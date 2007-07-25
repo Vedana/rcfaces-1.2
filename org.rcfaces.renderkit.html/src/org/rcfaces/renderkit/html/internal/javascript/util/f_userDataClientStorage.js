@@ -154,7 +154,7 @@ var __members = {
 }
 
 new f_class("f_userDataClientStorage", {
-	depend: f_clientStorage,
+	extend: f_clientStorage,
 	statics: __statics,
 	members: __members
 });

@@ -47,6 +47,40 @@ var __members={
 			this._initFocusId =  ch;
 		}
 		
+		if (false) {
+			f_core.AddEventListener(document, "focus", function() {
+				var evt=window.event;
+				
+				var message="Focus: ";
+				
+				if (evt.srcElement) {
+					message+=" src="+evt.srcElement.tagName+"#"+evt.srcElement.id;
+				}
+				
+				if (evt.toElement) {
+					message+=" to="+evt.toElement.tagName+"#"+evt.toElement.id;
+				}
+				
+				f_core.Debug(f_focusManager, message);
+			});
+			
+			f_core.AddEventListener(document, "blur", function() {
+				var evt=window.event;
+				
+				var message="Blur: ";
+				
+				if (evt.srcElement) {
+					message+=" src="+evt.srcElement.tagName+"#"+evt.srcElement.id;
+				}
+				
+				if (evt.toElement) {
+					message+=" to="+evt.toElement.tagName+"#"+evt.toElement.id;
+				}
+				
+				f_core.Debug(f_focusManager, message);
+			});
+		}
+				
 		if (false && f_core.IsGecko()) {
 			var focusManager=this;
 			this._onFocus=function(event) {

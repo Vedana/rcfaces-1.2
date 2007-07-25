@@ -30,13 +30,13 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-class HtmlRequestContext extends AbstractRequestContext implements
+public class HtmlRequestContext extends AbstractRequestContext implements
         IHtmlRequestContext {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(HtmlRequestContext.class);
 
-    private static final String EVENT_SERIAL = "VFC_SERIAL";
+    public static final String EVENT_SERIAL = "VFC_SERIAL";
 
     private static final String EVENT_NAME = "VFC_EVENT";
 

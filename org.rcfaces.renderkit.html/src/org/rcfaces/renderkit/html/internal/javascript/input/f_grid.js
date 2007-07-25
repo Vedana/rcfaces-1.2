@@ -383,8 +383,11 @@ var __statics = {
 				}			
 			}
 			
-			if (dataGrid._cursor) {
-				dataGrid.fa_updateElementStyle(dataGrid._cursor);			
+			var cursor=dataGrid._cursor;
+			if (cursor) {
+				dataGrid.fa_updateElementStyle(cursor);	
+				
+				dataGrid.fa_showElement(cursor);		
 			}
 			
 			dataGrid.f_onFocus(evt);
@@ -669,7 +672,7 @@ var __statics = {
 		
 		dataGrid._columnSelected=column;
 		dataGrid._updateTitleStyle(column);
-		
+				
 		return true;
 	},
 	/**
@@ -701,14 +704,17 @@ var __statics = {
 			if (oldColumn) {
 				dataGrid._updateTitleStyle(oldColumn);
 			}
-			return true;
+			
+			return f_core.CancelJsEvent(evt); // On bloque le FOCUS !
+			//return true;
 		}
 		
 		var append=(evt.shiftKey);
 		
 		dataGrid.f_setColumnSort(column, undefined, append); 
 		
-		return true;
+		return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
+		//return true;
 	},
 	/**
 	 * @method private static
@@ -749,6 +755,7 @@ var __statics = {
 			row._dataGrid.f_forceFocus(row);
 			return;
 		}
+		
 		this._dataGrid.f_forceFocus(this._dataGrid);
 	},	
 	/**
@@ -949,6 +956,12 @@ var __statics = {
 			for(var i=0;i<columns.length;i++) {
 				var column=columns[i];
 				
+				if (!column._visibility) {
+					continue;
+				}
+				
+				f_core.Assert(column._col, "f_grid._DragCursorMove: Invalid column '"+column+"'.");
+				
 				totalCols+=parseInt(column._col.style.width, 10);
 			}
 
@@ -1015,7 +1028,11 @@ var __statics = {
 	}
 }
  
-var __members = {
+var __members = {	
+	/**
+	 * @field private number
+	 */
+	 _additionalInformationCount: 0,
 	
 	f_grid: function() {
 		this.f_super(arguments);
@@ -1052,7 +1069,7 @@ var __members = {
 		this.f_openActionList(f_event.SELECTION);
 
 		var focus;
-		if (f_core.IsInternetExplorer()) {
+		if (false && f_core.IsInternetExplorer()) {
 			if (!this.tabIndex) {
 				this.tabIndex=0;
 			}
@@ -1066,6 +1083,9 @@ var __members = {
 			this.onmousewheel=f_grid._Link_onmousewheel;
 			this._dataGrid=this;
 			
+			this._table.onbeforeactivate=f_core.CancelJsEventHandler;
+			this._scrollBody.onbeforeactivate=f_core.CancelJsEventHandler;
+
 		} else if (f_core.IsGecko()) {
 			focus=f_core.GetChildByCssClass(this, "f_grid_dataBody_scroll");
 			
@@ -1101,9 +1121,46 @@ var __members = {
 		
 			if (this.tabIndex) {
 				focus.tabIndex=this.tabIndex;
+			}  else {
+				focus.tabIndex=0;
 			}
+
+			this.tabIndex=-1;
 			
-			table.appendChild(focus);
+			if (f_core.IsInternetExplorer()) {
+				this.hideFocus=true;
+				
+				var self=this;
+				focus.onbeforedeactivate=function() {
+					var evt=window.event;
+					
+					var next=evt.toElement;
+					
+					// f_core.Debug(f_grid, "On before DE activate "+next.tagName);
+	
+					if (!next) {
+						return;
+					}
+					
+					if ((next.parentNode._dataGrid==self && next.tagName.toLowerCase()!="input") || 
+							(next._column && next._column._dataGrid==self)) {
+
+						f_core.Debug(f_grid, "CANCEL On before DE activate "+next.tagName);
+
+						return f_core.CancelJsEvent(evt);
+					}
+				}
+					
+				if (this._title) {			
+					this._title.onbeforeactivate=f_core.CancelJsEventHandler;
+				}			
+				if (this._scrollTitle) {			
+					this._scrollTitle.onbeforeactivate=f_core.CancelJsEventHandler;
+				}			
+
+			}	
+			
+			this.insertBefore(focus, this.firstChild);			
 		}
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);		
@@ -1134,6 +1191,8 @@ var __members = {
 			this._colsPool=null;
 		}
 	*/	
+
+//		this._serializedIndexes=undefined; // number[]
 
 //		this._showValue=undefined; // String
 //		this._headerVisible=undefined; // boolean
@@ -1170,9 +1229,13 @@ var __members = {
 //		this._oldHeight=undefined;  // string
 //		this._oldHeightStyle=undefined; // string
 	
-		if (this._tbody) {
-			f_core.VerifyProperties(this._tbody);
+		var tbody=this._tbody;
+		if (tbody) {
 			this._tbody=undefined;
+			
+			 if (tbody!=this) {
+				f_core.VerifyProperties(tbody);		 	
+			 }
 		}
 
 		var table=this._table;
@@ -1180,6 +1243,7 @@ var __members = {
 			this._table=undefined;
 	
 			table._dataGrid=undefined;
+			table.onbeforeactivate=null;
 			
 			if (table!=this) {
 				f_core.VerifyProperties(table);
@@ -1197,14 +1261,16 @@ var __members = {
 		var cfocus=this._cfocus;
 		if (cfocus) {
 			this._cfocus=undefined;
+			this.onbeforeactivate=null;
 
+			cfocus.onbeforedeactivate=null;
 			cfocus.onfocus=null;
 			cfocus.onblur=null;
 			cfocus.onkeydown=null;
 			cfocus.onkeypress=null;
 			cfocus.onkeyup=null;
 			cfocus.onmousewheel=null;
-			cfocus._dataGrid=undefined;
+			cfocus._dataGrid=undefined; // f_dataGrid
 	
 		} else {
 			this.onfocus=null;
@@ -1213,7 +1279,7 @@ var __members = {
 			this.onkeypress=null;
 			this.onkeyup=null;
 			this.onmousewheel=null;
-			this._dataGrid=undefined;
+			this._dataGrid=undefined; // f_dataGrid
 		}
 		
 		var scrollBody=this._scrollBody;
@@ -1224,7 +1290,9 @@ var __members = {
 			scrollBody.onmousedown=null;
 			scrollBody.onmouseup=null;
 			scrollBody.onclick=null;
-			scrollBody._dataGrid=undefined;
+			scrollBody.onbeforeactivate=null;
+			
+			scrollBody._dataGrid=undefined; // f_dataGrid
 			
 			if (scrollBody!=this) {
 				f_core.VerifyProperties(scrollBody);
@@ -1235,6 +1303,7 @@ var __members = {
 		if (title) {
 			this._title=undefined;
 			
+			title.onbeforeactivate=null;			
 			if (title!=this) {
 				f_core.VerifyProperties(title);
 			}
@@ -1244,6 +1313,7 @@ var __members = {
 		if (scrollTitle) {
 			this._scrollTitle=undefined;
 			
+			scrollTitle.onbeforeactivate=null;			
 			scrollTitle.onscroll=null;
 			scrollTitle._dataGrid=undefined;
 			
@@ -1341,6 +1411,12 @@ var __members = {
 			this.f_setProperty(f_prop.COLUMN_WIDTHS, v);
 		}
 
+					
+		var serializedIndexes=this._serializedIndexes;
+		if (serializedIndexes) {
+			this.f_setProperty(f_prop.SERIALIZED_INDEXES, serializedIndexes.join(','));
+		}
+
 		var cursor=this._cursor;
 		var cursorValue=null;
 		if (cursor) {		
@@ -1353,6 +1429,29 @@ var __members = {
 		this.f_setProperty(f_prop.CURSOR, cursorValue);
 	
 		return this.f_super(arguments);
+	},
+	
+	f_addSerializedIndexes: function(first, rows) {
+					
+		var serializedIndexes=this._serializedIndexes;
+		if (!serializedIndexes) {
+			serializedIndexes=new Array;
+			this._serializedIndexes=serializedIndexes;
+
+		} else {		
+			for(var i=0;i<serializedIndexes.length;) {
+				var f=serializedIndexes[i++];
+				var r=serializedIndexes[i++];
+				
+				if (f==first && r==rows) {
+					return serializedIndexes;
+				}
+			}
+		}
+				
+		serializedIndexes.push(this._first, this._rows);
+		
+		return serializedIndexes;
 	},
 
 	f_update: function() {
@@ -1631,7 +1730,48 @@ var __members = {
 	/* ****************************************************************** */
 	
 	/**
+	 * List the columns of the grid
+	 * 
+	 * @method public
+	 * @return Object[] An array of column object. 
+	 */
+	f_getColumns: function() {
+		return f_core.PushArguments(null, this._columns);
+	},
+	/**
+	 * Returns the name associated to the column.
+	 * 
+	 * @method public
+	 * @param Object column The column object
+	 * @return String The name of the column.
+	 */
+	f_getColumnName: function(column) {
+		var labelComponent=column._label;
+		
+		if (!labelComponent) {
+			return null;
+		}
+		
+		return f_core.GetTextNode(labelComponent);
+	},
+	/**
+	 * @method public
+	 * @param Object column
+	 * @return number Ascending:1 Descending:-1 not-sorted:0
+	 */
+	f_getColumnOrderState: function(column) {
+		if (column._ascendingOrder===true) {
+			return 1;
+			
+		} else if (column._ascendingOrder===false) {
+			return -1;
+		}
+		
+		return 0;
+	},
+	/**
 	 * @method hidden
+	 * @return void
 	 */
 	f_setColumns2: function() {
 		var columns=new Array;
@@ -1792,6 +1932,35 @@ var __members = {
 		}
 		
 		this._updateCellsStyle(row, updateFirstOnly);
+
+	
+		var button=row._additionalButton;
+		if (button) {
+			var buttonClassName="f_grid_additional_button";
+	
+			var content=row._additionalContent;
+			if (content===false) {				
+				buttonClassName+=" f_grid_additional_button_no_content";
+				
+			} else  {
+				var shown=this.fa_isAdditionalElementVisible(row);
+				
+				if (shown) {
+					buttonClassName+=" f_grid_additional_button_expanded";
+					
+				} else {
+					buttonClassName+=" f_grid_additional_button_collapsed";				
+				}
+				
+				if (this.f_isDisabled()) {
+					buttonClassName+="_disabled";
+				}
+			}
+			
+			if (button.className!=buttonClassName) {
+				button.className=buttonClassName;
+			}
+		}		
 	},
 	/**
 	 * @method private
@@ -2132,9 +2301,11 @@ var __members = {
 	 * @method public
 	 * @param number index
 	 * @param number cursorIndex The cursor index. (can be undefined)
+	 * @param hidden boolean selection New cursor position
+	 * @param hidden boolean ignoreInteractive Change the position only (no server call) 
 	 * @return boolean Returns <code>false</code>.
 	 */
-	f_setFirst: function(index, cursorIndex, selection) {
+	f_setFirst: function(index, cursorIndex, selection, ignoreInteractive) {
 		var oldFirst=this._first;
 		
 		this.f_setProperty(f_prop.FIRST, index);
@@ -2142,9 +2313,13 @@ var __members = {
 			this.f_setProperty(f_prop.CURSOR, cursorIndex);
 		}
 	
+		if (ignoreInteractive===true) {
+			return;
+		}
+	
 		if (this._interactive) {
-			this.f_appendCommand(function(dataGrid) {			
-				dataGrid.f_callServer(index, 0, cursorIndex, selection);
+			this.f_appendCommand(function(grid) {			
+				grid.f_callServer(index, 0, cursorIndex, selection);
 			});
 			
 			return false;
@@ -2191,6 +2366,7 @@ var __members = {
 				head.onmouseover=null;
 				head.onmousedown=null;
 				head.onmouseup=null;
+				head.onbeforeactivate=null;
 				
 				f_core.VerifyProperties(head);
 				
@@ -2285,7 +2461,35 @@ var __members = {
 				
 				f_core.VerifyProperties(input);
 			}
-										
+			
+			input=row._additionalButton;
+			if (input) {
+				row._input=undefined;
+
+				input._row=undefined;  // HtmlTRElement
+				input.onmousedown=null;
+				input.onmouseup=null;
+				input.onclick=null;
+				input.ondblclick=null;
+				input.onfocus=null;
+				
+				f_core.VerifyProperties(input);				
+			}
+			
+//			row._additional=undefined; // boolean
+//			row._additionalContent=undefined; // String
+
+			var additionalRow=row._additionalRow;
+			if (additionalRow) {
+				row._additionalRow=undefined; // HTMLRowElement
+				
+				additionalRow._parentNode=undefined; // HTMLRowElement
+				additionalRow._row=undefined; // HtmlRowElement
+				additionalRow._dataGrid=undefined; // f_grid
+				//additionalRow._additionalBody=undefined; // boolean
+				additionalRow._waiting=undefined; // f_waiting				
+			}
+			// 			
 //			row._className=undefined; // string
 			row._cells=undefined; // HtmlElement[]
 			row._label=undefined;  // HtmlLabelElement
@@ -2295,6 +2499,7 @@ var __members = {
 //			row._selected=undefined; // boolean
 			row._cellImages=undefined; // HTMLImageELement[]
 //			row._hasCursor=undefined; // boolean
+//			row._rowIndex=undefined; // number
 			
 			row.onmousedown=null;
 			row.onmouseup=null;
@@ -2324,6 +2529,7 @@ var __members = {
 			cell.ondblclick=null;
 			cell.onclick=null;
 			cell.onfocus=null;
+			cell.onbeforeactivate=null;
 			
 //			cell._className=undefined; // string
 			cell._dataGrid=undefined; // f_grid
@@ -2352,6 +2558,8 @@ var __members = {
 		var cancel=false;
 
 		var selection=fa_selectionManager.ComputeKeySelection(evt);
+		
+		var additionalInformations=this._additionalInformations;
 		
 		var code=evt.keyCode;
 		switch(code) {
@@ -2400,7 +2608,7 @@ var __members = {
 		case f_key.VK_RETURN:
 		case f_key.VK_ENTER:
 			if (this._cursor && this._selectable) {
-				this._performElementSelection(this._cursor, true, evt, selection);
+				this.f_performElementSelection(this._cursor, true, evt, selection);
 			}
 			cancel=true;
 			break;
@@ -2408,6 +2616,26 @@ var __members = {
 		case f_key.VK_CONTEXTMENU:
 			this._openContextMenu(evt);
 			cancel=true;
+			break;
+
+		case f_key.VK_LEFT: // FLECHE A GAUCHE
+			if (additionalInformations) {
+				var cursor=this._cursor;
+				if (cursor) {
+					this._keyHideAdditionalInformation(evt, cursor);
+					cancel=true;
+				}
+			}
+			break
+						
+		case f_key.VK_RIGHT: // FLECHE A DROITE
+			if (additionalInformations) {
+				var cursor=this._cursor;
+				if (cursor) {
+					this._keyShowAdditionalInformation(evt, cursor);
+					cancel=true;
+				}
+			}
 			break;
 		}
 	
@@ -2467,6 +2695,11 @@ var __members = {
 			return;
 		}
 		
+		var cursor=this._cursor;
+		if (cursor) {
+			this.fa_showElement(cursor);
+		}
+		
 		var cfocus=this._cfocus;
 		if (cfocus) {
 			cfocus.style.top=this._table.scrollTop+"px";
@@ -2498,37 +2731,38 @@ var __members = {
 		}
 		return true;
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return void
+	 */
 	_nextCursorRow: function(evt, selection) {
-		var trs=this._rowsPool;
+		var trs=this._rowsPool; // Attention trs EST DANS LE DESORDRE !
 
 		var tr=this._cursor;
-		if (!tr) {
+		if (!tr || tr.parentNode!=this._tbody) {
 			// Selection du premier cursor
+						
+			for(tr=this._tbody.firstChild;tr && !tr._dataGrid;tr=tr.nextSibling);
 
-			for(var i=0;i<trs.length;i++) {
-				var tr=trs[i];
-				if (!tr._dataGrid) {
-					continue;
-				}
-				
+			if (tr) {
 				this.f_moveCursor(tr, true, evt, selection);
-				
-				return;
 			}
 
 			return;
 		}
 		
-		for(tr=tr.nextSibling;tr;tr=tr.nextSibling) {
-			if (!tr._dataGrid) {
-				continue;
-			}
-			
+		for(tr=tr.nextSibling;tr && !tr._dataGrid;tr=tr.nextSibling);
+
+		if (tr) {
 			// Si le CONTROL est appuyé on ne bouge que le curseur !
 			this.f_moveCursor(tr, true, evt, selection);
 			
 			return;
 		}
+		
+		// Plus de TR !
 		
 		// Page suivante ?
 		if (!this._rows) {
@@ -2567,42 +2801,25 @@ var __members = {
 	_previousCursorRow: function(evt, selection) {		
 		var trs=this._rowsPool;
 
-		if (!this._cursor) {
+		var tr=this._cursor;
+		if (!tr || tr.parentNode!=this._tbody) {
 			// Selection du dernier
 
-			for(var i=trs.length-1;i>=0;i--) {
-				if (!trs[i]._dataGrid) {
-					continue;
-				}
-				
-				this.f_moveCursor(trs[i], true, evt, selection);
-				
-				return;
+			for(tr=this._tbody.lastChild;tr && !tr._dataGrid;tr=tr.previousSibling);
+			if (tr) {
+				this.f_moveCursor(tr, true, evt, selection);
 			}
 
 			return;
 		}
 		
-		for(var i=0;i<trs.length;i++) {
-			if (trs[i]!=this._cursor || !trs[i]._dataGrid) {
-				continue;
-			}
-			
-			
-			for(i--;i>=0;i--) {
-				if (trs[i]._dataGrid) {
-					break;
-				}
-			}
-			
-			if (i<0) {
-				break;
-			}
-			
-			this.f_moveCursor(trs[i], true, evt, selection);
-			
+		for(tr=tr.previousSibling;tr && !tr._dataGrid;tr=tr.previousSibling);			
+		if (tr) {
+			this.f_moveCursor(tr, true, evt, selection);
 			return;
-		}
+		}			
+		
+		// Plus de rows 
 		
 		// Page pr?cedente ?
 		if (!this._rows || !this._paged) {
@@ -2634,18 +2851,18 @@ var __members = {
 
 		// Il faut rechercher le dernier visible !
 		var last=null;
-		for(var i=0;i<trs.length;i++) {
-			var row=trs[i];
-			if (!row._dataGrid) {
+		var tr=this._tbody.firstChild;
+		for(;tr;tr=tr.nextSibling) {
+			if (!tr._dataGrid) {
 				continue;
 			}
-			
-			if (row.offsetTop+row.offsetHeight/2-this._scrollBody.scrollTop>this._scrollBody.clientHeight) {
+
+			if (tr.offsetTop+tr.offsetHeight/2-this._scrollBody.scrollTop>this._scrollBody.clientHeight) {
 				// On le voit plus !
 				break;
 			}		
 			
-			last=row;
+			last=tr;
 		}
 		
 		if (last && last!=this._cursor) {
@@ -2655,20 +2872,15 @@ var __members = {
 		
 		if (this._rows && this._paged) {
 			// Table Page par Page
-			var bottom;
-			for(var i=0;i<trs.length;i++) {
-				if (!trs[i]._dataGrid) {
-					continue;
-				}
-				
-				bottom=trs[i];
-			}
 			
-			if (bottom) {
-				if (this._cursor!=bottom) {
-					this.f_moveCursor(bottom, true, evt, selection);
-					return;
-				}
+			// On cherche le dernier
+			
+			var tr=this._tbody.lastChild;
+			for(;tr && !tr._dataGrid;tr=tr.previousSibling);
+			
+			if (tr && this._cursor!=tr) {
+				this.f_moveCursor(tr, true, evt, selection);
+				return;
 			}
 					
 			// Page suivante ...
@@ -2698,21 +2910,22 @@ var __members = {
 			return;	
 		}
 		
+		// Pas de page par page ...
+		
 		// On recherche notre index, et la hauteur d'une ligne
 		var trh=0;
 		var idx=-1;
-		for(var i=0;i<trs.length;i++) {
-			var row=trs[i];
-			
-			if (!row._dataGrid) {
+		var i=0;
+		for(tr=this._tbody.firstChild;tr;tr=tr.nextSibling,i++) {
+			if (!tr._dataGrid) {
 				continue;
 			}
 			
 			if (trh<1) {
-				trh=row.offsetHeight;
+				trh=tr.offsetHeight;
 			}
 
-			if (row==this._cursor) {
+			if (tr==this._cursor) {
 				idx=i;
 			}
 			
@@ -2736,36 +2949,28 @@ var __members = {
 			pos=trs.length-1;
 		}		
 //		f_core.Assert(pos>=trs.length, "Invalid position !");
-
-		var row=null;
 		
-		// On cherche juste apres !
-		for(var i=pos;i<trs.length;i++) {
-			var r=trs[i];
-			
-			if (!r._dataGrid) {
-				continue;
-			}
-			
-			row=r;
-			f_core.Debug(f_grid, "_nextPageRow: Found #"+i+" pos="+pos+" next row="+row);
-			break;
+		// On se positionne sur le row recherché !
+		tr=this._tbody.childNodes[pos];
+		
+		if (tr==this._cursor) {
+			tr=tr.nextSibling;
 		}
 		
-		f_core.Debug(f_grid, "_nextPageRow: Found next row="+row);
+		// On cherche juste apres !
+		for(;tr && !tr._dataGrid;tr=tr.nextSibling);
 		
-		if (!row) {
-			// Pas trouvé, alors on cherche juste avant !
-			for(var i=pos-1;i>=0;i--) {
-				var r=trs[i];
-				
-				if (r._dataGrid) {
-					row=r;
-					break;
-				}			
+		f_core.Debug(f_grid, "_nextPageRow: Found next row="+tr);
+		
+		if (!tr) {
+			tr=this._tbody.childNodes[pos];
+			
+			if (tr!=this._cursor) {
+				// On cherche juste avant !
+				for(;tr && !tr._dataGrid;tr=tr.previousSibling);
+	
+				f_core.Debug(f_grid, "_nextPageRow: Found previous row="+tr);
 			}
-
-			f_core.Debug(f_grid, "_nextPageRow: Found previous row="+row);
 		}
 		
 		//alert("Paged="+this._paged+" pos="+pos+" trs.length="+trs.length);
@@ -2785,7 +2990,9 @@ var __members = {
 			}
 		}
 		
-		this.f_moveCursor(row, true, evt, selection);
+		if (tr) {
+			this.f_moveCursor(tr, true, evt, selection);
+		}
 	},
 	_previousPageRow: function(evt, selection) {
 		var trs= this._rowsPool;
@@ -2794,27 +3001,28 @@ var __members = {
 		}
 
 		// Il faut rechercher le dernier visible !
-		var last=null;
-		for(var i=0;i<trs.length;i++) {
-			var row=trs[i];
-			if (!row._dataGrid) {
+		var tr=null;
+		for(tr=this._tbody.firstChild;tr;tr=tr.nextSibling) {
+			if (!tr._dataGrid) {
 				continue;
 			}
 			
-			if (row.offsetTop+row.offsetHeight/2-this._scrollBody.scrollTop<0) {
+			if (tr.offsetTop+tr.offsetHeight/2-this._scrollBody.scrollTop<0) {				
 				continue;
 			}
 			
-			last=row;
+			// Il est visible !
+			if (tr && tr!=this._cursor) {				
+				this.f_moveCursor(tr, true, evt, selection);
+				return;			
+			}
+			
 			break;
 		}
 		
-		if (last && last!=this._cursor) {
-			this.f_moveCursor(last, true, evt, selection);
-			return;			
-		}
+		// Le curseur est en haut de notre page !
 
-		if (this._rows && this._paged) {
+		if (this._rows && this._paged && this._scrollBody.scrollTop==0) {
 			// Page pr?c?dante ...
 	
 			if (this._first<=0) {
@@ -2831,31 +3039,35 @@ var __members = {
 			return;	
 		}
 		
-		// On recherche la position du pr?c?dant !
+	// On recherche notre index, et la hauteur d'une ligne
 		var trh=0;
 		var idx=-1;
-		for(var i=0;i<trs.length;i++) {
-			var row=trs[i];
-			
-			if (!row._dataGrid) {
+		var i=0;
+		for(tr=this._tbody.firstChild;tr;tr=tr.nextSibling,i++) {
+			if (!tr._dataGrid) {
 				continue;
 			}
 			
 			if (trh<1) {
-				trh=row.offsetHeight;
+				trh=tr.offsetHeight;
 			}
 
-			if (row==this._cursor) {
+			if (tr==this._cursor) {
 				idx=i;
 			}
 			
-			if (idx>=0 && trh>0) {
-				break;
+			if (idx>=0 && trh) {
+				break; // On a trouvé l'index et la hauteur d'une ligne
 			}
 		}
+		
 		if (trh<=0 || idx<0) {
+			// On a pas trouvé notre index, ou la hauteur d'une ligne
+			f_core.Debug(f_grid, "_previousPageRow: Can not compute the size of a row !");
+			
 			return;
 		}
+		
 		var h=this._scrollBody.clientHeight;
 
 		var pos=Math.floor(idx-h/trh);
@@ -2863,43 +3075,30 @@ var __members = {
 			pos=0;
 		}		
 
-		var row;
-		for(var i=0;pos>=0;i++) {
-			row=trs[i];
-			
-			if (!row._dataGrid) {
-				continue;
-			}
-			
-			pos--;
+		// On se positionne sur le row recherché !
+		tr=this._tbody.childNodes[pos];
+		
+		if (tr==this._cursor) { // On tombe encore sur le curseur !
+			tr=tr.previousSibling;
 		}
 		
-		this.f_moveCursor(row, true, evt, selection);
+		// On cherche juste avant !
+		for(;tr && !tr._dataGrid;tr=tr.previousSibling);
+		
+		if (tr) {
+			this.f_moveCursor(tr, true, evt, selection);
+		}
 	},
 	_selectLastRow: function(evt, selection) {
-		var trs= this._rowsPool;
-		if (!trs.length) {
-			return;
-		}
-
-		// Il faut rechercher le dernier visible !
-		var last=null;
-		for(var i=0;i<trs.length;i++) {
-			var row=trs[i];
-			if (!row._dataGrid) {
-				continue;
-			}
-			
-			last=row;
-		}
+		var tr=this._tbody.lastChild;
+		for(;tr && !tr._dataGrid;tr=tr.previousSibling);		
 		
-		
-		if (!last) {
+		if (!tr) {
 			return;
 		}
 		
-		if (last!=this._cursor) {	
-			this.f_moveCursor(last, true, evt, selection);
+		if (tr!=this._cursor) {	
+			this.f_moveCursor(tr, true, evt, selection);
 			return;
 		}
 		
@@ -2921,23 +3120,15 @@ var __members = {
 		this.f_setFirst(nextFirst, nextPos, selection);
 	},
 	_selectTopRow: function(evt, selection) {
-		var trs= this._rowsPool;
-		if (!trs.length) {
+		var tr=this._tbody.firstChild;
+		for(;tr && !tr._dataGrid;tr=tr.nextSibling);		
+		
+		if (!tr) {
 			return;
 		}
-
-		// Il faut rechercher le premier visible !
-		for(var i=0;i<trs.length;i++) {
-			var row=trs[i];
-			if (!row._dataGrid) {
-				continue;
-			}
-			
-			if (row==this._cursor) {
-				break;
-			}
-			
-			this.f_moveCursor(row, true, evt, selection);
+		
+		if (tr!=this._cursor) {	
+			this.f_moveCursor(tr, true, evt, selection);
 			return;
 		}
 		
@@ -3359,7 +3550,7 @@ var __members = {
 	
 		var selection=(append)?fa_selectionManager.APPEND_SELECTION:0;
 		
-		return this._performElementSelection(row, show, jsEvent, selection);
+		return this.f_performElementSelection(row, show, jsEvent, selection);
 	},
 	/**
 	 * Deselect a row
@@ -3377,7 +3568,7 @@ var __members = {
 			return false;
 		}
 
-		return this._performElementSelection(row, show, jsEvent, false);
+		return this.f_performElementSelection(row, show, jsEvent, false);
 	},
 	/**
 	 * Returns <code>true</code> if the receiver is checked, and <code>false</code> otherwise
@@ -3428,14 +3619,14 @@ var __members = {
 			scrollBody.scrollTop=row.offsetTop;
 			
 			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "+row.offsetTop);
-			return;
-		}
 			
-		if (row.offsetTop+row.offsetHeight-scrollBody.scrollTop>scrollBody.clientHeight) {
+		} else if (row.offsetTop+row.offsetHeight-scrollBody.scrollTop>scrollBody.clientHeight) {
 			scrollBody.scrollTop=row.offsetTop+row.offsetHeight-scrollBody.clientHeight;
 			
-			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "+(row.offsetTop+row.offsetHeight-scrollBody.clientHeight));
+			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "+(row.offsetTop+row.offsetHeight-scrollBody.clientHeight));			
 		}		
+
+		f_core.ShowComponent(row);
 	},
 	
 	fa_listVisibleElements: function() {
@@ -3475,7 +3666,7 @@ var __members = {
 				scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
 				
 				catchScrollEvent=true;
-			}			
+			}
 		}
 		
 		if (scrollBody) {
@@ -3549,6 +3740,8 @@ var __members = {
 			head.onmouseout=f_grid._Title_onMouseOut;
 			head.onmousedown=f_grid._Title_onMouseDown;
 			head.onmouseup=f_grid._Title_onMouseUp;
+			//head.onbeforeactivate=f_core.CancelJsEventHandler;
+			head.tabIndex=-1;
 			
 			head._column=column;
 			column._head=head;
@@ -3756,6 +3949,351 @@ var __members = {
 		return true;
 	},
 	
+	/**
+	 * @method public
+	 * @return boolean
+	 */
+	f_hasElementAdditionalInformation: function(rowValue) {
+		if (!this._additionalInformations) {
+			return false;
+		}
+		
+		var row=this.f_getRowByValue(rowValue, true);
+		
+		var additional=row._additional;
+		if (typeof(additional)=="boolean") {
+			return additional;
+		}
+	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @param Object cursor
+	 * @return void
+	 */
+	_keyShowAdditionalInformation: function(evt, cursor) {
+		if (this.fa_isAdditionalElementVisible(cursor)) {
+			return;
+		}
+		
+		if (!this.f_hasAdditionalElement(cursor)) {
+			return;
+		}
+			
+		this.fa_performElementAdditionalInformation(cursor, true, evt, true);
+	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @param Object cursor
+	 * @return void
+	 */
+	_keyHideAdditionalInformation: function(evt, cursor) {
+		if (!this.fa_isAdditionalElementVisible(cursor)) {
+			return;
+		}
+			
+		this.fa_performElementAdditionalInformation(cursor, true, evt, false);
+	},
+	/**
+	 * @method protected
+	 * @param Object row
+	 * @return boolean
+	 */
+	fa_isAdditionalElementVisible:  function(row) {
+		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.fa_isAdditionalElementVisible: Invalid element parameter ! ("+row+")");
+
+		return !!row._additional;
+	},
+	/**
+	 * @method protected
+	 * @param Object row
+	 * @param boolean additional
+	 * @param boolean animated
+	 * @return void
+	 */
+	fa_setAdditionalElementVisible:  function(row, additional, animated) {
+		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.fa_setAdditionalElementVisible: Invalid element parameter ! ("+row+")");
+
+		if (row._additional==additional) {
+			return;
+		}		
+
+		row._additional=additional;
+		
+		if (additional) {
+			this.f_showAdditionalContent(row, animated);
+
+		} else {
+			this.f_hideAdditionalContent(row, animated);
+		}
+	},
+	/**
+	 * @method protected
+	 * @param Object row
+	 * @return boolean
+	 */
+	f_hasAdditionalElement: function(row) {
+		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.f_hasAdditionalElement: Invalid element parameter ! ("+row+")");
+
+		return row._additionalContent!==false;
+	},
+	/**
+	 * @method protected
+	 * @param HTMLRowElement row
+	 * @param boolean animated
+	 * @return void
+	 */
+	f_showAdditionalContent: function(row, animated) {
+
+		var additionalRow=row._additionalRow;
+
+		if (additionalRow) {
+			// L'additional content est déjà construit !
+			
+			if (!additionalRow.parentNode || !additionalRow.parentOffset) {
+				// Déjà affiché !
+				
+				row.parentNode.insertBefore(additionalRow, row.nextSibling);
+			} 
+			
+			// On sait jamais, apres un tri, ca peut changer !							
+			additionalRow.className=row._className;				
+
+			return;
+		}
+
+		var additionalContent=row._additionalContent;
+		if (additionalContent===false) {
+			return;			
+		}
+		row._additionalContent=true;	
+
+		this._additionalInformationCount++;
+
+		var doc=row.ownerDocument;
+
+		var shadowRows=this._shadowRows;
+				
+		var additionalCell=null;
+		
+		if (shadowRows && shadowRows.length) {
+			additionalRow=shadowRows.shift();
+			additionalCell=row.firstChild;
+			
+			while (additionalCell.hasChildNodes()) {
+				additionalCell.removeChild(additionalCell.lastChild);
+			}
+			
+			f_core.Assert(additionalRow.tagName.toLowerCase()=="tr", "f_dataGrid.f_addRow2: Invalid row ! "+additionalRow);
+
+			additionalRow.parentNode.removeChild(additionalRow);
+			
+		} else {
+			additionalRow=doc.createElement("tr");
+		}
+
+		this._tbody.insertBefore(additionalRow, row.nextSibling);
+
+		additionalRow._additionalBody=true;
+		additionalRow._row=row;
+		additionalRow._parentNode=row;
+		additionalRow.className=row._className+" f_grid_additionalRow"
+		row._additionalRow=additionalRow;
+
+		if (row._additionalHeight) {
+			additionalRow.style.height=parseInt(row._additionalHeight, 10)+"px";
+			additionalRow.style.verticalAlign="top";
+		}
+
+		if (!additionalCell) {
+			additionalCell=doc.createElement("td");
+			additionalRow.appendChild(additionalCell);
+		}
+
+		additionalCell.className="f_grid_additional_body";						
+		additionalCell.colSpan=this._visibleColumnsCount;
+
+		if (additionalContent) {
+			this.f_getClass().f_getClassLoader().f_loadContent(this, additionalCell, additionalContent);
+			return;
+		}
+		
+		if (additionalContent!==undefined) {
+			// ???
+			alert("Unknown type '"+additionalContent+"'");
+			return;
+		}
+		
+		if (additionalRow._waiting) {
+			// En cours d'ouverture ...
+			return;
+		}
+		
+		// On récupère en AJAX ....
+			
+		var url=f_env.GetViewURI();
+		var request=new f_httpRequest(this, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
+		var self=this;
+
+		request.f_setListener({
+	 		onInit: function(request) {
+	 			var waiting=additionalRow._waiting;
+	 			if (!waiting) {	
+	 				waiting=f_waiting.Create(additionalRow.firstChild, null, true, undefined, f_waiting.LEFT, 20);
+	 				additionalRow._waiting=waiting;
+	 			}
+	 			
+	 			waiting.f_setText(f_waiting.GetLoadingMessage());
+	 			waiting.f_show();
+	 		},
+			/**
+			 * @method public
+			 */
+	 		onError: function(request, status, text) {
+	
+	 			var waiting=additionalRow._waiting;
+	 			if (waiting) {
+	 				additionalRow._waiting=undefined;
+	 				
+	 				waiting.f_hide();
+	 				waiting.f_close();
+	 			}
+				
+				f_tree.Info(f_tree, "f_showAdditionalContent.onError: Bad status: "+request.f_getStatus());
+
+				try {
+					additionalRow._additionalContent=false;
+					
+					self.f_hideAdditionalContent(row, animated);
+					
+				} catch(x) {				
+				 	self.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
+				}
+				
+		 		self.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+	 		},
+			/**
+			 * @method public
+			 */
+	 		onProgress: function(request, content, length, contentType) {
+	 			var waiting=additionalRow._waiting;
+				if (waiting) {
+					waiting.f_setText(f_waiting.GetReceivingMessage());
+				}	 			
+	 		},
+			/**
+			 * @method public
+			 */
+	 		onLoad: function(request, content, contentType) {
+	
+	 			var waiting=additionalRow._waiting;
+	 			if (waiting) {
+	 				additionalRow._waiting=undefined;
+	 				
+	 				waiting.f_hide();
+	 				waiting.f_close();
+	 			}
+
+				var ret=undefined;
+
+				if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+					self.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+					ret=false;
+					
+				} else {
+					var responseContentType=request.f_getResponseContentType();
+					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+				 		self.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+						ret=false;
+
+					} else if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)<0) {
+			 			self.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+	
+						ret=false;
+					}
+				}
+				
+				if (ret===undefined) {
+	 				ret=request.f_getResponse();
+				}
+				
+				try {
+					additionalRow._additionalContent=ret;
+					
+					if (ret===false) {
+						self.f_hideAdditionalContent(row, animated);
+						
+					} else {
+						self.f_getClass().f_getClassLoader().f_loadContent(self, additionalCell, ret);
+					}
+					
+				} catch(x) {				
+				 	self.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
+				}
+	 		}			
+		});
+
+//		alert("Params="+params);
+
+		request.f_setRequestHeader("X-Camelia", "grid.additionalInformation");
+		
+		var params = {
+			gridId: this.id,
+			rowValue: row._index,
+			rowIndex: row._rowIndex
+		};
+		
+		if (this._paged) {		
+			// On synchronise 1 SEULE ligne, on envoi pas les indexes !
+			
+			var serializedState=this.f_getClass().f_getClassLoader().f_getSerializedState();
+			f_core.Debug(f_dataGrid, "f_callServer: serializedState="+serializedState);
+			if (!serializedState) {
+				serializedState=""; // Il faut informer le service que nous sommes en mode paginé !
+			}
+
+			params[f_core.SERIALIZED_DATA]=serializedState;
+			
+			f_classLoader.SerializeInputsIntoParam(params, this, false);
+		}
+				
+		request.f_doFormRequest(params);		
+	},
+	/**
+	 * @method protected
+	 * @param HTMLRowElement row
+	 * @param boolean animated
+	 * @return void
+	 */
+	f_hideAdditionalContent: function(row, animated) {
+
+		var additionalRow=row._additionalRow;
+
+		if (!additionalRow) {
+			return;
+		}
+
+		if (row._additionalContent===false) {
+			// On l'efface !
+			row._additionalRow=undefined;
+			
+			additionalRow._parentNode=undefined; // HTMLRowElement
+			additionalRow._row=undefined; // HtmlRowElement
+			additionalRow._dataGrid=undefined; // f_grid
+			additionalRow._waiting=undefined; // f_waiting				
+			
+			if (additionalRow.hasChildNodes()) {
+				while (additionalRow.hasChildNodes()) {
+					additionalRow.removeChild(additionalRow.lastChild);
+				}			
+				
+				this.f_getClass().f_getClassLoader().f_garbageObjects();
+			}
+		}
+		
+		row.parentNode.removeChild(additionalRow);
+	},
 	/** 
 	 * @method protected abstract
 	 */
@@ -3769,7 +4307,7 @@ var __members = {
  
 new f_class("f_grid", {
 	extend: f_component,
-	aspects: [fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager, fa_scrollPositions],
+	aspects: [fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager, fa_scrollPositions, fa_additionalInformationManager],
 	statics: __statics,
 	members: __members
 });

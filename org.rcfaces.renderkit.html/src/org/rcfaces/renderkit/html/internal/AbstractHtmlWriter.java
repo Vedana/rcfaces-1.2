@@ -183,6 +183,10 @@ public abstract class AbstractHtmlWriter extends
         return writeAttribute(name, String.valueOf(value));
     }
 
+    public String getResponseCharacterEncoding() {
+        return responseWriter.getCharacterEncoding();
+    }
+
     public ISgmlWriter writeAttribute(String name) throws WriterException {
         closeCssWriter();
 

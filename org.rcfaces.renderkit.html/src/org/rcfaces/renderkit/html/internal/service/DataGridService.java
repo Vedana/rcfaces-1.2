@@ -14,9 +14,12 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
+import javax.faces.application.StateManager;
+import javax.faces.application.StateManager.SerializedView;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 import javax.servlet.ServletResponse;
@@ -115,6 +118,9 @@ public class DataGridService extends AbstractHtmlService {
             }
         }
 
+        String showAdditional = (String) parameters.get("showAdditional");
+        String hideAdditional = (String) parameters.get("hideAdditional");
+
         UIComponent component = HtmlTools.getForComponent(facesContext,
                 dataGridId, viewRoot);
         if (component == null) {
@@ -138,6 +144,8 @@ public class DataGridService extends AbstractHtmlService {
         }
 
         DataGridComponent dgc = (DataGridComponent) component;
+
+        decodeSubComponents(facesContext, dgc, parameters);
 
         ISortedComponent sortedComponents[] = null;
 
@@ -203,7 +211,7 @@ public class DataGridService extends AbstractHtmlService {
 
             writeJs(facesContext, printWriter, dgc, dataGridId, dgr, rowIndex,
                     forcedRows, sortedComponents, filterExpression,
-                    unknownRowCount);
+                    unknownRowCount, showAdditional, hideAdditional);
 
         } catch (IOException ex) {
             throw new FacesException(
@@ -236,11 +244,50 @@ public class DataGridService extends AbstractHtmlService {
         return (DataGridRenderer) renderer;
     }
 
+    private void decodeSubComponents(FacesContext facesContext,
+            DataGridComponent dgc, Map parameters) {
+
+        int first = -1;
+        int rows = -1;
+
+        String serializedFirst = (String) parameters.get("serializedFirst");
+        if (serializedFirst != null) {
+            first = Integer.parseInt(serializedFirst);
+        }
+
+        String serializedRows = (String) parameters.get("serializedRows");
+        if (serializedRows != null) {
+            rows = Integer.parseInt(serializedRows);
+        }
+
+        if (first < 0 || rows < 1) {
+            return;
+        }
+
+        dgc.setFirst(first);
+        dgc.setRows(rows);
+
+        String serializedIndexes = (String) parameters.get("serializedIndexes");
+        if (serializedIndexes != null) {
+            for (StringTokenizer st = new StringTokenizer(serializedIndexes,
+                    ","); st.hasMoreTokens();) {
+
+                int zfirst = Integer.parseInt(st.nextToken());
+                int zrows = Integer.parseInt(st.nextToken());
+
+                dgc.addDecodedIndexes(zfirst, zrows);
+            }
+        }
+
+        dgc.processDecodes(facesContext);
+    }
+
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             DataGridComponent dgc, String componentClientId,
             DataGridRenderer dgr, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
-            boolean unknownRowCount) throws IOException {
+            boolean unknownRowCount, String showAdditional,
+            String hideAdditional) throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -253,12 +300,13 @@ public class DataGridService extends AbstractHtmlService {
         }
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, dgc, componentClientId);
+                pw, RESPONSE_CHARSET, dgc, componentClientId);
 
         DataGridRenderer.DataGridRenderContext tableContext = dgr
                 .createTableContext(processContext, jsWriter
                         .getJavaScriptRenderContext(), dgc, rowIndex,
-                        forcedRows, sortedComponents, filterExpression);
+                        forcedRows, sortedComponents, filterExpression,
+                        showAdditional, hideAdditional);
 
         String varId = jsWriter.getComponentVarName();
 

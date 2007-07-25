@@ -208,6 +208,10 @@ var __members = {
 	f_setFirst: f_class.ABSTRACT
 }
 
-new f_aspect("fa_pagedComponent", __statics, __members, fa_filterProperties);
+new f_aspect("fa_pagedComponent", {
+	extend: [ fa_filterProperties ],
+	statics: __statics,
+	members: __members
+});
 
 

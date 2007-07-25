@@ -62,6 +62,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
     private static final Log LOG = LogFactory.getLog(InitRenderer.class);
 
+    private static final String TITLE_PROPERTY = "org.rcfaces.html.PAGE_TITLE";
+
     private static final String DISABLE_IE_IMAGE_BAR_PARAMETER = Constants
             .getPackagePrefix()
             + ".DISABLE_IE_IMAGE_BAR";
@@ -398,6 +400,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
         String title = initComponent.getTitle(facesContext);
         if (title != null) {
             writeTitle(htmlWriter, title);
+
+            facesContext.getExternalContext().getRequestMap().put(
+                    TITLE_PROPERTY, title);
         }
 
         HtmlRenderContext.setMetaDataInitialized(facesContext);
@@ -943,6 +948,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         public JavaScriptWriterImpl(IHtmlWriter writer) {
             this.writer = writer;
+        }
+
+        public String getResponseCharacterEncoding() {
+            return writer.getResponseCharacterEncoding();
         }
 
         protected String convertSymbol(String className, String memberName) {

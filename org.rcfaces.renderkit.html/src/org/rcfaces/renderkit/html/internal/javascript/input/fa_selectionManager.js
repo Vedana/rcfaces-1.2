@@ -193,7 +193,7 @@ var __members = {
 		f_core.Debug(fa_selectionManager, "f_moveCursor: Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
-			if (this._performElementSelection(element, show, evt, selection)) {
+			if (this.f_performElementSelection(element, show, evt, selection)) {
 				show=false;
 			}
 		}
@@ -243,7 +243,7 @@ var __members = {
 				s+=currentSelection.join(",");
 			}		
 		
-			f_core.Debug("fa_selectionManager", s);
+			f_core.Debug(fa_selectionManager, "f_moveCursor: "+s);
 		}
 	},
 	/**
@@ -486,13 +486,21 @@ var __members = {
 		}		
 	},
 	
-	_performElementSelection: function(element, show, evt, selection) {
+	/**
+	 * @method protected
+	 * @param Object element
+	 * @param boolean show
+	 * @param Event evt
+	 * @param number selection Mask of type of selection
+	 * @return boolean
+	 */
+	f_performElementSelection: function(element, show, evt, selection) {
 		var cardinality=this._selectionCardinality;
 		if (!cardinality) {
 			return false;
 		}
 		
-		f_core.Debug(fa_selectionManager, "_performElementSelection: "+
+		f_core.Debug(fa_selectionManager, "f_performElementSelection: "+
 			" exclusive='"+((selection & fa_selectionManager.EXCLUSIVE_SELECTION)>0)+"'"+
 			" append='"+((selection & fa_selectionManager.APPEND_SELECTION)>0)+"'"+
 			" range='"+((selection & fa_selectionManager.RANGE_SELECTION)>0)+"'  disabled="+this.fa_isElementDisabled(element));
@@ -511,6 +519,7 @@ var __members = {
 		switch(cardinality) {
 		case fa_cardinality.ONE_CARDINALITY:
 			if (elementSelected) {
+				// On ne peut pas deselectionner un élément déjà selectionné
 				return false;
 			}
 			
@@ -546,7 +555,7 @@ var __members = {
 			if (rangeMode) {
 				var lastSelectedElement=this._lastSelectedElement;
 				if (!lastSelectedElement) {
-					f_core.Debug(fa_selectionManager, "_performElementSelection: No lastSelectedElement set to '"+this.fa_getElementValue(element)+"'.");
+					f_core.Debug(fa_selectionManager, "f_performElementSelection: No lastSelectedElement set to '"+this.fa_getElementValue(element)+"'.");
 
 					this._lastSelectedElement=element;
 					lastSelectedElement=element;
@@ -555,10 +564,10 @@ var __members = {
 				// Nous sommes en range mode .....
 				this._selectRange(element, lastSelectedElement, (selection & fa_selectionManager.APPEND_SELECTION));
 				
-			} else if (elementSelected) {				
+			} else if (elementSelected) {
 				if (selection & fa_selectionManager.APPEND_SELECTION) {
 					// On est juste en ajout: pas de déselection complete !
-					this._deselectElement(element, elementValue);				
+					this._deselectElement(element, elementValue);
 					break;
 				}
 				
@@ -569,7 +578,6 @@ var __members = {
 				// On deselectionne tout !
 				this._deselectAllElements();
 			}
-			
 
 			this._selectElement(element, elementValue, show);
 			break;
@@ -708,4 +716,8 @@ var __members = {
 	fa_setElementSelected: f_class.ABSTRACT
 }
 
-new f_aspect("fa_selectionManager", __statics, __members, fa_itemsManager, fa_selectionProvider);
+new f_aspect("fa_selectionManager", {
+	extend: [ fa_itemsManager, fa_selectionProvider],
+	statics: __statics,
+	members: __members 
+});

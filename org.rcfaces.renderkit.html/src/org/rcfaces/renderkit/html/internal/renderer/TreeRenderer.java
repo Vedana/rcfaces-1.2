@@ -13,7 +13,8 @@ import javax.faces.convert.ConverterException;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.TreeComponent;
-import org.rcfaces.core.component.capability.ICardinality;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
@@ -64,7 +65,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         if (treeComponent.isCheckable(facesContext)) {
             int cardinality = treeComponent.getCheckCardinality(facesContext);
             if (cardinality == 0) {
-                cardinality = ICardinality.DEFAULT_CARDINALITY;
+                cardinality = ICheckCardinalityCapability.DEFAULT_CARDINALITY;
             }
 
             htmlWriter.writeAttribute("v:checkCardinality", cardinality);
@@ -78,7 +79,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             int cardinality = treeComponent
                     .getSelectionCardinality(facesContext);
             if (cardinality == 0) {
-                cardinality = ICardinality.DEFAULT_CARDINALITY;
+                cardinality = ISelectionCardinalityCapability.DEFAULT_CARDINALITY;
             }
 
             htmlWriter.writeAttribute("v:selectionCardinality", cardinality);

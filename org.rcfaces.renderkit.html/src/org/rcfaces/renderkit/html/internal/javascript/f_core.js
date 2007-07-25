@@ -226,6 +226,10 @@ var f_core = {
 	 * @method private static
 	 */
 	_AddLog: function(level, name, message, exception, win) {
+		if (window.rcfacesLogCB) {
+			window.rcfacesLogCB.apply(window, arguments);
+			return;
+		}
 		if (f_core._Logging) {
 			if (exception) {
 				throw exception;
@@ -554,8 +558,8 @@ var f_core = {
 		if (profilerMode===undefined) {
 			profilerMode=true;
 		}
-		if (!window.f_profilerCB) {
-			window.f_profilerCB=profilerMode;
+		if (!window.rcfacesProfilerCB) {
+			window.rcfacesProfilerCB=profilerMode;
 		}
 	},
 	/**
@@ -577,23 +581,32 @@ var f_core = {
 		
 		f_core.DebugMode=window.rcfacesDebugMode;
 		
-		f_core.Info(f_core, "_InitLibrary: start date="+initDate);
-		
-		var profilerCB=window.f_profilerCB;
-		if (!profilerCB) {
-			try {
-				for(var w=window;w && w.parent!=w;w=w.parent) {
-					if (!w.parent.f_profilerCB) {
-						continue;
-					}
-					
-					profilerCB=w.parent.f_profilerCB;
-					window.f_profilerCB=profilerCB;
+		var profilerCB=window.rcfacesProfilerCB;
+		var logCB=window.rcfacesLogCB;
+
+		try {
+			for(var w=window;w && w.parent!=w;w=w.parent) {
+				var f=w.parent.rcfacesProfilerCB
+				if (!f) {
+					f=w.parent.f_profilerCB;
 				}
-			} catch (x) {
-				// Il y aura peut etre des problemes de sécurité ... on laisse tomber !
+				
+				if (f) {
+					profilerCB=f;
+					window.rcfacesProfilerCB=profilerCB;
+				}
+				
+				f=w.parent.rcfacesLogCB
+				if (f) {
+					logCB=f;
+					window.rcfacesLogCB=logCB;
+				}
 			}
+		} catch (x) {
+			// Il y aura peut etre des problemes de sécurité ... on laisse tomber !
 		}
+		
+		f_core.Info(f_core, "_InitLibrary: start date="+initDate);
 		
 		if (profilerCB) {
 			f_core.Info(f_core, "_InitLibrary: Enable profiler mode");
@@ -738,7 +751,7 @@ var f_core = {
 		try {
 			f_core._LoggingProfile=true;	
 	
-			var profiler=window.f_profilerCB;
+			var profiler=window.rcfacesProfilerCB;
 			if (profiler===undefined) {
 				return;
 			}
@@ -801,7 +814,7 @@ var f_core = {
 				var title=["DEBUG"];
 				f_core.Info("f_core", "Enable f_core.DEBUG mode");
 			
-				var profiler=window.f_profilerCB;
+				var profiler=window.rcfacesProfilerCB;
 				if (profiler) {
 					title.push("PROFILER");
 				}
@@ -933,30 +946,31 @@ var f_core = {
 		
 				var forms = document.forms;
 				for (var i=0; i<forms.length; i++) {
-					var f = forms[i];
+					var form = forms[i];
 					
-					if (!f._initialized) {
+					if (!form._initialized) {
 						continue;
 					}
-					f._initialized=undefined;
+					form._initialized=undefined;
 		
-					f_core.RemoveEventListener(f, "submit", f_core._OnSubmit);
-					f_core.RemoveEventListener(f, "reset", f_core._OnReset);
+					f_core.RemoveEventListener(form, "submit", f_core._OnSubmit);
+					f_core.RemoveEventListener(form, "reset", f_core._OnReset);
 		
-					f._checkListeners=undefined; // List<method>
-					f._resetListeners=undefined; // List<method>
-					f._messageContext=undefined; // f_messageContext
-					f.f_findComponent=undefined; // function
+					form._checkListeners=undefined; // List<method>
+					form._resetListeners=undefined; // List<method>
+					form._messageContext=undefined; // f_messageContext
+					form.f_findComponent=undefined; // function
+//					form._serializedInputs=undefined; // Map<String, String>			
 					
-					if (f._oldSubmit) {
+					if (form._oldSubmit) {
 						try {
-							f.submit = f._oldSubmit;
+							f.submit = form._oldSubmit;
 							
 						} catch (x) {
 							// Dans certaines versions de IE, il n'est pas possible de changer le submit !
 						}
 						
-						f._oldSubmit = undefined;
+						form._oldSubmit = undefined;
 					}
 				}
 		
@@ -1060,11 +1074,11 @@ var f_core = {
 		var forms=elt.ownerDocument.forms;
 		switch(forms.length) {
 		case 0:
-			f_core.Debug(f_core, "No form into document !");
+			f_core.Debug(f_core, "GetParentForm: No form into document !");
 			return null;
 
 		case 1:
-//			f_core.Debug(f_core, "Only one form into document, returns "+forms[0].id);
+//			f_core.Debug(f_core, "GetParentForm: Only one form into document, returns "+forms[0].id);
 			return forms[0];
 		}
 	
@@ -1078,12 +1092,12 @@ var f_core = {
 				continue;
 			}
 			
-			f_core.Debug(f_core, "Parent form of '"+elt.id+"': "+f.id);
+			f_core.Debug(f_core, "GetParentForm: Parent form of '"+elt.id+"': "+f.id);
 			
 			return f;
 		}
 
-		f_core.Debug(f_core, "Can not find any parent form for component '"+elt.id+"'.");
+		f_core.Debug(f_core, "GetParentForm: Can not find any parent form for component '"+elt.id+"'.");
 		return null;
 	},
 	/**
@@ -1400,6 +1414,7 @@ var f_core = {
 
 			if (classLoader) {
 				classLoader.f_serialize(form);
+				f_classLoader.SerializeInputsIntoForm(form);
 				
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
 			}
@@ -2564,15 +2579,46 @@ var f_core = {
 		var curTop = 0;
 		var curLeft= 0;
 		
+		var gecko=f_core.IsGecko();
+		
 	//	f_core.Debug(f_core, "Get absolutePos of '"+component.id+"'.");
-		if (component.offsetParent) {
-			for (;component.offsetParent;component = component.offsetParent) {
-				curTop += component.offsetTop;
+		var offsetParent=component.offsetParent;
+		if (offsetParent) {
+			var doc=component.ownerDocument;
+			
+			var body=doc.body;
+			var documentElement=doc.documentElement;
+		
+			for (;;) {
+				curTop += component.offsetTop 
 				curLeft += component.offsetLeft;
+				
+				if (!offsetParent) {
+					break;
+				}
 
-		//		f_core.Debug(f_core, " Sub absolutePos of '"+component.id+"' x="+component.offsetLeft+" y="+component.offsetTop+"  totX="+curLeft+" totY="+curTop);
+				// On cherche le scroll intermédiaire !				
+				for(component=component.parentNode;component!=offsetParent;component=component.parentNode) {
+					curTop -= component.scrollTop;
+					curLeft -= component.scrollLeft;
+				}
+	
+				if (component!=body && component!=documentElement) {
+					curTop -= component.scrollTop;
+					curLeft -= component.scrollLeft;
+			
+					if (gecko) {
+						curTop+=f_core.ComputeBorderLength(component, "top")		
+						curLeft+=f_core.ComputeBorderLength(component, "left")
+					}		
+				}
+								
+			//	f_core.Debug(f_core, " Sub absolutePos of '"+component.id+"' x="+component.offsetLeft+" y="+component.offsetTop+"  totX="+curLeft+" totY="+curTop);
+		
+				offsetParent = component.offsetParent;
 			}
 		} else {
+			// ???
 			if (component.x) {
 				curLeft+=component.x;
 			}
@@ -2581,7 +2627,7 @@ var f_core = {
 			}
 		}
 		
-	//	f_core.Debug(f_core, "  End absolutePos x="+curLeft+" y="+curTop);
+		//f_core.Debug(f_core, "  End absolutePos x="+curLeft+" y="+curTop);
 		return { x: curLeft, y: curTop };
 	},
 	/**
@@ -2860,59 +2906,183 @@ var f_core = {
 	 * Returns the size of the View.
 	 *
 	 * @method public static 
+	 * @param optional Object values
 	 * @param optional Document doc
 	 * @return Object Object which defines 2 fields: width and height 
 	 */
-	GetViewSize: function(doc) {
+	GetViewSize: function(values, doc) {
+		f_core.Assert(values===undefined || values===null || typeof(values)=="object", "f_core.GetViewSize: Invalid values parameter '"+values+"'.");
+
+		if (!values) {
+			values=new Object;
+		}
+		
+		var win;
 		if (!doc) {
 			doc=document;
+			win=window;
+			
+		} else {
+			win=f_core.GetWindow(doc);
 		}
+		
 		if (f_core.IsInternetExplorer()) {
-			return { 
-		 		width: Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft) +
-		     		 (doc.documentElement.clientWidth != 0 ? doc.documentElement.clientWidth : doc.body.clientWidth),
-		   		height: Math.max(doc.documentElement.scrollTop, doc.body.scrollTop) +
-		      		(doc.documentElement.clientHeight != 0 ? doc.documentElement.clientHeight : doc.body.clientHeight) 
-		      };
+			
+			var docElement=doc.documentElement;
+			
+			if (docElement && docElement.clientWidth) {
+				values.width=docElement.clientWidth; 
+				values.height=docElement.clientHeight; 
+			
+				return values;
+			}
+			
+		} else if (f_core.IsGecko()) {
+			// Firefox !
+
+			var docElement=doc.documentElement;
+			var body=doc.body;
+			
+					
+			if (docElement.clientWidth<docElement.scrollWidth) {
+				values.width=docElement.clientWidth;
+		
+			} else if (body.clientWidth<body.scrollWidth) {
+				// On retire la taille de la scrollbar
+				values.width=body.clientWidth;
+				
+			} else {
+				values.width=win.innerWidth;
+			}
+		
+			if (docElement.clientHeight<docElement.scrollHeight) {
+				values.height=docElement.clientHeight;
+		
+			} else if (body.clientHeight<body.scrollHeight) {
+				// On retire la taille de la scrollbar
+				values.height=body.clientHeight;
+				
+			} else {
+				values.height=win.innerHeight;
+			}
+			
+//			values.width-=f_core.ComputeBorderLength(body, "left")+f_core.ComputeBorderLength(body, "right");
+//			values.height-=f_core.ComputeBorderLength(body, "top")+f_core.ComputeBorderLength(body, "bottom");
+			
+			return values;
 		}
-		  
-		var window=f_core.GetWindow(doc);
-		 
-		return { 
-			width: window.scrollX + window.innerWidth,
-			height: window.scrollY + window.innerHeight
-		};
+					
+		var body=doc.body;
+		values.width=body.clientWidth;
+		values.height=body.clientHeight;
+		
+		return values;
+	},
+	/**
+	 * @method private static
+	 * @param HTMLElement component
+	 * @param String side
+	 * @return number
+	 */
+	ComputeBorderLength: function(component, side) {
+		var length=0;
+		
+		var margin=f_core.GetCurrentStyleProperty(component, "margin-"+side);
+		if (margin && margin.indexOf("px")>0) {
+			length+=parseInt(margin);
+		}
+	
+		var padding=f_core.GetCurrentStyleProperty(component, "padding-"+side);
+		if (padding && padding.indexOf("px")>0) {
+			length+=parseInt(padding);
+		}
+	
+		var border=f_core.GetCurrentStyleProperty(component, "border-"+side);
+		if (border && border.indexOf("px")>0) {
+			length+=parseInt(border);
+		}
+		
+		return length;
+	},
+	/**
+	 * @method public static
+ 	 * @param optional Object values
+	 * @param optional Document doc
+	 * @return Object  which defines 2 fields: x and y 
+	 */
+	GetScrollOffsets: function(values, doc) {
+		f_core.Assert(values===undefined || values===null || typeof(values)=="object", "f_core.GetScrollOffsets: Invalid values parameter '"+values+"'.");
+		
+		if (!values) {
+			values=new Object;
+		}
+		
+		var win;
+		if (doc) {		
+			win=f_core.GetWindow(doc);
+			
+		} else {
+			doc=document;
+			win=window;
+		}	
+				
+		if (typeof(win.pageYOffset)=="number") {
+			// Netscape !
+			values.x=win.pageXOffset;
+			values.y=win.pageYOffset;
+			
+			return values;
+		}
+		
+		var docElement=doc.documentElement;
+		if (docElement && docElement.clientWidth) {
+			values.x=docElement.scrollLeft; 
+			values.y=docElement.scrollTop;
+			
+			return values;
+		}
+		
+		var body=doc.body;
+		values.x=body.scrollLeft; 
+		values.y=body.scrollTop; 
+		
+		return values;
 	},
 	/**
 	 * Returns the size of the document.
 	 *
 	 * @method public static 
+	 * @param optional Object values
 	 * @param optional Document doc
 	 * @return Object Object which defines 2 fields: width and height 
 	 */
-	GetDocumentSize: function(doc) {
+	GetDocumentSize: function(values, doc) {
+		f_core.Assert(values===undefined || values===null || typeof(values)=="object", "f_core.GetDocumentSize: Invalid values parameter '"+values+"'.");
+
+		if (!values) {
+			values=new Object;
+		}
+
 		if (!doc) {
 			doc=document;
 		}
 		
-		if (f_core.IsInternetExplorer()) {
-			var width=doc.body.scrollWidth;
-			var height=doc.body.scrollHeight;
-		
-			return {
-				width: width,
-				height: height
-			};
+		var docElement=doc.documentElement;
+		if (docElement && docElement.clientWidth) {
+			// Firefox et IE en mode docType strict
+
+			values.width=docElement.scrollWidth;
+			values.height=docElement.scrollHeight;
+			
+			return values;
 		}
-				
-		// Firefox
-		var width=doc.documentElement.scrollWidth;
-		var height=doc.documentElement.scrollHeight;
 		
-		return {
-			width: width,
-			height: height
-		};
+		// IE et le reste ...		
+		var body=doc.body;
+		values.width=body.scrollWidth;
+		values.height=body.scrollHeight;
+		
+		return values;
 	},
 	/**
 	 * Copy the styleSheets from a document source to a document destination.
@@ -4752,14 +4922,62 @@ var f_core = {
 
 		return clientData;
 	},
+	
 	/**
 	 * @method public static
+	 * @param HTMLElement component
+	 * @return void
+	 */
+	ShowComponent: function(component) {
+
+		var position=f_core.GetAbsolutePosition(component);
+		var size= { width: component.offsetWidth, height: component.offsetHeight };
+					
+		if (f_core.IsGecko()) {
+			size.width+=f_core.ComputeBorderLength(component, "left")+f_core.ComputeBorderLength(component, "right");
+			size.height+=f_core.ComputeBorderLength(component, "top")+f_core.ComputeBorderLength(component, "bottom");
+		}		
+						
+		var scroll=f_core.GetScrollOffsets(null, component.ownerDocument);
+		var viewSize=f_core.GetViewSize(null, component.ownerDocument);		
+		
+		f_core.Debug(f_core, "ShowComponent: position x="+position.x+" y="+position.y+"  scroll.x="+scroll.x+" scroll.y="+scroll.y+"  view.width="+viewSize.width+" view.height="+viewSize.height);
+		
+		var newScroll= { x: scroll.x, y: scroll.y };
+		
+		if (position.y<scroll.y) {
+			newScroll.y=position.y;
+
+		} else if (position.y+size.height>scroll.y+viewSize.height) {
+			newScroll.y=position.y+size.height-viewSize.height;
+		}
+	
+		if (position.x<scroll.x) {
+			newScroll.x=position.x;
+
+		} else if (position.x+size.width>scroll.x+viewSize.width) {
+			newScroll.x=position.x+size.width-viewSize.width;
+		}
+		
+		if (newScroll.x!=scroll.x || newScroll.y!=scroll.y) {
+		
+			f_core.Debug(f_core, "ShowComponent: x="+newScroll.x+" y="+newScroll.y+"  oldX="+scroll.x+" oldY="+scroll.y);
+						
+			window.scroll(newScroll.x, newScroll.y);
+		}
+	},
+	
+	/**
+	 * @method public static
+	 * @return void
 	 */
 	ShowVersion: function() {
 		alert("RCFaces buildId="+window.rcfacesBuildId);
 	},
 	/**
 	 * @method public static
+	 * @param String tokenId
+	 * @return void
 	 */
 	ReportError: function(tokenId) {
 		if (!tokenId) {

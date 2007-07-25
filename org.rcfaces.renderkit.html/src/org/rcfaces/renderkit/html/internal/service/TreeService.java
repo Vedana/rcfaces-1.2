@@ -219,7 +219,7 @@ public class TreeService extends AbstractHtmlService {
         // String waitingVarId = "_rootNode";
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, treeComponent, treeId);
+                pw, RESPONSE_CHARSET, treeComponent, treeId);
 
         String varId = jsWriter.getComponentVarName();
         String waitingVarId = jsWriter.getJavaScriptRenderContext()

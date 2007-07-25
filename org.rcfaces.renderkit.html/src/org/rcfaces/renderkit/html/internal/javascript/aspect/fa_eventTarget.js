@@ -373,4 +373,7 @@ var __members = {
 	f_clearDomEvent: f_class.OPTIONAL_ABSTRACT
 }
 
-new f_aspect("fa_eventTarget", __statics, __members);
+new f_aspect("fa_eventTarget", {
+	statics: __statics,
+	members: __members
+});

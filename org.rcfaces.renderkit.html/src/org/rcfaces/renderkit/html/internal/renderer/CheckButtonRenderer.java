@@ -178,34 +178,24 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
         boolean selected = false;
 
-        String componentValue = getValue(facesContext, button);
+        String selectedProperty = clientData.getStringProperty("selected");
+        if (selectedProperty != null) {
+            selected = (selectedProperty.length() > 0);
 
-        if (componentValue != null) {
-            String selectedValue = clientData.getStringProperty("selected");
-            if (selectedValue != null) {
-                selected = componentValue.equals(selectedValue);
+        } else {
+            String values[] = clientData.getComponentParameters();
 
-            } else {
-                String values[] = clientData.getComponentParameters();
+            if (values != null) {
+                for (int i = 0; i < values.length; i++) {
+                    selected = (values[i].length() > 0);
 
-                if (values != null && values.length > 0) {
-                    for (int i = 0; i < values.length; i++) {
-                        String value = values[i];
-
-                        if (componentValue.equals(value) == false) {
-                            continue;
-                        }
-
-                        selected = true;
-
-                        break;
-                    }
+                    break;
                 }
             }
         }
 
         if (button.isSelected(facesContext) != selected) {
-            button.setSelected(selected);
+            button.setValue(Boolean.valueOf(selected));
 
             button.queueEvent(new PropertyChangeEvent(button,
                     Properties.SELECTED, Boolean.valueOf(selected == false),

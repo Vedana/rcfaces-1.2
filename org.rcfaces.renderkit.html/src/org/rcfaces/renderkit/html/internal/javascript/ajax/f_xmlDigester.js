@@ -625,8 +625,8 @@ var __members = {
 	 * @return void
 	 */
 	_setProperty: function(object, attributeName, attributeValue) {
-		f_core.Assert(typeof(attributeName)=="string", "Attribute name is not a string ! ("+attributeName+")");
-		f_core.Assert(typeof(object)=="object", "Object parameter is not an object ! ("+object+")");
+		f_core.Assert(typeof(attributeName)=="string", "_setProperty: Attribute name is not a string ! ("+attributeName+")");
+		f_core.Assert(typeof(object)=="object", "_setProperty: Object parameter is not an object ! ("+object+")");
 
 		var setterName="set"+attributeName.charAt(0).toUpperCase()+attributeName.substring(1);
 		
@@ -636,7 +636,7 @@ var __members = {
 				f.call(object, attributeValue);
 				
 			} catch (x) {
-				f_core.Error(f_xmlDigester, "Setter '"+setterName+"' of object '"+object+"' throws exception (value='"+attributeValue+"')");
+				f_core.Error(f_xmlDigester, "_setProperty: Setter '"+setterName+"' of object '"+object+"' throws exception (value='"+attributeValue+"')");
 				
 				throw x;
 			}
@@ -648,10 +648,14 @@ var __members = {
 			object[attributeName]=attributeValue;
 			
 		} catch (x) {
-			f_core.Error(f_xmlDigester, "Set field '"+setterName+"' of object '"+object+"' with value '"+attributeValue+"' throws exception (value='"+attributeValue+"')");
+			f_core.Error(f_xmlDigester, "_setProperty: Set field '"+setterName+"' of object '"+object+"' with value '"+attributeValue+"' throws exception (value='"+attributeValue+"')");
 			
 			throw x;
 		}
 	}
 }
-new f_class("f_xmlDigester", null, __statics, __members, f_object);
+new f_class("f_xmlDigester", {
+	extend: f_object,
+	statics: __statics,
+	members: __members
+});

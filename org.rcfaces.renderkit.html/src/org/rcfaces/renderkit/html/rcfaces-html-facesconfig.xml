@@ -29,6 +29,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.additionalInformation</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.AdditionalInformationRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.box</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.BoxRenderer</renderer-class>
 		</renderer>

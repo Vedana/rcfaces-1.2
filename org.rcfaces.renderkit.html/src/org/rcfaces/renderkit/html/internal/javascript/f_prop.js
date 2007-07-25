@@ -140,6 +140,11 @@ var __statics = {
 	/**
 	 * @field hidden static final
 	 */
+	HIDE_ADDITIONAL:		"hideAdditional",
+
+	/**
+	 * @field hidden static final
+	 */
 	HIDEROOTNODE:			"hideRootNode",
 
 	/**
@@ -226,6 +231,16 @@ var __statics = {
 	 * @field hidden static final
 	 */
 	SELECTED_ITEMS:			"selectedItems",
+
+	/**
+	 * @field hidden static final
+	 */
+	SERIALIZED_INDEXES:		"serializedIndexes",
+
+	/**
+	 * @field hidden static final
+	 */
+	SHOW_ADDITIONAL:		"showAdditional",
 
 	/**
 	 * @field hidden static final

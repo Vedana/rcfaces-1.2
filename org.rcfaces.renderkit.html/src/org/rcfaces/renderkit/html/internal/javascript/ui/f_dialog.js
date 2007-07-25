@@ -149,7 +149,7 @@ var __statics = {
     	f_dialog._ObjMove = undefined; // Object
     	if (f_dialog._TimeoutId) {
     		window.clearTimeout(f_dialog._TimeoutId);
-    		f_dialog._TimeoutId = undefind; // number
+    		f_dialog._TimeoutId = undefined; // number
     	}
 	},
     /**

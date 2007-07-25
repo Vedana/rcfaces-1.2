@@ -117,6 +117,9 @@ public class PopupGridService extends AbstractHtmlService {
             }
         }
 
+        String showAdditional = (String) parameters.get("showAdditional");
+        String hideAdditional = (String) parameters.get("hideAdditional");
+
         UIComponent component = HtmlTools.getForComponent(facesContext,
                 dataGridId, viewRoot);
         if (component == null) {
@@ -203,7 +206,8 @@ public class PopupGridService extends AbstractHtmlService {
 
             writeJs(facesContext, printWriter, dgc, dataGridId,
                     (DataGridRenderer) dgr, rowIndex, forcedRows,
-                    sortedComponents, filterExpression, unknownRowCount);
+                    sortedComponents, filterExpression, unknownRowCount,
+                    showAdditional, hideAdditional);
 
         } catch (IOException ex) {
             throw new FacesException(
@@ -239,8 +243,8 @@ public class PopupGridService extends AbstractHtmlService {
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             IGridComponent dgc, String componentClientId, DataGridRenderer dgr,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
-            String filterExpression, boolean unknownRowCount)
-            throws IOException {
+            String filterExpression, boolean unknownRowCount,
+            String showAdditional, String hideAdditional) throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -253,12 +257,13 @@ public class PopupGridService extends AbstractHtmlService {
         }
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, (UIComponent) dgc, componentClientId);
+                pw, RESPONSE_CHARSET, (UIComponent) dgc, componentClientId);
 
         DataGridRenderer.DataGridRenderContext tableContext = dgr
                 .createTableContext(processContext, jsWriter
                         .getJavaScriptRenderContext(), dgc, rowIndex,
-                        forcedRows, sortedComponents, filterExpression);
+                        forcedRows, sortedComponents, filterExpression,
+                        showAdditional, hideAdditional);
 
         String varId = jsWriter.getComponentVarName();
 

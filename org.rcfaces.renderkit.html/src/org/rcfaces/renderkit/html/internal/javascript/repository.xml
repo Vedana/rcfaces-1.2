@@ -464,6 +464,8 @@
 				<required-class name="f_component" />
 				<required-class name="fa_required" />
 				<required-class name="fa_message" />
+
+				<required-class name="fa_compositeNumEntry" />
 			</class>
 		</file>
 	</module>
@@ -519,6 +521,12 @@
 		</file>
 		<file name="input/fa_checkManager.js">
 			<class name="fa_checkManager">
+				<required-class name="fa_itemsManager" />
+				<required-class name="f_prop" />
+			</class>
+		</file>
+		<file name="input/fa_additionalInformationManager.js">
+			<class name="fa_additionalInformationManager">
 				<required-class name="fa_itemsManager" />
 				<required-class name="f_prop" />
 			</class>
@@ -894,8 +902,13 @@
 		</file>
 	</module>
 
-<!-- DATAGRID Components -->
+<!-- GRID Components -->
 	<module id="dataGrid">
+		<file name="input/f_additionalInformation.js">
+			<class name="f_additionalInformation">
+				<required-class name="f_component" />
+			</class>
+		</file>
 		<file name="input/f_grid.js">
 			<class name="f_grid">
 				<required-class name="f_component" />
@@ -906,11 +919,16 @@
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_selectionProvider" />
 				<required-class name="fa_selectionManager" />
+				<required-class name="fa_additionalInformationManager" />
+				<required-class name="f_additionalInformation" />
 				<required-class name="f_error" />
 				<required-class name="fa_scrollPositions" />
 				<required-class id="menu" name="f_menu" />
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
+				
+				<required-class id="additional" name="fa_asyncRender" />
+				<required-class id="additional" name="f_additionalInformation" />
 
 				<required-style name="f_grid.css" />
 			</class>

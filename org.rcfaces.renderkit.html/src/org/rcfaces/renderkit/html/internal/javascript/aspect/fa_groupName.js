@@ -128,4 +128,7 @@ var __members = {
 	fa_getRadioScope: f_class.ABSTRACT
 }
 
-new f_aspect("fa_groupName", __statics, __members);
+new f_aspect("fa_groupName", {
+	statics: __statics,
+	members: __members
+});

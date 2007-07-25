@@ -755,4 +755,8 @@ var __members = {
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT
 }
 
-new f_aspect("fa_items", __statics, __members, fa_itemClientDatas);
+new f_aspect("fa_items", {
+	extend: [ fa_itemClientDatas ],
+	statics: __statics,
+	members: __members
+});

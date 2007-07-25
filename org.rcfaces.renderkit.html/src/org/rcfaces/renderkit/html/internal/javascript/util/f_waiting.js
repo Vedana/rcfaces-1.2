@@ -103,7 +103,7 @@ var __statics = {
 		
 		var doc=parentElement.ownerDocument;
 	
-		f_core.Assert(parentElement.tagName, "parent is not a DOM element !");
+		f_core.Assert(parentElement.tagName, "f_waiting.Create: parent is not a DOM element !");
 		var node=doc.createElement("div");
 		
 		var className="f_waiting";
@@ -113,6 +113,7 @@ var __statics = {
 			node.setAttribute("v:lookId", lookId);
 		}
 
+		node._inlineMode=inlineMode;
 		node._parentElement=parentElement;
 		
 		if (!message) {
@@ -218,22 +219,28 @@ var __statics = {
 		if (y<0) {
 			y=0;
 		}
-		
-		for(var p=node._parentElement;p;p=p.offsetParent) {
-			var pos=f_core.GetCurrentStyleProperty(p, "position");
-
-			if (pos=="absolute" || pos=="relative") {
-				break;
-			}	
-
-			// Le parent peut pas positionner l'enfant !
-			x+=p.offsetLeft;
-			y+=p.offsetTop;
 			
-		}
+		if (node._inlineMode) {
+			node.style.marginLeft=x+"px";
+			node.style.marginTop=y+"px";
+			
+		} else  {
+			for(var p=node._parentElement;p;p=p.offsetParent) {
+				var pos=f_core.GetCurrentStyleProperty(p, "position");
+	
+				if (pos=="absolute" || pos=="relative") {
+					break;
+				}	
+	
+				// Le parent peut pas positionner l'enfant !
+				x+=p.offsetLeft;
+				y+=p.offsetTop;
 				
-		node.style.left=x+"px";
-		node.style.top=y+"px";
+			}
+
+			node.style.left=x+"px";
+			node.style.top=y+"px";
+		}
 //		node.style.display="block";
 //		document.title="x="+x+"/y="+y;
 	},
@@ -330,6 +337,16 @@ var __statics = {
 } 
 
 var __members = {
+	
+	/**
+	 * @field private String
+	 */
+	 _text: undefined,
+	 
+	/**
+	 * @field private String
+	 */
+	 _parentElementOldCursor: undefined,
 
 	/*
 	f_waiting: function() {

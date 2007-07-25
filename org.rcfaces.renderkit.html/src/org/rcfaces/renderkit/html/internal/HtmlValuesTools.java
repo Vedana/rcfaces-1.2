@@ -6,7 +6,6 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -15,8 +14,8 @@ import java.util.StringTokenizer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.lang.OrderedSet;
 
 /**
  * 
@@ -53,7 +52,7 @@ public class HtmlValuesTools extends ValuesTools {
     }
 
     public static boolean updateValues(FacesContext facesContext,
-            UIComponent component, boolean convert, Collection values,
+            UIComponent component, boolean convert, Set values,
             String valuesToAdd, String valuesToRemove) {
         List vadd = Collections.EMPTY_LIST;
         if (valuesToAdd != null) {

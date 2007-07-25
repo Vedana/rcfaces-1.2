@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.faces.component.UIComponent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 
@@ -20,6 +22,16 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 
 public class SelectItemsJsContext extends SelectItemsContext {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(SelectItemsJsContext.class);
+
+    private static final boolean LOG_VARS = LOG.isTraceEnabled();
+    static {
+        if (LOG_VARS) {
+            LOG.info("LOG_VARS enabled !");
+        }
+    }
 
     private final List varIds = new ArrayList(8);
 
@@ -50,14 +62,19 @@ public class SelectItemsJsContext extends SelectItemsContext {
     }
 
     public void popVarId() {
-        // System.out.println("Pop var Id depth="+varIds.size());
+        if (LOG_VARS) {
+            LOG.trace("Pop var Id depth=" + varIds.size());
+        }
 
         varIds.remove(varIds.size() - 1);
     }
 
     public void pushVarId(String varId) {
         varIds.add(varId);
-        // System.out.println("Push var Id="+varId+" depth="+varIds.size());
+
+        if (LOG_VARS) {
+            LOG.trace("Push var Id=" + varId + " depth=" + varIds.size());
+        }
     }
 
     public String peekVarId() {

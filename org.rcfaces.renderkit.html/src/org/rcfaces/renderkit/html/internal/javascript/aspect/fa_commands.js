@@ -26,16 +26,16 @@ var __members = {
 	 */
 	f_appendCommand: function(callBack) {
 		if (!this._loading) {
-			f_core.Info(fa_commands, "Call immediatly the callback !");
+			f_core.Info(fa_commands, "f_appendCommand: Call immediatly the callback !");
 			callBack.call(this, this);
 			return;
 		}
 		
 		if (this._nextCommand) {
-			f_core.Info(fa_commands, "Replace an other callback !");
+			f_core.Info(fa_commands, "f_appendCommand: Replace an other callback !");
 
 		} else  {
-			f_core.Info(fa_commands, "Set the next callback !");
+			f_core.Info(fa_commands, "f_appendCommand: Set the next callback !");
 		}
 
 		this._nextCommand=callBack;
@@ -50,7 +50,7 @@ var __members = {
 			return false;
 		}
 	
-		f_core.Info(fa_commands, "Process callback !");
+		f_core.Info(fa_commands, "f_processNextCommand: Process callback !");
 		
 		this._nextCommand=undefined;
 		
@@ -58,7 +58,7 @@ var __members = {
 			nextCommand.call(this, this);
 			
 		} catch (ex) {
-			f_core.error(fa_commands, "Call of callback: "+nextCommand+" throws exception.", ex);
+			f_core.error(fa_commands, "f_processNextCommand: Call of callback: "+nextCommand+" throws exception.", ex);
 			return false;
 		}
 		
@@ -66,4 +66,6 @@ var __members = {
 	}
 }
 
-new f_aspect("fa_commands", null, __members);
+new f_aspect("fa_commands", {
+	members: __members
+});

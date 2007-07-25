@@ -81,4 +81,6 @@ var __members = {
 	}
 }
 
-new f_aspect("fa_itemClientDatas", null, __members);
+new f_aspect("fa_itemClientDatas", {
+	members: __members
+});

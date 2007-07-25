@@ -230,5 +230,7 @@ var __statics = {
 	}
 }
 
-new f_class("f_xml", null, __statics);
+new f_class("f_xml", {
+	statics: __statics
+});
 

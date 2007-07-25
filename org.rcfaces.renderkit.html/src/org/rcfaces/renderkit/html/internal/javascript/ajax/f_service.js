@@ -486,4 +486,9 @@ var __members={
 	}
 }
  
-new f_class("f_service", null, __statics, __members, f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands);
+new f_class("f_service", {
+	extend: f_object,
+	aspects: [ fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands ],
+	statics: __statics,
+	members: __members
+});

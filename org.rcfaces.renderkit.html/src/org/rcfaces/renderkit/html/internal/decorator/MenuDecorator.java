@@ -20,16 +20,16 @@ import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.MenuItemComponent;
 import org.rcfaces.core.component.MenuSeparatorComponent;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.internal.util.KeyTools;
 import org.rcfaces.core.item.IAcceleratorKeyItem;
 import org.rcfaces.core.item.IAccessKeyItem;
@@ -448,6 +448,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         super.decode(context, decodedComponent, componentData);
 
+        FacesContext facesContext = context.getFacesContext();
+
         Map childrenClientIds = null;
 
         String disabledItems = componentData.getStringProperty(DISABLED_ITEMS);
@@ -486,73 +488,41 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        if (component instanceof ICheckedValuesCapability) {
-            ICheckedValuesCapability checkedValuesCapability = (ICheckedValuesCapability) component;
-
-            Object checkedValues = checkedValuesCapability.getCheckedValues();
-
-            boolean checkModified = false;
-            Set checkValues = null;
+        if (component instanceof ICheckComponent) {
 
             String checkedItems = componentData
                     .getStringProperty(CHECKED_ITEMS);
-            if (checkedItems != null && checkedItems.length() > 0) {
-
-                List values = HtmlValuesTools.parseValues(context
-                        .getFacesContext(), component, true, false,
-                        checkedItems);
-
-                for (Iterator it = values.iterator(); it.hasNext();) {
-                    Object value = it.next();
-
-                    if (checkValues == null) {
-                        checkValues = ValuesTools
-                                .convertSelection(checkedValues);
-                    }
-
-                    if (checkValues.add(value) == false) {
-                        continue;
-                    }
-
-                    checkModified = true;
-                }
-            }
-
             String uncheckedItems = componentData
                     .getStringProperty(UNCHECKED_ITEMS);
-            if (uncheckedItems != null && uncheckedItems.length() > 0) {
 
-                if (checkValues == null) {
-                    checkValues = ValuesTools.convertSelection(checkedValues);
-                }
+            if (checkedItems != null || uncheckedItems != null) {
+                boolean checkModified = false;
+                Set checkValues = CheckTools.checkValuesToSet(facesContext,
+                        (ICheckComponent) component, false);
 
-                if (checkValues != null) {
-                    List values = HtmlValuesTools.parseValues(context
-                            .getFacesContext(), component, true, false,
-                            uncheckedItems);
+                if (checkedItems != null && checkedItems.length() > 0) {
 
-                    for (Iterator it = values.iterator(); it.hasNext();) {
-                        Object value = it.next();
+                    List values = HtmlValuesTools.parseValues(facesContext,
+                            component, true, false, checkedItems);
 
-                        if (checkValues.remove(value) == false) {
-                            continue;
-                        }
-
+                    if (checkValues.addAll(values)) {
                         checkModified = true;
                     }
                 }
-            }
 
-            if (checkModified) {
-                Class cls = checkedValuesCapability
-                        .getCheckedValuesType(context.getFacesContext());
-                if (cls == null && checkedValues != null) {
-                    cls = checkedValues.getClass();
+                if (uncheckedItems != null && uncheckedItems.length() > 0) {
+                    List values = HtmlValuesTools.parseValues(facesContext,
+                            component, true, false, uncheckedItems);
+
+                    if (checkValues.removeAll(values)) {
+                        checkModified = true;
+                    }
                 }
 
-                Object value = ValuesTools.adaptValues(cls, checkValues);
-
-                checkedValuesCapability.setCheckedValues(value);
+                if (checkModified) {
+                    CheckTools.setCheckValues(facesContext,
+                            (ICheckComponent) component, checkValues);
+                }
             }
         }
     }

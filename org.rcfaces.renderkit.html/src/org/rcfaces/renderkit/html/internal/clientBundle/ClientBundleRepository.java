@@ -276,7 +276,8 @@ class ClientBundleRepository extends AbstractRepository implements
         PrintWriter writer = new PrintWriter(outputStreamWriter);
 
         IJavaScriptWriter javaScriptWriter = new JavaScriptResponseWriter(
-                servletContext, writer);
+                servletContext, writer,
+                ClientResourceBundleServlet.RESOURCE_BUNDLE_ENCODING);
         try {
             javaScriptWriter.writeCall("f_resourceBundle", "DefineLoaded");
             javaScriptWriter.writeString(baseName);

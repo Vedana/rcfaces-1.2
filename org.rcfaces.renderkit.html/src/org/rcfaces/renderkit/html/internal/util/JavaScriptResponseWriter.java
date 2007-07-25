@@ -38,6 +38,8 @@ public class JavaScriptResponseWriter extends
 
     private final PrintWriter out;
 
+    private final String characterEncoding;
+
     private String componentVarName;
 
     private Map strings;
@@ -53,18 +55,24 @@ public class JavaScriptResponseWriter extends
     private IRenderContext renderContext;
 
     public JavaScriptResponseWriter(FacesContext facesContext, PrintWriter out,
-            UIComponent component, String componentId) {
+            String characterEncoding, UIComponent component, String componentId) {
         super(facesContext, component, componentId);
 
         this.out = out;
+        this.characterEncoding = characterEncoding;
     }
 
     public JavaScriptResponseWriter(ServletContext servletContext,
-            PrintWriter out) {
+            PrintWriter out, String characterEncoding) {
         super(null, null, null);
 
         this.out = out;
         this.servletContext = servletContext;
+        this.characterEncoding = characterEncoding;
+    }
+
+    public final String getResponseCharacterEncoding() {
+        return characterEncoding;
     }
 
     public IJavaScriptRenderContext getJavaScriptRenderContext() {

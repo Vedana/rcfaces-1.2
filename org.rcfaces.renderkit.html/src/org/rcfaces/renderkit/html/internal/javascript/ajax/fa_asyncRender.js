@@ -183,7 +183,8 @@ var __members = {
 	 * @return void
 	 */
 	fa_getInteractiveParent: f_class.ABSTRACT
-	
 }
 
-new f_aspect("fa_asyncRender", null, __members);
+new f_aspect("fa_asyncRender", {
+	members: __members
+});

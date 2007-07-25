@@ -47,6 +47,20 @@ public class JavascriptCodec {
             return writer;
         }
 
+        int idx = text.indexOf("</");
+        if (idx >= 0) {
+            idx = text.toLowerCase().indexOf("</script", idx);
+            if (idx >= 0) {
+                writer = writeJavaScript(writer, text.substring(0, idx + 1),
+                        separator);
+
+                writer = writer.write(separator).write('+').write(separator);
+
+                return writeJavaScript(writer, text.substring(idx + 1),
+                        separator);
+            }
+        }
+
         char dst[] = new char[l * 2];
 
         int pos = encodeJavaScript(text, dst, separator);

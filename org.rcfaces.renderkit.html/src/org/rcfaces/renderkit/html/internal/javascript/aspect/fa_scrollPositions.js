@@ -157,5 +157,6 @@ var __members = {
 	
 }
 
-new f_aspect("fa_scrollPositions", null, __members);
-	
+new f_aspect("fa_scrollPositions", {
+	members: __members
+});

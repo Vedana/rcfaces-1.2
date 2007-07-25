@@ -51,24 +51,22 @@ var __members = {
 				return;
 			}
 			
-			var values="";
 			if (!listSep) {
 				listSep='\x01';
 			}
 			
+			var values;
 			if (value instanceof Array) {
-				for (var i=0;i<value.length;i++) {
-					if (values) {
-						values += listSep;
-					}
-					values += value[i];
-				}
+				values=value.join(listSep);
+
 			} else {
-				for (var v in value) {
-					if (values) {
-						values += listSep;
+				for (var propertyName in value) {
+					if (!values) {
+						values=propertyName;
+						continue;
 					}
-					values += v;
+
+					values += listSep + propertyName;					
 				}
 			}
 		
@@ -108,12 +106,12 @@ var __members = {
 			return;
 		}
 		
-		var oldValue=properties[name];
-		
+		var oldValue=properties[name];		
 		properties[name] = value;
 		
-		if (this.f_performPropertyChange) {			
-			this.f_performPropertyChange(name, value, oldValue);
+		var performPropertyChange=this.f_performPropertyChange;
+		if (performPropertyChange) {			
+			performPropertyChange.call(this, name, value, oldValue);
 		}
 	},
 	/**

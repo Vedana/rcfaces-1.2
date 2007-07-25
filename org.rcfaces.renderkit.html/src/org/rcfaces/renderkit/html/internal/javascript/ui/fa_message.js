@@ -11,18 +11,33 @@
  */
 
 var __members = {
+	
+	/**
+	 * @field private f_messageContext
+	 */
+	_messageContext: undefined,
+	
 	fa_message: function() {
 
 		var messageContext=f_messageContext.Get(this);
-		
-		var messages=messageContext.f_listMessages(this);
+		this._messageContext=messageContext;
 		
 		messageContext.f_addMessageListener(this);
+		
+		var messages=messageContext.f_listMessages(this);
 		
 		f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"' = "+messages);
 		if (messages.length) {
 			this.f_performMessageChanges(messageContext);
 		}
+	},
+	f_finalize: function() {
+		var messageContext=this._messageContext;
+		if (messageContext) {
+			this._messageContext=undefined;
+			
+			messageContext.f_removeMessageListener(this);
+		}		
 	},
 	
 	/**

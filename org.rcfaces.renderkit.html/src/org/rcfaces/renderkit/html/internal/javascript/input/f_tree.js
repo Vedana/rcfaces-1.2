@@ -301,6 +301,10 @@ var __statics = {
 				tree.fa_updateElementStyle(li);
 			}
 		}
+		
+		if (tree._cursor) {
+			tree.fa_showElement(tree._cursor);
+		}
 
 		tree.f_onFocus(evt);
 
@@ -464,7 +468,7 @@ var __members = {
 		this._blankNodeImageURL=styleSheetBase+f_tree._BLANK_NODE_IMAGE_URL;
 		f_imageRepository.PrepareImage(this._blankNodeImageURL);
 		
-		if (f_core.IsInternetExplorer()) {
+		if (false && f_core.IsInternetExplorer()) {
 			if (!this.tabIndex) {
 				this.tabIndex=0;
 			}
@@ -496,14 +500,46 @@ var __members = {
 			this.onblur=f_tree._Link_onblur;
 			this._tree=this;
 
-			var tabIndex=this.tabIndex;
-			if (tabIndex<0) {
-				tabIndex=0;
+			if (this.tabIndex>0) {
+				focus.tabIndex=this.tabIndex;
+				
+			}  else {
+				focus.tabIndex=0;
 			}
-			focus.tabIndex=0;
+
 			this.tabIndex=-1;
 
-			this.appendChild(focus);
+			this.insertBefore(focus, this.firstChild);
+			
+			if (f_core.IsInternetExplorer()) {
+				this.hideFocus=true;
+				
+				var self=this;
+				
+				focus.onbeforeactivate=function() {
+					var evt=window.event;
+					
+					evt.cancelBubble=true;
+				}
+				
+				focus.onbeforedeactivate=function() {
+					var evt=window.event;
+					
+					var next=evt.toElement;
+	
+					if (!next || next.tagName!="UL") {
+						return;
+					}
+					
+					if (next._tree!=self || next==self) {
+						return;
+					}
+
+					f_core.Debug(f_tree, "CANCEL On before DE activate "+next.tagName);
+					
+					return f_core.CancelJsEvent(evt);
+				}
+			}
 		}
 		
 		this.onmousedown=f_tree._BodyMouseDown;
@@ -541,9 +577,15 @@ var __members = {
 			cfocus.onkeydown=null;
 			cfocus.onkeyup=null;
 			cfocus.onkeypress=null;
+			cfocus.onbeforedeactivate=null;
+			cfocus.onbeforeactivate=null;
 			
 			cfocus._tree=undefined;
 			cfocus.f_link=undefined;
+			
+			if (cfocus!=this) {
+				f_core.VerifyProperties(cfocus);
+			}
 		}
 
 		this.onfocus=null;
@@ -1236,6 +1278,11 @@ var __members = {
 	f_performErrorEvent: function(param, messageCode, message) {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
+	/**
+	 * @method private
+	 * @param number parentDepth
+	 * @return HTMLLiElement
+	 */
 	_newWaitingNode: function(parentDepth) {
 		var li=document.createElement("li");
 
@@ -1243,7 +1290,7 @@ var __members = {
 		
 		var divNode=document.createElement("div");
 		li.appendChild(divNode);
-		divNode.className="f_tree_depth"+(parentDepth+1);
+		divNode.className="f_tree_depth"+(parentDepth+1)+" f_tree_waiting"
 		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 		
 		var command=document.createElement("img");
@@ -1302,18 +1349,17 @@ var __members = {
 		if (item.offsetTop-this.scrollTop<0) {
 			this.scrollTop=item.offsetTop;
 			//	f_core.Debug(f_tree, "Show=UP");
-			return;
-		}	
-		
-		if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
+
+		} else if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
 			this.scrollTop=item.offsetTop+item.offsetHeight-this.clientHeight;
 
 			// f_core.Debug(f_tree, "Show=DOWN itemO="+item.offsetTop+" laH="+item._label.offsetHeight+", stop="+this.scrollTop+", ch="+this.clientHeight);
-			return;
 		}
+		
+		f_core.ShowComponent(item._span);
 	},
 	fa_updateElementStyle: function(li) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "Invalid LI parameter ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_updateElementStyle: Invalid LI parameter ("+li+")");
 		
 		var node=li._node;
 	
@@ -1342,10 +1388,15 @@ var __members = {
 
 			if (node._selected) {
 				suffixLabel+="_selected";
-			}				
-			if (this._focus && li==this._cursor) {
+
+				if (this._focus) {
+					suffixLabel+="_focus";
+				}
+			
+			} else if (this._focus && li==this._cursor) {
 				suffixLabel+="_focus";
 			}
+			
 			if (li._labelOver) {
 				suffixLabel+="_hover";
 			}
@@ -1774,7 +1825,7 @@ var __members = {
 		case f_key.VK_ENTER:
 						
 			if (this._cursor && this._selectable) {
-				this._performElementSelection(this._cursor, true, evt, selection);
+				this.f_performElementSelection(this._cursor, true, evt, selection);
 			}
 			cancel=true;
 			break;
@@ -1927,7 +1978,6 @@ var __members = {
 		
 		this.f_moveCursor(lis[i], true, evt, selection);
 	},
-	
 	_previousPageTreeNode: function(evt, selection) {		
 		var cursorLi=this._cursor;
 		if (!cursorLi) {
@@ -2245,7 +2295,7 @@ var __members = {
 		
 		var selection=(append)?fa_selectionManager.APPEND_SELECTION:0;
 		
-		return this._performElementSelection(li, show, jsEvent, selection);
+		return this.f_performElementSelection(li, show, jsEvent, selection);
 	},
 	/**
 	 * Check a node.
@@ -2551,10 +2601,10 @@ var __members = {
 		var waiting=this._waitingNodes[waitingId];
 		f_core.Assert(waiting, "f_tree.f_clearWaiting: Can not find waiting #"+waitingId);
 
-		f_core.Debug(f_tree, "_clearWaiting id='"+waitingId+"'.");
+		f_core.Debug(f_tree, "f_clearWaiting: id='"+waitingId+"'.");
 
 		var li=waiting._li;
-		f_core.Assert(li, "Waiting node is already cleared !");
+		f_core.Assert(li, "f_tree.f_clearWaiting: Waiting node is already cleared !");
 		
 		waiting._li=undefined;
 		waiting._image=undefined;

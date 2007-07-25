@@ -61,5 +61,7 @@ var __members = {
 	fa_updateReadOnly: f_class.ABSTRACT
 }
 
-new f_aspect("fa_readOnly", null, __members);
+new f_aspect("fa_readOnly", {
+	members: __members
+});
 	

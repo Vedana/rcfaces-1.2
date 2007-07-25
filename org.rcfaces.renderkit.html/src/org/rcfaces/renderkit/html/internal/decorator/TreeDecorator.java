@@ -3,6 +3,7 @@
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -16,18 +17,21 @@ import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.TreeNodeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
-import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.CollectionTools;
+import org.rcfaces.core.internal.tools.ExpansionTools;
 import org.rcfaces.core.internal.tools.SelectItemMappers;
+import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.item.ITreeNode;
 import org.rcfaces.core.item.TreeNode;
+import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -462,6 +466,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String uncheckedValues = componentData
                 .getStringProperty("uncheckedItems");
         if (checkable && (checkedValues != null || uncheckedValues != null)) {
+            // C'est checkable , le check est forcement sur la VALUE !
+
             Object v = tree.getCheckedValues(facesContext);
             if (v == null) {
                 // Le CHECK est sur la value !
@@ -473,18 +479,12 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 tree.setCheckedValues(null);
             }
 
-            Set values = ValuesTools.valueToSet(v, true);
+            Set values = CollectionTools.valuesToSet(v, false);
 
             if (HtmlValuesTools.updateValues(facesContext, tree, false, values,
-                    checkedValues, uncheckedValues)
-                    && tree.isValueLocked(facesContext) == false) {
+                    checkedValues, uncheckedValues)) {
 
-                if (values.isEmpty()) {
-                    ValuesTools.setValue(tree, OBJECT_EMPTY_ARRAY);
-
-                } else {
-                    ValuesTools.setValue(tree, values.toArray());
-                }
+                ValuesTools.setValues(facesContext, tree, values);
             }
         }
 
@@ -494,7 +494,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 .getStringProperty("deselectedItems");
         if (selectedValues != null || deselectedValues != null) {
             if (checkable == false) {
-                // La selection est sur la value !
+                // La selection est FORCEMENT sur la value !
                 Object v = tree.getSelectedValues(facesContext);
                 if (v != null) {
                     // On retire la selectionValue pour n'utiliser que la value
@@ -504,7 +504,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
                 // Set values = ValuesTools.valueToSet(v, true);
 
-                // On recommence à ZERO !
+                // On recommence à ZERO ! ???? pourquoi ? nous sommes en full
+                // state ?
                 Set values = new OrderedSet();
 
                 if (HtmlValuesTools.updateValues(facesContext, tree, false,
@@ -512,42 +513,40 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
                     int selectionCardinality = tree
                             .getSelectionCardinality(facesContext);
+
                     if (selectionCardinality == ICardinality.ONE_CARDINALITY
                             || selectionCardinality == ICardinality.OPTIONAL_CARDINALITY) {
                         // On prend le premier seulement !
 
-                        if (values.isEmpty()) {
-                            ValuesTools.setValue(tree, null);
+                        if (values.size() < 2) {
+                            ValuesTools.setValues(facesContext, tree, values);
 
                         } else {
-                            ValuesTools
-                                    .setValue(tree, values.iterator().next());
+                            // On prend le premier !
+                            Set set = new HashSet(1);
+                            set.add(values.iterator().next());
+
+                            ValuesTools.setValues(facesContext, tree, set);
                         }
 
-                    } else if (values.isEmpty()) {
-                        ValuesTools.setValue(tree, OBJECT_EMPTY_ARRAY);
-
                     } else {
-                        ValuesTools.setValue(tree, values.toArray());
+                        ValuesTools.setValues(facesContext, tree, values);
                     }
                 }
             } else {
+                // Il y a un CHECK !
+
                 // Object v = tree.getSelectionValues(facesContext);
 
                 // Set values = ValuesTools.valueToSet(v, true);
 
-                // On recommence à ZERO !
+                // On recommence à ZERO ! ??? nous sommes en full state ?
                 Set values = new OrderedSet();
 
                 HtmlValuesTools.updateValues(facesContext, tree, true, values,
                         selectedValues, deselectedValues);
 
-                Class cls = tree.getSelectedValuesType(facesContext);
-                if (cls == null) {
-                    cls = Object[].class;
-                }
-
-                tree.setSelectedValues(ValuesTools.adaptValues(cls, values));
+                SelectionTools.setSelectionValues(facesContext, tree, values);
             }
         }
 
@@ -556,19 +555,14 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String collapsedValues = componentData
                 .getStringProperty("collapsedItems");
         if (collapsedValues != null || expandedValues != null) {
-            Object v = tree.getExpandedValues(facesContext);
+            Set expansionValues = ExpansionTools.expansionValuesToSet(
+                    facesContext, component, false);
 
-            Set values = ValuesTools.valueToSet(v, true);
+            if (HtmlValuesTools.updateValues(facesContext, tree, true,
+                    expansionValues, expandedValues, collapsedValues)) {
 
-            if (HtmlValuesTools.updateValues(facesContext, tree, true, values,
-                    expandedValues, collapsedValues)) {
-
-                Class cls = tree.getExpandedValuesType(facesContext);
-                if (cls == null && v != null) {
-                    cls = v.getClass();
-                }
-
-                tree.setExpandedValues(ValuesTools.adaptValues(cls, values));
+                ExpansionTools.setExpansionValues(facesContext, tree,
+                        expansionValues);
             }
         }
     }

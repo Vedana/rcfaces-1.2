@@ -162,4 +162,7 @@ var __members = {
 	}
 }
 
-new f_aspect("fa_clientData", __statics, __members);
+new f_aspect("fa_clientData", {
+	statics: __statics,
+	members: __members
+});

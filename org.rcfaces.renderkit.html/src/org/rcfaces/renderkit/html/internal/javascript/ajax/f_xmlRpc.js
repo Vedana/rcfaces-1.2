@@ -1,2 +1,4 @@
 
-new f_class("f_xmlRpc", null, null, null, f_object);
+new f_class("f_xmlRpc", {
+	extend: f_object
+});

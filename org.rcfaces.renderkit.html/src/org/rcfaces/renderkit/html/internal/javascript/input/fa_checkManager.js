@@ -164,6 +164,7 @@ var __members = {
 	
 	/**
 	 * @method protected
+	 * @return boolean
 	 */
 	fa_performElementCheck: function(element, show, evt, checked) {
 		var cardinality=this._checkCardinality;
@@ -325,4 +326,7 @@ var __members = {
 	
 }
 
-new f_aspect("fa_checkManager", null, __members, fa_itemsManager);
+new f_aspect("fa_checkManager", {
+	extend: [ fa_itemsManager ],
+	members: __members 
+});

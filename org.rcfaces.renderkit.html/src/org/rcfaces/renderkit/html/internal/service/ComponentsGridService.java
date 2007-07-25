@@ -121,6 +121,9 @@ public class ComponentsGridService extends AbstractHtmlService {
             }
         }
 
+        String showAdditional = (String) parameters.get("showAdditional");
+        String hideAdditional = (String) parameters.get("hideAdditional");
+
         UIComponent component = HtmlTools.getForComponent(facesContext,
                 componentsGridId, viewRoot);
         if (component == null) {
@@ -210,7 +213,8 @@ public class ComponentsGridService extends AbstractHtmlService {
             }
 
             writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
-                    rowIndex, forcedRows, sortedComponents, filterExpression);
+                    rowIndex, forcedRows, sortedComponents, filterExpression,
+                    showAdditional, hideAdditional);
 
         } catch (IOException ex) {
             throw new FacesException(
@@ -233,15 +237,25 @@ public class ComponentsGridService extends AbstractHtmlService {
     private void decodeSubComponents(FacesContext facesContext,
             ComponentsGridComponent dgc, Map parameters) {
 
+        int first = -1;
+        int rows = -1;
+
         String serializedFirst = (String) parameters.get("serializedFirst");
         if (serializedFirst != null) {
-            dgc.setFirst(Integer.parseInt(serializedFirst));
+            first = Integer.parseInt(serializedFirst);
         }
 
         String serializedRows = (String) parameters.get("serializedRows");
         if (serializedRows != null) {
-            dgc.setRows(Integer.parseInt(serializedRows));
+            rows = Integer.parseInt(serializedRows);
         }
+
+        if (first < 0 || rows < 1) {
+            return;
+        }
+
+        dgc.setFirst(first);
+        dgc.setRows(rows);
 
         dgc.processDecodes(facesContext);
     }
@@ -252,6 +266,8 @@ public class ComponentsGridService extends AbstractHtmlService {
         Renderer renderer = getRenderer(facesContext, component);
 
         if ((renderer instanceof ComponentsGridRenderer) == false) {
+            LOG.error("Renderer is not a valid type (AbstractGridRenderer) => "
+                    + renderer);
             return null;
         }
 
@@ -261,8 +277,8 @@ public class ComponentsGridService extends AbstractHtmlService {
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             ComponentsGridComponent dgc, String componentClientId,
             ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
-            ISortedComponent sortedComponents[], String filterExpression)
-            throws IOException {
+            ISortedComponent sortedComponents[], String filterExpression,
+            String showAdditional, String hideAdditional) throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -279,7 +295,7 @@ public class ComponentsGridService extends AbstractHtmlService {
         String contentType = (String) states[1];
 
         JavaScriptResponseWriter jsWriter = new JavaScriptResponseWriter(
-                facesContext, pw, dgc, componentClientId);
+                facesContext, pw, RESPONSE_CHARSET, dgc, componentClientId);
 
         String varId = jsWriter.getComponentVarName();
 
@@ -290,8 +306,8 @@ public class ComponentsGridService extends AbstractHtmlService {
         jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
                 ");");
 
-        ResponseWriter oldWriter = facesContext.getResponseWriter();
-        ResponseStream oldStream = facesContext.getResponseStream();
+        ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
+        ResponseStream oldResponseStream = facesContext.getResponseStream();
 
         try {
             CharArrayWriter myWriter = new CharArrayWriter(1);
@@ -315,7 +331,8 @@ public class ComponentsGridService extends AbstractHtmlService {
             ComponentsGridRenderer.ComponentsGridRenderContext listContext = dgr
                     .createComponentsGridContext(processContext, jsWriter
                             .getJavaScriptRenderContext(), dgc, rowIndex,
-                            forcedRows, sortedComponents, filterExpression);
+                            forcedRows, sortedComponents, filterExpression,
+                            showAdditional, hideAdditional);
 
             int rowCount = dgr.encodeChildren(jsWriter, listContext, true);
 
@@ -323,12 +340,12 @@ public class ComponentsGridService extends AbstractHtmlService {
                     .writeln(");");
 
         } finally {
-            if (oldWriter != null) {
-                facesContext.setResponseWriter(oldWriter);
+            if (oldResponseWriter != null) {
+                facesContext.setResponseWriter(oldResponseWriter);
             }
 
-            if (oldStream != null) {
-                facesContext.setResponseStream(oldStream);
+            if (oldResponseStream != null) {
+                facesContext.setResponseStream(oldResponseStream);
             }
         }
 

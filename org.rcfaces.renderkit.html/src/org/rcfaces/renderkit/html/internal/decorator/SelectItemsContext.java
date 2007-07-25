@@ -14,11 +14,15 @@ import java.util.Set;
 import javax.faces.component.UIComponent;
 import javax.faces.model.SelectItem;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.ExpansionTools;
+import org.rcfaces.core.internal.tools.SelectionTools;
 
 /**
  * 
@@ -29,6 +33,8 @@ public class SelectItemsContext {
 
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory.getLog(SelectItemsContext.class);
+
     private static final Object OPEN_HAS_CHILD = "HAS CHILD";
 
     private static final Object OPEN_NO_CHILD = "NO CHILD";
@@ -37,9 +43,17 @@ public class SelectItemsContext {
 
     private static final Object NOT_OPENED = "NOT OPENED";
 
-    private static final boolean LOG_TREE = false;
+    private static final boolean LOG_TREE = LOG.isDebugEnabled();
 
-    private static final boolean LOG_STACK = false;
+    private static final boolean LOG_STACK = LOG.isTraceEnabled();
+    static {
+        if (LOG_TREE) {
+            LOG.info("LOG_TREE enabled !");
+        }
+        if (LOG_STACK) {
+            LOG.info("LOG_STACK enabled !");
+        }
+    }
 
     // private final AbstractSelectItemsRenderer renderer;
 
@@ -100,15 +114,15 @@ public class SelectItemsContext {
     }
 
     protected void initializeSelectionValue(Object value) {
-        this.selectionValues = ValuesTools.valueToSet(value, false);
+        this.selectionValues = SelectionTools.valuesToSet(value, true);
     }
 
     protected void initializeCheckValue(Object values) {
-        this.checkValues = ValuesTools.valueToSet(values, false);
+        this.checkValues = CheckTools.valuesToSet(values, true);
     }
 
     protected void initializeExpansionValue(Object values) {
-        this.expandValues = ValuesTools.valueToSet(values, false);
+        this.expandValues = ExpansionTools.valuesToSet(values, true);
     }
 
     public final UIComponent getRootComponent() {
@@ -203,7 +217,7 @@ public class SelectItemsContext {
                 if (eval == ISelectItemNodeWriter.SKIP_NODE) {
                     items.set(size - 1, REFUSE_CHILD);
                     if (LOG_STACK) {
-                        System.out.println("REFUSE children (SET) for "
+                        LOG.trace("REFUSE children (SET) for "
                                 + parentSelectItem.getLabel());
                     }
                     return false;
@@ -213,8 +227,7 @@ public class SelectItemsContext {
 
             } else if (opened == REFUSE_CHILD) {
                 if (LOG_STACK) {
-                    System.out
-                            .println("REFUSE child: " + selectItem.getLabel());
+                    LOG.trace("REFUSE child: " + selectItem.getLabel());
                 }
                 return false;
             }
@@ -228,8 +241,8 @@ public class SelectItemsContext {
         depth = (items.size() / 4);
 
         if (LOG_STACK) {
-            System.out.println("PUSH: " + selectItem.getLabel() + " [" + depth
-                    + "] " + visible);
+            LOG.trace("PUSH: " + selectItem.getLabel() + " [" + depth + "] "
+                    + visible);
         }
 
         selectItemNodeWriter.encodeNodeInit(component, selectItem);
@@ -241,7 +254,7 @@ public class SelectItemsContext {
         depth = 1; // Il y a forcement un element
 
         if (LOG_STACK) {
-            System.out.println("POP enter" + " [" + depth + "]");
+            LOG.trace("POP enter" + " [" + depth + "]");
         }
 
         for (ListIterator it = items.listIterator(); it.hasNext(); depth++) {
@@ -267,7 +280,7 @@ public class SelectItemsContext {
                 if (eval == ISelectItemNodeWriter.SKIP_NODE) {
                     // Pas les enfants !
                     if (LOG_STACK) {
-                        System.out.println("POP BREAK");
+                        LOG.trace("POP BREAK");
                     }
                     for (; it.hasNext();) {
                         it.remove();
@@ -313,7 +326,7 @@ public class SelectItemsContext {
         depth = (s / 4);
 
         if (LOG_STACK) {
-            System.out.println("POP exit" + " [" + depth + "]");
+            LOG.trace("POP exit" + " [" + depth + "]");
         }
     }
 

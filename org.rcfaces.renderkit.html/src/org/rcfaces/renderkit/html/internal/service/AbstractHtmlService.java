@@ -75,7 +75,7 @@ public abstract class AbstractHtmlService extends AbstractService {
             PrintWriter printWriter = response.getWriter();
 
             IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(
-                    facesContext, printWriter, null, null);
+                    facesContext, printWriter, RESPONSE_CHARSET, null, null);
 
             jsWriter.writeCall("f_core", "PerformErrorEvent").writeString(
                     componentClientId);

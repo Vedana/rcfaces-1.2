@@ -62,4 +62,6 @@ var __members = {
 	fa_updateRequired: f_class.ABSTRACT
 }
 
-new f_aspect("fa_required", null, __members);
+new f_aspect("fa_required", {
+	members: __members
+});

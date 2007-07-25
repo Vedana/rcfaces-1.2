@@ -61,4 +61,6 @@ var __members = {
 	fa_updateCollapsed: f_class.ABSTRACT
 }
 
-new f_aspect("fa_collapsed", null, __members);
+new f_aspect("fa_collapsed", {
+	members: __members
+});

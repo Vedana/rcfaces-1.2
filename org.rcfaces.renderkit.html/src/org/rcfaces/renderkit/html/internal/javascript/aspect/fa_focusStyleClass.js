@@ -35,5 +35,7 @@ var __members = {
 	f_setProperty: f_class.ABSTRACT
 }
 
-new f_aspect("fa_focusStyleClass", null, __members);
-	
+new f_aspect("fa_focusStyleClass", {
+	members: __members
+});
+

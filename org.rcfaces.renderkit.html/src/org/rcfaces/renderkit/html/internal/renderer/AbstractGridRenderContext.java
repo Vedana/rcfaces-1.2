@@ -15,13 +15,15 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
 import javax.faces.model.DataModel;
 
+import org.rcfaces.core.component.AdditionalInformationComponent;
+import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
@@ -43,6 +45,7 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
@@ -184,6 +187,16 @@ public abstract class AbstractGridRenderContext {
 
     private Object showValue;
 
+    private AdditionalInformationComponent[] additionalInformations;
+
+    private boolean clientAdditionalFullState = false;
+
+    private int additionalInformationCardinality;
+
+    private String requestShowAdditionals;
+
+    private String requestHideAdditionals;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -235,7 +248,7 @@ public abstract class AbstractGridRenderContext {
                 }
 
                 if (selectionCardinality == 0) {
-                    selectionCardinality = ICardinality.DEFAULT_CARDINALITY;
+                    selectionCardinality = ISelectionCardinalityCapability.DEFAULT_CARDINALITY;
                 }
                 this.selectionCardinality = selectionCardinality;
 
@@ -255,7 +268,7 @@ public abstract class AbstractGridRenderContext {
                             .getCheckCardinality();
                 }
                 if (checkCardinality == 0) {
-                    checkCardinality = ICardinality.DEFAULT_CARDINALITY;
+                    checkCardinality = ICheckCardinalityCapability.DEFAULT_CARDINALITY;
                 }
                 this.checkCardinality = checkCardinality;
 
@@ -264,6 +277,28 @@ public abstract class AbstractGridRenderContext {
                             .isClientCheckFullState();
                 }
             }
+        }
+
+        if (gridComponent instanceof IAdditionalInformationComponent) {
+            additionalInformations = ((IAdditionalInformationComponent) gridComponent)
+                    .listAdditionalInformations().toArray();
+
+            if (gridComponent instanceof IClientAdditionalInformationFullStateCapability) {
+                this.clientAdditionalFullState = ((IClientAdditionalInformationFullStateCapability) gridComponent)
+                        .isClientAdditionalInformationFullState();
+            }
+
+            int additionalInformationCardinality = 0;
+            if (gridComponent instanceof IAdditionalInformationCardinalityCapability) {
+                additionalInformationCardinality = ((IAdditionalInformationCardinalityCapability) gridComponent)
+                        .getAdditionalInformationCardinality();
+            }
+
+            if (additionalInformationCardinality == 0) {
+                additionalInformationCardinality = IAdditionalInformationCardinalityCapability.DEFAULT_CARDINALITY;
+            }
+
+            this.additionalInformationCardinality = additionalInformationCardinality;
         }
 
         if (gridComponent instanceof IDisabledCapability) {
@@ -635,6 +670,10 @@ public abstract class AbstractGridRenderContext {
             hasScrollBars = true;
         }
 
+        if (hasAdditionalInformations()) {
+            hasScrollBars = true;
+        }
+
         if (resizable && (hasScrollBars == false || widthNotSpecified)) {
             resizable = false;
         }
@@ -644,7 +683,6 @@ public abstract class AbstractGridRenderContext {
         // Le dataModel peut etre NULL, car dans des cas de structures
         // simples,
         // elles n'ont pas besoin de publier un model !
-
     }
 
     protected abstract String convertAliasCommand(String command);
@@ -708,7 +746,8 @@ public abstract class AbstractGridRenderContext {
     protected AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, int rowIndex, int forcedRows,
-            ISortedComponent sortedComponents[], String filterExpression) {
+            ISortedComponent sortedComponents[], String filterExpression,
+            String showAdditionals, String hideAdditionals) {
         this(processContext, scriptRenderContext, gridComponent,
                 sortedComponents, false);
 
@@ -719,6 +758,9 @@ public abstract class AbstractGridRenderContext {
             this.filtersMap = HtmlTools.decodeFilterExpression(null,
                     (UIComponent) gridComponent, filterExpression);
         }
+
+        this.requestShowAdditionals = showAdditionals;
+        this.requestHideAdditionals = hideAdditionals;
     }
 
     public IFilterProperties getFiltersMap() {
@@ -869,6 +911,10 @@ public abstract class AbstractGridRenderContext {
         return clientCheckFullState;
     }
 
+    public boolean isClientAdditionalFullState() {
+        return clientAdditionalFullState;
+    }
+
     public final boolean isSelectable() {
         return selectable;
     }
@@ -947,6 +993,27 @@ public abstract class AbstractGridRenderContext {
 
     public final Object getShowValue() {
         return showValue;
+    }
+
+    public final AdditionalInformationComponent[] listAdditionalInformations() {
+        return additionalInformations;
+    }
+
+    public boolean hasAdditionalInformations() {
+        return additionalInformations != null
+                && additionalInformations.length > 0;
+    }
+
+    public int getAdditionalInformationCardinality() {
+        return additionalInformationCardinality;
+    }
+
+    public String getRequestHideAdditionalValues() {
+        return requestHideAdditionals;
+    }
+
+    public String getRequestShowAdditionalValues() {
+        return requestShowAdditionals;
     }
 
 }

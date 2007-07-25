@@ -802,5 +802,8 @@ var __members = {
 	}
 }
 
-new f_class("f_httpRequest", null, __statics, __members);
+new f_class("f_httpRequest", {
+	statics: __statics,
+	members: __members
+});
 

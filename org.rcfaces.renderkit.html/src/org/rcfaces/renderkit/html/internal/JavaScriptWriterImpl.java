@@ -52,6 +52,10 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         return writer;
     }
 
+    public String getResponseCharacterEncoding() {
+        return writer.getResponseCharacterEncoding();
+    }
+
     public final FacesContext getFacesContext() {
         return getHtmlComponentRenderContext().getFacesContext();
     }

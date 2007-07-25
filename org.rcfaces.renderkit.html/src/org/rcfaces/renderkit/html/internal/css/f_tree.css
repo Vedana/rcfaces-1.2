@@ -123,3 +123,8 @@
 	height: 0;
 	-moz-outline-width: 0;
 }
+
+.f_tree_waiting {
+	height: 16px;
+}
+

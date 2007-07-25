@@ -526,10 +526,12 @@ public class ComboGridRenderer extends DataGridRenderer {
             IProcessContext processContext,
             IScriptRenderContext scriptRenderContext, IGridComponent dg,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
-            String filterExpression) {
+            String filterExpression, String showAdditionals,
+            String hideAdditionals) {
         DataGridRenderContext tableContext = new ComboGridRenderContext(
                 processContext, scriptRenderContext, dg, rowIndex, forcedRows,
-                sortedComponents, filterExpression);
+                sortedComponents, filterExpression, showAdditionals,
+                hideAdditionals);
 
         return tableContext;
     }
@@ -602,9 +604,11 @@ public class ComboGridRenderer extends DataGridRenderer {
         public ComboGridRenderContext(IProcessContext processContext,
                 IScriptRenderContext scriptRenderContext, IGridComponent dg,
                 int rowIndex, int forcedRows,
-                ISortedComponent[] sortedComponents, String filterExpression) {
+                ISortedComponent[] sortedComponents, String filterExpression,
+                String showAdditionals, String hideAdditionals) {
             super(processContext, scriptRenderContext, dg, rowIndex,
-                    forcedRows, sortedComponents, filterExpression);
+                    forcedRows, sortedComponents, filterExpression,
+                    showAdditionals, hideAdditionals);
         }
 
         public ComboGridRenderContext(

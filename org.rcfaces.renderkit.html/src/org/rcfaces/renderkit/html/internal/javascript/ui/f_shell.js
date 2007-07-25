@@ -127,9 +127,11 @@ var __statics = {
 		    f_core.Debug(f_shell, "ExecuteOnDocComplete: executing");
 		    // Add timeout to empty the stack and allow IE to draw an iframe from an IMG !!!
 			window.setTimeout(functionToExecute,0);
+			
 		} else if (!f_shell._OnDocComplete) {
 		    f_core.Debug(f_shell, "ExecuteOnDocComplete: delaying");
 			f_shell._OnDocComplete = functionToExecute;
+			
 		} else {
 			f_core.Debug(f_shell, "ExecuteOnDocComplete: ignored new function");
 		}
@@ -144,11 +146,14 @@ var __statics = {
 		f_shell.HideSelect();
      	
      	f_shell._DocComplete=true;
-     	if (f_shell._OnDocComplete) {
-     		f_shell._OnDocComplete();
-     		f_shell._OnDocComplete=null;
+     	
+     	var onDocComplete=f_shell._OnDocComplete;
+     	if (onDocComplete) {
+     		f_shell._OnDocComplete=undefined;
+
+     		onDocComplete.call(f_shell);
      	}
-     },
+	},
 	
      /**
      * Class Constructor (called in the head ...
@@ -159,26 +164,31 @@ var __statics = {
     	f_shell._IE6 = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6); 
     	f_shell._IE = f_core.IsInternetExplorer(); 
 	 },
-     /**
+	/**
      * Class Destructor (called in the head ...
      * @method public static
 	 * @return void
      */
     Finalizer: function() {
     	var objIframe=f_shell._ObjIFrame;
-    	if (objIframe && objIframe._iframe) {
-    		var iframe=objIframe._iframe;
-    		iframe.onload=null;
-    		iframe.onreadystatechange=null;
+    	if (objIframe) {
+	    	f_shell._ObjIFrame = undefined; // Object
+	    	
+     		var iframe=objIframe._iframe;
+    		if (iframe) {
+    			objIframe._iframe=undefined; // HTMLIFrameElement
+    			
+	    		iframe.onload=null;
+	    		iframe.onreadystatechange=null;
+	    	}
     	}
-    	objIframe = undefined; // Object
     	// f_shell._IE6 = undefined; // boolean
     	// f_shell._IE = undefined; // boolean
     	// f_shell._DocComplete = undefined; // boolean
-    	f_shell._OnDocComplete = null; // function
+    	f_shell._OnDocComplete = undefined; // function
 	 },
 	 
-     /**
+	/**
      * @method public static
      * @return Object size (width, height)
      */

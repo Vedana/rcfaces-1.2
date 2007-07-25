@@ -12,6 +12,8 @@ public final class JavaScriptClasses {
 
     public static final String ACCELERATOR = "f_accelerator";
 
+    public static final String ADDITIONAL_INFORMATION = "f_additionalInformation";
+
     public static final String BOX = "f_box";
 
     public static final String BUTTON = "f_button";

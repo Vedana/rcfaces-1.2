@@ -20,6 +20,7 @@ function f_classLoader(window, parentClassLoader) {
 	this._classes=new Object;
 	this._aspects=new Object;
 	this._bundles=new Object;
+	this._serializedStates=new Object;
 }
 
 f_classLoader.prototype = {
@@ -423,9 +424,8 @@ f_classLoader.prototype = {
 	
 	_loadBundle: function(doc, bundleName) {
 	
-		var interactiveMode=this._interactiveMode;	
-		if (interactiveMode) {
-			return interactiveMode.addRequireBundle(bundleName);
+		if (this._interactiveMode) {
+			return this._asyncLoadBundle(doc, bundleName);
 		}
 	
 		var bundles=this._bundles;
@@ -723,70 +723,82 @@ f_classLoader.prototype = {
 	},
 
 	/**
-	 * @method hidden
+	 * @method private
 	 * @param HTMLElement[] components
 	 * @return String
 	 */
 	f_serializeComponents: function(components) {
-		var serial = "";
+		var serializedStates=this._serializedStates;
 	
 		try {
 			this._serializing=true;
 		
 			for (var i=0; i<components.length; i++) {
-				var obj = components[i];
-				var objectId=obj.id;
+				var component = components[i];
+				var componentId=component.id;
 				
-				if (!obj || !objectId) {
+				if (!component || !componentId) {
 					continue;
 				}
 				
-				var f = obj.f_serialize0;
+				var f = component.f_serialize0;
 				if (!f) {
 					continue;
 				}
 							
-				f_core.Assert(typeof(f)=="function", "f_classLoader.f_serializeComponents: Field f_serialize0 is not a method for object '"+objectId+"'.");
+				f_core.Assert(typeof(f)=="function", "f_classLoader.f_serializeComponents: Field f_serialize0 is not a method for object '"+componentId+"'.");
 				
 				var ser;
 				try {
-					ser = f.call(obj);
+					ser = f.call(component);
 					
 				} catch (x) {
-					f_core.Error(f_classLoader, "f_serializeComponents: Serialization of object '"+objectId+"' throws exception.", x);
+					f_core.Error(f_classLoader, "f_serializeComponents: Serialization of object '"+componentId+"' throws exception.", x);
 					continue;
 				}
 				
-				f_core.Assert(ser!==undefined, "f_classLoader.f_serializeComponents: Serialization of object '"+objectId+"' returns undefined !");
+				f_core.Assert(ser!==undefined, "f_classLoader.f_serializeComponents: Serialization of object '"+componentId+"' returns undefined !");
 				
 				if (!ser) {
+					delete serializedStates[componentId];
 					continue;
 				}
 				
-				if (serial) {
-					serial += ",";
-				}
-				
-				serial += objectId + "=[" + ser + "]";
+				serializedStates[componentId]=ser;
 			}
 			
 		} finally {
 			this._serializing=undefined;
 		}
-		
-		return serial;
 	},
+	/**
+	 * @method hidden
+	 * @return String
+	 */
+	f_getSerializedState: function() {
+		var serial="";
+		
+		var serializedStates=this._serializedStates;
 	
+		for(var id in serializedStates) {
+			if (serial) {
+				serial+=",";
+			}
+			serial+=id+"=["+serializedStates[id]+"]";
+		}		
+		
+		return serial;		
+	},
 	/**
 	 * @method hidden
 	 * @param HTMLFormElement form
 	 * @return String
 	 */
 	f_serialize: function(form) {
-
-		var components = this._componentPool;
 		
-		var serial=this.f_serializeComponents(components);
+		this.f_serializeComponents(this._componentPool);
+		
+		var serial=this.f_getSerializedState();
 	
 		f_core.Debug(f_classLoader, "f_serialize: Serialized form '"+form.id+"' => '"+serial+"'.");
 		
@@ -870,15 +882,62 @@ f_classLoader.prototype = {
 			throw "This classloader is exiting ... [garbageObjects]";
 		}
 		
+		var garbageMark=this._garbageMark;
+		if (garbageMark===undefined) {
+			garbageMark=new Date().getTime();
+		}
+
+		var keepGarbageMark=++garbageMark;
+		var clearGarbageMark=++garbageMark;
+		this._garbageMark=garbageMark;
+		
+		var list=new Array;
 		var toClean;
 		for (var i=0;i<componentPool.length;) {
 			var obj=componentPool[i];
 			
 			var p=obj;
-			for(;p;p=p.parentNode) {
+			var gm;
+			var parentNode;
+			for(;;) {
 				if (p.nodeType==f_core.DOCUMENT_NODE) {
 					break;
 				}
+
+				gm=p._rcfacesGarbageMark;
+
+				if (gm==keepGarbageMark) {
+					// Cool !
+					break;
+					
+				} else if (gm==clearGarbageMark) {
+					p=null;
+					break;
+				}
+
+				list.push(p); // On marque
+
+				parentNode=p.parentNode;
+				if (parentNode) {
+					p=parentNode;
+					
+					continue;
+				}
+				
+				parentNode=p._parentNode;
+				if (parentNode) {
+					p=parentNode;
+
+					continue;
+				}
+				
+				p=null;
+				break;
+			}
+			
+			var setMark=(p)?keepGarbageMark:clearGarbageMark;
+			for(;list.length;) {
+				list.shift()._rcfacesGarbageMark=setMark;
 			}
 			
 			if (p) {
@@ -899,13 +958,19 @@ f_classLoader.prototype = {
 	
 		if (!toClean) {						
 			f_core.Debug(f_classLoader, "f_garbageObjects: no object garbaged.");
+
+			if (serializeState) {
+				return this.f_getSerializedState();
+			}
 			return;
 		}
 		
 		var serializedForm=null;
 		
 		if (serializeState) {
-			serializedForm=this.f_serializeComponents(toClean);
+			this.f_serializeComponents(toClean);
+
+			serializedForm=this.f_getSerializedState();
 		}
 		
 		f_class.Clean(toClean);
@@ -1076,18 +1141,29 @@ f_classLoader.Destroy=function(object1, object2) {
 }
 
 /**
- * @method hidden static
+ * @method private static
  * @param Object parameters
  * @param HTMLElement component
  * @return void
  */
-f_classLoader.SerializeInputs=function(parameters, component) {
-	f_core.Assert(parameters && typeof(parameters)=="object", "f_classLoader.SerializeInputs: Invalid parameters parameter '"+parameters+"'.");
-	f_core.Assert(component && (component.nodeType==f_core.ELEMENT_NODE || component.nodeType==f_core.DOCUMENT_NODE), "f_classLoader.SerializeInputs: Invalid parameters parameter '"+parameters+"'.");
+f_classLoader._SerializeInputs=function(component) {
+	f_core.Assert(component && (component.nodeType==f_core.ELEMENT_NODE || component.nodeType==f_core.DOCUMENT_NODE), "f_classLoader.SerializeInputs: Invalid component parameter '"+component+"'.");
+	
+	var form=f_core.GetParentForm(component);
+	var serializedInputs=form._serializedInputs;
+	if (!serializedInputs) {
+		serializedInputs=new Object;
+		form._serializedInputs=serializedInputs;
+	}
 
 	var inputs=f_core.GetElementsByTagName(component, "input");
 	for(var i=0;i<inputs.length;i++) {
 		var input=inputs[i];
+		
+		if (input._dontSerialize) {
+			continue;
+		}
+		
 		var inputName=input.name;
 		if (!inputName) {
 			continue;
@@ -1110,9 +1186,8 @@ f_classLoader.SerializeInputs=function(parameters, component) {
 			 break;
 		}
 		
-		parameters[inputName]=value;
+		serializedInputs[inputName]=value;
 	}
-	
 	
 	var selects=f_core.GetElementsByTagName(component, "select");
 	for(var i=0;i<selects.length;i++) {
@@ -1122,9 +1197,129 @@ f_classLoader.SerializeInputs=function(parameters, component) {
 			continue;
 		}
 		
-		parameters[selectName]="x";
+		serializedInputs[selectName]=select.value;
 	}
+	
+	return serializedInputs;
 }
+
+/**
+ * @method hidden static
+ * @param Object parameters
+ * @param HTMLElement component
+ * @param boolean updateInputs
+ * @return void
+ */
+f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInputs) {
+	f_core.Assert(parameters && typeof(parameters)=="object", "f_classLoader.SerializeInputsIntoParam: Invalid parameters parameter '"+parameters+"'.");
+	f_core.Assert(component===undefined || (component.nodeType==f_core.ELEMENT_NODE || component.nodeType==f_core.DOCUMENT_NODE), "f_classLoader.SerializeInputsIntoParam: Invalid component parameter '"+component+"'.");
+	
+	var serializedInputs;
+	if (updateInputs) {
+		serializedInputs=f_classLoader._SerializeInputs(component);
+
+	} else {
+		var form=f_core.GetParentForm(component);
+		serializedInputs=form._serializedInputs
+	}
+	
+	if (!serializedInputs) {
+		return;
+	}
+	
+	for(var name in serializedInputs) {
+		parameters[name]=serializedInputs[name];
+	}	
+}
+
+/**
+ * @method hidden static
+ * @param Object parameters
+ * @param HTMLElement component
+ * @return void
+ */
+f_classLoader.SerializeInputsIntoForm=function(form) {
+	f_core.Assert(form && form.nodeType==f_core.ELEMENT_NODE && form.tagName.toLowerCase()=="form", "f_classLoader.SerializeInputsIntoParam: Invalid form parameter '"+form+"'.");
+	
+	var serializedInputs=form._serializedInputs;
+	if (!serializedInputs) {
+		// Aucune sérialisation donc on laisse tomber la recherche de doublons d'INPUT		
+		return;
+	}
+	
+	for(var name in serializedInputs) {
+		var value=serializedInputs[name];
+		var elements=document.getElementsByName(name);
+		
+		f_core.Debug(f_classLoader, "SerializeInputsIntoForm: elements.length="+elements.length+" for name '"+name+"'.");
+		
+		switch(elements.length) {
+		case 0:
+			// Aucun élément
+			var input = form.ownerDocument.createElement("input");
+			input.type = "hidden";
+			input.value = value;
+			input.name = name;
+			input._serializedInput=true;
+		
+			form.appendChild(input);
+
+			f_core.Debug(f_classLoader, "SerializeInputsIntoForm: add input name='"+name+"' value='"+value+"'");
+			break;
+		
+		case 1:
+			// Un seul élément, c'est un faux ?
+			var input=elements[0];
+			if (input._serializedInput) {
+				// C'est un faux !
+				// On change juste la valeur
+				
+				input.value=value;
+				f_core.Debug(f_classLoader, "SerializeInputsIntoForm: change input value for name='"+name+"', new value='"+value+"'");
+				break;
+			}
+			// C'est pas un faux !
+			// Bizarre comme config, on laisse tomber ...
+			break;
+		
+		default:
+			// Plusieurs champs avec le même nom
+			
+			// Y a t-il un vrai input ?
+			var realValueComponent=null;
+			for(var i=0;i<elements.length;i++) {
+				var input=elements[i];
+				if (input._serializedInput) {
+					continue;
+				}
+				
+				realValueComponent=input;
+				break;
+			}
+			
+			if (!realValueComponent) {
+				// Que des faux, on garde le premier faux
+				// et on efface le reste ...
+				
+				realValueComponent=elements[0];
+				realValueComponent.value=value;
+			}
+				
+			// On effaces tous les faux sauf le realValueComponent
+			for(var i=0;i<elements.length;i++) {
+				var input=elements[i];
+				if (!input._serializedInput || input==realValueComponent) {
+					continue;
+				}
+
+				input.parentNode.removeChild(input);
+			}
+			
+			break;
+		}
+	}		
+}
+
 
 /**
  * @method hidden static

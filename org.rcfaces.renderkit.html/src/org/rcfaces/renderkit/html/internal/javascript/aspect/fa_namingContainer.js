@@ -280,4 +280,6 @@ var __statics = {
 	}
 }
 
-new f_aspect("fa_namingContainer", __statics);	
+new f_aspect("fa_namingContainer", {
+	statics: __statics
+});	

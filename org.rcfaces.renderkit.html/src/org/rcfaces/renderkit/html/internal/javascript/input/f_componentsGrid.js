@@ -402,7 +402,8 @@ var __members = {
 			
 			var rowIdx=this._rowsPool.length;
 			
-			row._index=f_core.GetAttribute(row, "v:index");
+			row._index=f_core.GetAttribute(row, "v:rowValue");
+			row._rowIndex=f_core.GetNumberAttribute(row, "v:rowIndex");
 			if (!row.id) {
 				row.id=this.id+fa_namingContainer.GetSeparator()+"row"+i;
 			}
@@ -682,6 +683,7 @@ var __members = {
 		} else {
 			row._index=row.id;
 		}
+		row._rowIndex=properties._rowIndex;
 				
 		var className=null;
 		

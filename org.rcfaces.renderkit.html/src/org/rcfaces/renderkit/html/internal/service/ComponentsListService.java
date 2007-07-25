@@ -253,7 +253,7 @@ public class ComponentsListService extends AbstractHtmlService {
         String contentType = (String) states[1];
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, dgc, componentClientId);
+                pw, RESPONSE_CHARSET, dgc, componentClientId);
 
         String varId = jsWriter.getComponentVarName();
 

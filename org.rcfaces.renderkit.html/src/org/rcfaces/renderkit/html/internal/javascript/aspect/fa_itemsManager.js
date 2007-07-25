@@ -47,4 +47,7 @@ var __members = {
 	fa_updateElementStyle: f_class.ABSTRACT
 }
 
-new f_aspect("fa_itemsManager", null, __members, fa_cardinality);
+new f_aspect("fa_itemsManager", {
+	extend: [ fa_cardinality ],
+	members: __members
+});

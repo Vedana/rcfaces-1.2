@@ -240,6 +240,13 @@ var __statics = {
 	 *
 	 * @field public static final String
 	 */
+	ADDITIONAL_INFORMATION:	"additionalInformation",
+
+	/**
+	 * Blur event name.
+	 *
+	 * @field public static final String
+	 */
 	BLUR:		"blur",
 
 	/**

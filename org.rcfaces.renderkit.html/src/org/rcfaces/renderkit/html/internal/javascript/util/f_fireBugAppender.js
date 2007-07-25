@@ -36,7 +36,7 @@ var __statics={
  		// this est la classe !
 		this.f_newInstance();
 
-		if (!window.f_profilerCB) {
+		if (!window.rcfacesProfilerCB) {
 			f_core.SetProfilerMode(f_fireBugAppender._Profile);
 		}
 		

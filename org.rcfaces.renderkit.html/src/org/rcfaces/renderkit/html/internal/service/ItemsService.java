@@ -225,7 +225,7 @@ public class ItemsService extends AbstractHtmlService {
         }
 
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, (UIComponent) component, componentId);
+                pw, RESPONSE_CHARSET, (UIComponent) component, componentId);
 
         String varId = jsWriter.getComponentVarName();
 

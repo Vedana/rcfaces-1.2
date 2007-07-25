@@ -83,4 +83,10 @@ var __members = {
 	}
 }
  
-new f_class("f_box", null, __statics, __members, f_component, fa_asyncRender, fa_subMenu);
+new f_class("f_box", {
+	extend: f_component,
+	aspects: [ fa_asyncRender, fa_subMenu ],
+	statics: __statics,
+	members: __members
+});
+

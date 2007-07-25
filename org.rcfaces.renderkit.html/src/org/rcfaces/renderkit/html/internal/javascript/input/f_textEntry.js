@@ -154,7 +154,7 @@ var __members = {
 			validator = f_clientValidator.f_newInstance(this);
 		}
 		
-		validator.f_addBehavior(f_vb.Behavior_required);		
+		validator.f_addBehavior(f_vb.Behavior_required);
 	},
 	f_serializeValue: function() {
 		var validator=this._validator;

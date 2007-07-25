@@ -40,6 +40,8 @@ public interface IHtmlRenderContext extends IRenderContext {
 
     void pushInteractiveRenderComponent(IHtmlWriter writer);
 
+    void popInteractiveRenderComponent();
+
     IJavaScriptRenderContext getJavaScriptRenderContext();
 
     IAsyncRenderComponent getCurrentInteractiveRenderComponent();

@@ -30,10 +30,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
-import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.lang.OrderedSet;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -43,8 +41,10 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.GridServerSort;
+import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
@@ -140,10 +140,12 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             ComponentsGridComponent dgc, int rowIndex, int forcedRow,
-            ISortedComponent[] sortedComponents, String filterExpression) {
+            ISortedComponent[] sortedComponents, String filterExpression,
+            String showAdditionals, String hideAdditionals) {
         return new ComponentsGridRenderContext(processContext,
                 scriptRenderContext, dgc, rowIndex, forcedRow,
-                sortedComponents, filterExpression);
+                sortedComponents, filterExpression, showAdditionals,
+                hideAdditionals);
     }
 
     protected void encodeBodyEnd(IHtmlWriter writer,
@@ -204,8 +206,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     writeFullStates(jsWriter, "f_setSelectionStates",
                             selectedIndexes);
                 } else {
-                    Set selectedObjects = ValuesTools
-                            .convertSelection(selectionModel);
+                    Set selectedObjects = CollectionTools.valuesToSet(
+                            selectionModel, true);
 
                     writeFullStates(jsWriter, gridRenderContext,
                             "f_setSelectionStates", selectedObjects);
@@ -364,8 +366,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     }
 
                 } else {
-                    selectedObjects = ValuesTools
-                            .convertSelection(selectionModel);
+                    selectedObjects = CollectionTools.valuesToSet(
+                            selectionModel, true);
                 }
             }
         }
@@ -486,6 +488,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
                 if (rowValue == null) {
                     rowValue = String.valueOf(rowIndex);
+                    // NON: C'est géré coté client desormais (on fait transité
+                    // le rowIndex !)
                 }
 
                 StringAppender sa = new StringAppender("f_cGrid_row", 32);
@@ -516,12 +520,12 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 if (encodeJs) {
                     encodeRowJs((IJavaScriptWriter) writer, gridRenderContext,
                             rowValue, sa.toString(), selected, writeSelected,
-                            defaultCellStyleClass, i);
+                            defaultCellStyleClass, i, translatedRowIndex);
 
                 } else {
                     encodeRow((IHtmlWriter) writer, gridRenderContext,
                             rowValue, sa.toString(), selected, writeSelected,
-                            defaultCellStyleClass, i);
+                            defaultCellStyleClass, i, translatedRowIndex);
                 }
 
                 if (sortTranslations == null) {
@@ -543,11 +547,16 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     private void encodeRow(IHtmlWriter htmlWriter,
             ComponentsGridRenderContext gridRenderContext, String rowValue,
             String rowClassName, boolean selected, boolean writeSelected,
-            String defaultCellStyleClass, int rowIndex) throws WriterException {
+            String defaultCellStyleClass, int index, int rowIndex)
+            throws WriterException {
 
         htmlWriter.startElement(IHtmlWriter.TR);
 
-        htmlWriter.writeAttribute("v:index", rowValue);
+        if (rowValue != null) {
+            htmlWriter.writeAttribute("v:rowValue", rowValue);
+        }
+
+        htmlWriter.writeAttribute("v:rowIndex", rowIndex);
 
         htmlWriter.writeClass(rowClassName);
 
@@ -607,7 +616,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             if (styleClass == null && defaultCellStyleClasses != null) {
                 String csc[] = defaultCellStyleClasses[columnIndex];
                 if (csc != null && csc.length > 0) {
-                    styleClass = csc[rowIndex % csc.length];
+                    styleClass = csc[index % csc.length];
                 }
             }
 
@@ -645,7 +654,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     private void encodeRowJs(IJavaScriptWriter jsWriter,
             ComponentsGridRenderContext gridRenderContext, String rowValue,
             String rowClassName, boolean selected, boolean writeSelected,
-            String defaultCellStyleClass, int rowIndex) throws WriterException {
+            String defaultCellStyleClass, int index, int rowIndex)
+            throws WriterException {
 
         jsWriter.writeMethodCall("f_addRow2").writeString(
                 computeRowId(jsWriter));
@@ -659,6 +669,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         if (rowValue != null) {
             oWriter.writeSymbol("_value").writeString(rowValue);
         }
+        oWriter.writeSymbol("_rowIndex").writeInt(rowIndex);
 
         if (selected && writeSelected) {
             oWriter.writeSymbol("_selected").writeBoolean(true);
@@ -807,21 +818,16 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 .getStringProperty("deselectedItems");
         if (selectedRows != null || deselectedRows != null) {
             if (rowValueSetted) {
-                Object selected = componentsGridComponent.getSelectedValues();
 
-                Set values = updateSelection(facesContext, selected,
-                        selectedRows, deselectedRows, componentsGridComponent);
+                Set selectedValues = SelectionTools.selectionValuesToSet(
+                        facesContext, componentsGridComponent, false);
 
-                Class cls = ((ISelectedValuesCapability) componentsGridComponent)
-                        .getSelectedValuesType(facesContext);
+                Set newSelectedValues = updateSelection(facesContext,
+                        selectedValues, selectedRows, deselectedRows,
+                        componentsGridComponent);
 
-                if (cls == null && selected != null) {
-                    cls = selected.getClass();
-                }
-
-                selected = ValuesTools.adaptValues(cls, values);
-
-                componentsGridComponent.setSelectedValues(selected);
+                SelectionTools.setSelectionValues(facesContext,
+                        componentsGridComponent, newSelectedValues);
 
             } else {
                 int indexes[] = parseIndexes(selectedRows);
@@ -845,17 +851,9 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.decode(context, component, componentData);
     }
 
-    private Set updateSelection(FacesContext facesContext, Object selected,
+    private Set updateSelection(FacesContext facesContext, Set set,
             String selectedRows, String deselectedRows,
             ComponentsGridComponent componentsGridComponent) {
-        Set set;
-
-        if (selected == null) {
-            set = new OrderedSet(8);
-
-        } else {
-            set = ValuesTools.convertSelection(selected);
-        }
 
         if (HtmlTools.ALL_VALUE.equals(deselectedRows)) {
             set.clear();
@@ -946,9 +944,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 IScriptRenderContext scriptRenderContext,
                 ComponentsGridComponent gridComponent, int rowIndex,
                 int forcedRows, ISortedComponent[] sortedComponents,
-                String filterExpression) {
+                String filterExpression, String showAdditionals,
+                String hideAdditionals) {
             super(processContext, scriptRenderContext, gridComponent, rowIndex,
-                    forcedRows, sortedComponents, filterExpression);
+                    forcedRows, sortedComponents, filterExpression,
+                    showAdditionals, hideAdditionals);
         }
 
         public ComponentsGridRenderContext(

@@ -18,6 +18,10 @@
 				<command id="componentsGrid.update" />
 			</service>
 			
+			<service id="org.rcfaces.renderkit.html.AdditionalInformationsGrid" class="org.rcfaces.renderkit.html.internal.service.AdditionalInformationService">
+				<command id="grid.additionalInformation" />
+			</service>
+			
 			<service id="org.rcfaces.renderkit.html.PopupGrid" class="org.rcfaces.renderkit.html.internal.service.PopupGridService">
 				<command id="popupGrid.update" />
 			</service>

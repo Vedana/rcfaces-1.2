@@ -414,9 +414,12 @@ var __members={
 					
 				} catch (x) {
 					f_core.Debug(fa_calendarPopup, "f_openCalendarPopup: Get date of component '"+component.id+"' throws exception.", x);
+					date=null;
 				}
+				
 				try {
 					this.f_setSelection(date);
+					
 				} catch (x) {
 					f_core.Error(fa_calendarPopup, "f_openCalendarPopup: set Selection '"+component.id+"' with date '"+date+"' throws exception.", x);
 				}

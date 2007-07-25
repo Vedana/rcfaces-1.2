@@ -123,5 +123,7 @@ var __members = {
 			
 }
 
-new f_aspect("fa_filterProperties", null, __members);
+new f_aspect("fa_filterProperties", {
+	members: __members
+});
 

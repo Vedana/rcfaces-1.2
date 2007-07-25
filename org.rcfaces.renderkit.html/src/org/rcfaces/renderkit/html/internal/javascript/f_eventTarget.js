@@ -115,13 +115,15 @@ var __members = {
 			this.f_initEventAtts(f_eventTarget._EVENTS);
 		}
 	},	
-	/**
+	/*
 	 * 
 	 * @method protected
-	 */
-	/*
+	 *
 	f_finalize: function() {
 		this.f_super(arguments);
+
+		f_core.RemoveResetListener(this);  ???
+		f_core.RemoveCheckListener(this);  ???
 	},
 	*/
 	/**

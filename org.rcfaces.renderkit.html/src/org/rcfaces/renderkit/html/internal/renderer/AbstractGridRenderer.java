@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.io.CharArrayWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -13,11 +15,16 @@ import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
+import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
+import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
@@ -46,13 +53,14 @@ import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
-import org.rcfaces.core.internal.capability.ICheckComponent;
+import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.capability.ISelectionComponent;
+import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.component.UIData2;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
@@ -64,18 +72,25 @@ import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.FilterExpressionTools;
+import org.rcfaces.core.internal.tools.FilteredDataModel;
+import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.preference.IComponentPreference;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.Constants;
+import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -108,6 +123,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private static final String TITLE_STEXT = "_stext";
 
+    private static final String TABLE_BODY = "_table_tbody";
+
     private static final String TABLE_CONTEXT = "camelia.table.context";
 
     private static final String SCROLLBARS_PROPERTY = "camelia.scrollbars";
@@ -133,6 +150,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected static final int GENERATE_CELL_TEXT = 0x0004;
 
     protected static final int GENERATE_CELL_WIDTH = 0x0008;
+
+    private static final String ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE = "org.rcfaces.html.AI_CONTEXT";
 
     public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return GRID_STYLE_CLASS;
@@ -160,6 +179,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         IGridComponent dataGridComponent = (IGridComponent) writer
                 .getComponentRenderContext().getComponent();
 
+        AbstractGridRenderContext gridRenderContext = getGridRenderContext(writer
+                .getHtmlComponentRenderContext());
+
         IJavaScriptRenderContext javaScriptRenderContext = writer
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getJavaScriptRenderContext();
@@ -177,9 +199,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (ajax == false) {
             // On a des colonnes triables coté serveur ?
-            AbstractGridRenderContext gridRenderContext = getGridRenderContext(writer
-                    .getHtmlComponentRenderContext());
-
             int columnCount = gridRenderContext.getColumnCount();
             for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
                 Object sort = gridRenderContext.getSortCommand(columnIndex);
@@ -205,9 +224,191 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
+        if (gridRenderContext.hasAdditionalInformations()) {
+            ajax = true;
+            javaScriptRenderContext.appendRequiredClasses(classes,
+                    JavaScriptClasses.GRID, "additional");
+
+            if (needAdditionalInformationContextState()) {
+                IHtmlRenderContext htmlRenderContext = writer
+                        .getHtmlComponentRenderContext().getHtmlRenderContext();
+
+                Object state = htmlRenderContext.saveRenderContextState();
+
+                if (state != null) {
+                    String contentType = htmlRenderContext.getFacesContext()
+                            .getResponseWriter().getContentType();
+
+                    ((UIComponent) dataGridComponent).getAttributes().put(
+                            ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE,
+                            new Object[] { state, contentType });
+                }
+            }
+        }
+
         if (ajax) {
             javaScriptRenderContext.appendRequiredClasses(classes,
                     JavaScriptClasses.GRID, "ajax");
+        }
+    }
+
+    public Object[] getAdditionalInformationsRenderContextState(
+            IGridComponent component) {
+        return (Object[]) ((UIComponent) component).getAttributes().get(
+                ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE);
+    }
+
+    protected boolean needAdditionalInformationContextState() {
+        return false;
+    }
+
+    protected String encodeAdditionalInformation(IJavaScriptWriter jsWriter,
+            AdditionalInformationComponent additionalInformationComponent)
+            throws WriterException {
+
+        CharArrayWriter writer = new CharArrayWriter(8000);
+
+        encodeAdditionalInformation(jsWriter.getFacesContext(), writer,
+                (IGridComponent) jsWriter.getComponentRenderContext()
+                        .getComponent(), additionalInformationComponent,
+                jsWriter.getResponseCharacterEncoding());
+
+        writer.close();
+
+        return writer.toString();
+    }
+
+    protected void encodeAdditionalInformation(FacesContext facesContext,
+            Writer writer, IGridComponent component,
+            AdditionalInformationComponent additionalInformationComponent,
+            String responseCharacterEncoding) throws WriterException {
+
+        ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
+        ResponseWriter newResponseWriter;
+        ResponseStream oldResponseStream = null;
+        if (oldResponseWriter == null) {
+            // Appel AJAX pour un TRI par exemple ... (ou changement de page)
+
+            oldResponseStream = facesContext.getResponseStream();
+
+            Object states[] = getAdditionalInformationsRenderContextState(component);
+
+            newResponseWriter = facesContext.getRenderKit()
+                    .createResponseWriter(writer, (String) states[1],
+                            responseCharacterEncoding);
+
+            HtmlRenderContext.restoreRenderContext(facesContext, states[0],
+                    true);
+
+        } else {
+            newResponseWriter = oldResponseWriter.cloneWithWriter(writer);
+        }
+
+        facesContext.setResponseWriter(newResponseWriter);
+        try {
+            ComponentTools.encodeRecursive(facesContext,
+                    additionalInformationComponent);
+
+        } finally {
+            if (oldResponseWriter != null) {
+                facesContext.setResponseWriter(oldResponseWriter);
+            }
+
+            if (oldResponseStream != null) {
+                facesContext.setResponseStream(oldResponseStream);
+            }
+        }
+    }
+
+    public void renderAdditionalInformation(
+            IHtmlRenderContext htmlRenderContext, Writer writer,
+            IGridComponent gridComponent, String responseCharacterEncoding,
+            String rowValue2, String rowIndex) throws WriterException {
+
+        IHtmlWriter htmlWriter = (IHtmlWriter) htmlRenderContext
+                .getComponentWriter();
+
+        // On prepare le DataModel !
+        AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
+                .getHtmlComponentRenderContext());
+        DataModel dataModel = tableContext.getDataModel();
+
+        IFilterProperties filtersMap = tableContext.getFiltersMap();
+        if (filtersMap != null) {
+            if (dataModel instanceof IFiltredModel) {
+                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+                filtredDataModel.setFilter(filtersMap);
+
+            } else {
+                dataModel = FilteredDataModel.filter(dataModel, filtersMap);
+            }
+
+        } else if (dataModel instanceof IFiltredModel) {
+            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+
+            filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
+        }
+
+        int translatedRowIndex = Integer.parseInt(rowIndex);
+
+        ISortedComponent sortedComponents[] = tableContext
+                .listSortedComponents();
+        if (sortedComponents != null && sortedComponents.length > 0) {
+            if (dataModel instanceof ISortedDataModel) {
+                ((ISortedDataModel) dataModel).setSortParameters(
+                        (UIComponent) gridComponent, sortedComponents);
+            } else {
+                // Il faut faire le tri à la main !
+
+                int sortTranslations[] = GridServerSort
+                        .computeSortedTranslation(htmlRenderContext
+                                .getFacesContext(), gridComponent, dataModel,
+                                sortedComponents);
+
+                if (sortTranslations != null) {
+                    translatedRowIndex = sortTranslations[translatedRowIndex];
+                }
+            }
+        } else {
+            if (dataModel instanceof ISortedDataModel) {
+                // Reset des parametres de tri !
+                ((ISortedDataModel) dataModel).setSortParameters(
+                        (UIComponent) gridComponent, null);
+            }
+        }
+
+        gridComponent.setRowIndex(translatedRowIndex);
+        try {
+            if (gridComponent.isRowAvailable() == false) {
+                return;
+            }
+
+            AdditionalInformationComponent additionalInformationComponents[] = tableContext
+                    .listAdditionalInformations();
+
+            AdditionalInformationComponent additionalInformationComponent = null;
+
+            for (int i = 0; i < additionalInformationComponents.length; i++) {
+                AdditionalInformationComponent add = additionalInformationComponents[i];
+
+                if (add.isRendered() == false) {
+                    continue;
+                }
+
+                additionalInformationComponent = add;
+                break;
+            }
+
+            if (additionalInformationComponent == null) {
+                return;
+            }
+
+            encodeAdditionalInformation(htmlRenderContext.getFacesContext(),
+                    writer, gridComponent, additionalInformationComponent,
+                    responseCharacterEncoding);
+
+        } finally {
+            gridComponent.setRowIndex(-1);
         }
     }
 
@@ -259,6 +460,17 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter, null, ~CSS_SIZE_MASK);
+
+        if (gridRenderContext.hasAdditionalInformations()) {
+            int cardinality = gridRenderContext
+                    .getAdditionalInformationCardinality();
+            if (cardinality == 0) {
+                cardinality = IAdditionalInformationCardinalityCapability.DEFAULT_CARDINALITY;
+            }
+
+            htmlWriter.writeAttribute("v:additionalInformationCardinality",
+                    cardinality);
+        }
 
         if (gridRenderContext.isSelectable()) {
             htmlWriter.writeAttribute("v:selectionCardinality",
@@ -461,6 +673,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         encodeHeader(htmlWriter, gridRenderContext);
 
         htmlWriter.startElement(IHtmlWriter.TBODY);
+        htmlWriter.writeClass(getTitleTableBodyClassName(htmlWriter));
 
         encodeBodyBegin(htmlWriter, gridRenderContext);
     }
@@ -586,6 +799,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(IHtmlWriter.TR);
         htmlWriter.endElement(IHtmlWriter.THEAD);
         htmlWriter.startElement(IHtmlWriter.TBODY);
+
         htmlWriter.endElement(IHtmlWriter.TBODY);
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
@@ -594,6 +808,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         return tableWidth;
+    }
+
+    private String getTitleTableBodyClassName(IHtmlWriter htmlWriter) {
+        return GRID_STYLE_CLASS + TABLE_BODY;
     }
 
     protected String getTitleRowClassName(IHtmlWriter htmlWriter) {
@@ -1443,6 +1661,21 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         IGridComponent gridComponent = (IGridComponent) component;
 
+        if (component instanceof UIData2) {
+            String serializedIndexes = componentData
+                    .getStringProperty("serializedIndexes");
+            if (serializedIndexes != null) {
+                for (StringTokenizer st = new StringTokenizer(
+                        serializedIndexes, ","); st.hasMoreTokens();) {
+
+                    int first = Integer.parseInt(st.nextToken());
+                    int rows = Integer.parseInt(st.nextToken());
+
+                    ((UIData2) component).addDecodedIndexes(first, rows);
+                }
+            }
+        }
+
         Number first = componentData.getNumberProperty("first");
         if (first != null) {
             int old = gridComponent.getFirst();
@@ -1635,7 +1868,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected void setCheckedIndexes(FacesContext facesContext,
-            ICheckComponent checkComponent, int[] indexes, int uindexes[],
+            ICheckRangeComponent checkComponent, int[] indexes, int uindexes[],
             boolean uncheckAll) {
 
         if (uncheckAll) {
@@ -1667,7 +1900,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected void setSelectedIndexes(FacesContext facesContext,
-            ISelectionComponent selectionComponent, int[] indexes,
+            ISelectionRangeComponent selectionComponent, int[] indexes,
             int dindexes[], boolean deselectAll) {
 
         if (deselectAll) {

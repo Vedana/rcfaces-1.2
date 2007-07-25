@@ -25,7 +25,6 @@ import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
@@ -142,7 +141,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return renderContext;
     }
 
-    public static final IRenderContext restoreRenderContext(
+    public static final IHtmlRenderContext restoreRenderContext(
             FacesContext facesContext, Object state, boolean noLazyTag) {
         HtmlRenderContext renderContext = (HtmlRenderContext) getRenderContext(facesContext);
 
@@ -257,17 +256,23 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return lastInteractiveRenderComponentClientId;
     }
 
-    public void encodeEnd(UIComponent component) {
-        if (lastInteractiveRenderComponent != null) {
-            if (lastInteractiveRenderComponent == component) {
+    public void popInteractiveRenderComponent() {
+        if (interactiveRenderComponents.isEmpty()) {
+            throw new IllegalStateException(
+                    "No more elements into interactive render components");
+        }
 
-                lastInteractiveRenderComponent = (IAsyncRenderComponent) interactiveRenderComponents
-                        .remove(0);
-                lastInteractiveRenderComponentClientId = (String) interactiveRenderComponents
-                        .remove(0);
-                javascriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
-                        .remove(0);
-            }
+        lastInteractiveRenderComponent = (IAsyncRenderComponent) interactiveRenderComponents
+                .remove(0);
+        lastInteractiveRenderComponentClientId = (String) interactiveRenderComponents
+                .remove(0);
+        javascriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
+                .remove(0);
+    }
+
+    public void encodeEnd(UIComponent component) {
+        if (lastInteractiveRenderComponent == component) {
+            popInteractiveRenderComponent();
         }
 
         super.encodeEnd(component);

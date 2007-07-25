@@ -229,4 +229,6 @@ var __members = {
 	
 }
 
-new f_aspect("fa_images", null, __members);	
+new f_aspect("fa_images", {
+	members: __members
+});	

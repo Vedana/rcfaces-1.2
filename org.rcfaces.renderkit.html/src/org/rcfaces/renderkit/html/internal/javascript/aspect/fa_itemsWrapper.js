@@ -239,4 +239,6 @@ var __members = {
 	fa_getItemsWrapper: f_class.ABSTRACT
 }
 
-new f_aspect("fa_itemsWrapper", null, __members);
+new f_aspect("fa_itemsWrapper", {
+	members: __members
+});
