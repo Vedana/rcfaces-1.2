@@ -4,6 +4,7 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -118,6 +119,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
     protected void encodeBodyEnd(IHtmlWriter htmlWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
         encodeBodyTableEnd(htmlWriter, gridRenderContext);
+    }
+
+    public boolean getRendersChildren() {
+        return true;
     }
 
     protected void writeFullStates(IJavaScriptWriter jsWriter,

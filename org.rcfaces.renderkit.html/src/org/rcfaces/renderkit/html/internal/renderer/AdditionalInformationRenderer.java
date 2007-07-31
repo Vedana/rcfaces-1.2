@@ -28,12 +28,18 @@ public class AdditionalInformationRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement(IHtmlWriter.DIV);
-
-        writeComponentAttributes(htmlWriter);
+        encodeComponent(htmlWriter);
 
         htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
                 .pushInteractiveRenderComponent(htmlWriter);
+    }
+
+    protected void encodeComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
+
+        htmlWriter.startElement(IHtmlWriter.DIV);
+
+        writeComponentAttributes(htmlWriter);
     }
 
     protected void writeComponentAttributes(IHtmlWriter htmlWriter)
@@ -47,9 +53,14 @@ public class AdditionalInformationRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.endElement(IHtmlWriter.DIV);
+        encodeEndComponent(htmlWriter);
 
         super.encodeEnd(writer);
+    }
+
+    protected void encodeEndComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
+        htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
     protected String getJavaScriptClassName() {
