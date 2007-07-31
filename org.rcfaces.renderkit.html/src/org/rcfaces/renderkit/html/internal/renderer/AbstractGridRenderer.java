@@ -278,6 +278,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return writer.toString();
     }
 
+    public void encodeChildren(FacesContext facesContext, UIComponent component) {
+        // Pas de rendu des enfants !
+        // super.encodeChildren(facesContext, component);
+    }
+
     protected void encodeAdditionalInformation(FacesContext facesContext,
             Writer writer, IGridComponent component,
             AdditionalInformationComponent additionalInformationComponent,
