@@ -195,14 +195,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param number form Form of date (SHORT, MEDIUM, LONG)
+	 * @param optional number form Form of date (SHORT, MEDIUM, LONG)
 	 * @return String
 	 * @see #LONG
 	 * @see #SHORT
 	 * @see #MEDIUM
 	 */
 	f_getDateFormat: function(form) {
-		f_core.Assert(typeof(form)=="number" && (form==f_locale.SHORT || form==f_locale.MEDIUM || form==f_locale.LONG), "f_locale.f_getDateFormat: Invalid form parameter ("+form+")");
+		f_core.Assert(form===undefined || (typeof(form)=="number" && (form==f_locale.SHORT || form==f_locale.MEDIUM || form==f_locale.LONG)), "f_locale.f_getDateFormat: Invalid form parameter ("+form+")");
 
 		var ds=this._dateFormats;
 	
