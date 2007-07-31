@@ -158,8 +158,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.encodeBodyEnd(writer, tableContext);
     }
 
-    /*
-    public void encodeChildren(FacesContext facesContext, UIComponent component)
+    public void encodeChildren1(FacesContext facesContext, UIComponent component)
             throws IOException {
 
         IRenderContext renderContext = getRenderContext(facesContext);
@@ -186,7 +185,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         encodeChildren(htmlWriter, tableContext, false);
     }
-    */
 
     protected void encodeJsColumns(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
@@ -804,6 +802,16 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         ComponentsGridComponent componentsListComponent = (ComponentsGridComponent) writer
                 .getComponentRenderContext().getComponent();
+
+        try {
+            encodeChildren1(writer.getComponentRenderContext()
+                    .getFacesContext(), componentsListComponent);
+
+        } catch (IOException e) {
+            throw new WriterException("Can not encode children", e,
+                    componentsListComponent);
+
+        }
 
         componentsListComponent.setRowIndex(-1);
 

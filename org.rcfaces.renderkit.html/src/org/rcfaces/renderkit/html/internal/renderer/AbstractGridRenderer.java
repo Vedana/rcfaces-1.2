@@ -5,6 +5,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.io.CharArrayWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -278,7 +279,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return writer.toString();
     }
 
-    public void encodeChildren(FacesContext facesContext, UIComponent component) {
+    public void encodeChildren(FacesContext facesContext, UIComponent component) throws IOException {
         // Pas de rendu des enfants !
         // super.encodeChildren(facesContext, component);
     }
