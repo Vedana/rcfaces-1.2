@@ -260,7 +260,7 @@ var __members = {
 
 			var suggestTextEntry=this;
 			this._timerId=window.setTimeout(function() {
-				if (window._f_exiting) {
+				if (window._rcfacesExiting) {
 					return;
 				}
 

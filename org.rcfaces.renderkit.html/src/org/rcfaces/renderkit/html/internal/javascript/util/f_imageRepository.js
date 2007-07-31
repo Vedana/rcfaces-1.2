@@ -121,7 +121,7 @@ var __statics = {
 	 */
 	_OnErrorHandler: function() {
 
-		if (window._f_exiting) {
+		if (window._rcfacesExiting) {
 			return;
 		}
 
@@ -137,7 +137,7 @@ var __statics = {
 	 * @return void
 	 */
 	_OnLoadHandler: function() {
-		if (window._f_exiting) {
+		if (window._rcfacesExiting) {
 			return;
 		}
 

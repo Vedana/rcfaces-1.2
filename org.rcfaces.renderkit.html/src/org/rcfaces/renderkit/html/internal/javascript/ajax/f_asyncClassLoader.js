@@ -377,6 +377,11 @@ f_classLoader.prototype._asyncPostLoad=function(interactiveMode) {
  * @return boolean
  */
 f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {		
+	
+	if (doc.defaultView._rcfacesExiting) {
+		return;
+	}
+
 	f_core.Debug("f_asyncClassLoader", "_asyncLoadBundle: Add require bundle '"+bundleName+"'.");
 
 	var requestedBundles=this._requestedBundles;
@@ -431,6 +436,11 @@ f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {
  * @return void
  */
 f_classLoader.prototype._asyncBundleLoaded=function(doc, bundleName) {
+	
+	if (doc.defaultView._rcfacesExiting) {
+		return;
+	}
+	
 	this._loadingBundle--;
 
 	f_core.Debug("f_asyncClassLoader", "_asyncBundleLoaded: Bundle '"+bundleName+"' loaded  (loadingCount="+this._loadingBundle+")");	
@@ -483,6 +493,10 @@ f_classLoader.prototype._asyncBundleLoaded=function(doc, bundleName) {
  */
 f_classLoader.prototype._asyncSystemLoadBundle=function(doc,bundleName) {
 	// On lance le chargement du bundle ...	
+	
+	if (doc.defaultView._rcfacesExiting) {
+		return;
+	}
 
 	var url=f_env.ComputeJavaScriptURI(bundleName);
 	

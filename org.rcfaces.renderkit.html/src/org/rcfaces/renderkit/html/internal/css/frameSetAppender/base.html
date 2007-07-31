@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<script type="text/javascript">
-window._Camelia_frameSetAppend=function() {
+window._rcfacesFrameSetAppend=function() {
 	if (!window._logAppender) {
 		return;
 	}
@@ -25,7 +25,7 @@ window.f_profilerCB=function(timeEnd, name, date) {
 	
 function initializeLogFrame(frameWindow) {
 	window._logFrame=frameWindow;
-	window._logAppender=frameWindow._Camelia_frameSetAppend;
+	window._logAppender=frameWindow._rcfacesFrameSetAppend;
 	
 	var location=document.location.toString();
 	var idx=location.indexOf("url=");
@@ -41,7 +41,7 @@ function initializeToolBarFrame(frameWindow) {
 	
 function loadMainFrame(frameWindow) {
 	window._mainFrame=frameWindow;
-	window._Camelia_frameSetAppend.call(frameWindow, "loadFrame");
+	window._rcfacesFrameSetAppend.call(frameWindow, "loadFrame");
 }
 
 function updateLocation(location) {

@@ -422,7 +422,7 @@ var __statics = {
      * @return boolean
      */
      _OnFocus: function(evt) {
-     	if (window._f_exiting) {
+     	if (window._rcfacesExiting) {
      		// On sait jamais, nous sommes peut etre dans un context foireux ...
      		return;
      	}

@@ -41,17 +41,17 @@ var __members = {
 //		this._hasInitListeners=undefined; // boolean
 //		this._forcedEventReturns=undefined; // Map<String, boolean>
 		
+		var toDestroy=new Array;
+		
 		var clearDomEvent=this.f_clearDomEvent;
 		for(var type in actionLists) {
 			if (clearDomEvent) {
 				clearDomEvent.call(this, type, this);
 			}
-				
-			// Pour les subviews !
-			var al=actionLists[type];
-			
-			f_classLoader.Destroy(al);
+			toDestroy.push(actionLists[type]);
 		}
+					
+		f_classLoader.Destroy.apply(f_classLoader, toDestroy);
 	},
 	/**
 	 * 
@@ -98,7 +98,7 @@ var __members = {
 	 */
 	f_getEventLocked: function(jsEvent, showAlert, mask) {
 
-		if (window._f_exiting) {
+		if (window._rcfacesExiting) {
 			return true;
 		}
 
@@ -253,6 +253,8 @@ var __members = {
 	
 		var al=this.f_openActionList(type);
 		
+		f_core.Debug(fa_eventTarget, "f_addEventListener: Add actions '"+type+"' => "+arguments);
+		
 		for (var i=1;i<arguments.length;i++) {
 			al.f_addAction(arguments[i]);
 		}
@@ -268,6 +270,8 @@ var __members = {
 		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_insertEventListenerFirst: Bad type of event '"+type+"'");
 	
 		var al=this.f_openActionList(type);
+		
+		f_core.Debug(fa_eventTarget, "f_insertEventListenerFirst: Insert actions '"+type+"' => "+arguments);
 		
 		for (var i=1;i<arguments.length;i++) {
 			al.f_addActionFirst(arguments[i]);

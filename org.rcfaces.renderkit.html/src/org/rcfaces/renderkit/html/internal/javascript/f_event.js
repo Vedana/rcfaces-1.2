@@ -546,7 +546,7 @@ var __statics = {
 	 */
 	GetEventLocked: function(jsEvent, showAlert, mask) {
 	
-		if (window._f_exiting) {
+		if (window._rcfacesExiting) {
 			return true;
 		}
 	

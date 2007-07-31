@@ -21,7 +21,7 @@ var __statics={
 		for(;parentWindow.parent && parentWindow.parent!=parentWindow;) {
 			parentWindow=parentWindow.parent;
 		}
-		if (!parentWindow || !parentWindow._Camelia_windowAppend) {
+		if (!parentWindow || !parentWindow._rcfacesWindowAppend) {
 			// On doit se debrouiller à trouver l'URL du stylesheet,
 			// car le stylesheet est surement pas encore initialisé au niveau du f_env.
 			// par contre il doit y avoir un <LINK rel="stylesheet"  avant !
@@ -52,7 +52,7 @@ var __statics={
 			window.open(uri, "CAMELIA_WINDOW_LOG", "toolbar=no,scrollbars=yes,location=no,toolbar=no,directories=no,status=no,menubar=non,copyhistory=no");
 			return;
 		}
-		var callback=parentWindow._Camelia_windowAppend;
+		var callback=parentWindow._rcfacesWindowAppend;
 
 		callback.call(window, "newPage");
 

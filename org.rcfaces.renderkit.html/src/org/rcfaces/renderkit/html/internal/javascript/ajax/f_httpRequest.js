@@ -400,7 +400,7 @@ var __members = {
 				
 				// Ben oui, c'est la joie du context de création des fonctions.
 				req.onreadystatechange =  function() {
-					if (window._f_exiting) {
+					if (window._rcfacesExiting) {
 						// Nous ne sommes pas dans un contexte sain ....
 						// Par exemple, échanges HTTP aprés un onExit de f_core !
 						return false;
@@ -411,7 +411,7 @@ var __members = {
 				
 				if (f_core.IsGecko()) {
 					req.onerror = function() {
-						if (window._f_exiting) {
+						if (window._rcfacesExiting) {
 							// Nous ne sommes pas dans un contexte sain ....
 							// Par exemple, échanges HTTP aprés un onExit de f_core !
 							return false;

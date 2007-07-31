@@ -34,7 +34,7 @@ if (f_core.IsGecko()) {
 	 * @method static hidden
 	 */
 	f_class._ChangeContext = function(win, mwMethod) {
-		var changeContext=win._changeContext;
+		var changeContext=win._rcfacesChangeContext;
 		if (typeof(mwMethod)=="function") {
 			mwMethod=mwMethod.valueOf();
 			
@@ -58,7 +58,7 @@ f_classLoader.prototype._newWindow=function(clparent, changeContext) {
 	var win=this;
 	
 	if (f_core.IsInternetExplorer()) {
-		win._changeContext=changeContext;
+		win._rcfacesChangeContext=changeContext;
 	}
 
 	var cl=new f_classLoader(win, clparent);
@@ -219,7 +219,7 @@ f_classLoader.prototype._loadBundle=function(doc, bundleName) {
 	}
 	
 	// Notre méthode de changement de contexte !
-	var changeContext=win._changeContext;
+	var changeContext=win._rcfacesChangeContext;
 	if (!changeContext) {
 		changeContext=function(source) {
 			return win.eval(source);

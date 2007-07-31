@@ -292,7 +292,7 @@ f_classLoader.prototype = {
 		this._parent=undefined;
 		
 		this._window._rcfacesClassLoader=undefined;
-		this._window._changeContext=undefined;
+		this._window._rcfacesChangeContext=undefined;
 	
 		//this._documentCompleted=undefined; // boolean
 		//this._lazyIndex=undefined; // number

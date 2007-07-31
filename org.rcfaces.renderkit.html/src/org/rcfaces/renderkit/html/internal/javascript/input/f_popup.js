@@ -476,7 +476,7 @@ var __statics = {
 	 * @method private static
 	 */
 	_OnFocus: function(evt) {
-		if (window._f_exiting) {
+		if (window._rcfacesExiting) {
 			return;
 		}
 		

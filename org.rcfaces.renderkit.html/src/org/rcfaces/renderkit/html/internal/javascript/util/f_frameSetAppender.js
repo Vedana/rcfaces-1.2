@@ -22,7 +22,7 @@ var __statics={
 			parentWindow=parentWindow.parent;
 		}
 //		alert("ParentWindow="+parentWindow);
-		if (!parentWindow || !parentWindow._Camelia_frameSetAppend) {
+		if (!parentWindow || !parentWindow._rcfacesFrameSetAppend) {
 			// On doit se debrouiller à trouver l'URL du stylesheet,
 			// car le stylesheet est surement pas encore initialisé au niveau du f_env.
 			// par contre il doit y avoir un <LINK rel="stylesheet"  avant !
@@ -54,7 +54,7 @@ var __statics={
 			window.document.location=uri;
 			return;
 		}
-		var callback=parentWindow._Camelia_frameSetAppend;
+		var callback=parentWindow._rcfacesFrameSetAppend;
 
 		callback.call(window, "newPage");
 

@@ -260,7 +260,7 @@ var __members = {
 		var message=this;
 		
 		this._onFocusCb=function(evt) {
-	    	if (window._f_exiting) {
+	    	if (window._rcfacesExiting) {
 	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
 	     		return;
 	     	}
@@ -281,7 +281,7 @@ var __members = {
 
 /*
 		this._onBlurCb=function(evt) {
-	    	if (window._f_exiting) {
+	    	if (window._rcfacesExiting) {
 	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
 	     		return;
 	     	}

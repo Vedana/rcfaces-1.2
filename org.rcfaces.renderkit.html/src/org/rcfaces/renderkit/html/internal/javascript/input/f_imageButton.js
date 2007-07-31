@@ -23,48 +23,8 @@ var __members = {
 		this.f_super(arguments);
 
 		var tabIndex=this.tabIndex;
-		var link=null;
-		var tagName=this.tagName.toLowerCase();
 		
-		if (tagName=="input") {
-			// Il faut recuperer le click pour empecher le submit !
-			this._image=this;
-			
-		} else 	if (tagName=="a") {
-			// Il faut recuperer le click pour empecher le submit !
-			this._image=f_core.GetFirstElementByTagName(this, "img", true);
-						
-		} else {
-			link=f_core.GetFirstElementByTagName(this, "input", false);
-			if (!link) {
-				// Fred : to allow imageButton without image !
-				link=f_core.GetFirstElementByTagName(this, "a", false);
-			}
-			
-			if (link) {
-				tabIndex=f_core.GetAttribute(this, "tabIndex");
-				if (!tabIndex) {
-					tabIndex=0;
-				}
-			
-				if (link.tagName.toLowerCase()=="input") {				
-					this._image=link;
-				} else {
-					this._image=f_core.GetFirstElementByTagName(link, "img", false);
-					
-					f_core.Assert(this._image, "Can not find Image of component '"+this.id+"'.");
-				}
-				
-				this._link=link;
-				link.f_link=this;
-				
-				if (tabIndex>=0) {
-					link.tabIndex=tabIndex;
-				}
-
-				this.f_openActionList(f_event.SELECTION);
-			}
-		}
+		var eventComponent=this.f_getEventComponent();
 		
 		if (!this._image) {
 			var images=this.getElementsByTagName("img");
@@ -133,11 +93,9 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
 		
 		this._tabIndex=tabIndex;
-		if (this.f_isDisabled()) {
-			var cmp=(link)?link:this;
-			
-			cmp.tabIndex=-1;
-			cmp.hideFocus=true;
+		if (this.f_isDisabled()) {			
+			eventComponent.tabIndex=-1;
+			eventComponent.hideFocus=true;
 		}
 	},
 	f_finalize: function() {
@@ -178,7 +136,14 @@ var __members = {
 		// Ce n'est plus qu'un indicateur,
 		// car c'est soit NULL ou _image !
 		// On efface le link aprés car on en a besoin lors du clearDomEvent !
-		this._link=undefined;
+		var eventComponent=this._eventComponent;
+		this._eventComponent=undefined;
+		
+		if (eventComponent!=this) {
+			eventComponent.f_link=undefined;
+			
+			f_core.VerifyProperties(eventComponent);
+		}
 		
 		if (text && text!=this) {
 			f_core.VerifyProperties(text);
@@ -186,6 +151,69 @@ var __members = {
 		if (image && image!=this) {
 			f_core.VerifyProperties(image);
 		}		
+	},
+	
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getEventComponent: function() {
+		var eventComponent=this._eventComponent;
+		if (eventComponent!==undefined) {
+			return eventComponent;
+		}
+		
+		eventComponent=this;
+		
+		switch(this.tagName.toLowerCase()) {
+		case "input":
+			// Il faut recuperer le click pour empecher le submit !
+			this._image=this;
+			break;
+
+		case "a":
+			// Il faut recuperer le click pour empecher le submit !
+			this._image=f_core.GetFirstElementByTagName(this, "img", true);
+			break;
+
+		default:
+			var link=f_core.GetFirstElementByTagName(this, "input", false);
+			if (!link) {
+				// Fred : to allow imageButton without image !
+				link=f_core.GetFirstElementByTagName(this, "a", false);
+			}
+			
+			if (link) {
+				var tabIndex=f_core.GetAttribute(this, "tabIndex");
+				if (!tabIndex) {
+					tabIndex=0;
+				}
+			
+				if (link.tagName.toLowerCase()=="input") {				
+					this._image=link;
+					
+				} else {
+					this._image=f_core.GetFirstElementByTagName(link, "img", false);
+					
+					f_core.Assert(this._image, "f_imageButton.f_getEventComponent: Can not find Image of component '"+this.id+"'.");
+				}
+				
+				eventComponent=link;
+				link.f_link=this;
+				
+				if (tabIndex>=0) {
+					link.tabIndex=tabIndex;
+				}
+			}
+		}
+		
+		this._eventComponent=eventComponent;
+		
+		if (eventComponent!=this) {
+			this.f_openActionList(f_event.SELECTION);		
+		}
+		
+		return eventComponent;
 	},
 	
 	/**
@@ -449,7 +477,7 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
 	f_setDomEvent: function(type, target) {
-		var link=this._link;
+		var link=this.f_getEventComponent();
 		if (link) {
 			switch(type) {
 /*			case f_event.SELECTION: 
@@ -466,7 +494,7 @@ var __members = {
 		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent: function(type, target) {
-		var link=this._link;
+		var link=this.f_getEventComponent();
 		if (link) {
 			switch(type) {
 /*			case f_event.SELECTION: 
@@ -490,7 +518,7 @@ var __members = {
 		this._updateImage();
 	},
 	fa_updateDisabled: function(disabled) {
-		var cmp=(this._link)?this._link:this;
+		var cmp=this.f_getEventComponent();
 
 		if (disabled) {
 			cmp.tabIndex=-1;
@@ -560,7 +588,7 @@ var __members = {
 
 		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"'.");
 		
-		var cmp=this._link;
+		var cmp=this.f_getEventComponent();
 		if (!cmp) {
 			cmp=this;
 		}

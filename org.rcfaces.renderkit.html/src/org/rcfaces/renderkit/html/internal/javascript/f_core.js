@@ -767,7 +767,7 @@ var f_core = {
 				return;
 			}
 			
-			if (profiler!==true || window._f_exiting) {
+			if (profiler!==true || window._rcfacesExiting) {
 				return;
 			}
 		
@@ -917,11 +917,11 @@ var f_core = {
 	_OnExit: function() {
 		var win=this;
 		
-		if (win._f_exiting) {
+		if (win._rcfacesExiting) {
 			return;
 		}
 		
-		win._f_exiting=f_core._RCFACES_EXITING;
+		win._rcfacesExiting=f_core._RCFACES_EXITING;
 		
 		var exitedState=f_core._RCFACES_EXITED;
 		try {		
@@ -989,7 +989,7 @@ var f_core = {
 				f_core.Profile(true, "f_core.onExit");
 			}
 		} finally {
-			win._f_exiting=exitedState;
+			win._rcfacesExiting=exitedState;
 		}
 	},
 	/**
@@ -1816,8 +1816,15 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param Window win
+	 * @param Object parameters
+	 * @param boolean modal
+	 * @return Window
 	 */
-	OpenWindow: function(window, parameters, modal) {
+	OpenWindow: function(win, parameters, modal) {
+		if (!win) {
+			win=window;
+		}
 		var url=parameters.url;
 		if (!url) {
 			url = "about:blank";
@@ -1874,14 +1881,14 @@ var f_core = {
 			s+=name+"="+features[name];
 		}
 		
-		f_core.Debug("f_core", "Open window, url="+url+" target="+target+" features="+s);
+		f_core.Debug(f_core, "OpenWindow: url="+url+" target="+target+" features="+s);
 		
 		var newWindow;
 		try {
-			newWindow=window.open(url, target, s);
+			newWindow=win.open(url, target, s);
 
 		} catch (x) {
-			f_core.Debug("f_core", "Open window exception.", x);
+			f_core.Debug(f_core, "OpenWindow: while opening new window, exception.", x);
 			newWindow=null;
 		}
 			
@@ -1894,7 +1901,7 @@ var f_core = {
 				return null;
 			}
 			
-			f_core.Error(f_core, "Can not open window url='"+url+"' target='"+target+"' features='"+s+"'.", x);
+			f_core.Error(f_core, "OpenWindow: Can not open window url='"+url+"' target='"+target+"' features='"+s+"'.", x);
 			return null;
 		}
 		
@@ -3354,13 +3361,25 @@ var f_core = {
 			if (typeof(value)=="function") {
 				s+="[*function*]";
 				continue;
+
+			} else if (value.nodeType==f_core.ELEMENT_NODE) {
+				s+="[Tag "+value.tagName+"."+value.className+"#"+value.id+"]";
+				continue;
+					
+			} else if (value.nodeType==f_core.DOCUMENT_NODE) {
+				s+="[Document "+value.location.toString()+"*]";
+				continue;
 			}
+			
 			s+="["+value+":"+typeOfValue+"]";
 		}
 		
 		if (s.length) {
-			if (object.tagName) {
-				s="TagName: "+object.tagName+"{"+object.className+"}\n"+s;
+			if (object.nodeType==f_core.ELEMENT_NODE) {
+				s="[Tag "+object.tagName+"."+object.className+"#"+object.id+"]\n"+s;
+					
+			} else if (object.nodeType==f_core.DOCUMENT_NODE) {
+				s+="[Document "+object.location.toString()+"]\n"+s;
 			}
 			if (object._kclassName) {
 				s="_KClassName: "+object._kclassName+"\n"+s;
@@ -3452,7 +3471,7 @@ var f_core = {
 	 */
 	_FocusTimeout: function() {
 		// On sait jamais !
-		if (window._f_exiting) {
+		if (window._rcfacesExiting) {
 			return;
 		}
 		f_core._FocusTimeoutID=undefined;
