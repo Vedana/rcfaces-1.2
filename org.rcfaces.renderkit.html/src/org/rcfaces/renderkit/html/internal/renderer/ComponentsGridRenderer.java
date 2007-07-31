@@ -158,6 +158,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.encodeBodyEnd(writer, tableContext);
     }
 
+    /*
     public void encodeChildren(FacesContext facesContext, UIComponent component)
             throws IOException {
 
@@ -185,6 +186,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         encodeChildren(htmlWriter, tableContext, false);
     }
+    */
 
     protected void encodeJsColumns(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
