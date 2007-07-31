@@ -378,7 +378,7 @@ f_classLoader.prototype._asyncPostLoad=function(interactiveMode) {
  */
 f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {		
 	
-	if (doc.defaultView._rcfacesExiting) {
+	if (window._rcfacesExiting) {
 		return;
 	}
 
@@ -437,7 +437,7 @@ f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {
  */
 f_classLoader.prototype._asyncBundleLoaded=function(doc, bundleName) {
 	
-	if (doc.defaultView._rcfacesExiting) {
+	if (window._rcfacesExiting) {
 		return;
 	}
 	
@@ -494,7 +494,7 @@ f_classLoader.prototype._asyncBundleLoaded=function(doc, bundleName) {
 f_classLoader.prototype._asyncSystemLoadBundle=function(doc,bundleName) {
 	// On lance le chargement du bundle ...	
 	
-	if (doc.defaultView._rcfacesExiting) {
+	if (window._rcfacesExiting) {
 		return;
 	}
 
