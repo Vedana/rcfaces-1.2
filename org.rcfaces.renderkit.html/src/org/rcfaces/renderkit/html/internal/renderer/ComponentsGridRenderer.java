@@ -581,6 +581,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         for (int columnIndex = 0; columnIndex < columns.length; columnIndex++) {
 
+            if (gridRenderContext.getColumnState(columnIndex) != AbstractGridRenderContext.VISIBLE) {
+                continue;
+            }
+
             UIColumn column = columns[columnIndex];
 
             htmlWriter.startElement(IHtmlWriter.TD);

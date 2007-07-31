@@ -10,8 +10,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletConfig;
@@ -68,6 +70,41 @@ public class ExtendedHttpServlet extends HttpServlet {
             new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
             new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US) };
 
+    public static final String CSS_MIME_TYPE = "text/css";
+
+    public static final String HTML_MIME_TYPE = "text/html";
+
+    public static final String JAVASCRIPT_MIME_TYPE = "text/javascript";
+
+    public static final String TEXT_PLAIN_MIME_TYPE = "text/plain";
+
+    private static Set useGZIPExtensions = new HashSet();
+    static {
+        useGZIPExtensions.add(CSS_MIME_TYPE);
+        useGZIPExtensions.add(HTML_MIME_TYPE);
+        useGZIPExtensions.add(JAVASCRIPT_MIME_TYPE);
+        useGZIPExtensions.add(TEXT_PLAIN_MIME_TYPE);
+    }
+
+    public static final boolean isMimeTypeSupportGZip(String mimeType) {
+        if (mimeType == null || mimeType.length() < 1) {
+            return false;
+        }
+
+        int idx = mimeType.indexOf(";");
+        if (idx >= 0) {
+            mimeType = mimeType.substring(0, idx);
+        }
+
+        mimeType = mimeType.trim().toLowerCase();
+
+        return useGZIPExtensions.contains(mimeType);
+    }
+
+    public static final boolean hasGzipSupport(HttpServletRequest request) {
+        return hasGzipSupport(request.getHeader(HTTP_ACCEPT_ENCODING));
+    }
+
     public static boolean hasGzipSupport(FacesContext facesContext) {
         Map requestMap = facesContext.getExternalContext()
                 .getRequestHeaderMap();
@@ -106,7 +143,7 @@ public class ExtendedHttpServlet extends HttpServlet {
             byte digest[] = messageDigest.digest(buffer);
 
             StringAppender sb = new StringAppender(digest.length * 2 + 16);
-            sb.append("\"cm:");
+            sb.append("\"rcfaces:");
             for (int i = 0; i < digest.length; i++) {
                 int v = digest[i] & 0xff;
                 if (v < 16) {
@@ -202,9 +239,4 @@ public class ExtendedHttpServlet extends HttpServlet {
             LOG.debug("Set GZIP content encoding.");
         }
     }
-
-    public static final boolean hasGzipSupport(HttpServletRequest request) {
-        return hasGzipSupport(request.getHeader(HTTP_ACCEPT_ENCODING));
-    }
-
 }

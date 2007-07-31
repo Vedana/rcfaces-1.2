@@ -14,144 +14,134 @@ import javax.faces.application.Application;
 
 public class MenuItemTag extends ExpandableItemTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(MenuItemTag.class);
 
-    private String accessKey;
+	private static final Log LOG=LogFactory.getLog(MenuItemTag.class);
 
-    private String acceleratorKey;
+	private String accessKey;
+	private String acceleratorKey;
+	private String styleClass;
+	private String menuListeners;
+	private String removeAllWhenShown;
+	public String getComponentType() {
+		return MenuItemComponent.COMPONENT_TYPE;
+	}
 
-    private String styleClass;
+	public final String getAccessKey() {
+		return accessKey;
+	}
 
-    private String menuListeners;
+	public final void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
+	}
 
-    private String removeAllWhenShown;
+	public final String getAcceleratorKey() {
+		return acceleratorKey;
+	}
 
-    public String getComponentType() {
-        return MenuItemComponent.COMPONENT_TYPE;
-    }
+	public final void setAcceleratorKey(String acceleratorKey) {
+		this.acceleratorKey = acceleratorKey;
+	}
 
-    public final String getAccessKey() {
-        return accessKey;
-    }
+	public final String getStyleClass() {
+		return styleClass;
+	}
 
-    public final void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
+	}
 
-    public final String getAcceleratorKey() {
-        return acceleratorKey;
-    }
+	public final String getMenuListener() {
+		return menuListeners;
+	}
 
-    public final void setAcceleratorKey(String acceleratorKey) {
-        this.acceleratorKey = acceleratorKey;
-    }
+	public final void setMenuListener(String menuListeners) {
+		this.menuListeners = menuListeners;
+	}
 
-    public final String getStyleClass() {
-        return styleClass;
-    }
+	public final String getRemoveAllWhenShown() {
+		return removeAllWhenShown;
+	}
 
-    public final void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
-    }
+	public final void setRemoveAllWhenShown(String removeAllWhenShown) {
+		this.removeAllWhenShown = removeAllWhenShown;
+	}
 
-    public final String getMenuListener() {
-        return menuListeners;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (MenuItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  acceleratorKey='"+acceleratorKey+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setMenuListener(String menuListeners) {
-        this.menuListeners = menuListeners;
-    }
+		if ((uiComponent instanceof MenuItemComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'MenuItemComponent'.");
+		}
 
-    public final String getRemoveAllWhenShown() {
-        return removeAllWhenShown;
-    }
+		MenuItemComponent component = (MenuItemComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final void setRemoveAllWhenShown(String removeAllWhenShown) {
-        this.removeAllWhenShown = removeAllWhenShown;
-    }
+		if (accessKey != null) {
+			if (isValueReference(accessKey)) {
+				ValueBinding vb = application.createValueBinding(accessKey);
+				component.setValueBinding(Properties.ACCESS_KEY, vb);
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (MenuItemComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  accessKey='" + accessKey + "'");
-            LOG.debug("  acceleratorKey='" + acceleratorKey + "'");
-            LOG.debug("  styleClass='" + styleClass + "'");
-            LOG.debug("  removeAllWhenShown='" + removeAllWhenShown + "'");
-        }
-        super.setProperties(uiComponent);
+			} else {
+				component.setAccessKey(accessKey);
+			}
+		}
 
-        if ((uiComponent instanceof MenuItemComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'MenuItemComponent'.");
-        }
+		if (acceleratorKey != null) {
+			if (isValueReference(acceleratorKey)) {
+				ValueBinding vb = application.createValueBinding(acceleratorKey);
+				component.setValueBinding(Properties.ACCELERATOR_KEY, vb);
 
-        MenuItemComponent component = (MenuItemComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+			} else {
+				component.setAcceleratorKey(acceleratorKey);
+			}
+		}
 
-        if (accessKey != null) {
-            if (isValueReference(accessKey)) {
-                ValueBinding vb = application.createValueBinding(accessKey);
-                component.setValueBinding(Properties.ACCESS_KEY, vb);
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+				component.setValueBinding(Properties.STYLE_CLASS, vb);
 
-            } else {
-                component.setAccessKey(accessKey);
-            }
-        }
+			} else {
+				component.setStyleClass(styleClass);
+			}
+		}
 
-        if (acceleratorKey != null) {
-            if (isValueReference(acceleratorKey)) {
-                ValueBinding vb = application
-                        .createValueBinding(acceleratorKey);
-                component.setValueBinding(Properties.ACCELERATOR_KEY, vb);
+		if (menuListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MENU_LISTENER_TYPE, menuListeners);
+		}
 
-            } else {
-                component.setAcceleratorKey(acceleratorKey);
-            }
-        }
+		if (removeAllWhenShown != null) {
+			if (isValueReference(removeAllWhenShown)) {
+				ValueBinding vb = application.createValueBinding(removeAllWhenShown);
+				component.setValueBinding(Properties.REMOVE_ALL_WHEN_SHOWN, vb);
 
-        if (styleClass != null) {
-            if (isValueReference(styleClass)) {
-                ValueBinding vb = application.createValueBinding(styleClass);
-                component.setValueBinding(Properties.STYLE_CLASS, vb);
+			} else {
+				component.setRemoveAllWhenShown(getBool(removeAllWhenShown));
+			}
+		}
+	}
 
-            } else {
-                component.setStyleClass(styleClass);
-            }
-        }
+	public void release() {
+		accessKey = null;
+		acceleratorKey = null;
+		styleClass = null;
+		menuListeners = null;
+		removeAllWhenShown = null;
 
-        if (menuListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.MENU_LISTENER_TYPE, menuListeners);
-        }
-
-        if (removeAllWhenShown != null) {
-            if (isValueReference(removeAllWhenShown)) {
-                ValueBinding vb = application
-                        .createValueBinding(removeAllWhenShown);
-                component.setValueBinding(Properties.REMOVE_ALL_WHEN_SHOWN, vb);
-
-            } else {
-                component.setRemoveAllWhenShown(getBool(removeAllWhenShown));
-            }
-        }
-    }
-
-    public void release() {
-        accessKey = null;
-        acceleratorKey = null;
-        styleClass = null;
-        menuListeners = null;
-        removeAllWhenShown = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

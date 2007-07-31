@@ -14,180 +14,164 @@ import javax.faces.application.Application;
 
 public class ServiceTag extends CameliaTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(ServiceTag.class);
 
-    private String propertyChangeListeners;
+	private static final Log LOG=LogFactory.getLog(ServiceTag.class);
 
-    private String serviceEventListeners;
+	private String propertyChangeListeners;
+	private String serviceEventListeners;
+	private String filterProperties;
+	private String componentLocale;
+	private String componentTimeZone;
+	private String serviceId;
+	private String enableViewState;
+	public String getComponentType() {
+		return ServiceComponent.COMPONENT_TYPE;
+	}
 
-    private String filterProperties;
+	public final String getPropertyChangeListener() {
+		return propertyChangeListeners;
+	}
 
-    private String componentLocale;
+	public final void setPropertyChangeListener(String propertyChangeListeners) {
+		this.propertyChangeListeners = propertyChangeListeners;
+	}
 
-    private String componentTimeZone;
+	public final String getServiceEventListener() {
+		return serviceEventListeners;
+	}
 
-    private String serviceId;
+	public final void setServiceEventListener(String serviceEventListeners) {
+		this.serviceEventListeners = serviceEventListeners;
+	}
 
-    private String enableViewState;
+	public final String getFilterProperties() {
+		return filterProperties;
+	}
 
-    public String getComponentType() {
-        return ServiceComponent.COMPONENT_TYPE;
-    }
+	public final void setFilterProperties(String filterProperties) {
+		this.filterProperties = filterProperties;
+	}
 
-    public final String getPropertyChangeListener() {
-        return propertyChangeListeners;
-    }
+	public final String getComponentLocale() {
+		return componentLocale;
+	}
 
-    public final void setPropertyChangeListener(String propertyChangeListeners) {
-        this.propertyChangeListeners = propertyChangeListeners;
-    }
+	public final void setComponentLocale(String componentLocale) {
+		this.componentLocale = componentLocale;
+	}
 
-    public final String getServiceEventListener() {
-        return serviceEventListeners;
-    }
+	public final String getComponentTimeZone() {
+		return componentTimeZone;
+	}
 
-    public final void setServiceEventListener(String serviceEventListeners) {
-        this.serviceEventListeners = serviceEventListeners;
-    }
+	public final void setComponentTimeZone(String componentTimeZone) {
+		this.componentTimeZone = componentTimeZone;
+	}
 
-    public final String getFilterProperties() {
-        return filterProperties;
-    }
+	public final String getServiceId() {
+		return serviceId;
+	}
 
-    public final void setFilterProperties(String filterProperties) {
-        this.filterProperties = filterProperties;
-    }
+	public final void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
+	}
 
-    public final String getComponentLocale() {
-        return componentLocale;
-    }
+	public final String getEnableViewState() {
+		return enableViewState;
+	}
 
-    public final void setComponentLocale(String componentLocale) {
-        this.componentLocale = componentLocale;
-    }
+	public final void setEnableViewState(String enableViewState) {
+		this.enableViewState = enableViewState;
+	}
 
-    public final String getComponentTimeZone() {
-        return componentTimeZone;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ServiceComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  componentLocale='"+componentLocale+"'");
+			LOG.debug("  componentTimeZone='"+componentTimeZone+"'");
+			LOG.debug("  serviceId='"+serviceId+"'");
+			LOG.debug("  enableViewState='"+enableViewState+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setComponentTimeZone(String componentTimeZone) {
-        this.componentTimeZone = componentTimeZone;
-    }
+		if ((uiComponent instanceof ServiceComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'ServiceComponent'.");
+		}
 
-    public final String getServiceId() {
-        return serviceId;
-    }
+		ServiceComponent component = (ServiceComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
-    }
+		if (propertyChangeListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		}
 
-    public final String getEnableViewState() {
-        return enableViewState;
-    }
+		if (serviceEventListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SERVICE_EVENT_LISTENER_TYPE, serviceEventListeners);
+		}
 
-    public final void setEnableViewState(String enableViewState) {
-        this.enableViewState = enableViewState;
-    }
+		if (filterProperties != null) {
+				ValueBinding vb = application.createValueBinding(filterProperties);
+				component.setValueBinding(Properties.FILTER_PROPERTIES, vb);
+		}
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (ServiceComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  filterProperties='" + filterProperties + "'");
-            LOG.debug("  componentLocale='" + componentLocale + "'");
-            LOG.debug("  componentTimeZone='" + componentTimeZone + "'");
-            LOG.debug("  serviceId='" + serviceId + "'");
-            LOG.debug("  enableViewState='" + enableViewState + "'");
-        }
-        super.setProperties(uiComponent);
+		if (componentLocale != null) {
+			if (isValueReference(componentLocale)) {
+				ValueBinding vb = application.createValueBinding(componentLocale);
+				component.setValueBinding(Properties.COMPONENT_LOCALE, vb);
 
-        if ((uiComponent instanceof ServiceComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'ServiceComponent'.");
-        }
+			} else {
+				component.setComponentLocale(componentLocale);
+			}
+		}
 
-        ServiceComponent component = (ServiceComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (componentTimeZone != null) {
+			if (isValueReference(componentTimeZone)) {
+				ValueBinding vb = application.createValueBinding(componentTimeZone);
+				component.setValueBinding(Properties.COMPONENT_TIME_ZONE, vb);
 
-        if (propertyChangeListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE,
-                    propertyChangeListeners);
-        }
+			} else {
+				component.setComponentTimeZone(componentTimeZone);
+			}
+		}
 
-        if (serviceEventListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.SERVICE_EVENT_LISTENER_TYPE,
-                    serviceEventListeners);
-        }
+		if (serviceId != null) {
+			if (isValueReference(serviceId)) {
+				ValueBinding vb = application.createValueBinding(serviceId);
+				component.setValueBinding(Properties.SERVICE_ID, vb);
 
-        if (filterProperties != null) {
-            ValueBinding vb = application.createValueBinding(filterProperties);
-            component.setValueBinding(Properties.FILTER_PROPERTIES, vb);
-        }
+			} else {
+				component.setServiceId(serviceId);
+			}
+		}
 
-        if (componentLocale != null) {
-            if (isValueReference(componentLocale)) {
-                ValueBinding vb = application
-                        .createValueBinding(componentLocale);
-                component.setValueBinding(Properties.COMPONENT_LOCALE, vb);
+		if (enableViewState != null) {
+			if (isValueReference(enableViewState)) {
+				ValueBinding vb = application.createValueBinding(enableViewState);
+				component.setValueBinding(Properties.ENABLE_VIEW_STATE, vb);
 
-            } else {
-                component.setComponentLocale(componentLocale);
-            }
-        }
+			} else {
+				component.setEnableViewState(getBool(enableViewState));
+			}
+		}
+	}
 
-        if (componentTimeZone != null) {
-            if (isValueReference(componentTimeZone)) {
-                ValueBinding vb = application
-                        .createValueBinding(componentTimeZone);
-                component.setValueBinding(Properties.COMPONENT_TIME_ZONE, vb);
+	public void release() {
+		propertyChangeListeners = null;
+		serviceEventListeners = null;
+		filterProperties = null;
+		componentLocale = null;
+		componentTimeZone = null;
+		serviceId = null;
+		enableViewState = null;
 
-            } else {
-                component.setComponentTimeZone(componentTimeZone);
-            }
-        }
-
-        if (serviceId != null) {
-            if (isValueReference(serviceId)) {
-                ValueBinding vb = application.createValueBinding(serviceId);
-                component.setValueBinding(Properties.SERVICE_ID, vb);
-
-            } else {
-                component.setServiceId(serviceId);
-            }
-        }
-
-        if (enableViewState != null) {
-            if (isValueReference(enableViewState)) {
-                ValueBinding vb = application
-                        .createValueBinding(enableViewState);
-                component.setValueBinding(Properties.ENABLE_VIEW_STATE, vb);
-
-            } else {
-                component.setEnableViewState(getBool(enableViewState));
-            }
-        }
-    }
-
-    public void release() {
-        propertyChangeListeners = null;
-        serviceEventListeners = null;
-        filterProperties = null;
-        componentLocale = null;
-        componentTimeZone = null;
-        serviceId = null;
-        enableViewState = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

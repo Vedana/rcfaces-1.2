@@ -14,149 +14,141 @@ import org.rcfaces.core.internal.component.Properties;
 
 public class SelectImageItemTag extends CameliaTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(SelectImageItemTag.class);
 
-    private String imageURL;
+	private static final Log LOG=LogFactory.getLog(SelectImageItemTag.class);
 
-    private String itemValue;
+	private String imageURL;
+	private String itemValue;
+	private String itemDescription;
+	private String itemLabel;
+	private String itemDisabled;
+	public String getComponentType() {
+		return SelectImageItemComponent.COMPONENT_TYPE;
+	}
 
-    private String itemDescription;
+	public final String getImageURL() {
+		return imageURL;
+	}
 
-    private String itemLabel;
+	public final void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
 
-    private String itemDisabled;
+	public final String getItemValue() {
+		return itemValue;
+	}
 
-    public String getComponentType() {
-        return SelectImageItemComponent.COMPONENT_TYPE;
-    }
+	public final void setItemValue(String itemValue) {
+		this.itemValue = itemValue;
+	}
 
-    public final String getImageURL() {
-        return imageURL;
-    }
+	public final String getItemDescription() {
+		return itemDescription;
+	}
 
-    public final void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
+	public final void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
+	}
 
-    public final String getItemValue() {
-        return itemValue;
-    }
+	public final String getItemLabel() {
+		return itemLabel;
+	}
 
-    public final void setItemValue(String itemValue) {
-        this.itemValue = itemValue;
-    }
+	public final void setItemLabel(String itemLabel) {
+		this.itemLabel = itemLabel;
+	}
 
-    public final String getItemDescription() {
-        return itemDescription;
-    }
+	public final String getItemDisabled() {
+		return itemDisabled;
+	}
 
-    public final void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
-    }
+	public final void setItemDisabled(String itemDisabled) {
+		this.itemDisabled = itemDisabled;
+	}
 
-    public final String getItemLabel() {
-        return itemLabel;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (SelectImageItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  itemValue='"+itemValue+"'");
+			LOG.debug("  itemDescription='"+itemDescription+"'");
+			LOG.debug("  itemLabel='"+itemLabel+"'");
+			LOG.debug("  itemDisabled='"+itemDisabled+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setItemLabel(String itemLabel) {
-        this.itemLabel = itemLabel;
-    }
+		if ((uiComponent instanceof SelectImageItemComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'SelectImageItemComponent'.");
+		}
 
-    public final String getItemDisabled() {
-        return itemDisabled;
-    }
+		SelectImageItemComponent component = (SelectImageItemComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final void setItemDisabled(String itemDisabled) {
-        this.itemDisabled = itemDisabled;
-    }
+		if (imageURL != null) {
+			if (isValueReference(imageURL)) {
+				ValueBinding vb = application.createValueBinding(imageURL);
+				component.setValueBinding(Properties.IMAGE_URL, vb);
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (SelectImageItemComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  imageURL='" + imageURL + "'");
-            LOG.debug("  itemValue='" + itemValue + "'");
-            LOG.debug("  itemDescription='" + itemDescription + "'");
-            LOG.debug("  itemLabel='" + itemLabel + "'");
-            LOG.debug("  itemDisabled='" + itemDisabled + "'");
-        }
-        super.setProperties(uiComponent);
+			} else {
+				component.setImageURL(imageURL);
+			}
+		}
 
-        if ((uiComponent instanceof SelectImageItemComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'SelectImageItemComponent'.");
-        }
+		if (itemValue != null) {
+			if (isValueReference(itemValue)) {
+				ValueBinding vb = application.createValueBinding(itemValue);
+				component.setValueBinding(Properties.ITEM_VALUE, vb);
 
-        SelectImageItemComponent component = (SelectImageItemComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+			} else {
+				component.setItemValue(itemValue);
+			}
+		}
 
-        if (imageURL != null) {
-            if (isValueReference(imageURL)) {
-                ValueBinding vb = application.createValueBinding(imageURL);
-                component.setValueBinding(Properties.IMAGE_URL, vb);
+		if (itemDescription != null) {
+			if (isValueReference(itemDescription)) {
+				ValueBinding vb = application.createValueBinding(itemDescription);
+				component.setValueBinding(Properties.ITEM_DESCRIPTION, vb);
 
-            } else {
-                component.setImageURL(imageURL);
-            }
-        }
+			} else {
+				component.setItemDescription(itemDescription);
+			}
+		}
 
-        if (itemValue != null) {
-            if (isValueReference(itemValue)) {
-                ValueBinding vb = application.createValueBinding(itemValue);
-                component.setValueBinding(Properties.ITEM_VALUE, vb);
+		if (itemLabel != null) {
+			if (isValueReference(itemLabel)) {
+				ValueBinding vb = application.createValueBinding(itemLabel);
+				component.setValueBinding(Properties.ITEM_LABEL, vb);
 
-            } else {
-                component.setItemValue(itemValue);
-            }
-        }
+			} else {
+				component.setItemLabel(itemLabel);
+			}
+		}
 
-        if (itemDescription != null) {
-            if (isValueReference(itemDescription)) {
-                ValueBinding vb = application
-                        .createValueBinding(itemDescription);
-                component.setValueBinding(Properties.ITEM_DESCRIPTION, vb);
+		if (itemDisabled != null) {
+			if (isValueReference(itemDisabled)) {
+				ValueBinding vb = application.createValueBinding(itemDisabled);
+				component.setValueBinding(Properties.ITEM_DISABLED, vb);
 
-            } else {
-                component.setItemDescription(itemDescription);
-            }
-        }
+			} else {
+				component.setItemDisabled(getBool(itemDisabled));
+			}
+		}
+	}
 
-        if (itemLabel != null) {
-            if (isValueReference(itemLabel)) {
-                ValueBinding vb = application.createValueBinding(itemLabel);
-                component.setValueBinding(Properties.ITEM_LABEL, vb);
+	public void release() {
+		imageURL = null;
+		itemValue = null;
+		itemDescription = null;
+		itemLabel = null;
+		itemDisabled = null;
 
-            } else {
-                component.setItemLabel(itemLabel);
-            }
-        }
-
-        if (itemDisabled != null) {
-            if (isValueReference(itemDisabled)) {
-                ValueBinding vb = application.createValueBinding(itemDisabled);
-                component.setValueBinding(Properties.ITEM_DISABLED, vb);
-
-            } else {
-                component.setItemDisabled(getBool(itemDisabled));
-            }
-        }
-    }
-
-    public void release() {
-        imageURL = null;
-        itemValue = null;
-        itemDescription = null;
-        itemLabel = null;
-        itemDisabled = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

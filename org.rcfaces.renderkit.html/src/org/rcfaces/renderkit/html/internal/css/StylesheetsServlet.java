@@ -52,26 +52,18 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private final int MAX_404_RESPONSE = 64;
 
-    private static final String CSS_MIME_TYPE = "text/css";
-
-    private static final String HTML_MIME_TYPE = "text/html";
-
     private static final String CSS_CONFIG_PROPERTY = "org.rcfaces.renderkit.html.CSS_CONFIG";
 
     private static Map extensions = new HashMap(10);
     {
+        extensions.put("js", JAVASCRIPT_MIME_TYPE);
+        extensions.put("txt", TEXT_PLAIN_MIME_TYPE);
         extensions.put("css", CSS_MIME_TYPE);
         extensions.put("html", HTML_MIME_TYPE);
         extensions.put("gif", "image/gif");
         extensions.put("jpg", "image/jpeg");
         extensions.put("jpeg", "image/jpg");
         extensions.put("png", "image/png");
-    }
-
-    private static Set useGZIPExtensions = new HashSet();
-    static {
-        useGZIPExtensions.add(CSS_MIME_TYPE);
-        useGZIPExtensions.add(HTML_MIME_TYPE);
     }
 
     private static Set useFilterExtensions = new HashSet();
@@ -415,25 +407,22 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
 
         byte bufferGZIP[] = null;
-        if (hasGZipSupport()) {
-            if (useGZIPExtensions.contains(extension)) {
-                try {
-                    ByteBufferOutputStream bos = new ByteBufferOutputStream(
-                            workBytes.length);
-                    GZIPOutputStream gzos = new GZIPOutputStream(bos,
-                            workBytes.length);
-                    gzos.write(workBytes);
-                    gzos.close();
+        if (hasGZipSupport() && isMimeTypeSupportGZip(mimeType)) {
+            try {
+                ByteBufferOutputStream bos = new ByteBufferOutputStream(
+                        workBytes.length);
+                GZIPOutputStream gzos = new GZIPOutputStream(bos,
+                        workBytes.length);
+                gzos.write(workBytes);
+                gzos.close();
 
-                    bos.close();
+                bos.close();
 
-                    bufferGZIP = bos.toByteArray();
+                bufferGZIP = bos.toByteArray();
 
-                } catch (IOException ex3) {
-                    throw new ServletException(
-                            "Can not create GZIP buffer of adonis css files.",
-                            ex3);
-                }
+            } catch (IOException ex3) {
+                throw new ServletException(
+                        "Can not create GZIP buffer of adonis css files.", ex3);
             }
         }
 

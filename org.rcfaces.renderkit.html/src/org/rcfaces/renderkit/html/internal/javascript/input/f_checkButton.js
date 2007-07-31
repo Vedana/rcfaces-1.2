@@ -38,11 +38,11 @@ var __members = {
 		return this.f_super(arguments);
 	},
 	f_finalize: function() {
-		var label=this._label;
-		if (label) {
+		var labelComponent=this._label;
+		if (labelComponent) {
 			this._label=undefined;
 			
-			f_core.VerifyProperties(label);			
+			f_core.VerifyProperties(labelComponent);			
 		}
 		this.f_super(arguments);
 	},
@@ -130,14 +130,22 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @return void
 	 */
 	f_serialize: function() {
-		if (this.f_isDisabled()) {
-			if (this.f_isSelected()) {			
-				this.f_setProperty(f_prop.SELECTED, this._input.value);
-			}
-		}
+		
+		this.f_serializeValue();
+		
 		return this.f_super(arguments);
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_serializeValue: function() {
+		if (this.f_isDisabled() && this.f_isSelected()) {			
+			this.f_setProperty(f_prop.SELECTED, this._input.value);
+		}
 	}
 }
 

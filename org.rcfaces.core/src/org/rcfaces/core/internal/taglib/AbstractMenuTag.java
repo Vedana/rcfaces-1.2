@@ -12,127 +12,117 @@ import org.rcfaces.core.component.AbstractMenuComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
-public abstract class AbstractMenuTag extends AbstractConverterCommandTag
-        implements Tag {
+public abstract class AbstractMenuTag extends AbstractConverterCommandTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(AbstractMenuTag.class);
 
-    private String selectionListeners;
+	private static final Log LOG=LogFactory.getLog(AbstractMenuTag.class);
 
-    private String checkListeners;
+	private String selectionListeners;
+	private String checkListeners;
+	private String checkedValues;
+	private String readOnly;
+	private String removeAllWhenShown;
+	public final String getSelectionListener() {
+		return selectionListeners;
+	}
 
-    private String checkedValues;
+	public final void setSelectionListener(String selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
 
-    private String readOnly;
+	public final String getCheckListener() {
+		return checkListeners;
+	}
 
-    private String removeAllWhenShown;
+	public final void setCheckListener(String checkListeners) {
+		this.checkListeners = checkListeners;
+	}
 
-    public final String getSelectionListener() {
-        return selectionListeners;
-    }
+	public final String getCheckedValues() {
+		return checkedValues;
+	}
 
-    public final void setSelectionListener(String selectionListeners) {
-        this.selectionListeners = selectionListeners;
-    }
+	public final void setCheckedValues(String checkedValues) {
+		this.checkedValues = checkedValues;
+	}
 
-    public final String getCheckListener() {
-        return checkListeners;
-    }
+	public final String getReadOnly() {
+		return readOnly;
+	}
 
-    public final void setCheckListener(String checkListeners) {
-        this.checkListeners = checkListeners;
-    }
+	public final void setReadOnly(String readOnly) {
+		this.readOnly = readOnly;
+	}
 
-    public final String getCheckedValues() {
-        return checkedValues;
-    }
+	public final String getRemoveAllWhenShown() {
+		return removeAllWhenShown;
+	}
 
-    public final void setCheckedValues(String checkedValues) {
-        this.checkedValues = checkedValues;
-    }
+	public final void setRemoveAllWhenShown(String removeAllWhenShown) {
+		this.removeAllWhenShown = removeAllWhenShown;
+	}
 
-    public final String getReadOnly() {
-        return readOnly;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("  checkedValues='"+checkedValues+"'");
+			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setReadOnly(String readOnly) {
-        this.readOnly = readOnly;
-    }
+		if ((uiComponent instanceof AbstractMenuComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractMenuComponent'.");
+		}
 
-    public final String getRemoveAllWhenShown() {
-        return removeAllWhenShown;
-    }
+		AbstractMenuComponent component = (AbstractMenuComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final void setRemoveAllWhenShown(String removeAllWhenShown) {
-        this.removeAllWhenShown = removeAllWhenShown;
-    }
+		if (selectionListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("  checkedValues='" + checkedValues + "'");
-            LOG.debug("  readOnly='" + readOnly + "'");
-            LOG.debug("  removeAllWhenShown='" + removeAllWhenShown + "'");
-        }
-        super.setProperties(uiComponent);
+		if (checkListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
+		}
 
-        if ((uiComponent instanceof AbstractMenuComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'AbstractMenuComponent'.");
-        }
+		if (checkedValues != null) {
+				ValueBinding vb = application.createValueBinding(checkedValues);
+				component.setValueBinding(Properties.CHECKED_VALUES, vb);
+		}
 
-        AbstractMenuComponent component = (AbstractMenuComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (readOnly != null) {
+			if (isValueReference(readOnly)) {
+				ValueBinding vb = application.createValueBinding(readOnly);
+				component.setValueBinding(Properties.READ_ONLY, vb);
 
-        if (selectionListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-        }
+			} else {
+				component.setReadOnly(getBool(readOnly));
+			}
+		}
 
-        if (checkListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
-        }
+		if (removeAllWhenShown != null) {
+			if (isValueReference(removeAllWhenShown)) {
+				ValueBinding vb = application.createValueBinding(removeAllWhenShown);
+				component.setValueBinding(Properties.REMOVE_ALL_WHEN_SHOWN, vb);
 
-        if (checkedValues != null) {
-            ValueBinding vb = application.createValueBinding(checkedValues);
-            component.setValueBinding(Properties.CHECKED_VALUES, vb);
-        }
+			} else {
+				component.setRemoveAllWhenShown(getBool(removeAllWhenShown));
+			}
+		}
+	}
 
-        if (readOnly != null) {
-            if (isValueReference(readOnly)) {
-                ValueBinding vb = application.createValueBinding(readOnly);
-                component.setValueBinding(Properties.READ_ONLY, vb);
+	public void release() {
+		selectionListeners = null;
+		checkListeners = null;
+		checkedValues = null;
+		readOnly = null;
+		removeAllWhenShown = null;
 
-            } else {
-                component.setReadOnly(getBool(readOnly));
-            }
-        }
-
-        if (removeAllWhenShown != null) {
-            if (isValueReference(removeAllWhenShown)) {
-                ValueBinding vb = application
-                        .createValueBinding(removeAllWhenShown);
-                component.setValueBinding(Properties.REMOVE_ALL_WHEN_SHOWN, vb);
-
-            } else {
-                component.setRemoveAllWhenShown(getBool(removeAllWhenShown));
-            }
-        }
-    }
-
-    public void release() {
-        selectionListeners = null;
-        checkListeners = null;
-        checkedValues = null;
-        readOnly = null;
-        removeAllWhenShown = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

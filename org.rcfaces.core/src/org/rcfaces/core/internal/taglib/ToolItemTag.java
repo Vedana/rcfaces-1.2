@@ -14,258 +14,246 @@ import org.rcfaces.core.internal.component.Properties;
 
 public class ToolItemTag extends UIImageItemTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(ToolItemTag.class);
 
-    private String groupName;
+	private static final Log LOG=LogFactory.getLog(ToolItemTag.class);
 
-    private String inputType;
+	private String groupName;
+	private String inputType;
+	private String imageHeight;
+	private String imageWidth;
+	private String lookId;
+	private String borderType;
+	private String textPosition;
+	private String accessKey;
+	private String width;
+	private String styleClass;
+	public String getComponentType() {
+		return ToolItemComponent.COMPONENT_TYPE;
+	}
 
-    private String imageHeight;
+	public final String getGroupName() {
+		return groupName;
+	}
 
-    private String imageWidth;
+	public final void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 
-    private String lookId;
+	public final String getInputType() {
+		return inputType;
+	}
 
-    private String borderType;
+	public final void setInputType(String inputType) {
+		this.inputType = inputType;
+	}
 
-    private String textPosition;
+	public final String getImageHeight() {
+		return imageHeight;
+	}
 
-    private String accessKey;
+	public final void setImageHeight(String imageHeight) {
+		this.imageHeight = imageHeight;
+	}
 
-    private String width;
+	public final String getImageWidth() {
+		return imageWidth;
+	}
 
-    private String styleClass;
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
+	}
 
-    public String getComponentType() {
-        return ToolItemComponent.COMPONENT_TYPE;
-    }
+	public final String getLookId() {
+		return lookId;
+	}
 
-    public final String getGroupName() {
-        return groupName;
-    }
+	public final void setLookId(String lookId) {
+		this.lookId = lookId;
+	}
 
-    public final void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
+	public final String getBorderType() {
+		return borderType;
+	}
 
-    public final String getInputType() {
-        return inputType;
-    }
+	public final void setBorderType(String borderType) {
+		this.borderType = borderType;
+	}
 
-    public final void setInputType(String inputType) {
-        this.inputType = inputType;
-    }
+	public final String getTextPosition() {
+		return textPosition;
+	}
 
-    public final String getImageHeight() {
-        return imageHeight;
-    }
+	public final void setTextPosition(String textPosition) {
+		this.textPosition = textPosition;
+	}
 
-    public final void setImageHeight(String imageHeight) {
-        this.imageHeight = imageHeight;
-    }
+	public final String getAccessKey() {
+		return accessKey;
+	}
 
-    public final String getImageWidth() {
-        return imageWidth;
-    }
+	public final void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
+	}
 
-    public final void setImageWidth(String imageWidth) {
-        this.imageWidth = imageWidth;
-    }
+	public final String getWidth() {
+		return width;
+	}
 
-    public final String getLookId() {
-        return lookId;
-    }
+	public final void setWidth(String width) {
+		this.width = width;
+	}
 
-    public final void setLookId(String lookId) {
-        this.lookId = lookId;
-    }
+	public final String getStyleClass() {
+		return styleClass;
+	}
 
-    public final String getBorderType() {
-        return borderType;
-    }
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
+	}
 
-    public final void setBorderType(String borderType) {
-        this.borderType = borderType;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ToolItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  groupName='"+groupName+"'");
+			LOG.debug("  inputType='"+inputType+"'");
+			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
+			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final String getTextPosition() {
-        return textPosition;
-    }
+		if ((uiComponent instanceof ToolItemComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'ToolItemComponent'.");
+		}
 
-    public final void setTextPosition(String textPosition) {
-        this.textPosition = textPosition;
-    }
+		ToolItemComponent component = (ToolItemComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final String getAccessKey() {
-        return accessKey;
-    }
+		if (groupName != null) {
+			if (isValueReference(groupName)) {
+				ValueBinding vb = application.createValueBinding(groupName);
+				component.setValueBinding(Properties.GROUP_NAME, vb);
 
-    public final void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
+			} else {
+				component.setGroupName(groupName);
+			}
+		}
 
-    public final String getWidth() {
-        return width;
-    }
+		if (inputType != null) {
+			if (isValueReference(inputType)) {
+				ValueBinding vb = application.createValueBinding(inputType);
+				component.setValueBinding(Properties.INPUT_TYPE, vb);
 
-    public final void setWidth(String width) {
-        this.width = width;
-    }
+			} else {
+				component.setInputType(inputType);
+			}
+		}
 
-    public final String getStyleClass() {
-        return styleClass;
-    }
+		if (imageHeight != null) {
+			if (isValueReference(imageHeight)) {
+				ValueBinding vb = application.createValueBinding(imageHeight);
+				component.setValueBinding(Properties.IMAGE_HEIGHT, vb);
 
-    public final void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
-    }
+			} else {
+				component.setImageHeight(getInt(imageHeight));
+			}
+		}
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (ToolItemComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  groupName='" + groupName + "'");
-            LOG.debug("  inputType='" + inputType + "'");
-            LOG.debug("  imageHeight='" + imageHeight + "'");
-            LOG.debug("  imageWidth='" + imageWidth + "'");
-            LOG.debug("  lookId='" + lookId + "'");
-            LOG.debug("  borderType='" + borderType + "'");
-            LOG.debug("  textPosition='" + textPosition + "'");
-            LOG.debug("  accessKey='" + accessKey + "'");
-            LOG.debug("  width='" + width + "'");
-            LOG.debug("  styleClass='" + styleClass + "'");
-        }
-        super.setProperties(uiComponent);
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+				component.setValueBinding(Properties.IMAGE_WIDTH, vb);
 
-        if ((uiComponent instanceof ToolItemComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'ToolItemComponent'.");
-        }
+			} else {
+				component.setImageWidth(getInt(imageWidth));
+			}
+		}
 
-        ToolItemComponent component = (ToolItemComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (lookId != null) {
+			if (isValueReference(lookId)) {
+				ValueBinding vb = application.createValueBinding(lookId);
+				component.setValueBinding(Properties.LOOK_ID, vb);
 
-        if (groupName != null) {
-            if (isValueReference(groupName)) {
-                ValueBinding vb = application.createValueBinding(groupName);
-                component.setValueBinding(Properties.GROUP_NAME, vb);
+			} else {
+				component.setLookId(lookId);
+			}
+		}
 
-            } else {
-                component.setGroupName(groupName);
-            }
-        }
+		if (borderType != null) {
+			if (isValueReference(borderType)) {
+				ValueBinding vb = application.createValueBinding(borderType);
+				component.setValueBinding(Properties.BORDER_TYPE, vb);
 
-        if (inputType != null) {
-            if (isValueReference(inputType)) {
-                ValueBinding vb = application.createValueBinding(inputType);
-                component.setValueBinding(Properties.INPUT_TYPE, vb);
+			} else {
+				component.setBorderType(borderType);
+			}
+		}
 
-            } else {
-                component.setInputType(inputType);
-            }
-        }
+		if (textPosition != null) {
+			if (isValueReference(textPosition)) {
+				ValueBinding vb = application.createValueBinding(textPosition);
+				component.setValueBinding(Properties.TEXT_POSITION, vb);
 
-        if (imageHeight != null) {
-            if (isValueReference(imageHeight)) {
-                ValueBinding vb = application.createValueBinding(imageHeight);
-                component.setValueBinding(Properties.IMAGE_HEIGHT, vb);
+			} else {
+				component.setTextPosition(textPosition);
+			}
+		}
 
-            } else {
-                component.setImageHeight(getInt(imageHeight));
-            }
-        }
+		if (accessKey != null) {
+			if (isValueReference(accessKey)) {
+				ValueBinding vb = application.createValueBinding(accessKey);
+				component.setValueBinding(Properties.ACCESS_KEY, vb);
 
-        if (imageWidth != null) {
-            if (isValueReference(imageWidth)) {
-                ValueBinding vb = application.createValueBinding(imageWidth);
-                component.setValueBinding(Properties.IMAGE_WIDTH, vb);
+			} else {
+				component.setAccessKey(accessKey);
+			}
+		}
 
-            } else {
-                component.setImageWidth(getInt(imageWidth));
-            }
-        }
+		if (width != null) {
+			if (isValueReference(width)) {
+				ValueBinding vb = application.createValueBinding(width);
+				component.setValueBinding(Properties.WIDTH, vb);
 
-        if (lookId != null) {
-            if (isValueReference(lookId)) {
-                ValueBinding vb = application.createValueBinding(lookId);
-                component.setValueBinding(Properties.LOOK_ID, vb);
+			} else {
+				component.setWidth(width);
+			}
+		}
 
-            } else {
-                component.setLookId(lookId);
-            }
-        }
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+				component.setValueBinding(Properties.STYLE_CLASS, vb);
 
-        if (borderType != null) {
-            if (isValueReference(borderType)) {
-                ValueBinding vb = application.createValueBinding(borderType);
-                component.setValueBinding(Properties.BORDER_TYPE, vb);
+			} else {
+				component.setStyleClass(styleClass);
+			}
+		}
+	}
 
-            } else {
-                component.setBorderType(borderType);
-            }
-        }
+	public void release() {
+		groupName = null;
+		inputType = null;
+		imageHeight = null;
+		imageWidth = null;
+		lookId = null;
+		borderType = null;
+		textPosition = null;
+		accessKey = null;
+		width = null;
+		styleClass = null;
 
-        if (textPosition != null) {
-            if (isValueReference(textPosition)) {
-                ValueBinding vb = application.createValueBinding(textPosition);
-                component.setValueBinding(Properties.TEXT_POSITION, vb);
-
-            } else {
-                component.setTextPosition(textPosition);
-            }
-        }
-
-        if (accessKey != null) {
-            if (isValueReference(accessKey)) {
-                ValueBinding vb = application.createValueBinding(accessKey);
-                component.setValueBinding(Properties.ACCESS_KEY, vb);
-
-            } else {
-                component.setAccessKey(accessKey);
-            }
-        }
-
-        if (width != null) {
-            if (isValueReference(width)) {
-                ValueBinding vb = application.createValueBinding(width);
-                component.setValueBinding(Properties.WIDTH, vb);
-
-            } else {
-                component.setWidth(width);
-            }
-        }
-
-        if (styleClass != null) {
-            if (isValueReference(styleClass)) {
-                ValueBinding vb = application.createValueBinding(styleClass);
-                component.setValueBinding(Properties.STYLE_CLASS, vb);
-
-            } else {
-                component.setStyleClass(styleClass);
-            }
-        }
-    }
-
-    public void release() {
-        groupName = null;
-        inputType = null;
-        imageHeight = null;
-        imageWidth = null;
-        lookId = null;
-        borderType = null;
-        textPosition = null;
-        accessKey = null;
-        width = null;
-        styleClass = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

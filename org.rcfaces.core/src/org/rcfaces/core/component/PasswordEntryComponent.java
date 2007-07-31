@@ -5,13 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <p>
- * The passwordEntry Component is based on the standard HTML tag &lt;INPUT
- * TYPE="password"&gt; and is a <a
- * href="/comps/textEntryComponent.html">textEntry Component</a>.
- * </p>
- * <p>
- * The passwordEntry Component has the following capabilities :
+ * <p>The passwordEntry Component is based on the standard HTML tag &lt;INPUT TYPE="password"&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
+ * <p>The passwordEntry Component has the following capabilities :
  * <ul>
  * <li>Position &amp; Size</li>
  * <li>Foreground &amp; Background Color</li>
@@ -24,24 +19,23 @@ import java.util.Set;
  */
 public class PasswordEntryComponent extends TextEntryComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.passwordEntry";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.passwordEntry";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            TextEntryComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
-    public PasswordEntryComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
+	public PasswordEntryComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public PasswordEntryComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public PasswordEntryComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

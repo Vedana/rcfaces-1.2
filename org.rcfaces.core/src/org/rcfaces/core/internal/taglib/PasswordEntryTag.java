@@ -8,15 +8,16 @@ import org.rcfaces.core.component.PasswordEntryComponent;
 
 public class PasswordEntryTag extends TextEntryTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(PasswordEntryTag.class);
 
-    public String getComponentType() {
-        return PasswordEntryComponent.COMPONENT_TYPE;
-    }
+	private static final Log LOG=LogFactory.getLog(PasswordEntryTag.class);
 
-    public void release() {
+	public String getComponentType() {
+		return PasswordEntryComponent.COMPONENT_TYPE;
+	}
 
-        super.release();
-    }
+	public void release() {
+
+		super.release();
+	}
 
 }

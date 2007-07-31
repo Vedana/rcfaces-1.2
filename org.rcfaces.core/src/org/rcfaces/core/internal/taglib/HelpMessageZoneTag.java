@@ -14,214 +14,204 @@ import org.rcfaces.core.internal.component.Properties;
 
 public class HelpMessageZoneTag extends AbstractOutputTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(HelpMessageZoneTag.class);
 
-    private String text;
+	private static final Log LOG=LogFactory.getLog(HelpMessageZoneTag.class);
 
-    private String textDirection;
+	private String text;
+	private String textDirection;
+	private String fontBold;
+	private String fontItalic;
+	private String fontName;
+	private String fontSize;
+	private String fontUnderline;
+	private String textAlignment;
+	public String getComponentType() {
+		return HelpMessageZoneComponent.COMPONENT_TYPE;
+	}
 
-    private String fontBold;
+	public final String getText() {
+		return text;
+	}
 
-    private String fontItalic;
+	public final void setText(String text) {
+		this.text = text;
+	}
 
-    private String fontName;
+	public final String getTextDirection() {
+		return textDirection;
+	}
 
-    private String fontSize;
+	public final void setTextDirection(String textDirection) {
+		this.textDirection = textDirection;
+	}
 
-    private String fontUnderline;
+	public final String getFontBold() {
+		return fontBold;
+	}
 
-    private String textAlignment;
+	public final void setFontBold(String fontBold) {
+		this.fontBold = fontBold;
+	}
 
-    public String getComponentType() {
-        return HelpMessageZoneComponent.COMPONENT_TYPE;
-    }
+	public final String getFontItalic() {
+		return fontItalic;
+	}
 
-    public final String getText() {
-        return text;
-    }
+	public final void setFontItalic(String fontItalic) {
+		this.fontItalic = fontItalic;
+	}
 
-    public final void setText(String text) {
-        this.text = text;
-    }
+	public final String getFontName() {
+		return fontName;
+	}
 
-    public final String getTextDirection() {
-        return textDirection;
-    }
+	public final void setFontName(String fontName) {
+		this.fontName = fontName;
+	}
 
-    public final void setTextDirection(String textDirection) {
-        this.textDirection = textDirection;
-    }
+	public final String getFontSize() {
+		return fontSize;
+	}
 
-    public final String getFontBold() {
-        return fontBold;
-    }
+	public final void setFontSize(String fontSize) {
+		this.fontSize = fontSize;
+	}
 
-    public final void setFontBold(String fontBold) {
-        this.fontBold = fontBold;
-    }
+	public final String getFontUnderline() {
+		return fontUnderline;
+	}
 
-    public final String getFontItalic() {
-        return fontItalic;
-    }
+	public final void setFontUnderline(String fontUnderline) {
+		this.fontUnderline = fontUnderline;
+	}
 
-    public final void setFontItalic(String fontItalic) {
-        this.fontItalic = fontItalic;
-    }
+	public final String getTextAlignment() {
+		return textAlignment;
+	}
 
-    public final String getFontName() {
-        return fontName;
-    }
+	public final void setTextAlignment(String textAlignment) {
+		this.textAlignment = textAlignment;
+	}
 
-    public final void setFontName(String fontName) {
-        this.fontName = fontName;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (HelpMessageZoneComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  textDirection='"+textDirection+"'");
+			LOG.debug("  fontBold='"+fontBold+"'");
+			LOG.debug("  fontItalic='"+fontItalic+"'");
+			LOG.debug("  fontName='"+fontName+"'");
+			LOG.debug("  fontSize='"+fontSize+"'");
+			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final String getFontSize() {
-        return fontSize;
-    }
+		if ((uiComponent instanceof HelpMessageZoneComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'HelpMessageZoneComponent'.");
+		}
 
-    public final void setFontSize(String fontSize) {
-        this.fontSize = fontSize;
-    }
+		HelpMessageZoneComponent component = (HelpMessageZoneComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final String getFontUnderline() {
-        return fontUnderline;
-    }
+		if (text != null) {
+			if (isValueReference(text)) {
+				ValueBinding vb = application.createValueBinding(text);
+				component.setValueBinding(Properties.TEXT, vb);
 
-    public final void setFontUnderline(String fontUnderline) {
-        this.fontUnderline = fontUnderline;
-    }
+			} else {
+				component.setText(text);
+			}
+		}
 
-    public final String getTextAlignment() {
-        return textAlignment;
-    }
+		if (textDirection != null) {
+			if (isValueReference(textDirection)) {
+				ValueBinding vb = application.createValueBinding(textDirection);
+				component.setValueBinding(Properties.TEXT_DIRECTION, vb);
 
-    public final void setTextAlignment(String textAlignment) {
-        this.textAlignment = textAlignment;
-    }
+			} else {
+				component.setTextDirection(getInt(textDirection));
+			}
+		}
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (HelpMessageZoneComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  text='" + text + "'");
-            LOG.debug("  textDirection='" + textDirection + "'");
-            LOG.debug("  fontBold='" + fontBold + "'");
-            LOG.debug("  fontItalic='" + fontItalic + "'");
-            LOG.debug("  fontName='" + fontName + "'");
-            LOG.debug("  fontSize='" + fontSize + "'");
-            LOG.debug("  fontUnderline='" + fontUnderline + "'");
-            LOG.debug("  textAlignment='" + textAlignment + "'");
-        }
-        super.setProperties(uiComponent);
+		if (fontBold != null) {
+			if (isValueReference(fontBold)) {
+				ValueBinding vb = application.createValueBinding(fontBold);
+				component.setValueBinding(Properties.FONT_BOLD, vb);
 
-        if ((uiComponent instanceof HelpMessageZoneComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'HelpMessageZoneComponent'.");
-        }
+			} else {
+				component.setFontBold(getBoolean(fontBold));
+			}
+		}
 
-        HelpMessageZoneComponent component = (HelpMessageZoneComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (fontItalic != null) {
+			if (isValueReference(fontItalic)) {
+				ValueBinding vb = application.createValueBinding(fontItalic);
+				component.setValueBinding(Properties.FONT_ITALIC, vb);
 
-        if (text != null) {
-            if (isValueReference(text)) {
-                ValueBinding vb = application.createValueBinding(text);
-                component.setValueBinding(Properties.TEXT, vb);
+			} else {
+				component.setFontItalic(getBoolean(fontItalic));
+			}
+		}
 
-            } else {
-                component.setText(text);
-            }
-        }
+		if (fontName != null) {
+			if (isValueReference(fontName)) {
+				ValueBinding vb = application.createValueBinding(fontName);
+				component.setValueBinding(Properties.FONT_NAME, vb);
 
-        if (textDirection != null) {
-            if (isValueReference(textDirection)) {
-                ValueBinding vb = application.createValueBinding(textDirection);
-                component.setValueBinding(Properties.TEXT_DIRECTION, vb);
+			} else {
+				component.setFontName(fontName);
+			}
+		}
 
-            } else {
-                component.setTextDirection(getInt(textDirection));
-            }
-        }
+		if (fontSize != null) {
+			if (isValueReference(fontSize)) {
+				ValueBinding vb = application.createValueBinding(fontSize);
+				component.setValueBinding(Properties.FONT_SIZE, vb);
 
-        if (fontBold != null) {
-            if (isValueReference(fontBold)) {
-                ValueBinding vb = application.createValueBinding(fontBold);
-                component.setValueBinding(Properties.FONT_BOLD, vb);
+			} else {
+				component.setFontSize(fontSize);
+			}
+		}
 
-            } else {
-                component.setFontBold(getBoolean(fontBold));
-            }
-        }
+		if (fontUnderline != null) {
+			if (isValueReference(fontUnderline)) {
+				ValueBinding vb = application.createValueBinding(fontUnderline);
+				component.setValueBinding(Properties.FONT_UNDERLINE, vb);
 
-        if (fontItalic != null) {
-            if (isValueReference(fontItalic)) {
-                ValueBinding vb = application.createValueBinding(fontItalic);
-                component.setValueBinding(Properties.FONT_ITALIC, vb);
+			} else {
+				component.setFontUnderline(getBoolean(fontUnderline));
+			}
+		}
 
-            } else {
-                component.setFontItalic(getBoolean(fontItalic));
-            }
-        }
+		if (textAlignment != null) {
+			if (isValueReference(textAlignment)) {
+				ValueBinding vb = application.createValueBinding(textAlignment);
+				component.setValueBinding(Properties.TEXT_ALIGNMENT, vb);
 
-        if (fontName != null) {
-            if (isValueReference(fontName)) {
-                ValueBinding vb = application.createValueBinding(fontName);
-                component.setValueBinding(Properties.FONT_NAME, vb);
+			} else {
+				component.setTextAlignment(textAlignment);
+			}
+		}
+	}
 
-            } else {
-                component.setFontName(fontName);
-            }
-        }
+	public void release() {
+		text = null;
+		textDirection = null;
+		fontBold = null;
+		fontItalic = null;
+		fontName = null;
+		fontSize = null;
+		fontUnderline = null;
+		textAlignment = null;
 
-        if (fontSize != null) {
-            if (isValueReference(fontSize)) {
-                ValueBinding vb = application.createValueBinding(fontSize);
-                component.setValueBinding(Properties.FONT_SIZE, vb);
-
-            } else {
-                component.setFontSize(fontSize);
-            }
-        }
-
-        if (fontUnderline != null) {
-            if (isValueReference(fontUnderline)) {
-                ValueBinding vb = application.createValueBinding(fontUnderline);
-                component.setValueBinding(Properties.FONT_UNDERLINE, vb);
-
-            } else {
-                component.setFontUnderline(getBoolean(fontUnderline));
-            }
-        }
-
-        if (textAlignment != null) {
-            if (isValueReference(textAlignment)) {
-                ValueBinding vb = application.createValueBinding(textAlignment);
-                component.setValueBinding(Properties.TEXT_ALIGNMENT, vb);
-
-            } else {
-                component.setTextAlignment(textAlignment);
-            }
-        }
-    }
-
-    public void release() {
-        text = null;
-        textDirection = null;
-        fontBold = null;
-        fontItalic = null;
-        fontName = null;
-        fontSize = null;
-        fontUnderline = null;
-        textAlignment = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

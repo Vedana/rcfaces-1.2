@@ -17,168 +17,160 @@ import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 
 public class JavaScriptTag extends CameliaTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(JavaScriptTag.class);
 
-    private String text;
+	private static final Log LOG=LogFactory.getLog(JavaScriptTag.class);
 
-    private String src;
+	private String text;
+	private String src;
+	private String srcCharSet;
+	private String requiredFiles;
+	private String requiredClasses;
+	public String getComponentType() {
+		return JavaScriptComponent.COMPONENT_TYPE;
+	}
 
-    private String srcCharSet;
+	public final String getText() {
+		return text;
+	}
 
-    private String requiredFiles;
+	public final void setText(String text) {
+		this.text = text;
+	}
 
-    private String requiredClasses;
+	public final String getSrc() {
+		return src;
+	}
 
-    public String getComponentType() {
-        return JavaScriptComponent.COMPONENT_TYPE;
-    }
+	public final void setSrc(String src) {
+		this.src = src;
+	}
 
-    public final String getText() {
-        return text;
-    }
+	public final String getSrcCharSet() {
+		return srcCharSet;
+	}
 
-    public final void setText(String text) {
-        this.text = text;
-    }
+	public final void setSrcCharSet(String srcCharSet) {
+		this.srcCharSet = srcCharSet;
+	}
 
-    public final String getSrc() {
-        return src;
-    }
+	public final String getRequiredFiles() {
+		return requiredFiles;
+	}
 
-    public final void setSrc(String src) {
-        this.src = src;
-    }
+	public final void setRequiredFiles(String requiredFiles) {
+		this.requiredFiles = requiredFiles;
+	}
 
-    public final String getSrcCharSet() {
-        return srcCharSet;
-    }
+	public final String getRequiredClasses() {
+		return requiredClasses;
+	}
 
-    public final void setSrcCharSet(String srcCharSet) {
-        this.srcCharSet = srcCharSet;
-    }
+	public final void setRequiredClasses(String requiredClasses) {
+		this.requiredClasses = requiredClasses;
+	}
 
-    public final String getRequiredFiles() {
-        return requiredFiles;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (JavaScriptComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  src='"+src+"'");
+			LOG.debug("  srcCharSet='"+srcCharSet+"'");
+			LOG.debug("  requiredFiles='"+requiredFiles+"'");
+			LOG.debug("  requiredClasses='"+requiredClasses+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setRequiredFiles(String requiredFiles) {
-        this.requiredFiles = requiredFiles;
-    }
+		if ((uiComponent instanceof JavaScriptComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'JavaScriptComponent'.");
+		}
 
-    public final String getRequiredClasses() {
-        return requiredClasses;
-    }
+		JavaScriptComponent component = (JavaScriptComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final void setRequiredClasses(String requiredClasses) {
-        this.requiredClasses = requiredClasses;
-    }
+		if (text != null) {
+			if (isValueReference(text)) {
+				ValueBinding vb = application.createValueBinding(text);
+				component.setValueBinding(Properties.TEXT, vb);
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (JavaScriptComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  text='" + text + "'");
-            LOG.debug("  src='" + src + "'");
-            LOG.debug("  srcCharSet='" + srcCharSet + "'");
-            LOG.debug("  requiredFiles='" + requiredFiles + "'");
-            LOG.debug("  requiredClasses='" + requiredClasses + "'");
-        }
-        super.setProperties(uiComponent);
+			} else {
+				component.setText(text);
+			}
+		}
 
-        if ((uiComponent instanceof JavaScriptComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'JavaScriptComponent'.");
-        }
+		if (src != null) {
+			if (isValueReference(src)) {
+				ValueBinding vb = application.createValueBinding(src);
+				component.setValueBinding(Properties.SRC, vb);
 
-        JavaScriptComponent component = (JavaScriptComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+			} else {
+				component.setSrc(src);
+			}
+		}
 
-        if (text != null) {
-            if (isValueReference(text)) {
-                ValueBinding vb = application.createValueBinding(text);
-                component.setValueBinding(Properties.TEXT, vb);
+		if (srcCharSet != null) {
+			if (isValueReference(srcCharSet)) {
+				ValueBinding vb = application.createValueBinding(srcCharSet);
+				component.setValueBinding(Properties.SRC_CHAR_SET, vb);
 
-            } else {
-                component.setText(text);
-            }
-        }
+			} else {
+				component.setSrcCharSet(srcCharSet);
+			}
+		}
 
-        if (src != null) {
-            if (isValueReference(src)) {
-                ValueBinding vb = application.createValueBinding(src);
-                component.setValueBinding(Properties.SRC, vb);
+		if (requiredFiles != null) {
+			if (isValueReference(requiredFiles)) {
+				ValueBinding vb = application.createValueBinding(requiredFiles);
+				component.setValueBinding(Properties.REQUIRED_FILES, vb);
 
-            } else {
-                component.setSrc(src);
-            }
-        }
+			} else {
+				component.setRequiredFiles(requiredFiles);
+			}
+		}
 
-        if (srcCharSet != null) {
-            if (isValueReference(srcCharSet)) {
-                ValueBinding vb = application.createValueBinding(srcCharSet);
-                component.setValueBinding(Properties.SRC_CHAR_SET, vb);
+		if (requiredClasses != null) {
+			if (isValueReference(requiredClasses)) {
+				ValueBinding vb = application.createValueBinding(requiredClasses);
+				component.setValueBinding(Properties.REQUIRED_CLASSES, vb);
 
-            } else {
-                component.setSrcCharSet(srcCharSet);
-            }
-        }
+			} else {
+				component.setRequiredClasses(requiredClasses);
+			}
+		}
+	}
 
-        if (requiredFiles != null) {
-            if (isValueReference(requiredFiles)) {
-                ValueBinding vb = application.createValueBinding(requiredFiles);
-                component.setValueBinding(Properties.REQUIRED_FILES, vb);
+	public void release() {
+		text = null;
+		src = null;
+		srcCharSet = null;
+		requiredFiles = null;
+		requiredClasses = null;
 
-            } else {
-                component.setRequiredFiles(requiredFiles);
-            }
-        }
+		super.release();
+	}
 
-        if (requiredClasses != null) {
-            if (isValueReference(requiredClasses)) {
-                ValueBinding vb = application
-                        .createValueBinding(requiredClasses);
-                component.setValueBinding(Properties.REQUIRED_CLASSES, vb);
+	protected int getDoStartValue() {
+		return EVAL_BODY_BUFFERED;
+	}
 
-            } else {
-                component.setRequiredClasses(requiredClasses);
-            }
-        }
-    }
-
-    public void release() {
-        text = null;
-        src = null;
-        srcCharSet = null;
-        requiredFiles = null;
-        requiredClasses = null;
-
-        super.release();
-    }
-
-    protected int getDoStartValue() {
-        return EVAL_BODY_BUFFERED;
-    }
-
-    public int doEndTag() throws JspException {
-        if (text == null && getBodyContent() != null) {
-            String content = getBodyContent().getString();
-            if (content != null && content.length() > 0) {
-                content = content.trim();
-                if (content.length() > 0) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("  [body of tag] text='" + content + "'");
-                    }
-                    ((ITextCapability) getComponentInstance()).setText(content);
-                }
-            }
-        }
-        return super.doEndTag();
-    }
+	public int doEndTag() throws JspException {
+		if (text == null && getBodyContent() != null) {
+			String content = getBodyContent().getString();
+			if (content != null && content.length() > 0) {
+				content = content.trim();
+				if (content.length() > 0) {
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("  [body of tag] text='"+content+"'");
+					}
+					((ITextCapability)getComponentInstance()).setText(content);
+				}
+			}
+		}
+		return super.doEndTag();
+	}
 }

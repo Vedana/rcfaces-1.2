@@ -299,7 +299,17 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
 
         byte buffer[] = new byte[bufferSize];
 
-        InputStream inputStream = resolvedContent.getInputStream();
+        InputStream inputStream = null;
+
+        /*
+         * if (hasGZipSupport() && hasGzipSupport(request)) { if (bufferSize >
+         * 128) { inputStream = new GZIPInputStream(inputStream, bufferSize); } }
+         */
+
+        if (inputStream == null) {
+            inputStream = resolvedContent.getInputStream();
+        }
+
         try {
             OutputStream outputStream = response.getOutputStream();
 

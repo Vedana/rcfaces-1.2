@@ -26,9 +26,10 @@
 package org.rcfaces.core.internal.component;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +39,7 @@ import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
@@ -57,6 +59,7 @@ import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 import javax.servlet.jsp.jstl.sql.Result;
 
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
 
@@ -176,6 +179,11 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
      * </p>
      */
     private String var = null;
+
+    private transient List decodedIndexes;
+
+    // Par défaut à TRUE
+    private boolean saveCompleteState = true;
 
     // -------------------------------------------------------------- Properties
 
@@ -537,16 +545,32 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[9];
+        Object values[] = new Object[10];
         values[0] = super.saveState(context);
         values[1] = new Integer(first);
         values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
         values[3] = new Integer(rowIndex);
         values[4] = new Integer(rows);
         values[5] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = saved;
-        values[7] = value;
-        values[8] = var;
+        values[6] = value;
+        values[7] = var;
+
+        values[8] = saveCompleteState ? Boolean.TRUE : Boolean.FALSE;
+
+        if (saved != null && saved.isEmpty() == false) {
+            Object ser[] = new Object[saved.size() * 2];
+            values[9] = ser;
+
+            int i = 0;
+            for (Iterator it = saved.entrySet().iterator(); it.hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
+
+                SavedState savedState = (SavedState) entry.getValue();
+
+                ser[i++] = entry.getKey();
+                ser[i++] = savedState.saveState(context);
+            }
+        }
         return (values);
 
     }
@@ -560,10 +584,30 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         rowIndex = ((Integer) values[3]).intValue();
         rows = ((Integer) values[4]).intValue();
         rowsSet = ((Boolean) values[5]).booleanValue();
-        saved = (Map) values[6];
-        value = values[7];
-        var = (String) values[8];
 
+        value = values[6];
+        var = (String) values[7];
+
+        saveCompleteState = ((Boolean) values[8]).booleanValue();
+
+        Object v = values[9];
+        if (v != null) {
+            Object ss[] = (Object[]) v;
+
+            saved = new HashMap(ss.length);
+
+            for (int i = 0; i < ss.length;) {
+                String sKey = (String) ss[i++];
+
+                SavedState sState = new SavedState();
+                sState.restoreState(context, ss[i++]);
+
+                saved.put(sKey, sState);
+            }
+
+        } else {
+            saved = new HashMap();
+        }
     }
 
     /**
@@ -757,6 +801,9 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         if (!keepSaved(context)) {
             saved = new HashMap();
         }
+
+        decodedIndexes = null;
+
         super.encodeBegin(context);
 
     }
@@ -815,9 +862,9 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
             saved = new HashMap(); // We don't need saved state here
         }
 
-        iterate(context, PhaseId.APPLY_REQUEST_VALUES);
         decode(context);
-
+        // On itére apres, car le décodage peut ajouter des decodedIndexes
+        iterate(context, PhaseId.APPLY_REQUEST_VALUES);
     }
 
     /**
@@ -1027,10 +1074,57 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
             }
         }
 
+        if (decodedIndexes != null && decodedIndexes.size() > 0) {
+
+            decodedIndexes.add(new int[] { getFirst(), getRows() });
+
+            Collections.sort(decodedIndexes, new Comparator() {
+
+                public int compare(Object arg0, Object arg1) {
+                    int i0[] = (int[]) arg0;
+                    int i1[] = (int[]) arg1;
+
+                    return i0[0] - i1[0];
+                }
+
+            });
+
+            int last[] = null;
+            for (Iterator it = decodedIndexes.iterator(); it.hasNext();) {
+                int is[] = (int[]) it.next();
+
+                if (last == null) {
+                    last = is;
+                    continue;
+                }
+
+                if (is[0] > last[0] + last[1]) {
+                    // Segment séparé !
+                    iterateRange(context, phaseId, last[0], last[1]);
+                    last = is;
+                    continue;
+                }
+
+                it.remove();
+                // Meme position ou inférieur !
+                last[1] = Math.max(last[1], is[0] + is[1] - last[0]);
+            }
+
+            // decodedIndexes = null; // Il faut le garder pour les autres
+            // phases !
+            iterateRange(context, phaseId, last[0], last[1]);
+
+        } else {
+            iterateRange(context, phaseId, getFirst(), getRows());
+        }
+
+    }
+
+    protected void iterateRange(FacesContext context, PhaseId phaseId,
+            int rowIndex, int rows) {
         // Iterate over our UIColumn children, once per row
         int processed = 0;
-        int rowIndex = getFirst() - 1;
-        int rows = getRows();
+        rowIndex--;
 
         while (true) {
 
@@ -1077,6 +1171,14 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         // Clean up after ourselves
         setRowIndex(-1);
 
+    }
+
+    public void addDecodedIndexes(int first, int rows) {
+        if (this.decodedIndexes == null) {
+            this.decodedIndexes = new ArrayList();
+        }
+
+        this.decodedIndexes.add(new int[] { first, rows });
     }
 
     /**
@@ -1196,7 +1298,8 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
                 }
             }
 
-            IComponentEngine componentEngine = state.getComponentEngine();
+            IComponentEngine componentEngine = state.getComponentEngine(
+                    context, component);
             if (componentEngine != null) {
                 ComponentEngineManager.setComponentEngine(
                         (IRCFacesComponent) component, componentEngine);
@@ -1228,10 +1331,6 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
             }
         }
 
-    }
-
-    protected boolean saveComponentEngine() {
-        return false;
     }
 
     /**
@@ -1266,7 +1365,7 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
             state.setLocalValueSet(input.isLocalValueSet());
         }
 
-        if (saveComponentEngine()) {
+        if (isSaveCompleteState()) {
             if (component instanceof IRCFacesComponent) {
                 IComponentEngine componentEngine = ComponentEngineManager
                         .getComponentEngine((IRCFacesComponent) component);
@@ -1293,14 +1392,32 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
 
     }
 
+    public final boolean isSaveCompleteState() {
+        return saveCompleteState;
+    }
+
+    public final void setSaveCompleteState(boolean saveCompleteState) {
+        this.saveCompleteState = saveCompleteState;
+    }
+
 }
 
 // ------------------------------------------------------------- Private Classes
 
 // Private class to represent saved state information
-class SavedState implements Serializable {
+class SavedState implements StateHolder {
 
     private Object submittedValue;
+
+    private boolean localValueSet;
+
+    private Object value;
+
+    private boolean valid = true;
+
+    private IComponentEngine componentEngine;
+
+    private Object serializedComponentEngine;
 
     Object getSubmittedValue() {
         return (this.submittedValue);
@@ -1310,8 +1427,6 @@ class SavedState implements Serializable {
         this.submittedValue = submittedValue;
     }
 
-    private boolean valid = true;
-
     boolean isValid() {
         return (this.valid);
     }
@@ -1319,8 +1434,6 @@ class SavedState implements Serializable {
     void setValid(boolean valid) {
         this.valid = valid;
     }
-
-    private Object value;
 
     Object getValue() {
         return (this.value);
@@ -1330,8 +1443,6 @@ class SavedState implements Serializable {
         this.value = value;
     }
 
-    private boolean localValueSet;
-
     boolean isLocalValueSet() {
         return (this.localValueSet);
     }
@@ -1340,14 +1451,26 @@ class SavedState implements Serializable {
         this.localValueSet = localValueSet;
     }
 
-    private IComponentEngine componentEngine;
+    public final IComponentEngine getComponentEngine(FacesContext facesContext,
+            UIComponent component) {
+        if (serializedComponentEngine == null) {
+            return componentEngine;
+        }
 
-    public final IComponentEngine getComponentEngine() {
+        IFactory factory = Constants.getCameliaFactory();
+
+        IComponentEngine componentEngine = factory.createComponentEngine();
+
+        componentEngine.restoreState(facesContext, serializedComponentEngine);
+
+        serializedComponentEngine = null;
+
         return componentEngine;
     }
 
     public final void setComponentEngine(IComponentEngine componentEngine) {
         this.componentEngine = componentEngine;
+        this.serializedComponentEngine = null;
     }
 
     public String toString() {
@@ -1355,6 +1478,42 @@ class SavedState implements Serializable {
                 + " localValueSet: " + localValueSet + " componentEngine=" + componentEngine);
     }
 
+    public boolean isTransient() {
+        return false;
+    }
+
+    public void setTransient(boolean newTransientValue) {
+    }
+
+    public void restoreState(FacesContext context, Object state) {
+        Object params[] = (Object[]) state;
+
+        submittedValue = params[0];
+
+        localValueSet = (params[1] != null);
+
+        value = params[2];
+
+        valid = (params[3] != null);
+
+        serializedComponentEngine = params[4];
+
+    }
+
+    public Object saveState(FacesContext context) {
+        Object params[] = new Object[5];
+
+        params[0] = submittedValue;
+        params[1] = localValueSet ? Boolean.TRUE : null;
+        params[2] = value;
+        params[3] = valid ? Boolean.TRUE : null;
+
+        if (componentEngine != null) {
+            params[4] = componentEngine.saveState(context);
+        }
+
+        return params;
+    }
 }
 
 // Private class to wrap an event with a row index

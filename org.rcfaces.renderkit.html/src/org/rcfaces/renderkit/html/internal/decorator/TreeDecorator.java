@@ -508,7 +508,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 // state ?
                 Set values = new OrderedSet();
 
-                if (HtmlValuesTools.updateValues(facesContext, tree, false,
+                if (HtmlValuesTools.updateValues(facesContext, tree, true,
                         values, selectedValues, deselectedValues)) {
 
                     int selectionCardinality = tree

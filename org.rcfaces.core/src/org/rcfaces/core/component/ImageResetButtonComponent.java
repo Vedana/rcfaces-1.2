@@ -5,13 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <p>
- * The imageResetButton Component is a <a
- * href="/comps/resetButtonComponent.html">resetButton Component</a> that can
- * show an image.
- * </p>
- * <p>
- * The imageResetButton Component has the following capabilities :
+ * <p>The imageResetButton Component is a <a href="/comps/resetButtonComponent.html">resetButton Component</a> that can show an image.</p>
+ * <p>The imageResetButton Component has the following capabilities :
  * <ul>
  * <li>Position &amp; Size</li>
  * <li>Foreground &amp; Background Color</li>
@@ -25,24 +20,23 @@ import java.util.Set;
  */
 public class ImageResetButtonComponent extends ImageButtonComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.imageResetButton";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.imageResetButton";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            ImageButtonComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
-    public ImageResetButtonComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
+	public ImageResetButtonComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public ImageResetButtonComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public ImageResetButtonComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

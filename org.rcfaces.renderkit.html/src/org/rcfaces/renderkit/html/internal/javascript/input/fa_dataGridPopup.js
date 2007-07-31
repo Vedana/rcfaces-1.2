@@ -84,7 +84,9 @@ var __statics = {
 					break;
 				}
 				
-				parent.appendChild(popup);
+				//parent.appendChild(popup);
+				
+				parent.ownerDocument.body.appendChild(popup);
 			}
 			dataGridPopup._popup=popup;
 		

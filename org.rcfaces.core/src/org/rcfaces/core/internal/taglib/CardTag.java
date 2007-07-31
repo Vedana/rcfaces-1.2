@@ -14,138 +14,129 @@ import javax.faces.application.Application;
 
 public class CardTag extends AbstractOutputTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(CardTag.class);
 
-    private String textAlignment;
+	private static final Log LOG=LogFactory.getLog(CardTag.class);
 
-    private String verticalAlignment;
+	private String textAlignment;
+	private String verticalAlignment;
+	private String scopeValue;
+	private String scopeVar;
+	private String loadListeners;
+	public String getComponentType() {
+		return CardComponent.COMPONENT_TYPE;
+	}
 
-    private String scopeValue;
+	public final String getTextAlignment() {
+		return textAlignment;
+	}
 
-    private String scopeVar;
+	public final void setTextAlignment(String textAlignment) {
+		this.textAlignment = textAlignment;
+	}
 
-    private String loadListeners;
+	public final String getVerticalAlignment() {
+		return verticalAlignment;
+	}
 
-    public String getComponentType() {
-        return CardComponent.COMPONENT_TYPE;
-    }
+	public final void setVerticalAlignment(String verticalAlignment) {
+		this.verticalAlignment = verticalAlignment;
+	}
 
-    public final String getTextAlignment() {
-        return textAlignment;
-    }
+	public final String getScopeValue() {
+		return scopeValue;
+	}
 
-    public final void setTextAlignment(String textAlignment) {
-        this.textAlignment = textAlignment;
-    }
+	public final void setScopeValue(String scopeValue) {
+		this.scopeValue = scopeValue;
+	}
 
-    public final String getVerticalAlignment() {
-        return verticalAlignment;
-    }
+	public final String getScopeVar() {
+		return scopeVar;
+	}
 
-    public final void setVerticalAlignment(String verticalAlignment) {
-        this.verticalAlignment = verticalAlignment;
-    }
+	public final void setScopeVar(String scopeVar) {
+		this.scopeVar = scopeVar;
+	}
 
-    public final String getScopeValue() {
-        return scopeValue;
-    }
+	public final String getLoadListener() {
+		return loadListeners;
+	}
 
-    public final void setScopeValue(String scopeValue) {
-        this.scopeValue = scopeValue;
-    }
+	public final void setLoadListener(String loadListeners) {
+		this.loadListeners = loadListeners;
+	}
 
-    public final String getScopeVar() {
-        return scopeVar;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (CardComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  textAlignment='"+textAlignment+"'");
+			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
+			LOG.debug("  scopeValue='"+scopeValue+"'");
+			LOG.debug("  scopeVar='"+scopeVar+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setScopeVar(String scopeVar) {
-        this.scopeVar = scopeVar;
-    }
+		if ((uiComponent instanceof CardComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'CardComponent'.");
+		}
 
-    public final String getLoadListener() {
-        return loadListeners;
-    }
+		CardComponent component = (CardComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final void setLoadListener(String loadListeners) {
-        this.loadListeners = loadListeners;
-    }
+		if (textAlignment != null) {
+			if (isValueReference(textAlignment)) {
+				ValueBinding vb = application.createValueBinding(textAlignment);
+				component.setValueBinding(Properties.TEXT_ALIGNMENT, vb);
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (CardComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  textAlignment='" + textAlignment + "'");
-            LOG.debug("  verticalAlignment='" + verticalAlignment + "'");
-            LOG.debug("  scopeValue='" + scopeValue + "'");
-            LOG.debug("  scopeVar='" + scopeVar + "'");
-        }
-        super.setProperties(uiComponent);
+			} else {
+				component.setTextAlignment(textAlignment);
+			}
+		}
 
-        if ((uiComponent instanceof CardComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'CardComponent'.");
-        }
+		if (verticalAlignment != null) {
+			if (isValueReference(verticalAlignment)) {
+				ValueBinding vb = application.createValueBinding(verticalAlignment);
+				component.setValueBinding(Properties.VERTICAL_ALIGNMENT, vb);
 
-        CardComponent component = (CardComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+			} else {
+				component.setVerticalAlignment(verticalAlignment);
+			}
+		}
 
-        if (textAlignment != null) {
-            if (isValueReference(textAlignment)) {
-                ValueBinding vb = application.createValueBinding(textAlignment);
-                component.setValueBinding(Properties.TEXT_ALIGNMENT, vb);
+		if (scopeValue != null) {
+				ValueBinding vb = application.createValueBinding(scopeValue);
+				component.setValueBinding(Properties.SCOPE_VALUE, vb);
+		}
 
-            } else {
-                component.setTextAlignment(textAlignment);
-            }
-        }
+		if (scopeVar != null) {
+			if (isValueReference(scopeVar)) {
+				ValueBinding vb = application.createValueBinding(scopeVar);
+				component.setValueBinding(Properties.SCOPE_VAR, vb);
 
-        if (verticalAlignment != null) {
-            if (isValueReference(verticalAlignment)) {
-                ValueBinding vb = application
-                        .createValueBinding(verticalAlignment);
-                component.setValueBinding(Properties.VERTICAL_ALIGNMENT, vb);
+			} else {
+				component.setScopeVar(scopeVar);
+			}
+		}
 
-            } else {
-                component.setVerticalAlignment(verticalAlignment);
-            }
-        }
+		if (loadListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+		}
+	}
 
-        if (scopeValue != null) {
-            ValueBinding vb = application.createValueBinding(scopeValue);
-            component.setValueBinding(Properties.SCOPE_VALUE, vb);
-        }
+	public void release() {
+		textAlignment = null;
+		verticalAlignment = null;
+		scopeValue = null;
+		scopeVar = null;
+		loadListeners = null;
 
-        if (scopeVar != null) {
-            if (isValueReference(scopeVar)) {
-                ValueBinding vb = application.createValueBinding(scopeVar);
-                component.setValueBinding(Properties.SCOPE_VAR, vb);
-
-            } else {
-                component.setScopeVar(scopeVar);
-            }
-        }
-
-        if (loadListeners != null) {
-            ListenersTools.parseListener(facesContext, component,
-                    ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
-        }
-    }
-
-    public void release() {
-        textAlignment = null;
-        verticalAlignment = null;
-        scopeValue = null;
-        scopeVar = null;
-        loadListeners = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

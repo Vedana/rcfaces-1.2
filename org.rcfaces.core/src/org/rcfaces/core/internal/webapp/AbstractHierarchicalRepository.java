@@ -493,8 +493,10 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
 
             IModule module = getModuleByName(moduleName);
             if (module == null) {
-                throw new IllegalArgumentException("Can not find module '"
-                        + moduleName + "'.");
+                throw new IllegalArgumentException(
+                        "Can not find module '"
+                                + moduleName
+                                + "', please check the name or remove it from the web.xml !");
             }
 
             addModules(l, module);

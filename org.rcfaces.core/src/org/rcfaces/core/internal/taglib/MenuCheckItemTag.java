@@ -8,15 +8,16 @@ import org.rcfaces.core.component.MenuCheckItemComponent;
 
 public class MenuCheckItemTag extends MenuItemTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(MenuCheckItemTag.class);
 
-    public String getComponentType() {
-        return MenuCheckItemComponent.COMPONENT_TYPE;
-    }
+	private static final Log LOG=LogFactory.getLog(MenuCheckItemTag.class);
 
-    public void release() {
+	public String getComponentType() {
+		return MenuCheckItemComponent.COMPONENT_TYPE;
+	}
 
-        super.release();
-    }
+	public void release() {
+
+		super.release();
+	}
 
 }

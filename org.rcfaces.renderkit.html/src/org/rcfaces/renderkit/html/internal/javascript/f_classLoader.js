@@ -421,7 +421,12 @@ f_classLoader.prototype = {
 			this._loadBundle(doc, bundleName);
 		}	
 	},
-	
+	/**
+	 * @method private
+	 * @param Document doc
+	 * @param String bundleName
+	 * @return boolean
+	 */
 	_loadBundle: function(doc, bundleName) {
 	
 		if (this._interactiveMode) {
@@ -438,6 +443,8 @@ f_classLoader.prototype = {
 		var url=f_env.ComputeJavaScriptURI(bundleName);
 	
 		f_core.Info(f_classLoader, "_loadBundle: Load '"+bundleName+"' located at url '"+url+"'.");
+
+		f_core.Profile(null, "f_classLoader.requestBundle("+bundleName+")");
 	
 		doc.write("<SCRIPT type=\"text/javascript\" charset=\"UTF-8\" src=\""+url+"\"></SCRIPT>");
 		
@@ -982,6 +989,9 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method hidden
+	 * @param f_bundle bundle
+	 * @param optional Window win
+	 * @return void
 	 */
 	_declareBundle: function(bundle, win) {
 		if (win && win!=window) {

@@ -8,15 +8,16 @@ import org.rcfaces.core.component.HyperLinkComponent;
 
 public class HyperLinkTag extends ButtonTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(HyperLinkTag.class);
 
-    public String getComponentType() {
-        return HyperLinkComponent.COMPONENT_TYPE;
-    }
+	private static final Log LOG=LogFactory.getLog(HyperLinkTag.class);
 
-    public void release() {
+	public String getComponentType() {
+		return HyperLinkComponent.COMPONENT_TYPE;
+	}
 
-        super.release();
-    }
+	public void release() {
+
+		super.release();
+	}
 
 }

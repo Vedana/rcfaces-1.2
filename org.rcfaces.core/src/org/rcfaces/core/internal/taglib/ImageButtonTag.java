@@ -14,238 +14,225 @@ import org.rcfaces.core.internal.component.Properties;
 
 public class ImageButtonTag extends ButtonTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(ImageButtonTag.class);
 
-    private String imageURL;
+	private static final Log LOG=LogFactory.getLog(ImageButtonTag.class);
 
-    private String disabledImageURL;
+	private String imageURL;
+	private String disabledImageURL;
+	private String hoverImageURL;
+	private String selectedImageURL;
+	private String border;
+	private String borderType;
+	private String textPosition;
+	private String imageHeight;
+	private String imageWidth;
+	public String getComponentType() {
+		return ImageButtonComponent.COMPONENT_TYPE;
+	}
 
-    private String hoverImageURL;
+	public final String getImageURL() {
+		return imageURL;
+	}
 
-    private String selectedImageURL;
+	public final void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
 
-    private String border;
+	public final String getDisabledImageURL() {
+		return disabledImageURL;
+	}
 
-    private String borderType;
+	public final void setDisabledImageURL(String disabledImageURL) {
+		this.disabledImageURL = disabledImageURL;
+	}
 
-    private String textPosition;
+	public final String getHoverImageURL() {
+		return hoverImageURL;
+	}
 
-    private String imageHeight;
+	public final void setHoverImageURL(String hoverImageURL) {
+		this.hoverImageURL = hoverImageURL;
+	}
 
-    private String imageWidth;
+	public final String getSelectedImageURL() {
+		return selectedImageURL;
+	}
 
-    public String getComponentType() {
-        return ImageButtonComponent.COMPONENT_TYPE;
-    }
+	public final void setSelectedImageURL(String selectedImageURL) {
+		this.selectedImageURL = selectedImageURL;
+	}
 
-    public final String getImageURL() {
-        return imageURL;
-    }
+	public final String getBorder() {
+		return border;
+	}
 
-    public final void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
+	public final void setBorder(String border) {
+		this.border = border;
+	}
 
-    public final String getDisabledImageURL() {
-        return disabledImageURL;
-    }
+	public final String getBorderType() {
+		return borderType;
+	}
 
-    public final void setDisabledImageURL(String disabledImageURL) {
-        this.disabledImageURL = disabledImageURL;
-    }
+	public final void setBorderType(String borderType) {
+		this.borderType = borderType;
+	}
 
-    public final String getHoverImageURL() {
-        return hoverImageURL;
-    }
+	public final String getTextPosition() {
+		return textPosition;
+	}
 
-    public final void setHoverImageURL(String hoverImageURL) {
-        this.hoverImageURL = hoverImageURL;
-    }
+	public final void setTextPosition(String textPosition) {
+		this.textPosition = textPosition;
+	}
 
-    public final String getSelectedImageURL() {
-        return selectedImageURL;
-    }
+	public final String getImageHeight() {
+		return imageHeight;
+	}
 
-    public final void setSelectedImageURL(String selectedImageURL) {
-        this.selectedImageURL = selectedImageURL;
-    }
+	public final void setImageHeight(String imageHeight) {
+		this.imageHeight = imageHeight;
+	}
 
-    public final String getBorder() {
-        return border;
-    }
+	public final String getImageWidth() {
+		return imageWidth;
+	}
 
-    public final void setBorder(String border) {
-        this.border = border;
-    }
+	public final void setImageWidth(String imageWidth) {
+		this.imageWidth = imageWidth;
+	}
 
-    public final String getBorderType() {
-        return borderType;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (ImageButtonComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
+			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
+			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
+			LOG.debug("  border='"+border+"'");
+			LOG.debug("  borderType='"+borderType+"'");
+			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  imageHeight='"+imageHeight+"'");
+			LOG.debug("  imageWidth='"+imageWidth+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final void setBorderType(String borderType) {
-        this.borderType = borderType;
-    }
+		if ((uiComponent instanceof ImageButtonComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageButtonComponent'.");
+		}
 
-    public final String getTextPosition() {
-        return textPosition;
-    }
+		ImageButtonComponent component = (ImageButtonComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final void setTextPosition(String textPosition) {
-        this.textPosition = textPosition;
-    }
+		if (imageURL != null) {
+			if (isValueReference(imageURL)) {
+				ValueBinding vb = application.createValueBinding(imageURL);
+				component.setValueBinding(Properties.IMAGE_URL, vb);
 
-    public final String getImageHeight() {
-        return imageHeight;
-    }
+			} else {
+				component.setImageURL(imageURL);
+			}
+		}
 
-    public final void setImageHeight(String imageHeight) {
-        this.imageHeight = imageHeight;
-    }
+		if (disabledImageURL != null) {
+			if (isValueReference(disabledImageURL)) {
+				ValueBinding vb = application.createValueBinding(disabledImageURL);
+				component.setValueBinding(Properties.DISABLED_IMAGE_URL, vb);
 
-    public final String getImageWidth() {
-        return imageWidth;
-    }
+			} else {
+				component.setDisabledImageURL(disabledImageURL);
+			}
+		}
 
-    public final void setImageWidth(String imageWidth) {
-        this.imageWidth = imageWidth;
-    }
+		if (hoverImageURL != null) {
+			if (isValueReference(hoverImageURL)) {
+				ValueBinding vb = application.createValueBinding(hoverImageURL);
+				component.setValueBinding(Properties.HOVER_IMAGE_URL, vb);
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (ImageButtonComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  imageURL='" + imageURL + "'");
-            LOG.debug("  disabledImageURL='" + disabledImageURL + "'");
-            LOG.debug("  hoverImageURL='" + hoverImageURL + "'");
-            LOG.debug("  selectedImageURL='" + selectedImageURL + "'");
-            LOG.debug("  border='" + border + "'");
-            LOG.debug("  borderType='" + borderType + "'");
-            LOG.debug("  textPosition='" + textPosition + "'");
-            LOG.debug("  imageHeight='" + imageHeight + "'");
-            LOG.debug("  imageWidth='" + imageWidth + "'");
-        }
-        super.setProperties(uiComponent);
+			} else {
+				component.setHoverImageURL(hoverImageURL);
+			}
+		}
 
-        if ((uiComponent instanceof ImageButtonComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'ImageButtonComponent'.");
-        }
+		if (selectedImageURL != null) {
+			if (isValueReference(selectedImageURL)) {
+				ValueBinding vb = application.createValueBinding(selectedImageURL);
+				component.setValueBinding(Properties.SELECTED_IMAGE_URL, vb);
 
-        ImageButtonComponent component = (ImageButtonComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+			} else {
+				component.setSelectedImageURL(selectedImageURL);
+			}
+		}
 
-        if (imageURL != null) {
-            if (isValueReference(imageURL)) {
-                ValueBinding vb = application.createValueBinding(imageURL);
-                component.setValueBinding(Properties.IMAGE_URL, vb);
+		if (border != null) {
+			if (isValueReference(border)) {
+				ValueBinding vb = application.createValueBinding(border);
+				component.setValueBinding(Properties.BORDER, vb);
 
-            } else {
-                component.setImageURL(imageURL);
-            }
-        }
+			} else {
+				component.setBorder(getBool(border));
+			}
+		}
 
-        if (disabledImageURL != null) {
-            if (isValueReference(disabledImageURL)) {
-                ValueBinding vb = application
-                        .createValueBinding(disabledImageURL);
-                component.setValueBinding(Properties.DISABLED_IMAGE_URL, vb);
+		if (borderType != null) {
+			if (isValueReference(borderType)) {
+				ValueBinding vb = application.createValueBinding(borderType);
+				component.setValueBinding(Properties.BORDER_TYPE, vb);
 
-            } else {
-                component.setDisabledImageURL(disabledImageURL);
-            }
-        }
+			} else {
+				component.setBorderType(borderType);
+			}
+		}
 
-        if (hoverImageURL != null) {
-            if (isValueReference(hoverImageURL)) {
-                ValueBinding vb = application.createValueBinding(hoverImageURL);
-                component.setValueBinding(Properties.HOVER_IMAGE_URL, vb);
+		if (textPosition != null) {
+			if (isValueReference(textPosition)) {
+				ValueBinding vb = application.createValueBinding(textPosition);
+				component.setValueBinding(Properties.TEXT_POSITION, vb);
 
-            } else {
-                component.setHoverImageURL(hoverImageURL);
-            }
-        }
+			} else {
+				component.setTextPosition(textPosition);
+			}
+		}
 
-        if (selectedImageURL != null) {
-            if (isValueReference(selectedImageURL)) {
-                ValueBinding vb = application
-                        .createValueBinding(selectedImageURL);
-                component.setValueBinding(Properties.SELECTED_IMAGE_URL, vb);
+		if (imageHeight != null) {
+			if (isValueReference(imageHeight)) {
+				ValueBinding vb = application.createValueBinding(imageHeight);
+				component.setValueBinding(Properties.IMAGE_HEIGHT, vb);
 
-            } else {
-                component.setSelectedImageURL(selectedImageURL);
-            }
-        }
+			} else {
+				component.setImageHeight(getInt(imageHeight));
+			}
+		}
 
-        if (border != null) {
-            if (isValueReference(border)) {
-                ValueBinding vb = application.createValueBinding(border);
-                component.setValueBinding(Properties.BORDER, vb);
+		if (imageWidth != null) {
+			if (isValueReference(imageWidth)) {
+				ValueBinding vb = application.createValueBinding(imageWidth);
+				component.setValueBinding(Properties.IMAGE_WIDTH, vb);
 
-            } else {
-                component.setBorder(getBool(border));
-            }
-        }
+			} else {
+				component.setImageWidth(getInt(imageWidth));
+			}
+		}
+	}
 
-        if (borderType != null) {
-            if (isValueReference(borderType)) {
-                ValueBinding vb = application.createValueBinding(borderType);
-                component.setValueBinding(Properties.BORDER_TYPE, vb);
+	public void release() {
+		imageURL = null;
+		disabledImageURL = null;
+		hoverImageURL = null;
+		selectedImageURL = null;
+		border = null;
+		borderType = null;
+		textPosition = null;
+		imageHeight = null;
+		imageWidth = null;
 
-            } else {
-                component.setBorderType(borderType);
-            }
-        }
-
-        if (textPosition != null) {
-            if (isValueReference(textPosition)) {
-                ValueBinding vb = application.createValueBinding(textPosition);
-                component.setValueBinding(Properties.TEXT_POSITION, vb);
-
-            } else {
-                component.setTextPosition(textPosition);
-            }
-        }
-
-        if (imageHeight != null) {
-            if (isValueReference(imageHeight)) {
-                ValueBinding vb = application.createValueBinding(imageHeight);
-                component.setValueBinding(Properties.IMAGE_HEIGHT, vb);
-
-            } else {
-                component.setImageHeight(getInt(imageHeight));
-            }
-        }
-
-        if (imageWidth != null) {
-            if (isValueReference(imageWidth)) {
-                ValueBinding vb = application.createValueBinding(imageWidth);
-                component.setValueBinding(Properties.IMAGE_WIDTH, vb);
-
-            } else {
-                component.setImageWidth(getInt(imageWidth));
-            }
-        }
-    }
-
-    public void release() {
-        imageURL = null;
-        disabledImageURL = null;
-        hoverImageURL = null;
-        selectedImageURL = null;
-        border = null;
-        borderType = null;
-        textPosition = null;
-        imageHeight = null;
-        imageWidth = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

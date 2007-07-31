@@ -9,24 +9,23 @@ import java.util.Set;
  */
 public class MenuBarComponent extends AbstractMenuComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.menuBar";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.menuBar";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            AbstractMenuComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMenuComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
-    public MenuBarComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
+	public MenuBarComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public MenuBarComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public MenuBarComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

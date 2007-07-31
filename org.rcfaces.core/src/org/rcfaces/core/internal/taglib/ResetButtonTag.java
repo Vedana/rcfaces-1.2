@@ -8,15 +8,16 @@ import org.rcfaces.core.component.ResetButtonComponent;
 
 public class ResetButtonTag extends ButtonTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(ResetButtonTag.class);
 
-    public String getComponentType() {
-        return ResetButtonComponent.COMPONENT_TYPE;
-    }
+	private static final Log LOG=LogFactory.getLog(ResetButtonTag.class);
 
-    public void release() {
+	public String getComponentType() {
+		return ResetButtonComponent.COMPONENT_TYPE;
+	}
 
-        super.release();
-    }
+	public void release() {
+
+		super.release();
+	}
 
 }

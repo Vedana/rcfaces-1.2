@@ -14,171 +14,162 @@ import org.rcfaces.core.internal.component.Properties;
 
 public class DateItemTag extends AbstractItemTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(DateItemTag.class);
 
-    private String text;
+	private static final Log LOG=LogFactory.getLog(DateItemTag.class);
 
-    private String styleClass;
+	private String text;
+	private String styleClass;
+	private String menuPopupId;
+	private String literalLocale;
+	private String literalTimeZone;
+	private String date;
+	public String getComponentType() {
+		return DateItemComponent.COMPONENT_TYPE;
+	}
 
-    private String menuPopupId;
+	public final String getText() {
+		return text;
+	}
 
-    private String literalLocale;
+	public final void setText(String text) {
+		this.text = text;
+	}
 
-    private String literalTimeZone;
+	public final String getStyleClass() {
+		return styleClass;
+	}
 
-    private String date;
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
+	}
 
-    public String getComponentType() {
-        return DateItemComponent.COMPONENT_TYPE;
-    }
+	public final String getMenuPopupId() {
+		return menuPopupId;
+	}
 
-    public final String getText() {
-        return text;
-    }
+	public final void setMenuPopupId(String menuPopupId) {
+		this.menuPopupId = menuPopupId;
+	}
 
-    public final void setText(String text) {
-        this.text = text;
-    }
+	public final String getLiteralLocale() {
+		return literalLocale;
+	}
 
-    public final String getStyleClass() {
-        return styleClass;
-    }
+	public final void setLiteralLocale(String literalLocale) {
+		this.literalLocale = literalLocale;
+	}
 
-    public final void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
-    }
+	public final String getLiteralTimeZone() {
+		return literalTimeZone;
+	}
 
-    public final String getMenuPopupId() {
-        return menuPopupId;
-    }
+	public final void setLiteralTimeZone(String literalTimeZone) {
+		this.literalTimeZone = literalTimeZone;
+	}
 
-    public final void setMenuPopupId(String menuPopupId) {
-        this.menuPopupId = menuPopupId;
-    }
+	public final String getDate() {
+		return date;
+	}
 
-    public final String getLiteralLocale() {
-        return literalLocale;
-    }
+	public final void setDate(String date) {
+		this.date = date;
+	}
 
-    public final void setLiteralLocale(String literalLocale) {
-        this.literalLocale = literalLocale;
-    }
+	protected void setProperties(UIComponent uiComponent) {
+		if (LOG.isDebugEnabled()) {
+			if (DateItemComponent.COMPONENT_TYPE==getComponentType()) {
+				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
+			}
+			LOG.debug("  text='"+text+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  menuPopupId='"+menuPopupId+"'");
+			LOG.debug("  literalLocale='"+literalLocale+"'");
+			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
+			LOG.debug("  date='"+date+"'");
+		}
+		super.setProperties(uiComponent);
 
-    public final String getLiteralTimeZone() {
-        return literalTimeZone;
-    }
+		if ((uiComponent instanceof DateItemComponent)==false) {
+			if (uiComponent instanceof UIViewRoot) {
+				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
+			}
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'DateItemComponent'.");
+		}
 
-    public final void setLiteralTimeZone(String literalTimeZone) {
-        this.literalTimeZone = literalTimeZone;
-    }
+		DateItemComponent component = (DateItemComponent) uiComponent;
+		FacesContext facesContext = getFacesContext();
+		Application application = facesContext.getApplication();
 
-    public final String getDate() {
-        return date;
-    }
+		if (text != null) {
+			if (isValueReference(text)) {
+				ValueBinding vb = application.createValueBinding(text);
+				component.setValueBinding(Properties.TEXT, vb);
 
-    public final void setDate(String date) {
-        this.date = date;
-    }
+			} else {
+				component.setText(text);
+			}
+		}
 
-    protected void setProperties(UIComponent uiComponent) {
-        if (LOG.isDebugEnabled()) {
-            if (DateItemComponent.COMPONENT_TYPE == getComponentType()) {
-                LOG.debug("Component id='" + getId() + "' type='"
-                        + getComponentType() + "'.");
-            }
-            LOG.debug("  text='" + text + "'");
-            LOG.debug("  styleClass='" + styleClass + "'");
-            LOG.debug("  menuPopupId='" + menuPopupId + "'");
-            LOG.debug("  literalLocale='" + literalLocale + "'");
-            LOG.debug("  literalTimeZone='" + literalTimeZone + "'");
-            LOG.debug("  date='" + date + "'");
-        }
-        super.setProperties(uiComponent);
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+				component.setValueBinding(Properties.STYLE_CLASS, vb);
 
-        if ((uiComponent instanceof DateItemComponent) == false) {
-            if (uiComponent instanceof UIViewRoot) {
-                throw new IllegalStateException(
-                        "The first component of the page must be a UIViewRoot component !");
-            }
-            throw new IllegalStateException(
-                    "Component specified by tag is not instanceof of 'DateItemComponent'.");
-        }
+			} else {
+				component.setStyleClass(styleClass);
+			}
+		}
 
-        DateItemComponent component = (DateItemComponent) uiComponent;
-        FacesContext facesContext = getFacesContext();
-        Application application = facesContext.getApplication();
+		if (menuPopupId != null) {
+			if (isValueReference(menuPopupId)) {
+				ValueBinding vb = application.createValueBinding(menuPopupId);
+				component.setValueBinding(Properties.MENU_POPUP_ID, vb);
 
-        if (text != null) {
-            if (isValueReference(text)) {
-                ValueBinding vb = application.createValueBinding(text);
-                component.setValueBinding(Properties.TEXT, vb);
+			} else {
+				component.setMenuPopupId(menuPopupId);
+			}
+		}
 
-            } else {
-                component.setText(text);
-            }
-        }
+		if (literalLocale != null) {
+			if (isValueReference(literalLocale)) {
+				ValueBinding vb = application.createValueBinding(literalLocale);
+				component.setValueBinding(Properties.LITERAL_LOCALE, vb);
 
-        if (styleClass != null) {
-            if (isValueReference(styleClass)) {
-                ValueBinding vb = application.createValueBinding(styleClass);
-                component.setValueBinding(Properties.STYLE_CLASS, vb);
+			} else {
+				component.setLiteralLocale(literalLocale);
+			}
+		}
 
-            } else {
-                component.setStyleClass(styleClass);
-            }
-        }
+		if (literalTimeZone != null) {
+			if (isValueReference(literalTimeZone)) {
+				ValueBinding vb = application.createValueBinding(literalTimeZone);
+				component.setValueBinding(Properties.LITERAL_TIME_ZONE, vb);
 
-        if (menuPopupId != null) {
-            if (isValueReference(menuPopupId)) {
-                ValueBinding vb = application.createValueBinding(menuPopupId);
-                component.setValueBinding(Properties.MENU_POPUP_ID, vb);
+			} else {
+				component.setLiteralTimeZone(literalTimeZone);
+			}
+		}
 
-            } else {
-                component.setMenuPopupId(menuPopupId);
-            }
-        }
+		if (date != null) {
+			if (isValueReference(date)) {
+				ValueBinding vb = application.createValueBinding(date);
+				component.setValueBinding(Properties.DATE, vb);
 
-        if (literalLocale != null) {
-            if (isValueReference(literalLocale)) {
-                ValueBinding vb = application.createValueBinding(literalLocale);
-                component.setValueBinding(Properties.LITERAL_LOCALE, vb);
+			} else {
+				component.setDate(date);
+			}
+		}
+	}
 
-            } else {
-                component.setLiteralLocale(literalLocale);
-            }
-        }
+	public void release() {
+		text = null;
+		styleClass = null;
+		menuPopupId = null;
+		literalLocale = null;
+		literalTimeZone = null;
+		date = null;
 
-        if (literalTimeZone != null) {
-            if (isValueReference(literalTimeZone)) {
-                ValueBinding vb = application
-                        .createValueBinding(literalTimeZone);
-                component.setValueBinding(Properties.LITERAL_TIME_ZONE, vb);
-
-            } else {
-                component.setLiteralTimeZone(literalTimeZone);
-            }
-        }
-
-        if (date != null) {
-            if (isValueReference(date)) {
-                ValueBinding vb = application.createValueBinding(date);
-                component.setValueBinding(Properties.DATE, vb);
-
-            } else {
-                component.setDate(date);
-            }
-        }
-    }
-
-    public void release() {
-        text = null;
-        styleClass = null;
-        menuPopupId = null;
-        literalLocale = null;
-        literalTimeZone = null;
-        date = null;
-
-        super.release();
-    }
+		super.release();
+	}
 
 }

@@ -8,15 +8,16 @@ import org.rcfaces.core.component.SubmitButtonComponent;
 
 public class SubmitButtonTag extends ButtonTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(SubmitButtonTag.class);
 
-    public String getComponentType() {
-        return SubmitButtonComponent.COMPONENT_TYPE;
-    }
+	private static final Log LOG=LogFactory.getLog(SubmitButtonTag.class);
 
-    public void release() {
+	public String getComponentType() {
+		return SubmitButtonComponent.COMPONENT_TYPE;
+	}
 
-        super.release();
-    }
+	public void release() {
+
+		super.release();
+	}
 
 }

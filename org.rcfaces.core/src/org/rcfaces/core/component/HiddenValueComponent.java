@@ -24,305 +24,298 @@ import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
- * <p>
- * The hiddenValue Component is a non-visual component. It is equivalent to and
- * Input hidden type HTML tag.
- * </p>
- * <p>
- * It allows to access and store value on the client and on the server while
- * keeping it concealed. The clientData Component can also be used.
- * </p>
- * <p>
- * The hiddenValue Component has the following capability :
+ * <p>The hiddenValue Component is a non-visual component. It is equivalent to and Input hidden type HTML tag.</p>
+ * <p>It allows to access and store value on the client and on the server while keeping it concealed. The clientData Component can also be used.</p>
+ * <p>The hiddenValue Component has the following capability :
  * <ul>
  * <li>Property changed Event handling</li>
  * </ul>
  * </p>
  */
-public class HiddenValueComponent extends CameliaInputComponent implements
-        IClientDataCapability, IServerDataCapability,
-        IPropertyChangeEventCapability, IImmediateCapability,
-        IValueLockedCapability, IValidationEventCapability, IServerDataManager,
-        IClientDataManager {
+public class HiddenValueComponent extends CameliaInputComponent implements 
+	IClientDataCapability,
+	IServerDataCapability,
+	IPropertyChangeEventCapability,
+	IImmediateCapability,
+	IValueLockedCapability,
+	IValidationEventCapability,
+	IServerDataManager,
+	IClientDataManager {
+
+	public static final String COMPONENT_TYPE="org.rcfaces.core.hiddenValue";
+
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"validationListener","immediate","propertyChangeListener","valueLocked"}));
+	}
+
+	public HiddenValueComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
+
+	public HiddenValueComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
+
+	public void setClientData(String name, ValueBinding value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.hiddenValue";
+	public void setServerData(String name, ValueBinding value) {
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            CameliaInputComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {
-                "validationListener", "immediate", "propertyChangeListener",
-                "valueLocked" }));
-    }
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public String getClientData(String name, FacesContext facesContext) {
 
-    public HiddenValueComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
 
-    public HiddenValueComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return (String)dataMapAccessor.getData(name, facesContext);
+		
+	}
 
-    public void setClientData(String name, ValueBinding value) {
+	public Object getServerData(String name, FacesContext facesContext) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", true);
 
-        dataMapAccessor.setData(name, value, null);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+		
+		return dataMapAccessor.getData(name, facesContext);
+		
+	}
 
-    }
+	public Map getClientDataMap(FacesContext facesContext) {
 
-    public void setServerData(String name, ValueBinding value) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
+		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
 
-        dataMapAccessor.setData(name, value, null);
+	public Map getServerDataMap(FacesContext facesContext) {
 
-    }
 
-    public String getClientData(String name, FacesContext facesContext) {
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+ 		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		Map map=dataMapAccessor.getDataMap(facesContext);
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+			if (map.isEmpty()) {
+				return Collections.EMPTY_MAP;
+			}
+			map=Collections.unmodifiableMap(map);
+		}
+		return map;
+		
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
+	public String[] listClientDataKeys(FacesContext facesContext) {
 
-        return (String) dataMapAccessor.getData(name, facesContext);
 
-    }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
 
-    public Object getServerData(String name, FacesContext facesContext) {
+	public String[] listServerDataKeys(FacesContext facesContext) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
 
-        return dataMapAccessor.getData(name, facesContext);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
 
-    }
+	public Map getClientDataMap() {
 
-    public Map getClientDataMap(FacesContext facesContext) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(
-                facesContext, "clientData", false);
-        if (dataMapAccessor == null) {
-            return Collections.EMPTY_MAP;
-        }
+		return getClientDataMap(null);
+		
+	}
 
-        return dataMapAccessor.getDataMap(facesContext);
+	public int getClientDataCount() {
 
-    }
 
-    public Map getServerDataMap(FacesContext facesContext) {
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+		 
+		 return dataMapAccessor.getDataCount();
+		
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(
-                facesContext, "serverData", false);
-        if (dataMapAccessor == null) {
-            return Collections.EMPTY_MAP;
-        }
+	public String getClientData(String name) {
 
-        Map map = dataMapAccessor.getDataMap(facesContext);
-        if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
-            if (map.isEmpty()) {
-                return Collections.EMPTY_MAP;
-            }
-            map = Collections.unmodifiableMap(map);
-        }
-        return map;
 
-    }
+		 return getClientData(name, null);
+		
+	}
 
-    public String[] listClientDataKeys(FacesContext facesContext) {
+	public String[] listClientDataKeys() {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return ComponentTools.STRING_EMPTY_ARRAY;
-        }
 
-        return dataMapAccessor.listDataKeys(facesContext);
+			return listClientDataKeys(null);
+		
+	}
 
-    }
+	public String removeClientData(String name) {
 
-    public String[] listServerDataKeys(FacesContext facesContext) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return ComponentTools.STRING_EMPTY_ARRAY;
-        }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+            
+		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
 
-        return dataMapAccessor.listDataKeys(facesContext);
+	public String setClientData(String name, String value) {
 
-    }
 
-    public Map getClientDataMap() {
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
+	}
 
-        return getClientDataMap(null);
+	public Object getServerData(String name) {
 
-    }
 
-    public int getClientDataCount() {
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
+            
+		return dataMapAccessor.getData(name, null);
+		
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return 0;
-        }
+	public Object removeServerData(String name) {
 
-        return dataMapAccessor.getDataCount();
 
-    }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+		 	return null;
+		}
+            
+		return dataMapAccessor.removeData(name, null);
+		
+	}
 
-    public String getClientData(String name) {
+	public Map getServerDataMap() {
 
-        return getClientData(name, null);
 
-    }
+		return getServerDataMap(null);
+		
+	}
 
-    public String[] listClientDataKeys() {
+	public int getServerDataCount() {
 
-        return listClientDataKeys(null);
 
-    }
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
+		
+	}
 
-    public String removeClientData(String name) {
+	public Object setServerData(String name, Object value) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
 
-        return (String) dataMapAccessor.removeData(name, null);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
 
-    }
+	public String[] listServerDataKeys() {
 
-    public String setClientData(String name, String value) {
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "clientData", true);
+			return listServerDataKeys(null);
+		
+	}
 
-        return (String) dataMapAccessor.setData(name, value, null);
+	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		addFacesListener(listener);
+	}
 
-    }
+	public final void removePropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		removeFacesListener(listener);
+	}
 
-    public Object getServerData(String name) {
+	public final javax.faces.event.FacesListener [] listPropertyChangeListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
+	public boolean isValueLocked() {
+		return isValueLocked(null);
+	}
 
-        return dataMapAccessor.getData(name, null);
+	/**
+	 * See {@link #isValueLocked() isValueLocked()} for more details
+	 */
+	public boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VALUE_LOCKED, false, facesContext);
+	}
 
-    }
+	/**
+	 * Returns <code>true</code> if the attribute "valueLocked" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isValueLockedSetted() {
+		return engine.isPropertySetted(Properties.VALUE_LOCKED);
+	}
 
-    public Object removeServerData(String name) {
+	public void setValueLocked(boolean valueLocked) {
+		engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
+	}
 
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return null;
-        }
+	public final void addValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		addFacesListener(listener);
+	}
 
-        return dataMapAccessor.removeData(name, null);
+	public final void removeValidationListener(org.rcfaces.core.event.IValidationListener listener) {
+		removeFacesListener(listener);
+	}
 
-    }
+	public final javax.faces.event.FacesListener [] listValidationListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IValidationListener.class);
+	}
 
-    public Map getServerDataMap() {
-
-        return getServerDataMap(null);
-
-    }
-
-    public int getServerDataCount() {
-
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", false);
-        if (dataMapAccessor == null) {
-            return 0;
-        }
-
-        return dataMapAccessor.getDataCount();
-
-    }
-
-    public Object setServerData(String name, Object value) {
-
-        IDataMapAccessor dataMapAccessor = engine.getDataMapAccessor(null,
-                "serverData", true);
-
-        return dataMapAccessor.setData(name, value, null);
-
-    }
-
-    public String[] listServerDataKeys() {
-
-        return listServerDataKeys(null);
-
-    }
-
-    public final void addPropertyChangeListener(
-            org.rcfaces.core.event.IPropertyChangeListener listener) {
-        addFacesListener(listener);
-    }
-
-    public final void removePropertyChangeListener(
-            org.rcfaces.core.event.IPropertyChangeListener listener) {
-        removeFacesListener(listener);
-    }
-
-    public final javax.faces.event.FacesListener[] listPropertyChangeListeners() {
-        return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
-    }
-
-    public boolean isValueLocked() {
-        return isValueLocked(null);
-    }
-
-    /**
-     * See {@link #isValueLocked() isValueLocked()} for more details
-     */
-    public boolean isValueLocked(javax.faces.context.FacesContext facesContext) {
-        return engine.getBoolProperty(Properties.VALUE_LOCKED, false,
-                facesContext);
-    }
-
-    /**
-     * Returns <code>true</code> if the attribute "valueLocked" is set.
-     * 
-     * @return <code>true</code> if the attribute is set.
-     */
-    public final boolean isValueLockedSetted() {
-        return engine.isPropertySetted(Properties.VALUE_LOCKED);
-    }
-
-    public void setValueLocked(boolean valueLocked) {
-        engine.setProperty(Properties.VALUE_LOCKED, valueLocked);
-    }
-
-    public final void addValidationListener(
-            org.rcfaces.core.event.IValidationListener listener) {
-        addFacesListener(listener);
-    }
-
-    public final void removeValidationListener(
-            org.rcfaces.core.event.IValidationListener listener) {
-        removeFacesListener(listener);
-    }
-
-    public final javax.faces.event.FacesListener[] listValidationListeners() {
-        return getFacesListeners(org.rcfaces.core.event.IValidationListener.class);
-    }
-
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

@@ -8,15 +8,16 @@ import org.rcfaces.core.component.MenuBarComponent;
 
 public class MenuBarTag extends AbstractMenuTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(MenuBarTag.class);
 
-    public String getComponentType() {
-        return MenuBarComponent.COMPONENT_TYPE;
-    }
+	private static final Log LOG=LogFactory.getLog(MenuBarTag.class);
 
-    public void release() {
+	public String getComponentType() {
+		return MenuBarComponent.COMPONENT_TYPE;
+	}
 
-        super.release();
-    }
+	public void release() {
+
+		super.release();
+	}
 
 }

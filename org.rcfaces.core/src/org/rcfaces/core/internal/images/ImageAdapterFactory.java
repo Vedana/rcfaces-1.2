@@ -389,7 +389,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
 
                     StringAppender sb = new StringAppender(
                             etagDigest.length * 2 + 16);
-                    sb.append("\"cm:");
+                    sb.append("\"rcfaces:");
                     for (int i = 0; i < etagDigest.length; i++) {
                         int v = etagDigest[i] & 0xff;
                         if (v < 16) {

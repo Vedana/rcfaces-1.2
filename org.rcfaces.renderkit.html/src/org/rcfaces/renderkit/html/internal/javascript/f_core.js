@@ -9,7 +9,7 @@ if (window.f_core) {
 } 
 
 // For profiling ....
-window._f_core_initLibraryDate=new Date();
+window._rcfacesInitLibraryDate=new Date();
 
 		
 var __SYMBOL=function(x) { return x };
@@ -577,7 +577,7 @@ var f_core = {
 	 * @return void
 	 */
 	_InitLibrary: function(window) {
-		var initDate=window._f_core_initLibraryDate;
+		var initDate=window._rcfacesInitLibraryDate;
 		
 		f_core.DebugMode=window.rcfacesDebugMode;
 		
@@ -785,7 +785,7 @@ var f_core = {
 				name="EXIT: "+name;
 			}
 		
-			var diff=date-window._f_core_initLibraryDate;
+			var diff=date-window._rcfacesInitLibraryDate;
 			if (diff<1) {
 				f_core.Debug("f_core.profile", "Profiler: "+name+"  "+date);
 				return;
@@ -4417,9 +4417,12 @@ var f_core = {
 	ComputePopupPosition: function(popup, positions) {
 		var body=popup.ownerDocument.body;
 		
-		// Ne fonctionne que sous IE !
-		var bw=window.innerWidth;
-		var bh=window.innerHeight;
+		// Ne fonctionne PAS sous IE !
+		
+		var viewSize=f_core.GetViewSize(null, popup.ownerDocument);
+		
+		var bw=viewSize.width;
+		var bh=viewSize.height;
 /*		
 		document.title="bw="+body.clientWidth+" bh="+body.clientHeight+" ww="+window.innerWidth+" wh="+window.innerHeight+" sx="+window.scrollX+" sy="+window.scrollY;
 	*/	
@@ -4945,19 +4948,19 @@ var f_core = {
 		
 		var newScroll= { x: scroll.x, y: scroll.y };
 		
-		if (position.y<scroll.y) {
+		if (position.y+size.height>newScroll.y+viewSize.height) {
+			newScroll.y=position.y+size.height-viewSize.height;			
+		}
+		if (position.y<newScroll.y) {
 			newScroll.y=position.y;
-
-		} else if (position.y+size.height>scroll.y+viewSize.height) {
-			newScroll.y=position.y+size.height-viewSize.height;
 		}
 	
-		if (position.x<scroll.x) {
-			newScroll.x=position.x;
-
-		} else if (position.x+size.width>scroll.x+viewSize.width) {
+		if (position.x+size.width>newScroll.x+viewSize.width) {
 			newScroll.x=position.x+size.width-viewSize.width;
 		}
+		if (position.x<newScroll.x) {
+			newScroll.x=position.x;
+		} 
 		
 		if (newScroll.x!=scroll.x || newScroll.y!=scroll.y) {
 		

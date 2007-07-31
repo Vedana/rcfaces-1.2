@@ -162,6 +162,19 @@ var __members = {
 	},
 	fa_updateRequired: function() {
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_serializeValue: function() {
+		if (this.f_isDisabled()) {
+			var selectedButton=this.f_getSelectedInGroup();
+			
+			var value=(selectedButton)?selectedButton._input.value:null;
+			
+			this.f_setProperty(f_prop.SELECTED, value);
+		}
+	},
 	fa_getRadioScope: fa_groupName.GlobalScope
 }
 

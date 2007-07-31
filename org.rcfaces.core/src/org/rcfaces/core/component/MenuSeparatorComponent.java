@@ -9,24 +9,23 @@ import java.util.Set;
  */
 public class MenuSeparatorComponent extends AbstractSeparatorComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.menuSeparator";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.menuSeparator";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            AbstractSeparatorComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractSeparatorComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
-    public MenuSeparatorComponent() {
-        setRendererType(null);
-    }
+	public MenuSeparatorComponent() {
+		setRendererType(null);
+	}
 
-    public MenuSeparatorComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public MenuSeparatorComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

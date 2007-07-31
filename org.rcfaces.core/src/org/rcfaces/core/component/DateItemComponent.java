@@ -24,234 +24,227 @@ import org.rcfaces.core.lang.IAdaptable;
 /**
  * An item specialized for date values.
  */
-public class DateItemComponent extends AbstractItemComponent implements
-        ITextCapability, IStyleClassCapability, IMenuPopupIdCapability,
-        ILiteralLocaleCapability, ILiteralTimeZoneCapability {
+public class DateItemComponent extends AbstractItemComponent implements 
+	ITextCapability,
+	IStyleClassCapability,
+	IMenuPopupIdCapability,
+	ILiteralLocaleCapability,
+	ILiteralTimeZoneCapability {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.dateItem";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.dateItem";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            AbstractItemComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] { "menuPopupId",
-                "literalTimeZone", "styleClass", "literalLocale", "text",
-                "date" }));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","literalTimeZone","styleClass","literalLocale","text","date"}));
+	}
 
-    public DateItemComponent() {
-        setRendererType(null);
-    }
+	public DateItemComponent() {
+		setRendererType(null);
+	}
 
-    public DateItemComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public DateItemComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    public Date getDate() {
+	public Date getDate() {
 
-        Object value = getItemValue();
 
-        if (value == null) {
-            return null;
-        }
+				Object value=getItemValue();
 
-        if (value instanceof Date) {
-            return (Date) value;
-        }
+				if (value==null) {
+					return null;
+				}			
 
-        if (value instanceof String) {
-            return (Date) LiteralDateConverter.SINGLETON.getAsObject(null,
-                    this, (String) value);
-        }
+				if (value instanceof Date) {
+					return (Date)value;
+				}
+								
+				if (value instanceof String) {
+					return (Date)LiteralDateConverter.SINGLETON.getAsObject(null, this, (String)value);
+				}				
 
-        if (value instanceof IAdaptable) {
-            Date adapted = (Date) ((IAdaptable) value).getAdapter(Date.class,
-                    this);
-            if (adapted != null) {
-                return adapted;
-            }
-        }
+				if (value instanceof IAdaptable) {
+					Date adapted=(Date)((IAdaptable)value).getAdapter(Date.class, this);
+					if (adapted!=null) {
+						return adapted;
+					}
+				}
 
-        throw new FacesException("ItemValue of DateItem is not a date ! ("
-                + value + ")");
+				throw new FacesException("ItemValue of DateItem is not a date ! ("+value+")");
+			
+	}
 
-    }
+	public void setDate(Date date) {
 
-    public void setDate(Date date) {
 
-        setItemValue(date);
+				setItemValue(date);
+			
+	}
 
-    }
+	public void setDate(String date) {
 
-    public void setDate(String date) {
 
-        setItemValue(date);
+				setItemValue(date);
+			
+	}
 
-    }
+	public void setText(String text) {
 
-    public void setText(String text) {
 
-        setItemLabel(text);
+			setItemLabel(text);
+			
+	}
 
-    }
+	public String getText() {
 
-    public String getText() {
 
-        return getItemLabel();
+			return getItemLabel();
+			
+	}
 
-    }
+	public void setToolTip(String text) {
 
-    public void setToolTip(String text) {
 
-        setItemDescription(text);
+			setItemDescription(text);
+			
+	}
 
-    }
+	public String getToolTip() {
 
-    public String getToolTip() {
 
-        return getItemDescription();
+			return getItemDescription();
+			
+	}
 
-    }
+	public void setLiteralLocale(String locale) {
 
-    public void setLiteralLocale(String locale) {
 
-        setLiteralLocale((Locale) LocaleConverter.SINGLETON.getAsObject(null,
-                this, locale));
+		setLiteralLocale((Locale)LocaleConverter.SINGLETON.getAsObject(null, this, locale));
+		
+	}
 
-    }
+	public void setLiteralTimeZone(String timeZone) {
 
-    public void setLiteralTimeZone(String timeZone) {
 
-        setLiteralTimeZone((TimeZone) TimeZoneConverter.SINGLETON.getAsObject(
-                null, this, timeZone));
+		setLiteralTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
+		
+	}
 
-    }
+	/**
+	 * Returns <code>true</code> if the attribute "text" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTextSetted() {
+		return engine.isPropertySetted(Properties.TEXT);
+	}
 
-    /**
-     * Returns <code>true</code> if the attribute "text" is set.
-     * 
-     * @return <code>true</code> if the attribute is set.
-     */
-    public final boolean isTextSetted() {
-        return engine.isPropertySetted(Properties.TEXT);
-    }
+	public java.lang.String getStyleClass() {
+		return getStyleClass(null);
+	}
 
-    public java.lang.String getStyleClass() {
-        return getStyleClass(null);
-    }
+	/**
+	 * See {@link #getStyleClass() getStyleClass()} for more details
+	 */
+	public java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
+	}
 
-    /**
-     * See {@link #getStyleClass() getStyleClass()} for more details
-     */
-    public java.lang.String getStyleClass(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
-    }
+	/**
+	 * Returns <code>true</code> if the attribute "styleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isStyleClassSetted() {
+		return engine.isPropertySetted(Properties.STYLE_CLASS);
+	}
 
-    /**
-     * Returns <code>true</code> if the attribute "styleClass" is set.
-     * 
-     * @return <code>true</code> if the attribute is set.
-     */
-    public final boolean isStyleClassSetted() {
-        return engine.isPropertySetted(Properties.STYLE_CLASS);
-    }
+	public void setStyleClass(java.lang.String styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
 
-    public void setStyleClass(java.lang.String styleClass) {
-        engine.setProperty(Properties.STYLE_CLASS, styleClass);
-    }
+	public java.lang.String getMenuPopupId() {
+		return getMenuPopupId(null);
+	}
 
-    public java.lang.String getMenuPopupId() {
-        return getMenuPopupId(null);
-    }
+	/**
+	 * See {@link #getMenuPopupId() getMenuPopupId()} for more details
+	 */
+	public java.lang.String getMenuPopupId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MENU_POPUP_ID, facesContext);
+	}
 
-    /**
-     * See {@link #getMenuPopupId() getMenuPopupId()} for more details
-     */
-    public java.lang.String getMenuPopupId(
-            javax.faces.context.FacesContext facesContext) {
-        return engine.getStringProperty(Properties.MENU_POPUP_ID, facesContext);
-    }
+	/**
+	 * Returns <code>true</code> if the attribute "menuPopupId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMenuPopupIdSetted() {
+		return engine.isPropertySetted(Properties.MENU_POPUP_ID);
+	}
 
-    /**
-     * Returns <code>true</code> if the attribute "menuPopupId" is set.
-     * 
-     * @return <code>true</code> if the attribute is set.
-     */
-    public final boolean isMenuPopupIdSetted() {
-        return engine.isPropertySetted(Properties.MENU_POPUP_ID);
-    }
+	public void setMenuPopupId(java.lang.String menuPopupId) {
+		engine.setProperty(Properties.MENU_POPUP_ID, menuPopupId);
+	}
 
-    public void setMenuPopupId(java.lang.String menuPopupId) {
-        engine.setProperty(Properties.MENU_POPUP_ID, menuPopupId);
-    }
+	public java.util.Locale getLiteralLocale() {
+		return getLiteralLocale(null);
+	}
 
-    public java.util.Locale getLiteralLocale() {
-        return getLiteralLocale(null);
-    }
+	/**
+	 * See {@link #getLiteralLocale() getLiteralLocale()} for more details
+	 */
+	public java.util.Locale getLiteralLocale(javax.faces.context.FacesContext facesContext) {
+		return (java.util.Locale)engine.getProperty(Properties.LITERAL_LOCALE, facesContext);
+	}
 
-    /**
-     * See {@link #getLiteralLocale() getLiteralLocale()} for more details
-     */
-    public java.util.Locale getLiteralLocale(
-            javax.faces.context.FacesContext facesContext) {
-        return (java.util.Locale) engine.getProperty(Properties.LITERAL_LOCALE,
-                facesContext);
-    }
+	/**
+	 * Returns <code>true</code> if the attribute "literalLocale" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLiteralLocaleSetted() {
+		return engine.isPropertySetted(Properties.LITERAL_LOCALE);
+	}
 
-    /**
-     * Returns <code>true</code> if the attribute "literalLocale" is set.
-     * 
-     * @return <code>true</code> if the attribute is set.
-     */
-    public final boolean isLiteralLocaleSetted() {
-        return engine.isPropertySetted(Properties.LITERAL_LOCALE);
-    }
+	public void setLiteralLocale(java.util.Locale literalLocale) {
+		engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
+	}
 
-    public void setLiteralLocale(java.util.Locale literalLocale) {
-        engine.setProperty(Properties.LITERAL_LOCALE, literalLocale);
-    }
+	public java.util.TimeZone getLiteralTimeZone() {
+		return getLiteralTimeZone(null);
+	}
 
-    public java.util.TimeZone getLiteralTimeZone() {
-        return getLiteralTimeZone(null);
-    }
+	/**
+	 * See {@link #getLiteralTimeZone() getLiteralTimeZone()} for more details
+	 */
+	public java.util.TimeZone getLiteralTimeZone(javax.faces.context.FacesContext facesContext) {
+		return (java.util.TimeZone)engine.getProperty(Properties.LITERAL_TIME_ZONE, facesContext);
+	}
 
-    /**
-     * See {@link #getLiteralTimeZone() getLiteralTimeZone()} for more details
-     */
-    public java.util.TimeZone getLiteralTimeZone(
-            javax.faces.context.FacesContext facesContext) {
-        return (java.util.TimeZone) engine.getProperty(
-                Properties.LITERAL_TIME_ZONE, facesContext);
-    }
+	/**
+	 * Returns <code>true</code> if the attribute "literalTimeZone" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLiteralTimeZoneSetted() {
+		return engine.isPropertySetted(Properties.LITERAL_TIME_ZONE);
+	}
 
-    /**
-     * Returns <code>true</code> if the attribute "literalTimeZone" is set.
-     * 
-     * @return <code>true</code> if the attribute is set.
-     */
-    public final boolean isLiteralTimeZoneSetted() {
-        return engine.isPropertySetted(Properties.LITERAL_TIME_ZONE);
-    }
+	public void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
+		engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
+	}
 
-    public void setLiteralTimeZone(java.util.TimeZone literalTimeZone) {
-        engine.setProperty(Properties.LITERAL_TIME_ZONE, literalTimeZone);
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	public void setValueBinding(String name, ValueBinding binding) {
+		if (Properties.TEXT.equals(name)) {
+			name=Properties.ITEM_LABEL;
 
-    public void setValueBinding(String name, ValueBinding binding) {
-        if (Properties.TEXT.equals(name)) {
-            name = Properties.ITEM_LABEL;
+		} else if (Properties.TOOL_TIP_TEXT.equals(name)) {
+			name=Properties.ITEM_DESCRIPTION;
 
-        } else if (Properties.TOOL_TIP_TEXT.equals(name)) {
-            name = Properties.ITEM_DESCRIPTION;
-
-        } else if (Properties.DATE.equals(name)) {
-            name = Properties.ITEM_VALUE;
-        }
-        super.setValueBinding(name, binding);
-    }
+		} else if (Properties.DATE.equals(name)) {
+			name=Properties.ITEM_VALUE;
+		}
+		super.setValueBinding(name, binding);
+	}
 }

@@ -5,12 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <p>
- * The hyperLink Component translates into a classic hyperlink and is a <A
- * href="/comps/buttonComponent.html">button</A>.
- * </p>
- * <p>
- * The hyperLink Component has the following capabilities :
+ * <p>The hyperLink Component translates into a classic hyperlink and is a <A href="/comps/buttonComponent.html">button</A>.</p>
+ * <p>The hyperLink Component has the following capabilities :
  * <ul>
  * <li>Position &amp; Size</li>
  * <li>Foreground &amp; Background Color</li>
@@ -23,24 +19,23 @@ import java.util.Set;
  */
 public class HyperLinkComponent extends ButtonComponent {
 
-    public static final String COMPONENT_TYPE = "org.rcfaces.core.hyperLink";
+	public static final String COMPONENT_TYPE="org.rcfaces.core.hyperLink";
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            ButtonComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
+	}
 
-    public HyperLinkComponent() {
-        setRendererType(COMPONENT_TYPE);
-    }
+	public HyperLinkComponent() {
+		setRendererType(COMPONENT_TYPE);
+	}
 
-    public HyperLinkComponent(String componentId) {
-        this();
-        setId(componentId);
-    }
+	public HyperLinkComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

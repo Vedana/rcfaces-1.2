@@ -174,33 +174,28 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         boolean selected = false;
 
         String svalue = clientData.getStringProperty("selected");
-        if (svalue != null) {
-            selected = true;
+        if (svalue == null) {
+            svalue = clientData.getParameter(gb);
+        }
 
+        // selection
+        if (svalue != null) {
             submittedValue = getConvertedValue(facesContext, radioButton,
                     svalue);
+        }
 
-        } else {
-            svalue = clientData.getParameter(gb); // Non du bouton qui a la
-            // selection
-            if (svalue != null) {
-                submittedValue = getConvertedValue(facesContext, radioButton,
-                        svalue);
-            }
+        // Submitted value contient la valeur pour LE GROUPE
 
-            // Submitted value contient la valeur pour LE GROUPE
+        Object radioValue = radioButton.getRadioValue(facesContext);
+        if (radioValue != null) {
+            selected = (radioValue.equals(submittedValue)); // C'est la
+            // value de
+            // notre bouton
 
-            Object radioValue = radioButton.getRadioValue(facesContext);
-            if (radioValue != null) {
-                selected = (radioValue.equals(submittedValue)); // C'est la
-                // value de
-                // notre bouton
+        } else if (svalue != null) {
+            String value = getValueAsText(facesContext, radioButton);
 
-            } else if (svalue != null) {
-                String value = getValueAsText(facesContext, radioButton);
-
-                selected = (svalue.equals(value));
-            }
+            selected = (svalue.equals(value));
         }
 
         if (radioButton.isValueLocked(facesContext) == false) {

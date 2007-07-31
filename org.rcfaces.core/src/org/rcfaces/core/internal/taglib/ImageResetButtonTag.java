@@ -8,15 +8,16 @@ import org.rcfaces.core.component.ImageResetButtonComponent;
 
 public class ImageResetButtonTag extends ImageButtonTag implements Tag {
 
-    private static final Log LOG = LogFactory.getLog(ImageResetButtonTag.class);
 
-    public String getComponentType() {
-        return ImageResetButtonComponent.COMPONENT_TYPE;
-    }
+	private static final Log LOG=LogFactory.getLog(ImageResetButtonTag.class);
 
-    public void release() {
+	public String getComponentType() {
+		return ImageResetButtonComponent.COMPONENT_TYPE;
+	}
 
-        super.release();
-    }
+	public void release() {
+
+		super.release();
+	}
 
 }

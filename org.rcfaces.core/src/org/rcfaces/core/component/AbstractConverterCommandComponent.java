@@ -13,57 +13,62 @@ import org.rcfaces.core.internal.component.Properties;
 /**
  * Technical component, used as a basis for building new RCFaces components.
  */
-public abstract class AbstractConverterCommandComponent extends
-        AbstractCommandComponent implements IConvertValueHolder {
+public abstract class AbstractConverterCommandComponent extends AbstractCommandComponent implements 
+	IConvertValueHolder {
 
-    protected static final Set CAMELIA_ATTRIBUTES = new HashSet(
-            AbstractCommandComponent.CAMELIA_ATTRIBUTES);
-    static {
-        CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] { "converter" }));
-    }
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"converter"}));
+	}
 
-    public void setConverter(String converterId) {
 
-        setConverter(null, converterId);
+	public void setConverter(String converterId) {
 
-    }
 
-    public void setConverter(FacesContext facesContext, String converterId) {
+			 setConverter(null, converterId);
+		
+	}
 
-        if (facesContext == null) {
-            facesContext = FacesContext.getCurrentInstance();
-        }
-        Converter converter = facesContext.getApplication().createConverter(
-                converterId);
-        this.setConverter(converter);
+	public void setConverter(FacesContext facesContext, String converterId) {
 
-    }
 
-    public void setConverter(Converter converter) {
+			if (facesContext==null) {
+				facesContext=FacesContext.getCurrentInstance();
+			}
+			Converter converter = facesContext.getApplication().createConverter(converterId);
+            this.setConverter(converter);
+		
+	}
 
-        engine.setProperty("converter", converter);
+	public void setConverter(Converter converter) {
 
-    }
 
-    public Converter getConverter() {
+        	engine.setProperty("converter", converter);
+		
+	}
 
-        return (Converter) engine.getProperty("converter", null);
+	public Converter getConverter() {
 
-    }
 
-    public Converter getConverter(FacesContext facesContext) {
+        	return (Converter)engine.getProperty("converter", null);
+		
+	}
 
-        return (Converter) engine.getProperty("converter", facesContext);
+	public Converter getConverter(FacesContext facesContext) {
 
-    }
 
-    public Object getLocalValue() {
+        	return (Converter)engine.getProperty("converter", facesContext);
+		
+	}
 
-        return engine.getLocalValue(Properties.VALUE);
+	public Object getLocalValue() {
 
-    }
 
-    protected Set getCameliaFields() {
-        return CAMELIA_ATTRIBUTES;
-    }
+		return engine.getLocalValue(Properties.VALUE);
+		
+	}
+
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
 }

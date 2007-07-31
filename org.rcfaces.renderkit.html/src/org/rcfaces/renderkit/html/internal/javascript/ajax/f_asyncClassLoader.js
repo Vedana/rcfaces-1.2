@@ -32,21 +32,21 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 		
 		var LF="-¤CaMelIa¤-";
 		var lfRegExp=new RegExp(LF, "g");
-		buffer=buffer.replace(/\n/g, LF);
+		buffer=buffer.replace(/[\r]?\n/g, LF);
 		
 		var scriptRegExp=new RegExp("^(.*)?<script([^>]*)?>(.*)?</script([^>]*)?>(.*)?", "i");
 		
 		for(;;) {			
 			var result=scriptRegExp.exec(buffer);
 			if (!result) {
-				content=buffer+content;
+				content=buffer.replace(lfRegExp, '\n')+content;
 				break;
 			}
 			
 			buffer=result[1];
 			
 			if (result[5]) {
-				content=result[5]+content; // Nouveau content !
+				content=result[5].replace(lfRegExp, '\n')+content; // Nouveau content !
 			} 
 			
 			var text=result[3].replace(lfRegExp, '\n');
@@ -81,7 +81,20 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
  * @param HTMLElement htmlNode
  * @return void
  */
-f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts) {
+f_classLoader.prototype.f_loadAndProcessScripts= function(component, htmlNode) {
+	var scriptNodes=f_core.GetElementsByTagName(htmlNode, "script");
+	
+	this.f_processScripts(component, htmlNode, null, scriptNodes);
+}
+
+/**
+ * @method hidden * @param HTMLElement component
+ * @param HTMLElement htmlNode
+ * @param optional String[] scripts
+ * @param optional HTMLScriptElement[] scripts
+ * @return void
+ */
+f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts, scriptNodes) {
 	f_core.Assert(component && component._kclass, "f_asyncClassLoader.f_processScripts: Invalid component parameter '"+component+"'.");
 	f_core.Assert(htmlNode && htmlNode.nodeType==f_core.ELEMENT_NODE, "f_asyncClassLoader.f_processScripts: Invalid htmlNode parameter '"+htmlNode+"'.");
 	
@@ -232,7 +245,7 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 
 	var commands=interactiveMode._commands;
 
-	if (scripts.length) {
+	if (scripts && scripts.length) {
 		var srcRegExp=new RegExp("(.*)?src=\"([^\"]*)\"(.*)?", "i");
 		var typeRegExp=new RegExp("(.*)?type=\"([^\"]*)\"(.*)?", "i");
 		var charsetRegExp=new RegExp("(.*)?charset=\"([^\"]*)\"(.*)?", "i");
@@ -254,11 +267,48 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 				ret=typeRegExp.exec(scriptParams);
 				type=(ret)?ret[2]:null;
 			}				
+				
+			if (typeof(type)=="string" && type.length && type.toLowerCase().indexOf("text/javascript")<0) {
+				f_core.Error("f_asyncClassLoader", "f_processScripts: Unknown script type: "+type);
+				continue;
+			}
 			
 			if (src) {
 				var ret=charsetRegExp.exec(scriptParams);
 				var charset=(ret)?ret[2]:null;
 							
+				var js= { src: src, 
+						type: type, 
+						charset: charset };
+	
+				f_core.Debug("f_asyncClassLoader", "f_processScripts: Add element script: src="+src+" type="+type+" charset="+charset);
+	
+				commands.push("scriptURL", js);
+				continue;
+			}
+	
+			f_core.Debug("f_asyncClassLoader", "f_processScripts: Add text script: "+scriptText);
+			
+			commands.push("scriptText", scriptText);
+		}
+	}
+	
+	if (scriptNodes) {
+		for(var i=0;i<scriptNodes.length;i++) {
+			var scriptNode=scriptNodes[i];
+			
+			f_core.Debug("f_asyncClassLoader", "f_processScripts: scriptNode params='"+scriptParams+"' text='"+scriptText+"'");
+			
+			var type=scriptNode.type;
+			
+			if (typeof(type)=="string" && type.length && type.toLowerCase().indexOf("text/javascript")<0) {
+				f_core.Error("f_asyncClassLoader", "f_processScripts: Unknown script type: "+type);
+				continue;
+			}
+
+			var src=scriptNode.src;
+			
+			if (src) {
 				var js= { src: src, 
 						type: type, 
 						charset: script.charset };
@@ -269,15 +319,13 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 				continue;
 			}
 			
-			if (typeof(type)=="string" && type.length && type.toLowerCase().indexOf("text/javascript")<0) {
-				f_core.Error("f_asyncClassLoader", "f_processScripts: Unknown script type: "+script.type);
-				continue;
-			}
+			var scriptText=scriptNode.text;
 	
 			f_core.Debug("f_asyncClassLoader", "f_processScripts: Add text script: "+scriptText);
 			
 			commands.push("scriptText", scriptText);
 		}
+		
 	}
 			
 	f_core.Debug("f_asyncClassLoader", "f_processScripts: Run an interactive process");

@@ -85,7 +85,7 @@ var __members = {
 				this._shadowRows=undefined;
 				this._endRowIndex=undefined;
 
-				f_classLoader.SerializeInputs(params, tbody);
+				f_classLoader.SerializeInputsIntoParam(params, tbody, true);
 
 				while (tbody.hasChildNodes()) {
 					tbody.removeChild(tbody.lastChild);
@@ -282,7 +282,7 @@ var __members = {
 
 		var tbody=this._tbody;
 		try {
-			this.f_getClass().f_getClassLoader().f_processScripts(this, tbody);
+			this.f_getClass().f_getClassLoader().f_loadAndProcessScripts(this, tbody);
 			
 		} catch (x) {
  			f_core.Error(f_componentsGrid, "f_updateNewPage: Can not load content of componentsGrid cell '"+content+"'", x);
