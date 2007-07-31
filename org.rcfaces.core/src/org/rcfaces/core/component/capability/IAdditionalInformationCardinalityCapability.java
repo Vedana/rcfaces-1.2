@@ -31,9 +31,9 @@ public interface IAdditionalInformationCardinalityCapability extends
      * Sets an int value indicating the cardinality (number of
      * additional-informations allowed) for this component.
      * 
-     * @param checkCardinality
+     * @param additionalInformationCardinality
      *            1:?,optional|2:*,zeroMany|3:1,one+|4:+,oneMany
      *            default=zeroMany
      */
-    void setAdditionalInformationCardinality(int additionalInformation);
+    void setAdditionalInformationCardinality(int additionalInformationCardinality);
 }

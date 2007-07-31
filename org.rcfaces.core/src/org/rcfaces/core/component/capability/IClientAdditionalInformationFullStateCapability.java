@@ -22,7 +22,7 @@ public interface IClientAdditionalInformationFullStateCapability {
      * Sets a boolean value indicating whether the client should know about the
      * component's full state even if only a part of the data is present (AJAX).
      * 
-     * @param clientSelectionFullState
+     * @param clientAdditionalInformationFullState
      *            boolean
      */
     void setClientAdditionalInformationFullState(
