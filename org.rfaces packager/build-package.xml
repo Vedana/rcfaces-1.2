@@ -10,11 +10,15 @@
   <property name="cdn_dir"  value="${basedir}/../CDN_POC"/>
   <property name="demo_dir"  value="${basedir}/../Demo JSF-Camelia"/>
   <property name="starter_demo_dir"  value="${basedir}/../Camelia Starter"/>
-
+	
+	<property name="CVSROOT" value=":extssh:oeuillot@cvs.vedana.com/data/cvs/camelia" />
+	<property name="sf.version" value="1.0b2" />
+	
 	<target name="clean">
 		<delete file="${dist}/rcfaces*.jar" />		
 		 <delete>
-		    <fileset dir="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript" includes="*.jsc,symbolsc,symbols"/>
+		    <fileset dir="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols"/>
+		    <fileset dir="${build-html}/bin/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols"/>
 		  </delete>
 	</target>
 
@@ -26,6 +30,9 @@
 			<classpath path="../com.vedana.camelia.generators/lib-generator/xercesImpl.jar" />
 			<classpath path="../com.vedana.camelia.generators/lib-generator/xmlParserAPIs.jar" />
 			<classpath path="../com.vedana.camelia.generators/lib-generator/xom-1.0d19.jar" />
+			<classpath path="../JWSDP 1.3/lib/commons-logging.jar" />
+			<classpath path="../JWSDP 1.3/lib/commons-digester.jar" />
+			<classpath path="../JWSDP 1.3/lib/commons-collections.jar" />
 		</java>
  	</target>
 
@@ -35,14 +42,27 @@
 		<antcall target="clean" />
 		<antcall target="compileJS" />
 		
-		
 		<echo message="dir ${dist}" />
 		<buildnumber file="${dist}/build-number"/>
 		<tstamp>
 			<format property="TODAY" pattern="dd/MM/yyyy HH:mm " locale="fr"/>
 		</tstamp>
+
+		<property name="build.path" value="${dist}/last" />
 	
-		<copy file="${build-core}/META-INF/MANIFEST.MF" toDir="${dist}"/>
+		<property name="rcfaces-core.jar" value="${build.path}/rcfaces-core.jar" />
+		<property name="rcfaces-core-src.jar" value="${build.path}/rcfaces-core-src.jar" />		
+		<property name="rcfaces-html.jar" value="${build.path}/rcfaces-html.jar" />
+		<property name="rcfaces-htmlc.jar" value="${build.path}/rcfaces-htmlc.jar" />
+		<property name="rcfaces-html-src.jar" value="${build.path}/rcfaces-html-src.jar" />
+		<property name="rcfaces-jsdoc.zip" value="${build.path}/rcfaces-jsdoc.zip" />
+		<property name="rcfaces-javadoc.zip" value="${build.path}/rcfaces-javadoc.zip" />
+		<property name="rcfaces-tlddoc.zip" value="${build.path}/rcfaces-tlddoc.zip" />
+		
+		<delete failonerror="false" dir="${build.path}" />
+		<mkdir dir="${build.path}"/>
+
+		<copy file="${build-core}/META-INF/MANIFEST.MF" toDir="${dist}" overwrite="true"/>
 		<manifest file="${dist}/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}"/> 
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${build.number}"/> 
@@ -50,17 +70,37 @@
 			<section name="org.rcfaces.core">
 			</section>
 		</manifest>
-		<delete file="${dist}/rcfaces-core.jar" failonerror="false" />
-		<jar destfile="${dist}/rcfaces-core.jar" index="true" manifest="${dist}/MANIFEST.MF">
+		<delete file="${rcfaces-core.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-core.jar}" index="true" manifest="${dist}/MANIFEST.MF">
 			<fileset dir="${build-core}/bin">
 				<exclude name="org/rcfaces/core/*.tld"/>
 				<exclude name="org/rcfaces/core/*.xml"/>
+				<exclude name="org/rcfaces/core/internal/images/ico/javax.imageio.spi*"/>
+				<exclude name="**/*.db"/>
+				<exclude name="**/*_"/>
 			</fileset>
 			<zipfileset dir="${build-core}/bin/org/rcfaces/core/" includes="rcfaces-core-facesconfig.xml" fullpath="META-INF/faces-config.xml"/>
+			<zipfileset dir="${build-core}/bin/org/rcfaces/core/" includes="rcfaces-core.taglib.xml" fullpath="META-INF/rcfaces-core.taglib.xml"/>
 			<zipfileset dir="${build-core}/bin/org/rcfaces/core/" includes="rcfaces-core.tld" fullpath="META-INF/rcfaces-core.tld"/>
+			<zipfileset dir="${build-core}/bin/org/rcfaces/core/internal/images/ico" includes="javax.imageio.spi.ImageWriterSpi" fullpath="META-INF/services/javax.imageio.spi.ImageWriterSpi"/>
 		</jar>
 		
-		<copy file="${build-html}/META-INF/MANIFEST.MF" toDir="${dist}"/>
+		<delete file="${rcfaces-core-src.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-core-src.jar}" index="true" manifest="${dist}/MANIFEST.MF">
+			<fileset dir="${build-core}/src">
+				<exclude name="org/rcfaces/core/*.tld"/>
+				<exclude name="org/rcfaces/core/*.xml"/>
+				<exclude name="org/rcfaces/core/internal/images/ico/javax.imageio.spi*"/>
+				<exclude name="**/*.db"/>
+				<exclude name="**/*_"/>
+			</fileset>
+			<zipfileset dir="${build-core}/src/org/rcfaces/core/" includes="rcfaces-core-facesconfig.xml" fullpath="META-INF/faces-config.xml"/>
+			<zipfileset dir="${build-core}/src/org/rcfaces/core/" includes="rcfaces-core.taglib.xml" fullpath="META-INF/rcfaces-core.taglib.xml"/>
+			<zipfileset dir="${build-core}/src/org/rcfaces/core/" includes="rcfaces-core.tld" fullpath="META-INF/rcfaces-core.tld"/>
+			<zipfileset dir="${build-core}/src/org/rcfaces/core/internal/images/ico" includes="javax.imageio.spi.ImageWriterSpi" fullpath="META-INF/services/javax.imageio.spi.ImageWriterSpi"/>
+		</jar>
+		
+		<copy file="${build-html}/META-INF/MANIFEST.MF" toDir="${dist}" overwrite="true"/>
 		<manifest file="${dist}/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}"/> 
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${build.number}"/> 
@@ -68,82 +108,90 @@
 			<section name="org.rcfaces.renderkit.html">
 			</section>
 		</manifest>
-		<delete file="${dist}/rcfaces-html.jar" failonerror="false" />
-		<jar destfile="${dist}/rcfaces-html.jar" index="true" manifest="${dist}/MANIFEST.MF">
+		<delete file="${rcfaces-html.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-html.jar}" index="true" manifest="${dist}/MANIFEST.MF">
 			<fileset dir="${build-html}/bin">
 				<exclude name="org/rcfaces/renderkit/html/*.tld"/>
 				<exclude name="org/rcfaces/renderkit/html/*.xml"/>
 				<exclude name="**/symbolsc"/>
 				<exclude name="**/symbols"/>
 				<exclude name="**/*.jsc"/>
+				<exclude name="**/*.db"/>
+				<exclude name="**/*_"/>
 			</fileset>
-			<zipfileset dir="${build-html}/bin/org/rcfaces/renderkit/html" includes="rcfaces-html-facesconfig.xml" fullpath="META-INF/faces-config.xml"/>
-			<zipfileset dir="${build-html}/bin/org/rcfaces/renderkit/html" includes="rcfaces-html.tld" fullpath="META-INF/rcfaces-html.tld"/>
-			<zipfileset dir="${build-html}/bin/org/rcfaces/renderkit/html/internal" includes="rcfaces-html-config.xml" fullpath="META-INF/rcfaces-config.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html-facesconfig.xml" fullpath="META-INF/faces-config.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html.taglib.xml" fullpath="META-INF/rcfaces-html.taglib.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html.tld" fullpath="META-INF/rcfaces-html.tld"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html/internal" includes="rcfaces-html-config.xml" fullpath="META-INF/rcfaces-config.xml"/>
 		</jar>
-		
+
+		<delete file="${rcfaces-html-src.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-html-src.jar}" index="true" manifest="${dist}/MANIFEST.MF">
+			<fileset dir="${build-html}/src">
+				<exclude name="org/rcfaces/renderkit/html/*.tld"/>
+				<exclude name="org/rcfaces/renderkit/html/*.xml"/>
+				<exclude name="**/symbolsc"/>
+				<exclude name="**/symbols"/>
+				<exclude name="**/*.db"/>
+				<exclude name="**/*.jsc"/>
+				<exclude name="**/*_"/>
+			</fileset>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html-facesconfig.xml" fullpath="META-INF/faces-config.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html.tld" fullpath="META-INF/rcfaces-html.tld"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html.taglib.xml" fullpath="META-INF/rcfaces-html.taglib.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html/internal" includes="rcfaces-html-config.xml" fullpath="META-INF/rcfaces-config.xml"/>
+		</jar>
+
 		<delete dir="${build}/js-temp" failonerror="false" />
 		<mkdir dir="${build}/js-temp"/>
 		<copy todir="${build}/js-temp">
 			<fileset dir="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript">
-				<include name="*.jsc"/>
+				<include name="**/*.jsc"/>
 				<include name="symbols"/>
 			</fileset>
 			<mapper type="glob" from="*.jsc" to="*.js"/>
 		</copy>
-		<delete file="${dist}/rcfaces-htmlc.jar" failonerror="false" />
-		<jar destfile="${dist}/rcfaces-htmlc.jar" index="true" manifest="${dist}/MANIFEST.MF">
+		<delete file="${rcfaces-htmlc.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-htmlc.jar}" index="true" manifest="${dist}/MANIFEST.MF">
 			<fileset dir="${build-html}/bin">
 				<exclude name="org/rcfaces/renderkit/html/*.tld"/>
 				<exclude name="org/rcfaces/renderkit/html/*.xml"/>
 				<exclude name="**/symbolsc"/> <!-- A choisir avec ou sans c -->
 				<exclude name="**/*.js"/>
 				<exclude name="**/*.jsc"/>
+				<exclude name="**/*.db"/>
+				<exclude name="**/*_"/>
 			</fileset>
-			<zipfileset dir="${build}/js-temp" includes="*.js" prefix="org/rcfaces/renderkit/html/internal/javascript/"/>
+			<zipfileset dir="${build}/js-temp" includes="**/*.js" prefix="org/rcfaces/renderkit/html/internal/javascript/"/>
 			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript" includes="symbols" prefix="org/rcfaces/renderkit/html/internal/javascript/"/>
 			
-			<zipfileset dir="${build-html}/bin/org/rcfaces/renderkit/html" includes="rcfaces-html-facesconfig.xml" fullpath="META-INF/faces-config.xml"/>
-			<zipfileset dir="${build-html}/bin/org/rcfaces/renderkit/html" includes="rcfaces-html.tld" fullpath="META-INF/rcfaces-html.tld"/>
-			<zipfileset dir="${build-html}/bin/org/rcfaces/renderkit/html/internal" includes="rcfaces-html-config.xml" fullpath="META-INF/rcfaces-config.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html-facesconfig.xml" fullpath="META-INF/faces-config.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html.tld" fullpath="META-INF/rcfaces-html.tld"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html" includes="rcfaces-html.taglib.xml" fullpath="META-INF/rcfaces-html.taglib.xml"/>
+			<zipfileset dir="${build-html}/src/org/rcfaces/renderkit/html/internal" includes="rcfaces-html-config.xml" fullpath="META-INF/rcfaces-config.xml"/>
 		</jar>
 		<delete dir="${build}/js-temp"/>
 		<delete file="${dist}/MANIFEST.MF" />
 		
-		<mkdir dir="${dist}/rcfaces-b${build.number}"/>
-		<copy file="${dist}/rcfaces-core.jar" tofile="${dist}/rcfaces-b${build.number}/rcfaces-core.jar" />
-		<copy file="${dist}/rcfaces-html.jar" tofile="${dist}/rcfaces-b${build.number}/rcfaces-html.jar" />
-		<copy file="${dist}/rcfaces-htmlc.jar" tofile="${dist}/rcfaces-b${build.number}/rcfaces-htmlc.jar" />
-	</target>
-
-	<target name="demo" depends="main">
-		<copy file="${dist}/rcfaces.jar" toDir="${demo_dir}/webApplication/WEB-INF/lib" />
-		<copy file="${dist}/rcfaces.jar" toDir="${starter_demo_dir}/WEB-INF/lib" />
-	</target>
-
-	<target name="cdn" depends="main">
-		<copy file="${dist}/rcfaces.jar" toDir="${cdn_dir}/webApplication/WEB-INF/lib" />
 	</target>
 	
-	<target name="rock" depends="main">
-		<copy file="${dist}/rcfaces.jar" toDir="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Runtime RockDance/Rockdance/webApplication/WEB-INF/lib" />
-	</target>
-	
-	<target name="pim" depends="main">
-		<copy file="${dist}/rcfaces.jar" toDir="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Runtime PIM2/PIM sample/webApplication/WEB-INF/lib" />
-		<copy file="${dist}/rcfaces.jar" toDir="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Runtime PIM2/CMS sample/webApplication/WEB-INF/lib" />
-		<copy file="${dist}/rcfaces.jar" toDir="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Runtime PIM2/LDAP sample/webApplication/WEB-INF/lib" />
-	</target>
+	<target name="integration">
+		<property name="integration.version" value="-I${build.number}" />
+		<property name="buildNumber.path" value="${dist}/rcfaces${integration.version}" />
 
-	<target name="addressbook" depends="main">
-		<copy file="${dist}/rcfaces-prod.jar" toDir="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Runtime PIM2/LDAP sample/webApplication/WEB-INF/lib" />
-		<copy file="${dist}/rcfaces-prod.jar" toDir="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Runtime PIM2/Camelia Starter/webApplication/WEB-INF/lib" />
-		<copy file="${dist}/rcfaces-prod.jar" toDir="C:/Documents and Settings/oeuillot/Mes documents/Mes workspaces/Runtime PIM2/Camelia Blank Project/webApplication/WEB-INF/lib" />
-	</target>
-
-	<target name="unedic" depends="main">
-		<copy file="${dist}/rcfaces-prod.jar" toDir="W:/Workspace Unedic/Dude faces/PortailWeb/portailWeb/WEB-INF/lib" />
-		<copy file="${dist}/rcfaces-prod.jar" toDir="W:/Workspace Unedic/Dossier faces/webApplication/WEB-INF/lib" />
+		<mkdir dir="${buildNumber.path}"/>
+		<copy todir="${buildNumber.path}">
+			<fileset dir="${build.path}">
+				<include name="*.jar"/>
+			</fileset>
+			<mapper type="glob" from="*.jar" to="*${integration.version}.jar"/>
+		</copy>
+		<copy todir="${buildNumber.path}">
+			<fileset dir="${build.path}">
+				<include name="*.zip"/>
+			</fileset>
+			<mapper type="glob" from="*.zip" to="*${integration.version}.zip"/>
+		</copy>
 	</target>
 	
 	<target name="tlddoc">
@@ -153,8 +201,9 @@
 			<arg value="-d"/>
 			<arg path="c:/temp/camelia_tlddoc"/>
 			<arg path="${build-core}/src/org/rcfaces/core/rcfaces-core.tld"/>
+			<arg path="${build-html}/src/org/rcfaces/renderkit/html/rcfaces-html.tld"/>
 		 </java>
-		<zip destfile="dist/rcfaces-b${build.number}/rcfaces-tlddoc.zip">
+		<zip destfile="${rcfaces-tlddoc.zip}">
 			<fileset dir="c:/temp/camelia_tlddoc">
 			</fileset>
 		</zip>
@@ -169,7 +218,7 @@
 		<mkdir dir="C:/temp/camelia-javadoc" />
 		<javadoc access="public" 
 				author="false" 
-				classpath="../JWSDP 1.3/lib/jsp-api.jar;lib/commons-logging.jar;../JWSDP 1.3/lib/commons-logging.jar;../JWSDP 1.3/lib/commons-beanutils.jar;../jsf-1_1_01/bin;../JWSDP 1.3/lib/standard.jar;../JWSDP 1.3/lib/jstl.jar;../JWSDP 1.3/lib/commons-digester.jar;../JWSDP 1.3/lib/commons-collections.jar;../JWSDP 1.3/lib/servlet-api.jar" 
+				classpath="../JWSDP 1.3/lib/jsp-api.jar;../JWSDP 1.3/lib/commons-logging.jar;../JWSDP 1.3/lib/commons-beanutils.jar;../jsf-1_1_01/bin;../JWSDP 1.3/lib/standard.jar;../JWSDP 1.3/lib/jstl.jar;../JWSDP 1.3/lib/commons-digester.jar;../JWSDP 1.3/lib/commons-collections.jar;../JWSDP 1.3/lib/servlet-api.jar;../org.rcfaces.core/lib/jsf-facelets.jar" 
 				destdir="C:/temp/camelia-javadoc/" 
 				doctitle="Rich Client Faces Components" 
 				nodeprecated="true" 
@@ -177,13 +226,13 @@
 				noindex="false" 
 				nonavbar="false" 
 				notree="false" 
-				packagenames="org.rcfaces.core.component.capability,org.rcfaces.core.converter,org.rcfaces.core.component.familly,org.rcfaces.core.component,org.rcfaces.core.component.iterator,org.rcfaces.core.event,org.rcfaces.core.util,org.rcfaces.core.model,org.rcfaces.core.preference,org.rcfaces.core.provider,org.rcfaces.core.progressMonitor,org.rcfaces.core.image" 
-				source="1.3" 
+				packagenames="org.rcfaces.core.component.capability,org.rcfaces.core.converter,org.rcfaces.core.component.familly,org.rcfaces.core.component,org.rcfaces.core.component.iterator,org.rcfaces.core.event,org.rcfaces.core.util,org.rcfaces.core.model,org.rcfaces.core.preference,org.rcfaces.core.provider,org.rcfaces.core.progressMonitor,org.rcfaces.core.image,org.rcfaces.core.item,org.rcfaces.core.lang,org.rcfaces.core.lang.provider" 
+				source="1.4" 
 				sourcepath="${build-core}/src" 
 				splitindex="true" 
-				use="true" 
+				use="false" 
 				version="false"/>
-		<zip destfile="dist/rcfaces-b${build.number}/rcfaces-javadoc.zip">
+		<zip destfile="${rcfaces-javadoc.zip}">
 			<fileset dir="C:/temp/camelia-javadoc/">
 			</fileset>
 		</zip>
@@ -204,7 +253,7 @@
 		  	input="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript"
 		  	outputDirectory="C:/temp/camelia-jsdoc/">
 		</jsDoc>
-		<zip destfile="dist/rcfaces-b${build.number}/rcfaces-jsdoc.zip">
+		<zip destfile="${rcfaces-jsdoc.zip}">
 			<fileset dir="c:/temp/camelia-jsdoc">
 			</fileset>
 		</zip>
@@ -231,4 +280,41 @@
 		</ftp>
 	</target>
 	
+	<target name="sf">
+			<zip destfile="rcfaces-${sf.version}/RCFaces_bin_v${sf.version}.zip">
+				<zipfileset file="rcfaces-${sf.version}/rcfaces-core.jar" fullpath="rcfaces-core.jar" />
+				<zipfileset file="rcfaces-${sf.version}/rcfaces-htmlc.jar" fullpath="rcfaces-htmlc.jar" />
+			</zip>
+		<zip destfile="rcfaces-${sf.version}/RCFaces_dev_v${sf.version}.zip">
+			<zipfileset file="rcfaces-${sf.version}/rcfaces-core.jar" fullpath="rcfaces-core.jar" />
+			<zipfileset file="rcfaces-${sf.version}/rcfaces-html.jar" fullpath="rcfaces-html.jar" />
+		</zip>
+		<zip destfile="rcfaces-${sf.version}/RCFaces_src_v${sf.version}.zip">
+			<zipfileset file="rcfaces-${sf.version}/rcfaces-core-src.jar" fullpath="rcfaces-core-src.jar" />
+			<zipfileset file="rcfaces-${sf.version}/rcfaces-html-src.jar" fullpath="rcfaces-html-src.jar" />
+		</zip>
+	</target>
+
+	<target name="cvs" depends="main">
+		<cvs dest="${build-core}/src" command="tag" noexec="true" cvsRoot="${cvs.root}" tag="${sf.version}"></cvs>
+		<cvs dest="${build-html}/src" command="tag" noexec="true" cvsRoot="${cvs.root}" tag="${sf.version}"></cvs>
+	</target>
+	
+	
+	<target name="pim" depends="main">
+		<copy file="${dist}/rcfaces.jar" toDir="w:/Runtime PIM2/PIM sample/webApplication/WEB-INF/lib" />
+		<copy file="${dist}/rcfaces.jar" toDir="w:/Runtime PIM2/CMS sample/webApplication/WEB-INF/lib" />
+		<copy file="${dist}/rcfaces.jar" toDir="w:/Runtime PIM2/LDAP sample/webApplication/WEB-INF/lib" />
+	</target>
+
+	<target name="addressbook" depends="main">
+		<copy file="${dist}/rcfaces-prod.jar" toDir="w:/Runtime PIM2/LDAP sample/webApplication/WEB-INF/lib" />
+		<copy file="${dist}/rcfaces-prod.jar" toDir="w:/Runtime PIM2/Camelia Starter/webApplication/WEB-INF/lib" />
+		<copy file="${dist}/rcfaces-prod.jar" toDir="w:/Runtime PIM2/Camelia Blank Project/webApplication/WEB-INF/lib" />
+	</target>
+
+	<target name="unedic" depends="main">
+		<copy file="${dist}/rcfaces-prod.jar" toDir="W:/Workspace Unedic/Dude faces/PortailWeb/portailWeb/WEB-INF/lib" />
+		<copy file="${dist}/rcfaces-prod.jar" toDir="W:/Workspace Unedic/Dossier faces/webApplication/WEB-INF/lib" />
+	</target>	
 </project>
