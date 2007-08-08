@@ -17,6 +17,16 @@ var __statics = {
 			selection: f_event.SELECTION
 	},
 	
+	/**
+	 * @field private static final String
+	 */
+	 LIB_ASCENDANT: "ascendant",
+	
+	/**
+	 * @field private static final String
+	 */
+	 LIB_DESCENDANT: "descendant",
+	
      /**
      * @method private static
      * @param Event evt the event
@@ -69,13 +79,13 @@ var __statics = {
 	    var secondSelectComp;
 	    var thirdSelectComp;
 
-		if (number == 1) {
-		    firstSelectComp = base.firstSelect;
-		    secondSelectComp = base.secondSelect;
-		    thirdSelectComp = base.thirdSelect;
+		if (number == 0) {
+		    firstSelectComp = base._selects[0];
+		    secondSelectComp = base._selects[1];
+		    thirdSelectComp = base._selects[2];
 		} else {
-		    firstSelectComp = base.secondSelect;
-		    secondSelectComp = base.thirdSelect;
+		    firstSelectComp = base._selects[1];
+		    secondSelectComp = base._selects[2];
 		}
 	    
 	    f_columnSortDialog.EmptySelect(secondSelectComp);
@@ -118,8 +128,8 @@ var __statics = {
      * @return option
      */
     AddOption: function(docBase, selectComp, column) {
-            var newOpt = docBase.createElement("OPTION");
-            var text = "(aucune";
+            var newOpt = docBase.createElement("option");
+            var text = "(aucune)";
             if (column) {
 	            // oops
     	        text = column._dataGrid.f_getColumnName(column);
@@ -395,7 +405,7 @@ var __members = {
 		selectComp._number = 0;
 		baseMem._selects = new Array();
 		baseMem._selects.push(selectComp);
-		selectComp.onchange = _SelectOnChange;
+		selectComp.onchange = f_columnSortDialog._SelectOnChange;
 		
 		cellCorps.appendChild(selectComp);
 
@@ -456,7 +466,7 @@ var __members = {
 		selectComp._base = baseMem;
 		selectComp._number = 1;
 		baseMem._selects.push(selectComp);
-		selectComp.onchange = _SelectOnChange;
+		selectComp.onchange = f_columnSortDialog._SelectOnChange;
 		
 		cellCorps.appendChild(selectComp);
 
@@ -517,7 +527,7 @@ var __members = {
 		selectComp._base = baseMem;
 		selectComp._number = 2;
 		baseMem._selects.push(selectComp);
-		selectComp.onchange = _SelectOnChange;
+		selectComp.onchange = f_columnSortDialog._SelectOnChange;
 		
 		cellCorps.appendChild(selectComp);
 
@@ -662,7 +672,7 @@ var __members = {
 		if (selectComp._sort =! -1) {
 			radioComp.checked = "true";
 		}
-        radioComp.appendChild(docBase.createTextNode("ascendant"));
+        radioComp.appendChild(docBase.createTextNode(f_columnSortDialog.LIB_ASCENDANT));
         radioComp.onclick = function() {
         	selectComp._sort = 1;
         };
@@ -680,7 +690,7 @@ var __members = {
 		if (selectComp._sort == -1) {
 			radioComp.checked = "true";
 		}
-        radioComp.appendChild(docBase.createTextNode("descendant"));
+        radioComp.appendChild(docBase.createTextNode(f_columnSortDialog.LIB_DESCENDANT));
         radioComp.onclick = function() {
         	selectComp._sort = -1;
         };
