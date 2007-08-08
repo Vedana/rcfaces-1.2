@@ -47,6 +47,55 @@ var __statics = {
 		
 		return f_core.CancelJsEvent(evt);
     },
+    
+     /**
+     * @method private static
+     * @param Event evt the event
+     * @return boolean
+     */
+    _SelectOnChange: function(evt) {
+    	var select=this;
+		var base=select._base;
+		var docBase = select.ownerDocument;
+		var number = select._number
+		
+		f_core.Debug(f_columnSortDialog, "_SelectOnChange: entering");
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+	    var firstSelectComp;
+	    var secondSelectComp;
+	    var thirdSelectComp;
+
+		if (number == 1) {
+		    firstSelectComp = base.firstSelect;
+		    secondSelectComp = base.secondSelect;
+		    thirdSelectComp = base.thirdSelect;
+		} else {
+		    firstSelectComp = base.secondSelect;
+		    secondSelectComp = base.thirdSelect;
+		}
+	    
+	    f_columnSortDialog.EmptySelect(secondSelectComp);
+	    if (thirdSelectComp) {
+	        f_columnSortDialog.EmptySelect(thirdSelectComp);
+	    }
+	    if (firstSelectComp.selectedIndex == 0) {
+	        firstSelectComp.value = "";
+	        return;
+	    }
+	    var options = firstSelectComp.options;
+	    var value = firstSelectComp.value;
+	    for (var i = 0; i<options.length; i++) {
+	        if (!options[i].selected) {
+	            f_columnSortDialog.AddOption(docBase, secondSelectComp, options[i]._column)
+	        }
+	    } 
+		
+		return f_core.CancelJsEvent(evt);
+    },
 
     /**
      * <p>js listener example</p>
@@ -59,7 +108,42 @@ var __statics = {
     ListenerExample: function(evt) {
     	var value = evt.f_getValue();
     	return true;
-    }
+    },
+    
+    /**
+     * @method public static
+     * @param HTMLDocument docBase document
+     * @param HTMLElement selectComp Select
+     * @param object column
+     * @return option
+     */
+    AddOption: function(docBase, selectComp, column) {
+            var newOpt = docBase.createElement("OPTION");
+            var text = "(aucune";
+            if (column) {
+	            // oops
+    	        text = column._dataGrid.f_getColumnName(column);
+    	    }
+            newOpt.value = text;
+            newOpt.appendChild(docBase.createTextNode(text));
+            newOpt._column = column;
+            selectComp.appendChild(newOpt);
+            return newOpt;
+  	},
+  	
+    /**
+     * @method public static
+     * @param HTMLElement selectComp Select
+     * @return void
+     */
+	EmptySelect: function(selectComp) {
+		selectComp.value = "";
+		var j=selectComp.options.length;
+		while (j > 0) {
+			selectComp.options[j]._column = undefined;
+			selectComp.remove(--j);
+		} 
+	}
     
 }
 
@@ -263,253 +347,195 @@ var __members = {
 		tableCorps.cellSpacing=0;
 		var tbodCorps = docBase.createElement("tbody");
 		
-		// Corps de la popup : 2 liste et une palanquée de boutons
+		// Corps de la popup : 3 combos et des radios
 
-		// Creation de la ligne de libellés
+		// Creation de la ligne de libellé Trier par
 		var ligneCorps = docBase.createElement("tr");
 		
 		var cellCorps = docBase.createElement("td");
+		cellCorps.colSpan="2";
 
 		zone = docBase.createElement("span");
 		zone.className = cssClassBase+"_text_text";
-		zone.appendChild(docBase.createTextNode("Cols dispo."));
+		zone.appendChild(docBase.createTextNode("Trier par"));
 
 		cellCorps.appendChild(zone);
 		ligneCorps.appendChild(cellCorps);
 
-		// Col des boutons entre les listes
-		cellCorps = docBase.createElement("td");
-		ligneCorps.appendChild(cellCorps);
-
-		cellCorps = docBase.createElement("td");
-
-		zone = docBase.createElement("span");
-		zone.className = cssClassBase+"_text_text";
-		zone.appendChild(docBase.createTextNode("Cols triées"));
-
-		cellCorps.appendChild(zone);
-		ligneCorps.appendChild(cellCorps);
-		
-		// Col des boutons d'organisation des cols triees
-		cellCorps = docBase.createElement("td");
-		ligneCorps.appendChild(cellCorps);
-		
 		// Ajout de la ligne à la table
 		tbodCorps.appendChild(ligneCorps);
-		
 
-		// Creation de la ligne de liste
+		// ligne 1er combo et radios
+		ligneCorps = docBase.createElement("tr");
+		cellCorps = docBase.createElement("td");
+
+		var selectComp = docBase.createElement("select");
+		
+		// Remplissage
+		f_columnSortDialog.AddOption(docBase, selectComp);
+		selectComp._sort = 1;
+		var grid = this._grid;
+		var cols = grid.f_getColumns();
+		var sortedCols = new Array();
+		for (var i = 0; i<cols.length; i++) {
+			var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
+			if (sortedCols.length == 0) {
+				var sort = grid.f_getColumnSortedState(cols[i]);
+				if (sort != 0) {
+					sortedCols.push(cols[i]); 
+				} else {
+					option.selected = "true";
+					selectComp._sort = sort;
+					selectComp._column = cols[i];
+				}
+			}
+		}
+		
+		selectComp._base = baseMem;
+		selectComp._number = 0;
+		baseMem._selects = {selectComp};
+		selectComp.onchange = _SelectOnChange;
+		
+		cellCorps.appendChild(selectComp);
+
+		ligneCorps.appendChild(cellCorps);
+
+		cellCorps = docBase.createElement("td");
+		
+		var tableRadio = this._createTableRadio(docBase, "sort0", selectComp);
+
+		cellCorps.appendChild(tableRadio);
+		ligneCorps.appendChild(cellCorps);
+		
+		tbodCorps.appendChild(ligneCorps);
+
+		// Creation de la ligne de libellé Puis Trier par (2)
 		ligneCorps = docBase.createElement("tr");
 		
 		cellCorps = docBase.createElement("td");
+		cellCorps.colSpan="2";
 
-		var colsDispos; //liste des colonnes disponibles
-		var colsSorted; //liste des colonnes triées
-
-		colsDispos = docBase.createElement("select");
-		colsDispos.multiple = true;
-		colsDispos.size = 6;
-		
-		cellCorps.appendChild(colsDispos);
-		ligneCorps.appendChild(cellCorps);
-
-		// Col des boutons entre les listes
-		cellCorps = docBase.createElement("td");
-		
-		var tableBut = docBase.createElement("table");
-		var tbodBut = docBase.createElement("tbody");
-
-		// ligne vide de 50px
-		var ligneBut = docBase.createElement("tr");
-		ligneBut.style.height = "50px";
-		var cellBut = docBase.createElement("td");
-		ligneBut.appendChild(cellBut);
-		tbodBut.appendChild(ligneBut);
-		
-		// premier bouton : selection
-		ligneBut = docBase.createElement("tr");
-		cellBut = docBase.createElement("td");
-		var but = docBase.createElement("input");
-		but.type="button";
-		but.className=cssClassBase+"_button";
-		but.value=" >>> ";
-		var selCol=function() {
-			var options = colsDispos.options;
-			for (var i = 0; i<options.length; i++) {
-				var selOpt = options[i];
-				if (selOpt.selected) {
-					var column = selOpt._column;
-					var opt = docBase.createElement("option");
-					opt.text = "+ "+selOpt.text;
-					opt.value = selOpt.text;
-					opt._column = column;
-					opt._sort = 1;
-					colsSorted.add(opt);
-				}
-			}
-			for (var i = 0; i<options.length; i++) {
-				var selOpt = options[i];
-				if (selOpt.selected) {
-					colsDispos.remove(i);
-				}
-			}
-			if (colsDispos.length == 0) {
-				but.disabled = true;
-			}
-			if (colsSorted.length > 0) {
-				but.disabled = false;
-			}
-		};
-		but.onclick=selCol;
-		but.onClick=null;
-		
-		cellBut.appendChild(but);
-		ligneBut.appendChild(cellBut);
-		tbodBut.appendChild(ligneBut);
-
-		// ligne vide de 10 px
-		ligneBut = docBase.createElement("tr");
-		ligneBut.style.height = "10px";
-		cellBut = docBase.createElement("td");
-		ligneBut.appendChild(cellBut);
-		tbodBut.appendChild(ligneBut);
-		
-		// second bouton : déselection
-		ligneBut = docBase.createElement("tr");
-		cellBut = docBase.createElement("td");
-		but = docBase.createElement("input");
-		but.type="button";
-		but.className=cssClassBase+"_button";
-		but.value=" >>> ";
-		var deselCol=function() {
-			var options = colsSorted.options;
-			for (var i = 0; i<options.length; i++) {
-				var selOpt = options[i];
-				if (selOpt.selected) {
-					var column = selOpt._column;
-					var opt = docBase.createElement("option");
-					opt.text = selOpt.value;
-					opt.value = selOpt.value;
-					opt._column = column;
-					colsDispos.add(opt);
-				}
-			}
-			for (var i = 0; i<options.length; i++) {
-				var selOpt = options[i];
-				if (selOpt.selected) {
-					colsSorted.remove(i);
-				}
-			}
-			if (colsDispos.length > 0) {
-				but.disabled = false;
-			}
-			if (colsSorted.length == 0) {
-				but.disabled = true;
-			}
-		};
-		but.onclick=deselCol;
-		but.onClick=null;
-		
-		cellBut.appendChild(but);
-		ligneBut.appendChild(cellBut);
-		tbodBut.appendChild(ligneBut);
-
-		tableBut.appendChild(tbodBut);
-		cellCorps.appendChild(tableBut);
-		
-		ligneCorps.appendChild(cellCorps);
-
-		cellCorps = docBase.createElement("td");
-
-		colsSorted = docBase.createElement("select");
-		colsSorted.multiple = true;
-		colsSorted.size = 6;
-		
-		cellCorps.appendChild(colsSorted);
-		ligneCorps.appendChild(cellCorps);
+		zone = docBase.createElement("span");
+		zone.className = cssClassBase+"_text_text";
+		zone.appendChild(docBase.createTextNode("Puis trier par"));
 
 		cellCorps.appendChild(zone);
 		ligneCorps.appendChild(cellCorps);
-		
-		// Col des boutons d'organisation des cols triees
-		cellCorps = docBase.createElement("td");
-		
-		var tableSort = docBase.createElement("table");
-		var tbodSort = docBase.createElement("tbody");
 
-		// ligne vide de 50px
-		var ligneSort = docBase.createElement("tr");
-		ligneSort.style.height = "50px";
-		var cellSort = docBase.createElement("td");
-		ligneSort.appendChild(cellSort);
-		tbodSort.appendChild(ligneSort);
-		
-		// premier bouton : ascendant
-		ligneSort = docBase.createElement("tr");
-		cellSort = docBase.createElement("td");
-		but = docBase.createElement("input");
-		but.type="button";
-		but.className=cssClassBase+"_button";
-		but.value=" asc. ";
-		var selAsc=function() {
-			var options = colsSorted.options;
-			for (var i = 0; i<options.length; i++) {
-				var selOpt = options[i];
-				if (selOpt.selected) {
-					selOpt.text = "+ "+selOpt.value;
-					selOpt._sort = 1;
-				}
-			}
-		};
-		but.onclick=selAsc;
-		but.onClick=null;
-		
-		cellSort.appendChild(but);
-		ligneSort.appendChild(cellSort);
-		tbodSort.appendChild(ligneSort);
-
-		// ligne vide de 10 px
-		ligneSort = docBase.createElement("tr");
-		ligneSort.style.height = "10px";
-		cellSort = docBase.createElement("td");
-		ligneSort.appendChild(cellSort);
-		tbodSort.appendChild(ligneSort);
-		
-		// second bouton : descendant
-		ligneSort = docBase.createElement("tr");
-		cellSort = docBase.createElement("td");
-		but = docBase.createElement("input");
-		but.type="button";
-		but.className=cssClassBase+"_button";
-		but.value=" desc. ";
-		var selDesc=function() {
-			var options = colsSorted.options;
-			for (var i = 0; i<options.length; i++) {
-				var selOpt = options[i];
-				if (selOpt.selected) {
-					selOpt.text = "- "+selOpt.value;
-					selOpt._sort = -1;
-				}
-			}
-		};
-		but.onclick=selDesc;
-		but.onClick=null;
-		
-		cellSort.appendChild(but);
-		ligneSort.appendChild(cellSort);
-		tbodSort.appendChild(ligneSort);
-
-		tableSort.appendChild(tbodSort);
-		cellCorps.appendChild(tableSort);
-		
-		
-		ligneCorps.appendChild(cellCorps);
-		
 		// Ajout de la ligne à la table
 		tbodCorps.appendChild(ligneCorps);
+
+		// ligne 1er combo et radios
+		ligneCorps = docBase.createElement("tr");
+		cellCorps = docBase.createElement("td");
+
+		selectComp = docBase.createElement("select");
 		
+		// Remplissage si la précédente est déjà sélectionnée
+		if (sortedCols.length == 1) {
+			f_columnSortDialog.AddOption(docBase, selectComp);
+			selectComp._sort = 1;
+			for (var i = 0; i<cols.length; i++) {
+				if (cols[i] != sortedCols[0]) {
+					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
+					if (sortedCols.length == 1) {
+						var sort = grid.f_getColumnSortedState(cols[i]);
+						if (sort != 0) {
+							sortedCols.push(cols[i]); 
+						} else {
+							option.selected = "true";
+							selectComp._sort = sort;
+							selectComp._column = cols[i];
+						}
+					}
+				}
+			}
+		}
+		
+		selectComp._base = baseMem;
+		selectComp._number = 1;
+		baseMem._selects.push(selectComp);
+		selectComp.onchange = _SelectOnChange;
+		
+		cellCorps.appendChild(selectComp);
+
+		ligneCorps.appendChild(cellCorps);
+
+		cellCorps = docBase.createElement("td");
+		
+		var tableRadio = this._createTableRadio(docBase, "sort1", selectComp);
+
+		cellCorps.appendChild(tableRadio);
+		ligneCorps.appendChild(cellCorps);
+		
+		tbodCorps.appendChild(ligneCorps);
+
+		// Creation de la ligne de libellé Puis Trier par (3)
+		ligneCorps = docBase.createElement("tr");
+		
+		cellCorps = docBase.createElement("td");
+		cellCorps.colSpan="2";
+
+		zone = docBase.createElement("span");
+		zone.className = cssClassBase+"_text_text";
+		zone.appendChild(docBase.createTextNode("Puis trier par"));
+
+		cellCorps.appendChild(zone);
+		ligneCorps.appendChild(cellCorps);
+
+		// Ajout de la ligne à la table
+		tbodCorps.appendChild(ligneCorps);
+
+		// ligne 1er combo et radios
+		ligneCorps = docBase.createElement("tr");
+		cellCorps = docBase.createElement("td");
+
+		selectComp = docBase.createElement("select");
+		
+		// Remplissage si la précédente est déjà sélectionnée
+		if (sortedCols.length == 2) {
+			f_columnSortDialog.AddOption(docBase, selectComp);
+			selectComp._sort = 1;
+			for (var i = 0; i<cols.length; i++) {
+				if (cols[i] != sortedCols[0] && cols[i] != sortedCols[1]) {
+					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
+					if (sortedCols.length == 2) {
+						var sort = grid.f_getColumnSortedState(cols[i]);
+						if (sort != 0) {
+							sortedCols.push(cols[i]); 
+						} else {
+							option.selected = "true";
+							selectComp._sort = sort;
+							selectComp._column = cols[i];
+						}
+					}
+				}
+			}
+		}
+		
+		selectComp._base = baseMem;
+		selectComp._number = 2;
+		baseMem._selects.push(selectComp);
+		selectComp.onchange = _SelectOnChange;
+		
+		cellCorps.appendChild(selectComp);
+
+		ligneCorps.appendChild(cellCorps);
+
+		cellCorps = docBase.createElement("td");
+		
+		var tableRadio = this._createTableRadio(docBase, "sort2", selectComp);
+
+		cellCorps.appendChild(tableRadio);
+		ligneCorps.appendChild(cellCorps);
+		
+		tbodCorps.appendChild(ligneCorps);
+
+
 		tableCorps.appendChild(tbodCorps);
-		
+
+	//fin de la table de corps
+
 		cell.appendChild(tableCorps);
 
 		ligne.appendChild(cell);
@@ -605,33 +631,64 @@ var __members = {
 
 		base.appendChild(actForm);
 		
-		// Remplir les listes
-		
-		var columns = grid.getColumns();
-		for (var i=0; i<columns.length; i++) {
-			var column = columns[i];
-			var opt = docBase.createElement("option");
-			var label = grid.f_getColumnName(column);
-			opt.value = label;
-			opt._column = column;
-			var sort = grid.f_getColumnSortedState(column);
-			if (sort == 0) {
-				opt.text = label;
-				colsDispos.add(opt);
-			} else {
-				if (sort > 0) {
-					opt._sort = 1;
-					opt.text = "+  "+label;
-				} else {
-					opt._sort = -1;
-					opt.text = "-  "+label;
-				}
-				colsSorted.add(opt);
-			}
-		}
-		
 		// Hide the select
 		f_shell.HideSelect();
+		
+	},
+	
+	/**
+	 * @method private
+	 * @param HTMLDocument docBase document
+	 * @param string name
+	 * @param number sort
+	 * @return HTMLElement table with radios
+	 */
+	_createTableRadio: function(docBase, name, selectComp) {
+		var tableRadio = docBase.createElement("table");
+		//set size and pos
+		tableRadio.cellPadding=0;
+		tableRadio.cellSpacing=0;
+		tableRadio.tabIndex=1;
+		
+		var tbodyRadio = docBase.createElement("tbody");
+
+		var ligneRadio = docBase.createElement("tr");
+		var cellRadio = docBase.createElement("td");
+		
+		var radioComp = docBase.createElement("input");
+		radioComp.type = "radio";
+		radioComp.name = name;
+		if (selectComp._sort =! -1) {
+			radioComp.checked = "true";
+		}
+        radioComp.appendChild(docBase.createTextNode("ascendant"));
+        radioComp.onclick = function() {
+        	selectComp._sort = 1;
+        };
+        
+        cellRadio.appendChild(radioComp);
+        ligneRadio.appendChild(cellRadio);
+		tbodyRadio.appendChild(ligneRadio);
+		
+		ligneRadio = docBase.createElement("tr");
+		cellRadio = docBase.createElement("td");
+		
+		radioComp = docBase.createElement("input");
+		radioComp.type = "radio";
+		radioComp.name = name;
+		if (selectComp._sort == -1) {
+			radioComp.checked = "true";
+		}
+        radioComp.appendChild(docBase.createTextNode("descendant"));
+        radioComp.onclick = function() {
+        	selectComp._sort = -1;
+        };
+        
+        cellRadio.appendChild(radioComp);
+        ligneRadio.appendChild(cellRadio);
+		tbodyRadio.appendChild(ligneRadio);
+
+		tableRadio.appendChild(tbodyRadio);
 		
 	},
 	
