@@ -380,7 +380,7 @@ var __members = {
 		for (var i = 0; i<cols.length; i++) {
 			var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
 			if (sortedCols.length == 0) {
-				var sort = grid.f_getColumnSortedState(cols[i]);
+				var sort = grid.f_getColumnOrderState(cols[i]);
 				if (sort != 0) {
 					sortedCols.push(cols[i]); 
 				} else {
@@ -393,7 +393,8 @@ var __members = {
 		
 		selectComp._base = baseMem;
 		selectComp._number = 0;
-		baseMem._selects = {selectComp};
+		baseMem._selects = new Array();
+		baseMem._selects.push(selectComp);
 		selectComp.onchange = _SelectOnChange;
 		
 		cellCorps.appendChild(selectComp);
@@ -439,7 +440,7 @@ var __members = {
 				if (cols[i] != sortedCols[0]) {
 					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
 					if (sortedCols.length == 1) {
-						var sort = grid.f_getColumnSortedState(cols[i]);
+						var sort = grid.f_getColumnOrderState(cols[i]);
 						if (sort != 0) {
 							sortedCols.push(cols[i]); 
 						} else {
@@ -500,7 +501,7 @@ var __members = {
 				if (cols[i] != sortedCols[0] && cols[i] != sortedCols[1]) {
 					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
 					if (sortedCols.length == 2) {
-						var sort = grid.f_getColumnSortedState(cols[i]);
+						var sort = grid.f_getColumnOrderState(cols[i]);
 						if (sort != 0) {
 							sortedCols.push(cols[i]); 
 						} else {
