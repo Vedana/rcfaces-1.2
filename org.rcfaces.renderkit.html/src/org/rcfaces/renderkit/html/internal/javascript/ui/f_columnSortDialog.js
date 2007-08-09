@@ -103,6 +103,7 @@ var __statics = {
 	            f_columnSortDialog.AddOption(docBase, secondSelectComp, options[i]._column)
 	        }
 	    } 
+		secondSelectComp.value = "";
 		
 		return f_core.CancelJsEvent(evt);
     },
@@ -137,8 +138,8 @@ var __statics = {
             newOpt.value = text;
             newOpt.appendChild(docBase.createTextNode(text));
             newOpt._column = column;
-            selectComp.appendChild(newOpt);
-            return newOpt;
+            
+            return selectComp.appendChild(newOpt);
   	},
   	
     /**
@@ -150,7 +151,7 @@ var __statics = {
 		selectComp.value = "";
 		var j=selectComp.options.length;
 		while (j > 0) {
-			selectComp.options[j]._column = undefined;
+			selectComp.options(j)._column = undefined;
 			selectComp.remove(--j);
 		} 
 	}
@@ -186,7 +187,7 @@ var __members = {
 		this.f_setBackgroundMode("greyed");
 		
 		this.f_setWidth(500);
-		this.f_setHeight(500);
+		this.f_setHeight(300);
 	},
 
 	/**
@@ -285,6 +286,7 @@ var __members = {
 		var cssClassBase = this.f_getCssClassBase();
 		if (!cssClassBase) {
 			cssClassBase = "f_columnSortDialog";
+			this.f_setCssClassBase(cssClassBase);
 		}
 
 		var docBase = base.ownerDocument;
@@ -350,6 +352,8 @@ var __members = {
 		cell.className = cssClassBase+"_corps_td";
 		cell.tabIndex=1;
 		
+		cell.align = "center";
+		
 		var tableCorps = docBase.createElement("table");
 		tableCorps.style.top=0;
 		tableCorps.style.left=0;
@@ -380,9 +384,11 @@ var __members = {
 		cellCorps = docBase.createElement("td");
 
 		var selectComp = docBase.createElement("select");
+		selectComp.className = cssClassBase+"_select";
 		
 		// Remplissage
 		f_columnSortDialog.AddOption(docBase, selectComp);
+		selectComp.selectedIndex = 0;
 		selectComp._sort = 1;
 		var grid = this._grid;
 		var cols = grid.f_getColumns();
@@ -393,10 +399,9 @@ var __members = {
 				var sort = grid.f_getColumnOrderState(cols[i]);
 				if (sort != 0) {
 					sortedCols.push(cols[i]); 
-				} else {
-					option.selected = "true";
 					selectComp._sort = sort;
 					selectComp._column = cols[i];
+					selectComp.selectedIndex = i+1;
 				}
 			}
 		}
@@ -441,11 +446,14 @@ var __members = {
 		cellCorps = docBase.createElement("td");
 
 		selectComp = docBase.createElement("select");
+		selectComp.className = cssClassBase+"_select";
+		selectComp._sort = 1;
 		
 		// Remplissage si la précédente est déjà sélectionnée
 		if (sortedCols.length == 1) {
+			selectComp.selectedIndex = 0;
+			selectComp.value = "";
 			f_columnSortDialog.AddOption(docBase, selectComp);
-			selectComp._sort = 1;
 			for (var i = 0; i<cols.length; i++) {
 				if (cols[i] != sortedCols[0]) {
 					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
@@ -453,10 +461,9 @@ var __members = {
 						var sort = grid.f_getColumnOrderState(cols[i]);
 						if (sort != 0) {
 							sortedCols.push(cols[i]); 
-						} else {
-							option.selected = "true";
 							selectComp._sort = sort;
 							selectComp._column = cols[i];
+							selectComp.selectedIndex = i+1;
 						}
 					}
 				}
@@ -502,11 +509,14 @@ var __members = {
 		cellCorps = docBase.createElement("td");
 
 		selectComp = docBase.createElement("select");
+		selectComp.className = cssClassBase+"_select";
+		selectComp._sort = 1;
 		
 		// Remplissage si la précédente est déjà sélectionnée
 		if (sortedCols.length == 2) {
+			selectComp.selectedIndex = 0;
+			selectComp.value = "";
 			f_columnSortDialog.AddOption(docBase, selectComp);
-			selectComp._sort = 1;
 			for (var i = 0; i<cols.length; i++) {
 				if (cols[i] != sortedCols[0] && cols[i] != sortedCols[1]) {
 					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
@@ -514,10 +524,9 @@ var __members = {
 						var sort = grid.f_getColumnOrderState(cols[i]);
 						if (sort != 0) {
 							sortedCols.push(cols[i]); 
-						} else {
-							option.selected = "true";
 							selectComp._sort = sort;
 							selectComp._column = cols[i];
+							selectComp.selectedIndex = i+1;
 						}
 					}
 				}
@@ -527,7 +536,6 @@ var __members = {
 		selectComp._base = baseMem;
 		selectComp._number = 2;
 		baseMem._selects.push(selectComp);
-		selectComp.onchange = f_columnSortDialog._SelectOnChange;
 		
 		cellCorps.appendChild(selectComp);
 
@@ -592,6 +600,7 @@ var __members = {
 		button.onClick=null;
 		button._base = baseMem;
 		button.onfocusin=noFocus;
+		baseMem._buttons = new Array();
 		baseMem._buttons.push(button);
 			
 		cellb.appendChild(button);
@@ -666,41 +675,71 @@ var __members = {
 		var ligneRadio = docBase.createElement("tr");
 		var cellRadio = docBase.createElement("td");
 		
-		var radioComp = docBase.createElement("input");
-		radioComp.type = "radio";
-		radioComp.name = name;
-		if (selectComp._sort =! -1) {
-			radioComp.checked = "true";
+		var radioComp;
+		if (f_shell._IE) {
+			var tag = "<input type='radio' name='"+name+"'";
+			if (selectComp._sort != -1) {
+				tag = tag + " checked='true'";
+			}
+			tag = tag + "/>";
+			radioComp = docBase.createElement(tag);	
+		} else {
+			radioComp = docBase.createElement("input");	
+			radioComp.type = "radio";
+			radioComp.name = name;
+			if (selectComp._sort != -1) {
+				radioComp.checked = "true";
+			}
 		}
-        radioComp.appendChild(docBase.createTextNode(f_columnSortDialog.LIB_ASCENDANT));
+		
+		var cssClassBase = this.f_getCssClassBase();
+		radioComp.className = cssClassBase+"_radio_text";
         radioComp.onclick = function() {
         	selectComp._sort = 1;
         };
         
         cellRadio.appendChild(radioComp);
+        var zone = docBase.createElement("span");
+        zone.className = cssClassBase+"_radio_text";
+        zone.appendChild(docBase.createTextNode(f_columnSortDialog.LIB_ASCENDANT));
+        cellRadio.appendChild(zone);
         ligneRadio.appendChild(cellRadio);
 		tbodyRadio.appendChild(ligneRadio);
 		
 		ligneRadio = docBase.createElement("tr");
 		cellRadio = docBase.createElement("td");
 		
-		radioComp = docBase.createElement("input");
-		radioComp.type = "radio";
-		radioComp.name = name;
-		if (selectComp._sort == -1) {
-			radioComp.checked = "true";
+		if (f_shell._IE) {
+			var tag = "<input type='radio' name='"+name+"'";
+			if (selectComp._sort == -1) {
+				tag = tag + " checked='true'";
+			}
+			tag = tag + "/>";
+			radioComp = docBase.createElement(tag);	
+		} else {
+			radioComp = docBase.createElement("input");	
+			radioComp.type = "radio";
+			radioComp.name = name;
+			if (selectComp._sort == -1) {
+				radioComp.checked = "true";
+			}
 		}
-        radioComp.appendChild(docBase.createTextNode(f_columnSortDialog.LIB_DESCENDANT));
+		radioComp.className = cssClassBase+"_radio_text";
         radioComp.onclick = function() {
         	selectComp._sort = -1;
         };
         
         cellRadio.appendChild(radioComp);
+        zone = docBase.createElement("span");
+        zone.className = cssClassBase+"_radio_text";
+        zone.appendChild(docBase.createTextNode(f_columnSortDialog.LIB_DESCENDANT));
+        cellRadio.appendChild(zone);
         ligneRadio.appendChild(cellRadio);
 		tbodyRadio.appendChild(ligneRadio);
 
 		tableRadio.appendChild(tbodyRadio);
 		
+		return tableRadio;
 	},
 	
 	/**
