@@ -39,7 +39,7 @@ var __statics = {
     		button=this._button;
     	}
 		var base=button._base;
-		var messageBox=base._messageBox;
+		var popup=base._popup;
 		
 		f_core.Debug(f_columnSortDialog, "_OnClick: entering");
 
@@ -47,13 +47,13 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		if (messageBox.f_getEventLocked(evt, true)) {
-			f_core.Debug(f_columnSortDialog, "_OnClick : messageBox.f_getEventLocked(true)");
+		if (popup.f_getEventLocked(evt, true)) {
+			f_core.Debug(f_columnSortDialog, "_OnClick : popup.f_getEventLocked(true)");
 			return false;
 		}
 		
-		f_core.Debug(f_columnSortDialog, "_OnClick: before messageBox.f_buttonOnClick(button);");
-		messageBox.f_buttonOnClick(button, evt);
+		f_core.Debug(f_columnSortDialog, "_OnClick: before popup.f_buttonOnClick(button);");
+		popup.f_buttonOnClick(button, evt);
 		
 		return f_core.CancelJsEvent(evt);
     },
@@ -83,27 +83,33 @@ var __statics = {
 		    firstSelectComp = base._selects[0];
 		    secondSelectComp = base._selects[1];
 		    thirdSelectComp = base._selects[2];
-		} else {
+		} else if (number == 1) {
 		    firstSelectComp = base._selects[1];
 		    secondSelectComp = base._selects[2];
+		} else if (number == 2) {
+		    firstSelectComp = base._selects[2];
 		}
 	    
 	    f_columnSortDialog.EmptySelect(secondSelectComp);
-	    if (thirdSelectComp) {
-	        f_columnSortDialog.EmptySelect(thirdSelectComp);
-	    }
-	    if (firstSelectComp.selectedIndex == 0) {
+        f_columnSortDialog.EmptySelect(thirdSelectComp);
+
+	    var sel = firstSelectComp.selectedIndex;
+	    if (sel <= 0) {
 	        firstSelectComp.value = "";
-	        return;
+	        firstSelectComp._column = undefined;
+   	        firstSelectComp._sort = 0;
+			return f_core.CancelJsEvent(evt);
 	    }
 	    var options = firstSelectComp.options;
-	    var value = firstSelectComp.value;
-	    for (var i = 0; i<options.length; i++) {
-	        if (!options[i].selected) {
-	            f_columnSortDialog.AddOption(docBase, secondSelectComp, options[i]._column)
-	        }
-	    } 
-		secondSelectComp.value = "";
+	    firstSelectComp._column = options[sel]._column;
+		if (secondSelectComp) {
+		    for (var i = 0; i<options.length; i++) {
+		        if (i != sel) {
+		            f_columnSortDialog.AddOption(docBase, secondSelectComp, options[i]._column)
+		        }
+		    } 
+			secondSelectComp.value = "";
+		}
 		
 		return f_core.CancelJsEvent(evt);
     },
@@ -148,12 +154,20 @@ var __statics = {
      * @return void
      */
 	EmptySelect: function(selectComp) {
+		if (!selectComp) {
+			return;
+		}
 		selectComp.value = "";
-		var j=selectComp.options.length;
-		while (j > 0) {
-			selectComp.options(j)._column = undefined;
-			selectComp.remove(--j);
-		} 
+		selectComp._column = undefined;
+		selectComp._sort = 0;
+		var options = selectComp.options;
+		if (options) {
+			var j=options.length;
+			while (j > 0) {
+				options[--j]._column = undefined;
+				selectComp.remove(j);
+			} 
+		}
 	}
     
 }
@@ -383,32 +397,37 @@ var __members = {
 		ligneCorps = docBase.createElement("tr");
 		cellCorps = docBase.createElement("td");
 
+		var grid = this._grid;
+		var sortedCols = grid.f_getSortedColumns();
+		var sortedColsIndex = 0;
+		var cols = grid.f_getColumns();
+
 		var selectComp = docBase.createElement("select");
 		selectComp.className = cssClassBase+"_select";
-		
+		selectComp._sort = 1;
+
+		var selectedCol = undefined;
+		if (sortedColsIndex < sortedCols.length) {
+			selectedCol = sortedCols[sortedColsIndex++];
+		}
+				
 		// Remplissage
 		f_columnSortDialog.AddOption(docBase, selectComp);
 		selectComp.selectedIndex = 0;
-		selectComp._sort = 1;
-		var grid = this._grid;
-		var cols = grid.f_getColumns();
-		var sortedCols = new Array();
+		selectComp.value = "";
 		for (var i = 0; i<cols.length; i++) {
-			var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
-			if (sortedCols.length == 0) {
-				var sort = grid.f_getColumnOrderState(cols[i]);
-				if (sort != 0) {
-					sortedCols.push(cols[i]); 
-					selectComp._sort = sort;
-					selectComp._column = cols[i];
-					selectComp.selectedIndex = i+1;
-				}
+			f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
+			if (selectedCol && selectedCol == cols[i]) {
+				selectComp._sort = grid.f_getColumnOrderState(selectedCol);
+				selectComp._column = selectedCol;
+				selectComp.selectedIndex = i+1;
+				selectedCol = undefined;
 			}
 		}
 		
 		selectComp._base = baseMem;
 		selectComp._number = 0;
-		baseMem._selects = new Array();
+		baseMem._selects = new Array;
 		baseMem._selects.push(selectComp);
 		selectComp.onchange = f_columnSortDialog._SelectOnChange;
 		
@@ -449,22 +468,24 @@ var __members = {
 		selectComp.className = cssClassBase+"_select";
 		selectComp._sort = 1;
 		
-		// Remplissage si la précédente est déjà sélectionnée
-		if (sortedCols.length == 1) {
+		if (sortedColsIndex < sortedCols.length) {
+			selectedCol = sortedCols[sortedColsIndex++];
+		}
+
+		// Remplissage si la précédente a été préselectionnée
+		if (sortedCols.length > 0) {
 			selectComp.selectedIndex = 0;
 			selectComp.value = "";
 			f_columnSortDialog.AddOption(docBase, selectComp);
-			for (var i = 0; i<cols.length; i++) {
+			for (var i = j = 0; i<cols.length; i++) {
 				if (cols[i] != sortedCols[0]) {
-					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
-					if (sortedCols.length == 1) {
-						var sort = grid.f_getColumnOrderState(cols[i]);
-						if (sort != 0) {
-							sortedCols.push(cols[i]); 
-							selectComp._sort = sort;
-							selectComp._column = cols[i];
-							selectComp.selectedIndex = i+1;
-						}
+					j++;
+					f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
+					if (selectedCol && selectedCol == cols[i]) {
+						selectComp._sort = grid.f_getColumnOrderState(selectedCol);
+						selectComp._column = selectedCol;
+						selectComp.selectedIndex = j;
+						selectedCol = undefined;
 					}
 				}
 			}
@@ -511,23 +532,24 @@ var __members = {
 		selectComp = docBase.createElement("select");
 		selectComp.className = cssClassBase+"_select";
 		selectComp._sort = 1;
+		selectComp.selectedIndex = 0;
 		
+		if (sortedColsIndex < sortedCols.length) {
+			selectedCol = sortedCols[sortedColsIndex++];
+		}
+
 		// Remplissage si la précédente est déjà sélectionnée
-		if (sortedCols.length == 2) {
-			selectComp.selectedIndex = 0;
-			selectComp.value = "";
+		if (sortedCols.length > 1) {
 			f_columnSortDialog.AddOption(docBase, selectComp);
-			for (var i = 0; i<cols.length; i++) {
+			for (var i = j = 0; i<cols.length; i++) {
 				if (cols[i] != sortedCols[0] && cols[i] != sortedCols[1]) {
-					var option = f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
-					if (sortedCols.length == 2) {
-						var sort = grid.f_getColumnOrderState(cols[i]);
-						if (sort != 0) {
-							sortedCols.push(cols[i]); 
-							selectComp._sort = sort;
-							selectComp._column = cols[i];
-							selectComp.selectedIndex = i+1;
-						}
+					j++;
+					f_columnSortDialog.AddOption(docBase, selectComp, cols[i]);
+					if (selectedCol && selectedCol == cols[i]) {
+						selectComp._sort = grid.f_getColumnOrderState(selectedCol);
+						selectComp._column = selectedCol;
+						selectComp.selectedIndex = j;
+						selectedCol = undefined;
 					}
 				}
 			}
@@ -536,6 +558,7 @@ var __members = {
 		selectComp._base = baseMem;
 		selectComp._number = 2;
 		baseMem._selects.push(selectComp);
+		selectComp.onchange = f_columnSortDialog._SelectOnChange;
 		
 		cellCorps.appendChild(selectComp);
 
@@ -599,8 +622,10 @@ var __members = {
 		button.onclick=f_columnSortDialog._OnClick;
 		button.onClick=null;
 		button._base = baseMem;
+		button._close = true;
+		button._apply = true;
 		button.onfocusin=noFocus;
-		baseMem._buttons = new Array();
+		baseMem._buttons = new Array;
 		baseMem._buttons.push(button);
 			
 		cellb.appendChild(button);
@@ -608,18 +633,20 @@ var __members = {
 
 		// Bouton Appliquer
 		cellb = docBase.createElement("td");
-		button = docBase.createElement("input");
+//		button = docBase.createElement("input");
 		
-		button.type="button";
-		button.className=cssClassBase+"_button";
-		button.value="Appliquer";
-		button.onclick=f_columnSortDialog._OnClick;
-		button.onClick=null;
-		button._base = baseMem;
-		button.onfocusin=noFocus;
-		baseMem._buttons.push(button);
+//		button.type="button";
+//		button.className=cssClassBase+"_button";
+//		button.value="Appliquer";
+//		button._close = false;
+//		button._apply = true;
+//		button.onclick=f_columnSortDialog._OnClick;
+//		button.onClick=null;
+//		button._base = baseMem;
+//		button.onfocusin=noFocus;
+//		baseMem._buttons.push(button);
 			
-		cellb.appendChild(button);
+//		cellb.appendChild(button);
 		actTr.appendChild(cellb);
 
 		// Bouton Annuler
@@ -629,6 +656,8 @@ var __members = {
 		button.type="button";
 		button.className=cssClassBase+"_button";
 		button.value="Annuler";
+		button._close = true;
+		button._apply = false;
 		button.onclick=f_columnSortDialog._OnClick;
 		button.onClick=null;
 		button._base = baseMem;
@@ -754,55 +783,86 @@ var __members = {
      	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: entering ("+selectedButton+")");
 	
 		var base=selectedButton._base;
-		var messageBox=base._messageBox;
+		var popup=base._popup;
 		var buttons=base._buttons;
-		var value=selectedButton._value;
-	
-		// Buttons cleaning
-		for (var i=0; i<buttons.length; i++) {
-			var button = buttons[i];
-			button._base=undefined;
-			button._value=undefined;
-			button.onclick=null;
-			button.onfocusin=null;
-			
-			f_core.VerifyProperties(button);
+		var selects=base._selects;
+		var close=selectedButton._close;
+		var apply=selectedButton._apply;
+
+     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: button close="+close+", apply="+apply);
+		
+		var colsSorted = new Array;
+
+		if (apply) {
+			for (var i=0; i<selects.length; i++) {
+				var select = selects[i];
+				if (select._column) {
+					colsSorted.push({_col: select._column, _sort: select._sort});
+				} else {
+					break;
+				}
+			}
 		}
 		
-		// Table cleaning
-		base._messageBox=undefined;
-		base._buttons=undefined;
-			
-		f_core.VerifyProperties(base);
+		if (close) {
+			// Buttons cleaning
+			for (var i=0; i<buttons.length; i++) {
+				var button = buttons[i];
+				button._base=undefined;
+				button._close=undefined;
+				button._apply=undefined;
+				button.onclick=null;
+				button.onfocusin=null;
+				
+				f_core.VerifyProperties(button);
+			}
 		
-		// Deletion of the base HTMLElement
-		var parent = base.parentNode.parentNode;
-		parent.removeChild(base.parentNode);
-
-//		var msgDialog=this;
-//		var toto=function() {
-//			f_dialog.ClearTimeoutId();
-//			var ret = msgDialog.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
-//			if (ret) {
-//				f_dialog.ShowNextDialogStored();
-//				return;
-//			}
+			// Selects cleaning
+			// & Get the informations !!!
+			for (var i=0; i<selects.length; i++) {
+				var select = selects[i];
+				select._base=undefined;
+				select._column=undefined;
+				select.onchange=null;
+				select.onfocusin=null;
+				var options = select.options;
+				if (options) {
+					for (var j=0; j<options.length; j++) {
+						options[j]._column = undefined;
+					}
+				}
+				
+				f_core.VerifyProperties(select);
+			}
 	
+			// Table cleaning
+			base._popup=undefined;
+			base._buttons=undefined;
+			base._selects=undefined;
+				
+			f_core.VerifyProperties(base);
+		}
+
+		if (apply) {
+			// Impact the grid
+			var grid = this._grid;
+			var lon = colsSorted.length;
+	     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: sorting "+lon+" cols");
+			if (lon == 0) {
+				grid.f_clearSort();
+			} else if (lon == 1) {
+				grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false);
+			} else if (lon == 2) {
+				grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false, colsSorted[1]._col, colsSorted[1]._sort >= 0);
+			} else if (lon == 3) {
+				grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false, colsSorted[1]._col, colsSorted[1]._sort >= 0, colsSorted[2]._col, colsSorted[2]._sort >= 0);
+			}
+		}
+
+		if (close) {
 			//delete the iFrame
-//			msgDialog.f_delModIFrame();
-//		};
-
-		// Need to desynchronize the call to the next thing to do
-//		f_dialog.SetTimeoutId(window.setTimeout(toto, 50));
-
-		var ret = this.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
-		if (ret) {
-			f_dialog.ShowNextDialogStored();
-			return;
+			this.f_delModIFrame();
 		}
-
-		//delete the iFrame
-		this.f_delModIFrame();
 	},
 	
 	
