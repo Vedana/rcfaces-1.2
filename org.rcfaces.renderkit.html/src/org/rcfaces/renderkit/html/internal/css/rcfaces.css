@@ -62,5 +62,6 @@
 @import url(f_messageDialog.css); 			//module:messageDialog
 @import url(f_viewDialog.css); 				//module:messageDialog
 @import url(f_waitingShell.css); 			//module:messageDialog
-		
+@import url(f_columnSortDialog.css);		//module:gridHelp
+				
 @import url(f_consoleAppender.css); 				//module:log

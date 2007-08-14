@@ -1,0 +1,88 @@
+.f_columnSortDialog_global {
+	overflow: hidden;
+	background-color: transparent;
+	background-image: none;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	border-spacing: 0;
+}
+
+.f_columnSortDialog_background_transparent
+ {
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    position: absolute;
+    z-index: 10; 
+    background-color: black; 
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+}
+
+.f_columnSortDialog_background_greyed {
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    position: absolute;
+    z-index: 10; 
+    background-color: black; 
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+.f_columnSortDialog_background_opaque {
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    position: absolute;
+    z-index: 10; 
+    background-color: blue; 
+}
+
+.f_columnSortDialog_frame {
+	background-color: transparent;
+    position: absolute;
+    border: 0;
+    frameBorder: O;
+	z-index: 1000;
+}
+
+.f_columnSortDialog_dialog {
+	background-color: #FFFFFF;
+    position: absolute;
+	text-align: center;
+	vertical-align: middle;
+	tabIndex: 0;
+}
+
+.f_columnSortDialog_title_tr {
+	background-color: blue;
+	color: white;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+.f_columnSortDialog_title_td,
+.f_columnSortDialog_image_td,
+.f_columnSortDialog_text_td,
+.f_columnSortDialog_actions_td {
+	vertical-align: middle;
+}
+
+.handleToMove {
+	cursor: move;
+}
+
+/*
+.f_columnSortDialog_title_text
+.f_columnSortDialog_corps_td
+.f_columnSortDialog_text_text
+.f_columnSortDialog_button
+.f_columnSortDialog_text_tr
+.f_columnSortDialog_actions_tr
+*/
+
