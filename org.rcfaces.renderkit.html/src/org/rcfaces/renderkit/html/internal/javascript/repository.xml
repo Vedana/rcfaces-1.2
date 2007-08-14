@@ -1334,6 +1334,15 @@
 		 </file>
 	</module>
 
+	<module id="gridHelp">
+		 <file name="ui/f_columnSortDialog.js">
+			<class name="f_columnSortDialog">
+				<required-class name="f_dialog" />
+				<required-class name="f_grid" />
+			</class>
+		 </file>
+	</module>
+
 	<module id="textEditor">
 		<file name="input/f_textEditor.js">
 			<class name="f_textEditor">
