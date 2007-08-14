@@ -3201,7 +3201,8 @@ var __members = {
 		f_core.Debug(f_grid, "f_setColumnSort: Sort col="+col._index+" ascending="+ascending+" append="+append);
 
 		if (currentSorts.length) {
-			if ((append || currentSorts.length==1) && currentSorts[currentSorts.length-1]==col) {
+			// Ajout Fred pour éviter le cas où on appelle un tri sur plusieurs col dont la première est déjà triée
+			if ((append || currentSorts.length==1) && currentSorts[currentSorts.length-1]==col && !col2) {
 				// f_core.Debug(f_grid, "f_setColumnSort: Just inverse");
 				col._ascendingOrder=ascending;
 		
@@ -3260,6 +3261,57 @@ var __members = {
 		
 		this._sortTable();
 	},
+
+	/**
+	 * gives the ordered set of sorted columns
+	 * @author Fred
+	 * @method public
+	 * @return array of columns
+	 */
+	 f_getSortedColumns: function() {
+	 	var currentSorts=this._currentSorts;
+ 		if (currentSorts && currentSorts.length) {
+		
+			f_core.Debug(f_grid, "f_getSortedColumns: create the array");
+			
+			var newSorts = new Array;
+		
+			for(var i=0;i<currentSorts.length;i++) {
+				newSorts.push(currentSorts[i]);
+			}
+			
+			return newSorts;	
+		}
+		return new Array;
+	 },
+	 
+	/**
+	 * Clean the sort
+	 * @author Fred
+	 * @method public
+	 * @return void
+	 */
+	 f_clearSort: function() {
+	 	var currentSorts=this._currentSorts;
+	 	if (!currentSorts) {
+	 		return;
+	 	}
+ 		if (currentSorts.length) {
+		
+			f_core.Debug(f_grid, "f_clearSort: Remove olds");
+		
+			for(var i=0;i<currentSorts.length;i++) {
+				var old=currentSorts[i];
+				
+				old._ascendingOrder=undefined;
+				this._updateTitleStyle(old);
+			}
+			
+			currentSorts=new Array;
+			this._currentSorts=currentSorts;
+		}
+	 },
+	 
 	/** 
 	 * @method private
 	 */
