@@ -41,6 +41,8 @@ public class Constants {
 
     public static final boolean JAVASCRIPPT_APPEND_RCFACES_HEADER = true;
 
+    public static final boolean JAVASCRIPT_APPEND_PROFILER_DATE=true;
+    
     public static final String JAVASCRIPT_GROUP_ALL_DEFAULT_VALUE = "all";
 
     public static final String JAVASCRIPT_BOOT_SET_DEFAULT_VALUE = "CORE";
