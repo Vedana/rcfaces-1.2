@@ -249,6 +249,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
      */
     private class FileResolvedContent extends AbstractResolvedContent implements
             Serializable {
+        private static final String REVISION = "$Revision$";
 
         private static final long serialVersionUID = 2045867975901327708L;
 

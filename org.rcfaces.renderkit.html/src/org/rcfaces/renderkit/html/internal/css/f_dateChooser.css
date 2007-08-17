@@ -28,7 +28,9 @@
 }
 
 .f_dateChooser_disabled,
-.f_dateChooser_disabled INPUT {
+.f_dateChooser_disabled INPUT,
+.f_dateChooser_disabled .f_dateChooser_text,
+.f_dateChooser_disabled .f_dateChooser_image {
 	-moz-user-focus: ignore;
 	cursor: default;
 }
