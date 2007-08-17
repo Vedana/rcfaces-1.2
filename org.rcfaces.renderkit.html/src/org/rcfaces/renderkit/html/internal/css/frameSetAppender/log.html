@@ -81,7 +81,7 @@ window._rcfacesFrameSetAppend=function(type, name, value) {
 		return;
 		
 	case "console":
-		appendLog(arguments[1]);
+		appendLog.apply(this, arguments[1]);
 		return;
 	}
 	
@@ -196,10 +196,10 @@ function clearLogs() {
 	}
 }
 
-function appendLog(event) {
+function appendLog(level, name, msg, ex, win) {
 	var li=document.createElement("DIV");
 	
-	var date=event.date;
+	var date=new Date();
 	var h=date.getHours();
 	if (h<10) h="0"+h;
 	var m=date.getMinutes();
@@ -210,14 +210,13 @@ function appendLog(event) {
 	if (ms<10) ms="0"+ms;
 	if (ms<100) ms="0"+ms;
 
-	var msg=event.message;
 	var title="["+h+":"+m+":"+s+"."+ms+"]";
 	
-	if (event.window!=window._loggedWindow) {
-		title+=" {"+event.window.document.location+"}";
+	if (win!=window._loggedWindow) {
+		title+=" {"+win.document.location+"}";
 	}
 
-	switch(event.level) {
+	switch(level) {
 	case 0:
 		title+=" FATAL";
 		break;
@@ -237,15 +236,20 @@ function appendLog(event) {
 		title+=" TRACE";
 		break;
 	default: 
-		if (event.level) {
-			title+=" [Level: "+event.level+"]";
+		if (level) {
+			title+=" [Level: "+level+"]";
 		}
 		break;
 	}
-	li._level=event.level;
+	li._level=level;
 	
 	if (msg) {
-		title+=" "+event.name;
+		if (typeof(name)!="string" && name.f_getName) {
+			var className=name.f_getName();
+			name=className;
+		}
+
+		title+=" "+name;
 		
 	} else {
 		msg=name;
@@ -269,7 +273,6 @@ function appendLog(event) {
 		}
 	}
 			
-	var ex=event.exception;
 	if (ex) {
 		if (typeof(ex)!="string") {
 			li.appendChild(document.createElement("HR"));
