@@ -12,7 +12,7 @@
 var __statics = {
 
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Initializer: function() {

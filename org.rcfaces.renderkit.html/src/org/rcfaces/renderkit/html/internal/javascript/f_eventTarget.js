@@ -45,7 +45,7 @@ var __statics = {
 	
 	
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Initializer: function() {
@@ -310,7 +310,7 @@ var __members = {
 	 * @method protected
 	 * @param String type
 	 * @param HTMLElement target
-	 * @return boolean
+	 * @return void
 	 */
 	f_setDomEvent: function(type, target) {
 		f_core.Assert(typeof(type)=="string", "f_eventTarget.f_setDomEvent: Type of event is incorrect ! ("+type+")");

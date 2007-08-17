@@ -5,7 +5,7 @@
 /**
  * Aspect AdditionalInformationManager
  *
- * @aspect public fa_additionalInformationManager extends fa_itemsManager
+ * @aspect public abstract fa_additionalInformationManager extends fa_itemsManager
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

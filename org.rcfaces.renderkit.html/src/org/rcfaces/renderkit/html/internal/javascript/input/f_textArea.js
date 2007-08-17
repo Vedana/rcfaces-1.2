@@ -5,7 +5,7 @@
 /**
  * f_textArea class
  *
- * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_focusStyleClass
+ * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -26,16 +26,16 @@ var __statics = {
 		
 		var maxTextLength=textArea.f_getMaxTextLength();
 		if (!maxTextLength || maxTextLength<1) {
-			return;
+			return true;
 		}
 		
 		var value=textArea.f_getValue();
 		if (!value) {
-			return;
+			return true;
 		}
 		
 		if (value.length<=maxTextLength) {
-			return;
+			return true;
 		}
 	
 		var message=f_resourceBundle.Get(f_textArea).f_formatParams("MAX_TEXT_LENGTH", [maxTextLength]);
@@ -107,7 +107,7 @@ var __members = {
 		
 		this.f_serializeValue();
 		
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	},
 	/**
 	 * @method protected
@@ -204,13 +204,15 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param f_event event
+	 * @return boolean
 	 */
 	_performMenuMouseDown: function(event) {		
 		var evt=event.f_getJsEvent();
 		
 		var sub=f_core.IsPopupButton(evt);
 		if (!sub) {
-			return;
+			return true;
 		}
 		
 		var menu=this.f_getSubMenuById(f_textArea._TEXT_MENU_ID);
@@ -221,6 +223,8 @@ var __members = {
 		
 			return event.f_preventDefault();
 		}
+		
+		return true;
 	},
 	/**
 	 * @method private
@@ -291,7 +295,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return void
+	 * @return HTMLElement
 	 */
 	fa_componentCaptureMenuEvent: function() {
 		return null;

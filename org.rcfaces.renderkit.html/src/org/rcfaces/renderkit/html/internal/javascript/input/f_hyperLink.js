@@ -5,7 +5,7 @@
 /**
  * class f_hyperLink
  *
- * @class f_hyperLink extends f_input
+ * @class f_hyperLink extends f_input, fa_immediate
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -22,6 +22,11 @@ var __members = {
 			if (!input.href) {
 				input.href=f_core.JAVASCRIPT_VOID;
 			}
+		}
+		
+		var d=f_core.GetAttribute(this, "DISABLED");
+		if (d!==undefined && d!==false) {
+			this.f_setDisabled(true);
 		}
 	},
 	f_initializeInput: function() {
@@ -47,6 +52,19 @@ var __members = {
 		f_core.SetTextNode(this, text, this._accessKey);
 		
 		this.f_setProperty(f_prop.TEXT,text);
+	},
+	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
+		if (type==f_event.SELECTION) {			
+			if (this.f_isReadOnly() || this.f_isDisabled()) {
+				return false;
+			}
+			
+			if (!value) {
+				value=this.f_getValue();
+			}
+		}	
+		
+		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
 	}
 }
 new f_class("f_hyperLink", null, null, __members, f_input, fa_immediate);

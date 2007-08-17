@@ -43,7 +43,9 @@ var __statics = {
 	_COMMAND_IMAGE_HEIGHT: 16,
 
 	/**
-	 * @method private static 
+	 * @method private static
+	 * @param Event evt 
+	 * @return boolean
 	 */
 	_NodeLabel_mouseOver: function(evt) {
 		var li=this._node;
@@ -60,24 +62,32 @@ var __statics = {
 		li._labelOver=true;
 		
 		tree.fa_updateElementStyle(li);
+		
+		return true;
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_NodeLabel_mouseOut: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
 
 		if (!li._labelOver) {
-			return;
+			return true;
 		}
 		
 		li._labelOver=undefined;
 		
 		tree.fa_updateElementStyle(li);
+		
+		return true;
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_DivNode_mouseOver: function(evt) {
 		var li=this._node;
@@ -96,9 +106,12 @@ var __statics = {
 		li._over=true;
 		
 		tree.fa_updateElementStyle(li);
+		return true;
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_DivNode_mouseOut: function(evt) {
 		var li=this._node;
@@ -107,15 +120,18 @@ var __statics = {
 		f_core.Assert(tree && tree.tagName, "f_tree._DivNode_mouseOut: Invalid tree this=("+this.id+"/"+this.tagname+") li=("+li.id+"/"+li.tagName+")");
 
 		if (!tree || !li._over) {
-			return;
+			return true;
 		}
 		
 		li._over=undefined;
 		
 		tree.fa_updateElementStyle(li);
+		return true;
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_DivNode_dblClick: function(evt) {
 		var li=this._node;
@@ -136,6 +152,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
+	 * @param Event
+	 * @return boolean
 	 */
 	_DivNode_mouseDown: function(evt) {
 		var li=this._node;
@@ -168,6 +186,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
+	 * @param Event
+	 * @return boolean
 	 */
 	_BodyMouseDown: function(evt) {
 		var tree=this;
@@ -209,6 +229,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
+	 * @param Even evt
+	 * @return boolean
 	 */
 	_Command_mouseDown: function(evt) {
 		var li=this._node;
@@ -241,6 +263,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_Link_bodyOnfocus: function(evt) {
 		var tree=this._tree;
@@ -253,9 +277,12 @@ var __statics = {
 		}
 		
 		tree.f_setFocus();
+		return true;
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_Link_onfocus: function(evt) {
 		var tree=this._tree;
@@ -311,7 +338,9 @@ var __statics = {
 		return true;		
 	},
 	/**
-	 * @method private static 
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean 
 	 */
 	_Link_onblur: function(evt) {
 		var tree=this._tree;
@@ -345,6 +374,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_Link_onkeydown: function(evt) {
 		var tree=this._tree;
@@ -364,6 +395,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_Link_onkeyup: function(evt) {
 		var tree=this._tree;
@@ -785,7 +818,7 @@ var __members = {
 			return;
 		}
 
-		return this.f_super(arguments, type, target);
+		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent: function(type, target) {
 		switch(type) {
@@ -797,8 +830,12 @@ var __members = {
 			return;
 		}
 
-		return this.f_super(arguments, type, target);
+		this.f_super(arguments, type, target);
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_documentComplete: function() {
 		this.f_super(arguments);
 
@@ -1101,7 +1138,7 @@ var __members = {
 		
 			this._callServer(waitingNode);
 		
-			return;
+			return true;
 		}
 		
 		if (!ul.hasChildNodes()) {
@@ -1117,6 +1154,10 @@ var __members = {
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_reloadTree: function() {
 		var ul=this;
 	
@@ -1132,8 +1173,6 @@ var __members = {
 		this._waitingNodes.push(waitingNode);
 	
 		this._callServer(waitingNode);
-	
-		return;
 	},
 	_callServer: function(waitingNode) {
 		var error=false;
@@ -1208,7 +1247,7 @@ var __members = {
 					image.src=f_waiting.GetWaitingErrorImageURL();
 				}
 				
-				f_tree.Info(f_tree, "Bad status: "+request.f_getStatus());
+				f_tree.Info(f_tree, "_callServer.onError: Bad status: "+status);
 				
 		 		tree.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
 	 		},
@@ -1714,24 +1753,48 @@ var __members = {
 			this.f_setDisabledNodeImageURL(node, disabledImageURL);
 		}
 	},
+	/**
+	 * @method public
+	 * @param Object node
+	 * @param String imageURL
+	 * @return void
+	 */
 	f_setNodeImageURL: function(node, imageURL) {
 		node._imageURL=imageURL;
 		if (imageURL) {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 	},
+	/**
+	 * @method public
+	 * @param Object node
+	 * @param String imageURL
+	 * @return void
+	 */
 	f_setExpandedNodeImageURL: function(node, imageURL) {
 		node._expandedImageURL=imageURL;
 		if (imageURL) {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 	},
+	/**
+	 * @method public
+	 * @param Object node
+	 * @param String imageURL
+	 * @return void
+	 */
 	f_setSelectedNodeImageURL: function(node, imageURL) {
 		node._selectedImageURL=imageURL;
 		if (imageURL) {
 			f_imageRepository.PrepareImage(imageURL);
 		}
 	},
+	/**
+	 * @method public
+	 * @param Object node
+	 * @param String imageURL
+	 * @return void
+	 */
 	f_setDisabledNodeImageURL: function(node, imageURL) {
 		node._disabledImageURL=imageURL;
 		if (imageURL) {
@@ -1894,6 +1957,12 @@ var __members = {
 
 		this.f_moveCursor(lis[i], true, evt, selection);
 	},
+	/**
+	 * @method private
+	 * @param Event Event
+	 * @param number selection
+	 * @eturn void
+	 */
 	_lastTreeNode: function(evt, selection) {
 		var lis=this.fa_listVisibleElements();
 		if (!lis || !lis.length) {
@@ -1902,6 +1971,12 @@ var __members = {
 		
 		this.f_moveCursor(lis[lis.length-1], true, evt, selection);
 	},
+	/**
+	 * @method private
+	 * @param Event Event
+	 * @param number selection
+	 * @eturn void
+	 */
 	_nextPageTreeNode: function(evt, selection) {		
 		var cursorLi=this._cursor;
 		if (!cursorLi) {
@@ -1943,6 +2018,12 @@ var __members = {
 
 		this.f_moveCursor(last, true, evt, selection);
 	},
+	/**
+	 * @method private
+	 * @param Event Event
+	 * @param number selection
+	 * @eturn void
+	 */
 	_firstTreeNode: function(evt, selection) {		
 		var lis=this.fa_listVisibleElements();
 		if (!lis || !lis.length) {
@@ -1951,6 +2032,12 @@ var __members = {
 
 		this.f_moveCursor(lis[0], true, evt, selection);
 	},
+	/**
+	 * @method private
+	 * @param Event Event
+	 * @param number selection
+	 * @eturn void
+	 */
 	_previousTreeNode: function(evt, selection) {
 		var cursorLi=this._cursor;
 		if (!cursorLi) {
@@ -1978,6 +2065,12 @@ var __members = {
 		
 		this.f_moveCursor(lis[i], true, evt, selection);
 	},
+	/**
+	 * @method private
+	 * @param Event Event
+	 * @param number selection
+	 * @eturn void
+	 */
 	_previousPageTreeNode: function(evt, selection) {		
 		var cursorLi=this._cursor;
 		if (!cursorLi) {
@@ -2574,7 +2667,7 @@ var __members = {
 		this.f_setProperty(f_prop.HORZSCROLLPOS, this.scrollLeft);
 		this.f_setProperty(f_prop.VERTSCROLLPOS, this.scrollTop);
 		
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	},
 	/** 
 	 * @method hidden
@@ -2704,6 +2797,10 @@ var __members = {
 			this._openNode(node, null, li);
 		}
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
 	fa_componentCaptureMenuEvent: function() {
 		return null;
 	},

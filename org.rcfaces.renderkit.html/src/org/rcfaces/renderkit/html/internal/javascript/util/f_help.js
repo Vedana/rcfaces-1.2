@@ -43,7 +43,7 @@ var __statics = {
 	_F: "scrollbars,resizable,status=no",
 
 	/**
-	 * @field private boolean
+	 * @field private static boolean
 	 */
 	_Installed: undefined,
 
@@ -102,6 +102,9 @@ var __statics = {
 
 		document.onkeydown = f_help._NS_open;
 	},
+	/**
+	 * @method private static
+	 */
 	_IE_open: function() {
 		if (f_help._FocusElement) {
 			return f_help._Open(f_help._FocusElement);
@@ -109,6 +112,9 @@ var __statics = {
 
 		return false;
 	},
+	/**
+	 * @method private static
+	 */
 	_NS_open: function(js) {
 		if (f_help._FocusElement && js.keyCode==f_key.VK_F1) {
 			return f_help._Open(f_help._FocusElement);
@@ -116,15 +122,24 @@ var __statics = {
 
 		return true;
 	},
+	/**
+	 * @method private static
+	 */
 	_OnFocus: function(evt) {
 		f_help._FocusElement = evt.f_getComponent();
 	},
+	/**
+	 * @method private static
+	 */
 	_OnBlur: function(evt) {
 		if (f_help._FocusElement == evt.f_getComponent()) {
 			f_help._FocusElement = undefined;
 		}
 	},
-	_OnShowHelpMessage: function(evt) {
+	/**
+	 * @method hidden static
+	 */
+	OnShowHelpMessage: function(evt) {
 		var component=evt.f_getComponent();
 		
 		var zone = f_help._HelpZone;
@@ -136,7 +151,10 @@ var __statics = {
 		}
 		return true;
 	},
-	_OnHideHelpMessage: function(evt) {
+	/**
+	 * @method hidden static
+	 */
+	OnHideHelpMessage: function(evt) {
 		var component=evt.f_getComponent();
 		var zone = f_help._HelpZone;
 		if (!zone) {
@@ -148,6 +166,9 @@ var __statics = {
 		
 		return true;
 	},
+	/**
+	 * @method private static
+	 */
 	_Open: function(elt) {
 		var url=null;
 		if (elt && typeof(elt.f_getHelpURL)=="function") {
@@ -165,7 +186,7 @@ var __statics = {
 			var h = f_env.Get("WINHELP_H", f_help._H);
 			var x = f_env.Get("WINHELP_X", f_help._X);
 			var y = f_env.Get("WINHELP_Y", f_help._Y);
-			var f = f_env.Get("WINHELP_FEATURES", f_help._F);
+			// var f = f_env.Get("WINHELP_FEATURES", f_help._F);
 			win = f_core.OpenWindow(window, { 
 				url: url,
 				target: id,
@@ -182,6 +203,9 @@ var __statics = {
 		
 		return false;
 	},
+	/**
+	 * @method protected static
+	 */
 	DocumentComplete: function() {
 		if (!f_help._FindZone) {
 			return;
@@ -189,7 +213,7 @@ var __statics = {
 		f_help._HelpZone = f_core.GetChildByClass(document,f_helpMessageZone.f_getName());
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {

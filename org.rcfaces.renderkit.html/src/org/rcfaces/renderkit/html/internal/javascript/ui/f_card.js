@@ -5,7 +5,7 @@
 /**
  * class Card
  *
- * @class f_card extends f_component
+ * @class f_card extends f_component, fa_asyncRender
  * @author olivier Oeuillot
  * @version $REVISION: $
  */

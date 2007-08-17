@@ -237,7 +237,7 @@ var __statics = {
 		return false;
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {

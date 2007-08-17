@@ -5,7 +5,7 @@
 /**
  * Aspect SelectionManager
  *
- * @aspect public fa_selectionManager extends fa_itemsManager, fa_selectionProvider
+ * @aspect public abstract fa_selectionManager extends fa_itemsManager, fa_selectionProvider
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -102,7 +102,7 @@ var __statics = {
 		return keySelection;
 	},
 	/**
-	 * @hidden
+	 * @method hidden static
 	 */
 	SetSelectionCardinality: function(object, cardinality, selectionFullState) {
 		object._selectionCardinality=cardinality;

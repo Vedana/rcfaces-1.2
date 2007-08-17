@@ -215,13 +215,13 @@ var __statics = {
 	 */
 	POPUP_LOCK: 4,
 
-	/* 
+	/**
 	 * @field private static number
 	 */
 	_EvtLock: 0,
 
 	
-	/*
+	/**
 	 * @field private static boolean
 	 */
 	_EvtLockMode: true,
@@ -420,12 +420,6 @@ var __statics = {
 	 */
 	RESET_DETAIL: 0x200,
 	
-	/**
-	 * @field hidden boolean
-	 * @see f_class#_systemClass
-	 */
-	_systemClass: true,
-
 	/**
 	 * @method public static
 	 * @return f_object
@@ -723,5 +717,6 @@ var __statics = {
 }
 new f_class("f_event", {
 	statics: __statics,
-	members: __members
+	members: __members,
+	systemClass: true
 });

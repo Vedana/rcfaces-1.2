@@ -10,7 +10,6 @@ if (window.f_core) {
 
 // For profiling ....
 window._rcfacesInitLibraryDate=new Date();
-
 		
 var __SYMBOL=function(x) { return x };
 
@@ -226,6 +225,10 @@ var f_core = {
 	 * @method private static
 	 */
 	_AddLog: function(level, name, message, exception, win) {
+		if (!win) {
+			win=window;
+		}
+
 		if (window.rcfacesLogCB) {
 			window.rcfacesLogCB.apply(window, arguments);
 			return;
@@ -555,9 +558,15 @@ var f_core = {
 	SetProfilerMode: function(profilerMode) {
 		f_core.Assert(profilerMode===undefined || typeof(profilerMode)=="function", "f_core.SetProfilerMode: Invalid profilerMode parameter ("+profilerMode+")");
 
+		if (profilerMode===false) {			
+			window.rcfacesProfilerCB=false;
+			return;
+		}
+		
 		if (profilerMode===undefined) {
 			profilerMode=true;
 		}
+		
 		if (!window.rcfacesProfilerCB) {
 			window.rcfacesProfilerCB=profilerMode;
 		}
@@ -588,7 +597,7 @@ var f_core = {
 			for(var w=window;w && w.parent!=w;w=w.parent) {
 				var f=w.parent.rcfacesProfilerCB
 				if (!f) {
-					f=w.parent.f_profilerCB;
+					f=w.parent.f_profilerCB; // Legacy !
 				}
 				
 				if (f) {
@@ -693,7 +702,7 @@ var f_core = {
 				component.nodeType==f_core.DOCUMENT_NODE || 
 				component.screen /* window ? */), "f_core.RemoveEventListener: Invalid component parameter ("+component+")");
 		f_core.Assert(typeof(name)=="string", "f_core.RemoveEventListener: Invalid name parameter ("+name+")");
-		f_core.Assert(typeof(fct)=="function", "f_core.RemoveEventListener: Invalid function parameter ("+fct+")");
+		f_core.Assert(typeof(fct)=="function", "f_core.RemoveEventListener: Invalid function parameter ("+fct+") type='"+name+"' component={"+component.nodeType+"}"+component.tagName+"."+component.className+"#"+component.id);
 		f_core.Assert(capture===undefined || 		
 			(capture.nodeType==f_core.ELEMENT_NODE || 
 				capture.nodeType==f_core.DOCUMENT_NODE || 
@@ -744,10 +753,14 @@ var f_core = {
 	 * @param optional any Date of profile point. (Can be 'Date' or numer)
 	 * @return void
 	 */
-	Profile: function(timeEnd, name, date) {
+	Profile: function(timeEnd, name, date, win) {
 		if (f_core._LoggingProfile) {
 			return;
 		}
+		if (!win) {
+			win=window;
+		}
+		
 		try {
 			f_core._LoggingProfile=true;	
 	
@@ -993,7 +1006,7 @@ var f_core = {
 		}
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 */
 	Finalizer: function() {
 		//	document._lazyIndex=undefined; // number
@@ -1120,7 +1133,7 @@ var f_core = {
 	 * @param HTLMElement parent
 	 * @param String tagName
 	 * @param Object properties
-	 * @return void
+	 * @return HTMLElement
 	 */
 	CreateElement: function(parent, tagName, properties) {
 		f_core.Assert(parent && parent.nodeType==f_core.ELEMENT_NODE, "f_core.CreateElement: Invalid component ! ("+parent+")");		
@@ -1270,6 +1283,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @return boolean
 	 */
 	_OnReset: function(evt) {
 		if (!evt) {
@@ -1313,6 +1327,8 @@ var f_core = {
 		if (f_env.GetCheckValidation()) {
 			f_core._CallFormCheckListeners(form, true);
 		}
+		
+		return true;
 	},
 	/**
 	 * @method private static
@@ -1928,7 +1944,7 @@ var f_core = {
 		var cfs=undefined;
 		var ces=undefined;
 		
-		var messageContext=f_messageContext.Get(form);
+		// var messageContext=f_messageContext.Get(form); // Pas utilisé !
 		
 		for(var i=0;i<checkListeners.length;) {
 			var component= checkListeners[i++];
@@ -1968,6 +1984,11 @@ var f_core = {
 			ces.push({
 				_component: component,
 				
+				/**
+				 * @method hidden
+				 * @param f_event event
+				 * @return boolean 
+				 */
 				f_performCheckValue: function(event) {
 					var detail=event.f_getDetail();
 					if (!detail) {
@@ -2699,6 +2720,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @return boolean
 	 */
 	_SearchBrowser: function() {
 		var agt=window.navigator.userAgent.toLowerCase();
@@ -2816,6 +2838,7 @@ var f_core = {
 		}
 
 		f_core.Assert(false, "f_core._SearchBrowser: Unknown browser '"+agt+"'.");
+		return false;
 	},
 	/**
 	 * @method hidden static
@@ -3407,21 +3430,21 @@ var f_core = {
 
 		if (f_core._FocusTimeoutID) {
 			f_core._FocusComponent=component;
-			return;
+			return true;
 		}
 		
 		if (asyncMode) {
 			f_core._FocusComponent=component;
 			
 			f_core._FocusTimeoutID=window.setTimeout(f_core._FocusTimeout, f_core._FOCUS_TIMEOUT_DELAY);
-			return;
+			return true;
 		}
 
 		if (typeof(component.f_show)=="function") {
 			try {
 				if (!component.f_show()) {
 					f_core.Info(f_core, "SetFocus: Can not set focus to a not visible component");
-					return;
+					return false;
 				}
 				
 			} catch (ex) {
@@ -3732,7 +3755,7 @@ var f_core = {
 		return obj;
 	},
 	/**
-	 * @method private hidden
+	 * @method private hidden static
 	 * @param Date date
 	 * @return String
 	 */
@@ -3839,6 +3862,7 @@ var f_core = {
 		}
 		
 		f_core.Error(f_core, "DeserializeDate: Invalid date format ! ("+date+")");
+		return null;
 	},
 	/**
 	 * @method private static
@@ -3948,7 +3972,7 @@ var f_core = {
 		
 		window._acceptedSelection=textRange.getBookmark();
 		document.title="Set bookmark ! "+window._acceptedSelection;	
-			
+		return true;
 	},
 	/**
 	 * @method private static
@@ -4180,6 +4204,7 @@ var f_core = {
 		}
 		
 		f_core.Error(f_core, "GetTextSelection: Unsupported browser for GetTextSelection() !");
+		return null;
 	},
 	/**
 	 * Select a text into a TextEntry or a TextArea
@@ -4661,12 +4686,13 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static 
-	 * @param String url 
-	 * @param any data
-	 * @return any Data
+	 * @param Function callback
+	 * @return Function
 	 */
 	SetAjaxParametersUpdater: function(callback) {
+		var old=f_core._AjaxParametersUpdater;
 		f_core._AjaxParametersUpdater=callback;
+		return old;
 	},
 	/**
 	 * @method hidden static 
@@ -5017,112 +5043,12 @@ var f_core = {
 		return "f_core";
 	},
 	/**
-	 * @method public
+	 * @method public static
 	 * @return String
 	 */
 	toString: function() {
 		return "[class f_core]";
 	}
-}
-
-/**
- * Removes the first occurrence in this list of the specified element.
- *
- * @class hidden Array
- * @method hidden f_removeElement
- * @param Object element Object to be removed.
- * @return boolean <code>true</code> if success.
- */
-Array.prototype.f_removeElement=function(element) {
-	for(var i=0;i<this.length;i++) {
-		if (this[i]!=element) {
-			continue;
-		}
-		
-		this.splice(i, 1);
-		return true;
-	}
-	return false;
-}
-/**
- * Removes the first occurrence in this list of the specified elements.
- *
- * @class hidden Array
- * @method hidden f_removeElements
- * @return number Number of removed element.
- */
-Array.prototype.f_removeElements=function() {
-	var cnt=0;
-	for(var j=0;j<arguments.length && this.length>0;j++) {
-		var element=arguments[j];
-		
-		for(var i=0;i<this.length;i++) {
-			if (this[i]!=element) {
-				continue;
-			}
-			
-			this.splice(i, 1);
-			cnt++;
-			break;
-		}
-	}
-	
-	return cnt;
-}
-/**
- * Adds the specified element to the list if the list does not contain the element.
- *
- * @class hidden Array
- * @method hidden f_addElement
- * @param Object element element to be added.
- */
-Array.prototype.f_addElement=function(element) {
-	if (this.f_contains(element)) {
-		return false;
-	}
-
-	this.push(element);
-	return true;
-}
-/**
- * Adds the specified element to the list if the list does not contain the element.
- *
- * @class hidden Array
- * @method hidden f_addElements
- * @return number Number of added elements.
- */
-Array.prototype.f_addElements=function() {
-	var cnt=0;
-	for(var j=0;j<arguments.length;j++) {
-		var element=arguments[j];
-		
-		if (!this.f_addElement(element)) {
-			continue;
-		}
-		
-		cnt++;
-	}
-	
-	return cnt;		
-}
-/**
- * Returns <tt>true</tt> if this array contains the specified element.
- *
- * @class hidden Array
- * @method hidden f_contains
- * @param any element Element whose presence in this array is to be tested.
- * @return boolean <tt>true</tt> if this collection contains the specified element
- */
-Array.prototype.f_contains=function(element) {
-	for(var i=0;i<this.length;i++) {
-		if (this[i]!=element) {
-			continue;
-		}
-		
-		return true;
-	}
-	
-	return false;
 }
 
 

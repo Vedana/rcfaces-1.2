@@ -5,7 +5,7 @@
 /**
  * Aspect ReadOnly
  *
- * @aspect public fa_readOnly
+ * @aspect public abstract fa_readOnly
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

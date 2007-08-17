@@ -229,6 +229,10 @@ var __members = {
 			this.f_uiSelectItem(menuItems[menuItems.length-1]);
 		}
 	},
+	/**
+	 * @method protected
+	 * @return Object
+	 */
 	fa_getPopupCallbacks: function() {
 		var menu=this;
 		

@@ -176,7 +176,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setSelectedIndex: function(idx) {
-		return this.f_setValue(idx, true);
+		this.f_setValue(idx, true);
 	},
 	/**
 	 * Returns the value of item specified by an index.
@@ -227,7 +227,7 @@ var __members = {
 			this.f_setProperty(f_prop.SELECTED_ITEMS, sel, sel instanceof Array);
 		}
 
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {
@@ -329,7 +329,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_combo, "Bad status: "+request.f_getStatus());
+	 			f_core.Info(f_combo, "Bad status: "+status);
 	 			
 				if (combo.f_processNextCommand()) {
 					return;

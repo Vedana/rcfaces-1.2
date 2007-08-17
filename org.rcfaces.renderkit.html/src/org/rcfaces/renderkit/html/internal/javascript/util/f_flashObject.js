@@ -84,7 +84,8 @@ var __statics = {
 		if (!version) {
 			try {
 				// version will be set for 4.X or 5.X player
-				var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.3");
+				//var axo = 
+				new ActiveXObject("ShockwaveFlash.ShockwaveFlash.3");
 				version = axo.GetVariable("$version");
 				
 			} catch (e) {
@@ -94,7 +95,8 @@ var __statics = {
 		if (!version) {
 			try {
 				// version will be set for 3.X player
-				var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.3");
+				//var axo = 
+				new ActiveXObject("ShockwaveFlash.ShockwaveFlash.3");
 				
 				version = "WIN 3,0,18,0";
 			} catch (e) {
@@ -104,7 +106,8 @@ var __statics = {
 		if (!version) {
 			try {
 				// version will be set for 2.X player
-				var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+				//var axo = 
+				new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
 				
 				version = "WIN 2,0,0,11";
 	

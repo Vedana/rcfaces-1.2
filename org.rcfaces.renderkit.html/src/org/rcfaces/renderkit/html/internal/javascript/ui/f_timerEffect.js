@@ -42,6 +42,9 @@ var __statics = {
 }
 
 var __members = {
+	/**
+	 * @method protected
+	 */
 	f_finalize: function() {
 		var timerId=this._timerId;
 		if (timerId) {
@@ -52,14 +55,30 @@ var __members = {
 
 		this.f_super(arguments);
 	},
+	/**
+	 * @method public
+	 * @return number
+	 */
 	f_getStepMs: function() {	
 		return 100;
 	},
+	/**
+	 * @method public
+	 * @return number
+	 */
 	f_getStep: function() {
 		return 0.1;
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_performTick: function(component, cur, next) {
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_wakeUpTimer: function() {
 		if (this._timerId) {
 			return;

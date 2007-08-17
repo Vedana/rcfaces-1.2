@@ -16,22 +16,22 @@ var __statics = {
 	_STORAGE_MAX_SIZE: 1048576,
 	
 	/**
-	 * @method private static final String
+	 * @field private static final String
 	 */
 	_STORAGE_NAME: "camelia",
 	
 	/**
-	 * @method private static
+	 * @field private static
 	 */
 	_UserDataComponent: undefined,
 	
 	/**
-	 * @method private static boolean
+	 * @field private static boolean
 	 */
 	_NeedSave: undefined,
 	
 	/**
-	 * @method private static boolean
+	 * @field private static boolean
 	 */
 	_Exiting: undefined,
 		

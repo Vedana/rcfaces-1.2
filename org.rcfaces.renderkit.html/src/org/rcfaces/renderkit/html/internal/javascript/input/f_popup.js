@@ -94,6 +94,10 @@ var __statics = {
 	 */
 	_LockPopupEvents: undefined,
 	
+	/**
+	 * @method protected static
+	 * @return void
+	 */
 	Initializer: function() {
 		if (f_core.IsInternetExplorer()) {
 			var popup=f_popup._Ie_PreparePopup(document);
@@ -102,7 +106,7 @@ var __statics = {
 	},
 	
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -381,7 +385,7 @@ var __statics = {
 
 		var component=f_popup.Component;
 		if (!component) {
-			return;
+			return true;
 		}
 		
 		// Si la target n'est pas dans une popup on ferme !
@@ -650,6 +654,8 @@ var __statics = {
 				return false; // undefined
 			}	
 		}
+		
+		return true;
 	},
 	/**
 	 * Verify que l'evenement a eu lieu dans une popup !
@@ -856,9 +862,9 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static 
-	 * @param Object positionsInfos
-	 * @param Event jsEvt
-	 * @return Object
+	 * @param Object popup
+	 * @param Object positionInfos
+	 * @return void
 	 */
 	Gecko_openPopup: function(popup, positionInfos) {
 		f_core.Assert(typeof(popup)=="object", "f_popup.Gecko_openPopup: Invalid popup parameter '"+popup+"'.");

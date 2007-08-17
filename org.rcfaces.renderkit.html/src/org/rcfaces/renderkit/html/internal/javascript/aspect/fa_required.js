@@ -5,7 +5,7 @@
 /**
  * Aspect Required. 
  *
- * @aspect public fa_required
+ * @aspect public abstract fa_required
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

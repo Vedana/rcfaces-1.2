@@ -36,7 +36,7 @@ var __statics = {
 	_LastTimerType: undefined,
 	
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -53,6 +53,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @return boolean
 	 */
 	_OnSpinnerButtonOver: function(evt) {
 		var spinner=this._spinner;
@@ -82,10 +83,11 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @return boolean
 	 */
 	_OnSpinnerButtonOut: function() {
 		if (!this._hover) {
-			return;
+			return true;
 		}
 		
 		var spinner=this._spinner;
@@ -100,6 +102,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @return boolean
 	 */
 	_OnSpinnerButtonDown: function(evt) {
 		var spinner=this._spinner;
@@ -122,6 +125,8 @@ var __statics = {
 		spinner.f_performStep(this._scale, evt);
 		
 		fa_spinner._InstallTimer(this, true);
+		
+		return true;
 	},
 	
 	/**
@@ -148,6 +153,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @return void
 	 */
 	_PerformTick: function(button) {
 		if (!button._hover || !button._pushed) {
@@ -156,7 +162,7 @@ var __statics = {
 		
 		var spinner=button._spinner;
 		if (spinner.f_getEventLocked(null) || spinner.f_isDisabled()) {
-			return false;
+			return;
 		}
 	
 		spinner.f_performStep(button._scale, null);

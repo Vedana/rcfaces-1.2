@@ -5,7 +5,7 @@
 /**
  * Aspect Images
  *
- * @aspect public fa_images
+ * @aspect public abstract fa_images
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

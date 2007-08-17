@@ -5,7 +5,7 @@
 /**
  * Aspect Menu
  *
- * @aspect public fa_menuCore extends fa_groupName, fa_items
+ * @aspect public abstract fa_menuCore extends fa_groupName, fa_items
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -33,7 +33,7 @@ var __statics = {
 	_ItemIds: 0,
 	
 	/** 
-	 * @field private static String
+	 * @method private static String
 	 * @this Object
 	 */
 	_ItemToString: function() {
@@ -691,10 +691,8 @@ var __members = {
 			// Appel de la callback de selection
 			var value=this.f_getItemValue(menuItem);
 			this.f_performItemSelect(menuItem, value, jsEvent);
-			return true;
+			return;
 		}
-		
-		return false;
 	},
 	/**
 	 * @method protected final
@@ -879,12 +877,12 @@ var __members = {
 		
 		// Le menu est en mode ReadOnly ?
 		if (this.f_isReadOnly()) {
-			return true;
+			return;
 		}
 		
 		// Notre menuItem root est-il desactivé ?
 		if (this.f_isItemDisabled(menuItem)) {
-			return true;
+			return;
 		}
 
 		// a t-il  un popup ?
@@ -1388,9 +1386,7 @@ var __members = {
 
 		f_core.Debug(fa_menuCore, "f_openUIPopup: parentItem="+parentItem+" positionInfos="+positionInfos+" autoSelect="+autoSelect);
 
-		var selectionProvider=this.fa_getSelectionProvider();
-
-		f_core.Debug(fa_menuCore, "f_openUIPopup: selectionProvider="+selectionProvider);
+		f_core.Debug(fa_menuCore, "f_openUIPopup: selectionProvider="+this.fa_getSelectionProvider());
 				
 		var container=this._getPopupContainer(menuItem);
 		f_core.Assert(container, "fa_menuCore.f_openUIPopup: Invalid popup container !");
@@ -1480,6 +1476,8 @@ var __members = {
 				this.f_menuItem_over(selectItem, false, jsEvent);
 			}
 		}
+		
+		return true;
 	},
 	/**
 	 * @method protected
@@ -1628,12 +1626,17 @@ var __members = {
 	fa_getKeyProvider: f_class.ABSTRACT,
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 * @param Object parent
 	 * @return boolean
 	 */
-	fa_isRootMenuItem: f_class.ABSTRACT
-	
+	fa_isRootMenuItem: f_class.ABSTRACT,
+
+	/**
+	 * @method protected abstract
+	 * @return Object
+	 */
+	fa_getPopupCallbacks: f_class.ABSTRACT
 }
 
 new f_aspect("fa_menuCore", __statics, __members, fa_groupName, fa_items);

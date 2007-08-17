@@ -138,7 +138,7 @@ var __statics = {
     },
     /**
      *
-     * @method public static
+     * @method protected static
 	 * @return void
      */
      DocumentComplete: function() {
@@ -157,7 +157,7 @@ var __statics = {
 	
      /**
      * Class Constructor (called in the head ...
-     * @method public static
+     * @method protected static
 	 * @return void
      */
     Initializer: function() {
@@ -166,7 +166,7 @@ var __statics = {
 	 },
 	/**
      * Class Destructor (called in the head ...
-     * @method public static
+     * @method protected static
 	 * @return void
      */
     Finalizer: function() {
@@ -986,7 +986,7 @@ var __members = {
 	f_drawModIFrame: function() {
      	f_core.Debug(f_shell, "f_drawModIFrame: entering");
 
-		var cssClassBase = this.f_getCssClassBase();
+		//var cssClassBase = this.f_getCssClassBase();
 
 		if (f_shell._ObjIFrame) {
 	     	f_core.Debug(f_shell, "f_drawModIFrame: exit : already done !");

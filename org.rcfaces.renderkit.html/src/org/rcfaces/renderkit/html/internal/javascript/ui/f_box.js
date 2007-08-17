@@ -56,14 +56,14 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return void
+	 * @return boolean
 	 */
 	_performMenuMouseDown: function(event) {		
 		var jsEvent=event.f_getJsEvent();
 		
 		var sub=f_core.IsPopupButton(jsEvent);
 		if (!sub) {
-			return;
+			return true;
 		}
 		
 		var menuId=this.f_getDefaultMenuId();
@@ -77,7 +77,13 @@ var __members = {
 				
 			return event.f_preventDefault();
 		}
+		
+		return true;
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
 	fa_componentCaptureMenuEvent: function() {
 		return null;
 	}

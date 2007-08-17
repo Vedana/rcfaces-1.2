@@ -433,8 +433,8 @@ var __members={
 			return false;
 		}
 		
-		var offsetX=0;
-		var offsetY=this.offsetHeight;
+		//var offsetX=0;
+		//var offsetY=this.offsetHeight;
 		
 		fa_calendarPopup._OpenPopup(this, this, 0, this.offsetHeight, false, false);
 		

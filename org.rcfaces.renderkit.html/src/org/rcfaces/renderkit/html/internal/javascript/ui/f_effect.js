@@ -65,7 +65,7 @@ var __statics = {
 		return claz.f_newInstance(component, callback);
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {

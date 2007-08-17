@@ -72,7 +72,7 @@ var __statics = {
 	_Appenders: undefined,
 	
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Initializer: function() {
@@ -86,7 +86,7 @@ var __statics = {
 		});
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {

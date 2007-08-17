@@ -69,12 +69,6 @@ var __statics = {
 	 * @field private static boolean
 	 */
 	_ClientValidationDisabled: undefined,
-		
-	/**
-	 * @field hidden boolean
-	 * @see f_class#_systemClass
-	 */
-	_systemClass: true,
 	
 	/*
 	Initializer: function() {
@@ -415,5 +409,6 @@ var __statics = {
 }
 
 new f_class("f_env", {
-	statics: __statics
+	statics: __statics,
+	systemClass: true
 });

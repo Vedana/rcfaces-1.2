@@ -4,7 +4,7 @@
 
 /**
  *
- * @class public f_clientStorage extends f_object
+ * @class public abstract f_clientStorage extends f_object
  * @version $Revision$ $Date$
  */
 
@@ -91,6 +91,10 @@ var __statics = {
 		
 		return null;
 	},
+	/**
+	 * @method private static
+	 * @return f_clientStorage
+	 */
 	_SearchStorage: function(storages, type) {
 		if ((type & f_clientStorage.DOM_STORAGE_TYPE) && f_class.IsClassDefined("f_domClientStorage"))  {
 			if (storages) {
@@ -160,6 +164,9 @@ var __statics = {
 		
 		return null;
 	},
+	/**
+	 * @method protected static
+	 */
 	Finalizer: function() {
 		f_clientStorage._Storage=undefined;
 		f_clientStorage._Storages=undefined;

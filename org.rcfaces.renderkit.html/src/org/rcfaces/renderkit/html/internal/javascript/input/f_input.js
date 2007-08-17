@@ -299,6 +299,8 @@ var __members = {
 		}
 		
 		this.f_getInput().value=value;
+		
+		return true;
 	},
 	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
 		if (type==f_event.CHANGE) {			

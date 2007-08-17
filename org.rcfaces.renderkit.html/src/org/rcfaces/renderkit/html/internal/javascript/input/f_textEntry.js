@@ -5,7 +5,7 @@
 /**
  * f_textEntry class
  *
- * @class f_textEntry extends f_textArea
+ * @class public f_textEntry extends f_textArea
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

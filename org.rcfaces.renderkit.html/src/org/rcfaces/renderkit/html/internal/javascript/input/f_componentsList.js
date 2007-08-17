@@ -68,6 +68,10 @@ var __members = {
 			this.f_getClass().f_getClassLoader().addVisibleComponentListener(this);			
 		}
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_documentComplete: function() {
 		this.f_super(arguments);
 
@@ -100,7 +104,7 @@ var __members = {
 	 * @return boolean Returns <code>false</code>.
 	 */
 	f_setFirst: function(index, cursorIndex, jsEvent) {
-		var oldFirst=this._first;
+		//var oldFirst=this._first;
 		
 		this.f_setProperty(f_prop.FIRST, index);
 	
@@ -160,7 +164,7 @@ var __members = {
 
 		var tbody=this._tbody;
 
-		var scrollBody=this._scrollBody;
+		//var scrollBody=this._scrollBody;
 		if (!this._oldHeight) {
 			this._oldHeight=true;
 			this._oldHeightStyle=this.style.height;
@@ -196,9 +200,19 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_componentsList, "Bad status: "+request.f_getStatus());
-
-		 		if (componentsList.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
+	 			f_core.Info(f_componentsList, "Bad status: "+status);
+ 			
+	 			var continueProcess;
+	 			
+	 			try {
+	 				continueProcess=componentsList.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+	 				
+	 			} catch (x) {
+	 				// On continue coute que coute !
+	 				continueProcess=false;
+	 			}	 				
+	 				 				 			 			
+		 		if (continueProcess===false) {
 					componentsList._loading=false;		
 					
 					var waiting=componentsList._waiting;
@@ -309,7 +323,7 @@ var __members = {
 	f_startNewPage: function(rowIndex) {
 		// Appeler par la génération du serveur !
 
-		var scrollBody=this._scrollBody;
+		//var scrollBody=this._scrollBody;
 		if (this._oldHeight) {
 			this.style.height=this._oldHeightStyle;
 			this._oldHeight=undefined;

@@ -83,6 +83,10 @@ var __members = {
 		f_core.Debug(f_imageCombo, "f_imageButtonSelect: Menu open (menu='"+menu+"')");
 		return false;
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
 	fa_componentCaptureMenuEvent: function() {
 		return this;
 	},	

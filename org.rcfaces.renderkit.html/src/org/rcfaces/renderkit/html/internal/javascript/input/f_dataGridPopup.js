@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_dataGridPopup extends f_daraGrid
+ * @class public f_dataGridPopup extends f_dataGrid
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

@@ -661,7 +661,7 @@ var __members = {
 	 * @return number of removed rows.
 	 */
 	f_clearAll: function() {
-		this.f_clear.apply(this, this.fa_listVisibleElements());
+		return this.f_clear.apply(this, this.fa_listVisibleElements());
 	},
 	/**
 	 * Returns an array of content of each cell of the specified row.
@@ -942,9 +942,20 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+request.f_getStatus());
-	 				 				 			
-		 		if (dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
+	 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+status);
+	 			
+	 			var continueProcess;
+	 			
+	 			try {
+	 				continueProcess=dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+	 				
+	 			} catch (x) {
+	 				// On continue coute que coute !
+	 				continueProcess=false;
+	 			}	 				
+	 				 				
+	 			 			
+		 		if (continueProcess===false) {
 					dataGrid._loading=undefined;		
 	
 					if (waitingObject) {
@@ -1678,7 +1689,7 @@ var __members = {
 		
 		var trs=new Array;
 		var childNodes=body.rows;
-		var idx=0;
+		//var idx=0;
 		for(var i=0;i<childNodes.length;i++) {
 			var row=childNodes[i];
 			if (row._index===undefined) {

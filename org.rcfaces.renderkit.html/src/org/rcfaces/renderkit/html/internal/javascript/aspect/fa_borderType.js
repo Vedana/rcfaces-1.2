@@ -5,7 +5,7 @@
 /**
  * Aspect BorderType
  *
- * @aspect fa_borderType
+ * @aspect abstract fa_borderType
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -30,7 +30,7 @@ var __statics = {
 	},
 
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -105,7 +105,7 @@ var __members = {
 	 */
 	f_getBorderComponent: function() {
 		if (!this.f_getBorderType()) {
-			return;
+			return null;
 		}
 		
 		return this._border;

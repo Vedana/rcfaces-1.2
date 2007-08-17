@@ -94,6 +94,8 @@ var __members = {
 			}
 			return stringKey;
 		}
+		
+		return -1;
 	},
 
 	/**
@@ -180,9 +182,21 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return any[]
 	 */
 	f_keySet: function() {
+		var hash = this._underlyingHash;
+	
+		var ret=new Array;	
+		for(var itemHash in hash) {
+			var items = hash[itemHash];
+	
+			for(var i=0;i<items.length;i++){
+				ret.push(items[i]);
+			}
+		}
+	
+		return ret;
 	},
 	/**
 	 * @method public

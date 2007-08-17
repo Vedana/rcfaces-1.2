@@ -3,7 +3,7 @@
  */
  
 /**
- * Box class.
+ * Styled message class.
  *
  * @class public f_styledMessage extends f_component, fa_message1
  */
@@ -47,4 +47,8 @@ var __members = {
 	}
 }
  
-new f_class("f_styledMessage", null, __statics, __members, f_component, fa_message1);
+new f_class("f_styledMessage", {
+	extend: f_component,
+	aspects: [fa_message1],
+	members: __members
+});

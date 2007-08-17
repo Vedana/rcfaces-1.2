@@ -164,7 +164,8 @@ var __members={
 		var request=new f_httpRequest(this, url);
 		var params=this._prepareRequest(request, requestId, parameter);
 
-		var ret=this._sendRequest(request, params, progressMonitor);
+		// var ret=
+		this._sendRequest(request, params, progressMonitor);
 		
 		var state= f_service.ERRORED_STATE;
 		try {	
@@ -211,11 +212,6 @@ var __members={
 		}
 		
 		return content;
-	},
-	/**
-	 * @method public
-	 */
-	f_getRequestState: function(requestId) {
 	},
 	/**
 	 * @method private
@@ -357,7 +353,7 @@ var __members={
 							resultCallback.call(service, state, parameter, content);
 	
 						} catch (x) {
-							f_core.Error(f_service, "Call of callback throws an exception : "+resultCallback+".", x);
+							f_core.Error(f_service, "_asyncCallServer.onLoad: Call of callback throws an exception : "+resultCallback+".", x);
 						}
 					}
 										
@@ -386,10 +382,10 @@ var __members={
 					resultCallback.call(service, state, parameter, undefined);
 
 				} catch (x) {
-					f_core.Error(f_service, "Call of callback throws an exception : "+resultCallback+".", x);
+					f_core.Error(f_service, "_asyncCallServer.onError: Call of callback throws an exception : "+resultCallback+".", x);
 				}
 
-	 			f_core.Info(f_service, "Bad status: "+request.f_getStatus());
+	 			f_core.Info(f_service, "_asyncCallServer.onError: Bad status: "+status);
 
 				if (subProgressMonitor) {
 					subProgressMonitor.f_done();

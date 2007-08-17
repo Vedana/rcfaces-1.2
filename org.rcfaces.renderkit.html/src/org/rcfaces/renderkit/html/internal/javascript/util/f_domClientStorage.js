@@ -20,11 +20,14 @@ var __statics = {
 	 */
 	_StorageList: undefined,
 
+	/**
+	 * @method protected static
+	 */
 	Initializer: function() {
 
 		var globalStorage=window.globalStorage;
 		if (!globalStorage || (globalStorage instanceof StorageList)==false) {
-			return false;
+			return;
 		}
 		
 		var domain=f_env.GetDomain();

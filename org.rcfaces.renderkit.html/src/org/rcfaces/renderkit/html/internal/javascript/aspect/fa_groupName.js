@@ -5,7 +5,7 @@
 /**
  * Aspect GroupName
  *
- * @aspect public fa_groupName
+ * @aspect public abstract fa_groupName
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -18,7 +18,7 @@ var __statics = {
 	},
 	
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -34,16 +34,20 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @return any
 	 */
 	f_delFromGroup: function(groupName, obj) {
 		var g = this.f_listGroup(groupName);
 		if (!g) {
 			return null;
 		}
-		g.f_removeElement(obj);
+		return g.f_removeElement(obj);
 	},
 	/**
 	 * @method protected
+	 * @param String groupName
+	 * @param any obj
+	 * @return void
 	 */
 	f_addToGroup: function(groupName, obj) {
 		var g = this.f_listGroup(groupName, true);

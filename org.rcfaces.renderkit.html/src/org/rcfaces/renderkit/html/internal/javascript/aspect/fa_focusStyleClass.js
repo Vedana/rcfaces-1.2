@@ -5,7 +5,7 @@
 /**
  * Aspect Focus style class.
  *
- * @aspect fa_focusStyleClass
+ * @aspect abstract fa_focusStyleClass
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

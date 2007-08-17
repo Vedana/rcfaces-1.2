@@ -11,6 +11,9 @@
  */
 
 var __statics={
+	/**
+	 * @method protected static
+	 */
 	Initializer: function() {	
  		// this est la classe !
 		this.f_newInstance();
@@ -292,6 +295,9 @@ var __members = {
 	
 		this.f_super(arguments);
 	},
+	/**
+	 * @method public
+	 */
 	f_doAppend: function(event) {
 		if (!this._documentCompleted) {
 			var pipe=this._pipe;
@@ -446,7 +452,7 @@ var __members = {
 						span.appendChild(doc.createElement("br"));
 					}
 					
-					var s=sp[i];
+					//var s=sp[i];
 					span.appendChild(doc.createTextNode(sp[i]));
 				}
 				li.appendChild(span);
@@ -469,7 +475,7 @@ var __members = {
 						span.appendChild(doc.createElement("br"));
 					}
 					
-					var s=sp[i];
+					//var s=sp[i];
 					span.appendChild(doc.createTextNode(sp[i]));
 				}
 				li.appendChild(span);
@@ -595,7 +601,7 @@ var __members = {
 		this._updateSizes();
 	},
 	_openClose: function() {
-		var console=this._console;
+		//var console=this._console;
 		
 		var display="block";
 

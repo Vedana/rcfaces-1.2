@@ -72,6 +72,7 @@ var __statics = {
 		}
 		
 		f_core.Error(f_time, "DeserializeTime: Invalid time format ! ("+time+")");
+		return null;
 	}
 }
 

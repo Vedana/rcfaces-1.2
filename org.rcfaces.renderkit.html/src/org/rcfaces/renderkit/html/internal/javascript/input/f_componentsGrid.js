@@ -9,18 +9,6 @@
  * @version $Revision$ $Date$
  */
 
-var __statics = {
-	/**
-	 * @method hidden static
-	 * @param String text1
-	 * @param String text2
-	 * @return number
-	 */
-	Sort_Server: function(text1, text2) {
-		// Pas d'implementation, car la fonction est filtrée avant !
-	}
-}
- 
 var __members = {
 	
 	f_componentsGrid: function() {
@@ -126,9 +114,20 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_componentsGrid, "Bad status: "+request.f_getStatus());
-	 				 				 			
-		 		if (dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
+	 			f_core.Info(f_componentsGrid, "Bad status: "+status);
+ 			
+	 			var continueProcess;
+	 			
+	 			try {
+	 				continueProcess=dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+	 				
+	 			} catch (x) {
+	 				// On continue coute que coute !
+	 				continueProcess=false;
+	 			}	 				
+	 				 				
+	 			 			
+		 		if (continueProcess===false) {
 					dataGrid._loading=undefined;		
 	
 					if (waitingObject) {
@@ -241,7 +240,7 @@ var __members = {
 	f_startNewPage: function(rowIndex) {
 		// Appeler par la génération du serveur !
 
-		var tbody=this._tbody;
+		//var tbody=this._tbody;
 		
 		var scrollBody=this._scrollBody;
 		if (this._oldHeight) {
@@ -400,7 +399,7 @@ var __members = {
 			this._rowsPool.push(row);
 			row._dataGrid=this;
 			
-			var rowIdx=this._rowsPool.length;
+			//var rowIdx=this._rowsPool.length;
 			
 			row._index=f_core.GetAttribute(row, "v:rowValue");
 			row._rowIndex=f_core.GetNumberAttribute(row, "v:rowIndex");
@@ -471,7 +470,7 @@ var __members = {
 		
 		var trs=new Array;
 		var childNodes=body.rows;
-		var idx=0;
+		//var idx=0;
 		for(var i=0;i<childNodes.length;i++) {
 			var row=childNodes[i];
 			if (row._index===undefined) {
@@ -708,7 +707,7 @@ var __members = {
 		
 		var cells=new Array;
 		row._cells=cells;
-		var rowValueColumnIndex=this._rowValueColumnIndex;
+		//var rowValueColumnIndex=this._rowValueColumnIndex;
 		var columns=this._columns;
 		for(var i=0;i<columns.length;i++) {
 			var col=columns[i];
@@ -801,4 +800,7 @@ var __members = {
 	}
 }
  
-new f_class("f_componentsGrid", null, __statics, __members, f_grid);
+new f_class("f_componentsGrid", {
+	extend: f_grid,
+	members: __members
+});

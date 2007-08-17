@@ -5,7 +5,7 @@
 /**
  * f_suggestTextEntry class
  *
- * @class public f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands, fa_subMenu
+ * @class public f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -67,8 +67,8 @@ var __members = {
 		menu.f_setCatchOnlyPopupKeys(true);
 		menu.f_insertEventListenerFirst(f_event.SELECTION, function(evt) {
 			var jsEvt=evt.f_getJsEvent();
-			var menu=evt.f_getComponent();
-			var evtItem=evt.f_getItem();
+			//var menu=evt.f_getComponent();
+			//var evtItem=evt.f_getItem();
 			var item=evt.f_getValue();
 	
 			suggestTextEntry._setSuggestion(item._label, item._value, item, jsEvt);
@@ -101,6 +101,10 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_documentComplete: function() {
 		this.f_super(arguments);
 		
@@ -365,9 +369,19 @@ var __members = {
 				 * @method public
 				 */
 		 		onError: function(request, status, text) {
-		 			f_core.Info(f_suggestTextEntry, "Bad status: "+request.f_getStatus());
+		 			f_core.Info(f_suggestTextEntry, "Bad status: "+status);
+
+		 			var continueProcess;
 		 			
-		 			if (suggestTextEntry.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
+		 			try {
+		 				continueProcess=suggestTextEntry.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+		 				
+		 			} catch (x) {
+		 				// On continue coute que coute !
+		 				continueProcess=false;
+		 			}	 				
+		 				 				 			 			
+			 		if (continueProcess===false) {
 						suggestTextEntry.f_setLoading(false);
 						return;
 					}
@@ -631,7 +645,7 @@ var __members = {
 	 * @param String proposalValue
 	 * @param hidden Object proposalItem
 	 * @param hidden Event jsEvt
-	 * @return boolean
+	 * @return void
 	 */
 	f_showProposal: function(proposalLabel, proposalValue, proposalItem, jsEvt) {
 		var label=this.f_getText();
@@ -640,7 +654,7 @@ var __members = {
 		var proposalLabelCS=(this._caseSensitive)?proposalLabel:proposalLabel.toLowerCase();
 		
 		if (proposalLabelCS.indexOf(labelCS)!=0) {
-			return false;
+			return;
 		}
 
 		if (this._forceProposal) {

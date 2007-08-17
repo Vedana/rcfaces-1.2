@@ -501,11 +501,11 @@ var __members = {
 	 * @return void
 	 */
 	f_setHelpMessage: function(msg) {
-		f_core.Assert(msg===null || typeof(msg)=="string", "Message parameter must be a string ! ("+msg+")");
+		f_core.Assert(msg===null || typeof(msg)=="string", "f_component.f_setHelpMessage: Message parameter must be a string ! ("+msg+")");
 
 		var helpMessage=this._helpMessage;
-		if (helpMessage!==undefined) {
-			return helpMessage;
+		if (helpMessage==msg) {
+			return;
 		}
 
 		this._helpMessage = msg;
@@ -522,10 +522,10 @@ var __members = {
 		}
 		
 		f_help.SetHelpMessageZone();
-		this.f_addEventListener(f_event.MOUSEOVER,f_help._OnShowHelpMessage);
-		this.f_addEventListener(f_event.MOUSEOUT,f_help._OnHideHelpMessage);
-		this.f_addEventListener(f_event.FOCUS,f_help._OnShowHelpMessage);
-		this.f_addEventListener(f_event.BLUR,f_help._OnHideHelpMessage);
+		this.f_addEventListener(f_event.MOUSEOVER,f_help.OnShowHelpMessage);
+		this.f_addEventListener(f_event.MOUSEOUT,f_help.OnHideHelpMessage);
+		this.f_addEventListener(f_event.FOCUS,f_help.OnShowHelpMessage);
+		this.f_addEventListener(f_event.BLUR,f_help.OnHideHelpMessage);
 		*/
 	},
 	/**
@@ -611,7 +611,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return void
+	 * @return boolean
 	 */	 
 	f_parentShow: function() {
 		var parent=f_core.GetParentComponent(this);

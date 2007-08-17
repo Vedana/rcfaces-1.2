@@ -5,6 +5,7 @@
 /**
  * f_classLoader  Additionnal interactive methods.
  *
+ * @class public f_classLoader
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -118,7 +119,7 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 		_commands: new Array,		
 		
 		run: function() {			 	
-		 	var win=f_core.GetWindow(this._component);
+		 	// var win=f_core.GetWindow(this._component); // Non utilisé
 			try {
 			 	var commands=this._commands;
 			 	
@@ -379,7 +380,7 @@ f_classLoader.prototype._asyncPostLoad=function(interactiveMode) {
 f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {		
 	
 	if (window._rcfacesExiting) {
-		return;
+		return false;
 	}
 
 	f_core.Debug("f_asyncClassLoader", "_asyncLoadBundle: Add require bundle '"+bundleName+"'.");

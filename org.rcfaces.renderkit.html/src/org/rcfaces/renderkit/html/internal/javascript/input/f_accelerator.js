@@ -45,7 +45,7 @@ var __statics={
 	*/
 	
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -99,6 +99,11 @@ var __members={
 		return this.f_fireEvent(f_event.KEYPRESS, jsEvt);
 	},
 	
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return boolean
+	 */
 	_forListener: function(event) {
 		var forComponent=this._forComponentId;
 		

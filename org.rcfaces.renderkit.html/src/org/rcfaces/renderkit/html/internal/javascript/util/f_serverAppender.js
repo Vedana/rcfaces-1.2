@@ -17,7 +17,7 @@ var __statics={
 	_TIMER: 500,
 	
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Initializer: function() {	
@@ -48,6 +48,9 @@ var __members = {
 		
 		this._events=undefined;
 	},
+	/**
+	 * @method public
+	 */
 	f_doAppend: function(event) {
 	
 		if (!this._running) {

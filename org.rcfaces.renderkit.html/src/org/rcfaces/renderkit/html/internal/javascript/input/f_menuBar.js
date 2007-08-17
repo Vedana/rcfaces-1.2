@@ -202,13 +202,13 @@ var __members = {
 	f_serialize: function() {
 		this.f_serializeItems();
 			
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	},
 	f_setDomEvent: function(type, target) {
 		if (type==f_event.SELECTION) {
 			return;
 		}
-		return this.f_super(arguments, type, target);
+		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent: function(type, target) {
 		if (type==f_event.SELECTION) {
@@ -480,6 +480,7 @@ var __members = {
 		}
 	},
 	/**
+	 * @method protected
 	 * @inherited
 	 */
 	f_nextMenuItemLevel: function(menuItem, evt) {
@@ -529,6 +530,7 @@ var __members = {
 		}
 	},
 	/**
+	 * @method protected
 	 * @inherited
 	 */
 	f_previousMenuItemLevel: function(menuItem, evt) {
@@ -747,6 +749,11 @@ var __members = {
 		
 		return cid+"::"+menuItem._id;
 	},
+	/**
+	 * @method protected
+	 * @param Object menuItem
+	 * @return void
+	 */
 	f_uiUpdateItemStyle: function(menuItem) {
 		if (this.f_getParentItem(menuItem)==this) {
 			this.f_updateMenuBarItemStyle(menuItem);
@@ -829,6 +836,10 @@ var __members = {
 		return this.f_super(arguments, menuItem);
 	},
 	
+	/**
+	 * @method protected
+	 * @return Object
+	 */
 	fa_getPopupCallbacks: function() {
 		var menuBar=this;
 		

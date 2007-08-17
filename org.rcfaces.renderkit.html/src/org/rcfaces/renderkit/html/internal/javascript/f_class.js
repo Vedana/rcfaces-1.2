@@ -421,6 +421,7 @@ var __statics = {
 			if (!l) {
 				l=old._kbefore=new Array;
 			}
+			l.push(member);
 			break;
 			
 		case f_class.AFTER_ASPECT:
@@ -428,6 +429,7 @@ var __statics = {
 			if (!l) {
 				l=old._kafter=new Array;
 			}
+			l.unshift(member);
 			break;
 			
 		case f_class.THROWING_ASPECT:
@@ -435,9 +437,6 @@ var __statics = {
 			if (!l) {
 				l=old._kthrowing=new Array;
 			}
-		}
-		
-		if (l) {
 			l.push(member);
 		}
 	},
@@ -599,9 +598,6 @@ var __statics = {
 		}
 		
 		return false;
-	},
-
-	_remapContext: function() {
 	},
 	
 	/**
@@ -780,7 +776,7 @@ var __members = {
 	
 	/**
 	 * @method hidden final
-	 * @return f_classLoader
+	 * @return void
 	 */
 	f_localize: function(staticMembers, instanceMembers) {
 		if (staticMembers) {

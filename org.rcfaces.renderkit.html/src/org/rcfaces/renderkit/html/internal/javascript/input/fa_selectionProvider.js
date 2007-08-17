@@ -5,7 +5,7 @@
 /**
  * Aspect SelectionProvider
  *
- * @aspect public fa_selectionProvider
+ * @aspect public abstract fa_selectionProvider
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

@@ -6,7 +6,7 @@
  * 
  *
  * @class public final f_error extends Object
- * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
+ * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 
@@ -14,7 +14,7 @@ var __statics = {
 
 
 	/**
-	 * @field public static final number
+	 * @field public static final String
 	 */
 	ERROR_MIME_TYPE: "x-camelia/error",
 
@@ -92,12 +92,6 @@ var __statics = {
 	 * @field public static final number
 	 */
 	APPLICATION_ERROR: 0x0000000,
-	
-	/**
-	 * @field hidden boolean
-	 * @see f_class#_systemClass
-	 */
-	_systemClass: true,
 
 	/**
 	 * @method hidden static
@@ -139,5 +133,6 @@ var __statics = {
 }
 
 new f_class("f_error", {
-	statics: __statics
+	statics: __statics,
+	systemClass: true
 });

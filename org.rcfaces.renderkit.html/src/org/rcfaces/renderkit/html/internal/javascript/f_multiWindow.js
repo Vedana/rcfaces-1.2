@@ -6,6 +6,7 @@
  * Divers Add'ons afin de pouvoir gérer le multiWindow.
  * 
  * @TODO traiter les functions en chaines de caracteres ...
+ * @class f_classLoader
  */
  
 /* f_class ***************************************************************************/

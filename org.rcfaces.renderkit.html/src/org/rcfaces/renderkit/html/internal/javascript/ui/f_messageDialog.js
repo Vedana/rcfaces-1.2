@@ -57,7 +57,7 @@ var __statics = {
      * @return boolean
      */
     ListenerExample: function(evt) {
-    	var value = evt.f_getValue();
+    	// var value = evt.f_getValue();
     	return true;
     }
     
@@ -506,7 +506,7 @@ var __members = {
      	f_core.Debug(f_messageDialog, "f_buttonOnClick: entering ("+selectedButton+")");
 	
 		var base=selectedButton._base;
-		var messageBox=base._messageBox;
+		// var messageBox=base._messageBox;
 		var buttons=base._buttons;
 		var value=selectedButton._value;
 	

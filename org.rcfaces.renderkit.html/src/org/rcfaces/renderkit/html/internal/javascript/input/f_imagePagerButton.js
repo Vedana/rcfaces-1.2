@@ -54,7 +54,7 @@ var __members = {
 			type=type.toLowerCase();
 			
 			var first=pagedComponent.f_getFirst();
-			var maxRows=pagedComponent.f_getMaxRows();
+			//var maxRows=pagedComponent.f_getMaxRows();
 			// Nombre de ligne 
 
 			switch(type) {

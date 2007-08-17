@@ -285,6 +285,13 @@ var __members = {
 		this._addRule(pattern, f_xmlDigester._AddSetTopRule, name);	
 	},
 	
+	/**
+	 * @method public
+	 * @param String pattern 
+	 * @param Function method
+	 * @param any parameters
+	 * @return void 
+	 */
 	f_addCallMethod: function(pattern, method, parameters) {
 		this._addRule(pattern, f_xmlDigester._AddCallMethod, method, parameters);	
 	},

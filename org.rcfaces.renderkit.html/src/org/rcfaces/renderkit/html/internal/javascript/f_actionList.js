@@ -9,7 +9,6 @@
  * @version $Revision$ $Date$
  */
 
-
 var __statics= {
 	/**
 	 * @method private static 

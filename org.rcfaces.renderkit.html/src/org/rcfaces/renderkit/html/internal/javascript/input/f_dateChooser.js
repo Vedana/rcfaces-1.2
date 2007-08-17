@@ -44,7 +44,7 @@ var __members={
 		if (type==f_event.CHANGE) {
 			return;
 		}
-		return this.f_super(arguments, type, target);
+		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent: function(type, target) {
 		if (type==f_event.CHANGE) {
@@ -59,4 +59,8 @@ var __members={
 	}
 }
  
-new f_class("f_dateChooser", null, __statics, __members, f_imageButton, fa_calendarPopup);
+new f_class("f_dateChooser", {
+	extend: f_imageButton, 
+	aspects: [ fa_calendarPopup ],
+	members: __members
+});

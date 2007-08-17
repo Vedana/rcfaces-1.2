@@ -12,7 +12,7 @@
  
 var __statics = {
 	/** 
-	 * @field private static String
+	 * @method private static String
 	 * @this Object
 	 */
 	_ItemToString: function() {
@@ -44,7 +44,7 @@ var __members = {
 	f_serialize: function() {
 		this.f_serializeItems();
 			
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	},
 	fa_destroyItems: function(items) {
 	},	
@@ -152,7 +152,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return void
+	 * @return boolean
 	 */
 	_itemOnSelect: function(event) {
 		var itemValue; // Rechercher l'item
@@ -192,7 +192,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return void
+	 * @return boolean
 	 */
 	_itemMenuOnSelect: function(event) {
 		var itemValue=event.f_getValue(); // Rechercher l'item

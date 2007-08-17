@@ -120,7 +120,8 @@ var __members = {
 	 */
 	f_setText: function(text) {
 		if (!this._label) {
-			return this.f_super(arguments, text);
+			this.f_super(arguments, text);
+			return;
 		}
 		if (text==this.f_getText()) {
 			return;
@@ -136,7 +137,7 @@ var __members = {
 		
 		this.f_serializeValue();
 		
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	},
 	/**
 	 * @method protected

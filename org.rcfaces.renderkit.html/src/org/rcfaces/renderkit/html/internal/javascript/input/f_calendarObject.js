@@ -437,7 +437,7 @@ var __statics = {
 			d2.setDate(0); // d2= fin du mois
 			var nbd=d2.getDate()-date.getDate(); // Nombre de jour avant la fin du mois
 			
-			var d1=d2;
+			//var d1=d2; // Pas utilisé
 			d2=calendar._searchValidDate(d2, -1, date);
 			if (!d2) {
 				// f_core.Debug(f_calendarObject, "Day.EndDelta: invalid date '"+d2+"' from '"+d1+"'=>'"+date+"'.");
@@ -1220,6 +1220,10 @@ var __members = {
 		
 		// XXX Restituer la selection
 	},
+	/**
+	 * @method public
+	 * @return HTMLElement
+	 */
 	f_getTargetComponent: function() {
 		return this._calendarContainer;
 	},
@@ -1587,7 +1591,7 @@ var __members = {
 		this._dayButtons=new Array;
 		this._weekButtons=new Array;
 		
-		var idx=0;
+		//var idx=0;
 		for(var j=0;j<42;j++) {
 			if ((j % 7)==0) {
 				tr=doc.createElement("tr");
@@ -1660,7 +1664,7 @@ var __members = {
 		table.appendChild(tbody);
 
 		var tr;
-		var idx=0;
+		//var idx=0;
 		for(var j=0;j<12;j++) {
 			if ((j % 6)==0) {
 				tr=doc.createElement("tr");
@@ -2054,8 +2058,8 @@ var __members = {
 	 * @method private
 	 */
 	_updateSelection: function(showDate) {
-		var firstDate;
-		var lastDate;
+		//var firstDate;
+		//var lastDate;
 		
 		var minTime=this._minTime;
 		var minDate=this._minDate;
@@ -2957,6 +2961,10 @@ var __members = {
 		
 		return f_core.UpperCaseFirstChar(this.f_formatDate(date, format));
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_refreshComponent: function() {		
 		this._updateCells(this._showDate);
 		
@@ -3014,7 +3022,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_calendarObject, "Bad status: "+request.f_getStatus());
+	 			f_core.Info(f_calendarObject, "Bad status: "+status);
 	 			
 				if (calendarObject.f_processNextCommand()) {
 					return;

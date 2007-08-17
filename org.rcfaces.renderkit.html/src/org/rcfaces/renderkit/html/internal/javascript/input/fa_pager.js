@@ -5,7 +5,7 @@
 /**
  * Aspect Pager
  *
- * @aspect fa_pager
+ * @aspect public abstract fa_pager
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

@@ -5,7 +5,7 @@
 /**
  * Aspect fa_SubMenu
  *
- * @aspect public fa_subMenu
+ * @aspect public abstract fa_subMenu
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -123,6 +123,7 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
+	 * @return HTMLElement
 	 */
 	fa_componentCaptureMenuEvent: f_class.ABSTRACT
 }

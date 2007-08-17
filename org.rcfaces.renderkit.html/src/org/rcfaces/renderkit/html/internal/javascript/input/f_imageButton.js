@@ -24,7 +24,10 @@ var __members = {
 
 		var tabIndex=this.tabIndex;
 		
-		var eventComponent=this.f_getEventComponent();
+		var eventComponent=this.f_getEventComponent();		
+		if (eventComponent!=this) {
+			this.f_openActionList(f_event.SELECTION);		
+		}
 		
 		if (!this._image) {
 			var images=this.getElementsByTagName("img");
@@ -208,10 +211,6 @@ var __members = {
 		}
 		
 		this._eventComponent=eventComponent;
-		
-		if (eventComponent!=this) {
-			this.f_openActionList(f_event.SELECTION);		
-		}
 		
 		return eventComponent;
 	},
@@ -583,7 +582,7 @@ var __members = {
 		}
 
 		if (this.f_isDisabled()) {
-			return false;
+			return;
 		}
 
 		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"'.");

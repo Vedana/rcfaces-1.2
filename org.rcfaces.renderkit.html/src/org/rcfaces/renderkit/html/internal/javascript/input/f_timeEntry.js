@@ -188,10 +188,15 @@ var __members={
 
 		this.f_super(arguments);
 	},
+	/**
+	 * @method hidden
+	 * @param f_event event
+	 * @return boolean 
+	 */
 	f_performCheckValue: function(event) {		
 		var messageContext=f_messageContext.Get(this);
 		if (!messageContext) {
-			return;
+			return true;
 		}
 
 		var errorMessage=null;
@@ -265,10 +270,12 @@ var __members={
 		f_core.Debug(f_timeEntry, "Error Message: "+errorMessage+" date="+date);
 		
 		if (!errorMessage) {
-			return;
+			return true;
 		}
 		
 		this.f_addErrorMessage(f_timeEntry, errorMessage);
+	
+		return true;
 	}
 }
  

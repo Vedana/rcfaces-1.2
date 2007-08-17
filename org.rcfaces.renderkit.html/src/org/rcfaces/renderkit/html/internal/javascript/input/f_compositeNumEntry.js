@@ -29,7 +29,13 @@ var __members={
 		this.f_super(arguments);
 	},
 	*/
-	f_performCheckValue: function(event) {		
+	/**
+	 * @method hidden
+	 * @param f_event event
+	 * @return boolean 
+	 */
+	f_performCheckValue: function(event) {
+		return true;		
 	},
 	/**
 	 * @method protected

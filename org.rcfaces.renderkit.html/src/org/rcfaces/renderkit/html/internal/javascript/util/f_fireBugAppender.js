@@ -20,7 +20,7 @@ var __statics={
 	},
 	
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Initializer: function() {	
@@ -43,6 +43,12 @@ var __statics={
 		f_fireBugAppender._oldAssert=f_core.Assert;
 		f_core.Assert=f_fireBugAppender.Assert;
 	},
+	/**
+	 * @method public static 
+	 * @param boolean test
+	 * @param String message
+	 * @return void
+	 */
 	Assert: function(test, message) {
 		if (window.console) {
 			window.console.assert(test, message);
@@ -63,6 +69,9 @@ var __members = {
 		
 		f_log.AddAppenders(this);
 	},
+	/**
+	 * @method public
+	 */
 	f_doAppend: function(event) {
 
 		if (!window.console) {

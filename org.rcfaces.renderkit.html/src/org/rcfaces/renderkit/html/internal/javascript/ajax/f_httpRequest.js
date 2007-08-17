@@ -323,7 +323,7 @@ var __members = {
 		}
 		
 		try {
-			return this._doRequest.apply(this, arguments);
+			this._doRequest.apply(this, arguments);
 
 		} catch (x) {
 			f_core.Error(f_httpRequest, "f_doRequest: Can not send request to "+this._url+" data="+data, x);
@@ -594,14 +594,14 @@ var __members = {
 			var onInit=this._listener.onInit;
 			if (typeof(onInit)=="function") {
 				if (!this._noLog) {
-					f_core.Info(f_httpRequest, "_onReadyStateChange: Call onInit for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
+					f_core.Info(f_httpRequest, "_onReadyStateChange.loading: Call onInit for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
 				}
 
 				try {
 					onInit.call(this, this);
 
 				} catch (ex) {
-					f_core.Error(f_httpRequest, "_onReadyStateChange: Exception when calling onInit for url="+url+".\n"+onInit,ex);
+					f_core.Error(f_httpRequest, "_onReadyStateChange.loading: Exception when calling onInit for url="+url+".\n"+onInit,ex);
 				}
 			}
 			return;
@@ -628,12 +628,25 @@ var __members = {
 					return;
 				}
 				
-				statusText=req.statusText;
-				
-			} catch(ex) {
-				f_core.Error(f_httpRequest, "_onReadyStateChange: Can not get status of request !", ex);
+			} catch(ex) {				
+				try {
+					f_core.Error(f_httpRequest, "_onReadyStateChange.loaded: Can not get status of request !", ex);
+				} catch (x2) {
+					// On recupere une exception de l'erreur car on appele la callback
+				}
 			}
 			
+			try {				
+				statusText=req.statusText;
+				
+			} catch (x) {
+				// Pas de traitement			
+			}
+			
+			if (!statusText || statusText=="Unknown") {
+				statusText=f_resourceBundle.Get(f_httpRequest).f_get("STATUS_ERROR");
+			}
+		
 			this._callError(status, statusText);
 			return;
 		}
@@ -652,7 +665,7 @@ var __members = {
 				len = req.getResponseHeader("Content-Length");
 				
 			} catch(ex) {
-				f_core.Debug(f_httpRequest, "_onReadyStateChange: Can not get length of response of url="+url+".");
+				f_core.Debug(f_httpRequest, "_onReadyStateChange.interactive: Can not get length of response of url="+url+".");
 				len = NaN;
 			}
 			try {
@@ -661,28 +674,28 @@ var __members = {
 					this._responseContentType=contentType;
 				}
 			} catch (ex) {
-				f_core.Debug(f_httpRequest, "_onReadyStateChange: Can not get content type of response of url="+url+".");
+				f_core.Debug(f_httpRequest, "_onReadyStateChange.interactive: Can not get content type of response of url="+url+".");
 			}
 			
 			if (!contentType || contentType.indexOf(f_httpRequest.TEXT_XML_MIME_TYPE)<0) {
 				try {
 					response = req.responseText;
 				} catch(ex) {
-					f_core.Debug(f_httpRequest, "_onReadyStateChange: Can not get response text of url="+url+".");
+					f_core.Debug(f_httpRequest, "_onReadyStateChange.interactive: Can not get response text of url="+url+".");
 				}
 			}
 			
 			var onProgress=this._listener.onProgress;
 			if (typeof(onProgress)=="function") {				
 				if (!this._noLog) {
-					f_core.Info(f_httpRequest, "_onReadyStateChange: Call onProgress for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
+					f_core.Info(f_httpRequest, "_onReadyStateChange.interactive: Call onProgress for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)");
 				}
 
 				try {
 					onProgress.call(this, this, response, len, contentType);
 
 				} catch (ex) {
-					f_core.Error(f_httpRequest, "_onReadyStateChange: Exception when calling onProgress method for url='"+url+"'.\n"+onProgress, ex);
+					f_core.Error(f_httpRequest, "_onReadyStateChange.interactive: Exception when calling onProgress method for url='"+url+"'.\n"+onProgress, ex);
 				}
 			}
 			
@@ -703,7 +716,7 @@ var __members = {
 				responseContentType=req.getResponseHeader(f_httpRequest.HTTP_CONTENT_TYPE);
 				
 			} catch (x) {
-				f_core.Debug(f_httpRequest, "_onReadyStateChange: getResponseHeader exception !", ex);
+				f_core.Debug(f_httpRequest, "_onReadyStateChange.complete: getResponseHeader exception !", ex);
 				// Il peut y avoir des cas ou la reponse n'est pas prete car c'est un RELOAD forcé par l'utilisateur !
 				return;
 			}
@@ -727,10 +740,14 @@ var __members = {
 				statusText=req.statusText;
 				
 			} catch (ex) {
-				f_core.Error(f_httpRequest, "_onReadyStateChange: Can not get status of request !", ex);
+				try {
+					f_core.Error(f_httpRequest, "_onReadyStateChange.complete: Can not get status of request !", ex);
+				} catch (x2) {					
+					// On recupere une exception de l'erreur car on appele la callback
+				}
 			}
 			
-			f_core.Debug(f_httpRequest, "_onReadyStateChange: Response='"+response+"' status='"+status+"' statusText='"+statusText+"'");
+			f_core.Debug(f_httpRequest, "_onReadyStateChange.complete: Response='"+response+"' status='"+status+"' statusText='"+statusText+"'");
 
 			if (status!=f_httpRequest.OK_STATUS) {
 				this._callError(status, statusText);
@@ -744,13 +761,13 @@ var __members = {
 			
 			try {
 				if (!this._noLog) {
-					f_core.Info(f_httpRequest, "_onReadyStateChange: Call onLoad for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)\nresponse size="+((response)?(response.length+" bytes"):"null"));
+					f_core.Info(f_httpRequest, "_onReadyStateChange.complete: Call onLoad for url="+url+" . (+"+(new Date().getTime()-this._date)+"ms)\nresponse size="+((response)?(response.length+" bytes"):"null"));
 				}
 
 				onLoad.call(this, this, response, responseContentType);
 				
 			} catch (ex) {
-				f_core.Error(f_httpRequest, "_onReadyStateChange: Exception when calling onLoad method for url '"+url+"'.\n"+onLoad, ex);
+				f_core.Error(f_httpRequest, "_onReadyStateChange.complete: Exception when calling onLoad method for url '"+url+"'.\n"+onLoad, ex);
 			}
 
 			return;

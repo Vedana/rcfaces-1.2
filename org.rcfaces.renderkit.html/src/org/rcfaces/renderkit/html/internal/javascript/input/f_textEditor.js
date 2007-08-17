@@ -119,7 +119,7 @@ var __statics = {
 		buttons.push(button);
 	},
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -161,6 +161,11 @@ var __statics = {
 		
 		textEditor._performButtonCommand(button.f_getType(), parameter);
 	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 */
 	_OnFocus: function(evt) {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -179,6 +184,11 @@ var __statics = {
 		
 		return textEditor._onFocus(evt);
 	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 */
 	_OnBlur: function(evt) {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);

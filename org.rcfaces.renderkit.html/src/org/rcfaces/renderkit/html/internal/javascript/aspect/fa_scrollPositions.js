@@ -5,7 +5,7 @@
 /**
  * Aspect Scroll positions. 
  *
- * @aspect public fa_scrollPositions
+ * @aspect public abstract fa_scrollPositions
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

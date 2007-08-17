@@ -5,7 +5,7 @@
 /**
  * Aspect AsyncRender
  *
- * @aspect hidden fa_asyncRender
+ * @aspect hidden abstract fa_asyncRender
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -76,7 +76,7 @@ var __members = {
 				if (waiting) {
 					waiting.f_hide();
 				}
-				f_core.Info(fa_asyncRender, "f_prepare.onError: Bad status: "+request.f_getStatus());
+				f_core.Info(fa_asyncRender, "f_prepare.onError: Bad status: "+status);
 				
 				component.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
 	 		},

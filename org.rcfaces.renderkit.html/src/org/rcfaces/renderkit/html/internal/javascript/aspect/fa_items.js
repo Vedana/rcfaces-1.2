@@ -5,7 +5,7 @@
 /**
  * Aspect Items
  *
- * @aspect public fa_items extends fa_itemClientDatas
+ * @aspect public abstract fa_items extends fa_itemClientDatas
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -81,14 +81,6 @@ var __members = {
 		item._value=value;
 	},
 	*/
-	/**
-	 * @method public
-	 * @param Object item
-	 * @return any
-	 */
-	f_getItemValue: function(item) {
-		return item._value;
-	},
 	/**
 	 * @method hidden
 	 */
@@ -749,7 +741,7 @@ var __members = {
 	f_setProperty: f_class.ABSTRACT,
 	
 	/**
-	 * @method abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	fa_componentUpdated: f_class.OPTIONAL_ABSTRACT

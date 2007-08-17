@@ -31,7 +31,7 @@ var __members = {
 		// car il peut utiliser des Beans request !
 		this.f_setProperty(f_prop.SELECTED,this.f_isSelected());
 
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	}
 }
 new f_class("f_imageCheckButton", {

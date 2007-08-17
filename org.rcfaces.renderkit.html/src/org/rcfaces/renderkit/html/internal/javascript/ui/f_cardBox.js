@@ -251,7 +251,7 @@ var __members={
 			return;
 		}
 
-		return this.f_super(arguments, type, target);
+		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent: function(type, target) {
 		switch(type) {
@@ -259,7 +259,7 @@ var __members={
 			return;
 		}
 
-		return this.f_super(arguments, type, target);
+		this.f_super(arguments, type, target);
 	}
 }
  

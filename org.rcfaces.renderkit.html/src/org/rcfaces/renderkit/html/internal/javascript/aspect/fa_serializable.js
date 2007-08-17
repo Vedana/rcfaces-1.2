@@ -5,7 +5,7 @@
 /**
  * Aspect serializable. 
  *
- * @aspect hidden fa_serializable
+ * @aspect hidden abstract fa_serializable
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

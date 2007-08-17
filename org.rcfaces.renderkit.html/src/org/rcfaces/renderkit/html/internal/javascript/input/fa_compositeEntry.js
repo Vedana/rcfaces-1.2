@@ -5,7 +5,7 @@
 /**
  * Aspect Composite entry
  *
- * @aspect hidden fa_compositeEntry extends fa_disabled, fa_readOnly
+ * @aspect hidden abstract fa_compositeEntry extends fa_disabled, fa_readOnly
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -172,11 +172,11 @@ var __members={
 	/**
 	 * @method protected abstract optional
 	 */
-	fa_initializeInput: f_core.OPTIONAL_ABSTRACT,
+	fa_initializeInput: f_class.OPTIONAL_ABSTRACT,
 	/**
 	 * @method protected abstract
 	 */
-	fa_finalizeInput: f_core.OPTIONAL_ABSTRACT,
+	fa_finalizeInput: f_class.OPTIONAL_ABSTRACT,
 	/**
 	 * @method private
 	 */
@@ -274,11 +274,11 @@ var __members={
 	/**
 	 * @method protected abstract optional
 	 */
-	fa_performStep: f_core.OPTIONAL_ABSTRACT,
+	fa_performStep: f_class.OPTIONAL_ABSTRACT,
 	/**
 	 * @method protected abstract optional
 	 */
-	fa_performSet: f_core.OPTIONAL_ABSTRACT,
+	fa_performSet: f_class.OPTIONAL_ABSTRACT,
 	/**
 	 * @method private
 	 */
@@ -348,7 +348,7 @@ var __members={
 	/**
 	 * @method protected abstract
 	 */
-	fa_keyPressed: f_core.ABSTRACT,
+	fa_keyPressed: f_class.ABSTRACT,
 	/**
 	 * @method private
 	 */
@@ -362,7 +362,7 @@ var __members={
 	 * @method protected abstract
 	 * @return void
 	 */
-	fa_formatInput: f_core.ABSTRACT,
+	fa_formatInput: f_class.ABSTRACT,
 	/**
 	 * @method private
 	 */

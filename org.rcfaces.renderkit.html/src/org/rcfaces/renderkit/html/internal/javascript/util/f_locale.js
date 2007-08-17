@@ -50,7 +50,7 @@ var __statics = {
 		return f_locale._Instance;
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {

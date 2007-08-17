@@ -732,7 +732,7 @@ f_classLoader.prototype = {
 	/**
 	 * @method private
 	 * @param HTMLElement[] components
-	 * @return String
+	 * @return void
 	 */
 	f_serializeComponents: function(components) {
 		var serializedStates=this._serializedStates;
@@ -799,7 +799,7 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden
 	 * @param HTMLFormElement form
-	 * @return String
+	 * @return void
 	 */
 	f_serialize: function(form) {
 		
@@ -969,7 +969,7 @@ f_classLoader.prototype = {
 			if (serializeState) {
 				return this.f_getSerializedState();
 			}
-			return;
+			return undefined;
 		}
 		
 		var serializedForm=null;
@@ -1003,7 +1003,7 @@ f_classLoader.prototype = {
 		}
 
 		var name=bundle.f_getName();
-
+		
 		f_core.Profile(false, "f_classLoader.loadBundle("+name+")");
 
 		f_core.Assert(!this._bundles[name], "Bundle '"+name+"' is alreay declared !");
@@ -1053,7 +1053,7 @@ f_classLoader._MakeClassName=function(claz,look) {
 }
 
 /**
- * @method static static final
+ * @method private static final
  */
 f_classLoader._InitializeStaticMembers=function(claz) {
 	// Attention: Code pour Classes et Aspects
@@ -1154,7 +1154,7 @@ f_classLoader.Destroy=function(object1, object2) {
  * @method private static
  * @param Object parameters
  * @param HTMLElement component
- * @return void
+ * @return Object
  */
 f_classLoader._SerializeInputs=function(component) {
 	f_core.Assert(component && (component.nodeType==f_core.ELEMENT_NODE || component.nodeType==f_core.DOCUMENT_NODE), "f_classLoader.SerializeInputs: Invalid component parameter '"+component+"'.");
@@ -1343,6 +1343,10 @@ f_classLoader.Get=function(win) {
 	return win._rcfacesClassLoader;
 }
 
+/**
+ * @method public static
+ * @return String
+ */
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
 }

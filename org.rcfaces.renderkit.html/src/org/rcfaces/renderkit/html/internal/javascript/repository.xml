@@ -2,9 +2,14 @@
 
 <repository id="javascript" baseDirectory="org/rcfaces/renderkit/html/internal/javascript">
 	<module id="core" defaultCoreModule="true">
+		<file name="Array.js">
+			<class name="Array">
+			</class>
+		</file>
 		<file name="f_core.js">
 			<class name="f_core">
 				<required-style name="f_core.css" />				
+				<required-class name="Array" />
 			</class>
 		</file>
 		<file name="f_classLoader.js">

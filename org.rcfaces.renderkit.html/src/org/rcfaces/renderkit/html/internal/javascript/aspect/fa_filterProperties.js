@@ -5,7 +5,7 @@
 /**
  * Aspect FilterProperties
  *
- * @aspect fa_filterProperties
+ * @aspect abstract fa_filterProperties
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

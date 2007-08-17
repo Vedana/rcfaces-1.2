@@ -55,7 +55,7 @@ var __statics = {
 			return false;
 		}
 
-		var old=tabbedPane._selectedCard;
+		//var old=tabbedPane._selectedCard;
 
 		tabbedPane._selectTab(this._tab, true, evt);
 				
@@ -238,7 +238,7 @@ var __statics = {
 		return url;
 	},
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Initializer: function() {
@@ -297,6 +297,10 @@ var __members = {
 			this._selectTab(cards[0], false, null, false);
 		}
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_documentComplete: function() {
 		this.f_super(arguments);
 		
@@ -774,7 +778,7 @@ var __members = {
 		var trTitle=rows[0];
 		var trText=rows[1];
 		
-		var cellsTitle=trTitle.cells;
+		//var cellsTitle=trTitle.cells;
 		var cellsText=trText.cells;
 		
 		if (!tab._prev) {
@@ -873,8 +877,7 @@ var __members = {
 	f_destroyCard: function(tab) {
 		f_core.Assert(tab._cardBox, "f_tabbedPane.f_destroyCard: Invalid tab object ("+tab+")");
 		
-		var ccard=tab._ccard;
-		
+		var ccard=tab._ccard;		
 		f_core.Debug(f_tabbedPane, "f_destroyCard: Destroy tab: "+tab+"  component="+ccard);
 		
 		tab._next=undefined; // f_tab

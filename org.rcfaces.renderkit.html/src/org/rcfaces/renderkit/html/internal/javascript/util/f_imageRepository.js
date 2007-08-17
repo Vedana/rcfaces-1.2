@@ -176,7 +176,7 @@ var __statics = {
 		f_imageRepository._ImagesObjectPool.push(imageObject);
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {

@@ -5,7 +5,7 @@
 /**
  * fa_eventTarget class
  *
- * @aspect public fa_eventTarget
+ * @aspect public abstract fa_eventTarget
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -351,7 +351,7 @@ var __members = {
 		}, 10);
 	},
 	/**
-	 * @protected final
+	 * @method protected final
 	 * @param String type
 	 * @param boolean value
 	 * @return void

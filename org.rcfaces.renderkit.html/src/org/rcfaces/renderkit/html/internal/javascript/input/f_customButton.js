@@ -5,7 +5,7 @@
 /**
  * f_customButton class
  *
- * @class f_customButton extends f_component, fa_readOnly, fa_disabled, fa_borderType
+ * @class f_customButton extends f_component, fa_readOnly, fa_disabled, fa_borderType, fa_value
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */ 

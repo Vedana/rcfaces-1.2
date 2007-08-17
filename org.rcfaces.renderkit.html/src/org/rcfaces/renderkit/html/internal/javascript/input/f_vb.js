@@ -2,10 +2,10 @@
  * $Id$
  */
 
-/*
+/**
  * F_VALID_BASIC package
  *
- * @class f_vb
+ * @class f_vb extends Object
  */
 /*=============================================================================
 	FILTERS in alphabetic order...please
@@ -124,7 +124,7 @@ var __statics = {
 	},
 
 	/**
-	 * @method public
+	 * @method public static
 	 */
 	Filter_digit: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
@@ -322,8 +322,8 @@ var __statics = {
 		var set = "["+f_vb._BuildEscaped(sep)+"]";
 		var s = sep.charAt(0);
 		var	sTmp = inVal;
-		var d,m,y,p;
-		var res = "";
+		var d,m,y; //,p;
+		//var res = "";
 	
 		// Deal with empty string and required attribute
 		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
@@ -421,7 +421,7 @@ var __statics = {
 		var set = "["+f_vb._BuildEscaped(sep)+"]";
 		var s = sep.charAt(0);
 		var	sTmp = inVal;
-		var m,y,p,dd,l,r;
+		var m,y,dd,l,r; //,p
 	
 		// Deal with empty string and required attribute
 		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
@@ -820,7 +820,7 @@ var __statics = {
 		}
 	
 		var sTmp = inVal;
-		var signed = validator.f_getBoolParameter("num.signed");
+		//var signed = validator.f_getBoolParameter("num.signed");
 		var decimal = validator.f_getIntParameter("num.cutDecimal", -1);
 		var dec = validator.f_getParameter("num.decSign");
 		var neg = validator.f_getParameter("num.negSign","-");
@@ -1196,7 +1196,7 @@ var __statics = {
 			
 			var n;
 			var ip;
-			var d;
+			//var d;
 			var dp;
 
 			if (neg) {
@@ -1264,5 +1264,7 @@ var __statics = {
 	}
 }
 
-new f_class("f_vb", null, __statics);
+new f_class("f_vb", {
+	statics: __statics
+});
 

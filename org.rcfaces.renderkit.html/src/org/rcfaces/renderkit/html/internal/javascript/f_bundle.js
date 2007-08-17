@@ -18,6 +18,17 @@ var __members = {
 		var names=new Array;
 		var classes=new Array;
 		this._classes=classes;
+
+		var timeBundle=window._rcfacesBundleTime;
+		if (timeBundle) {
+			var timeBundleEnd=new Date();
+			
+			window._rcfacesBundleTime=undefined;
+			
+			f_core.Profile(false, "f_bundle.parse("+name+")", timeBundle);			
+
+			f_core.Profile(true, "f_bundle.parse("+name+")", timeBundleEnd);			
+		}
 		
 		for(var i=1;i<arguments.length;i++) {
 			var clazz=arguments[i];
@@ -28,10 +39,10 @@ var __members = {
 			names.push(clazz.f_getName());
 		}
 		
-		f_core.Info("f_bundle", "Bundle '"+name+"' declares classes: "+names);
+		f_core.Info("f_bundle", "f_bundle: Bundle '"+name+"' declares classes: "+names);
 	
 		var classLoader=f_classLoader.Get();
-		f_core.Assert(classLoader, "Bundle '"+name+"' can not get window classloader !");
+		f_core.Assert(classLoader, "f_bundle: Bundle '"+name+"' can not get window classloader !");
 		
 		this._classLoader=classLoader;
 		

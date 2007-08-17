@@ -46,7 +46,7 @@ var __statics = {
 	_Expressions: undefined,
 	
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -345,7 +345,7 @@ var __statics = {
 		return true;
 	},
 	/**
-	 * @method private hidden
+	 * @method private static hidden
 	 */
 	PerformMessageError: function(validator, type, lastError, lastErrorArgs) {
 		f_core.Debug(f_clientValidator, "Perform message error. type='"+type+"' "+((lastError)?("severity='"+lastError.severity+"' summary='"+lastError.summary+"' detail='"+lastError.detail+"'"):("no error"))+"'.");
@@ -395,12 +395,18 @@ var __statics = {
 		
 		return true; // On arrete la, les messages ...
 	},
+	/**
+	 * @method public static
+	 */
 	Filter_generic: function(val,expr,keyCode,keyChar) {
 		f_core.Assert(expr instanceof RegExp, "f_clientValidator.Filter_generic: Not a regular expression. '"+expr+"'.");
 		
 		return (expr.test(keyChar));
 	},
 	
+	/**
+	 * @method public static
+	 */
 	Translator_generic: function(validator, expr, keyCode, keyChar) {
 		return keyCode;
 	},
@@ -408,30 +414,57 @@ var __statics = {
 	/*=============================================================================
 		ERROR HANDLERS
 	=============================================================================*/
+	/**
+	 * @method public static
+	 */
 	Error_msg: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, false);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_msg_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, false);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_msg_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_msg_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, true);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, false);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, true);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, true);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_null: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, false);
 	},
+	/**
+	 * @method public static
+	 */
 	Error_default: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
 	},
@@ -583,6 +616,11 @@ var __members = {
 		
 		f_core.Debug(f_clientValidator, "f_performCheckPre: Precheck of component '"+this._component.id+"' returns "+this._checked+" value='"+value+"'.");
 	},
+	/**
+	 * @method hidden
+	 * @param f_event event
+	 * @return boolean 
+	 */
 	f_performCheckValue: function(event) {
 		if (this._checked) {
 			return true;
@@ -600,7 +638,8 @@ var __members = {
 	
 		var self=this;
 		window.setTimeout(function() {
-			var bRet = self._applyAutoCheck(self._initialValue, false);
+			//var bRet = 
+			self._applyAutoCheck(self._initialValue, false);
 			
 			if (self._hasFocus) {
 				self._applyInputValue();
@@ -645,6 +684,11 @@ var __members = {
 	_getInitialValue: function() { 
 		return this._initialValue; 
 	},
+	/**
+	 * @method hidden
+	 * @param String val
+	 * @return void
+	 */
 	f_setInputValue: function(val) { 
 		if (this._inputValue != val) {
 			f_core.Debug(f_clientValidator, "f_setInputValue: Change internal input value '"+val+"'.");
@@ -652,6 +696,10 @@ var __members = {
 		
 		this._inputValue = val; 
 	},
+	/**
+	 * @method hidden
+	 * @return String
+	 */
 	f_getValue: function() { 
 		var value=this.f_getInputValue(true);
 
@@ -663,6 +711,10 @@ var __members = {
 
 		return v;
 	},
+	/**
+	 * @method hidden
+	 * @return String
+	 */
 	f_serializeValue: function() {
 		var value=this.f_getInputValue(true);
 
@@ -674,6 +726,10 @@ var __members = {
 
 		return v;
 	},
+	/**
+	 * @method hidden
+	 * @return String
+	 */
 	f_getInputValue: function(verifyFocus) { 
 		/**
 		 * @author Joel Merlin
@@ -694,6 +750,11 @@ var __members = {
 		
 		return this._inputValue; 
 	},
+	/**
+	 * @method hidden
+	 * @param String val
+	 * @return void
+	 */
 	f_setOutputValue: function(val) { 
 		if (this._outputValue != val) {
 			f_core.Debug(f_clientValidator, "f_setOutputValue: Change internal output value to '"+val+"'.");
@@ -701,6 +762,10 @@ var __members = {
 		
 		this._outputValue = val; 
 	},
+	/**
+	 * @method hidden
+	 * @return String
+	 */
 	f_getOutputValue: function() { 
 		/**
 		 * @author Joel Merlin
@@ -709,6 +774,10 @@ var __members = {
 		 */
 		return this._outputValue; 
 	},
+	/**
+	 * @method hidden
+	 * @return HTMLElement
+	 */
 	f_getComponent: function() {
 		return this._component;
 	},

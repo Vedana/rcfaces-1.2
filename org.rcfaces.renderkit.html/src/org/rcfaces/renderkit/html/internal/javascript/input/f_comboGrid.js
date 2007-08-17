@@ -101,6 +101,10 @@ var __statics = {
 		
 		return f_core.CancelJsEvent(evt);		
 	},
+	/**
+	 * @method private static
+	 * @return boolean
+	 */
 	_OnBeforeDeactivate: function() {
 		var evt = f_core.GetJsEvent(this);
 		
@@ -208,7 +212,7 @@ var __members = {
 	f_serialize: function() {
 		this.f_setProperty(f_prop.SELECTED, this._selectedValue);
 		
-		return this.f_super(arguments);	
+		this.f_super(arguments);	
 	},
 	/**
 	 * @method private

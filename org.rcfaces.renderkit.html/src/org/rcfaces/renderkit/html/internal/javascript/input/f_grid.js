@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_grid extends f_component, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager, fa_selectionManager, fa_scrollPositions
+ * @class public abstract f_grid extends f_component, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager, fa_scrollPositions, fa_additionalInformationManager
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -195,6 +195,8 @@ var __statics = {
 	},
 	/**
 	 * @method protected static
+	 * @param Event evt
+	 * @return boolean
 	 */
 	RowMouseDblClick: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -264,7 +266,7 @@ var __statics = {
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
-	 * @method protected
+	 * @method protected static
 	 * @param HTMLTableElement element
 	 * @return HTMLTrElement
 	 */
@@ -290,7 +292,7 @@ var __statics = {
 		return null;
 	},
 	/**
-	 * @method protected
+	 * @method protected static
 	 * @param HTMLTableElement element
 	 * @return HTMLTrElement
 	 */
@@ -391,12 +393,12 @@ var __statics = {
 			}
 			
 			dataGrid.f_onFocus(evt);
-	
-			return true;
 			
 		} catch (x) {
 			f_core.Error(f_grid, "_Link_onfocus: throws exception.", x);
 		}
+		
+		return true;
 	},
 	/**
 	 * @method private static
@@ -429,12 +431,12 @@ var __statics = {
 			dataGrid._updateCurrentSelection();
 			
 			dataGrid.f_onBlur(evt);
-	
-			return true;
 			
 		} catch (x) {
 			f_core.Error(f_grid, "_Link_onfocus: throws exception.", x);
 		}
+	
+		return true;
 	},
 	/**
 	 * @method private static
@@ -593,6 +595,8 @@ var __statics = {
 		}
 
 		dataGrid._updateTitleStyle(column);
+		
+		return true;
 	},
 	/**
 	 * @method private static
@@ -629,6 +633,8 @@ var __statics = {
 		dataGrid._columnOver=null;
 
 		dataGrid._updateTitleStyle(column);
+		
+		return true;
 	},
 	/**
 	 * @method private static
@@ -753,10 +759,12 @@ var __statics = {
 		var row=this._row;
 		if (row) {
 			row._dataGrid.f_forceFocus(row);
-			return;
+			return true;
 		}
 		
 		this._dataGrid.f_forceFocus(this._dataGrid);
+		
+		return true;
 	},	
 	/**
 	 * @method private static
@@ -796,7 +804,7 @@ var __statics = {
 		dataGrid._dragOriginX=eventPos.x;
 
 		var ths=dataGrid._title.getElementsByTagName("th");
-		var c=this.style.cursor;
+		//var c=this.style.cursor;
 		for(var i=0;i<ths.length;i++) {
 			ths[i].oldCursorStyle=ths[i].style.cursor;
 			ths[i].style.cursor="e-resize";
@@ -878,7 +886,7 @@ var __statics = {
 		dw=w-column._col.offsetWidth;
 		
 		if (dw==0) {
-			return false;
+			return;
 		}
 		
 		/*
@@ -981,6 +989,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_TitleCursorDragStop: function(evt) {
 		var column=f_grid._DragColumn;
@@ -1016,6 +1026,8 @@ var __statics = {
 		dataGrid._dragDeltaX=undefined;
 		dataGrid._dragOriginX=undefined;
 		dataGrid._dragMousePosition=undefined;
+		
+		return true;
 	},
 	/**
 	 * @method hidden static
@@ -1025,6 +1037,7 @@ var __statics = {
 	 */
 	Sort_Server: function(text1, text2) {
 		// Pas d'implementation, car la fonction est filtrÃ©e avant !
+		return 0;
 	}
 }
  
@@ -1428,9 +1441,14 @@ var __members = {
 		
 		this.f_setProperty(f_prop.CURSOR, cursorValue);
 	
-		return this.f_super(arguments);
+		this.f_super(arguments);
 	},
-	
+	/**
+	 * @method protected
+	 * @param number first
+	 * @param number rows
+	 * @return number[]
+	 */
 	f_addSerializedIndexes: function(first, rows) {
 					
 		var serializedIndexes=this._serializedIndexes;
@@ -1522,6 +1540,10 @@ var __members = {
 			*/
 		}
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_documentComplete: function() {
 		this.f_super(arguments);
 
@@ -2306,7 +2328,7 @@ var __members = {
 	 * @return boolean Returns <code>false</code>.
 	 */
 	f_setFirst: function(index, cursorIndex, selection, ignoreInteractive) {
-		var oldFirst=this._first;
+		//var oldFirst=this._first;
 		
 		this.f_setProperty(f_prop.FIRST, index);
 		if (cursorIndex) {
@@ -2314,7 +2336,7 @@ var __members = {
 		}
 	
 		if (ignoreInteractive===true) {
-			return;
+			return false;
 		}
 	
 		if (this._interactive) {
@@ -2738,7 +2760,7 @@ var __members = {
 	 * @return void
 	 */
 	_nextCursorRow: function(evt, selection) {
-		var trs=this._rowsPool; // Attention trs EST DANS LE DESORDRE !
+		//var trs=this._rowsPool; // Attention trs EST DANS LE DESORDRE !
 
 		var tr=this._cursor;
 		if (!tr || tr.parentNode!=this._tbody) {
@@ -2799,7 +2821,7 @@ var __members = {
 		this.f_setFirst(nextFirst, nextFirst, selection);
 	},
 	_previousCursorRow: function(evt, selection) {		
-		var trs=this._rowsPool;
+	//	var trs=this._rowsPool;
 
 		var tr=this._cursor;
 		if (!tr || tr.parentNode!=this._tbody) {
@@ -3182,7 +3204,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setColumnSort: function(col, ascending, append, col2, ascending2) {
-		var args=[false];
+		//var args=[false];
 		
 		if (ascending===undefined) {
 			if (col._ascendingOrder===undefined) {
@@ -3201,7 +3223,7 @@ var __members = {
 		f_core.Debug(f_grid, "f_setColumnSort: Sort col="+col._index+" ascending="+ascending+" append="+append);
 
 		if (currentSorts.length) {
-			// Ajout Fred pour éviter le cas où on appelle un tri sur plusieurs col dont la première est déjà triée
+			// Ajout Fred pour ï¿½viter le cas oï¿½ on appelle un tri sur plusieurs col dont la premiï¿½re est dï¿½jï¿½ triï¿½e
 			if ((append || currentSorts.length==1) && currentSorts[currentSorts.length-1]==col && !col2) {
 				// f_core.Debug(f_grid, "f_setColumnSort: Just inverse");
 				col._ascendingOrder=ascending;
@@ -3462,6 +3484,7 @@ var __members = {
 	},	
 	/**
 	 * @method protected
+	 * @return HTMLElement
 	 */
 	fa_componentCaptureMenuEvent: function() {
 		return null;
@@ -3580,7 +3603,8 @@ var __members = {
 
 			f_core.Debug(f_grid, "_sortTable: SERVER:\nserial='"+serial+"'\nrowCount="+this._rowCount+"\nrows="+this._rows);
 			
-			return this.f_setFirst(this._first);
+			this.f_setFirst(this._first);
+			return;
 		}
 		
 		f_core.Debug(f_grid, "_sortTable: CLIENT:\ntdIndexes="+tdIndexes+"\nascendings="+ascendings+"\nSort="+methods);
@@ -3693,6 +3717,10 @@ var __members = {
 	fa_getScrolledVerticalTitle: function() {
 		return null;
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_initializeTableLayout: function() {
 		var table = f_core.GetChildByCssClass(this, "f_grid_table");
 		f_core.Assert(table, "f_grid.f_initializeTableLayout: Can not find table 'f_grid_table'");
@@ -4016,6 +4044,8 @@ var __members = {
 		if (typeof(additional)=="boolean") {
 			return additional;
 		}
+		
+		return false;
 	},
 	/**
 	 * @method private
@@ -4212,7 +4242,7 @@ var __members = {
 	 				waiting.f_close();
 	 			}
 				
-				f_tree.Info(f_tree, "f_showAdditionalContent.onError: Bad status: "+request.f_getStatus());
+				f_tree.Info(f_tree, "f_showAdditionalContent.onError: Bad status: "+status);
 
 				try {
 					additionalRow._additionalContent=false;

@@ -223,6 +223,11 @@ var __members={
 
 		this.f_super(arguments);
 	},
+	/**
+	 * @method hidden
+	 * @param f_event event
+	 * @return boolean 
+	 */
 	f_performCheckValue: function(event) {		
 		var messageContext=f_messageContext.Get(this);
 		if (!messageContext) {

@@ -5,7 +5,7 @@
 /**
  * Aspect Message
  *
- * @aspect fa_message
+ * @aspect public abstract fa_message
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

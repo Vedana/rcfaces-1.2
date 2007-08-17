@@ -4,7 +4,7 @@
 
 /**
  * 
- * @aspect public fa_dataGridPopup extends f_object, fa_filterProperties
+ * @aspect public abstract fa_dataGridPopup extends fa_filterProperties
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -303,7 +303,7 @@ var __members = {
 		this._columns=undefined;  // Object[]
 		
 		this.f_destroyDataGrid();
-		this.f_destroyPager();
+		this._destroyPager();
 	},
 	/**
 	 * @method protected
@@ -324,7 +324,7 @@ var __members = {
 		}
 		var pager=this._pager;
 		if (pager) {
-			this.f_destroyPager(dataGrid);	
+			this._destroyPager(dataGrid);	
 		}
 
 		var rows=f_core.GetNumberAttribute(this, "v:rows");
@@ -386,6 +386,9 @@ var __members = {
 		
 		return dataGrid;
 	},
+	/**
+	 * @method protected
+	 */
 	f_destroyDataGrid: function() {
 		var dataGrid=this._dataGrid;
 		if (!dataGrid) {
@@ -400,7 +403,11 @@ var __members = {
 		
 		f_classLoader.Destroy(dataGrid);
 	},
-	f_destroyPager: function() {
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_destroyPager: function() {
 		var pager=this._pager;
 		if (!pager) {
 			return;
@@ -433,7 +440,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param optional Event jsEvent
-	 * @return boolean
+	 * @return void
 	 */
 	f_closeDataGridPopup: function(jsEvent) {
 		fa_dataGridPopup._ClosePopup(this, jsEvent);
@@ -454,8 +461,8 @@ var __members = {
 				return false;
 			}
 			
-			var offsetX=0;
-			var offsetY=this.offsetHeight;
+			// var offsetX=0;
+			// var offsetY=this.offsetHeight;
 			
 			fa_dataGridPopup._OpenPopup(this, this, 0, this.offsetHeight, false); 
 		}
@@ -516,6 +523,10 @@ var __members = {
 		}
 		dataGrid.f_performAutoSelection(autoSelection);
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_clearAllGridRows: function() {
 
 		var dataGrid=this.f_getDataGrid();

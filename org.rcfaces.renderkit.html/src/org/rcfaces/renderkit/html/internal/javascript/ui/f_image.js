@@ -9,14 +9,15 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
- 
-var __members = {
 
+var __statics = {
 	/**
 	 * @field private static final String
 	 */
-	_BLANK_IMAGE_URL: "/blank.gif",
+	_BLANK_IMAGE_URL: "/blank.gif"	
+}
 
+var __members = {
 
 	f_image: function() {
 		this.f_super(arguments);
@@ -95,7 +96,24 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_image, "_callServer.onError: Bad status: "+request.f_getStatus());
+	 			f_core.Info(f_image, "_callServer.onError: Bad status: "+status);
+
+	 			var continueProcess;
+	 			
+	 			try {
+	 				continueProcess=image.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+	 				
+	 			} catch (x) {
+	 				// On continue coute que coute !
+	 				continueProcess=false;
+	 			}	 				
+	 				 				 			 			
+		 		if (continueProcess===false) {
+					image._loading=false;		
+					
+					image.className=this.f_computeStyleClass();
+					return;
+		 		}
 	 			
 				if (image.f_processNextCommand()) {
 					return;
@@ -202,5 +220,6 @@ var __members = {
 new f_class("f_image", {
 	extend: f_component, 
 	aspects: [ fa_filterProperties, fa_commands ],
-	members: __members
+	members: __members,
+	statics: __statics
 });

@@ -5,7 +5,7 @@
 /**
  * Aspect Immediate.
  *
- * @aspect fa_immediate
+ * @aspect abstract fa_immediate
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

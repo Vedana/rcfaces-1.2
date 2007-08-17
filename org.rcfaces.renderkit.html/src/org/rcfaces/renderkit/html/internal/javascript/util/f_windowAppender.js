@@ -12,7 +12,7 @@
 
 var __statics={
 	/**
-	 * @method public static
+	 * @method protected static
 	 * @return void
 	 */
 	Initializer: function() {	
@@ -56,7 +56,8 @@ var __statics={
 
 		callback.call(window, "newPage");
 
-		var instance=this.f_newInstance(callback);
+		//var instance=
+		this.f_newInstance(callback);
 		
 		f_windowAppender._callback=callback;
 	}
@@ -71,6 +72,9 @@ var __members = {
 	f_finalize: function() {
 		this.f_super(arguments);
 	},
+	/**
+	 * @method public
+	 */
 	f_doAppend: function(event) {
 		var callback=f_windowAppender._callback;
 		if (!callback) {

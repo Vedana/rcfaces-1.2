@@ -50,6 +50,7 @@ import org.rcfaces.core.internal.webapp.IRepository.IContent;
 import org.rcfaces.core.internal.webapp.IRepository.IContext;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.Constants;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 
@@ -133,6 +134,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     // Ne sert que dans la version de developpement
     private String compiledJsSuffix;
 
+    private boolean profilerMode;
+
     public JavaScriptRepositoryServlet() {
     }
 
@@ -158,6 +161,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         super.init(config);
 
         compiledJsSuffix = getParameter(COMPILED_JS_SUFFIX_PARAMETER);
+        if (compiledJsSuffix != null) {
+            LOG.info("Compiled JS Suffix=" + compiledJsSuffix);
+        }
+
+        profilerMode = "true"
+                .equalsIgnoreCase(getParameter(IHtmlProcessContext.PROFILER_MODE_APPLICATION_PARAMETER));
+        LOG.info("Profiler mode=" + profilerMode);
     }
 
     protected boolean getVersionSupport() {
@@ -574,6 +584,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 }
 
                 sb.append('\n');
+            }
+            
+            if (Constants.JAVASCRIPT_APPEND_PROFILER_DATE) {
+                if (profilerMode) {
+                    sb
+                            .append("window._rcfacesBundleTime=new Date();\n");
+                }
             }
         }
 

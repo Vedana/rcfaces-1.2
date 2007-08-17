@@ -5,7 +5,7 @@
 /**
  * Aspect Items
  *
- * @aspect public fa_itemsWrapper
+ * @aspect public abstract fa_itemsWrapper
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -17,19 +17,11 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return any
-	 */
-	f_getItemValue: function(item) {
-		return this._getItemsWrapper().f_getItemValue(item);
-	},
-	/**
-	 * @method public
-	 * @param Object item
 	 * @param String message
 	 * @return void
 	 */
 	f_setItemToolTip: function(item, message) {
-		return this._getItemsWrapper().f_setItemToolTip(item, message);
+		this._getItemsWrapper().f_setItemToolTip(item, message);
 	},
 	/**
 	 * @method public
@@ -46,7 +38,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setItemImageURL: function(item, imageURL) {
-		return this._getItemsWrapper().f_setItemImageURL(item, imageURL);
+		this._getItemsWrapper().f_setItemImageURL(item, imageURL);
 	},
 	/**
 	 * @method public
@@ -63,7 +55,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setItemDisabledImageURL: function(item, imageURL) {
-		return this._getItemsWrapper().f_setItemDisabledImageURL(item, imageURL);
+		this._getItemsWrapper().f_setItemDisabledImageURL(item, imageURL);
 	},
 	/**
 	 * @method public
@@ -80,7 +72,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setItemHoverImageURL: function(item, imageURL) {
-		return this._getItemsWrapper().f_setItemHoverImageURL(item, imageURL);
+		this._getItemsWrapper().f_setItemHoverImageURL(item, imageURL);
 	},
 	/**
 	 * @method public
@@ -97,7 +89,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setItemSelectedImageURL: function(item, imageURL) {
-		return this._getItemsWrapper().f_setItemSelectedImageURL(item, imageURL);
+		this._getItemsWrapper().f_setItemSelectedImageURL(item, imageURL);
 	},
 	/**
 	 * @method public
@@ -122,7 +114,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setItemDisabled: function(item, disabled) {
-		return this._getItemsWrapper().f_setItemDisabled(item, disabled);
+		this._getItemsWrapper().f_setItemDisabled(item, disabled);
 	},
 	/**
 	 * @method public
@@ -139,7 +131,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setItemVisible: function(item, visible) {
-		return this._getItemsWrapper().f_setItemVisible(item, visible);
+		this._getItemsWrapper().f_setItemVisible(item, visible);
 	},
 	/**
 	 * @method public
@@ -156,7 +148,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setItemChecked: function(item, checked) {
-		return this._getItemsWrapper().f_setItemChecked(item, checked);
+		this._getItemsWrapper().f_setItemChecked(item, checked);
 	},
 	/**
 	 * @method public

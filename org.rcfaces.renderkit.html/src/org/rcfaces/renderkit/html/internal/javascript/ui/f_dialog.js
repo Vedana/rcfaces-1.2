@@ -120,8 +120,9 @@ var __statics = {
 	     	
     		var dialogInst = dialObj._dialog;
 			var functionToCall = dialObj._function;
-			var url = dialObj._url;
-			var iframe = dialogInst.f_constructIframe();
+			//var url = dialObj._url;
+			//var iframe = 
+			dialogInst.f_constructIframe();
 
 			dialogInst.f_decorateDiv(dialogInst.f_getDiv());
 
@@ -142,7 +143,7 @@ var __statics = {
     
      /**
      * Class Destructor (called in the head ...
-     * @method public static
+     * @method protected static
      */
     Finalizer: function() {
     	f_dialog._Dialogs = undefined; // List<Object>

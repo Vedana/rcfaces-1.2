@@ -2,7 +2,7 @@
  * $Id$
  */
  
-/*
+/**
  * class f_imageRadioButton
  *
  * @class f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required
@@ -77,7 +77,7 @@ var __members = {
 	/**
 	 * Set the group name of the button.
 	 *
-	 * @method hiden
+	 * @method protected
 	 * @param String group
 	 * @return void
 	 */

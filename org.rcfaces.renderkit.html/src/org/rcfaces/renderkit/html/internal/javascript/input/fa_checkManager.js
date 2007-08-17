@@ -5,7 +5,7 @@
 /**
  * Aspect CheckManager
  *
- * @aspect public fa_checkManager extends fa_itemsManager
+ * @aspect public abstract fa_checkManager extends fa_itemsManager
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

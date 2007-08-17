@@ -41,7 +41,7 @@ var __members = {
 	 * @method protected
 	 */
 	f_updateComponent: function() {
-		var doc=this.ownerDocument;
+		//var doc=this.ownerDocument;
 		this._calendar.f_constructComponent(this);		
 	},
 	/**

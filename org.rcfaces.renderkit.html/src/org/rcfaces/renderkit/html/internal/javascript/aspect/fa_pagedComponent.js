@@ -5,7 +5,7 @@
 /**
  * Aspect PagedComponent
  *
- * @aspect fa_pagedComponent extends fa_filterProperties
+ * @aspect public abstract fa_pagedComponent extends fa_filterProperties
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -74,7 +74,7 @@ var __statics = {
 		}
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {

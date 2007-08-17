@@ -29,6 +29,10 @@ var __members = {
 
 		this._hideSeparators();
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_documentComplete: function() {
 		this.f_super(arguments);
 		
@@ -36,7 +40,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @return void
+	 * @return HTMLElement[]
 	 */
 	_listSeparators: function() {
 		var separators=this._separators;

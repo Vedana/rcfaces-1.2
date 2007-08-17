@@ -5,7 +5,7 @@
 /**
  * Aspect Collapsed
  *
- * @aspect fa_collapsed
+ * @aspect abstract fa_collapsed
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

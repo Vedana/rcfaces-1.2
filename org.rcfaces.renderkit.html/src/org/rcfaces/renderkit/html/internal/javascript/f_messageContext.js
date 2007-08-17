@@ -124,7 +124,6 @@ var __statics = {
 var __members = {
 	/** 
 	 * @method private
-	 * @return f_messageContext
 	 */
 	f_messageContext: function(form) {
 	
@@ -411,7 +410,8 @@ var __members = {
 				changed=parent._clearMessages(false);
 			}
 			
-			for(var i in this._messages) {
+			for(var dummy in this._messages) {
+				// Il y a au moins un message !
 				this._messages=new Object;
 				changed=true;
 				break;

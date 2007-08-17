@@ -5,7 +5,7 @@
 /**
  * Aspect Selected
  *
- * @aspect public fa_selected
+ * @aspect public abstract fa_selected
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

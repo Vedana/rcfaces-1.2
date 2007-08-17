@@ -25,7 +25,7 @@ var __statics={
 		return f_focusManager._Instance;
 	},
 	/**
-	 * @method hidden static
+	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
@@ -143,6 +143,10 @@ var __members={
 
 		this.f_super(arguments);
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
 	f_documentComplete: function() {
 		var focusId=this._initFocusId;
 		if (!focusId) {

@@ -5,7 +5,7 @@
 /**
  * Disable state.
  *
- * @aspect fa_disabled
+ * @aspect abstract fa_disabled
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
