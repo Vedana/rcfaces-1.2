@@ -35,6 +35,8 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
 
     private static final String DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
 
+    private static final String DATE_CHOOSER_DISABLED_IMAGEURL = "dateChooser/dateChooser_disabled.gif";
+
     private static final int DATE_CHOOSER_WIDTH = 16;
 
     private static final int DATE_CHOOSER_HEIGHT = 16;
@@ -85,6 +87,17 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
                         IContentType.IMAGE);
     }
 
+    public IContentAccessor getDateChooserDisabledImageAccessor(
+            IHtmlWriter htmlWriter) {
+
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+
+        return htmlRenderContext.getHtmlProcessContext()
+                .getStyleSheetContentAccessor(DATE_CHOOSER_DISABLED_IMAGEURL,
+                        IContentType.IMAGE);
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -95,6 +108,8 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
         private static final String REVISION = "$Revision$";
 
         private boolean firstLine = true;
+
+        private boolean defaultImageAccessor = false;
 
         private IContentAccessor imageAccessor;
 
@@ -200,6 +215,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             }
 
             imageAccessor = getDateChooserImageAccessor(htmlWriter);
+            defaultImageAccessor = true;
 
             imageButtonFamilly
                     .setImageWidth(getDateChooserImageWidth(htmlWriter));
@@ -209,10 +225,25 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             return imageAccessor;
         }
 
+        protected IContentAccessor getDisabledImageAccessor(
+                IHtmlWriter htmlWriter) {
+            if (defaultImageAccessor) {
+                return getDateChooserDisabledImageAccessor(htmlWriter);
+            }
+
+            return super.getDisabledImageAccessor(htmlWriter);
+        }
+
         protected IContentAccessor getDateChooserImageAccessor(
                 IHtmlWriter htmlWriter) {
             return DateChooserRenderer.this
                     .getDateChooserImageAccessor(htmlWriter);
+        }
+
+        protected IContentAccessor getDateChooserDisabledImageAccessor(
+                IHtmlWriter htmlWriter) {
+            return DateChooserRenderer.this
+                    .getDateChooserDisabledImageAccessor(htmlWriter);
         }
 
         protected int getDateChooserImageHeight(IHtmlWriter htmlWriter) {
