@@ -25,9 +25,9 @@ public interface IProcessContext {
 
     FacesContext getFacesContext();
 
-    boolean getDebugMode();
+    Boolean getDebugMode();
 
-    boolean getProfilerMode();
+    Boolean getProfilerMode();
 
     boolean isDesignerMode();
 

@@ -84,12 +84,12 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return facesContext;
     }
 
-    public boolean getDebugMode() {
-        return false;
+    public Boolean getDebugMode() {
+        return null;
     }
 
-    public boolean getProfilerMode() {
-        return false;
+    public Boolean getProfilerMode() {
+        return null;
     }
 
     public boolean isDesignerMode() {

@@ -387,9 +387,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         disabledCookiesPageURL);
 
             } else {
+                Boolean debugMode = htmlProcessContext.getDebugMode();
+
                 writeScriptTag(htmlWriter, cameliaScriptURI, jsBaseURI,
-                        disabledCookiesPageURL, htmlProcessContext
-                                .getDebugMode());
+                        disabledCookiesPageURL, debugMode);
             }
         }
 
@@ -589,7 +590,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
     }
 
     private void writeScriptTag(IHtmlWriter writer, String uri,
-            String jsBaseURI, String disabledCookiesPageURL, boolean debugMode)
+            String jsBaseURI, String disabledCookiesPageURL, Boolean debugMode)
             throws WriterException {
 
         if (disabledCookiesPageURL != null) {
@@ -598,11 +599,11 @@ public class InitRenderer extends AbstractHtmlRenderer {
             jsWriter.end();
         }
 
-        if (debugMode) {
+        if (debugMode != null) {
             IJavaScriptWriter jsWriter = openScriptTag(writer);
-            jsWriter.write("window.rcfacesDebugMode=true;");
-            jsWriter.end();
-
+            jsWriter.write("window.rcfacesDebugMode=");
+            jsWriter.writeBoolean(debugMode.booleanValue());
+            jsWriter.write(';').end();
         }
 
         includeScript(writer, jsBaseURI + "/" + uri,
@@ -861,12 +862,16 @@ public class InitRenderer extends AbstractHtmlRenderer {
                     LOG.info("UseMetaContentStyleType is enabled for context.");
                 }
 
-                if (htmlProcessContext.getDebugMode()) {
-                    LOG.info("DEBUG_MODE is enabled for context.");
+                if (htmlProcessContext.getDebugMode() != null) {
+                    LOG.info("DEBUG_MODE is setted to "
+                            + htmlProcessContext.getDebugMode()
+                            + " for context.");
                 }
 
-                if (htmlProcessContext.getProfilerMode()) {
-                    LOG.info("PROFILER_MODE is enabled for context.");
+                if (htmlProcessContext.getProfilerMode() != null) {
+                    LOG.info("PROFILER_MODE is setted to "
+                            + htmlProcessContext.getProfilerMode()
+                            + " for context.");
                 }
 
                 if (htmlProcessContext.isDesignerMode()) {

@@ -528,14 +528,28 @@ public class JavaScriptRenderContext implements IJavaScriptRenderContext {
         IHtmlProcessContext processContext = htmlRenderContext
                 .getHtmlProcessContext();
 
-        boolean debugMode = processContext.getDebugMode();
-        if (debugMode) {
-            writer.writeCall("f_core", "SetDebugMode").writeln(");");
-        }
+        /*
+        Boolean debugMode = processContext.getDebugMode();
+        if (debugMode != null) {
+            writer.writeCall("f_core", "SetDebugMode");
 
-        boolean profilerMode = processContext.getProfilerMode();
-        if (profilerMode) {
-            writer.writeCall("f_core", "SetProfilerMode").writeln(");");
+            if (debugMode.booleanValue() == false) {
+                writer.writeBoolean(false);
+            }
+
+            writer.writeln(");");
+        }
+        */
+
+        Boolean profilerMode = processContext.getProfilerMode();
+        if (profilerMode != null) {
+            writer.writeCall("f_core", "SetProfilerMode");
+
+            if (profilerMode.booleanValue() == false) {
+                writer.writeBoolean(false);
+            }
+
+            writer.writeln(");");
         }
 
         boolean designerMode = processContext.isDesignerMode();

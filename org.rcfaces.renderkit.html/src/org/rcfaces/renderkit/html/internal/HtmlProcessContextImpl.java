@@ -50,9 +50,9 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private final boolean useMetaContentStyleType;
 
-    private boolean debugMode;
+    private Boolean debugMode;
 
-    private boolean profilerMode;
+    private Boolean profilerMode;
 
     public HtmlProcessContextImpl(FacesContext facesContext) {
         super(facesContext);
@@ -75,11 +75,19 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         useFlatIdentifier = "true".equalsIgnoreCase((String) applicationMap
                 .get(HTML_FLAT_IDENTIFIER_PARAMETER));
 
-        debugMode = "true".equalsIgnoreCase((String) applicationMap
-                .get(DEBUG_MODE_APPLICATION_PARAMETER));
+        String debugModeParam = (String) applicationMap
+                .get(DEBUG_MODE_APPLICATION_PARAMETER);
+        if (debugModeParam != null) {
+            debugMode = Boolean
+                    .valueOf("true".equalsIgnoreCase(debugModeParam));
+        }
 
-        profilerMode = "true".equalsIgnoreCase((String) applicationMap
-                .get(PROFILER_MODE_APPLICATION_PARAMETER));
+        String profilerModeParam = (String) applicationMap
+                .get(PROFILER_MODE_APPLICATION_PARAMETER);
+        if (profilerModeParam != null) {
+            profilerMode = Boolean.valueOf("true"
+                    .equalsIgnoreCase(profilerModeParam));
+        }
 
         separatorChar = getHtmlSeparatorChar(externalContext);
 
@@ -195,11 +203,11 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         return useScriptCData;
     }
 
-    public boolean getDebugMode() {
+    public Boolean getDebugMode() {
         return debugMode;
     }
 
-    public boolean getProfilerMode() {
+    public Boolean getProfilerMode() {
         return profilerMode;
     }
 
