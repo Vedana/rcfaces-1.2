@@ -579,8 +579,8 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                 LOG.debug("Load record '" + file.getFilename() + "' into "
                         + buffer.length + " bytes, modified date="
                         + dateFormat.format(new Date(lastModificationDate))
-                        + "  (update-ratio "
-                        + (buffer.length * 100 / beforeUpdate) + "%)");
+                        + ((beforeUpdate>0)?("  (update-ratio "
+                        + (buffer.length * 100 / beforeUpdate) + "%)"):""));
             }
 
             if (hasEtagSupport()) {
