@@ -505,10 +505,10 @@ var __members = {
 			clientDatas=new Object;
 			
 			for(var i=4;i<arguments.length-1;) {
-				var key=arguments[i++];
-				var value=arguments[i++]
+				var keyArg=arguments[i++];
+				var valueArg=arguments[i++]
 
-				clientDatas[key]=value;
+				clientDatas[keyArg]=valueArg;
 			}
 		}
 		

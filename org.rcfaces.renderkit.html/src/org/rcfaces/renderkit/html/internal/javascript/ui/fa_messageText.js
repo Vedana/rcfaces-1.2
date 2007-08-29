@@ -37,7 +37,7 @@ var __members = {
 	 *
 	f_setShowSummary: function(showSummary) {
 		var old=this.f_isShowSummary();
-		showSummary=(showSummary)?true:false;
+		showSummary=!!showSummary;
 		
 		if (showSummary==old) {
 			return;
@@ -74,7 +74,7 @@ var __members = {
 		f_core.Assert(typeof(showDetail)=="boolean", "Invalid showDetail parameter ('"+showDetail+"')");
 
 		var old=this.f_isShowDetail();
-		showDetail=(showDetail)?true:false;
+		showDetail=!!showDetail;
 		
 		if (showDetail==old) {
 			return;

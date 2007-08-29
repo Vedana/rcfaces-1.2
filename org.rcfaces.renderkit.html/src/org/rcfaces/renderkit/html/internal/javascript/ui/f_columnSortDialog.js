@@ -14,7 +14,7 @@ var __statics = {
 	 * @field private static final
 	 */
 	_EVENTS: {
-			selection: f_event.SELECTION
+		selection: f_event.SELECTION
 	},
 	
 	/**
@@ -100,6 +100,7 @@ var __statics = {
    	        firstSelectComp._sort = 0;
 			return f_core.CancelJsEvent(evt);
 	    }
+	    
 	    var options = firstSelectComp.options;
 	    firstSelectComp._column = options[sel]._column;
 		if (secondSelectComp) {
@@ -121,12 +122,12 @@ var __statics = {
      * @method public static
      * @param f_event evt
      * @return boolean
-     */
+     *
     ListenerExample: function(evt) {
     	var value = evt.f_getValue();
     	return true;
     },
-    
+    */
     /**
      * @method public static
      * @param HTMLDocument docBase document
@@ -135,17 +136,17 @@ var __statics = {
      * @return option
      */
     AddOption: function(docBase, selectComp, column) {
-            var newOpt = docBase.createElement("option");
-            var text = "(aucune)";
-            if (column) {
-	            // oops
-    	        text = column._dataGrid.f_getColumnName(column);
-    	    }
-            newOpt.value = text;
-            newOpt.appendChild(docBase.createTextNode(text));
-            newOpt._column = column;
-            
-            return selectComp.appendChild(newOpt);
+        var newOpt = docBase.createElement("option");
+        var text = "(aucune)";
+        if (column) {
+            // oops
+	        text = column._dataGrid.f_getColumnName(column);
+	    }
+        newOpt.value = text;
+        newOpt.appendChild(docBase.createTextNode(text));
+        newOpt._column = column;
+        
+        return selectComp.appendChild(newOpt);
   	},
   	
     /**
@@ -210,8 +211,12 @@ var __members = {
 	 * @method public
 	 */
 	f_finalize: function() {		
-		// this._title=undefined; // string
+		// this._title=undefined; // String
 		this._grid=undefined; // f_grid
+
+		// OO: @TODO  Il y a des onclick sur les radioButtons !
+		
+		// OO: @TODO  AJOUTER DES VERIFY_PROPERTY sur TOUS LES COMPOSANTS
 
 		this.f_super(arguments);
 	},
@@ -246,6 +251,7 @@ var __members = {
 		var grid = this._grid;
 		if (!grid) {
 			f_core.Error(f_columnSortDialog, "f_geColumns: grid is undefined !");
+			return [];
 		}
 		return grid.f_getColumns();
 	},
@@ -377,7 +383,7 @@ var __members = {
 		
 		// Corps de la popup : 3 combos et des radios
 
-		// Creation de la ligne de libellé Trier par
+		// Creation de la ligne de libellï¿½ Trier par
 		var ligneCorps = docBase.createElement("tr");
 		
 		var cellCorps = docBase.createElement("td");
@@ -390,7 +396,7 @@ var __members = {
 		cellCorps.appendChild(zone);
 		ligneCorps.appendChild(cellCorps);
 
-		// Ajout de la ligne à la table
+		// Ajout de la ligne ï¿½ la table
 		tbodCorps.appendChild(ligneCorps);
 
 		// ligne 1er combo et radios
@@ -444,7 +450,7 @@ var __members = {
 		
 		tbodCorps.appendChild(ligneCorps);
 
-		// Creation de la ligne de libellé Puis Trier par (2)
+		// Creation de la ligne de libellï¿½ Puis Trier par (2)
 		ligneCorps = docBase.createElement("tr");
 		
 		cellCorps = docBase.createElement("td");
@@ -457,7 +463,7 @@ var __members = {
 		cellCorps.appendChild(zone);
 		ligneCorps.appendChild(cellCorps);
 
-		// Ajout de la ligne à la table
+		// Ajout de la ligne ï¿½ la table
 		tbodCorps.appendChild(ligneCorps);
 
 		// ligne 1er combo et radios
@@ -472,7 +478,7 @@ var __members = {
 			selectedCol = sortedCols[sortedColsIndex++];
 		}
 
-		// Remplissage si la précédente a été préselectionnée
+		// Remplissage si la prï¿½cï¿½dente a ï¿½tï¿½ prï¿½selectionnï¿½e
 		if (sortedCols.length > 0) {
 			selectComp.selectedIndex = 0;
 			selectComp.value = "";
@@ -509,7 +515,7 @@ var __members = {
 		
 		tbodCorps.appendChild(ligneCorps);
 
-		// Creation de la ligne de libellé Puis Trier par (3)
+		// Creation de la ligne de libellï¿½ Puis Trier par (3)
 		ligneCorps = docBase.createElement("tr");
 		
 		cellCorps = docBase.createElement("td");
@@ -522,7 +528,7 @@ var __members = {
 		cellCorps.appendChild(zone);
 		ligneCorps.appendChild(cellCorps);
 
-		// Ajout de la ligne à la table
+		// Ajout de la ligne ï¿½ la table
 		tbodCorps.appendChild(ligneCorps);
 
 		// ligne 1er combo et radios
@@ -538,7 +544,7 @@ var __members = {
 			selectedCol = sortedCols[sortedColsIndex++];
 		}
 
-		// Remplissage si la précédente est déjà sélectionnée
+		// Remplissage si la prï¿½cï¿½dente est dï¿½jï¿½ sï¿½lectionnï¿½e
 		if (sortedCols.length > 1) {
 			f_columnSortDialog.AddOption(docBase, selectComp);
 			for (var i = j = 0; i<cols.length; i++) {
@@ -625,8 +631,7 @@ var __members = {
 		button._close = true;
 		button._apply = true;
 		button.onfocusin=noFocus;
-		baseMem._buttons = new Array;
-		baseMem._buttons.push(button);
+		baseMem._buttons = [ button ];
 			
 		cellb.appendChild(button);
 		actTr.appendChild(cellb);
@@ -706,6 +711,8 @@ var __members = {
 		
 		var radioComp;
 		if (f_shell._IE) {
+			// OO: UTILISER defaultChecked		
+
 			var tag = "<input type='radio' name='"+name+"'";
 			if (selectComp._sort != -1) {
 				tag = tag + " checked='true'";
@@ -739,6 +746,8 @@ var __members = {
 		cellRadio = docBase.createElement("td");
 		
 		if (f_shell._IE) {
+			// OO: UTILISER defaultChecked
+			
 			var tag = "<input type='radio' name='"+name+"'";
 			if (selectComp._sort == -1) {
 				tag = tag + " checked='true'";
@@ -796,11 +805,11 @@ var __members = {
 		if (apply) {
 			for (var i=0; i<selects.length; i++) {
 				var select = selects[i];
-				if (select._column) {
-					colsSorted.push({_col: select._column, _sort: select._sort});
-				} else {
+				if (!select._column) {
 					break;
 				}
+				
+				colsSorted.push({_col: select._column, _sort: select._sort});
 			}
 		}
 		

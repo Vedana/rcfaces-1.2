@@ -24,6 +24,9 @@ var __statics = {
 
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object tabbedPane
 	 */
 	_TabbedPane_onresize: function(evt) {
 		var tabbedPane=this._tabbedPane;
@@ -42,6 +45,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object tabbedPane
 	 */
 	_TabbedPane_click: function(evt) {
 		var tab=this._tab;
@@ -63,6 +69,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object tabbedPane
 	 */
 	_TabbedPane_focus: function(evt) {
 		var tab=this._tab;
@@ -80,6 +89,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object tabbedPane
 	 */
 	_TabbedPane_keyPress: function(evt) {
 		var tab=this._tab;
@@ -106,6 +118,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object tabbedPane
 	 */
 	_TabbedPane_keyDown: function(evt) {
 		var tab=this._tab;
@@ -166,6 +181,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object tabbedPane
 	 */
 	_TabbedPane_mouseover: function(evt) {
 		var tab=this._tab;
@@ -185,6 +203,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object tabbedPane
 	 */
 	_TabbedPane_mouseout: function(evt) {
 		var tab=this._tab;
@@ -825,7 +846,7 @@ var __members = {
 			textLink.accessKey=accessKey;
 		}
 
-		var imageURL=tab._imageURL;
+		//var imageURL=tab._imageURL;
 		if (imageURL) {
 			var icon=document.createElement("img");
 			tab._icon=icon;

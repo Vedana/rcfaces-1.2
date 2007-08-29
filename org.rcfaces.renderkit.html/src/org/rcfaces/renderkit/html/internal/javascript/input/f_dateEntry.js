@@ -231,7 +231,7 @@ var __members={
 	f_performCheckValue: function(event) {		
 		var messageContext=f_messageContext.Get(this);
 		if (!messageContext) {
-			return;
+			return true;
 		}
 
 		var errorMessage=null;
@@ -255,7 +255,7 @@ var __members={
 				
 				if (empty) {
 					// Tous les champs sont vides
-					return;
+					return true;
 				}
 
 				errorMessage="invalidDate.error";
@@ -300,7 +300,7 @@ var __members={
 		f_core.Debug(f_dateEntry, "Error Message: "+errorMessage+" date="+date);
 		
 		if (!errorMessage) {
-			return;
+			return true;
 		}
 		
 		

@@ -21,13 +21,16 @@ var __statics = {
 	 * @method private static final
 	 * @param Event evt
 	 * @return boolean
+	 * @object combo
 	 */
 	_OnChange: function(evt) {
+		var combo=this;
+		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		return this.f_fireEvent(f_event.SELECTION, evt, null, this.f_getValue(), this);
+		return combo.f_fireEvent(f_event.SELECTION, evt, null, combo.f_getValue(), combo);
 	}
 }
 

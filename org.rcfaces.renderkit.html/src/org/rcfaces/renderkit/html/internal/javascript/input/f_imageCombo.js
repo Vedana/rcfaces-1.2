@@ -25,6 +25,8 @@ var __members = {
 	},
 	/** 
 	 * @method private
+	 * @param f_event event
+	 * @return boolean
 	 */
 	_onKeyDown: function(event) {
 		var code=event.f_getJsEvent().keyCode;
@@ -47,6 +49,8 @@ var __members = {
 	},
 	/** 
 	 * @method protected
+	 * @param f_event evt
+	 * @return boolean
 	 */
 	f_imageButtonSelect: function(evt) {
 		f_core.Debug(f_imageCombo, "f_imageButtonSelect: evt="+evt);
@@ -58,7 +62,7 @@ var __members = {
 			return false;
 		}
 		
-		if (f_popup.VerifyMouseDown(this, evt._jsEvent)) {
+		if (f_popup.VerifyMouseDown(this, evt.f_getJsEvent())) {
 			f_core.Debug(f_imageCombo, "f_imageButtonSelect: mouse down outside !");
 			return false;
 		}

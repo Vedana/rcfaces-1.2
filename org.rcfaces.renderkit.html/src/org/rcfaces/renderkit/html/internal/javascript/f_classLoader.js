@@ -24,6 +24,17 @@ function f_classLoader(window, parentClassLoader) {
 }
 
 f_classLoader.prototype = {
+	
+	/**
+	 * @field hidden final Window
+	 */
+	_window: undefined,
+	
+	/**
+	 * @field hidden final f_classLoader 
+	 */
+	_parent: undefined,
+	
 	/**
 	 * @method public final
 	 * @return Window
@@ -283,8 +294,8 @@ f_classLoader.prototype = {
 		for (var claz in classes) {
 			window[claz._name]=undefined;
 		}
-		for (var name in aspects) {
-			window[name]=undefined;
+		for (var aspect in aspects) {
+			window[aspect._name]=undefined;
 		}
 		
 		f_core.Profile(true, "f_classLoader.onExit");
@@ -634,7 +645,7 @@ f_classLoader.prototype = {
 			
 			var doc=this._window.document;
 	
-			var obj=doc.getElementById(id);
+			obj=doc.getElementById(id);
 			if (!obj) {
 				var names=doc.getElementsByName(id);
 				if (!names || !names.length) {
@@ -646,7 +657,7 @@ f_classLoader.prototype = {
 				
 				f_core.Assert(names.length!=1, "f_classLoader._init: Too many components associated to name '"+id+"'.");
 				
-				var obj=names[0];
+				obj=names[0];
 				if (f_core.DebugMode) {
 					if (obj.id) {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') has already an ID ('+obj.id+') !");

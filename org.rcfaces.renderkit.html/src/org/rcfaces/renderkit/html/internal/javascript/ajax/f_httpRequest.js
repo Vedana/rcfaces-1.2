@@ -354,7 +354,7 @@ var __members = {
 	
 			this._date=new Date().getTime();
 		
-			f_core.Assert(typeof(this._url)=="string", "f_httpRequest._doRequest: URL is invalid !");
+			f_core.Assert(typeof(this._url)=="string", "f_httpRequest._doRequest: URL is invalid ! ("+this._url+")");
 		
 			// Create new object
 			var req = null;

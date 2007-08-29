@@ -113,6 +113,9 @@ var __statics = {
 		
 	/**
 	 * @method protected static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	RowMouseDown: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -156,6 +159,9 @@ var __statics = {
 	},
 	/**
 	 * @method protected static
+	 * @param Event evt
+	 * @return boolean
+	 * @object NONE
 	 */
 	VerifyTarget: function(evt) {		
 		if (this._dataGrid || this._row) {
@@ -181,8 +187,13 @@ var __statics = {
 	},
 	/**
 	 * @method protected static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	FiltredCancelJsEventHandler: function(evt) {
+		var dataGrid=this._dataGrid;
+		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
@@ -197,6 +208,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event evt
 	 * @return boolean
+	 * @object dataGrid
 	 */
 	RowMouseDblClick: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -218,10 +230,13 @@ var __statics = {
 		
 		dataGrid.f_fireEvent(f_event.DBLCLICK, evt, this, this._index, dataGrid);
 		
-		return f_core.CancelJsEvent(evt);;
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_BodyMouseDown: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -327,11 +342,14 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Link_onfocus: function(evt) {
+		var dataGrid=this._dataGrid;
+		
 		try {
-			var dataGrid=this._dataGrid;
-
 			if (dataGrid._ignoreFocus) {
 				return false;
 			}
@@ -402,11 +420,14 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Link_onblur: function(evt) {
-		try {
-			var dataGrid=this._dataGrid;
+		var dataGrid=this._dataGrid;
 
+		try {
 			if (dataGrid._ignoreFocus) {
 				return true;
 			}
@@ -440,6 +461,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Link_onkeypress: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -472,6 +496,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Link_onkeydown: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -497,6 +524,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Link_onkeyup: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -523,6 +553,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Link_onmousewheel: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -557,18 +590,21 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Title_onMouseOver: function(evt) {
 		var column=this._column;
 		if (!column) {
 			return false;
 		}
+		var dataGrid=column._dataGrid;
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		var dataGrid=column._dataGrid;
 		if (dataGrid.f_getEventLocked(evt, false) || !dataGrid._columnCanBeSorted) {
 			return false;
 		}
@@ -600,8 +636,18 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Title_onMouseOut: function(evt) {
+		var column=this._column;
+		if (!column) {
+			return false;
+		}
+		
+		var dataGrid=column._dataGrid;
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
@@ -609,14 +655,7 @@ var __statics = {
 		// En drag ?
 		if (f_grid._DragColumn) {
 			return false;
-		}	
-
-		var column=this._column;
-		if (!column) {
-			return false;
 		}
-		
-		var dataGrid=column._dataGrid;
 
 		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted || !column._method) {
 			return false;
@@ -638,6 +677,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Title_onMouseDown: function(evt) {
 
@@ -646,11 +688,12 @@ var __statics = {
 			return false;
 		}
 	
+		var dataGrid=column._dataGrid;
+	
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-	
-		var dataGrid=column._dataGrid;
+		
 		if (dataGrid.f_getEventLocked(evt)) {
 			return false;
 		}
@@ -683,6 +726,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_Title_onMouseUp: function(evt) {
 		var column=this._column;
@@ -724,13 +770,17 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_OnScroll: function(evt) {
+		var dataGrid=this._dataGrid;
+
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		var dataGrid=this._dataGrid;
 		var scrollBody=dataGrid._scrollBody;
 		
 		if (dataGrid._scrollTitle) {		
@@ -746,8 +796,17 @@ var __statics = {
 	},
 	/**
 	 * @method protected static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	GotFocus: function(evt) {
+		var dataGrid=this._dataGrid;
+		var row=this._row;
+		if (!dataGrid && row) {
+			dataGrid=row._dataGrid;
+		}
+		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
@@ -756,18 +815,19 @@ var __statics = {
 			return true;
 		}
 
-		var row=this._row;
 		if (row) {
-			row._dataGrid.f_forceFocus(row);
+			dataGrid.f_forceFocus(row);
 			return true;
 		}
 		
-		this._dataGrid.f_forceFocus(this._dataGrid);
-		
+		dataGrid.f_forceFocus(dataGrid);
 		return true;
 	},	
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_TitleCursorMouseDown: function(evt) {
 		var column=this._column;
@@ -817,6 +877,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_TitleCursorDragMove: function(evt) {
 		var column=f_grid._DragColumn;
@@ -843,7 +906,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @return void
+	 * @param Event evt
+	 * @return boolean
+	 * @object dataGrid
 	 */
 	_TimerDragMove: function() {
 		var column=f_grid._DragColumn;
@@ -962,15 +1027,15 @@ var __statics = {
 			var totalCols=0;
 			var columns=dataGrid._columns;
 			for(var i=0;i<columns.length;i++) {
-				var column=columns[i];
+				var cl=columns[i];
 				
-				if (!column._visibility) {
+				if (!cl._visibility) {
 					continue;
 				}
 				
-				f_core.Assert(column._col, "f_grid._DragCursorMove: Invalid column '"+column+"'.");
+				f_core.Assert(cl._col, "f_grid._DragCursorMove: Invalid column '"+cl+"'.");
 				
-				totalCols+=parseInt(column._col.style.width, 10);
+				totalCols+=parseInt(cl._col.style.width, 10);
 			}
 
 			var fakeCol=dataGrid._fakeColWidth;
@@ -991,6 +1056,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @object dataGrid
 	 */
 	_TitleCursorDragStop: function(evt) {
 		var column=f_grid._DragColumn;
@@ -1896,7 +1962,7 @@ var __members = {
 	 * @return boolean
 	 */
 	f_isRowSelected: function(row) {
-		return (row._selected)?true:false;
+		return !!row._selected;
 	},
 	/**
 	 * @method protected
@@ -3178,7 +3244,7 @@ var __members = {
 
 		for(var i=0;i<arguments.length;) {		
 			var sortColumnIndex=arguments[i++];
-			var ascending=(arguments[i++])?true:false;
+			var ascending=!!arguments[i++];
 			
 			f_core.Assert(sortColumnIndex>=0 && sortColumnIndex<cols.length, "Bad sortColumnIndex !");
 	

@@ -301,10 +301,10 @@ var __members = {
 	_onUnLoad: function() {
 		var unloadFrame=this._unloadFrame;
 		this._unloadFrame=undefined; // function
-		
-		if (!window.f_textEditor) {
+
+		if (window._rcfacesExiting) {
 			return;
-		}
+		}		
 
 // On Log pas, les classes sont en vrac ...
 //		f_core.Debug(f_textEditor, "_onUnLoad: Unload textEditor");

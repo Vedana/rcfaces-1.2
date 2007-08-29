@@ -57,7 +57,7 @@ var __statics = {
 		}
 		
 		// On accepte aucun parametre !
-		for(var i=0;i<arguments.length || i==0;i++) {
+		for(var i=0;!i || i<arguments.length;i++) {
 			var type=arguments[i]; // Le premier parametre peut-etre Undefined !
 			
 			if (!type) {

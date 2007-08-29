@@ -2,17 +2,6 @@
  * $Id$
  */
 
-if (window.f_core) {
-	var m="PANIC: Vedana Faces Library is already loaded !";
-	alert(m);
-	throw new Error(m);
-} 
-
-// For profiling ....
-window._rcfacesInitLibraryDate=new Date();
-		
-var __SYMBOL=function(x) { return x };
-
 /**
  * f_core class
  *
@@ -2556,7 +2545,7 @@ var f_core = {
 		}
 
 		for(var i=0;i<parents.length;i++) {
-			var component=parents[i];
+			component=parents[i];
 			
 			var style=component.style;
 
@@ -2635,10 +2624,11 @@ var f_core = {
 					curTop -= component.scrollTop;
 					curLeft -= component.scrollLeft;
 			
-					if (gecko) {
-						curTop+=f_core.ComputeBorderLength(component, "top")		
-						curLeft+=f_core.ComputeBorderLength(component, "left")
-					}		
+					//if (gecko) {
+						// C'est dans l'offsetTop
+						// curTop+=f_core.ComputeBorderLength(component, "top")		
+						// curLeft+=f_core.ComputeBorderLength(component, "left")
+					//}		
 				}
 								
 			//	f_core.Debug(f_core, " Sub absolutePos of '"+component.id+"' x="+component.offsetLeft+" y="+component.offsetTop+"  totX="+curLeft+" totY="+curTop);
@@ -2725,7 +2715,7 @@ var f_core = {
 	_SearchBrowser: function() {
 		var agt=window.navigator.userAgent.toLowerCase();
 
-		f_core.Info("f_core", "Navigator agent: "+agt);
+		f_core.Info(f_core, "_SearchBrowser: Navigator agent: "+agt);
 		f_core._browser=f_core._UNKNOWN_BROWER;
 
 		var idx=agt.indexOf("msie ");
@@ -2743,25 +2733,31 @@ var f_core = {
 				f_core._browser_release=parseInt(vs[1], 10);
 				
 			} catch (ex) {
-				f_core.Error(f_core, "Can not parse msie version '"+version+"'.", ex);
+				f_core.Error(f_core, "_SearchBrowser: Can not parse msie version '"+version+"'.", ex);
 				version=-1;
 			}
+			
+			var scriptEngine=ScriptEngine();
+			var scriptEngineMajorVersion=ScriptEngineMajorVersion();
+			var scriptEngineMinorVersion=ScriptEngineMinorVersion();
+			
+			f_core._ieScriptEngine57=(scriptEngineMajorVersion>5) || (scriptEngineMajorVersion==5 && scriptEngineMinorVersion>=7);
 			
 			if (f_core._browser_major>=7) {
 				f_core._browser=f_core.INTERNET_EXPLORER_7;
 
-				f_core.Info(f_core, "Microsoft Internet Explorer 7 detected !");
+				f_core.Info(f_core, "Microsoft Internet Explorer 7 detected ! (script engine '"+scriptEngine+"' "+scriptEngineMajorVersion+"."+scriptEngineMinorVersion+")");
 				return true;
 			}
 			
 			if (f_core._browser_major>=6) {
 				f_core._browser=f_core.INTERNET_EXPLORER_6;
 
-				f_core.Info(f_core, "Microsoft Internet Explorer 6 detected !");
+				f_core.Info(f_core, "Microsoft Internet Explorer 6 detected ! (script engine '"+scriptEngine+"' "+scriptEngineMajorVersion+"."+scriptEngineMinorVersion+")");
 				return true;
 			}
 			
-			f_core.Info(f_core, "Invalid version of Microsoft Internet Explorer !");
+			f_core.Info(f_core, "_SearchBrowser: Invalid version of Microsoft Internet Explorer !");
 			
 			return false;
 		}
@@ -2786,7 +2782,7 @@ var f_core = {
 						f_core._browser_major=parseInt(vs[0], 10);
 
 					} catch (ex) {
-						f_core.Error(f_core, "Can not parse firefox version '"+version+"'.", ex);
+						f_core.Error(f_core, "_SearchBrowser: Can not parse firefox version '"+version+"'.", ex);
 						return false;
 					}
 				}
@@ -2796,7 +2792,7 @@ var f_core = {
 						f_core._browser_release=parseInt(vs[1], 10);
 						
 					} catch (ex) {
-						f_core.Debug(f_core, "Can not parse release version ! (release="+vs[1]+")");
+						f_core.Debug(f_core, "_SearchBrowser: Can not parse release version ! (release="+vs[1]+")");
 					}
 				}
 				if (vs.length>2) {	
@@ -2809,9 +2805,9 @@ var f_core = {
 				}
 			}
 
-			f_core.Debug(f_core, "Browser version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
+			f_core.Debug(f_core, "_SearchBrowser: Firefox version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
 
-			if (f_core._browser_major==2) {			
+			if (f_core._browser_major>=2) {			
 				f_core._browser=f_core.FIREFOX_2_0;
 				
 				f_core.Info(f_core, "Firefox 2.0 detected !");
@@ -2832,7 +2828,7 @@ var f_core = {
 				return true;
 			}
 			
-			f_core.Info(f_core, "Invalid version of Firefox !");
+			f_core.Info(f_core, "_SearchBrowser: Invalid version of Firefox !");
 			
 			return false;
 		}

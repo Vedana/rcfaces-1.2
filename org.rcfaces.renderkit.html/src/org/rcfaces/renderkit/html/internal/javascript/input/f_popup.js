@@ -285,9 +285,9 @@ var __statics = {
 		document.addEventListener("dblclick", f_popup._OnClick, true);		
 //		document.addEventListener("blur", f_popup._OnBlur, true);
 		document.addEventListener("focus", f_popup._OnFocus, true);
-		document.addEventListener("keydown", f_popup._OnKeyDown, true);
-		document.addEventListener("keyup", f_popup._OnKeyUp, true);
-		document.addEventListener("keypress", f_popup._OnKeyPress, true);		
+		document.addEventListener("keydown", f_popup._OnKeyDownJs, true);
+		document.addEventListener("keyup", f_popup._OnKeyUpJs, true);
+		document.addEventListener("keypress", f_popup._OnKeyPressJs, true);		
 		document.addEventListener("contextmenu", f_popup._OnContextMenu, true);
 		return true;
 	},
@@ -357,9 +357,9 @@ var __statics = {
 		document.removeEventListener("dblclick", f_popup._OnClick, true);
 //		document.removeEventListener("blur", f_popup._OnBlur, true);
 		document.removeEventListener("focus", f_popup._OnFocus, true);
-		document.removeEventListener("keydown", f_popup._OnKeyDown, true);
-		document.removeEventListener("keyup", f_popup._OnKeyUp, true);
-		document.removeEventListener("keypress", f_popup._OnKeyPress, true);
+		document.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
+		document.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
+		document.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
 		document.removeEventListener("contextmenu", f_popup._OnContextMenu, true);
 	},
 	/**
@@ -434,6 +434,12 @@ var __statics = {
 
 			if (target._menu==popupDocument || target._popupObject) {
 				f_core.Debug(f_popup, "IsChildOfDocument: menu or popupObject => true");
+				return true;
+			}
+			
+			var isPopupLock=target.f_isPopupLock;
+			if (typeof(isPopupLock)=="function" && isPopupLock.call(target, popupDocument)==false) {
+				f_core.Debug(f_popup, "IsChildOfDocument: f_isPopupLock return false => true");
 				return true;
 			}
 		}
@@ -511,23 +517,32 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param f_event evt 
+	 * @return boolean
 	 */
-	_OnKeyDown: function(evt) {	
+	_OnKeyDown: function(evt) {
+		return f_popup._OnKeyDownJs(evt._jsEvent);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object :ownerDocument
+	 */
+	_OnKeyDownJs: function(evt) {	
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
-		} else if (evt._jsEvent) {
-			evt=evt._jsEvent;
 		}
 	
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug(f_popup, "_OnKeyDown: keyCode="+evt.keyCode+" on "+this+" no component");
+			f_core.Debug(f_popup, "_OnKeyDownJs: keyCode="+evt.keyCode+" on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug(f_popup, "_OnKeyDown: keyCode="+evt.keyCode+" on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "_OnKeyDownJs: keyCode="+evt.keyCode+" on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		if (evt.altKey) { // ?
@@ -537,7 +552,7 @@ var __statics = {
 				}
 				
 			} catch (x) {
-				f_core.Error(f_popup, "_OnKeyDown: Exit callback throws exception", x);
+				f_core.Error(f_popup, "_OnKeyDownJs: Exit callback throws exception", x);
 				
 			} finally {
 				f_popup.Callbacks=undefined;
@@ -556,30 +571,39 @@ var __statics = {
 				return true;
 			}			
 		} catch (x) {
-			f_core.Error(f_popup, "_OnKeyDown: KeyDown callback throws exception", x);
+			f_core.Error(f_popup, "_OnKeyDownJs: KeyDown callback throws exception", x);
 		}
 			
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method private static
+	 * @param f_event evt 
+	 * @return boolean
 	 */
-	_OnKeyUp: function(evt) {	
+	_OnKeyUp: function(evt) {
+		return f_popup._OnKeyUpJs(evt._jsEvent);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object :ownerDocument
+	 */
+	_OnKeyUpJs: function(evt) {	
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
-		} else if (evt._jsEvent) {
-			evt=evt._jsEvent;
 		}
 
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug(f_popup, "OnKeyUp["+evt.keyCode+"] on "+this+" no component");
+			f_core.Debug(f_popup, "_OnKeyUpJs["+evt.keyCode+"] on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug(f_popup, "OnKeyUp["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "_OnKeyUpJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		try {
@@ -590,31 +614,39 @@ var __statics = {
 			}
 			
 		} catch (x) {
-			f_core.Error(f_popup, "KeyUp callback throws exception", x);
+			f_core.Error(f_popup, "_OnKeyUpJs: KeyUp callback throws exception", x);
 		}
 		
 		return true;
 	},
 	/**
 	 * @method private static
+	 * @param f_event evt 
+	 * @return boolean
 	 */
-	_OnKeyPress: function(evt) {	
+	_OnKeyPress: function(evt) {
+		return f_popup._OnKeyPressJs(evt._jsEvent);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object :ownerDocument
+	 */
+	_OnKeyPressJs: function(evt) {	
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
-			
-		} else if (evt._jsEvent) {
-			evt=evt._jsEvent;
 		}
 
 		var component=f_popup.Component;
 		if (!component) {
-			f_core.Debug(f_popup, "_OnKeyPress["+evt.keyCode+"] on "+this+" no component");
+			f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" no component");
 
 			return true;
 		}
 	
 		var target=evt.target;
-		f_core.Debug(f_popup, "_OnKeyPress["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
+		f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
 		try {
@@ -625,7 +657,7 @@ var __statics = {
 			}
 			
 		} catch (x) {
-			f_core.Error(f_popup, "_OnKeyPress: KeyPress callback throws exception", x);
+			f_core.Error(f_popup, "_OnKeyPressJs: KeyPress callback throws exception", x);
 		}
 		
 		return true;

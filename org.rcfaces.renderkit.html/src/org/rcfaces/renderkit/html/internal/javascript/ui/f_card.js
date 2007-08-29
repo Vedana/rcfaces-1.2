@@ -60,7 +60,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @return void
+	 * @return HTMLElement
 	 */
 	fa_getInteractiveParent: function() {
 		return this; //._tabbedPane;

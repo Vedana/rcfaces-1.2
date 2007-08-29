@@ -180,7 +180,7 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
-	 * @return void
+	 * @return HTMLElement
 	 */
 	fa_getInteractiveParent: f_class.ABSTRACT
 }

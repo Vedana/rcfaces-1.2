@@ -56,7 +56,7 @@ var __members = {
 	 * @return boolean Returns <code>true</code> if auto tab facility is enabled.
 	 */
 	f_isAutoTab: function() {
-		return this._autoTab?true:false;
+		return !!this._autoTab;
 	},
 	/**
 	 * @method protected

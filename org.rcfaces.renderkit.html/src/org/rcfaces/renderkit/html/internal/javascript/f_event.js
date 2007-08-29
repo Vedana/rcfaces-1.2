@@ -527,9 +527,12 @@ var __statics = {
 		f_core.Assert(set===undefined || typeof(set)=="boolean", "f_event.SetEventLockedMode: invalid set parameter ("+set+").");
 		if (set===undefined) {
 			set=true;
+			
+		} else {
+			set=!!set;
 		}
 		
-		f_event._EvtLockMode = (set)?true:false;
+		f_event._EvtLockMode = set;
 	},
 	/**
 	 * @method hidden static
@@ -537,6 +540,7 @@ var __statics = {
 	 * @param optional boolean showAlert
 	 * @param optional number mask
 	 * @return boolean Returns <code>true</code> if lock is setted !
+	 * @dontInline f_popup
 	 */
 	GetEventLocked: function(jsEvent, showAlert, mask) {
 	
@@ -569,8 +573,7 @@ var __statics = {
 		}
 
 		if (f_event._EvtLock & f_event.POPUP_LOCK) {
-			// On utilise window.f_popup => gros hack pour le compilateur !
-			if (window.f_popup.VerifyLock()===false) {
+			if (f_popup.VerifyLock()===false) {
 				// FInalement nous ne sommes plus en LOCK ...
 				// 					
 				currentLock=f_event._EvtLock;
@@ -589,7 +592,7 @@ var __statics = {
 			
 				var ret;
 				if (target) {
-					ret=window.f_popup.IsChildOfDocument(target);
+					ret=f_popup.IsChildOfDocument(target);
 				}
 				
 				f_core.Debug(f_event, "GetEventLocked: Search popup child: target="+target+" return="+ret);
@@ -657,19 +660,19 @@ var __statics = {
 				s+="\nJSEVENT informations: type="+jsEvent.type;
 				
 				if (jsEvent.target) {
-					s+="\ntarget=["+sEvent.target.nodeType+"]"+jsEvent.target.tagName+"#"+jsEvent.target.id+"."+jsEvent.target.className
+					s+="\ntarget=["+jsEvent.target.nodeType+"]"+jsEvent.target.tagName+"#"+jsEvent.target.id+"."+jsEvent.target.className
 				}				
 				if (jsEvent.currentTarget) {
-					s+="\ncurrentTarget=["+sEvent.currentTarget.nodeType+"]"+jsEvent.currentTarget.tagName+"#"+jsEvent.currentTarget.id+"."+jsEvent.currentTarget.className
+					s+="\ncurrentTarget=["+jsEvent.currentTarget.nodeType+"]"+jsEvent.currentTarget.tagName+"#"+jsEvent.currentTarget.id+"."+jsEvent.currentTarget.className
 				}
 				if (jsEvent.fromElement) {
-					s+="\nfromElement=["+sEvent.fromElement.nodeType+"]"+jsEvent.fromElement.tagName+"#"+jsEvent.fromElement.id+"."+jsEvent.fromElement.className;
+					s+="\nfromElement=["+jsEvent.fromElement.nodeType+"]"+jsEvent.fromElement.tagName+"#"+jsEvent.fromElement.id+"."+jsEvent.fromElement.className;
 				}
 				if (jsEvent.srcElement) {
-					s+="\nsrcElement=["+sEvent.srcElement.nodeType+"]"+jsEvent.srcElement.tagName+"#"+jsEvent.srcElement.id+"."+jsEvent.srcElement.className;
+					s+="\nsrcElement=["+jsEvent.srcElement.nodeType+"]"+jsEvent.srcElement.tagName+"#"+jsEvent.srcElement.id+"."+jsEvent.srcElement.className;
 				}
 				if (jsEvent.toElement) {
-					s+="\ntoElement=["+sEvent.toElement.nodeType+"]"+jsEvent.toElement.tagName+"#"+jsEvent.toElement.id+"."+jsEvent.toElement.className;
+					s+="\ntoElement=["+jsEvent.toElement.nodeType+"]"+jsEvent.toElement.tagName+"#"+jsEvent.toElement.id+"."+jsEvent.toElement.className;
 				}
 			}
 		

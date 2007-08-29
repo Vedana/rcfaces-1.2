@@ -70,7 +70,7 @@ var __members = {
 	f_getValue: function() {
 		var button=this.f_getSelectedInGroup();
 		if (!button) {
-			return;
+			return undefined;
 		}
 		if (!button.f_getRadioValue) {
 			return null;
@@ -155,7 +155,7 @@ var __members = {
 		var input=this._input;
 		
 		if (!input) {
-			return;
+			return undefined;
 		}
 		
 		return input.name;

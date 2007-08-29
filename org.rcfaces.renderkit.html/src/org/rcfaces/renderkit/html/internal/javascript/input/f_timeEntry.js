@@ -220,7 +220,7 @@ var __members={
 				
 				if (empty) {
 					// Tous les champs sont vides
-					return;
+					return true;
 				}
 
 				errorMessage="invalidTime.error";

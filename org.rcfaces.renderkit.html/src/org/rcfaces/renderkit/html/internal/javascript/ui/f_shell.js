@@ -328,7 +328,7 @@ var __statics = {
      * <p>Resize Callback called on the div</p>
      *
      * @method protected static
-     * @return void
+     * @return boolean
      */
 	_OnResize: function(evt) {
 		var shell=this._shell;
@@ -424,7 +424,7 @@ var __statics = {
      _OnFocus: function(evt) {
      	if (window._rcfacesExiting) {
      		// On sait jamais, nous sommes peut etre dans un context foireux ...
-     		return;
+     		return true;
      	}
      	f_core.Debug(f_shell, "_OnFocus: entering on "+this.outerHTML);
  
@@ -432,7 +432,7 @@ var __statics = {
  		if (!iframe) {
  			// On a un gros probleme ...
      		f_core.Error(f_shell, "_OnFocus: No frame opened ?");
-			return;
+			return true;
  		}
      	
 		if (!evt) {
@@ -489,7 +489,6 @@ var __statics = {
 // 		}, 50);
      	
      	return f_core.CancelJsEvent(evt);
-
      }
 }
 
@@ -869,7 +868,7 @@ var __members = {
 	 *  </p>
 	 *
 	 * @method protected
-	 * @return Function 
+	 * @return void
 	 */
 	f_drawIframeWithUrl: function() {
     	f_core.Debug(f_shell, "f_drawIframeWithUrl: entering");
@@ -981,7 +980,7 @@ var __members = {
 	 *  </p>
 	 *
 	 * @method protected
-	 * @return Object _div holds the gray div and _iframe holds the iframe
+	 * @return void  ??? _div holds the gray div and _iframe holds the iframe
 	 */
 	f_drawModIFrame: function() {
      	f_core.Debug(f_shell, "f_drawModIFrame: entering");

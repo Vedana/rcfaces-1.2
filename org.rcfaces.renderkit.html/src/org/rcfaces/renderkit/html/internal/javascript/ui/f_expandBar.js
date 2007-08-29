@@ -13,33 +13,49 @@
 var __statics = {
 
 	/**
+	 * @field private static final String
+	 */
+	_HEAD_CLASSNAME: "f_expandBar_head",
+
+	/**
 	 * @method private static
-	 * @document this.ownerDocument
+	 * @param Event evt
+	 * @return boolean
+	 * @object expandBar
 	 */
 	_OnHeadOver: function() {
-		// this = head
-		var cls="f_expandBar_head";
+		var expandBar=this._link;
+		
+		var cls=f_expandBar._HEAD_CLASSNAME;
 		this.className=cls+" "+cls+"_over";
+		
+		return true;
 	},
 	/**
 	 * @method private static
-	 * @document this.ownerDocument
+	 * @param Event evt
+	 * @return boolean
+	 * @object expandBar
 	 */
 	_OnHeadOut: function() {
-		// this = head
+		var expandBar=this._link;
 
-		this.className="f_expandBar_head";
+		this.className=f_expandBar._HEAD_CLASSNAME;
+		
+		return true;
 	},
 	/**
 	 * @method private static
-	 * @document this.ownerDocument
+	 * @param Event evt
+	 * @return boolean
+	 * @object expandBar
 	 */
 	_OnHeadClick: function(evt) {
-		// this = head
-
 		var expandBar=this._link;
 		
 		expandBar.f_onSelect(evt);
+		
+		return true;
 	}
 }
 
@@ -191,7 +207,7 @@ var __members = {
 		this.f_super(arguments, type, target);
 	},
 	/** 
-	 * @method private
+	 * @method boolean
 	 */
 	_onSelect: function() {
 		if (!this._focus)  {
@@ -216,7 +232,7 @@ var __members = {
 		}
 		
 		if (this.f_isDisabled()) {
-			return false;
+			return;
 		}
 				
 		var cmp=this._button;
@@ -224,7 +240,7 @@ var __members = {
 			cmp=this;
 		}
 		
-		f_core.Debug(f_expandBar, "f_expandBar.f_setFocus of component '"+cmp+"' for expandBar '"+this.id+"'.");
+		f_core.Debug(f_expandBar, "f_setFocus: focus component '"+cmp+"' for expandBar '"+this.id+"'.");
 		cmp.focus();
 	},
 	f_performAccessKey: function(evt) {
@@ -264,12 +280,12 @@ var __members = {
 				collapsedText=this._normalText;
 			}
 			
-			f_core.Debug(f_expandBar, "Change text to '"+collapsedText+"'.");
+			f_core.Debug(f_expandBar, "fa_updateCollapsed: Change text to '"+collapsedText+"'.");
 			
 			f_core.SetTextNode(this._text, collapsedText, this._accessKey);
 		}
 		
-		f_core.Debug(f_expandBar, "Call effect '"+effect+"'.");
+		f_core.Debug(f_expandBar, "fa_updateCollapsed: Call effect '"+effect+"'.");
 		
 		var suffix="";
 		if (effect) {
@@ -432,7 +448,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return void
+	 * @return boolean
 	 */	 
 	f_parentShow: function() {
 		this.f_setCollapsed(false);

@@ -537,7 +537,7 @@ var __statics = {
 	IsObjectInitialized: function(object) {
 		f_core.Assert(object && typeof(object)=="object", "f_class.IsObjectInitialized: Object is invalid ("+object+")");
 
-		return (object._kclass)?true:false;
+		return !!object._kclass;
 	},
 	/**
 	 * @method private static final 
@@ -564,11 +564,11 @@ var __statics = {
 		}
 		
 		if (!staticMembers.f_getName) {
-			staticMembers.f_getName=window.f_class.f_getName;
+			staticMembers.f_getName=f_class.f_getName;
 		}
 		
 		if (!staticMembers.toString) {	
-			staticMembers.toString=window.f_class.toString;
+			staticMembers.toString=f_class.toString;
 		}			
 		
 		cls._staticMembers=staticMembers;
@@ -623,6 +623,37 @@ var __members = {
 	 * @field hidden boolean
 	 */
 	_systemClass: undefined,
+			
+	/**
+	 * @field hidden String
+	 */
+	_name: undefined,
+	
+	/**
+	 * @field hidden Object
+	 */
+	_staticMembers: undefined, // Map<String, function>
+	
+	/**
+	 * @field hidden String
+	 */
+	_look: undefined,
+	
+	/**
+	 * @field hidden Object 
+	 */
+	_members: undefined,  // Map<String, function>
+	
+	/**
+	 * @field hidden f_class
+	 */
+	_parent: undefined,
+		
+	/**
+	 * @field hidden f_classLoader
+	 */
+	_classLoader: undefined,
+	
 	
 	f_class: function(className, lookId, staticMembers, members, parentClass) {
 		// Constructeur vide: on ne fait rien !
@@ -707,7 +738,6 @@ var __members = {
 		this._look = lookId;
 		this._members = members;
 		this._parent = parentClass;
-
 
 		if (!aspects) {
 			aspects=new Array

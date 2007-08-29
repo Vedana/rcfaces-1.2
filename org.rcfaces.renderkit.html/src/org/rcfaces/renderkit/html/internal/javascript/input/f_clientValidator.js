@@ -193,6 +193,8 @@ var __statics = {
 
 	/**
 	 * @method private static
+	 * @param f_event evt
+	 * @return boolean
 	 */
 	_OnFocus: function(evt) {
 		f_core.Debug(f_clientValidator, "_OnFocus: focus on client validator ");
@@ -209,6 +211,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param f_event evt
+	 * @return boolean
 	 */
 	_OnBlur: function(evt) {
 		f_core.Debug(f_clientValidator, "_OnFocus: focus on client validator ");
@@ -227,6 +231,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param f_event evt
+	 * @return boolean
 	 */
 	_OnKeyPress: function(event) {
 		var jsEvent = event.f_getJsEvent();

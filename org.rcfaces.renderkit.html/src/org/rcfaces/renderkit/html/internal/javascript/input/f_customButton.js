@@ -13,6 +13,9 @@ var __statics = {
 
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object customButton
 	 */
 	_MouseDown: function(evt) {
 		var customButton=this.f_link;
@@ -29,6 +32,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object customButton
 	 */
 	_MouseUp: function(evt) {
 		var customButton=this.f_link;

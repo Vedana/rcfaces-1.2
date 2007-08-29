@@ -17,10 +17,11 @@ var __statics = {
 			selection: f_event.SELECTION
 	},
 	
-     /**
+    /**
      * @method private static
      * @param Event evt the event
      * @return boolean
+     * @object messageBox
      */
     _OnClick: function(evt) {
     	var button=this;
@@ -46,21 +47,21 @@ var __statics = {
 		messageBox.f_buttonOnClick(button, evt);
 		
 		return f_core.CancelJsEvent(evt);
-    },
+    }
 
-    /**
+    /*
      * <p>js listener example</p>
      * dans le tag : SelectionListener="return ListenerExample(event);"
      *
      * @method public static
      * @param f_event evt
      * @return boolean
-     */
+     *
     ListenerExample: function(evt) {
     	// var value = evt.f_getValue();
     	return true;
     }
-    
+    */
 }
 
 var __members = {

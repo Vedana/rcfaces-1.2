@@ -158,7 +158,7 @@ var __statics = {
      *
      * @method private static
      * @param Event evt
-     * @return void
+     * @return boolean
      */
     _OnMouseDown: function(evt) {
 		f_core.Debug(f_dialog, "_OnMouseDown: entering ("+evt+")");
@@ -198,31 +198,35 @@ var __statics = {
      */
     _OnMouseMove: function(evt) {
 	    var objMove = f_dialog._ObjMove;
-	    if (objMove) {
-		    f_core.Debug(f_dialog, "_OnMouseMove : entering");
-	    
-			if (!evt) {
-				evt = f_core.GetJsEvent(this);
-			}
-		    f_core.Debug(f_dialog, "_OnMouseMove: evt "+evt+" : "+evt.clientX+", "+evt.clientY);
-	    	
-	    	var iframe = f_shell.GetIframe();
-	    	
-			// memorize the position
-			var posX = evt.clientX;
-			var posY = evt.clientY;
-		    f_core.Debug(f_dialog, "_OnMouseMove: iframe before "+iframe.style.left+", "+iframe.style.top);
-			iframe.style.left = iframe.style.left + posX - objMove._deltaX;
-			iframe.style.top = iframe.style.top + posY - objMove._deltaY;
-		    f_core.Debug(f_dialog, "_OnMouseMove: iframe after "+iframe.style.left+", "+iframe.style.top);
-			objMove = {
-				_deltaX: posX,
-				_deltaX: posY
-			};
-	    	//if (evt.clientX >= 0 && evt.clientY >= 0) {
-			//}
-			return f_core.CancelJsEvent(evt);
+	    if (!objMove) {
+	    	return true;
 	    }
+	    
+	    f_core.Debug(f_dialog, "_OnMouseMove : entering");
+    
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+	    f_core.Debug(f_dialog, "_OnMouseMove: evt "+evt+" : "+evt.clientX+", "+evt.clientY);
+    	
+    	var iframe = f_shell.GetIframe();
+    	
+		// memorize the position
+		var posX = evt.clientX;
+		var posY = evt.clientY;
+	    
+	    f_core.Debug(f_dialog, "_OnMouseMove: iframe before "+iframe.style.left+", "+iframe.style.top);
+		iframe.style.left = iframe.style.left + posX - objMove._deltaX;
+		iframe.style.top = iframe.style.top + posY - objMove._deltaY;
+		
+	    f_core.Debug(f_dialog, "_OnMouseMove: iframe after "+iframe.style.left+", "+iframe.style.top);
+		objMove = {
+			_deltaX: posX,
+			_deltaX: posY
+		};
+    	//if (evt.clientX >= 0 && evt.clientY >= 0) {
+		//}
+		return f_core.CancelJsEvent(evt);
     }
 
 }

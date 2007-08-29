@@ -76,7 +76,7 @@ var __statics = {
 	 * @return void
 	 */
 	Initializer: function() {
-		var cb=window.f_logCB;
+		var cb=window.rcfacesLogAppender;
 		if (!cb) {
 			return;
 		}

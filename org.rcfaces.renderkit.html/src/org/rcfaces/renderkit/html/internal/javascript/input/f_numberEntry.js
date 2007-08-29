@@ -193,7 +193,7 @@ var __members={
 	f_performCheckValue: function(event) {		
 		var messageContext=f_messageContext.Get(this);
 		if (!messageContext) {
-			return;
+			return true;
 		}
 
 		var errorMessage=null;
@@ -262,12 +262,12 @@ var __members={
 		f_core.Debug(f_numberEntry, "Error Message: "+errorMessage+" number="+number);
 		
 		if (!errorMessage) {
-			return;
+			return true;
 		}
 		
 		this.f_addErrorMessage(f_numberEntry, errorMessage);
 		
-		return true;
+		return false;
 	},
 	/**
 	 * @method protected
@@ -275,19 +275,19 @@ var __members={
 	fa_formatNumber: function(input, number, size) {
 		var s=String(number);
 		
-		var size=input._forced-s.length;
-		if (size<1) {
+		var sizeLeft=input._forced-s.length;
+		if (sizeLeft<1) {
 			return s;
 		}
 		
 		if (input._fillRight) {
-			for(;size;size--) {
+			for(;sizeLeft;sizeLeft--) {
 				s+="0";
 			}
 			return s;
 		}
 		
-		for(;size;size--) {
+		for(;sizeLeft;sizeLeft--) {
 			s="0"+s;
 		}
 		return s;

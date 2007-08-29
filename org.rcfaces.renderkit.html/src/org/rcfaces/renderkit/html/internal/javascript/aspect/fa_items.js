@@ -299,7 +299,7 @@ var __members = {
 			item=this.f_getItemByValue(item, true);
 		}
 
-		return (item._disabled)?true:false;
+		return !!item._disabled;
 	},
 	/**
 	 * Returns the disable state of the item.
@@ -318,11 +318,11 @@ var __members = {
 			disabled=true;
 			
 		} else {
-			disabled=(disabled)?true:false;
+			disabled=!!disabled;
 		}
 		
-		var old=(item._disabled)?true:false;
-		item._disabled=(disabled)?true:false;
+		var old=!!item._disabled;
+		item._disabled=!!disabled;
 		
 		if (old==item._disabled) {
 			return;
@@ -422,7 +422,7 @@ var __members = {
 			item=this.f_getItemByValue(item, true);
 		}
 		
-		return (item._checked)?true:false;
+		return !!item._checked;
 	},
 	/**
 	 * @method public
@@ -439,7 +439,7 @@ var __members = {
 			checked=true;
 			
 		} else {
-			checked=(checked)?true:false;
+			checked=!!checked;
 		}
 
 		if (item._groupName && checked) {
@@ -449,7 +449,7 @@ var __members = {
 			}		
 		}		
 		
-		var old=(item._checked)?true:false;
+		var old=!!item._checked;
 
 		if (checked==old) {
 			return;
@@ -664,12 +664,12 @@ var __members = {
 		}
 		
 		for(var i=0;i<items.length;i++) {
-			var item=items[i];
-			if (!this.f_isItemVisible(item)) {
+			var item2=items[i];
+			if (!this.f_isItemVisible(item2)) {
 				continue;
 			}
 			
-			array.push(item);
+			array.push(item2);
 		}
 		
 		return array;

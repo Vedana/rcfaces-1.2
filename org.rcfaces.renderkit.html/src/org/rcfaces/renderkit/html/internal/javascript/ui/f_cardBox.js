@@ -96,7 +96,7 @@ var __members={
 
 	/**
 	 * @method hidden
-	 * @return void
+	 * @return f_card
 	 */
 	f_declareCard: function(cardBodyId, cardValue, selected) {
 		var card=new Object;

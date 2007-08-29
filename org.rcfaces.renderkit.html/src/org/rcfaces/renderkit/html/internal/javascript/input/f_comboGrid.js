@@ -26,6 +26,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @object comboGrid
 	 */
 	_OnButtonMouseDown: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -49,6 +50,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @object comboGrid
 	 */
 	_OnButtonMouseUp: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -65,6 +67,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @object comboGrid
 	 */
 	_OnButtonMouseOver: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -89,6 +92,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @object comboGrid
 	 */
 	_OnButtonMouseOut: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -104,6 +108,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return boolean
+	 * @object XXX To do
 	 */
 	_OnBeforeDeactivate: function() {
 		var evt = f_core.GetJsEvent(this);
@@ -472,7 +477,7 @@ var __members = {
 		
 		var suggestionDelayMs=this._suggestionDelayMs;		
 		if (suggestionDelayMs<1) {
-			return;
+			return true;
 		}
 		
 		f_core.Debug(f_comboGrid, "_onSuggest: Set timeout to "+suggestionDelayMs);

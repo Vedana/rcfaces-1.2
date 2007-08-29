@@ -418,7 +418,7 @@ var __members = {
 		}
 
 
-		f_core.Debug(f_imageButton, "Update class: "+className+" mouseDown="+this._mouseDown+" selected="+this._selected+" focus="+this._focus);
+		f_core.Debug(f_imageButton, "_updateImage: Update class: "+className+" mouseDown="+this._mouseDown+" selected="+this._selected+" focus="+this._focus);
 /*		
 		var text=this._text;
 		if (text) {

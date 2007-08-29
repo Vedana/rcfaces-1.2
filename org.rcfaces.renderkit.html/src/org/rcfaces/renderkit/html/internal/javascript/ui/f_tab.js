@@ -164,7 +164,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return void
+	 * @return boolean
 	 */	 
 	f_parentShow: function() {
 		if (this.f_isDisabled()) {
@@ -177,7 +177,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return void
+	 * @return boolean
 	 */
 	f_forceChildVisibility: function(component) {
 		return false;

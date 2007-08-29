@@ -14,6 +14,9 @@ var __statics = {
 
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object menuBar
 	 */
 	_MenuBarItem_mouseOver: function(evt) {
 		var item=this._item;
@@ -33,6 +36,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object menuBar
 	 */
 	_MenuBarItem_mouseOut: function(evt) {
 		var item=this._item;
@@ -50,6 +56,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object menuBar
 	 */
 	_MenuBarItemInput_click: function(evt) {
 		var menuItem=this._item;
@@ -71,7 +80,7 @@ var __statics = {
 			f_menuBar._MenuBarItem_setFocus(menuItem);
 		
 		} catch (x) {
-			f_core.Error(f_menuBar, "Click exception", x);
+			f_core.Error(f_menuBar, "_MenuBarItemInput_click: Click exception", x);
 		}
 				
 		return f_core.CancelJsEvent(evt);
@@ -93,6 +102,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object menuBar
 	 */
 	_MenuBarItem_keyDown: function(evt) {
 		var menuItem=this._item;
@@ -112,6 +124,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object menuBar
 	 */
 	_MenuBarItem_focus: function(evt) {
 		var menuItem=this._item;
@@ -157,6 +172,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @object menuBar
 	 */
 	_MenuBarItem_blur: function(evt) {
 		var menuItem=this._item;
@@ -168,13 +186,13 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 		
-		if (menuBar.f_getEventLocked(evt)) {
+		if (menuBar.f_getEventLocked(evt, false)) { // Pas d'affichage ...
 			return false;
 		}
 	
 //		menuBar._openMode=undefined;
 			
-		f_core.Info(f_menuBar, "Blur clear openMode");
+		f_core.Info(f_menuBar, "_MenuBarItem_blur: Blur clear openMode");
 		
 		var old=menuBar.f_uiGetSelectedItem(menuBar);
 		if (old!=menuItem) {
@@ -214,7 +232,7 @@ var __members = {
 		if (type==f_event.SELECTION) {
 			return;
 		}
-		return this.f_super(arguments, type, target);
+		this.f_super(arguments, type, target);
 	},
 	
 	/* ********************************************************************
@@ -877,6 +895,21 @@ var __members = {
 	},
 	fa_isRootMenuItem: function(parent) {
 		return parent==this;
+	},
+	/**
+	 * @method hidden
+	 * @param Object popupDocument
+	 * @return boolean
+	 */
+	f_isPopupLock: function(popupDocument) {
+		var menuItem=this.f_uiGetSelectedItem(this);
+		if (!menuItem) {
+			return true;
+		}
+	
+		var popup=this.f_getUIPopup(menuItem);
+	
+		return (popup!=popupDocument); // On reste bloqué si ce n'est pas le meme
 	}
 }
 

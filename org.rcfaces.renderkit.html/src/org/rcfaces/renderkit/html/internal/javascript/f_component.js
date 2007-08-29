@@ -165,7 +165,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setX: function(x) {
-		f_core.Assert(typeof(x)=="number", "x parameter must be a number ! ("+x+")");
+		f_core.Assert(typeof(x)=="number", "f_component.f_setX: x parameter must be a number ! ("+x+")");
 		
 		this.style.left = x+"px";
 		this.f_setProperty(f_prop.X,x);
@@ -183,7 +183,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setY: function(y) {
-		f_core.Assert(typeof(y)=="number", "y parameter must be a number ! ("+y+")");
+		f_core.Assert(typeof(y)=="number", "f_component.f_setY: y parameter must be a number ! ("+y+")");
 
 		this.style.top = y+"px";
 		this.f_setProperty(f_prop.Y,y);
@@ -205,7 +205,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setWidth: function(width) {
-		f_core.Assert(typeof(width)=="number", "w parameter must be a number ! ("+width+")");
+		f_core.Assert(typeof(width)=="number", "f_component.f_setWidth: w parameter must be a number ! ("+width+")");
 
 		this.style.width = width+"px";
 		this.f_setProperty(f_prop.WIDTH, width);
@@ -227,7 +227,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setHeight: function(height) {
-		f_core.Assert(typeof(height)=="number", "h parameter must be a number ! ("+height+")");
+		f_core.Assert(typeof(height)=="number", "f_component.f_setHeight: h parameter must be a number ! ("+height+")");
 
 		this.style.height = height+"px";
 		this.f_setProperty(f_prop.HEIGHT, height);
@@ -249,7 +249,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setBackgroundColor: function(color) {
-		f_core.Assert(color===null || typeof(color)=="string", "Background color parameter must be a string ! ("+color+")");
+		f_core.Assert(color===null || typeof(color)=="string", "f_component.f_setBackgroundColor: Background color parameter must be a string ! ("+color+")");
 
 		this.style.backgroundColor = color;
 		this.f_setProperty(f_prop.BACKGROUND,color);
@@ -271,7 +271,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setForegroundColor: function(color) {
-		f_core.Assert(color===null || typeof(color)=="string", "Foreground color parameter must be a string ! ("+color+")");
+		f_core.Assert(color===null || typeof(color)=="string", "f_component.f_setForegroundColor: Foreground color parameter must be a string ! ("+color+")");
 
 		this.style.color = color;
 		this.f_setProperty(f_prop.FOREGROUND,color);

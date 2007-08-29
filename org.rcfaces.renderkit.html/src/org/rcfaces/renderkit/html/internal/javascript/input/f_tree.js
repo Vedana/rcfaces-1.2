@@ -1689,7 +1689,7 @@ var __members = {
 		}
 		
 		if (this._userExpandable) {
-			node._opened=(args[atts++])?true:false;
+			node._opened=!!args[atts++];
 			
 			if (atts>=args.length) {
 				return;
@@ -1707,7 +1707,7 @@ var __members = {
 		}
 
 		if (this._checkable && !this._checkFullState) {
-			node._checked=(args[atts++])?true:false;
+			node._checked=!!args[atts++];
 			
 			if (atts>=args.length) {
 				return;
@@ -2439,7 +2439,7 @@ var __members = {
 	f_isOpened: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
 
-		return (li._node._opened)?true:false;
+		return !!li._node._opened;
 	},
 	/**
 	 * Returns the selection state of a node.

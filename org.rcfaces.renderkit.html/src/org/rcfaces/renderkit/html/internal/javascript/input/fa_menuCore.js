@@ -34,17 +34,21 @@ var __statics = {
 	
 	/** 
 	 * @method private static String
-	 * @this Object
+	 * @object this
 	 */
 	_ItemToString: function() {
 		return this._id;
 	},
 	/**
-	 * @method private static 
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean 
+	 * @object menu
 	 */
 	_MenuItem_mouseOver: function(evt) {
 		var item=this._item;
 		var menu=item._menu;
+		
 		f_core.Debug(fa_menuCore, "_MenuItem_mouseOver: menu="+menu+" item="+item);
 
 		if (!evt) {
@@ -60,13 +64,16 @@ var __statics = {
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
-	 * @method private static 
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean 
+	 * @object menu
 	 */
 	_MenuItem_mouseOut: function(evt) {
-// Pas bloqué !			if (f_core.GetJsEventLocked(false)) return false;
-
 		var item=this._item;
 		var menu=item._menu;
+
+// Pas bloqué !			if (f_core.GetJsEventLocked(false)) return false;
 
 		f_core.Debug(fa_menuCore, "_MenuItem_mouseOut: menu="+menu+" item="+item);
 
@@ -79,8 +86,10 @@ var __statics = {
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
-	 * @method private static 
-	 * @document this.ownerDocument
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean 
+	 * @object menu
 	 */
 	_MenuItem_mouseDown: function(evt) {
 		var item=this._item;
@@ -669,7 +678,7 @@ var __members = {
 
 		var menuItems=this.f_listVisibleItemChildren(parent);
 		for(var i=0;i<menuItems.length;i++) {
-			var menuItem=menuItems[i];
+			menuItem=menuItems[i];
 
 			var accessKey=this.f_getItemAccessKey(menuItem);
 			
@@ -1378,7 +1387,7 @@ var __members = {
 		// On verifie l'AJAX !
 
 		if (!this._preparePopup(menuItem)) {
-			f_core.Debug(fa_menuCore, "Prepare popup of '"+menuItem.id+"' returns false !");
+			f_core.Debug(fa_menuCore, "f_openUIPopup: Prepare popup of '"+menuItem.id+"' returns false !");
 			return false;
 		}
 		
@@ -1404,7 +1413,7 @@ var __members = {
 	
 			if (f_popup.RegisterWindowClick(this.fa_getPopupCallbacks(), this, popup, this.fa_getKeyProvider())==false) {
 				f_core.Debug(fa_menuCore, "f_openUIPopup: Register FAILED");
-				return;
+				return false;
 			}
 		} else {
 			f_core.Debug(fa_menuCore, "f_openUIPopup: Child popup parentItem="+parentItem+" this="+this+" menuItem="+menuItem+" popup="+popup);
