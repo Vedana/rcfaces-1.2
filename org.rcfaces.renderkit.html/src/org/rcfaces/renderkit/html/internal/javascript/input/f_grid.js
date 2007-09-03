@@ -1843,6 +1843,22 @@ var __members = {
 		return f_core.GetTextNode(labelComponent);
 	},
 	/**
+	 * Returns the id associated to the column.
+	 * 
+	 * @method public
+	 * @param Object column The column object
+	 * @return String The Id of the column.
+	 */
+	f_getColumnId: function(column) {
+		var idComponent=column._id;
+		
+		if (idComponent) {
+			return idComponent;
+		}
+		
+		return this.f_getColumnName(column);
+	},
+	/**
 	 * @method public
 	 * @param Object column
 	 * @return number Ascending:1 Descending:-1 not-sorted:0
