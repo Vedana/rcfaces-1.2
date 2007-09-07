@@ -12,6 +12,10 @@
  */
 
 var __members = {
+	/**
+	 * @method hidden
+	 * @param String name
+	 */
 	f_bundle: function(name)  {
 		this._name=name;
 	
@@ -41,7 +45,7 @@ var __members = {
 		
 		f_core.Info("f_bundle", "f_bundle: Bundle '"+name+"' declares classes: "+names);
 	
-		var classLoader=f_classLoader.Get();
+		var classLoader=f_classLoader.Get(window);
 		f_core.Assert(classLoader, "f_bundle: Bundle '"+name+"' can not get window classloader !");
 		
 		this._classLoader=classLoader;

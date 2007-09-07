@@ -605,9 +605,9 @@ public class CollectionTools {
         }
 
         try {
-            Method method = collection.getClass().getMethod("clone", null);
+            Method method = collection.getClass().getMethod("clone", (Class[])null);
 
-            collection = (Collection) method.invoke(collection, null);
+            collection = (Collection) method.invoke(collection, (Object[])null);
 
         } catch (Throwable th) {
             LOG.info("Can not copy the collection ! ("

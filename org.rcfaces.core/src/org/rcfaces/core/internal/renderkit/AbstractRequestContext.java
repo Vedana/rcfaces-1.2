@@ -155,7 +155,7 @@ public abstract class AbstractRequestContext extends AbstractReleasable
     }
 
     /*
-     * public void pushScopeVar(String var, ValueBinding valueBinding) { Object
+     * public void pushScopeVar(String var, ValueExpression valueBinding) { Object
      * value = valueBinding.getValue(getFacesContext());
      * 
      * facesContext.getExternalContext().getRequestMap().put(var, value); }

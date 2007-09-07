@@ -574,16 +574,18 @@ var f_core = {
 	 * @method hidden static
 	 * @return void
 	 */
-	_InitLibrary: function(window) {
-		var initDate=window._rcfacesInitLibraryDate;
+	_InitLibrary: function(win) {
+		this._window=win;
 		
-		f_core.DebugMode=window.rcfacesDebugMode;
+		var initDate=win._rcfacesInitLibraryDate;
 		
-		var profilerCB=window.rcfacesProfilerCB;
-		var logCB=window.rcfacesLogCB;
+		f_core.DebugMode=win.rcfacesDebugMode;
+		
+		var profilerCB=win.rcfacesProfilerCB;
+		var logCB=win.rcfacesLogCB;
 
 		try {
-			for(var w=window;w && w.parent!=w;w=w.parent) {
+			for(var w=win;w && w.parent!=w;w=w.parent) {
 				var f=w.parent.rcfacesProfilerCB
 				if (!f) {
 					f=w.parent.f_profilerCB; // Legacy !
@@ -591,13 +593,13 @@ var f_core = {
 				
 				if (f) {
 					profilerCB=f;
-					window.rcfacesProfilerCB=profilerCB;
+					win.rcfacesProfilerCB=profilerCB;
 				}
 				
 				f=w.parent.rcfacesLogCB
 				if (f) {
 					logCB=f;
-					window.rcfacesLogCB=logCB;
+					win.rcfacesLogCB=logCB;
 				}
 			}
 		} catch (x) {
@@ -612,15 +614,15 @@ var f_core = {
 			f_core.Profile(null, "f_core.initializing", initDate);
 		}
 			
-		if (window.rcfacesBuildId) {
+		if (win.rcfacesBuildId) {
 			f_core.Info(f_core, "_InitLibrary: RCFaces buildId: "+rcfacesBuildId);
 		}
 	
-		f_core.AddEventListener(window, "load", f_core._OnInit);
-		f_core.AddEventListener(window, "unload", f_core._OnExit);
+		f_core.AddEventListener(win, "load", f_core._OnInit);
+		f_core.AddEventListener(win, "unload", f_core._OnExit);
 
 		if (f_core.IsInternetExplorer()) {
-			f_core.AddEventListener(document, "selectstart", f_core._IeOnSelectStart);
+			f_core.AddEventListener(win.document, "selectstart", f_core._IeOnSelectStart);
 		}
 	},
 	/**
@@ -801,27 +803,28 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @window win
 	 */
 	_OnInit: function() {
+		var win=this;
+		
 		var now=new Date();
 		f_core.Profile(false, "f_core.onInit", now);
 		try {		
 			f_core._FlushLogs();	
-	
-			var window=this;
-		
+			
 			f_core.Info("f_core", "Install library (onload) on "+now);
 			
 			if (f_core.DebugMode) {
 				var title=["DEBUG"];
 				f_core.Info("f_core", "Enable f_core.DEBUG mode");
 			
-				var profiler=window.rcfacesProfilerCB;
+				var profiler=win.rcfacesProfilerCB;
 				if (profiler) {
 					title.push("PROFILER");
 				}
 				
-				var version=window.rcfacesBuildId;
+				var version=win.rcfacesBuildId;
 				if (version) {
 					var compiled=false;					
 					var compiledVersion=version.indexOf('c');
@@ -842,9 +845,7 @@ var f_core = {
 					}
 				}
 				
-				if (title.length>0) {
-					window.document.title+="  [Camelia: "+title.join(",")+"]";
-				}
+				win.document.title+="  [Camelia: "+title.join(",")+"]";
 			}
 			
 			if (f_core._DisabledContextMenu) {
@@ -854,7 +855,7 @@ var f_core = {
 			}
 							
 			// Hook the forms
-			var forms = window.document.forms;
+			var forms = win.document.forms;
 			for (var i=0; i<forms.length; i++) {
 				var f = forms[i];
 	
@@ -903,7 +904,7 @@ var f_core = {
 			}
 		}
 		
-		f_core.Debug("f_core", "Hook Html FORM tag id=\""+f.id+"\".");
+		f_core.Debug(f_core, "InitializeForm: Hook Html FORM tag id=\""+f.id+"\".");
 	},
 	/**
 	 * @method private static
@@ -915,6 +916,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @window win
 	 */
 	_OnExit: function() {
 		var win=this;
@@ -927,7 +929,7 @@ var f_core = {
 		
 		var exitedState=f_core._RCFACES_EXITED;
 		try {		
-			var document=win.document;
+			var doc=win.document;
 	
 			f_core.Profile(false, "f_core.onExit");
 			try {
@@ -937,16 +939,16 @@ var f_core = {
 				f_core._DesinstallModalWindow();
 				
 				if (f_core.IsInternetExplorer()) {
-					f_core.RemoveEventListener(document, "selectstart", f_core._IeOnSelectStart);
+					f_core.RemoveEventListener(doc, "selectstart", f_core._IeOnSelectStart);
 				}
 				
 				var timeoutID=f_core._FocusTimeoutID;
 				if (timeoutID) {
 					f_core._FocusTimeoutID=undefined;
-					window.clearTimeout(timeoutID);
+					win.clearTimeout(timeoutID);
 				}
 		
-				var forms = document.forms;
+				var forms = doc.forms;
 				for (var i=0; i<forms.length; i++) {
 					var form = forms[i];
 					
@@ -993,6 +995,9 @@ var f_core = {
 		} finally {
 			win._rcfacesExiting=exitedState;
 		}
+		
+		// Ultime finalize
+		f_core._window=undefined;
 	},
 	/**
 	 * @method protected static
@@ -2139,6 +2144,14 @@ var f_core = {
 		}	
 		
 		return resetListeners.f_removeElement(component);
+	},
+	/**
+	 * @method public static
+	 * @param f_event event
+	 * @return boolean <code>true</code> if success.
+	 */
+	SubmitEvent: function(event) {
+		return f_core._Submit(null, null, event);
 	},
 	/**
 	 * @method public static
@@ -3920,6 +3933,7 @@ var f_core = {
 	 * @method private static
 	 */
 	_IeOnSelectStop: function() {
+		// TODO Il faut résoudre le WINDOW
 				//document.title="STOP bookmark ! "+window._acceptedSelection;
 		//window._acceptedSelection=undefined;
 		f_core.RemoveEventListener(document.body, "losecapture", f_core._IeOnSelectStop);
@@ -3930,6 +3944,8 @@ var f_core = {
 	 * @method private static
 	 */
 	_IeOnSelectOver: function() {
+		// TODO Il faut résoudre le WINDOW
+
 		var component=window.event.srcElement;
 		
 		var selection=document.selection;
@@ -3974,6 +3990,8 @@ var f_core = {
 	 * @method private static
 	 */
 	_IeOnSelectStart: function() {
+		// TODO Il faut résoudre le WINDOW
+
 		if (true) {
 			return;
 		}

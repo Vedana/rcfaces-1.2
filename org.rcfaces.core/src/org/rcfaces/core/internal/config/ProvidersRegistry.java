@@ -102,7 +102,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
                             + "'), TRY with no parameter !", ex);
 
             try {
-                constructor = clazz.getConstructor(null);
+                constructor = clazz.getConstructor((Class[])null);
                 parameters = null;
 
             } catch (NoSuchMethodException ex2) {

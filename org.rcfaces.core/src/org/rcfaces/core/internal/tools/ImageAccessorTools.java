@@ -4,7 +4,6 @@
 package org.rcfaces.core.internal.tools;
 
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.capability.IImageCapability;
@@ -103,17 +102,8 @@ public class ImageAccessorTools {
             facesContext = FacesContext.getCurrentInstance();
         }
 
-        ValueBinding valueBinding = engine
-                .getValueBindingProperty(Properties.IMAGE_URL);
-
-        Object imageContent;
-        if (valueBinding != null) {
-            imageContent = valueBinding.getValue(facesContext);
-
-        } else {
-            imageContent = engine.getStringProperty(Properties.IMAGE_URL,
-                    facesContext);
-        }
+        Object imageContent = engine.getProperty(Properties.IMAGE_URL,
+                facesContext);
 
         return createImageAccessor(facesContext, imageContent);
     }
@@ -241,17 +231,7 @@ public class ImageAccessorTools {
             FacesContext facesContext, IComponentEngine engine,
             String attributeName, IContentAccessor rootImageContentAccessor) {
 
-        ValueBinding valueBinding = engine
-                .getValueBindingProperty(attributeName);
-
-        Object imageContent;
-        if (valueBinding != null) {
-            imageContent = valueBinding.getValue(facesContext);
-
-        } else {
-            imageContent = engine
-                    .getStringProperty(attributeName, facesContext);
-        }
+        Object imageContent = engine.getProperty(attributeName, facesContext);
 
         if (imageContent == null) {
             return null;

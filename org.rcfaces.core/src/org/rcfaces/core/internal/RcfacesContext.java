@@ -16,6 +16,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
 import org.rcfaces.core.internal.config.RcfacesContextImpl;
@@ -36,7 +38,32 @@ import org.rcfaces.core.internal.version.IResourceVersionHandler;
 public abstract class RcfacesContext {
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory.getLog(RcfacesContext.class);
+
     private static final String CAMELIA_CONTEXT_PROPERTY = "org.rcfaces.core.internal.CAMELIA_CONTEXT";
+
+    public static final int JSF_1_1 = 0x100100;
+
+    public static final int JSF_1_2 = 0x100200;
+
+    private static final boolean isJSF1_2;
+    static {
+        boolean is1_2 = false;
+
+        try {
+            RcfacesContext.class.getClassLoader().loadClass(
+                    "javax.faces.webapp.UIComponentELTag");
+
+            is1_2 = true;
+
+            LOG.info("JSF version 1.2 detected !");
+
+        } catch (Throwable ex) {
+            LOG.debug(ex);
+        }
+
+        isJSF1_2 = is1_2;
+    }
 
     protected static final String CAMELIA_CONFIG_FILES_PARAMETER = Constants
             .getPackagePrefix()
@@ -216,4 +243,8 @@ public abstract class RcfacesContext {
 
     public abstract void setDocumentBuilderProvider(
             IDocumentBuilderProvider documentBuilderProvider);
+
+    public static boolean isJSF1_2() {
+        return isJSF1_2;
+    }
 }

@@ -19,6 +19,8 @@ import javax.faces.context.ResponseWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
@@ -484,6 +486,29 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     public boolean isClientValidation() {
         return clientValidation;
+    }
+
+    public int getAsyncRenderMode(
+            IAsyncRenderModeCapability asyncRenderModeCapability) {
+
+        int mode = asyncRenderModeCapability.getAsyncRenderMode();
+
+        if (RcfacesContext.isJSF1_2() == false) {
+            return mode;
+        }
+
+        if (mode == IAsyncRenderModeCapability.BUFFER_ASYNC_RENDER_MODE) {
+            mode = IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE;
+
+            if (LOG.isDebugEnabled()) {
+                LOG
+                        .debug("BUFFER_ASYNC_RENDER_MODE can not be used with JSF 1_2 (componentId='"
+                                + ((UIComponent) asyncRenderModeCapability)
+                                        .getId() + "'");
+            }
+        }
+
+        return mode;
     }
 
 }

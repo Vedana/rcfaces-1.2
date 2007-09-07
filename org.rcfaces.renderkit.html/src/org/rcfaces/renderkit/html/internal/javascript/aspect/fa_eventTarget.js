@@ -24,7 +24,7 @@ var __statics = {
 	 * @return boolean
 	 */
 	 _Submit: function(event) {
-	 	f_core.Submit(event);
+	 	f_core.SubmitEvent(event);
 	 	return false;
 	 }
 }

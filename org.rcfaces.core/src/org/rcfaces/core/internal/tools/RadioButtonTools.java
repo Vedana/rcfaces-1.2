@@ -219,7 +219,7 @@ public class RadioButtonTools {
      * public static void setGroupValue(IComponentEngine engine,
      * IRadioValueCapability component, Object value) {
      * 
-     * if (value instanceof ValueBinding) {
+     * if (value instanceof ValueExpression) {
      * engine.setProperty(Properties.GROUP_VALUE, value); return; }
      * 
      * List list = new ArrayList(8);

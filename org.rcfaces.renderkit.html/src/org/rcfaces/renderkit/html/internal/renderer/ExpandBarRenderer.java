@@ -137,8 +137,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
         if (collapsed) {
             if (asyncRenderEnable) {
-                asyncRender = expandBarComponent
-                        .getAsyncRenderMode(facesContext);
+                asyncRender = htmlRenderContext.getAsyncRenderMode(expandBarComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", true);

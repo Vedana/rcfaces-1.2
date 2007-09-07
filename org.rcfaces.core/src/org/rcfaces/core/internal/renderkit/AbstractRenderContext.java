@@ -14,10 +14,10 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.BindingTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -262,7 +262,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         }
 
         int level = scopeVars.size();
-        scopeVars.remove(--level); // ValueBinding
+        scopeVars.remove(--level); // ScopeVar
         String stackVarName = (String) scopeVars.remove(--level);
 
         if (varName.equals(stackVarName) == false) {
@@ -273,17 +273,18 @@ public abstract class AbstractRenderContext implements IRenderContext {
         getFacesContext().getExternalContext().getRequestMap().remove(varName);
     }
 
-    public void pushScopeVar(String varName, ValueBinding valueBinding) {
+    public void pushScopeVar(String varName, Object scopeValue) {
 
         FacesContext facesContext = getFacesContext();
-        Object value = valueBinding.getValue(facesContext);
+
+        Object value = BindingTools.resolveBinding(facesContext, scopeValue);
 
         if (scopeVars == null) {
             scopeVars = new ArrayList(SCOPE_VAR_INITIAL_SIZE * 2);
         }
 
         scopeVars.add(varName);
-        scopeVars.add(valueBinding);
+        scopeVars.add(scopeValue);
 
         facesContext.getExternalContext().getRequestMap().put(varName, value);
     }
@@ -317,8 +318,8 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
             for (int i = 0; i < sv.length;) {
                 String varName = (String) sv[i++];
-                ValueBinding valueBinding = (ValueBinding) UIComponentBase
-                        .restoreAttachedState(facesContext, sv[i++]);
+                Object valueBinding = UIComponentBase.restoreAttachedState(
+                        facesContext, sv[i++]);
 
                 pushScopeVar(varName, valueBinding);
             }

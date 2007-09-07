@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.BindingTools;
 import org.rcfaces.core.model.IContentModel;
 
 /**
@@ -83,16 +83,7 @@ public class BasicContentAccessor extends AbstractContentAccessor {
             return null;
         }
 
-        if (url instanceof ValueBinding) {
-            if (facesContext == null) {
-                facesContext = FacesContext.getCurrentInstance();
-            }
-            url = ((ValueBinding) url).getValue(facesContext);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Get value of binding => " + url);
-            }
-        }
+        url = BindingTools.resolveBinding(facesContext, url);
 
         if ((url instanceof String) == false) {
             setPathType(IContentAccessor.UNDEFINED_PATH_TYPE);

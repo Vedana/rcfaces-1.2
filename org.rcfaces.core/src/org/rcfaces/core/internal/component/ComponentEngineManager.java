@@ -65,7 +65,7 @@ class ComponentEngineManager {
             Method method = getGetter(component.getClass());
 
             try {
-                return (IComponentEngine) method.invoke(component, null);
+                return (IComponentEngine) method.invoke(component, (Object[])null);
 
             } catch (Throwable e) {
                 throw new RuntimeException("Can not call getter '" + method
@@ -96,7 +96,7 @@ class ComponentEngineManager {
                     .getSuperclass()) {
                 try {
                     method = cls.getDeclaredMethod(
-                            COMPONENT_ENGINE_GETTER_METHOD_NAME, null);
+                            COMPONENT_ENGINE_GETTER_METHOD_NAME, (Class[])null);
 
                     break;
 

@@ -55,7 +55,10 @@ var __statics = {
 		return m.apply(obj, a);
 	},
 	/**
-	 * @method private static final string
+	 * @method private static 
+	 * @param Object caller
+	 * @return any
+	 * @object this
 	 */
 	_Super: function(caller) {
 		f_core.Assert(caller && caller.callee, "f_class._Super: First parameter must be an argument object ! (caller="+caller+")");
@@ -541,22 +544,26 @@ var __statics = {
 	},
 	/**
 	 * @method private static final 
+	 * @window window
 	 */
-	_DeclarePrototypeClass: function(name, staticMembers, methods) {
+	_DeclarePrototypeClass: function(classLoader, name, staticMembers, methods) {
+		if (!classLoader) {
+			classLoader=f_classLoader.Get(window);
+		}
+		
 		var cls=null;
 		if (methods) {
 			cls=methods[name];
 		}
 		if (!cls) {
-			cls=new function() {
-			};
+			cls=f_class._CreateConstructor();
 		}
 		
 		window[name]=cls;
 		
 		cls.prototype=methods;
 		cls._name=name;
-		cls._classLoader=f_classLoader.Get();
+		cls._classLoader=classLoader;
 		cls._nativeClass=true;
 
 		if (!staticMembers) {
@@ -575,7 +582,14 @@ var __statics = {
 				
 		cls._classLoader.f_declareClass(cls);
 	},
-	
+	/**
+	 * @method private static
+	 * @return function
+	 */
+	_CreateConstructor: function() {
+		return new function() {
+		};
+	},
 	/**
 	 * @method hidden static
 	 * @param String className
@@ -654,7 +668,9 @@ var __members = {
 	 */
 	_classLoader: undefined,
 	
-	
+	/**
+	 * @window window
+	 */
 	f_class: function(className, lookId, staticMembers, members, parentClass) {
 		// Constructeur vide: on ne fait rien !
 		if (!arguments.length) {
@@ -712,14 +728,15 @@ var __members = {
 			}
 		}
 		
+		var classLoader=(parentClass)?parentClass._classLoader:f_classLoader.Get(window);
 		
 		if (!parentClass && className!="f_object") {
-			f_class._DeclarePrototypeClass(className, staticMembers, members);
+			f_class._DeclarePrototypeClass(classLoader, className, staticMembers, members);
 			
 			return;
 		}
 	
-		this._classLoader=(parentClass)?parentClass._classLoader:f_classLoader.Get();
+		this._classLoader=classLoader;
 
 		if (!staticMembers) {
 			staticMembers=new Object;
@@ -825,5 +842,5 @@ var __members = {
 	}
 }
 
-__statics._DeclarePrototypeClass("f_class", __statics, __members);
+__statics._DeclarePrototypeClass(null, "f_class", __statics, __members);
 

@@ -5,7 +5,7 @@ package org.rcfaces.core.internal.renderkit;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -44,7 +44,7 @@ public interface IRenderContext {
 
     void encodeEnd(UIComponent component);
 
-    void pushScopeVar(String varName, ValueBinding value);
+    void pushScopeVar(String varName, Object valueExpression);
 
     void popScopeVar(String varName);
 }

@@ -157,7 +157,7 @@ public class ImageContentAccessorHandlerImpl extends
         Constructor constructor;
 
         try {
-            constructor = clazz.getConstructor(null);
+            constructor = clazz.getConstructor((Class[]) null);
 
         } catch (NoSuchMethodException ex) {
             throw new FacesException(
@@ -168,7 +168,8 @@ public class ImageContentAccessorHandlerImpl extends
 
         IImageOperation operation;
         try {
-            operation = (IImageOperation) constructor.newInstance(null);
+            operation = (IImageOperation) constructor
+                    .newInstance((Object[]) null);
 
         } catch (Throwable ex) {
             throw new FacesException("Can not instanciate class '"

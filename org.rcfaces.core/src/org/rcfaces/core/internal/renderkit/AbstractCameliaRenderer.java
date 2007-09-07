@@ -10,13 +10,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
-import javax.faces.el.ValueBinding;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
@@ -75,7 +75,7 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             return;
         }
 
-        ValueBinding valueBinding = variableScopeCapability.getScopeValue();
+        Object valueBinding = variableScopeCapability.getScopeValue();
         if (valueBinding == null) {
             return;
         }
@@ -119,6 +119,13 @@ public abstract class AbstractCameliaRenderer extends Renderer {
         if ((this instanceof IAsyncRenderer) == false) {
             return false;
         }
+
+        if (RcfacesContext.isJSF1_2()) {
+            // En jsf 1.2 nous sommes forcement en parcours d'arbre
+            return true;
+        }
+        
+        // Jsf 1.1 : on doit distinguer d'un parcours par TAG ou par programmation
 
         if (AsyncModeTools.isTagProcessor(null)) {
             // Nous sommes en mode TAG, c'est le tag qui détourne le flux.

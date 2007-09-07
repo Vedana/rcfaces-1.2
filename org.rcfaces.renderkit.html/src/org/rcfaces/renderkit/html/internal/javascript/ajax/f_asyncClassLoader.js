@@ -50,8 +50,13 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 				content=result[5].replace(lfRegExp, '\n')+content; // Nouveau content !
 			} 
 			
+			if (!result[3]) {
+				scripts.unshift(result[2], "");
+				continue;
+			}
+
 			var text=result[3].replace(lfRegExp, '\n');
-			
+		
 			scripts.unshift(result[2], text);
 		}
 	}

@@ -5,6 +5,7 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Set;
 
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -67,4 +68,6 @@ public interface IHtmlRenderContext extends IRenderContext {
     String getWaiRolesNS();
 
     boolean isClientValidation();
+
+    int getAsyncRenderMode(IAsyncRenderModeCapability asyncRenderModeCapability);
 }

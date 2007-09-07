@@ -21,8 +21,6 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.el.MethodBinding;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
@@ -30,12 +28,10 @@ import javax.faces.event.FacesListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.listener.IScriptListener;
-import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
@@ -53,9 +49,9 @@ public final class ComponentTools {
 
     public static final String[] STRING_EMPTY_ARRAY = new String[0];
 
-    private static final String VARIABLE_SCOPE_VALUE = "org.rcfaces.core.internal.VARIABLE_SCOPE_VALUE";
+    static final String VARIABLE_SCOPE_VALUE = "org.rcfaces.core.internal.VARIABLE_SCOPE_VALUE";
 
-    private static final String NONE_VARIABLE_SCOPE = "##~NONE~"
+    static final String NONE_VARIABLE_SCOPE = "##~NONE~"
             + System.currentTimeMillis();
 
     private static final UIComponent[] COMPONENT_EMPTY_ARRAY = new UIComponent[0];
@@ -298,60 +294,6 @@ public final class ComponentTools {
         return null;
     }
 
-    public static IVarScope processVariableScope(FacesContext facesContext,
-            IVariableScopeCapability variableScopeCapability) {
-        String var = variableScopeCapability.getScopeVar();
-        if (var == null || var.length() < 1) {
-            return null;
-        }
-
-        ITransientAttributesManager manager = (ITransientAttributesManager) variableScopeCapability;
-
-        if (false) {
-            /**
-             * On peut pas mettre la valeur en cache !
-             */
-            Object ret = manager.getTransientAttribute(VARIABLE_SCOPE_VALUE);
-            if (ret != null) {
-                if (ret == NONE_VARIABLE_SCOPE) {
-                    ret = null;
-                }
-
-                Map requestMap = facesContext.getExternalContext()
-                        .getRequestMap();
-
-                Object old = requestMap.put(var, ret);
-
-                return new VarScope(var, old);
-            }
-        }
-
-        ValueBinding valueBinding = variableScopeCapability.getScopeValue();
-        if (valueBinding == null) {
-            return null;
-        }
-
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
-
-        Object ret = valueBinding.getValue(facesContext);
-        if (false) {
-            /**
-             * On peut pas mettre la valeur en cache !
-             */
-
-            if (ret == null) {
-                manager.setTransientAttribute(VARIABLE_SCOPE_VALUE,
-                        NONE_VARIABLE_SCOPE);
-
-            } else {
-                manager.setTransientAttribute(VARIABLE_SCOPE_VALUE, ret);
-            }
-        }
-
-        Object old = requestMap.put(var, ret);
-        return new VarScope(var, old);
-    }
-
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -366,7 +308,7 @@ public final class ComponentTools {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class VarScope implements IVarScope {
+    static class VarScope implements IVarScope {
         private static final String REVISION = "$Revision$";
 
         private final String var;
@@ -508,12 +450,8 @@ public final class ComponentTools {
         if (found) {
             return;
         }
-
-        // Notify the specified action listener method (if any)
-        MethodBinding mb = component.getActionListener();
-        if (mb != null) {
-            mb.invoke(facesContext, new Object[] { facesEvent });
-        }
+        
+        BindingTools.invokeActionListener(facesContext, component, facesEvent);
 
         // Invoke the default ActionListener
         ActionListener listener = facesContext.getApplication()

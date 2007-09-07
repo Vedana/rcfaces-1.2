@@ -9,6 +9,10 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+
+/**
+ * @window window
+ */
 function f_aspect(aspectName, staticMembers, members, extend) {
 	// Constructeur vide: on ne fait rien !
 	if (!arguments.length) {

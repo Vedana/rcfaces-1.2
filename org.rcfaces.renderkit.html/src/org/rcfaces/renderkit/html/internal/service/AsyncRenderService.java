@@ -33,6 +33,7 @@ import javax.servlet.jsp.tagext.BodyContent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
@@ -249,6 +250,15 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Enable asyncRender for component '" + component.getId()
                     + "'.");
+        }
+
+        if (asyncRender != IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE) {
+            if (RcfacesContext.isJSF1_2()) {
+                LOG
+                        .debug("Force TREE_ASYNC_RENDER_MODE, jsf 1.2 does not support other value");
+
+                asyncRender = IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE;
+            }
         }
 
         if (asyncRender == IAsyncRenderModeCapability.TREE_ASYNC_RENDER_MODE) {

@@ -18,12 +18,10 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
 import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.Validator;
-import javax.faces.webapp.UIComponentTag;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
@@ -32,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
+import org.rcfaces.core.internal.tools.BindingTools;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
@@ -533,10 +532,9 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             if (id != null && id.length() > 0) {
                 Application application = facesContext.getApplication();
 
-                if (UIComponentTag.isValueReference(id)) {
-                    ValueBinding vb = application.createValueBinding(id);
-
-                    converter = (Converter) vb.getValue(facesContext);
+                if (BindingTools.isBindingExpression(id)) {
+                    converter = (Converter) BindingTools.evalBinding(
+                            facesContext, id, Converter.class);
 
                 } else {
                     converter = application.createConverter(id);

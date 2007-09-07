@@ -138,7 +138,7 @@ public class TabRenderer extends CardRenderer {
 
         if (selected == false) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                asyncRender = tabbedPane.getAsyncRenderMode(facesContext);
+                asyncRender = htmlRenderContext.getAsyncRenderMode(tabbedPane);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlRenderContext.pushInteractiveRenderComponent(writer);

@@ -179,10 +179,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
             try {
                 // getContentType appears into 2.4 spec
                 Method getContentTypeMethod = response.getClass().getMethod(
-                        "getContentType", null);
+                        "getContentType", (Class[]) null);
 
                 contentType = (String) getContentTypeMethod.invoke(response,
-                        null);
+                        (Object[]) null);
 
             } catch (Throwable ex) {
                 LOG.debug("Can not get contentType of response object !", ex);

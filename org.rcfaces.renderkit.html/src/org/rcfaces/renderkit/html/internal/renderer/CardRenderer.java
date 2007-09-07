@@ -234,7 +234,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
         if (selected == false) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                asyncRender = cardBoxComponent.getAsyncRenderMode(facesContext);
+                asyncRender = htmlRenderContext.getAsyncRenderMode(cardBoxComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     writer.getHtmlComponentRenderContext()

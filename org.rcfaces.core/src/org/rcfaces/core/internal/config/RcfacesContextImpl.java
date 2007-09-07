@@ -512,5 +512,4 @@ public class RcfacesContextImpl extends RcfacesContext implements
             IDocumentBuilderProvider documentBuilderProvider) {
         this.documentBuilderProvider = documentBuilderProvider;
     }
-
 }

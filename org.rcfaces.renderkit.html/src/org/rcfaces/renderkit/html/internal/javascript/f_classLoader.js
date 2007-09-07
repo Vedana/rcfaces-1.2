@@ -10,8 +10,8 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-function f_classLoader(window, parentClassLoader) {
-	this._window=window;
+function f_classLoader(win, parentClassLoader) {
+	this._window=win;
 	this._parent=parentClassLoader;			
 
 	this._objectPool=new Array;
@@ -21,6 +21,7 @@ function f_classLoader(window, parentClassLoader) {
 	this._aspects=new Object;
 	this._bundles=new Object;
 	this._serializedStates=new Object;
+	this._kclass=f_classLoader;
 }
 
 f_classLoader.prototype = {
@@ -119,6 +120,7 @@ f_classLoader.prototype = {
 	 * @param f_class claz
 	 * @param optional Window win
 	 * @return void
+	 * @object this
 	 */
 	f_declareClass: function(claz, win) {
 		if (win && win!=window) {
@@ -1346,6 +1348,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
  * @method hidden static
  * @param optional Window win
  * @return f_classLoader
+ * @window window
  */
 f_classLoader.Get=function(win) {
 	if (!win) {
