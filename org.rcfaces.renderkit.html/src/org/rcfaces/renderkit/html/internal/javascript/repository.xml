@@ -1036,6 +1036,19 @@
 		
 	</module>
 
+	<module id="itemsList">
+		<file name="input/f_itemsList.js">
+			<class name="f_itemsList">
+				<required-class name="f_component" />
+				<required-class name="fa_disabled" />
+				<required-class name="fa_readOnly" />
+				<required-class name="fa_items" />
+				<required-class name="fa_groupName" />
+				<required-class name="fa_subMenu" />
+				<required-class id="menu" name="f_menu" />
+			</class>
+		</file>
+	</module>
 	
 <!-- Spinner component -->
 	<module id="spinner">
