@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
-import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
@@ -182,8 +182,8 @@ class FileRenderedImage implements IBufferedImage {
 
         byte buffer[] = bous.toByteArray();
 
-        hash = ConfiguredHttpServlet.computeHash(buffer);
-        etag = ConfiguredHttpServlet.computeETag(buffer);
+        hash = ExtendedHttpServlet.computeHash(buffer);
+        etag = ExtendedHttpServlet.computeETag(buffer);
         this.size = buffer.length;
 
         FileOutputStream fileOutputStream = new FileOutputStream(file);

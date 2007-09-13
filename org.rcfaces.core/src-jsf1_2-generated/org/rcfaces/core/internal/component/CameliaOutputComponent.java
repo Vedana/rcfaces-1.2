@@ -20,8 +20,8 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import java.util.HashSet;
 import java.util.Arrays;
+import java.util.HashSet;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
@@ -56,7 +56,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 
 	private static final Log LOG = LogFactory.getLog(CameliaOutputComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","converter"}));
 
 	protected transient IComponentEngine engine;
 
@@ -427,7 +427,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait rÃ©fÃ©rence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

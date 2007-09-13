@@ -32,6 +32,8 @@ abstract class AbstractActionListener implements StateHolder,
 
     private static final Class[] FACES_PARAMETERS = new Class[] { FacesEvent.class };
 
+    private static final Class[] NO_PARAMETERS = new Class[0];
+
     private String expression;
 
     private transient boolean forwarNameMethodInitialized;
@@ -197,7 +199,7 @@ abstract class AbstractActionListener implements StateHolder,
     }
 
     private MethodBinding getNoArgsMethodBinding(Application application) {
-        return application.createMethodBinding(expression, null);
+        return application.createMethodBinding(expression, NO_PARAMETERS);
     }
 
     protected abstract Class[] listParameterClasses();

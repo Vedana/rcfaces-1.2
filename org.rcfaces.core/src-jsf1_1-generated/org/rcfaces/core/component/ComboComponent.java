@@ -1,13 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import java.util.HashSet;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractInputComponent;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 
 /**

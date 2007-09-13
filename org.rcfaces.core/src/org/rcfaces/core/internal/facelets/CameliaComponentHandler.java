@@ -30,7 +30,7 @@ import com.sun.facelets.tag.jsf.ComponentHandler;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CameliaComponentHandler extends ComponentHandler {
+public class CameliaComponentHandler extends CameliaComponentHandler0 {
     private static final String REVISION = "$Revision$";
 
     /**
@@ -174,9 +174,9 @@ public class CameliaComponentHandler extends ComponentHandler {
                 return new Metadata() {
                     public void applyMetadata(FaceletContext ctx,
                             Object instance) {
-                        ListenersTools.parseAction(ctx.getFacesContext(),
-                                (UIComponent) instance, defaultListenerType,
-                                expression);
+
+                        actionApplyMetaData(ctx, (UIComponent) instance,
+                                expression, defaultListenerType);
                     }
                 };
             }
@@ -285,5 +285,4 @@ public class CameliaComponentHandler extends ComponentHandler {
                     defaultListenerType, name);
         }
     }
-
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
@@ -262,68 +263,161 @@ public abstract class AbstractRenderContext implements IRenderContext {
         }
 
         int level = scopeVars.size();
-        scopeVars.remove(--level); // ScopeVar
-        String stackVarName = (String) scopeVars.remove(--level);
+        VarScopeState scope = (VarScopeState) scopeVars.remove(--level);
 
-        if (varName.equals(stackVarName) == false) {
+        if (varName.equals(scope.getVarName()) == false) {
             throw new FacesException("Not the same varName ? (stackVarName="
-                    + stackVarName + " varName=" + varName + ")");
+                    + scope.getVarName() + " varName=" + varName + ")");
         }
 
         getFacesContext().getExternalContext().getRequestMap().remove(varName);
     }
 
-    public void pushScopeVar(String varName, Object scopeValue) {
+    public void pushScopeVar(String varName, Object scopeValue,
+            Object valueBinding, boolean valueMustBeStored) {
+
+        pushScopeVar(new VarScopeState(varName, scopeValue, valueBinding,
+                valueMustBeStored));
+    }
+
+    protected void pushScopeVar(VarScopeState varScopeState) {
 
         FacesContext facesContext = getFacesContext();
 
-        Object value = BindingTools.resolveBinding(facesContext, scopeValue);
-
         if (scopeVars == null) {
-            scopeVars = new ArrayList(SCOPE_VAR_INITIAL_SIZE * 2);
+            scopeVars = new ArrayList(SCOPE_VAR_INITIAL_SIZE);
         }
 
-        scopeVars.add(varName);
-        scopeVars.add(scopeValue);
+        scopeVars.add(varScopeState);
 
-        facesContext.getExternalContext().getRequestMap().put(varName, value);
+        facesContext.getExternalContext().getRequestMap().put(
+                varScopeState.getVarName(), varScopeState.getValue());
     }
 
     public Object saveRenderContextState() {
-        Object ret[] = new Object[1];
-
-        if (scopeVars != null && scopeVars.isEmpty() == false) {
-            Object sv[] = new Object[scopeVars.size() * 2];
-            FacesContext facesContext = getFacesContext();
-
-            int idx = 0;
-            for (Iterator it = scopeVars.iterator(); it.hasNext();) {
-                sv[idx++] = it.next();
-                sv[idx++] = UIComponentBase.saveAttachedState(facesContext, it
-                        .next());
-            }
-
-            ret[0] = sv;
+        if (scopeVars == null || scopeVars.isEmpty()) {
+            return null;
         }
 
-        return ret;
+        Object sv[] = new Object[scopeVars.size()];
+        FacesContext facesContext = getFacesContext();
+
+        int idx = 0;
+        for (Iterator it = scopeVars.iterator(); it.hasNext();) {
+            VarScopeState varScopeState = (VarScopeState) it.next();
+
+            sv[idx++] = varScopeState.saveState(facesContext);
+        }
+
+        return sv;
     }
 
     public void restoreState(Object object) {
-        Object ret[] = (Object[]) object;
+        Object sv[] = (Object[]) object;
+        if (sv == null) {
+            return;
+        }
 
-        if (ret[0] != null) {
-            Object sv[] = (Object[]) ret[0];
-            FacesContext facesContext = getFacesContext();
+        FacesContext facesContext = getFacesContext();
 
-            for (int i = 0; i < sv.length;) {
-                String varName = (String) sv[i++];
-                Object valueBinding = UIComponentBase.restoreAttachedState(
-                        facesContext, sv[i++]);
+        for (int i = 0; i < sv.length; i++) {
+            VarScopeState varScopeState = new VarScopeState();
 
-                pushScopeVar(varName, valueBinding);
-            }
+            varScopeState.restoreState(facesContext, sv[i]);
+
+            pushScopeVar(varScopeState);
         }
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static class VarScopeState implements StateHolder {
+        private static final String REVISION = "$Revision$";
+
+        private String varName;
+
+        private Object value;
+
+        private Object valueBinding;
+
+        private boolean valueMustBeStored;
+
+        public VarScopeState() {
+        }
+
+        public VarScopeState(String varName, Object scopeValue,
+                Object valueBinding, boolean valueMustBeStored) {
+            this.varName = varName;
+            this.value = scopeValue;
+            this.valueBinding = valueBinding;
+            this.valueMustBeStored = valueMustBeStored;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+        }
+
+        public boolean isTransient() {
+            return false;
+        }
+
+        public void restoreState(FacesContext facesContext, Object state) {
+            Object ret[] = (Object[]) state;
+
+            varName = (String) ret[0];
+
+            valueMustBeStored = (ret[3] != null);
+
+            valueBinding = UIComponentBase.restoreAttachedState(facesContext,
+                    ret[2]);
+
+            if (valueMustBeStored || valueBinding == null) {
+                value = UIComponentBase.restoreAttachedState(facesContext,
+                        ret[1]);
+
+            } else if (valueBinding != null) {
+                value = BindingTools.resolveBinding(facesContext, valueBinding);
+            }
+        }
+
+        public Object saveState(FacesContext facesContext) {
+            Object ret[] = new Object[4];
+
+            ret[0] = varName;
+            ret[3] = valueMustBeStored ? Boolean.TRUE : null;
+
+            if (valueBinding != null) {
+                ret[2] = UIComponentBase.saveAttachedState(facesContext,
+                        valueBinding); // ValueBindig
+
+                if (valueMustBeStored) {
+                    ret[1] = UIComponentBase.saveAttachedState(facesContext,
+                            value);
+                }
+
+            } else { // Pas de valueBinding, on enregistre la valeur
+                ret[1] = UIComponentBase.saveAttachedState(facesContext, value); // Value
+            }
+
+            return ret;
+        }
+
+        public final String getVarName() {
+            return varName;
+        }
+
+        public final Object getValue() {
+            return value;
+        }
+
+        public final Object getValueBinding() {
+            return valueBinding;
+        }
+
+        public final boolean isValueMustBeStored() {
+            return valueMustBeStored;
+        }
+    }
 }

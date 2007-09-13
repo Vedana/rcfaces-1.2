@@ -3,8 +3,6 @@
  */
 package org.rcfaces.core.internal.capability;
 
-import javax.el.ValueExpression;
-
 
 /**
  * A couple string-binding specifying the name of a variable representing a
@@ -39,7 +37,7 @@ public interface IVariableScopeCapability {
      * 
      * @return value binding
      */
-    ValueExpression getScopeValue();
+    Object getScopeValue();
 
     /**
      * Sets a value binding associated to a variable representing a shortcut.
@@ -47,5 +45,20 @@ public interface IVariableScopeCapability {
      * @param valueBinding
      *            value binding
      */
-    void setScopeValue(ValueExpression valueBinding);
+    void setScopeValue(Object valueBinding);
+    
+
+    /**
+     * Returns <code>true</code> if the value is stored when the view is serialized.
+     * 
+     * @return <code>true</code> if the value is saved.
+     */
+    boolean isScopeSaveValue();
+
+    /**
+     * Sets if the value must be stored when the view is serialized.
+     * 
+     * @param saveValue
+     */
+    void setScopeSaveValue(boolean saveValue);
 }

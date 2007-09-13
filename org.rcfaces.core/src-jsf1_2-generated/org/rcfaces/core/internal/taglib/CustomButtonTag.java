@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import org.rcfaces.core.component.CustomButtonComponent;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.CustomButtonComponent;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class CustomButtonTag extends AbstractCommandTag implements Tag {
 
@@ -22,8 +23,8 @@ public class CustomButtonTag extends AbstractCommandTag implements Tag {
 	private ValueExpression selectionListeners;
 	private ValueExpression doubleClickListeners;
 	private ValueExpression readOnly;
-	private ValueExpression action;
 	private ValueExpression actionListeners;
+	private ValueExpression action;
 	public String getComponentType() {
 		return CustomButtonComponent.COMPONENT_TYPE;
 	}
@@ -98,11 +99,11 @@ public class CustomButtonTag extends AbstractCommandTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (doubleClickListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
 		}
 
 		if (readOnly != null) {
@@ -115,11 +116,11 @@ public class CustomButtonTag extends AbstractCommandTag implements Tag {
 		}
 
 		if (action != null) {
-			ListenersTools.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
+			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
 		}
 	}
 

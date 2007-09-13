@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.StyledMessageComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.StyledMessageComponent;
+import javax.faces.application.Application;
 
 public class StyledMessageTag extends AbstractBasicTag implements Tag {
 
@@ -149,16 +150,8 @@ public class StyledMessageTag extends AbstractBasicTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final String getShowIfMessage() {
-		return showIfMessage;
-	}
-
 	public final void setShowIfMessage(String showIfMessage) {
 		this.showIfMessage = showIfMessage;
-	}
-
-	public final String getSetFocusIfMessage() {
-		return setFocusIfMessage;
 	}
 
 	public final void setSetFocusIfMessage(String setFocusIfMessage) {

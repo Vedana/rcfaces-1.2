@@ -1,30 +1,30 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.capability.ICollapsableCapability;
+import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.ICollapsableCapability;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Set;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The expandBar Component is a container that can be collapsed to show only a title bar. Expand Bars can be managed by group : only one element of the group is expanded.</p>
@@ -66,7 +66,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","groupName","accessKey","fontName","text","collapsedText","tabIndex","focusListener","fontBold","fontSize","loadListener","asyncRenderMode","textDirection","collapsed","selectionListener","fontItalic","fontUnderline","readOnly","scopeVar","collapseEffect","textAlignment","scopeValue","border","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","border","blurListener","fontName","focusListener","asyncRenderMode","collapseEffect","disabled","accessKey","groupName","fontItalic","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","readOnly","tabIndex"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -502,15 +502,38 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public javax.faces.el.ValueBinding getScopeValue() {
+	public boolean isScopeSaveValue() {
+		return isScopeSaveValue(null);
+	}
+
+	/**
+	 * See {@link #isScopeSaveValue() isScopeSaveValue()} for more details
+	 */
+	public boolean isScopeSaveValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SCOPE_SAVE_VALUE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeSaveValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeSaveValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_SAVE_VALUE);
+	}
+
+	public void setScopeSaveValue(boolean scopeSaveValue) {
+		engine.setProperty(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+	}
+
+	public java.lang.Object getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValueExpressionProperty(Properties.SCOPE_VALUE);
+	public java.lang.Object getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SCOPE_VALUE, facesContext);
 	}
 
 	/**
@@ -521,7 +544,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 		return engine.isPropertySetted(Properties.SCOPE_VALUE);
 	}
 
-	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	public void setScopeValue(java.lang.Object scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 

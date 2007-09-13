@@ -5,7 +5,6 @@
 		<state-manager>org.rcfaces.core.util.ViewSessionPatchStateManager</state-manager>
 		<locale-config/>
 	</application>
-	<factory />
 	<component>
 		<component-type>org.rcfaces.core.accelerator</component-type>
 		<component-class>org.rcfaces.core.component.AcceleratorComponent</component-class>
@@ -329,6 +328,10 @@
 	<component>
 		<component-type>org.rcfaces.core.tree</component-type>
 		<component-class>org.rcfaces.core.component.TreeComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.itemsList</component-type>
+		<component-class>org.rcfaces.core.component.ItemsListComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.treeNode</component-type>

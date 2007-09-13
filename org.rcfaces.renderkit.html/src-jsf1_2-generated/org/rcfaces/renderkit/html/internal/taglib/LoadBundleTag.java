@@ -1,29 +1,31 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.faces.application.Application;
-import org.rcfaces.renderkit.html.component.LoadClientBundleComponent;
-import javax.faces.component.UIComponent;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.taglib.CameliaTag;
-import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.renderkit.html.component.LoadBundleComponent;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.core.internal.taglib.CameliaTag;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
 
-public class LoadClientBundleTag extends CameliaTag implements Tag {
+public class LoadBundleTag extends CameliaTag implements Tag {
 
 
-	private static final Log LOG=LogFactory.getLog(LoadClientBundleTag.class);
+	private static final Log LOG=LogFactory.getLog(LoadBundleTag.class);
 
 	private ValueExpression bundleName;
 	private ValueExpression baseName;
-	private ValueExpression serverSide;
+	private ValueExpression side;
+	private ValueExpression serverScope;
 	private ValueExpression override;
 	public String getComponentType() {
-		return LoadClientBundleComponent.COMPONENT_TYPE;
+		return LoadBundleComponent.COMPONENT_TYPE;
 	}
 
 	public final void setBundleName(ValueExpression bundleName) {
@@ -34,8 +36,12 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 		this.baseName = baseName;
 	}
 
-	public final void setServerSide(ValueExpression serverSide) {
-		this.serverSide = serverSide;
+	public final void setSide(ValueExpression side) {
+		this.side = side;
+	}
+
+	public final void setServerScope(ValueExpression serverScope) {
+		this.serverScope = serverScope;
 	}
 
 	public final void setOverride(ValueExpression override) {
@@ -44,24 +50,25 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			if (LoadClientBundleComponent.COMPONENT_TYPE==getComponentType()) {
+			if (LoadBundleComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  bundleName='"+bundleName+"'");
 			LOG.debug("  baseName='"+baseName+"'");
-			LOG.debug("  serverSide='"+serverSide+"'");
+			LOG.debug("  side='"+side+"'");
+			LOG.debug("  serverScope='"+serverScope+"'");
 			LOG.debug("  override='"+override+"'");
 		}
 		super.setProperties(uiComponent);
 
-		if ((uiComponent instanceof LoadClientBundleComponent)==false) {
+		if ((uiComponent instanceof LoadBundleComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
-			throw new IllegalStateException("Component specified by tag is not instanceof of 'LoadClientBundleComponent'.");
+			throw new IllegalStateException("Component specified by tag is not instanceof of 'LoadBundleComponent'.");
 		}
 
-		LoadClientBundleComponent component = (LoadClientBundleComponent) uiComponent;
+		LoadBundleComponent component = (LoadBundleComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
 		if (bundleName != null) {
@@ -82,12 +89,21 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (serverSide != null) {
-			if (serverSide.isLiteralText()==false) {
-				component.setValueExpression(Properties.SERVER_SIDE, serverSide);
+		if (side != null) {
+			if (side.isLiteralText()==false) {
+				component.setValueExpression(Properties.SIDE, side);
 
 			} else {
-				component.setServerSide(getBool(serverSide.getExpressionString()));
+				component.setSide(side.getExpressionString());
+			}
+		}
+
+		if (serverScope != null) {
+			if (serverScope.isLiteralText()==false) {
+				component.setValueExpression(Properties.SERVER_SCOPE, serverScope);
+
+			} else {
+				component.setServerScope(serverScope.getExpressionString());
 			}
 		}
 
@@ -104,7 +120,8 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 	public void release() {
 		bundleName = null;
 		baseName = null;
-		serverSide = null;
+		side = null;
+		serverScope = null;
 		override = null;
 
 		super.release();

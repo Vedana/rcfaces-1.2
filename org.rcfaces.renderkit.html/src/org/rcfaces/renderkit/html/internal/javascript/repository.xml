@@ -614,6 +614,7 @@
 				<required-class name="fa_required" />
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_selectionProvider" />
+				<required-class name="fa_immediate" />
 				<required-class id="menu" name="f_menu" />
 			</class>
 		</file>
@@ -704,6 +705,7 @@
 				<required-class name="fa_filterProperties"/>
 				<required-class name="fa_selectionProvider"/>
 				<required-class name="fa_required"/>
+				<required-class name="fa_immediate"/>
 				<required-class id="filter" name="f_httpRequest" />
 				<required-class id="filter" name="f_waiting" />
 
@@ -1043,12 +1045,10 @@
 				<required-class name="fa_disabled" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_items" />
-				<required-class name="fa_groupName" />
-				<required-class name="fa_subMenu" />
-				<required-class id="menu" name="f_menu" />
 			</class>
 		</file>
 	</module>
+
 	
 <!-- Spinner component -->
 	<module id="spinner">

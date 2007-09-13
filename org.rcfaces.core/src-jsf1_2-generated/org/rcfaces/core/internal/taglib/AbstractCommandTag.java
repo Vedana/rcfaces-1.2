@@ -1,72 +1,89 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.component.AbstractCommandComponent;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(AbstractCommandTag.class);
 
-	private ValueExpression helpMessage;
-	private ValueExpression helpURL;
-	private ValueExpression toolTipText;
+	private ValueExpression width;
+	private ValueExpression height;
+	private ValueExpression visible;
+	private ValueExpression mouseOutListeners;
+	private ValueExpression mouseOverListeners;
+	private ValueExpression disabled;
+	private ValueExpression unlockedClientAttributeNames;
 	private ValueExpression blurListeners;
 	private ValueExpression focusListeners;
+	private ValueExpression errorListeners;
 	private ValueExpression backgroundColor;
 	private ValueExpression foregroundColor;
-	private ValueExpression visible;
-	private ValueExpression errorListeners;
-	private ValueExpression disabled;
-	private ValueExpression validationListeners;
+	private ValueExpression styleClass;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
 	private ValueExpression fontName;
 	private ValueExpression fontSize;
 	private ValueExpression fontUnderline;
-	private ValueExpression mouseOutListeners;
-	private ValueExpression mouseOverListeners;
+	private ValueExpression initListeners;
+	private ValueExpression helpMessage;
+	private ValueExpression helpURL;
+	private ValueExpression toolTipText;
 	private ValueExpression tabIndex;
-	private ValueExpression unlockedClientAttributeNames;
-	private ValueExpression propertyChangeListeners;
+	private ValueExpression x;
+	private ValueExpression y;
+	private ValueExpression lookId;
+	private ValueExpression validationListeners;
 	private ValueExpression marginBottom;
 	private ValueExpression marginLeft;
 	private ValueExpression marginRight;
 	private ValueExpression marginTop;
-	private ValueExpression userEventListeners;
-	private ValueExpression x;
-	private ValueExpression y;
-	private ValueExpression styleClass;
-	private ValueExpression lookId;
-	private ValueExpression width;
-	private ValueExpression height;
 	private ValueExpression textAlignment;
-	private ValueExpression accessKey;
+	private ValueExpression userEventListeners;
 	private ValueExpression waiRole;
-	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
+	private ValueExpression propertyChangeListeners;
+	private ValueExpression accessKey;
 	private ValueExpression margins;
 	private ValueExpression immediate;
 	private ValueExpression value;
-	public final void setHelpMessage(ValueExpression helpMessage) {
-		this.helpMessage = helpMessage;
+	public final void setWidth(ValueExpression width) {
+		this.width = width;
 	}
 
-	public final void setHelpURL(ValueExpression helpURL) {
-		this.helpURL = helpURL;
+	public final void setHeight(ValueExpression height) {
+		this.height = height;
 	}
 
-	public final void setToolTipText(ValueExpression toolTipText) {
-		this.toolTipText = toolTipText;
+	public final void setVisible(ValueExpression visible) {
+		this.visible = visible;
+	}
+
+	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+		this.mouseOutListeners = mouseOutListeners;
+	}
+
+	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+		this.mouseOverListeners = mouseOverListeners;
+	}
+
+	public final void setDisabled(ValueExpression disabled) {
+		this.disabled = disabled;
+	}
+
+	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
 	public final void setBlurListener(ValueExpression blurListeners) {
@@ -77,6 +94,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.focusListeners = focusListeners;
 	}
 
+	public final void setErrorListener(ValueExpression errorListeners) {
+		this.errorListeners = errorListeners;
+	}
+
 	public final void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
@@ -85,20 +106,8 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setVisible(ValueExpression visible) {
-		this.visible = visible;
-	}
-
-	public final void setErrorListener(ValueExpression errorListeners) {
-		this.errorListeners = errorListeners;
-	}
-
-	public final void setDisabled(ValueExpression disabled) {
-		this.disabled = disabled;
-	}
-
-	public final void setValidationListener(ValueExpression validationListeners) {
-		this.validationListeners = validationListeners;
+	public final void setStyleClass(ValueExpression styleClass) {
+		this.styleClass = styleClass;
 	}
 
 	public final void setFontBold(ValueExpression fontBold) {
@@ -121,24 +130,40 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
-		this.mouseOutListeners = mouseOutListeners;
+	public final void setInitListener(ValueExpression initListeners) {
+		this.initListeners = initListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
-		this.mouseOverListeners = mouseOverListeners;
+	public final void setHelpMessage(ValueExpression helpMessage) {
+		this.helpMessage = helpMessage;
+	}
+
+	public final void setHelpURL(ValueExpression helpURL) {
+		this.helpURL = helpURL;
+	}
+
+	public final void setToolTipText(ValueExpression toolTipText) {
+		this.toolTipText = toolTipText;
 	}
 
 	public final void setTabIndex(ValueExpression tabIndex) {
 		this.tabIndex = tabIndex;
 	}
 
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
-		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
+	public final void setX(ValueExpression x) {
+		this.x = x;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
-		this.propertyChangeListeners = propertyChangeListeners;
+	public final void setY(ValueExpression y) {
+		this.y = y;
+	}
+
+	public final void setLookId(ValueExpression lookId) {
+		this.lookId = lookId;
+	}
+
+	public final void setValidationListener(ValueExpression validationListeners) {
+		this.validationListeners = validationListeners;
 	}
 
 	public final void setMarginBottom(ValueExpression marginBottom) {
@@ -157,52 +182,28 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.marginTop = marginTop;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
-		this.userEventListeners = userEventListeners;
-	}
-
-	public final void setX(ValueExpression x) {
-		this.x = x;
-	}
-
-	public final void setY(ValueExpression y) {
-		this.y = y;
-	}
-
-	public final void setStyleClass(ValueExpression styleClass) {
-		this.styleClass = styleClass;
-	}
-
-	public final void setLookId(ValueExpression lookId) {
-		this.lookId = lookId;
-	}
-
-	public final void setWidth(ValueExpression width) {
-		this.width = width;
-	}
-
-	public final void setHeight(ValueExpression height) {
-		this.height = height;
-	}
-
 	public final void setTextAlignment(ValueExpression textAlignment) {
 		this.textAlignment = textAlignment;
 	}
 
-	public final void setAccessKey(ValueExpression accessKey) {
-		this.accessKey = accessKey;
+	public final void setUserEventListener(ValueExpression userEventListeners) {
+		this.userEventListeners = userEventListeners;
 	}
 
 	public final void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
-		this.initListeners = initListeners;
-	}
-
 	public final void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
+	}
+
+	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+		this.propertyChangeListeners = propertyChangeListeners;
+	}
+
+	public final void setAccessKey(ValueExpression accessKey) {
+		this.accessKey = accessKey;
 	}
 
 	public final void setMargins(ValueExpression margins) {
@@ -219,34 +220,34 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("  helpMessage='"+helpMessage+"'");
-			LOG.debug("  helpURL='"+helpURL+"'");
-			LOG.debug("  toolTipText='"+toolTipText+"'");
-			LOG.debug("  backgroundColor='"+backgroundColor+"'");
-			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  height='"+height+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
 			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  helpMessage='"+helpMessage+"'");
+			LOG.debug("  helpURL='"+helpURL+"'");
+			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
-			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
+			LOG.debug("  x='"+x+"'");
+			LOG.debug("  y='"+y+"'");
+			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
 			LOG.debug("  marginTop='"+marginTop+"'");
-			LOG.debug("  x='"+x+"'");
-			LOG.debug("  y='"+y+"'");
-			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  lookId='"+lookId+"'");
-			LOG.debug("  width='"+width+"'");
-			LOG.debug("  height='"+height+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
-			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
 		super.setProperties(uiComponent);
@@ -261,39 +262,69 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		AbstractCommandComponent component = (AbstractCommandComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
-		if (helpMessage != null) {
-			if (helpMessage.isLiteralText()==false) {
-				component.setValueExpression(Properties.HELP_MESSAGE, helpMessage);
+		if (width != null) {
+			if (width.isLiteralText()==false) {
+				component.setValueExpression(Properties.WIDTH, width);
 
 			} else {
-				component.setHelpMessage(helpMessage.getExpressionString());
+				component.setWidth(width.getExpressionString());
 			}
 		}
 
-		if (helpURL != null) {
-			if (helpURL.isLiteralText()==false) {
-				component.setValueExpression(Properties.HELP_URL, helpURL);
+		if (height != null) {
+			if (height.isLiteralText()==false) {
+				component.setValueExpression(Properties.HEIGHT, height);
 
 			} else {
-				component.setHelpURL(helpURL.getExpressionString());
+				component.setHeight(height.getExpressionString());
 			}
 		}
 
-		if (toolTipText != null) {
-			if (toolTipText.isLiteralText()==false) {
-				component.setValueExpression(Properties.TOOL_TIP_TEXT, toolTipText);
+		if (visible != null) {
+			if (visible.isLiteralText()==false) {
+				component.setValueExpression(Properties.VISIBLE, visible);
 
 			} else {
-				component.setToolTipText(toolTipText.getExpressionString());
+				component.setVisible(getBool(visible.getExpressionString()));
+			}
+		}
+
+		if (mouseOutListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+		}
+
+		if (mouseOverListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+		}
+
+		if (disabled != null) {
+			if (disabled.isLiteralText()==false) {
+				component.setValueExpression(Properties.DISABLED, disabled);
+
+			} else {
+				component.setDisabled(getBool(disabled.getExpressionString()));
+			}
+		}
+
+		if (unlockedClientAttributeNames != null) {
+			if (unlockedClientAttributeNames.isLiteralText()==false) {
+				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+
+			} else {
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
 			}
 		}
 
 		if (blurListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.BLUR_LISTENER_TYPE, blurListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.BLUR_LISTENER_TYPE, blurListeners);
 		}
 
 		if (focusListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
+		}
+
+		if (errorListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
 		if (backgroundColor != null) {
@@ -314,30 +345,13 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (visible != null) {
-			if (visible.isLiteralText()==false) {
-				component.setValueExpression(Properties.VISIBLE, visible);
+		if (styleClass != null) {
+			if (styleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.STYLE_CLASS, styleClass);
 
 			} else {
-				component.setVisible(getBool(visible.getExpressionString()));
+				component.setStyleClass(styleClass.getExpressionString());
 			}
-		}
-
-		if (errorListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
-		}
-
-		if (disabled != null) {
-			if (disabled.isLiteralText()==false) {
-				component.setValueExpression(Properties.DISABLED, disabled);
-
-			} else {
-				component.setDisabled(getBool(disabled.getExpressionString()));
-			}
-		}
-
-		if (validationListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
 		}
 
 		if (fontBold != null) {
@@ -385,12 +399,35 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (mouseOutListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+		if (initListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (mouseOverListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+		if (helpMessage != null) {
+			if (helpMessage.isLiteralText()==false) {
+				component.setValueExpression(Properties.HELP_MESSAGE, helpMessage);
+
+			} else {
+				component.setHelpMessage(helpMessage.getExpressionString());
+			}
+		}
+
+		if (helpURL != null) {
+			if (helpURL.isLiteralText()==false) {
+				component.setValueExpression(Properties.HELP_URL, helpURL);
+
+			} else {
+				component.setHelpURL(helpURL.getExpressionString());
+			}
+		}
+
+		if (toolTipText != null) {
+			if (toolTipText.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOOL_TIP_TEXT, toolTipText);
+
+			} else {
+				component.setToolTipText(toolTipText.getExpressionString());
+			}
 		}
 
 		if (tabIndex != null) {
@@ -402,17 +439,35 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (unlockedClientAttributeNames != null) {
-			if (unlockedClientAttributeNames.isLiteralText()==false) {
-				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+		if (x != null) {
+			if (x.isLiteralText()==false) {
+				component.setValueExpression(Properties.X, x);
 
 			} else {
-				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
+				component.setX(x.getExpressionString());
 			}
 		}
 
-		if (propertyChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		if (y != null) {
+			if (y.isLiteralText()==false) {
+				component.setValueExpression(Properties.Y, y);
+
+			} else {
+				component.setY(y.getExpressionString());
+			}
+		}
+
+		if (lookId != null) {
+			if (lookId.isLiteralText()==false) {
+				component.setValueExpression(Properties.LOOK_ID, lookId);
+
+			} else {
+				component.setLookId(lookId.getExpressionString());
+			}
+		}
+
+		if (validationListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
 		}
 
 		if (marginBottom != null) {
@@ -451,64 +506,6 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (userEventListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
-		}
-
-		if (x != null) {
-			if (x.isLiteralText()==false) {
-				component.setValueExpression(Properties.X, x);
-
-			} else {
-				component.setX(x.getExpressionString());
-			}
-		}
-
-		if (y != null) {
-			if (y.isLiteralText()==false) {
-				component.setValueExpression(Properties.Y, y);
-
-			} else {
-				component.setY(y.getExpressionString());
-			}
-		}
-
-		if (styleClass != null) {
-			if (styleClass.isLiteralText()==false) {
-				component.setValueExpression(Properties.STYLE_CLASS, styleClass);
-
-			} else {
-				component.setStyleClass(styleClass.getExpressionString());
-			}
-		}
-
-		if (lookId != null) {
-			if (lookId.isLiteralText()==false) {
-				component.setValueExpression(Properties.LOOK_ID, lookId);
-
-			} else {
-				component.setLookId(lookId.getExpressionString());
-			}
-		}
-
-		if (width != null) {
-			if (width.isLiteralText()==false) {
-				component.setValueExpression(Properties.WIDTH, width);
-
-			} else {
-				component.setWidth(width.getExpressionString());
-			}
-		}
-
-		if (height != null) {
-			if (height.isLiteralText()==false) {
-				component.setValueExpression(Properties.HEIGHT, height);
-
-			} else {
-				component.setHeight(height.getExpressionString());
-			}
-		}
-
 		if (textAlignment != null) {
 			if (textAlignment.isLiteralText()==false) {
 				component.setValueExpression(Properties.TEXT_ALIGNMENT, textAlignment);
@@ -518,13 +515,8 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (accessKey != null) {
-			if (accessKey.isLiteralText()==false) {
-				component.setValueExpression(Properties.ACCESS_KEY, accessKey);
-
-			} else {
-				component.setAccessKey(accessKey.getExpressionString());
-			}
+		if (userEventListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (waiRole != null) {
@@ -536,16 +528,25 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (initListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
-		}
-
 		if (hiddenMode != null) {
 			if (hiddenMode.isLiteralText()==false) {
 				component.setValueExpression(Properties.HIDDEN_MODE, hiddenMode);
 
 			} else {
 				component.setHiddenMode(hiddenMode.getExpressionString());
+			}
+		}
+
+		if (propertyChangeListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		}
+
+		if (accessKey != null) {
+			if (accessKey.isLiteralText()==false) {
+				component.setValueExpression(Properties.ACCESS_KEY, accessKey);
+
+			} else {
+				component.setAccessKey(accessKey.getExpressionString());
 			}
 		}
 
@@ -576,43 +577,43 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
-		helpMessage = null;
-		helpURL = null;
-		toolTipText = null;
+		width = null;
+		height = null;
+		visible = null;
+		mouseOutListeners = null;
+		mouseOverListeners = null;
+		disabled = null;
+		unlockedClientAttributeNames = null;
 		blurListeners = null;
 		focusListeners = null;
+		errorListeners = null;
 		backgroundColor = null;
 		foregroundColor = null;
-		visible = null;
-		errorListeners = null;
-		disabled = null;
-		validationListeners = null;
+		styleClass = null;
 		fontBold = null;
 		fontItalic = null;
 		fontName = null;
 		fontSize = null;
 		fontUnderline = null;
-		mouseOutListeners = null;
-		mouseOverListeners = null;
+		initListeners = null;
+		helpMessage = null;
+		helpURL = null;
+		toolTipText = null;
 		tabIndex = null;
-		unlockedClientAttributeNames = null;
-		propertyChangeListeners = null;
+		x = null;
+		y = null;
+		lookId = null;
+		validationListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;
 		marginTop = null;
-		userEventListeners = null;
-		x = null;
-		y = null;
-		styleClass = null;
-		lookId = null;
-		width = null;
-		height = null;
 		textAlignment = null;
-		accessKey = null;
+		userEventListeners = null;
 		waiRole = null;
-		initListeners = null;
 		hiddenMode = null;
+		propertyChangeListeners = null;
+		accessKey = null;
 		margins = null;
 		immediate = null;
 		value = null;

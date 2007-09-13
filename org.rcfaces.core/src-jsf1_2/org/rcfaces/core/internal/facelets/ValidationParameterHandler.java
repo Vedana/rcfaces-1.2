@@ -45,7 +45,7 @@ public class ValidationParameterHandler extends TagHandler {
             return;
         }
 
-        boolean clientSide = value.getBoolean(ctx);
+        boolean clientSide = this.clientSide.getBoolean(ctx);
 
         IValidationParameters clientDataCapability = (IValidationParameters) parent;
 

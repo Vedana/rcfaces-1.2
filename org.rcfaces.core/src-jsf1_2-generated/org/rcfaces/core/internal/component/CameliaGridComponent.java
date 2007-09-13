@@ -18,11 +18,11 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.rcfaces.core.internal.tools.GridTools;
-import javax.faces.component.NamingContainer;
 import javax.faces.model.DataModel;
-import java.util.HashSet;
 import java.util.Arrays;
+import javax.faces.component.NamingContainer;
+import org.rcfaces.core.internal.tools.GridTools;
+import java.util.HashSet;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
@@ -434,7 +434,7 @@ public abstract class CameliaGridComponent extends javax.faces.component.UICompo
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait rÃ©fÃ©rence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

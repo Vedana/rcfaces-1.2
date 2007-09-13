@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.faces.convert.Converter;
 
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 
 /**
@@ -25,7 +26,7 @@ public class TextPositionConverter extends HorizontalTextPositionConverter {
     private static final String BOTTOM_POSITION_NAME = "bottom";
 
     private static final Integer DEFAULT_POSITION = new Integer(
-            ITextPositionCapability.DEFAULT_POSITION);
+            IHorizontalTextPositionCapability.DEFAULT_POSITION);
 
     private static Map TEXT_POSITIONS = new HashMap(HORIZONTAL_TEXT_POSITIONS);
     static {

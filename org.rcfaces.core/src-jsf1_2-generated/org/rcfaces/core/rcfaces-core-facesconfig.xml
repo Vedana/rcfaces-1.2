@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 <faces-config>
-	<application>
-		<state-manager>org.rcfaces.core.util.ViewSessionPatchStateManager</state-manager>
-		<locale-config/>
-	</application>
-	<factory />
 	<component>
 		<component-type>org.rcfaces.core.accelerator</component-type>
 		<component-class>org.rcfaces.core.component.AcceleratorComponent</component-class>
@@ -331,6 +326,10 @@
 		<component-class>org.rcfaces.core.component.TreeComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.itemsList</component-type>
+		<component-class>org.rcfaces.core.component.ItemsListComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.treeNode</component-type>
 		<component-class>org.rcfaces.core.component.TreeNodeComponent</component-class>
 	</component>
@@ -341,6 +340,10 @@
 	<component>
 		<component-type>org.rcfaces.core.service</component-type>
 		<component-class>org.rcfaces.core.component.ServiceComponent</component-class>
+	</component>
+	<component>
+		<component-type>javax.faces.HtmlOutputText</component-type>
+		<component-class>org.rcfaces.core.internal.component.AsyncHtmlOutputText</component-class>
 	</component>
 	<converter>
 		<converter-id>org.rcfaces.Byte</converter-id>

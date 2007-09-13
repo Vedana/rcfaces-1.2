@@ -1,12 +1,13 @@
 package org.rcfaces.core.internal.taglib;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.MenuCheckItemComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.MenuCheckItemComponent;
+import javax.faces.component.UIViewRoot;
 
 public class MenuCheckItemTag extends MenuItemTag implements Tag {
 

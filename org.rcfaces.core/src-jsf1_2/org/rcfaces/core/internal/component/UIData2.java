@@ -210,10 +210,8 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
                 return first;
             }
             return (value.intValue());
-        } else {
-            return (this.first);
-        }
-
+        } 
+        return (this.first);
     }
 
     /**
@@ -485,10 +483,8 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
                 return rows;
             }
             return (value.intValue());
-        } else {
-            return (this.rows);
         }
-
+        return (this.rows);
     }
 
     /**
@@ -636,10 +632,8 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         ValueExpression vb = getValueExpression("value");
         if (vb != null) {
             return (vb.getValue(getFacesContext().getELContext()));
-        } else {
-            return (null);
         }
-
+        return (null);
     }
 
     /**
@@ -715,10 +709,8 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         String baseClientId = super.getClientId(context);
         if (rowIndex >= 0) {
             return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
-        } else {
-            return (baseClientId);
         }
-
+        return (baseClientId);
     }
 
     /**
@@ -1518,6 +1510,8 @@ class SavedState implements StateHolder {
 
 // Private class to wrap an event with a row index
 class WrapperEvent extends FacesEvent {
+
+     private static final long serialVersionUID = -8001741843179328047L;
 
     public WrapperEvent(UIComponent component, FacesEvent event, int rowIndex) {
         super(component);

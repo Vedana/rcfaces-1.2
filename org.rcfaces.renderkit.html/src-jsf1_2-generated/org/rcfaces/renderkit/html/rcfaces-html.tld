@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN" "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
-<taglib>
-	<tlib-version>1.0</tlib-version>
-	<jsp-version>1.2</jsp-version>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd" version="2.1">
+	<tlib-version>1.2</tlib-version>
 	<short-name>vh</short-name>
 	<uri>http://rcfaces.org/html</uri>
 	<display-name>RCFaces HTML components</display-name>
@@ -19,117 +17,153 @@ A set of components specific to the html render-kit.
 		<p>It <b>must</b> be the first tag for a page.</p>
 ]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<deferred-value>
+				<type>javax.faces.component.UIComponent</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>base</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value indicating the base HRef. If the key word "context" is used the base HRef is calculated from the context.
 ]]></description>
+			<name>base</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>title</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the title for the document.
 ]]></description>
+			<name>title</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>favoriteImageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url string pointing to the image used for a bookmark.
 ]]></description>
+			<name>favoriteImageURL</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>disabledScriptPageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url string pointing to a page shown if scripts are not enabled on the browser.
 ]]></description>
+			<name>disabledScriptPageURL</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>disabledCookiesPageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value that inhibits cookies for the page or not.
 ]]></description>
+			<name>disabledCookiesPageURL</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>invalidBrowserPageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url pointing to the page to show if the browser is not supported.
 ]]></description>
+			<name>invalidBrowserPageURL</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>literalLocale</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>java.util.Locale</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>literalTimeZone</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>java.util.TimeZone</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>disabledIEImageBar</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value specifying wether the "image Bar" (contextual menu for images) in Internet Explorer should be hidden.
 ]]></description>
+			<name>disabledIEImageBar</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>disableCache</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value that force disabled cache for the page or not.
 ]]></description>
+			<name>disableCache</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>disableContextMenu</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value that hide context menu for the page or not.
 ]]></description>
+			<name>disableContextMenu</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>renderBaseTag</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value specifying if the HTML BASE tag must be generated.
 ]]></description>
+			<name>renderBaseTag</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>clientMessageIdFilter</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>waiRolesNS</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>clientValidation</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 	</tag>
 	<tag>
@@ -140,62 +174,78 @@ A boolean value specifying if the HTML BASE tag must be generated.
 Specifies includes and required javascript classes.
 ]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<deferred-value>
+				<type>javax.faces.component.UIComponent</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>text</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
+			<name>text</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>src</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
+			<name>src</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>srcCharSet</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value sprecifying the charset associated to the "src" files.
 ]]></description>
+			<name>srcCharSet</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>requiredFiles</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying a list of javascript files to include.
 ]]></description>
+			<name>requiredFiles</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>requiredClasses</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying a list of javascript classes to include.
 ]]></description>
+			<name>requiredClasses</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 	</tag>
 	<tag>
@@ -206,105 +256,131 @@ A string value specifying a list of javascript classes to include.
 Css style
 ]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<deferred-value>
+				<type>javax.faces.component.UIComponent</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>text</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
+			<name>text</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>src</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
+			<name>src</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>srcCharSet</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value sprecifying the charset associated to the "src" files.
 ]]></description>
+			<name>srcCharSet</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 	</tag>
 	<tag>
-		<name>loadClientBundle</name>
-		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadClientBundleTag</tag-class>
+		<name>loadBundle</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadBundleTag</tag-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
-Loads a property bundle on the client side.
-]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<deferred-value>
+				<type>javax.faces.component.UIComponent</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>bundleName</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the name to be used on the client side to access the resource bundle.
 ]]></description>
+			<name>bundleName</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>baseName</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 Base name of the resource bundle to be loaded.
 		A string indicating the fully qualified name of a resources bundle (property file).
 ]]></description>
+			<name>baseName</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>serverSide</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value indicating wether the resource is available on the server side.
-]]></description>
+			<name>side</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>serverScope</name>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>override</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 	</tag>
 	<tag>
@@ -312,35 +388,45 @@ A boolean value indicating wether the resource is available on the server side.
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.NameSpaceTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<deferred-value>
+				<type>javax.faces.component.UIComponent</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>uri</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 		<attribute>
 			<name>prefix</name>
-			<rtexprvalue>true</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
 		</attribute>
 	</tag>
 </taglib>

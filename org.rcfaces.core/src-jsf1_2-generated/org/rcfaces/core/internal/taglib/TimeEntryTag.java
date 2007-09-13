@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.TimeEntryComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.TimeEntryComponent;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TimeEntryTag extends AbstractInputTag implements Tag {
 
@@ -206,7 +207,7 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (valueChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
 		}
 
 		if (focusStyleClass != null) {
@@ -219,7 +220,7 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (readOnly != null) {

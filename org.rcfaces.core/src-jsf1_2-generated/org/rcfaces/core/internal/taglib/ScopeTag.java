@@ -1,26 +1,32 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.ScopeComponent;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.core.component.ScopeComponent;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ScopeTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ScopeTag.class);
 
+	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	public String getComponentType() {
 		return ScopeComponent.COMPONENT_TYPE;
+	}
+
+	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
 	}
 
 	public final void setScopeValue(ValueExpression scopeValue) {
@@ -36,6 +42,7 @@ public class ScopeTag extends CameliaTag implements Tag {
 			if (ScopeComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 		}
@@ -51,8 +58,22 @@ public class ScopeTag extends CameliaTag implements Tag {
 		ScopeComponent component = (ScopeComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
+		if (scopeSaveValue != null) {
+			if (scopeSaveValue.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue.getExpressionString()));
+			}
+		}
+
 		if (scopeValue != null) {
+			if (scopeValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SCOPE_VALUE, scopeValue);
+
+			} else {
+				component.setScopeValue(scopeValue.getExpressionString());
+			}
 		}
 
 		if (scopeVar != null) {
@@ -66,6 +87,7 @@ public class ScopeTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 

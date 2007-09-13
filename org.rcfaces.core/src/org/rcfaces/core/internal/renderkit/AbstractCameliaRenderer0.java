@@ -16,7 +16,6 @@ import javax.faces.render.Renderer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 
@@ -24,15 +23,13 @@ import org.rcfaces.core.internal.tools.ValuesTools;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractCameliaRenderer extends Renderer {
+public abstract class AbstractCameliaRenderer0 extends Renderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
-            .getLog(AbstractCameliaRenderer.class);
+            .getLog(AbstractCameliaRenderer0.class);
 
     private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
-
-    private static final String VARIABLE_SCOPE_PROPERTY = "camelia.VARIABLE_SCOPE";
 
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
@@ -61,31 +58,8 @@ public abstract class AbstractCameliaRenderer extends Renderer {
         }
     }
 
-    protected void encodeBegin(IComponentWriter writer) throws WriterException {
-        UIComponent component = writer.getComponentRenderContext()
-                .getComponent();
-        if ((component instanceof IVariableScopeCapability) == false) {
-            return;
-        }
-
-        IVariableScopeCapability variableScopeCapability = (IVariableScopeCapability) component;
-
-        String var = variableScopeCapability.getScopeVar();
-        if (var == null || var.length() < 1) {
-            return;
-        }
-
-        Object valueBinding = variableScopeCapability.getScopeValue();
-        if (valueBinding == null) {
-            return;
-        }
-
-        writer.getComponentRenderContext().getRenderContext().pushScopeVar(var,
-                valueBinding);
-
-        writer.getComponentRenderContext().setAttribute(
-                VARIABLE_SCOPE_PROPERTY, var);
-    }
+    protected abstract void encodeBegin(IComponentWriter writer)
+            throws WriterException;
 
     protected abstract IRenderContext getRenderContext(FacesContext context);
 
@@ -124,8 +98,9 @@ public abstract class AbstractCameliaRenderer extends Renderer {
             // En jsf 1.2 nous sommes forcement en parcours d'arbre
             return true;
         }
-        
-        // Jsf 1.1 : on doit distinguer d'un parcours par TAG ou par programmation
+
+        // Jsf 1.1 : on doit distinguer d'un parcours par TAG ou par
+        // programmation
 
         if (AsyncModeTools.isTagProcessor(null)) {
             // Nous sommes en mode TAG, c'est le tag qui détourne le flux.
@@ -173,15 +148,6 @@ public abstract class AbstractCameliaRenderer extends Renderer {
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
-
-        String scopeVar = (String) writer.getComponentRenderContext()
-                .getAttribute(VARIABLE_SCOPE_PROPERTY);
-        if (scopeVar == null) {
-            return;
-        }
-
-        writer.getComponentRenderContext().getRenderContext().popScopeVar(
-                scopeVar);
     }
 
     protected abstract IRequestContext getRequestContext(FacesContext context);

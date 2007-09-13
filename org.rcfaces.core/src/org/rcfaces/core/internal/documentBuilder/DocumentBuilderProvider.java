@@ -3,7 +3,6 @@
  */
 package org.rcfaces.core.internal.documentBuilder;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -19,11 +18,11 @@ import org.w3c.dom.Document;
 public class DocumentBuilderProvider implements IDocumentBuilderProvider {
     private static final String REVISION = "$Revision$";
 
-    public Document parse(Reader reader) throws IOException {
+    public Document parse(Reader reader) {
         throw new FacesException("Not implemented !");
     }
 
-    public void serialize(Writer writer, Document document) throws IOException {
+    public void serialize(Writer writer, Document document) {
         throw new FacesException("Not implemented !");
     }
 

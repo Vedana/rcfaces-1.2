@@ -5,7 +5,7 @@
 
 /**
  * 
- * @class f_combo extends f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider
+ * @class f_combo extends f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider, fa_immediate
  * @author  Joel Merlin & Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -584,4 +584,10 @@ var __members = {
 	}
 }
 
-new f_class("f_combo", null, __statics, __members, f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider);
+
+new f_class("f_combo", {
+	extend: f_input,
+	aspects: [ fa_required, fa_filterProperties, fa_commands, fa_selectionProvider, fa_immediate ],
+	members: __members,
+	statics: __statics
+});

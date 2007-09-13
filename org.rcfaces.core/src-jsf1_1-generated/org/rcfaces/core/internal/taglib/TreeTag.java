@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.TreeComponent;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.TreeComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TreeTag extends AbstractInputTag implements Tag {
 
@@ -196,104 +197,52 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.expandedValues = expandedValues;
 	}
 
-	public final String getDefaultImageURL() {
-		return defaultImageURL;
-	}
-
 	public final void setDefaultImageURL(String defaultImageURL) {
 		this.defaultImageURL = defaultImageURL;
-	}
-
-	public final String getDefaultSelectedImageURL() {
-		return defaultSelectedImageURL;
 	}
 
 	public final void setDefaultSelectedImageURL(String defaultSelectedImageURL) {
 		this.defaultSelectedImageURL = defaultSelectedImageURL;
 	}
 
-	public final String getDefaultExpandedImageURL() {
-		return defaultExpandedImageURL;
-	}
-
 	public final void setDefaultExpandedImageURL(String defaultExpandedImageURL) {
 		this.defaultExpandedImageURL = defaultExpandedImageURL;
-	}
-
-	public final String getDefaultDisabledImageURL() {
-		return defaultDisabledImageURL;
 	}
 
 	public final void setDefaultDisabledImageURL(String defaultDisabledImageURL) {
 		this.defaultDisabledImageURL = defaultDisabledImageURL;
 	}
 
-	public final String getDefaultLeafImageURL() {
-		return defaultLeafImageURL;
-	}
-
 	public final void setDefaultLeafImageURL(String defaultLeafImageURL) {
 		this.defaultLeafImageURL = defaultLeafImageURL;
-	}
-
-	public final String getDefaultSelectedLeafImageURL() {
-		return defaultSelectedLeafImageURL;
 	}
 
 	public final void setDefaultSelectedLeafImageURL(String defaultSelectedLeafImageURL) {
 		this.defaultSelectedLeafImageURL = defaultSelectedLeafImageURL;
 	}
 
-	public final String getDefaultExpandedLeafImageURL() {
-		return defaultExpandedLeafImageURL;
-	}
-
 	public final void setDefaultExpandedLeafImageURL(String defaultExpandedLeafImageURL) {
 		this.defaultExpandedLeafImageURL = defaultExpandedLeafImageURL;
-	}
-
-	public final String getDefaultDisabledLeafImageURL() {
-		return defaultDisabledLeafImageURL;
 	}
 
 	public final void setDefaultDisabledLeafImageURL(String defaultDisabledLeafImageURL) {
 		this.defaultDisabledLeafImageURL = defaultDisabledLeafImageURL;
 	}
 
-	public final String getHideRootExpandSign() {
-		return hideRootExpandSign;
-	}
-
 	public final void setHideRootExpandSign(String hideRootExpandSign) {
 		this.hideRootExpandSign = hideRootExpandSign;
-	}
-
-	public final String getCursorValue() {
-		return cursorValue;
 	}
 
 	public final void setCursorValue(String cursorValue) {
 		this.cursorValue = cursorValue;
 	}
 
-	public final String getExpansionUseValue() {
-		return expansionUseValue;
-	}
-
 	public final void setExpansionUseValue(String expansionUseValue) {
 		this.expansionUseValue = expansionUseValue;
 	}
 
-	public final String getClientSelectionFullState() {
-		return clientSelectionFullState;
-	}
-
 	public final void setClientSelectionFullState(String clientSelectionFullState) {
 		this.clientSelectionFullState = clientSelectionFullState;
-	}
-
-	public final String getClientCheckFullState() {
-		return clientCheckFullState;
 	}
 
 	public final void setClientCheckFullState(String clientCheckFullState) {

@@ -1,25 +1,25 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import java.lang.String;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IBackgroundImageCapability;
+import javax.el.ValueExpression;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
-import javax.el.ValueExpression;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
 
 /**
  * <p>The Box Component is a container.</p>
@@ -54,7 +54,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","asyncRenderMode","scopeSaveValue","mouseOverListener","backgroundImageVerticalPosition","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
 	}
 
 	public BoxComponent() {
@@ -259,17 +259,17 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 
@@ -303,15 +303,38 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
-	public javax.faces.el.ValueBinding getScopeValue() {
+	public boolean isScopeSaveValue() {
+		return isScopeSaveValue(null);
+	}
+
+	/**
+	 * See {@link #isScopeSaveValue() isScopeSaveValue()} for more details
+	 */
+	public boolean isScopeSaveValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SCOPE_SAVE_VALUE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeSaveValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeSaveValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_SAVE_VALUE);
+	}
+
+	public void setScopeSaveValue(boolean scopeSaveValue) {
+		engine.setProperty(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+	}
+
+	public java.lang.Object getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValueExpressionProperty(Properties.SCOPE_VALUE);
+	public java.lang.Object getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SCOPE_VALUE, facesContext);
 	}
 
 	/**
@@ -322,7 +345,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return engine.isPropertySetted(Properties.SCOPE_VALUE);
 	}
 
-	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	public void setScopeValue(java.lang.Object scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 

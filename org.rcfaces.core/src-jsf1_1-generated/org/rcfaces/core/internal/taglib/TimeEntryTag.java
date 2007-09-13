@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.TimeEntryComponent;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.TimeEntryComponent;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TimeEntryTag extends AbstractInputTag implements Tag {
 
@@ -166,80 +167,40 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		this.alternateText = alternateText;
 	}
 
-	public final String getAutoCompletion() {
-		return autoCompletion;
-	}
-
 	public final void setAutoCompletion(String autoCompletion) {
 		this.autoCompletion = autoCompletion;
-	}
-
-	public final String getTime() {
-		return time;
 	}
 
 	public final void setTime(String time) {
 		this.time = time;
 	}
 
-	public final String getMinTime() {
-		return minTime;
-	}
-
 	public final void setMinTime(String minTime) {
 		this.minTime = minTime;
-	}
-
-	public final String getDefaultTime() {
-		return defaultTime;
 	}
 
 	public final void setDefaultTime(String defaultTime) {
 		this.defaultTime = defaultTime;
 	}
 
-	public final String getMaxTime() {
-		return maxTime;
-	}
-
 	public final void setMaxTime(String maxTime) {
 		this.maxTime = maxTime;
-	}
-
-	public final String getTimeFormat() {
-		return timeFormat;
 	}
 
 	public final void setTimeFormat(String timeFormat) {
 		this.timeFormat = timeFormat;
 	}
 
-	public final String getHourStep() {
-		return hourStep;
-	}
-
 	public final void setHourStep(String hourStep) {
 		this.hourStep = hourStep;
-	}
-
-	public final String getMinuteStep() {
-		return minuteStep;
 	}
 
 	public final void setMinuteStep(String minuteStep) {
 		this.minuteStep = minuteStep;
 	}
 
-	public final String getSecondStep() {
-		return secondStep;
-	}
-
 	public final void setSecondStep(String secondStep) {
 		this.secondStep = secondStep;
-	}
-
-	public final String getMillisStep() {
-		return millisStep;
 	}
 
 	public final void setMillisStep(String millisStep) {

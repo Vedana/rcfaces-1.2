@@ -342,11 +342,11 @@ public abstract class SourceRepository {
         }
 
         if (canUseETag) {
-            etag = ConfiguredHttpServlet.computeETag(sourceBuffer);
+            etag = ExtendedHttpServlet.computeETag(sourceBuffer);
         }
 
         if (canUseHash) {
-            hash = ConfiguredHttpServlet.computeHash(sourceBuffer);
+            hash = ExtendedHttpServlet.computeHash(sourceBuffer);
         }
 
         if (canUseGzip && sourceBuffer.length > 0) {

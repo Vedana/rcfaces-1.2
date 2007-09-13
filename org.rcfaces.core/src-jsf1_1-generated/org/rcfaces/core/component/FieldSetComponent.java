@@ -1,24 +1,24 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.IImageCapability;
 
 /**
  * <p>The fieldSet Component is a container with a title (text and/or picture).</p>
@@ -53,7 +53,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","fontName","text","borderType","fontBold","fontSize","textDirection","fontItalic","verticalAlignment","fontUnderline","scopeVar","textAlignment","scopeValue","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","imageHeight","scopeValue","imageURL","verticalAlignment","scopeSaveValue","fontSize","fontItalic","textDirection","fontBold","text","scopeVar","textAlignment","imageWidth","borderType","fontName"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -379,15 +379,38 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public javax.faces.el.ValueBinding getScopeValue() {
+	public boolean isScopeSaveValue() {
+		return isScopeSaveValue(null);
+	}
+
+	/**
+	 * See {@link #isScopeSaveValue() isScopeSaveValue()} for more details
+	 */
+	public boolean isScopeSaveValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SCOPE_SAVE_VALUE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeSaveValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeSaveValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_SAVE_VALUE);
+	}
+
+	public void setScopeSaveValue(boolean scopeSaveValue) {
+		engine.setProperty(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+	}
+
+	public java.lang.Object getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
+	public java.lang.Object getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SCOPE_VALUE, facesContext);
 	}
 
 	/**
@@ -398,7 +421,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 		return engine.isPropertySetted(Properties.SCOPE_VALUE);
 	}
 
-	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	public void setScopeValue(java.lang.Object scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 

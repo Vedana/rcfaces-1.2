@@ -1,19 +1,20 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.servlet.jsp.JspException;
-import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.taglib.CameliaTag;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
-import org.rcfaces.renderkit.html.component.JavaScriptComponent;
+import org.rcfaces.core.internal.taglib.CameliaTag;
+import javax.servlet.jsp.JspException;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
 import org.apache.commons.logging.Log;
-import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.component.capability.ITextCapability;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 
 public class JavaScriptTag extends CameliaTag implements Tag {
 
@@ -37,32 +38,16 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 		this.text = text;
 	}
 
-	public final String getSrc() {
-		return src;
-	}
-
 	public final void setSrc(String src) {
 		this.src = src;
-	}
-
-	public final String getSrcCharSet() {
-		return srcCharSet;
 	}
 
 	public final void setSrcCharSet(String srcCharSet) {
 		this.srcCharSet = srcCharSet;
 	}
 
-	public final String getRequiredFiles() {
-		return requiredFiles;
-	}
-
 	public final void setRequiredFiles(String requiredFiles) {
 		this.requiredFiles = requiredFiles;
-	}
-
-	public final String getRequiredClasses() {
-		return requiredClasses;
 	}
 
 	public final void setRequiredClasses(String requiredClasses) {

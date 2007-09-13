@@ -120,7 +120,7 @@ public class ExpirationDate implements Serializable {
             d = System.currentTimeMillis() + expiresDelay;
 
             if (expiresMaxAge != null) {
-                response.setHeader(ConfiguredHttpServlet.HTTP_CACHE_CONTROL,
+                response.setHeader(ExtendedHttpServlet.HTTP_CACHE_CONTROL,
                         expiresMaxAge);
             }
 
@@ -138,7 +138,7 @@ public class ExpirationDate implements Serializable {
                         + ")");
             }
 
-            response.setDateHeader(ConfiguredHttpServlet.HTTP_EXPIRES, d);
+            response.setDateHeader(ExtendedHttpServlet.HTTP_EXPIRES, d);
 
         } else if (LOG.isDebugEnabled()) {
             LOG.debug("No expiration defined");

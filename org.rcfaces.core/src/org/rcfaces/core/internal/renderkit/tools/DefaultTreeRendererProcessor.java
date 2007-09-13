@@ -61,7 +61,7 @@ public class DefaultTreeRendererProcessor extends AbstractTreeRendererProcessor 
         StateManager stateManager = facesContext.getApplication()
                 .getStateManager();
 
-        SerializedView serializedView = stateManager
+        Object serializedView = stateManager
                 .saveSerializedView(facesContext);
 
         String saveValue = StateFieldMarkerTools.getStateValue(facesContext,

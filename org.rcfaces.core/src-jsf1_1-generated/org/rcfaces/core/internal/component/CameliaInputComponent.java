@@ -17,13 +17,14 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.event.FacesListener;
+import java.lang.String;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import java.util.HashSet;
-import java.lang.String;
-import java.util.Arrays;
+import java.lang.Object;
 import javax.faces.event.ValueChangeEvent;
+import java.util.Arrays;
+import javax.faces.event.FacesListener;
+import java.util.HashSet;
 import org.rcfaces.core.internal.capability.ISubmittedExternalValue;
 
 
@@ -59,7 +60,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 	private static final Log LOG = LogFactory.getLog(CameliaInputComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","converter"}));
 
 	protected transient IComponentEngine engine;
 

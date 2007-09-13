@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.BoxComponent;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.BoxComponent;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class BoxTag extends AbstractBasicTag implements Tag {
 
@@ -28,6 +29,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private ValueExpression initListeners;
 	private ValueExpression loadListeners;
 	private ValueExpression asyncRenderMode;
+	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression horizontalScroll;
@@ -80,6 +82,10 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
+	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
+	}
+
 	public final void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
@@ -108,6 +114,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
@@ -180,19 +187,19 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		}
 
 		if (mouseOutListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (initListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (loadListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 
 		if (asyncRenderMode != null) {
@@ -204,8 +211,22 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
+		if (scopeSaveValue != null) {
+			if (scopeSaveValue.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue.getExpressionString()));
+			}
+		}
+
 		if (scopeValue != null) {
+			if (scopeValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SCOPE_VALUE, scopeValue);
+
+			} else {
+				component.setScopeValue(scopeValue.getExpressionString());
+			}
 		}
 
 		if (scopeVar != null) {
@@ -248,6 +269,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		initListeners = null;
 		loadListeners = null;
 		asyncRenderMode = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 		horizontalScroll = null;

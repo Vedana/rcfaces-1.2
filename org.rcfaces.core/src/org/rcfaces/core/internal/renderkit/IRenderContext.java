@@ -6,7 +6,6 @@ package org.rcfaces.core.internal.renderkit;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -44,7 +43,7 @@ public interface IRenderContext {
 
     void encodeEnd(UIComponent component);
 
-    void pushScopeVar(String varName, Object valueExpression);
+    void pushScopeVar(String varName, Object value, Object valueBinding, boolean valueMustBeStored);
 
     void popScopeVar(String varName);
 }

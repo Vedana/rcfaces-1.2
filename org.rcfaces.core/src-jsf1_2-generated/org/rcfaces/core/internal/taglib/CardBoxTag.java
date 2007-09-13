@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.CardBoxComponent;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class CardBoxTag extends AbstractInputTag implements Tag {
 
@@ -20,6 +21,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 	private ValueExpression selectionListeners;
 	private ValueExpression asyncRenderMode;
 	private ValueExpression preference;
+	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	public String getComponentType() {
@@ -38,6 +40,10 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		this.preference = preference;
 	}
 
+	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
+	}
+
 	public final void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
@@ -53,6 +59,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 			}
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
 			LOG.debug("  preference='"+preference+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 		}
@@ -69,7 +76,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 
 		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (asyncRenderMode != null) {
@@ -85,8 +92,22 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.PREFERENCE, preference);
 		}
 
+		if (scopeSaveValue != null) {
+			if (scopeSaveValue.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue.getExpressionString()));
+			}
+		}
+
 		if (scopeValue != null) {
+			if (scopeValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SCOPE_VALUE, scopeValue);
+
+			} else {
+				component.setScopeValue(scopeValue.getExpressionString());
+			}
 		}
 
 		if (scopeVar != null) {
@@ -103,6 +124,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		selectionListeners = null;
 		asyncRenderMode = null;
 		preference = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 

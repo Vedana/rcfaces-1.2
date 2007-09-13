@@ -89,14 +89,9 @@ public class BindingTools {
             }
         }
 
-        ValueBinding valueBinding = variableScopeCapability.getScopeValue();
-        if (valueBinding == null) {
-            return null;
-        }
-
         Map requestMap = facesContext.getExternalContext().getRequestMap();
 
-        Object ret = valueBinding.getValue(facesContext);
+        Object ret =  variableScopeCapability.getScopeValue();
         if (false) {
             /**
              * On peut pas mettre la valeur en cache !

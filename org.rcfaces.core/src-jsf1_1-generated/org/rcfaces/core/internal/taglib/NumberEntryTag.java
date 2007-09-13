@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.NumberEntryComponent;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.NumberEntryComponent;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class NumberEntryTag extends AbstractInputTag implements Tag {
 
@@ -157,80 +158,40 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 		this.alternateText = alternateText;
 	}
 
-	public final String getAutoCompletion() {
-		return autoCompletion;
-	}
-
 	public final void setAutoCompletion(String autoCompletion) {
 		this.autoCompletion = autoCompletion;
-	}
-
-	public final String getIntegerDigits() {
-		return integerDigits;
 	}
 
 	public final void setIntegerDigits(String integerDigits) {
 		this.integerDigits = integerDigits;
 	}
 
-	public final String getFractionDigits() {
-		return fractionDigits;
-	}
-
 	public final void setFractionDigits(String fractionDigits) {
 		this.fractionDigits = fractionDigits;
-	}
-
-	public final String getNumberFormat() {
-		return numberFormat;
 	}
 
 	public final void setNumberFormat(String numberFormat) {
 		this.numberFormat = numberFormat;
 	}
 
-	public final String getIntegerStep() {
-		return integerStep;
-	}
-
 	public final void setIntegerStep(String integerStep) {
 		this.integerStep = integerStep;
-	}
-
-	public final String getFractionStep() {
-		return fractionStep;
 	}
 
 	public final void setFractionStep(String fractionStep) {
 		this.fractionStep = fractionStep;
 	}
 
-	public final String getNumber() {
-		return number;
-	}
-
 	public final void setNumber(String number) {
 		this.number = number;
-	}
-
-	public final String getMinimum() {
-		return minimum;
 	}
 
 	public final void setMinimum(String minimum) {
 		this.minimum = minimum;
 	}
 
-	public final String getDefaultNumber() {
-		return defaultNumber;
-	}
-
 	public final void setDefaultNumber(String defaultNumber) {
 		this.defaultNumber = defaultNumber;
-	}
-
-	public final String getMaximum() {
-		return maximum;
 	}
 
 	public final void setMaximum(String maximum) {

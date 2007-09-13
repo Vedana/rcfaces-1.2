@@ -1,21 +1,21 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.iterator.ICardIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.CardBoxTools;
 import java.lang.String;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
+import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import javax.el.ValueExpression;
-import java.util.HashSet;
 import org.rcfaces.core.component.CardComponent;
-import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IPreferenceCapability;
+import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.iterator.ICardIterator;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.internal.tools.CardBoxTools;
 
 /**
  * <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
@@ -39,7 +39,7 @@ public class CardBoxComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeVar","preference","scopeValue","asyncRenderMode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeValue","scopeVar","scopeSaveValue","asyncRenderMode","preference"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -145,15 +145,38 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.PREFERENCE, preference);
 	}
 
-	public javax.faces.el.ValueBinding getScopeValue() {
+	public boolean isScopeSaveValue() {
+		return isScopeSaveValue(null);
+	}
+
+	/**
+	 * See {@link #isScopeSaveValue() isScopeSaveValue()} for more details
+	 */
+	public boolean isScopeSaveValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SCOPE_SAVE_VALUE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeSaveValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeSaveValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_SAVE_VALUE);
+	}
+
+	public void setScopeSaveValue(boolean scopeSaveValue) {
+		engine.setProperty(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+	}
+
+	public java.lang.Object getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValueExpressionProperty(Properties.SCOPE_VALUE);
+	public java.lang.Object getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SCOPE_VALUE, facesContext);
 	}
 
 	/**
@@ -164,7 +187,7 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		return engine.isPropertySetted(Properties.SCOPE_VALUE);
 	}
 
-	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	public void setScopeValue(java.lang.Object scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 

@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ExpandBarComponent;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.ExpandBarComponent;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
@@ -37,6 +38,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private String focusListeners;
 	private String selectionListeners;
 	private String loadListeners;
+	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
 	private String collapseEffect;
@@ -205,6 +207,14 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
+	public final String getScopeSaveValue() {
+		return scopeSaveValue;
+	}
+
+	public final void setScopeSaveValue(String scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
+	}
+
 	public final String getScopeValue() {
 		return scopeValue;
 	}
@@ -221,16 +231,8 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
-	public final String getCollapseEffect() {
-		return collapseEffect;
-	}
-
 	public final void setCollapseEffect(String collapseEffect) {
 		this.collapseEffect = collapseEffect;
-	}
-
-	public final String getCollapsedText() {
-		return collapsedText;
 	}
 
 	public final void setCollapsedText(String collapsedText) {
@@ -258,6 +260,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  groupName='"+groupName+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
@@ -452,9 +455,24 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 
+		if (scopeSaveValue != null) {
+			if (isValueReference(scopeSaveValue)) {
+				ValueBinding vb = application.createValueBinding(scopeSaveValue);
+				component.setValueBinding(Properties.SCOPE_SAVE_VALUE, vb);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue));
+			}
+		}
+
 		if (scopeValue != null) {
+			if (isValueReference(scopeValue)) {
 				ValueBinding vb = application.createValueBinding(scopeValue);
 				component.setValueBinding(Properties.SCOPE_VALUE, vb);
+
+			} else {
+				component.setScopeValue(scopeValue);
+			}
 		}
 
 		if (scopeVar != null) {
@@ -509,6 +527,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		focusListeners = null;
 		selectionListeners = null;
 		loadListeners = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 		collapseEffect = null;

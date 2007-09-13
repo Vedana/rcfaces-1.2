@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import org.rcfaces.core.component.AdditionalInformationComponent;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.component.AdditionalInformationComponent;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class AdditionalInformationTag extends CameliaTag implements Tag {
 
@@ -39,6 +40,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 	private String mouseOverListeners;
 	private String initListeners;
 	private String loadListeners;
+	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
 	private String margins;
@@ -222,6 +224,14 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
+	public final String getScopeSaveValue() {
+		return scopeSaveValue;
+	}
+
+	public final void setScopeSaveValue(String scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
+	}
+
 	public final String getScopeValue() {
 		return scopeValue;
 	}
@@ -236,10 +246,6 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 	public final void setScopeVar(String scopeVar) {
 		this.scopeVar = scopeVar;
-	}
-
-	public final String getMargins() {
-		return margins;
 	}
 
 	public final void setMargins(String margins) {
@@ -266,6 +272,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  height='"+height+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  margins='"+margins+"'");
@@ -461,9 +468,24 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 
+		if (scopeSaveValue != null) {
+			if (isValueReference(scopeSaveValue)) {
+				ValueBinding vb = application.createValueBinding(scopeSaveValue);
+				component.setValueBinding(Properties.SCOPE_SAVE_VALUE, vb);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue));
+			}
+		}
+
 		if (scopeValue != null) {
+			if (isValueReference(scopeValue)) {
 				ValueBinding vb = application.createValueBinding(scopeValue);
 				component.setValueBinding(Properties.SCOPE_VALUE, vb);
+
+			} else {
+				component.setScopeValue(scopeValue);
+			}
 		}
 
 		if (scopeVar != null) {
@@ -507,6 +529,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		mouseOverListeners = null;
 		initListeners = null;
 		loadListeners = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 		margins = null;

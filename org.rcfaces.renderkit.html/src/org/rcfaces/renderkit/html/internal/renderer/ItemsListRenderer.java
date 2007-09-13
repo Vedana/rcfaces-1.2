@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
@@ -14,6 +17,11 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ItemsListDecorator;
 
+/**
+ * 
+ * @author Frederic Lefevere (latest modification by $Author$)
+ * @version $Revision$ $Date$
+ */
 public class ItemsListRenderer extends AbstractSelectItemsRenderer {
     private static final String REVISION = "$Revision$";
 

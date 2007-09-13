@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import org.rcfaces.core.component.AdditionalInformationComponent;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.AdditionalInformationComponent;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class AdditionalInformationTag extends CameliaTag implements Tag {
 
@@ -39,6 +40,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 	private ValueExpression mouseOverListeners;
 	private ValueExpression initListeners;
 	private ValueExpression loadListeners;
+	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression margins;
@@ -134,6 +136,10 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
+	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
+	}
+
 	public final void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
@@ -166,6 +172,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  height='"+height+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  margins='"+margins+"'");
@@ -183,15 +190,15 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 
 		if (propertyChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (userEventListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (errorListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
 		if (waiRole != null) {
@@ -330,23 +337,37 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		}
 
 		if (mouseOutListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
 
 		if (mouseOverListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
 		}
 
 		if (initListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
 		if (loadListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+		}
+
+		if (scopeSaveValue != null) {
+			if (scopeSaveValue.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue.getExpressionString()));
+			}
 		}
 
 		if (scopeValue != null) {
+			if (scopeValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SCOPE_VALUE, scopeValue);
+
+			} else {
+				component.setScopeValue(scopeValue.getExpressionString());
+			}
 		}
 
 		if (scopeVar != null) {
@@ -389,6 +410,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		mouseOverListeners = null;
 		initListeners = null;
 		loadListeners = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 		margins = null;

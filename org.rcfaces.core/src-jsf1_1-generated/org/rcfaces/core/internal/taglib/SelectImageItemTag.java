@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.component.SelectImageItemComponent;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.SelectImageItemComponent;
+import javax.faces.application.Application;
 
 public class SelectImageItemTag extends CameliaTag implements Tag {
 
@@ -34,32 +35,16 @@ public class SelectImageItemTag extends CameliaTag implements Tag {
 		this.imageURL = imageURL;
 	}
 
-	public final String getItemValue() {
-		return itemValue;
-	}
-
 	public final void setItemValue(String itemValue) {
 		this.itemValue = itemValue;
-	}
-
-	public final String getItemDescription() {
-		return itemDescription;
 	}
 
 	public final void setItemDescription(String itemDescription) {
 		this.itemDescription = itemDescription;
 	}
 
-	public final String getItemLabel() {
-		return itemLabel;
-	}
-
 	public final void setItemLabel(String itemLabel) {
 		this.itemLabel = itemLabel;
-	}
-
-	public final String getItemDisabled() {
-		return itemDisabled;
 	}
 
 	public final void setItemDisabled(String itemDisabled) {

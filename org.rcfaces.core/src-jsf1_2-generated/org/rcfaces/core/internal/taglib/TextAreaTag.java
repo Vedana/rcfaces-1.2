@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.component.TextAreaComponent;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.TextAreaComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TextAreaTag extends AbstractInputTag implements Tag {
 
@@ -33,8 +34,8 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 	private ValueExpression maxTextLength;
 	private ValueExpression columnNumber;
 	private ValueExpression rowNumber;
-	private ValueExpression action;
 	private ValueExpression actionListeners;
+	private ValueExpression action;
 	public String getComponentType() {
 		return TextAreaComponent.COMPONENT_TYPE;
 	}
@@ -191,7 +192,7 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 		}
 
 		if (valueChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.VALUE_CHANGE_LISTENER_TYPE, valueChangeListeners);
 		}
 
 		if (focusStyleClass != null) {
@@ -240,7 +241,7 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (alternateText != null) {
@@ -280,11 +281,11 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 		}
 
 		if (action != null) {
-			ListenersTools.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
+			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
 		}
 	}
 

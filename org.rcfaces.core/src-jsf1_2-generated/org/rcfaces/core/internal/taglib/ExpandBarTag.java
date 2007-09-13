@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ExpandBarComponent;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.ExpandBarComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
@@ -37,6 +38,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private ValueExpression focusListeners;
 	private ValueExpression selectionListeners;
 	private ValueExpression loadListeners;
+	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression collapseEffect;
@@ -125,6 +127,10 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
+	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
+	}
+
 	public final void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
@@ -162,6 +168,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  groupName='"+groupName+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
@@ -324,23 +331,37 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		}
 
 		if (blurListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.BLUR_LISTENER_TYPE, blurListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.BLUR_LISTENER_TYPE, blurListeners);
 		}
 
 		if (focusListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
 		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (loadListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+		}
+
+		if (scopeSaveValue != null) {
+			if (scopeSaveValue.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue.getExpressionString()));
+			}
 		}
 
 		if (scopeValue != null) {
+			if (scopeValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SCOPE_VALUE, scopeValue);
+
+			} else {
+				component.setScopeValue(scopeValue.getExpressionString());
+			}
 		}
 
 		if (scopeVar != null) {
@@ -392,6 +413,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		focusListeners = null;
 		selectionListeners = null;
 		loadListeners = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 		collapseEffect = null;

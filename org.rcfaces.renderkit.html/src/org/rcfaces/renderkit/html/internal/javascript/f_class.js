@@ -545,6 +545,7 @@ var __statics = {
 	/**
 	 * @method private static final 
 	 * @window window
+	 * @dontInline f_class
 	 */
 	_DeclarePrototypeClass: function(classLoader, name, staticMembers, methods) {
 		if (!classLoader) {

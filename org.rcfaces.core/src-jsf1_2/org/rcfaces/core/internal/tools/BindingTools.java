@@ -6,11 +6,12 @@ package org.rcfaces.core.internal.tools;
 import java.util.Map;
 
 import javax.el.ELContext;
+import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
-import javax.faces.el.MethodBinding;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 
 import org.apache.commons.logging.Log;
@@ -31,6 +32,20 @@ public class BindingTools {
 
     public static Object resolveBinding(FacesContext facesContext, Object object) {
 
+        // La deserialisation génére cette classe !
+        if (object instanceof ValueBinding) {
+            if (facesContext == null) {
+                facesContext = FacesContext.getCurrentInstance();
+            }
+            object = ((ValueBinding) object).getValue(facesContext);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Get value of binding => " + object);
+            }
+
+            return object;
+        }
+        
         if (object instanceof ValueExpression) {
             if (facesContext == null) {
                 facesContext = FacesContext.getCurrentInstance();
@@ -46,8 +61,17 @@ public class BindingTools {
         return object;
     }
 
-    public static boolean isBindingExpression(String id) {
-        // TODO Auto-generated method stub
+    public static boolean isBindingExpression(String value) {
+        if (value.length() < 4) {
+            return false;
+        }
+
+        int pos = value.indexOf("#{");
+
+        if (pos >= 0 && pos < value.indexOf('}')) {
+            return true;
+        }
+
         return false;
     }
 
@@ -75,7 +99,8 @@ public class BindingTools {
 
         if (false) {
             /**
-             * On peut pas mettre la valeur en cache !
+             * On peut pas mettre la valeur en cache ! Car elle peut changer
+             * entre 2 appels !
              */
             Object ret = manager
                     .getTransientAttribute(ComponentTools.VARIABLE_SCOPE_VALUE);
@@ -93,14 +118,10 @@ public class BindingTools {
             }
         }
 
-        ValueExpression valueBinding = variableScopeCapability.getScopeValue();
-        if (valueBinding == null) {
-            return null;
-        }
+        Object ret = variableScopeCapability.getScopeValue();
 
         Map requestMap = facesContext.getExternalContext().getRequestMap();
 
-        Object ret = valueBinding.getValue(facesContext.getELContext());
         if (false) {
             /**
              * On peut pas mettre la valeur en cache !
@@ -125,11 +146,9 @@ public class BindingTools {
             UICommand component, ActionEvent facesEvent) {
 
         // Notify the specified action listener method (if any)
-        MethodBinding mb = component.getActionListener();
-        if (mb != null) {
-            mb.invoke(facesContext, new Object[] { facesEvent });
+        MethodExpression me = component.getActionExpression();
+        if (me != null) {
+            me.invoke(facesContext.getELContext(), new Object[] { facesEvent });
         }
-
     }
-
 }

@@ -1,16 +1,15 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractCommandComponent;
-import javax.faces.context.FacesContext;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
@@ -45,20 +44,6 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	public ButtonComponent(String componentId) {
 		this();
 		setId(componentId);
-	}
-
-	public Object getValue() {
-
-
-				return getValue(null);
-			
-	}
-
-	public Object getValue(FacesContext context) {
-
-
-				return engine.getValue(Properties.VALUE, context);
-			
 	}
 
 	public java.lang.String getText() {

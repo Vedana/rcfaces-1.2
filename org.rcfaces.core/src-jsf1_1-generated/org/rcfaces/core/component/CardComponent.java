@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.CardBoxTools;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.AbstractOutputComponent;
-import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.internal.tools.CardBoxTools;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 
 /**
  * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
@@ -28,7 +28,7 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalAlignment","scopeVar","textAlignment","scopeValue","loadListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment","scopeSaveValue"}));
 	}
 
 	public CardComponent() {
@@ -93,15 +93,38 @@ public class CardComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.VERTICAL_ALIGNMENT, verticalAlignment);
 	}
 
-	public javax.faces.el.ValueBinding getScopeValue() {
+	public boolean isScopeSaveValue() {
+		return isScopeSaveValue(null);
+	}
+
+	/**
+	 * See {@link #isScopeSaveValue() isScopeSaveValue()} for more details
+	 */
+	public boolean isScopeSaveValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SCOPE_SAVE_VALUE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "scopeSaveValue" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isScopeSaveValueSetted() {
+		return engine.isPropertySetted(Properties.SCOPE_SAVE_VALUE);
+	}
+
+	public void setScopeSaveValue(boolean scopeSaveValue) {
+		engine.setProperty(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+	}
+
+	public java.lang.Object getScopeValue() {
 		return getScopeValue(null);
 	}
 
 	/**
 	 * See {@link #getScopeValue() getScopeValue()} for more details
 	 */
-	public javax.faces.el.ValueBinding getScopeValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValueBindingProperty(Properties.SCOPE_VALUE);
+	public java.lang.Object getScopeValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SCOPE_VALUE, facesContext);
 	}
 
 	/**
@@ -112,7 +135,7 @@ public class CardComponent extends AbstractOutputComponent implements
 		return engine.isPropertySetted(Properties.SCOPE_VALUE);
 	}
 
-	public void setScopeValue(javax.faces.el.ValueBinding scopeValue) {
+	public void setScopeValue(java.lang.Object scopeValue) {
 		engine.setProperty(Properties.SCOPE_VALUE, scopeValue);
 	}
 

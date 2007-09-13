@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.SuggestTextEntryComponent;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.SuggestTextEntryComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 
@@ -64,56 +65,28 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		this.menuListeners = menuListeners;
 	}
 
-	public final String getSuggestionDelayMs() {
-		return suggestionDelayMs;
-	}
-
 	public final void setSuggestionDelayMs(String suggestionDelayMs) {
 		this.suggestionDelayMs = suggestionDelayMs;
-	}
-
-	public final String getSuggestionMinChars() {
-		return suggestionMinChars;
 	}
 
 	public final void setSuggestionMinChars(String suggestionMinChars) {
 		this.suggestionMinChars = suggestionMinChars;
 	}
 
-	public final String getCaseSensitive() {
-		return caseSensitive;
-	}
-
 	public final void setCaseSensitive(String caseSensitive) {
 		this.caseSensitive = caseSensitive;
-	}
-
-	public final String getForceProposal() {
-		return forceProposal;
 	}
 
 	public final void setForceProposal(String forceProposal) {
 		this.forceProposal = forceProposal;
 	}
 
-	public final String getSuggestionValue() {
-		return suggestionValue;
-	}
-
 	public final void setSuggestionValue(String suggestionValue) {
 		this.suggestionValue = suggestionValue;
 	}
 
-	public final String getSuggestionConverter() {
-		return suggestionConverter;
-	}
-
 	public final void setSuggestionConverter(String suggestionConverter) {
 		this.suggestionConverter = suggestionConverter;
-	}
-
-	public final String getMoreResultsMessage() {
-		return moreResultsMessage;
 	}
 
 	public final void setMoreResultsMessage(String moreResultsMessage) {

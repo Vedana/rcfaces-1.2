@@ -1,29 +1,26 @@
 package org.rcfaces.renderkit.html.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.HashSet;
+import javax.faces.el.ValueBinding;
 import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
+import java.util.HashSet;
 
-/**
- * Loads a property bundle on the client side.
- */
-public class LoadClientBundleComponent extends CameliaBaseComponent {
+public class LoadBundleComponent extends CameliaBaseComponent {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html.loadClientBundle";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.loadBundle";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"override","serverSide","baseName","bundleName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"override","baseName","serverScope","bundleName","side"}));
 	}
 
-	public LoadClientBundleComponent() {
+	public LoadBundleComponent() {
 		setRendererType(COMPONENT_TYPE);
 	}
 
-	public LoadClientBundleComponent(String componentId) {
+	public LoadBundleComponent(String componentId) {
 		this();
 		setId(componentId);
 	}
@@ -100,40 +97,44 @@ public class LoadClientBundleComponent extends CameliaBaseComponent {
 		return engine.isPropertySetted(Properties.BASE_NAME);
 	}
 
-	/**
-	 * Returns a boolean value indicating wether the resource is available on the server side.
-	 * @return true if the resource is available on the server side
-	 */
-	public boolean isServerSide() {
-		return isServerSide(null);
+	public String getSide() {
+		return getSide(null);
+	}
+
+	public String getSide(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SIDE, facesContext);
+	}
+
+	public void setSide(String side) {
+		engine.setProperty(Properties.SIDE, side);
 	}
 
 	/**
-	 * Returns a boolean value indicating wether the resource is available on the server side.
-	 * @return true if the resource is available on the server side
-	 */
-	public boolean isServerSide(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.SERVER_SIDE, false, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the resource is available on the server side.
-	 * @param serverSide true if the resource is available on the server side
-	 */
-	public void setServerSide(boolean serverSide) {
-		engine.setProperty(Properties.SERVER_SIDE, serverSide);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the resource is available on the server side.
-	 * @param serverSide true if the resource is available on the server side
-	 */
-	/**
-	 * Returns <code>true</code> if the attribute "serverSide" is set.
+	 * Returns <code>true</code> if the attribute "side" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isServerSideSetted() {
-		return engine.isPropertySetted(Properties.SERVER_SIDE);
+	public boolean isSideSetted() {
+		return engine.isPropertySetted(Properties.SIDE);
+	}
+
+	public String getServerScope() {
+		return getServerScope(null);
+	}
+
+	public String getServerScope(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SERVER_SCOPE, facesContext);
+	}
+
+	public void setServerScope(String serverScope) {
+		engine.setProperty(Properties.SERVER_SCOPE, serverScope);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "serverScope" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isServerScopeSetted() {
+		return engine.isPropertySetted(Properties.SERVER_SCOPE);
 	}
 
 	public boolean isOverride() {

@@ -135,7 +135,7 @@ public class StateFieldMarkerTools {
     }
 
     public static String getStateValue(FacesContext facesContext,
-            SerializedView serializedView) throws IOException {
+            Object serializedView) throws IOException {
 
         StringWriter writer = new StringWriter(512);
         ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
@@ -152,7 +152,7 @@ public class StateFieldMarkerTools {
             facesContext.setResponseWriter(responseWriter);
 
             facesContext.getApplication().getStateManager().writeState(
-                    facesContext, serializedView);
+                    facesContext, (SerializedView) serializedView);
 
             String state = writer.toString();
 

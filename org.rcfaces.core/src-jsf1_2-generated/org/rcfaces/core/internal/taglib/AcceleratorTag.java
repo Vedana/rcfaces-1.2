@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AcceleratorComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.AcceleratorComponent;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class AcceleratorTag extends CameliaTag implements Tag {
 
@@ -22,8 +23,8 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 	private ValueExpression forValue;
 	private ValueExpression forItemValue;
 	private ValueExpression keyBinding;
-	private ValueExpression action;
 	private ValueExpression actionListeners;
+	private ValueExpression action;
 	private ValueExpression immediate;
 	private ValueExpression value;
 	public String getComponentType() {
@@ -90,11 +91,11 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 
 		if (keyPressListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
 		if (validationListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
 		}
 
 		if (forValue != null) {
@@ -125,11 +126,11 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		}
 
 		if (action != null) {
-			ListenersTools.parseAction(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, action);
+			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, actionListeners, true);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, actionListeners, true);
 		}
 
 		if (immediate != null) {

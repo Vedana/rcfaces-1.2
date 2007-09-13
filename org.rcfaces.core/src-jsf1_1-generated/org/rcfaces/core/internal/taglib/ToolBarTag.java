@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ToolBarComponent;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.ToolBarComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ToolBarTag extends AbstractBasicTag implements Tag {
 
@@ -58,80 +59,40 @@ public class ToolBarTag extends AbstractBasicTag implements Tag {
 		this.borderType = borderType;
 	}
 
-	public final String getSeparatorImageURL() {
-		return separatorImageURL;
-	}
-
 	public final void setSeparatorImageURL(String separatorImageURL) {
 		this.separatorImageURL = separatorImageURL;
-	}
-
-	public final String getSeparatorImageWidth() {
-		return separatorImageWidth;
 	}
 
 	public final void setSeparatorImageWidth(String separatorImageWidth) {
 		this.separatorImageWidth = separatorImageWidth;
 	}
 
-	public final String getSeparatorImageHeight() {
-		return separatorImageHeight;
-	}
-
 	public final void setSeparatorImageHeight(String separatorImageHeight) {
 		this.separatorImageHeight = separatorImageHeight;
-	}
-
-	public final String getSeparatorAlternateText() {
-		return separatorAlternateText;
 	}
 
 	public final void setSeparatorAlternateText(String separatorAlternateText) {
 		this.separatorAlternateText = separatorAlternateText;
 	}
 
-	public final String getControlImageURL() {
-		return controlImageURL;
-	}
-
 	public final void setControlImageURL(String controlImageURL) {
 		this.controlImageURL = controlImageURL;
-	}
-
-	public final String getControlImageWidth() {
-		return controlImageWidth;
 	}
 
 	public final void setControlImageWidth(String controlImageWidth) {
 		this.controlImageWidth = controlImageWidth;
 	}
 
-	public final String getControlImageHeight() {
-		return controlImageHeight;
-	}
-
 	public final void setControlImageHeight(String controlImageHeight) {
 		this.controlImageHeight = controlImageHeight;
-	}
-
-	public final String getControlAlternateText() {
-		return controlAlternateText;
 	}
 
 	public final void setControlAlternateText(String controlAlternateText) {
 		this.controlAlternateText = controlAlternateText;
 	}
 
-	public final String getItemPadding() {
-		return itemPadding;
-	}
-
 	public final void setItemPadding(String itemPadding) {
 		this.itemPadding = itemPadding;
-	}
-
-	public final String getLocked() {
-		return locked;
 	}
 
 	public final void setLocked(String locked) {

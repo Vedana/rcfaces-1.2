@@ -19,69 +19,71 @@ A set of components specific to the html render-kit.
 		<p>It <b>must</b> be the first tag for a page.</p>
 ]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>base</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value indicating the base HRef. If the key word "context" is used the base HRef is calculated from the context.
 ]]></description>
+			<name>base</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>title</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the title for the document.
 ]]></description>
+			<name>title</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>favoriteImageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url string pointing to the image used for a bookmark.
 ]]></description>
+			<name>favoriteImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>disabledScriptPageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url string pointing to a page shown if scripts are not enabled on the browser.
 ]]></description>
+			<name>disabledScriptPageURL</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>disabledCookiesPageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value that inhibits cookies for the page or not.
 ]]></description>
+			<name>disabledCookiesPageURL</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>invalidBrowserPageURL</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url pointing to the page to show if the browser is not supported.
 ]]></description>
+			<name>invalidBrowserPageURL</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>literalLocale</name>
@@ -92,32 +94,32 @@ An url pointing to the page to show if the browser is not supported.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>disabledIEImageBar</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value specifying wether the "image Bar" (contextual menu for images) in Internet Explorer should be hidden.
 ]]></description>
+			<name>disabledIEImageBar</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>disableCache</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value that force disabled cache for the page or not.
 ]]></description>
+			<name>disableCache</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>disableContextMenu</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value that hide context menu for the page or not.
 ]]></description>
+			<name>disableContextMenu</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>renderBaseTag</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value specifying if the HTML BASE tag must be generated.
 ]]></description>
+			<name>renderBaseTag</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>clientMessageIdFilter</name>
@@ -140,62 +142,64 @@ A boolean value specifying if the HTML BASE tag must be generated.
 Specifies includes and required javascript classes.
 ]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>text</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>src</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
+			<name>src</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>srcCharSet</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value sprecifying the charset associated to the "src" files.
 ]]></description>
+			<name>srcCharSet</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>requiredFiles</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying a list of javascript files to include.
 ]]></description>
+			<name>requiredFiles</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>requiredClasses</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying a list of javascript classes to include.
 ]]></description>
+			<name>requiredClasses</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	<tag>
@@ -206,101 +210,103 @@ A string value specifying a list of javascript classes to include.
 Css style
 ]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>text</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
+			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>src</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
+			<name>src</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>srcCharSet</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value sprecifying the charset associated to the "src" files.
 ]]></description>
+			<name>srcCharSet</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	<tag>
-		<name>loadClientBundle</name>
-		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadClientBundleTag</tag-class>
+		<name>loadBundle</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadBundleTag</tag-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
-Loads a property bundle on the client side.
-]]></description>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>bundleName</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A string value specifying the name to be used on the client side to access the resource bundle.
 ]]></description>
+			<name>bundleName</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>baseName</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 Base name of the resource bundle to be loaded.
 		A string indicating the fully qualified name of a resources bundle (property file).
 ]]></description>
+			<name>baseName</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>serverSide</name>
+			<name>side</name>
 			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
-A boolean value indicating wether the resource is available on the server side.
-]]></description>
+		</attribute>
+		<attribute>
+			<name>serverScope</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>override</name>
@@ -312,27 +318,29 @@ A boolean value indicating wether the resource is available on the server side.
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.NameSpaceTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
-			<name>id</name>
-<description><![CDATA[
+			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>binding</name>
-<description><![CDATA[
+			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>rendered</name>
-			<rtexprvalue>true</rtexprvalue>
-<description><![CDATA[
+			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
+			<name>rendered</name>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>uri</name>

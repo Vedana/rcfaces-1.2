@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.MenuComponent;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.MenuComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class MenuTag extends CameliaTag implements Tag {
 
@@ -70,16 +71,8 @@ public class MenuTag extends CameliaTag implements Tag {
 		this.checkedValues = checkedValues;
 	}
 
-	public final String getMenuId() {
-		return menuId;
-	}
-
 	public final void setMenuId(String menuId) {
 		this.menuId = menuId;
-	}
-
-	public final String getRemoveAllWhenShown() {
-		return removeAllWhenShown;
 	}
 
 	public final void setRemoveAllWhenShown(String removeAllWhenShown) {

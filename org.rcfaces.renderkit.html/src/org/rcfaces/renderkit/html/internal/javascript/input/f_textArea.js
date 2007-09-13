@@ -5,7 +5,7 @@
 /**
  * f_textArea class
  *
- * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu
+ * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_immediate
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -312,7 +312,7 @@ var __members = {
 
 new f_class("f_textArea", {
 	extend: f_input,
-	aspects: [ fa_required, fa_selectionProvider, fa_subMenu ],
+	aspects: [ fa_required, fa_selectionProvider, fa_subMenu, fa_immediate ],
 	members: __members,
 	statics: __statics
 });

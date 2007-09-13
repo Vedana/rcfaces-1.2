@@ -221,6 +221,10 @@ public class HashCodeTools {
             LOG.debug("Compute ETag from url '" + url + "'.");
         }
 
+        if (url.startsWith("/") == false) {
+            url = "/" + url;
+        }
+
         RequestDispatcher requestDispatcher = servletContext
                 .getRequestDispatcher(url);
         if (requestDispatcher == null) {

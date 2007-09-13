@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.TreeComponent;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.TreeComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TreeTag extends AbstractInputTag implements Tag {
 
@@ -223,7 +224,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 
 		if (doubleClickListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
 		}
 
 		if (required != null) {
@@ -299,7 +300,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		}
 
 		if (checkListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.CHECK_LISTENER_TYPE, checkListeners);
 		}
 
 		if (checkedValues != null) {
@@ -325,7 +326,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		}
 
 		if (selectionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (selectedValues != null) {

@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractCalendarComponent;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.AbstractCalendarComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractCalendarTag extends AbstractInputTag implements Tag {
 
@@ -84,32 +85,16 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 		this.clientDatesStrategy = clientDatesStrategy;
 	}
 
-	public final String getTwoDigitYearStart() {
-		return twoDigitYearStart;
-	}
-
 	public final void setTwoDigitYearStart(String twoDigitYearStart) {
 		this.twoDigitYearStart = twoDigitYearStart;
-	}
-
-	public final String getMinDate() {
-		return minDate;
 	}
 
 	public final void setMinDate(String minDate) {
 		this.minDate = minDate;
 	}
 
-	public final String getMaxDate() {
-		return maxDate;
-	}
-
 	public final void setMaxDate(String maxDate) {
 		this.maxDate = maxDate;
-	}
-
-	public final String getDisabledWeekDays() {
-		return disabledWeekDays;
 	}
 
 	public final void setDisabledWeekDays(String disabledWeekDays) {

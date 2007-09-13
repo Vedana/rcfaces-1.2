@@ -1,14 +1,15 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractCalendarComponent;
-import org.rcfaces.core.internal.converter.CalendarModeConverter;
-import javax.el.ValueExpression;
-import java.util.HashSet;
+import java.lang.String;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
+import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
+import org.rcfaces.core.internal.converter.CalendarModeConverter;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.AbstractCalendarComponent;
 
 /**
  * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
@@ -33,7 +34,7 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"border","mode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"mode","border"}));
 	}
 
 	public CalendarComponent() {

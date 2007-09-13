@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.HiddenValueComponent;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.faces.context.FacesContext;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class HiddenValueTag extends CameliaTag implements Tag {
 
@@ -72,7 +73,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 
 		if (propertyChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
 		if (immediate != null) {
@@ -94,7 +95,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		}
 
 		if (validationListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
 		}
 
 		if (value != null) {

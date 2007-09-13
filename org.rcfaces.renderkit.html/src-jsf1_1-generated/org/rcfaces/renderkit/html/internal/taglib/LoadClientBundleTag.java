@@ -1,17 +1,18 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.faces.application.Application;
-import org.rcfaces.renderkit.html.component.LoadClientBundleComponent;
 import javax.faces.component.UIComponent;
+import org.rcfaces.renderkit.html.component.LoadClientBundleComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.taglib.CameliaTag;
+import javax.servlet.jsp.tagext.Tag;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.taglib.CameliaTag;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
 import javax.faces.context.FacesContext;
+import javax.faces.application.Application;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
 
 public class LoadClientBundleTag extends CameliaTag implements Tag {
 
@@ -20,38 +21,22 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 
 	private String bundleName;
 	private String baseName;
-	private String serverSide;
+	private String side;
 	private String override;
 	public String getComponentType() {
 		return LoadClientBundleComponent.COMPONENT_TYPE;
-	}
-
-	public final String getBundleName() {
-		return bundleName;
 	}
 
 	public final void setBundleName(String bundleName) {
 		this.bundleName = bundleName;
 	}
 
-	public final String getBaseName() {
-		return baseName;
-	}
-
 	public final void setBaseName(String baseName) {
 		this.baseName = baseName;
 	}
 
-	public final String getServerSide() {
-		return serverSide;
-	}
-
-	public final void setServerSide(String serverSide) {
-		this.serverSide = serverSide;
-	}
-
-	public final String getOverride() {
-		return override;
+	public final void setSide(String side) {
+		this.side = side;
 	}
 
 	public final void setOverride(String override) {
@@ -65,7 +50,7 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 			}
 			LOG.debug("  bundleName='"+bundleName+"'");
 			LOG.debug("  baseName='"+baseName+"'");
-			LOG.debug("  serverSide='"+serverSide+"'");
+			LOG.debug("  side='"+side+"'");
 			LOG.debug("  override='"+override+"'");
 		}
 		super.setProperties(uiComponent);
@@ -101,13 +86,13 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (serverSide != null) {
-			if (isValueReference(serverSide)) {
-				ValueBinding vb = application.createValueBinding(serverSide);
-				component.setValueBinding(Properties.SERVER_SIDE, vb);
+		if (side != null) {
+			if (isValueReference(side)) {
+				ValueBinding vb = application.createValueBinding(side);
+				component.setValueBinding(Properties.SIDE, vb);
 
 			} else {
-				component.setServerSide(getBool(serverSide));
+				component.setSide(side);
 			}
 		}
 
@@ -125,7 +110,7 @@ public class LoadClientBundleTag extends CameliaTag implements Tag {
 	public void release() {
 		bundleName = null;
 		baseName = null;
-		serverSide = null;
+		side = null;
 		override = null;
 
 		super.release();

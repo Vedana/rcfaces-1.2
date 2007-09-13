@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.DateEntryComponent;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.DateEntryComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
@@ -99,32 +100,16 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final String getShowCalendarOnFocus() {
-		return showCalendarOnFocus;
-	}
-
 	public final void setShowCalendarOnFocus(String showCalendarOnFocus) {
 		this.showCalendarOnFocus = showCalendarOnFocus;
-	}
-
-	public final String getAutoCompletion() {
-		return autoCompletion;
 	}
 
 	public final void setAutoCompletion(String autoCompletion) {
 		this.autoCompletion = autoCompletion;
 	}
 
-	public final String getDateFormat() {
-		return dateFormat;
-	}
-
 	public final void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
-	}
-
-	public final String getDefaultDate() {
-		return defaultDate;
 	}
 
 	public final void setDefaultDate(String defaultDate) {
@@ -141,10 +126,6 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
 	public final void setActionListener(String listeners) {
 		this.actionListeners = listeners;
-	}
-
-	public final String getActionListener() {
-		return actionListeners;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -294,11 +275,11 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		}
 
 		if (action != null) {
-			ListenersTools.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
+			ListenersTools1_1.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
+			ListenersTools1_1.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, actionListeners, true);
 		}
 	}
 

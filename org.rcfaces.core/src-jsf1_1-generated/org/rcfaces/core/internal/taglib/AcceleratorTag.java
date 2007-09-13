@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.AcceleratorComponent;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.AcceleratorComponent;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class AcceleratorTag extends CameliaTag implements Tag {
 
@@ -54,16 +55,8 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		this.forValue = forValue;
 	}
 
-	public final String getForItemValue() {
-		return forItemValue;
-	}
-
 	public final void setForItemValue(String forItemValue) {
 		this.forItemValue = forItemValue;
-	}
-
-	public final String getKeyBinding() {
-		return keyBinding;
 	}
 
 	public final void setKeyBinding(String keyBinding) {
@@ -80,10 +73,6 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 
 	public final void setActionListener(String listeners) {
 		this.actionListeners = listeners;
-	}
-
-	public final String getActionListener() {
-		return actionListeners;
 	}
 
 	public final String getImmediate() {
@@ -165,11 +154,11 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		}
 
 		if (action != null) {
-			ListenersTools.parseAction(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, action);
+			ListenersTools1_1.parseAction(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, action);
 		}
 
 		if (actionListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, actionListeners, true);
+			ListenersTools1_1.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, actionListeners, true);
 		}
 
 		if (immediate != null) {

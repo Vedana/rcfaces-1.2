@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.CardComponent;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class CardTag extends AbstractOutputTag implements Tag {
 
@@ -19,6 +20,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 
 	private ValueExpression textAlignment;
 	private ValueExpression verticalAlignment;
+	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression loadListeners;
@@ -32,6 +34,10 @@ public class CardTag extends AbstractOutputTag implements Tag {
 
 	public final void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
+	}
+
+	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
 	}
 
 	public final void setScopeValue(ValueExpression scopeValue) {
@@ -53,6 +59,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			}
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 		}
@@ -86,8 +93,22 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (scopeSaveValue != null) {
+			if (scopeSaveValue.isLiteralText()==false) {
+				component.setValueExpression(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue.getExpressionString()));
+			}
+		}
+
 		if (scopeValue != null) {
+			if (scopeValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SCOPE_VALUE, scopeValue);
+
+			} else {
+				component.setScopeValue(scopeValue.getExpressionString());
+			}
 		}
 
 		if (scopeVar != null) {
@@ -100,13 +121,14 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		}
 
 		if (loadListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 	}
 
 	public void release() {
 		textAlignment = null;
 		verticalAlignment = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 		loadListeners = null;

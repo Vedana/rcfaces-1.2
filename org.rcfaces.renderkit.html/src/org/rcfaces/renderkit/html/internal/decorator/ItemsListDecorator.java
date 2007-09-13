@@ -76,8 +76,7 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
 public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory
-            .getLog(ItemsListDecorator.class);
+    private static final Log LOG = LogFactory.getLog(ItemsListDecorator.class);
 
     private static final String DISABLED_ITEMS = "disabledItems";
 
@@ -100,11 +99,14 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     private boolean itemPaddingSetted;
 
     private int itemPadding;
-    
+
     private String defaultImageURL;
-	private String defaultDisabledImageURL;
-	private String defaultHoverImageURL;
-	private String defaultSelectedImageURL;
+
+    private String defaultDisabledImageURL;
+
+    private String defaultHoverImageURL;
+
+    private String defaultSelectedImageURL;
 
     public ItemsListDecorator(UIComponent component) {
         super(component, null);
@@ -123,26 +125,26 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
             itemPadding = itemsListComponent.getItemPadding();
         }
-        
+
         if (itemsListComponent.isDefaultImageURLSetted()) {
-        	defaultImageURL = itemsListComponent.getDefaultImageURL();
+            defaultImageURL = itemsListComponent.getDefaultImageURL();
         } else {
-        	defaultImageURL = null;
+            defaultImageURL = null;
         }
         if (itemsListComponent.isDisabledImageURLSetted()) {
-        	defaultDisabledImageURL = itemsListComponent.getDisabledImageURL();
+            defaultDisabledImageURL = itemsListComponent.getDisabledImageURL();
         } else {
-        	defaultDisabledImageURL = null;
+            defaultDisabledImageURL = null;
         }
         if (itemsListComponent.isHoverImageURLSetted()) {
-        	defaultHoverImageURL = itemsListComponent.getHoverImageURL();
+            defaultHoverImageURL = itemsListComponent.getHoverImageURL();
         } else {
-        	defaultHoverImageURL = null;
+            defaultHoverImageURL = null;
         }
         if (itemsListComponent.isSelectedImageURLSetted()) {
-        	defaultSelectedImageURL = itemsListComponent.getSelectedImageURL();
+            defaultSelectedImageURL = itemsListComponent.getSelectedImageURL();
         } else {
-        	defaultSelectedImageURL = null;
+            defaultSelectedImageURL = null;
         }
     }
 
@@ -154,7 +156,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
         ItemsListComponent itemsListComponent = (ItemsListComponent) getComponent();
 
-        imageAccessors = (IImageAccessors) itemsListComponent.getImageAccessors(facesContext);
+        imageAccessors = (IImageAccessors) itemsListComponent
+                .getImageAccessors(facesContext);
 
         super.preEncodeContainer();
     }
@@ -573,9 +576,9 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
             if (itemComponent instanceof IImageCapability) {
                 String imageURL = imagesSelectItem.getImageURL();
                 if (imageURL == null && defaultImageURL != null) {
-                	imageURL = defaultImageURL;
+                    imageURL = defaultImageURL;
                 }
-            	if (imageURL != null) {
+                if (imageURL != null) {
                     ((IImageCapability) itemComponent).setImageURL(imageURL);
                 }
             }
@@ -616,23 +619,24 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
                 }
             }
         } else {
-       		if (itemComponent instanceof IImageCapability) {
-               	if (defaultImageURL != null) {
-        			((IImageCapability) itemComponent).setImageURL(defaultImageURL);
-        		}
-        	}
-        	if (itemComponent instanceof IStatesImageCapability) {
-        		IStatesImageCapability sic = (IStatesImageCapability) itemComponent;
-        		if (defaultDisabledImageURL != null) {
-        			sic.setDisabledImageURL(defaultDisabledImageURL);
-        		}
-        		if (defaultHoverImageURL != null) {
-        			sic.setHoverImageURL(defaultHoverImageURL);
-        		}
-        		if (defaultSelectedImageURL != null) {
-        			sic.setSelectedImageURL(defaultSelectedImageURL);
-        		}
-        	}
+            if (itemComponent instanceof IImageCapability) {
+                if (defaultImageURL != null) {
+                    ((IImageCapability) itemComponent)
+                            .setImageURL(defaultImageURL);
+                }
+            }
+            if (itemComponent instanceof IStatesImageCapability) {
+                IStatesImageCapability sic = (IStatesImageCapability) itemComponent;
+                if (defaultDisabledImageURL != null) {
+                    sic.setDisabledImageURL(defaultDisabledImageURL);
+                }
+                if (defaultHoverImageURL != null) {
+                    sic.setHoverImageURL(defaultHoverImageURL);
+                }
+                if (defaultSelectedImageURL != null) {
+                    sic.setSelectedImageURL(defaultSelectedImageURL);
+                }
+            }
         }
 
         if (itemComponent instanceof IImageSizeCapability) {
@@ -677,7 +681,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        FacesContext facesContext = htmlWriter.getComponentRenderContext().getFacesContext();
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
 
         Renderer renderer = getRenderer(facesContext, itemComponent);
         if (renderer == null) {

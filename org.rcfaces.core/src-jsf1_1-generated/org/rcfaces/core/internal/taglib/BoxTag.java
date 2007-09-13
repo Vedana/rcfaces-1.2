@@ -1,16 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.BoxComponent;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.component.BoxComponent;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class BoxTag extends AbstractBasicTag implements Tag {
 
@@ -28,6 +29,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private String initListeners;
 	private String loadListeners;
 	private String asyncRenderMode;
+	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
 	private String horizontalScroll;
@@ -124,6 +126,14 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
+	public final String getScopeSaveValue() {
+		return scopeSaveValue;
+	}
+
+	public final void setScopeSaveValue(String scopeSaveValue) {
+		this.scopeSaveValue = scopeSaveValue;
+	}
+
 	public final String getScopeValue() {
 		return scopeValue;
 	}
@@ -140,16 +150,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
-	public final String getHorizontalScroll() {
-		return horizontalScroll;
-	}
-
 	public final void setHorizontalScroll(String horizontalScroll) {
 		this.horizontalScroll = horizontalScroll;
-	}
-
-	public final String getVerticalScroll() {
-		return verticalScroll;
 	}
 
 	public final void setVerticalScroll(String verticalScroll) {
@@ -168,6 +170,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
@@ -272,9 +275,24 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
+		if (scopeSaveValue != null) {
+			if (isValueReference(scopeSaveValue)) {
+				ValueBinding vb = application.createValueBinding(scopeSaveValue);
+				component.setValueBinding(Properties.SCOPE_SAVE_VALUE, vb);
+
+			} else {
+				component.setScopeSaveValue(getBool(scopeSaveValue));
+			}
+		}
+
 		if (scopeValue != null) {
+			if (isValueReference(scopeValue)) {
 				ValueBinding vb = application.createValueBinding(scopeValue);
 				component.setValueBinding(Properties.SCOPE_VALUE, vb);
+
+			} else {
+				component.setScopeValue(scopeValue);
+			}
 		}
 
 		if (scopeVar != null) {
@@ -320,6 +338,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		initListeners = null;
 		loadListeners = null;
 		asyncRenderMode = null;
+		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
 		horizontalScroll = null;
