@@ -47,7 +47,6 @@ import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.event.SelectionEvent;
-import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -94,8 +93,6 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     private final Map itemIdToClientId = new HashMap(8);
 
-    private IImageAccessors imageAccessors;
-
     private boolean itemPaddingSetted;
 
     private int itemPadding;
@@ -131,18 +128,18 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         } else {
             defaultImageURL = null;
         }
-        if (itemsListComponent.isDisabledImageURLSetted()) {
-            defaultDisabledImageURL = itemsListComponent.getDisabledImageURL();
+        if (itemsListComponent.isDefaultDisabledImageURLSetted()) {
+            defaultDisabledImageURL = itemsListComponent.getDefaultDisabledImageURL();
         } else {
             defaultDisabledImageURL = null;
         }
-        if (itemsListComponent.isHoverImageURLSetted()) {
-            defaultHoverImageURL = itemsListComponent.getHoverImageURL();
+        if (itemsListComponent.isDefaultHoverImageURLSetted()) {
+            defaultHoverImageURL = itemsListComponent.getDefaultHoverImageURL();
         } else {
             defaultHoverImageURL = null;
         }
-        if (itemsListComponent.isSelectedImageURLSetted()) {
-            defaultSelectedImageURL = itemsListComponent.getSelectedImageURL();
+        if (itemsListComponent.isDefaultSelectedImageURLSetted()) {
+            defaultSelectedImageURL = itemsListComponent.getDefaultSelectedImageURL();
         } else {
             defaultSelectedImageURL = null;
         }
@@ -150,14 +147,6 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     protected void preEncodeContainer() throws WriterException {
         htmlWriter.enableJavaScript();
-
-        FacesContext facesContext = getComponentRenderContext()
-                .getFacesContext();
-
-        ItemsListComponent itemsListComponent = (ItemsListComponent) getComponent();
-
-        imageAccessors = (IImageAccessors) itemsListComponent
-                .getImageAccessors(facesContext);
 
         super.preEncodeContainer();
     }

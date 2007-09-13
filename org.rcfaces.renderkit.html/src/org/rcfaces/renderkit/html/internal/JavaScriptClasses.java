@@ -84,6 +84,8 @@ public final class JavaScriptClasses {
 
     public static final String ITEMS_TOOL_FOLDER = "f_itemsToolFolder";
 
+    public static final String ITEMS_LIST = "f_itemsList";
+
     public static final String LINE_BREAK = "f_lineBreak";
 
     public static final String LIST = "f_list";

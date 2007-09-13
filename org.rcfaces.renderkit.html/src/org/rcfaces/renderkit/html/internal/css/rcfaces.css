@@ -32,6 +32,7 @@
 @import url(f_imageResetButton.css);		//module:extaButton
 @import url(f_imageSubmitButton.css);		//module:extaButton
 @import url(f_input.css);					//module:basic
+@import url(f_itemsList.css);				//module:itemsList
 @import url(f_list.css);					//module:basic
 @import url(f_menu.css); 					//module:popup
 @import url(f_menuBar.css); 				//module:popup
