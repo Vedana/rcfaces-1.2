@@ -214,9 +214,9 @@ var __members = {
 		// this._title=undefined; // String
 		this._grid=undefined; // f_grid
 
-		// OO: @TODO  Il y a des onclick sur les radioButtons !
-		
-		// OO: @TODO  AJOUTER DES VERIFY_PROPERTY sur TOUS LES COMPOSANTS
+		if (this._baseMem) {
+			this._clean(this._baseMem);
+		}
 
 		this.f_super(arguments);
 	},
@@ -322,6 +322,7 @@ var __members = {
 		
 		// Memorisation de la call-back et de l'instance de f_columnSortDialog
 		baseMem._popup=this;
+		this._baseMem = baseMem;
 
 		//set size and pos
 		table.style.top=0;
@@ -433,6 +434,7 @@ var __members = {
 		
 		selectComp._base = baseMem;
 		selectComp._number = 0;
+		baseMem._radios = new Array;
 		baseMem._selects = new Array;
 		baseMem._selects.push(selectComp);
 		selectComp.onchange = f_columnSortDialog._SelectOnChange;
@@ -443,14 +445,14 @@ var __members = {
 
 		cellCorps = docBase.createElement("td");
 		
-		var tableRadio = this._createTableRadio(docBase, "sort0", selectComp);
+		var tableRadio = this._createTableRadio(docBase, baseMem, "sort0", selectComp);
 
 		cellCorps.appendChild(tableRadio);
 		ligneCorps.appendChild(cellCorps);
 		
 		tbodCorps.appendChild(ligneCorps);
 
-		// Creation de la ligne de libell� Puis Trier par (2)
+		// Creation de la ligne de libelle Puis Trier par (2)
 		ligneCorps = docBase.createElement("tr");
 		
 		cellCorps = docBase.createElement("td");
@@ -463,7 +465,7 @@ var __members = {
 		cellCorps.appendChild(zone);
 		ligneCorps.appendChild(cellCorps);
 
-		// Ajout de la ligne � la table
+		// Ajout de la ligne a la table
 		tbodCorps.appendChild(ligneCorps);
 
 		// ligne 1er combo et radios
@@ -478,7 +480,7 @@ var __members = {
 			selectedCol = sortedCols[sortedColsIndex++];
 		}
 
-		// Remplissage si la pr�c�dente a �t� pr�selectionn�e
+		// Remplissage si la precedente a ete preselectionnee
 		if (sortedCols.length > 0) {
 			selectComp.selectedIndex = 0;
 			selectComp.value = "";
@@ -508,7 +510,7 @@ var __members = {
 
 		cellCorps = docBase.createElement("td");
 		
-		var tableRadio = this._createTableRadio(docBase, "sort1", selectComp);
+		var tableRadio = this._createTableRadio(docBase, baseMem, "sort1", selectComp);
 
 		cellCorps.appendChild(tableRadio);
 		ligneCorps.appendChild(cellCorps);
@@ -544,7 +546,7 @@ var __members = {
 			selectedCol = sortedCols[sortedColsIndex++];
 		}
 
-		// Remplissage si la pr�c�dente est d�j� s�lectionn�e
+		// Remplissage si la precedente est deselectionnee
 		if (sortedCols.length > 1) {
 			f_columnSortDialog.AddOption(docBase, selectComp);
 			for (var i = j = 0; i<cols.length; i++) {
@@ -572,7 +574,7 @@ var __members = {
 
 		cellCorps = docBase.createElement("td");
 		
-		var tableRadio = this._createTableRadio(docBase, "sort2", selectComp);
+		var tableRadio = this._createTableRadio(docBase, baseMem, "sort2", selectComp);
 
 		cellCorps.appendChild(tableRadio);
 		ligneCorps.appendChild(cellCorps);
@@ -693,11 +695,13 @@ var __members = {
 	/**
 	 * @method private
 	 * @param HTMLDocument docBase document
+	 * @param HTMLElement base element that hold the references to other elements
 	 * @param string name
 	 * @param number sort
 	 * @return HTMLElement table with radios
 	 */
-	_createTableRadio: function(docBase, name, selectComp) {
+	_createTableRadio: function(docBase, base, name, selectComp) {
+
 		var tableRadio = docBase.createElement("table");
 		//set size and pos
 		tableRadio.cellPadding=0;
@@ -711,8 +715,6 @@ var __members = {
 		
 		var radioComp;
 		if (f_shell._IE) {
-			// OO: UTILISER defaultChecked		
-
 			var tag = "<input type='radio' name='"+name+"'";
 			if (selectComp._sort != -1) {
 				tag = tag + " checked='true'";
@@ -721,15 +723,18 @@ var __members = {
 			radioComp = docBase.createElement(tag);	
 		} else {
 			radioComp = docBase.createElement("input");	
-			radioComp.type = "radio";
 			radioComp.name = name;
+			radioComp.type = "radio";
 			if (selectComp._sort != -1) {
-				radioComp.checked = "true";
+				radioComp.checked = true;
 			}
 		}
 		
+		radioComp.id = name+"_asc";
+		radioComp.value = f_columnSortDialog.LIB_ASCENDANT;
 		var cssClassBase = this.f_getCssClassBase();
 		radioComp.className = cssClassBase+"_radio_text";
+		base._radios.push(radioComp);
         radioComp.onclick = function() {
         	selectComp._sort = 1;
         };
@@ -746,8 +751,6 @@ var __members = {
 		cellRadio = docBase.createElement("td");
 		
 		if (f_shell._IE) {
-			// OO: UTILISER defaultChecked
-			
 			var tag = "<input type='radio' name='"+name+"'";
 			if (selectComp._sort == -1) {
 				tag = tag + " checked='true'";
@@ -756,13 +759,16 @@ var __members = {
 			radioComp = docBase.createElement(tag);	
 		} else {
 			radioComp = docBase.createElement("input");	
-			radioComp.type = "radio";
 			radioComp.name = name;
+			radioComp.type = "radio";
 			if (selectComp._sort == -1) {
-				radioComp.checked = "true";
+				radioComp.checked = true;
 			}
 		}
+		radioComp.id = name+"_desc";
+		radioComp.value = f_columnSortDialog.LIB_DESCENDANT;
 		radioComp.className = cssClassBase+"_radio_text";
+		base._radios.push(radioComp);
         radioComp.onclick = function() {
         	selectComp._sort = -1;
         };
@@ -795,6 +801,7 @@ var __members = {
 		var popup=base._popup;
 		var buttons=base._buttons;
 		var selects=base._selects;
+		var radios=base._radios;
 		var close=selectedButton._close;
 		var apply=selectedButton._apply;
 
@@ -814,6 +821,60 @@ var __members = {
 		}
 		
 		if (close) {
+			this._clean(base);
+		}
+
+		var iframe = this.f_getIframe();
+		if (apply) {
+			// Impact the grid
+			var grid = this._grid;
+			var lon = colsSorted.length;
+	     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: sorting "+lon+" cols");
+	     	var delayedSort;
+			if (lon == 0) {
+				delayedSort = function () {
+					grid.f_clearSort();
+				};
+			} else if (lon == 1) {
+				delayedSort = function () {
+					grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false);
+				};
+			} else if (lon == 2) {
+				delayedSort = function () {
+					grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false, colsSorted[1]._col, colsSorted[1]._sort >= 0);
+				};
+			} else if (lon == 3) {
+				delayedSort = function () {
+					grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false, colsSorted[1]._col, colsSorted[1]._sort >= 0, colsSorted[2]._col, colsSorted[2]._sort >= 0);
+				};
+			}
+			if (delayedSort) {
+		     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: setting timeout on "+window);
+				// main window
+				window.setTimeout(delayedSort, 10);
+			}
+		}
+
+		if (close) {
+			//delete the iFrame
+			this.f_delModIFrame();
+		}
+	},
+	
+	/**
+	 * @method private
+	 * @param HTMLElement base element that hold the references to other elements
+	 * @return void
+	 */
+	_clean: function(base) {
+		if (!base) {
+			return;
+		}
+		var buttons = base._buttons;
+		var radios = base._radios;
+		var selects = base._selects;
+
+		if (buttons) {
 			// Buttons cleaning
 			for (var i=0; i<buttons.length; i++) {
 				var button = buttons[i];
@@ -825,7 +886,19 @@ var __members = {
 				
 				f_core.VerifyProperties(button);
 			}
+		}
+
+		if (radios) {
+			// Radios cleaning
+			for (var i=0; i<radios.length; i++) {
+				var radio = radios[i];
+				radio.onclick=null;
+				
+				f_core.VerifyProperties(radio);
+			}
+		}	
 		
+		if (selects) {
 			// Selects cleaning
 			// & Get the informations !!!
 			for (var i=0; i<selects.length; i++) {
@@ -843,37 +916,16 @@ var __members = {
 				
 				f_core.VerifyProperties(select);
 			}
-	
-			// Table cleaning
-			base._popup=undefined;
-			base._buttons=undefined;
-			base._selects=undefined;
-				
-			f_core.VerifyProperties(base);
 		}
 
-		if (apply) {
-			// Impact the grid
-			var grid = this._grid;
-			var lon = colsSorted.length;
-	     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: sorting "+lon+" cols");
-			if (lon == 0) {
-				grid.f_clearSort();
-			} else if (lon == 1) {
-				grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false);
-			} else if (lon == 2) {
-				grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false, colsSorted[1]._col, colsSorted[1]._sort >= 0);
-			} else if (lon == 3) {
-				grid.f_setColumnSort(colsSorted[0]._col, colsSorted[0]._sort >= 0, false, colsSorted[1]._col, colsSorted[1]._sort >= 0, colsSorted[2]._col, colsSorted[2]._sort >= 0);
-			}
-		}
-
-		if (close) {
-			//delete the iFrame
-			this.f_delModIFrame();
-		}
+		// Table cleaning
+		base._popup=undefined;
+		base._buttons=undefined;
+		base._radios=undefined;
+		base._selects=undefined;
+			
+		f_core.VerifyProperties(base);
 	},
-	
 	
 	/**
 	 * @method public
