@@ -34,7 +34,7 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        ItemsListComponent ItemsListComponent = (ItemsListComponent) componentRenderContext
+        ItemsListComponent itemsListComponent = (ItemsListComponent) componentRenderContext
                 .getComponent();
 
         writer.startElement(IHtmlWriter.DIV);
@@ -43,10 +43,10 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
         writeJavaScriptAttributes(writer);
         writeCssAttributes(writer);
 
-        if (ItemsListComponent.isDisabled(facesContext)) {
+        if (itemsListComponent.isDisabled(facesContext)) {
             writer.writeAttribute("v:disabled", true);
         }
-        if (ItemsListComponent.isReadOnly(facesContext)) {
+        if (itemsListComponent.isReadOnly(facesContext)) {
             writer.writeAttribute("v:readOnly", true);
         }
 
