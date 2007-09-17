@@ -206,7 +206,7 @@ var __members = {
 	},
 
 	/**
-	 * <p>Destruct a new <code>f_columnSortDialog</code>.</p>
+	 * <p>Destruct a  <code>f_columnSortDialog</code>.</p>
 	 *
 	 * @method public
 	 */

@@ -72,6 +72,11 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
 
+/**
+ * Decorator for itemsList (inspired by itemsToolFolder)
+ * @author Fred
+ *
+ */
 public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     private static final String REVISION = "$Revision$";
 
@@ -105,6 +110,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     private String defaultSelectedImageURL;
 
+    /**
+     * Constructor
+     * @param component component ItemsList
+     */
     public ItemsListDecorator(UIComponent component) {
         super(component, null);
 
@@ -145,12 +154,22 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         }
     }
 
+    /**
+     * Starting
+     */
     protected void preEncodeContainer() throws WriterException {
         htmlWriter.enableJavaScript();
 
         super.preEncodeContainer();
     }
 
+    /**
+     * @param component component ItemsList
+     * @param selectItem selectItem
+     * @param hasChild hasCHild
+     * @param isVisible isVisible
+     * @return int indicating wether the node should be skipped or not
+     */
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
 
@@ -175,6 +194,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         return EVAL_NODE;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter#encodeNodeEnd(javax.faces.component.UIComponent, javax.faces.model.SelectItem, boolean, boolean)
+     */
     public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
 
@@ -192,6 +215,14 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     }
 
+    /**
+     * for popups (not used yet ...)
+     * @param component component ItemsList
+     * @param selectItem selectItem
+     * @param hasChild hasChild
+     * @param isVisible isVisible
+     * @return int indicating wether the node should be skipped or not
+     */
     protected int encodeToolItemPopupBegin(UIComponent component,
             SelectItem selectItem, boolean hasChild, boolean isVisible)
             throws WriterException {
@@ -354,6 +385,14 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         return EVAL_NODE;
     }
 
+    /**
+     * for popups (not used ...)
+     * @param component component ItemsList
+     * @param selectItem selectItem
+     * @param hasChild hasChild
+     * @param isVisible isVisible
+     * @return void
+     */
     protected void encodeToolItemPopupEnd(UIComponent component,
             SelectItem selectItem, boolean hasChild, boolean isVisible)
             throws WriterException {
@@ -375,10 +414,22 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         }
     }
 
+    /**
+     * 
+     * @param selectItem selectItem
+     * @return int item Separator Width
+     */
     protected int getToolItemSeparatorWidth(SelectItem selectItem) {
         return ToolBarRenderer.DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH;
     }
 
+    /**
+     * Called for each item
+     * @param component component ItemsList
+     * @param selectItem selectItem
+     * @param hasChild hasChild
+     * @throws WriterException
+     */
     private void encodeToolItemBegin(UIComponent component,
             SelectItem selectItem, boolean hasChild) throws WriterException {
 
@@ -754,7 +805,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     }
 
     /**
-     * called after theencodeItem
+     * called after the encodeItem
      * 
      * @param renderer
      * @param component
@@ -767,6 +818,11 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     }
 
+    /**
+     * text position
+     * @param selectItem
+     * @return cf. {@link ITextPositionCapability}
+     */
     private int getDefaultTextPosition(SelectItem selectItem) {
         UIComponent component = getComponent();
 
@@ -777,14 +833,30 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         return 0;
     }
 
+    /**
+     * 
+     * @param selectItem
+     * @return int default height
+     */
     protected int getToolItemImageDefaultHeight(SelectItem selectItem) {
         return -1;
     }
 
+    /**
+     * 
+     * @param selectItem
+     * @return int default width
+     */
     protected int getToolItemImageDefaultWidth(SelectItem selectItem) {
         return -1;
     }
 
+    /**
+     * 
+     * @param facesContext
+     * @param itemComponent
+     * @return renderer
+     */
     private Renderer getRenderer(FacesContext facesContext,
             UIComponent itemComponent) {
         String rendererType = itemComponent.getRendererType();
@@ -801,6 +873,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     }
 
+    /**
+     * @param component component item
+     * @return {@link SelectItem}
+     */
     protected SelectItem createSelectItem(UISelectItem component) {
         if (component instanceof ToolItemComponent) {
             return new ToolItem((ToolItemComponent) component);
@@ -809,6 +885,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         return super.createSelectItem(component);
     }
 
+    /**
+     * @param component component
+     * @return {@link SelectItem}
+     */
     protected SelectItem getUnknownComponent(UIComponent component) {
         if (component instanceof ToolItemSeparatorComponent) {
             return SeparatorSelectItem.SEPARATOR;
@@ -930,6 +1010,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.rcfaces.renderkit.html.internal.decorator.AbstractSelectItemsDecorator#convertToSelectItem(java.lang.Object)
+     */
     protected SelectItem convertToSelectItem(Object value) {
         if (value instanceof IToolItem) {
             IToolItem toolItem = (IToolItem) value;
@@ -940,10 +1024,17 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         return super.convertToSelectItem(value);
     }
 
+    /**
+     * @return next
+     */
     public String nextItemId() {
         return (String) itemsId.remove(0);
     }
 
+    /**
+     * 
+     * @return new id
+     */
     public String allocateItemId() {
         String id = "_item" + itemsId.size();
 
@@ -952,11 +1043,23 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         return id;
     }
 
+    /**
+     * @return void
+     *
+     */
     public void allocateItemSeparator() {
 
         itemsId.add(null);
     }
 
+    /**
+     * menu (not used yet)
+     * @param selectItemVarName
+     * @param selectItemComponentId
+     * @param javascriptWriter
+     * @return
+     * @throws WriterException
+     */
     public ItemsMenuDecorator pushMenuDecorator(String selectItemVarName,
             String selectItemComponentId, IJavaScriptWriter javascriptWriter)
             throws WriterException {
@@ -972,6 +1075,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         return itemsMenuDecorator;
     }
 
+    /**
+     * menu (not used yet)
+     *
+     */
     public void popupMenuDecorator() {
 
         ItemsMenuDecorator itemsMenuDecorator = (ItemsMenuDecorator) menuDecoratorStack
@@ -980,6 +1087,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         itemsMenuDecorator.finalizeItemContext();
     }
 
+    /**
+     * menu (not used yet)
+     * @return
+     */
     public ItemsMenuDecorator peekMenuDecorator() {
         return (ItemsMenuDecorator) menuDecoratorStack.get(menuDecoratorStack
                 .size() - 1);

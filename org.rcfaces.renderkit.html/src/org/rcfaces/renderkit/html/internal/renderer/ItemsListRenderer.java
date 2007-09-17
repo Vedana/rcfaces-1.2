@@ -25,6 +25,13 @@ import org.rcfaces.renderkit.html.internal.decorator.ItemsListDecorator;
 public class ItemsListRenderer extends AbstractSelectItemsRenderer {
     private static final String REVISION = "$Revision$";
 
+    /**
+     * surrounding for the decorator
+     * @param writer writer
+     * @param componentDecorator decorator
+     * @throws WriterException 
+     * @return void
+     */
     protected void encodeBeforeDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeBeforeDecorator(writer, componentDecorator);
@@ -50,17 +57,17 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
             writer.writeAttribute("v:readOnly", true);
         }
 
-        /*
-         * String className = getMainStyleClassName(); // Un dummy pour eviter
-         * des sauts de pages writer.startElement(IHtmlWriter.A"); String cls =
-         * className + "_itemFolder"; writer.writeAttribute("class", cls);
-         * writer.endElement(IHtmlWriter.A");
-         */
-
         writer.startElement(IHtmlWriter.TABLE);
         writer.startElement(IHtmlWriter.TBODY);
     }
 
+    /**
+     * surrounding for the decorator
+     * @param writer writer
+     * @param componentDecorator decorator
+     * @throws WriterException 
+     * @return void
+     */
     protected void encodeAfterDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
 
@@ -89,11 +96,24 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
         return true;
     }
 
+    /**
+     * back from the client
+     * @param context context
+     * @param component component
+     * @param componentData componentData
+     * @return void
+     */
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
     }
 
+    /**
+     * Creates the decorator
+     * @param facesContext facesContext
+     * @param component component
+     * @return componentDecorator
+     */
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
         return new ItemsListDecorator(component);

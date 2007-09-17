@@ -18,6 +18,12 @@ var __statics = {
 
 var __members = {
 
+	/**
+	 * <p>Construct a new <code>f_itemsList</code> with no
+     * initial values.</p>
+	 *
+	 * @method public
+	 */
 	f_itemsList: function() {
 		this.f_super(arguments);
 		
@@ -25,23 +31,42 @@ var __members = {
 		
 		this._uiItems=new Object;
 	},
+
+	/**
+	 * <p>Destruct a <code>f_itemsList</code>.</p>
+	 *
+	 * @method public
+	 */
 	f_finalize: function() {
 		this._uiItems=undefined; // Map<String, Object>
 //		this._sepId=undefined; // number
 		
 		this.f_super(arguments);
 	},
+
+	/**
+	 * @method hidden 
+	 * @return void
+	 */
 	f_update: function() {
 		if (this._items) {
 		}
 		
 		return this.f_super(arguments);
 	},
+	/**
+	 * @method hidden 
+	 * @return void
+	 */
 	f_serialize: function() {
 		this.f_serializeItems();
 			
 		this.f_super(arguments);
 	},
+	/**
+	 * @method hidden 
+	 * @return void
+	 */
 	fa_destroyItems: function(items) {
 	},	
 	/**
@@ -140,7 +165,7 @@ var __members = {
 			break;
 
 		default:
-			f_core.Debug(f_itemsList, "f_appendToolItems: unknown input type of item='"+item+"'.");
+			f_core.Debug(f_itemsList, "f_appendToolItem2: unknown input type of item='"+item+"'.");
 		}
 		
 		return item;
@@ -209,6 +234,10 @@ var __members = {
 		
 		return false;
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	fa_updateDisabled: function() {
 		var disabled=this.f_isDisabled();
 		
@@ -222,6 +251,10 @@ var __members = {
 			component.f_setDisabled(disabled);
 		}
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	fa_updateReadOnly: function() {
 		var readOnly=this.f_isReadOnly();
 		
@@ -235,6 +268,11 @@ var __members = {
 			component.f_setReadOnly(readOnly);
 		}
 	},
+	/**
+	 * @method public
+	 * @param item
+	 * @return void
+	 */
 	fa_updateItemStyle: function(item) {
 		var component=this.f_getItemComponent(item);
 		if (!component) {
