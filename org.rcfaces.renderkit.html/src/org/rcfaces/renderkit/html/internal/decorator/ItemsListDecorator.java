@@ -75,7 +75,7 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
 /**
  * Decorator for itemsList (inspired by itemsToolFolder)
  * @author Fred
- *
+ * @see ItemsToolFolderDecorator
  */
 public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     private static final String REVISION = "$Revision$";

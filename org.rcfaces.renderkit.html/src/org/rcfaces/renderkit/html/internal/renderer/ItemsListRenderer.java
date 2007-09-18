@@ -21,6 +21,7 @@ import org.rcfaces.renderkit.html.internal.decorator.ItemsListDecorator;
  * 
  * @author Frederic Lefevere (latest modification by $Author$)
  * @version $Revision$ $Date$
+ * @see ItemsToolFolderRenderer
  */
 public class ItemsListRenderer extends AbstractSelectItemsRenderer {
     private static final String REVISION = "$Revision$";
