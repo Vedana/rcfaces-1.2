@@ -1,35 +1,35 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import java.util.Collections;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.util.HashMap;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import java.util.Locale;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
 import java.lang.Object;
-import java.lang.String;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.converter.LiteralNumberConverter;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import java.util.HashSet;
+import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import java.util.HashMap;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.HashSet;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.util.Locale;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.LiteralNumberConverter;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <b>NOT COMPLETE</b>
@@ -52,7 +52,7 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","fatalStyleClass","fractionDigits","minimum","defaultNumber","integerDigits","selectionListener","literalLocale","valueChangeListener","errorStyleClass","autoCompletion","alternateText","required","autoTab","fractionStep","styleClass","number","numberFormatType","warnStyleClass","readOnly","infoStyleClass","numberFormat","componentLocale","maximum","integerStep"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","numberFormat","numberFormatType","warnStyleClass","styleClass","alternateText","infoStyleClass","fractionDigits","number","errorStyleClass","fatalStyleClass","autoCompletion","componentLocale","required","minimum","defaultNumber","valueChangeListener","integerStep","integerDigits","fractionStep","maximum","literalLocale","readOnly","focusStyleClass","autoTab"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="number";
 
@@ -63,13 +63,6 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	public NumberEntryComponent(String componentId) {
 		this();
 		setId(componentId);
-	}
-
-	public int getValidationParametersCount() {
-
-		 
-		 return getValidationParametersCount(null);
-		
 	}
 
 	public boolean isClientSideValidationParameter(String name) {
@@ -86,10 +79,10 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public void setValidationParameter(String name, ValueBinding value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		setValidationParameterData(name, value, client);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
@@ -97,13 +90,6 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 
 
 		 return getValidationParameter(name, null);
-		
-	}
-
-	public Map getClientValidationParametersMap() {
-
-
-		return getClientValidationParametersMap(null);
 		
 	}
 
@@ -126,10 +112,17 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
+	public Map getClientValidationParametersMap() {
 
 
-		return (String)setValidationParameterData(name, value, client);
+		return getClientValidationParametersMap(null);
+		
+	}
+
+	public int getValidationParametersCount() {
+
+		 
+		 return getValidationParametersCount(null);
 		
 	}
 
@@ -250,6 +243,13 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 		}
 		 
 		return dataMapAccessor.getDataCount();
+		
+	}
+
+	public void setValidationParameter(String name, ValueBinding value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
 		
 	}
 

@@ -1,43 +1,47 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import javax.faces.component.ValueHolder;
-import org.rcfaces.core.component.capability.IResizableCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ICellStyleClassCapability;
-import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IAutoFilterCapability;
-import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
-import org.rcfaces.core.internal.converter.OrderConverter;
-import org.rcfaces.core.component.capability.ICellImageCapability;
-import org.rcfaces.core.component.capability.IOrderCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.component.capability.ISortEventCapability;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import java.util.Arrays;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
+import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.capability.ICellImageSettings;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.ICellImageCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
+import javax.faces.component.ValueHolder;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IResizableCapability;
+import org.rcfaces.core.component.capability.IAlignmentCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.capability.ICellImageSettings;
+import org.rcfaces.core.internal.converter.OrderConverter;
+import org.rcfaces.core.component.capability.ISortEventCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.ICellStyleClassCapability;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 
 public class ComboColumnComponent extends CameliaValueColumnComponent implements 
 	IVisibilityCapability,
@@ -60,17 +64,21 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 	ICellImageCapability,
 	ICellStyleClassCapability,
 	ICellToolTipTextCapability,
-	IImageAccessorsCapability,
-	ValueHolder,
-	ICellStyleClassSettings,
+	ISelectionEventCapability,
+	IDoubleClickEventCapability,
+	IUserEventCapability,
+	IInitEventCapability,
 	ICellToolTipTextSettings,
-	ICellImageSettings {
+	ICellImageSettings,
+	IImageAccessorsCapability,
+	ICellStyleClassSettings,
+	ValueHolder {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.comboColumn";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaValueColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","alignment","defaultCellImageURL","visible","backgroundColor","minWidth","sortComparator","autoFilter","cellStyleClass","cellImageURL","selectedImageURL","hiddenMode","value","defaultCellStyleClass","maxWidth","resizable","ascending","foregroundColor","imageHeight","text","cellToolTipText","styleClass","hoverImageURL","width","cellDefaultToolTipText","textDirection","verticalAlignment","sortListener","toolTipText","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","defaultCellImageURL","imageURL","width","verticalAlignment","defaultCellStyleClass","doubleClickListener","alignment","hiddenMode","cellImageURL","foregroundColor","styleClass","sortListener","sortComparator","initListener","selectedImageURL","value","hoverImageURL","imageHeight","maxWidth","disabledImageURL","ascending","toolTipText","userEventListener","cellToolTipText","minWidth","textDirection","resizable","text","imageWidth","cellStyleClass","cellDefaultToolTipText","visible","backgroundColor","autoFilter"}));
 	}
 
 	public ComboColumnComponent() {
@@ -82,10 +90,10 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 		setId(componentId);
 	}
 
-	public void setConverter(Converter converter) {
+	public Converter getConverter() {
 
 
-        	engine.setProperty("converter", converter);
+        	return (Converter)engine.getProperty("converter", null);
 		
 	}
 
@@ -96,6 +104,13 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 			
 	}
 
+	public void setValue(Object value) {
+
+
+				engine.setValue(Properties.VALUE, value);
+			
+	}
+
 	public Object getLocalValue() {
 
 
@@ -103,18 +118,11 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 			
 	}
 
-	public Converter getConverter() {
+	public void setConverter(Converter converter) {
 
 
-        	return (Converter)engine.getProperty("converter", null);
+        	engine.setProperty("converter", converter);
 		
-	}
-
-	public void setValue(Object value) {
-
-
-				engine.setValue(Properties.VALUE, value);
-			
 	}
 
 	public IContentAccessors getImageAccessors(FacesContext facesContext) {
@@ -865,6 +873,54 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 
 	public void setCellToolTipText(java.lang.String cellToolTipText) {
 		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
+	}
+
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDoubleClickListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
+	}
+
+	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listUserEventListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
+	}
+
+	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listInitListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
 	protected Set getCameliaFields() {

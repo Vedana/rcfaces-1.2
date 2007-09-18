@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.ComponentsColumnComponent;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.component.ComponentsColumnComponent;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ComponentsColumnTag extends CameliaTag implements Tag {
 
@@ -46,6 +46,10 @@ public class ComponentsColumnTag extends CameliaTag implements Tag {
 	private String defaultCellStyleClass;
 	private String cellDefaultToolTipText;
 	private String cellToolTipText;
+	private String selectionListeners;
+	private String doubleClickListeners;
+	private String userEventListeners;
+	private String initListeners;
 	public String getComponentType() {
 		return ComponentsColumnComponent.COMPONENT_TYPE;
 	}
@@ -272,6 +276,38 @@ public class ComponentsColumnTag extends CameliaTag implements Tag {
 
 	public final void setCellToolTipText(String cellToolTipText) {
 		this.cellToolTipText = cellToolTipText;
+	}
+
+	public final String getSelectionListener() {
+		return selectionListeners;
+	}
+
+	public final void setSelectionListener(String selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
+
+	public final String getDoubleClickListener() {
+		return doubleClickListeners;
+	}
+
+	public final void setDoubleClickListener(String doubleClickListeners) {
+		this.doubleClickListeners = doubleClickListeners;
+	}
+
+	public final String getUserEventListener() {
+		return userEventListeners;
+	}
+
+	public final void setUserEventListener(String userEventListeners) {
+		this.userEventListeners = userEventListeners;
+	}
+
+	public final String getInitListener() {
+		return initListeners;
+	}
+
+	public final void setInitListener(String initListeners) {
+		this.initListeners = initListeners;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -588,6 +624,22 @@ public class ComponentsColumnTag extends CameliaTag implements Tag {
 				component.setCellToolTipText(cellToolTipText);
 			}
 		}
+
+		if (selectionListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
+		if (doubleClickListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+		}
+
+		if (userEventListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+		}
+
+		if (initListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
+		}
 	}
 
 	public void release() {
@@ -619,6 +671,10 @@ public class ComponentsColumnTag extends CameliaTag implements Tag {
 		defaultCellStyleClass = null;
 		cellDefaultToolTipText = null;
 		cellToolTipText = null;
+		selectionListeners = null;
+		doubleClickListeners = null;
+		userEventListeners = null;
+		initListeners = null;
 
 		super.release();
 	}
