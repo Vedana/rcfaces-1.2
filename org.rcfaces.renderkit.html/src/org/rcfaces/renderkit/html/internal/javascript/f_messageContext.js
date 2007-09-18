@@ -255,6 +255,35 @@ var __members = {
 	
 	/**
 	 * @method public
+	 * @param optional boolean withComponentOnly to return only messages associated to a component
+	 * @return string[]
+	 */
+	f_listComponentIdsWithMessages: function(withComponentOnly) {
+	
+		var messages=this._messages;
+	
+		if (!messages) {
+			return [];
+		}
+	
+		var l=new Array;
+		
+		for(var clientId in messages) {
+			if (!withComponentOnly || 
+				(clientId != f_messageContext._UNKNOWN_COMPONENT_ID && clientId != f_messageContext._GLOBAL_COMPONENT_ID)) {
+				l.push(clientId);
+			}
+		}
+			
+		if (this._parent) {
+			l.push.apply(l, this._parent.f_listComponentIdsWithMessages());
+		}
+	
+		return l;
+	},
+	
+	/**
+	 * @method public
 	 * @param optional String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
 	 * @param optional boolean globalOnly
 	 * @return f_messageObject[]
