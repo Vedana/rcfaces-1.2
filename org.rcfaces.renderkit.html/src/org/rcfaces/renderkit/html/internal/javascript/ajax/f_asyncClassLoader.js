@@ -382,7 +382,7 @@ f_classLoader.prototype._asyncPostLoad=function(interactiveMode) {
  * @param String bundleName
  * @return boolean
  */
-f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {		
+f_classLoader.prototype._asyncLoadBundle=function(bundleName) {		
 	
 	if (window._rcfacesExiting) {
 		return false;
@@ -422,7 +422,7 @@ f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {
 
 		f_core.Debug("f_asyncClassLoader", "_asyncLoadBundle: No bundle waiting, call the systemLoad.");
 
-		this._asyncSystemLoadBundle(doc, bundleName);
+		this._asyncSystemLoadBundle(bundleName);
 		
 		return true;		
 	}
@@ -437,11 +437,10 @@ f_classLoader.prototype._asyncLoadBundle=function(doc, bundleName) {
 
 /**
  * @method private
- * @param Document doc
  * @param String bundleName
  * @return void
  */
-f_classLoader.prototype._asyncBundleLoaded=function(doc, bundleName) {
+f_classLoader.prototype._asyncBundleLoaded=function(bundleName) {
 	
 	if (window._rcfacesExiting) {
 		return;
@@ -472,7 +471,7 @@ f_classLoader.prototype._asyncBundleLoaded=function(doc, bundleName) {
 		// Un autre Bundle a charger ... 
 		f_core.Debug("f_asyncClassLoader", "_asyncBundleLoaded: Load next bundle '"+bundleName+"'");	
 		
-		this._asyncSystemLoadBundle(doc, bundleName);
+		this._asyncSystemLoadBundle(bundleName);
 	}
 
 	if (interactives) {
@@ -493,11 +492,10 @@ f_classLoader.prototype._asyncBundleLoaded=function(doc, bundleName) {
 
 /**
  * @method private
- * @param Document doc
  * @param String bundleName
  * @return void
  */
-f_classLoader.prototype._asyncSystemLoadBundle=function(doc,bundleName) {
+f_classLoader.prototype._asyncSystemLoadBundle=function(bundleName) {
 	// On lance le chargement du bundle ...	
 	
 	if (window._rcfacesExiting) {
@@ -510,7 +508,7 @@ f_classLoader.prototype._asyncSystemLoadBundle=function(doc,bundleName) {
 
 	f_core.Debug("f_asyncClassLoader", "_asyncBundleLoaded: Declare the loading of script '"+bundleName+"' at url='"+url+"'. (loadingCount="+this._loadingBundle+")");
 
-	var script=doc.createElement("script");
+	var script=document.createElement("script");
 	script.type=f_httpRequest.JAVASCRIPT_MIME_TYPE;
 	script.src=url;
 	script.defer=false;
@@ -535,16 +533,16 @@ f_classLoader.prototype._asyncSystemLoadBundle=function(doc,bundleName) {
 			}
 			
 			script.onreadystatechange=null;
-			self._asyncBundleLoaded(script.ownerDocument, script._bundleName);
+			self._asyncBundleLoaded(script._bundleName);
 		};
 
 	} else {
 		script.onload=function() {
 			script.onload=null; 
-			self._asyncBundleLoaded(script.ownerDocument, script._bundleName);
+			self._asyncBundleLoaded(script._bundleName);
 		};
 	}
 	
-	doc.body.appendChild(script);
+	document.body.appendChild(script);
 }
 

@@ -19,7 +19,7 @@ import org.rcfaces.renderkit.html.internal.decorator.ItemsListDecorator;
 
 /**
  * 
- * @author Fred Lefevere-Laoideeric Lefevere (latest modification by $Author$)
+ * @author Fred Lefevere-Laoid (latest modification by $Author$)
  * @version $Revision$ $Date$
  * @see ItemsToolFolderRenderer
  */
@@ -31,7 +31,6 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
      * @param writer writer
      * @param componentDecorator decorator
      * @throws WriterException 
-     * @return void
      */
     protected void encodeBeforeDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
@@ -67,7 +66,6 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
      * @param writer writer
      * @param componentDecorator decorator
      * @throws WriterException 
-     * @return void
      */
     protected void encodeAfterDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
@@ -102,7 +100,6 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
      * @param context context
      * @param component component
      * @param componentData componentData
-     * @return void
      */
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
@@ -113,7 +110,6 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
      * Creates the decorator
      * @param facesContext facesContext
      * @param component component
-     * @return componentDecorator
      */
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {

@@ -78,6 +78,7 @@ var __statics = {
 	
 			imageObject=new Image();
 			imageObject.id="ImageObject #"+f_imageRepository._ImagesObjectCount;
+			imageObject._window=window;
 			imageObject.onerror=f_imageRepository._OnErrorHandler;
 			imageObject.onload=f_imageRepository._OnLoadHandler;
 
@@ -118,10 +119,12 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return void
+	 * @window win
 	 */
 	_OnErrorHandler: function() {
+		var win=this._window;
 
-		if (window._rcfacesExiting) {
+		if (win._rcfacesExiting) {
 			return;
 		}
 
@@ -135,9 +138,11 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return void
+	 * @window win
 	 */
 	_OnLoadHandler: function() {
-		if (window._rcfacesExiting) {
+		var win=this._window;
+		if (win._rcfacesExiting) {
 			return;
 		}
 
@@ -197,6 +202,7 @@ var __statics = {
 //			image.id=undefined;
 			image.onload=null;
 			image.onerror=null;
+			image._window=undefined; // Window
 		}
 	}
 }

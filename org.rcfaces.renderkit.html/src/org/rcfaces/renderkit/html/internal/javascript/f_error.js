@@ -134,5 +134,5 @@ var __statics = {
 
 new f_class("f_error", {
 	statics: __statics,
-	systemClass: true
+	_systemClass: true
 });

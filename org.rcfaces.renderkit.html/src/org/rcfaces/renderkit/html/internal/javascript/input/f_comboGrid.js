@@ -108,10 +108,11 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return boolean
-	 * @object XXX To do
+	 * @event evt
 	 */
-	_OnBeforeDeactivate: function() {
-		var evt = f_core.GetJsEvent(this);
+	_OnBeforeDeactivate: function(evt) {
+		// Que sur IE ... donc ...
+		evt=f_core.GetJsEvent(this);
 		
 		var toElement=evt.toElement;
 		if (!toElement) {

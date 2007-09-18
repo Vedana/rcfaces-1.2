@@ -585,11 +585,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
                 sb.append('\n');
             }
-            
+
             if (Constants.JAVASCRIPT_APPEND_PROFILER_DATE) {
                 if (profilerMode) {
-                    sb
-                            .append("window._rcfacesBundleTime=new Date();\n");
+                    sb.append("window._rcfacesBundleTime=new Date();\n");
                 }
             }
         }
@@ -656,7 +655,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             return;
         }
 
-        sb.append("new f_bundle(\"");
+        sb.append("new f_bundle(window, \"");
 
         sb.append(file.getURI(locale));
         sb.append('\"');
@@ -666,10 +665,17 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             symbols = getSymbols();
         }
 
+        sb.append(",[");
+
+        boolean first = true;
         for (Iterator it = classes.iterator(); it.hasNext();) {
             IClass clazz = (IClass) it.next();
 
-            sb.append(',');
+            if (first) {
+                first = false;
+            } else {
+                sb.append(',');
+            }
 
             String className = clazz.getName();
             if (symbols != null) {
@@ -682,7 +688,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             sb.append(className);
         }
 
-        sb.append(");\n");
+        sb.append("]);\n");
     }
 
     public static IRepository.IContext getContextRepository(

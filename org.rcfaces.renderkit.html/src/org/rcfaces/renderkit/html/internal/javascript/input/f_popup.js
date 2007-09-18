@@ -194,12 +194,12 @@ var __statics = {
 	/**
 	 * @method hidden static
 	 */
-	Ie_CreatePopup: function(document) {
-		var popup=document.parentWindow.createPopup();
+	Ie_CreatePopup: function(doc) {
+		var popup=doc.parentWindow.createPopup();
 				
 		var pdocument=popup.document;
 		
-		var bases=document.getElementsByTagName("BASE");
+		var bases=doc.getElementsByTagName("BASE");
 		if (bases.length) {
 			var base=bases[bases.length-1];	// On prend le dernier !
 			
@@ -209,7 +209,7 @@ var __statics = {
 			pdocument.appendChild(pbase);
 		}
 		
-		f_core.CopyStyleSheets(pdocument, document);
+		f_core.CopyStyleSheets(pdocument, doc);
 		
 		return popup;
 	},
@@ -449,6 +449,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @event evt
 	 */
 	_OnClick: function(evt) {	
 		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+evt.target+"/"+evt.target.className);
@@ -465,6 +466,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @event evt
 	 */
 	_OnBlur: function(evt) {	
 		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
@@ -484,6 +486,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @event evt
 	 */
 	_OnFocus: function(evt) {
 		if (window._rcfacesExiting) {
@@ -519,6 +522,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt 
 	 * @return boolean
+	 * @event evt
 	 */
 	_OnKeyDown: function(evt) {
 		return f_popup._OnKeyDownJs(evt._jsEvent);
@@ -527,7 +531,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object :ownerDocument
+	 * @event evt
 	 */
 	_OnKeyDownJs: function(evt) {	
 		if (!evt) {
@@ -580,6 +584,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt 
 	 * @return boolean
+	 * @event evt
 	 */
 	_OnKeyUp: function(evt) {
 		return f_popup._OnKeyUpJs(evt._jsEvent);
@@ -588,7 +593,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object :ownerDocument
+	 * @event evt
 	 */
 	_OnKeyUpJs: function(evt) {	
 		if (!evt) {
@@ -623,6 +628,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt 
 	 * @return boolean
+	 * @event evt
 	 */
 	_OnKeyPress: function(evt) {
 		return f_popup._OnKeyPressJs(evt._jsEvent);
@@ -631,7 +637,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object :ownerDocument
+	 * @event evt
 	 */
 	_OnKeyPressJs: function(evt) {	
 		if (!evt) {

@@ -12,41 +12,56 @@
  */
 
 var __members = {
+	
+	/**
+	 * @field private final String
+	 */
+	_name: undefined,
+	
+	/**
+	 * @field private final f_classLoader
+	 */
+	_classLoader: undefined,
+	
+	/**
+	 * @field private final f_class[]
+	 */
+	_classes: undefined,
+	
 	/**
 	 * @method hidden
+	 * @param Window win
 	 * @param String name
+	 * @param f_class[] classes
 	 */
-	f_bundle: function(name)  {
+	f_bundle: function(win, name, classes)  {
 		this._name=name;
 	
-		var names=new Array;
-		var classes=new Array;
 		this._classes=classes;
 
-		var timeBundle=window._rcfacesBundleTime;
+		var timeBundle=win._rcfacesBundleTime;
 		if (timeBundle) {
 			var timeBundleEnd=new Date();
 			
-			window._rcfacesBundleTime=undefined;
+			win._rcfacesBundleTime=undefined;
 			
 			f_core.Profile(false, "f_bundle.parse("+name+")", timeBundle);			
 
 			f_core.Profile(true, "f_bundle.parse("+name+")", timeBundleEnd);			
 		}
 		
-		for(var i=1;i<arguments.length;i++) {
-			var clazz=arguments[i];
-			classes.push(clazz);
+		if (f_core.IsInfoEnabled(f_bundle)) {
+			var names=new Array;
+					
+			for(var i=0;i<classes.length;i++) {			
+				names.push(classes[i].f_getName());
+			}
 			
-			f_core.Assert(clazz.f_getName, "The class '"+clazz+"' ["+i+"] has not defined f_getName method ! ("+name+")");
-			
-			names.push(clazz.f_getName());
+			f_core.Info(f_bundle, "f_bundle: Bundle '"+name+"' declares classes: "+names.join(","));		
 		}
-		
-		f_core.Info("f_bundle", "f_bundle: Bundle '"+name+"' declares classes: "+names);
-	
-		var classLoader=f_classLoader.Get(window);
-		f_core.Assert(classLoader, "f_bundle: Bundle '"+name+"' can not get window classloader !");
+			
+		var classLoader=f_classLoader.Get(win);
+		f_core.Assert(classLoader, "f_bundle.f_bundle: Bundle '"+name+"' can not get window classloader !");
 		
 		this._classLoader=classLoader;
 		

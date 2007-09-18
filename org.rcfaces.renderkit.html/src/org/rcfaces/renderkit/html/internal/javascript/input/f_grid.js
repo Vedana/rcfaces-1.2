@@ -880,6 +880,7 @@ var __statics = {
 	 * @param Event evt
 	 * @return boolean
 	 * @object dataGrid
+	 * @event evt
 	 */
 	_TitleCursorDragMove: function(evt) {
 		var column=f_grid._DragColumn;
@@ -909,8 +910,9 @@ var __statics = {
 	 * @param Event evt
 	 * @return boolean
 	 * @object dataGrid
+	 * @event evt
 	 */
-	_TimerDragMove: function() {
+	_TimerDragMove: function(evt) {
 		var column=f_grid._DragColumn;
 		if (!column) {
 			return;
@@ -1057,6 +1059,7 @@ var __statics = {
 	 * @param Event evt
 	 * @return boolean
 	 * @object dataGrid
+	 * @event evt
 	 */
 	_TitleCursorDragStop: function(evt) {
 		var column=f_grid._DragColumn;
@@ -3331,7 +3334,7 @@ var __members = {
 			this._currentSorts=currentSorts;
 		}
 		
-		if (!f_core.AddElement(currentSorts, col)) {
+		if (!currentSorts.f_addElement(col)) {
 			// Déjà connu !
 	
 			// f_core.Debug(f_grid, "f_setColumnSort: Already known ???");
@@ -3354,7 +3357,7 @@ var __members = {
 				col=arguments[i++];
 				ascending=arguments[i++];
 				
-				if (!f_core.AddElement(currentSorts, col)) {
+				if (!currentSorts.f_addElement(col)) {
 					continue;	
 				}
 				

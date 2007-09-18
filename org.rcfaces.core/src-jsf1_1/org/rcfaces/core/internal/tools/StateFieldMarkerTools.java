@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import javax.faces.application.StateManager;
 import javax.faces.application.StateManager.SerializedView;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -134,8 +135,13 @@ public class StateFieldMarkerTools {
         }
     }
 
-    public static String getStateValue(FacesContext facesContext,
-            Object serializedView) throws IOException {
+    public static String getStateValue(FacesContext facesContext)
+            throws IOException {
+
+        StateManager stateManager = facesContext.getApplication()
+                .getStateManager();
+
+        Object serializedView = stateManager.saveSerializedView(facesContext);
 
         StringWriter writer = new StringWriter(512);
         ResponseWriter oldResponseWriter = facesContext.getResponseWriter();

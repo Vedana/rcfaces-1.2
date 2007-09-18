@@ -5,7 +5,7 @@
 /**
  * Array class
  *
- * @class public Array extends Object
+ * @class public Array
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */

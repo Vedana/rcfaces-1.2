@@ -163,13 +163,15 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
 
         jsWriter.writeCall(cameliaClassLoader, "f_requiresBundle");
-        jsWriter.write("document");
 
         Locale locale = repositoryContext.getLocale();
         for (int i = 0; i < fs.length; i++) {
             String src = fs[i].getURI(locale);
 
-            jsWriter.write(", \"").write(src).write('"');
+            if (i > 0) {
+                jsWriter.write(',');
+            }
+            jsWriter.writeString(src);
         }
 
         jsWriter.writeln(");");

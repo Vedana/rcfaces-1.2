@@ -353,7 +353,7 @@ var __members = {
 
 new f_class("f_log", { 
 	extend: f_object,
-	systemClass: true,
+	_systemClass: true,
 	statics: __statics, 
 	members: __members
 });

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 
+import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -107,8 +108,7 @@ public class StateFieldMarkerTools {
         }
     }
 
-    public static String getStateValue(FacesContext facesContext,
-            Object serializedView) throws IOException {
+    public static String getStateValue(FacesContext facesContext) throws IOException {
 
         StringWriter writer = new StringWriter(512);
         ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
@@ -124,8 +124,10 @@ public class StateFieldMarkerTools {
             }
             facesContext.setResponseWriter(responseWriter);
 
-            facesContext.getApplication().getStateManager().writeState(
-                    facesContext, serializedView);
+            StateManager stateManager = facesContext.getApplication()
+                    .getStateManager();
+            stateManager.writeState(facesContext, stateManager
+                    .saveView(facesContext));
 
             String state = writer.toString();
 

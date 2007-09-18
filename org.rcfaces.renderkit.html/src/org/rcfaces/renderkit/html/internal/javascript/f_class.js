@@ -72,6 +72,11 @@ var __statics = {
 			f_core.Assert(cls instanceof f_class, "f_class._Super: Can not find class of object '"+caller+"'\n["+caller.callee+"'\nclass='"+cls+"'\nname='"+name+"' !");
 	
 			var p = cls._parent;
+			if (f_classLoader.MULTI_WINDOW_CLASSLOADER) {
+				// On recherche le parent du bon contexte !
+				p = this._kclass._classLoader.f_getClass(p._name, p._lookId); 
+			}
+
 			f_core.Assert(p instanceof f_class, "f_class._Super: No parent class ! (className='"+cls._name+", method='"+name+"')");
 		
 			if (callee._constructor) {
@@ -548,19 +553,19 @@ var __statics = {
 	 * @dontInline f_class
 	 */
 	_DeclarePrototypeClass: function(classLoader, name, staticMembers, methods) {
-		if (!classLoader) {
-			classLoader=f_classLoader.Get(window);
-		}
-		
-		var cls=null;
+	
+		var constructorFct;
 		if (methods) {
-			cls=methods[name];
-		}
-		if (!cls) {
-			cls=f_class._CreateConstructor();
+			constructorFct=methods[name];
 		}
 		
-		window[name]=cls;
+		var cls;
+		if (name=="f_class") {
+			cls=staticMembers._CreateConstructor(constructorFct);
+		
+		} else {
+			cls=f_class._CreateConstructor(constructorFct);
+		}
 		
 		cls.prototype=methods;
 		cls._name=name;
@@ -570,6 +575,7 @@ var __statics = {
 		if (!staticMembers) {
 			staticMembers=new Object;
 		}
+		cls._staticMembers=staticMembers;
 		
 		if (!staticMembers.f_getName) {
 			staticMembers.f_getName=f_class.f_getName;
@@ -578,17 +584,18 @@ var __statics = {
 		if (!staticMembers.toString) {	
 			staticMembers.toString=f_class.toString;
 		}			
-		
-		cls._staticMembers=staticMembers;
-				
+						
 		cls._classLoader.f_declareClass(cls);
 	},
 	/**
 	 * @method private static
 	 * @return function
 	 */
-	_CreateConstructor: function() {
-		return new function() {
+	_CreateConstructor: function(constructorFct) {
+		return function() {
+			if (constructorFct) {
+				constructorFct.apply(this, arguments);
+			}
 		};
 	},
 	/**
@@ -652,7 +659,7 @@ var __members = {
 	/**
 	 * @field hidden String
 	 */
-	_look: undefined,
+	_lookId: undefined,
 	
 	/**
 	 * @field hidden Object 
@@ -677,12 +684,9 @@ var __members = {
 		if (!arguments.length) {
 			return;
 		}
-		if (className instanceof f_classLoader) {
-			this._newMultiWindow(arguments);		
-			return;
-		}
-
+	
 		var aspects;
+		var classLoader;
 		
 		if (lookId && typeof(lookId)=="object") {
 			var atts=lookId;
@@ -691,7 +695,8 @@ var __members = {
 			staticMembers=atts.statics;
 			members=atts.members;
 			parentClass=atts.extend;
-			this._systemClass=!!atts.systemClass;
+			classLoader=atts._classLoader;
+			this._systemClass=!!atts._systemClass;
 			
 			aspects=atts.aspects;
 			
@@ -702,7 +707,7 @@ var __members = {
 			f_core.Assert(aspects===undefined || (aspects instanceof Array), "f_class: Invalid aspects attribute ("+aspects+") for class '"+className+"'.");
 			
 			if (f_core.IsDebugEnabled(f_class)) {
-				var keywords="|lookId|members|statics|extend|systemClass|aspects|";
+				var keywords="|lookId|members|statics|extend|_systemClass|aspects|_classLoader|";
 				for(var name in atts) {
 					f_core.Assert(keywords.indexOf("|"+name+"|")>=0, "f_class: Unknown keyword '"+name+"' in definition of class '"+className+"'.");
 				}
@@ -729,7 +734,9 @@ var __members = {
 			}
 		}
 		
-		var classLoader=(parentClass)?parentClass._classLoader:f_classLoader.Get(window);
+		if (!classLoader) {
+			classLoader=(parentClass)?parentClass._classLoader:f_classLoader.Get(window);
+		}
 		
 		if (!parentClass && className!="f_object") {
 			f_class._DeclarePrototypeClass(classLoader, className, staticMembers, members);
@@ -753,7 +760,7 @@ var __members = {
 		
 		this._name = className;
 		this._staticMembers = staticMembers;
-		this._look = lookId;
+		this._lookId = lookId;
 		this._members = members;
 		this._parent = parentClass;
 
@@ -778,7 +785,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getLookId: function() {
-		return this._look;
+		return this._lookId;
 	},
 	
 	/**
@@ -843,5 +850,5 @@ var __members = {
 	}
 }
 
-__statics._DeclarePrototypeClass(null, "f_class", __statics, __members);
+__statics._DeclarePrototypeClass(window._rcfacesClassLoader, "f_class", __statics, __members);
 

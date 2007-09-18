@@ -35,6 +35,10 @@ public interface IHtmlProcessContext extends IProcessContext {
     String DEBUG_MODE_APPLICATION_PARAMETER = Constants.getPackagePrefix()
             + ".client.DEBUG_MODE";
 
+    String MULTI_WINDOW_MODE_APPLICATION_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".client.MULTI_WINDOW_MODE";
+
     String PROFILER_MODE_APPLICATION_PARAMETER = Constants.getPackagePrefix()
             + ".client.PROFILER_MODE";
 

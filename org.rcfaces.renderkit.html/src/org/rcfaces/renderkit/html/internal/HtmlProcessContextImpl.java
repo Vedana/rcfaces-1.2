@@ -50,6 +50,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private final boolean useMetaContentStyleType;
 
+    private Boolean multiWindowMode;
+
     private Boolean debugMode;
 
     private Boolean profilerMode;
@@ -87,6 +89,13 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         if (profilerModeParam != null) {
             profilerMode = Boolean.valueOf("true"
                     .equalsIgnoreCase(profilerModeParam));
+        }
+
+        String multiWindowModeParam = (String) applicationMap
+                .get(MULTI_WINDOW_MODE_APPLICATION_PARAMETER);
+        if (multiWindowModeParam != null) {
+            multiWindowMode = Boolean.valueOf("true"
+                    .equalsIgnoreCase(multiWindowModeParam));
         }
 
         separatorChar = getHtmlSeparatorChar(externalContext);
@@ -227,6 +236,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         setProcessContext(htmlProcessContext);
 
         return htmlProcessContext;
+    }
+
+    public Boolean getMultiWindowMode() {
+        return multiWindowMode;
     }
 
 }

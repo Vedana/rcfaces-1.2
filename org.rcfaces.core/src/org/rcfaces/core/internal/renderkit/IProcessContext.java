@@ -25,6 +25,8 @@ public interface IProcessContext {
 
     FacesContext getFacesContext();
 
+    Boolean getMultiWindowMode();
+
     Boolean getDebugMode();
 
     Boolean getProfilerMode();

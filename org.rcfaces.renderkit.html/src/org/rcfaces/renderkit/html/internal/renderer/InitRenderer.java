@@ -98,9 +98,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
     private static final String MULTI_WINDOW_FILENAME = "f_multiWindow.js";
 
-    public static final String MULTI_WINDOW_PARAMETER = Constants
+    public static final String MULTI_WINDOW_CLASSLOADER = Constants
             .getPackagePrefix()
-            + ".MULTI_WINDOW_MODE";
+            + ".MULTI_WINDOW_CLASSLOADER";
 
     private static final String NONE_IMAGE_URL = "none";
 
@@ -381,16 +381,19 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 disabledCookiesPageURL = appParams.disabledCookiesPageURL;
             }
 
-            if (appParams.multiWindowScript) {
+            Boolean debugMode = htmlProcessContext.getDebugMode();
+            Boolean muliWindowMode = htmlProcessContext.getMultiWindowMode();
+
+            if (appParams.multiWindowClassLoader
+                    && Boolean.FALSE.equals(muliWindowMode) == false) {
                 writeScriptTag_multiWindow(htmlWriter, cameliaScriptURI,
                         jsBaseURI, repository, repositoryContext,
-                        disabledCookiesPageURL);
+                        disabledCookiesPageURL, debugMode);
 
             } else {
-                Boolean debugMode = htmlProcessContext.getDebugMode();
 
                 writeScriptTag(htmlWriter, cameliaScriptURI, jsBaseURI,
-                        disabledCookiesPageURL, debugMode);
+                        disabledCookiesPageURL, debugMode, muliWindowMode);
             }
         }
 
@@ -589,38 +592,65 @@ public class InitRenderer extends AbstractHtmlRenderer {
         writer.endElement(IHtmlWriter.NOSCRIPT);
     }
 
-    private void writeScriptTag(IHtmlWriter writer, String uri,
-            String jsBaseURI, String disabledCookiesPageURL, Boolean debugMode)
-            throws WriterException {
+    private void writeDebugModes(IHtmlWriter writer,
+            IJavaScriptWriter jsWriter, String disabledCookiesPageURL,
+            Boolean debugMode, Boolean multiWindowMode) throws WriterException {
+
+        boolean closeJsWriter = false;
 
         if (disabledCookiesPageURL != null) {
-            IJavaScriptWriter jsWriter = openScriptTag(writer);
-            writeCookieTest(jsWriter, disabledCookiesPageURL);
-            jsWriter.end();
+            if (jsWriter == null) {
+                jsWriter = openScriptTag(writer);
+                closeJsWriter = true;
+            }
+
+            jsWriter.write("if (!navigator.cookieEnabled) document.location=");
+            jsWriter.writeString(disabledCookiesPageURL);
+            jsWriter.writeln(";");
         }
 
         if (debugMode != null) {
-            IJavaScriptWriter jsWriter = openScriptTag(writer);
+            if (jsWriter == null) {
+                jsWriter = openScriptTag(writer);
+                closeJsWriter = true;
+            }
+
             jsWriter.write("window.rcfacesDebugMode=");
             jsWriter.writeBoolean(debugMode.booleanValue());
-            jsWriter.write(';').end();
+            jsWriter.writeln(";");
         }
+
+        if (multiWindowMode != null) {
+            if (jsWriter == null) {
+                jsWriter = openScriptTag(writer);
+                closeJsWriter = true;
+            }
+
+            jsWriter.write("window.rcfacesMultiWindowMode=");
+            jsWriter.writeBoolean(multiWindowMode.booleanValue());
+            jsWriter.writeln(";");
+        }
+
+        if (closeJsWriter) {
+            jsWriter.end();
+        }
+    }
+
+    private void writeScriptTag(IHtmlWriter writer, String uri,
+            String jsBaseURI, String disabledCookiesPageURL, Boolean debugMode,
+            Boolean multiWindowMode) throws WriterException {
+
+        writeDebugModes(writer, null, disabledCookiesPageURL, debugMode,
+                multiWindowMode);
 
         includeScript(writer, jsBaseURI + "/" + uri,
                 IHtmlRenderContext.JAVASCRIPT_CHARSET);
     }
 
-    private void writeCookieTest(IJavaScriptWriter writer,
-            String disabledCookiesPageURL) throws WriterException {
-        writer.write("if (!navigator.cookieEnabled) document.location=");
-        writer.write(disabledCookiesPageURL);
-        writer.writeln(";");
-    }
-
     private void writeScriptTag_multiWindow(IHtmlWriter writer, String uri,
             String jsBaseURI, IHierarchicalRepository repository,
-            IContext repositoryContext, String disabledCookiesPageURL)
-            throws WriterException {
+            IContext repositoryContext, String disabledCookiesPageURL,
+            Boolean debugMode) throws WriterException {
 
         IHtmlProcessContext htmlProcessContext = writer
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
@@ -633,22 +663,29 @@ public class InitRenderer extends AbstractHtmlRenderer {
         // new JavaScriptTag.JavaScriptWriterImpl( facesContext, symbols,
         // writer);
 
-        if (disabledCookiesPageURL != null) {
-            writeCookieTest(jsWriter, disabledCookiesPageURL);
-        }
+        writeDebugModes(null, jsWriter, disabledCookiesPageURL, debugMode,
+                Boolean.TRUE);
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
 
-        jsWriter.write("for(var cl,v=window;v && !cl;v=v.opener)try{ cl=v.");
+        jsWriter.write("for(var cl,v=window;v && !cl;v=v.opener) try{ cl=v.");
         jsWriter.write(cameliaClassLoader);
         jsWriter.writeln("}catch(x){}");
         jsWriter.write("if (!cl && top) cl=top.");
         jsWriter.write(cameliaClassLoader);
         jsWriter.writeln(";");
-        jsWriter.write("if (cl) cl.");
-        jsWriter.writeSymbol("_newWindow");
-        jsWriter.write(".call(window, cl, function(x){return eval(x)});");
+        jsWriter.write("if (cl && cl.");
+        jsWriter.writeSymbol("f_newWindowClassLoader");
+        jsWriter.write(") ");
+        jsWriter.write(cameliaClassLoader);
+        jsWriter.write("=cl.");
+
+        String newWindowClassLoader = jsWriter.getJavaScriptRenderContext()
+                .convertSymbol("f_classLoader", "f_newWindowClassLoader");
+        jsWriter.write(newWindowClassLoader);
+        
+        jsWriter.write("(window);");
         jsWriter.write(" else document.write(\"<SCRIPT");
         if (htmlProcessContext.useMetaContentScriptType() == false) {
             jsWriter.write(" type=\\\"");
@@ -656,8 +693,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
             jsWriter.write("\\\"");
         }
         jsWriter.write(" src=\\\"");
-        String u = jsBaseURI + "/" + uri;
-        jsWriter.write(u);
+        jsWriter.write(jsBaseURI);
+        jsWriter.write('/');
+        jsWriter.write(uri);
         jsWriter.write("\\\"");
 
         if (javascriptCharset != null) {
@@ -683,9 +721,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 }
                 jsWriter.write(" src=\\\"");
 
-                u = jsBaseURI + "/" + files[i].getURI(locale);
+                jsWriter.write(jsBaseURI);
+                jsWriter.write('/');
+                jsWriter.write(files[i].getURI(locale));
 
-                jsWriter.write(u);
                 jsWriter.write("\\\"");
                 if (javascriptCharset != null) {
                     jsWriter.write(" charset=\\\"");
@@ -717,7 +756,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         boolean disableIEImageBar;
 
-        boolean multiWindowScript;
+        boolean multiWindowClassLoader;
 
         boolean disableCache;
 
@@ -819,8 +858,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 metaContentType = false;
             }
 
-            multiWindowScript = "true".equalsIgnoreCase((String) initParameters
-                    .get(MULTI_WINDOW_PARAMETER));
+            multiWindowClassLoader = "true"
+                    .equalsIgnoreCase((String) initParameters
+                            .get(MULTI_WINDOW_CLASSLOADER));
 
             symbols = JavaScriptRepositoryServlet.getSymbols(facesContext);
 
@@ -845,8 +885,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
                     LOG.info("Client validation is disabled for context.");
                 }
 
-                if (multiWindowScript) {
-                    LOG.info("MultiWindowScript is enabled for context.");
+                if (multiWindowClassLoader) {
+                    LOG.info("MultiWindowClassLoader is enabled for context.");
                 }
 
                 if (metaContentType) {
@@ -871,6 +911,12 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 if (htmlProcessContext.getProfilerMode() != null) {
                     LOG.info("PROFILER_MODE is setted to "
                             + htmlProcessContext.getProfilerMode()
+                            + " for context.");
+                }
+
+                if (htmlProcessContext.getMultiWindowMode() != null) {
+                    LOG.info("MULTI_WINDOW_MODE is setted to "
+                            + htmlProcessContext.getMultiWindowMode()
                             + " for context.");
                 }
 

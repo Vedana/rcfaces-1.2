@@ -74,6 +74,7 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
 
 /**
  * Decorator for itemsList (inspired by itemsToolFolder)
+
  * @author Fred Lefevere-Laoide
  * @see ItemsToolFolderDecorator
  */
@@ -391,7 +392,6 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
      * @param selectItem selectItem
      * @param hasChild hasChild
      * @param isVisible isVisible
-     * @return void
      */
     protected void encodeToolItemPopupEnd(UIComponent component,
             SelectItem selectItem, boolean hasChild, boolean isVisible)
@@ -417,7 +417,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /**
      * 
      * @param selectItem selectItem
-     * @return int item Separator Width
+     * @return item Separator Width
      */
     protected int getToolItemSeparatorWidth(SelectItem selectItem) {
         return ToolBarRenderer.DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH;
@@ -836,7 +836,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /**
      * 
      * @param selectItem
-     * @return int default height
+     * @return default height
      */
     protected int getToolItemImageDefaultHeight(SelectItem selectItem) {
         return -1;
@@ -845,7 +845,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /**
      * 
      * @param selectItem
-     * @return int default width
+     * @return default width
      */
     protected int getToolItemImageDefaultWidth(SelectItem selectItem) {
         return -1;
@@ -1044,7 +1044,6 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     }
 
     /**
-     * @return void
      *
      */
     public void allocateItemSeparator() {
@@ -1057,7 +1056,6 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
      * @param selectItemVarName
      * @param selectItemComponentId
      * @param javascriptWriter
-     * @return
      * @throws WriterException
      */
     public ItemsMenuDecorator pushMenuDecorator(String selectItemVarName,
@@ -1089,7 +1087,6 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     /**
      * menu (not used yet)
-     * @return
      */
     public ItemsMenuDecorator peekMenuDecorator() {
         return (ItemsMenuDecorator) menuDecoratorStack.get(menuDecoratorStack

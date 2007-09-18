@@ -410,5 +410,5 @@ var __statics = {
 
 new f_class("f_env", {
 	statics: __statics,
-	systemClass: true
+	_systemClass: true
 });

@@ -407,6 +407,12 @@ var f_core = {
 	 * @return boolean <code>true</code> if debug logging  is enabled.
 	 */
 	IsTraceEnabled: function(name) {
+		if (typeof(name)!="string" && name.f_getName) {
+			var className=name.f_getName();
+			f_core.Assert(typeof(className)=="string", "f_core.IsTraceEnabled: Invalid class name of object '"+name+"'.");
+			name=className;
+		}
+
 		f_core.Assert(typeof(name)=="string", "f_core.IsTraceEnabled: name parameter is invalid. ('"+name+"')");
 		if (!window.f_log) {
 			return (f_core.DebugMode);
@@ -437,6 +443,12 @@ var f_core = {
 	 * @return boolean <code>true</code> if info logging  is enabled.
 	 */
 	IsInfoEnabled: function(name) {
+		if (typeof(name)!="string" && name.f_getName) {
+			var className=name.f_getName();
+			f_core.Assert(typeof(className)=="string", "f_core.IsInfoEnabled: Invalid class name of object '"+name+"'.");
+			name=className;
+		}
+
 		f_core.Assert(typeof(name)=="string", "f_core.IsInfoEnabled: name parameter is invalid. ('"+name+"')");
 		
 		return f_log.GetLog(name).f_isInfoEnabled();
@@ -464,6 +476,12 @@ var f_core = {
 	 * @return boolean <code>true</code> if info logging  is enabled.
 	 */
 	IsWarnEnabled: function(name) {
+		if (typeof(name)!="string" && name.f_getName) {
+			var className=name.f_getName();
+			f_core.Assert(typeof(className)=="string", "f_core.IsWarnEnabled: Invalid class name of object '"+name+"'.");
+			name=className;
+		}
+
 		f_core.Assert(typeof(name)=="string", "f_core.IsWarnEnabled: name parameter is invalid. ('"+name+"')");
 		
 		return f_log.GetLog(name).f_isWarnEnabled();
@@ -523,6 +541,12 @@ var f_core = {
 	 * @return boolean <code>true</code> if error logging  is enabled.
 	 */
 	IsErrorEnabled: function(name) {
+		if (typeof(name)!="string" && name.f_getName) {
+			var className=name.f_getName();
+			f_core.Assert(typeof(className)=="string", "f_core.IsErrorEnabled: Invalid class name of object '"+name+"'.");
+			name=className;
+		}
+
 		f_core.Assert(typeof(name)=="string", "f_core.IsErrorEnabled: name parameter is invalid. ('"+name+"')");
 		
 		return f_log.GetLog(name).f_isErrorEnabled();
@@ -584,28 +608,41 @@ var f_core = {
 		var profilerCB=win.rcfacesProfilerCB;
 		var logCB=win.rcfacesLogCB;
 
-		try {
-			for(var w=win;w && w.parent!=w;w=w.parent) {
-				var f=w.parent.rcfacesProfilerCB
-				if (!f) {
-					f=w.parent.f_profilerCB; // Legacy !
-				}
-				
-				if (f) {
-					profilerCB=f;
-					win.rcfacesProfilerCB=profilerCB;
-				}
-				
-				f=w.parent.rcfacesLogCB
-				if (f) {
-					logCB=f;
-					win.rcfacesLogCB=logCB;
-				}
+		if (window.rcfacesMultiWindowClassLoader===true) {
+			// Il faut copier les members de CORE pour les retrouver !
+			
+			var kmethods=new Object;
+			f_core._kmethods=kmethods;
+			
+			for(var memberName in f_core) {
+				kmethods[memberName]=f_core[kmethods];
 			}
-		} catch (x) {
-			// Il y aura peut etre des problemes de sécurité ... on laisse tomber !
 		}
-		
+
+		if (window.rcfacesMultiWindowMode!==false) {
+			try {
+				for(var w=win;w && w.parent!=w;w=w.parent) {
+					var f=w.parent.rcfacesProfilerCB
+					if (!f) {
+						f=w.parent.f_profilerCB; // Legacy !
+					}
+					
+					if (f) {
+						profilerCB=f;
+						win.rcfacesProfilerCB=profilerCB;
+					}
+					
+					f=w.parent.rcfacesLogCB
+					if (f) {
+						logCB=f;
+						win.rcfacesLogCB=logCB;
+					}
+				}
+			} catch (x) {
+				// Il y aura peut etre des problemes de sécurité ... on laisse tomber !
+			}
+		}
+				
 		f_core.Info(f_core, "_InitLibrary: start date="+initDate);
 		
 		if (profilerCB) {
@@ -1070,7 +1107,7 @@ var f_core = {
 
 	},
 	/**
-	 * @method public static
+	 * @method hidden static
 	 * @param HTMLElement elt
 	 * @return HTMLFormElement
 	 */
@@ -2091,7 +2128,7 @@ var f_core = {
 		f_core.Assert(listener===undefined || typeof(listener)=="object", "f_core.AddCheckListener: Listener must be an object ! ("+listener+")");
 		f_core.Assert(component.nodeType, "f_core.AddCheckListener: Invalid component parameter ("+component+")");
 
-		var form=this.GetParentForm(component);
+		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_core.AddCheckListener: Can not get form of component '"+component.id+"'.");
 		
 		var checkListeners=form._checkListeners;
@@ -2118,7 +2155,7 @@ var f_core = {
 	AddResetListener: function(component) {
 		f_core.Assert(typeof(component)=="object", "f_core.AddResetListener: Listener is invalid !");
 
-		var form=this.GetParentForm(component);
+		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_core.AddResetListener: Can not get form of component '"+component.id+"'.");
 		
 		var resetListeners=form._resetListeners;
@@ -2135,7 +2172,7 @@ var f_core = {
 	RemoveResetListener: function(component) {
 		f_core.Assert(typeof(component)=="object", "f_core.RemoveResetListener: Listener is invalid !");
 
-		var form=this.GetParentForm(component);
+		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_core.RemoveResetListener: Can not get form of component '"+component.id+"'.");
 		
 		var resetListeners=form._resetListeners;
@@ -2851,40 +2888,9 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 */
-	RemoveElement: function(list, value) {
-		if (!list || !list.length) {
-			return false;
-		}
-		for(var i=0;i<list.length;i++) {
-			if (list[i]!==value) {
-				continue;
-			}
-			
-			list.splice(i, 1);
-			return true;
-		}
-		return false;
-	},
-	/**
-	 * @method hidden static
-	 */
-	AddElement: function(list, value) {
-		for(var i=0;i<list.length;i++) {
-			if (list[i]!==value) {
-				continue;
-			}
-			
-			return false;
-		}
-	
-		list.push(value);
-		return true;
-	},
-	/**
-	 * @method hidden static
 	 * @param Event evt Javascript event
 	 * @return boolean
+	 * @event evt
 	 */
 	CancelJsEventHandler: function(evt) {
 		if (!evt) {
@@ -2901,6 +2907,7 @@ var f_core = {
 	 * @method hidden static 
 	 * @param Event evt Javascript event
 	 * @return boolean
+	 * @event evt
 	 */
 	CancelJsEventHandlerTrue: function(evt) {
 		if (!evt) {
@@ -2917,6 +2924,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @event evt
 	 */
 	CancelJsEvent: function(evt) {
 		if (!evt) {

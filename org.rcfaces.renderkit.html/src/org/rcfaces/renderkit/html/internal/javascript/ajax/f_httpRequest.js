@@ -5,7 +5,7 @@
 /**
  * HTTP request support.
  *
- * @class f_httpRequest extends f_object
+ * @class f_httpRequest
  * @author Joel Merlin + Olivier Oeuillot
  */
 var __statics = {
@@ -69,7 +69,7 @@ var __statics = {
 var __members = {
 
 	f_httpRequest: function(component, url, acceptType, noLog) {
-		this._component=component;
+		this._component=component;		
 		this._noLog=noLog;
 		this._url=url;
 		this.f_setAcceptType(acceptType);

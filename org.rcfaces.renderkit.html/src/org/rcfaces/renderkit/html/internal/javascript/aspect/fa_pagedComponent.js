@@ -70,7 +70,7 @@ var __statics = {
 		}
 		
 		for(var componentId in dgp) {
-			f_core.RemoveElement(dgp[componentId], pager);
+			dgp[componentId].f_removeElement(pager);
 		}
 	},
 	/**

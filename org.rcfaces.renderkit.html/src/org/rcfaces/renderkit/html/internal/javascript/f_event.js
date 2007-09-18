@@ -721,5 +721,5 @@ var __statics = {
 new f_class("f_event", {
 	statics: __statics,
 	members: __members,
-	systemClass: true
+	_systemClass: true
 });

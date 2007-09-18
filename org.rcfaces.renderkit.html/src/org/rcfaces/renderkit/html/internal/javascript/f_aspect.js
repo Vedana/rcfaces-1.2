@@ -19,12 +19,8 @@ function f_aspect(aspectName, staticMembers, members, extend) {
 		return;
 	}
 
-	if (aspectName instanceof f_classLoader) {
-		this._newMultiWindow(arguments);		
-		return;
-	}
-
 	var parents;
+	var classLoader;
 	
 	if (staticMembers && (staticMembers.statics || staticMembers.members || staticMembers.extend)) {
 		var atts=staticMembers;
@@ -32,11 +28,12 @@ function f_aspect(aspectName, staticMembers, members, extend) {
 		staticMembers=atts.statics;
 		members=atts.members;
 		parents=atts.extend;
+		classLoader=atts._classLoader;
 		
 		if (f_core.IsDebugEnabled("f_aspect")) {
-			var keywords="|members|statics|extend|systemClass|";				
+			var keywords="|members|statics|extend|_systemClass|_classLoader|";				
 			for(var name in atts) {
-				f_core.Assert(keywords.indexOf("|"+name+"|")>=0, "f_aspect: Unknown keyword '"+name+"' in definition of aspect '"+aspectName+"'.");
+				f_core.Assert(keywords.indexOf("|"+name+"|")>=0, "f_aspect.f_aspect: Unknown keyword '"+name+"' in definition of aspect '"+aspectName+"'.");
 			}
 		}		
 		
@@ -59,14 +56,19 @@ function f_aspect(aspectName, staticMembers, members, extend) {
 	this._name=aspectName;
 	this._members=members;
 	this._staticMembers=staticMembers;
-	this._classLoader=f_classLoader.Get();
-
+	
+	if (!classLoader) {
+		classLoader=f_classLoader.Get(window);
+	}
+	
+	this._classLoader=classLoader;
 		
 	if (f_core.IsDebugEnabled("f_aspect")) {
 		if (parents) {
 			for(var i=0;i<parents.length;i++) {
 				var parent=parents[i];
-				f_core.Assert(parent instanceof f_aspect, "Parent of aspect must be an aspect. (parent="+parent+").");
+				
+				f_core.Assert(parent instanceof f_aspect, "f_aspect.f_aspect: Parent of aspect must be an aspect. (parent="+parent+").");
 			}
 		}
 	}		
@@ -74,6 +76,7 @@ function f_aspect(aspectName, staticMembers, members, extend) {
 	
 	this._classLoader.f_declareAspect(this);
 }
+
 f_aspect.prototype = {
 	/**
 	 * @method public

@@ -6,13 +6,22 @@
 /**
  * f_classLoader
  *
- * @class public final f_classLoader extends Object
+ * @class public final f_classLoader
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-function f_classLoader(win, parentClassLoader) {
+ 
+/**
+ * @window window
+ */
+function f_classLoader(win) {
+	if (!arguments.length) {
+		// Constructeur vide pour l'héritage
+		return;
+	}
+	f_core.Assert(win, "f_classLoader.f_classLoader: Invalid window parameter ("+win+")");
+	
 	this._window=win;
-	this._parent=parentClassLoader;			
 
 	this._objectPool=new Array;
 	this._componentPool=new Array;
@@ -32,11 +41,6 @@ f_classLoader.prototype = {
 	_window: undefined,
 	
 	/**
-	 * @field hidden final f_classLoader 
-	 */
-	_parent: undefined,
-	
-	/**
 	 * @method public final
 	 * @return Window
 	 */
@@ -54,14 +58,6 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method public final
-	 * @return f_classLoader
-	 */
-	f_getParent: function() {
-		return this._parent;
-	},
-	
-	/**
-	 * @method public final
 	 * @param String className Name of class.
 	 * @param optional String lookId Look id.
 	 * @return f_class
@@ -74,15 +70,6 @@ f_classLoader.prototype = {
 			claz=this._classes[name];
 			if (claz) {
 				break;
-			}
-			
-			var parentClassloader=this._parent;
-			if (parentClassloader) {
-				claz= parentClassloader.f_getClass(className, lookId);
-				if (claz) {
-					// C'est déjà initializé par le parent !
-					return claz;
-				}
 			}
 	
 			if (!lookId) {
@@ -107,31 +94,17 @@ f_classLoader.prototype = {
 		if (aspect) {
 			return aspect;
 		}
-	
-		var parentClassloader=this._parent;
-		if (!parentClassloader) {
-			return null;
-		}
-		
-		return parentClassloader.f_getAspect(aspectName);
+
+		return null;
 	},
 	/**
 	 * @method hidden
 	 * @param f_class claz
-	 * @param optional Window win
 	 * @return void
 	 * @object this
 	 */
-	f_declareClass: function(claz, win) {
-		if (win && win!=window) {
-			// On ne traite pas les déclarations de classes si c'est pas notre fenetre !
-			return;
-		}
-		if (!win) {
-			win=window;
-		}
-	
-		var key=f_classLoader._MakeClassName(claz._name, claz._look);
+	f_declareClass: function(claz) {
+		var key=f_classLoader._MakeClassName(claz._name, claz._lookId);
 		
 		f_core.Assert(typeof(key)=="string", "f_classLoader.f_declareClass: Invalid className '"+key+"'.");
 		
@@ -139,31 +112,18 @@ f_classLoader.prototype = {
 	
 		this._classes[key] = claz;
 	
-		f_core.Debug(f_classLoader, "f_declareClass: Registering class "+claz._name+((claz._look)?" (lookId="+claz._look+")":"")+".");
+		f_core.Debug(f_classLoader, "f_declareClass: Registering class "+claz._name+((claz._lookId)?" (lookId="+claz._lookId+")":"")+".");
 	
-		win[claz._name]=claz;
+		this._window[claz._name]=claz;
 		f_classLoader._InitializeStaticMembers(claz);
-	
-		var parentClassloader=this._parent;
-		if (parentClassloader) {
-			parentClassloader.f_declareClass(claz, win);
-		}
 	},
 	
 	/**
 	 * @method hidden
 	 * @param f_aspect aspect
-	 * @param optional Window win
 	 * @return void
 	 */
-	f_declareAspect: function(aspect, win) {
-		if (win && win!=window) {
-			// On ne traite pas les déclarations de classes si c'est pas notre fenetre !
-			return;
-		}
-		if (!win) {
-			win=window;
-		}
+	f_declareAspect: function(aspect) {
 	
 		var name=aspect._name;
 		
@@ -173,14 +133,9 @@ f_classLoader.prototype = {
 		f_core.Debug("f_classLoader", "Registering aspect "+name+".");
 		
 		this._aspects[name] = aspect;
-		win[name]=aspect;
+		this._window[name] = aspect;
 
 		f_classLoader._InitializeStaticMembers(aspect);
-		
-		var parentClassloader=this._parent;
-		if (parentClassloader) {
-			parentClassloader.f_declareAspect(aspect, win);
-		}
 	},
 	
 	/**
@@ -293,26 +248,24 @@ f_classLoader.prototype = {
 			}
 		}		
 
+		var win=this._window;
+		this._window=undefined;
+
 		for (var claz in classes) {
-			window[claz._name]=undefined;
+			win[claz._name]=undefined;
 		}
 		for (var aspect in aspects) {
-			window[aspect._name]=undefined;
+			win[aspect._name]=undefined;
 		}
 		
 		f_core.Profile(true, "f_classLoader.onExit");
 		
-		this._parent=undefined;
-		
-		this._window._rcfacesClassLoader=undefined;
-		this._window._rcfacesChangeContext=undefined;
+		win._rcfacesClassLoader=undefined;
 	
 		//this._documentCompleted=undefined; // boolean
 		//this._lazyIndex=undefined; // number
 		
 		// this._exiting=undefined; // boolean
-	
-		this._window=undefined;
 	},
 	
 	/**
@@ -408,42 +361,29 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method hidden
+	 * @param String... bundleNames
 	 * @return void
 	 */
-	f_requiresBundle: function(doc) {
+	f_requiresBundle: function(bundleNames) {
 		if (this._exiting) {
 			throw "This classloader is exiting ... [requiresBundle]";
 		}
-	
-		f_core.Assert(doc && doc.nodeType==f_core.DOCUMENT_NODE, "f_classLoader.f_requiresBundle: Document parameter is not a valid document node !");
-	
-		var parentClassloader=this._parent;
-		
-		// #0=document
-		for(var i=1;i<arguments.length;i++) {
+			
+		for(var i=0;i<arguments.length;i++) {
 			var bundleName=arguments[i];
-	
-			if (parentClassloader) {		
-				if (parentClassloader._loadBundle(doc, bundleName)) {
-					continue;
-				}
-				
-				f_core.Debug(f_classLoader, "f_requiresBundle: Parent classloader can not find bundle '"+bundleName+"'.");
-			}
 		
-			this._loadBundle(doc, bundleName);
+			this._loadBundle(bundleName);
 		}	
 	},
 	/**
 	 * @method private
-	 * @param Document doc
 	 * @param String bundleName
 	 * @return boolean
 	 */
-	_loadBundle: function(doc, bundleName) {
+	_loadBundle: function(bundleName) {
 	
 		if (this._interactiveMode) {
-			return this._asyncLoadBundle(doc, bundleName);
+			return this._asyncLoadBundle(bundleName);
 		}
 	
 		var bundles=this._bundles;
@@ -459,7 +399,7 @@ f_classLoader.prototype = {
 
 		f_core.Profile(null, "f_classLoader.requestBundle("+bundleName+")");
 	
-		doc.write("<SCRIPT type=\"text/javascript\" charset=\"UTF-8\" src=\""+url+"\"></SCRIPT>");
+		document.write("<SCRIPT type=\"text/javascript\" charset=\"UTF-8\" src=\""+url+"\"></SCRIPT>");
 		
 		return true;
 	},
@@ -507,7 +447,6 @@ f_classLoader.prototype = {
 			if (requires) {
 				var args=requires.split(";");
 				
-				args.unshift(this, this._window.document);
 				this.f_requiresBundle.apply(args);
 			}
 			
@@ -1003,33 +942,19 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden
 	 * @param f_bundle bundle
-	 * @param optional Window win
 	 * @return void
 	 */
-	_declareBundle: function(bundle, win) {
-		if (win && win!=window) {
-			// On ne traite pas les déclarations de bundle si c'est pas notre fenetre !
-			return;
-		}
-		if (!win) {
-			win=window;
-		}
-
+	_declareBundle: function(bundle) {
 		var name=bundle.f_getName();
 		
 		f_core.Profile(false, "f_classLoader.loadBundle("+name+")");
 
-		f_core.Assert(!this._bundles[name], "Bundle '"+name+"' is alreay declared !");
+		f_core.Assert(!this._bundles[name], "f_classLoader._declareBundle: Bundle '"+name+"' is alreay declared !");
 
 		this._bundles[name]=bundle;
 
 		if (!this._mainBundleName) {
 			this._mainBundleName=name;
-		}
-
-		var parentClassloader=this._parent;
-		if (parentClassloader) {
-			parentClassloader._declareBundle(bundle, win);
 		}
 
 		f_core.Profile(true, "f_classLoader.loadBundle("+name+")");
@@ -1054,15 +979,24 @@ f_classLoader._LOOK="~";
  */
 f_classLoader._EMPTY_ARGUMENTS=[];
 
+
 /**
- * @method private static String
+ * @field hidden static final boolean
  */
-f_classLoader._MakeClassName=function(claz,look) {
-	if (!look) {
+f_classLoader.MULTI_WINDOW_CLASSLOADER=false;
+
+/**
+ * @method private static
+ * @param String claz
+ * @param optional String lookId 
+ * @return String
+ */
+f_classLoader._MakeClassName=function(claz, lookId) {
+	if (!lookId) {
 		return claz;
 	}
 	
-	return claz+f_class._LOOK+look;
+	return claz+f_class._LOOK+lookId;
 }
 
 /**
@@ -1070,8 +1004,7 @@ f_classLoader._MakeClassName=function(claz,look) {
  */
 f_classLoader._InitializeStaticMembers=function(claz) {
 	// Attention: Code pour Classes et Aspects
-	
-	
+		
 	var staticMembers=claz._staticMembers;
 	if (staticMembers) {
 	/*

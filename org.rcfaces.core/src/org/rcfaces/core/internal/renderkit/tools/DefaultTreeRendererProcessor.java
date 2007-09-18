@@ -58,14 +58,7 @@ public class DefaultTreeRendererProcessor extends AbstractTreeRendererProcessor 
             throw new FacesException("Save state field marker is null !");
         }
 
-        StateManager stateManager = facesContext.getApplication()
-                .getStateManager();
-
-        Object serializedView = stateManager
-                .saveSerializedView(facesContext);
-
-        String saveValue = StateFieldMarkerTools.getStateValue(facesContext,
-                serializedView);
+        String saveValue = StateFieldMarkerTools.getStateValue(facesContext);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Save value=" + saveValue);
