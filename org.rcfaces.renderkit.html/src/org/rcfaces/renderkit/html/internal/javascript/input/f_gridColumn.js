@@ -45,6 +45,13 @@ var __members = {
 	},
 	/**
 	 * @method public
+	 * @return f_grid
+	 */
+	f_getGrid: function() {
+		return this._dataGrid;
+	},
+	/**
+	 * @method public
 	 * @return number Ascending:1 Descending:-1 not-sorted:0
 	 */
 	f_getColumnOrderState: function() {
