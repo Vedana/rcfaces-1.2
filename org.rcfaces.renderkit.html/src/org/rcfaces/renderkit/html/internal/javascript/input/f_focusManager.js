@@ -203,7 +203,7 @@ var __members={
 	 * @return boolean
 	 */
 	f_setFocus: function(focus, async) {
-		f_core.Assert(typeof(focus)=="string" || (focus && focus.nodeType==f_core.ELEMENT_NODE), "Focus component parameter is not invalid ("+focus+").");
+		f_core.Assert(typeof(focus)=="string" || (focus && focus.nodeType==f_core.ELEMENT_NODE), "f_focusManager.f_setFocus: Focus component parameter is not invalid ("+focus+").");
 		
 		var component=focus;
 		
@@ -255,4 +255,9 @@ var __members={
 	}
 }
  
-new f_class("f_focusManager", null, __statics, __members, f_object, fa_serializable);
+new f_class("f_focusManager", {
+	extend: f_object,
+	aspects: [ fa_serializable ],
+	statics: __statics, 
+	members: __members
+});
