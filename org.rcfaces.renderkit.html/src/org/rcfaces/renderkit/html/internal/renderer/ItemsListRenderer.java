@@ -19,7 +19,7 @@ import org.rcfaces.renderkit.html.internal.decorator.ItemsListDecorator;
 
 /**
  * 
- * @author Frederic Lefevere (latest modification by $Author$)
+ * @author Fred Lefevere-Laoideeric Lefevere (latest modification by $Author$)
  * @version $Revision$ $Date$
  * @see ItemsToolFolderRenderer
  */

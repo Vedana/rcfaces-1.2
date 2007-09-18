@@ -3368,7 +3368,7 @@ var __members = {
 
 	/**
 	 * gives the ordered set of sorted columns
-	 * @author Fred
+	 * @author Fred Lefevere-Laoide
 	 * @method public
 	 * @return array of columns
 	 */
@@ -3391,7 +3391,7 @@ var __members = {
 	 
 	/**
 	 * Clean the sort
-	 * @author Fred
+	 * @author Fred Lefevere-Laoide
 	 * @method public
 	 * @return void
 	 */

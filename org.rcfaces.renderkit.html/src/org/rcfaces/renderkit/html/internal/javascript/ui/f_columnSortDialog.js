@@ -6,7 +6,7 @@
  * <p><strong>f_columnSortDialog</strong> represents columns Sort popup modal window.
  *
  * @class public final f_columnSortDialog extends f_dialog
- * @author Fred Lefevere-Laoide (latest modification by $Author$)
+ * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 var __statics = {

@@ -74,7 +74,7 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
 
 /**
  * Decorator for itemsList (inspired by itemsToolFolder)
- * @author Fred
+ * @author Fred Lefevere-Laoide
  * @see ItemsToolFolderDecorator
  */
 public class ItemsListDecorator extends AbstractSelectItemsDecorator {

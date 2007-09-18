@@ -6,7 +6,7 @@
  * <p><strong>f_messageDialog</strong> represents popup modal window.
  *
  * @class public final f_messageDialog extends f_dialog
- * @author Fred Lefevere-Laoide (latest modification by $Author$)
+ * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 var __statics = {

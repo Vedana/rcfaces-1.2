@@ -20,7 +20,7 @@ import org.rcfaces.renderkit.html.internal.decorator.MessageDialogDecorator;
 
 /**
  * 
- * @author Fred (latest modification by $Author$)
+ * @author Fred Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
