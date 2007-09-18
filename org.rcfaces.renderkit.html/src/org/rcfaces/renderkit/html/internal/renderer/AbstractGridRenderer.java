@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -99,6 +100,7 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
+import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -279,7 +281,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return writer.toString();
     }
 
-    public void encodeChildren(FacesContext facesContext, UIComponent component) throws IOException {
+    public void encodeChildren(FacesContext facesContext, UIComponent component)
+            throws IOException {
         // Pas de rendu des enfants !
         // super.encodeChildren(facesContext, component);
     }
@@ -1516,6 +1519,23 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected void writeGridColumnProperties(IObjectLiteralWriter objectWriter,
             AbstractGridRenderContext tableContext, UIColumn columnComponent,
             int columnIndex) throws WriterException {
+
+        Map listenersByType = ListenerTools.getListenersByType(
+                ListenerTools.ATTRIBUTE_NAME_SPACE, columnComponent);
+
+        if (listenersByType.isEmpty() == false) {
+            StringAppender sa = new StringAppender(128);
+
+            appendAttributeEventForm(sa, objectWriter.getParent().getWriter(),
+                    listenersByType);
+
+            if (sa.length() > 0) {
+                IJavaScriptWriter jsWriter = objectWriter
+                        .writeSymbol("_events");
+
+                jsWriter.writeString(sa.toString());
+            }
+        }
 
         Object sort = tableContext.getSortCommand(columnIndex);
         if (sort != null) {

@@ -58,13 +58,10 @@ var __members = {
 	 * 
 	 * @method hidden
 	 * @param Object eventTypes 
+	 * @param String value
+	 * @return void
 	 */
-	f_initEventAtts: function(eventTypes) {
-		var value=f_core.GetAttribute(this, "v:events");
-		if (!value) {
-			return;
-		}
-		
+	f_initEventAtts: function(eventTypes, value) {
 		var evts=value.split("|");
 		for(var j=0;j<evts.length;j++) {
 			var commands=f_core.ParseParameters(evts[j], new Array);

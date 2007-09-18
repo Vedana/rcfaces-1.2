@@ -1,11 +1,11 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.TextEntryComponent;
+import org.rcfaces.core.internal.component.Properties;
+import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
+import javax.faces.el.ValueBinding;
 
 /**
  * <p>The spinner Component is a <a href="/comps/textEntryComponent.html">textEntry Component</a> that accepts numbers and whose value can be incremented or decremented (by a parametrable step) with buttons or the keyboard arrows.</p>
@@ -27,7 +27,7 @@ public class SpinnerComponent extends TextEntryComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"minimum","step","cycleValue","maximum"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"minimum","maximum","cycleValue","step"}));
 	}
 
 	public SpinnerComponent() {

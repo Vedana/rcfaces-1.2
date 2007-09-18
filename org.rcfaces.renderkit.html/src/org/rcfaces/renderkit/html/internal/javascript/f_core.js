@@ -1616,7 +1616,9 @@ var f_core = {
 				f_core.Profile(null, "f_core._submit.preSubmit");
 				
 				// Don't replace the current handler form.submit() and call the previous
-				form._oldSubmit();
+				if (win._rcfacesNoSubmit!==true) {
+					form._oldSubmit();
+				}
 	
 				f_core.Profile(null, "f_core._submit.postSubmit");
 		
@@ -5056,6 +5058,16 @@ var f_core = {
 		var url=f_env.GetStyleSheetBase()+f_core._REPORT_ERROR_URL+"?tokenId="+encodeURIComponent(tokenId);
 				
 		window.open(url, "rcfacesReport"+new Date().getTime());
+	},
+	/**
+	 * @method public static
+	 * @param window win
+	 */
+	ProfileExit: function(win) {
+		win._rcfacesNoSubmit=true;
+		
+		win.document.forms[0].submit();
+		f_core._OnExit.call(win);		
 	},
 	/**
 	 * @method public static

@@ -19,6 +19,7 @@ import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import javax.faces.component.ValueHolder;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
@@ -31,10 +32,13 @@ import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.converter.OrderConverter;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
@@ -60,6 +64,10 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 	ICellImageCapability,
 	ICellStyleClassCapability,
 	ICellToolTipTextCapability,
+	ISelectionEventCapability,
+	IDoubleClickEventCapability,
+	IUserEventCapability,
+	IInitEventCapability,
 	ICellToolTipTextSettings,
 	ICellImageSettings,
 	IImageAccessorsCapability,
@@ -70,7 +78,7 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaValueColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultCellImageURL","imageURL","width","verticalAlignment","defaultCellStyleClass","alignment","hiddenMode","cellImageURL","foregroundColor","styleClass","sortListener","sortComparator","selectedImageURL","value","hoverImageURL","imageHeight","maxWidth","disabledImageURL","ascending","toolTipText","cellToolTipText","minWidth","textDirection","resizable","text","imageWidth","cellStyleClass","cellDefaultToolTipText","visible","backgroundColor","autoFilter"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","defaultCellImageURL","imageURL","width","verticalAlignment","defaultCellStyleClass","doubleClickListener","alignment","hiddenMode","cellImageURL","foregroundColor","styleClass","sortListener","sortComparator","initListener","selectedImageURL","value","hoverImageURL","imageHeight","maxWidth","disabledImageURL","ascending","toolTipText","userEventListener","cellToolTipText","minWidth","textDirection","resizable","text","imageWidth","cellStyleClass","cellDefaultToolTipText","visible","backgroundColor","autoFilter"}));
 	}
 
 	public ComboColumnComponent() {
@@ -865,6 +873,54 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 
 	public void setCellToolTipText(java.lang.String cellToolTipText) {
 		engine.setProperty(Properties.CELL_TOOL_TIP_TEXT, cellToolTipText);
+	}
+
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDoubleClickListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDoubleClickListener.class);
+	}
+
+	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listUserEventListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
+	}
+
+	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listInitListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
 	protected Set getCameliaFields() {

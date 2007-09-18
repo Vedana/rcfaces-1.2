@@ -68,8 +68,11 @@ var __members={
 		this._keyFlags = f_core.GetNumberAttribute(this, "v:keyFlags");
 
 		f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent);
-		
-		this.f_initEventAtts(f_accelerator._EVENTS);
+
+		var events=f_core.GetAttribute(this, "v:events");
+		if (events) {
+			this.f_initEventAtts(f_accelerator._EVENTS, events);
+		}
 		
 		var forComponent=f_core.GetAttribute(this, "v:for");
 		

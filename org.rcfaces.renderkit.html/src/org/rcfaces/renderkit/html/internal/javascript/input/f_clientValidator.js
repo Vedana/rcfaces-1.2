@@ -1003,25 +1003,39 @@ var __members = {
 		this.f_setInputValue(curVal);
 		this.f_setOutputValue(curVal);
 
-		// Call filters
-		var filterVal = "";
-		for (var i=0; i<curVal.length; i++) {
-			var ch=curVal.charAt(i);
-			
-			bValid = this._applyFilters(curVal.charCodeAt(i), ch);
-			if (bValid) {
-				filterVal +=ch;
+		var hasTranslators=!!this._translators;
+		var hasFilters=!!this._filters;
+
+		// Call filters and translators
+		var transVal;
+		
+		if (hasFilters || hasTranslators) {
+			transVal = "";
+			for (var i=0; i<curVal.length; i++) {
+				var ch=curVal.charAt(i);
+				
+				if (hasFilters) {
+					bValid = this._applyFilters(curVal.charCodeAt(i), ch);
+					if (!bValid) {
+						continue;
+					}
+				}
+				
+				if (hasTranslators) {					
+					var t=this._applyTranslators(curVal.charCodeAt(i), ch);
+					transVal += String.fromCharCode(t);
+					
+					continue;
+				}
+				
+				transVal+=ch;
 			}
+		} else {
+			transVal=curVal;
 		}
-
+		
 		// f_core.Debug(f_clientValidator, "Apply auto check after filters input='"+this._inputValue+"' output='"+this._outputValue+"'.");
-
-		// Call translators
-		var transVal = "";
-		for (var i=0; i<filterVal.length; i++) {
-			var t=this._applyTranslators(filterVal.charCodeAt(i), filterVal.charAt(i));
-			transVal += String.fromCharCode(t);
-		}
+		
 		if (curVal != transVal) {
 			curVal=transVal;
 			this.f_setInputValue(transVal);

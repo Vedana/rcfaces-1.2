@@ -48,6 +48,10 @@ public class ComboColumnTag extends CameliaTag implements Tag {
 	private ValueExpression defaultCellStyleClass;
 	private ValueExpression cellDefaultToolTipText;
 	private ValueExpression cellToolTipText;
+	private ValueExpression selectionListeners;
+	private ValueExpression doubleClickListeners;
+	private ValueExpression userEventListeners;
+	private ValueExpression initListeners;
 	private ValueExpression value;
 	private ValueExpression converter;
 
@@ -173,6 +177,22 @@ public class ComboColumnTag extends CameliaTag implements Tag {
 
 	public final void setCellToolTipText(ValueExpression cellToolTipText) {
 		this.cellToolTipText = cellToolTipText;
+	}
+
+	public final void setSelectionListener(ValueExpression selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
+
+	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+		this.doubleClickListeners = doubleClickListeners;
+	}
+
+	public final void setUserEventListener(ValueExpression userEventListeners) {
+		this.userEventListeners = userEventListeners;
+	}
+
+	public final void setInitListener(ValueExpression initListeners) {
+		this.initListeners = initListeners;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -492,6 +512,22 @@ public class ComboColumnTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (selectionListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
+		if (doubleClickListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
+		}
+
+		if (userEventListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+		}
+
+		if (initListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
@@ -540,6 +576,10 @@ public class ComboColumnTag extends CameliaTag implements Tag {
 		defaultCellStyleClass = null;
 		cellDefaultToolTipText = null;
 		cellToolTipText = null;
+		selectionListeners = null;
+		doubleClickListeners = null;
+		userEventListeners = null;
+		initListeners = null;
 		value = null;
 		converter = null;
 

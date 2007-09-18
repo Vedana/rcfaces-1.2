@@ -16,6 +16,7 @@ import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 
 /**
  * 
@@ -53,7 +54,14 @@ public class EventsRenderer {
                 String listenerType = (String) entry.getKey();
                 FacesListener listeners[] = (FacesListener[]) entry.getValue();
 
-                encodeEventListeners(js, varName, listenerType, listeners);
+                boolean submitSupport = true;
+                if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
+                        .equals(listenerType)) {
+                    submitSupport = false;
+                }
+
+                encodeEventListeners(js, varName, listenerType, listeners,
+                        submitSupport);
             }
         }
 
@@ -66,10 +74,14 @@ public class EventsRenderer {
     }
 
     private static void encodeEventListeners(IJavaScriptWriter js,
-            String varName, String listenerType, FacesListener facesListeners[])
+            String varName, String listenerType,
+            FacesListener facesListeners[], boolean submitSupport)
             throws WriterException {
 
         boolean first = true;
+
+        boolean clientSubmit = false;
+        boolean needSubmit = false;
 
         IProcessContext processContext = js.getHtmlRenderContext()
                 .getProcessContext();
@@ -78,6 +90,24 @@ public class EventsRenderer {
             FacesListener fl = facesListeners[i];
 
             if ((fl instanceof IScriptListener) == false) {
+                // C'est un listener serveur, il nous faut un submit coté client
+                // !
+
+                if (clientSubmit) {
+                    // Submit déjà généré : on arrete tout !
+                    break;
+                }
+
+                if (submitSupport == false) {
+                    continue;
+                }
+                // Il faut générer un submit en javascript !
+                needSubmit = true;
+                continue;
+            }
+
+            if (clientSubmit) {
+                // Le client a déjà généré un submit : on ignore la suite !
                 continue;
             }
 
@@ -95,15 +125,32 @@ public class EventsRenderer {
 
             js.write(',');
 
-            encodeJavaScriptCommmand(js, scriptListener);
+            String command = scriptListener.getCommand();
+
+            if (DEFAULT_SUBMIT.equals(command)) {
+                if (submitSupport == false) {
+                    throw new FacesException("'" + DEFAULT_SUBMIT
+                            + "' keyword is not supported byte listener type '"
+                            + listenerType + "'.");
+                }
+
+                command = DEFAULT_SUBMIT_JAVA_SCRIPT;
+                clientSubmit = true;
+                needSubmit = false;
+            }
+
+            js.writeString(command);
         }
 
-        if (first && facesListeners.length > 0) {
-            // Des evenements serveurs mais pas Javascript
-            // Aussi on ajoute un submit() histoire de soliciter les methodes
-            // cot� serveur
-            encodeJavaScriptEventSubmit(js, varName, listenerType);
-            return;
+        if (needSubmit) {
+
+            if (first) {
+                first = false;
+                js.writeCall(varName, ADD_EVENT_LISTENERS).write(listenerType);
+            }
+
+            js.write(',');
+            js.writeString(DEFAULT_SUBMIT_JAVA_SCRIPT);
         }
 
         if (first == false) {

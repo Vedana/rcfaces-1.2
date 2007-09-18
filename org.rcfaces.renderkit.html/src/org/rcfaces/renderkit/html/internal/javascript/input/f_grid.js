@@ -728,7 +728,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @object column
 	 */
 	_Title_onMouseUp: function(evt) {
 		var column=this._column;
@@ -760,6 +760,10 @@ var __statics = {
 			return f_core.CancelJsEvent(evt); // On bloque le FOCUS !
 			//return true;
 		}
+			
+		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid)===false) {
+			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
+		}			
 		
 		var append=(evt.shiftKey);
 		
@@ -1824,7 +1828,7 @@ var __members = {
 	 * List the columns of the grid
 	 * 
 	 * @method public
-	 * @return Object[] An array of column object. 
+	 * @return f_gridColumn[] An array of column object. 
 	 */
 	f_getColumns: function() {
 		return f_core.PushArguments(null, this._columns);
@@ -1833,7 +1837,7 @@ var __members = {
 	 * Returns the name associated to the column.
 	 * 
 	 * @method public
-	 * @param Object column The column object
+	 * @param f_gridColumn column The column object
 	 * @return String The name of the column.
 	 */
 	f_getColumnName: function(column) {
@@ -1849,11 +1853,11 @@ var __members = {
 	 * Returns the id associated to the column.
 	 * 
 	 * @method public
-	 * @param Object column The column object
+	 * @param f_gridColumn column The column object
 	 * @return String The Id of the column.
 	 */
 	f_getColumnId: function(column) {
-		var idComponent=column._id;
+		var idComponent=column.f_getId();
 		
 		if (idComponent) {
 			return idComponent;
@@ -1863,18 +1867,12 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Object column
+	 * @param f_gridColumn column
 	 * @return number Ascending:1 Descending:-1 not-sorted:0
+	 * @deprecated Use column.f_getColumnOrderState() 
 	 */
 	f_getColumnOrderState: function(column) {
-		if (column._ascendingOrder===true) {
-			return 1;
-			
-		} else if (column._ascendingOrder===false) {
-			return -1;
-		}
-		
-		return 0;
+		return column.f_getColumnOrderState();
 	},
 	/**
 	 * @method hidden
@@ -1886,9 +1884,11 @@ var __members = {
 
 		var v=0;
 		for(var i=0;i<arguments.length;) {
-			var column=arguments[i++];			
+			var column=arguments[i++];
 
 			if (column) {				
+				f_gridColumn.f_decorateInstance(column);
+			
 				if (column._visibility===undefined) {
 					column._visibility=true;
 				}
@@ -1918,8 +1918,8 @@ var __members = {
 					column._resizable=(column._minWidth>=f_grid._COLUMN_MIN_WIDTH && column._maxWidth>=column._minWidth);
 				}
 				
-			} else {
-				column=new Object;
+			} else {		
+				column=f_gridColumn.f_newInstance();
 				
 				column._visibility=true;			
 				column._align=f_grid._DEFAULT_ALIGNMENT;
@@ -3196,6 +3196,12 @@ var __members = {
 			this.f_moveCursor(tr, true, evt, selection);
 		}
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return void
+	 */
 	_selectLastRow: function(evt, selection) {
 		var tr=this._tbody.lastChild;
 		for(;tr && !tr._dataGrid;tr=tr.previousSibling);		
@@ -3226,6 +3232,12 @@ var __members = {
 		
 		this.f_setFirst(nextFirst, nextPos, selection);
 	},
+	/**
+	 * @method private
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return void
+	 */
 	_selectTopRow: function(evt, selection) {
 		var tr=this._tbody.firstChild;
 		for(;tr && !tr._dataGrid;tr=tr.nextSibling);		
@@ -3281,10 +3293,10 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Object col Column to sort
+	 * @param f_gridColumn col Column to sort
 	 * @param optional boolean ascending Sort ascending.
 	 * @param optional boolean append Append the sort.
-	 * @param optional Object col2 Column 2
+	 * @param optional f_gridColumn col2 Column 2
 	 * @param optional boolean ascending2 Sort ascending2.
 	 * @return void
 	 */
@@ -3373,7 +3385,7 @@ var __members = {
 	 * gives the ordered set of sorted columns
 	 * @author Fred Lefevere-Laoide
 	 * @method public
-	 * @return array of columns
+	 * @return f_gridColumn[]
 	 */
 	 f_getSortedColumns: function() {
 	 	var currentSorts=this._currentSorts;
@@ -3382,10 +3394,8 @@ var __members = {
 			f_core.Debug(f_grid, "f_getSortedColumns: create the array");
 			
 			var newSorts = new Array;
-		
-			for(var i=0;i<currentSorts.length;i++) {
-				newSorts.push(currentSorts[i]);
-			}
+			
+			newSorts.push.apply(newSorts, currentSorts);
 			
 			return newSorts;	
 		}

@@ -117,7 +117,10 @@ var __members = {
 			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_messageDialog"));
 			this.f_setBackgroundMode("greyed");
 
-			this.f_initEventAtts(f_messageDialog._EVENTS);
+			var events=f_core.GetAttribute(this, "v:events");
+			if (events) {
+				this.f_initEventAtts(f_messageDialog._EVENTS, events);
+			}
 
 		} else {
 			this._title=title;

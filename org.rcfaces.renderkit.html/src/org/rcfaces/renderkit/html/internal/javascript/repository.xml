@@ -918,9 +918,16 @@
 				<required-class name="f_component" />
 			</class>
 		</file>
+		<file name="input/f_gridColumn.js">
+			<class name="f_gridColumn">
+				<required-class name="f_object" />
+				<required-class name="fa_eventTarget" />
+			</class>
+		</file>
 		<file name="input/f_grid.js">
 			<class name="f_grid">
 				<required-class name="f_component" />
+				<required-class name="f_gridColumn" />
 				<required-class name="f_resourceBundle" />
 				<required-class name="fa_disabled" />
 				<required-class name="fa_pagedComponent" />

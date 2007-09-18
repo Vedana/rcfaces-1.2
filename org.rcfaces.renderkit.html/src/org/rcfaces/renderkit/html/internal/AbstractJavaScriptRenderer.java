@@ -318,24 +318,7 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
         if (listenersByType.isEmpty() == false) {
             StringAppender sa = new StringAppender(128);
 
-            IRenderContext renderContext = writer.getComponentRenderContext()
-                    .getRenderContext();
-            for (Iterator it = listenersByType.entrySet().iterator(); it
-                    .hasNext();) {
-                Map.Entry entry = (Map.Entry) it.next();
-
-                String listenerType = (String) entry.getKey();
-                FacesListener listeners[] = (FacesListener[]) entry.getValue();
-
-                boolean submitSupport = true;
-                if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
-                        .equals(listenerType)) {
-                    submitSupport = false;
-                }
-
-                EventsRenderer.encodeAttributeEventListeners(renderContext, sa,
-                        listenerType, listeners, submitSupport);
-            }
+            appendAttributeEventForm(sa, writer, listenersByType);
 
             if (sa.length() > 0) {
                 writer.writeAttribute("v:events", sa.toString());
@@ -348,6 +331,27 @@ public abstract class AbstractJavaScriptRenderer extends AbstractHtmlRenderer
         }
 
         return writer;
+    }
+
+    protected static final void appendAttributeEventForm(StringAppender sa,
+            IHtmlWriter writer, Map listenersByType) {
+        IRenderContext renderContext = writer.getComponentRenderContext()
+                .getRenderContext();
+        for (Iterator it = listenersByType.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String listenerType = (String) entry.getKey();
+            FacesListener listeners[] = (FacesListener[]) entry.getValue();
+
+            boolean submitSupport = true;
+            if (ListenerTools.ATTRIBUTE_NAME_SPACE.getValidationEventName()
+                    .equals(listenerType)) {
+                submitSupport = false;
+            }
+
+            EventsRenderer.encodeAttributeEventListeners(renderContext, sa,
+                    listenerType, listeners, submitSupport);
+        }
     }
 
     protected void encodeJavaScript(IJavaScriptWriter writer)

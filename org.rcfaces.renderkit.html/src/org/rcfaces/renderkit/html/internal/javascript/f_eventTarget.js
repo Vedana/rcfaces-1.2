@@ -112,7 +112,10 @@ var __members = {
 		this.f_super(arguments); // On appelle pas le super à cause d'un problème de profondeur de pile IE
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			this.f_initEventAtts(f_eventTarget._EVENTS);
+			var events=f_core.GetAttribute(this, "v:events");
+			if (events) {
+				this.f_initEventAtts(f_eventTarget._EVENTS, events);
+			}
 		}
 	},	
 	/*
@@ -337,14 +340,6 @@ var __members = {
 			f_core.AddCheckListener(this);
 			return;					
 		}
-	},
-	/**
-	 * 
-	 * @method hidden
-	 * @return boolean
-	 */
-	f_callOnInit: function() {
-		return this.f_fireEvent(f_event.INIT,null);
 	},
 	/**
 	 * 

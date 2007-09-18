@@ -549,23 +549,26 @@ var __statics = {
 	},
 	/**
 	 * @method private static final 
+	 * @param f_classLoader classLoader
+	 * @param String name
+	 * @param optional Object staticMembers
+	 * @param optional Object methods
+	 * @param private optional function constructorFactory
 	 * @window window
 	 * @dontInline f_class
 	 */
-	_DeclarePrototypeClass: function(classLoader, name, staticMembers, methods) {
+	_DeclarePrototypeClass: function(classLoader, name, staticMembers, methods, constructorFactory) {
 	
 		var constructorFct;
 		if (methods) {
 			constructorFct=methods[name];
 		}
 		
-		var cls;
-		if (name=="f_class") {
-			cls=staticMembers._CreateConstructor(constructorFct);
-		
-		} else {
-			cls=f_class._CreateConstructor(constructorFct);
+		if (!constructorFactory) {
+			constructorFactory=f_class._CreateConstructor;
 		}
+		
+		var cls=constructorFactory(constructorFct);
 		
 		cls.prototype=methods;
 		cls._name=name;
@@ -820,6 +823,18 @@ var __members = {
 	},
 	
 	/**
+	 * @method hidden final
+	 * @param Object obj
+	 * @param any... args Arguments of constructor.
+	 * @return Object
+	 */
+	f_decorateInstance: function(obj, args) {
+		args=f_core.PushArguments(null, arguments, 1);
+	
+		return f_class.Init(obj, this, args, this._systemClass);
+	},
+	
+	/**
 	 * Returns the classes loader of this class.
 	 * 
 	 * @method public final
@@ -850,5 +865,5 @@ var __members = {
 	}
 }
 
-__statics._DeclarePrototypeClass(window._rcfacesClassLoader, "f_class", __statics, __members);
+__statics._DeclarePrototypeClass(window._rcfacesClassLoader, "f_class", __statics, __members, __statics._CreateConstructor);
 
