@@ -52,9 +52,9 @@ public class Constants {
 
     public static final boolean RESOURCE_CONTENT_VERSION_SUPPORT = true;
 
-    public static final boolean CACHED_COMPONENT_ITERATOR = true;
+    public static final boolean CACHED_COMPONENT_ITERATOR = false;
 
-    public static final boolean STATED_COMPONENT_CHILDREN_LIST = true;
+    public static final boolean STATED_COMPONENT_CHILDREN_LIST = false;
 
     public static final boolean ENCODE_URI = false;
 

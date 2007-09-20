@@ -864,7 +864,10 @@
 	
 <!-- Gestion du multi-window ! -->
 	<module id="multiWindow">
-		<file name="f_multiWindow.js" required="f_class.js, f_bundle.js">
+		<file name="f_multiWindowClassLoader.js">
+			<class name="f_multiWindowClassLoader">
+				<required-class name="f_classLoader" />
+			</class>
 		</file>
 	</module>
 

@@ -159,12 +159,13 @@ var __statics = {
 	 * @method hidden static final
 	 */
 	InitializeClass: function(claz) {
-		f_core.Assert((typeof(claz)=="function" && claz._nativeClass) || typeof(claz)=="object", "f_class.InitializeClass: Invalid claz parameter '"+claz+"'.");
-		
 		if (claz._initialized) {
 			return;
 		}
-		
+
+		// On le met apres le test à cause du multiWindow !
+		f_core.Assert((typeof(claz)=="function" && claz._nativeClass) || typeof(claz)=="object", "f_class.InitializeClass: Invalid class parameter '"+claz+"'.");
+				
 		claz._initialized=true;
 		
 		if (claz._nativeClass) {
@@ -455,7 +456,9 @@ var __statics = {
 		var cls=obj._kclass;
 		f_core.Assert(cls, "f_class._Inherit: Class of object '"+obj+"' is null !");
 		
-		f_class.InitializeClass(cls)
+		if (!cls._initialized) {
+			f_class.InitializeClass(cls);
+		}
 		
 		var methods=cls._kmethods;
 		for (var fname in methods) {
@@ -562,6 +565,8 @@ var __statics = {
 		var constructorFct;
 		if (methods) {
 			constructorFct=methods[name];
+		} else {
+			methods=new Object;
 		}
 		
 		if (!constructorFactory) {
@@ -569,8 +574,11 @@ var __statics = {
 		}
 		
 		var cls=constructorFactory(constructorFct);
+		f_core.Assert(!cls._name, "f_class._DeclarePrototypeClass: Invalid constructor ! ("+cls._name+")");
 		
 		cls.prototype=methods;
+		cls.prototype._kclass=cls;
+		cls._members=methods; // On en a besoin pour le multiWindow
 		cls._name=name;
 		cls._classLoader=classLoader;
 		cls._nativeClass=true;
@@ -587,8 +595,10 @@ var __statics = {
 		if (!staticMembers.toString) {	
 			staticMembers.toString=f_class.toString;
 		}			
-						
-		cls._classLoader.f_declareClass(cls);
+
+		if (name!="f_classLoader") {
+			cls._classLoader.f_declareClass(cls);
+		}
 	},
 	/**
 	 * @method private static
@@ -681,6 +691,7 @@ var __members = {
 	
 	/**
 	 * @window window
+	 * @dontInline f_classLoader
 	 */
 	f_class: function(className, lookId, staticMembers, members, parentClass) {
 		// Constructeur vide: on ne fait rien !
@@ -710,7 +721,7 @@ var __members = {
 			f_core.Assert(aspects===undefined || (aspects instanceof Array), "f_class: Invalid aspects attribute ("+aspects+") for class '"+className+"'.");
 			
 			if (f_core.IsDebugEnabled(f_class)) {
-				var keywords="|lookId|members|statics|extend|_systemClass|aspects|_classLoader|";
+				var keywords="|lookId|members|statics|extend|_systemClass|aspects|_classLoader|_nativeClass|";
 				for(var name in atts) {
 					f_core.Assert(keywords.indexOf("|"+name+"|")>=0, "f_class: Unknown keyword '"+name+"' in definition of class '"+className+"'.");
 				}
@@ -771,7 +782,7 @@ var __members = {
 			aspects=new Array
 		}
 		this._aspects=aspects;
-				
+	
 		this._classLoader.f_declareClass(this);
 	},
 

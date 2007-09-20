@@ -117,6 +117,34 @@ var __statics = {
 	},
 	
 	/**
+	 * INTERNAL USE: Methodes pour le multiWindow
+	 * 
+	 * @method hidden static
+	 * @return Object
+	 */
+	CopyResources: function() {
+		var newResources=new Object();
+		
+		var resources=f_resourceBundle._Resources;
+		
+		for(var i in resources) {
+			newResources[i]=resources[i];
+		}
+		
+		return newResources;
+	},
+	/**
+	 * INTERNAL USE: Methodes pour le multiWindow
+	 * 
+	 * @method hidden static
+	 * @param Object newResourceBundle
+	 * @return void
+	 */
+	SetResources: function(newResourceBundle) {
+		f_resourceBundle._Resources=newResourceBundle;
+	},
+	
+	/**
 	 * @method protected static
 	 * @return void
 	 */

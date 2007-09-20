@@ -86,7 +86,7 @@ var __statics= {
 
 var __members= {
 	f_actionList: function(component,type) {
-		f_core.Assert(typeof(type)=="string", "Type of actionList is invalid '"+type+"'.");
+		f_core.Assert(typeof(type)=="string", "f_actionList.f_actionList: Type of actionList is invalid '"+type+"'.");
 		
 		this._link = component;
 		this._type = type;

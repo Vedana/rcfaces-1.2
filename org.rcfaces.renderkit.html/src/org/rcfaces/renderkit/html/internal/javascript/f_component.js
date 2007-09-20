@@ -539,7 +539,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setFocus: function() {
-		f_core.Assert(false, "Focus method not implemented !");
+		f_core.Assert(false, "f_component.f_setFocus: Focus method not implemented !");
 	},
 	/**
 	 * @method protected final

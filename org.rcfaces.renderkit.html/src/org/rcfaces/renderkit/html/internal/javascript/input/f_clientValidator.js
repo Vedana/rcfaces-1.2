@@ -195,6 +195,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt
 	 * @return boolean
+	 * @object this
 	 */
 	_OnFocus: function(evt) {
 		f_core.Debug(f_clientValidator, "_OnFocus: focus on client validator ");
@@ -213,6 +214,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt
 	 * @return boolean
+	 * @object this
 	 */
 	_OnBlur: function(evt) {
 		f_core.Debug(f_clientValidator, "_OnFocus: focus on client validator ");
@@ -233,6 +235,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt
 	 * @return boolean
+	 * @object this
 	 */
 	_OnKeyPress: function(event) {
 		var jsEvent = event.f_getJsEvent();
@@ -250,7 +253,7 @@ var __statics = {
 			keyChar = String.fromCharCode(charCode);
 		}
 				
-		f_core.Debug(f_clientValidator, "KeyPress: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
+		f_core.Debug(f_clientValidator, "_OnKeyPress: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
 	
 		if (f_core.IsInternetExplorer()) {
 			if (keyCode < 32) {
@@ -281,6 +284,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @object this
 	 */
 	_OnKeyUp: function(event) {
 		var jsEvent = event.f_getJsEvent();
@@ -292,7 +296,7 @@ var __statics = {
 		var ctrl = jsEvent.ctrlKey;
 		var alt = jsEvent.altKey;
 				
-		f_core.Debug(f_clientValidator, "KeyUp: keyCode="+keyCode+" shift="+shift+" ctrl="+ctrl+" alt="+alt);
+		f_core.Debug(f_clientValidator, "_OnKeyUp: keyCode="+keyCode+" shift="+shift+" ctrl="+ctrl+" alt="+alt);
 		
 		validator.f_setInputValue(this._input.value);
 
@@ -1003,35 +1007,35 @@ var __members = {
 		this.f_setInputValue(curVal);
 		this.f_setOutputValue(curVal);
 
-		var hasTranslators=!!this._translators;
-		var hasFilters=!!this._filters;
+		var transVal=curVal;
 
 		// Call filters and translators
-		var transVal;
+		var hasTranslators=!!this._translators;
+		var hasFilters=!!this._filters;
 		
 		if (hasFilters || hasTranslators) {
 			transVal = "";
 			for (var i=0; i<curVal.length; i++) {
 				var ch=curVal.charAt(i);
+				var cch=curVal.charCodeAt(i);
 				
 				if (hasFilters) {
-					bValid = this._applyFilters(curVal.charCodeAt(i), ch);
+					bValid = this._applyFilters(cch, ch);
 					if (!bValid) {
 						continue;
 					}
 				}
 				
 				if (hasTranslators) {					
-					var t=this._applyTranslators(curVal.charCodeAt(i), ch);
-					transVal += String.fromCharCode(t);
-					
-					continue;
+					var t=this._applyTranslators(cch, ch);
+
+					if (t!=cch) {					
+						ch = String.fromCharCode(t);
+					}
 				}
 				
 				transVal+=ch;
 			}
-		} else {
-			transVal=curVal;
 		}
 		
 		// f_core.Debug(f_clientValidator, "Apply auto check after filters input='"+this._inputValue+"' output='"+this._outputValue+"'.");

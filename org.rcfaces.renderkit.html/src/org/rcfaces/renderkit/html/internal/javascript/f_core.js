@@ -603,23 +603,23 @@ var f_core = {
 		
 		var initDate=win._rcfacesInitLibraryDate;
 		
-		f_core.DebugMode=win.rcfacesDebugMode;
+		f_core.DebugMode=win._rcfacesDebugMode;
 		
 		var profilerCB=win.rcfacesProfilerCB;
 		var logCB=win.rcfacesLogCB;
 
-		if (window.rcfacesMultiWindowClassLoader===true) {
-			// Il faut copier les members de CORE pour les retrouver !
-			
-			var kmethods=new Object;
-			f_core._kmethods=kmethods;
-			
-			for(var memberName in f_core) {
-				kmethods[memberName]=f_core[kmethods];
+		if (window._rcfacesMultiWindowMode!==false) {
+			if (window._rcfacesMultiWindowClassLoader===true && !f_core._multiWindowCore) {
+				// Il faut copier les members de CORE pour les retrouver !
+				
+				var kmethods=new Object;
+				f_core._kmethods=kmethods;
+				
+				for(var memberName in f_core) {
+					kmethods[memberName]=f_core[memberName];
+				}
 			}
-		}
 
-		if (window.rcfacesMultiWindowMode!==false) {
 			try {
 				for(var w=win;w && w.parent!=w;w=w.parent) {
 					var f=w.parent.rcfacesProfilerCB
@@ -799,7 +799,7 @@ var f_core = {
 			
 			if (typeof(profiler)=="function") {
 				try {
-					profiler.apply(window, arguments);
+					profiler.call(window, timeEnd, name, date, win);
 					
 				} catch (x) {
 					f_core.Error(f_core, "While calling external profiler.", x);
@@ -900,7 +900,7 @@ var f_core = {
 			}
 			
 			// Les objets non encore initializés
-			var classLoader=f_classLoader.Get();	
+			var classLoader=f_classLoader.Get(win);	
 			classLoader.f_initializeObjects();
 	
 			f_core.Profile(null, "f_core.onInit.objects");
@@ -933,7 +933,7 @@ var f_core = {
 			try {
 				var old=f.submit;
 				
-				f.submit = f_core._Submit;
+				f.submit = f_core._SystemSubmit;
 				
 				f._oldSubmit = old;
 			} catch (x) {
@@ -1005,7 +1005,7 @@ var f_core = {
 					
 					if (form._oldSubmit) {
 						try {
-							f.submit = form._oldSubmit;
+							form.submit = form._oldSubmit;
 							
 						} catch (x) {
 							// Dans certaines versions de IE, il n'est pas possible de changer le submit !
@@ -1016,7 +1016,7 @@ var f_core = {
 				}
 		
 				// Terminate packages here
-				var classLoader=f_classLoader.Get();
+				var classLoader=f_classLoader.Get(win);
 				classLoader.f_onExit();
 				
 				f_core.Finalizer();
@@ -1045,6 +1045,7 @@ var f_core = {
 		f_core._FocusComponent=undefined; // HTMLElement
 		f_core._PostSubmitListeners=undefined; // List<function>
 		f_core._FocusTimeoutID=undefined; // any ???
+		f_core._kmethods=undefined; // Map<name, object>
 	},
 	/**
 	 * @method hidden static
@@ -1363,6 +1364,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @event evt
 	 */
 	_OnSubmit: function(evt) {
 		f_core.Profile(false, "f_core.SubmitEvent");
@@ -1477,17 +1479,28 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @param Event jsEvent
+	 * @return boolean
+	 * @event jsEvent
+	 */
+	_SystemSubmit: function(jsEvent) {
+		return f_core._Submit(this, this, jsEvent);
+	},
+	/**
+	 * @method private static
+	 * @return boolean
 	 */
 	_Submit: function(form, elt, event, url, target, createWindowParameters, closeWindow, modal) {
 		f_core.Assert(createWindowParameters===undefined || createWindowParameters===null || typeof(createWindowParameters)=="object", "f_core._Submit: createWindowParameters parameter must be undefined or an object.");
 		f_core.Assert(closeWindow===undefined || closeWindow===null || typeof(closeWindow)=="boolean", "f_core._Submit: closeWindow parameter must be undefined or a boolean.");
 		f_core.Assert(modal===undefined || modal===null || typeof(modal)=="boolean", "f_core._Submit: modal parameter must be undefined or a boolean.");
-				
+
 		f_core.Profile(false, "f_core._submit("+url+")");
 
 		try {
 			// Check if we get called from the form itself and use it if none specified
 			if (!form && (this != f_core)) {
+				event = form;
 				form = this;
 			}
 			
@@ -1495,12 +1508,20 @@ var f_core = {
 			var ret = false;
 	
 			var type;
+			var jsEvt;
 			if (typeof(event)=="string") {
 				type=event;	
 				event=f_event.GetEvent();
 	
 			} else if (!event) {
 				event=f_event.GetEvent();
+	
+			} else if (event.cancelBubble!==undefined) { // Un event ... on peut pas faire instanceof Event 
+				jsEvt=event;
+			}
+			
+			if (!jsEvt) {
+				jsEvt=(event)?event.f_getJsEvent():null;
 			}
 	
 			// Get element from event info if given
@@ -1522,7 +1543,7 @@ var f_core = {
 			var doc=form.ownerDocument;
 			var win=f_core.GetWindow(doc);
 			
-			if (win.f_event.GetEventLocked((event)?event.f_getJsEvent():null, true)) {
+			if (win.f_event.GetEventLocked(jsEvt, true)) {
 				return false;
 			}
 	
@@ -1533,7 +1554,7 @@ var f_core = {
 			try {
 				win._rcfacesSubmitting=true;
 				
-				var ret = f_core._OnSubmit.call(form);
+				var ret = f_core._OnSubmit.call(form, jsEvt);
 				if (!ret) {
 					return ret;
 				}

@@ -31,7 +31,7 @@ function f_aspect(aspectName, staticMembers, members, extend) {
 		classLoader=atts._classLoader;
 		
 		if (f_core.IsDebugEnabled("f_aspect")) {
-			var keywords="|members|statics|extend|_systemClass|_classLoader|";				
+			var keywords="|members|statics|extend|_systemClass|_classLoader|_nativeClass|";				
 			for(var name in atts) {
 				f_core.Assert(keywords.indexOf("|"+name+"|")>=0, "f_aspect.f_aspect: Unknown keyword '"+name+"' in definition of aspect '"+aspectName+"'.");
 			}
@@ -59,7 +59,7 @@ function f_aspect(aspectName, staticMembers, members, extend) {
 	
 	if (!classLoader) {
 		classLoader=f_classLoader.Get(window);
-	}
+	} 	
 	
 	this._classLoader=classLoader;
 		
@@ -123,3 +123,4 @@ f_aspect.f_getName=function() {
 	return "f_aspect";
 }
 
+f_aspect._nativeClass=true;

@@ -1,16 +1,16 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.AbstractCommandComponent;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.AbstractCommandComponent;
 
 /**
  * A button Component highly customizable through its API.
@@ -26,7 +26,7 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","doubleClickListener","border","readOnly","borderType"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","readOnly","borderType","doubleClickListener","border"}));
 	}
 
 	public CustomButtonComponent() {

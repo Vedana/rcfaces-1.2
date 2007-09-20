@@ -25,7 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.event.SortEvent;
-import org.rcfaces.core.event.SortEvent.ISortConverter;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.SortActionListener;
@@ -113,10 +112,8 @@ public final class GridServerSort {
                     }
 
                     ISortMethod sortMethod = sortMethods[i];
-                    if (sortMethod instanceof ISortConverter) {
-                        value = ((ISortConverter) sortMethod).convertValue(
-                                facesContext, column, value);
-                    }
+                    value = sortMethod
+                            .convertValue(facesContext, column, value);
 
                     if (value == null) {
                         if (rowDataInitialized == false) {

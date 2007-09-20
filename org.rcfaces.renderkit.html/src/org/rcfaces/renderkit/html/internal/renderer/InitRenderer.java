@@ -96,11 +96,11 @@ public class InitRenderer extends AbstractHtmlRenderer {
             .getPackagePrefix()
             + ".WAI_ROLES_NS";
 
-    private static final String MULTI_WINDOW_FILENAME = "f_multiWindow.js";
+    private static final String MULTI_WINDOW_CLASSLOADER_FILENAME = "f_multiWindowClassLoader.js";
 
     public static final String MULTI_WINDOW_CLASSLOADER = Constants
             .getPackagePrefix()
-            + ".MULTI_WINDOW_CLASSLOADER";
+            + ".client.MULTI_WINDOW_CLASSLOADER";
 
     private static final String NONE_IMAGE_URL = "none";
 
@@ -594,7 +594,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
     private void writeDebugModes(IHtmlWriter writer,
             IJavaScriptWriter jsWriter, String disabledCookiesPageURL,
-            Boolean debugMode, Boolean multiWindowMode) throws WriterException {
+            Boolean debugMode, Boolean multiWindowMode,
+            boolean multiWindowClassLoader) throws WriterException {
 
         boolean closeJsWriter = false;
 
@@ -615,7 +616,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 closeJsWriter = true;
             }
 
-            jsWriter.write("window.rcfacesDebugMode=");
+            jsWriter.write("window._rcfacesDebugMode=");
             jsWriter.writeBoolean(debugMode.booleanValue());
             jsWriter.writeln(";");
         }
@@ -626,9 +627,18 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 closeJsWriter = true;
             }
 
-            jsWriter.write("window.rcfacesMultiWindowMode=");
+            jsWriter.write("window._rcfacesMultiWindowMode=");
             jsWriter.writeBoolean(multiWindowMode.booleanValue());
             jsWriter.writeln(";");
+        }
+
+        if (multiWindowClassLoader) {
+            if (jsWriter == null) {
+                jsWriter = openScriptTag(writer);
+                closeJsWriter = true;
+            }
+
+            jsWriter.writeln("window._rcfacesMultiWindowClassLoader=true;");
         }
 
         if (closeJsWriter) {
@@ -641,7 +651,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             Boolean multiWindowMode) throws WriterException {
 
         writeDebugModes(writer, null, disabledCookiesPageURL, debugMode,
-                multiWindowMode);
+                multiWindowMode, false);
 
         includeScript(writer, jsBaseURI + "/" + uri,
                 IHtmlRenderContext.JAVASCRIPT_CHARSET);
@@ -664,7 +674,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         // writer);
 
         writeDebugModes(null, jsWriter, disabledCookiesPageURL, debugMode,
-                Boolean.TRUE);
+                Boolean.TRUE, true);
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
@@ -684,7 +694,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         String newWindowClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "f_newWindowClassLoader");
         jsWriter.write(newWindowClassLoader);
-        
+
         jsWriter.write("(window);");
         jsWriter.write(" else document.write(\"<SCRIPT");
         if (htmlProcessContext.useMetaContentScriptType() == false) {
@@ -705,7 +715,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
         jsWriter.write("></\"+\"SCRIPT>");
 
-        List l = Collections.singletonList(MULTI_WINDOW_FILENAME);
+        List l = Collections.singletonList(MULTI_WINDOW_CLASSLOADER_FILENAME);
 
         IRepository.IFile files[] = repository.computeFiles(l,
                 IHierarchicalRepository.FILENAME_COLLECTION_TYPE,

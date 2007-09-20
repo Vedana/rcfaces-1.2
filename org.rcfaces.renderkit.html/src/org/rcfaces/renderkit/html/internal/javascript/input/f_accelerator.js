@@ -6,6 +6,8 @@
  * Accelerator class.
  *
  * @class public f_accelerator extends f_object, fa_immediate, fa_eventTarget
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
  */
 
 var __statics={
@@ -172,4 +174,9 @@ var __members={
 	}
 }
  
-new f_class("f_accelerator", null, __statics, __members, f_object, fa_immediate, fa_eventTarget);
+new f_class("f_accelerator", {
+	extend: f_object,
+	aspects: [ fa_immediate, fa_eventTarget ],
+	statics: __statics,
+	members: __members
+});

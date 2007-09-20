@@ -5,7 +5,7 @@
 /**
  * Class Message Context
  *
- * @class public final f_messageContext extends Object
+ * @class public final f_messageContext
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

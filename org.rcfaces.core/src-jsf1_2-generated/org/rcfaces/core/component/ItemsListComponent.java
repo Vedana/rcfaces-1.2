@@ -1,29 +1,29 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.ToolBarComponent;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.ITextPositionCapability;
-import org.rcfaces.core.internal.tools.ToolBarTools;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.component.AbstractInputComponent;
 import javax.faces.component.NamingContainer;
-import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import java.lang.String;
+import org.rcfaces.core.component.ToolBarComponent;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ITextPositionCapability;
+import java.util.HashSet;
+import org.rcfaces.core.internal.tools.ToolBarTools;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.internal.tools.CheckTools;
 
 public class ItemsListComponent extends AbstractInputComponent implements 
 	IInitEventCapability,
@@ -42,7 +42,7 @@ public class ItemsListComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultDisabledImageURL","selectionListener","defaultImageURL","disabled","doubleClickListener","mouseOverListener","itemHiddenMode","itemPadding","defaultHoverImageURL","checkListener","checkedValues","defaultSelectedImageURL","initListener","mouseOutListener","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","defaultHoverImageURL","defaultDisabledImageURL","itemHiddenMode","textPosition","borderType","defaultImageURL","doubleClickListener","initListener","checkedValues","selectionListener","readOnly","mouseOverListener","defaultSelectedImageURL","itemPadding","mouseOutListener","disabled"}));
 	}
 
 	public ItemsListComponent() {
@@ -201,6 +201,13 @@ public class ItemsListComponent extends AbstractInputComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
+	public Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues(), getValue());
+		
+	}
+
 	public int getCheckedValuesCount() {
 
 
@@ -212,13 +219,6 @@ public class ItemsListComponent extends AbstractInputComponent implements
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
-		
-	}
-
-	public Object getFirstCheckedValue() {
-
-
-			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 

@@ -2,10 +2,10 @@ package org.rcfaces.renderkit.html.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
 
 public class NameSpaceComponent extends CameliaBaseComponent {
 
@@ -13,7 +13,7 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"uri","prefix"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"prefix","uri"}));
 	}
 
 	public NameSpaceComponent() {

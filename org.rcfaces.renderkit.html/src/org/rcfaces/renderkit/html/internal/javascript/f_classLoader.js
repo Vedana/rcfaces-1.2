@@ -22,6 +22,7 @@ function f_classLoader(win) {
 	f_core.Assert(win, "f_classLoader.f_classLoader: Invalid window parameter ("+win+")");
 	
 	this._window=win;
+	f_classLoader._window=win;
 
 	this._objectPool=new Array;
 	this._componentPool=new Array;
@@ -127,10 +128,10 @@ f_classLoader.prototype = {
 	
 		var name=aspect._name;
 		
-		f_core.Assert(aspect instanceof f_aspect, "Aspect parameter must be an aspect ! ("+aspect+")");
-		f_core.Assert(!this._aspects[name],"Aspect '"+name+"' is already known.");
+		f_core.Assert(aspect instanceof f_aspect, "f_classLoader.f_declareAspect: Aspect parameter must be an aspect ! ("+aspect+")");
+		f_core.Assert(!this._aspects[name], "f_classLoader.f_declareAspectAspect: Aspect '"+name+"' is already known.");
 	
-		f_core.Debug("f_classLoader", "Registering aspect "+name+".");
+		f_core.Debug(f_classLoader, "f_declareAspect: Registering aspect "+name+".");
 		
 		this._aspects[name] = aspect;
 		this._window[name] = aspect;
