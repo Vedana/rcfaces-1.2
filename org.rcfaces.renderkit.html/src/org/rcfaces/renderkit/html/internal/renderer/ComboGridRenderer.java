@@ -33,6 +33,7 @@ import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -178,6 +179,21 @@ public class ComboGridRenderer extends DataGridRenderer {
         boolean headerVisible = gridRenderContext.isHeaderVisible();
         if (headerVisible == false) {
             htmlWriter.writeAttribute("v:headerVisible", false);
+        }
+
+        Object dataModel = gridRenderContext.getDataModel();
+        if (dataModel instanceof IFiltredModel) {
+            htmlWriter.writeAttribute("v:filtred", true);
+
+            IFilterProperties filterMap = gridRenderContext.getFiltersMap();
+            if (filterMap != null && filterMap.isEmpty() == false) {
+                String filterExpression = HtmlTools.encodeFilterExpression(
+                        filterMap, componentRenderContext.getRenderContext()
+                                .getProcessContext(), componentRenderContext
+                                .getComponent());
+                htmlWriter.writeAttribute("v:filterExpression",
+                        filterExpression);
+            }
         }
 
         int popupWidth = gridRenderContext.getGridWidth();
