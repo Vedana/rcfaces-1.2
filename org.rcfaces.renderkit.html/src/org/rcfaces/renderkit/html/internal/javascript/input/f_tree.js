@@ -46,7 +46,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt 
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_NodeLabel_mouseOver: function(evt) {
 		var li=this._node;
@@ -70,7 +70,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_NodeLabel_mouseOut: function(evt) {
 		var li=this._node;
@@ -90,7 +90,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_DivNode_mouseOver: function(evt) {
 		var li=this._node;
@@ -115,7 +115,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_DivNode_mouseOut: function(evt) {
 		var li=this._node;
@@ -136,7 +136,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_DivNode_dblClick: function(evt) {
 		var li=this._node;
@@ -159,7 +159,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_DivNode_mouseDown: function(evt) {
 		var li=this._node;
@@ -194,7 +194,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_BodyMouseDown: function(evt) {
 		var tree=this;
@@ -238,7 +238,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Even evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_Command_mouseDown: function(evt) {
 		var li=this._node;
@@ -273,7 +273,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_Link_bodyOnfocus: function(evt) {
 		var tree=this._tree;
@@ -292,7 +292,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_Link_onfocus: function(evt) {
 		var tree=this._tree;
@@ -351,7 +351,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean 
-	 * @object tree
+	 * @context object:tree
 	 */
 	_Link_onblur: function(evt) {
 		var tree=this._tree;
@@ -387,7 +387,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_Link_onkeydown: function(evt) {
 		var tree=this._tree;
@@ -409,7 +409,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Event evt
 	 * @return boolean
-	 * @object tree
+	 * @context object:tree
 	 */
 	_Link_onkeyup: function(evt) {
 		var tree=this._tree;
@@ -430,7 +430,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
-	 * @object tree
+	 * @context object:tree
 	 */
 	_Link_onkeypress: function(evt) {
 		var tree=this._tree;
@@ -451,7 +451,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
-	 * @object tree
+	 * @context object:tree
 	 */
 	_NodeInput_mouseClick: function(evt) {
 		var li=this._node;

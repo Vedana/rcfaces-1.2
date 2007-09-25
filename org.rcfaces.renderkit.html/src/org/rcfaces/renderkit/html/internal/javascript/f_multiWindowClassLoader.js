@@ -88,6 +88,8 @@ f_multiWindowClassLoader.prototype._cloneClass=function(clazz) {
 		return newArray;
 		
 	case "f_core":
+		this._window._rcfacesGetWindow=this._parent._window._rcfacesGetWindow;
+			
 		var newCore=new Object();
 		this._window.f_core=newCore;
 		

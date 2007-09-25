@@ -711,21 +711,9 @@
 		</converter>
 	</tag>
 	<tag>
-		<tag-name>checkListener</tag-name>
-		<handler-class>
-			org.rcfaces.core.internal.facelets.CheckListenerHandler
-		</handler-class>
-	</tag>
-	<tag>
 		<tag-name>selectionListener</tag-name>
 		<handler-class>
 			org.rcfaces.core.internal.facelets.SelectionListenerHandler
-		</handler-class>
-	</tag>
-	<tag>
-		<tag-name>serverData</tag-name>
-		<handler-class>
-			org.rcfaces.core.internal.facelets.ServerDataHandler
 		</handler-class>
 	</tag>
 	<tag>
@@ -735,15 +723,15 @@
 		</handler-class>
 	</tag>
 	<tag>
-		<tag-name>userEventListener</tag-name>
+		<tag-name>serverData</tag-name>
 		<handler-class>
-			org.rcfaces.core.internal.facelets.UserEventListenerHandler
+			org.rcfaces.core.internal.facelets.ServerDataHandler
 		</handler-class>
 	</tag>
 	<tag>
-		<tag-name>errorListener</tag-name>
+		<tag-name>checkListener</tag-name>
 		<handler-class>
-			org.rcfaces.core.internal.facelets.ErrorListenerHandler
+			org.rcfaces.core.internal.facelets.CheckListenerHandler
 		</handler-class>
 	</tag>
 	<tag>
@@ -756,6 +744,18 @@
 		<tag-name>propertyChangeListener</tag-name>
 		<handler-class>
 			org.rcfaces.core.internal.facelets.PropertyChangeListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>userEventListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.UserEventListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>errorListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.ErrorListenerHandler
 		</handler-class>
 	</tag>
 	<tag>

@@ -40,6 +40,7 @@ import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
+import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
@@ -197,6 +198,8 @@ public abstract class AbstractGridRenderContext {
 
     private String requestHideAdditionals;
 
+    private String sortManager;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -213,6 +216,11 @@ public abstract class AbstractGridRenderContext {
 
         if (gridComponent instanceof IShowValueCapability) {
             showValue = ((IShowValueCapability) gridComponent).getShowValue();
+        }
+
+        if (gridComponent instanceof ISortManagerCapability) {
+            sortManager = ((ISortManagerCapability) gridComponent)
+                    .getSortManager();
         }
 
         initialize(checkTitleImages);
@@ -674,6 +682,10 @@ public abstract class AbstractGridRenderContext {
             hasScrollBars = true;
         }
 
+        if (getSortManager() != null) {
+            hasScrollBars = true;
+        }
+
         if (resizable && (hasScrollBars == false || widthNotSpecified)) {
             resizable = false;
         }
@@ -1014,6 +1026,10 @@ public abstract class AbstractGridRenderContext {
 
     public String getRequestShowAdditionalValues() {
         return requestShowAdditionals;
+    }
+
+    public String getSortManager() {
+        return sortManager;
     }
 
 }

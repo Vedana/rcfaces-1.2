@@ -528,6 +528,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:headerVisible", false);
         }
 
+        String sortManager = gridRenderContext.getSortManager();
+        if (sortManager != null) {
+            htmlWriter.writeAttribute("v:sortManager", sortManager);
+        }
+
         Object dataModel = gridRenderContext.getDataModel();
         if (dataModel instanceof IFiltredModel) {
             htmlWriter.writeAttribute("v:filtred", true);

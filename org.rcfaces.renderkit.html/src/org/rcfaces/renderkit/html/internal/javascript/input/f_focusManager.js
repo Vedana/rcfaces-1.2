@@ -211,7 +211,7 @@ var __members={
 			f_core.Debug(f_focusManager, "f_setFocus: search component id='"+focus+"' async='"+async+"'.");
 		
 			try {
-				component=f_core.GetElementByClientId(focus, document);
+				component=f_core.GetElementByClientId(focus);
 				
 			} catch (x)  {
 				// Si le composant n'est pas Camelia, ca pete !

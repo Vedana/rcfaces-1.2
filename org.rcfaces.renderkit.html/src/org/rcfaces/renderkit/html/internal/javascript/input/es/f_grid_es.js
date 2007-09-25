@@ -12,7 +12,8 @@
  
 var __resources = {
 	EVENT_LOCKED: "Cargando datos, por favor espere ... ",
-	COLUMN_RESIZE: "Mantenga el botón del mouse presionado para modificar el ancho de la columna"
+	COLUMN_RESIZE: "Mantenga el botón del mouse presionado para modificar el ancho de la columna",
+	SORT_CONFIGURATION: "??? Configure sort features"
 }
 
 f_resourceBundle.Define(f_grid, __resources);

@@ -26,7 +26,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object comboGrid
+	 * @context object:comboGrid
 	 */
 	_OnButtonMouseDown: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -50,7 +50,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object comboGrid
+	 * @context object:comboGrid
 	 */
 	_OnButtonMouseUp: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -67,7 +67,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object comboGrid
+	 * @context object:comboGrid
 	 */
 	_OnButtonMouseOver: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -92,7 +92,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object comboGrid
+	 * @context object:comboGrid
 	 */
 	_OnButtonMouseOut: function(evt) {
 		var comboGrid=this._comboGrid;
@@ -108,7 +108,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return boolean
-	 * @event evt
+	 * @context event:evt
 	 */
 	_OnBeforeDeactivate: function(evt) {
 		// Que sur IE ... donc ...
@@ -573,10 +573,10 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	fa_valueSelected: function(value, label) {
+	fa_valueSelected: function(value, label, rowValues) {
 		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 		
-		if (this.f_fireEvent(f_event.SELECTION, null, null, value)===false) {
+		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
 			return;
 		}
 		

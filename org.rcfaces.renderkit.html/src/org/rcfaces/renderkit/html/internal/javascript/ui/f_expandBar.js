@@ -21,7 +21,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object expandBar
+	 * @context object:expandBar
 	 */
 	_OnHeadOver: function() {
 		var expandBar=this._link;
@@ -35,7 +35,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object expandBar
+	 * @context object:expandBar
 	 */
 	_OnHeadOut: function() {
 		var expandBar=this._link;
@@ -48,7 +48,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object expandBar
+	 * @context object:expandBar
 	 */
 	_OnHeadClick: function(evt) {
 		var expandBar=this._link;

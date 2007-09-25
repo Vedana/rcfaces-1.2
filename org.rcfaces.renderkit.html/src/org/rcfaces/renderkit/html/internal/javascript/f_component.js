@@ -657,12 +657,21 @@ var __members = {
 	 * @return void
 	 */
 	f_completeComponent: function() {
+		
+		if (f_class.PROFILE_COMPONENT) {
+			f_core.Profile(false, "f_component.f_completeComponent("+this.id+" / "+this._kclass._name+")");
+		}
+
 	 	try {
 	 		this.f_update(true);
 	 		
 	 	} catch (x) {
 	 		f_core.Error(f_component, "f_completeComponent: Call of f_update throws exception !", x);
 	 	}
+		
+		if (f_class.PROFILE_COMPONENT) {
+			f_core.Profile(true, "f_class.f_completeComponent("+this.id+" / "+this._kclass._name+")");
+		}
 
 		if (!this._hasInitListeners) {
 			return;

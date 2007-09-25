@@ -696,6 +696,7 @@ var f_core = {
 	 				break;
 	 			}
 	 		}
+	 		
 		    component.attachEvent("on"+name, fct);
 			    
 		    if (capture) {
@@ -840,12 +841,28 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @window win
+	 * @context window:win
 	 */
 	_OnInit: function() {
+		var now=new Date();
 		var win=this;
 		
-		var now=new Date();
+		if (win.document.readyState) {
+			// Sous IE;
+			
+			// Bug du frameSet
+			if (!win.event) {
+				// Une des frames doit positionner 'event'
+				var frames=win.frames;
+				for(var i=0;i<frames.length;i++) {
+					if (frames[i].event) {
+						win=frames[i];
+						break;
+					}
+				}
+			}
+		}
+			
 		f_core.Profile(false, "f_core.onInit", now);
 		try {		
 			f_core._FlushLogs();	
@@ -953,10 +970,26 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @window win
+	 * @context window:win
 	 */
 	_OnExit: function() {
 		var win=this;
+		
+		if (win.document.readyState) {
+			// Sous IE;
+			
+			// Bug du frameSet
+			if (!win.event) {
+				// Une des frames doit positionner 'event'
+				var frames=win.frames;
+				for(var i=0;i<frames.length;i++) {
+					if (frames[i].event) {
+						win=frames[i];
+						break;
+					}
+				}
+			}
+		}
 		
 		if (win._rcfacesExiting) {
 			return;
@@ -969,8 +1002,7 @@ var f_core = {
 			var doc=win.document;
 	
 			f_core.Profile(false, "f_core.onExit");
-			try {
-				
+			try {				
 				f_core.RemoveEventListener(win, "load", f_core._OnInit);
 				f_core.RemoveEventListener(win, "unload", f_core._OnExit);
 				f_core._DesinstallModalWindow();
@@ -1364,7 +1396,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @event evt
+	 * @context event:evt
 	 */
 	_OnSubmit: function(evt) {
 		f_core.Profile(false, "f_core.SubmitEvent");
@@ -1481,7 +1513,7 @@ var f_core = {
 	 * @method private static
 	 * @param Event jsEvent
 	 * @return boolean
-	 * @event jsEvent
+	 * @context event:jsEvent
 	 */
 	_SystemSubmit: function(jsEvent) {
 		return f_core._Submit(this, this, jsEvent);
@@ -2913,7 +2945,7 @@ var f_core = {
 	 * @method hidden static
 	 * @param Event evt Javascript event
 	 * @return boolean
-	 * @event evt
+	 * @context event:evt
 	 */
 	CancelJsEventHandler: function(evt) {
 		if (!evt) {
@@ -2930,7 +2962,7 @@ var f_core = {
 	 * @method hidden static 
 	 * @param Event evt Javascript event
 	 * @return boolean
-	 * @event evt
+	 * @context event:evt
 	 */
 	CancelJsEventHandlerTrue: function(evt) {
 		if (!evt) {
@@ -2947,7 +2979,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @event evt
+	 * @context event:evt
 	 */
 	CancelJsEvent: function(evt) {
 		if (!evt) {

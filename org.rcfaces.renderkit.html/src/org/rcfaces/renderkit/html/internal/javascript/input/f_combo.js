@@ -21,7 +21,7 @@ var __statics = {
 	 * @method private static final
 	 * @param Event evt
 	 * @return boolean
-	 * @object combo
+	 * @context object:combo
 	 */
 	_OnChange: function(evt) {
 		var combo=this;

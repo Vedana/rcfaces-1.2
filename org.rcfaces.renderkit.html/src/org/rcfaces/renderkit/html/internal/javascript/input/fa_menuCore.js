@@ -34,7 +34,7 @@ var __statics = {
 	
 	/** 
 	 * @method private static String
-	 * @object this
+	 * @context object:this
 	 */
 	_ItemToString: function() {
 		return this._id;
@@ -43,7 +43,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean 
-	 * @object menu
+	 * @context object:menu
 	 */
 	_MenuItem_mouseOver: function(evt) {
 		var item=this._item;
@@ -67,7 +67,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean 
-	 * @object menu
+	 * @context object:menu
 	 */
 	_MenuItem_mouseOut: function(evt) {
 		var item=this._item;
@@ -89,7 +89,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean 
-	 * @object menu
+	 * @context object:menu
 	 */
 	_MenuItem_mouseDown: function(evt) {
 		var item=this._item;

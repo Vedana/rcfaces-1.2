@@ -21,6 +21,11 @@
 var __statics = {
 	
 	/**
+	 * @field hidden static final boolean
+	 */
+	PROFILE_COMPONENT: true,
+	
+	/**
 	 * @field hidden static final String
 	 */
 	ABSTRACT: "f_abstract",
@@ -58,7 +63,7 @@ var __statics = {
 	 * @method private static 
 	 * @param Object caller
 	 * @return any
-	 * @object this
+	 * @context object:this
 	 */
 	_Super: function(caller) {
 		f_core.Assert(caller && caller.callee, "f_class._Super: First parameter must be an argument object ! (caller="+caller+")");
@@ -476,8 +481,10 @@ var __statics = {
 			return obj;
 		}
 					
-		// f_core.Profile("f_class.init(false, "+obj.id+" / "+cls._name+")");
-					
+		if (f_class.PROFILE_COMPONENT) {
+			f_core.Profile(false, "f_class.init("+obj.id+" / "+cls._name+")");
+		}
+				
 		obj._kclass = cls;
 		
 		f_class._Inherit(obj);
@@ -500,7 +507,9 @@ var __statics = {
 							
 		cls._classLoader._newInstance(obj, systemClass);
 		
-		// f_core.Profile("f_class.init(true, "+obj.id+" / "+cls._name+")");
+		if (f_class.PROFILE_COMPONENT) {
+			f_core.Profile(true, "f_class.init("+obj.id+" / "+cls._name+")");
+		}
 		
 		return obj;
 	},
@@ -557,7 +566,7 @@ var __statics = {
 	 * @param optional Object staticMembers
 	 * @param optional Object methods
 	 * @param private optional function constructorFactory
-	 * @window window
+	 * @context window:window
 	 * @dontInline f_class
 	 */
 	_DeclarePrototypeClass: function(classLoader, name, staticMembers, methods, constructorFactory) {
@@ -690,7 +699,7 @@ var __members = {
 	_classLoader: undefined,
 	
 	/**
-	 * @window window
+	 * @context window:window
 	 * @dontInline f_classLoader
 	 */
 	f_class: function(className, lookId, staticMembers, members, parentClass) {

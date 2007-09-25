@@ -117,7 +117,6 @@ var __statics = {
 					switch(jsEvent.keyCode) {
 					case f_key.VK_RETURN:
 				 	case f_key.VK_ENTER:
-				 			
 						dataGridPopup._rowSelection(dataGridPopup._dataGrid, jsEvent);
 				 		return false;
 
@@ -126,7 +125,6 @@ var __statics = {
 				 		return true; // On accepte le TAB
 
 					case f_key.VK_ESCAPE:
-							
 						dataGridPopup.f_closeDataGridPopup(jsEvent);
 				 		return false;
 				 		
@@ -573,7 +571,7 @@ var __members = {
 		// A cause de IE !!!! ARG !
 		var self=this;
 		window.setTimeout(function() {
-			self.fa_valueSelected(value, message);
+			self.fa_valueSelected(value, message, values);
 		}, 0);
 	},
 
@@ -586,7 +584,7 @@ var __members = {
 	 * @method protected abstract
 	 * @param String value
 	 * @param String label
-	 * @param optional Event jsEvent
+	 * @param Object rowValues values of row
 	 * @return void
 	 */	
 	fa_valueSelected: f_class.ABSTRACT

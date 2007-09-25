@@ -64,7 +64,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_alpha: function(validator, keyCode, keyChar) {
 		var exp = "[a-zA-Z";
@@ -75,7 +75,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_alpha_fr: function(validator, keyCode, keyChar) {
 		var exp = "[a-zA-Z" + f_vb._LATIN_ACCENT_FR;
@@ -86,7 +86,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_alphanum: function(validator, keyCode, keyChar) {
 		var exp = "[0-9a-zA-Z";
@@ -97,7 +97,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_card: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\.]/, keyCode, keyChar);
@@ -105,7 +105,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_code: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9a-zA-Z]/, keyCode, keyChar);
@@ -113,7 +113,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_dat: function(validator, keyCode, keyChar) {
 		var exp = "[0-9";
@@ -124,7 +124,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_date: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\/]/, keyCode, keyChar);
@@ -132,7 +132,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_digit: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
@@ -140,7 +140,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_dps: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[\040-\177]/, keyCode, keyChar);
@@ -148,7 +148,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_hour: function(validator, keyCode, keyChar) {
 		var exp = "[0-9";
@@ -159,7 +159,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_insee: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9aAbB]/, keyCode, keyChar);
@@ -167,7 +167,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_integer: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode, keyChar);
@@ -175,7 +175,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_money: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\.\+\-]/, keyCode, keyChar);
@@ -183,7 +183,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_name: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[ a-zA-Z0-9\*\.\-]/, keyCode, keyChar);
@@ -191,7 +191,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_noblank: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[^ ]/, keyCode, keyChar);
@@ -199,7 +199,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_num: function(validator, keyCode, keyChar) {
 		var exp = "[0-9";
@@ -219,7 +219,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_number: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\,\-]/, keyCode, keyChar);
@@ -227,7 +227,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_signed: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\-]/, keyCode, keyChar);
@@ -235,7 +235,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_scientific: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\.\-eE]/, keyCode, keyChar);
@@ -243,7 +243,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Filter_time: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\:]/, keyCode, keyChar);
@@ -255,7 +255,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Translator_date: function(validator, keyCode, keyChar) {
 		var set = validator.f_getParameter("date.sepSign");
@@ -267,7 +267,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Translator_hour: function(validator, keyCode, keyChar) {
 		var set = validator.f_getParameter("hour.sepSign");
@@ -279,7 +279,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Translator_num: function(validator, keyCode, keyChar) {
 		var set = validator.f_getParameter("num.decSign");
@@ -291,7 +291,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Translator_removeaccent: function(validator, keyCode, keyChar) {
 		var mapper=f_vb._ACCENTS_MAPPER;
@@ -307,7 +307,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Translator_uppercase: function(validator, keyCode, keyChar) {
 		if (keyCode >= 97 && keyCode <= 122) {
@@ -321,7 +321,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Translator_lowercase: function(validator, keyCode, keyChar) {
 		if (keyCode >= 65 && keyCode <= 90) {
@@ -339,7 +339,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Checker_dat: function(validator, inVal) {
 		var min = validator.f_getIntParameter("date.min", 1850);
@@ -441,7 +441,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Checker_dat_msa: function(validator, inVal) {
 		var pivot = validator.f_getIntParameter("date.pivot", 0);
@@ -505,7 +505,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Checker_dat_nai: function(validator, inVal) {
 		// Handle empty string
@@ -710,7 +710,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Checker_hour: function(validator, inVal) {
 		var sep = validator.f_getParameter("hour.sepSign");
@@ -796,7 +796,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 *
 	 * Rules are the following:
 	 * Position 1 has to be 125678
@@ -843,7 +843,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Checker_num: function(validator, inVal) {
 		// Handle empty string
@@ -927,7 +927,7 @@ var __statics = {
   
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Checker_trim: function(validator, inVal) {
 		// Handle empty string
@@ -948,7 +948,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Formatter_insee: function(validator, inVal) {
 		var l = inVal.length;
@@ -958,7 +958,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Formatter_num: function(validator, inVal) {
 		var sTmp = inVal;
@@ -1036,7 +1036,7 @@ var __statics = {
 	
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Behavior_required: function(validator, inVal) {
 		var bRet;
@@ -1082,7 +1082,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Behavior_forcefill: function(validator, inVal) {
 		var bRet = true;
@@ -1110,7 +1110,7 @@ var __statics = {
   
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Processor_autoTab: function(validator, keyCode, shift, ctrl, alt) {
 		// Handle special key codes
@@ -1152,7 +1152,7 @@ var __statics = {
 	
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Converter_dat: {
 		// parameter name="date.sepSign" value="/-."
@@ -1177,7 +1177,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Converter_hour: {
 		// Parmaters: hour.sepSign" value=":. 
@@ -1200,7 +1200,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @object validator
+	 * @context object:validator
 	 */
 	Converter_num: {
 		// parameter name="num.negSign" value="-"

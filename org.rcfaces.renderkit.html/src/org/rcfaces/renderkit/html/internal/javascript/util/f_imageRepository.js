@@ -119,7 +119,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return void
-	 * @window win
+	 * @context window:win
 	 */
 	_OnErrorHandler: function() {
 		var win=this._window;
@@ -138,7 +138,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return void
-	 * @window win
+	 * @context window:win
 	 */
 	_OnLoadHandler: function() {
 		var win=this._window;

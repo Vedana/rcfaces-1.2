@@ -93,11 +93,13 @@
 	cursor: default;
 }
 
-.f_grid_tcell_over {
+.f_grid_tcell_over,
+.f_grid_sortManager_over {
 	background: url('grid/titleOver.gif') repeat-x bottom white;
 }
 
-.f_grid_tcell_selected {
+.f_grid_tcell_selected,
+.f_grid_sortManager_selected {
 	border: 1px solid #A5A597;
 	background-color: #DEDFD8;
 	padding: 1px 1px 1px 5px;
@@ -228,7 +230,9 @@
 	text-align: left;
 	-moz-outline-style: none;
 }
-.f_grid_dataTitle_scroll {
+
+.f_grid_dataTitle_scroll,
+.f_grid_sortManager {
 	padding: 0;
 	margin: 0;
 	border: 0;
@@ -298,5 +302,28 @@
 
 .f_grid_additional_button_no_content {
 	visibility: hidden; 
+}
+
+.f_grid_sortManager {
+	display: block;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 16px;
+	height: 20px;	
+	z-index: 10;
+}
+
+.f_grid_sortManager_image {
+	display: block;
+	position: absolute;
+	top: 2;
+	left: 0;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: transparent url('grid/sort.gif') scroll no-repeat center center;
 }
 

@@ -12,7 +12,7 @@
  */
  
 /**
- * @window window
+ * @context window:window
  */
 function f_classLoader(win) {
 	if (!arguments.length) {
@@ -102,7 +102,7 @@ f_classLoader.prototype = {
 	 * @method hidden
 	 * @param f_class claz
 	 * @return void
-	 * @object this
+	 * @context object:this
 	 */
 	f_declareClass: function(claz) {
 		var key=f_classLoader._MakeClassName(claz._name, claz._lookId);
@@ -1282,7 +1282,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
  * @method hidden static
  * @param optional Window win
  * @return f_classLoader
- * @window window
+ * @context window:window
  */
 f_classLoader.Get=function(win) {
 	if (!win) {

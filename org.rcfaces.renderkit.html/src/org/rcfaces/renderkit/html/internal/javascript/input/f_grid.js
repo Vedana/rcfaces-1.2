@@ -115,7 +115,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	RowMouseDown: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -161,7 +161,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event evt
 	 * @return boolean
-	 * @object NONE
+	 * @context event:evt
 	 */
 	VerifyTarget: function(evt) {		
 		if (this._dataGrid || this._row) {
@@ -189,7 +189,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	FiltredCancelJsEventHandler: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -208,7 +208,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	RowMouseDblClick: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -236,7 +236,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_BodyMouseDown: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -344,7 +344,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Link_onfocus: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -422,7 +422,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Link_onblur: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -463,7 +463,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Link_onkeypress: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -498,7 +498,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Link_onkeydown: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -526,7 +526,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Link_onkeyup: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -555,7 +555,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Link_onmousewheel: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -592,7 +592,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Title_onMouseOver: function(evt) {
 		var column=this._column;
@@ -638,7 +638,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Title_onMouseOut: function(evt) {
 		var column=this._column;
@@ -679,7 +679,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_Title_onMouseDown: function(evt) {
 
@@ -728,7 +728,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object column
+	 * @context object:column
 	 */
 	_Title_onMouseUp: function(evt) {
 		var column=this._column;
@@ -776,7 +776,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_OnScroll: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -802,7 +802,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	GotFocus: function(evt) {
 		var dataGrid=this._dataGrid;
@@ -831,7 +831,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
+	 * @context object:dataGrid
 	 */
 	_TitleCursorMouseDown: function(evt) {
 		var column=this._column;
@@ -883,8 +883,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
-	 * @event evt
+	 * @context event:evt
 	 */
 	_TitleCursorDragMove: function(evt) {
 		var column=f_grid._DragColumn;
@@ -913,8 +912,8 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
-	 * @event evt
+	 * @context object:dataGrid
+	 * @context event:evt
 	 */
 	_TimerDragMove: function(evt) {
 		var column=f_grid._DragColumn;
@@ -1062,8 +1061,8 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @object dataGrid
-	 * @event evt
+	 * @context object:dataGrid
+	 * @context event:evt
 	 */
 	_TitleCursorDragStop: function(evt) {
 		var column=f_grid._DragColumn;
@@ -1103,6 +1102,107 @@ var __statics = {
 		return true;
 	},
 	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */				
+	_SortIndication_onmouseover: function(evt) {
+		var dataGrid=this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
+		}
+
+		if (this._over) {
+			return true;
+		}
+
+		this._over=true;
+		
+		dataGrid._updateSortManager();
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onmouseout: function(evt) {
+		var dataGrid=this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (!this._over && !this._selected) {
+			return true;
+		}
+
+		this._over=undefined;
+		this._selected=undefined;
+		
+		dataGrid._updateSortManager();
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onmousedown: function(evt) {
+		var dataGrid=this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (this._selected) {
+			return true;
+		}
+
+		this._selected=true;
+		
+		dataGrid._updateSortManager();
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onmouseup: function(evt) {
+		var dataGrid=this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (!this._selected) {
+			return true;
+		}
+	
+		this._selected=undefined;
+		
+		dataGrid._updateSortManager();
+		
+		dataGrid._showSortManager();
+		
+		return true;
+	
+	},
+	
+	/**
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
@@ -1139,6 +1239,8 @@ var __members = {
 		this._showValue=f_core.GetAttribute(this, "v:showValue");
 
 		this._headerVisible=f_core.GetBooleanAttribute(this, "v:headerVisible", true);
+
+		this._sortManager=f_core.GetAttribute(this, "v:sortManager");
 	
 		var rowStyleClass=f_core.GetAttribute(this, "v:rowStyleClass");
 		if (rowStyleClass) {
@@ -1149,10 +1251,41 @@ var __members = {
 		}
 		
 		this.f_initializeTableLayout();
+		
+		var styleSheetBase=f_env.GetStyleSheetBase();
+
+		this._blankImageURL=styleSheetBase+f_grid._BLANK_IMAGE_URL;
+		f_imageRepository.PrepareImage(this._blankImageURL);
 			
 		this.f_openActionList(f_event.MOUSEDOWN);
 		this.f_openActionList(f_event.MOUSEUP);
 		this.f_openActionList(f_event.SELECTION);
+
+		if (this._sortManager) {
+			var sortIndicator=this.ownerDocument.createElement("DIV");
+			sortIndicator.className="f_grid_sortManager";
+			sortIndicator._dataGrid=this;
+			
+			sortIndicator.onmouseover=f_grid._SortIndication_onmouseover;
+			sortIndicator.onmouseout=f_grid._SortIndication_onmouseout;
+			sortIndicator.onmousedown=f_grid._SortIndication_onmousedown;
+			sortIndicator.onmouseup=f_grid._SortIndication_onmouseup;
+		
+			this._sortIndicator=sortIndicator
+			this.appendChild(sortIndicator);
+			
+			var img=this.ownerDocument.createElement("IMG");
+			img.className="f_grid_sortManager_image";
+			img.src=this._blankImageURL;
+			img.alt="*";
+			img.width=16;
+			img.height=16;
+			
+			var resourceBundle=f_resourceBundle.Get(f_grid);
+			img.title=resourceBundle.f_get("SORT_CONFIGURATION");
+
+			sortIndicator.appendChild(img);
+		}
 
 		var focus;
 		if (false && f_core.IsInternetExplorer()) {
@@ -1246,15 +1379,10 @@ var __members = {
 
 			}	
 			
-			this.insertBefore(focus, this.firstChild);			
+			this.insertBefore(focus, this.firstChild);
 		}
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);		
-		
-		var styleSheetBase=f_env.GetStyleSheetBase();
-
-		this._blankImageURL=styleSheetBase+f_grid._BLANK_IMAGE_URL;
-		f_imageRepository.PrepareImage(this._blankImageURL);
 	},
 	f_finalize: function() {
 	
@@ -1277,7 +1405,18 @@ var __members = {
 			this._colsPool=null;
 		}
 	*/	
+		var sortIndicator=this._sortIndicator;
+		if (sortIndicator) {
+			this._sortIndicator=undefined; // HtmlDivElement
 
+			sortIndicator._dataGrid=undefined;
+			
+			sortIndicator.onmouseover=null;
+			sortIndicator.onmouseout=null;
+			sortIndicator.onmousedown=null;
+			sortIndicator.onmouseup=null;
+		}
+		
 //		this._serializedIndexes=undefined; // number[]
 
 //		this._showValue=undefined; // String
@@ -1287,6 +1426,7 @@ var __members = {
 //		this._rowStyleClass=undefined; // String
 	
 //		this._showCursor=undefined; // boolean
+//		this._sortManager=undefined; // String
 	
 //		this._endRowIndex=undefined; // number
 		this._shadowRows=undefined; // HtmlTRElement[]
@@ -1775,7 +1915,7 @@ var __members = {
 			var poolSize=dataGrid._rowsPool.length;
 		
 			dataGrid.f_callServer(poolSize, 0, cursorIndex, undefined, true);
-		});	
+		});
 	},
 
 	/**
@@ -2506,7 +2646,7 @@ var __members = {
 			
 //			column._align=undefined; // String
 			column._tcol=undefined; // HTMLThElement
-			column._tcell=undefined;
+			column._tcell=undefined; // HTMLTdElement 
 			column._box=undefined; // HTMLDivElement
 			column._label=undefined; // HTMLDivElement
 			column._image=undefined; // HTMLImageElement
@@ -2529,7 +2669,9 @@ var __members = {
 //			column._cellImage=undefined; // boolean
 //			column._defaultCellImageURL=undefined; // String
 			
-			f_core.VerifyProperties(column);
+			// Les colonnes sont devenus des objets
+			// f_core.VerifyProperties(column);			
+			f_classLoader.Destroy(column);			
 		}
 	},
 	/**
@@ -4101,6 +4243,14 @@ var __members = {
 		}
 		
 		this.fa_initializeScrollBars();
+	},
+	
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_updateSortManager: function() {
+		
 	},
 	
 	/**

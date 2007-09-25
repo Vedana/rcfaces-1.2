@@ -21,7 +21,7 @@ var __statics = {
      * @method private static
      * @param Event evt the event
      * @return boolean
-     * @object messageBox
+     * @context object:messageBox
      */
     _OnClick: function(evt) {
     	var button=this;

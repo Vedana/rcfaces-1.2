@@ -11,7 +11,7 @@
  */
 
 /**
- * @window window
+ * @context window:window
  */
 function f_aspect(aspectName, staticMembers, members, extend) {
 	// Constructeur vide: on ne fait rien !
