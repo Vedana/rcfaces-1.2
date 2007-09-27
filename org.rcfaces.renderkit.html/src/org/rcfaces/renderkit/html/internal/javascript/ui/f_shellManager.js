@@ -161,8 +161,14 @@ var __statics = {
 		// En mode Firefox il se peut que ce ne soit pas des des windows à chaque fois !
 		var win=f_core.GetWindow(component);
 		
-		if (win.frameElement) {
-			return win.frameElement._shell;
+		var frameElement=win.frameElement;
+		if (frameElement) {
+			var shell=frameElement._shell;
+			if (shell) {
+				return shell;
+			}
+			
+			return f_shellManager.GetShell(frameElement.ownerDocument);
 		}
 		
 		return null;
