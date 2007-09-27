@@ -52,6 +52,23 @@ var __members = {
 	},
 	/**
 	 * @method public
+	 * @return boolean
+	 */
+	f_isVisible: function() {
+		return this._visibility;
+	},
+	/**
+	 * @method public
+	 * @return boolean
+	 */
+	f_isSortable: function() {
+		if (this._method) {
+			return true;
+		}
+		return false;
+	},
+	/**
+	 * @method public
 	 * @return number Ascending:1 Descending:-1 not-sorted:0
 	 */
 	f_getColumnOrderState: function() {
