@@ -88,7 +88,7 @@ var __statics = {
 		}
 		
 		var grid=base._grid;
-		var cols = grid.f_getColumns();		
+		var cols = f_columnSortDialog.GetColumns(grid);		
 		
 		var selects=base._selects;
 		var radios=base._radios;
@@ -99,7 +99,7 @@ var __statics = {
 			
 			if (selection==0) {
 				select._sort=undefined;
-				// Plus de sélection !
+				// Plus de selection !
 				for(i++;i<selects.length;i++) {
 					selects[i].selectedIndex=0;
 					selects[i]._sort=undefined;
@@ -109,7 +109,7 @@ var __statics = {
 
 			var colIndex=select.options[selection]._columnIndex;
 
-			// On vérifie qu'il n'y a pas de doublons			
+			// On verifie qu'il n'y a pas de doublons			
 			for(var j=0;j<i;j++) {
 				var s=selects[j];
 				var sc=s.options[s.selectedIndex]._columnIndex;
@@ -118,7 +118,7 @@ var __statics = {
 					continue;
 				}
 				
-				// Conflit, on réinitialise tout !
+				// Conflit, on reinitialise tout !
 								
 				for(i=j+1;i<selects.length;i++) {
 					selects[i].selectedIndex=0;
@@ -130,7 +130,7 @@ var __statics = {
 
 		f_columnSortDialog.UpdateRadioButtons(selects, 0, radios);
 
-		for(var i=1;i<selects.length;i++) { // On debute à la deuxieme combo !
+		for(var i=1;i<selects.length;i++) { // On debute a la deuxieme combo !
 			// On remplis les selects en essayant de conserver la selection
 				
 			var select=selects[i];
@@ -168,7 +168,7 @@ var __statics = {
 		
 		var cnt=0;
 		for (var j = 0; j < cols.length; j++) {				
-			var found=false; // On retire les colonnes déjà référencées !
+			var found=false; // On retire les colonnes deja referencees !
 			for(var k=0;k<i;k++) {
 				var selection=selects[k].selectedIndex;
 				if (!selection) {
@@ -247,8 +247,10 @@ var __statics = {
         var text;
 
         if (column) {
-            // oops
-	        text = column._dataGrid.f_getColumnName(column);
+	        text = column.f_getGrid().f_getColumnName(column);
+	        if (!text) {
+	        	text = column.f_getId();
+	        }
 
 	    } else {
 	    	text = f_resourceBundle.Get(f_columnSortDialog).f_get("NO_COLUMN");
@@ -262,6 +264,30 @@ var __statics = {
         
         return selectComp.appendChild(newOpt);
   	},
+	/**
+	 *  <p>get the columns.</p>
+     * @method public static
+     * @param object grid
+     * @return array of visible columns
+	 */
+	GetColumns: function(grid) {
+		if (!grid) {
+			f_core.Error(f_columnSortDialog, "GetColumns: grid is undefined !");
+			return [];
+		}
+		var allCols = grid.f_getColumns();
+		
+		var visibleCols = new Array;
+		for (var i=0; i<allCols.length; i++) {
+			var col = allCols[i];
+			f_core.Debug(f_columnSortDialog, "GetColumns: col "+col.f_getId()+" visibility :" +col.f_isVisible());
+			f_core.Debug(f_columnSortDialog, "GetColumns: col "+col.f_getId()+" sortability :" +col.f_isSortable());
+			if (col.f_isVisible() && col.f_isSortable()) {
+				visibleCols.push(col);
+			}
+		}
+		return visibleCols;
+	},
 
 	/**
 	 * @method private static
@@ -319,20 +345,6 @@ var __members = {
 		this._cleanInputs();
 
 		this.f_super(arguments);
-	},
-	
-	/**
-	 *  <p>get the columns.</p>
-	 *
-	 * @method private 
-	 */
-	f_getColumns: function() {
-		var grid = this._grid;
-		if (!grid) {
-			f_core.Error(f_columnSortDialog, "f_geColumns: grid is undefined !");
-			return [];
-		}
-		return grid.f_getColumns();
 	},
 	/**
 	 *  <p>draw a message box.
@@ -401,16 +413,20 @@ var __members = {
 		var tbodCorps = docBase.createElement("tbody");
 		tableCorps.appendChild(tbodCorps);
 		
-		// Corps de la popup : 3 combos et des radios
+		// Corps de la popup : 3 (max) combos et des radios
 
 		this._radios = new Array;
 		this._selects = new Array;
 		this._buttons = new Array;
 
 		var sortedCols = grid.f_getSortedColumns();
-		var cols = grid.f_getColumns();
+		var cols = f_columnSortDialog.GetColumns(grid);
+		var nbCols = cols.length;
+		if (nbCols > 3) {
+			nbCols = 3;
+		}
 
-		for(var j=0;j<3;j++) {
+		for(var j=0;j<nbCols;j++) {
 			// Creation de la ligne de libell� Trier par
 
 			var ligneCorps = docBase.createElement("tr");
@@ -655,7 +671,7 @@ var __members = {
 
 		var grid = this._grid;
 		if (apply) {
-			var cols = grid.f_getColumns();		
+			var cols = f_columnSortDialog.GetColumns(grid);		
 
 			var selects=this._selects;
 			for (var i=0; i<selects.length; i++) {
