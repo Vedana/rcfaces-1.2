@@ -353,7 +353,7 @@ var __members = {
 		}
 		
 		var shellDecorator=this._shellManager.f_getShellDecorator(this);
-		var mySize=shellDecorator.f_computeExternalSize(this._width, this._height);
+		var mySize=shellDecorator.f_computeTrim(this._width, this._height);
 		
 		// calculate iframe size and position
 		var viewSize=f_shellManager.GetScreenSize();
@@ -451,7 +451,7 @@ var __members = {
 	 * @return void
 	 */
 	f_open: function(returnValueFunction) {
-		f_core.Assert(!this._closed, "f_open: Invalid shell state !");
+		f_core.Assert(!this._closing, "f_open: Invalid shell state !");
 		
 		this._returnValueFunction=returnValueFunction;
 		
@@ -464,11 +464,11 @@ var __members = {
 	 * @return void
 	 */
 	f_close: function(returnValue) {
-		if (this._closed) {
+		if (this._closing) {
 			return;
 		}
 		
-		this._closed=true;
+		this._closing=true;
 		
 		var self=this;
 		
@@ -480,6 +480,7 @@ var __members = {
 			self._shellManager.f_closeShell(self, !returnValueFunction);
 			
 			if (!returnValueFunction) {
+				self._closing=undefined;
 				return;
 			}
 			
@@ -490,7 +491,9 @@ var __members = {
 				f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
 			}
 			
-			self._shellManager.f_closeShell(null, true);		
+			self._shellManager.f_closeShell(null, true);
+			
+			self._closing=undefined;
 		}, 0);
 	},
 	f_preConstruct: function() {

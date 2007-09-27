@@ -45,7 +45,7 @@ var __members = {
 	 * @param optional number height
 	 * @return Object
 	 */
-	f_computeExternalSize: function(width, height) {
+	f_computeTrim: function(width, height) {
 		var shell=this._shell;
 		
 		if (width===undefined) {
