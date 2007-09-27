@@ -11,6 +11,7 @@ var __resources = {
 	OK_BUTTON: "OK",
 	VALID_BUTTON: "Valider",
 	APPLY_BUTTON: "Appliquer",
-	CANCEL_BUTTON: "Annuler"
+	CANCEL_BUTTON: "Annuler",
+	CLOSE_TITLE_BUTTON_TOOLTIP: "Fermer la fenêtre"	
 }
 f_resourceBundle.Define(f_shell, __resources);

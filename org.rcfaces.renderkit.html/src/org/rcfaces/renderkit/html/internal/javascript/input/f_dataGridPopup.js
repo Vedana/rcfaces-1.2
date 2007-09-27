@@ -202,6 +202,7 @@ var __members = {
 		this._serviceGridId=popupParent.id;
 		this._ignoreFocus=true;
 		this._focus=true;
+		this._showLoadingAlert=false;
 	},
 	/**
 	 * @method protected

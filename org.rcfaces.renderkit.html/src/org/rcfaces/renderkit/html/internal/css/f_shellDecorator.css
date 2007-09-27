@@ -59,4 +59,25 @@
 
 .f_shellDecorator_title_cell {
 	border-bottom: 1px #F0F0F0 solid;
+	vertical-align: top;
+}
+
+.f_shellDecorator_close {
+	float: left;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 21;
+	height: 17;
+
+	background: transparent url('shell/close.gif') no-repeat 0 0;	
+}
+
+.f_shellDecorator_close_over {
+	background: transparent url('shell/close.gif') no-repeat -21 0;	
+}
+
+.f_shellDecorator_close_selected,
+.f_shellDecorator_close_selected_over {
+	background: transparent url('shell/close.gif') no-repeat -42 0;	
 }

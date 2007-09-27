@@ -1270,7 +1270,6 @@ var __members = {
 		this.f_initializeTableLayout();
 		
 		var styleSheetBase=f_env.GetStyleSheetBase();
-
 		this._blankImageURL=styleSheetBase+f_grid._BLANK_IMAGE_URL;
 		f_imageRepository.PrepareImage(this._blankImageURL);
 			

@@ -14,7 +14,12 @@ var __statics = {
 	/**
 	 * @field hidden static final String
 	 */
-	TITLE_DECORATOR: "title"
+	TITLE_DECORATOR: "title",
+	
+	/** 
+	 * @field private static final String	
+	 */
+	_BLANK_IMAGE_URL: "/blank.gif"
 }
 
 var __members = {
@@ -36,8 +41,32 @@ var __members = {
 		
 		this._decorationValues=undefined; // Map<String,any>
 		this._shellBody=undefined; //HtmlElement
+		this._title=undefined; // HtmlElement
+		// this._blankImageURL=undefined; // String
+		
+		var buttons=this._buttons;
+		if (buttons) {
+			this.buttons=undefined;
+			
+			for(var name in buttons) {
+				var button=buttons[name];
+				
+				this.f_clearButton(button);
+			}
+		}
 		
 		this.f_super(arguments);
+	},
+	/**
+	 * @method protected
+	 * @param HTMLElement button
+	 * @return void
+	 */
+	f_clearButton: function(button) {				
+		button.onmousedown=null;
+		button.onmouseup=null;
+		button.onmouseover=null;
+		button.onmouseout=null;		
 	},
 	/**
 	 * @method public
@@ -162,7 +191,10 @@ var __members = {
 		}
 		
 		switch(key) {
-		case "title":
+		case f_shellDecorator.TITLE_DECORATOR:
+			if (this._title) {
+				f_core.SetTextNode(this._title, value);
+			}
 			break;
 		}	
 	},
@@ -215,7 +247,8 @@ var __members = {
 		var tbody=shellDocument.createElement("tbody");
 		table.appendChild(tbody);
 	
-		if (style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE)) {			
+		if (style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE)) {
+			
 			var tr=shellDocument.createElement("tr");
 			tr.className="f_shellDecorator_title";
 			tbody.appendChild(tr);
@@ -224,10 +257,7 @@ var __members = {
 			td.className="f_shellDecorator_title_cell";
 			tr.appendChild(td);
 			
-			var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
-			if (title) {
-				f_core.SetTextNode(td, title);
-			}
+			this.f_createTitle(td);
 		}
 		
 		var tr=shellDocument.createElement("tr");
@@ -255,6 +285,60 @@ var __members = {
 		}
 
 		this._iframe.style.visibility="hidden";		
+	},
+	/**
+	 * @method protected
+	 * @param HTMLElement td
+	 * @return void
+	 */
+	f_createTitle: function(parent) {
+			
+		var style=this._shell._style;
+		
+		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
+		if (title) {
+			f_core.SetTextNode(parent, title);
+		}		
+
+		if (style & f_shell.CLOSE_STYLE) {
+			var tooltip=f_resourceBundle.Get(f_shell).f_get("CLOSE_TITLE_BUTTON_TOOLTIP");
+			
+			this.f_addTitleButton(parent, "close", "f_shellDecorator_close", tooltip);
+		}
+	},
+	/**
+	 * @method protected
+	 * @param String name
+	 * @param String className
+	 * @return void
+	 */
+	f_addTitleButton: function(parent, name, className, tooltip) {
+
+		var blankImageURL=this._blankImageURL;
+		if (!blankImageURL) {
+			var styleSheetBase=f_env.GetStyleSheetBase();
+			blankImageURL=f_env.ResolveContentUrl(window, styleSheetBase+f_shellDecorator._BLANK_IMAGE_URL);
+			f_imageRepository.PrepareImage(blankImageURL);
+			
+			this._blankImageURL=blankImageURL;
+		}
+
+		var img=f_core.CreateElement(parent, "img", {
+			className: className,
+			src: blankImageURL,
+			title: tooltip
+		});
+		
+		img.onmousedown=null;
+		img.onmouseup=null;
+		img.onmouseover=null;
+		img.onmouseexit=null;
+		
+		if (!this._buttons) {
+			this._buttons=new Object;
+		}
+		
+		this._buttons[name]=className;
 	},
 	f_setShellBounds: function(shell, x, y, width, height) {
 		
