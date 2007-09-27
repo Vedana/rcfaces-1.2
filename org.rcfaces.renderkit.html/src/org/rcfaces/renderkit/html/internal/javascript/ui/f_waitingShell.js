@@ -6,7 +6,8 @@
  * <p><strong>f_waitingShell</strong> represents popup modal window.
  *
  * @class public final f_waitingShell extends f_shell
- * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
+ * @author Fred Lefevere-Laoide (latest modification by $Author$)
+ * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
 var __statics = {
@@ -16,7 +17,7 @@ var __statics = {
      */
     WaitForSubmit: function() {
  		var waitingShell=f_waitingShell.f_newInstance();
- 		waitingShell.f_show();
+ 		waitingShell.f_open();
 	}
 }
 
@@ -29,7 +30,8 @@ var __members = {
 	 * @method public
 	 */
 	f_waitingShell: function() {
-		this.f_super(arguments);
+		this.f_super(arguments, f_shell.TRANSPARENT);
+		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 150));
 			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 150));
@@ -38,31 +40,33 @@ var __members = {
 			if (imageURL) {
 				this.f_setImageURL(imageURL);
 			}
-			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_waitingShell"));
-			this.f_setBackgroundMode(f_core.GetAttribute(this, "v:backgroundMode", "greyed"));
-			var waitingShell=this;
 
+			var text=f_core.GetAttribute(this, "v:text");
+			if (text) {
+				this.f_setText(text);
+			}
+
+			this.f_setStyleClass(f_core.GetAttribute(this, "v:styleClass", "f_waitingShell"));
+			this.f_setBackgroundMode(f_core.GetAttribute(this, "v:backgroundMode", f_shell.GREYED_BACKGROUND_MODE));
+
+			var self=this;
 			var submitCb=function() {
-				waitingShell.f_show();
+				self.f_open();
 			}
 			f_core.AddPostSubmitListener(submitCb);
 
 		} else {
-			this.f_setCssClassBase("f_waitingShell");
-			this.f_setBackgroundMode("greyed");
+			this.f_setStyleClass("f_waitingShell");
+			this.f_setBackgroundMode(f_shell.GREYED_BACKGROUND_MODE);
 			this.f_setWidth(150);
 			this.f_setHeight(150);
 		}
-		
 	},
-
 	/*
-	 * <p>Destruct a new <code>f_messageDialog</code>.</p>
-	 *
-	 * @method public
-	 *
 	f_finalize: function() {
 		this.f_super(arguments);
+		//this._imageURL=undefined; // String
+		//this._text=undefined; // String
 	},
 	*/
 
@@ -73,74 +77,86 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_fillWaitingShell: function() {
-     	f_core.Debug(f_waitingShell, "f_fillWaitingShell: entering");
+	f_fillBody: function(base) {
+		this.f_super(arguments, base);
 
-		this.f_fillModIFrame(arguments);
-
-		//Hide Selects
-		f_shell.HideSelect();
-
-		var iframe=this.f_getIframe();
-		var docBase = iframe.contentWindow.document;
-		var base = docBase.body;
-		var cssClassBase = this.f_getCssClassBase();
-		if (!cssClassBase) {
-			cssClassBase="f_waitingShell";
-		}
+		var tr=f_core.CreateElement(base, "table", {
+			cellPadding: 0,
+			cellSpacing: 0
+		}, "tbody", null, "tr", null);
 
 		var url=this.f_getImageResolvedURL();
 		if (url) {
-			var img = docBase.createElement("img");
-			img.className=cssClassBase+"_image"
-			img.style.width=this.f_getWidth()+"px";
-			img.style.height=this.f_getHeight()+"px";
-			img.src=url;
-			base.appendChild(img);
+			f_core.CreateElement(tr, "td", {
+				align: "center",
+				valign: "middle"
+			}, "img", {
+				className: "f_waitingShell_image",
+				src: url
+			});
 		}
 		
+		var text=this._text;
+		if (text) {
+			f_core.CreateElement(tr, "td", {
+				align: "center",
+				valign: "middle"
+			}, "span", {
+				className: "f_waitingShell_text",
+				textNode: text
+			});
+		}
 	},
 
 	/**
-	 *  <p>returns the callback to use to draw the iFrame 
-	 *  </p>
+	 *  <p>Gets the image URL.</p>
 	 *
-	 * @method protected
-	 * @return Function 
+	 * @method public 
+	 * @return String imageURL 
 	 */
-	f_getIFrameDrawingCallBack: function() {
-		return this.f_fillWaitingShell;
+	f_getImageURL: function() {
+		return this._imageURL;
 	},
-
+	
 	/**
-	 * @method public
-	 * @return void
+	 *  <p>Gets the image resolved URL.</p>
+	 *
+	 * @method public 
+	 * @return String imageURL 
 	 */
-	f_show: function() {
-     	f_core.Debug(f_waitingShell, "f_show: entering ");
-
-		var url=this.f_getImageURL();
-		if (!url) {
-			this.f_setWidth(1);
-			this.f_setHeight(1);
+	f_getImageResolvedURL: function() {
+		if (!this._imageURL) {
+			return null;
 		}
-		// Create a blocking Div
-		this.f_drawModIFrame();
 		
-		//draw the image
-		this.f_constructIframe();
-
+		return f_env.ResolveContentUrl(window, this._imageURL);
 	},
-
 	/**
-	 * @method public
+	 *  <p>Sets the image URL.</p>
+	 *
+	 * @method public 
+	 * @param String imageURL  (or <code>null</code>)
 	 * @return void
 	 */
-	f_hide: function() {
-     	f_core.Debug(f_waitingShell, "f_hide : entering ");
-		
-		// Hide the blocking Div
-		f_shell.DelModIFrame();
+	f_setImageURL: function(imageURL) {
+    	f_core.Assert(imageURL===null || typeof(imageURL)=="string", "f_shell.f_setImageURL: Invalid parameter '"+imageURL+"'.");
+    	
+		this._imageURL = imageURL;
+	},
+	/**
+	 * @method public
+	 * @param String text
+	 * @return void
+	 */
+	f_setText: function(text) {
+		this._text=text;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getText: function() {
+		return this._text;
 	},
 
 	/**
@@ -152,4 +168,8 @@ var __members = {
 	}
 }
 
-new f_class("f_waitingShell", null, __statics, __members, f_shell);
+new f_class("f_waitingShell", {
+	extend: f_shell,
+	statics: __statics,
+	members: __members
+});

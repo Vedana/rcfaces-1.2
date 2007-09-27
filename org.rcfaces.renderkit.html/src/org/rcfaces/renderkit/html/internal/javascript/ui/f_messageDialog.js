@@ -25,14 +25,9 @@ var __statics = {
      */
     _OnClick: function(evt) {
     	var button=this;
-    	if (this._button) {
-    		// called by the form
-    		button=this._button;
-    	}
-		var base=button._base;
-		var messageBox=base._messageBox;
+		var messageBox=button._messageBox;
 		
-		f_core.Debug(f_messageDialog, "_OnClick: entering");
+		f_core.Debug(f_messageDialog, "_OnClick: entering "+this);
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -69,23 +64,18 @@ var __members = {
 	/**
 	 * @field private String
 	 */
-	_title: undefined,
-	/**
-	 * @field private String
-	 */
 	_text: undefined,
+
 	/**
 	 * @field private String
 	 */
 	_defaultValue: undefined,
-	/**
-	 * @field private String
-	 */
-	_styleClass: undefined,
+
 	/**
 	 * @field private Array
 	 */
 	_actions: undefined,
+
 	/**
 	 * <p>Construct a new <code>f_messageDialog</code> with the specified
      * initial values.</p>
@@ -99,23 +89,24 @@ var __members = {
 		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			this._title = f_core.GetAttribute(this, "v:title");
+			var title = f_core.GetAttribute(this, "v:title");
+			if (title) {
+				this.f_setTitle(title);
+			}
 			this._text=f_core.GetAttribute(this, "v:text");
 			this._defaultValue=f_core.GetAttribute(this, "v:defaultValue");
 			
 			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 300));
 			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 500));
 			this.f_setPriority(f_core.GetNumberAttribute(this, "v:dialogPriority", 0));
-
-			this._styleClass=f_core.GetAttribute(this, "v:styleClass");
-			//v:lookId
 			
 			var imageURL=f_core.GetAttribute(this, "v:imageURL");
 			if (imageURL) {
 				this.f_setImageURL(imageURL);
 			}
-			this.f_setCssClassBase(f_core.GetAttribute(this, "v:cssClassBase", "f_messageDialog"));
-			this.f_setBackgroundMode("greyed");
+			
+			this.f_setStyleClass(f_core.GetAttribute(this, "v:styleClass", "f_messageDialog"));
+			this.f_setBackgroundMode(f_shell.GREYED_BACKGROUND_MODE);
 
 			var events=f_core.GetAttribute(this, "v:events");
 			if (events) {
@@ -123,13 +114,15 @@ var __members = {
 			}
 
 		} else {
-			this._title=title;
+			if (title) {
+				this.f_setTitle(title);
+			}
 			this._text=text;
 			this._defaultValue=defaultValue;
 
 			this.f_setPriority(0);
 			this.f_setCssClassBase("f_messageDialog");
-			this.f_setBackgroundMode("greyed");
+			this.f_setBackgroundMode(f_shell.GREYED_BACKGROUND_MODE);
 		}
 
    		this._actions = new Array();
@@ -141,34 +134,16 @@ var __members = {
 	 * @method public
 	 */
 	f_finalize: function() {		
-		// this._title=undefined; // string
 		// this._text=undefined; // string
 		// this._defaultValue=undefined; // string
 		this._actions=undefined; // List<Object>
 		//this._styleClass=undefined; // string
+		//this._submitButton=undefined; // HtmlInputElement
+		//this._imageURL=undefined; // String
+		
+		this._cleanInputs();
 
 		this.f_super(arguments);
-	},
-
-	/**
-	 *  <p>Return the title.</p>
-	 *
-	 * @method public 
-	 * @return String The title
-	 */
-	f_getTitle: function() {
-		return this._title;
-	},
-	
-	/**
-	 *  <p>Sets the title.</p>
-	 *
-	 * @method public 
-	 * @param String title the title
-	 */
-	f_setTitle: function(title) {
-    	f_core.Assert((typeof(title)=="string"), "f_messageDialog.f_setTitle: Invalid parameter '"+title+"'.");
-		this._title = title;
 	},
 	
 	/**
@@ -215,27 +190,6 @@ var __members = {
 	},
 	
 	/**
-	 *  <p>Return the style class.</p>
-	 *
-	 * @method public 
-	 * @return String an additional style Class
-	 */
-	f_getStyleClass: function() {
-		return this._styleClass;
-	},
-	/**
-	 *  <p>Sets an additional Style Class.</p>
-	 *
-	 * @method public 
-	 * @param String styleClass an additional style Class
-	 */
-	f_setStyleClass: function(styleClass) {
-    	f_core.Assert(typeof(styleClass)=="string", "f_messageDialog.f_setStyleClass: Invalid parameter '"+styleClass+"'.");
-
-		this._styleClass = styleClass;
-	},
-	
-	/**
 	 *  <p>Adds an action to the popup.</p>
 	 *
 	 * @method public 
@@ -250,6 +204,7 @@ var __members = {
     	f_core.Assert((typeof(text)=="string"), "f_messageDialog.f_addAction: Invalid parameter text '"+text+"'.");
     	f_core.Assert(arguments.length < 3 || (typeof(disabled)=="boolean"), "f_messageDialog.f_addAction: Invalid parameter disabled '"+disabled+"'.");
     	f_core.Assert(arguments.length < 4 || (typeof(submitButton)=="boolean"), "f_messageBox.f_addAction: Invalid parameter submitButton '"+submitButton+"'.");
+		
 		this._actions.push({ 
 			_text: text,
 			_value: value,
@@ -293,8 +248,7 @@ var __members = {
 			this.f_addEventListener(f_event.SELECTION, callback);
 		}
 		
-		this.f_openDialog(this._open, null);
-		
+		this.f_open();		
 	},
 	/**
 	 *  <p>draw a message box.
@@ -304,200 +258,153 @@ var __members = {
 	 * @param HTMLElement the base html element to construct the dialog
 	 * @return void
 	 */
-	_open: function(base) {
-     	f_core.Debug(f_messageDialog, "_open: entering ("+base+")");
-		
-		if (!base) {
-			var iframe = this.f_getIframe();
-			base = iframe.contentWindow.document.body;
-		}
-		
-		//Hide Selects
-		f_shell.HideSelect();
-		
-		var cssClassBase = this.f_getCssClassBase();
-		if (!cssClassBase) {
-			cssClassBase = "f_messageDialog";
-		}
+	f_fillBody: function(base) {
 
 		var docBase = base.ownerDocument;
 		
 		// form to catch the return
 		var actForm = docBase.createElement("form");
+		actForm.className = "f_messageDialog_form";
+		base.appendChild(actForm);		
 		
 		// Creation de la table
 		var table = docBase.createElement("table");
-		var baseMem = table;
+		actForm.appendChild(table);
 
-		table.className = cssClassBase+"_dialog";
+		table.className = "f_messageDialog_body";
+
+		this._buttons=new Array();
 		
-		var styleClass = this._styleClass;
-		if (styleClass) {
-			table.className += " "+styleClass;
-		}
-
-		baseMem._buttons=new Array();
-		
-		// Memorisation de la call-back et de l'instance de f_messageDialog
-		baseMem._messageBox=this;
-
 		//set size and pos
-		table.style.top=0;
-		table.style.left=0;
 		table.style.width=this.f_getWidth()+"px";
 		table.style.height=this.f_getHeight()+"px";
 		table.cellPadding=0;
 		table.cellSpacing=0;
-		table.width=this.f_getWidth()+"px";
-		table.tabIndex=1;
 
 		var tbod = docBase.createElement("tbody");
-		
-		// Creation de la ligne de titre
-		var ligne = docBase.createElement("tr");
-		ligne.className = cssClassBase+"_title_tr";
-		ligne.style.height = "30px";
-		
-		var cell = docBase.createElement("td");
-		cell.colSpan = 2;
-		cell.tabIndex=1;
-		
-		// HandleToMove : to recognize a movable item
-		cell.className = cssClassBase+"_title_td handleToMove";
-		//Handle for Mouse Moves
-//		cell.onmousedown = f_dialog._OnMouseDown;
-//		cell.onmouseup = f_dialog._OnMouseUp;
-//		cell.onmousemove = f_dialog._OnMouseMove;
-		
-		var zone = docBase.createElement("span");
-		zone.className = cssClassBase+"_title_text";
-		
-		var text=this._title;
-		if (text) {
-			zone.appendChild(docBase.createTextNode(text));
-		}
-
-		cell.appendChild(zone);
-		ligne.appendChild(cell);
-		tbod.appendChild(ligne);
+		table.appendChild(tbod);
 		
 		// Creation de la ligne de texte
-		ligne = docBase.createElement("tr");
-		ligne.className = cssClassBase+"_text_tr";
-		ligne.style.height = (this.f_getHeight() - 60 -30)+"px";
+		var ligne = docBase.createElement("tr");
+		tbod.appendChild(ligne);
+		ligne.className = "f_messageDialog_body_tr";
+		ligne.style.height = (this.f_getHeight() - 60)+"px";
 		
 		// cell for image
 		cell = docBase.createElement("td");
-		cell.className = cssClassBase+"_image_td";
-		cell.tabIndex=1;
+		ligne.appendChild(cell);
+		cell.className = "f_messageDialog_image_td";
 		
-		text=this.f_getImageResolvedURL();
-		if (text) {
+		var imageURL=this.f_getImageResolvedURL();
+		if (imageURL) {
 			zone = docBase.createElement("img");
-			zone.className=cssClassBase+"_image_image"
-			zone.src=text;
+			zone.className="f_messageDialog_image"
+			zone.src=imageURL;
 			cell.appendChild(zone);
 		}
 
+		// cell for text
+		var cell = docBase.createElement("td");
 		ligne.appendChild(cell);
 
-		// cell for text
-		cell = docBase.createElement("td");
-		cell.className = cssClassBase+"_text_td";
-		cell.tabIndex=1;
+		cell.className = "f_messageDialog_text_td";
 		
-		zone = docBase.createElement("span");
-		zone.className = cssClassBase+"_text_text";
+		var zone = docBase.createElement("span");
+		cell.appendChild(zone);
+		zone.className ="f_messageDialog_text";
 		
-		text=this._text;
+		var text=this._text;
 		if (text) {
-			zone.appendChild(docBase.createTextNode(text));
+			f_core.SetTextNode(zone, text);
 		}
 
-		cell.appendChild(zone);
-		ligne.appendChild(cell);
-
-		tbod.appendChild(ligne);
-
 		// Creation de la ligne de boutons
-		ligne = docBase.createElement("tr");
-		ligne.className = cssClassBase+"_actions_tr";
+		var ligne = docBase.createElement("tr");
+		tbod.appendChild(ligne);
+		ligne.className = "f_messageDialog_actions_tr";
 		ligne.style.height = "60px";
 		
 		cell = docBase.createElement("td");
+		ligne.appendChild(cell);
+
 		cell.colSpan = 2;
 
-		cell.className = cssClassBase+"_actions_td";
+		cell.className = "f_messageDialog_actions_td";
 		cell.align = "center";
-		cell.tabIndex=1;
 		
 		var actTable = docBase.createElement("table");
+		cell.appendChild(actTable);
+
 		var actTbod = docBase.createElement("tbody");
+		actTable.appendChild(actTbod);
+
 		var actTr = docBase.createElement("tr");
+		actTbod.appendChild(actTr);
 		
 		var actions=this._actions;
 		if (!actions.length) {
 			var def = this._defaultValue;
 			if (!def) {
-				def = "OK";
+				def = f_resourceBundle.Get(f_shell).f_get("OK_BUTTON");
 			}
 			this.f_addAction(def, def, false, true);
 		}
 		
-		var noFocus=function(evt) {
-			f_core.Debug(f_messageDialog, "_open: noFocus on button "+this.value);
-			if (!evt) {
-				evt = f_core.GetJsEvent(this);
-			}
-			return f_core.CancelJsEvent(evt);
-			
-		};
-		
 		for (var i=0; i<actions.length; i++) {
 			var action=actions[i];
+
 			var cellb = docBase.createElement("td");
+			actTr.appendChild(cellb);			
+
 			var button = docBase.createElement("input");
 			
 			if (action._submitButton) {
 				button.type="submit";
 
-				actForm.onsubmit=f_messageDialog._OnClick;
-				actForm._button=button;
+//				actForm.onsubmit=f_messageDialog._OnClick;
+//				this._submitButton=button;
+				button.onclick=f_messageDialog._OnClick;
+
 			} else {
 				button.type="button";
+				button.onclick=f_messageDialog._OnClick;
 			}
-			button.className=cssClassBase+"_button";
+			button.className= "f_messageDialog_button";
 			button.disabled=action._disabled;
 			button._value=action._value;
 			button.value=action._text;
-			button.onclick=f_messageDialog._OnClick;
-			button.onClick=null;
-			button._base = baseMem;
-			button.onfocusin=noFocus;
-			baseMem._buttons.push(button);
-			
-			cellb.appendChild(button);
-			actTr.appendChild(cellb);
-			
-		}
 
-		actTbod.appendChild(actTr);
-		actTable.appendChild(actTbod);
-
-		cell.appendChild(actTable);
-		ligne.appendChild(cell);
-		tbod.appendChild(ligne);
-		
-		table.appendChild(tbod);
-		actForm.appendChild(table);
-
-		base.appendChild(actForm);
-		
-		// Hide the select
-		f_shell.HideSelect();
-		
-	},
+			button._messageBox= this;
+			this._buttons.push(button);			
 	
+			cellb.appendChild(button);
+		}
+	},
+	f_preDestruction: function() {
+		this._cleanInputs();
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_cleanInputs: function() {
+	
+		var buttons=this._buttons;
+		if (buttons) {
+			this._buttons=undefined;
+	
+			// Buttons cleaning
+			for (var i=0; i<buttons.length; i++) {
+				var button = buttons[i];
+				button._messageBox=undefined; // f_messageBox
+				button._value=undefined; // any
+				button.onclick=null;
+				button.onfocusin=null;
+				
+				f_core.VerifyProperties(button);
+			}
+		}	
+	},
 	/**
 	 *  <p>callBack that will call the user provided callBack</p>
 	 *
@@ -509,58 +416,53 @@ var __members = {
 	f_buttonOnClick: function(selectedButton, jsEvent) {
      	f_core.Debug(f_messageDialog, "f_buttonOnClick: entering ("+selectedButton+")");
 	
-		var base=selectedButton._base;
 		// var messageBox=base._messageBox;
-		var buttons=base._buttons;
 		var value=selectedButton._value;
-	
-		// Buttons cleaning
-		for (var i=0; i<buttons.length; i++) {
-			var button = buttons[i];
-			button._base=undefined;
-			button._value=undefined;
-			button.onclick=null;
-			button.onfocusin=null;
-			
-			f_core.VerifyProperties(button);
-		}
 		
-		// Table cleaning
-		base._messageBox=undefined;
-		base._buttons=undefined;
-			
-		f_core.VerifyProperties(base);
-		
-		// Deletion of the base HTMLElement
-		var parent = base.parentNode.parentNode;
-		parent.removeChild(base.parentNode);
-
-//		var msgDialog=this;
-//		var toto=function() {
-//			f_dialog.ClearTimeoutId();
-//			var ret = msgDialog.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
-//			if (ret) {
-//				f_dialog.ShowNextDialogStored();
-//				return;
-//			}
-	
-			//delete the iFrame
-//			msgDialog.f_delModIFrame();
-//		};
-
-		// Need to desynchronize the call to the next thing to do
-//		f_dialog.SetTimeoutId(window.setTimeout(toto, 50));
-
 		var ret = this.f_fireEvent(f_event.SELECTION, jsEvent, null, value);
-		if (ret) {
-			f_dialog.ShowNextDialogStored();
-			return;
+		if (ret===false) {
+			this.f_getShellManager().f_clearPendingShells();
 		}
-
-		//delete the iFrame
-		this.f_delModIFrame();
+		
+		this.f_close();
 	},
 	
+
+	/**
+	 *  <p>Gets the image URL.</p>
+	 *
+	 * @method public 
+	 * @return String imageURL 
+	 */
+	f_getImageURL: function() {
+		return this._imageURL;
+	},
+	
+	/**
+	 *  <p>Gets the image resolved URL.</p>
+	 *
+	 * @method public 
+	 * @return String imageURL 
+	 */
+	f_getImageResolvedURL: function() {
+		if (!this._imageURL) {
+			return null;
+		}
+		
+		return f_env.ResolveContentUrl(window, this._imageURL);
+	},
+	/**
+	 *  <p>Sets the image URL.</p>
+	 *
+	 * @method public 
+	 * @param String imageURL  (or <code>null</code>)
+	 * @return void
+	 */
+	f_setImageURL: function(imageURL) {
+    	f_core.Assert(imageURL===null || typeof(imageURL)=="string", "f_shell.f_setImageURL: Invalid parameter '"+imageURL+"'.");
+    	
+		this._imageURL = imageURL;
+	},
 	
 	/**
 	 * @method public

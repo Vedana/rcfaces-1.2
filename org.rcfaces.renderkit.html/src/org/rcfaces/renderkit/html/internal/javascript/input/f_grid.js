@@ -1196,7 +1196,7 @@ var __statics = {
 		
 		dataGrid._updateSortManager();
 		
-		dataGrid._showSortManager();
+		dataGrid.f_showSortManager(evt);
 		
 		return true;
 	
@@ -1211,7 +1211,24 @@ var __statics = {
 	Sort_Server: function(text1, text2) {
 		// Pas d'implementation, car la fonction est filtrée avant !
 		return 0;
-	}
+	},
+	/**
+	 * @method public static
+	 * @param String name
+	 * @param Function callback
+	 */
+	RegisterSortManager: function(name, callback) {
+		var sortManagers=f_grid._SortManagers;
+		if (!sortManagers) {
+			sortManagers=new Object;
+			f_grid._SortManagers=sortManagers;
+		}
+		
+		sortManagers[name]=callback;
+	},
+	Finalizer: function() {
+		f_grid._SortManagers=undefined;
+	}	 
 }
  
 var __members = {	
@@ -4250,9 +4267,68 @@ var __members = {
 	 * @return void
 	 */
 	_updateSortManager: function() {
+		var sortIndicator=this._sortIndicator;
 		
+		var prefix="";
+		
+		if (this.f_isDisabled()) {
+			prefix+="_disabled";
+			
+		} else {
+			if (sortIndicator._selected) {
+				prefix+="_selected";
+			}
+			if (sortIndicator._over) {
+				prefix+="_over";
+			}
+		}
+
+		var className="f_grid_sortManager";
+		if (prefix) {
+			className=className+prefix+" "+className;
+		}
+
+		if (sortIndicator.className!=className) {
+			sortIndicator.className=className;
+		}
 	},
 	
+	/**
+	 * @method protected
+	 * @param Event jsEvt
+	 * @return void
+	 */
+	f_showSortManager: function(jsEvt) {
+		f_core.Debug(f_grid, "f_showSortManager: Call sort manager !");
+		
+		var sortManager=this._sortManager;
+		
+		var sortCallback=sortManager;
+		
+		if (sortManager.indexOf('(')<0) {
+			var sortManagers=f_grid._SortManagers;
+			if (!sortManagers) {
+				f_core.Debug(f_grid, "f_showSortManager: No sort manager for '"+sortManager+"'.");
+				return;				
+			}
+			
+			sortCallback=sortManagers[sortManager];			
+		}
+		
+		f_core.Debug(f_grid, "f_showSortManager: Call sort manager: "+sortCallback);
+		
+		if (typeof(sortCallback)=="string") {
+			sortCallback=new Function("event", sortCallback);
+		}
+
+		var event=new f_event(this, f_event.SORT);
+		try {
+			sortCallback.call(window, event);
+			
+		} finally {
+			f_classLoader.Destroy(event);
+		}
+	},
 	/**
 	 * Show a row.
 	 *

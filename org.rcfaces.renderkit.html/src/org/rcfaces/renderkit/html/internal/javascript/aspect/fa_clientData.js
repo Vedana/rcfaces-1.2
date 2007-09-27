@@ -42,6 +42,7 @@ var __members = {
 		var clientDatas=this._clientDatas;
 		if (clientDatas===undefined) {
 			clientDatas=f_core.ParseDataAttribute(this);
+			this._clientDatas=clientDatas;
 		}
 		
 		return clientDatas[name];

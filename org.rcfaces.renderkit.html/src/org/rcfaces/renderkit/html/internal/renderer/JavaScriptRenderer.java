@@ -99,9 +99,9 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
         List files = new ArrayList(32);
 
         if (requiredFiles != null) {
-            StringTokenizer st = new StringTokenizer(requiredFiles, ", ");
+            StringTokenizer st = new StringTokenizer(requiredFiles, ",");
             for (; st.hasMoreTokens();) {
-                String requiredFile = st.nextToken();
+                String requiredFile = st.nextToken().trim();
 
                 IRepository.IFile file = repository.getSetByName(requiredFile);
                 if (file == null) {
@@ -121,9 +121,9 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
             }
         }
         if (requiredClasses != null) {
-            StringTokenizer st = new StringTokenizer(requiredClasses, ", ");
+            StringTokenizer st = new StringTokenizer(requiredClasses, ",");
             for (; st.hasMoreTokens();) {
-                String className = st.nextToken();
+                String className = st.nextToken().trim();
 
                 IJavaScriptRepository.IClass clazz = repository
                         .getClassByName(className);

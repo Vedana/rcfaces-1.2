@@ -43,6 +43,10 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         if (height != null) {
             htmlWriter.writeAttribute("v:height", height);
         }
+        String text = component.getText(facesContext);
+        if (text != null) {
+            htmlWriter.writeAttribute("v:text", text);
+        }
         String src = component.getViewURL(facesContext);
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
@@ -55,6 +59,10 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         }
         if (!component.isVisible(facesContext)) {
             htmlWriter.writeAttribute("v:visible", false);
+        }
+        if (component.isDialogPrioritySetted()) {
+            htmlWriter.writeAttribute("v:dialogPriority", component
+                    .getDialogPriority(facesContext));
         }
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 

@@ -60,9 +60,13 @@
 @import url(f_textEditor.css);				//module:textEditor  <<< AVANT TOOLBAR
 @import url(f_tree.css); 					//module:tree
 @import url(f_waiting.css); 				//module:waiting
-@import url(f_messageDialog.css); 			//module:messageDialog
-@import url(f_viewDialog.css); 				//module:messageDialog
-@import url(f_waitingShell.css); 			//module:messageDialog
+@import url(f_messageDialog.css); 			//module:dialog
+@import url(f_viewDialog.css); 				//module:dialog
+@import url(f_waitingShell.css); 			//module:dialog
 @import url(f_columnSortDialog.css);		//module:gridHelp
+@import url(f_shell.css);					//module:dialog
+@import url(f_shellManager.css);					//module:dialog
+@import url(f_shellDecorator.css);					//module:dialog
+@import url(f_dialog.css);					//module:dialog
 				
 @import url(f_consoleAppender.css); 				//module:log

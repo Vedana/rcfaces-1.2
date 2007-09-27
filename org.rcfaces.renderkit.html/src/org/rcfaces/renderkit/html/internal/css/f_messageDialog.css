@@ -9,73 +9,9 @@
  * @author Fred Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$ 
  */
-.f_messageDialog_global {
-	overflow: hidden;
-	background-color: transparent;
-	background-image: none;
-	margin: 0;
-	border: 0;
-	padding: 0;
-	border-spacing: 0;
-}
 
-.f_messageDialog_background_transparent
- {
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    position: absolute;
-    z-index: 10; 
-    background-color: black; 
-    opacity: 0.0;
-    filter: alpha(opacity=0);
-}
-
-.f_messageDialog_background_greyed {
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    position: absolute;
-    z-index: 10; 
-    background-color: black; 
-    opacity: 0.3;
-    filter: alpha(opacity=30);
-}
-
-.f_messageDialog_background_opaque {
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    position: absolute;
-    z-index: 10; 
-    background-color: blue; 
-}
-
-.f_messageDialog_frame {
-	background-color: transparent;
-    position: absolute;
-    border: 0;
-    frameBorder: O;
-	z-index: 1000;
-}
-
-.f_messageDialog_dialog {
-	background-color: #FFFFFF;
-    position: absolute;
+.f_messageDialog_body {
 	text-align: center;
-}
-
-.f_messageDialog_title_tr {
-	background-color: blue;
-	color: white;
-	font-weight: bold;
-}
-
-.handleToMove {
-	cursor: move;
 }
 
 .f_messageDialog_title_td,
@@ -85,12 +21,8 @@
 	vertical-align: middle;
 }
 
-/*
-.f_messageDialog_title_text
-.f_messageDialog_text_text
-.f_messageDialog_button
-.f_messageDialog_title_td
-.f_messageDialog_text_tr
-.f_messageDialog_actions_tr
-*/
-
+.f_messageDialog_form {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}

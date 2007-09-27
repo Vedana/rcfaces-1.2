@@ -1204,6 +1204,8 @@ var f_core = {
 		
 		var doc=parent.ownerDocument;
 		
+		var ie=f_core.IsInternetExplorer();
+		
 		for(var i=1;i<arguments.length;) {
 			tagName=arguments[i++];
 			properties=arguments[i++];
@@ -1211,7 +1213,16 @@ var f_core = {
 			f_core.Assert(typeof(tagName)=="string", "f_core.CreateElement: Invalid tagName parameter ("+tagName+")");
 			f_core.Assert(properties===undefined || typeof(properties)=="object", "f_core.CreateElement: Invalid properties parameter ("+properties+")");
 			
-			var element=doc.createElement(tagName);
+			var element;
+			
+			if (ie && tagName.toLowerCase()=="input" && properties.type && properties.name) {
+				element=doc.createElement("<input name=\""+properties.name+"\" type=\""+properties.type+"\">");
+				delete properties.name;
+				delete properties.type;
+				
+			} else {
+				element=doc.createElement(tagName);
+			}
 			
 			var textNode=null;
 			if (properties) {
@@ -2470,7 +2481,7 @@ var f_core = {
 			doc=document;
 		}
 		
-		return f_namingContainer.FindComponent(doc.body, id);
+		return fa_namingContainer.FindComponent(doc.body, id);
 	},
 	/**
 	 * Find a child by its identifier. <b>(The naming separator might not be ':')</b>
@@ -3620,15 +3631,37 @@ var f_core = {
 		}
 
 		if (f_core.IsGecko()) {
-			window.addEventListener("resize", function() {
+			listener._mainResizeCallback=function() {
 				return listener.call(component);
-				
-			}, false);
+			}
+		
+			window.addEventListener("resize", listener._mainResizeCallback, false);
 			
 			return true;
 		}
 		
 		return false;
+	},
+	/**
+	 * @method hidden static
+	 * @param HTMLElement component
+	 * @param Function listener
+	 * @return void
+	 */
+	RemoveResizeEventListener: function(component, listener) {
+		if (f_core.IsInternetExplorer()) {
+			component.onresize=null;
+			return;
+		}
+
+		if (f_core.IsGecko()) {
+			window.removeEventListener("resize", listener._mainResizeCallback, false);
+			
+			listener._mainResizeCallback=undefined;
+			return true;
+		}
+		
+		return;
 	},
 	/**
 	 * @method hidden static

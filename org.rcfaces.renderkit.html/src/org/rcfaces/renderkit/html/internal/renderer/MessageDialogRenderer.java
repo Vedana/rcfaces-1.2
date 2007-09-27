@@ -111,10 +111,6 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
         if (chaine != null) {
             htmlWriter.writeAttribute("v:styleClass", chaine);
         }
-        chaine = getCssClassBase(component, facesContext);
-        if (chaine != null) {
-            htmlWriter.writeAttribute("v:cssClassBase", chaine);
-        }
         chaine = component.getLookId(facesContext);
         if (chaine != null) {
             htmlWriter.writeAttribute("v:lookId", chaine);

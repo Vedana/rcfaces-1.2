@@ -390,6 +390,13 @@ var __statics = {
 	SELECTION:	"selection",
 
 	/**
+	 * Sort event name.
+	 *
+	 * @field public static final String
+	 */
+	SORT:	"sort",
+
+	/**
 	 * Submit event name.
 	 *
 	 * @field public static final String

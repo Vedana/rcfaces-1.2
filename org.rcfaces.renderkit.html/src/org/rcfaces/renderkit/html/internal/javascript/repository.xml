@@ -1335,11 +1335,25 @@
 	</module>
 
 	<module id="dialog">
+		 <file name="ui/f_shellManager.js">
+			<class name="f_shellManager">
+				<required-class name="f_core" />
+			</class>
+		 </file>
+		 <file name="ui/f_shellDecorator.js">
+			<class name="f_shellDecorator">
+				<required-class name="f_core" />
+				<required-class name="f_object" />
+				<required-class name="f_shellManager" />
+			</class>
+		 </file>
 		 <file name="ui/f_shell.js">
 			<class name="f_shell">
 				<required-class name="f_core" />
 				<required-class name="f_object" />
 				<required-class name="fa_eventTarget" />
+				<required-class name="f_shellManager" />
+				<required-class name="f_shellDecorator" />
 			</class>
 		 </file>
 		 <file name="ui/f_waitingShell.js">

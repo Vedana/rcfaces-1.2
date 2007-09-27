@@ -320,6 +320,7 @@ var __members = {
 		if (dataGrid) {
 			this.f_destroyDataGrid(dataGrid);
 		}
+		
 		var pager=this._pager;
 		if (pager) {
 			this._destroyPager(dataGrid);	

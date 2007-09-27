@@ -3,13 +3,34 @@
  */
 
 /**
- * <p><strong>f_shell</strong> represents popup modal window.
+ * <p><strong>f_shell</strong> represents popup window.
  *
  * @class public final f_shell extends f_object, fa_eventTarget
- * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
+ * @author Fred Lefevere-Laoide (latest modification by $Author$)
+ * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
 var __statics = {
+	
+	/**
+	 * @field public static final String
+	 */
+	GREYED_BACKGROUND_MODE: "greyed",
+	
+	/**
+	 * @field public static final String
+	 */
+	LIGHT_GREYED_BACKGROUND_MODE: "light",
+	
+	/**
+	 * @field public static final String
+	 */
+	TRANSPARENT_BACKGROUND_MODE: "transparent",
+	
+	/**
+	 * @field public static final String
+	 */
+	OPAQUE_BACKGROUND_MODE: "opaque",
 	
 	/**
 	 * Style constant for resize area trim
@@ -61,6 +82,34 @@ var __statics = {
 	MAX_STYLE: 1<<10,
 	
 	/**
+	 * Style constant for hide background
+	 * 
+	 * @field public static final number
+	 */
+	HIDE_SCREEN_STYLE: 1<<11,
+	
+	/**
+	 * Copy styleSheet from the main frame
+	 * 
+	 * @field public static final number
+	 */
+	COPY_STYLESHEET: 1<<12,
+	
+	/**
+	 * Force the body of the shell to be an IFrame
+	 * 
+	 * @field public static final number
+	 */
+	FRAME_ELEMENT: 1<<13,
+	
+	/**
+	 * The frame can be transparent
+	 * 
+	 * @field public static final number
+	 */
+	TRANSPARENT: 1<<14,
+	
+	/**
 	 * Style constant for modeless behavior
 	 * 
 	 * @field public static final number
@@ -81,482 +130,74 @@ var __statics = {
 	 */
 	APPLICATION_MODAL_STYLE: 1<<16,
 	
-	
-    /**
-     * @field private static Object
-     */
-	_ObjIFrame: undefined,
-	
-    /**
-     * @field private static boolean
-     */
-	_IE6: undefined,
-	
-    /**
-     * @field private static boolean
-     */
-	_IE: undefined,
-
-    /**
-     * @field private static boolean
-     */
-	_DocComplete: undefined,
-	
-    /**
-     * @field private static function
-     */
-	_OnDocComplete: undefined,
-	
-     /**
-     * @method protected static
-     * @return boolean
-     */
-    IsDocComplete: function() {
-	    f_core.Debug(f_shell, "IsDocComplete: entering");
-		return f_shell._DocComplete;
-    },
-     /**
-     * @method protected static
-     * @param function functionToExecute
-     * @return void
-     */
-    ExecuteOnDocComplete: function(functionToExecute) {
-	    f_core.Debug(f_shell, "ExecuteOnDocComplete: entering");
-	    f_core.Assert(typeof(functionToExecute) == "function", "f_shell.ExecuteOnDocComplete bad parameter "+functionToExecute);
-		if (f_shell._DocComplete) {
-		    f_core.Debug(f_shell, "ExecuteOnDocComplete: executing");
-		    // Add timeout to empty the stack and allow IE to draw an iframe from an IMG !!!
-			window.setTimeout(functionToExecute,0);
-			
-		} else if (!f_shell._OnDocComplete) {
-		    f_core.Debug(f_shell, "ExecuteOnDocComplete: delaying");
-			f_shell._OnDocComplete = functionToExecute;
-			
-		} else {
-			f_core.Debug(f_shell, "ExecuteOnDocComplete: ignored new function");
-		}
-    },
-    /**
-     *
-     * @method protected static
-	 * @return void
-     */
-     DocumentComplete: function() {
-     	f_core.Debug(f_shell, "DocumentComplete: entering");
-		f_shell.HideSelect();
-     	
-     	f_shell._DocComplete=true;
-     	
-     	var onDocComplete=f_shell._OnDocComplete;
-     	if (onDocComplete) {
-     		f_shell._OnDocComplete=undefined;
-
-     		onDocComplete.call(f_shell);
-     	}
-	},
-	
-     /**
-     * Class Constructor (called in the head ...
-     * @method protected static
-	 * @return void
-     */
-    Initializer: function() {
-    	f_shell._IE6 = f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6); 
-    	f_shell._IE = f_core.IsInternetExplorer(); 
-	 },
 	/**
-     * Class Destructor (called in the head ...
-     * @method protected static
-	 * @return void
-     */
-    Finalizer: function() {
-    	var objIframe=f_shell._ObjIFrame;
-    	if (objIframe) {
-	    	f_shell._ObjIFrame = undefined; // Object
-	    	
-     		var iframe=objIframe._iframe;
-    		if (iframe) {
-    			objIframe._iframe=undefined; // HTMLIFrameElement
-    			
-	    		iframe.onload=null;
-	    		iframe.onreadystatechange=null;
-	    	}
-    	}
-    	// f_shell._IE6 = undefined; // boolean
-    	// f_shell._IE = undefined; // boolean
-    	// f_shell._DocComplete = undefined; // boolean
-    	f_shell._OnDocComplete = undefined; // function
-	 },
-	 
+	 * @field private static final number
+	 */	
+	_DEFAULT_HEIGHT: 100,
+	
 	/**
-     * @method public static
-     * @return Object size (width, height)
-     */
-    GetOwnDocumentSize: function() {
- 		var viewSize=f_core.GetViewSize();
- 		var viewDocSize=f_core.GetDocumentSize();
- 		if (viewSize.height>viewDocSize.height) {
- 			return viewSize;
- 		}
- 		return viewDocSize;
-	},
-     /**
-     * <p>For IE 6 only : Hide selects that get over the Div</p>
-     *
-     * @method protected static
-	 * @return void
-     */
-    HideSelect: function() {
-		if (!f_shell._IE6) {
-			return;
-		}
-		
-		var tags=f_core.GetElementsByTagName(document,"select");
-
-		for (var i=0;i<tags.length;i++) {
-			var tag=tags[i];
-			if (tag._visibility_old === undefined) {
-				tag._visibility_old=tag.style.visibility;
-				tag.style.visibility="hidden";
-			}
-		}		
-    },
-
-    /**
-     * <p>For IE 6 only : Show selects that get over the Div</p>
-     *
-     * @method protected static
-	 * @return void
-     */
-    ShowSelect: function() {
-		if (!f_shell._IE6) {
-			return;
-		}
-		
-		var tags=f_core.GetElementsByTagName(document,"select");
-
-		for (var i=0;i<tags.length;i++) {
-			var tag=tags[i];
-			if (tag._visibility_old != undefined) {
-				tag.style.visibility=tag._visibility_old;
-				tag._visibility_old=undefined;
-			}
-		}
-    },
-
+	 * @field private static final number
+	 */	
+	_DEFAULT_WIDTH: 300,
+	
 	/**
-	 *  <p>delete the modal iFrame. 
-	 *  </p>
-	 *
-	 * @method protected static
-	 * @return void
+	 * @field private static number
 	 */
-	DelModIFrame: function() {
-     	f_core.Debug(f_shell, "DelModIFrame: entering");
-     	
-     	var objIFrame=f_shell._ObjIFrame;
-		if (objIFrame) {
-			f_shell._ObjIFrame = undefined;
-
-			var shell=objIFrame._iframe._modalShell;
-			objIFrame._iframe._modalShell = undefined;
-
-			shell.f_uninstallModalStyle();
-			
-
-			//Detach
-			document.body.removeChild(objIFrame._div);
-			objIFrame._div = undefined; // HTMLDivElement
-			
-			shell.f_deleteIframe();				
-
-			objIFrame._iframe = undefined; // HTMLIFrameElement
-
-			objIFrame._lastValidFocus=undefined; //HTMLElement
-			// Return from Modal ...
-		}
-		
-		// remove focus hooks if they exist
-		f_core.RemoveEventListener(document, "focus", f_shell._OnFocus, document);
-		
-		//Show Selects
-		f_shell.ShowSelect();
-	},
-
-	/**
-	 *  <p>onload for the iframe object. 
-	 *  </p>
-	 *
-	 * @method private static
-	 * @return void
-	 */
-	_OnIframeLoad: function() {
-     	f_core.Debug(f_shell, "_OnIframeLoad: entering with this="+this);
-     	
-	    this.onreadystatechange=null;
-		this.onload=null;
-	    
-     	var inst=this._modalShell;
-     	if (!inst) {
-	     	f_core.Debug(f_shell, "_OnIframeLoad: Hack de la mort pour IE ...");
-	     	inst=f_shell.GetInstance();
-     	}
-     	
-     	var callBack=inst.f_getIFrameDrawingCallBack();
-     	if (typeof(callBack) == "function") {
-	     	callBack.call(inst);
-	    } else {
-	    	f_core.Debug(f_shell, "_OnIframeLoad: the callBack specified is not a function "+callBack+"\n trying url");
-    		inst.f_drawIframeWithUrl();
-	    }
- 	},
-	
-	/**
-	 *  <p>onload for the iframe object. 
-	 *  </p>
-	 *
-	 * @method private static
-	 */
-	_OnIframeRS: function() {
-     	f_core.Debug(f_shell, "_OnIframeRS: entering with this="+this+" readyState = "+this.readyState);
-		if (this.readyState == "interactive") {
-			f_shell._OnIframeLoad.call(this);
-		}
- 	},
-	
-    /**
-     * <p>Resize Callback called on the div</p>
-     *
-     * @method protected static
-     * @return boolean
-     */
-	_OnResize: function(evt) {
-		var shell=this._shell;
-		
-		if (!evt) {
-			evt=f_core.GetJsEvent(this);
-		}
-
-		if (shell.f_getEventLocked(evt, false)) {
-			return false;
-		}
-		
-		shell._resize();
-		
-		return true;
-    },
-    
-	/**
-	 *  <p>get the iFrame from the iframe object. 
-	 *  </p>
-	 *
-	 * @method protected static
-	 * @return HTMLIframeElement iframe
-	 */
-	GetIframe: function() {
-     	f_core.Debug(f_shell, "GetIframe: entering");
-		if (f_shell._ObjIFrame) {
-			return f_shell._ObjIFrame._iframe;
-		}
-		return undefined;
-	},
-
-	/**
-	 *  <p>get the current instance from the iframe object. 
-	 *  </p>
-	 *
-	 * @method protected static
-	 * @return f_shell
-	 */
-	GetInstance: function() {
-     	f_core.Debug(f_shell, "GetInstance: entering");
-		if (f_shell._ObjIFrame && f_shell._ObjIFrame._iframe) {
-			return f_shell._ObjIFrame._iframe._modalShell;
-		}
-		return undefined;
-	},
-
-	/**
-	 *  <p>get the current instance from the parent iframe 
-	 *  </p>
-	 *
-	 * @method public static
-	 * @param optional Window win
-	 * @return f_shell
-	 */
-	GetParentShell: function(win) {
-     	f_core.Assert(!win || win.document, "f_shell.GetParentShell: bad parameter type "+win);
-     	f_core.Debug(f_shell, "GetParentShell: entering");
-     	
-     	if (!win) {
-     		win = window;
-     	}
-		var iframe = win.frameElement;
-		if (iframe) {
-			return iframe._modalShell;
-		}
-		return null;
-	},
-
-	/**
-	 *  <p>clean the current instance from the iframe object. 
-	 *  </p>
-	 *
-	 * @method protected static
-	 * @return void
-	 */
-	CleanInstance: function() {
-     	f_core.Debug(f_shell, "ClearInstance: entering");
-		if (f_shell._ObjIFrame && f_shell._ObjIFrame._iframe) {
-			f_shell._ObjIFrame._iframe._modalShell = undefined;
-		}
-		if (f_shell._ObjIFrame && f_shell._ObjIFrame._div) {
-			f_shell._ObjIFrame._div._shell = undefined;
-		}
-	},
-
-    /**
-     *
-     * @method private static
-     * @param Event evt
-     * @return boolean
-     */
-     _OnFocus: function(evt) {
-     	if (window._rcfacesExiting) {
-     		// On sait jamais, nous sommes peut etre dans un context foireux ...
-     		return true;
-     	}
-     	f_core.Debug(f_shell, "_OnFocus: entering on "+this.outerHTML);
- 
- 		var iframe=f_shell.GetIframe();
- 		if (!iframe) {
- 			// On a un gros probleme ...
-     		f_core.Error(f_shell, "_OnFocus: No frame opened ?");
-			return true;
- 		}
-     	
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-     	 			
-		var target;
-		if (evt.target) {
-			target = evt.target;
-			
-		} else if (evt.srcElement) {
-			target = evt.srcElement;
-		}
-		
-		if (!target) {
-    		f_core.Info(f_shell, "_OnFocus: No target identified");
-			return true;
-		}
-
-		var targetDocument=target;
-		switch(target.nodeType) {
-		case f_core.DOCUMENT_NODE:
-			break;
-			
-		case f_core.ELEMENT_NODE:
-			targetDocument=target.ownerDocument;
-			break;
-
-		default:
-			// Qu'est que c'est ????
-			f_core.Debug(f_shell, "_OnFocus: type de noeud "+target.nodeType);
-			targetDocument=document; // On bloque donc
-		}
- 		
- 		var frameDocument = iframe.contentWindow.document;
-
-     	if (targetDocument==frameDocument) {
-     		// C'est dans notre frame
-     
-     		// Pour l'instant ce n'est pas possible ... car la callback n'est pas installee
-      		
-     		iframe._lastValidFocus=target;
-     		f_core.Debug(f_shell, "_OnFocus: Focus on our frame !");
-     		return true;
-     	}
-     	
-     	iframe.focus();
-		iframe._modalShell.f_setFocus();
-//		var self=iframe._modalShell;
-//  		window.setTimeout(function() {
-//  			f_core.Debug(f_shell, "anonymous timer _OnFocus: entering");
-//  			self.f_getIframe().focus();
-//  			self.f_setFocus();
-// 		}, 50);
-     	
-     	return f_core.CancelJsEvent(evt);
-     }
+	_ID: 0
 }
 
 var __members = {
+
+	_id: undefined,
 
 	/**
 	 * @field private number
 	 */
 	_style: undefined,
-
-	/**
-	 * @field private String
-	 */
-	_div: undefined,
-	
-	/**
-	 * @field private String
-	 */
-	_iframe: undefined,
-	
-	/**
-	 * @field private String
-	 */
-	_cssClassBase: undefined,
 	
 	/**
 	 * @field private String
 	 */
 	_backgroundMode: undefined,
-	
-	/**
-	 * @field private String
-	 */
-	_imageURL: undefined,
 
 	/**
 	 * @field private number
 	 */
 	_height: undefined,
+	
 	/**
 	 * @field private number
 	 */
 	_width: undefined,
 	
 	/**
-	 * @field private boolean
+	 * @field private number
 	 */
-	_iframeDraw: false,
-	
-	/**
-	 * @field private function
-	 */
-	_drawingFunction: undefined,
+	_priority: 0,
 	
 	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
      * initial values.</p>
 	 *
 	 * @method public
-	 * @param number style the style of control to construct
+	 * @param optional number style the style of control to construct
+	 * @param optional function drawingFunction
+	 * @param optional function returnValueFunction
 	 */
-	f_shell: function(style) {
-		f_core.Assert(style===undefined || typeof(style)=="number", "f_shell.f_shell: Invalid style parameter ("+style+")");
+	f_shell: function(style, drawingFunction, returnValueFunction) {
 		this.f_super(arguments);
+
+		f_core.Assert(style===undefined || typeof(style)=="number", "f_shell.f_shell: Invalid style parameter ("+style+")");
+		f_core.Assert(drawingFunction===undefined || typeof(drawingFunction) == "function", "f_shell.f_shell: bad parameter type: drawingFunction is not a function "+drawingFunction);
+		
+		this._id="shell_"+(f_shell._ID++);
 		
 		this._style=(style)?style:0;
-		this._cssClassBase="f_shell";
-		this._backgroundMode="greyed";
+		this._backgroundMode=(this._style & f_shell.HIDE_BACKGROUND_STYLE)?f_shell.GREYED_BACKGROUND_MODE:null;
+		this._drawingFunction=drawingFunction;
+		this._returnValueFunction=returnValueFunction;
+		
+		this._shellManager=f_shellManager.Get();
 	},
 
 
@@ -567,19 +208,52 @@ var __members = {
 	 * @return void
 	 */
 	f_finalize: function() {
-		
-		// this._cssClassBase=undefined; // string
 		// this._backgroundMode=undefined; //string
 		// this._imageURL=undefined; //string
 		// this._style=undefined; //number
-		this._div=undefined; //HTMLElement
-		this._iframe=undefined; //HTMLElement
 		//this._height=undefined; // number
 		//this._width=undefined; // number
-		//this._iframeDraw: undefined; // boolean
-		this._drawingFunction=null; //function
+		// this._styleClass=undefined; // string
+		
+		this._drawingFunction=undefined; // function
+		this._returnValueFunction=undefined; // function
+
+		this._shellManager=undefined; // f_shellManager
+
+		this._shellBody=undefined; // HtmlElement
 
 		this.f_super(arguments);
+	},
+
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getId: function() {
+		return this._id;
+	},
+
+	/**
+	 *  <p>Return the priority.</p>
+	 *
+	 * @method public 
+	 * @return number priority
+	 */
+	f_getPriority: function() {
+		return this._priority;
+	},
+	
+	/**
+	 *  <p>Sets the priority.</p>
+	 *
+	 * @method public 
+	 * @param number priority
+	 * @return void
+	 */
+	f_setPriority: function(priority) {
+    	f_core.Assert(typeof(priority)=="number", "f_shell.f_setPriority: Invalid priority parameter '"+priority+"'."+typeof(priority));
+
+		this._priority = priority;
 	},
 
 	/**
@@ -590,73 +264,6 @@ var __members = {
 	 */
 	f_getStyle: function() {
 		return this._style;
-	},
-
-	/**
-	 *  <p>Return the greying Div.</p>
-	 *
-	 * @method public 
-	 * @return object Div
-	 */
-	f_getDiv: function() {
-		return this._div;
-	},
-	
-	/**
-	 *  <p>Sets greying div.</p>
-	 *
-	 * @method public 
-	 * @param object div
-	 * @return void
-	 */
-	f_setDiv: function(div) {
-    	f_core.Assert((typeof(div)=="object"), "f_shell.f_setDiv: Invalid parameter '"+div+"'.");
-		this._div = div;
-	},
-	
-	/**
-	 *  <p>Return the iframe.</p>
-	 *
-	 * @method public 
-	 * @return object iframe
-	 */
-	f_getIframe: function() {
-		return this._iframe;
-	},
-	
-	/**
-	 *  <p>Sets the IFrame.</p>
-	 *
-	 * @method public 
-	 * @param object iframe
-	 * @return void
-	 */
-	f_setIframe: function(iframe) {
-    	f_core.Assert(typeof(iframe)=="object", "f_shell.f_setIframe: Invalid parameter '"+iframe+"'.");
-		this._iframe = iframe;
-	},
-	
-	/**
-	 *  <p>Return the Css base class name.</p>
-	 *
-	 * @method public 
-	 * @return String a base name for the style classes
-	 */
-	f_getCssClassBase: function() {
-		return this._cssClassBase;
-	},
-	
-	/**
-	 *  <p>Sets the Css base class name.</p>
-	 *
-	 * @method public 
-	 * @param String cssClassBase a base name for the style classes
-	 * @return void
-	 */
-	f_setCssClassBase: function(cssClassBase) {
-    	f_core.Assert(typeof(cssClassBase)=="string", "f_shell.f_setCssClassBase: Invalid parameter '"+cssClassBase+"'.");
-    	
-		this._cssClassBase = cssClassBase;
 	},
 	
 	/**
@@ -678,44 +285,10 @@ var __members = {
 	 */
 	f_setBackgroundMode: function(backgroundMode) {
     	f_core.Assert(typeof(backgroundMode)=="string", "f_shell.f_setBackgroundMode: Invalid parameter '"+backgroundMode+"'.");
+
 		this._backgroundMode = backgroundMode;
 	},
 	
-	/**
-	 *  <p>Gets the image URL.</p>
-	 *
-	 * @method public 
-	 * @return String imageURL 
-	 */
-	f_getImageURL: function() {
-		return this._imageURL;
-	},
-	
-	/**
-	 *  <p>Gets the image resolved URL.</p>
-	 *
-	 * @method public 
-	 * @return String imageURL 
-	 */
-	f_getImageResolvedURL: function() {
-		if (!this._imageURL) {
-			return null;
-		}
-		
-		return f_env.ResolveContentUrl(window, this._imageURL);
-	},
-	/**
-	 *  <p>Sets the image URL.</p>
-	 *
-	 * @method public 
-	 * @param String imageURL  (or <code>null</code>)
-	 * @return void
-	 */
-	f_setImageURL: function(imageURL) {
-    	f_core.Assert(imageURL===null || typeof(imageURL)=="string", "f_shell.f_setImageURL: Invalid parameter '"+imageURL+"'.");
-    	
-		this._imageURL = imageURL;
-	},
 
 	/**
 	 *  <p>Return the height.</p>
@@ -760,176 +333,6 @@ var __members = {
 
 		this._width = width;
 	},
-	
-
-	/**
-	 *  <p>Resize the greying div 
-	 *  </p>
-	 *
-	 * @method private
-	 * @return void
-	 */
-	_resize: function() {
-     	f_core.Debug(f_shell, "_resize: entering");
-
-		// Get the document' size
-		var size=f_shell.GetOwnDocumentSize();
-		
-		//get the greying div
-		var div = this.f_getDiv();
-		
-		//Modify the size
-		div.style.width=size.width+"px";
-		div.style.height=size.height+"px";
-
-	},
-
-	/**
-	 *  <p>Fill a modal iFrame. 
-	 *  </p>
-	 *
-	 * @method protected
-	 * @return void
-	 */
-	f_drawContent: function(drawingFunction) {
-     	f_core.Debug(f_shell, "f_drawContent: entering");
-		f_core.Assert(typeof(drawingFunction) == "function", "f_shell.f_drawContent: bad parameter type: drawingFunction is not a function "+drawingFunction);
-
-		try {
-			if (!this._iframeDraw) {
-				f_core.Debug(f_shell, "f_drawContent: not ready yet");
-		     	this._drawingFunction=drawingFunction;
-				return;
-			}
-
-			f_core.Debug(f_shell, "f_drawContent: ready call");
-			drawingFunction.call(this);
-			f_core.Debug(f_shell, "f_drawContent: setFocus");
-			this.f_setFocus(true);
-
-		} catch (e) {
-	     	f_core.Error(f_shell, "f_drawContent: catch error", e);
-		}
-
-	},
-
-	
-	/**
-	 *  <p>Fill a modal iFrame. 
-	 *  </p>
-	 *
-	 * @method protected
-	 * @return void
-	 */
-	f_fillModIFrame: function() {
-     	f_core.Debug(f_shell, "f_fillModIFrame: entering");
-
-		try {
-			if (!f_shell._ObjIFrame) {
-		     	f_core.Debug(f_shell, "_fillModIFrame : exit No iFrame");
-				return;
-			}
-			f_shell.HideSelect();
-			
-			var iframe = this.f_getIframe();
-			
-			var iframeDocument = iframe.contentWindow.document;
-	
-			f_core.CopyStyleSheets(iframeDocument, document);
-			
-			var base = iframeDocument.body;
-			var cssBaseName = iframe._modalShell.f_getCssClassBase();
-			if (!cssBaseName) {
-				cssBaseName = "f_shell";
-			}
-			//style
-			base.className = cssBaseName+"_global";
-			
-			if (this._drawingFunction) {
-		     	f_core.Debug(f_shell, "f_fillModIFrame: call drawing funtion ");
-				this._drawingFunction.call(this);
-				this._drawingFunction=null;
-				
-		     	f_core.Debug(f_shell, "f_fillModIFrame: setFocus");
-				this.f_setFocus(true);
-			} else {
-		     	f_core.Debug(f_shell, "f_fillModIFrame: no drawing funtion ");
-				this._iframeDraw=true;
-			}
-
-		} catch (e) {
-	     	f_core.Error(f_shell, "_fillModIFrame: catch error", e);
-		}
-
-	},
-
-	/**
-	 *  <p>returns the callback to use to draw the iFrame 
-	 *  </p>
-	 *
-	 * @method protected
-	 * @return void
-	 */
-	f_drawIframeWithUrl: function() {
-    	f_core.Debug(f_shell, "f_drawIframeWithUrl: entering");
-    	var srcUrl=this.f_getIFrameUrl();
-    	f_core.Debug(f_shell, "f_drawIframeWithUrl: url = "+srcUrl);
-    	if (srcUrl && typeof(srcUrl) == "string") {
-    		var iframe=this.f_getIframe();
-    		iframe.src=srcUrl;
-    		return;
-    	}
-    	f_core.Debug(f_shell, "f_drawIframeWithUrl: bad url = "+srcUrl);
-    	
-	},
-	/**
-	 *  <p>returns the callback to use to draw the iFrame 
-	 *  </p>
-	 *
-	 * @method protected
-	 * @return Function 
-	 */
-	f_getIFrameDrawingCallBack: function() {
-		return this.f_fillModIFrame;
-	},
-
-	/**
-	 *  <p>returns the url to show in the iFrame 
-	 *  </p>
-	 *
-	 * @method protected
-	 * @return String 
-	 */
-	f_getIFrameUrl: function() {
-		return "";
-	},
-
-	/**
-	 *  <p>decorate the div
-	 *  </p>
-	 *
-	 * @method protected
-	 * @param HTMLElement div
-	 * @return void
-	 */
-	f_decorateDiv: function(div) {
-     	f_core.Debug(f_shell, "f_decorateDiv: entering");
-     	f_core.Assert(div.nodeType==f_core.ELEMENT_NODE, "f_shell.f_decorateDiv: bad parameter type "+div);
-
-		// Recuperation de la taille de la fenetre
-		var size=f_shell.GetOwnDocumentSize();
-
-		div.className = this.f_getCssClassBase()+"_background_"+this.f_getBackgroundMode();
-		div.style.position="absolute";
-		div.style.top=0;
-		div.style.left=0;
-		div.style.width=size.width+"px";
-		div.style.height=size.height+"px";
-
-		//Associate this to the div
-		div._shell = this;
-
-	},
 
 	/**
 	 *  <p>decorate the iframe
@@ -939,242 +342,65 @@ var __members = {
 	 * @param HTMLElement iframe
 	 * @return void
 	 */
-	f_decorateIframe: function(iframe) {
-     	f_core.Debug(f_shell, "f_decorateIframe: entering");
-     	f_core.Assert(iframe.nodeType==f_core.ELEMENT_NODE, "f_shell.f_decorateIframe: bad parameter type "+iframe);
-
-		iframe.className = this.f_getCssClassBase()+"_frame";
+	f_prepareOpening: function() {
+     	f_core.Debug(f_shell, "f_setupIframe: entering");
+		
+		if (this._height<1) {
+			this._height=f_shell._DEFAULT_HEIGHT;
+		}
+		if (this._width<1) {
+			this._width=f_shell._DEFAULT_WIDTH;
+		}
+		
+		var shellDecorator=this._shellManager.f_getShellDecorator(this);
+		var mySize=shellDecorator.f_computeExternalSize(this._width, this._height);
 		
 		// calculate iframe size and position
-		var viewSize=f_core.GetViewSize();
-		if (!this._height) {
-			this._height=100;
-		}
-		var y=0;
-		if (viewSize.height > this._height) {
-			y = Math.round((viewSize.height - this._height)/2);
-		} else {
-			this._height = viewSize.height;
-		}
-		if (!this._width) {
-			this._width=100;
-		}
+		var viewSize=f_shellManager.GetScreenSize();
+	
 		var x=0;
-		if (viewSize.width > this._width) {
-			x = Math.round((viewSize.width - this._width)/2);
+		if (viewSize.width > mySize.width) {
+			x = Math.round((viewSize.width - mySize.width)/2);
+			
 		} else {
-			this._width = viewSize.width;
+			mySize.width = viewSize.width;
 		}
-		// Def pos and size
-		iframe.style.top = y+"px";
-		iframe.style.left = x+"px";
-		iframe.style.height = this._height+"px";
-		iframe.style.width = this._width+"px";
 		
-		iframe._modalShell = this;
-
-	},
-
-	/**
-	 *  <p>draw a modal iFrame with a greying div around. 
-	 *  </p>
-	 *
-	 * @method protected
-	 * @return void  ??? _div holds the gray div and _iframe holds the iframe
-	 */
-	f_drawModIFrame: function() {
-     	f_core.Debug(f_shell, "f_drawModIFrame: entering");
-
-		//var cssClassBase = this.f_getCssClassBase();
-
-		if (f_shell._ObjIFrame) {
-	     	f_core.Debug(f_shell, "f_drawModIFrame: exit : already done !");
-	     	if (!this._div) {
-		     	this.f_setDiv(f_shell._ObjIFrame._div);
-		     }
-	     	if (!this._iframe && f_shell._ObjIFrame._iframe) {
-		     	this.f_setIframe(f_shell._ObjIFrame._iframe);
-		     }
-			return;
+		var y=0;
+		if (viewSize.height > mySize.height) {
+			y = Math.round((viewSize.height - mySize.height)/2);
+			
+		} else {
+			mySize.height = viewSize.height;
 		}
-
-		// Creation de la div recouvrant la page
-		var div = document.createElement("div");
-		
-		this.f_decorateDiv(div);
-
-		//Resize Handler
-		f_core.AddResizeEventListener(div, f_shell._OnResize);
-
-		this.f_setDiv(div);
-
-		//Hide Selects
-		f_shell.HideSelect();
-		
-		//Attach
-		document.body.insertBefore(div, document.body.firstChild);
-
-		f_shell._ObjIFrame = { 
-			_div: div, 
-			_iframe: undefined
-		};
-		
-		// Creation de l'iFrame
-//		var iframe = this.f_constructIframe(document);
+			
+		this._shellManager.f_setShellBounds(this, x, y, mySize.width, mySize.height);
 	},
 	
 	/**
 	 *  <p>construct the iframe. 
 	 *  </p>
 	 *
-	 * @method public
-	 * @return HTMLElement iframe
-	 */
-	f_constructIframe: function() {
-     	f_core.Debug(f_shell, "f_constructIframe: entering");
-		var doc = this.f_deleteIframe();
-		
-		if (!doc) {
-     		f_core.Debug(f_shell, "f_constructIframe: pas de doc");
-			if (this._div) {
-	    	 	f_core.Debug(f_shell, "f_constructIframe: doc from div");
-				doc = this._div.ownerDocument;
-			} 
-			if (!doc) {
-	     		f_core.Debug(f_shell, "f_constructIframe: doc = document");
-				doc = document;
-			}
-		}
-		
-		this._iframeDraw=false;
-		
-		// Creation de l'iFrame
-		var iframe = doc.createElement("iframe");
-		iframe.id = "shell_"+iframe.uniqueID;
-		iframe.name = "shell_"+iframe.uniqueID+"_name";
-
-		iframe.frameBorder = 0;
-		if (!f_shell._IE6) {
-			iframe.allowTransparency = true;
-		}
-		
-		this.f_decorateIframe(iframe);
-		
-    	var srcUrl=this.f_getIFrameUrl();
-    	f_core.Debug(f_shell, "f_constructIframe: url = "+srcUrl);
-    	if (srcUrl && typeof(srcUrl) == "string") {
-			iframe.src=srcUrl;
-    	} else {
-    		srcUrl = undefined;
-			iframe.src="about:blank";
-		}
-		
-		this.f_setIframe(iframe);
-
-		//Attach
-		doc.body.insertBefore(iframe, doc.body.firstChild);
-
-		f_shell._ObjIFrame = { 
-			_div: this.f_getDiv(), 
-			_iframe: iframe
-		};
-
-		if (!srcUrl) {
-			if (f_shell._IE) {
-				f_core.Debug(f_shell, "f_constructIframe: IE use onreadystatechange ");
-				iframe.onreadystatechange=f_shell._OnIframeRS;
-			} else {
-				iframe.onload=f_shell._OnIframeLoad;
-			}
-		}
-		
-		this.f_installModalStyle();
-		
-		return iframe;
-	},
-
-	/**
-	 *  <p>delete the iframe. 
-	 * and return its document
-	 *  </p>
-	 *
-	 * @method public
-	 * @return HTMLElement document
-	 */
-	f_deleteIframe: function() {
-     	f_core.Debug(f_shell, "f_deleteIframe: entering");
-		var iframe = this.f_getIframe();
-		if (!iframe) {
-	     	f_core.Debug(f_shell, "f_deleteIframe: no instance iframe : getting it ...");
-			iframe = f_shell.GetIframe();
-			if (!iframe) {
-				return undefined;
-			}
-		}
-		var doc = iframe.ownerDocument;
-
-		iframe.onload=null;
-	    iframe.onreadystatechange=null;
-
-	    this.f_uninstallModalStyle();
-
-     	f_core.Debug(f_shell, "f_deleteIframe: before removing the iframe from "+doc+" "+doc.body);
-     	try {
-			doc.body.removeChild(iframe);
-		} catch (e) {
-			f_core.Assert("f_shell.f_deleteIframe : iframe is not a child of body\n"+e);
-		}
-     	f_core.Debug(f_shell, "f_deleteIframe: after removing the ifram");
-	    
-		return doc;
-	},
-	
-	/**
-	 *  <p>delete the modal iframe and div. 
-	 *  </p>
-	 *
-	 * @method public
-	 * @return void
-	 */
-	f_delModIFrame: function() {
-     	f_core.Debug(f_shell, "f_delModIFrame: entering");
-
-     	this.f_uninstallModalStyle();
-
-		f_shell.DelModIFrame();     	
-
-	},
-	
-	/**
 	 * @method protected
 	 * @return void
 	 */
-	f_installModalStyle: function() {
-		f_core.Debug(f_shell, "f_installModalStyle");
-		var style=this.f_getStyle();
-		if (!(style & (f_shell.PRIMARY_MODAL_STYLE | f_shell.APPLICATION_MODAL_STYLE))) {
-			return;
-		}
-
-     	f_core.Debug(f_shell, "f_installModalStyle: Install modal hooks");
-		
-		f_core.AddEventListener(document, "focus", f_shell._OnFocus);
+	f_fillBody: function(shellBody) {
+     	f_core.Debug(f_shell, "f_fillBody: fill body in "+shellBody);		
+     	
+     	this._shellBody=shellBody;
 	},
 
 	/**
+	 *  <p>delete the iframe. </p>
+	 *
 	 * @method protected
 	 * @return void
 	 */
-	f_uninstallModalStyle: function() {
-		var style=this.f_getStyle();
-		if (!(style & (f_shell.PRIMARY_MODAL_STYLE | f_shell.APPLICATION_MODAL_STYLE))) {
-			return;
-		}
-
-     	f_core.Debug(f_shell, "f_uninstallModalStyle: Uninstall modal hooks");
-		
-		f_core.RemoveEventListener(document, "focus", f_shell._OnFocus);
-	},
+	f_deleteBody: function() {
+     	f_core.Debug(f_shell, "f_deleteBody: entering");
+     	
+     	this._shellBody=null;
+	},	
 	
 	/**
 	 * @method protected
@@ -1183,16 +409,14 @@ var __members = {
 	 */
 	f_setFocus: function(firstTime) {
 		f_core.Debug(f_shell, "f_setFocus: entering with firstTime = "+firstTime);
-		if (!f_shell.IsDocComplete()) {
+		if (!this._shellBody) {
 			f_core.Debug(f_shell, "f_setFocus: Doc is not complete yet");
 			return;
 		}
-		var iframe=this._iframe;
-		var frameDoc=iframe.contentWindow.document;
 		
 		var nextFocusable=null;
 		if (firstTime) {
-			var inputs=f_core.GetElementsByTagName(frameDoc, "input");
+			var inputs=f_core.GetElementsByTagName(this._shellBody, "input");
 			
 			for(var i=0;i<inputs.length;i++) {
 				var input=inputs[i];
@@ -1211,9 +435,7 @@ var __members = {
 		}
 
   		if (!nextFocusable) {
-  			if (frameDoc.body) {
-	   			nextFocusable=f_core.GetNextFocusableComponent(frameDoc.body);
-	   		}
+   			nextFocusable=f_core.GetNextFocusableComponent(this._shellBody);
   		}
   		
    		if (nextFocusable) {
@@ -1225,11 +447,108 @@ var __members = {
 
 	/**
 	 * @method public
+	 * @param function returnValueFunction
+	 * @return void
+	 */
+	f_open: function(returnValueFunction) {
+		f_core.Assert(!this._closed, "f_open: Invalid shell state !");
+		
+		this._returnValueFunction=returnValueFunction;
+		
+		this._shellManager.f_openShell(this);
+	},	
+
+	/**
+	 * @method public
+	 * @param optional function returnValueFunction
+	 * @return void
+	 */
+	f_close: function(returnValue) {
+		if (this._closed) {
+			return;
+		}
+		
+		this._closed=true;
+		
+		var self=this;
+		
+		// On découple la destruction ... pour éviter des problèmes de sécurité !
+		window.setTimeout(function() {
+			
+			var returnValueFunction=self._returnValueFunction;
+					
+			self._shellManager.f_closeShell(self, !returnValueFunction);
+			
+			if (!returnValueFunction) {
+				return;
+			}
+			
+			try {
+				returnValueFunction.call(self, returnValue);
+	
+			} catch (x) {
+				f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
+			}
+			
+			self._shellManager.f_closeShell(null, true);		
+		}, 0);
+	},
+	f_preConstruct: function() {
+	},
+	f_postConstruct: function() {		
+	},
+	f_preDestruction: function() {
+	},
+	f_postDestruction: function() {
+	},
+	/**
+	 * @method public
+	 * @param Strint title
+	 * @return void
+	 */
+	f_setTitle: function(title) {
+		f_core.Assert(title===null || typeof(title)=="string", "f_shell.f_setTitle: Invalid title parameter ('"+title+"')");
+
+		if (title) {
+			this._style|=f_shell.TITLE_STYLE;			
+		}
+		
+		this._shellManager.f_setShellDecoration(this, f_shellDecorator.TITLE_DECORATOR, title);
+	},
+	/**
+	 * @method protected
+	 * @return f_shellManager 
+	 */
+	f_getShellManager: function() {
+		return this._shellManager;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getStyleClass: function() {
+		return this._styleClass;
+	},
+	/**
+	 * @method public
+	 * @param String styleClass
+	 * @return void
+	 */
+	f_setStyleClass: function(styleClass) {
+		this._styleClass=styleClass;
+	},
+	/**
+	 * @method public
 	 * @return String
 	 */
 	_toString: function() {
-		return "[f_shell cssClassBase='"+this._cssClassBase+"' backgroundMode='"+this._backgroundMode+"']";
+		return "[f_shell id="+this._id+" styleClass='"+this._styleClass+"']";
 	}
 }
 
-new f_class("f_shell", null, __statics, __members, f_object, fa_eventTarget);
+new f_class("f_shell", {
+	extend: f_object,
+	aspects: [ fa_eventTarget ],
+	statics: __statics,
+	members: __members
+});

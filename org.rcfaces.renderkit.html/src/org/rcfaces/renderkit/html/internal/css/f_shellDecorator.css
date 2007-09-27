@@ -1,0 +1,62 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_shellDecorator
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_shellDecorator_frame {
+	visibility: hidden;
+	position: absolute;
+	z-index: 1000;
+}
+
+.f_shellDecorator_frame_border {
+	border: 1px black solid;
+}
+
+.f_shellDecorator_frame_transparent {
+}
+
+.f_shellDecorator_body {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+}
+
+.f_shellDecorator_body_transparent {
+	background-color: transparent;
+}
+
+.f_shellDecorator_body_cell {
+	overflow: auto;
+	border: 1px solid white;
+	background-color: #F0F0F0;
+	vertical-align: top;
+}
+
+.f_shellDecorator_background {
+}
+
+.f_shellDecorator_background_transparent {
+}
+
+.f_shellDecorator_title {
+	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	background-color: white;
+	height: 20px;
+	text-align: center;
+	user-select: none;
+	-moz-user-select: none;
+}
+
+.f_shellDecorator_title_cell {
+	border-bottom: 1px #F0F0F0 solid;
+}
