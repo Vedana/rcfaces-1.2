@@ -19,7 +19,47 @@ var __statics = {
 	/** 
 	 * @field private static final String	
 	 */
-	_BLANK_IMAGE_URL: "/blank.gif"
+	_BLANK_IMAGE_URL: "/blank.gif",
+	
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context event:evt
+	 */
+	_TitleButton_onmousedown: function(evt) {
+		
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context event:evt
+	 */
+	_TitleButton_onmouseup: function(evt) {
+		
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context event:evt
+	 */
+	_TitleButton_onmouseover: function(evt) {
+		
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context event:evt
+	 */
+	_TitleButton_onmouseexit: function(evt) {
+		
+	}
 }
 
 var __members = {
@@ -294,17 +334,20 @@ var __members = {
 	f_createTitle: function(parent) {
 			
 		var style=this._shell._style;
-		
-		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
-		if (title) {
-			f_core.SetTextNode(parent, title);
-		}		
-
+/*
 		if (style & f_shell.CLOSE_STYLE) {
 			var tooltip=f_resourceBundle.Get(f_shell).f_get("CLOSE_TITLE_BUTTON_TOOLTIP");
 			
 			this.f_addTitleButton(parent, "close", "f_shellDecorator_close", tooltip);
 		}
+	*/	
+		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
+		if (title) {
+			this._title=f_core.CreateElement(parent, "div", {
+				className: "f_shellDecorator_title_text",
+				textNode: title
+			});
+		}		
 	},
 	/**
 	 * @method protected
@@ -329,10 +372,10 @@ var __members = {
 			title: tooltip
 		});
 		
-		img.onmousedown=null;
-		img.onmouseup=null;
-		img.onmouseover=null;
-		img.onmouseexit=null;
+		img.onmousedown=f_shellDecorator._TitleButton_onmousedown;
+		img.onmouseup=f_shellDecorator._TitleButton_onmouseup;
+		img.onmouseover=f_shellDecorator._TitleButton_onmouseover;
+		img.onmouseexit=f_shellDecorator._TitleButton_onmouseexit;
 		
 		if (!this._buttons) {
 			this._buttons=new Object;

@@ -62,13 +62,18 @@
 	vertical-align: top;
 }
 
+
+.f_shellDecorator_title_text {
+	padding-top: 2px;
+}
+
 .f_shellDecorator_close {
-	float: left;
-	margin: 0;
+	float: right;
+	margin: 0 4px 0 0;
 	padding: 0;
 	border: 0;
-	width: 21;
-	height: 17;
+	width: 21px;
+	height: 17px;
 
 	background: transparent url('shell/close.gif') no-repeat 0 0;	
 }

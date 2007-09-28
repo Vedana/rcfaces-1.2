@@ -9,8 +9,6 @@
  * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __statics = {
-}
 
 var __members = {
 
@@ -32,7 +30,6 @@ var __members = {
 	 *
 	f_finalize: function() {
 		this.f_super(arguments);
-		//this._imageURL=undefined; // String
 	},
 	*/
 
@@ -40,7 +37,6 @@ var __members = {
 
 new f_class("f_dialog", {
 	extend: f_shell,
-	statics: __statics,
 	members: __members
 });
 
