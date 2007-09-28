@@ -550,7 +550,7 @@ var __members = {
 		if (button._eventName) {	
 			var event=new f_event(shell, button._eventName, jsEvent, button, button._name);
 			try {
-				if (shelll.f_fireEvent(event)===false) {
+				if (shell.f_fireEvent(event)===false) {
 					return false;
 				}
 				
