@@ -197,6 +197,9 @@ var __statics = {
 
 			cnt++;	
 		}
+		if (!select._sort) {
+			select._sort = 1;
+		}
 			
 		f_columnSortDialog.UpdateRadioButtons(selects, i, radios);			
 		
@@ -214,9 +217,6 @@ var __statics = {
 		radios[i*2+1].disabled=false;
 
 		var sort=selects[i]._sort;
-		if (!sort) {
-			sort=1;
-		}
 
 		radios[i*2].checked=(sort==1);
 		radios[i*2+1].checked=(sort==-1);;
@@ -493,7 +493,7 @@ var __members = {
 
 			// Remplissage
 			f_columnSortDialog.AddOptions(grid, selectComp, cols, this._selects, this._radios,selectedColIndex);
-
+			
 			var ligneCorps = docBase.createElement("tr");
 			tbodCorps.appendChild(ligneCorps);
 			ligneCorps.style.height="20px";
