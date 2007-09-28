@@ -79,10 +79,10 @@
 }
 
 .f_shellDecorator_close_over {
-	background: transparent url('shell/close.gif') no-repeat -21 0;	
+	background-position: -21px 0;	
 }
 
 .f_shellDecorator_close_selected,
 .f_shellDecorator_close_selected_over {
-	background: transparent url('shell/close.gif') no-repeat -42 0;	
+	background-position: -42px 0;	
 }

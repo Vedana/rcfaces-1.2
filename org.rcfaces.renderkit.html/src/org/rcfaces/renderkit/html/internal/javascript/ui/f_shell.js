@@ -15,6 +15,11 @@ var __statics = {
 	/**
 	 * @field public static final String
 	 */
+	CLOSE_BUTTON_EVENT: "closeButton",
+	
+	/**
+	 * @field public static final String
+	 */
 	GREYED_BACKGROUND_MODE: "greyed",
 	
 	/**

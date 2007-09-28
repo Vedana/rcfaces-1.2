@@ -24,40 +24,83 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
-	 * @context event:evt
+	 * @return void
+	 * @context object:shellDecorator
 	 */
 	_TitleButton_onmousedown: function(evt) {
+		var button=this;
+		var shellDecorator=button._shellDecorator;
 		
+		if (this._selected) {
+			return;
+		}
+		
+		this._selected=true;
+		
+		shellDecorator._updateTitleButton(button);
 	},
 	
 	/**
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @context event:evt
+	 * @context object:shellDecorator
 	 */
 	_TitleButton_onmouseup: function(evt) {
+		var button=this;
+		var shellDecorator=button._shellDecorator;
 		
+		if (!evt) {
+			evt=f_core.GetJsEvent(this);
+		}
+		
+		if (!this._selected) {
+			return;
+		}
+		
+		this._selected=false;
+		
+		shellDecorator._updateTitleButton(button);
+		shellDecorator._performTitleButton(button, evt);		
 	},
 	
 	/**
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @context event:evt
+	 * @context object:shellDecorator
 	 */
 	_TitleButton_onmouseover: function(evt) {
+		var button=this;
+		var shellDecorator=button._shellDecorator;
 		
+		if (this._over) {
+			return;
+		}
+		
+		this._over=true;
+		
+		shellDecorator._updateTitleButton(button);
 	},
 	
 	/**
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
-	 * @context event:evt
+	 * @context object:shellDecorator
 	 */
-	_TitleButton_onmouseexit: function(evt) {
+	_TitleButton_onmouseout: function(evt) {
+		var button=this;
+		var shellDecorator=button._shellDecorator;
+		
+		if (!this._over) {
+			return;
+		}
+		
+		this._over=false;
+		this._selected=false;
+		
+		shellDecorator._updateTitleButton(button);
 		
 	}
 }
@@ -102,7 +145,13 @@ var __members = {
 	 * @param HTMLElement button
 	 * @return void
 	 */
-	f_clearButton: function(button) {				
+	f_clearButton: function(button) {
+//		button._over=undefined; // boolean
+//		button._selected=undefined; // boolean
+//		button._className=undefined; // String
+//		button._eventName=undefined; // String
+//		button._name=undefined; // String
+		button._shellDecorator=undefined; // f_shellDecorator		
 		button.onmousedown=null;
 		button.onmouseup=null;
 		button.onmouseover=null;
@@ -334,13 +383,12 @@ var __members = {
 	f_createTitle: function(parent) {
 			
 		var style=this._shell._style;
-/*
 		if (style & f_shell.CLOSE_STYLE) {
 			var tooltip=f_resourceBundle.Get(f_shell).f_get("CLOSE_TITLE_BUTTON_TOOLTIP");
 			
-			this.f_addTitleButton(parent, "close", "f_shellDecorator_close", tooltip);
+			this.f_addTitleButton(parent, "close", "f_shellDecorator_close", tooltip, f_shell.CLOSE_BUTTON_EVENT);
 		}
-	*/	
+	
 		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
 		if (title) {
 			this._title=f_core.CreateElement(parent, "div", {
@@ -355,7 +403,7 @@ var __members = {
 	 * @param String className
 	 * @return void
 	 */
-	f_addTitleButton: function(parent, name, className, tooltip) {
+	f_addTitleButton: function(parent, name, className, tooltip, eventName) {
 
 		var blankImageURL=this._blankImageURL;
 		if (!blankImageURL) {
@@ -375,7 +423,11 @@ var __members = {
 		img.onmousedown=f_shellDecorator._TitleButton_onmousedown;
 		img.onmouseup=f_shellDecorator._TitleButton_onmouseup;
 		img.onmouseover=f_shellDecorator._TitleButton_onmouseover;
-		img.onmouseexit=f_shellDecorator._TitleButton_onmouseexit;
+		img.onmouseout=f_shellDecorator._TitleButton_onmouseout;
+		img._shellDecorator=this;
+		img._className=className;
+		img._eventName=eventName;
+		img._name=name;
 		
 		if (!this._buttons) {
 			this._buttons=new Object;
@@ -463,6 +515,55 @@ var __members = {
 
 		iframe.contentWindow.focus();
 		this._shell.f_setFocus();
+	},
+	/**
+	 * @method private
+	 * @param Object button
+	 * @return void
+	 */
+	_updateTitleButton: function(button) {
+		var className=button._className;
+		
+		if (button._selected) {
+			className+=" "+className+"_selected";
+			if (button._over) {
+				className+="_over";
+			}
+			
+		} else if (button._over) {
+			className+=" "+className+"_over";		
+		}
+		
+		if (button.className!=className) {
+			button.className=className;
+		}
+	},
+	/**
+	 * @method private
+	 * @param Object button
+	 * @param Event jsEvent
+	 * @return boolean
+	 */
+	_performTitleButton: function(button, jsEvent) {
+		var shell=this._shell;
+	
+		if (button._eventName) {	
+			var event=new f_event(shell, button._eventName, jsEvent, button, button._name);
+			try {
+				if (shelll.f_fireEvent(event)===false) {
+					return false;
+				}
+				
+			} finally {
+				f_classLoader.Destroy(event);
+			}
+		}
+		
+		switch(button._name) {
+		case "close":
+			shell.f_close();
+			break;
+		}		
 	}
 }
 
