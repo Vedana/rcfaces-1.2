@@ -10,13 +10,6 @@
  * @version $Revision$ $Date$
  */
 
-var __statics = {
-	/**
-	 * @field private static final String
-	 */
-	_BLANK_IMAGE_URL: "/blank.gif"	
-}
-
 var __members = {
 
 	f_image: function() {
@@ -56,7 +49,7 @@ var __members = {
 		this._imageURL = url;
 		var u=url;
 		if (!u) {
-			u=f_env.GetStyleSheetBase()+f_image._BLANK_IMAGE_URL;
+			u=f_env.GetBlankImageURL();
 		}
 		this.src=u;
 		
@@ -220,6 +213,5 @@ var __members = {
 new f_class("f_image", {
 	extend: f_component, 
 	aspects: [ fa_filterProperties, fa_commands ],
-	members: __members,
-	statics: __statics
+	members: __members
 });

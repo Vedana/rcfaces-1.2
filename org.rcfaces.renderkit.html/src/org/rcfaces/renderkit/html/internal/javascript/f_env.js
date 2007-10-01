@@ -6,11 +6,16 @@
  * 
  *
  * @class public final f_env extends Object
- * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
+ * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 
 var __statics = {
+	/**
+	 * @field public static final String 
+	 */
+	BLANK_IMAGE_URL: "/blank.gif",
+
 	/**
 	 * @field private static final String 
 	 */
@@ -69,7 +74,12 @@ var __statics = {
 	 * @field private static boolean
 	 */
 	_ClientValidationDisabled: undefined,
-	
+		
+	/**
+	 * @field private static String
+	 */
+	_BlankImageURL: undefined,
+
 	/*
 	Initializer: function() {
 		// Defaults are in f_helpButton, change these for customization
@@ -185,7 +195,13 @@ var __statics = {
 	},
 	
 	/**
-	 * @method hidden static 
+	 * @method hidden static
+	 * @param String baseURI
+	 * @param String viewURI
+	 * @param String localeName
+	 * @param String jsBaseURI
+	 * @param optional String styleSheetBaseURI 
+	 * @return void
 	 */
 	Initialize: function(baseURI, viewURI, localeName, jsBaseURI, styleSheetBaseURI) {
 		f_env._BaseURI=baseURI;		
@@ -405,6 +421,22 @@ var __statics = {
 	 */	
 	DisableClientValidation: function() {
 		f_env._ClientValidationDisabled=true;
+	},
+	/**
+	 * @method public static
+	 * @return String
+	 */
+	GetBlankImageURL: function() {
+		if (f_env._BlankImageURL) {
+			return f_env._BlankImageURL;	
+		}
+		
+		var url=f_env.GetStyleSheetBase()+f_env.BLANK_IMAGE_URL;
+		f_env._BlankImageURL=url;
+		
+		f_imageRepository.PrepareImage(url);
+		
+		return url;
 	}
 }
 

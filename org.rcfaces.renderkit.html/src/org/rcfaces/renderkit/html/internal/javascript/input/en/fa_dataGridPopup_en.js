@@ -13,7 +13,8 @@ var __resources = {
 	ONE_RESULT_MESSAGE: "'One result.'",
 	MESSAGE: "{rowcount}' results, results from '{first}' to '{last}'.\nPage: '{bpages}",
 	MANY_RESULTS_MESSAGE: "'Results from '{first}'.\n'Page: {bpages}",
-	MANY_RESULTS_MESSAGE2: "'Results from '{first}' to '{last}'.\nPage: '{bpages}"
+	MANY_RESULTS_MESSAGE2: "'Results from '{first}' to '{last}'.\nPage: '{bpages}",
+	SEARCH_LABEL: "Search :"	
 }
 
 f_resourceBundle.Define(fa_dataGridPopup, __resources);

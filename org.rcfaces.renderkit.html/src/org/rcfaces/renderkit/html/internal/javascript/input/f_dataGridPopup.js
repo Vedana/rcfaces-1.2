@@ -46,7 +46,7 @@ var __statics = {
 			id: dataGridPopup.id+fa_namingContainer.GetSeparator()+"popup", 
 			"v:nc": "true", 
 			role: "wairole:grid", 
-			"class": "f_grid", 
+			"className": "f_grid", 
 			"v:asyncRender": "true", 
 			"v:filtred": "true"
 		};
@@ -59,7 +59,7 @@ var __statics = {
 		}
 		
 		if (styleClass) {
-			properties["v:styleClass"]=styleClass;
+			properties["className"]+=" "+styleClass;
 		}
 		
 		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged", "v:headerVisible");

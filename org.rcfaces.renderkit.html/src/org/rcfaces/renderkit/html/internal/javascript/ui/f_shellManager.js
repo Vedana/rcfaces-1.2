@@ -10,6 +10,10 @@
  * @version $Revision$ $Date$
  */
 var __statics = {
+	/**
+	 * @method public static
+	 * @return f_shellManager
+	 */
 	Get: function() {
 		var shellManager=f_shellManager._singleton;
 		
@@ -158,19 +162,27 @@ var __statics = {
 	 * @return f_shell
 	 */
 	GetShell: function(component) {
-		// En mode Firefox il se peut que ce ne soit pas des des windows à chaque fois !
-		var win=f_core.GetWindow(component);
+		f_core.Assert(component, "f_shellManager.GetShell: Invalid component parameter '"+component+"'.");
 		
-		var frameElement=win.frameElement;
-		if (frameElement) {
-			var shell=frameElement._shell;
-			if (shell) {
-				return shell;
+		for(;component;) {
+			if (component._shell) {
+				return component._shell;
 			}
 			
-			return f_shellManager.GetShell(frameElement.ownerDocument);
+			var parent=component.parentNode;
+			if (parent && parent.nodeType!=f_core.DOCUMENT_NODE) {
+				component=parent;
+				continue;
+			}
+			
+			var win=f_core.GetWindow(component);
+			if (!win) {
+				break;
+			}
+			
+			component=win.frameElement;
 		}
-		
+
 		return null;
 	},
 	Finalizer: function() {
@@ -214,6 +226,11 @@ var __members = {
 			this.f_uninstallModalStyle();
 		}
 	},
+	/**
+	 * @method hidden
+	 * @param f_shell shell
+	 * @return void
+	 */
 	f_pushShell: function(shell) {
 		f_core.Debug(f_shellManager, "f_pushShell: push shell '"+shell._id+"'.");
 
@@ -229,6 +246,11 @@ var __members = {
 		
 		this.f_getShellDecorator(shell).f_showShell();
 	},
+	/**
+	 * @method hidden
+	 * @param f_shell shell
+	 * @return void
+	 */
 	f_popShell: function(shell) {
 		f_core.Debug(f_shellManager, "f_pushShell: pop shell '"+shell._id+"'.");
 
@@ -254,9 +276,17 @@ var __members = {
 			this._showScreen();
 		}
 	},
+	/**
+	 * @method public
+	 * @return f_shell
+	 */
 	f_getTopShell: function() {
 		return this._shells[this._shells.length-1];
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_hideScreen: function() {		
 		var backgroundMode;
 		
@@ -294,6 +324,10 @@ var __members = {
 		//Attach
 		document.body.insertBefore(div, document.body.firstChild);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_showScreen: function() {
 		var backgroundElement=this._backgroundElement;
 		if (!backgroundElement) {
@@ -341,6 +375,11 @@ var __members = {
 			
 		f_core.RemoveEventListener(document, "focus", f_shellManager._OnFocus);
 	},
+	/**
+	 * @method public
+	 * @param f_shell shell
+	 * @return f_shellDecorator
+	 */
 	f_getShellDecorator: function(shell) {
 		var shellDecorators=this._shellDecorators;
 		
@@ -358,9 +397,19 @@ var __members = {
 		
 		return shellDecorator;
 	},
+	/**
+	 * @method protected
+	 * @param f_shell shell
+	 * @return f_shellDecorator
+	 */
 	f_newShellDecorator: function(shell) {
 		return f_shellDecorator.f_newInstance(shell);
 	},
+	/**
+	 * @method hidden
+	 * @param f_shell shell
+	 * @return void
+	 */
 	f_openShell: function(shell) {
 		if (!f_shellManager._documentComplete) {
 			f_core.Debug(f_shellManager, "f_openShell: document is not complete, push shell into pipe !");
@@ -393,6 +442,12 @@ var __members = {
 		});		
 		
 	},
+	/**
+	 * @method hidden
+	 * @param optional f_shell shell
+	 * @param optional boolean showNextShell
+	 * @return void
+	 */
 	f_closeShell: function(shell, showNextShell) {
 		if (shell) {
 			shell.f_preDestruction();
@@ -438,12 +493,32 @@ var __members = {
 	    	}
 		}
 	},
+	/**
+	 * @method hidden
+	 * @param f_shell shell
+	 * @param String key
+	 * @param optional any value
+	 * @return void
+	 */
 	f_setShellDecoration: function(shell, key, value) {
 		this.f_getShellDecorator(shell).f_setDecorationValue(key, value);
 	},
+	/**
+	 * @method hidden
+	 * @param f_shell shell
+	 * @param number x
+	 * @param number y
+	 * @param number width
+	 * @param number height
+	 * @return void
+	 */
 	f_setShellBounds: function(shell, x, y, width, height) {
 		this.f_getShellDecorator(shell).f_setShellBounds(shell, x, y, width, height);
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_clearPendingShells: function() {
     	this._waitingShells=undefined;
 	}

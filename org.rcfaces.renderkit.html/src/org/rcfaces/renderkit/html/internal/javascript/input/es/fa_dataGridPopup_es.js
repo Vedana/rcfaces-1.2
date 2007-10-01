@@ -15,7 +15,8 @@ var __resources = {
 	ONE_RESULT_MESSAGE: "'Un registro.'",
 	MESSAGE: "{rowcount}' registros encontrados, mostrando del '{first}' al '{last}'.\n'{bpages}",
 	MANY_RESULTS_MESSAGE: "'Cantidad desconocida de registros, mostrando del '{first}'.\n'{bpages}",
-	MANY_RESULTS_MESSAGE2: "'Cantidad desconocida de registros, mostrando del '{first}' al '{last}'.\n'{bpages}"
+	MANY_RESULTS_MESSAGE2: "'Cantidad desconocida de registros, mostrando del '{first}' al '{last}'.\n'{bpages}",
+	SEARCH_LABEL: "??? Search :"	
 }
 
 f_resourceBundle.Define(fa_dataGridPopup, __resources);

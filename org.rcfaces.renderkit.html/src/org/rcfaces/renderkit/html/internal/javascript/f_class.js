@@ -459,7 +459,9 @@ var __statics = {
 	 */
 	_Inherit: function(obj) {
 		var cls=obj._kclass;
-		f_core.Assert(cls, "f_class._Inherit: Class of object '"+obj+"' is null !");
+		
+		// f_core.Assert(cls, "f_class._Inherit: Class of object '"+obj+"' is null !");
+		// le toString de 'obj' peut planter de temps en temps ???
 		
 		if (!cls._initialized) {
 			f_class.InitializeClass(cls);

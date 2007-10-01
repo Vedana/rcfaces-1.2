@@ -16,11 +16,6 @@ var __statics = {
 	 */
 	TITLE_DECORATOR: "title",
 	
-	/** 
-	 * @field private static final String	
-	 */
-	_BLANK_IMAGE_URL: "/blank.gif",
-	
 	/**
 	 * @method private static
 	 * @param Event evt
@@ -407,9 +402,7 @@ var __members = {
 
 		var blankImageURL=this._blankImageURL;
 		if (!blankImageURL) {
-			var styleSheetBase=f_env.GetStyleSheetBase();
-			blankImageURL=f_env.ResolveContentUrl(window, styleSheetBase+f_shellDecorator._BLANK_IMAGE_URL);
-			f_imageRepository.PrepareImage(blankImageURL);
+			blankImageURL=f_env.ResolveContentUrl(window, f_env.GetBlankImageURL());
 			
 			this._blankImageURL=blankImageURL;
 		}

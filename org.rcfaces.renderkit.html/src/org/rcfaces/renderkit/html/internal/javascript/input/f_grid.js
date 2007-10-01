@@ -59,11 +59,6 @@ var __statics = {
 	/** 
 	 * @field private static final String	
 	 */
-	_BLANK_IMAGE_URL: "/blank.gif",
-	
-	/** 
-	 * @field private static final String	
-	 */
 	_ROW_MENU_ID: "#row",	
 
 	/** 
@@ -1269,9 +1264,7 @@ var __members = {
 		
 		this.f_initializeTableLayout();
 		
-		var styleSheetBase=f_env.GetStyleSheetBase();
-		this._blankImageURL=styleSheetBase+f_grid._BLANK_IMAGE_URL;
-		f_imageRepository.PrepareImage(this._blankImageURL);
+		this._blankImageURL=f_env.GetBlankImageURL();
 			
 		this.f_openActionList(f_event.MOUSEDOWN);
 		this.f_openActionList(f_event.MOUSEUP);

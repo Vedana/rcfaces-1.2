@@ -17,11 +17,6 @@ var __statics = {
 	_COMPUTE_TOOLTIP: true,
 
 	/**
-	 * @field private static final String
-	 */
-	_BLANK_IMAGE_URL: "/blank.gif",
-
-	/**
 	 * @field private static final number
 	 */
 	_HOME_DELTA: -999999,
@@ -1424,8 +1419,7 @@ var __members = {
 			className="f_calendarObject";
 		}
 	
-		var blankImageURL=f_env.GetStyleSheetBase()+f_calendarObject._BLANK_IMAGE_URL;
-		f_imageRepository.PrepareImage(blankImageURL);
+		var blankImageURL=f_env.GetBlankImageURL();
 
 		var layout=this._layout;
 		/* --- L'année -- */

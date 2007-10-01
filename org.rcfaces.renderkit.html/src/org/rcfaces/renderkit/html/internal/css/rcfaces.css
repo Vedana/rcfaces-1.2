@@ -68,5 +68,6 @@
 @import url(f_shellManager.css);					//module:dialog
 @import url(f_shellDecorator.css);					//module:dialog
 @import url(f_dialog.css);					//module:dialog
+@import url(fa_dataGridPopup.css);					//module:dialog
 				
 @import url(f_consoleAppender.css); 				//module:log

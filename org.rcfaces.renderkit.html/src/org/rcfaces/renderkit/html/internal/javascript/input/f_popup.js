@@ -1011,6 +1011,12 @@ var __statics = {
 		popupStyle.top=pos.y+"px";
 	
 		popupStyle.visibility="inherit";
+	},
+	/**
+	 * @return HTMLElement
+	 */
+	GetComponent: function() {
+		return f_popup.Component;
 	}
 }
 

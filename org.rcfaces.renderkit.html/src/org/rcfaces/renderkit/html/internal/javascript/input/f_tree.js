@@ -12,10 +12,6 @@
  
 var __statics = {
 	
-	/**
-	 * @field private static final String
-	 */
-	_BLANK_NODE_IMAGE_URL: "/blank.gif",
 	
 	/**
 	 * @field private static final String
@@ -513,8 +509,7 @@ var __members = {
 		
 		var styleSheetBase=f_env.GetStyleSheetBase();
 
-		this._blankNodeImageURL=styleSheetBase+f_tree._BLANK_NODE_IMAGE_URL;
-		f_imageRepository.PrepareImage(this._blankNodeImageURL);
+		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
 		if (false && f_core.IsInternetExplorer()) {
 			if (!this.tabIndex) {

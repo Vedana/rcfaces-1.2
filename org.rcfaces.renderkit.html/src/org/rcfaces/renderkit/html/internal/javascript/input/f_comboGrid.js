@@ -393,154 +393,22 @@ var __members = {
 		}
 		
 		var menuOpened=this.f_isDataGridPopupOpened();
-
-		f_core.Debug(f_comboGrid, "_onSuggest: Charcode ("+jsEvt.keyCode+") menuOpened="+menuOpened);
-
-		var cancel=false;
-		var value=this.f_getValue();
-		var showPopup=false;
-		
-		var newInput=this.f_getInput().value;
-		if (this._inputValue!=newInput) {
-			f_core.Debug(f_comboGrid, "_onSuggest: Different values  newInput='"+newInput+
-				"' inputValue='"+this._inputValue+
-				"' formattedValue='"+this._formattedValue+
-				"' selectedValue='"+this._selectedValue+"'.");
-			
-			this._formattedValue="";
-			this._inputValue=newInput;
-			this._inputSelection=undefined;
-			
-			if (newInput!=this._selectedValue && this._selectedValue) {
-				this._selectedValue=null;
-	
-				this.f_fireEvent(f_event.SELECTION, jsEvt, null, null);
-			}
-		}
-
-		switch(jsEvt.keyCode) {
-		case f_key.VK_DOWN:
-		case f_key.VK_UP:
-			var direction=(jsEvt.keyCode==f_key.VK_DOWN)?1:-1;
-			
-			if (menuOpened) {
-				//this.f_changeSelection(direction);
-				return true;// f_core.CancelJsEvent(jsEvt);
-			}
-
-			if (value==this._lastValue) {
-				this.f_openPopup(jsEvt, direction);
-
-				return f_core.CancelJsEvent(jsEvt);
-			}
-			
-			showPopup=true;
-			break;
-
-		case f_key.VK_ENTER:
-		case f_key.VK_RETURN:
-		case f_key.VK_TAB:
-			// Le KeyUp vient du popup !
-			if (menuOpened) {
-				// Selection !
-				return f_core.CancelJsEvent(jsEvt);
-			}
-			
+		if (menuOpened) {
+			// Aie aie aie
 			this.f_closePopup(jsEvt);
 			return true;
 		}
 		
-		var value=this.f_getValue();
-		if (value==this._lastValue) {
-			f_core.Debug(f_comboGrid, "_onSuggest: Same value ! (value='"+value+"' / last='"+this._lastValue+"')");
-			return true;
-		}
-		
-		if (menuOpened) {
-			//this.f_clearAllGridRows(); // ???
-		}
-		
-		var keyCode=jsEvt.keyCode;
-		if (!showPopup) {
-			if (keyCode<32) {
-				// On affiche le POPUP que si c'est une touche normale !
-		
-//				return;
-			}
-		}
-		
-		var timerId=this._timerId;
-		if (timerId) {
-			this._timerId=undefined;
-			window.clearTimeout(timerId);
-		}
-		
-		var suggestionDelayMs=this._suggestionDelayMs;		
-		if (suggestionDelayMs<1) {
-			return true;
-		}
-		
-		f_core.Debug(f_comboGrid, "_onSuggest: Set timeout to "+suggestionDelayMs);
-		
-		var delay=suggestionDelayMs;
-		if (menuOpened) {
-			delay/=3.0;
-			if (delay<1) {
-				delay=1;
-			}
-		} else if (!showPopup && keyCode<32) {
-			delay*=2.0;
-		}
-		
-		if (showPopup) {
-			this._lastValue=value;
-			this._onSuggestTimeOut();
-			
-		} else {
-			this._lastValue=value;
+		switch(jsEvt.keyCode) {
+		case f_key.VK_DOWN:
+		case f_key.VK_UP:
+			this.f_openPopup(jsEvt);
 
-			var self=this;
-			this._timerId=window.setTimeout(function() {
-				if (window._rcfacesExiting) {
-					return;
-				}
-							
-				try {
-					self._onSuggestTimeOut();
-					
-				} catch (x) {
-					f_core.Error(f_comboGrid, "_onSuggest.timer: Timeout processing error !", x);
-				}
-			}, delay);
-		}		
-		
-		if (cancel) {
 			return f_core.CancelJsEvent(jsEvt);
 		}
 		
 		return true;
-	},
-	/**
-	 * @method private
-	 */
-	_onSuggestTimeOut: function(text) {
-		if (!this._focus) {
-			return;
-		}
-		
-		if (!text) {
-			text=this.f_getText();
-		}
-		
-		var minChars=this._suggestionMinChars;
-		f_core.Debug(f_comboGrid, "_onSuggestTimeOut: text='"+text+"'. (minChars="+minChars+")");
-
-		if (minChars>0 && text.length<minChars) {
-			return;
-		}
-
-		this.f_openDataGridPopup(null, text);
-	},
+	},			
 	/**
 	 * Returns the selected value.
 	 * 
@@ -606,6 +474,11 @@ var __members = {
 		f_core.Debug(f_comboGrid, "_onBlur: formattedValue='"+this._formattedValue+"' (inputValue='"+this._inputValue+"')");
 		this._focus=undefined;
 
+		var menuOpened=this.f_isDataGridPopupOpened();
+		if (menuOpened) {
+			return;
+		}
+
 		// On affiche la zone formatée
 
 		var input=this.f_getInput();
@@ -619,6 +492,12 @@ var __members = {
 	},
 	f_performSelectionEvent: function() {
 		// On traite pas le RETURN !
+	},
+	f_getSuggestionMinChars: function() {
+		return this._suggestionMinChars;
+	},
+	f_getSuggestionDelayMs: function() {
+		return this._suggestionDelayMs;
 	}
 }
 

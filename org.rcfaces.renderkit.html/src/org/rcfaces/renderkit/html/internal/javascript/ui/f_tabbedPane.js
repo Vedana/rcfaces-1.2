@@ -11,12 +11,6 @@
  */
 
 var __statics = {
-
-	/**
-	 * @field private static final String
-	 */
-	_BLANK_IMAGE_URL: "/blank.gif",
-	
 	/**
 	 * @field private static 
 	 */
@@ -233,7 +227,6 @@ var __statics = {
 		}
 
 		var args= [
-			f_tabbedPane._BLANK_IMAGE_URL,
 			"/tabbedPane/xpMid2.gif", 
 			"/tabbedPane/xpT2.gif" ];
 
@@ -766,7 +759,7 @@ var __members = {
 		}
 		tab._disabled=disabled;
 		
-		var blankImage=f_tabbedPane._GetImageURL(f_tabbedPane._BLANK_IMAGE_URL);
+		var blankImage=f_env.GetBlankImageURL();
 		
 		tab._imageURL=imageURL;
 		if (imageURL) {

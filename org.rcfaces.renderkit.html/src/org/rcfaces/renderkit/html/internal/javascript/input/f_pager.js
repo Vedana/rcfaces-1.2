@@ -218,12 +218,13 @@ var __statics = {
 			"v:for": forId
 		};
 		
-		if (styleClass) {
-			properties["v:styleClass"]=styleClass;
-		}		
-		
 		f_dataGridPopup.CopyProperties(properties, refComponent, 
 			"v:message", "v:zeroResultMessage", "v:oneResultMessage", "v:manyResultMessage", "v:manyResultMessage2");
+
+		
+		if (styleClass) {
+			properties["className"]+=" "+styleClass;
+		}		
 		
 		var pager=f_core.CreateElement(parent, "div", properties);
 

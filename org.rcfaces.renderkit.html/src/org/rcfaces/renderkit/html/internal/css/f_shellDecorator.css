@@ -69,20 +69,20 @@
 
 .f_shellDecorator_close {
 	float: right;
-	margin: 0 4px 0 0;
+	margin: 2px 4px 0 0;
 	padding: 0;
 	border: 0;
-	width: 21px;
-	height: 17px;
+	width: 28px;
+	height: 16px;
 
-	background: transparent url('shell/close.gif') no-repeat 0 0;	
+	background: transparent url('shell/closeRed.gif') no-repeat 0 0;	
 }
 
 .f_shellDecorator_close_over {
-	background-position: -21px 0;	
+	background-position: -28px 0;	
 }
 
 .f_shellDecorator_close_selected,
 .f_shellDecorator_close_selected_over {
-	background-position: -42px 0;	
+	background-position: -56px 0;	
 }

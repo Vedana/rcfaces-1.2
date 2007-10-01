@@ -4772,15 +4772,30 @@ var f_core = {
 	 * @param String url 
 	 * @param any data
 	 * @return any Data
+	 * @dontInline f_popup
 	 */
 	UpdateAjaxParameters: function(component, url, data) {
 		var forms=document.forms;
 		var form=component;
+		
 		if (forms.length==1 || !component || component.nodeType==f_core.DOCUMENT_NODE) {
 			form=forms[0];
 
 		} else if (component.tagName.toLowerCase()!="form") {
-			form=f_core.GetParentForm(component);
+			
+			if (window.f_popup) { // Une popup ?
+				var popupComponent=f_popup.GetComponent();
+				if (popupComponent) {
+					component=popupComponent;
+				}
+			}
+
+			form=f_core.GetParentForm(component);			
+		}
+		
+		if (!form) {
+			f_core.Error(f_core, "UpdateAjaxParameters: can not copy jsf marker"); 
+			return;
 		}
 		
 		var ajaxParametersUpdater=f_core._AjaxParametersUpdater;
