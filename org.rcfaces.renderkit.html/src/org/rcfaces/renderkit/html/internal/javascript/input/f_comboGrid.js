@@ -736,7 +736,7 @@ var __members = {
 			request.f_cancelRequest();
 		}		
 		
-		if (updateInputStyle===false) {
+		if (updateInputStyle!==false) {
 			this.f_updateInputStyle();			
 		}
 	},
