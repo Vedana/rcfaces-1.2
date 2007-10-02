@@ -310,4 +310,8 @@ var __members={
 	}
 }
  
-new f_class("f_dateEntry", null, null, __members, f_compositeNumEntry, fa_calendarPopup);
+new f_class("f_dateEntry", {
+	extend: f_compositeNumEntry,
+	aspects: [ fa_calendarPopup ],
+	members: __members
+});

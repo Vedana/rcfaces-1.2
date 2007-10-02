@@ -933,11 +933,11 @@ var f_core = {
 	 * @method hidden static
 	 */
 	InitializeForm: function(f) {
-		if (f._initialized) {
+		if (f._rcfacesInitialized) {
 			return;
 		}
 
-		f._initialized=true;
+		f._rcfacesInitialized=true;
 		
 		f_core.AddEventListener(f, "submit", f_core._OnSubmit);
 		f_core.AddEventListener(f, "reset", f_core._OnReset);
@@ -946,6 +946,7 @@ var f_core = {
 
 
 		// Pas forcement, si on ne veut pas que ca soit trop intrusif !
+		// Obligatoire pour la validation !
 		if (true) {
 			try {
 				var old=f.submit;
@@ -1021,10 +1022,10 @@ var f_core = {
 				for (var i=0; i<forms.length; i++) {
 					var form = forms[i];
 					
-					if (!form._initialized) {
+					if (!form._rcfacesInitialized) {
 						continue;
 					}
-					form._initialized=undefined;
+					form._rcfacesInitialized=undefined;
 		
 					f_core.RemoveEventListener(form, "submit", f_core._OnSubmit);
 					f_core.RemoveEventListener(form, "reset", f_core._OnReset);
@@ -1046,13 +1047,16 @@ var f_core = {
 						form._oldSubmit = undefined;
 					}
 				}
+				
+				if (win.rcfacesGarbageDisabled!==true) {
 		
-				// Terminate packages here
-				var classLoader=f_classLoader.Get(win);
-				classLoader.f_onExit();
-				
-				f_core.Finalizer();
-				
+					// Terminate packages here
+					var classLoader=f_classLoader.Get(win);
+
+					classLoader.f_onExit();
+					f_core.Finalizer();
+				}
+			
 				if (win._rcfacesCloseWindow) {		
 					win._rcfacesCloseWindow=undefined;
 					win.close();
@@ -1456,8 +1460,8 @@ var f_core = {
 			}
 	
 			var classLoader=f_classLoader.Get();
-			if (!form._initialized) {
-				//f_core.Assert(form._initialized, "f_core._OnSubmit: Not initialized form '"+form.id+"'.");
+			if (!form._rcfacesInitialized) {
+				//f_core.Assert(form._rcfacesInitialized, "f_core._OnSubmit: Not initialized form '"+form.id+"'.");
 	
 				// Cas ou l'utilisateur va plus vite que la musique ! (avant le onload de la page)
 				
@@ -4433,6 +4437,11 @@ var f_core = {
 	GetNextFocusableComponent: function(component) {
 		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetNextFocusableComponent: bad parameter type "+component);
 		f_core.Debug(f_core, "GetNextFocusableComponent: entering ("+component+") "+component.nodeType);
+		
+		var focusableElementFunction=component.f_getFocusableElement;
+		if (typeof(focusableElementFunction)=="function") {
+			component=focusableElementFunction.call(component);
+		}
 		
 		// Check view elements
 		var elts = f_core.ListAllHtmlComponents(component.ownerDocument);

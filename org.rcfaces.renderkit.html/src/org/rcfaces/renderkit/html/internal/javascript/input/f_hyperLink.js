@@ -67,4 +67,8 @@ var __members = {
 		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
 	}
 }
-new f_class("f_hyperLink", null, null, __members, f_input, fa_immediate);
+new f_class("f_hyperLink", {
+	extend: f_input,
+	aspects: [ fa_immediate ],
+	members: __members
+});

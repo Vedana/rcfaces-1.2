@@ -824,6 +824,9 @@ var __members = {
 		
 		return null;
 	},
+	/**
+	 * @method protected
+	 */
 	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
@@ -956,7 +959,7 @@ var __members = {
 	 				 				
 	 			 			
 		 		if (continueProcess===false) {
-					dataGrid._loading=undefined;		
+					dataGrid._loading=undefined;
 	
 					if (waitingObject) {
 						waitingObject.f_hide();

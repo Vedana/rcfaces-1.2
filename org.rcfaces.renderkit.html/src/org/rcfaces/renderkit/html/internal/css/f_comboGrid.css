@@ -33,6 +33,14 @@
 	margin: 0 2px;
 }
 
+.f_comboGrid_input_verifying {
+	background: url("suggestTextEntry/waiting.gif") no-repeat right center;
+}
+
+.f_comboGrid_input_errored {
+	background: #FFFFDD url("comboGrid/warning.gif") no-repeat right center;
+}
+
 .f_comboGrid_button {
 	border: 0;
 	padding: 0;

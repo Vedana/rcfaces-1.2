@@ -26,6 +26,10 @@
 				<command id="popupGrid.update" />
 			</service>
 			
+			<service id="org.rcfaces.renderkit.html.ComboGridKey" class="org.rcfaces.renderkit.html.internal.service.ComboGridKeyService">
+				<command id="comboGrid.key" />
+			</service>
+			
 			<service id="org.rcfaces.renderkit.html.Tree" class="org.rcfaces.renderkit.html.internal.service.TreeService">
 				<command id="tree.request" />
 			</service>

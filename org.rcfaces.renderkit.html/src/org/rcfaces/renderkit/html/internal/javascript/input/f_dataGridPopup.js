@@ -247,7 +247,12 @@ var __members = {
 		f_core.Debug(f_dataGridPopup, "f_performAutoSelection: Selection="+selection);
 		
 		if (selection!==undefined) {
-			this.f_setSelection([ selection ], true);				
+			this.f_setSelection([ selection ], true);			
+			
+			var row=this.f_getRowByValue(selection);
+			if (row!==undefined || row!==null) {
+				this.f_moveCursor(row, true);
+			}	
 		}
 	},
 	/**
@@ -271,4 +276,8 @@ var __members = {
 	}
 }
  
-new f_class("f_dataGridPopup", null, __statics, __members, f_dataGrid);
+new f_class("f_dataGridPopup", {
+	extend: f_dataGrid,
+	statics: __statics,
+	members: __members
+});

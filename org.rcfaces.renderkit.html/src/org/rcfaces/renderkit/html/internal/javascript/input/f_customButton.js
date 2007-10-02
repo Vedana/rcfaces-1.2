@@ -351,4 +351,9 @@ var __members = {
 	}	
 }
 
-new f_class("f_customButton", null, __statics, __members, f_component, fa_readOnly, fa_disabled, fa_borderType, fa_value);
+new f_class("f_customButton", {
+	extend: f_component,
+	aspects: [ fa_readOnly, fa_disabled, fa_borderType, fa_value ],
+	statics: __statics,
+	members: __members
+});

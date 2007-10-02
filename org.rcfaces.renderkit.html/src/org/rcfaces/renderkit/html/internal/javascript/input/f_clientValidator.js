@@ -1441,4 +1441,8 @@ var __members = {
 	}
 }
 
-new f_class("f_clientValidator", null, __statics, __members, f_object);
+new f_class("f_clientValidator", {
+	extend: f_object,
+	statics: __statics,
+	members: __members
+});

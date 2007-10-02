@@ -13,7 +13,7 @@ var __statics = {
 	/** 
 	 * @field private static final boolean 
 	 */
-	_DONT_RELEASE_POPUP: true,
+	_DONT_RELEASE_POPUP: false,
 	
 	/** 
 	 * @field private static final String 
@@ -127,19 +127,21 @@ var __statics = {
 
 				 	case f_key.VK_TAB:
 						dataGridPopup._rowSelection(dataGridPopup._dataGrid, jsEvent);
+						dataGridPopup._focusNext=true;
 				 		return true; // On accepte le TAB
 
 					case f_key.VK_ESCAPE:
 						dataGridPopup.f_closeDataGridPopup(jsEvent);
 				 		return false;
-				 		
+		 		
 					case f_key.VK_DOWN:
 					case f_key.VK_UP:
 					case f_key.VK_PAGE_DOWN:
 					case f_key.VK_PAGE_UP:
 //					case f_key.VK_END:
 //					case f_key.VK_HOME:
-						return dataGridPopup._dataGrid.f_performKeyDown(jsEvent);
+						dataGridPopup._dataGrid.f_performKeyDown(jsEvent);
+						return false;
 					}
 
 					return true;
@@ -151,14 +153,15 @@ var __statics = {
 					f_core.Debug(fa_dataGridPopup, "_OpenPopup.keyUp: popup keyUp: "+jsEvent.keyCode);
 					/*return menu._filterKey("up", evt);*/
 					
-					switch(jsEvent) {
+					switch(jsEvent.keyCode) {
 					case f_key.VK_DOWN:
 					case f_key.VK_UP:
 					case f_key.VK_PAGE_DOWN:
 					case f_key.VK_PAGE_UP:
 					case f_key.VK_END:
 					case f_key.VK_HOME:
-						//return dataGridPopup._dataGrid.f_onKeyUp(jsEvent);
+						dataGridPopup._dataGrid.f_onKeyUp(jsEvent);
+						return false;
 					}
 					
 					return true;
@@ -196,7 +199,11 @@ var __statics = {
 			
 			} else {
 				f_popup.Gecko_openPopup(popup, positionParameters);
-			}			
+			}
+			
+			if (dataGridPopup._searchInput) {
+				dataGridPopup._searchInput.focus();
+			}
 		}
 	
 		dataGridPopup._popupOpened=true;
@@ -225,7 +232,7 @@ var __statics = {
 		dataGridPopup._popup=undefined;
 		
 		if (!dataGridPopup._iePopup) {
-			//f_popup.Gecko_closePopup(popup);
+			f_popup.Gecko_closePopup(popup);
 
 			if (fa_dataGridPopup._DONT_RELEASE_POPUP==false) {
 				f_popup.Gecko_releasePopup(popup); // A REMETTRE
@@ -236,8 +243,47 @@ var __statics = {
 		f_popup.Ie_closePopup(popup);
 
 		f_popup.Ie_releasePopup(popup);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGridPopup
+	 */
+	_SearchSuggest_onkeyup: function(jsEvent) {
+		var input=this;
+		var dataGridPopup=input._dataGridPopup;
+				
+		if (!jsEvent) {
+			jsEvent = f_core.GetJsEvent(this);
+		}
+
+		if (dataGridPopup.f_getEventLocked(jsEvent)) {
+			return false;
+		}
+		
+		return dataGridPopup._onSearchSuggest(jsEvent);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGridPopup
+	 */
+	_SearchButton_onclick: function(jsEvent) {
+		var input=this;
+		var dataGridPopup=input._dataGridPopup;
+				
+		if (!jsEvent) {
+			jsEvent = f_core.GetJsEvent(this);
+		}
+
+		if (dataGridPopup.f_getEventLocked(jsEvent)) {
+			return false;
+		}
+		
+		return dataGridPopup._onSearchClick(jsEvent);
 	}
-	
 }
 
 var __members = {
@@ -293,6 +339,11 @@ var __members = {
 		this._iePopup=f_popup.Ie_enablePopup();
 	},
 	f_finalize: function() {
+		var timerId=this._timerId;
+		if (timerId) {
+			this._timerId=undefined;
+			window.clearTimeout(timerId);
+		}
 		
 		// this._dataGridHtml=undefined; // String
 		// this._autoSelect=undefined; // number
@@ -306,15 +357,33 @@ var __members = {
 		this._popup=undefined; // ? HtmlDivElement
 		this._columns=undefined;  // Object[]
 		
+		this._finalizePopup();
+		
+	},
+	_finalizePopup: function() {
+		
 		var searchInput=this._searchInput;
 		if (searchInput) {
 			this._searchInput=undefined; // HtmlInputElement
-			input.onkeyup=null;	
+
+			searchInput._dataGridPopup=undefined;	
+			searchInput.onkeyup=null;
+			
+			f_core.VerifyProperties(searchInput);
 		}
-		this._searchIcon=undefined; // HtmlImageElement
 		
+		var searchIcon=this._searchIcon;
+		if (searchIcon) {
+			this._searchIcon=undefined; // HtmlImageElement
+
+			searchIcon._dataGridPopup=undefined;	
+			searchIcon.onclick=null;
+			
+			f_core.VerifyProperties(searchIcon);
+		}
+
 		this.f_destroyDataGrid();
-		this._destroyPager();
+		this._destroyPager();		
 	},
 	/**
 	 * @method protected
@@ -324,6 +393,8 @@ var __members = {
 	f_constructDataGrid: function(parent) {
 		f_core.Debug(fa_dataGridPopup, "f_constructDataGrid: construct components parent="+parent);
 		
+		this._finalizePopup();
+		/*
 		var dataGrid=this._dataGrid;
 		if (dataGrid && dataGrid.parentNode && dataGrid.ownerDocument==parent.ownerDocument) {
 		//	return dataGrid;
@@ -338,6 +409,7 @@ var __members = {
 		if (pager) {
 			this._destroyPager(dataGrid);	
 		}
+		*/
 
 		var rows=f_core.GetNumberAttribute(this, "v:rows");
 		var paged=f_core.GetBooleanAttribute(this, "v:paged", true);
@@ -382,29 +454,39 @@ var __members = {
 			className: "fa_dataGridPopup_form"
 		});
 	
-		var button=f_core.CreateElement(form, "input", {
+		var button=f_core.CreateElement(form, "img", {
 			className: "fa_dataGridPopup_icon",
 			src: f_env.GetBlankImageURL(),
-			name: "searchButton",
-			type: "image"
+			name: "searchButton"
 		});	
 		this._searchIcon=button;
+		button._dataGridPopup=this;
+		button.onclick=fa_dataGridPopup._SearchButton_onclick;
 		
 		var input=f_core.CreateElement(form, "input", {
 			className: "fa_dataGridPopup_input",
 			name: "searchValue",
-			type: "text"
+			type: "text",
+			// He oui ! cela semble marcher sur tous les browsers ! (meme Gecko !?)		
+			autocomplete: "off"
 		});
 		this._searchInput=input;
-		input.onkeyup=this._onSearchSuggest;
+		input._dataGridPopup=this;
+		input.onkeyup=fa_dataGridPopup._SearchSuggest_onkeyup;
 		
 		var td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {
 				align: "left", 
 				valign: "middle" });									
 		
+		var cwidth=width;
+		if (f_core.IsInternetExplorer()) {
+			cwidth-=8;
+			height-=18;
+		}
+		
 		dataGrid=f_dataGridPopup.Create(td, 
 			this, 
-			width, 
+			cwidth, 
 			height-pagerHeight-inputHeight, 
 			f_core.GetAttribute(this, "v:gridStyleClass", "fa_dataGridPopup_grid"));
 		
@@ -454,7 +536,7 @@ var __members = {
 			return;
 		}
 		this._dataGrid=undefined;
-		
+
 		var parent=dataGrid.parentNode;
 		if (parent) {
 			parent.removeChild(dataGrid);
@@ -502,7 +584,14 @@ var __members = {
 	 * @return void
 	 */
 	f_closeDataGridPopup: function(jsEvent) {
+		f_core.Debug(fa_dataGridPopup, "f_closeDataGridPopup: event="+jsEvent);
+
 		fa_dataGridPopup._ClosePopup(this, jsEvent);
+		
+		var self=this;
+		window.setTimeout(function() {
+			self.f_setFocus();
+		}, 10);
 	},
 	/**
 	 * @method hidden
@@ -531,19 +620,14 @@ var __members = {
 			return false;
 		}
 		
-		var selection=dataGrid.f_getSelection();
-		if (autoSelect && !selection.length) {
-			dataGrid.f_setAutoSelection(autoSelect);
-		}
+		dataGrid.f_setAutoSelection(1);
 		
 		var filterProperties=this.f_getFilterProperties();
-		filterProperties.text=text;
+		if (text) {
+			filterProperties.text=text;
+		}
 		
 		dataGrid.f_setFilterProperties(filterProperties); 
-		
-		if (this._searchInput) {
-			this._searchInput.focus();
-		}
 		
 		return true;
 	},
@@ -605,6 +689,10 @@ var __members = {
 	 * @return void
 	 */
 	_rowSelection: function(dataGrid, jsEvent) {
+		f_core.Debug(fa_dataGridPopup, "_rowSelection: dataGrid.selection="+dataGrid.f_getSelection());
+
+		this._focusNext=undefined;
+
 		var selection=dataGrid.f_getSelection();
 		
 		if (!selection.length) {
@@ -636,39 +724,37 @@ var __members = {
 		// A cause de IE !!!! ARG !
 		var self=this;
 		window.setTimeout(function() {
-			self.fa_valueSelected(value, message, values);
+			self.fa_valueSelected(value, message, values, self._focusNext);
 		}, 0);
 	},
-	_onSearchSuggest: function(jsEvt) {
-		if (jsEvt.cancelBubble) {
-			f_core.Debug(f_comboGrid, "_onSuggest: Event has been canceled !");
-			return true;
+	/**
+	 * @method private
+	 * @param Event jsEvt
+	 * @return boolean 
+	 */
+	_onSearchClick: function(jsEvt) {
+		var timerId=this._timerId;
+		if (timerId) {
+			this._timerId=undefined;
+			window.clearTimeout(timerId);
 		}
+		
+		var text=this._searchInput.value;
 
-		f_core.Debug(f_comboGrid, "_onSuggest: Charcode ("+jsEvt.keyCode+")");
+		// Filtrer la valeur
+		this.f_openDataGridPopup(null, text);
+	},
+	/**
+	 * @method private
+	 * @param Event jsEvt
+	 * @return boolean 
+	 */
+	_onSearchSuggest: function(jsEvt) {
+		f_core.Debug(f_comboGrid, "_onSearchSuggest: Charcode ("+jsEvt.keyCode+")");
 
 		var cancel=false;
-		var value=this.f_getValue();
-		var showPopup=false;
+	//	var value=this.f_getValue();
 		
-		var newInput=this._searchInput.value;
-		if (this._inputValue!=newInput) {
-			f_core.Debug(f_comboGrid, "_onSuggest: Different values  newInput='"+newInput+
-				"' inputValue='"+this._inputValue+
-				"' formattedValue='"+this._formattedValue+
-				"' selectedValue='"+this._selectedValue+"'.");
-			
-			this._formattedValue="";
-			this._inputValue=newInput;
-			this._inputSelection=undefined;
-			
-			if (newInput!=this._selectedValue && this._selectedValue) {
-				this._selectedValue=null;
-	
-				this.f_fireEvent(f_event.SELECTION, jsEvt, null, null);
-			}
-		}
-
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
@@ -686,20 +772,14 @@ var __members = {
 			return true;
 		}
 		
-		var value=this.f_getValue();
-		if (value==this._lastValue) {
-			f_core.Debug(f_comboGrid, "_onSuggest: Same value ! (value='"+value+"' / last='"+this._lastValue+"')");
+		var newInputValue=this._searchInput.value;
+		if (newInputValue==this._lastValue) {
+			f_core.Debug(f_comboGrid, "_onSearchSuggest: Same value ! (value='"+newInputValue+"' / last='"+this._lastValue+"')");
 			return true;
 		}
+		this._lastValue=newInputValue;
 		
 		var keyCode=jsEvt.keyCode;
-		if (!showPopup) {
-			if (keyCode<32) {
-				// On affiche le POPUP que si c'est une touche normale !
-		
-//				return;
-			}
-		}
 		
 		var timerId=this._timerId;
 		if (timerId) {
@@ -712,39 +792,23 @@ var __members = {
 			return true;
 		}
 		
-		f_core.Debug(f_comboGrid, "_onSuggest: Set timeout to "+suggestionDelayMs);
+		f_core.Debug(f_comboGrid, "_onSearchSuggest: Set timeout to "+suggestionDelayMs);
 		
 		var delay=suggestionDelayMs;
-		if (menuOpened) {
-			delay/=3.0;
-			if (delay<1) {
-				delay=1;
-			}
-		} else if (!showPopup && keyCode<32) {
-			delay*=2.0;
-		}
-		
-		if (showPopup) {
-			this._lastValue=value;
-			this._onSuggestTimeOut();
-			
-		} else {
-			this._lastValue=value;
 
-			var self=this;
-			this._timerId=window.setTimeout(function() {
-				if (window._rcfacesExiting) {
-					return;
-				}
-							
-				try {
-					self._onSuggestTimeOut();
-					
-				} catch (x) {
-					f_core.Error(f_comboGrid, "_onSuggest.timer: Timeout processing error !", x);
-				}
-			}, delay);
-		}		
+		var self=this;
+		this._timerId=window.setTimeout(function() {
+			if (window._rcfacesExiting) {
+				return;
+			}
+						
+			try {
+				self._onSuggestTimeOut();
+				
+			} catch (x) {
+				f_core.Error(f_comboGrid, "_onSearchSuggest.timer: Timeout processing error !", x);
+			}
+		}, delay);
 		
 		if (cancel) {
 			return f_core.CancelJsEvent(jsEvt);
@@ -756,12 +820,8 @@ var __members = {
 	 * @method private
 	 */
 	_onSuggestTimeOut: function(text) {
-		if (!this._focus) {
-			return;
-		}
-		
 		if (!text) {
-			text=this.f_getText();
+			text=this._searchInput.value;
 		}
 		
 		var minChars=this.f_getSuggestionMinChars();
@@ -772,6 +832,7 @@ var __members = {
 		}
 
 		// Filtrer la valeur
+		this.f_openDataGridPopup(null, text);
 	},
 	
 
@@ -785,6 +846,7 @@ var __members = {
 	 * @param String value
 	 * @param String label
 	 * @param Object rowValues values of row
+	 * @param optional boolean focusNext
 	 * @return void
 	 */	
 	fa_valueSelected: f_class.ABSTRACT

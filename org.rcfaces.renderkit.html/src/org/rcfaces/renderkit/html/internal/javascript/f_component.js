@@ -765,6 +765,13 @@ var __members = {
 	 */
 	f_findSiblingComponent: function(id) {
 		return fa_namingContainer.FindSiblingComponents(this, arguments);
+	},	
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		return this;	
 	},
 	/**
 	 * @method public

@@ -62,6 +62,8 @@ import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.lang.FilterPropertiesMap;
+import org.rcfaces.core.model.BasicFiltredContentModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -482,7 +484,7 @@ public abstract class AbstractGridRenderContext {
                                 if (rows > 0) {
                                     // Script en mode ROW !
                                     throw new FacesException(
-                                            "Client-side sort not support with 'rows' mode !");
+                                            "Client-side sort does not support 'rows' mode !");
                                 }
 
                                 sortClientSide[i] = true;
@@ -776,6 +778,9 @@ public abstract class AbstractGridRenderContext {
     }
 
     public IFilterProperties getFiltersMap() {
+        if (filtersMap == null) {
+            filtersMap = new FilterPropertiesMap();
+        }
         return filtersMap;
     }
 

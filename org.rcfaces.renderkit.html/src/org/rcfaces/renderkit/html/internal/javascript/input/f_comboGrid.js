@@ -5,7 +5,7 @@
 
 /**
  * 
- * @class f_comboGrid extends f_textEntry, fa_dataGridPopup
+ * @class f_comboGrid extends f_textEntry, fa_dataGridPopup, fa_commands
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -188,15 +188,9 @@ var __members = {
 		// this._valueFormat=undefined; // String
 		// this._formattedValue=undefined; // String
 		// this._inputValue=undefined; // String
-		// this._inputSelection=undefined; // int[]
 		// this._focus=undefined; // boolean
 		// this._selectedValue=undefined; // String
-
-		var timerId=this._timerId;
-		if (timerId) {
-			this._timerId=undefined;
-			window.clearTimeout(timerId);
-		}
+		// this._verifyingKey=undefined; // boolean
 	
 		var button=this._button;
 		if (button) {
@@ -211,6 +205,13 @@ var __members = {
 
 			f_core.VerifyProperties(button);
 		}
+		
+		var request=this._verifyRequest;
+		if (request) {
+			this._verifyRequest=undefined;
+			
+			request.f_cancelRequest();
+		}		
 		
 		this.f_super(arguments);
 	},
@@ -275,7 +276,8 @@ var __members = {
 		this.f_updateButtonStyle();	
 	},
 	/**
-	 *  @method protected
+	 * @method protected
+	 * @return void
 	 */
 	f_updateButtonStyle: function() {
 		var button=this._button;
@@ -302,6 +304,29 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @return void
+	 */
+	f_updateInputStyle: function() {
+		var className="f_comboGrid_input";
+		
+		if (this._verifyingKey) {
+			className+= " "+className+"_verifying";	
+
+		} else if (this._keyErrored) {
+			className+= " "+className+"_errored";
+		}
+		
+		var input=this.f_getInput();
+		if (!input) {
+			return;
+		}
+		
+		if (input.className!=className) {
+			input.className=className;
+		}		
+	},
+	/**
+	 * @method protected
 	 * @param Event jsEvent
 	 * @param optional boolean autoSelect
 	 * @return void
@@ -310,22 +335,19 @@ var __members = {
 		if (this.f_isReadOnly()) {
 			return;
 		}
+
+		f_core.Debug(f_comboGrid, "f_openPopup: open popup");
 		
-		var text;
-		if (this._focus) {
-			text=this.f_getText();
-		} else {
-			text=this._selectedValue;
-		}
-		
-		this.f_openDataGridPopup(jsEvent, text, autoSelect);
+		this.f_openDataGridPopup(jsEvent, null, autoSelect);
 	},
 	/**
 	 * @method protected
 	 * @param Event jsEvent
 	 * @return void
 	 */
-	f_closePopup: function(jsEvent) {		
+	f_closePopup: function(jsEvent) {
+		f_core.Debug(f_comboGrid, "f_closePopup: close popup");
+			
 		this.f_closeDataGridPopup(jsEvent);
 	},
 	/**
@@ -373,6 +395,18 @@ var __members = {
 
 		case f_key.VK_TAB:
 			return true;		
+
+		case f_key.VK_SPACE:
+			if (jsEvt.ctrlKey) {
+				var input=this.f_getInput();
+				
+				var inputValue=input.value;
+				
+				if (inputValue) {
+					this._verifyKey(inputValue);
+				}
+				return false;
+			}
 		}
 
 		this._inputValue=this.f_getInput().value;
@@ -397,6 +431,38 @@ var __members = {
 			// Aie aie aie
 			this.f_closePopup(jsEvt);
 			return true;
+		}
+		
+		var newInput=this.f_getInput().value;
+		if (this._inputValue!=newInput) {
+			f_core.Debug(f_comboGrid, "_onSuggest: Different values  newInput='"+newInput+
+				"' inputValue='"+this._inputValue+
+				"' formattedValue='"+this._formattedValue+
+				"' selectedValue='"+this._selectedValue+"'.");
+			
+			this._formattedValue=newInput;
+			this._inputValue=newInput;
+		
+			if (this._verifyingKey) {
+				this._verifyingKey=undefined;
+				this._keyErrored=undefined;
+				
+				this.f_updateInputStyle();
+				
+				// Suppression de la recherche XXX
+				this._cancelVerification();
+
+			} else if (this._keyErrored) {
+				this._keyErrored=undefined;
+				
+				this.f_updateInputStyle();
+			}
+				
+			if (newInput!=this._selectedValue && this._selectedValue) {
+				this._selectedValue=null;
+	
+				this.f_fireEvent(f_event.SELECTION, jsEvt, null, null);
+			}
 		}
 		
 		switch(jsEvt.keyCode) {
@@ -432,32 +498,62 @@ var __members = {
 		
 		this._selectedValue=value;		
 		this._inputValue="";
-		this._inputSelection=undefined;
-		this._formattedValue=""; // ???
-		
+		this._formattedValue="";
+		this._keyErrored=undefined;
+		this._verifyingKey=value;
+
+		this.f_updateInputStyle();			
+				
 		this.f_getInput().value="";
 	},
 	/**
 	 * @method protected
 	 */
-	fa_valueSelected: function(value, label, rowValues) {
+	fa_valueSelected: function(value, label, rowValues, focusNext) {
 		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 		
 		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
 			return;
 		}
 		
+		if (value===undefined) {
+			this._keyErrored=true;
+			this._formattedValue=this.f_getInput().value;
+			this._selectedValue="";
+			this._cancelVerification();
+			return;
+		}
+		
+		this._keyErrored=undefined;
+		this._cancelVerification();
+		
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
 		this._inputValue=value;
-		this._inputSelection=undefined;
-		this._lastValue=value;
 		
 		var input=this.f_getInput();
-		input.value=value;
-		f_core.SelectText(input, value.length);
+		
+		if (this._focus) {
+			input.value=value;
+			f_core.SelectText(input, value.length);
+			
+			if (focusNext) {
+				var comp=f_core.GetNextFocusableComponent(this);
+				if (comp) {
+					f_core.SetFocus(comp);
+				}	
+			}
+
+		} else {
+			input.value=this._formattedValue;			
+		}
 	},
-	_onFocus: function() {
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return void
+	 */
+	_onFocus: function(event) {
 		f_core.Debug(f_comboGrid, "_onFocus: inputValue='"+this._inputValue+"'  (formattedValue='"+this._formattedValue+"')");
 
 		this._focus=true;
@@ -470,6 +566,11 @@ var __members = {
 		// Il faut tout selectionner car sous IE le focus se repositionne au début		
 		input.select();		
 	},
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return void
+	 */
 	_onBlur: function(event) {
 		f_core.Debug(f_comboGrid, "_onBlur: formattedValue='"+this._formattedValue+"' (inputValue='"+this._inputValue+"')");
 		this._focus=undefined;
@@ -483,22 +584,184 @@ var __members = {
 
 		var input=this.f_getInput();
 		
-		this._inputSelection=f_core.GetTextSelection(input);
 		this._inputValue=input.value;
 		
-		input.value=this._formattedValue;
+		if (this._inputValue && !this._selectedValue) {
+			this._verifyKey(this._inputValue);
+		}
 		
-		this.f_closePopup(event.f_getJsEvent());
+		input.value=this._formattedValue;
+	},
+	/**
+	 * @method private
+	 * @param String value
+	 * @return void
+	 */
+	_verifyKey: function(value) {
+		if (this._verifyingKey) {
+			if (this._verifyingKey==value) {
+				return;
+			}
+		
+			this._cancelVerification(false);
+		}
+		
+		var inputValue=this._inputValue;
+		this._verifyingKey=inputValue;					
+		this.f_updateInputStyle();		
+				
+		this.f_appendCommand(function(comboGrid) {
+			comboGrid.f_callServer(this._verifyingKey);
+		});
+		
+	},
+	/**
+	 * @method protected
+	 */
+	f_callServer: function(key) {		
+		var params={
+			gridId: this.id,
+			key: key
+		}
+	
+		var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
+		if (filterExpression) {
+			params.filterExpression=filterExpression;
+		}
+		
+		var url=f_env.GetViewURI();
+		var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+		var comboGrid=this;
+		request.f_setListener({
+			/**
+			 * @method public
+			 */
+	 		onError: function(request, status, text) {
+	 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+status);
+	 			
+	 			var continueProcess;
+	 			
+	 			try {
+	 				continueProcess=comboGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+	 				
+	 			} catch (x) {
+	 				// On continue coute que coute !
+	 				continueProcess=false;
+	 			}	 				
+ 			 			
+		 		if (continueProcess===false) {
+					comboGrid._loading=undefined;
+			 		return;
+		 		}
+	 			
+				if (comboGrid.f_processNextCommand()) {
+					return;
+				}
+	 		
+				dataGrid._loading=undefined;		
+	 			 			
+				comboGrid._verifyingKey=undefined;		
+				comboGrid.f_updateInputStyle();		
+	 		},
+			/**
+			 * @method public
+			 */
+	 		onLoad: function(request, content, contentType) {
+				if (comboGrid.f_processNextCommand()) {
+					return;
+				}
+	 				
+				comboGrid._verifyingKey=undefined;		
+				try {
+					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+						comboGrid.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+						return;
+					}
+
+					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+					if (!cameliaServiceVersion) {
+						comboGrid.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+						return;					
+					}
+	
+					var responseContentType=request.f_getResponseContentType();
+					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+				 		comboGrid.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+						return;
+					}
+		
+					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+				 		comboGrid.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+						return;
+					}
+					
+					var ret=request.f_getResponse();
+										
+					//alert("ret="+ret);
+					try {
+						eval(ret);
+						
+					} catch (x) {
+			 			comboGrid.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
+					}
+
+				} finally {
+					comboGrid._loading=undefined;
+					comboGrid.f_updateInputStyle();		
+				}
+	 		}
+		});
+
+		this._loading=true;
+		request.f_setRequestHeader("X-Camelia", "comboGrid.key");
+		request.f_doFormRequest(params);
+	},
+	/**
+	 * @method protected
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_cancelVerification: function(updateInputStyle) {
+		this.f_clearCommands();
+		
+		var request=this._verifyRequest;
+		if (request) {
+			this._verifyRequest=undefined;
+			
+			request.f_cancelRequest();
+		}		
+		
+		if (updateInputStyle===false) {
+			this.f_updateInputStyle();			
+		}
 	},
 	f_performSelectionEvent: function() {
 		// On traite pas le RETURN !
 	},
+	/**
+	 * @method protected
+	 * @return number
+	 */
 	f_getSuggestionMinChars: function() {
 		return this._suggestionMinChars;
 	},
+	/**
+	 * @method protected
+	 * @return number
+	 */
 	f_getSuggestionDelayMs: function() {
 		return this._suggestionDelayMs;
 	}
 }
 
-new f_class("f_comboGrid", null, __statics, __members, f_textEntry, fa_dataGridPopup);
+new f_class("f_comboGrid", {
+	extend: f_textEntry,
+	aspects: [ fa_dataGridPopup, fa_commands ],
+	statics: __statics,
+	members: __members
+});

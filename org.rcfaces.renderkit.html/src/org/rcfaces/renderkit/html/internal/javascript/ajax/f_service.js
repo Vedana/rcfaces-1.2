@@ -182,8 +182,7 @@ var __members={
 				throw new Error(errorMessage);
 			}
 	
-			var responseContentType=request.f_getResponseContentType();
-			
+			var responseContentType=request.f_getResponseContentType();			
 			if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
 		 		this.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
 				

@@ -53,7 +53,7 @@ public class ComponentsGridService extends AbstractHtmlService {
     private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
-            + ".ComponentsGrid";
+            + ".ComponentsGridKey";
 
     private static final Log LOG = LogFactory
             .getLog(ComponentsGridService.class);

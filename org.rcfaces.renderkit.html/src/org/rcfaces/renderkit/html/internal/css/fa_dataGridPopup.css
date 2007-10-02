@@ -14,7 +14,7 @@
 }
 
 .fa_dataGridPopup_label {
-	height:20px;
+	height: 20px;
 	margin-left: 16px;
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
 }
@@ -28,6 +28,7 @@
 	padding: 0;	
 	float: left;
 	display: block;
+	height: 20px;
 }
 
 .fa_dataGridPopup_title LI {
@@ -40,8 +41,8 @@
 }
 
 .fa_dataGridPopup_form {
-	height: 20px;
-	padding: 2px;
+	height: 18px;
+	padding: 0;
 	border: 1px solid #888;
 	padding: 0;
 	margin: 0;
@@ -53,8 +54,8 @@
 	border:0;
 	padding:0;
 	margin:0;
-	margin-top: 2px;
-	width: 140px;
+	height: 16px;
+	width: 120px;
 }
 
 .fa_dataGridPopup_icon {
@@ -62,7 +63,9 @@
 	width: 16px;
 	height: 16px;
 	background: url('grid/search.gif') no-repeat 0 0;
-	margin-top: 2px;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
 }
 
 .fa_dataGridPopup_search {

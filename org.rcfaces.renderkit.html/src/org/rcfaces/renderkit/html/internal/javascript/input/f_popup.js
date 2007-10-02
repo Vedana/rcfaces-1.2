@@ -425,7 +425,7 @@ var __statics = {
 		}
 				
 		for(;target;target=target.parentNode) {
-			// f_core.Debug(f_popup, "Test child '"+target+"' popupParent='"+target._popupParent+"'");
+			f_core.Debug(f_popup, "IsChildOfDocument: Test child '"+target+"' #"+target.id+" popupObject='"+target._popupObject+"' popupParent='"+target._popupParent+"'");
 		
 			if (target==popupDocument) {
 				f_core.Debug(f_popup, "IsChildOfDocument: parent is popup document => true");

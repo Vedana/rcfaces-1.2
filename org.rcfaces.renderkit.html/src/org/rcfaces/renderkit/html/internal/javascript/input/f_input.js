@@ -66,6 +66,14 @@ var __members = {
 		return input;
 	},
 	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		return this.f_getInput();
+	},
+	
+	/**
 	 * 
 	 * @method protected
 	 * @return HTMLElement

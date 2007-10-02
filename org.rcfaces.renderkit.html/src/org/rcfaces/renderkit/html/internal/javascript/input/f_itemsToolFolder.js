@@ -315,5 +315,9 @@ var __members = {
 	*/
 }
  
-new f_class("f_itemsToolFolder", null, __statics, __members, f_component,
-	fa_readOnly, fa_disabled, fa_items, fa_subMenu);
+new f_class("f_itemsToolFolder", {
+	extend: f_component,
+	aspects: [ fa_readOnly, fa_disabled, fa_items, fa_subMenu ],
+	statics: __statics,
+	members: __members
+});

@@ -12,11 +12,17 @@
 var __members = {
 
 	/**
-	 * @field protected
+	 * @field protected boolean
 	 */
 	_loading: undefined,
 
+	/**
+	 * @field private function
+	 */
+	_nextCommand: undefined,
+
 	f_finalize: function() {
+//		this._loading=undefined; // boolean
 		this._nextCommand=undefined; // function
 	},
 	/**
@@ -25,19 +31,23 @@ var __members = {
 	 * @return void
 	 */
 	f_appendCommand: function(callBack) {
+		f_core.Assert(typeof(callBack)=="function", "fa_commands.f_appendCommand: Invalid callback parameter ("+callBack+")");
+		
 		if (!this._loading) {
 			f_core.Info(fa_commands, "f_appendCommand: Call immediatly the callback !");
 			callBack.call(this, this);
 			return;
 		}
 		
-		if (this._nextCommand) {
-			f_core.Info(fa_commands, "f_appendCommand: Replace an other callback !");
-
-		} else  {
-			f_core.Info(fa_commands, "f_appendCommand: Set the next callback !");
+		if (f_core.IsInfoEnabled(fa_commands)) {
+			if (this._nextCommand) {
+				f_core.Info(fa_commands, "f_appendCommand: Replace an other callback !");
+	
+			} else  {
+				f_core.Info(fa_commands, "f_appendCommand: Set the next callback !");
+			}
 		}
-
+		
 		this._nextCommand=callBack;
 	},
 	/**
@@ -63,6 +73,13 @@ var __members = {
 		}
 		
 		return true;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_clearCommands: function() {
+		this._nextCommand=undefined;
 	}
 }
 
