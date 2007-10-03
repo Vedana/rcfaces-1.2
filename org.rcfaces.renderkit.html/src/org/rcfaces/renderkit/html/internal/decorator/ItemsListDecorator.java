@@ -60,6 +60,7 @@ import org.rcfaces.core.item.IImageSizeItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.IInputTypeItem;
 import org.rcfaces.core.item.ILookAndFeelItem;
+import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.item.ITextPositionItem;
 import org.rcfaces.core.item.IToolItem;
 import org.rcfaces.core.item.IVisibleItem;
@@ -577,8 +578,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
-        if (selectItem instanceof IStyleClassCapability) {
-            IStyleClassCapability lookIdItem = (IStyleClassCapability) selectItem;
+        if (selectItem instanceof IStyleClassItem) {
+        	IStyleClassItem lookIdItem = (IStyleClassItem) selectItem;
 
             String cssClass = lookIdItem.getStyleClass();
             if (cssClass != null
