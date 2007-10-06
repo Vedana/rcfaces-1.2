@@ -666,7 +666,9 @@ var __members = {
 	 		this.f_update(true);
 	 		
 	 	} catch (x) {
-	 		f_core.Error(f_component, "f_completeComponent: Call of f_update throws exception !", x);
+	 	alert(x);
+
+	 		f_core.Error(f_component, "f_completeComponent: Call of f_update throws exception !", x);	 		
 	 	}
 		
 		if (f_class.PROFILE_COMPONENT) {

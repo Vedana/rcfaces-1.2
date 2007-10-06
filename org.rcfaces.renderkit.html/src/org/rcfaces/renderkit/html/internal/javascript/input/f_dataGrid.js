@@ -621,7 +621,7 @@ var __members = {
 			tbody.removeChild(row);
 			rowsPool.f_removeElement(row);
 		
-			this._releaseRow(row);			
+			this.f_releaseRow(row);			
 
 			f_core.VerifyProperties(row);
 			

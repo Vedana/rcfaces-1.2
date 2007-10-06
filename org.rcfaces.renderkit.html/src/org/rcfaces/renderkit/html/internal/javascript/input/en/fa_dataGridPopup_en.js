@@ -11,9 +11,9 @@
 var __resources = {
 	ZERO_RESULT_MESSAGE: "'No result.'",
 	ONE_RESULT_MESSAGE: "'One result.'",
-	MESSAGE: "{rowcount}' results, results from '{first}' to '{last}'.\nPage: '{bpages}",
-	MANY_RESULTS_MESSAGE: "'Results from '{first}'.\n'Page: {bpages}",
-	MANY_RESULTS_MESSAGE2: "'Results from '{first}' to '{last}'.\nPage: '{bpages}",
+	MESSAGE: "{rowcount}' results, pages: '{bpages}",
+	MANY_RESULTS_MESSAGE: "'Pages: '{bpages}",
+	MANY_RESULTS_MESSAGE2: "'Pages: '{bpages}",
 	SEARCH_LABEL: "Search :"	
 }
 

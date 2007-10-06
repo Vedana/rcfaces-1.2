@@ -49,7 +49,7 @@ var __members={
 		
 		if (false) {
 			f_core.AddEventListener(document, "focus", function() {
-				var evt=window.event;
+				var evt=f_core.GetJsEvent(this);
 				
 				var message="Focus: ";
 				
@@ -65,7 +65,7 @@ var __members={
 			});
 			
 			f_core.AddEventListener(document, "blur", function() {
-				var evt=window.event;
+				var evt = f_core.GetJsEvent(this);
 				
 				var message="Blur: ";
 				

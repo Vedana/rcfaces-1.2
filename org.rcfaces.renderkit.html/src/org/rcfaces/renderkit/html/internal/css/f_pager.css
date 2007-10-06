@@ -18,6 +18,7 @@
 	font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif; 
 	text-align: left;
 	vertical-align: baseline;
+	-moz-box-sizing: border-box;
 }
 
 .f_pager_button {

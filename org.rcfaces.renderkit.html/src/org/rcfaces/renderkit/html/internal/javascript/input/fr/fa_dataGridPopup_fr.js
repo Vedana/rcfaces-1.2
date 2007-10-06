@@ -11,9 +11,9 @@
 var __resources = {
 	ZERO_RESULT_MESSAGE: "'Aucune entrée.'",
 	ONE_RESULT_MESSAGE: "'Une entrée.'",
-	MESSAGE: "{rowcount}' entrées, affichage de '{first}' à '{last}'.\nPage: '{bpages}",
-	MANY_RESULTS_MESSAGE: "'Nombre d''entrée indéterminé, affichage à partir de '{first}'.\nPage: '{bpages}",
-	MANY_RESULTS_MESSAGE2: "'Nombre d''entrée indéterminé, affichage de '{first}' à '{last}'.\nPage: '{bpages}",
+	MESSAGE: "{rowcount}' entrées, pages: '{bpages}",
+	MANY_RESULTS_MESSAGE: "'Pages: '{bpages}",
+	MANY_RESULTS_MESSAGE2: "'Pages: '{bpages}",
 	SEARCH_LABEL: "Rechercher :"	
 }
 

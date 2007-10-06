@@ -3098,31 +3098,34 @@ var f_core = {
 	/**
 	 * @method private static
 	 * @param HTMLElement component
-	 * @param String side
+	 * @param String... side
 	 * @return number
 	 */
 	ComputeBorderLength: function(component, side) {
 		var length=0;
 		
-		var margin=f_core.GetCurrentStyleProperty(component, "margin-"+side);
-		if (margin && margin.indexOf("px")>0) {
-			length+=parseInt(margin);
-		}
-	
-		var padding=f_core.GetCurrentStyleProperty(component, "padding-"+side);
-		if (padding && padding.indexOf("px")>0) {
-			length+=parseInt(padding);
-		}
-	
-		var border=f_core.GetCurrentStyleProperty(component, "border-"+side);
-		if (border && border.indexOf("px")>0) {
-			length+=parseInt(border);
-		}
+		for(var i=1;i<arguments.length;i++) {
+			side=arguments[i];
+			
+			var margin=f_core.GetCurrentStyleProperty(component, "margin-"+side);
+			if (margin && margin.indexOf("px")>0) {
+				length+=parseInt(margin);
+			}
 		
+			var padding=f_core.GetCurrentStyleProperty(component, "padding-"+side);
+			if (padding && padding.indexOf("px")>0) {
+				length+=parseInt(padding);
+			}
+		
+			var border=f_core.GetCurrentStyleProperty(component, "border-"+side);
+			if (border && border.indexOf("px")>0) {
+				length+=parseInt(border);
+			}
+		}		
 		return length;
 	},
 	/**
-	 * @method public static
+	 * @method hidden static
  	 * @param optional Object values
 	 * @param optional Document doc
 	 * @return Object  which defines 2 fields: x and y 
@@ -3135,14 +3138,14 @@ var f_core = {
 		}
 		
 		var win;
-		if (doc) {		
-			win=f_core.GetWindow(doc);
-			
-		} else {
+		if (!doc) {
 			doc=document;
 			win=window;
-		}	
-				
+			
+		} else {
+			win=f_core.GetWindow(doc);
+		}
+					
 		if (typeof(win.pageYOffset)=="number") {
 			// Netscape !
 			values.x=win.pageXOffset;
@@ -3150,20 +3153,25 @@ var f_core = {
 			
 			return values;
 		}
-		
+
 		var docElement=doc.documentElement;
-		if (docElement && docElement.clientWidth) {
+		if (docElement && (typeof(doc.compatMode) == "string") &&
+               (doc.compatMode.indexOf("CSS") >= 0) &&
+               (typeof(docElement.scrollTop) == 'number')) {
+
 			values.x=docElement.scrollLeft; 
 			values.y=docElement.scrollTop;
-			
 			return values;
-		}
-		
+        }
+
 		var body=doc.body;
-		values.x=body.scrollLeft; 
-		values.y=body.scrollTop; 
-		
-		return values;
+		if (body && (typeof(body.scrollTop) == "number")) {
+			values.x=body.scrollLeft; 
+			values.y=body.scrollTop; 
+			return values;
+ 		}
+      
+		return null;
 	},
 	/**
 	 * Returns the size of the document.
@@ -4046,7 +4054,8 @@ var f_core = {
 	_IeOnSelectOver: function() {
 		// TODO Il faut résoudre le WINDOW
 
-		var component=window.event.srcElement;
+		var evt = f_core.GetJsEvent(this);
+		var component=evt.srcElement;
 		
 		var selection=document.selection;
 		var textRanges=selection.createRangeCollection();
@@ -4572,6 +4581,7 @@ var f_core = {
 		
 		return getNextAvailable(utabs, -1);
 	},
+
 	/**
 	 *  NE FONCTIONNE pas avec IE
 	 * 
@@ -4579,7 +4589,7 @@ var f_core = {
 	 */
 	ComputePopupPosition: function(popup, positions) {
 		var body=popup.ownerDocument.body;
-		
+			
 		// Ne fonctionne PAS sous IE !
 		
 		var viewSize=f_core.GetViewSize(null, popup.ownerDocument);
@@ -4589,8 +4599,9 @@ var f_core = {
 /*		
 		document.title="bw="+body.clientWidth+" bh="+body.clientHeight+" ww="+window.innerWidth+" wh="+window.innerHeight+" sx="+window.scrollX+" sy="+window.scrollY;
 	*/	
-		bw+=window.scrollX;
-		bh+=window.scrollY;
+		var scrollPosition=f_core.GetScrollOffsets(popup.ownerDocument);
+		bw+=scrollPosition.x;
+		bh+=scrollPosition.y;
 
 		var absPos=f_core.GetAbsolutePosition(popup.offsetParent);
 
@@ -5111,41 +5122,58 @@ var f_core = {
 	 * @return void
 	 */
 	ShowComponent: function(component) {
-
-		var position=f_core.GetAbsolutePosition(component);
-		var size= { width: component.offsetWidth, height: component.offsetHeight };
-					
-		if (f_core.IsGecko()) {
-			size.width+=f_core.ComputeBorderLength(component, "left")+f_core.ComputeBorderLength(component, "right");
-			size.height+=f_core.ComputeBorderLength(component, "top")+f_core.ComputeBorderLength(component, "bottom");
-		}		
+		try {	
+			var position=f_core.GetAbsolutePosition(component);
+			var size= { width: component.offsetWidth, height: component.offsetHeight };
 						
-		var scroll=f_core.GetScrollOffsets(null, component.ownerDocument);
-		var viewSize=f_core.GetViewSize(null, component.ownerDocument);		
-		
-		f_core.Debug(f_core, "ShowComponent: position x="+position.x+" y="+position.y+"  scroll.x="+scroll.x+" scroll.y="+scroll.y+"  view.width="+viewSize.width+" view.height="+viewSize.height);
-		
-		var newScroll= { x: scroll.x, y: scroll.y };
-		
-		if (position.y+size.height>newScroll.y+viewSize.height) {
-			newScroll.y=position.y+size.height-viewSize.height;			
-		}
-		if (position.y<newScroll.y) {
-			newScroll.y=position.y;
-		}
-	
-		if (position.x+size.width>newScroll.x+viewSize.width) {
-			newScroll.x=position.x+size.width-viewSize.width;
-		}
-		if (position.x<newScroll.x) {
-			newScroll.x=position.x;
-		} 
-		
-		if (newScroll.x!=scroll.x || newScroll.y!=scroll.y) {
-		
-			f_core.Debug(f_core, "ShowComponent: x="+newScroll.x+" y="+newScroll.y+"  oldX="+scroll.x+" oldY="+scroll.y);
-						
-			window.scroll(newScroll.x, newScroll.y);
+			if (f_core.IsGecko()) {
+				size.width+=f_core.ComputeBorderLength(component, "left", "right");
+				size.height+=f_core.ComputeBorderLength(component, "top", "bottom");
+			}		
+			
+			for(;;) {			
+				var doc=component.ownerDocument;
+				var scroll=f_core.GetScrollOffsets(null, doc);
+				var viewSize=f_core.GetViewSize(null, doc);		
+				
+				f_core.Debug(f_core, "ShowComponent: position x="+position.x+" y="+position.y+"  scroll.x="+scroll.x+" scroll.y="+scroll.y+"  view.width="+viewSize.width+" view.height="+viewSize.height+"  document='"+doc.location+"'");
+				
+				var newScroll= { x: scroll.x, y: scroll.y };
+				
+				if (position.y+size.height>newScroll.y+viewSize.height) {
+					newScroll.y=position.y+size.height-viewSize.height;			
+				}
+				if (position.y<newScroll.y) {
+					newScroll.y=position.y;
+				}
+			
+				if (position.x+size.width>newScroll.x+viewSize.width) {
+					newScroll.x=position.x+size.width-viewSize.width;
+				}
+				if (position.x<newScroll.x) {
+					newScroll.x=position.x;
+				} 
+				
+				var win=f_core.GetWindow(doc);
+				if (newScroll.x!=scroll.x || newScroll.y!=scroll.y) {
+				
+					f_core.Debug(f_core, "ShowComponent: move scroll x="+newScroll.x+" y="+newScroll.y+"  oldX="+scroll.x+" oldY="+scroll.y);
+								
+					win.scroll(newScroll.x, newScroll.y);
+				}
+				
+				component=win.frameElement
+				if (!component) {
+					return;
+				}
+				
+				var iframePosition=f_core.GetAbsolutePosition(component);
+				position.x+=iframePosition.x;
+				position.y+=iframePosition.y;
+			}
+		} catch (x) {
+			// Un probleme de sécurité ?
+			f_core.Info(f_core, "ShowComponent: can not change scroll position !", x);
 		}
 	},
 	

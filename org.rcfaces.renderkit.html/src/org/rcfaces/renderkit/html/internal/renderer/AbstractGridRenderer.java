@@ -619,7 +619,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         int tableWidth = 0;
         boolean mainComponentScrollable = true;
         if (gridRenderContext.hasScrollBars()) {
-            int w = gridRenderContext.getGridWidth();
+            int w = gridRenderContext.getGridWidth()-2;
 
             if (headerVisible) {
                 htmlWriter.startElement(IHtmlWriter.DIV);
@@ -640,7 +640,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 ICssWriter cssWriter = htmlWriter.writeStyle(32);
 
                 if (gridHeight > 0) {
-                    int gh = gridHeight;
+                    int gh = gridHeight-2; // Border !
                     if (headerVisible) {
                         gh -= getTitleHeight();
                     }
@@ -735,7 +735,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected int getTitleHeight() {
-        return 19;
+        return 20;
     }
 
     protected int encodeFixedHeader(IHtmlWriter htmlWriter,

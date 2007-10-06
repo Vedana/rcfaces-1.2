@@ -650,7 +650,11 @@ f_classLoader.prototype = {
 			return;
 		}
 		
-		var toClean=new Array;
+		// On evite l'empilement des destroys, on les ramene au premier appel !
+
+		var localClean;
+		/* var otherDocumentClean; */
+		
 		for(var i=0;i<objs.length;i++) {
 			var obj=objs[i];
 		
@@ -663,23 +667,71 @@ f_classLoader.prototype = {
 				}
 				
 				pool.splice(j, 1);
-		
-				toClean.push(obj);
+				/*
+				if (obj.tagName && obj.ownerDocument!=document) {
+					// Cas d'une frame !
+					if (!otherDocumentClean) {
+						otherDocumentClean=new Array;
+					}
+					
+					otherDocumentClean.push(obj);
+				} else {
+				*/
+					if (!localClean) {
+						localClean=new Array;
+					}
+			
+					localClean.push(obj);
+				/*
+				}
+				*/
+						
+				f_core.Debug(f_classLoader, "_destroy: Object '"+obj+"' "+obj.tagName+"#"+obj.id+"."+obj.className+"' has been removed from the pool !");
+
 				obj=undefined;
-		
-				f_core.Debug(f_classLoader, "_destroy: Object '"+obj+"' has been removed from the pool !");
 				
 				break;
 			}
 	
 			if (obj) {
-				f_core.Warn(f_classLoader, "_destroy: Object '"+obj+"' is not found into pool, and can not be destroyed !");
+				f_core.Warn(f_classLoader, "_destroy: Object '"+obj+"' "+obj.tagName+"#"+obj.id+"."+obj.className+"' is not found into pool, and can not be destroyed !");
 			}
 		}	
-				
-		if (toClean.length) {
-			f_class.Clean(toClean);
+		
+		/*
+		if (otherDocumentClean) {
+			f_class.Clean(otherDocumentClean);
 		}
+		*/
+		
+		if (!localClean) {
+			// Il n'y a rien a detruire !
+			return;
+		}
+		
+		
+		f_class.Clean(localClean);
+		
+		/*
+		var toClean=this._toClean;
+		if (toClean) {
+			// nous sommes dans un empilement d'appels
+			
+			// On empile nos nouveaux objets AU DEBUT de la liste
+			
+			toClean.unshift.apply(toClean, localClean);
+			return;
+		}
+		
+		for(;toClean.length;) {
+			// On ne peut les retirer que 1 par 1 !
+			// Car si c'est un element complexe, il peut en ajouter d'autres !
+			
+			f_class.Clean(toClean.splice(0, 1));
+		}
+		
+		this._toClean=undefined;
+		*/
 	},
 
 	/**

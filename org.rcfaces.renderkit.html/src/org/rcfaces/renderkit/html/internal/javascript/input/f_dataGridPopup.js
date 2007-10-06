@@ -57,6 +57,8 @@ var __statics = {
 				properties.style+=";height:"+height+"px";
 			}
 		}
+		width-=2;
+		height-=2;
 		
 		if (styleClass) {
 			properties["className"]+=" "+styleClass;
@@ -66,9 +68,7 @@ var __statics = {
 		
 		var divDataGrid=f_core.CreateElement(parent, "div", properties);
 		
-		var headerVisible=f_core.GetBooleanAttribute(divDataGrid, "v:headerVisible", true);
-
-		var vh=height;
+		var headerVisible=f_core.GetBooleanAttribute(dataGridPopup, "v:headerVisible", true);
 		
 		var totalSize=0;						
 		for(var i=0;i<columns.length;i++) {
@@ -90,6 +90,8 @@ var __statics = {
 				"class": "f_grid_dataTitle_scroll",
 				style: "width:"+width+"px;height:"+f_dataGridPopup._TITLE_HEIGHT+"px"
 			});
+			
+			height-=f_dataGridPopup._TITLE_HEIGHT;
 			
 			properties={ 
 				"class": "f_grid_fttitle",
@@ -142,13 +144,11 @@ var __statics = {
 			}
 			
 			f_core.CreateElement(tableTTitle, "tbody");
-			
-			vh-=f_dataGridPopup._TITLE_HEIGHT;
 		}
 				
 		var divDataBody=f_core.CreateElement(divDataGrid, "div", { 
 			"class": "f_grid_dataBody_scroll",
-			style: "width:"+width+"px;height:"+vh+"px"
+			style: "width:"+width+"px;height:"+height+"px"
 		});
 		
 			

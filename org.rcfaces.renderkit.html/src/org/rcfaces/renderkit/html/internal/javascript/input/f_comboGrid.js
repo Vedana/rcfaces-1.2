@@ -535,17 +535,21 @@ var __members = {
 		
 		if (this._focus) {
 			input.value=value;
-			f_core.SelectText(input, value.length);
 			
-			if (focusNext) {
-				var comp=f_core.GetNextFocusableComponent(this);
-				if (comp) {
-					f_core.SetFocus(comp);
-				}	
+			if (!focusNext) {			
+				f_core.SelectText(input, value.length);
 			}
 
 		} else {
 			input.value=this._formattedValue;			
+		}
+		
+		if (focusNext) {
+			var comp=f_core.GetNextFocusableComponent(this);
+			
+			if (comp) {
+				f_core.SetFocus(comp, true);
+			}
 		}
 	},
 	/**
@@ -598,6 +602,8 @@ var __members = {
 	 * @return void
 	 */
 	_verifyKey: function(value) {
+		f_core.Debug(f_comboGrid, "_verifyKey: value="+value);
+		
 		if (this._verifyingKey) {
 			if (this._verifyingKey==value) {
 				return;
@@ -727,6 +733,7 @@ var __members = {
 	 * @return void
 	 */
 	_cancelVerification: function(updateInputStyle) {
+		f_core.Debug(f_comboGrid, "_cancelVerification: updateInputStyle="+updateInputStyle);
 		this.f_clearCommands();
 		
 		var request=this._verifyRequest;

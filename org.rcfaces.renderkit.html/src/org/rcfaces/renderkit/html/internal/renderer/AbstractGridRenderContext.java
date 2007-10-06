@@ -232,12 +232,12 @@ public abstract class AbstractGridRenderContext {
     protected void computeGridSize(ISizeCapability sizeCapability) {
         String width = sizeCapability.getWidth();
         if (width != null) {
-            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 9);
+            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); //9);
         }
 
         String height = sizeCapability.getHeight();
         if (height != null) {
-            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 9);
+            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); //9);
         }
     }
 

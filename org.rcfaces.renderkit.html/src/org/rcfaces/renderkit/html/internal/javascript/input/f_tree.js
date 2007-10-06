@@ -560,13 +560,13 @@ var __members = {
 				var self=this;
 				
 				focus.onbeforeactivate=function() {
-					var evt=window.event;
+					var evt = f_core.GetJsEvent(this);
 					
 					evt.cancelBubble=true;
 				}
 				
 				focus.onbeforedeactivate=function() {
-					var evt=window.event;
+					var evt = f_core.GetJsEvent(this);
 					
 					var next=evt.toElement;
 	

@@ -48,7 +48,7 @@ var __statics={
 		var compositeEntry=this._compositeEntry;
 	
 		if (!evt) {
-			evt = window.event;
+			evt = f_core.GetJsEvent(this);
 		}
 
 		if (compositeEntry.f_getEventLocked(evt, false)) {

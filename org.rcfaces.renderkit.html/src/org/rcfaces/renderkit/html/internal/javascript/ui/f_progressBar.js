@@ -185,8 +185,8 @@ var __members = {
 		}
 	
 		cursorStyle.width=width+"px";
-		if (cursorStyle.visibility!="visible") {
-			cursorStyle.visibility="visible";
+		if (cursorStyle.visibility!="inherit") {
+			cursorStyle.visibility="inherit";
 		}
 	}
 }

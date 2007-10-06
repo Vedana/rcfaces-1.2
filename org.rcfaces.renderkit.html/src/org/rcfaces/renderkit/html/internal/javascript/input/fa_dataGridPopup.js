@@ -21,46 +21,36 @@ var __statics = {
 	_DATAGRID_POPUP_KEY_SCOPE_ID: "#dataGridPopup",
 	
 	/** 
-	 * @field private static final boolean 
-	 */
-	_CACHE_IE_POPUP: false,
-	
-	/** 
 	 * @field private static final String 
 	 */
 	_DEFAULT_VALUE_FORMAT: "{0}",
 	
 	/**
 	 * @method private static
+	 * @param Object dataGridPopup
+	 * @param Object position
+	 * @param number offsetX
+	 * @param number offsetY
+	 * @param function callbackWhenReady
+	 * @return void
 	 */
-	_OpenPopup: function(dataGridPopup, position, offsetX, offsetY) {
+	_OpenPopup: function(dataGridPopup, position, offsetX, offsetY, callbackWhenReady) {
 		f_core.Debug(fa_dataGridPopup, "_OpenPopup: Open popup for dataGridPopup '"+dataGridPopup.id+"'. (popupOpened='"+dataGridPopup._popupOpened+"' popup='"+dataGridPopup._popup+"')");
 				
 		var popup=dataGridPopup._popup;
 		if (!popup) {
-			var body=null;
-			
 			if (dataGridPopup._iePopup) {
 				var doc=dataGridPopup.ownerDocument;
 				
-				if (fa_dataGridPopup._CACHE_IE_POPUP) {
-					popup=f_popup.Ie_GetCurrentPopupByKey(doc, dataGridPopup.id);
-				}
-				
-				if (!popup) {
-					if (fa_dataGridPopup._CACHE_IE_POPUP) {				
-						popup=f_popup.Ie_GetPopup(doc, dataGridPopup.id, function() {
-							dataGridPopup.f_destroyComponent();		
-						});
-					} else {
-						popup=f_popup.Ie_GetPopup(doc);
-					}
-				
-					var pdoc=popup.document;
+				f_popup.Ie_GetPopup(doc, f_popup.IE_FRAME_POPUP_TYPE, function(popup, pdoc) {
+		
+					//pdoc.body.innerHTML="";
 					
-					pdoc.body.innerHTML="";
+					popup.style.width=dataGridPopup._popupWidth+"px";
+					popup.style.height=dataGridPopup._popupHeight+"px";
 					
-					body=pdoc.createElement("div");
+					
+					var body=pdoc.createElement("div");
 					body.className="f_dataGridPopup_popup";
 					body.style.visibility="inherit";
 					body.style.position="relative";
@@ -68,42 +58,47 @@ var __statics = {
 					body.style.height=dataGridPopup._popupHeight+"px";
 	
 					pdoc.body.appendChild(body);
-				}
-								
-			} else {
-				popup=dataGridPopup.ownerDocument.createElement("div");
-				popup.className="f_dataGridPopup_popup";
-	
-				popup.onclick=f_core.CancelJsEventHandlerTrue;
-				popup.onmousedown=f_core.CancelJsEventHandlerTrue;
-	
-				body=popup;
+
+					dataGridPopup._popup=popup;
 				
-				var parent=dataGridPopup;
-				for(;;parent=parent.parentNode) {
-					var tagName=parent.tagName.toLowerCase();
-					
-					if (tagName=="input" || tagName=="span" || tagName=="table") {
-						continue;
+					if (body) {
+						body._popupObject=true;
+						dataGridPopup.f_constructDataGrid(body);
 					}
-					break;
-				}
-				
-				//parent.appendChild(popup);
-				
-				parent.ownerDocument.body.appendChild(popup);
-			}
+			
+					fa_dataGridPopup._OpenPopup2(popup, dataGridPopup, position, offsetX, offsetY, callbackWhenReady);	
+				});
+
+				return;
+			}			
+
+			popup=dataGridPopup.ownerDocument.createElement("div");
+			popup.className="f_dataGridPopup_popup";
+			popup.style.width=dataGridPopup._popupWidth+"px";
+			popup.style.height=dataGridPopup._popupHeight+"px";
+
+			popup.onclick=f_core.CancelJsEventHandlerTrue;
+			popup.onmousedown=f_core.CancelJsEventHandlerTrue;
+
+			var body=popup;
+			
+			var parent=dataGridPopup;
+			
+			parent.ownerDocument.body.appendChild(popup);
+
 			dataGridPopup._popup=popup;
 		
 			if (body) {
 				body._popupObject=true;
 				dataGridPopup.f_constructDataGrid(body);
-				
-			} else {
-				//calendar.f_refreshComponent();
 			}
 		}
-
+		
+		fa_dataGridPopup._OpenPopup2(popup, dataGridPopup, position, offsetX, offsetY, callbackWhenReady);	
+	},
+	_OpenPopup2: function(popup, dataGridPopup, position, offsetX, offsetY, callbackWhenReady) {
+		f_core.Debug(fa_dataGridPopup, "_OpenPopup: Open popup for dataGridPopup '"+dataGridPopup.id+"'. (popupOpened='"+dataGridPopup._popupOpened+"' popup='"+dataGridPopup._popup+"')");
+	
 		if (f_popup.RegisterWindowClick({
 				/**
 				 * @method public
@@ -207,6 +202,10 @@ var __statics = {
 		}
 	
 		dataGridPopup._popupOpened=true;
+		
+		if (typeof(callbackWhenReady)=="function") {
+			callbackWhenReady.call(dataGridPopup);
+		}
 	},
 
 	/**
@@ -234,15 +233,24 @@ var __statics = {
 		if (!dataGridPopup._iePopup) {
 			f_popup.Gecko_closePopup(popup);
 
-			if (fa_dataGridPopup._DONT_RELEASE_POPUP==false) {
-				f_popup.Gecko_releasePopup(popup); // A REMETTRE
-			} 
+			window.setTimeout(function() {
+				dataGridPopup._finalizePopup();
+	
+				if (fa_dataGridPopup._DONT_RELEASE_POPUP==false) {
+					f_popup.Gecko_releasePopup(popup); // A REMETTRE
+				} 
+			}, 0);
 			return;
 		}	
 		
 		f_popup.Ie_closePopup(popup);
 
-		f_popup.Ie_releasePopup(popup);
+		// Il faut quitter la boucle d'evenement !
+		window.setTimeout(function() {
+			dataGridPopup._finalizePopup();
+	
+			f_popup.Ie_releasePopup(popup);
+		}, 0);
 	},
 	/**
 	 * @method private static
@@ -360,30 +368,60 @@ var __members = {
 		this._finalizePopup();
 		
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_finalizePopup: function() {
+		f_core.Debug(fa_dataGridPopup, "_finalizePopup: clear popup !");
 		
-		var searchInput=this._searchInput;
-		if (searchInput) {
-			this._searchInput=undefined; // HtmlInputElement
-
-			searchInput._dataGridPopup=undefined;	
-			searchInput.onkeyup=null;
+		try {
+			var searchInput=this._searchInput;
+			if (searchInput) {
+				this._searchInput=undefined; // HtmlInputElement
+	
+				searchInput._dataGridPopup=undefined;	
+				searchInput.onkeyup=null;
+				
+				f_core.VerifyProperties(searchInput);
+			}
 			
-			f_core.VerifyProperties(searchInput);
-		}
+			var searchIcon=this._searchIcon;
+			if (searchIcon) {
+				this._searchIcon=undefined; // HtmlImageElement
+	
+				searchIcon._dataGridPopup=undefined;	
+				searchIcon.onclick=null;
+				
+				f_core.VerifyProperties(searchIcon);
+			}
+	
+			var dataGrid=this._dataGrid;
+			if (dataGrid) {
+				this._dataGrid=undefined;
 		
-		var searchIcon=this._searchIcon;
-		if (searchIcon) {
-			this._searchIcon=undefined; // HtmlImageElement
-
-			searchIcon._dataGridPopup=undefined;	
-			searchIcon.onclick=null;
-			
-			f_core.VerifyProperties(searchIcon);
+				var parent=dataGrid.parentNode;
+				if (parent) {
+					parent.removeChild(dataGrid);
+				}
+	
+				f_classLoader.Destroy(dataGrid);
+			}
+					
+			var pager=this._pager;
+			if (pager) {
+				this._pager=undefined;
+				
+				var parent=pager.parentNode;
+				if (parent) {
+					parent.removeChild(pager);
+				}
+				
+				f_classLoader.Destroy(pager);
+			}
+		} catch (x) {
+			f_core.Debug(fa_dataGridPopup, "_finalizePopup: error while cleaning popup object", x);
 		}
-
-		this.f_destroyDataGrid();
-		this._destroyPager();		
 	},
 	/**
 	 * @method protected
@@ -392,33 +430,15 @@ var __members = {
 	 */
 	f_constructDataGrid: function(parent) {
 		f_core.Debug(fa_dataGridPopup, "f_constructDataGrid: construct components parent="+parent);
-		
-		this._finalizePopup();
-		/*
-		var dataGrid=this._dataGrid;
-		if (dataGrid && dataGrid.parentNode && dataGrid.ownerDocument==parent.ownerDocument) {
-		//	return dataGrid;
-		// Pas de cache pour l'instant !
-		}
-		
-		if (dataGrid) {
-			this.f_destroyDataGrid(dataGrid);
-		}
-		
-		var pager=this._pager;
-		if (pager) {
-			this._destroyPager(dataGrid);	
-		}
-		*/
 
 		var rows=f_core.GetNumberAttribute(this, "v:rows");
 		var paged=f_core.GetBooleanAttribute(this, "v:paged", true);
 		
 		var hasPager=(rows>0 && paged);
 		
-		var width=this._popupWidth;
-		var height=this._popupHeight;
-		var pagerHeight=(hasPager)?30:0;
+		var width=this._popupWidth-2; /*border */
+		var height=this._popupHeight-2; /*border */
+		var pagerHeight=(hasPager)?(18):0;
 		var inputHeight=20;
 		
 		var dataGridContainer=f_core.CreateElement(parent, "table", {
@@ -431,7 +451,8 @@ var __members = {
 		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");		
 		
 		var tr=f_core.CreateElement(tBodyContainer, "tr", {
-		 	className: "fa_dataGridPopup_search"
+		 	className: "fa_dataGridPopup_search",
+		 	height: inputHeight+4
 		});								
 		
 		var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
@@ -473,37 +494,45 @@ var __members = {
 		this._searchInput=input;
 		input._dataGridPopup=this;
 		input.onkeyup=fa_dataGridPopup._SearchSuggest_onkeyup;
+		this._lastValue="";
+
 		
-		var td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {
-				align: "left", 
-				valign: "middle" });									
+		var cwidth=width-2-2;
 		
-		var cwidth=width;
-		if (f_core.IsInternetExplorer()) {
-			cwidth-=8;
-			height-=18;
+		var cheight=height-2-2-inputHeight-2-2;
+		if (pagerHeight) {
+			cheight-=pagerHeight+2+2;
 		}
+		
+		var td=f_core.CreateElement(tBodyContainer, "tr", {
+			height: cheight+4
+		}, "td", {
+			align: "left", 
+			valign: "middle" 
+		});									
 		
 		dataGrid=f_dataGridPopup.Create(td, 
 			this, 
 			cwidth, 
-			height-pagerHeight-inputHeight, 
+			cheight,
 			f_core.GetAttribute(this, "v:gridStyleClass", "fa_dataGridPopup_grid"));
 		
 		this._dataGrid=dataGrid;
 		
 		if (hasPager) {
-			if (!f_core.GetAttribute(this, "v:message")) {
-				
+
+			if (!f_core.GetAttribute(this, "v:message")) {				
+
 				this.setAttribute("v:message", resourceBundle.f_get("MESSAGE"));
 				this.setAttribute("v:zeroResultMessage", resourceBundle.f_get("ZERO_RESULT_MESSAGE"));			
 				this.setAttribute("v:oneResultMessage", resourceBundle.f_get("ONE_RESULT_MESSAGE"));			
 				this.setAttribute("v:manyResultMessage", resourceBundle.f_get("MANY_RESULTS_MESSAGE"));			
 				this.setAttribute("v:manyResultMessage2", resourceBundle.f_get("MANY_RESULTS_MESSAGE2"));			
-			}
+			}			
 			
-			
-			td=f_core.CreateElement(tBodyContainer, "tr", null, "td", {
+			td=f_core.CreateElement(tBodyContainer, "tr", { 
+				height: pagerHeight+4
+			}, "td", {
 				align: "center", 
 				valign: "middle" });
 			pager=f_pager.Create(td, 
@@ -516,7 +545,7 @@ var __members = {
 				
 		var self=this;
 		dataGrid.f_addEventListener(f_event.SELECTION, function(event) {
-			f_core.Debug(fa_dataGridPopup, "_rowSelectionEvent: selection detail="+event.f_getDetail());
+			f_core.Debug(fa_dataGridPopup, "f_constructDataGrid.SELECTION: selection detail="+event.f_getDetail());
 
 			if (!(event.f_getDetail() & f_event.ACTIVATE_DETAIL)) {
 				return;
@@ -526,41 +555,6 @@ var __members = {
 		});
 		
 		return dataGrid;
-	},
-	/**
-	 * @method protected
-	 */
-	f_destroyDataGrid: function() {
-		var dataGrid=this._dataGrid;
-		if (!dataGrid) {
-			return;
-		}
-		this._dataGrid=undefined;
-
-		var parent=dataGrid.parentNode;
-		if (parent) {
-			parent.removeChild(dataGrid);
-		}
-		
-		f_classLoader.Destroy(dataGrid);
-	},
-	/**
-	 * @method private
-	 * @return void
-	 */
-	_destroyPager: function() {
-		var pager=this._pager;
-		if (!pager) {
-			return;
-		}
-		this._pager=undefined;
-		
-		var parent=pager.parentNode;
-		if (parent) {
-			parent.removeChild(pager);
-		}
-		
-		f_classLoader.Destroy(pager);
 	},
 	/**
 	 * @method hidden
@@ -598,7 +592,7 @@ var __members = {
 	 * @param optional Event jsEvent
 	 * @param optional String text
 	 * @param optional number autoSelect
-	 * @return boolean
+	 * @return void
 	 */
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
 		f_core.Debug(fa_dataGridPopup, "f_openDataGridPopup: jsEvent="+jsEvent+" text='"+text+"' autoSelect="+autoSelect);
@@ -612,12 +606,23 @@ var __members = {
 			// var offsetX=0;
 			// var offsetY=this.offsetHeight;
 			
-			fa_dataGridPopup._OpenPopup(this, this, 0, this.offsetHeight, false); 
+			var self=this;
+			fa_dataGridPopup._OpenPopup(this, this, 0, this.offsetHeight, function() {
+				self._updateDataGridPopup(text);
+			}); 
 		}
-
+		
+		this._updateDataGridPopup(text);
+	},
+	/**
+	 * @method private
+	 * @param optional String text
+	 * @return void
+	 */
+	_updateDataGridPopup: function(text) {
 		var dataGrid=this._dataGrid;
 		if (!dataGrid) {
-			return false;
+			return;
 		}
 		
 		dataGrid.f_setAutoSelection(1);
@@ -628,8 +633,6 @@ var __members = {
 		}
 		
 		dataGrid.f_setFilterProperties(filterProperties); 
-		
-		return true;
 	},
 	/**
 	 * @method private
@@ -699,12 +702,13 @@ var __members = {
 			return;
 		}
 		
-		this.f_closeDataGridPopup(jsEvent);
-
 		var first=selection[0];
 		
 		var array=dataGrid.f_getRowValues(first);
 		var values=dataGrid.f_getRowValuesSet(first);
+
+		this.f_closeDataGridPopup(jsEvent);
+
 		
 		if (values) {
 			for(var name in values) {
@@ -758,8 +762,11 @@ var __members = {
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
-			var direction=(jsEvt.keyCode==f_key.VK_DOWN)?1:-1;
+		case f_key.VK_PAGE_DOWN:
+		case f_key.VK_PAGE_UP:
+			//var direction=(jsEvt.keyCode==f_key.VK_DOWN)?1:-1;
 			
+			//this._dataGrid.f_performKeyDown(jsEvt);
 			// On chosi SANS SELECTIONNER en haut ou en bas du datagrid
 			break;
 

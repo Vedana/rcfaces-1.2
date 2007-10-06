@@ -9,6 +9,19 @@
  * @version $Revision$ $Date$
  */
 var __statics = {
+	 
+	/**
+	 * @field hidden static final number
+	 */
+	IE_POPUP_POPUP_TYPE: 0,
+	 
+	/**
+	 * @field hidden static final number
+	 */
+	IE_FRAME_POPUP_TYPE: 1,
+	 
+
+
 	/**
 	 * @field hidden static final number
 	 */
@@ -76,17 +89,6 @@ var __statics = {
 	/**
 	 * @field private static
 	 */
-	_ClearCallback: undefined,
-	
-	/**
-	 * @field private static
-	 */
-	_PopupKey: undefined,
-	
-	
-	/**
-	 * @field private static
-	 */
 	_KeyProvider: undefined,
 	
 	/**
@@ -115,8 +117,6 @@ var __statics = {
 		f_popup.Component=undefined;  // f_component
 		f_popup._OldContextMenu=undefined; // function
 		// f_popup._Installed=undefined; // boolean
-		f_popup._ClearCallback=undefined; // function
-		// f_popup._PopupKey=undefined; // string
 		f_popup._KeyProvider=undefined; // f_component
 	},
 	/**
@@ -126,25 +126,13 @@ var __statics = {
 		return f_core.IsInternetExplorer();
 	},
 	/**
-	 * @method hidden static
-	 */
-	Ie_GetCurrentPopupByKey: function(document, popupKey) {
-		var popup=document._iePopup;
-
-		if (!popup || f_popup._PopupKey!=popupKey) {
-			return null;
-		}
-		
-		return popup;
-	},
-	/**
 	 * @method private static
 	 */
 	_Ie_PreparePopup: function(doc, useIt) {		
 		var popup=doc._iePopup;
 		
 		if (!popup) {
-			popup=f_popup.Ie_CreatePopup(doc);
+			popup=f_popup._Ie_CreatePopup(doc);
 			doc._iePopup=popup;
 		}
 				
@@ -165,22 +153,59 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static
+	 * @param Document doc
+	 * @param number type
+	 * @param function readyFunction
+	 * @return HtmlElement
 	 */
-	Ie_GetPopup: function(doc, popupKey, clearCallback) {
-		f_core.Debug(f_popup, "Ie_GetPopup: Prepare popup form document="+doc);
+	Ie_GetPopup: function(doc, type, readyFunction) {
+		f_core.Debug(f_popup, "Ie_GetPopup: Prepare popup for document="+doc+" type="+type);
+
+		if (type==f_popup.IE_FRAME_POPUP_TYPE) {
+			// En mode frame !
+			
+			var iframe=doc.createElement("IFRAME");
+			iframe.frameBorder = 0;
+			
+			iframe.onreadystatechange=function() {
+				f_core.Debug(f_popup, "Ie_GetPopup.readyStateChange: frame created");
+
+				if (this.readyState != "interactive") {
+					return;
+				}	
+				
+				this.onreadystatechange=null;
+				
+				var pdocument=iframe.contentWindow.document;
+				
+				f_core.CopyStyleSheets(pdocument, doc, pdocument.styleSheets.length);
+
+				var body=pdocument.body;
+				body.topmargin=0;
+				body.leftmargin=0;
+				body.marginheight=0;
+				body.marginwidth=0;
+							
+				body.className="f_popup_iframe_body";			
+				
+				if (typeof(readyFunction)=="function") {
+					readyFunction.call(f_popup, iframe, pdocument);
+				}
+			};
+			
+			iframe.className="f_popup_iframe";
+			
+			document.body.insertBefore(iframe, document.body.firstChild);
+			
+			iframe.src="about:blank";
+			
+			return undefined;
+		}
 
 		var popup=f_popup._Ie_PreparePopup(doc, true);
 		
 		f_core.Assert(popup, "f_popup.Ie_GetPopup: Invalid popup from document="+doc);
 		f_core.Debug(f_popup, "Ie_GetPopup: Prepared popup="+popup);
-		
-		var oldClearCallback=f_popup._ClearCallback;
-		if (typeof(oldClearCallback)=="function") {
-			oldClearCallback.call(popup);
-		}
-
-		f_popup._ClearCallback=clearCallback;
-		f_popup._PopupKey=popupKey;
 
 		var body=popup.document.body;
 		for(;body.firstChild;) {
@@ -188,13 +213,16 @@ var __statics = {
 		}
 
 		f_core.Debug(f_popup, "Ie_GetPopup: Returned popup="+popup);
-
+		
+		if (typeof(readyFunction)=="function") {
+			readyFunction.call(f_popup, popup, popup.document);
+		}
+	
 		return popup;
 	},
-	/**
-	 * @method hidden static
+	/**	 * @method private static
 	 */
-	Ie_CreatePopup: function(doc) {
+	_Ie_CreatePopup: function(doc) {
 		var popup=doc.parentWindow.createPopup();
 				
 		var pdocument=popup.document;
@@ -222,14 +250,16 @@ var __statics = {
 
 		f_core.Debug(f_popup, "RegisterWindowClick: Register callbacks on component='"+component.id+"'.");
 
+		var doc=component.ownerDocument;
+
 		if (!f_popup._OldContextMenu) {
-			var oldContextMenu=document.body.oncontextmenu;
+			var oldContextMenu=doc.body.oncontextmenu;
 			if (!oldContextMenu) {
 				oldContextMenu=f_popup.NO_CONTEXT_POPUP;
 			}
 			f_popup._OldContextMenu=oldContextMenu;
 
-			document.body.oncontextmenu=f_core.CancelJsEventHandler;
+			doc.body.oncontextmenu=f_core.CancelJsEventHandler;
 		}
 		
 		if (!f_popup._LockPopupEvents) {
@@ -277,24 +307,40 @@ var __statics = {
 				keyProvider.f_insertEventListenerFirst(f_event.KEYUP, f_popup._OnKeyUp);
 				keyProvider.f_insertEventListenerFirst(f_event.KEYPRESS, f_popup._OnKeyPress);
 			}
+			
+			if (popup.tagName=="IFRAME") {
+				var body=doc.body;
+				body.onmousedown=f_popup._Ie_OnMouseDown;
+				body.onkeyup=f_popup._OnKeyUpJs;
+				body.onkeydown=f_popup._OnKeyDownJs;
+				body.onkeypress=f_popup._OnKeyPressJs;
+
+				body=popup.contentWindow.document.body;
+				body.onkeyup=f_popup._OnKeyUpJs;
+				body.onkeydown=f_popup._OnKeyDownJs;
+				body.onkeypress=f_popup._OnKeyPressJs;
+
+				//document.body.onfocus=f_popup._Ie_OnMouseFocus;
+			}
+			
 			return true;
 		}
 		
-		document.addEventListener("mousedown", f_popup._OnMouseDown, true);		
-		document.addEventListener("click", f_popup._OnClick, true);		
-		document.addEventListener("dblclick", f_popup._OnClick, true);		
-//		document.addEventListener("blur", f_popup._OnBlur, true);
-		document.addEventListener("focus", f_popup._OnFocus, true);
-		document.addEventListener("keydown", f_popup._OnKeyDownJs, true);
-		document.addEventListener("keyup", f_popup._OnKeyUpJs, true);
-		document.addEventListener("keypress", f_popup._OnKeyPressJs, true);		
-		document.addEventListener("contextmenu", f_popup._OnContextMenu, true);
+		doc.addEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);		
+		doc.addEventListener("click", f_popup._Gecko_OnClick, true);		
+		doc.addEventListener("dblclick", f_popup._Gecko_OnClick, true);		
+//		doc.addEventListener("blur", f_popup._Gecko_OnBlur, true);
+		doc.addEventListener("focus", f_popup._Gecko_OnFocus, true);
+		doc.addEventListener("keydown", f_popup._OnKeyDownJs, true);
+		doc.addEventListener("keyup", f_popup._OnKeyUpJs, true);
+		doc.addEventListener("keypress", f_popup._OnKeyPressJs, true);		
+		doc.addEventListener("contextmenu", f_popup._OnContextMenu, true);
 		return true;
 	},
 	/**
-	 * @method hidden static
+	 * @method private static
 	 */
-	UnlockPopupEvent: function() {	
+	_UnlockPopupEvent: function() {	
 		if (!f_popup._LockPopupEvents) {
 			return;
 		}
@@ -309,9 +355,9 @@ var __statics = {
 	UnregisterWindowClick: function(component) {	
 		f_core.Debug(f_popup, "Unregister callbacks on component='"+component.id+"'.");
 
-		var document=component.ownerDocument;
+		var doc=component.ownerDocument;
 		
-		f_popup.UnlockPopupEvent();
+		f_popup._UnlockPopupEvent();
 
 		var contextMenu=f_popup._OldContextMenu;
 		if (contextMenu) {
@@ -324,7 +370,7 @@ var __statics = {
 				contextMenu=null;
 			}
 			
-			document.body.oncontextmenu=contextMenu;
+			doc.body.oncontextmenu=contextMenu;
 		}
 
 		f_core.Debug(f_popup, "Unregister popup on "+component.id);
@@ -334,6 +380,8 @@ var __statics = {
 		
 		f_popup.Callbacks=undefined;
 		f_popup.Component=undefined;
+		
+		var popup=f_popup.Popup;
 		f_popup.Popup=undefined;
 		
 		if (!f_popup._Installed) {
@@ -349,18 +397,32 @@ var __statics = {
 				keyProvider.f_removeEventListener(f_event.KEYUP, f_popup._OnKeyUp);
 				keyProvider.f_removeEventListener(f_event.KEYPRESS, f_popup._OnKeyPress);		
 			}
+			
+			if (popup.tagName=="IFRAME") {
+				var body=doc.body;				
+				body.onmousedown=null;
+				body.onkeyup=null;
+				body.onkeydown=null;
+				body.onkeypress=null;
+
+				body=popup.contentWindow.document.body;
+				body.onkeyup=null;
+				body.onkeydown=null;
+				body.onkeypress=null;
+			}
+			
 			return;
 		}
 
-		document.removeEventListener("mousedown", f_popup._OnMouseDown, true);
-		document.removeEventListener("click", f_popup._OnClick, true);
-		document.removeEventListener("dblclick", f_popup._OnClick, true);
-//		document.removeEventListener("blur", f_popup._OnBlur, true);
-		document.removeEventListener("focus", f_popup._OnFocus, true);
-		document.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
-		document.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
-		document.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
-		document.removeEventListener("contextmenu", f_popup._OnContextMenu, true);
+		doc.removeEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);
+		doc.removeEventListener("click", f_popup._Gecko_OnClick, true);
+		doc.removeEventListener("dblclick", f_popup._Gecko_OnClick, true);
+//		document.removeEventListener("blur", f_popup._Gecko_OnBlur, true);
+		doc.removeEventListener("focus", f_popup._Gecko_OnFocus, true);
+		doc.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
+		doc.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
+		doc.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
+		doc.removeEventListener("contextmenu", f_popup._OnContextMenu, true);
 	},
 	/**
 	 * @method private static
@@ -380,7 +442,7 @@ var __statics = {
 	 * @param Event evt
 	 * @return boolean
 	 */
-	_OnMouseDown: function(evt) {	
+	_Gecko_OnMouseDown: function(evt) {	
 		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
 
 		var component=f_popup.Component;
@@ -447,11 +509,38 @@ var __statics = {
 		f_core.Debug(f_popup, "IsChildOfDocument: no parent popup => false");
 		return false;
 	},
+	_Ie_OnMouseFocus: function() {
+		alert("FOcus !");
+	},
+	_Ie_OnMouseDown: function() {
+		var evt = f_core.GetJsEvent(this);
+		
+		f_core.Debug(f_popup, "_Ie_OnMouseDown: click on "+this+" fromElement="+evt.srcElement+"/"+evt.srcElement.className);
+		
+		var found=f_popup.IsChildOfDocument(evt.srcElement);
+		f_core.Debug(f_popup, "_Ie_OnMouseDown: search parent="+found);
+
+		if (found) {
+			evt.cancelBubble=true; // On accepte l'evenement, mais on le passe surtout pas au parent !
+			return true;
+		}
+	
+		f_core.Debug(f_popup, "_Ie_OnMouseDown: click outside: close the popup !");
+		var clb=f_popup.Callbacks;
+		f_popup.Callbacks=undefined;
+		
+		var component=f_popup.Component;
+		clb.exit.call(component, evt);		
+		
+		// On Poursuit l'evenement ? finalement OUI, car c'est comme ca sur le bureau Windows !
+	//	evt.cancelBubble=true; // A VERIFIER: On accepte l'evenement, mais on le passe surtout pas au parent !
+		return false;
+	},
 	/**
 	 * @method private static
 	 * @context event:evt
 	 */
-	_OnClick: function(evt) {	
+	_Gecko_OnClick: function(evt) {	
 		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
@@ -468,7 +557,7 @@ var __statics = {
 	 * @method private static
 	 * @context event:evt
 	 */
-	_OnBlur: function(evt) {	
+	_Gecko_OnBlur: function(evt) {	
 		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
 
 /*
@@ -488,12 +577,12 @@ var __statics = {
 	 * @method private static
 	 * @context event:evt
 	 */
-	_OnFocus: function(evt) {
+	_Gecko_OnFocus: function(evt) {
 		if (window._rcfacesExiting) {
 			return;
 		}
 		
-		f_core.Debug(f_popup, "_OnFocus: on "+this+" target="+evt.target+"/"+evt.target.className);
+		f_core.Debug(f_popup, "_Gecko_OnFocus: on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
 			return;
@@ -546,6 +635,9 @@ var __statics = {
 		}
 	
 		var target=evt.target;
+		if (!target) {
+			target=evt.srcElement;
+		}
 		f_core.Debug(f_popup, "_OnKeyDownJs: keyCode="+evt.keyCode+" on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
@@ -586,7 +678,7 @@ var __statics = {
 	 * @return boolean
 	 * @context event:evt
 	 */
-	_OnKeyUp: function(evt) {
+	_OnKeyUp: function(evt) {				
 		return f_popup._OnKeyUpJs(evt._jsEvent);
 	},
 	/**
@@ -608,6 +700,9 @@ var __statics = {
 		}
 	
 		var target=evt.target;
+		if (!target) {
+			target=evt.srcElement;
+		}
 		f_core.Debug(f_popup, "_OnKeyUpJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
@@ -652,6 +747,9 @@ var __statics = {
 		}
 	
 		var target=evt.target;
+		if (!target) {
+			target=evt.srcElement;
+		}
 		f_core.Debug(f_popup, "_OnKeyPressJs["+evt.keyCode+"] on "+this+" component:"+component+" target:"+target);
 		
 		var callbacks=f_popup.Callbacks;
@@ -675,6 +773,10 @@ var __statics = {
 	VerifyLock: function() {
 		if (f_popup.Ie_enablePopup()) {
 			var popup=document._iePopup;
+			
+			if (window._rcfacesIEDivPopup) {
+				return true;
+			}
 			
 			if (popup && !popup.isOpen) {
 				// Ca va pas !
@@ -749,6 +851,13 @@ var __statics = {
 
 		f_core.Debug(f_popup, "Ie_openPopup: open popup '"+popup+"' positionInfos="+positionInfos.position);
 			
+		if (popup.tagName=="IFRAME") {
+			this.Gecko_openPopup(popup, positionInfos);
+			return;
+		}
+		
+		// Positionnement d'un composant Popup
+		
 		var popupDocument=popup.document;
 	
 		popupDocument.hideFocus=true;
@@ -858,6 +967,11 @@ var __statics = {
 	 * @return void
 	 */
 	Ie_closePopup: function(popup) {
+		if (popup.tagName=="IFRAME") {
+			popup.style.visibility="hidden";
+			return;
+		}
+		
 		if (!popup.isOpen) {
 			return;
 		}
@@ -872,6 +986,14 @@ var __statics = {
 	 * @return void
 	 */
 	Ie_releasePopup: function(popup) {
+		if (popup.tagName=="IFRAME") {
+			// On le traite en asynchrone pour des problemes d'evenement en cours de traitement
+			window.setTimeout(function() {
+				popup.parentNode.removeChild(popup);
+			}, 10);
+			return;
+		}
+		
 		try {
 			var body=popup.document.body;
 			for(;body.firstChild;) {
@@ -1017,6 +1139,18 @@ var __statics = {
 	 */
 	GetComponent: function() {
 		return f_popup.Component;
+	}
+}
+
+var __prototype = {
+	
+	/**
+	 * @field private number
+	 */
+	_mode: undefined,
+	
+	f_popup: function(mode) {
+		this._mode=mode;
 	}
 }
 

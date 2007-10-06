@@ -14,11 +14,6 @@ var __statics={
 	 * @field private static final String 
 	 */
 	_CALENDAR_KEY_SCOPE_ID: "#calendarPopup",
-	
-	/** 
-	 * @field private static final boolean 
-	 */
-	_CACHE_IE_POPUP: false,
 
 	/**
 	 * @method private static
@@ -51,9 +46,7 @@ var __statics={
 		f_popup.Ie_closePopup(popup);
 		dateChooser._popupCalendar=undefined;
 		
-		if (!fa_calendarPopup._CACHE_IE_POPUP) {
-			calendar.f_destroyComponent();
-		}
+		calendar.f_destroyComponent();
 	},
 
 	/**
@@ -76,18 +69,8 @@ var __statics={
 			if (dateChooser._iePopup) {
 				var doc=dateChooser.ownerDocument;
 				
-				if (fa_calendarPopup._CACHE_IE_POPUP) {
-					popup=f_popup.Ie_GetCurrentPopupByKey(doc, dateChooser.id);
-				}
-				
 				if (!popup) {
-					if (fa_calendarPopup._CACHE_IE_POPUP) {				
-						popup=f_popup.Ie_GetPopup(doc, dateChooser.id, function() {
-							calendar.f_destroyComponent();		
-						});
-					} else {
-						popup=f_popup.Ie_GetPopup(doc);
-					}
+					popup=f_popup.Ie_GetPopup(doc);
 				
 					var pdoc=popup.document;
 					
@@ -109,16 +92,7 @@ var __statics={
 	
 				body=popup;
 				
-				var parent=dateChooser;
-				for(;;parent=parent.parentNode) {
-					var tagName=parent.tagName.toLowerCase();
-					
-					if (tagName=="input" || tagName=="span") {
-						continue;
-					}
-					break;
-				}
-				
+				var parent=dateChooser;				
 				parent.ownerDocument.body.appendChild(popup);
 			}
 			dateChooser._popupCalendar=popup;

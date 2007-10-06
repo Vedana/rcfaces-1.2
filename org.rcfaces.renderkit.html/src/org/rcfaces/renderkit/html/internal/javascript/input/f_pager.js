@@ -337,161 +337,176 @@ var __members = {
 		
 		var component=this;
 		
-		var children=this.childNodes;
-		if (children) {
-			this._destroyButtons();
-
-			while (this.hasChildNodes()) {
-		    	this.removeChild(this.lastChild);
-			}
+		var oldVisibility=this.style.visibility;
+		if (!oldVisibility) {
+			oldVisibility="inherit";
 		}
+		try {
+			this.style.visibility="hidden";
+			
+			var children=this.childNodes;
+			if (children) {
+				this._destroyButtons();
 	
-		var resourceBundle;
-		var message;
-
-		var rows=dataComponent.f_getRows();
-		var rowCount=dataComponent.f_getRowCount();
-		var first=dataComponent.f_getFirst();
-		var maxRows=dataComponent.f_getMaxRows();
-		var paged=dataComponent.f_isPaged();
-
-		if (rows<1 || !paged) {
-			message=this._noPagedMessage;
-
-		} else {
-			if (rowCount<0) {
-				if (first+rows<maxRows) {
-					message=this._manyMessage2;
-					
-				} else {
-					message=this._manyMessage;
+				while (this.hasChildNodes()) {
+			    	this.removeChild(this.lastChild);
 				}
-				
-			} else if (rowCount==0) {
-				message=this._zeroMessage;
-	
-			} else if (rowCount==1) {
-				message=this._oneMessage;
 			}
-		}
 		
-		if (message==undefined) {
-			message=this._message;
-		}
+			var resourceBundle;
+			var message;
+	
+			var rows=dataComponent.f_getRows();
+			var rowCount=dataComponent.f_getRowCount();
+			var first=dataComponent.f_getFirst();
+			var maxRows=dataComponent.f_getMaxRows();
+			var paged=dataComponent.f_isPaged();
+	
+			if (rows<1 || !paged) {
+				message=this._noPagedMessage;
+	
+			} else {
+				if (rowCount<0) {
+					if (first+rows<maxRows) {
+						message=this._manyMessage2;
+						
+					} else {
+						message=this._manyMessage;
+					}
+					
+				} else if (rowCount==0) {
+					message=this._zeroMessage;
 		
-		f_core.Debug(f_pager, "fa_pagedComponentInitialized: Format message '"+message+"' rows="+rows+" rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
-		
-		var span="";
-		for(var i=0;i<message.length;) {
-			var c=message.charAt(i++);
-			if (c=="{") {
-				var end=message.indexOf("}", i);
-				var varName=message.substring(i, end).toLowerCase();		
-				i=end+1;
-				
-				if (span) {
-					this._appendSpan(this, span);
-					span="";
+				} else if (rowCount==1) {
+					message=this._oneMessage;
 				}
-				
-				if (!resourceBundle) {
-					resourceBundle=f_resourceBundle.Get(f_pager);
-				}
-				
-				var parameter=undefined;
-				var pvar=varName.indexOf(':');
-				if (pvar>=0) {
-					parameter=varName.substring(pvar+1);
-					varName=varName.substring(0, pvar);
-				}
-				
-				switch(varName) {
-				case "first":
-				case "position":
-					this.f_appendFirstValue(component, first+1, "first");
-					
-					break;
-					
-				case "pageposition":
-					if (rows>0) {
-						this.f_appendFirstValue(component, Math.floor(first/rows)+1, "pagePosition");
-					}
-					
-					break;
-					
-				case "last":
-					var last=first+rows;
-					if (rowCount>0 && last>=rowCount) {
-						last=rowCount;
-					} else if (maxRows>0 && last>=maxRows) {
-						last=maxRows;
-					}
-					this.f_appendLastValue(component, last, "last");
-					break;
-					
-				case "rowcount":
-					if (rowCount>=0) {
-						this.f_appendRowCountValue(component, rowCount, "rowCount");
-					}
-					break;
-					
-				case "pagecount":
-					if (rowCount>=0 && rows>0) {
-						this.f_appendRowCountValue(component, Math.floor(((rowCount-1)/rows)+1), "pageCount");
-					}
-					break;
-					
-				case "bfirst":
-					this.f_appendFirstButton(component, first, "first", resourceBundle);
-					break;
-
-				case "bprev":
-					this.f_appendPrevButton(component, first, rows, "prev", resourceBundle);
-					break;
-					
-				case "bnext":		
-					this.f_appendNextButton(component, first, rows, rowCount, maxRows, "next", resourceBundle);
-					break;
-				
-				case "blast":
-					this.f_appendLastButton(component, first, rows, rowCount, maxRows, "last", resourceBundle);
-					break;
-				
-				case "bpages":
-					this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,"goto", resourceBundle, parameter);
-					break;
-					
-				default:
-					f_core.Error(f_pager, "Unknown pager message button '"+varName+"'.");
-				}
-				
-				continue;	
-			} else if (c=="\'") {
-				for(var j=i;;) {
-					var end=message.indexOf("'", j);
-					if (end<0) {
-						span+=message.substring(j);
-						i=message.length;
-						break;
-					}
-							
-					if (message[end+1]=="\'") {
-						span+=message.substring(j, end)+"'";
-						j=end+2;
-						continue;
-					}
-					
-					span+=message.substring(j, end);
-					i=end+1;
-					break;
-				}
-				continue;
 			}
 			
-			span+=c;
+			if (message==undefined) {
+				message=this._message;
+			}
+			
+			f_core.Debug(f_pager, "fa_pagedComponentInitialized: Format message '"+message+"' rows="+rows+" rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
+			
+			var span="";
+			for(var i=0;i<message.length;) {
+				var c=message.charAt(i++);
+				if (c=="{") {
+					var end=message.indexOf("}", i);
+					var varName=message.substring(i, end).toLowerCase();		
+					i=end+1;
+					
+					if (span) {
+						this._appendSpan(this, span);
+						span="";
+					}
+					
+					if (!resourceBundle) {
+						resourceBundle=f_resourceBundle.Get(f_pager);
+					}
+					
+					var parameter=undefined;
+					var pvar=varName.indexOf(':');
+					if (pvar>=0) {
+						parameter=varName.substring(pvar+1);
+						varName=varName.substring(0, pvar);
+					}
+					
+					switch(varName) {
+					case "first":
+					case "position":
+						this.f_appendFirstValue(component, first+1, "first");
+						
+						break;
+						
+					case "pageposition":
+						if (rows>0) {
+							this.f_appendFirstValue(component, Math.floor(first/rows)+1, "pagePosition");
+						}
+						
+						break;
+						
+					case "last":
+						var last=first+rows;
+						if (rowCount>0 && last>=rowCount) {
+							last=rowCount;
+						} else if (maxRows>0 && last>=maxRows) {
+							last=maxRows;
+						}
+						this.f_appendLastValue(component, last, "last");
+						break;
+						
+					case "rowcount":
+						if (rowCount>=0) {
+							this.f_appendRowCountValue(component, rowCount, "rowCount");
+						}
+						break;
+						
+					case "pagecount":
+						if (rowCount>=0 && rows>0) {
+							this.f_appendRowCountValue(component, Math.floor(((rowCount-1)/rows)+1), "pageCount");
+						}
+						break;
+						
+					case "bfirst":
+						this.f_appendFirstButton(component, first, "first", resourceBundle);
+						break;
+	
+					case "bprev":
+						this.f_appendPrevButton(component, first, rows, "prev", resourceBundle);
+						break;
+						
+					case "bnext":		
+						this.f_appendNextButton(component, first, rows, rowCount, maxRows, "next", resourceBundle);
+						break;
+					
+					case "blast":
+						this.f_appendLastButton(component, first, rows, rowCount, maxRows, "last", resourceBundle);
+						break;
+					
+					case "bpages":
+						this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,"goto", resourceBundle, parameter);
+						break;
+						
+					default:
+						f_core.Error(f_pager, "Unknown pager message button '"+varName+"'.");
+					}
+					
+					continue;	
+				} else if (c=="\'") {
+					for(var j=i;;) {
+						var end=message.indexOf("'", j);
+						if (end<0) {
+							span+=message.substring(j);
+							i=message.length;
+							break;
+						}
+								
+						if (message[end+1]=="\'") {
+							span+=message.substring(j, end)+"'";
+							j=end+2;
+							continue;
+						}
+						
+						span+=message.substring(j, end);
+						i=end+1;
+						break;
+					}
+					continue;
+				}
+				
+				span+=c;
+			}
+			
+			if (span) {
+				this._appendSpan(component, span);
+			}
+			
+		} finally {
+			if (oldVisibility) {
+				this.style.visibility=oldVisibility;
+			}
 		}
-		
-		this._appendSpan(component, span);
 	},
 	/**
 	 * @method private

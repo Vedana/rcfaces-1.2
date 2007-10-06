@@ -1,0 +1,23 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_popup
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_popup_iframe {
+	position: absolute;
+	visibility: hidden;
+	z-index: 2000;
+}
+
+.f_popup_iframe_body {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}

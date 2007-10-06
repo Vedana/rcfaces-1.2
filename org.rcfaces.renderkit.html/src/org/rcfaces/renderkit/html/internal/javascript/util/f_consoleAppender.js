@@ -85,7 +85,9 @@ var __statics={
 	 * @method private static
 	 */
 	_ResizeClick: function(evt) {
-		if (!evt) evt = window.event;
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
 			
   		var console=this._console;
 		if (console._closed) {
@@ -133,7 +135,9 @@ var __statics={
 	 * @method private static
 	 */
 	_ResizeCursorDragMove: function(evt) {
- 		if (!evt) evt = window.event;
+ 		if (!evt) {
+ 			evt = f_core.GetJsEvent(this);
+ 		}
  
  	 	var console=window._dragConsole;
  		

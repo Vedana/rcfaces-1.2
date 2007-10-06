@@ -64,17 +64,3 @@
 	background-position: -48px 0;
 	cursor: default;
 }
-
-.f_dataGridPopup_popup {
-	background-color: #F0F0F0;
-	border: 1px solid #8A867A;
-	position: absolute;
-	left: 0;
-	top: 0;
-	margin: 0;
-	padding: 0;
-	display: block;
-	visibility: hidden;
-	cursor: default;
-	overflow: hidden;
-}

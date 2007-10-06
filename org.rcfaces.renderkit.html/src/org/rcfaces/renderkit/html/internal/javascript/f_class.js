@@ -23,7 +23,7 @@ var __statics = {
 	/**
 	 * @field hidden static final boolean
 	 */
-	PROFILE_COMPONENT: true,
+	PROFILE_COMPONENT: false,
 	
 	/**
 	 * @field hidden static final String

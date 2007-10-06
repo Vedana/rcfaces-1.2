@@ -116,6 +116,7 @@ var __statics = {
 		var dataGrid=this._dataGrid;
 
 		f_core.Debug(f_grid, "RowMouseDown: mouse down on row of '"+dataGrid+"'");
+		try {
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -149,8 +150,11 @@ var __statics = {
 				});
 			}
 		}
-			
+	
 		return f_core.CancelJsEvent(evt);
+		}finally {
+			f_core.Debug(f_grid, "RowMouseDown: mouse down on row of '"+dataGrid+"' EXITED");
+		}
 	},
 	/**
 	 * @method protected static
@@ -1264,6 +1268,8 @@ var __members = {
 		
 		this.f_initializeTableLayout();
 		
+		this._tbody.style.visibility="hidden";
+		
 		this._blankImageURL=f_env.GetBlankImageURL();
 			
 		this.f_openActionList(f_event.MOUSEDOWN);
@@ -1297,24 +1303,7 @@ var __members = {
 		}
 
 		var focus;
-		if (false && f_core.IsInternetExplorer()) {
-			if (!this.tabIndex) {
-				this.tabIndex=0;
-			}
-			
-			this.hideFocus=true;
-			this.onfocus=f_grid._Link_onfocus;
-			this.onblur=f_grid._Link_onblur;
-			this.onkeydown=f_grid._Link_onkeydown;
-			this.onkeypress=f_grid._Link_onkeypress;
-			this.onkeyup=f_grid._Link_onkeyup;
-			this.onmousewheel=f_grid._Link_onmousewheel;
-			this._dataGrid=this;
-			
-			this._table.onbeforeactivate=f_core.CancelJsEventHandler;
-			this._scrollBody.onbeforeactivate=f_core.CancelJsEventHandler;
-
-		} else if (f_core.IsGecko()) {
+		if (f_core.IsGecko()) {
 			focus=f_core.GetChildByCssClass(this, "f_grid_dataBody_scroll");
 			
 			if (focus) {
@@ -1360,7 +1349,7 @@ var __members = {
 				
 				var self=this;
 				focus.onbeforedeactivate=function() {
-					var evt=window.event;
+					var evt=f_core.GetJsEvent(this);
 					
 					var next=evt.toElement;
 					
@@ -1451,10 +1440,23 @@ var __members = {
 
 //		this._partialWaiting=undefined; // boolean
 // 		this._loading=undefined; // boolean
-		this._waiting=undefined; // 
+
+		var waiting=this._waiting;
+		if (waiting) {		
+			this._waiting=undefined; // f_waiting
+
+			f_classLoader.Destroy(waiting);
+		}				
+		 
 		this._waitingRow=undefined; // HTMLTrElement
 //		this._waitingLoading=undefined; // boolean
-		this._pagedWaiting=undefined; // 
+
+		var pagedWaiting=this._pagedWaiting;
+		if (pagedWaiting) {		
+			this._pagedWaiting=undefined; // f_waiting
+
+			f_classLoader.Destroy(pagedWaiting);
+		}				
 
 		this._currentSorts=undefined; // HTMLColElement
 //		this._columnCanBeSorted=undefined; // boolean
@@ -1569,6 +1571,9 @@ var __members = {
 //		this._resizable=undefined; // boolean
 
 		this.f_super(arguments);			
+	},
+	f_getFocusableElement: function() {
+		return this._cfocus;
 	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {
@@ -1697,6 +1702,7 @@ var __members = {
 	f_update: function() {
 		var rowCount=this._rowCount;
 		
+		try {
 		if (this._rows>0 && !this._paged) {
 			// Pas de mode page,
 			// On affiche un wait !
@@ -1743,9 +1749,11 @@ var __members = {
 		var menu=this.f_getSubMenuById(f_grid._BODY_MENU_ID);
 		if (menu) {
 			scrollBody.onmousedown=f_grid._BodyMouseDown;
-			scrollBody.onmouseup=f_core.FiltredCancelJsEventHandler;
-			scrollBody.onclick=f_core.FiltredCancelJsEventHandler;
+			scrollBody.onmouseup=f_grid.FiltredCancelJsEventHandler;
+			scrollBody.onclick=f_grid.FiltredCancelJsEventHandler;
 		}					
+
+		this._tbody.style.visibility="inherit";	
 	
 		this.f_performPagedComponentInitialized();
 		
@@ -1760,6 +1768,9 @@ var __members = {
 				f_grid.UpdateTitle(this);
 			}
 			*/
+		}
+		} catch (x) {
+			alert(x.message);
 		}
 	},
 	/**
@@ -2688,6 +2699,7 @@ var __members = {
 	 * @return void
 	 */
 	f_releaseRows: function() {
+		f_core.Debug(f_grid, "f_releaseRows: release all rows");
 		this._cursor=undefined; // HTMLRowElement
 
 		var list=this._rowsPool;
@@ -2698,6 +2710,11 @@ var __members = {
 		
 		this._releaseRow.apply(this, list);
 	},
+	/**
+	 * @method private
+	 * @param HtmlTRElement[] rows
+	 * @return void
+	 */
 	_releaseRow: function() {
 		for(var i=0;i<arguments.length;i++) {
 			var row=arguments[i];
@@ -4676,7 +4693,13 @@ var __members = {
 			additionalRow._parentNode=undefined; // HTMLRowElement
 			additionalRow._row=undefined; // HtmlRowElement
 			additionalRow._dataGrid=undefined; // f_grid
-			additionalRow._waiting=undefined; // f_waiting				
+			
+			var waiting=additionalRow._waiting;
+			if (waiting) {
+				additionalRow._waiting=undefined; // f_waiting
+
+				f_classLoader.Destroy(waiting);
+			}				
 			
 			if (additionalRow.hasChildNodes()) {
 				while (additionalRow.hasChildNodes()) {
