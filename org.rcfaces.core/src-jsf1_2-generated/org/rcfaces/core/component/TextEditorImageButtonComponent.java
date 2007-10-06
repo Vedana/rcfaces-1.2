@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.ImageButtonComponent;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
 
 public class TextEditorImageButtonComponent extends ImageButtonComponent implements 
@@ -17,7 +17,7 @@ public class TextEditorImageButtonComponent extends ImageButtonComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"type","groupName","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"groupName","for","type"}));
 	}
 
 	public TextEditorImageButtonComponent() {

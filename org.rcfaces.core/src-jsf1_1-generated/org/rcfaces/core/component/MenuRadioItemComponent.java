@@ -2,11 +2,11 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
-import javax.faces.el.ValueBinding;
-import java.util.Arrays;
-import org.rcfaces.core.component.MenuCheckItemComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.MenuCheckItemComponent;
+import javax.faces.el.ValueBinding;
 
 /**
  * A menu item with a radiobutton (see attribute GroupName)
@@ -18,7 +18,7 @@ public class MenuRadioItemComponent extends MenuCheckItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(MenuCheckItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"radioValue","groupName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"groupName","radioValue"}));
 	}
 
 	public MenuRadioItemComponent() {

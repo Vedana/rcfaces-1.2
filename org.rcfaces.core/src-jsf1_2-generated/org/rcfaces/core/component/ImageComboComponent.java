@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.convert.Converter;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractMenuComponent;
-import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.convert.Converter;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractMenuComponent;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The imageCombo Component is a <a href="/comps/comboComponent.html">combo Component</a> with an image added to the text.</p>
@@ -36,7 +36,7 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMenuComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","popupRowNumber","showDropDownMark","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","popupRowNumber","showDropDownMark","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 
 	public ImageComboComponent() {
@@ -292,17 +292,17 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public IContentAccessors getImageAccessors() {
-
-
-			return getImageAccessors(null);
-		
-	}
-
 	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
+	}
+
+	public IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
 		
 	}
 

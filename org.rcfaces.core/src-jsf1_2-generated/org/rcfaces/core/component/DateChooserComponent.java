@@ -1,22 +1,22 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import javax.el.ValueExpression;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
+import java.util.Date;
+import org.rcfaces.core.component.capability.IForCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Date;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
+import javax.faces.convert.Converter;
 import org.rcfaces.core.component.AbstractCalendarComponent;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
-import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The dateChooser Component is a button that shows a calendar and help the user to choose a date. It can be associated to a entry field, the choosen date is then automatically entered in the field. It works like an <a href="/comps/imageButtonComponent.html">Image Button Component</a>. The dateChooser Component does <b>not</b> provide an Entry field.</p>
@@ -42,7 +42,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","valueChangeListener","homeDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","textPosition","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","for","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","valueChangeListener","homeDate","readOnly","forValueFormat","border","homeDateLabel","imageURL","disabled","imageWidth"}));
 	}
 
 	public DateChooserComponent() {
@@ -317,17 +317,17 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public IContentAccessors getImageAccessors() {
-
-
-			return getImageAccessors(null);
-		
-	}
-
 	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
+	}
+
+	public IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
 		
 	}
 
