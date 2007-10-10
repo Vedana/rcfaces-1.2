@@ -278,7 +278,7 @@ public class EventsRenderer {
             }
 
             if (last < i) {
-                sa.append(chs, last, i);
+                sa.append(chs, last, i-last);
                 last = i + 1;
             }
 
