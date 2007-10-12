@@ -349,11 +349,14 @@ var __statics = {
 	},
      /**
      * @method public static
-     * @param HTMLElement myWindow a window with the right location
-     * @param string url for the content
-     * @return string fully formed url
+     * @param String url for the content
+     * @param optional Window myWindow a window with the right location
+     * @return String fully formed url
      */
-    ResolveContentUrl: function(myWindow, url) {
+    ResolveContentUrl: function(url, myWindow) {
+    	if (!myWindow) {
+    		myWindow=window;
+    	}
     	f_core.Assert(typeof(myWindow)=="object", "f_env.ResolveContentUrl: Invalid parameter window '"+myWindow+"'."+typeof(myWindow));
     	f_core.Assert(myWindow.location, "f_env.ResolveContentUrl: Invalid parameter window has no location '"+myWindow+"'.");
     	f_core.Assert((typeof(url)=="string"), "f_env.ResolveContentUrl: Invalid parameter url '"+url+"'.");
