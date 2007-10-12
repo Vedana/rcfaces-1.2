@@ -182,10 +182,13 @@ var __members={
 				throw new Error(errorMessage);
 			}
 	
-			var responseContentType=request.f_getResponseContentType();			
-			if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
-		 		this.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+			var responseContentType=request.f_getResponseContentType().toLowerCase();
+			if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
+				var code=f_error.ComputeApplicationErrorCode(request);
 				
+				var content=request.f_getResponse();
+		 		this.f_performErrorEvent(request, code, content);				
+
 				throw new Error("Application error");
 			}
 	
@@ -313,6 +316,8 @@ var __members={
 					
 					var call=false;
 					
+					var applicationError=false;
+					
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
 		
 						content=null;
@@ -327,10 +332,11 @@ var __members={
 						} else {			
 							call=true;
 
-							var responseContentType=request.f_getResponseContentType();
+							var responseContentType=request.f_getResponseContentType().toLowerCase();
 							
-							if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
+							if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
 								// Rien,  etat erreur, le contenu contient les infos de l'erreur
+								applicationError=true;
 							
 							} else if (contentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
 								eval(content);
@@ -355,10 +361,19 @@ var __members={
 							f_core.Error(f_service, "_asyncCallServer.onLoad: Call of callback throws an exception : "+resultCallback+".", x);
 						}
 					}
-										
+					
 					if (subProgressMonitor) {
 						subProgressMonitor.f_done();
-					}			
+					}		
+					
+					if (applicationError) {
+						var code=f_error.ComputeApplicationErrorCode(request);
+						 		
+						if (service.f_performErrorEvent(request, code, content)===false) {
+							loading=undefined;
+							return;
+						}
+					}	
 					
 					if (service.f_processNextCommand()) {
 						loading=true;
@@ -389,8 +404,8 @@ var __members={
 				if (subProgressMonitor) {
 					subProgressMonitor.f_done();
 				}			
-	 			
-	 			if (service.f_fireEvent(f_event.ERROR, null, request, f_error.HTTP_ERROR, null, text)===false) {
+
+				if (service.f_performErrorEvent(request, f_error.HTTP_ERROR, text)===false) {
 					service._loading=undefined;
 					return;
 				}
@@ -423,7 +438,12 @@ var __members={
 		
 		request.f_setAcceptType(ctype);
 		
-		return request.f_doFormRequest(params, progressMonitor);
+		try {
+			return request.f_doFormRequest(params, progressMonitor);
+			
+		} catch (x) {
+			f_core.Debug(f_service, "_sendRequest: Request exception ", x);
+		}
 	},
 	
 	/**

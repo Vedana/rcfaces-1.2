@@ -4614,9 +4614,11 @@ var __members = {
 					ret=false;
 					
 				} else {
-					var responseContentType=request.f_getResponseContentType();
-					if (responseContentType.indexOf(f_error.ERROR_MIME_TYPE)>=0) {
-				 		self.f_performErrorEvent(request, f_error.APPLICATION_ERROR, content);
+					var responseContentType=request.f_getResponseContentType().toLowerCase();
+					if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
+						var code=f_error.ComputeApplicationErrorCode(request);
+				
+				 		self.f_performErrorEvent(request, code, content);
 						ret=false;
 
 					} else if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)<0) {
