@@ -5,13 +5,25 @@
 /**
  * <p><strong>f_waitingShell</strong> represents popup modal window.
  *
- * @class public final f_waitingShell extends f_shell
+ * @class public final f_waitingShell extends f_dialog
  * @author Fred Lefevere-Laoide (latest modification by $Author$)
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
 var __statics = {
-     /**
+ 	
+	/**
+	 * @field private static final
+	 */
+	_DEFAULT_FEATURES: {
+		priority: 0,
+		width: 150,
+		height: 150,
+		styleClass: "f_waitingShell",
+		backgroundMode: f_shell.GREYED_BACKGROUND_MODE
+	},
+ 
+    /**
      * @method public static
      * @return void
      */
@@ -33,9 +45,6 @@ var __members = {
 		this.f_super(arguments, f_shell.TRANSPARENT);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 150));
-			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 150));
-			
 			var imageURL=f_core.GetAttribute(this, "v:imageURL");
 			if (imageURL) {
 				this.f_setImageURL(imageURL);
@@ -46,20 +55,11 @@ var __members = {
 				this.f_setText(text);
 			}
 
-			this.f_setStyleClass(f_core.GetAttribute(this, "v:styleClass", "f_waitingShell"));
-			this.f_setBackgroundMode(f_core.GetAttribute(this, "v:backgroundMode", f_shell.GREYED_BACKGROUND_MODE));
-
 			var self=this;
 			var submitCb=function() {
 				self.f_open();
 			}
 			f_core.AddPostSubmitListener(submitCb);
-
-		} else {
-			this.f_setStyleClass("f_waitingShell");
-			this.f_setBackgroundMode(f_shell.GREYED_BACKGROUND_MODE);
-			this.f_setWidth(150);
-			this.f_setHeight(150);
 		}
 	},
 	/*
@@ -129,7 +129,7 @@ var __members = {
 			return null;
 		}
 		
-		return f_env.ResolveContentUrl(window, this._imageURL);
+		return f_env.ResolveContentUrl(this._imageURL);
 	},
 	/**
 	 *  <p>Sets the image URL.</p>
@@ -169,7 +169,7 @@ var __members = {
 }
 
 new f_class("f_waitingShell", {
-	extend: f_shell,
+	extend: f_dialog,
 	statics: __statics,
 	members: __members
 });

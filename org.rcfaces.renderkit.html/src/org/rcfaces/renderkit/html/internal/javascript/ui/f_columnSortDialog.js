@@ -5,7 +5,7 @@
 /**
  * <p><strong>f_columnSortDialog</strong> represents columns Sort popup modal window.
  *
- * @class public final f_columnSortDialog extends f_dialog
+ * @class public final f_columnSortDialog extends f_shell
  * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -16,7 +16,17 @@ var __statics = {
 	_EVENTS: {
 		selection: f_event.SELECTION
 	},
-	
+		
+	/**
+	 * @field private static final
+	 */
+	_DEFAULT_FEATURES: {
+		width: 250,
+		height: 295,
+		dialogPriority: 0,
+		styleClass: "f_columnSortDialog",
+		backgroundMode: f_shell.LIGHT_GREYED_BACKGROUND_MODE
+	},
 		
 	/**
 	 * Style constant for application modal behavior
@@ -28,12 +38,12 @@ var __statics = {
 	/**
 	 * @field private static final String
 	 */
-	 LIB_ASCENDANT: "ascendant",
+	LIB_ASCENDANT: "ascendant",
 	
 	/**
 	 * @field private static final String
 	 */
-	 LIB_DESCENDANT: "descendant",
+	LIB_DESCENDANT: "descendant",
 	
 	/**
 	 * @field private static final String
@@ -128,7 +138,7 @@ var __statics = {
 			}
 		}
 
-		f_columnSortDialog.UpdateRadioButtons(selects, 0, radios);
+		f_columnSortDialog._UpdateRadioButtons(selects, 0, radios);
 
 		for(var i=1;i<selects.length;i++) { // On debute a la deuxieme combo !
 			// On remplis les selects en essayant de conserver la selection
@@ -148,12 +158,16 @@ var __statics = {
 			}
 			
 			// Remplissage
-			f_columnSortDialog.AddOptions(grid, select, cols, selects, radios, colIndex);
+			f_columnSortDialog._AddOptions(grid, select, cols, selects, radios, colIndex);
 		}
 		
 		return true;
     },
-	AddOptions: function(grid, select, cols, selects, radios, colIndex) {
+    /**
+     * @method private static
+     * @return void
+     */
+	_AddOptions: function(grid, select, cols, selects, radios, colIndex) {
 		f_columnSortDialog.AddOption(select); // Ajoute vide
 		select.selectedIndex = 0;
 		
@@ -164,7 +178,7 @@ var __statics = {
 			}
 		}
 
-		f_columnSortDialog.UpdateRadioButtons(selects, 0, radios);
+		f_columnSortDialog._UpdateRadioButtons(selects, 0, radios);
 		
 		var cnt=0;
 		for (var j = 0; j < cols.length; j++) {				
@@ -201,10 +215,17 @@ var __statics = {
 			select._sort = 1;
 		}
 			
-		f_columnSortDialog.UpdateRadioButtons(selects, i, radios);			
+		f_columnSortDialog._UpdateRadioButtons(selects, i, radios);			
 		
 	},
-	UpdateRadioButtons: function(selects, i, radios) {		
+	/**
+	 * @method private static
+	 * @param Object[] selects
+	 * @param number i
+	 * @param HTMLRadioElement[] radios
+	 * @return void
+	 */
+	_UpdateRadioButtons: function(selects, i, radios) {		
 		if (i>0 && selects[i-1].selectedIndex==0) {
 			radios[i*2].checked=false;
 			radios[i*2].disabled=true;
@@ -240,7 +261,7 @@ var __statics = {
      * @param HTMLDocument docBase document
      * @param HTMLElement selectComp Select
      * @param object column
-     * @return option
+     * @return HTMLOptionElement
      */
     AddOption: function(selectComp, column, columnIndex) {
         var newOpt = selectComp.ownerDocument.createElement("option");
@@ -267,8 +288,8 @@ var __statics = {
 	/**
 	 *  <p>get the columns.</p>
      * @method public static
-     * @param object grid
-     * @return array of visible columns
+     * @param Object grid
+     * @return Array array of visible columns
 	 */
 	GetColumns: function(grid) {
 		if (!grid) {
@@ -322,15 +343,14 @@ var __members = {
 	 * @param grid
 	 */
 	f_columnSortDialog: function(grid) {
-		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE | f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE);
+		this.f_super(arguments, 
+			f_shell.PRIMARY_MODAL_STYLE | 
+			f_shell.TITLE_STYLE | 
+			f_shell.CLOSE_STYLE | 
+			f_shell.COPY_STYLESHEET);
 		
 		this.f_setTitle(f_resourceBundle.Get(f_columnSortDialog).f_get("TITLE"));
 		this._grid=grid;
-		
-		this.f_setWidth(250);
-		this.f_setHeight(295);
-		this.f_setStyleClass("f_columnSortDialog");
-		this.f_setBackgroundMode(f_shell.LIGHT_GREYED_BACKGROUND_MODE);
 	},
 
 	/**
@@ -345,6 +365,13 @@ var __members = {
 		this._cleanInputs();
 
 		this.f_super(arguments);
+	},
+	/**
+	 * @method protected
+	 * @return Object
+	 */
+	f_getDefaultFeatures: function() {
+		return f_columnSortDialog._DEFAULT_FEATURES;
 	},
 	/**
 	 *  <p>draw a message box.
@@ -492,7 +519,7 @@ var __members = {
 			this._createTableRadio(cellCorps, "sort"+j, selectComp);			
 
 			// Remplissage
-			f_columnSortDialog.AddOptions(grid, selectComp, cols, this._selects, this._radios,selectedColIndex);
+			f_columnSortDialog._AddOptions(grid, selectComp, cols, this._selects, this._radios,selectedColIndex);
 			
 			var ligneCorps = docBase.createElement("tr");
 			tbodCorps.appendChild(ligneCorps);
@@ -772,9 +799,9 @@ var __members = {
 	 */
 	_toString: function() {
 		var ts = this.f_super(arguments);
-		ts = ts + "\n[f_columnSortDialog title='"+this._title+"' text='"+this._text+"' defaultValue='"+this._defaultValue+"']";
+		ts += "\n[f_columnSortDialog title='"+this._title+"' text='"+this._text+"' defaultValue='"+this._defaultValue+"']";
 		return ts;
 	}
 }
 
-new f_class("f_columnSortDialog", null, __statics, __members, f_dialog);
+new f_class("f_columnSortDialog", null, __statics, __members, f_shell);

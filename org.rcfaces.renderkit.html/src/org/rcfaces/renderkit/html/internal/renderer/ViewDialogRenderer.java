@@ -45,7 +45,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         }
         String text = component.getText(facesContext);
         if (text != null) {
-            htmlWriter.writeAttribute("v:text", text);
+            htmlWriter.writeAttribute("v:title", text);
         }
         String src = component.getViewURL(facesContext);
         if (src != null) {

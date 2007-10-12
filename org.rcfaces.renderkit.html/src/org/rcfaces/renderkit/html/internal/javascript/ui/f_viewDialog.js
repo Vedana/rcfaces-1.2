@@ -5,10 +5,26 @@
 /**
  * <p><strong>f_viewDialog</strong> represents popup modal view.
  *
- * @class public final f_viewDialog extends f_dialog
- * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
+ * @class public f_viewDialog extends f_dialog
+ * @author Fred Lefevere-Laoide (latest mdialogodification by $Author$)
+ * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
+
+var __statics = {
+	
+	/**
+	 * @field private static final
+	 */
+	_DEFAULT_FEATURES: {
+		width: 500,
+		height: 400,
+		priority: 0,
+		styleClass: "f_viewDialog",
+		backgroundMode: f_shell.GREYED_BACKGROUND_MODE
+	}
+	
+}
 
 var __members = {
 
@@ -33,33 +49,12 @@ var __members = {
 		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE | f_shell.CLOSE_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 500));
-			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 400));
-			
 			this.f_setViewURL(f_core.GetAttribute(this, "v:viewURL", "about:blank"));
 
-			this.f_setStyleClass(f_core.GetAttribute(this, "v:styleClass", "f_viewDialog"));
-			this.f_setBackgroundMode(f_core.GetAttribute(this, "v:backgroundMode", f_shell.GREYED_BACKGROUND_MODE));
-
-			var title=f_core.GetAttribute(this, "v:text");
-			if (title) {
-				this.f_setTitle(title);
-			}
-
-			this.f_setPriority(f_core.GetNumberAttribute(this, "v:dialogPriority", 0));
-			
 			if (f_core.GetBooleanAttribute(this, "v:visible", true)) {
 				this.f_open();
 			}
-			
-		} else {
-			this.f_setCssClassBase("f_viewDialog");
-			this.f_setBackgroundMode(f_shell.GREYED_BACKGROUND_MODE);
-			this.f_setWidth(500);
-			this.f_setHeight(400);
-			this.f_setPriority(0);
-		}
-		
+		}		
 	},
 
 	/*
@@ -72,6 +67,13 @@ var __members = {
 		this._iframe=undefined; // HtmlIFrame
 
 		this.f_super(arguments);		
+	},
+	/**
+	 * @method protected
+	 * @return Object
+	 */
+	f_getDefaultFeatures: function() {
+		return f_viewDialog._DEFAULT_FEATURES;
 	},
 
 	/**
@@ -94,7 +96,7 @@ var __members = {
 	f_setViewURL: function(viewURL) {
     	f_core.Assert((typeof(viewURL)=="string"), "f_shell.f_setViewURL: Invalid parameter '"+viewURL+"'.");
     	
-		this._viewURL = f_env.ResolveContentUrl(window, viewURL);
+		this._viewURL = f_env.ResolveContentUrl(viewURL);
 		
 		if (this._iframe) {
 			this._iframe.src=this.f_getIFrameUrl();
@@ -145,5 +147,6 @@ var __members = {
 
 new f_class("f_viewDialog", {
 	extend: f_dialog,
-	members: __members
+	members: __members,
+	statics: __statics
 });

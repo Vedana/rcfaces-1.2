@@ -265,7 +265,7 @@ var __members = {
 	f_getShellBody: function() {
 		f_core.Assert(this._iframe, "f_shellDecorator.f_getShellBody: Invalid state, iframe is null !");
 
-		return this._shellBody; //_iframe.contentWindow.document.body;
+		return this._shellBody;
 	},
 	f_setDecorationValue: function(key, value) {
 		this._decorationValues[key]=value;
@@ -402,7 +402,7 @@ var __members = {
 
 		var blankImageURL=this._blankImageURL;
 		if (!blankImageURL) {
-			blankImageURL=f_env.ResolveContentUrl(window, f_env.GetBlankImageURL());
+			blankImageURL=f_env.ResolveContentUrl(f_env.GetBlankImageURL());
 			
 			this._blankImageURL=blankImageURL;
 		}

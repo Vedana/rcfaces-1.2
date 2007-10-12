@@ -17,6 +17,17 @@ var __statics = {
 			selection: f_event.SELECTION
 	},
 	
+	/**
+	 * @field private static final
+	 */
+	_DEFAULT_FEATURES: {
+		width: 500,
+		height: 300,
+		dialogPriority: 0,
+		styleClass: "f_messageDialog",
+		backgroundMode: f_shell.GREYED_BACKGROUND_MODE
+	},
+	
     /**
      * @method private static
      * @param Event evt the event
@@ -89,24 +100,13 @@ var __members = {
 		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var title = f_core.GetAttribute(this, "v:title");
-			if (title) {
-				this.f_setTitle(title);
-			}
 			this._text=f_core.GetAttribute(this, "v:text");
 			this._defaultValue=f_core.GetAttribute(this, "v:defaultValue");
-			
-			this.f_setHeight(f_core.GetNumberAttribute(this, "v:height", 300));
-			this.f_setWidth(f_core.GetNumberAttribute(this, "v:width", 500));
-			this.f_setPriority(f_core.GetNumberAttribute(this, "v:dialogPriority", 0));
 			
 			var imageURL=f_core.GetAttribute(this, "v:imageURL");
 			if (imageURL) {
 				this.f_setImageURL(imageURL);
 			}
-			
-			this.f_setStyleClass(f_core.GetAttribute(this, "v:styleClass", "f_messageDialog"));
-			this.f_setBackgroundMode(f_shell.GREYED_BACKGROUND_MODE);
 
 			var events=f_core.GetAttribute(this, "v:events");
 			if (events) {
@@ -119,10 +119,6 @@ var __members = {
 			}
 			this._text=text;
 			this._defaultValue=defaultValue;
-
-			this.f_setPriority(0);
-			this.f_setCssClassBase("f_messageDialog");
-			this.f_setBackgroundMode(f_shell.GREYED_BACKGROUND_MODE);
 		}
 
    		this._actions = new Array();
@@ -145,7 +141,13 @@ var __members = {
 
 		this.f_super(arguments);
 	},
-	
+	/**
+	 * @method protected
+	 * @return Object
+	 */
+	f_getDefaultFeatures: function() {
+		return f_messageDialog._DEFAULT_FEATURES;
+	},
 	/**
 	 *  <p>Return the text.</p>
 	 *
@@ -449,7 +451,7 @@ var __members = {
 			return null;
 		}
 		
-		return f_env.ResolveContentUrl(window, this._imageURL);
+		return f_env.ResolveContentUrl(this._imageURL);
 	},
 	/**
 	 *  <p>Sets the image URL.</p>
@@ -475,4 +477,8 @@ var __members = {
 	}
 }
 
-new f_class("f_messageDialog", null, __statics, __members, f_dialog);
+new f_class("f_messageDialog", {
+	extend: f_dialog,
+	statics: __statics,
+	members: __members
+});
