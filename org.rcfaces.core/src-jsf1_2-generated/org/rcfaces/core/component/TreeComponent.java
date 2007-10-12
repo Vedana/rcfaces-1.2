@@ -1,47 +1,47 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UISelectItem;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.internal.tools.SelectionTools;
-import org.rcfaces.core.internal.tools.TreeTools;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
-import org.rcfaces.core.component.capability.IExpandableCapability;
-import org.rcfaces.core.internal.util.ComponentIterators;
-import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
 import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IExpandableCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.internal.tools.ExpansionTools;
-import org.rcfaces.core.internal.capability.ICheckComponent;
-import org.rcfaces.core.internal.capability.ISelectionComponent;
-import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.IExpandedValuesCapability;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import java.lang.String;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
-import javax.el.ValueExpression;
-import java.util.HashSet;
-import java.util.Arrays;
 import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import javax.faces.component.UISelectItem;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
+import javax.el.ValueExpression;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.capability.ICheckComponent;
+import org.rcfaces.core.component.capability.IExpandedValuesCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import org.rcfaces.core.internal.util.ComponentIterators;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
+import org.rcfaces.core.internal.capability.ISelectionComponent;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The tree Component shows informations in an arborescent view.
@@ -79,15 +79,15 @@ public class TreeComponent extends AbstractInputComponent implements
 	IPreloadedLevelDepthCapability,
 	IExpandableCapability,
 	IExpandedValuesCapability,
-	ICheckComponent,
 	ISelectionComponent,
+	ICheckComponent,
 	IComponentValueTypeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tree";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","defaultDisabledLeafImageURL","checkCardinality","checkable","checkedValues","selectionListener","showValue","defaultLeafImageURL","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","defaultExpandedImageURL","defaultDisabledImageURL","defaultImageURL","clientCheckFullState","doubleClickListener","horizontalScrollPosition","selectedValues","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","expandable"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","selectable","showValue","defaultExpandedLeafImageURL","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","expandable","clientSelectionFullState","checkListener","preloadedLevelDepth","selectionCardinality","readOnly","selectedValues"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -460,17 +460,17 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 
@@ -588,13 +588,6 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
-	public Object getFirstCheckedValue() {
-
-
-			return CheckTools.getFirst(getCheckedValues(), getValue());
-		
-	}
-
 	public int getCheckedValuesCount() {
 
 
@@ -606,6 +599,13 @@ public class TreeComponent extends AbstractInputComponent implements
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
+		
+	}
+
+	public Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 
@@ -786,17 +786,17 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
-	public Object[] listExpandedValues() {
-
-
-			return ExpansionTools.listValues(this, getExpandedValues(), getValue());
-		
-	}
-
 	public int getExpandedValuesCount() {
 
 
 			return ExpansionTools.getCount(this, getExpandedValues());
+		
+	}
+
+	public Object[] listExpandedValues() {
+
+
+			return ExpansionTools.listValues(this, getExpandedValues(), getValue());
 		
 	}
 

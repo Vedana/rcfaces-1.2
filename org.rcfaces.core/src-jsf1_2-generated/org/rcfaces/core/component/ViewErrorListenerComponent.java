@@ -2,12 +2,11 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
 import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.CameliaItemComponent;
-import java.lang.Object;
 import java.util.Map;
+import java.lang.Object;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.Set;
@@ -15,57 +14,31 @@ import java.util.HashSet;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
-/**
- * Technical component, used as a basis for building new RCFaces components.
- */
-public abstract class AbstractItemComponent extends CameliaItemComponent implements 
-	IDisabledCapability,
-	IServerDataCapability,
+public class ViewErrorListenerComponent extends CameliaBaseComponent implements 
 	IClientDataCapability,
-	IServerDataManager,
-	IClientDataManager {
+	IServerDataCapability,
+	IPropertyChangeEventCapability,
+	IErrorEventCapability {
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemComponent.CAMELIA_ATTRIBUTES);
+	public static final String COMPONENT_TYPE="org.rcfaces.core.viewErrorListener";
+
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemDescription","itemLabel","disabled","itemDisabled","itemValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"propertyChangeListener","errorListener"}));
 	}
 
-
-	public void setServerData(String name, ValueExpression value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
+	public ViewErrorListenerComponent() {
+		setRendererType(COMPONENT_TYPE);
 	}
 
-	public void setClientData(String name, ValueExpression value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public void setDisabled(boolean disabled) {
-
-
-			setItemDisabled(disabled);
-			
-	}
-
-	public boolean isDisabled() {
-
-
-			return isItemDisabled();
-			
+	public ViewErrorListenerComponent(String componentId) {
+		this();
+		setId(componentId);
 	}
 
 	public String getClientData(String name, FacesContext facesContext) {
@@ -147,12 +120,58 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 		
 	}
 
-	/**
-	 * Returns <code>true</code> if the attribute "disabled" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isDisabledSetted() {
-		return engine.isPropertySetted(Properties.DISABLED);
+	public Map getClientDataMap() {
+
+
+		return getClientDataMap(null);
+		
+	}
+
+	public int getClientDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+		 
+		 return dataMapAccessor.getDataCount();
+		
+	}
+
+	public String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public String[] listClientDataKeys() {
+
+
+			return listClientDataKeys(null);
+		
+	}
+
+	public String removeClientData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+            
+		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
 	}
 
 	public Object getServerData(String name) {
@@ -214,58 +233,28 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 		
 	}
 
-	public Map getClientDataMap() {
-
-
-		return getClientDataMap(null);
-		
+	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		addFacesListener(listener);
 	}
 
-	public int getClientDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-		 
-		 return dataMapAccessor.getDataCount();
-		
+	public final void removePropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		removeFacesListener(listener);
 	}
 
-	public String getClientData(String name) {
-
-
-		 return getClientData(name, null);
-		
+	public final javax.faces.event.FacesListener [] listPropertyChangeListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
 	}
 
-	public String[] listClientDataKeys() {
-
-
-			return listClientDataKeys(null);
-		
+	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		addFacesListener(listener);
 	}
 
-	public String removeClientData(String name) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		if (dataMapAccessor==null) {
-			return null;
-		}
-            
-		return (String)dataMapAccessor.removeData(name, null);
-		
+	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		removeFacesListener(listener);
 	}
 
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
-		
+	public final javax.faces.event.FacesListener [] listErrorListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
 	protected Set getCameliaFields() {

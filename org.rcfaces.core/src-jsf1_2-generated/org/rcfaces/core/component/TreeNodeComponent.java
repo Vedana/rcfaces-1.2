@@ -1,20 +1,20 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.ExpandableItemComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import java.lang.String;
-import org.rcfaces.core.internal.tools.TreeTools;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import javax.el.ValueExpression;
-import java.util.HashSet;
-import org.rcfaces.core.internal.converter.InputTypeConverter;
+import org.rcfaces.core.component.ExpandableItemComponent;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import java.util.Set;
+import javax.faces.context.FacesContext;
 import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.TreeComponent;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
+import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 
 /**
  * A node belonging to a tree.
@@ -29,7 +29,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"groupName","menuPopupId","inputType","styleClass"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","styleClass","inputType","groupName"}));
 	}
 
 	public TreeNodeComponent() {
