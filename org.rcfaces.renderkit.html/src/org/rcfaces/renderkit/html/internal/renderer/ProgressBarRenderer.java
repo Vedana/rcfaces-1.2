@@ -10,14 +10,11 @@ import org.rcfaces.core.component.ProgressBarComponent;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
-import org.rcfaces.core.internal.renderkit.ISgmlWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -54,22 +51,28 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
         ProgressBarComponent progressBar = (ProgressBarComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
-        IComponentRenderContext componentRenderContext = htmlWriter
-                .getComponentRenderContext();
-
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
-                .getRenderContext();
-
-        String blankImageURL = htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetURI(BLANK_IMAGE_URL, true);
-
-        htmlWriter.startElement(IHtmlWriter.TABLE);
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
         writeProgressBarAttributes(htmlWriter, progressBar);
+
+        htmlWriter.endElement(IHtmlWriter.DIV);
+
+/*
+ 
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
+                .getRenderContext();
+       
+        String blankImageURL = htmlRenderContext.getHtmlProcessContext()
+                .getStyleSheetURI(BLANK_IMAGE_URL, true);
+
+        htmlWriter.startElement(IHtmlWriter.TABLE);
 
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
@@ -124,12 +127,13 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(IHtmlWriter.TBODY);
 
         htmlWriter.endElement(IHtmlWriter.TABLE);
+        */
     }
 
     protected String getWAIRole() {
         return IAccessibilityRoles.PROGRESS_BAR;
     }
-
+/*
     protected String getLeftCellClassName(IHtmlWriter htmlWriter) {
         return getMainStyleClassName() + "_left";
     }
@@ -141,7 +145,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
     protected String getMidCellClassName(IHtmlWriter htmlWriter) {
         return getMainStyleClassName() + "_mid";
     }
-
+*/
     protected void writeProgressBarAttributes(IHtmlWriter htmlWriter,
             ProgressBarComponent progressBar) throws WriterException {
 

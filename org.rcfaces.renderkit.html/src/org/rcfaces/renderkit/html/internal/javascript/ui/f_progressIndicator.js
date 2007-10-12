@@ -96,6 +96,8 @@ var __members = {
 	 * @method hidden
 	 */
 	f_setIndeterminate: function(indeterminate) {
+		f_core.Assert(indeterminate===undefined || typeof(indeterminate)=="boolean", "f_progressIndicator.f_setIndeterminate: Invalid indeterminate parameter '"+indeterminate+"'.");  
+
 		var progressBar=this._progressBar;		
 		if (progressBar) {
 			progressBar.f_setIndeterminate(indeterminate);
@@ -161,6 +163,10 @@ var __members = {
 			
 		}, f_progressIndicator._UPDATE_DELAY);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_updateValues: function() {
 		this._lastUpdate=new Date().getTime();
 		

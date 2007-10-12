@@ -11,8 +11,11 @@
  */
  
 
-TABLE.f_progressBar {
-	border: none;
+.f_progressBar {
+	border: 0;
+	-moz-box-sizing: border-box;
+	-moz-outline-style: none;
+	user-select: none;	
 }
 
 .f_progressBar_left,

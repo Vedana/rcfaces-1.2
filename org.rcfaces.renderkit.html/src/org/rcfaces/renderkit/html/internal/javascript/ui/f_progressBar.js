@@ -10,6 +10,19 @@
  * @version $Revision$ $Date$
  */
 
+var __statics = {
+	/**
+	 * @method public static
+	 * @param HTMLElement parent
+	 * @return void
+	 */
+	Create: function(parent) {
+		var div=f_core.CreateElement(parent, "div", {
+			
+		});
+	}
+}
+
 var __members = {
 	f_progressBar: function() {
 		this.f_super(arguments);
@@ -71,7 +84,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setMin: function(min) {
-		f_core.Assert(typeof(min)=="number", "f_setMin: Min parameter must be a number. ("+min+")");
+		f_core.Assert(typeof(min)=="number", "f_progressBar.f_setMin: Min parameter must be a number. ("+min+")");
 		
 		this._min=min;
 		
@@ -96,7 +109,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setMax: function(max) {
-		f_core.Assert(typeof(max)=="number", "f_setMax: Max parameter must be a number. ("+max+")");
+		f_core.Assert(typeof(max)=="number", "f_progressBar.f_setMax: Max parameter must be a number. ("+max+")");
 		
 		this._max=max;
 		this.f_setProperty(f_prop.MAX, max);
@@ -120,7 +133,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setValue: function(value) {
-		f_core.Assert(typeof(value)=="number", "f_setValue: Value parameter must be a number. ("+value+")");
+		f_core.Assert(typeof(value)=="number", "f_progressBar.f_setValue: Value parameter must be a number. ("+value+")");
 		this._value=value;
 
 		this.f_setProperty(f_prop.VALUE, value);
@@ -135,6 +148,8 @@ var __members = {
 	 * @return void
 	 */
 	f_setIndeterminate: function(indeterminate) {
+		f_core.Assert(typeof(indeterminate)=="boolean", "f_progressBar.f_setIndeterminate: Invalid indeterminate parameter '"+indeterminate+"'.");  
+
 		this._indeterminate=indeterminate;
 	},
 	/** 
@@ -146,6 +161,10 @@ var __members = {
 	f_isIndeterminate: function() {
 		return this._indeterminate;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_updateBar: function() {
 		var min=this._min;
 		var max=this._max;
