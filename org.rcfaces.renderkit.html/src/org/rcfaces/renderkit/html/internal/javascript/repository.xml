@@ -230,6 +230,11 @@
 	
 <!-- Components -->
 	<module id="component" defaultCoreModule="true">
+		<file name="util/f_viewErrorListener.js">
+			<class name="f_viewErrorListener">
+				<required-class name="f_error" />
+			</class>
+		</file>
 		<file name="input/f_focusManager.js">
 			<class name="f_focusManager">
 				<required-class name="f_object" />
