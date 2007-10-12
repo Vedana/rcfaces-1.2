@@ -3,13 +3,16 @@
  */
 package org.rcfaces.core.internal.listener;
 
+import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.service.IApplicationExceptionCapability;
 import org.rcfaces.core.internal.service.IEventReturnValue;
+import org.rcfaces.core.lang.ApplicationException;
 
 /**
  * 
@@ -41,6 +44,21 @@ public abstract class AbstractReturnValueActionListener extends
         if (event instanceof IEventReturnValue) {
             ((IEventReturnValue) event).setReturnValue(ret);
         }
+    }
+
+    protected Exception processException(ELException ex, FacesEvent event) {
+        Throwable cause = ex.getCause();
+
+        if (event instanceof IApplicationExceptionCapability) {
+            if (cause instanceof ApplicationException) {
+                ((IApplicationExceptionCapability) event)
+                        .setApplicationException((ApplicationException) cause);
+                
+                return null;
+            }
+        }
+        
+        return super.processException(ex, event);
     }
 
 }

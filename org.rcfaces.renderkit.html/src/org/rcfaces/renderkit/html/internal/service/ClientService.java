@@ -27,6 +27,7 @@ import org.rcfaces.core.internal.service.AbstractClientService;
 import org.rcfaces.core.internal.service.ClientServiceException;
 import org.rcfaces.core.internal.service.IClientService;
 import org.rcfaces.core.internal.service.IClientServiceRegistry;
+import org.rcfaces.core.lang.ApplicationException;
 import org.rcfaces.core.progressMonitor.IProgressMonitor;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -55,6 +56,8 @@ public class ClientService extends AbstractClientService {
     private static final String REQUEST_ID = "X-Camelia-Request-Id";
 
     private static final String CAMELIA_CONTENT_TYPE = "X-Camelia-Content-Type";
+
+    private static final String CAMELIA_ERROR_CODE = "X-Camelia-Error-Code";
 
     private static final String CAMELIA_PROGRESS_MONITOR = "X-Camelia-ProgressMonitor";
 
@@ -189,8 +192,15 @@ public class ClientService extends AbstractClientService {
         if (syncMode == IClientServiceRegistry.SYNC_MODE) {
             operationsRegistry.startClientService(clientService);
 
-            Object ret = operationsRegistry.waitClientService(clientService,
-                    progressMonitor);
+            Object ret;
+            try {
+                ret = operationsRegistry.waitClientService(clientService,
+                        progressMonitor);
+
+            } catch (ApplicationException ex) {
+                sendClientError(facesContext, ex, processContext, component);
+                return;
+            }
 
             sendResponse(facesContext, ret, progressMonitor, processContext,
                     component);
@@ -199,6 +209,43 @@ public class ClientService extends AbstractClientService {
         }
 
         sendOperationStatus(facesContext, clientService, true);
+    }
+
+    private void sendClientError(FacesContext facesContext,
+            ApplicationException ex, IProcessContext processContext,
+            UIComponent component) {
+
+        HttpServletResponse response = (HttpServletResponse) facesContext
+                .getExternalContext().getResponse();
+
+        AbstractHtmlService.setNoCache(response);
+
+        response.setContentType("x-camelia/error; charset="
+                + AbstractHtmlService.RESPONSE_CHARSET);
+
+        AbstractHtmlService
+                .setCameliaResponse(response, CLIENT_SERVICE_VERSION);
+
+        if (ex.getErrorCode() != 0) {
+            response.setHeader(CAMELIA_ERROR_CODE, String.valueOf(ex
+                    .getErrorCode()));
+        }
+
+        if (ex.getErrorMessage() != null) {
+            response.setHeader(CAMELIA_CONTENT_TYPE, "string");
+
+            try {
+                PrintWriter pw = response.getWriter();
+
+                pw.print(ex.getErrorMessage());
+
+            } catch (IOException ex2) {
+                LOG.error("Can not send error !", ex2);
+            }
+        }
+
+        facesContext.responseComplete();
+
     }
 
     protected void sendResponse(FacesContext facesContext, Object ret,

@@ -12,6 +12,7 @@ import javax.faces.event.FacesListener;
 import org.rcfaces.core.component.ServiceComponent;
 import org.rcfaces.core.event.IServiceEventListener;
 import org.rcfaces.core.event.ServiceEvent;
+import org.rcfaces.core.lang.ApplicationException;
 import org.rcfaces.core.progressMonitor.IProgressMonitor;
 import org.rcfaces.core.progressMonitor.SubProgressMonitor;
 
@@ -64,6 +65,11 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
             serviceEventListener.processServiceEvent(event);
 
             event.endListener(i);
+            
+            ApplicationException applicationException=event.getApplicationException();
+            if (applicationException!=null) {
+                throw applicationException;
+            }
 
             returnValue = event.getReturnValue();
             if (returnValue != null) {
@@ -163,7 +169,8 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
      * @version $Revision$ $Date$
      */
     private static final class ClientServiceEventReturnValue extends
-            ServiceEvent implements IEventReturnValue {
+            ServiceEvent implements IEventReturnValue,
+            IApplicationExceptionCapability {
 
         private static final String REVISION = "$Revision$";
 
@@ -176,6 +183,8 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
         private Object returnValue;
 
         private IProgressMonitor progressMonitor;
+
+        private ApplicationException applicationException;
 
         public ClientServiceEventReturnValue(UIComponent component,
                 Object data, IProgressMonitor progressMonitor, int nbListeners) {
@@ -217,6 +226,15 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
 
         public Object getReturnValue() {
             return returnValue;
+        }
+
+        public ApplicationException getApplicationException() {
+            return applicationException;
+        }
+
+        public void setApplicationException(
+                ApplicationException applicationException) {
+            this.applicationException = applicationException;
         }
 
         protected IProgressMonitor createProgressMonitor() {

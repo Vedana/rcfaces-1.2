@@ -173,21 +173,26 @@ abstract class AbstractActionListener implements StateHolder,
                         + "'.", ex);
             }
 
-            Throwable cause = ex.getCause();
-
-            if (cause instanceof AbortProcessingException) {
-                throw (AbortProcessingException) cause;
-            }
-
-            if (cause instanceof MethodNotFoundException) {
-                return (Exception) cause;
-            }
-            if (cause instanceof NoSuchMethodException) {
-                return (Exception) cause;
-            }
-
-            throw ex;
+            return processException(ex, event);
         }
+    }
+
+    protected Exception processException(ELException ex, FacesEvent event) {
+
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof AbortProcessingException) {
+            throw (AbortProcessingException) cause;
+        }
+
+        if (cause instanceof MethodNotFoundException) {
+            return (Exception) cause;
+        }
+        if (cause instanceof NoSuchMethodException) {
+            return (Exception) cause;
+        }
+
+        throw ex;
     }
 
     private MethodExpression getArgumentsMethodExpression(

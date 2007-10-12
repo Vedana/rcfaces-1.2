@@ -28,7 +28,7 @@ import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
-import org.rcfaces.core.lang.UserFacesException;
+import org.rcfaces.core.lang.ApplicationException;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -128,7 +128,7 @@ public class ItemsService extends AbstractHtmlService {
             filtredItemsRenderer = getFilteredItemsRenderer(facesContext,
                     filterCapability);
 
-        } catch (UserFacesException ex) {
+        } catch (ApplicationException ex) {
             sendJsError(facesContext, ex, componentId);
             return;
         }

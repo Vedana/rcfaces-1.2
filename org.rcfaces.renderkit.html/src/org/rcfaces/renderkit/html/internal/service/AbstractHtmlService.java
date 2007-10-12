@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.service.AbstractService;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
-import org.rcfaces.core.lang.UserFacesException;
+import org.rcfaces.core.lang.ApplicationException;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
@@ -44,14 +44,11 @@ public abstract class AbstractHtmlService extends AbstractService {
 
     private transient boolean useGzip;
 
-    static void sendJsError(FacesContext facesContext, UserFacesException ex,
+    static void sendJsError(FacesContext facesContext, ApplicationException ex,
             String componentId) {
-        String id = ex.getComponentClientId();
-        if (id == null) {
-            id = componentId;
-        }
-        sendJsError(facesContext, id, ex.getMessageCode(), ex.getMessage(), ex
-                .getDetail());
+
+        sendJsError(facesContext, componentId, ex.getErrorCode(), ex
+                .getMessage(), ex.getErrorMessage());
     }
 
     static void sendJsError(FacesContext facesContext,
