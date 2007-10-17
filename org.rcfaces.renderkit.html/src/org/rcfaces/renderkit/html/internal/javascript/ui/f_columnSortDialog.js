@@ -5,7 +5,7 @@
 /**
  * <p><strong>f_columnSortDialog</strong> represents columns Sort popup modal window.
  *
- * @class public final f_columnSortDialog extends f_shell
+ * @class public final f_columnSortDialog extends f_dialog
  * @author Fred Lefevere-Laoide Lefevere-Laoide (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -804,4 +804,4 @@ var __members = {
 	}
 }
 
-new f_class("f_columnSortDialog", null, __statics, __members, f_shell);
+new f_class("f_columnSortDialog", null, __statics, __members, f_dialog);

@@ -412,7 +412,7 @@ var __members = {
 		var mySize=shellDecorator.f_computeTrim(this._width, this._height);
 		
 		// calculate iframe size and position
-		var viewSize=f_shellManager.GetScreenSize();
+		var viewSize=f_core.GetViewSize();
 	
 		var x=0;
 		if (viewSize.width > mySize.width) {

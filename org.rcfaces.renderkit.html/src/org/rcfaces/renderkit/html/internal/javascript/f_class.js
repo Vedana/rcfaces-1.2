@@ -78,7 +78,7 @@ var __statics = {
 			f_core.Assert(cls instanceof f_class, "f_class._Super: Can not find class of object '"+caller+"'\n["+caller.callee+"'\nclass='"+cls+"'\nname='"+name+"' !");
 	
 			var p = cls._parent;
-			if (f_classLoader.MULTI_WINDOW_CLASSLOADER) {
+			if (window._RCFACES_LEVEL3) {
 				// On recherche le parent du bon contexte !
 				p = this._kclass._classLoader.f_getClass(p._name, p._lookId); 
 			}

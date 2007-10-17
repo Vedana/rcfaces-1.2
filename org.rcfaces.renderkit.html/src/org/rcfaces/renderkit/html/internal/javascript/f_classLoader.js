@@ -1033,12 +1033,6 @@ f_classLoader._LOOK="~";
  */
 f_classLoader._EMPTY_ARGUMENTS=[];
 
-
-/**
- * @field hidden static final boolean
- */
-f_classLoader.MULTI_WINDOW_CLASSLOADER=false;
-
 /**
  * @method private static
  * @param String claz

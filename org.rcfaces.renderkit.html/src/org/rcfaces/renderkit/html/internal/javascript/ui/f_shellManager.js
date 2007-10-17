@@ -141,7 +141,7 @@ var __statics = {
  			height: (viewSize.height>docSize.height)?viewSize.height:docSize.height
  		};
  		
- 		document.title="viewSize:"+viewSize.width+","+viewSize.height+"  docSize="+docSize.width+","+docSize.height+"  size="+size.width+","+size.height;
+ 		//document.title="viewSize:"+viewSize.width+","+viewSize.height+"  docSize="+docSize.width+","+docSize.height+"  size="+size.width+","+size.height;
  		
  		return size;
 	},
