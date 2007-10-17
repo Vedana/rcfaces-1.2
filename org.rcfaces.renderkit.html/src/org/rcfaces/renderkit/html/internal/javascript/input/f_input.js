@@ -220,9 +220,17 @@ var __members = {
 		if (input.readOnly == set) {
 			return;
 		}
-		input.readOnly = set;
+	
 		this.f_setProperty(f_prop.READONLY,set);
-		
+		input.readOnly = set;
+				
+		this.f_updateReadOnly();
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateReadOnly: function(set) {	
 		this.f_updateStyleClass();
 	},
 	/**

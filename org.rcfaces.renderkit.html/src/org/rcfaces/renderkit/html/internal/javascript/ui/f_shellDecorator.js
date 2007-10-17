@@ -202,6 +202,7 @@ var __members = {
 		iframe._shell=this._shell;
 
 		iframe.frameBorder = 0;
+		iframe.scrolling="no";
 		
 		var className="f_shellDecorator_frame";
 		if (this._shell._style & f_shell.TRANSPARENT) {
@@ -307,6 +308,28 @@ var __members = {
 		}
 		body.className=className;	
 
+		if (style & f_shell.COPY_STYLESHEET) {
+			// Copie le BASE href
+			
+			var head=shellDocument.head;
+			if (!head) {
+				var root=shellDocument.documentElement;
+				
+				var head=f_core.GetFirstElementByTagName(root, "head");		
+				if (!head) {
+					head=f_core.CreateElement(root, "head");					
+				}
+			}
+						
+			var baseHref=document.baseURI || document.URL;
+			
+			if (!f_core.GetFirstElementByTagName(head, "base")) {
+				f_core.CreateElement(head, "base", {
+					href: baseHref
+				});
+			}
+		}
+		
 		f_core.CopyStyleSheets(shellDocument, document);
 		
 		if (!decoration) {
@@ -402,7 +425,7 @@ var __members = {
 
 		var blankImageURL=this._blankImageURL;
 		if (!blankImageURL) {
-			blankImageURL=f_env.ResolveContentUrl(f_env.GetBlankImageURL());
+			blankImageURL=f_env.GetBlankImageURL();
 			
 			this._blankImageURL=blankImageURL;
 		}

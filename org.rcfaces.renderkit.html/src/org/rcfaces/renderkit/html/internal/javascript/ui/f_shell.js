@@ -148,7 +148,43 @@ var __statics = {
 	/**
 	 * @field private static number
 	 */
-	_ID: 0
+	_ID: 0,
+	
+	/**
+	 * @field public static number
+	 */
+	CREATED_STATUS: 0x00,
+	
+	/**
+	 * @field public static number
+	 */
+	OPENING_STATUS: 0x10,
+	
+	/**
+	 * @field public static number
+	 */
+	OPENED_STATUS: 0x12,
+	
+	/**
+	 * @field public static number
+	 */	
+	CLOSING_STATUS: 0x20,
+	
+	
+	/**
+	 * @field public static number
+	 */
+	CLOSED_STATUS: 0x21,
+	
+	/**
+	 * @field public static number
+	 */
+	DESTROYING_STATUS: 0x30,
+	
+	/**
+	 * @field public static number
+	 */
+	DESTROYED_STATUS: 0x31
 }
 
 var __members = {
@@ -179,6 +215,12 @@ var __members = {
 	 * @field private number
 	 */
 	_priority: 0,
+	
+	
+	/**
+	 * @field private number
+	 */
+	_shellStatus: 0,
 	
 	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
@@ -213,6 +255,15 @@ var __members = {
 	 * @return void
 	 */
 	f_finalize: function() {
+		var shellStatus=this._shellStatus;
+		if (shellStatus!=f_shell.CREATED_STATUS &&
+			shellStatus!=f_shell.DESTROYED_STATUS) {
+			
+			shellStatus=f_shell.DESTROYED_STATUS;
+			
+			this.f_postDestruction();
+		}
+		
 		// this._backgroundMode=undefined; //string
 		// this._imageURL=undefined; //string
 		// this._style=undefined; //number
@@ -348,7 +399,7 @@ var __members = {
 	 * @return void
 	 */
 	f_prepareOpening: function() {
-     	f_core.Debug(f_shell, "f_setupIframe: entering");
+     	f_core.Debug(f_shell, "f_prepareOpening: entering");
 		
 		if (this._height<1) {
 			this._height=f_shell._DEFAULT_HEIGHT;
@@ -456,7 +507,10 @@ var __members = {
 	 * @return void
 	 */
 	f_open: function(returnValueFunction) {
-		f_core.Assert(!this._closing, "f_open: Invalid shell state !");
+		f_core.Assert(
+			this.f_getStatus()!=f_shell.OPENING_STATUS &&
+			this.f_getStatus()!=f_shell.OPENED_STATUS &&
+			this.f_getStatus()!=f_shell.CLOSING_STATUS, "f_open: Invalid shell state ! ("+this._status+")");
 		
 		this._returnValueFunction=returnValueFunction;
 		
@@ -469,11 +523,11 @@ var __members = {
 	 * @return void
 	 */
 	f_close: function(returnValue) {
-		if (this._closing) {
+		if (this.f_getStatus()!=f_shell.OPENED_STATUS) {
 			return;
 		}
-		
-		this._closing=true;
+
+		this.f_setStatus(f_shell.CLOSING_STATUS);
 		
 		var self=this;
 		
@@ -485,7 +539,6 @@ var __members = {
 			self._shellManager.f_closeShell(self, !returnValueFunction);
 			
 			if (!returnValueFunction) {
-				self._closing=undefined;
 				return;
 			}
 			
@@ -497,8 +550,6 @@ var __members = {
 			}
 			
 			self._shellManager.f_closeShell(null, true);
-			
-			self._closing=undefined;
 		}, 0);
 	},
 	f_preConstruct: function() {
@@ -543,7 +594,23 @@ var __members = {
 	 * @return void
 	 */
 	f_setStyleClass: function(styleClass) {
+		f_core.Assert(styleClass===null || typeof(styleClass)=="string", "f_shell.f_setStyleClass: Invalid styleClass parameter ("+styleClass+")");
+
 		this._styleClass=styleClass;
+	},
+	/**
+	 * @method public
+	 */
+	f_getStatus: function() {
+		return this._shellStatus;
+	},
+	/**
+	 * @method hidden
+	 */
+	f_setStatus: function(status) {
+		f_core.Assert(typeof(status)=="number", "f_shell.f_setStatus: Invalid status parameter ("+status+")");
+
+		this._shellStatus=status;
 	},
 	/**
 	 * @method public

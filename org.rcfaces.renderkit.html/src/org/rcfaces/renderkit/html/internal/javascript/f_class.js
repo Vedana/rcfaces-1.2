@@ -14,7 +14,8 @@
  * f_class package
  *
  * @class public final f_class extends Object
- * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @author Joel Merlin
  * @version $Revision$ $Date$
  */
 
@@ -502,7 +503,7 @@ var __statics = {
 			constructor.apply(obj, args);
 		
 		} catch (ex) {
-			f_core.Error(f_class, "Call of constructor of '"+cls._name+"' throws exception ! (id='"+obj.id+"')", ex);
+			f_core.Error(f_class, "Init: Call of constructor of '"+cls._name+"' throws exception ! (id='"+obj.id+"')", ex);
 		
 			throw ex;
 		}

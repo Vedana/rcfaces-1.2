@@ -495,7 +495,6 @@ var __members = {
 		input._dataGridPopup=this;
 		input.onkeyup=fa_dataGridPopup._SearchSuggest_onkeyup;
 		this._lastValue="";
-
 		
 		var cwidth=width-2-2;
 		

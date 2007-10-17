@@ -29,6 +29,7 @@ var __statics = {
      */
     WaitForSubmit: function() {
  		var waitingShell=f_waitingShell.f_newInstance();
+ 		
  		waitingShell.f_open();
 	}
 }

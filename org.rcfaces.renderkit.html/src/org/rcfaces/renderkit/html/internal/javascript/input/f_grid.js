@@ -2346,16 +2346,18 @@ var __members = {
 			this.fa_updateElementStyle(row);
 		}
 		
-		var cols=this._columns;
-		for(var i=0;i<cols.length;i++) {
-			var col=cols[i];
-			
-			if (!col._visibility) {
-				continue;
-			}
-			
-			this._updateTitleStyle(col);
-		}			
+		if (this._headerVisible) {
+			var cols=this._columns;
+			for(var i=0;i<cols.length;i++) {
+				var col=cols[i];
+				
+				if (!col._visibility) {
+					continue;
+				}
+				
+				this._updateTitleStyle(col);
+			}			
+		}
 	},
 	f_onSelect: function(evt) {
 		if (!evt) {

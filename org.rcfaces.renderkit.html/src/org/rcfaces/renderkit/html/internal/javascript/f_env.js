@@ -430,11 +430,13 @@ var __statics = {
 	 * @return String
 	 */
 	GetBlankImageURL: function() {
-		if (f_env._BlankImageURL) {
-			return f_env._BlankImageURL;	
+		var url=f_env._BlankImageURL;
+		if (url) {
+			return url;	
 		}
 		
-		var url=f_env.GetStyleSheetBase()+f_env.BLANK_IMAGE_URL;
+		url=f_env.ResolveContentUrl(f_env.GetStyleSheetBase()+f_env.BLANK_IMAGE_URL);
+		
 		f_env._BlankImageURL=url;
 		
 		f_imageRepository.PrepareImage(url);

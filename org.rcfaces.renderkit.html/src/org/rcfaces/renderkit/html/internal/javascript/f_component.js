@@ -6,7 +6,8 @@
  * f_component class
  *
  * @class f_component extends f_eventTarget, fa_serializable, fa_clientData
- * @author Joel Merlin & Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @author Joel Merlin
  * @version $Revision$ $Date$
  */
  

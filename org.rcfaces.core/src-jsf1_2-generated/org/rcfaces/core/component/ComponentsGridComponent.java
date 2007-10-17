@@ -185,7 +185,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	public Object getFirstSelectedValue() {
 
 
-				return SelectionTools.getFirst(getSelectedValues(), null);
+				return SelectionTools.getFirst(getSelectedValues(), getValue());
 			
 	}
 

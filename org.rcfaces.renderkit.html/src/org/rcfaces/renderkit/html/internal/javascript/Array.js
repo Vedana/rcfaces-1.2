@@ -6,7 +6,7 @@
  * Array class
  *
  * @class public Array
- * @author Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 

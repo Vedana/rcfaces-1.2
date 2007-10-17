@@ -342,6 +342,10 @@
 		<component-class>org.rcfaces.core.component.FocusManagerComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.viewErrorListener</component-type>
+		<component-class>org.rcfaces.core.component.ViewErrorListenerComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.service</component-type>
 		<component-class>org.rcfaces.core.component.ServiceComponent</component-class>
 	</component>

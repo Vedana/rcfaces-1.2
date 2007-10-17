@@ -449,7 +449,7 @@ var __statics = {
 		var set = "["+f_vb._BuildEscaped(sep)+"]";
 		var s = sep.charAt(0);
 		var	sTmp = inVal;
-		var m,y,dd,l,r; //,p
+		var l; //,p
 	
 		// Deal with empty string and required attribute
 		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
@@ -457,11 +457,13 @@ var __statics = {
 		}
 	
 		// Get the day date
-		dd = new Date();
-		m = y = null;
+		var dd = new Date();
+		var m = null;
+		var y = null;
 	
 		// Check if digits only
-		if (r = sTmp.match(/^\d*$/)) {
+		var r = sTmp.match(/^\d*$/);
+		if (r) {
 			switch (l = sTmp.length) {
 				case 6:
 				case 4: y = sTmp.substr(2);
@@ -582,9 +584,13 @@ var __statics = {
 	
 		// Special rules
 		// Force day 0 for month 0
-		if (mm == 0) dd = 0;
+		if (mm == 0) {
+			dd = 0;
+		}
 		// Force month 0 if day 0 and no month specified
-		if (dd == 0 && !m) mm = 0;
+		if (dd == 0 && !m) {
+			mm = 0;
+		}
 	
 		// Compute year between two limits
 		// Compute century
@@ -618,9 +624,13 @@ var __statics = {
 			// Check year against pivot year
 			if (!err) {
 				err = (yyyy>YYYY);
-				if (err && alt) yyyy=alt;
+				if (err && alt) {
+					yyyy=alt;
+				}
 				err = (yyyy>YYYY);
-				if (err) msg = "Année invalide";
+				if (err) {
+					msg = "Année invalide";
+				}
 			}
 			// Check month
 			if (!err) {
@@ -688,7 +698,9 @@ var __statics = {
 				yyyy = alt;
 				err = ((yyyy>YYYY)||(yyyy==YYYY && mm>MM)||(yyyy==YYYY && mm==MM && dd>DD));
 			}
-			if (err) msg = "Date supérieure à la date courante";
+			if (err) {
+				msg = "Date supérieure à la date courante";
+			}
 		}
 	
 		// Build output string
@@ -1042,18 +1054,24 @@ var __statics = {
 				var nbPad = ln - inVal.length;
 				if (nbPad > 0) {
 					var padder = validator.f_getParameter("padder.value", " ");
-					var side = validator.f_getParameter("padder.side", "left");
-					var outVal = "";
-					var padd = "";
+					var leftSide = validator.f_getBooleanParameter("padder.leftSide", true);
+					var modifyInput = validator.f_getBooleanParameter("padder.modifyInput", true);
+					
+					var padd = "";					
 					for (; nbPad>0; nbPad--) {
 						padd += padder;
 					}
-					if (side == "left") {
+					
+					var outVal;
+					if (leftSide) {
 						outVal = padd + inVal;
 					} else {
 						outVal = inVal + padd;
 					}
-					validator.f_setInputValue(outVal);
+					
+					if (modifyInput) {
+						validator.f_setInputValue(outVal);
+					}
 					return outVal;
 				}
 			}

@@ -6,7 +6,8 @@
  * f_core class
  *
  * @class public f_core extends Object
- * @author Olivier Oeuillot + Joel Merlin
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @author Joel Merlin
  * @version $Revision$ $Date$
  */
 var f_core = {
@@ -1229,6 +1230,7 @@ var f_core = {
 			}
 			
 			var textNode=null;
+			var innerHtml=null;
 			if (properties) {
 				for(var name in properties) {
 					var value=properties[name];
@@ -1241,6 +1243,10 @@ var f_core = {
 						
 					case "textnode":
 						textNode=value;
+						break;
+						
+					case "innerhtml":
+						innerHtml=value;
 						break;
 					
 					case "style":
@@ -1255,7 +1261,12 @@ var f_core = {
 						}
 						break;
 					
-					default:					
+					default:	
+						if (!name.indexOf("css")) {
+							element.style[name.substring(3, 4).toLowerCase()+name.substring(4)]=value;
+							break;
+						}
+									
 						element.setAttribute(name, value);
 					}
 				}
@@ -1265,6 +1276,10 @@ var f_core = {
 			
 			if (textNode) {
 				element.appendChild(doc.createTextNode(textNode));
+			}
+			
+			if (innerHtml) {
+				element.innerHTML=innerHtml;
 			}
 			
 			parent=element;
@@ -2009,7 +2024,7 @@ var f_core = {
 			newWindow=null;
 		}
 			
-		if (!newWindow) {
+		if (!newWindow || newWindow.closed) { // Déjà fermé: c'est un popup blocker
 			// Popup Blocker
 			var s=f_env.GetOpenWindowErrorMessage();
 			
@@ -3060,14 +3075,16 @@ var f_core = {
 			var docElement=doc.documentElement;
 			var body=doc.body;
 			
-					
 			if (docElement.clientWidth<docElement.scrollWidth) {
 				values.width=docElement.clientWidth;
 		
 			} else if (body.clientWidth<body.scrollWidth) {
 				// On retire la taille de la scrollbar
 				values.width=body.clientWidth;
-				
+			
+			} else if (win.scrollMaxY) {
+				values.width=body.clientWidth;
+					
 			} else {
 				values.width=win.innerWidth;
 			}
@@ -3077,6 +3094,9 @@ var f_core = {
 		
 			} else if (body.clientHeight<body.scrollHeight) {
 				// On retire la taille de la scrollbar
+				values.height=body.clientHeight;
+			
+			} else if (win.scrollMaxX) {
 				values.height=body.clientHeight;
 				
 			} else {
@@ -3103,21 +3123,30 @@ var f_core = {
 	 */
 	ComputeBorderLength: function(component, side) {
 		var length=0;
+
+		var ie=f_core.IsInternetExplorer();		
 		
 		for(var i=1;i<arguments.length;i++) {
 			side=arguments[i];
+
+			if (ie) {
+				side=side.substring(0, 1).toUpperCase()+side.substring(1);
+				
+			} else {
+				side="-"+side;
+			}
 			
-			var margin=f_core.GetCurrentStyleProperty(component, "margin-"+side);
+			var margin=f_core.GetCurrentStyleProperty(component, "margin"+side);
 			if (margin && margin.indexOf("px")>0) {
 				length+=parseInt(margin);
 			}
 		
-			var padding=f_core.GetCurrentStyleProperty(component, "padding-"+side);
+			var padding=f_core.GetCurrentStyleProperty(component, "padding"+side);
 			if (padding && padding.indexOf("px")>0) {
 				length+=parseInt(padding);
 			}
 		
-			var border=f_core.GetCurrentStyleProperty(component, "border-"+side);
+			var border=f_core.GetCurrentStyleProperty(component, "border"+side);
 			if (border && border.indexOf("px")>0) {
 				length+=parseInt(border);
 			}

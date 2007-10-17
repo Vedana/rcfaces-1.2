@@ -2,6 +2,11 @@
  * $Id$
  */
 
+/**
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
 if (window.f_core) {
 	var m="PANIC: Vedana Faces Library is already loaded !";
 	alert(m);
@@ -15,40 +20,65 @@ if (!window._rcfacesInitLibraryDate) {
 
 var __SYMBOL=function(x) { return x };
 
-var _rcfacesGetWindow=function(th, evt) {
-	if (evt) {
-		if (evt.view) {
-			// Firefox
-			return evt.view;
-		}
-		
-		if (evt.target) {
-			// Firefox
-			return evt.target.ownerDocument.defaultView;
-		}
-		
-		// IE		
-		if (evt.fromElement) {
-			return evt.fromElement.ownerDocument.parentWindow;		
-		}
-		
-		if (evt.toElement) {
-			return evt.toElement.ownerDocument.parentWindow;
-		}
-	}
-	
-	// IE !	
-	
-	if (th.nodeType==9) {
-		// component=document
-		return th.parentWindow;
-	}
-	
-	if (th.ownerDocument) {
-		return th.ownerDocument.parentWindow;
-	}
-	
-	// Component est une window ?
-	return th;
-}
+if (window._RCFACES_LEVEL3) {
+	var _rcfacesGW=function(thiz, evt) {
+		var win;
+		if (evt) {
+			if (evt.view) { // Firefox
+				win=evt.view;
 
+			} else if (evt.target) { // Firefox
+				win=evt.target.ownerDocument.defaultView;
+
+			} else if (evt.fromElement) { // IE
+				win=evt.fromElement.ownerDocument.parentWindow;		
+
+			} else if (evt.toElement) { // IE
+				win=evt.toElement.ownerDocument.parentWindow;
+			}
+		}
+		
+		if (!win) {
+			if (thiz.parentWindow) {
+				// IE !
+				win=thiz.parentWindow;
+				
+			} else if (thiz.defaultView) {
+				win=thiz.defaultView;
+				
+			} else if (thiz.ownerDocument) {
+				win=thiz.ownerDocument.parentWindow;
+	
+			} else if (thiz.frames) {
+				win=thiz;			
+			}
+			
+			if (!win) {
+				throw new Error("Unknown object type !");
+			}
+		}
+		
+		for(var w=win;w;w=w.opener) {
+			try {
+				if (w._rcfacesClassLoader) {
+					return w;
+				}
+			} catch(x) {
+			}			
+		}
+		
+		for(var w=win.top;w;w=w.top) {
+			try {
+				if (w._rcfacesClassLoader) {
+					return w;
+				}
+			} catch(x) {
+			}			
+			if (w.top==w) {
+				break;
+			}
+		}
+		
+		throw new Error("Can not identify the rcfaces window !");
+	}
+}	

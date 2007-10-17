@@ -6,6 +6,8 @@
  * f_clientValidator class
  *
  * @class hidden f_clientValidator extends f_object
+ * @author Olivier Oeuillot
+ * @author Joel Merlin
  */
  
 var __statics = {
@@ -811,6 +813,7 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @return void
 	 */
 	_verifyFirstFocus: function() {
 		if (this._firstApply) {
@@ -839,6 +842,10 @@ var __members = {
 		f_core.Debug(f_clientValidator, "_applyOutputValue: Set value '"+value+"'.");
 		this._input.value=value;
 	},
+	/**
+	 * @method private
+	 * @return boolean
+	 */
 	_applyFilters: function(keyCode, keyChar) {
 		var filters=this._filters;
 		if (!filters) {
@@ -863,6 +870,10 @@ var __members = {
 		
 		return bRet;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_applyProcessors: function(keyCode, shift, ctrl, alt) {
 		var processors=this._processors;
 		if (!processors) {
@@ -884,6 +895,12 @@ var __members = {
 			}
 		}
 	},
+	/**
+	 * @method private
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return number
+	 */
 	_applyTranslators: function(keyCode, keyChar) {
 		var translators=this._translators;
 		if (!translators) {
@@ -891,7 +908,6 @@ var __members = {
 		}
 
 		var component=this.f_getComponent();
-		var params=[ this, keyCode, keyChar ];
 		for (var i=0; i<translators.length; i++) {
 			var t = translators[i];
 			
@@ -900,7 +916,7 @@ var __members = {
 				retCode = f_clientValidator.Translator_generic(this, t, keyCode, keyChar);
 				
 			} else if (t instanceof Function) {
-				retCode = t.apply(component, params);
+				retCode = t.call(component, this, keyCode, keyChar);
 			}
 			
 			if (retCode != keyCode) {
@@ -911,6 +927,10 @@ var __members = {
 
 		return keyCode;
 	},
+	/**
+	 * @method private
+	 * @return String
+	 */
 	_applyCheckers: function(checkVal) {
 		var checkers=this._checkers;
 		
@@ -941,6 +961,10 @@ var __members = {
 		
 		return checkVal;
 	},
+	/**
+	 * @method private
+	 * @return String
+	 */
 	_applyFormatters: function() {
 		var formatters=this._formatters;
 		var formatVal = this.f_getOutputValue();
@@ -967,6 +991,7 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @return String
 	 */
 	_applyBehaviors: function() {
 		var behaviors=this._behaviors;
@@ -1150,6 +1175,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param Object expr A function or a Regexp 
+	 * @return void
 	 */
 	f_addFilter: function(expr) {
 		f_core.Assert(typeof(expr)=="function" || (expr instanceof RegExp), "f_clientValidator.f_addFilter: Filter parameter must be a function or a regexp. ("+expr+")");
@@ -1171,7 +1198,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
-	 * @param function expr
+	 * @param Object expr A function or a Regexp 
 	 * @return void
 	 */
 	f_addProcessor: function(expr) {
@@ -1194,6 +1221,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param Object expr A function or a Regexp 
+	 * @return void
 	 */
 	f_addTranslator: function(expr) {
 		f_core.Assert(typeof(expr)=="function" || (expr instanceof RegExp), "f_clientValidator.f_addTranslator: Translator parameter must be a function or a regexp. ("+expr+")");
@@ -1215,6 +1244,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param function expr 
+	 * @return void
 	 */
 	f_addChecker: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_addChecker: Checker parameter must be a function. ("+expr+")");
@@ -1231,6 +1262,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param function expr 
+	 * @return void
 	 */
 	f_addFormatter: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_addFormatter: Formatter parameter must be a function. ("+expr+")");
@@ -1247,6 +1280,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param function expr 
+	 * @return void
 	 */
 	f_addBehavior: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_addBehavior: Behavior parameter must be a function. ("+expr+")");
@@ -1263,6 +1298,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param function expr 
+	 * @return void
 	 */
 	f_setOnError: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_setOnError: OnError parameter must be a function. ("+expr+")");
@@ -1282,6 +1319,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param function expr 
+	 * @return void
 	 */
 	f_setOnCheckError: function(expr) {
 		f_core.Assert(typeof(expr)=="function", "f_clientValidator.f_setOnCheckError: OnCheckError parameter must be a function. ("+expr+")");

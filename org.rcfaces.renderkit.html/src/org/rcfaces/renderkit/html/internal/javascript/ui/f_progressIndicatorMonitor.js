@@ -11,6 +11,10 @@
  */
  
 var __members={
+	/**
+	 * @method public
+	 * @param fa_progressIndicator progressIndicator
+	 */
 	f_progressIndicatorMonitor: function(progressIndicator) {
 		this.f_super(arguments);
 		
@@ -35,7 +39,7 @@ var __members={
         this._progressIndicator.f_changeValues(-1, taskName, null, true);
     },
     f_done: function() {
- 		this._progressIndicator.f_changeValues(f_progressIndicator.PROGRESS_MAX, null, null, true);
+ 		this._progressIndicator.f_changeValues(f_progressIndicator.PROGRESS_MAX, null, null, true, true);
 	},
 	f_internalWorked: function(work) {
 		//f_core.Debug(f_progressIndicator, "Internal worked="+work+" sum="+this._sumWorked+" total="+this._totalWork);

@@ -162,6 +162,7 @@ var __members = {
 		this._formattedValue=this.f_getInput().value;
 		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
 		this._inputValue=this._selectedValue;
+		this._editable=f_core.GetAttribute(this, "v:editable", true);
 		
 		button._comboGrid=this;
 		button.onmousedown=f_comboGrid._OnButtonMouseDown;
@@ -191,6 +192,7 @@ var __members = {
 		// this._focus=undefined; // boolean
 		// this._selectedValue=undefined; // String
 		// this._verifyingKey=undefined; // boolean
+		// this._editable=undefined; // boolean
 	
 		var button=this._button;
 		if (button) {
@@ -481,7 +483,7 @@ var __members = {
 	 * @method public
 	 * @return String 
 	 */
-	f_getSelectedValue: function() {
+	f_getValue: function() {
 		return this._selectedValue;
 	},
 	/**
@@ -489,22 +491,22 @@ var __members = {
 	 * @param String value
 	 * @return void
 	 */
-	f_setSelectedValue: function(value) {
-		f_core.Assert(value===null || typeof(value)=="string", "f_comboGrid.f_setSelectedValue: Invalid value parameter ("+value+").");
+	f_setValue: function(value) {
+		f_core.Assert(value===null || typeof(value)=="string", "f_comboGrid.f_setValue: Invalid value parameter ("+value+").");
 		
-		if (value!==null) {
-			f_core.Error(f_comboGrid, "f_setSelectedValue: A value different of NULL is not supported yet.");
-		}
-		
-		this._selectedValue=value;		
-		this._inputValue="";
+		this._selectedValue="";		
+		this._inputValue=value;
 		this._formattedValue="";
 		this._keyErrored=undefined;
-		this._verifyingKey=value;
+		this._verifyingKey=undefined;
 
-		this.f_updateInputStyle();			
-				
-		this.f_getInput().value="";
+		this.f_updateInputStyle();
+		
+		this.f_getInput().value=value;
+		
+		if (!this._focus) {
+			this._verifyKey(value);
+		}
 	},
 	/**
 	 * @method protected
@@ -753,7 +755,7 @@ var __members = {
 		// On traite pas le RETURN !
 	},
 	/**
-	 * @method protected
+	 * @method public
 	 * @return number
 	 */
 	f_getSuggestionMinChars: function() {
@@ -765,6 +767,13 @@ var __members = {
 	 */
 	f_getSuggestionDelayMs: function() {
 		return this._suggestionDelayMs;
+	},
+	/**
+	 * @method public
+	 * @return boolean
+	 */
+	f_isEditable: function() {
+		return this._editable;
 	}
 }
 

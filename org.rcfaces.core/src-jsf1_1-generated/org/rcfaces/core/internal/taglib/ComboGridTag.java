@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.component.ComboGridComponent;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.ComboGridComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ComboGridTag extends AbstractGridTag implements Tag {
 
@@ -33,6 +33,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private String oneResultMessage;
 	private String zeroResultMessage;
 	private String maxTextLength;
+	private String editable;
 	private String horizontalScrollPosition;
 	private String verticalScrollPosition;
 	private String filterProperties;
@@ -176,6 +177,14 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.maxTextLength = maxTextLength;
 	}
 
+	public final String getEditable() {
+		return editable;
+	}
+
+	public final void setEditable(String editable) {
+		this.editable = editable;
+	}
+
 	public final String getHorizontalScrollPosition() {
 		return horizontalScrollPosition;
 	}
@@ -290,6 +299,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
 			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
 			LOG.debug("  maxTextLength='"+maxTextLength+"'");
+			LOG.debug("  editable='"+editable+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
@@ -453,6 +463,16 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 			} else {
 				component.setMaxTextLength(getInt(maxTextLength));
+			}
+		}
+
+		if (editable != null) {
+			if (isValueReference(editable)) {
+				ValueBinding vb = application.createValueBinding(editable);
+				component.setValueBinding(Properties.EDITABLE, vb);
+
+			} else {
+				component.setEditable(getBool(editable));
 			}
 		}
 
@@ -652,6 +672,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		oneResultMessage = null;
 		zeroResultMessage = null;
 		maxTextLength = null;
+		editable = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		filterProperties = null;

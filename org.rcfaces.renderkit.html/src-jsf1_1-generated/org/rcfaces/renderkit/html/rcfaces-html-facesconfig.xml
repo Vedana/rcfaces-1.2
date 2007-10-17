@@ -374,6 +374,11 @@
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.viewErrorListener</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ViewErrorListenerRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.service</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ServiceRenderer</renderer-class>
 		</renderer>

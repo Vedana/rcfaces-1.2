@@ -19,6 +19,7 @@ function f_classLoader(win) {
 		// Constructeur vide pour l'héritage
 		return;
 	}
+	
 	f_core.Assert(win, "f_classLoader.f_classLoader: Invalid window parameter ("+win+")");
 	
 	this._window=win;

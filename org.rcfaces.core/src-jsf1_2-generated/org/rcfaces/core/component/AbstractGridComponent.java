@@ -975,24 +975,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public int getFirst() {
-		return getFirst(null);
+	public int getRows() {
+		return getRows(null);
 	}
 
-	public int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	public int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
 	}
 
-	public void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
+	public void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "first" is set.
+	 * Returns <code>true</code> if the attribute "rows" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
+	public boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	public String getVar() {
@@ -1016,24 +1016,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.VAR);
 	}
 
-	public int getRows() {
-		return getRows(null);
+	public int getFirst() {
+		return getFirst(null);
 	}
 
-	public int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	public int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
 	}
 
-	public void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * Returns <code>true</code> if the attribute "first" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
+	public boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	protected Set getCameliaFields() {

@@ -59,6 +59,11 @@ var __statics= {
 	_LOADED_PROGRESS_MONITOR: 1,
 
 	/**
+	 * @field private static final number
+	 */
+	_RUN_PROGRESS_MONITOR: 17,
+
+	/**
 	 * @field private static number
 	 */
 	_Id: 0
@@ -154,8 +159,9 @@ var __members={
 	f_syncCall: function(parameter, progressMonitor) {
 		var requestId=this._allocateRequestId();
 		
-		if (progressMonitor && f_class.IsClassDefined("f_subProgressMonitor")) {
-			progressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, f_service._TOTAL_WORK_PROGRESS_MONITOR);
+		var subProgressMonitor;
+		if (progressMonitor) {
+			subProgressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, f_service._TOTAL_WORK_PROGRESS_MONITOR);
 		}
 		
 		this._setRequestState(requestId, f_service.INIT_STATE);
@@ -165,7 +171,7 @@ var __members={
 		var params=this._prepareRequest(request, requestId, parameter);
 
 		// var ret=
-		this._sendRequest(request, params, progressMonitor);
+		this._sendRequest(request, params, subProgressMonitor);
 		
 		var state= f_service.ERRORED_STATE;
 		try {	
@@ -211,6 +217,10 @@ var __members={
 			
 		} finally {
 			this._setRequestState(requestId, state);
+			
+			if (subProgressMonitor) {
+				subProgressMonitor.f_done();
+			}
 		}
 		
 		return content;
@@ -263,14 +273,16 @@ var __members={
 	 * @method private
 	 * @return void
 	 */
-	_asyncCallServer: function(requestId, resultCallback, parameter, progressMonitor, contentSizePercent) {
+	_asyncCallServer: function(requestId, resultCallback, parameter, progressMonitor, showLoading) {
 		var url=f_env.GetViewURI();
 		var request=new f_httpRequest(this, url);
 		var params=this._prepareRequest(request, requestId, parameter);
 		
 		var subProgressMonitor;
-		if (progressMonitor && f_class.IsClassDefined("f_subProgressMonitor")) {
-			subProgressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, f_service._TOTAL_WORK_PROGRESS_MONITOR);
+		if (progressMonitor) {
+			var total=(showLoading)?f_service._TOTAL_WORK_PROGRESS_MONITOR:1;
+
+			subProgressMonitor=f_subProgressMonitor.f_newInstance(progressMonitor, total);
 		}
 		
 		this._progressing=false;
@@ -283,7 +295,7 @@ var __members={
 			onInit: function(request) {						
 				service._setRequestState(requestId, f_service.REQUESTING_STATE);
 				
-				if (subProgressMonitor) {
+				if (showLoading) {
 					subProgressMonitor.f_work(f_service._INIT_PROGRESS_MONITOR);
 				}
 			},
@@ -298,7 +310,7 @@ var __members={
 							
 				service._setRequestState(requestId, f_service.LOADING_STATE);
 
-				if (subProgressMonitor) {
+				if (showLoading) {
 					subProgressMonitor.f_work(f_service._LOADING_PROGRESS_MONITOR);
 				}
 			},
@@ -306,7 +318,7 @@ var __members={
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (subProgressMonitor) {
+				if (showLoading) {
 					subProgressMonitor.f_work(f_service._LOADED_PROGRESS_MONITOR);
 				}
 
@@ -354,11 +366,21 @@ var __members={
 					service._setRequestState(requestId, state);
 				
 					if (call) {
+						var pm=subProgressMonitor; 
+					
+						if (showLoading) {
+							pm=f_subProgressMonitor.f_newInstance(pm, f_service._RUN_PROGRESS_MONITOR);
+						}						
+						
 						try {
-							resultCallback.call(service, state, parameter, content);
+							resultCallback.call(service, state, parameter, content, pm);
 	
 						} catch (x) {
 							f_core.Error(f_service, "_asyncCallServer.onLoad: Call of callback throws an exception : "+resultCallback+".", x);
+						}
+						
+						if (showLoading) {
+							pm.f_done();
 						}
 					}
 					

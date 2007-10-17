@@ -112,6 +112,7 @@ var __members = {
 
 new f_class("f_dialog", {
 	extend: f_shell,
-	members: __members
+	members: __members,
+	statics: __statics
 });
 

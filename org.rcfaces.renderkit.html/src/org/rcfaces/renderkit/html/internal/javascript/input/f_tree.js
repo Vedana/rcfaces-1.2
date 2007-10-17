@@ -1642,6 +1642,8 @@ var __members = {
 		}
 		
 		if (properties._imageURL) {
+			this._images=true; // C'est peut-etre trop tard ?  en Ajax ! ?
+			
 			this.f_setItemImages(node, 
 				properties._imageURL, 
 				properties._disabledImageURL, 
@@ -1729,9 +1731,8 @@ var __members = {
 	/**
 	 * @method hidden
 	 */
-	f_setItemImages: function() {
-		var atts=0;
-		var node=arguments[atts++];
+	f_setItemImages: function(node) {
+		var atts=1;
 		
 		var imageURL=arguments[atts++];
 		if (imageURL) {
@@ -2356,7 +2357,12 @@ var __members = {
 		
 		throw new Error("Can not find node with value '"+nodeOrValue+"'.");
 	},
-	_setDefaultImages: function() {
+	/**
+	 * @method hidden
+	 * @param String... urls
+	 * @return void
+	 */
+	f_setDefaultImages: function(urls) {
 		var i=0;
 
 		this._images=true;

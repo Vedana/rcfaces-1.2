@@ -77,6 +77,7 @@ public class ComboGridRenderer extends DataGridRenderer {
 
         boolean disabled = comboGridComponent.isDisabled(facesContext);
         boolean readOnly = comboGridComponent.isReadOnly(facesContext);
+        boolean editable = comboGridComponent.isEditable(facesContext);
 
         String classSuffix = null;
         if (disabled) {
@@ -111,6 +112,9 @@ public class ComboGridRenderer extends DataGridRenderer {
         }
         if (gridRenderContext.isPaged() == false) {
             htmlWriter.writeAttribute("v:paged", false);
+        }
+        if (editable == false) {
+            htmlWriter.writeAttribute("v:editable", false);
         }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
@@ -265,7 +269,7 @@ public class ComboGridRenderer extends DataGridRenderer {
         if (disabled) {
             htmlWriter.writeDisabled();
         }
-        if (readOnly) {
+        if (readOnly || editable == false) {
             htmlWriter.writeReadOnly();
         }
 

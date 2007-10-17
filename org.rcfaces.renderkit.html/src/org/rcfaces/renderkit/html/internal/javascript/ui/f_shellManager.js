@@ -46,10 +46,17 @@ var __statics = {
 
 		for (var i=0;i<tags.length;i++) {
 			var tag=tags[i];
-			if (tag._visibility_old === undefined) {
-				tag._visibility_old=tag.style.visibility;
-				tag.style.visibility="hidden";
+			
+			var old=tag._visibility_old;
+			if (old === undefined) {
+				old=tag.style.visibility;
+				if (!old) {
+					old="inherit";
+				}
+				tag._visibility_old=old;
 			}
+
+			tag.style.visibility="hidden";
 		}		
     },
 
@@ -120,26 +127,6 @@ var __statics = {
      	
      	return f_core.CancelJsEvent(evt);
      },
-	/**
-	 * @method private static
-	 * @return void
-	 */
-	_Background_onresize: function() {
-		var shellManager=this._shellManager;
-		
-		//get the greying div
-		var div = this._backgroundElement;
-		if (!div) {
-			return;
-		}
-
-		// Get the document' size
-		var size=f_shellManager.GetOwnDocumentSize();
-		
-		//Modify the size
-		div.style.width=size.width+"px";
-		div.style.height=size.height+"px";
-	},
 	 
 	/**
      * @method public static
@@ -153,6 +140,8 @@ var __statics = {
  			width: (viewSize.width>docSize.width)?viewSize.width:docSize.width, 
  			height: (viewSize.height>docSize.height)?viewSize.height:docSize.height
  		};
+ 		
+ 		document.title="viewSize:"+viewSize.width+","+viewSize.height+"  docSize="+docSize.width+","+docSize.height+"  size="+size.width+","+size.height;
  		
  		return size;
 	},
@@ -214,9 +203,10 @@ var __members = {
 		if (backgroundElement) {
 			this._backgroundElement=undefined; // HtmlDivElement
 
-			backgroundElement._shellManager=undefined; // f_shellManager
-			f_core.RemoveResizeEventListener(backgroundElement, f_shellManager._Background_onresize);
+			backgroundElement._shellManager=undefined; // f_shellManager	
 		}
+		
+		this._removeResizeCallback();
 
 		// Sécurité ! (fuite mémoire IE et Firefox)
 		if (this._modalStyleInstalled) {
@@ -313,13 +303,39 @@ var __members = {
 		
 		div.className="f_shellManager_background f_shellManager_background_"+backgroundMode;
 		
+		this._removeResizeCallback();
+		
+		var self=this;
+		this._onResizeCB=function() {
+			//get the greying div
+			var div = self._backgroundElement;
+			if (!div) {
+				// On ne sait jamais ...
+				return;
+			}
+	
+			// Get the document' size
+			var size=f_shellManager.GetScreenSize();
+			
+			if (f_core.IsGecko()) {
+				size.width-=1; //f_core.ComputeBorderLength(div.ownerDocument.body, "left", "right")+1;
+				size.height-=1; //f_core.ComputeBorderLength(div.ownerDocument.body, "top", "bottom")+2;
+			}
+					
+			//Modify the size
+			div.style.width=size.width+"px";
+			div.style.height=size.height+"px";
+		};
+		
 		//Resize Handler
-		f_core.AddResizeEventListener(div, f_shellManager._Background_onresize);
+		f_core.AddResizeEventListener(document.body, this._onResizeCB);
 
-		f_shellManager._Background_onresize.call(div);
+		this._onResizeCB();
 
 		//Hide Selects
-		f_shellManager.HideSelect();
+		if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
+			f_shellManager.HideSelect();
+		}
 		
 		//Attach
 		document.body.insertBefore(div, document.body.firstChild);
@@ -338,11 +354,25 @@ var __members = {
 		backgroundElement._shellManager=undefined;
 		
 		backgroundElement.parentNode.removeChild(backgroundElement);
-		f_core.RemoveResizeEventListener(backgroundElement, f_shellManager._Background_onresize);
+
+		this._removeResizeCallback();
 		
 		if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
 			f_shellManager.ShowSelect();
 		}
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_removeResizeCallback: function() {
+		var onResizeCB=this._onResizeCB; // function
+		if (!onResizeCB) {
+			return;
+		}
+		this._onResizeCB=undefined;
+		
+		f_core.RemoveResizeEventListener(document.body, onResizeCB);
 	},
 	/**
 	 * @method protected
@@ -431,12 +461,16 @@ var __members = {
 		var self=this;
 		this.f_getShellDecorator(shell).f_createDecoration(function(shellDecorator, shell) {
 			f_core.Debug(f_shellManager, "f_openShell: creation started ...");
+			
+			shell.f_setStatus(f_shell.OPENING_STATUS);
 
 			shell.f_postConstruct();
 
 			shell.f_fillBody(shellDecorator.f_getShellBody());
 			
 			shell.f_prepareOpening();
+			
+			shell.f_setStatus(f_shell.OPENED_STATUS);
 			
 			self.f_pushShell(shell);
 		});		
@@ -450,13 +484,23 @@ var __members = {
 	 */
 	f_closeShell: function(shell, showNextShell) {
 		if (shell) {
+			shell.f_setStatus(f_shell.CLOSING_STATUS); // Normalement c'est déjà fait
+
+			this.f_getShellDecorator(shell).f_hideShell();
+
 			shell.f_preDestruction();
 
 			this.f_getShellDecorator(shell).f_destroyDecoration();
 
+			shell.f_setStatus(f_shell.CLOSED_STATUS);
+
 			this.f_popShell(shell);
-			
+
+			shell.f_setStatus(f_shell.DESTROYING_STATUS);			
+
 			shell.f_postDestruction();
+
+			shell.f_setStatus(f_shell.DESTROYED_STATUS);			
 		}
 		
 		if (showNextShell!==false) {

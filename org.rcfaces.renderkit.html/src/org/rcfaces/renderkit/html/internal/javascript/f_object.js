@@ -6,7 +6,7 @@
  * class f_object
  *
  * @class public f_object extends Object
- * @author Joel Merlin & Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 var __members = {

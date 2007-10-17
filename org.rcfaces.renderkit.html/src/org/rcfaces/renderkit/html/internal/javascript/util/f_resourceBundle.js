@@ -223,7 +223,7 @@ var __members = {
 	 * @return Object
 	 */
 	f_formatParams: function(key, params, defaultValue) {
-	 	f_core.Assert(params==null || params===undefined || (params instanceof Array), "Params parameter is invalid. (["+typeof(params)+"] "+params+").");
+	 	f_core.Assert(params==null || params===undefined || (params instanceof Array) || typeof(params)=="object", "Params parameter is invalid. (["+typeof(params)+"] "+params+").");
 		
 		var message=this.f_get(key, defaultValue);
 		if (message===undefined) {

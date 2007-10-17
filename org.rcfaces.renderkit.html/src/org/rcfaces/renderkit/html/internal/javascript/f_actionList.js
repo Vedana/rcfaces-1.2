@@ -5,7 +5,8 @@
 /**
  *
  * @class hidden f_actionList extends Object
- * @author Joel Merlin & Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @author Joel Merlin
  * @version $Revision$ $Date$
  */
 

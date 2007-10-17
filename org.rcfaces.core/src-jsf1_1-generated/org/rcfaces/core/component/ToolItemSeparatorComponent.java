@@ -2,12 +2,12 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.AbstractSeparatorComponent;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
 import org.rcfaces.core.component.ToolFolderComponent;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <b>EXPERIMENTAL</b>

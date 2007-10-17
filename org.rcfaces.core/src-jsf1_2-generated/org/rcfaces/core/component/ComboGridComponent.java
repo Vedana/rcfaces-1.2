@@ -17,6 +17,7 @@ import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IEditableCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.AbstractGridComponent;
@@ -53,6 +54,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	IRowStyleClassCapability,
 	IPagerMessageCapability,
 	IMaxTextLengthCapability,
+	IEditableCapability,
 	IScrollableCapability,
 	IFilterCapability,
 	IPagedCapability,
@@ -67,7 +69,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","suggestionDelayMs","horizontalScrollPosition","pagerStyleClass","message","clientAdditionalInformationFullState","rowIndexVar","valueColumnId","additionalInformationValues","pagerLookId","oneResultMessage","filterProperties","zeroResultMessage","additionalInformationListener","valueFormat","border","gridStyleClass","labelColumnId","suggestionMinChars","gridLookId","verticalScrollPosition","paged","required","disabled","selectedValue","maxTextLength","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","manyResultsMessage","popupWidth","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","editable","suggestionDelayMs","horizontalScrollPosition","pagerStyleClass","message","clientAdditionalInformationFullState","valueColumnId","rowIndexVar","additionalInformationValues","pagerLookId","oneResultMessage","filterProperties","zeroResultMessage","additionalInformationListener","valueFormat","border","gridStyleClass","labelColumnId","suggestionMinChars","gridLookId","verticalScrollPosition","paged","required","disabled","selectedValue","maxTextLength","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","manyResultsMessage","popupWidth","readOnly"}));
 	}
 
 	public ComboGridComponent() {
@@ -582,6 +584,29 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	public void setMaxTextLength(int maxTextLength) {
 		engine.setProperty(Properties.MAX_TEXT_LENGTH, maxTextLength);
+	}
+
+	public boolean isEditable() {
+		return isEditable(null);
+	}
+
+	/**
+	 * See {@link #isEditable() isEditable()} for more details
+	 */
+	public boolean isEditable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.EDITABLE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "editable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isEditableSetted() {
+		return engine.isPropertySetted(Properties.EDITABLE);
+	}
+
+	public void setEditable(boolean editable) {
+		engine.setProperty(Properties.EDITABLE, editable);
 	}
 
 	public int getHorizontalScrollPosition() {

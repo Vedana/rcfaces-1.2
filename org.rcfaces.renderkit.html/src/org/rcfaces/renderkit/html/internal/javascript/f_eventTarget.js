@@ -6,7 +6,8 @@
  * f_eventTarget class
  *
  * @class public f_eventTarget extends f_object, HTMLElement, fa_eventTarget
- * @author Joel Merlin & Olivier Oeuillot
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @author Joel Merlin
  * @version $Revision$ $Date$
  */
 var __statics = {

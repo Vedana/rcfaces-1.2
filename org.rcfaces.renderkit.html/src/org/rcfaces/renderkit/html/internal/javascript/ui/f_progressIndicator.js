@@ -5,16 +5,12 @@
 /**
  * Classe ProgressIndicator
  *
- * @class public f_progressIndicator extends f_component
+ * @class public f_progressIndicator extends f_component, fa_progressIndicator
  * @author Olivier Oeuillot (latest modification by $Author$) 
  * @version $Revision$ $Date$
  */ 
  
 var __statics = {
-	/**
-	 * @field private static final number
-	 */
-	_UPDATE_DELAY: 200,
 	
 	/**
 	 * @field hidden static final number
@@ -38,167 +34,55 @@ var __members = {
 		this._label=label;
 		label.f_ignorePropertyChanges();// On optimise le temps d'affichage !
 	},
-	f_finalize: function() {
-		this._progressBar=undefined; // f_progressBar
-		this._label=undefined; // f_text
-		
-		var progressMonitor=this._progressMonitor;
-		if (progressMonitor) {
-			this._progressMonitor=undefined;
-			
-			if (progressMonitor.f_cancel) {
-				progressMonitor.f_cancel();
-			}
-		}
-
-		// this._oldTaskName=undefined; // string
-		// this._lastUpdate=undefined; // number
 	
-		// this._nextValue=undefined; // number
-		// this._nextTaskName=undefined; // string
-		// this._nextSubTaskName=undefined; // string
-		
-		var timer=this._timer; // TIMER_ID
-		if (timer) {
-			this._timer=undefined;
-			
-			window.clearTimeout(timer);
-		}
+	f_finalize: function() {
+		this._progressBar=undefined;
+		this._label=undefined; // f_text
 	
 		this.f_super(arguments);
 	},
+
 	/**
 	 * @method public
-	 * @return f_progressMonitor
+	 * @return f_progressBar
 	 */
-	f_createProgressMonitor: function() {		
-		var old=this._progressMonitor;
-		if (old) {
-			this._progressMonitor=undefined;
- 			if (!old.f_isCanceled()) {
-	 			old.f_cancel();
-	 		}
-		}
-		
-		var progressMonitor=f_progressIndicatorMonitor.f_newInstance(this);
-		
-		this._progressMonitor=progressMonitor;
-		return progressMonitor;
+	f_getProgressBar: function() {
+		return this._progressBar;
 	},
-	/**
-	 * @method public
-	 * @return f_progressMonitor
-	 */
-	f_getCurrentProgressMonitor: function() {
-		return this._progressMonitor;
-	},
-	/**
-	 * @method hidden
-	 */
-	f_setIndeterminate: function(indeterminate) {
-		f_core.Assert(indeterminate===undefined || typeof(indeterminate)=="boolean", "f_progressIndicator.f_setIndeterminate: Invalid indeterminate parameter '"+indeterminate+"'.");  
-
-		var progressBar=this._progressBar;		
-		if (progressBar) {
-			progressBar.f_setIndeterminate(indeterminate);
-		}
-	},
-	/**
-	 * @method hidden
-	 */
-	f_getValue: function() {
-		var progressBar=this._progressBar;		
-		if (!progressBar) {
-			return 0;
-		}
-		
-		return progressBar.f_getValue();
-	},
-	/**
-	 * @method hidden
-	 */
-	f_changeValues: function(value, taskName, subTaskName, important) {
 	
-		var modified=false;
-	
-		if (value!==undefined && value!=this._nextValue) {
-			this._nextValue=value;
-			modified=true;
-		}
-		
-		if (taskName!==undefined && taskName!=this._nextTaskName) {
-			this._nextTaskName=taskName;
-			modified=true;
-		}
-		
-		if (subTaskName!==undefined && subTaskName!=this._nextSubTaskName) {
-			this._nextSubTaskName=subTaskName;
-			modified=true;
-		}
-		
-		if (!modified) {
-			return;
-		}
-
-		if (important) {
-			this._updateValues();
-			return;
-		}
-
-		var time=new Date().getTime();
-		
-		if (!this._lastUpdate || (time-this._lastUpdate)>f_progressIndicator._UPDATE_DELAY) {
-			this._updateValues();
-			return;
-		}
-
-		var timer=this._timer;
-		if (timer) {
-			return;
-		}
-		
-		var progressIndicator=this;
-		this._timer=window.setTimeout(function() {
-			progressIndicator._updateValues();
-			
-		}, f_progressIndicator._UPDATE_DELAY);
-	},
 	/**
-	 * @method private
+	 * @method protected
+	 * @param number value
+	 * @param String nextTaskName
+	 * @param String subTaskName
 	 * @return void
 	 */
-	_updateValues: function() {
-		this._lastUpdate=new Date().getTime();
-		
-		if (this._nextValue===undefined) {
-			return;
-		}
-	
-		var progressBar=this._progressBar;		
-		if (progressBar) {
-			progressBar.f_setValue(this._nextValue);
-		}
-		
+	f_updateProgressLabel: function(value, taskName, subTaskName) {
 		var label=this._label;
 		if (label) {
-			var name=this._nextTaskName;
-			if (!name) {
-				name=" ";
+			if (!taskName) {
+				taskName=" ";
 			}
 		
-			if (name!=this._oldTaskName) {
-				this._oldTaskName=name;
+			if (taskName!=this._oldTaskName) {
+				this._oldTaskName=taskName;
 				
-				label.f_setText(name);
+				label.f_setText(taskName);
 			}
 		}
+	},
+	f_progressDone: function() {
+		if (this.f_getStatus()!=f_shell.OPENED_STATUS) {
+			return;
+		}
 		
-		this._nextValue=undefined;
+		this.f_close();
 	}
 }
  
 new f_class("f_progressIndicator", {
 	extend: f_component,
+	aspects: [ fa_progressIndicator ],
 	statics: __statics,
 	members: __members
 });

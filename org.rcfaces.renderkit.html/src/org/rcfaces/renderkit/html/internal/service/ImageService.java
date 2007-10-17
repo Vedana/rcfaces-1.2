@@ -205,7 +205,7 @@ public class ImageService extends AbstractHtmlService {
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
                 "GetElementByClientId").writeString(componentId).writeln(
-                ", document);");
+                ");");
 
         int width = imageContentInformation.getImageWidth();
         int height = imageContentInformation.getImageHeight();

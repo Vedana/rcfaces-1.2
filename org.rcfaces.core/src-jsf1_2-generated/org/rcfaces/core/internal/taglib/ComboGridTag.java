@@ -33,6 +33,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private ValueExpression oneResultMessage;
 	private ValueExpression zeroResultMessage;
 	private ValueExpression maxTextLength;
+	private ValueExpression editable;
 	private ValueExpression horizontalScrollPosition;
 	private ValueExpression verticalScrollPosition;
 	private ValueExpression filterProperties;
@@ -114,6 +115,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 	public final void setMaxTextLength(ValueExpression maxTextLength) {
 		this.maxTextLength = maxTextLength;
+	}
+
+	public final void setEditable(ValueExpression editable) {
+		this.editable = editable;
 	}
 
 	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
@@ -210,6 +215,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
 			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
 			LOG.debug("  maxTextLength='"+maxTextLength+"'");
+			LOG.debug("  editable='"+editable+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
@@ -359,6 +365,15 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 			} else {
 				component.setMaxTextLength(getInt(maxTextLength.getExpressionString()));
+			}
+		}
+
+		if (editable != null) {
+			if (editable.isLiteralText()==false) {
+				component.setValueExpression(Properties.EDITABLE, editable);
+
+			} else {
+				component.setEditable(getBool(editable.getExpressionString()));
 			}
 		}
 
@@ -541,6 +556,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		oneResultMessage = null;
 		zeroResultMessage = null;
 		maxTextLength = null;
+		editable = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		filterProperties = null;

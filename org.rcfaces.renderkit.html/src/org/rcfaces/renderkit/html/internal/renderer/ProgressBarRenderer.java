@@ -61,6 +61,8 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
+        htmlWriter.enableJavaScript();
+
 /*
  
         IComponentRenderContext componentRenderContext = htmlWriter
@@ -215,6 +217,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
                         Properties.MAXIMUM, new Double(old), max));
             }
         }
-
     }
+    
+    
 }

@@ -155,7 +155,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             return;
         }
 
-        javaScriptWriter.writeMethodCall("_setDefaultImages");
+        javaScriptWriter.writeMethodCall("f_setDefaultImages");
         int pred = 0;
         for (int i = 0; i < urls.length; i++) {
             String url = urls[i];

@@ -28,6 +28,7 @@
 	padding: 0;
 	margin: 0;
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	overflow: none;
 }
 
 .f_shellDecorator_body_transparent {

@@ -1262,11 +1262,16 @@
 				<required-class name="f_progressMonitor" />
 			</class>
 		</file>
+		<file name="ui/fa_progressIndicator.js">
+			<class name="fa_progressIndicator">
+				<required-class name="f_progressIndicatorMonitor" />				
+			</class>
+		</file>
 		<file name="ui/f_progressIndicator.js">
 			<class name="f_progressIndicator">
 				<required-class name="f_component" />
 				<required-class name="f_log" />
-				<required-class name="f_progressIndicatorMonitor" />				
+				<required-class name="fa_progressIndicator" />				
 			</class>
 		</file>
 	</module>
@@ -1361,14 +1366,14 @@
 				<required-class name="f_shellDecorator" />
 			</class>
 		 </file>
-		 <file name="ui/f_waitingShell.js">
-			<class name="f_waitingShell">
-				<required-class name="f_shell" />
-			</class>
-		 </file>
 		 <file name="ui/f_dialog.js">
 			<class name="f_dialog">
 				<required-class name="f_shell" />
+			</class>
+		 </file>
+		 <file name="ui/f_waitingShell.js">
+			<class name="f_waitingShell">
+				<required-class name="f_dialog" />
 			</class>
 		 </file>
 		 <file name="ui/f_messageDialog.js">
@@ -1379,6 +1384,16 @@
 		 <file name="ui/f_viewDialog.js">
 			<class name="f_viewDialog">
 				<required-class name="f_dialog" />
+			</class>
+		 </file>
+	</module>
+
+	<module id="progressMonitorDialog">
+		 <file name="ui/f_progressMonitorDialog.js">
+			<class name="f_progressMonitorDialog">
+				<required-class name="f_dialog" />
+				<required-class name="f_progressBar" />
+				<required-class name="fa_progressIndicator" />
 			</class>
 		 </file>
 	</module>
