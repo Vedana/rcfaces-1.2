@@ -1029,6 +1029,38 @@ var __statics = {
 		return sTmp;
 	},
 
+	/**
+	 * @method public static
+	 * @context object:validator
+	 */
+	Formatter_padding: function(validator, inVal) {
+		var component = validator.f_getComponent();
+		if (typeof(component.f_getMaxTextLength) == "function") {
+			var ln = component.f_getMaxTextLength();
+			// when maxTextLength is not defined it takes a very big value ...
+			if (ln > 0 && ln < 100000) {
+				var nbPad = ln - inVal.length;
+				if (nbPad > 0) {
+					var padder = validator.f_getParameter("padder.value", " ");
+					var side = validator.f_getParameter("padder.side", "left");
+					var outVal = "";
+					var padd = "";
+					for (; nbPad>0; nbPad--) {
+						padd += padder;
+					}
+					if (side == "left") {
+						outVal = padd + inVal;
+					} else {
+						outVal = inVal + padd;
+					}
+					validator.f_setInputValue(outVal);
+					return outVal;
+				}
+			}
+		}
+		return inVal;
+	},
+
 
 	/*=============================================================================
 		BEHAVIORS in alphabetic order...please
