@@ -786,8 +786,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
         // * en mode liste, le dataModel ne pouvait pas encore donner le nombre
         // de rows
 
-        if (rows > 0) {
-            if (count > firstCount || (unknownRowCount && firstCount >= 0)
+        if (unknownRowCount && firstCount >= 0) {
+            encodeJsRowCount(jsWriter, tableContext, count);
+
+        } else if (rows > 0) {
+            if (count > firstCount
                     || (gridComponent.getFirst() == 0 && count == 0)) {
                 encodeJsRowCount(jsWriter, tableContext, count);
             }

@@ -28,7 +28,7 @@ f_multiWindowClassLoader.f_getName=function() {
 	return "f_multiWindowClassLoader";
 }
 
-if (window.RCFACES_LEVEL3) {
+if (window._RCFACES_LEVEL3) {
 	/**
 	 *
 	 * @method hidden
@@ -37,7 +37,7 @@ if (window.RCFACES_LEVEL3) {
 	 */ 
 	f_classLoader.prototype.f_newWindowClassLoader=function(childWindow) {
 	
-			return new f_multiWindowClassLoader(childWindow);
+		return new f_multiWindowClassLoader(childWindow);
 	}
 	
 	/**
@@ -58,7 +58,8 @@ if (window.RCFACES_LEVEL3) {
 				
 				var parentBundle=parent._bundles[bundleName];
 				if (!parentBundle) {
-					alert("Unknown parent bundle ! ("+bundleName+")");
+					f_core.Debug(f_multiWindowClassLoader, "f_requiresBundle: delagate to parent bundle '"+bundleName+"'.");
+					f_classLoader.prototype.f_requiresBundle.call(this, bundleName);
 					continue;
 				}
 				
@@ -224,6 +225,6 @@ if (window.RCFACES_LEVEL3) {
 		if (!this._window) {
 			return "[MultiWindowClassLoader]";
 		}
-		return "[MultiWindowClassLoader '"+this._window.document.title+"']";
+		return "[MultiWindowClassLoader '"+this._window.location+"']";
 	}
 }

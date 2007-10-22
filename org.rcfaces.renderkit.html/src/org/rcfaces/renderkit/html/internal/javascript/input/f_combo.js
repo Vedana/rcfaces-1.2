@@ -6,7 +6,8 @@
 /**
  * 
  * @class f_combo extends f_input, fa_required, fa_filterProperties, fa_commands, fa_selectionProvider, fa_immediate
- * @author  Joel Merlin & Olivier Oeuillot
+ * @author Joel Merlin
+ * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
  

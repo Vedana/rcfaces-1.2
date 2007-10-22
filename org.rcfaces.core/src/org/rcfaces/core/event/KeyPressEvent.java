@@ -17,8 +17,15 @@ public class KeyPressEvent extends ActionEvent {
 
     private static final long serialVersionUID = 2531722435621838354L;
 
-    public KeyPressEvent(UIComponent component) {
+    private int keyCode;
+
+    private int modifiers;
+
+    public KeyPressEvent(UIComponent component, int keyCode, int modifiers) {
         super(component);
+
+        this.keyCode = keyCode;
+        this.modifiers = modifiers;
     }
 
     /*
@@ -37,6 +44,14 @@ public class KeyPressEvent extends ActionEvent {
      */
     public void processListener(FacesListener listener) {
         ((IKeyPressListener) listener).processKeyPress(this);
+    }
+
+    public final int getKeyCode() {
+        return keyCode;
+    }
+
+    public final int getModifiers() {
+        return modifiers;
     }
 
 }

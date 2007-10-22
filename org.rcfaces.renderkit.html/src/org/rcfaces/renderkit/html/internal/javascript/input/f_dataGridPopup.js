@@ -48,7 +48,8 @@ var __statics = {
 			role: "wairole:grid", 
 			className: "f_grid", 
 			"v:asyncRender": "true", 
-			"v:filtred": "true"
+			"v:filtred": "true",
+			"v:selectionCardinality": fa_cardinality.ONE_CARDINALITY
 		};
 		
 		if (width) {

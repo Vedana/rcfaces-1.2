@@ -185,6 +185,10 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         sa.append('/');
         sa.append(etag);
 
+        if (url.length() > 0 && url.charAt(0) != '/') {
+            sa.append('/');
+        }
+
         sa.append(url);
 
         return new BasicContentAccessor(facesContext, sa.toString(),

@@ -22,7 +22,7 @@ var __statics = {
 	 */
 	_DEFAULT_FEATURES: {
 		width: 250,
-		height: 295,
+		height: 272,
 		dialogPriority: 0,
 		styleClass: "f_columnSortDialog",
 		backgroundMode: f_shell.LIGHT_GREYED_BACKGROUND_MODE
@@ -362,8 +362,6 @@ var __members = {
 		// this._title=undefined; // String
 		this._grid=undefined; // f_grid
 
-		this._cleanInputs();
-
 		this.f_super(arguments);
 	},
 	/**
@@ -403,7 +401,7 @@ var __members = {
 		//actForm._button=button;
 		
 		// Creation de la table
-		var table = docBase.createElement("table");
+		var table = docBase.createElement("ul");
 		actForm.appendChild(table);
 
 		table.className = "f_columnSortDialog_dialog";
@@ -411,29 +409,16 @@ var __members = {
 		//set size and pos
 		table.style.width=this.f_getWidth()+"px";
 		table.style.height=this.f_getHeight()+"px";
-		table.cellPadding=0;
-		table.cellSpacing=0;
 		table.width=this.f_getWidth();
 		
-		var tbod = docBase.createElement("tbody");
-		table.appendChild(tbod);
-		
 		// Creation du corps de la popup
-		var ligne = docBase.createElement("tr");
-		tbod.appendChild(ligne);
-
-		ligne.className = cssClassBase+"_corps_tr";
-		
-		// cell for body
-		var cell = docBase.createElement("td");
-		ligne.appendChild(cell);
-		cell.className = cssClassBase+"_corps_td";
-		
-		cell.align = "center";
+		var ligne = f_core.CreateElement(table, "li", {	
+			className: cssClassBase+"_corps_tr"
+		});
 		
 		var tableCorps = docBase.createElement("table");
-		cell.appendChild(tableCorps);
-		tableCorps.cellPadding=2;
+		ligne.appendChild(tableCorps);
+		tableCorps.cellPadding=0;
 		tableCorps.cellSpacing=0;
 		tableCorps.width="100%";
 	
@@ -521,46 +506,32 @@ var __members = {
 			// Remplissage
 			f_columnSortDialog._AddOptions(grid, selectComp, cols, this._selects, this._radios,selectedColIndex);
 			
-			var ligneCorps = docBase.createElement("tr");
-			tbodCorps.appendChild(ligneCorps);
-			ligneCorps.style.height="20px";
-			ligneCorps.className = "f_columnSortDialog_hr";
+			if (j+1<nbCols) {
+				var ligneCorps = docBase.createElement("tr");
+				tbodCorps.appendChild(ligneCorps);
+				ligneCorps.style.height="20px";
+				ligneCorps.className = "f_columnSortDialog_hr";
+				
+				var cellCorps = docBase.createElement("td");
+				ligneCorps.appendChild(cellCorps);
+				cellCorps.colSpan=3;
 			
-			var cellCorps = docBase.createElement("td");
-			ligneCorps.appendChild(cellCorps);
-			cellCorps.colSpan=3;
-		
-			var hr = docBase.createElement("div");
-			cellCorps.appendChild(hr);
-			
-			f_core.SetTextNode(hr, " ");
+				var hr = docBase.createElement("div");
+				cellCorps.appendChild(hr);
+				
+				f_core.SetTextNode(hr, " ");
+			}
 		}
 
 	//fin de la table de corps
 
 		// Creation de la ligne de boutons
-		var ligne = docBase.createElement("tr");
-		tbod.appendChild(ligne);
-
-		ligne.className = "f_columnSortDialog_actions_tr";
-		
-		var cell = docBase.createElement("td");
-		ligne.appendChild(cell);
-		
-		cell.colSpan = 3;
-
-		cell.className = "f_columnSortDialog_actions_td";
-		cell.align = "center";
-
-		var actTable = f_core.CreateElement(cell, "table", {
-			cellspacing: 5,
-			cellpadding: 0
+		var ligne = f_core.CreateElement(table, "li", {	
+			className: "f_shellDecorator_body_buttons"
 		});
-		
-		var actTr = f_core.CreateElement(actTable, "tbody", null, "tr");
 				
 		// Bouton OK
-		var button = f_core.CreateElement(actTr, "td", null, "input", {
+		var button = f_core.CreateElement(ligne, "input", {
 			type: "submit",
 			className: "f_columnSortDialog_button",
 			value: f_resourceBundle.Get(f_shell).f_get("VALID_BUTTON")
@@ -575,7 +546,8 @@ var __members = {
 
 		// Bouton Apply
 		if (this._style & f_columnSortDialog.APPLY_BUTTON) {
-			var button = f_core.CreateElement(actTr, "td", null, "input", {
+			
+			var button = f_core.CreateElement(ligne, "input", {
 				type: "button",
 				className: "f_columnSortDialog_button",
 				value: f_resourceBundle.Get(f_shell).f_get("APPLY_BUTTON")
@@ -589,7 +561,7 @@ var __members = {
 		}
 
 		// Bouton Annuler
-		var button = f_core.CreateElement(actTr, "td", null, "input", {
+		var button = f_core.CreateElement(ligne, "input", {
 			type: "button",
 			className: "f_columnSortDialog_button",
 			value: f_resourceBundle.Get(f_shell).f_get("CANCEL_BUTTON")
@@ -626,35 +598,37 @@ var __members = {
 		rowRadio.style.height="20px";
 
 		var cellRadio = f_core.CreateElement(rowRadio, "td");
+  
+        var label=f_core.CreateElement(cellRadio, "label", {
+        	className: "f_columnSortDialog_radio_text"
+        });
  		
-		var radioComp=f_core.CreateElement(cellRadio, "input", {
+		var radioComp=f_core.CreateElement(label, "input", {
 			type: "radio",
 			name: name,
 			id: name+"_asc",
 			value: f_columnSortDialog.LIB_ASCENDANT,
-			className: "f_columnSortDialog_radio"
+			className: "f_columnSortDialog_radio"		
 		});
+		
+		label.appendChild(label.ownerDocument.createTextNode(resourceBundle.f_get("ASCENDANT")));
 		
 		this._radios.push(radioComp);
         radioComp.onclick = function() {
         	selectComp._sort = 1;
         };
   
-		var cellRadio = f_core.CreateElement(rowRadio, "td");
-       
-        f_core.CreateElement(cellRadio, "label", {
-        	className: "f_columnSortDialog_radio_text",
-        	textNode: resourceBundle.f_get("ASCENDANT"),
-        	'for': radioComp.id
-        });
-
 		var rowRadio=f_core.CreateElement(tbodyRadio, "tr");
 		rowRadio.verticalAlign="middle";
 		rowRadio.style.height="20px";
 		
 		var cellRadio = f_core.CreateElement(rowRadio, "td");
+          
+       	var label= f_core.CreateElement(cellRadio, "label", {
+        	className: "f_columnSortDialog_radio_text"
+        });
  		
-		var radioComp=f_core.CreateElement(cellRadio, "input", {
+		var radioComp=f_core.CreateElement(label, "input", {
 			type: "radio",
 			name: name,
 			id: name+"_desc",
@@ -662,18 +636,13 @@ var __members = {
 			className: "f_columnSortDialog_radio"
 		});
 		
+		label.appendChild(label.ownerDocument.createTextNode(resourceBundle.f_get("DESCENDANT")));
+		
 		this._radios.push(radioComp);
         radioComp.onclick = function() {
         	selectComp._sort = -1;
         };
 
-		var cellRadio = f_core.CreateElement(rowRadio, "td");
-         
-        f_core.CreateElement(cellRadio, "label", {
-        	className: "f_columnSortDialog_radio_text",
-        	textNode: resourceBundle.f_get("DESCENDANT"),
-        	'for': radioComp.id
-        });
   		
 		return tableRadio;
 	},
@@ -738,9 +707,15 @@ var __members = {
 			this.f_close();
 		}
 	},
+	/**
+	 * @method protected
+	 */
 	f_preDestruction: function() {
 		this._cleanInputs();
+
+		this.f_super(arguments);		
 	},
+	
 	/**
 	 * @method private
 	 * @return void

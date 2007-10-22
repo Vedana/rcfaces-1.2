@@ -116,6 +116,9 @@ public class ComboGridRenderer extends DataGridRenderer {
         if (editable == false) {
             htmlWriter.writeAttribute("v:editable", false);
         }
+        if (readOnly) {
+            htmlWriter.writeAttribute("v:readOnly", true);
+        }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
 
@@ -314,6 +317,47 @@ public class ComboGridRenderer extends DataGridRenderer {
 
         DataModel dataModel = comboGridComponent.getDataModelValue();
         if ((dataModel instanceof IFiltredModel) == false) {
+            if (true) {
+                return null;
+            }
+
+            LOG
+                    .info("Search a row value in a not filtred DataModel ! (comboGridComponent="
+                            + comboGridComponent.getId() + ")");
+
+            String var = comboGridComponent.getVar(facesContext);
+            if (var == null) {
+                throw new FacesException("Var attribute is null !");
+            }
+
+            Map requestMap = facesContext.getExternalContext().getRequestMap();
+            Object oldValue = requestMap.get(var);
+
+            try {
+                for (int rowIndex = 0;; rowIndex++) {
+                    dataModel.setRowIndex(rowIndex);
+
+                    if (dataModel.isRowAvailable() == false) {
+                        break;
+                    }
+
+                    Object rowData = dataModel.getRowData();
+
+                    // @XXX TODO Est-ce la bonne clef ?
+                    if (true) {
+                        continue;
+                    }
+
+                    // Oui !
+                    return formatValue(facesContext, comboGridComponent,
+                            rowData);
+                }
+
+            } finally {
+                requestMap.put(var, oldValue);
+                dataModel.setRowIndex(-1);
+            }
+
             return null;
         }
 
@@ -330,7 +374,6 @@ public class ComboGridRenderer extends DataGridRenderer {
 
         ((IFiltredModel) dataModel).setFilter(filterProperties);
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
         try {
             dataModel.setRowIndex(0);
 
@@ -345,43 +388,11 @@ public class ComboGridRenderer extends DataGridRenderer {
                 throw new FacesException("Var attribute is null !");
             }
 
+            Map requestMap = facesContext.getExternalContext().getRequestMap();
             Object oldValue = requestMap.put(var, rowData);
+
             try {
-                Map columnValues = new HashMap();
-
-                IColumnIterator it = comboGridComponent.listColumns();
-                for (int idx = 0; it.hasNext(); idx++) {
-                    UIColumn column = it.next();
-                    if ((column instanceof ValueHolder) == false) {
-                        continue;
-                    }
-
-                    String columnId = column.getId();
-                    if (columnId == null) {
-                        continue;
-                    }
-
-                    Object value = ((ValueHolder) column).getValue();
-                    String svalue = ValuesTools.convertValueToString(value,
-                            column, facesContext);
-
-                    columnValues.put(columnId, svalue);
-                    columnValues.put(String.valueOf(idx), svalue);
-                }
-
-                String valueFormat = comboGridComponent
-                        .getValueFormat(facesContext);
-                if (valueFormat == null) {
-                    String labelColumnId = comboGridComponent
-                            .getLabelColumnId();
-                    if (labelColumnId != null) {
-                        valueFormat = "{" + labelColumnId + "}";
-                    } else {
-                        valueFormat = "{0}";
-                    }
-                }
-
-                return formatMessage(valueFormat, columnValues);
+                return formatValue(facesContext, comboGridComponent, rowData);
 
             } finally {
                 requestMap.put(var, oldValue);
@@ -390,6 +401,44 @@ public class ComboGridRenderer extends DataGridRenderer {
         } finally {
             dataModel.setRowIndex(-1);
         }
+    }
+
+    private String formatValue(FacesContext facesContext,
+            ComboGridComponent comboGridComponent, Object rowData) {
+
+        Map columnValues = new HashMap();
+
+        IColumnIterator it = comboGridComponent.listColumns();
+        for (int idx = 0; it.hasNext(); idx++) {
+            UIColumn column = it.next();
+            if ((column instanceof ValueHolder) == false) {
+                continue;
+            }
+
+            String columnId = column.getId();
+            if (columnId == null) {
+                continue;
+            }
+
+            Object value = ((ValueHolder) column).getValue();
+            String svalue = ValuesTools.convertValueToString(value, column,
+                    facesContext);
+
+            columnValues.put(columnId, svalue);
+            columnValues.put(String.valueOf(idx), svalue);
+        }
+
+        String valueFormat = comboGridComponent.getValueFormat(facesContext);
+        if (valueFormat == null) {
+            String labelColumnId = comboGridComponent.getLabelColumnId();
+            if (labelColumnId != null) {
+                valueFormat = "{" + labelColumnId + "}";
+            } else {
+                valueFormat = "{0}";
+            }
+        }
+
+        return formatMessage(valueFormat, columnValues);
     }
 
     private String formatMessage(String message, Map parameters) {

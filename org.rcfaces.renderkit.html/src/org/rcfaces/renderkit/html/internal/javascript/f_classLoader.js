@@ -1018,7 +1018,7 @@ f_classLoader.prototype = {
 		if (!this._window) {
 			return "[ClassLoader]";
 		}
-		return "[ClassLoader '"+this._window.document.title+"']";
+		return "[ClassLoader '"+this._window.location+"']";
 	}
 }
 

@@ -45,7 +45,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement(IHtmlWriter.DIV);
+        htmlWriter.startElement(IHtmlWriter.LABEL);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -84,7 +84,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
             writeLabel(htmlWriter, button, className, buttonId);
         }
 
-        htmlWriter.endElement(IHtmlWriter.DIV);
+        htmlWriter.endElement(IHtmlWriter.LABEL);
     }
 
     protected void writeInput(IHtmlWriter htmlWriter,
@@ -124,16 +124,13 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
             CheckButtonComponent button, String className, String componentId)
             throws WriterException {
-        htmlWriter.startElement(IHtmlWriter.LABEL);
+        htmlWriter.startElement(IHtmlWriter.SPAN);
         String claz = className + TEXT;
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
         htmlWriter.writeAttribute("class", claz);
         writeTextDirection(htmlWriter, button);
-
-        String inputId = componentId + "_input";
-        htmlWriter.writeAttribute("for", inputId);
 
         String text = button.getText(facesContext);
         if (text != null) {
@@ -142,7 +139,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
-        htmlWriter.endElement(IHtmlWriter.LABEL);
+        htmlWriter.endElement(IHtmlWriter.SPAN);
 
         return htmlWriter;
     }

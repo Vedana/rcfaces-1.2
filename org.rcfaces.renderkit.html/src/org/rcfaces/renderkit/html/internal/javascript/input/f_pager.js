@@ -105,9 +105,11 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @context object:dataPager
 	 */
 	_PositionKey: function(evt) {
 		var dataPager=this.f_link;
+		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
@@ -182,6 +184,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @context object:dataPager
 	 */
 	_PositionSelect: function(evt) {
 		var dataPager=this.f_link;

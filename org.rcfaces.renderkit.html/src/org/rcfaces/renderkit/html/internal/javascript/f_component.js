@@ -681,7 +681,7 @@ var __members = {
 		}
 		this._hasInitListeners=undefined;
 		
-		this.f_onInitEvent();
+		this.f_fireEvent(f_event.INIT);
 	},
 	f_serialize: function() {
 		f_core.Assert(this.fa_componentUpdated, "f_component.f_serialize: Method fa_componentUpdated not called for component '"+this.id+"/"+this._kclass+"'.");

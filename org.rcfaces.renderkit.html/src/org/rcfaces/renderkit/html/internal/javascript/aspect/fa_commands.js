@@ -68,7 +68,7 @@ var __members = {
 			nextCommand.call(this, this);
 			
 		} catch (ex) {
-			f_core.error(fa_commands, "f_processNextCommand: Call of callback: "+nextCommand+" throws exception.", ex);
+			f_core.Error(fa_commands, "f_processNextCommand: Call of callback: "+nextCommand+" throws exception.", ex);
 			return false;
 		}
 		

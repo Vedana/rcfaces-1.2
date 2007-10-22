@@ -47,7 +47,7 @@ var __members = {
 	
 		this.fa_updateReadOnly(set);
 		
-		this.f_setProperty(f_prop.READONLY,this._readOnly);
+		this.f_setProperty(f_prop.READONLY, set);
 	},
 
 	/**

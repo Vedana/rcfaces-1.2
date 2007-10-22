@@ -277,7 +277,7 @@ var __members= {
 				
 				if (typeof(fct) == "string") {
 					// Le commande est transformée en fonction !
-					fct=new Function("event", fct);
+					fct=new window.Function("event", fct);
 					actions[i]=fct;
 				}
 	

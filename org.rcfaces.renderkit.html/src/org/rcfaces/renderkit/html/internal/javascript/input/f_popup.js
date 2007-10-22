@@ -510,9 +510,12 @@ var __statics = {
 		return false;
 	},
 	_Ie_OnMouseFocus: function() {
-		alert("FOcus !");
+		// alert("Focus !");
 	},
-	_Ie_OnMouseDown: function() {
+	/**
+	 * @context event:evt
+	 */
+	_Ie_OnMouseDown: function(evt) {
 		var evt = f_core.GetJsEvent(this);
 		
 		f_core.Debug(f_popup, "_Ie_OnMouseDown: click on "+this+" fromElement="+evt.srcElement+"/"+evt.srcElement.className);
@@ -772,17 +775,19 @@ var __statics = {
 	 */
 	VerifyLock: function() {
 		if (f_popup.Ie_enablePopup()) {
-			var popup=document._iePopup;
+			var popup=f_popup.Popup;
 			
-			if (window._rcfacesIEDivPopup) {
+			if (popup && popup.tagName=="IFRAME") {
 				return true;
 			}
+			
+			popup=document._iePopup;
 			
 			if (popup && !popup.isOpen) {
 				// Ca va pas !
 				// Le popup est fermé et personne n'est prévenu !
 				
-				f_core.Debug(f_popup, "VerifyLock: close not opened popup !");
+				f_core.Debug(f_popup, "VerifyLock: close not opened popup ! (tagName="+popup.tagName+")");
 				
 				var cbs=f_popup.Callbacks;
 				if (cbs) {
@@ -933,7 +938,7 @@ var __statics = {
 		
 		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
 		
-		window.title="Title= "+popupW+"/"+popupH+"/"+popupW+"/"+popupH;
+		//window.title="Title= "+popupW+"/"+popupH+"/"+popupW+"/"+popupH;
 
 		var seps=popupDocument.getElementsByTagName("li");
 		// Il faut motiver les composants ?????

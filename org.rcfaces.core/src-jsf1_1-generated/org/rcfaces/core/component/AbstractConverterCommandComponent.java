@@ -1,14 +1,14 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.AbstractCommandComponent;
+import org.rcfaces.core.internal.component.Properties;
+import java.util.HashSet;
+import java.lang.String;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import javax.faces.context.FacesContext;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.

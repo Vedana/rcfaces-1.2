@@ -42,20 +42,16 @@ var __members = {
 			f_imageRepository.PrepareImage(h);
 			this.f_setHoverImageURL(h);
 		}
-	},
-	f_onSelect: function() {
-		//var component=this;
 		
-		/*
-		var forId=f_core.GetAttribute(this, "v:for");
-		if (forId) {
-			
-		}
-		*/	
-	
-		f_help._Open(this);
-		return false;
+		this.f_addEventListener(f_event.SELECT, function() {
+			f_help._Open(this);
+			return false;		
+		});
 	}
 }
 
-new f_class("f_helpButton", null, __statics, __members, f_imageButton);
+new f_class("f_helpButton", {
+	extend: f_imageButton,
+	statics: __statics,
+	members: __members
+} );

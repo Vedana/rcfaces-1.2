@@ -77,7 +77,7 @@ var __statics = {
 			}
 		}
     },
-   /**
+	/**
      *
      * @method private static
      * @param Event evt
@@ -96,8 +96,7 @@ var __statics = {
  
  		var shell=shellManager.f_getTopShell();
  		if (!shell) {
- 			// On a un gros probleme ...
-     		f_core.Error(f_shellManager, "_OnFocus: No frame opened ?");
+ 			// Plus de frame visibles ... (on peut être en cours de fermeture ...)
 			return true;
  		}
      	
@@ -271,7 +270,17 @@ var __members = {
 	 * @return f_shell
 	 */
 	f_getTopShell: function() {
-		return this._shells[this._shells.length-1];
+		
+		var shells=this._shells;
+		for(var i=shells.length;i>0;) {
+			var shell=shells[--i];
+			
+			if (shell.f_getStatus()==f_shell.OPENED_STATUS) {
+				return shell;
+			}
+		}
+		
+		return null;
 	},
 	/**
 	 * @method private

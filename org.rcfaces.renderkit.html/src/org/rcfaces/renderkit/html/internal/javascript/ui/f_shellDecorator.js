@@ -3,9 +3,9 @@
  */
 
 /**
- * <p><strong>f_shellManager</strong> represents shell manager.
+ * <p><strong>f_shellDecorator</strong> represents shell decorator.
  *
- * @class public f_shellManager
+ * @class public f_shellDecorator
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -169,11 +169,11 @@ var __members = {
 			height=shell.f_getHeight();
 		}
 		
-		width+=2; // border body_cell
-		height+=2; // border body_cell
+//		width+=2; // border body_cell
+//		height+=2; // border body_cell
 		
-		width+=2; // border
-		height+=2; // border
+//		width+=2; // border
+//		height+=2; // border
 		
 		if (shell._style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE)) {
 			height+=20; // Le titre

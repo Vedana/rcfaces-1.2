@@ -135,7 +135,7 @@ var __statics = {
 					case f_key.VK_PAGE_UP:
 //					case f_key.VK_END:
 //					case f_key.VK_HOME:
-						dataGridPopup._dataGrid.f_performKeyDown(jsEvent);
+						dataGridPopup._dataGrid.f_fireEvent(f_event.KEYDOWN, jsEvent);
 						return false;
 					}
 
@@ -155,7 +155,7 @@ var __statics = {
 					case f_key.VK_PAGE_UP:
 					case f_key.VK_END:
 					case f_key.VK_HOME:
-						dataGridPopup._dataGrid.f_onKeyUp(jsEvent);
+						dataGridPopup._dataGrid.f_fireEvent(f_event.KEYUP, jsEvent);
 						return false;
 					}
 					
@@ -334,10 +334,10 @@ var __members = {
 			if (labelColumnId) {
 				valueFormat="{"+labelColumnId+"}";
 
-			} else {			
+			} else {
 				valueFormat=fa_dataGridPopup._DEFAULT_VALUE_FORMAT;
 			}
-		}		
+		}
 		
 		this._popupWidth=f_core.GetNumberAttribute(this, "v:popupWidth", 320);
 		this._popupHeight=f_core.GetNumberAttribute(this, "v:popupHeight", 200);
@@ -545,11 +545,13 @@ var __members = {
 		var self=this;
 		dataGrid.f_addEventListener(f_event.SELECTION, function(event) {
 			f_core.Debug(fa_dataGridPopup, "f_constructDataGrid.SELECTION: selection detail="+event.f_getDetail());
+			
+			//document.title="Detail: "+event.f_getDetail();
 
 			if (!(event.f_getDetail() & f_event.ACTIVATE_DETAIL)) {
 				return;
 			}
-			
+
 			return self._rowSelection(event.f_getSelectionProvider(), event.f_getJsEvent());			
 		});
 		
@@ -609,9 +611,10 @@ var __members = {
 			fa_dataGridPopup._OpenPopup(this, this, 0, this.offsetHeight, function() {
 				self._updateDataGridPopup(text);
 			}); 
+
+		} else {
+			this._updateDataGridPopup(text);
 		}
-		
-		this._updateDataGridPopup(text);
 	},
 	/**
 	 * @method private

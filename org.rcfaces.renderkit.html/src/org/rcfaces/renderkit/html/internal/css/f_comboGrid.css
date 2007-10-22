@@ -52,6 +52,10 @@
 	cursor: pointer;
 }
 
+.f_comboGrid_buttonCell {
+	vertical-align: middle;
+}
+
 .f_comboGrid_button_hover {
 	background-position: -16px 0;
 }

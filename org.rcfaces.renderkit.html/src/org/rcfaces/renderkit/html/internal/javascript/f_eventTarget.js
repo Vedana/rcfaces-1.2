@@ -53,57 +53,31 @@ var __statics = {
 		var cb={};
 		this._Callbacks=cb;
 		
-		cb[f_event.BLUR]={_dom: "onblur", _mtd: __SYMBOL("f_onBlur") }; 
-		cb[f_event.CHANGE]={_dom: "onchange", _mtd: __SYMBOL("f_onChange") }; 
+		var noLock={ _lock: false };
+		
+		cb[f_event.BLUR]={_dom: "onblur", _lock: false  }; 
+		cb[f_event.CHANGE]={_dom: "onchange" }; 
 		cb[f_event.CHECK]=null;
 		cb[f_event.CLOSE]=null;
-		cb[f_event.DBLCLICK]={_dom: "ondblclick", _mtd: __SYMBOL("f_onDblClick") }; 
-		cb[f_event.ERROR]=null;
-		cb[f_event.FOCUS]={_dom: "onfocus", _mtd: __SYMBOL("f_onFocus") }; 
-		cb[f_event.INIT]=null;
-		cb[f_event.KEYDOWN]={_dom: "onkeydown", _mtd: __SYMBOL("f_onKeyDown") }; 
-		cb[f_event.KEYPRESS]={_dom: "onkeypress", _mtd: __SYMBOL("f_onKeyPress") }; 
-		cb[f_event.KEYUP]={_dom: "onkeyup", _mtd: __SYMBOL("f_onKeyUp") }; 
+		cb[f_event.DBLCLICK]={_dom: "ondblclick" }; 
+		cb[f_event.ERROR]=noLock;
+		cb[f_event.FOCUS]={_dom: "onfocus", _lock: false }; 
+		cb[f_event.INIT]=noLock;
+		cb[f_event.KEYDOWN]={_dom: "onkeydown" }; 
+		cb[f_event.KEYPRESS]={_dom: "onkeypress" }; 
+		cb[f_event.KEYUP]={_dom: "onkeyup" }; 
 		cb[f_event.LOAD]=null;
-		cb[f_event.MENU]=null;
-		cb[f_event.MOUSEDOWN]={_dom: "onmousedown", _mtd: __SYMBOL("f_onMouseDown") }; 
-		cb[f_event.MOUSEOUT]={_dom: "onmouseout", _mtd: __SYMBOL("f_onMouseOut") }; 
-		cb[f_event.MOUSEOVER]={_dom: "onmouseover", _mtd: __SYMBOL("f_onMouseOver") }; 
-		cb[f_event.MOUSEUP]={_dom: "onmouseup", _mtd: __SYMBOL("f_onMouseUp") }; 
-		cb[f_event.PROPERTY_CHANGE]=null;
-		// A PART cb[f_event.RESET]=null;
-		cb[f_event.SELECTION]={_dom: "onclick", _mtd: __SYMBOL("f_onSelect") }; 
+		cb[f_event.MENU]=noLock;
+		cb[f_event.MOUSEDOWN]={_dom: "onmousedown"}; 
+		cb[f_event.MOUSEOUT]={_dom: "onmouseout", _lock: false  }; 
+		cb[f_event.MOUSEOVER]={_dom: "onmouseover", _lock: false  }; 
+		cb[f_event.MOUSEUP]={_dom: "onmouseup", _lock: false  }; 
+		cb[f_event.PROPERTY_CHANGE]=noLock;
+		cb[f_event.RESET]="reset";
+		cb[f_event.SELECTION]={_dom: "onclick" };
 		cb[f_event.SUBMIT]=null;
 		cb[f_event.SUGGESTION]=null;
-		cb[f_event.USER]=null;
-	},
-	
-	/**
-	 * @method private static
-	 * @return boolean
-	 */
-	_Generic: function(elt, jsEvent, type, lock) {
-		
-		if (window._rcfacesExiting) {
-			return false;
-		}
-		
-		if (!jsEvent && elt) {
-			jsEvent = f_core.GetJsEvent(elt);
-		}
-		
-		var comp = (elt.f_link)? elt.f_link:elt;
-
-		if (lock && comp.f_getEventLocked(jsEvent)) {
-			f_core.Info(f_eventTarget, "_Generic: Event has been locked ! (type="+type+" comp="+comp+" comp.id="+((comp)?comp.id:"none")+")");
-			
-			return false;
-		}
-
-		var ret = comp.f_fireEvent(type, jsEvent);
-
-		f_core.Debug(f_eventTarget, "_Generic: Generic call type '"+type+"' elt='"+((elt)?elt.id:"?")+"' comp='"+comp+"' returns '"+ret+"'.");
-		return ret;
+		cb[f_event.USER]=noLock;
 	}
 }
 
@@ -119,196 +93,17 @@ var __members = {
 			}
 		}
 	},	
-	/*
-	 * 
+	/**
 	 * @method protected
-	 *
+	 */
 	f_finalize: function() {
 		this.f_super(arguments);
 
-		f_core.RemoveResetListener(this);  ???
-		f_core.RemoveCheckListener(this);  ???
+		this._resetCallback=undefined;
+		//f_core.RemoveResetListener(this);  ???
+		//f_core.RemoveCheckListener(this);  ???
 	},
-	*/
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onCheck: function(evt) {
-		return f_eventTarget._Generic(this,evt,f_event.CHECK,true); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onSelect: function(evt) {
-		return f_eventTarget._Generic(this, evt, f_event.SELECTION, true); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onFocus: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.FOCUS); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onBlur: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.BLUR); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onChange: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.CHANGE,true); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onDblClick: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.DBLCLICK,true); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onError: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.ERROR);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onKeyUp: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.KEYUP,true); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onKeyDown: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.KEYDOWN,true); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onKeyPress: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.KEYPRESS,true); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onMouseOver: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEOVER); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onMouseOut: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEOUT); 
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onMouseDown: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEDOWN,true);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onMouseUp: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MOUSEUP);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onPrepareSuggestion: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.PREPAGESUGGESTION);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onPropertyChange: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.PROPERTY_CHANGE);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onMenu: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.MENU);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onReset: function(evt) { 
-		return f_eventTarget._Generic(this, evt, f_event.RESET);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @param optional Event evt
-	 * @return boolean
-	 */
-	f_onUserEvent: function(evt) { 
-		return f_eventTarget._Generic(this,evt,f_event.USER);
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @return boolean
-	 */
-	f_onInitEvent: function() { 
-		return this.f_fireEvent(f_event.INIT);
-	},
+	
 	/**
 	 * 
 	 * @method protected
@@ -323,10 +118,41 @@ var __members = {
 		f_core.Debug(f_eventTarget, "f_setDomEvent: component '"+this.tagName+"#"+this.id+"' add '"+type+"' callbak (target="+target.tagName+"#"+target.id+")");
 		
 		var cb=f_eventTarget._Callbacks[type];
+
+		if (cb) {			
+			var lock=cb._lock;
+			var self=this;
+			var func=function(jsEvent) {
+				if (window._rcfacesExiting) {
+					return false;
+				}
 		
+				if (!jsEvent) {
+					jsEvent = f_core.GetJsEvent(this);
+				}
+				
+				if (lock!==false && self.f_getEventLocked(jsEvent)) {
+					f_core.Info(f_eventTarget, "f_setDomEvent.handler: Event has been locked ! (type="+type+" comp="+self+" comp.id="+self.id+")");
+					
+					return false;
+				}
+		
+				var ret = self.f_fireEvent(type, jsEvent);
+		
+				f_core.Debug(f_eventTarget, "f_setDomEvent.handler: Generic call type '"+type+"' comp='"+self+"' returns '"+ret+"'.");
+				return ret;
+			};
+
+			if (cb=="reset") {
+				if (!this._resetCallback) {
+					this._resetCallback=func;
+					f_core.AddResetListener(this, func);
+				}
+				return;
+			}
+			
 //		alert("["+this.id+"] Type="+type+" => "+cb);
-		if (cb) {
-			target[cb._dom]=this[cb._mtd];
+			target[cb._dom]=func;
 			return;
 			
 		} else if (cb===null) {
@@ -334,9 +160,6 @@ var __members = {
 		}
 		
 		switch(type) {			
-		case f_event.RESET: 
-			f_core.AddResetListener(this);
-			return;					
 		case f_event.VALIDATION: 
 			f_core.AddCheckListener(this);
 			return;					
@@ -355,6 +178,14 @@ var __members = {
 
 		var cb=f_eventTarget._Callbacks[type];
 		if (cb) {
+			if (cb=="reset") {
+				var resetCallback=this._resetCallback;
+				if (resetCallback) {
+					this._resetCallback=undefined;
+					f_core.RemoveResetListener(this, resetCallback);
+				}			
+				return;
+			} 
 			target[cb._dom]=null;
 			return;
 			
@@ -363,9 +194,6 @@ var __members = {
 		}
 		
 		switch(type) {
-		case f_event.RESET: 
-			f_core.RemoveResetListener(this);
-			return;					
 		case f_event.VALIDATION: 
 			f_core.RemoveCheckListener(this);
 			return;					

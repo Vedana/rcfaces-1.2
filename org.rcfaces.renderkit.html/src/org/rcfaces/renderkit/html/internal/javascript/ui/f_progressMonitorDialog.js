@@ -38,7 +38,7 @@ var __statics = {
 	 */
 	_DEFAULT_FEATURES: {
 		width: 400,
-		height: 160,
+		height: 164,
 		dialogPriority: 0,
 		styleClass: "f_progressMonitorDialog",
 		backgroundMode: f_shell.LIGHT_GREYED_BACKGROUND_MODE
@@ -213,7 +213,7 @@ var __members = {
 		});
 	
 		var buttons=f_core.CreateElement(ul, "li", {
-			className: "f_progressMonitorDialog_buttons"
+			className: "f_shellDecorator_body_buttons"
 		});
 		
 		this._cancel=f_core.CreateElement(buttons, "input", {

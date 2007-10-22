@@ -1378,6 +1378,7 @@ var f_core = {
 	/**
 	 * @method private static
 	 * @return boolean
+	 * @context event:evt
 	 */
 	_OnReset: function(evt) {
 		if (!evt) {
@@ -1920,6 +1921,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @context event:event
 	 */
 	_ModalWindowFocus: function(event) {
 		var modalWindow=f_core._cameliaModalWindow;
@@ -2192,11 +2194,8 @@ var f_core = {
 		var ret=true;
 		for(var i=0;i<resetListeners.length && ret;i++) {
 			var resetListener=resetListeners[i];
-							
-			var resetFunction=resetListener.f_onReset;
-			f_core.Assert(typeof(resetFunction)=="function", "f_core._CallFormResetListeners: Invalid reset function '"+resetFunction+"'.");
 			
-			if (resetFunction.call(resetListener, event)===false) {
+			if (resetListener.call(form, event)===false) {
 				ret=false;
 			}
 		}
@@ -2237,8 +2236,9 @@ var f_core = {
 	/**
 	 * @method hidden static hidden
 	 */
-	AddResetListener: function(component) {
-		f_core.Assert(typeof(component)=="object", "f_core.AddResetListener: Listener is invalid !");
+	AddResetListener: function(component, callback) {
+		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.AddResetListener: Component is invalid  ("+component+")");
+		f_core.Assert(typeof(callback)=="function", "f_core.AddResetListener: Listener is invalid ("+callback+")");
 
 		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_core.AddResetListener: Can not get form of component '"+component.id+"'.");
@@ -2249,13 +2249,14 @@ var f_core = {
 			form._resetListeners=resetListeners;
 		}
 		
-		resetListeners.f_addElement(component);
+		resetListeners.f_addElement(callback);
 	},
 	/**
 	 * @method public static hidden
 	 */
-	RemoveResetListener: function(component) {
-		f_core.Assert(typeof(component)=="object", "f_core.RemoveResetListener: Listener is invalid !");
+	RemoveResetListener: function(component, callback) {
+		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.RemoveResetListener: Component is invalid  ("+component+")");
+		f_core.Assert(typeof(callback)=="function", "f_core.RemoveResetListener: Listener is invalid ("+callback+")");
 
 		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_core.RemoveResetListener: Can not get form of component '"+component.id+"'.");
@@ -2265,7 +2266,7 @@ var f_core = {
 			return false;
 		}	
 		
-		return resetListeners.f_removeElement(component);
+		return resetListeners.f_removeElement(callback);
 	},
 	/**
 	 * @method public static
@@ -2826,7 +2827,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param optional String version
-	 * @return boolean 
+	 * @return boolean
 	 */
 	IsInternetExplorer: function(version) {
 		if (!f_core._browser) {
@@ -4068,8 +4069,9 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @context event:evt
 	 */
-	_IeOnSelectStop: function() {
+	_IeOnSelectStop: function(evt) {
 		// TODO Il faut résoudre le WINDOW
 				//document.title="STOP bookmark ! "+window._acceptedSelection;
 		//window._acceptedSelection=undefined;
@@ -4079,11 +4081,12 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @context event:evt
 	 */
-	_IeOnSelectOver: function() {
+	_IeOnSelectOver: function(evt) {
 		// TODO Il faut résoudre le WINDOW
 
-		var evt = f_core.GetJsEvent(this);
+		evt = f_core.GetJsEvent(this);
 		var component=evt.srcElement;
 		
 		var selection=document.selection;
@@ -4126,9 +4129,9 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @context event:evt
 	 */
-	_IeOnSelectStart: function() {
-		// TODO Il faut résoudre le WINDOW
+	_IeOnSelectStart: function(evt) {
 
 		if (true) {
 			return;

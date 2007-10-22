@@ -243,6 +243,8 @@ var __members = {
 		this._backgroundMode=(this._style & f_shell.HIDE_BACKGROUND_STYLE)?f_shell.GREYED_BACKGROUND_MODE:null;
 		this._drawingFunction=drawingFunction;
 		this._returnValueFunction=returnValueFunction;
+		this._width=f_shell._DEFAULT_WIDTH;
+		this._height=f_shell._DEFAULT_HEIGHT;
 		
 		this._shellManager=f_shellManager.Get();
 	},
@@ -258,10 +260,16 @@ var __members = {
 		var shellStatus=this._shellStatus;
 		if (shellStatus!=f_shell.CREATED_STATUS &&
 			shellStatus!=f_shell.DESTROYED_STATUS) {
-			
-			shellStatus=f_shell.DESTROYED_STATUS;
-			
+
+			if (shellStatus<f_shell.CLOSED_STATUS) {
+				this.f_preDestruction();
+			}
+
+			this._shellStatus=f_shell.DESTROYING_STATUS;
+
 			this.f_postDestruction();
+			
+			this._shellStatus=f_shell.DESTROYED_STATUS;			
 		}
 		
 		// this._backgroundMode=undefined; //string
@@ -401,15 +409,20 @@ var __members = {
 	f_prepareOpening: function() {
      	f_core.Debug(f_shell, "f_prepareOpening: entering");
 		
-		if (this._height<1) {
-			this._height=f_shell._DEFAULT_HEIGHT;
+		var width=this.f_getWidth();
+		if (!width || width<1) {  // Il faut traiter undefined
+			width=f_shell._DEFAULT_WIDTH;
+			this.f_setWidth(width);
 		}
-		if (this._width<1) {
-			this._width=f_shell._DEFAULT_WIDTH;
+
+		var height=this.f_getHeight();
+		if (!height || height<1) {
+			height=f_shell._DEFAULT_HEIGHT;
+			this.f_setHeight(height);
 		}
 		
 		var shellDecorator=this._shellManager.f_getShellDecorator(this);
-		var mySize=shellDecorator.f_computeTrim(this._width, this._height);
+		var mySize=shellDecorator.f_computeTrim(width, height);
 		
 		// calculate iframe size and position
 		var viewSize=f_core.GetViewSize();
@@ -429,6 +442,10 @@ var __members = {
 		} else {
 			mySize.height = viewSize.height;
 		}
+		
+		var scrolls=f_core.GetScrollOffsets();		
+		x+=scrolls.x;
+		y+=scrolls.y;
 			
 		this._shellManager.f_setShellBounds(this, x, y, mySize.width, mySize.height);
 	},

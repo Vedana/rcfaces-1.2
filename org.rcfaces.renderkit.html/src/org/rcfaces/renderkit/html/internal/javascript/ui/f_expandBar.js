@@ -52,8 +52,12 @@ var __statics = {
 	 */
 	_OnHeadClick: function(evt) {
 		var expandBar=this._link;
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
 		
-		expandBar.f_onSelect(evt);
+		expandBar.f_fireEvent(f_event.SELECTION, evt);
 		
 		return true;
 	}

@@ -100,8 +100,29 @@ var __members={
 	 * @method private
 	 * @return boolean
 	 */
-	_performKeyEvent: function(jsEvt) {
-		return this.f_fireEvent(f_event.KEYPRESS, jsEvt);
+	_performKeyEvent: function(jsEvent) {
+		
+		var mask=0;
+		if (jsEvent.altKey) {
+			mask|=f_key.KF_ALT;
+		}
+		if (jsEvent.ctrlKey) {
+			mask|=f_key.KF_CONTROL;
+		}
+		if (jsEvent.shiftKey) {
+			mask|=f_key.KF_SHIFT;
+		}
+		if (jsEvent.metaKey) {
+			mask|=f_key.KF_META;
+		}
+		
+		var event=new f_event(this, f_event.KEYPRESS, jsEvent, null, jsEvent.keyCode, null, mask);
+		try {
+			return this.f_fireEvent(event);
+			
+		} finally {
+			f_classLoader.Destroy(event);
+		}
 	},
 	
 	/**
@@ -115,23 +136,23 @@ var __members={
 		var component=f_core.GetElementByClientId(forComponent, this.ownerDocument);
 		
 		if (!component) {
-			f_core.Debug(f_accelerator, "Can not find component '"+forComponent+"'.");
+			f_core.Debug(f_accelerator, "_forListener: Can not find component '"+forComponent+"'.");
 			return false;
 		}
 		
-		var f=component.f_onSelect;
-		if (!f) {				
-			f_core.Debug(f_accelerator, "No callback for component '"+forComponent+"'.");
+		var f=component.f_fireEvent;
+		if (typeof(f)!="function") {				
+			f_core.Debug(f_accelerator, "_forListener: No callback for component '"+forComponent+"'.");
 			return false;
 		}
 
-		f_core.Debug(f_accelerator, "Call onSelect on component '"+forComponent+"'.");
+		f_core.Debug(f_accelerator, "_forListener: Call onSelect on component '"+forComponent+"'.");
 		
 		try {
-			return f.call(component);
+			return f.call(component, event.f_getJsEvent());
 
 		} catch (ex) {
-			f_core.Error(f_accelerator, "Call onSelect on component '"+forComponent+"' throws exception.", ex);
+			f_core.Error(f_accelerator, "_forListener: Call onSelect on component '"+forComponent+"' throws exception.", ex);
 			
 			throw ex;
 		}

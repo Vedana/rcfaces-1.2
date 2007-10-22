@@ -339,7 +339,7 @@ var __statics = {
 			tree.fa_showElement(tree._cursor);
 		}
 
-		tree.f_onFocus(evt);
+		tree.f_fireEvent(f_event.FOCUS, evt);
 
 		return true;		
 	},
@@ -375,7 +375,7 @@ var __statics = {
 			tree._cfocus.style.top=tree.scrollTop+"px";
 		}
 
-		tree.f_onBlur(evt);
+		tree.f_fireEvent(f_event.BLUR, evt);
 
 		return true;
 	},
@@ -399,7 +399,7 @@ var __statics = {
 			return true;
 		}
 
-		return tree.f_onKeyDown(evt);
+		return tree.f_fireEvent(f_event.KEYDOWN, evt);
 	},
 	/**
 	 * @method private static 
@@ -422,7 +422,7 @@ var __statics = {
 			return true;
 		}
 
-		return tree.f_onKeyUp(evt);
+		return tree.f_fireEvent(f_event.KEYUP, evt);
 	},
 	/**
 	 * @method private static 
@@ -443,7 +443,7 @@ var __statics = {
 			return true;
 		}
 
-		return tree.f_onKeyPress(evt);
+		return tree.f_fireEvent(f_event.KEYPRESS, evt);
 	},
 	/**
 	 * @method private static 

@@ -5,9 +5,8 @@
 package org.rcfaces.core.internal.webapp;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -18,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
+import org.rcfaces.core.lang.OrderedSet;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -165,13 +165,26 @@ public abstract class HierarchicalRepositoryServlet extends RepositoryServlet {
     }
 
     private ISet initializeModuleSet(String setName, String moduleNames) {
-        StringTokenizer st = new StringTokenizer(moduleNames, ",; \n\t\r");
 
-        List l = new ArrayList(st.countTokens());
-        for (; st.hasMoreTokens();) {
-            String moduleName = st.nextToken();
+        Collection l = new OrderedSet();
 
-            l.add(moduleName);
+        if ("all".equals(moduleNames.trim())) {
+            /*
+             * IModule modules[]=getHierarchicalRepository().listModules();
+             * for(int i=0;i<modules.length;i++) {
+             * l.add(modules[i].getFilename()); }
+             */
+
+            if (true) {
+                throw new IllegalArgumentException("Not yet implemented !");
+            }
+        } else {
+            StringTokenizer st = new StringTokenizer(moduleNames, ",; \n\t\r");
+
+            for (; st.hasMoreTokens();) {
+                String moduleName = st.nextToken();
+                l.add(moduleName);
+            }
         }
 
         String uri = getSetURI(setName);

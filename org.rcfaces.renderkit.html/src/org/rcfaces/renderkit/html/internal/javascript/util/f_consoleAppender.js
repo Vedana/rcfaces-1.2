@@ -20,6 +20,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context object:console
 	 */
 	_OpenCloseButtonClick: function() {
 		var console=this._console;
@@ -28,6 +29,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context object:console
 	 */
 	_ClearButtonClick: function() {
 		var console=this._console;
@@ -39,6 +41,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context object:console
 	 */
 	_ErrorButtonClick: function() {
 		var console=this._console;
@@ -50,6 +53,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context object:console
 	 */
 	_WarningButtonClick: function() {
 		var console=this._console;
@@ -61,6 +65,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context object:console
 	 */
 	_InfoButtonClick: function() {
 		var console=this._console;
@@ -72,6 +77,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context object:console
 	 */
 	_DebugButtonClick: function() {
 		var console=this._console;
@@ -83,6 +89,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context object:console
 	 */
 	_ResizeClick: function(evt) {
 		if (!evt) {
@@ -116,6 +123,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context event:evt	 
 	 */
 	_ResizeCursorDragStop: function(evt) {
 		f_core.RemoveEventListener(document, "mousemove", f_consoleAppender._ResizeCursorDragMove, window._draggedComponent);
@@ -133,6 +141,7 @@ var __statics={
 	},
 	/**
 	 * @method private static
+	 * @context event:evt	 
 	 */
 	_ResizeCursorDragMove: function(evt) {
  		if (!evt) {

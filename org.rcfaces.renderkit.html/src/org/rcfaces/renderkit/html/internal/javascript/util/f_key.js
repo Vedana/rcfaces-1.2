@@ -4,7 +4,9 @@
 
 /**
  *
- * @class f_key extends Object
+ * @class public f_key extends Object
+ * @author Olivier Oeuillot
+ * @author Joel Merlin
  * @version $Revision$ $Date$
  */
 var __statics = {
@@ -262,7 +264,7 @@ var __statics = {
 		
 		currentScopes.push(scope);
 
-		f_core.Debug("f_key", "Enter scope '"+scope._name+"'.");
+		f_core.Debug(f_key, "EnterScope: Enter scope '"+scope._name+"'.");
 
 
 		if (false) {		
@@ -284,7 +286,7 @@ var __statics = {
 		var scope=f_key._CurrentScopes.pop();
 		f_core.Assert(scope._name==scopeName, "f_key.ExitScope: Bad scope ! [removed='"+scope._name+"', asked='"+scopeName+"']");
 
-		f_core.Debug("f_key", "Exit scope '"+scope._name+"'.");
+		f_core.Debug(f_key, "ExitScope: Exit scope '"+scope._name+"'.");
 
 		if (false) {
 			var s="";
@@ -345,6 +347,7 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static
+	 * @return boolean
 	 */
 	AddKeyHandler: function(scopeName, keyName, component, method, parameter) {	
 		var scope=f_key._GetScopeByName(scopeName);
@@ -365,7 +368,7 @@ var __statics = {
 		
 		keyHandlers[keyName]=def;
 		
-		f_core.Debug("f_key", "Add key handler scope='"+scopeName+"' keyName='"+keyName+"'"+(component?(" component='"+component.id+"'"):"")+"' method='"+method+"'.");
+		f_core.Debug(f_key, "AddKeyHandler: Add key handler scope='"+scopeName+"' keyName='"+keyName+"'"+(component?(" component='"+component.id+"'"):"")+"' method='"+method+"'.");
 
 		return true;
 	},
@@ -388,7 +391,7 @@ var __statics = {
 	 	def._component=component;
 	 	def._method=method;
 			
-		f_core.Debug("f_key", "Add accelerator character='"+character+"' virtualKeys='"+virtualKeys+"' keyFlags='"+keyFlags+"'.");
+		f_core.Debug(f_key, "AddAccelerator: Add accelerator character='"+character+"' virtualKeys='"+virtualKeys+"' keyFlags='"+keyFlags+"'.");
 	 	
 	 	accelerators.push(def);
 	 },
@@ -397,10 +400,10 @@ var __statics = {
 	 * @return void
 	 */
 	RemoveKeyHandler: function(scopeName, keyName) {
-		f_core.Assert(f_key._Scopes, "No scopes defined.");
+		f_core.Assert(f_key._Scopes, "f_key.RemoveKeyHandler: No scopes defined.");
 		
 		var scope=f_key._Scopes[scopeName];
-		f_core.Assert(scope, "Scope '"+scopeName+"' not found.");
+		f_core.Assert(scope, "f_key.RemoveKeyHandler: Scope '"+scopeName+"' not found.");
 
 		var keyHandlers=scope._keyHandlers;
 		if (!keyHandlers) {
@@ -416,13 +419,13 @@ var __statics = {
 	 * @return boolean
 	 */
 	RemoveScope: function(scopeName) {
-		f_core.Assert(f_key._Scopes, "No scopes defined.");
+		f_core.Assert(f_key._Scopes, "f_key.RemoveScope: No scopes defined.");
 		
 		var scope=f_key._Scopes[scopeName];
 		if (!scope) {
 			return false;
 		}
-		f_core.Assert(scope, "Scope '"+scopeName+"' not found.");
+		f_core.Assert(scope, "f_key.RemoveScope: Scope '"+scopeName+"' not found.");
 		
 		f_key._Scopes[scopeName]=undefined;
 		return true;
@@ -434,6 +437,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
+	 * @context event:jsEvent
 	 */
 	_PerformKey: function(jsEvent) {
 		if (!jsEvent) {
@@ -452,19 +456,19 @@ var __statics = {
 		var method=def._method;
 		
 		if (method==f_key.DefaultAccessKey) {
-			f_core.Debug("f_key", "PerformKey: Default accessKey comportement !");
+			f_core.Debug(f_key, "_PerformKey: Default accessKey comportement !");
 		
 			return true;
 		}
 		
 		if (method) {
-			f_core.Debug("f_key", "PerformKey: Call specific method.");
+			f_core.Debug(f_key, "_PerformKey: Call specific method.");
 
 			try {
 				method.call(def._component, jsEvent, def._parameter);
 				
 			} catch (ex) {
-				f_core.Error(f_key, "Exception/keyHandler, method="+method, ex);
+				f_core.Error(f_key, "_PerformKey: Exception/keyHandler, method="+method, ex);
 				
 				// def._method=undefined;
 			}				
@@ -482,6 +486,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @context event:jsEvent
 	 */
 	_CatchKey: function(jsEvent) {
 		if (!jsEvent) {
@@ -490,7 +495,7 @@ var __statics = {
 
 		var def=f_key._SearchDef(jsEvent, false);
 		
-		f_core.Debug("f_key", "_CatchKey return '"+def+"'.");
+		f_core.Debug(f_key, "_CatchKey: return '"+def+"'.");
 		if (!def) {
 			return true;
 		}
@@ -522,7 +527,7 @@ var __statics = {
 			keyChar=keyChar.toUpperCase();
 		}
 		
-		f_core.Debug("f_key", "KeyEvent keyCode="+keyCode+" charCode="+charCode+" keyChar="+keyChar);
+		f_core.Debug(f_key, "_SearchDef: KeyEvent keyCode="+keyCode+" charCode="+charCode+" keyChar="+keyChar);
 		
 		if (f_core.IsGecko()) {
 			if (keyCode<=0) {
@@ -546,7 +551,7 @@ var __statics = {
 				if (currentScope._altKey==jsEvent.altKey) {
 					var def=keyHandlers[keyChar];
 
-					f_core.Debug("f_key", "KeyHandlers("+keyChar+"/alt="+jsEvent.altKey+")="+def);
+					f_core.Debug(f_key, "_SearchDef: KeyHandlers("+keyChar+"/alt="+jsEvent.altKey+")="+def);
 
 					if (def) {
 						return def;
@@ -560,7 +565,7 @@ var __statics = {
 		
 		var def=f_key._SearchAccelerator(scope, keyChar, keyCode, jsEvent);
 		
-		f_core.Debug("f_key", "Accelerator("+keyChar+"/"+keyCode+")="+def);
+		f_core.Debug(f_key, "_SearchDef: Accelerator("+keyChar+"/"+keyCode+")="+def);
 		
 		return def;
 	},
@@ -648,7 +653,7 @@ var __statics = {
 	 */
 	_SetDomEvent: function(set) {
 		
-		f_core.Debug("f_key", "Set dom events ("+set+")");
+		f_core.Debug(f_key, "_SetDomEvent: Set dom events ("+set+")");
 
 		if (f_core.IsInternetExplorer()) {
 			if (set) {
@@ -678,4 +683,6 @@ var __statics = {
 	}
 }
 
-new f_class("f_key", null, __statics);
+new f_class("f_key", {
+	statics: __statics
+});

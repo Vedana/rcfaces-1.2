@@ -162,7 +162,7 @@ var __statics = {
 	 * @return boolean
 	 * @context event:evt
 	 */
-	VerifyTarget: function(evt) {		
+	VerifyTarget: function(evt) {
 		if (this._dataGrid || this._row) {
 			return true;
 		}
@@ -177,8 +177,12 @@ var __statics = {
 			
 		if (target && target.nodeType==f_core.ELEMENT_NODE) {
 			var tagName=target.tagName;
-			if (tagName && tagName.toLowerCase()=="input") {
-				return false;
+			if (tagName) {
+				switch(tagName.toLowerCase()) {
+				case "input":
+				case "select":
+					return false;
+				}
 			}
 		}
 				
@@ -409,7 +413,7 @@ var __statics = {
 				dataGrid.fa_showElement(cursor);		
 			}
 			
-			dataGrid.f_onFocus(evt);
+			dataGrid.f_fireEvent(f_event.FOCUS, evt);
 			
 		} catch (x) {
 			f_core.Error(f_grid, "_Link_onfocus: throws exception.", x);
@@ -450,7 +454,7 @@ var __statics = {
 		
 			dataGrid._updateCurrentSelection();
 			
-			dataGrid.f_onBlur(evt);
+			dataGrid.f_fireEvent(f_event.BLUR, evt);
 			
 		} catch (x) {
 			f_core.Error(f_grid, "_Link_onfocus: throws exception.", x);
@@ -487,7 +491,7 @@ var __statics = {
 			return true;
 			
 		} else if (f_key.IsPrintable(code)) {
-			return dataGrid.f_onKeyPress(evt);
+			return dataGrid.f_fireEvent(f_event.KEYPRESS, evt);
 //			return true;
 		}
 
@@ -518,7 +522,7 @@ var __statics = {
 			return true;
 		}
 	
-		return dataGrid.f_onKeyDown(evt);
+		return dataGrid.f_fireEvent(f_event.KEYDOWN, evt);
 		//return dataGrid.f_performKeyDown(evt);
 	},
 	/**
@@ -547,7 +551,8 @@ var __statics = {
 			return true;
 		}
 	
-		return dataGrid.f_onKeyUp(evt);
+		return dataGrid.f_fireEvent(f_event.KEYUP, evt);
+
 		//return dataGrid.f_performKeyDown(evt);
 	},
 	/**
@@ -2359,47 +2364,23 @@ var __members = {
 			}			
 		}
 	},
-	f_onSelect: function(evt) {
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
+	f_filterEvent: function(type, jsEvent) {
+		if (!jsEvent || 
+			(type!=f_event.SELECTION && 
+			type!=f_event.MOUSEDOWN &&
+			type!=f_event.MOUSEUP )) {
+			return undefined;
+		}		
 		
-		if (!f_grid.VerifyTarget(evt)) {
+		if (!f_grid.VerifyTarget(jsEvent)) {
 			return true;
 		}
 
 		if (this._selectable) {
-			return false;
-		}
-		return this.f_super(arguments, evt);
-	},
-	f_onMouseDown: function(evt) {
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
+			// return false; ??? Je ne sais pas si ca sert encore !
 		}
 		
-		if (!f_grid.VerifyTarget(evt)) {
-			return true;
-		}
-
-		if (this._selectable) {
-			return false;
-		}
-		return this.f_super(arguments, evt);
-	},
-	f_onMouseUp: function(evt) { 
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (!f_grid.VerifyTarget(evt)) {
-			return true;
-		}
-
-		if (this._selectable) {
-			return false;
-		}
-		return this.f_super(arguments, evt);
+		return this.f_super(arguments, type, jsEvent);
 	},
 	/**
 	 * Returns the value of the row specified by its index.

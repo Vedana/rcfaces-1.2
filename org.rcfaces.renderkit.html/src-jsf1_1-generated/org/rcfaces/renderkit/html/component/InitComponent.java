@@ -1,18 +1,18 @@
 package org.rcfaces.renderkit.html.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import java.util.TimeZone;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.capability.IPageConfigurator;
-import java.util.Locale;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.lang.String;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.HashSet;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.Locale;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
  * <p><b>Mandatory</b>.</p>
@@ -26,7 +26,7 @@ public class InitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disableContextMenu","waiRolesNS","title","clientMessageIdFilter","clientValidation","base","literalTimeZone","renderBaseTag","disabledCookiesPageURL","literalLocale","disabledScriptPageURL","invalidBrowserPageURL","favoriteImageURL","disabledIEImageBar","disableCache"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"clientMessageIdFilter","disabledCookiesPageURL","invalidBrowserPageURL","waiRolesNS","clientValidation","title","literalLocale","favoriteImageURL","disabledScriptPageURL","literalTimeZone","base","disableCache","disabledIEImageBar","renderBaseTag","disableContextMenu"}));
 	}
 
 	public InitComponent() {

@@ -5,7 +5,7 @@
 
 /**
  * 
- * @class f_comboGrid extends f_textEntry, fa_dataGridPopup, fa_commands
+ * @class f_comboGrid extends f_textEntry, fa_dataGridPopup, fa_commands, fa_readOnly, fa_editable
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -162,7 +162,6 @@ var __members = {
 		this._formattedValue=this.f_getInput().value;
 		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
 		this._inputValue=this._selectedValue;
-		this._editable=f_core.GetAttribute(this, "v:editable", true);
 		
 		button._comboGrid=this;
 		button.onmousedown=f_comboGrid._OnButtonMouseDown;
@@ -193,6 +192,7 @@ var __members = {
 		// this._selectedValue=undefined; // String
 		// this._verifyingKey=undefined; // boolean
 		// this._editable=undefined; // boolean
+		// this._readOnly=undefined; // boolean 
 	
 		var button=this._button;
 		if (button) {
@@ -334,10 +334,6 @@ var __members = {
 	 * @return void
 	 */
 	f_openPopup: function(jsEvent, autoSelect) {
-		if (this.f_isReadOnly()) {
-			return;
-		}
-
 		f_core.Debug(f_comboGrid, "f_openPopup: open popup");
 		
 		this.f_openDataGridPopup(jsEvent, null, autoSelect);
@@ -484,7 +480,7 @@ var __members = {
 	 * @return String 
 	 */
 	f_getValue: function() {
-		return this._selectedValue;
+		return this._inputValue;
 	},
 	/**
 	 * @method public
@@ -513,6 +509,10 @@ var __members = {
 	 */
 	fa_valueSelected: function(value, label, rowValues, focusNext) {
 		f_core.Debug(f_comboGrid, "fa_valueSelected: value='"+value+"' label='"+label+"'");
+
+		if (this.f_isReadOnly()) {
+			return;
+		}
 		
 		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
 			return;
@@ -535,15 +535,15 @@ var __members = {
 		
 		var input=this.f_getInput();
 		
-		if (this._focus) {
+		if (this._focus && this.f_isEditable() && !this.f_isReadOnly()) {
 			input.value=value;
-			
-			if (!focusNext) {			
-				f_core.SelectText(input, value.length);
-			}
 
 		} else {
-			input.value=this._formattedValue;			
+			input.value=this._formattedValue;
+		}
+		
+		if (!focusNext) {			
+			f_core.SelectText(input, value.length);
 		}
 		
 		if (focusNext) {
@@ -567,7 +567,9 @@ var __members = {
 		// On affiche la clef, ou la valeur saisie
 		var input=this.f_getInput();
 		
-		input.value=this._inputValue;
+		if (this.f_isEditable() && !this.f_isReadOnly()) {
+			input.value=this._inputValue;
+		}
 		
 		// Il faut tout selectionner car sous IE le focus se repositionne au début		
 		input.select();		
@@ -592,7 +594,7 @@ var __members = {
 		
 		this._inputValue=input.value;
 		
-		if (this._inputValue && !this._selectedValue) {
+		if (this._inputValue && !this._selectedValue && this.f_isEditable()) {
 			this._verifyKey(this._inputValue);
 		}
 		
@@ -769,17 +771,21 @@ var __members = {
 		return this._suggestionDelayMs;
 	},
 	/**
-	 * @method public
-	 * @return boolean
+	 * @method protected
 	 */
-	f_isEditable: function() {
-		return this._editable;
+	fa_updateReadOnly: function() {
+		this.f_getInput().readOnly=this.f_isReadOnly() || !this.f_isEditable();
+				
+		this.f_updateStyleClass();
+	},
+	fa_updateEditable: function(set) {
+		this.fa_updateReadOnly();
 	}
 }
 
 new f_class("f_comboGrid", {
 	extend: f_textEntry,
-	aspects: [ fa_dataGridPopup, fa_commands ],
+	aspects: [ fa_dataGridPopup, fa_commands, fa_readOnly, fa_editable ],
 	statics: __statics,
 	members: __members
 });

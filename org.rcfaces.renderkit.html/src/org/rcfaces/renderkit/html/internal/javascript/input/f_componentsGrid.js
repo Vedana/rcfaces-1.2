@@ -214,7 +214,7 @@ var __members = {
 					dataGrid._waitingLoading=undefined;
 
 					if (dataGrid._waitingMode==f_grid.END_WAITING) {						
-						dataGrid.f_addPagedWait();
+						dataGrid.f_addPagedWait(false);
 						
 					} else if (dataGrid._waitingMode==f_grid.ROWS_WAITING) {
 						dataGrid.f_addWaitingRows();

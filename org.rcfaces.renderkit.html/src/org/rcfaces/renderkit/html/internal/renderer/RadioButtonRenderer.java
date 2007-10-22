@@ -47,7 +47,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        htmlWriter.startElement(IHtmlWriter.DIV);
+        htmlWriter.startElement(IHtmlWriter.LABEL);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -83,7 +83,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
             writeLabel(htmlWriter, button, labelClassName, buttonId);
         }
 
-        htmlWriter.endElement(IHtmlWriter.DIV);
+        htmlWriter.endElement(IHtmlWriter.LABEL);
     }
 
     protected String getInputClassName(IHtmlWriter htmlWriter) {
@@ -130,7 +130,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
     protected void writeLabel(IHtmlWriter htmlWriter,
             RadioButtonComponent button, String className, String componentId)
             throws WriterException {
-        htmlWriter.startElement(IHtmlWriter.LABEL);
+        htmlWriter.startElement(IHtmlWriter.SPAN);
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
@@ -144,7 +144,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         }
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
-        htmlWriter.endElement(IHtmlWriter.LABEL);
+        htmlWriter.endElement(IHtmlWriter.SPAN);
     }
 
     protected void decode(IRequestContext context, UIComponent element,

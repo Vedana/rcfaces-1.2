@@ -108,6 +108,16 @@ var __members = {
 		return f_event.GetEventLocked(jsEvent, showAlert, mask);
 	},
 	/**
+	 * @method protected
+	 * @param String type
+	 * @param Event jsEvent
+	 * @return any
+	 */
+	f_filterEvent: function(type, jsEvent) {
+		return undefined;
+	},
+	
+	/**
 	 * 
 	 * @method public
 	 * @param String type Type of event or an f_event object
@@ -119,6 +129,7 @@ var __members = {
 	 * @return boolean
 	 */
 	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
+		
 		var eventId=undefined;
 		if (f_core.IsDebugEnabled(fa_eventTarget)) {
 			if (!fa_eventTarget._EventId) {
@@ -130,9 +141,19 @@ var __members = {
 		var event;
 		if (type instanceof f_event) {
 			event=type;
-			type=event._type;
-			jsEvt=event._jsEvent;
+			type=event.f_getType();
+			jsEvt=event.f_getJsEvent();
+			detail=event.f_getDetail();
+			selectionProvider=event.f_getSelectionProvider();
+			
 			event._eventId=eventId;
+		}
+
+	
+		var ret=this.f_filterEvent(type, jsEvt);
+		if (ret!==undefined) {
+			f_core.Debug(fa_eventTarget, "f_fireEvent: Filter of event '"+type+"' returns '"+ret+"'.");
+			return ret;
 		}
 
 //		f_core.Profile(false, "fa_eventTarget.fireEvent(#"+eventId+","+type+","+this.id+")");

@@ -10,15 +10,6 @@
  * @version $Revision$ $Date$
  */
 var __members = {
-
-	/**
-	 * @method hidden
-	 */
-	f_checkButton: function() {
-		this.f_super(arguments);
-		
-		this._label=f_core.GetFirstElementByTagName(this, "label");
-	},
 	
 	/**
 	 * @method protected
@@ -30,6 +21,7 @@ var __members = {
 		if (input) {
 			return input;
 		}
+		
 		input=f_core.GetChildByCssClass(this, this.f_getMainStyleClass()+"_input");
 		if (input) {
 			return input;
@@ -47,6 +39,21 @@ var __members = {
 		this.f_super(arguments);
 	},
 
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getLabel: function() {
+		var label=this._label;
+		if (label!==undefined) {
+			return label;
+		}
+		
+		label=f_core.GetFirstElementByTagName(this, "label");
+		this._label=label;
+		
+		return label;
+	},
 	/**
 	 * @method public
 	 * @return boolean
@@ -106,11 +113,12 @@ var __members = {
 	 * @return String
 	 */
 	f_getText: function() {
-		if (!this._label) {
+		var label=this.f_getLabel();
+		if (!label) {
 			return this.f_super(arguments);
 		}
 
-		return f_core.GetTextNode(this._label);
+		return f_core.GetTextNode(label);
 	},
 
 	/**
@@ -119,14 +127,17 @@ var __members = {
 	 * @return void
 	 */
 	f_setText: function(text) {
-		if (!this._label) {
+		var label=this.f_getLabel();
+		if (!label) {
 			this.f_super(arguments, text);
 			return;
 		}
+		
 		if (text==this.f_getText()) {
 			return;
 		}
-		f_core.SetTextNode(this._label, text);
+		
+		f_core.SetTextNode(label, text);
 		this.f_setProperty(f_prop.TEXT,text);
 	},
 	/**

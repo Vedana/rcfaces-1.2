@@ -226,6 +226,12 @@
 			</class>
 		</file>
 		
+		<file name="aspect/fa_editable.js">
+			<class name="fa_editable">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
+		
 	</module>
 	
 <!-- Components -->
@@ -997,6 +1003,8 @@
 				<required-class name="f_textEntry" />
 
 				<required-class name="fa_dataGridPopup" />
+				<required-class name="fa_readOnly" />
+				<required-class name="fa_editable" />
 				
 				<required-style name="f_comboGrid.css" />
 			</class>

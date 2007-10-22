@@ -28,7 +28,12 @@ if (window._RCFACES_LEVEL3) {
 				win=evt.view;
 
 			} else if (evt.target) { // Firefox
-				win=evt.target.ownerDocument.defaultView;
+				if (evt.target.nodeType==9) {					
+					win=evt.target.defaultView;
+					
+				} else {
+					win=evt.target.ownerDocument.defaultView;
+				}
 
 			} else if (evt.fromElement) { // IE
 				win=evt.fromElement.ownerDocument.parentWindow;		

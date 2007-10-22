@@ -382,10 +382,8 @@ var __statics = {
 			}
 			
 			if (f_core.IsDebugEnabled("f_class")) {
-				if (methods[memberName]) {
-					f_core.Assert(false, "Aspect: Already defined member '"+memberName+"' of aspect '"+aspect._name+"'.");
-					continue;
-				}
+				var oldMember=methods[memberName];
+				f_core.Assert(!oldMember || oldMember._kclass!=claz, "Aspect: Already defined member '"+memberName+"' of aspect '"+aspect._name+"'.");
 			}
 						
 			methods[memberName]=member;

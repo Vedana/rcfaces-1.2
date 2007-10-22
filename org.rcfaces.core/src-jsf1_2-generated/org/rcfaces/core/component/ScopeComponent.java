@@ -2,10 +2,10 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 
 public class ScopeComponent extends CameliaBaseComponent implements 
@@ -15,7 +15,7 @@ public class ScopeComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","scopeVar","scopeSaveValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeSaveValue","scopeVar","scopeValue"}));
 	}
 
 	public ScopeComponent() {

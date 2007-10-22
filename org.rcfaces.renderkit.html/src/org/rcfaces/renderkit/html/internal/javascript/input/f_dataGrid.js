@@ -18,6 +18,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @context event:evt
 	 */
 	_ReturnFalse: function(evt) {
 		if (!evt) {
@@ -39,6 +40,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @context object:dataGrid
 	 */
 	_CheckSelect: function(evt) {
 		var row=this._row;
@@ -88,6 +90,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @context object:dataGrid
 	 */
 	_AdditionalInformationSelect: function(evt) {
 		var row=this._row;
@@ -840,7 +843,7 @@ var __members = {
 		if (length>0) {
 			params.rows=length;
 		}
-		if (this._rows && this._rowCount<0) {			
+		if (this._rowCount<0) { /* && this._rows */			
 	        params.unknownRowCount=true;			
 		}
 
@@ -989,6 +992,10 @@ var __members = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
+				if (!f_class.IsObjectInitialized(dataGrid)) {
+					return;
+				}
+			
 				if (dataGrid.f_processNextCommand()) {
 					return;
 				}

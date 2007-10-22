@@ -114,30 +114,35 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @context event:jsEvent
 	 */
-	_NS_open: function(js) {
-		if (f_help._FocusElement && js.keyCode==f_key.VK_F1) {
+	_NS_open: function(jsEvent) {
+		if (f_help._FocusElement && jsEvent.keyCode==f_key.VK_F1) {
 			return f_help._Open(f_help._FocusElement);
 		}
 
 		return true;
 	},
-	/**
+	/*
 	 * @method private static
-	 */
-	_OnFocus: function(evt) {
-		f_help._FocusElement = evt.f_getComponent();
+	 * @context event:jsEvent
+	 *
+	_OnFocus: function(jsEvent) {
+		f_help._FocusElement = jsEvent.f_getComponent();
 	},
-	/**
+	*/
+	/*
 	 * @method private static
-	 */
+	 *
 	_OnBlur: function(evt) {
 		if (f_help._FocusElement == evt.f_getComponent()) {
 			f_help._FocusElement = undefined;
 		}
 	},
+	*/
 	/**
 	 * @method hidden static
+	 * @context event:evt
 	 */
 	OnShowHelpMessage: function(evt) {
 		var component=evt.f_getComponent();
@@ -153,6 +158,7 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static
+	 * @context event:evt
 	 */
 	OnHideHelpMessage: function(evt) {
 		var component=evt.f_getComponent();

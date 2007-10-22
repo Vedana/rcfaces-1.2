@@ -54,6 +54,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return boolean
+	 * @context object:spinner
 	 */
 	_OnSpinnerButtonOver: function(evt) {
 		var spinner=this._spinner;
@@ -84,13 +85,14 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return boolean
+	 * @context object:spinner
 	 */
 	_OnSpinnerButtonOut: function() {
+		var spinner=this._spinner;
+
 		if (!this._hover) {
 			return true;
-		}
-		
-		var spinner=this._spinner;
+		}		
 
 		this._hover=undefined;
 		spinner.f_updateSpinnerButton(this);
@@ -103,6 +105,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return boolean
+	 * @context object:spinner
 	 */
 	_OnSpinnerButtonDown: function(evt) {
 		var spinner=this._spinner;
@@ -174,6 +177,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @context object:spinner
 	 */
 	_OnSpinnerButtonUp: function() {
 		var spinner=this._spinner;

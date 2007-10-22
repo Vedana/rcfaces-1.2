@@ -18,6 +18,7 @@ var __statics={
 	
 	/**
 	 * @method private static
+	 * @context object:compositeEntry
 	 */
 	_OnInputKeyDown: function(evt) {
 		var compositeEntry=this._compositeEntry;
@@ -43,6 +44,7 @@ var __statics={
 	
 	/**
 	 * @method private static
+	 * @context object:compositeEntry
 	 */
 	_OnInputKeyPress: function(evt) {
 		var compositeEntry=this._compositeEntry;
@@ -68,6 +70,7 @@ var __statics={
 	
 	/**
 	 * @method private static
+	 * @context object:compositeEntry
 	 */
 	_OnInputBlur: function(evt) {
 		var compositeEntry=this._compositeEntry;

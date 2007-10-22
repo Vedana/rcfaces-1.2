@@ -196,7 +196,21 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
 
                     public void decodeEvent(UIComponent component,
                             IEventData eventData) {
-                        FacesEvent event = new KeyPressEvent(component);
+
+                        int charCode = -1;
+                        try {
+                            charCode = Integer.parseInt(eventData
+                                    .getEventValue());
+
+                        } catch (NumberFormatException ex) {
+                            LOG.debug("Invalid charCode from eventValue '"
+                                    + eventData.getEventValue() + "'", ex);
+                        }
+
+                        int modifiers = eventData.getEventDetail();
+
+                        FacesEvent event = new KeyPressEvent(component,
+                                charCode, modifiers);
                         queueEvent(component, event);
                     }
                 });

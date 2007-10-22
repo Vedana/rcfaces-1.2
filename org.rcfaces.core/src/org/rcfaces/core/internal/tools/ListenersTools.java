@@ -49,6 +49,7 @@ import org.rcfaces.core.internal.listener.ErrorScriptListener;
 import org.rcfaces.core.internal.listener.FocusScriptListener;
 import org.rcfaces.core.internal.listener.InitScriptListener;
 import org.rcfaces.core.internal.listener.KeyDownScriptListener;
+import org.rcfaces.core.internal.listener.KeyPressActionListener;
 import org.rcfaces.core.internal.listener.KeyPressScriptListener;
 import org.rcfaces.core.internal.listener.KeyUpScriptListener;
 import org.rcfaces.core.internal.listener.LoadScriptListener;
@@ -364,7 +365,10 @@ public class ListenersTools {
 
         public void addActionListener(UIComponent component,
                 Application application, String expression) {
-            throw new UnsupportedListenerTypeException("keyPress");
+            IKeyPressEventCapability keyPressEventCapability = (IKeyPressEventCapability) component;
+
+            keyPressEventCapability
+                    .addKeyPressListener(new KeyPressActionListener(expression));
         }
     };
 
