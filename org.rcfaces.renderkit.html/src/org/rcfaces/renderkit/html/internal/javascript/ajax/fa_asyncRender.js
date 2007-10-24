@@ -127,7 +127,7 @@ var __members = {
 				
 					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
 						try {
-							eval(ret);
+							f_core.WindowScopeEval(ret);
 							
 						} catch (x) {
 				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");

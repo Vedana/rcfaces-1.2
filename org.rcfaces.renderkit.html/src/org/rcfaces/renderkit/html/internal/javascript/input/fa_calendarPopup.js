@@ -210,13 +210,15 @@ var __statics={
 
 	/**
 	 * @method private static
+	 * @context object:this
 	 */
 	_DateSelectedEvent: function(evt) {
+		var calendar=evt.f_getComponent();
+
 		if (evt.f_getDetail()!=f_calendarObject.DAY_SELECTION_DETAIL) {
 			return true;
 		}
 		
-		var calendar=evt.f_getComponent();
 		f_core.Assert(typeof(calendar)=="object", "fa_calendarPopup._DateSelectedEvent: Component is not a calendarObject object '"+calendar+"'.");
 		
 		var dateChooser=calendar.f_getTargetComponent();

@@ -38,7 +38,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return void
 	 * @context object:shellDecorator
 	 */
 	_TitleButton_onmouseup: function(evt) {
@@ -62,7 +62,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return void
 	 * @context object:shellDecorator
 	 */
 	_TitleButton_onmouseover: function(evt) {
@@ -81,7 +81,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return void
 	 * @context object:shellDecorator
 	 */
 	_TitleButton_onmouseout: function(evt) {
@@ -102,6 +102,8 @@ var __statics = {
 
 var __members = {
 	f_shellDecorator: function(shell) {
+		this.f_super(arguments);
+		
 		this._shell=shell;
 		this._decorationValues=new Object;
 	},
@@ -479,7 +481,7 @@ var __members = {
 
 		var iframe=this._iframe;
 		if (!iframe) {
-			return;
+			return false;
 		}
 		
 		var targetDocument=null;

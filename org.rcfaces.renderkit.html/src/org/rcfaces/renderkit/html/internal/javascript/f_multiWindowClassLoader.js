@@ -92,7 +92,7 @@ if (window._RCFACES_LEVEL3) {
 			newArray.prototype.f_removeElements=parentArray.prototype.f_removeElements;
 			newArray.prototype.f_addElement=parentArray.prototype.f_addElement;
 			newArray.prototype.f_addElements=parentArray.prototype.f_addElements;
-			newArray.prototype.f_contains=parentArray.prototype.f_contains;		
+			newArray.prototype.f_contains=parentArray.prototype.f_contains;
 			return newArray;
 			
 		case "f_core":

@@ -18,7 +18,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"requiredClasses","requiredFiles","srcCharSet","text","src"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"requiredClasses","requiredFiles","srcCharSet","requiredModules","text","requiredSets","src"}));
 	}
 
 	public JavaScriptComponent() {
@@ -195,6 +195,46 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isRequiredClassesSetted() {
 		return engine.isPropertySetted(Properties.REQUIRED_CLASSES);
+	}
+
+	public String getRequiredModules() {
+		return getRequiredModules(null);
+	}
+
+	public String getRequiredModules(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
+	}
+
+	public void setRequiredModules(String requiredModules) {
+		engine.setProperty(Properties.REQUIRED_MODULES, requiredModules);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "requiredModules" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRequiredModulesSetted() {
+		return engine.isPropertySetted(Properties.REQUIRED_MODULES);
+	}
+
+	public String getRequiredSets() {
+		return getRequiredSets(null);
+	}
+
+	public String getRequiredSets(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
+	}
+
+	public void setRequiredSets(String requiredSets) {
+		engine.setProperty(Properties.REQUIRED_SETS, requiredSets);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "requiredSets" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRequiredSetsSetted() {
+		return engine.isPropertySetted(Properties.REQUIRED_SETS);
 	}
 
 	protected Set getCameliaFields() {

@@ -50,9 +50,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private String initListeners;
 	private String propertyChangeListeners;
 	private String hiddenMode;
+	private String var;
 	private String margins;
 	private String first;
-	private String var;
 	private String rows;
 	private String value;
 	public final String getMarginBottom() {
@@ -311,16 +311,16 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
+	public final void setVar(String var) {
+		this.var = var;
+	}
+
 	public final void setMargins(String margins) {
 		this.margins = margins;
 	}
 
 	public final void setFirst(String first) {
 		this.first = first;
-	}
-
-	public final void setVar(String var) {
-		this.var = var;
 	}
 
 	public final void setRows(String rows) {
@@ -357,9 +357,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  var='"+var+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  first='"+first+"'");
-			LOG.debug("  var='"+var+"'");
 			LOG.debug("  rows='"+rows+"'");
 		}
 		super.setProperties(uiComponent);
@@ -623,6 +623,16 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (var != null) {
+			if (isValueReference(var)) {
+				ValueBinding vb = application.createValueBinding(var);
+				component.setValueBinding(Properties.VAR, vb);
+
+			} else {
+				component.setVar(var);
+			}
+		}
+
 		if (margins != null) {
 			if (isValueReference(margins)) {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
@@ -637,16 +647,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setFirst(getInt(first));
-			}
-		}
-
-		if (var != null) {
-			if (isValueReference(var)) {
-				ValueBinding vb = application.createValueBinding(var);
-				component.setValueBinding(Properties.VAR, vb);
-
-			} else {
-				component.setVar(var);
 			}
 		}
 
@@ -704,9 +704,9 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		initListeners = null;
 		propertyChangeListeners = null;
 		hiddenMode = null;
+		var = null;
 		margins = null;
 		first = null;
-		var = null;
 		rows = null;
 		value = null;
 

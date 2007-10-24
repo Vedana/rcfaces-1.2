@@ -173,7 +173,7 @@ var __statics = {
 			
 		} else {
 			try {
-				f=eval(expr);
+				f=f_core.WindowScopeEval(expr);
 				
 			} catch (x) {
 				f_core.Error(f_clientValidator, "Can not eval expression '"+expr+"'.", x);
@@ -358,6 +358,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static hidden
+	 * @context object:validator
 	 */
 	PerformMessageError: function(validator, type, lastError, lastErrorArgs) {
 		f_core.Debug(f_clientValidator, "Perform message error. type='"+type+"' "+((lastError)?("severity='"+lastError.severity+"' summary='"+lastError.summary+"' detail='"+lastError.detail+"'"):("no error"))+"'.");
@@ -386,6 +387,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @context object:validator
 	 */
 	_PerformAlertError: function(validator, type, lastError, lastErrorArgs) {
 		if (!lastError) {
@@ -409,6 +411,7 @@ var __statics = {
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Filter_generic: function(val,expr,keyCode,keyChar) {
 		f_core.Assert(expr instanceof RegExp, "f_clientValidator.Filter_generic: Not a regular expression. '"+expr+"'.");
@@ -418,6 +421,7 @@ var __statics = {
 	
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Translator_generic: function(validator, expr, keyCode, keyChar) {
 		return keyCode;
@@ -428,54 +432,63 @@ var __statics = {
 	=============================================================================*/
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_msg: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, false);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_msg_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, false);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_msg_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_msg_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, true);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, false);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, true);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, true);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_null: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, false);
 	},
 	/**
 	 * @method public static
+	 * @context object:validator
 	 */
 	Error_default: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
@@ -489,6 +502,7 @@ var __statics = {
 	 * @param boolean useColor
 	 * @param boolean useFocus
 	 * @return boolean
+	 * @context object:validator
 	 */
 	Error_generic: function(validator, type, error, useMessage, useColor, useFocus) {
 		f_core.Debug(f_clientValidator, "Error_generic: type='"+type+"' error='"+error+"' useMessage="+useMessage+" useColor="+useColor+" useFocus="+useFocus);

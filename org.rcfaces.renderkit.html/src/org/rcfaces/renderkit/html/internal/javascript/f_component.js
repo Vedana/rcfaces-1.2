@@ -573,7 +573,21 @@ var __members = {
 	 * @param optional String suffix
 	 * @return String
 	 */
-	f_computeStyleClass: function(suffix) {
+	f_computeStyleClass: function(suffix) {				
+		if (suffix) {
+			// Un suffix, pas de cache !
+			var mainStyleClass=this.f_getMainStyleClass();
+			
+			var computedStyleClass=mainStyleClass+" "+mainStyleClass+suffix;
+			
+			var styleClass=this.f_getStyleClass();
+			if (styleClass) {
+				computedStyleClass+=" "+styleClass+" "+styleClass+suffix;
+			}
+			
+			return computedStyleClass;	
+		}
+
 		var computedStyleClass=this._computedStyleClass;
 		if (!computedStyleClass) {
 			computedStyleClass=this.f_getMainStyleClass();
@@ -584,10 +598,6 @@ var __members = {
 			}
 			
 			this._computedStyleClass=computedStyleClass;
-		}
-				
-		if (suffix) {
-			computedStyleClass=this.f_getMainStyleClass()+suffix+" "+computedStyleClass;
 		}
 		
 		return computedStyleClass;

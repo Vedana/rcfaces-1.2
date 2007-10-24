@@ -469,7 +469,7 @@ f_classLoader.prototype = {
 				var evaluatedFunction=evaluations[fct];
 				if (!evaluatedFunction) {
 					try {
-						evaluatedFunction=eval(fct)
+						evaluatedFunction=f_core.WindowScopeEval(fct)
 	
 					} catch (x) {
 						f_core.Error(f_classLoader, "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
@@ -1327,14 +1327,11 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 
 /**
  * @method hidden static
- * @param optional Window win
+ * @param Window win
  * @return f_classLoader
  * @context window:window
  */
 f_classLoader.Get=function(win) {
-	if (!win) {
-		win=window;
-	}
 	return win._rcfacesClassLoader;
 }
 

@@ -1475,7 +1475,7 @@ var f_core = {
 				}
 			}
 	
-			var classLoader=f_classLoader.Get();
+			var classLoader=f_classLoader.Get(win);
 			if (!form._rcfacesInitialized) {
 				//f_core.Assert(form._rcfacesInitialized, "f_core._OnSubmit: Not initialized form '"+form.id+"'.");
 	
@@ -2399,7 +2399,7 @@ var f_core = {
 			return elt;
 		}
 		if (elt.nodeType==f_core.ELEMENT_NODE && f_core.GetAttribute(elt, "v:class")==claz) {
-			return f_classLoader.Get().f_init(elt);
+			return f_classLoader.Get(window).f_init(elt);
 		}
 		return null;
 	},
@@ -2543,12 +2543,14 @@ var f_core = {
 			return obj;
 		}
 		
+		var win=f_core.GetWindow(doc);
+		var classLoader=f_classLoader.Get(win);
 		if (!obj) {
 			// Objet pas trouvé, on passe l'ID à la methode _init !
-			obj=f_classLoader.Get().f_init(id, true);
+			obj = classLoader.f_init(id, true);
 			
 		} else {		
-			obj = f_classLoader.Get().f_init(obj, true);
+			obj = classLoader.f_init(obj, true);
 		}
 		
 		if (!obj) {
@@ -3616,6 +3618,7 @@ var f_core = {
 	/**
 	 * @method private static
 	 * @return void
+	 * @context window:this
 	 */
 	_FocusTimeout: function() {
 		// On sait jamais !
@@ -4274,7 +4277,7 @@ var f_core = {
 		f_core.Assert(typeof(effectName)=="string", "f_core.CreateEffectByName: The name of the effect is not a string !");
 		f_core.Assert(body && body.nodeType!==undefined, "f_core.CreateEffectByName: Body parameter is not a HTMLElement");
 	
-		var effectClass=f_classLoader.Get().f_getClass("f_effect");
+		var effectClass=f_classLoader.Get(window).f_getClass("f_effect");
 		if (!effectClass) {
 			f_core.Error(f_core, "CreateEffectByName: Effect class has not been loaded. (name="+effectName+")");
 			return null;
@@ -5096,21 +5099,22 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param String code
-	 * @return void
+	 * @return any
 	 */
 	WindowScopeEval: function(code) {
 
-		if (window.execScript) { // IE only	
+		if (false && window.execScript) { // IE only	
 		    window.execScript(code); // eval in global scope for IE
 		    return;
 		}
 		  
 		if (window.eval) { // Firefox
-			window.eval(code);
-			return;
+			return window.eval(code);
 		}
 
-		eval(code);	// Other ?
+		// Pour IE, ca a l'air de marcher ...
+		var f=new window.Function(code);
+		return f.call(window);
 	},
 
 	/**
@@ -5214,7 +5218,13 @@ var f_core = {
 	 * @return void
 	 */
 	ShowVersion: function() {
-		alert("RCFaces buildId="+window.rcfacesBuildId);
+		var msg="RCFaces:\nbuildId="+window.rcfacesBuildId;
+		
+		if (window.RCFACES_JS_VERSION) {
+			msg+="\njs.version="+window.RCFACES_JS_VERSION;
+		}
+		
+		alert(msg);
 	},
 	/**
 	 * @method public static

@@ -5,7 +5,7 @@
 /**
  * Classe ProgressIndicator
  *
- * @aspect public fa_progressIndicator
+ * @aspect public abstract fa_progressIndicator
  * @author Olivier Oeuillot (latest modification by $Author$) 
  * @version $Revision$ $Date$
  */ 

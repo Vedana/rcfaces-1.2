@@ -26,6 +26,8 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 	private String srcCharSet;
 	private String requiredFiles;
 	private String requiredClasses;
+	private String requiredModules;
+	private String requiredSets;
 	public String getComponentType() {
 		return JavaScriptComponent.COMPONENT_TYPE;
 	}
@@ -54,6 +56,14 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 		this.requiredClasses = requiredClasses;
 	}
 
+	public final void setRequiredModules(String requiredModules) {
+		this.requiredModules = requiredModules;
+	}
+
+	public final void setRequiredSets(String requiredSets) {
+		this.requiredSets = requiredSets;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (JavaScriptComponent.COMPONENT_TYPE==getComponentType()) {
@@ -64,6 +74,8 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 			LOG.debug("  srcCharSet='"+srcCharSet+"'");
 			LOG.debug("  requiredFiles='"+requiredFiles+"'");
 			LOG.debug("  requiredClasses='"+requiredClasses+"'");
+			LOG.debug("  requiredModules='"+requiredModules+"'");
+			LOG.debug("  requiredSets='"+requiredSets+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -127,6 +139,26 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 				component.setRequiredClasses(requiredClasses);
 			}
 		}
+
+		if (requiredModules != null) {
+			if (isValueReference(requiredModules)) {
+				ValueBinding vb = application.createValueBinding(requiredModules);
+				component.setValueBinding(Properties.REQUIRED_MODULES, vb);
+
+			} else {
+				component.setRequiredModules(requiredModules);
+			}
+		}
+
+		if (requiredSets != null) {
+			if (isValueReference(requiredSets)) {
+				ValueBinding vb = application.createValueBinding(requiredSets);
+				component.setValueBinding(Properties.REQUIRED_SETS, vb);
+
+			} else {
+				component.setRequiredSets(requiredSets);
+			}
+		}
 	}
 
 	public void release() {
@@ -135,6 +167,8 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 		srcCharSet = null;
 		requiredFiles = null;
 		requiredClasses = null;
+		requiredModules = null;
+		requiredSets = null;
 
 		super.release();
 	}

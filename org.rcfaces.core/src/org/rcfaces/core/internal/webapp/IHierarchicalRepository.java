@@ -24,6 +24,8 @@ public interface IHierarchicalRepository extends IRepository {
 
     IModule getModuleByName(String name);
 
+    ISet[] listSets();
+
     ISet getBootSet();
 
     ISet getSetByName(String bootSet);

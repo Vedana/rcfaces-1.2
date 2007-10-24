@@ -20,6 +20,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event event
 	 * @return boolean
+	 * @context object:textArea
 	 */
 	_VerifyMaxTextLength: function(event) {
 		var textArea=event.f_getComponent();

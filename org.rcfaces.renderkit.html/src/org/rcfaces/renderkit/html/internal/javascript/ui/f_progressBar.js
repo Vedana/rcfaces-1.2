@@ -40,7 +40,7 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @param HTMLElement parent
-	 * @return void
+	 * @return f_progressBar
 	 */
 	Create: function(parent, width, height, styleClass) {
 		

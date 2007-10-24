@@ -507,8 +507,6 @@ var __members = {
 
 		this._showValue=f_core.GetAttribute(this, "v:showValue");
 		
-		var styleSheetBase=f_env.GetStyleSheetBase();
-
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
 		if (false && f_core.IsInternetExplorer()) {
@@ -1295,7 +1293,7 @@ var __members = {
 	 			var ret=request.f_getResponse();
 				try {
 					//alert("ret="+ret);
-					eval(ret);
+					f_core.WindowScopeEval(ret);
 
 				} catch(x) {				
 				 	tree.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");

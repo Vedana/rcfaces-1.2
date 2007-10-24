@@ -202,6 +202,71 @@ var __members = {
 		return items[idx].value;
 	},
 	/**
+	 * Remove specified items
+	 * 
+	 * @method public
+	 * @param String... value
+	 * @return number Number of removed items.
+	 */
+	f_clear: function(value) {		
+		var cnt=0;
+		var input=this.f_getInput();
+		
+		for(var j=0;j<arguments.length;j++) {
+			value=arguments[j];
+			
+			var items = input.options; // On recharge à chaque fois !
+			
+			for (var i=0; i<items.length; i++) {
+				var item=items[i];
+				
+				if (items.value != value) {
+					continue;
+				}
+				
+				input.removeChild(item);
+
+				cnt++;
+				break;
+			}
+		}
+		
+		return cnt;
+	},
+	/**
+	 * Remove specified items.
+	 * 
+	 * @method public
+	 * @param any[] values List of values whose specified items.
+	 * @return number Number of removed items.
+	 */
+	f_clearArray: function(values) {
+		f_core.Assert(values instanceof Array, "f_combo.f_clearArray: Invalid values parameter '"+values+"'.");
+
+		return this.f_clear.apply(this, values);
+	},
+	/**
+	 * Remove all items.
+	 * 
+	 * @method public
+	 * @return number Number of removed rows.
+	 */
+	f_clearAll: function() {
+		var input=this.f_getInput();
+		var items=input.items;
+		var cnt=items.length;
+		if (!cnt) {
+			return 0;
+		}
+		
+		// items risque d'etre modifié au fur & à mesure des removeChilds
+		for(var i=cnt-1;i>=0;i--) {
+			input.removeChild(items[i]);
+		}
+		
+		return cnt;
+	},
+	/**
 	 * Returns the index of item specified by its value.
 	 *
 	 * @method public
@@ -412,7 +477,7 @@ var __members = {
 		
 					var ret=request.f_getResponse();
 					try {
-						eval(ret);
+						f_core.WindowScopeEval(ret);
 						
 					} catch (x) {
 						f_core.Error(f_combo, "_callServer.onLoad: Can not eval response '"+ret+"'.", x);
@@ -437,6 +502,13 @@ var __members = {
 		this._loading=true;
 		request.f_setRequestHeader("X-Camelia", "items.request");
 		request.f_doFormRequest(params);
+	},
+	/**
+	 * @method protected
+	 * @overided
+	 */
+	f_performErrorEvent: function(param, messageCode, message) {
+		return f_error.PerformErrorEvent(this, messageCode, message, param);
 	},
 	/**
 	 * Append an item.

@@ -118,6 +118,23 @@ var __statics = {
 		f_popup._OldContextMenu=undefined; // function
 		// f_popup._Installed=undefined; // boolean
 		f_popup._KeyProvider=undefined; // f_component
+		
+		if (document._rcfacesIEPopup) {
+			var ps=[document];
+			
+			for(;ps.length;) {
+				var doc=ps.pop();
+				
+				var popup=doc._rcfacesIEPopup;
+				if (!popup) {
+					continue;
+				}
+				// doc._rcfacesStylesInitialized=undefined;
+				doc._rcfacesIEPopup=undefined;
+								
+				ps.push(popup.document);				
+			}
+		}
 	},
 	/**
 	 * @method hidden static
@@ -129,11 +146,11 @@ var __statics = {
 	 * @method private static
 	 */
 	_Ie_PreparePopup: function(doc, useIt) {		
-		var popup=doc._iePopup;
+		var popup=doc._rcfacesIEPopup;
 		
 		if (!popup) {
 			popup=f_popup._Ie_CreatePopup(doc);
-			doc._iePopup=popup;
+			doc._rcfacesIEPopup=popup;
 		}
 				
 		if (useIt) {
@@ -142,8 +159,8 @@ var __statics = {
 			f_popup._Ie_PreparePopup(pdocument);
 
 			// Ajoute les ressources qui n'avaient pas été encore initialisées ...
-			if (!pdocument._resInitialized) {
-				pdocument._resInitialized=true;
+			if (!pdocument._rcfacesStylesInitialized) {
+				pdocument._rcfacesStylesInitialized=true;
 				
 				f_core.CopyStyleSheets(pdocument, document, pdocument.styleSheets.length);
 			}
@@ -334,7 +351,7 @@ var __statics = {
 		doc.addEventListener("keydown", f_popup._OnKeyDownJs, true);
 		doc.addEventListener("keyup", f_popup._OnKeyUpJs, true);
 		doc.addEventListener("keypress", f_popup._OnKeyPressJs, true);		
-		doc.addEventListener("contextmenu", f_popup._OnContextMenu, true);
+		doc.addEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
 		return true;
 	},
 	/**
@@ -422,14 +439,15 @@ var __statics = {
 		doc.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
 		doc.removeEventListener("keyup", f_popup._OnKeyUpJs, true);
 		doc.removeEventListener("keypress", f_popup._OnKeyPressJs, true);
-		doc.removeEventListener("contextmenu", f_popup._OnContextMenu, true);
+		doc.removeEventListener("contextmenu", f_popup._Gecko_OnContextMenu, true);
 	},
 	/**
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @context document:this
 	 */
-	_OnContextMenu: function(evt) {
+	_Gecko_OnContextMenu: function(evt) {
 
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
@@ -441,8 +459,9 @@ var __statics = {
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
+	 * @context document:this
 	 */
-	_Gecko_OnMouseDown: function(evt) {	
+	_Gecko_OnMouseDown: function(evt) {
 		f_core.Debug(f_popup, "_OnMouseDown on "+this+" target="+evt.target+"/"+evt.target.className+"  popupComponent="+f_popup.Component);
 
 		var component=f_popup.Component;
@@ -541,7 +560,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @context event:evt
+	 * @context document:this
 	 */
 	_Gecko_OnClick: function(evt) {	
 		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+evt.target+"/"+evt.target.className);
@@ -558,7 +577,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @context event:evt
+	 * @context document:this
 	 */
 	_Gecko_OnBlur: function(evt) {	
 		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
@@ -578,7 +597,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @context event:evt
+	 * @context document:this
 	 */
 	_Gecko_OnFocus: function(evt) {
 		if (window._rcfacesExiting) {
@@ -614,7 +633,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt 
 	 * @return boolean
-	 * @context event:evt
+	 * @context object:this
 	 */
 	_OnKeyDown: function(evt) {
 		return f_popup._OnKeyDownJs(evt._jsEvent);
@@ -679,7 +698,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt 
 	 * @return boolean
-	 * @context event:evt
+	 * @context object:this
 	 */
 	_OnKeyUp: function(evt) {				
 		return f_popup._OnKeyUpJs(evt._jsEvent);
@@ -726,7 +745,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_event evt 
 	 * @return boolean
-	 * @context event:evt
+	 * @context object:this
 	 */
 	_OnKeyPress: function(evt) {
 		return f_popup._OnKeyPressJs(evt._jsEvent);
@@ -781,7 +800,7 @@ var __statics = {
 				return true;
 			}
 			
-			popup=document._iePopup;
+			popup=document._rcfacesIEPopup;
 			
 			if (popup && !popup.isOpen) {
 				// Ca va pas !
@@ -949,6 +968,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @context window:this
 	 */
 	_Ie_unload: function(evt) {
 		var doc=this.document;

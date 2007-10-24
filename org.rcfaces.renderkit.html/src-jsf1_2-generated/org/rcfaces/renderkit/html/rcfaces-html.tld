@@ -271,6 +271,20 @@ A string value specifying a list of javascript classes to include.
 				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
+		<attribute>
+			<name>requiredModules</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>requiredSets</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
 	</tag>
 	<tag>
 		<name>cssStyle</name>

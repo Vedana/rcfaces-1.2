@@ -26,6 +26,8 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 	private ValueExpression srcCharSet;
 	private ValueExpression requiredFiles;
 	private ValueExpression requiredClasses;
+	private ValueExpression requiredModules;
+	private ValueExpression requiredSets;
 	public String getComponentType() {
 		return JavaScriptComponent.COMPONENT_TYPE;
 	}
@@ -50,6 +52,14 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 		this.requiredClasses = requiredClasses;
 	}
 
+	public final void setRequiredModules(ValueExpression requiredModules) {
+		this.requiredModules = requiredModules;
+	}
+
+	public final void setRequiredSets(ValueExpression requiredSets) {
+		this.requiredSets = requiredSets;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (JavaScriptComponent.COMPONENT_TYPE==getComponentType()) {
@@ -60,6 +70,8 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 			LOG.debug("  srcCharSet='"+srcCharSet+"'");
 			LOG.debug("  requiredFiles='"+requiredFiles+"'");
 			LOG.debug("  requiredClasses='"+requiredClasses+"'");
+			LOG.debug("  requiredModules='"+requiredModules+"'");
+			LOG.debug("  requiredSets='"+requiredSets+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -117,6 +129,24 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 				component.setRequiredClasses(requiredClasses.getExpressionString());
 			}
 		}
+
+		if (requiredModules != null) {
+			if (requiredModules.isLiteralText()==false) {
+				component.setValueExpression(Properties.REQUIRED_MODULES, requiredModules);
+
+			} else {
+				component.setRequiredModules(requiredModules.getExpressionString());
+			}
+		}
+
+		if (requiredSets != null) {
+			if (requiredSets.isLiteralText()==false) {
+				component.setValueExpression(Properties.REQUIRED_SETS, requiredSets);
+
+			} else {
+				component.setRequiredSets(requiredSets.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -125,6 +155,8 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 		srcCharSet = null;
 		requiredFiles = null;
 		requiredClasses = null;
+		requiredModules = null;
+		requiredSets = null;
 
 		super.release();
 	}

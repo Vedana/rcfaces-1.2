@@ -201,6 +201,14 @@ A string value specifying a list of javascript classes to include.
 			<name>requiredClasses</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>requiredModules</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>requiredSets</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>cssStyle</name>

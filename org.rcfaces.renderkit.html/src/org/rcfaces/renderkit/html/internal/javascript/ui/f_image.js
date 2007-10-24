@@ -159,7 +159,7 @@ var __members = {
 
 					var ret=request.f_getResponse();
 					try {
-						eval(ret);
+						f_core.WindowScopeEval(ret);
 						
 					} catch (x) {
 						f_core.Error(f_image, "_callServer.onLoad: Can not eval response '"+ret+"'.", x);

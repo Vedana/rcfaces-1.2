@@ -207,7 +207,8 @@ var __members={
 	
 			var state;
 			if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
-				content=eval(content);
+				// Il nous faut un retour ... on a pas trop le choix concernant l'Eval		
+				content=f_core.WindowScopeEval(content);
 				
 			} else {					
 				content = this.f_decodeResponse(content, responseContentType, request);
@@ -351,7 +352,7 @@ var __members={
 								applicationError=true;
 							
 							} else if (contentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
-								eval(content);
+								f_core.WindowScopeEval(content);
 								
 								content=null;
 								

@@ -33,8 +33,9 @@ var __statics = {
 	_ItemIds: 0,
 	
 	/** 
-	 * @method private static String
-	 * @context object:this
+	 * @method private static
+	 * @return String
+	 * @context none
 	 */
 	_ItemToString: function() {
 		return this._id;

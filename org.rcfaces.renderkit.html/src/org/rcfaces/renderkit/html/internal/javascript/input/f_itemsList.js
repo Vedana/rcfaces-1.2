@@ -8,8 +8,9 @@
  
 var __statics = {
 	/** 
-	 * @method private static String
-	 * @this Object
+	 * @method private static
+	 * @return String
+	 * @context none
 	 */
 	_ItemToString: function() {
 		return this._id;

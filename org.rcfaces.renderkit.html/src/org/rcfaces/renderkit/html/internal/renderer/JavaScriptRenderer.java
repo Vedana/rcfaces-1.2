@@ -5,6 +5,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -20,6 +21,8 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IModule;
+import org.rcfaces.core.internal.webapp.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
@@ -52,9 +55,14 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
                 .getRequiredFiles(facesContext);
         String requiredClasses = javaScriptComponent
                 .getRequiredClasses(facesContext);
+        String requiredModules = javaScriptComponent
+                .getRequiredModules(facesContext);
+        String requiredSets = javaScriptComponent.getRequiredSets(facesContext);
 
-        if (requiredFiles != null || requiredClasses != null) {
-            addRequires(htmlWriter, requiredFiles, requiredClasses);
+        if (requiredFiles != null || requiredClasses != null
+                || requiredModules != null || requiredSets != null) {
+            addRequires(htmlWriter, requiredFiles, requiredClasses,
+                    requiredModules, requiredSets);
         }
 
         String src = javaScriptComponent.getSrc(facesContext);
@@ -85,7 +93,8 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
     }
 
     public static void addRequires(IHtmlWriter writer, String requiredFiles,
-            String requiredClasses) throws WriterException {
+            String requiredClasses, String requiredModules, String requiredSets)
+            throws WriterException {
 
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
@@ -120,6 +129,7 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
                 files.add(file);
             }
         }
+
         if (requiredClasses != null) {
             StringTokenizer st = new StringTokenizer(requiredClasses, ",");
             for (; st.hasMoreTokens();) {
@@ -135,6 +145,63 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
                 }
 
                 files.add(clazz.getFile());
+            }
+        }
+
+        if (requiredModules != null) {
+            StringTokenizer st = new StringTokenizer(requiredModules, ",");
+            for (; st.hasMoreTokens();) {
+                String moduleName = st.nextToken().trim();
+
+                if ("all".equals(moduleName)) {
+                    IModule modules[] = repository.listModules();
+
+                    for (int i = 0; i < modules.length; i++) {
+                        IModule module = modules[i];
+
+                        files.addAll(Arrays.asList(module.listDependencies()));
+                    }
+
+                    continue;
+                }
+
+                IModule module = repository.getModuleByName(moduleName);
+
+                if (module == null) {
+                    LOG.error("Can not find required module '" + moduleName
+                            + "' !");
+                    continue;
+                }
+
+                files.add(Arrays.asList(module.listDependencies()));
+            }
+        }
+
+        if (requiredSets != null) {
+            StringTokenizer st = new StringTokenizer(requiredSets, ",");
+            for (; st.hasMoreTokens();) {
+                String setName = st.nextToken().trim();
+
+                if ("all".equals(setName)) {
+                    ISet sets[] = repository.listSets();
+
+                    for (int i = 0; i < sets.length; i++) {
+                        ISet set = sets[i];
+
+                        files.addAll(Arrays.asList(set.listDependencies()));
+                    }
+
+                    continue;
+                }
+
+                ISet set = repository.getSetByName(setName);
+
+                if (set == null) {
+                    LOG.error("Can not find required set '" + setName + "' !");
+                    continue;
+                }
+
+                files.addAll(Arrays.asList(set.listDependencies()));
             }
         }
 

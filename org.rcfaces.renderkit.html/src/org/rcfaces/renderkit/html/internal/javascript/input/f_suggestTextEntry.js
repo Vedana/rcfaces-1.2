@@ -440,7 +440,7 @@ var __members = {
 						suggestTextEntry._requestedText=text;
 						
 						try {
-							eval(ret);
+							f_core.WindowScopeEval(ret);
 							
 						} catch (x) {
 				 			suggestTextEntry.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");

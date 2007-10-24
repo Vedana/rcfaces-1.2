@@ -485,6 +485,12 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
         return (IModule[]) c.toArray(new IModule[c.size()]);
     }
 
+    public ISet[] listSets() {
+        Collection c = setsByName.values();
+
+        return (ISet[]) c.toArray(new ISet[c.size()]);
+    }
+
     public ISet declareSet(String name, String uri, String[] modules) {
         List l = new ArrayList(modules.length);
 

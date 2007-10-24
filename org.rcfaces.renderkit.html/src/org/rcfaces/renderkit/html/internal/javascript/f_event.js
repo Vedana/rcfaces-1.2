@@ -581,7 +581,7 @@ var __statics = {
 
 		if (f_event._EvtLock & f_event.POPUP_LOCK) {
 			if (f_popup.VerifyLock()===false) {
-				// FInalement nous ne sommes plus en LOCK ...
+				// Finalement nous ne sommes plus en LOCK ...
 				// 					
 				currentLock=f_event._EvtLock;
 				if (mask) {

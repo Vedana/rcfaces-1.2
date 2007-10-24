@@ -333,7 +333,7 @@ var __statics = {
 		
 		var idx2=domain.indexOf(":");
 		if (idx2>0) {
-			domain=domain.subtring(0, idx2);
+			domain=domain.substring(0, idx2);
 		}
 		
 		var ds=domain.split(".");

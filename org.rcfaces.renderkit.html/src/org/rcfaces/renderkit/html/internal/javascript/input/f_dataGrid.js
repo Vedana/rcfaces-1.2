@@ -656,6 +656,8 @@ var __members = {
 	 * @return number of removed rows.
 	 */
 	f_clearArray: function(rowValues) {
+		f_core.Assert(rowValues instanceof Array, "f_dataGrid.f_clearArray: Invalid values parameter '"+values+"'.");
+
 		return this.f_clear.apply(this, rowValues);
 	},
 	/**
@@ -1035,7 +1037,7 @@ var __members = {
 					
 					//alert("ret="+ret);
 					try {
-						eval(ret);
+						f_core.WindowScopeEval(ret);
 						
 					} catch (x) {
 			 			dataGrid.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");

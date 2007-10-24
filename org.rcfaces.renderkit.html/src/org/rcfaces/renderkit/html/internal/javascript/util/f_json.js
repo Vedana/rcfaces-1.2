@@ -137,7 +137,7 @@ var __statics = {
                 replace(/\\./g, '@').
                 replace(/"[^"\\\n\r]*"/g, ''))) {
 
-            var j = eval('(' + formattedObject + ')');
+            var j = f_core.WindowScopeEval('(' + formattedObject + ')');
 
             if (typeof(filter)=== 'function') {
                 j = walk('', j);
