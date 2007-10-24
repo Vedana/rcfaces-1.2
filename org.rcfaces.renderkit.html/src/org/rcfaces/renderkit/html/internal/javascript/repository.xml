@@ -926,6 +926,15 @@
 	</module>
 
 <!-- GRID Components -->
+
+	<module id="gridHelp">
+		 <file name="ui/f_columnSortDialog.js">
+			<class name="f_columnSortDialog">
+				<required-class name="f_dialog" />
+			</class>
+		 </file>
+	</module>
+
 	<module id="dataGrid">
 		<file name="input/f_additionalInformation.js">
 			<class name="f_additionalInformation">
@@ -959,6 +968,8 @@
 				
 				<required-class id="additional" name="fa_asyncRender" />
 				<required-class id="additional" name="f_additionalInformation" />
+
+				<required-class id="sort-dialog" name="f_columnSortDialog" />
 
 				<required-style name="f_grid.css" />
 			</class>
@@ -1402,15 +1413,6 @@
 				<required-class name="f_dialog" />
 				<required-class name="f_progressBar" />
 				<required-class name="fa_progressIndicator" />
-			</class>
-		 </file>
-	</module>
-
-	<module id="gridHelp">
-		 <file name="ui/f_columnSortDialog.js">
-			<class name="f_columnSortDialog">
-				<required-class name="f_dialog" />
-				<required-class name="f_grid" />
 			</class>
 		 </file>
 	</module>

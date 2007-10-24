@@ -41,6 +41,7 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -252,6 +253,15 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         if (ajax) {
             javaScriptRenderContext.appendRequiredClasses(classes,
                     JavaScriptClasses.GRID, "ajax");
+        }        
+        
+        if (dataGridComponent instanceof ISortManagerCapability) {
+            String sortManager = ((ISortManagerCapability) dataGridComponent).getSortManager();
+            if (sortManager != null && sortManager.indexOf('(') < 0 ) {
+            	//TODO check availability of id sort-* in repository
+                javaScriptRenderContext.appendRequiredClasses(classes,
+                        JavaScriptClasses.GRID,"sort-"+sortManager);
+           }
         }
     }
 
