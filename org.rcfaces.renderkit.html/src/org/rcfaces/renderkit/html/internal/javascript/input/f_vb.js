@@ -1054,8 +1054,8 @@ var __statics = {
 				var nbPad = ln - inVal.length;
 				if (nbPad > 0) {
 					var padder = validator.f_getParameter("padder.value", " ");
-					var leftSide = validator.f_getBooleanParameter("padder.leftSide", true);
-					var modifyInput = validator.f_getBooleanParameter("padder.modifyInput", true);
+					var leftSide = validator.f_getBoolParameter("padder.leftSide", true);
+					var modifyInput = validator.f_getBoolParameter("padder.modifyInput", true);
 					
 					var padd = "";					
 					for (; nbPad>0; nbPad--) {
