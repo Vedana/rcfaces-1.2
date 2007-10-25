@@ -310,21 +310,14 @@ var __statics = {
 		return visibleCols;
 	},
 
-	/**
-	 * @method private static
-	 * @param f_event event
-	 * @return void
-	 * @context f_event:event
-	 */
-	_OpenSortManager: function(event) {
-		var grid=event.f_getComponent();
-		
-		var dialog=f_columnSortDialog.f_newInstance(grid);
-		
-		dialog.f_open();
-	},
 	Initializer: function() {
-		f_grid.RegisterSortManager(f_columnSortDialog._SORT_MANAGER_NAME, f_columnSortDialog._OpenSortManager);
+		f_grid.RegisterSortManager(f_columnSortDialog._SORT_MANAGER_NAME, function(event) {
+			var grid=event.f_getComponent();
+			
+			var dialog=f_columnSortDialog.f_newInstance(grid);
+			
+			dialog.f_open();
+		});
 	}   
 }
 

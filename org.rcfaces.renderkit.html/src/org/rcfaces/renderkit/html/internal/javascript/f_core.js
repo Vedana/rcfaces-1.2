@@ -977,19 +977,32 @@ var f_core = {
 	_OnExit: function() {
 		var win=this;
 		
-		if (win.document.readyState) {
-			// Sous IE;
-			
-			// Bug du frameSet
-			if (!win.event) {
-				// Une des frames doit positionner 'event'
-				var frames=win.frames;
-				for(var i=0;i<frames.length;i++) {
-					if (frames[i].event) {
-						win=frames[i];
-						break;
+		if (win.document.readyState && !win.event) {
+			// Sous IE il peut y avoir un bug de positionnement de l'évènement
+
+			function f(win) {
+				try {
+					if (win.event) {
+						return win;
 					}
-				}
+					
+					var frames=win.frames;
+					for(var i=0;i<frames.length;i++) {
+						win=f(frames[i]);
+						if (win) {
+							return win;
+						}
+					}
+				} catch (x) {
+					// Probleme de sécurité peut subvenir !
+				}				
+				return null;
+			}			
+
+			win=f(win);
+	
+			if (!win) {
+				alert("RCFACES: PANIC can not identify unloaded window !");
 			}
 		}
 		
@@ -5224,6 +5237,37 @@ var f_core = {
 			msg+="\njs.version="+window.RCFACES_JS_VERSION;
 		}
 		
+		if (window.frames.length) {
+			function f(win,index) {				
+				try {
+					if (!win._rcfacesClassLoader) {
+						return "\n"+index+": "+win.location;
+					}
+					
+					var msg="\n"+index+": "+win._rcfacesClassLoader;
+			
+					if (index=="Root") {
+						index="";
+					} else {
+						index+=".";
+					}
+			
+					var frames=win.frames;		
+					for(var i=0;i<frames.length;i++) {
+						msg+=arguments.callee(frames[i], index+(i+1));
+					}
+					
+					return msg;					
+				} catch (x) {
+					// Exception de sécurité !
+				}
+				
+				return "";
+			}
+			
+			msg+=f(window, "Root");
+		}
+				
 		alert(msg);
 	},
 	/**

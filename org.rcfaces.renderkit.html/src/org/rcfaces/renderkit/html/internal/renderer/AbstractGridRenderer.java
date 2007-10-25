@@ -253,15 +253,17 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         if (ajax) {
             javaScriptRenderContext.appendRequiredClasses(classes,
                     JavaScriptClasses.GRID, "ajax");
-        }        
-        
+        }
+
         if (dataGridComponent instanceof ISortManagerCapability) {
-            String sortManager = ((ISortManagerCapability) dataGridComponent).getSortManager();
-            if (sortManager != null && sortManager.indexOf('(') < 0 ) {
-            	//TODO check availability of id sort-* in repository
-                javaScriptRenderContext.appendRequiredClasses(classes,
-                        JavaScriptClasses.GRID,"sort-"+sortManager);
-           }
+            String sortManager = ((ISortManagerCapability) dataGridComponent)
+                    .getSortManager();
+            if (sortManager != null && sortManager.indexOf('(') < 0) {
+                if ("dialog".equals(sortManager)) {
+                    javaScriptRenderContext.appendRequiredClasses(classes,
+                            "f_columnSortDialog", null);
+                }
+            }
         }
     }
 
@@ -629,7 +631,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         int tableWidth = 0;
         boolean mainComponentScrollable = true;
         if (gridRenderContext.hasScrollBars()) {
-            int w = gridRenderContext.getGridWidth()-2;
+            int w = gridRenderContext.getGridWidth() - 2;
 
             if (headerVisible) {
                 htmlWriter.startElement(IHtmlWriter.DIV);
@@ -650,7 +652,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 ICssWriter cssWriter = htmlWriter.writeStyle(32);
 
                 if (gridHeight > 0) {
-                    int gh = gridHeight-2; // Border !
+                    int gh = gridHeight - 2; // Border !
                     if (headerVisible) {
                         gh -= getTitleHeight();
                     }

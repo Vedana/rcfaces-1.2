@@ -925,15 +925,54 @@
 		</file>
 	</module>
 
-<!-- GRID Components -->
 
-	<module id="gridHelp">
-		 <file name="ui/f_columnSortDialog.js">
-			<class name="f_columnSortDialog">
+<!-- Dialog Components -->
+
+	<module id="dialog">
+		 <file name="ui/f_shellManager.js">
+			<class name="f_shellManager">
+				<required-class name="f_core" />
+			</class>
+		 </file>
+		 <file name="ui/f_shellDecorator.js">
+			<class name="f_shellDecorator">
+				<required-class name="f_core" />
+				<required-class name="f_object" />
+				<required-class name="f_shellManager" />
+			</class>
+		 </file>
+		 <file name="ui/f_shell.js">
+			<class name="f_shell">
+				<required-class name="f_core" />
+				<required-class name="f_object" />
+				<required-class name="fa_eventTarget" />
+				<required-class name="f_shellManager" />
+				<required-class name="f_shellDecorator" />
+			</class>
+		 </file>
+		 <file name="ui/f_dialog.js">
+			<class name="f_dialog">
+				<required-class name="f_shell" />
+			</class>
+		 </file>
+		 <file name="ui/f_waitingShell.js">
+			<class name="f_waitingShell">
+				<required-class name="f_dialog" />
+			</class>
+		 </file>
+		 <file name="ui/f_messageDialog.js">
+			<class name="f_messageDialog">
+				<required-class name="f_dialog" />
+			</class>
+		 </file>
+		 <file name="ui/f_viewDialog.js">
+			<class name="f_viewDialog">
 				<required-class name="f_dialog" />
 			</class>
 		 </file>
 	</module>
+
+<!-- GRID Components -->
 
 	<module id="dataGrid">
 		<file name="input/f_additionalInformation.js">
@@ -968,8 +1007,6 @@
 				
 				<required-class id="additional" name="fa_asyncRender" />
 				<required-class id="additional" name="f_additionalInformation" />
-
-				<required-class id="sort-dialog" name="f_columnSortDialog" />
 
 				<required-style name="f_grid.css" />
 			</class>
@@ -1020,6 +1057,15 @@
 				<required-style name="f_comboGrid.css" />
 			</class>
 		</file>
+	</module>
+
+	<module id="gridHelp">
+		 <file name="ui/f_columnSortDialog.js">
+			<class name="f_columnSortDialog">
+				<required-class name="f_dialog" />
+				<required-class name="f_grid" />
+			</class>
+		 </file>
 	</module>
 	
 <!-- TREE Components -->
@@ -1361,50 +1407,6 @@
 		<file name="util/f_json.js">
 			<class name="f_json" />
 		</file>
-	</module>
-
-	<module id="dialog">
-		 <file name="ui/f_shellManager.js">
-			<class name="f_shellManager">
-				<required-class name="f_core" />
-			</class>
-		 </file>
-		 <file name="ui/f_shellDecorator.js">
-			<class name="f_shellDecorator">
-				<required-class name="f_core" />
-				<required-class name="f_object" />
-				<required-class name="f_shellManager" />
-			</class>
-		 </file>
-		 <file name="ui/f_shell.js">
-			<class name="f_shell">
-				<required-class name="f_core" />
-				<required-class name="f_object" />
-				<required-class name="fa_eventTarget" />
-				<required-class name="f_shellManager" />
-				<required-class name="f_shellDecorator" />
-			</class>
-		 </file>
-		 <file name="ui/f_dialog.js">
-			<class name="f_dialog">
-				<required-class name="f_shell" />
-			</class>
-		 </file>
-		 <file name="ui/f_waitingShell.js">
-			<class name="f_waitingShell">
-				<required-class name="f_dialog" />
-			</class>
-		 </file>
-		 <file name="ui/f_messageDialog.js">
-			<class name="f_messageDialog">
-				<required-class name="f_dialog" />
-			</class>
-		 </file>
-		 <file name="ui/f_viewDialog.js">
-			<class name="f_viewDialog">
-				<required-class name="f_dialog" />
-			</class>
-		 </file>
 	</module>
 
 	<module id="progressMonitorDialog">

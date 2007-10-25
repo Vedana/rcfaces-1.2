@@ -472,7 +472,26 @@ var __members = {
 		}
 		
 		return true;
-	},			
+	},
+	/**
+	 * @method public
+	 * @param String value
+	 * @return void
+	 * @see #f_setValue(String)
+	 */
+	f_setSelectedValue: function(value) {
+		this.f_setValue(value);
+	},
+	/**
+	 * Returns the selected value.
+	 * 
+	 * @method public
+	 * @return String 
+	 * @see #f_getValue()
+	 */
+	f_getSelectedValue: function() {
+		return this.f_getValue();
+	},
 	/**
 	 * Returns the selected value.
 	 * 

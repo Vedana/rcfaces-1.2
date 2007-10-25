@@ -59,7 +59,7 @@ if (window._RCFACES_LEVEL3) {
 			}
 			
 			if (!win) {
-				throw new Error("Unknown object type !");
+				throw new Error("RCFaces: Unknown this object type !");
 			}
 		}
 		
@@ -84,6 +84,6 @@ if (window._RCFACES_LEVEL3) {
 			}
 		}
 		
-		throw new Error("Can not identify the rcfaces window !");
+		throw new Error("RCFaces: Can not identify the rcfaces window !");
 	}
 }	
