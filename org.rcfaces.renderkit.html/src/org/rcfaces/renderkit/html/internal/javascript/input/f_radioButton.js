@@ -158,7 +158,7 @@ var __members = {
 			return undefined;
 		}
 		
-		return input.name;
+		return input.value;
 	},
 	fa_updateRequired: function() {
 	},
