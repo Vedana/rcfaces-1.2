@@ -6,12 +6,8 @@ import java.awt.image.IndexColorModel;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -29,135 +25,34 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.IIndexedImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.contentStorage.IResolvedContent;
-import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
-import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.lang.IAdaptable;
-import org.rcfaces.core.model.BasicContentModel;
+import org.rcfaces.core.internal.content.AbstractOperationContentModel;
+import org.rcfaces.core.internal.content.IBufferOperation;
+import org.rcfaces.core.internal.content.IFileBuffer;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-class ImageOperationContentModel extends BasicContentModel implements
-        Serializable, IAdaptable, IResolvedContent {
+public class ImageOperationContentModel extends AbstractOperationContentModel {
 
     private static final String REVISION = "$Revision$";
 
-    private static final long serialVersionUID = -8586152237093654819L;
+    private static final long serialVersionUID = 3641020501370064750L;
 
     private static final Log LOG = LogFactory
             .getLog(ImageOperationContentModel.class);
 
-    private static final String IMAGE_CONTENT_PROVIDER_ID = "org.rcfaces.core.IMAGE_CONTENT_PROVIDER";
-
-    /**
-     * 
-     */
-    private static final IBufferedImage INVALID_BUFFERED_IMAGE = new IBufferedImage() {
-        private static final String REVISION = "$Revision$";
-
-        public int getSize() {
-            return 0;
-        }
-
-        public String getName() {
-            return "*** Invalid image ***";
-        }
-
-        public InputStream getContent() {
-            return null;
-        }
-
-        public String getContentType() {
-            return null;
-        }
-
-        public long getModificationDate() {
-            return 0;
-        }
-
-        public String getHash() {
-            return null;
-        }
-
-        public String getETag() {
-            return null;
-        }
-
-        public boolean isInitialized() {
-            return true;
-        }
-
-        public void setErrored() {
-        }
-
-        public boolean isErrored() {
-            return true;
-        }
-
-        public void initialize(IImageLoader imageDownloader,
-                String contentType, RenderedImage renderedImage,
-                ImageWriter imageWriter, int imageType) {
-        }
-
-        public String getRedirection() {
-            return null;
-        }
-
-        public void initializeRedirection(String url) {
-        }
-
-    };
-
-    private final String resourceURL;
-
-    private final String operationId;
-
-    private String filterParametersToParse;
-
-    private String resourceKey;
-
-    private transient Map filterParameters;
-
-    private transient IBufferedImage bufferedImage;
-
-    private transient IImageOperation imageOperation;
-
-    private boolean versioned;
-
     public ImageOperationContentModel(String resourceURL, String contentType,
             String urlSuffix, String versionId, String operationId,
             String filterParametersToParse, Map attributes,
-            IImageOperation imageOperation) {
-        this.resourceURL = resourceURL;
-        this.operationId = operationId;
-        this.filterParametersToParse = filterParametersToParse;
-        this.imageOperation = imageOperation;
-
-        StringAppender sa = new StringAppender(operationId, 128);
-
-        if (filterParametersToParse != null) {
-            sa.append(filterParametersToParse);
-        }
-
-        sa.append("::");
-
-        sa.append(resourceURL);
-
-        if (versionId != null) {
-            sa.append(":$:");
-            sa.append(versionId);
-        }
-
-        this.resourceKey = sa.toString();
-
-        setProcessDataAtRequest(true);
+            IBufferOperation bufferOperation) {
+        super(resourceURL, contentType, versionId, operationId,
+                filterParametersToParse, attributes, bufferOperation);
 
         if (contentType != null) {
-            setContentType(contentType);
-
             if (urlSuffix == null) {
                 urlSuffix = ImageAdapterFactory
                         .getSuffixByContentType(contentType);
@@ -167,117 +62,31 @@ class ImageOperationContentModel extends BasicContentModel implements
         if (urlSuffix != null) {
             setURLSuffix(urlSuffix);
         }
-
-        if (attributes != null && attributes.isEmpty() == false) {
-            putAllAttributes(attributes);
-        }
-
-        setWrappedData(this);
     }
 
-    public final synchronized Map getFilterParameters() {
-        if (filterParameters != null) {
-            return filterParameters;
-        }
-
-        if (filterParametersToParse == null
-                || filterParametersToParse.length() < 1) {
-            filterParameters = Collections.EMPTY_MAP;
-            return filterParameters;
-        }
-
-        StringTokenizer st = new StringTokenizer(filterParametersToParse, ",");
-
-        filterParameters = new HashMap(st.countTokens());
-        int idx = 0;
-        for (; st.hasMoreTokens();) {
-            String token = st.nextToken().trim();
-
-            String pName;
-            String pValue;
-
-            int idxEq = token.indexOf('=');
-            if (idxEq >= 0) {
-                pName = token.substring(0, idxEq).trim();
-                pValue = token.substring(idxEq + 1).trim();
-
-            } else {
-                pName = "#" + idx;
-                pValue = token.trim();
-
-                idx++;
-            }
-
-            filterParameters.put(pName, pValue);
-        }
-
-        return filterParameters;
-    }
-
-    public Object getAdapter(Class adapter, Object parameter) {
-        if (IResolvedContent.class.equals(adapter)) {
-            return this;
-        }
-
-        return null;
-    }
-
-    public boolean isProcessAtRequest() {
-        return false;
-    }
-
-    public boolean isErrored() {
-        return getBufferedImage().isErrored();
-    }
-
-    private synchronized IBufferedImage getBufferedImage() {
-        if (bufferedImage != null) {
-            return bufferedImage;
-        }
-
-        bufferedImage = createBufferedImage();
-
-        return bufferedImage;
-    }
-
-    public InputStream getInputStream() throws IOException {
-        return getBufferedImage().getContent();
-    }
-
-    public long getModificationDate() {
-        return getBufferedImage().getModificationDate();
-    }
-
-    public int getLength() {
-        return getBufferedImage().getSize();
-    }
-
-    public synchronized IImageOperation getImageOperation(
-            FacesContext facesContext) {
-        if (imageOperation != null) {
-            return imageOperation;
-        }
+    protected IBufferOperation createBufferOperation(FacesContext facesContext) {
 
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
 
         ImageContentAccessorHandler imageOperationRepository = (ImageContentAccessorHandler) rcfacesContext
-                .getProvidersRegistry().getProvider(IMAGE_CONTENT_PROVIDER_ID);
+                .getProvidersRegistry().getProvider(
+                        ImageContentAccessorHandler.IMAGE_CONTENT_PROVIDER_ID);
 
-        imageOperation = imageOperationRepository
-                .getImageOperation(operationId);
+        IImageOperation imageOperation = imageOperationRepository
+                .getImageOperation(getOperationId());
 
         return imageOperation;
     }
 
-    private IBufferedImage createBufferedImage() {
+    protected IFileBuffer createFileBuffer() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        IImageOperation imageOperation = getImageOperation(facesContext);
+        IImageOperation imageOperation = (IImageOperation) getBufferOperation(facesContext);
         if (imageOperation == null) {
             LOG.error("Can not get image operation associated to id '"
-                    + operationId + "'.");
-            return INVALID_BUFFERED_IMAGE;
+                    + getOperationId() + "'.");
+            return INVALID_BUFFERED_FILE;
         }
 
         ExternalContext externalContext = facesContext.getExternalContext();
@@ -291,26 +100,26 @@ class ImageOperationContentModel extends BasicContentModel implements
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
 
-        IImageLoader imageDownloader = getImageDownloader(rcfacesContext,
-                resourceURL, context, request, response);
+        IResourceLoader imageDownloader = getImageLoader(rcfacesContext,
+                getResourceURL(), context, request, response);
 
         String downloadedContentType = imageDownloader.getContentType();
         if (downloadedContentType == null
                 || downloadedContentType.equals(getContentType()) == false) {
             LOG.error("Different content types request='" + getContentType()
                     + "' loaded='" + downloadedContentType + "' for path '"
-                    + resourceURL + "'.");
+                    + getResourceURL() + "'.");
 
-            return INVALID_BUFFERED_IMAGE;
+            return INVALID_BUFFERED_FILE;
         }
 
         InputStream inputStream = imageDownloader.openStream();
 
         if (inputStream == null) {
-            LOG.error("Can not get image specified by path '" + resourceURL
-                    + "'.");
+            LOG.error("Can not get image specified by path '"
+                    + getResourceURL() + "'.");
 
-            return INVALID_BUFFERED_IMAGE;
+            return INVALID_BUFFERED_FILE;
         }
 
         String internalContentType = getContentType();
@@ -332,7 +141,7 @@ class ImageOperationContentModel extends BasicContentModel implements
             LOG.error("Can not write image format '" + internalContentType
                     + "'.");
 
-            return INVALID_BUFFERED_IMAGE;
+            return INVALID_BUFFERED_FILE;
         }
 
         ImageWriter imageWriter = (ImageWriter) it.next();
@@ -343,7 +152,7 @@ class ImageOperationContentModel extends BasicContentModel implements
 
             if (it.hasNext() == false) {
                 throw new IOException("Can not get codec to read image '"
-                        + resourceURL + "'.");
+                        + getResourceURL() + "'.");
             }
 
             ImageReader imageReader = (ImageReader) it.next();
@@ -366,9 +175,9 @@ class ImageOperationContentModel extends BasicContentModel implements
             }
 
         } catch (IOException e) {
-            LOG.error("Can not load image '" + resourceURL + "'.", e);
+            LOG.error("Can not load image '" + getResourceURL() + "'.", e);
 
-            return INVALID_BUFFERED_IMAGE;
+            return INVALID_BUFFERED_FILE;
 
         } finally {
             try {
@@ -388,7 +197,7 @@ class ImageOperationContentModel extends BasicContentModel implements
             // sourceImageType = BufferedImage.TYPE_4BYTE_ABGR;
         }
 
-        IBufferedImage bufferedImage = createNewBufferedImage(resourceURL);
+        IBufferedImage bufferedImage = createNewBufferedImage(getResourceURL());
 
         try {
             RenderedImage renderedImage = filter(image,
@@ -397,14 +206,14 @@ class ImageOperationContentModel extends BasicContentModel implements
 
             try {
                 bufferedImage.initialize(imageDownloader, externalContentType,
-                        renderedImage, imageWriter, sourceImageType);
+                        renderedImage, imageWriter, sourceImageType,
+                        imageDownloader.getLastModified());
 
             } catch (IOException e) {
-                LOG.error(
-                        "Can not create filtred image '" + resourceURL + "'.",
-                        e);
+                LOG.error("Can not create filtred image '" + getResourceURL()
+                        + "'.", e);
 
-                return INVALID_BUFFERED_IMAGE;
+                return INVALID_BUFFERED_FILE;
             }
 
         } finally {
@@ -418,11 +227,11 @@ class ImageOperationContentModel extends BasicContentModel implements
         return new FileRenderedImage(imageName);
     }
 
-    private IImageLoader getImageDownloader(RcfacesContext context, String url,
+    private IResourceLoader getImageLoader(RcfacesContext context, String url,
             ServletContext servletContext, HttpServletRequest request,
             HttpServletResponse response) {
 
-        IImageLoaderFactory imageLoaderFactory;
+        IResourceLoaderFactory imageLoaderFactory;
         if (context.isDesignerMode()) {
             imageLoaderFactory = Constants.getDesignerImageLoaderFactory();
 
@@ -430,8 +239,8 @@ class ImageOperationContentModel extends BasicContentModel implements
             imageLoaderFactory = Constants.getImageLoaderFactory();
         }
 
-        return imageLoaderFactory.loadImage(servletContext, request, response,
-                url);
+        return imageLoaderFactory.loadResource(servletContext, request,
+                response, url);
     }
 
     protected RenderedImage filter(BufferedImage image,
@@ -545,25 +354,4 @@ class ImageOperationContentModel extends BasicContentModel implements
 
         return image;
     }
-
-    public String getETag() {
-        return getBufferedImage().getETag();
-    }
-
-    public String getHash() {
-        return getBufferedImage().getHash();
-    }
-
-    public String getResourceKey() {
-        return resourceKey;
-    }
-
-    public boolean isVersioned() {
-        return versioned;
-    }
-
-    public void setVersioned(boolean versioned) {
-        this.versioned = versioned;
-    }
-
 }

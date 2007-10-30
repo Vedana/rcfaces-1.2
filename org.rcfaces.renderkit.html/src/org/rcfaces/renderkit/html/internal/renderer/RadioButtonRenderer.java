@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 
@@ -33,9 +34,17 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 public class RadioButtonRenderer extends AbstractInputRenderer {
     private static final String REVISION = "$Revision$";
 
-    protected static final String INPUT_SUFFIX = "_input";
+    protected static final String INPUT_STYLECLASS_SUFFIX = "_input";
 
-    protected static final String TEXT_SUFFIX = "_text";
+    protected static final String TEXT_STYLECLASS_SUFFIX = "_text";
+
+    public static final String TEXT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "text";
+
+    public static final String INPUT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "input";
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
@@ -84,21 +93,23 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         }
 
         htmlWriter.endElement(IHtmlWriter.LABEL);
+
+        htmlWriter.enableJavaScript();
     }
 
     protected String getInputClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + INPUT_SUFFIX;
+        return getMainStyleClassName() + INPUT_STYLECLASS_SUFFIX;
     }
 
     protected String getLabelClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + TEXT_SUFFIX;
+        return getMainStyleClassName() + TEXT_STYLECLASS_SUFFIX;
     }
 
-    protected void writeInput(IHtmlWriter htmlWriter,
+    protected IHtmlWriter writeInput(IHtmlWriter htmlWriter,
             RadioButtonComponent radioButtonComponent, String className,
-            String componentId) throws WriterException {
+            String componentClientId) throws WriterException {
 
-        String inputId = componentId + "_input";
+        String inputId = componentClientId + INPUT_ID_SUFFIX;
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
         htmlWriter.writeId(inputId);
@@ -116,7 +127,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         if (htmlWriter.isJavaScriptEnabled() == false) {
             // Pour le FOCUS, pour retrouver le composant parent !
-            htmlWriter.writeAttribute("v:container", componentId);
+            htmlWriter.writeAttribute("v:container", componentClientId);
         }
 
         String accessKey = radioButtonComponent.getAccessKey(facesContext);
@@ -125,18 +136,21 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         }
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
+
+        return htmlWriter;
     }
 
-    protected void writeLabel(IHtmlWriter htmlWriter,
-            RadioButtonComponent button, String className, String componentId)
-            throws WriterException {
+    protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
+            RadioButtonComponent button, String className,
+            String componentClientId) throws WriterException {
         htmlWriter.startElement(IHtmlWriter.SPAN);
+
+        htmlWriter.writeId(componentClientId + TEXT_ID_SUFFIX);
+        htmlWriter.writeClass(className);
+        writeTextDirection(htmlWriter, button);
+
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
-
-        htmlWriter.writeClass(className);
-        String inputId = componentId + "_input";
-        htmlWriter.writeFor(inputId);
 
         String text = button.getText(facesContext);
         if (text != null) {
@@ -145,20 +159,26 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         HtmlTools.writeSpanAccessKey(htmlWriter, button, text, true);
 
         htmlWriter.endElement(IHtmlWriter.SPAN);
+
+        return htmlWriter;
     }
 
     protected void decode(IRequestContext context, UIComponent element,
             IComponentData componentData) {
+
+        RadioButtonComponent radioButton = (RadioButtonComponent) element;
+
+        boolean isDisabled = radioButton.isDisabled();
+
         super.decode(context, element, componentData);
 
-        RadioButtonComponent button = (RadioButtonComponent) element;
-
-        parseSelectedProperty((IHtmlRequestContext) context, button,
-                componentData);
+        parseSelectedProperty((IHtmlRequestContext) context, radioButton,
+                componentData, isDisabled);
     }
 
     protected void parseSelectedProperty(IHtmlRequestContext requestContext,
-            RadioButtonComponent radioButton, IComponentData clientData) {
+            RadioButtonComponent radioButton, IComponentData clientData,
+            boolean isDisabled) {
 
         String gb = radioButton.getGroupName();
         if (gb == null) {
@@ -176,6 +196,11 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         String svalue = clientData.getStringProperty("selected");
         if (svalue == null) {
             svalue = clientData.getParameter(gb);
+            
+            if (svalue==null && isDisabled) {
+                // Pas de changement d'états.
+                return;
+            }
         }
 
         // selection

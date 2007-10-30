@@ -173,7 +173,7 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
                     continue;
                 }
 
-                files.add(Arrays.asList(module.listDependencies()));
+                files.addAll(Arrays.asList(module.listDependencies()));
             }
         }
 

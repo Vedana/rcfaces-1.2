@@ -135,6 +135,29 @@ var __members = {
 		
 		iframe.src=this.f_getIFrameUrl();
 	},
+	/* Plus nécessaire par la redéfinition de  _OnExit 
+	f_preDestruction: function() {
+		if (window._RCFACES_LEVEL3) {
+			var iframe=this._iframe;
+			if (f_core.IsInternetExplorer() && iframe) {
+				
+				// Pour IE, probleme de synchronisme de fermeture !
+				
+				// Pas de super, car on passe en asynchrone !
+				iframe.parentNode.removeChild(iframe);
+		
+				var self=this;
+				var callee=arguments.callee;
+				window.setTimeout(function() {
+					self.f_super({callee: callee, length: 0 });
+				}, 10);
+				
+				return;
+			}
+		}
+		this.f_super(arguments);
+	},
+	*/
 
 	/**
 	 * @method public

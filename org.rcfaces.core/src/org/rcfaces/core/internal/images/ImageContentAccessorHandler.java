@@ -11,14 +11,15 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.ImageContentInformation;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
+import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.provider.AbstractProvider;
 
@@ -33,6 +34,8 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
     private static final Log LOG = LogFactory
             .getLog(ImageContentAccessorHandler.class);
+
+    public static final String IMAGE_CONTENT_PROVIDER_ID = "org.rcfaces.core.IMAGE_CONTENT_PROVIDER";
 
     public abstract IImageOperation getImageOperation(String operationId);
 
@@ -51,7 +54,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
     }
 
     protected abstract IContentAccessor formatImageURL(
-            FacesContext facesContext, IFiltredImageAccessor contentAccessor,
+            FacesContext facesContext, IFiltredContentAccessor contentAccessor,
             ImageContentInformation imageInformation);
 
     public IContentAccessor handleContent(FacesContext facesContext,
@@ -90,7 +93,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             contentInformationRef[0] = imageInformation;
         }
 
-        IFiltredImageAccessor modifiedContentAccessor = null;
+        IFiltredContentAccessor modifiedContentAccessor = null;
 
         int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
         String filter = url.substring(0, idx);
@@ -104,14 +107,14 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
                         + "'.");
             }
 
-            modifiedContentAccessor = new FiltredImageAccessor(filter,
+            modifiedContentAccessor = new FiltredContentAccessor(filter,
                     parentAccessor);
 
         } else {
             String newURL = url.substring(idx
                     + IContentAccessor.FILTER_SEPARATOR.length());
 
-            modifiedContentAccessor = new FiltredImageAccessor(filter,
+            modifiedContentAccessor = new FiltredContentAccessor(filter,
                     new BasicContentAccessor(facesContext, newURL,
                             contentAccessor,
                             IContentAccessor.UNDEFINED_PATH_TYPE));
@@ -132,41 +135,4 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
     public abstract String getContentType(String url);
 
     public abstract boolean isValidContenType(String contentType);
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static class FiltredImageAccessor extends AbstractContentAccessor
-            implements IFiltredImageAccessor {
-        private static final String REVISION = "$Revision$";
-
-        private final String filter;
-
-        public FiltredImageAccessor(String filter,
-                IContentAccessor parentAccessor) {
-            super(parentAccessor);
-            this.filter = filter;
-
-            setPathType(IContentAccessor.FILTER_PATH_TYPE);
-        }
-
-        public Object getContentRef() {
-            return null;
-        }
-
-        public String getFilter() {
-            return filter;
-        }
-
-        public String toString() {
-            return "[FiltredContentAccessor filter='" + filter
-                    + "' contentType=" + getType() + " pathType="
-                    + getPathTypeName(getPathType()) + " versionHandler="
-                    + getContentVersionHandler() + " root="
-                    + getParentAccessor() + "]";
-        }
-
-    }
 }

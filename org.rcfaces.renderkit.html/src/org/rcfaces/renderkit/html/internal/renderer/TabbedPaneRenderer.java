@@ -4,6 +4,7 @@
 
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TabbedPaneComponent;
@@ -23,7 +24,11 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 public class TabbedPaneRenderer extends CardBoxRenderer {
     private static final String REVISION = "$Revision$";
 
-    protected static final String TITLE_CLASSNAME = "_title";
+    protected static final String TITLE_CLASSNAME_SUFFIX = "_title";
+
+    protected static final String TITLE_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "title";
 
     protected static final String CONTENT_CLASSNAME = "_content";
 
@@ -47,6 +52,7 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
 
         htmlWriter.writeRole(IAccessibilityRoles.TAB);
 
+        htmlWriter.writeId(getTitleId(htmlWriter));
         htmlWriter.writeClass(getTitleClassName(htmlWriter));
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
@@ -88,7 +94,12 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
     }
 
     protected String getTitleClassName(IHtmlWriter writer) {
-        return getMainStyleClassName() + TITLE_CLASSNAME;
+        return getMainStyleClassName() + TITLE_CLASSNAME_SUFFIX;
+    }
+
+    protected String getTitleId(IHtmlWriter writer) {
+        return writer.getComponentRenderContext().getComponentClientId()
+                + TITLE_ID_SUFFIX;
     }
 
     protected String getContentClassName(IHtmlWriter writer) {

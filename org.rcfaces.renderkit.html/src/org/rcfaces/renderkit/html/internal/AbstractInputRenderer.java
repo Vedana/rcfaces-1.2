@@ -64,10 +64,18 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
             throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
         encodeComponent(htmlWriter);
 
         // On active le javascript pour le traitement des facesMessages !
-        htmlWriter.enableJavaScript();
+        if (componentRenderContext.getFacesContext().getMessages(
+                componentRenderContext.getComponentClientId()).hasNext()) {
+
+            // Il y a une erreur, on active le JavaScript ...
+            htmlWriter.enableJavaScript();
+        }
 
         super.encodeEnd(writer);
     }
@@ -93,12 +101,12 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
         String name = getInputName(componentRenderContext, id);
         if (name != null) {
-            writer.writeAttribute("name", name);
+            writer.writeName(name);
         }
 
         String type = getInputType(component);
         if (type != null) {
-            writer.writeAttribute("type", type);
+            writer.writeType(type);
         }
 
         if (component instanceof IReadOnlyCapability) {

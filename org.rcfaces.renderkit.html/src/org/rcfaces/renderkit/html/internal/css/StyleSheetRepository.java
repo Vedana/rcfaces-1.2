@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.webapp.SourceRepository;
 
 /**
@@ -18,6 +20,9 @@ import org.rcfaces.core.internal.webapp.SourceRepository;
  */
 public class StyleSheetRepository extends SourceRepository {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(StyleSheetRepository.class);
 
     private static final String CSS_PACKAGE = StyleSheetRepository.class
             .getPackage().getName().replace('.', '/') + '/';

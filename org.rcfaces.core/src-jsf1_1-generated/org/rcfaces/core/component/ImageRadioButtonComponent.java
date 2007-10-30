@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.RadioButtonComponent;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
-import java.util.Arrays;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  * <p>The imageRadioButton Component is a <a href="/comps/radioButtonComponent.html">radioButton Component</a> with an image instead of the rounded box.</p>
@@ -33,7 +33,7 @@ public class ImageRadioButtonComponent extends RadioButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(RadioButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 
 	public ImageRadioButtonComponent() {
@@ -236,17 +236,17 @@ public class ImageRadioButtonComponent extends RadioButtonComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public IContentAccessors getImageAccessors() {
-
-
-			return getImageAccessors(null);
-		
-	}
-
 	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
+	}
+
+	public IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
 		
 	}
 

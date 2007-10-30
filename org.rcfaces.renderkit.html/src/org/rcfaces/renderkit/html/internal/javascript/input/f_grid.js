@@ -12,6 +12,27 @@
 var __statics = {
 
 	/**
+	 * @field hidden static final String
+	 */
+	_DATA_BODY_SCROLL_ID_SUFFIX: "::dataBody_scroll",
+
+	/**
+	 * @field hidden static final String
+	 */
+	_DATA_TITLE_SCROLL_ID_SUFFIX: "::dataTitle_scroll",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	_DATA_TABLE_ID_SUFFIX: "::dataTable",
+	
+	
+	/**
+	 * @field hidden static final String
+	 */
+	_FIXED_HEADER_ID_SUFFIX: "::fixedHeader",
+	
+	/**
 	 * @field private static final String
 	 */
 	_DEFAULT_ALIGNMENT: "left",
@@ -1306,7 +1327,7 @@ var __members = {
 
 		var focus;
 		if (f_core.IsGecko()) {
-			focus=f_core.GetChildByCssClass(this, "f_grid_dataBody_scroll");
+			focus=this.ownerDocument.getElementById(this.id+f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
 			
 			if (focus) {
 				focus.onfocus=f_grid._Link_onfocus;
@@ -3965,7 +3986,8 @@ var __members = {
 	 * @return void
 	 */
 	f_initializeTableLayout: function() {
-		var table = f_core.GetChildByCssClass(this, "f_grid_table");
+		//var table = f_core.GetChildByCssClass(this, "f_grid_table");
+		var table=this.ownerDocument.getElementById(this.id+f_grid._DATA_TABLE_ID_SUFFIX);
 		f_core.Assert(table, "f_grid.f_initializeTableLayout: Can not find table 'f_grid_table'");
 		this._table = table;
 		table._dataGrid=this;	
@@ -3980,13 +4002,15 @@ var __members = {
 
 		var scrollBody=this;
 		var catchScrollEvent=false;
-		this._title=f_core.GetChildByCssClass(this,"f_grid_fttitle");
+		this._title=this.ownerDocument.getElementById(this.id+f_grid._FIXED_HEADER_ID_SUFFIX);
+		//this._title=f_core.GetChildByCssClass(this,"f_grid_fttitle");
 		if (this._title) {
-			this._scrollTitle=f_core.GetChildByCssClass(this, "f_grid_dataTitle_scroll");
+			//this._scrollTitle=f_core.GetChildByCssClass(this, "f_grid_dataTitle_scroll");
+			this._scrollTitle=this.ownerDocument.getElementById(this.id+f_grid._DATA_TITLE_SCROLL_ID_SUFFIX);
 			if (this._scrollTitle) {
-				var dataBodyClassName="f_grid_dataBody_scroll";
-
-				scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
+				// var dataBodyClassName="f_grid_dataBody_scroll";
+				//scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
+				scrollBody=this.ownerDocument.getElementById(this.id+f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
 				
 				catchScrollEvent=true;
 			}

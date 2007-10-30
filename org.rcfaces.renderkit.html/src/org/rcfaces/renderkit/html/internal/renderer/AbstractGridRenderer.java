@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -156,6 +157,22 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected static final int GENERATE_CELL_WIDTH = 0x0008;
 
     private static final String ADDITIONAL_INFORMATIONS_RENDER_CONTEXT_STATE = "org.rcfaces.html.AI_CONTEXT";
+
+    private static final String DATA_BODY_SCROLL_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "dataBody_scroll";
+
+    private static final String DATA_TITLE_SCROLL_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "dataTitle_scroll";
+
+    private static final String DATA_TABLE_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "dataTable";
+
+    private static final String FIXED_HEADER_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "fixedHeader";
 
     public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return GRID_STYLE_CLASS;
@@ -635,7 +652,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             if (headerVisible) {
                 htmlWriter.startElement(IHtmlWriter.DIV);
-                htmlWriter.writeClass(getDataTitleScroll(htmlWriter));
+                htmlWriter.writeId(getDataTitleScrollId(htmlWriter));
+                htmlWriter.writeClass(getDataTitleScrollClassName(htmlWriter));
                 if (w > 0) {
                     htmlWriter.writeStyle().writeWidth(w + "px");
                 }
@@ -647,6 +665,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 // Finalement le BODY aussi n'a pas de DIV !
 
                 htmlWriter.startElement(IHtmlWriter.DIV);
+                htmlWriter.writeId(getDataBodyScrollId(htmlWriter));
                 htmlWriter.writeClass(getDataBodyScrollClassName(htmlWriter));
 
                 ICssWriter cssWriter = htmlWriter.writeStyle(32);
@@ -672,6 +691,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.TABLE);
+        htmlWriter.writeId(getDataTableId(htmlWriter));
         htmlWriter.writeClass(getDataTableClassName(htmlWriter,
                 gridRenderContext.isDisabled()));
 
@@ -732,6 +752,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return GRID_STYLE_CLASS + "_dataBody_scroll";
     }
 
+    protected String getDataBodyScrollId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + DATA_BODY_SCROLL_ID_SUFFIX;
+    }
+
+    protected String getDataTableId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + DATA_TABLE_ID_SUFFIX;
+    }
+
     protected String getDataTableClassName(IHtmlWriter htmlWriter,
             boolean disabled) {
         String className = GRID_STYLE_CLASS + TABLE;
@@ -742,8 +772,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return className;
     }
 
-    protected String getDataTitleScroll(IHtmlWriter htmlWriter) {
+    protected String getDataTitleScrollClassName(IHtmlWriter htmlWriter) {
         return GRID_STYLE_CLASS + "_dataTitle_scroll";
+    }
+
+    protected String getDataTitleScrollId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + DATA_TITLE_SCROLL_ID_SUFFIX;
     }
 
     protected int getTitleHeight() {
@@ -755,6 +790,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             throws WriterException {
 
         htmlWriter.startElement(IHtmlWriter.TABLE);
+        htmlWriter.writeId(getFixedHeaderTableId(htmlWriter));
         htmlWriter.writeClass(getFixedHeaderTableClassName(htmlWriter));
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
@@ -846,6 +882,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected String getFixedHeaderTableClassName(IHtmlWriter htmlWriter) {
         return GRID_STYLE_CLASS + "_fttitle";
+    }
+
+    protected String getFixedHeaderTableId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + FIXED_HEADER_ID_SUFFIX;
     }
 
     private void encodeFixedTitleCol(IHtmlWriter htmlWriter,

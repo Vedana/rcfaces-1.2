@@ -25,6 +25,7 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
@@ -219,7 +220,7 @@ public class ImageContentAccessorHandlerImpl extends
     }
 
     public IContentAccessor formatImageURL(FacesContext facesContext,
-            IFiltredImageAccessor contentAccessor,
+            IFiltredContentAccessor contentAccessor,
             ImageContentInformation imageContentInformation) {
 
         String filter = contentAccessor.getFilter();

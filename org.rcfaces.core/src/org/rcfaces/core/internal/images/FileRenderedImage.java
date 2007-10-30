@@ -14,11 +14,7 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -26,106 +22,33 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
+import org.rcfaces.core.internal.content.FileBuffer;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
-import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-class FileRenderedImage implements IBufferedImage {
+class FileRenderedImage extends FileBuffer implements IBufferedImage {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(FileRenderedImage.class);
 
-    private static final String TEMP_FILE_PREFIX = "fileRenderedImage_";
-
-    private static final String TEMP_FILE_SUFFIX;
-    static {
-        TEMP_FILE_SUFFIX = "." + Constants.getVersion() + ".img";
-    }
-
-    private static boolean securityError;
-
-    private final String imageName;
-
-    private File file;
-
-    private String hash;
-
-    private String etag;
-
-    private int size;
-
-    private long lastModified;
-
-    private String contentType;
-
-    private boolean errored;
-
-    private String redirectedURL;
+    private static final int INITIAL_BUFFER_SIZE = 1024 * 8;
 
     public FileRenderedImage(String imageName) {
-        this.imageName = imageName;
+        super(imageName);
     }
 
-    public boolean isInitialized() {
-        return contentType != null;
-    }
+    public void initialize(IResourceLoader imageDownloader, String contentType,
+            RenderedImage renderedImage, ImageWriter imageWriter,
+            int destImageType, long lastModified) throws IOException {
 
-    public String getRedirection() {
-        return redirectedURL;
-    }
-
-    public void initializeRedirection(String url) {
-        this.redirectedURL = url;
-    }
-
-    public void initialize(IImageLoader imageDownloader,
-            String externalContentType, RenderedImage renderedImage,
-            ImageWriter imageWriter, int destImageType) throws IOException {
-
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Initialize fileRenderedImage '" + imageName
-                    + "' imageType="
-                    + ((BufferedImage) renderedImage).getType() + ".");
-        }
-
-        this.contentType = externalContentType;
-
-        try {
-            file = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX);
-
-        } catch (IOException ex) {
-            LOG.error(
-                    "Can not create temp file for filtred image ! (imageName="
-                            + imageName + ")", ex);
-
-            throw ex;
-        }
-
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Temp file associated to url '" + imageName + "' is "
-                    + file.getAbsolutePath());
-        }
-
-        try {
-            file.deleteOnExit();
-
-        } catch (SecurityException ex) {
-            if (securityError == false) {
-                securityError = true;
-
-                LOG.error(ex);
-            }
-        }
-
-        int size = 8000;
+        int size = INITIAL_BUFFER_SIZE;
         long originalSize = imageDownloader.getContentLength();
-        if (originalSize > 0 && originalSize < 8000) {
+        if (originalSize > 0 && originalSize < INITIAL_BUFFER_SIZE) {
             size = (int) originalSize + 256;
         }
 
@@ -140,14 +63,15 @@ class FileRenderedImage implements IBufferedImage {
             if ((renderedImage.getColorModel() instanceof IndexColorModel) == false) {
 
                 if (LOG.isTraceEnabled()) {
-                    LOG.trace("Dither imageName '" + imageName + "' ...");
+                    LOG.trace("Dither imageName '" + getName() + "' ...");
                 }
 
                 image = ditherImage(image);
             }
+
         } else if (destImageType != ((BufferedImage) renderedImage).getType()) {
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Convert imageName '" + imageName + "' from type "
+                LOG.trace("Convert imageName '" + getName() + "' from type "
                         + ((BufferedImage) renderedImage).getType()
                         + " to type " + destImageType);
             }
@@ -171,7 +95,7 @@ class FileRenderedImage implements IBufferedImage {
 
         } catch (IOException ex) {
             LOG.error("Can not encode image into temp file ! (imageName="
-                    + imageName + ")", ex);
+                    + getName() + ")", ex);
 
             throw ex;
         }
@@ -182,29 +106,7 @@ class FileRenderedImage implements IBufferedImage {
 
         byte buffer[] = bous.toByteArray();
 
-        hash = ExtendedHttpServlet.computeHash(buffer);
-        etag = ExtendedHttpServlet.computeETag(buffer);
-        this.size = buffer.length;
-
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
-        try {
-            fileOutputStream.write(buffer);
-
-        } catch (IOException ex) {
-            LOG.error("Can not write temp file for filtred image ! (imageName="
-                    + imageName + ")", ex);
-
-            throw ex;
-
-        } finally {
-            fileOutputStream.close();
-        }
-
-        lastModified = imageDownloader.getLastModified();
-
-        LOG.debug("Store filtred image '" + imageName + "' into " + size
-                + " bytes. (disk location='" + file.getAbsolutePath() + "')");
-
+        super.initialize(contentType, buffer, lastModified);
     }
 
     private RenderedImage ditherImage(RenderedImage image) {
@@ -335,67 +237,4 @@ class FileRenderedImage implements IBufferedImage {
 
         return bufferedImage;
     }
-
-    public int getSize() {
-        return size;
-    }
-
-    public InputStream getContent() throws IOException {
-        return new FileInputStream(file);
-    }
-
-    public String getName() {
-        return imageName;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public long getModificationDate() {
-        return lastModified;
-    }
-
-    public String getHash() {
-        return hash;
-    }
-
-    public String getETag() {
-        return etag;
-    }
-
-    public boolean isErrored() {
-        return errored;
-    }
-
-    public void setErrored() {
-        errored = true;
-    }
-
-    public String toString() {
-        return "[FileRenderedImage name='" + imageName + "' errored=" + errored
-                + " file='" + file + "' contentType='" + contentType
-                + "' lastModified=" + lastModified + " size=" + size + "]";
-    }
-
-    protected void finalize() throws Throwable {
-        if (file != null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.error("Finalize filtred image, delete file='"
-                        + file.getAbsolutePath() + "'.");
-            }
-
-            try {
-                file.delete();
-
-            } catch (Throwable th) {
-                LOG.error("Can not delete file '" + file.getAbsolutePath()
-                        + "'.", th);
-            }
-            file = null;
-        }
-
-        super.finalize();
-    }
-
 }

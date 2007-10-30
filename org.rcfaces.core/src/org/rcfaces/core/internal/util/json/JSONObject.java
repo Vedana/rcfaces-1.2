@@ -278,6 +278,7 @@ public class JSONObject {
                 String key = "";
                 if (name.startsWith("get")) {
                     key = name.substring(3);
+
                 } else if (name.startsWith("is")) {
                     key = name.substring(2);
                 }
@@ -285,11 +286,12 @@ public class JSONObject {
                         && method.getParameterTypes().length == 0) {
                     if (key.length() == 1) {
                         key = key.toLowerCase();
+
                     } else if (!Character.isUpperCase(key.charAt(1))) {
                         key = key.substring(0, 1).toLowerCase()
                                 + key.substring(1);
                     }
-                    this.put(key, method.invoke(bean, null));
+                    this.put(key, method.invoke(bean, (Object[]) null));
                 }
             } catch (Exception e) {
                 /* forget about it */

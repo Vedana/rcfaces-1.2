@@ -11,16 +11,11 @@
  */
 var __members = {
 
+	/*
 	f_radioButton: function() {
 		this.f_super(arguments);
-		
-		var input=this._input;
-		
-		var name=input.name;
-		if (name) {
-			this.f_addToGroup(name, this);
-		}
 	},
+	*/
 	/**
 	 * @method public 
 	 * @return String
@@ -55,11 +50,13 @@ var __members = {
 	 * @return f_radioButton
 	 */
 	f_getSelectedInGroup: function() {
+		var groupName=this.f_getGroupName();
+		
 		function search(item) {
 			return item.f_isSelected()?item:false;
 		}
 
-		return this.f_findIntoGroup(this.f_getGroupName(), search);
+		return this.f_findIntoGroup(groupName, search);
 	},
 	/**
 	 * Returns the value of the selected button of the group.
@@ -167,15 +164,20 @@ var __members = {
 	 * @return void
 	 */
 	f_serializeValue: function() {
-		if (this.f_isDisabled()) {
-			var selectedButton=this.f_getSelectedInGroup();
-			
-			var value=(selectedButton)?selectedButton._input.value:null;
-			
-			this.f_setProperty(f_prop.SELECTED, value);
-		}
+		var selectedButton=this.f_getSelectedInGroup();
+		
+		var value=(selectedButton)?selectedButton._input.value:null;
+		
+		this.f_setProperty(f_prop.SELECTED, value);
 	},
-	fa_getRadioScope: fa_groupName.GlobalScope
+	fa_getRadioScope: fa_groupName.GlobalScope,
+	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	fa_isRadioElementName: function() {
+		return true;
+	}
 }
 
 new f_class("f_radioButton", {

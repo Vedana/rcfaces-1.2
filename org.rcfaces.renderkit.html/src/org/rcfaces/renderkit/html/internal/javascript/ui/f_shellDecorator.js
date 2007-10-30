@@ -101,6 +101,12 @@ var __statics = {
 }
 
 var __members = {
+	
+	/**
+	 * @field private final f_shell
+	 */
+	_shell: undefined,
+	
 	f_shellDecorator: function(shell) {
 		this.f_super(arguments);
 		
@@ -249,6 +255,8 @@ var __members = {
 				functionWhenReady.call(window, self, self._shell);
 			};
 		}
+
+		iframe.src="about:blank";
 		
 		document.body.insertBefore(iframe, document.body.firstChild);
 		
@@ -263,6 +271,8 @@ var __members = {
 		this._iframe=undefined;
 		
 		iframe.parentNode.removeChild(iframe);
+
+		this._shell.f_setStatus(f_shell.CLOSED_STATUS);
 	},
 	
 	f_getShellBody: function() {

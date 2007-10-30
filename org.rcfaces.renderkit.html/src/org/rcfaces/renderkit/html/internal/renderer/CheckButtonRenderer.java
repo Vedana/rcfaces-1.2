@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CheckButtonComponent;
@@ -31,9 +32,17 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
     protected static final String DEFAULT_VALUE = "CHECKED";
 
-    public static final String INPUT = "_input";
+    public static final String INPUT_STYLECLASS_SUFFIX = "_input";
 
-    public static final String TEXT = "_text";
+    public static final String TEXT_STYLECLASS_SUFFIX = "_text";
+
+    public static final String TEXT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "text";
+
+    public static final String INPUT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "input";
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
@@ -88,13 +97,13 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
     }
 
     protected void writeInput(IHtmlWriter htmlWriter,
-            CheckButtonComponent button, String className, String componentId)
-            throws WriterException {
+            CheckButtonComponent button, String className,
+            String componentClientId) throws WriterException {
 
-        String inputId = componentId + "_input";
+        String inputId = componentClientId + INPUT_ID_SUFFIX;
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
-        htmlWriter.writeAttribute("id", inputId);
+        htmlWriter.writeId(inputId);
         writeInputAttributes(htmlWriter, inputId);
         writeChecked(htmlWriter, button);
 
@@ -102,19 +111,19 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
                 .getFacesContext();
         String value = getValue(facesContext, button);
         if (value != null) {
-            htmlWriter.writeAttribute("value", value);
+            htmlWriter.writeValue(value);
         }
 
-        htmlWriter.writeAttribute("class", className + INPUT);
+        htmlWriter.writeClass(className + INPUT_STYLECLASS_SUFFIX);
 
         if (htmlWriter.isJavaScriptEnabled() == false) {
             // Pour le FOCUS, pour retrouver le composant parent !
-            htmlWriter.writeAttribute("v:container", componentId);
+            htmlWriter.writeAttribute("v:container", componentClientId);
         }
 
         String accessKey = button.getAccessKey(facesContext);
         if (accessKey != null) {
-            htmlWriter.writeAttribute("accessKey", accessKey);
+            htmlWriter.writeAccessKey(accessKey);
         }
         writeAlternateText(htmlWriter, button);
 
@@ -122,15 +131,16 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
     }
 
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
-            CheckButtonComponent button, String className, String componentId)
-            throws WriterException {
+            CheckButtonComponent button, String className,
+            String componentClientId) throws WriterException {
         htmlWriter.startElement(IHtmlWriter.SPAN);
-        String claz = className + TEXT;
+
+        htmlWriter.writeId(componentClientId + TEXT_ID_SUFFIX);
+        htmlWriter.writeClass(className + TEXT_STYLECLASS_SUFFIX);
+        writeTextDirection(htmlWriter, button);
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
-        htmlWriter.writeAttribute("class", claz);
-        writeTextDirection(htmlWriter, button);
 
         String text = button.getText(facesContext);
         if (text != null) {
@@ -163,15 +173,21 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
     protected void decode(IRequestContext context, UIComponent element,
             IComponentData componentData) {
-        super.decode(context, element, componentData);
+
+        FacesContext facesContext = context.getFacesContext();
 
         CheckButtonComponent button = (CheckButtonComponent) element;
 
-        parseSelectedProperty(context.getFacesContext(), button, componentData);
+        boolean isDisabled = button.isDisabled(facesContext);
+
+        super.decode(context, element, componentData);
+
+        parseSelectedProperty(facesContext, button, componentData, isDisabled);
     }
 
     protected void parseSelectedProperty(FacesContext facesContext,
-            CheckButtonComponent button, IComponentData clientData) {
+            CheckButtonComponent button, IComponentData clientData,
+            boolean isDisabled) {
 
         boolean selected = false;
 
@@ -179,6 +195,10 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         if (selectedProperty != null) {
             selected = (selectedProperty.length() > 0);
 
+        } else if (isDisabled) {
+            // Pas d'état du composant ! (A cause du lazy mode)
+            return;
+           
         } else {
             String values[] = clientData.getComponentParameters();
 

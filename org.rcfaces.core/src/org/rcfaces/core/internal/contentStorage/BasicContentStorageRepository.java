@@ -87,15 +87,16 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
             id = BasicContentStorageRepository.id++;
         }
 
-        String key = System.currentTimeMillis() + "-" + id;
+        StringAppender sa = new StringAppender(128);
+        sa.append(System.currentTimeMillis()).append('-').append(id);
 
         String suffix = content.getURLSuffix();
         if (suffix != null) {
-            key += "." + suffix;
+            sa.append('.').append(suffix);
         }
 
         content.setVersioned(false);
-        return key;
+        return sa.toString();
     }
 
 }

@@ -32,7 +32,7 @@ var __statics = {
 		var shellManager=f_shellManager._singleton;
 		
 		if (shellManager) {
-	     	shellManager.f_closeShell(null, true);
+	     	shellManager.f_showNextShell();
 		}			
 	},
     /**
@@ -242,6 +242,8 @@ var __members = {
 	 */
 	f_popShell: function(shell) {
 		f_core.Debug(f_shellManager, "f_pushShell: pop shell '"+shell._id+"'.");
+
+		shell.f_setStatus(f_shell.DESTROYING_STATUS);			
 
 		var shells=this._shells;
 
@@ -492,59 +494,73 @@ var __members = {
 	 * @return void
 	 */
 	f_closeShell: function(shell, showNextShell) {
-		if (shell) {
-			shell.f_setStatus(f_shell.CLOSING_STATUS); // Normalement c'est déjà fait
+		if (shell.f_getStatus() == f_shell.CREATED_STATUS) {
+			shell.f_setStatus(f_shell.DESTROYING_STATUS); // Directement ...
+		}
 
+		if (shell.f_getStatus() == f_shell.OPENING_STATUS || shell.f_getStatus() == f_shell.OPENED_STATUS) {
+			shell.f_setStatus(f_shell.CLOSING_STATUS);
+		}
+
+		if (shell.f_getStatus()==f_shell.CLOSING_STATUS) {
 			this.f_getShellDecorator(shell).f_hideShell();
 
-			shell.f_preDestruction();
+			shell.f_preDestruction(); // C'est le preDestruction qui positionne le status ABOUT_TO_CLOSE ...
+		}
 
+		if (shell.f_getStatus()==f_shell.ABOUT_TO_CLOSE_STATUS) {
 			this.f_getShellDecorator(shell).f_destroyDecoration();
-
-			shell.f_setStatus(f_shell.CLOSED_STATUS);
-
+			// C'est le Shell decorator qui positionne CLOSED_STATUS
+		}
+		
+		if (shell.f_getStatus()==f_shell.CLOSED_STATUS) {
 			this.f_popShell(shell);
-
-			shell.f_setStatus(f_shell.DESTROYING_STATUS);			
-
+			
+			// C'est le Shell decorator qui positionne DESTROYING_STATUS
+		}
+		
+		if (shell.f_getStatus()==f_shell.DESTROYING_STATUS) {
 			shell.f_postDestruction();
+		}
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_showNextShell: function() {
+    	var waitingShells=this._waitingShells;
+    	
+    	if (!waitingShells) {
+    		return;
+    	}
+    	
+    	for(;waitingShells.length;) {		    		
+    		var maxPriority=-1;
+    		var waitingShell=null;
+    		
+    		for(var i=0;i<waitingShells.length;i++) {
+    			var ws=waitingShells[i];
+    			
+    			if (!waitingShell || ws._priority>waitingShell._priority) {
+    				waitingShell=ws;
+    			}
+    		}
+    	
+    		if (!waitingShell) {
+    			return;
+    		}
+    		
+    		waitingShells.f_removeElement(waitingShell);
+    	
+    		this.f_openShell(waitingShell);
+    		
+    		// Nous sommes en mode modal ?
+    		// On arrete alors !
 
-			shell.f_setStatus(f_shell.DESTROYED_STATUS);			
-		}
-		
-		if (showNextShell!==false) {
-	    	var waitingShells=this._waitingShells;
-	    	
-	    	if (waitingShells) {
-		    	for(;waitingShells.length;) {		    		
-		    		var maxPriority=-1;
-		    		var waitingShell=null;
-		    		
-		    		for(var i=0;i<waitingShells.length;i++) {
-		    			var ws=waitingShells[i];
-		    			
-		    			if (!waitingShell || ws._priority>waitingShell._priority) {
-		    				waitingShell=ws;
-		    			}
-		    		}
-		    	
-		    		if (!waitingShell) {
-		    			break;
-		    		}
-		    		
-		    		waitingShells.f_removeElement(waitingShell);
-		    	
-		    		this.f_openShell(waitingShell);
-		    		
-		    		// Nous sommes en mode modal ?
-		    		// On arrete alors !
-		
-					if (waitingShell.f_getStyle() & (f_shell.PRIMARY_MODAL_STYLE | f_shell.APPLICATION_MODAL_STYLE)) {
-						break;		    		
-			    	}			
-		    	}			    
-	    	}
-		}
+			if (waitingShell.f_getStyle() & (f_shell.PRIMARY_MODAL_STYLE | f_shell.APPLICATION_MODAL_STYLE)) {
+				return; 
+	    	}			
+    	}			    
 	},
 	/**
 	 * @method hidden

@@ -100,7 +100,6 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
             String groupName = ((IRadioGroupCapability) imageButtonFamilly)
                     .getGroupName();
             if (groupName != null) {
-
                 groupName = HtmlTools.computeGroupName(writer
                         .getHtmlComponentRenderContext().getHtmlRenderContext()
                         .getHtmlProcessContext(),

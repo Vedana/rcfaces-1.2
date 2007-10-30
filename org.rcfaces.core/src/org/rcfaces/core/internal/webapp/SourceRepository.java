@@ -489,6 +489,8 @@ public abstract class SourceRepository {
             throw new ServletException(ex);
         }
 
+        buffers.append("@charset \"").append(charSet).append("\";");
+        
         try {
             BufferedReader br;
 

@@ -11,6 +11,12 @@
  */
 
 var __statics = {
+	
+	/**
+	 * @field private static final String
+	 */
+	_TITLE_ID_SUFFIX: "::title",
+	
 	/**
 	 * @field private static 
 	 */
@@ -783,7 +789,8 @@ var __members = {
 		
 		var table=this._title;
 		if (!table) {
-			table=f_core.GetChildByCssClass(this,"f_tabbedPane_title");
+			table=this.ownerDocument.getElementById(this.id+f_tabbedPane._TITLE_ID_SUFFIX);
+			//table=f_core.GetChildByCssClass(this,"f_tabbedPane_title");
 			this._title=table;
 			table._tabbedPane=this;
 		}

@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.images;
+package org.rcfaces.core.internal.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,19 +22,20 @@ import org.apache.commons.logging.LogFactory;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
+public class ClassLoaderResourceLoaderFactory extends
+        AbstractResourceLoaderFactory {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
-            .getLog(ResourceImageLoaderFactory.class);
+            .getLog(ClassLoaderResourceLoaderFactory.class);
 
     public String getName() {
-        return "Load image by classloader context";
+        return "Load resource by classloader context";
     }
 
-    public IImageLoader loadImage(ServletContext context,
+    public IResourceLoader loadResource(ServletContext context,
             HttpServletRequest request, HttpServletResponse response, String uri) {
-        return new ResourceImageLoader(context, uri);
+        return new ClassLoaderResourceLoader(context, uri);
     }
 
     /**
@@ -42,7 +43,7 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class ResourceImageLoader implements IImageLoader {
+    private static class ClassLoaderResourceLoader implements IResourceLoader {
         private static final String REVISION = "$Revision$";
 
         private final ServletContext servletContext;
@@ -59,7 +60,8 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
 
         private String contentType;
 
-        public ResourceImageLoader(ServletContext servletContext, String url) {
+        public ClassLoaderResourceLoader(ServletContext servletContext,
+                String url) {
             this.servletContext = servletContext;
             this.url = url;
         }
@@ -78,9 +80,9 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
                 url = "/" + url;
             }
 
-            URL imageURL;
+            URL resourceURL;
             try {
-                imageURL = servletContext.getResource(url);
+                resourceURL = servletContext.getResource(url);
 
             } catch (MalformedURLException ex) {
                 LOG.error("Malformed url '" + url + "'.", ex);
@@ -88,20 +90,21 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
                 return;
             }
 
-            if (imageURL == null) {
-                LOG.error("Can not get image specified by path '" + url + "'.");
+            if (resourceURL == null) {
+                LOG.error("Can not get resource specified by path '" + url
+                        + "'.");
                 errored = true;
                 return;
             }
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Search resource '/" + url + "' => '" + imageURL
+                LOG.debug("Search resource '/" + url + "' => '" + resourceURL
                         + "'.");
             }
 
             try {
-                urlConnection = imageURL.openConnection();
+                urlConnection = resourceURL.openConnection();
                 if (urlConnection == null) {
-                    LOG.error("Can not get image specified by path '" + url
+                    LOG.error("Can not get resource specified by path '" + url
                             + "'.");
                     errored = true;
                     return;
@@ -114,7 +117,7 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
                 if (LOG.isDebugEnabled()) {
                     LOG
                             .debug("Resource '"
-                                    + imageURL
+                                    + resourceURL
                                     + "' contentType='"
                                     + contentType
                                     + "' contentLength="
@@ -126,8 +129,8 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
                 }
 
             } catch (IOException ex) {
-                LOG.error("Can not get content of image '" + imageURL + "'.",
-                        ex);
+                LOG.error("Can not get content of resource '" + resourceURL
+                        + "'.", ex);
                 errored = true;
             }
         }
@@ -143,12 +146,13 @@ class ResourceImageLoaderFactory extends AbstractImageLoaderFactory {
                     return ins;
                 }
 
-                LOG.error("Can not get image specified by path '" + url + "'.");
+                LOG.error("Can not get resource specified by path '" + url
+                        + "'.");
                 errored = true;
                 return null;
 
             } catch (IOException ex) {
-                LOG.error("Can not get content of image '" + url + "'.", ex);
+                LOG.error("Can not get content of resource '" + url + "'.", ex);
                 errored = true;
                 return null;
             }

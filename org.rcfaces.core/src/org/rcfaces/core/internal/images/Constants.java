@@ -5,6 +5,9 @@ package org.rcfaces.core.internal.images;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.resource.ClassLoaderResourceLoaderFactory;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
+import org.rcfaces.core.internal.resource.IncludeResourceLoaderFactory;
 
 /**
  * 
@@ -28,14 +31,14 @@ public class Constants {
         CONSTANT_PREFIX = name;
     }
 
-    private static final IImageLoaderFactory DESIGNER_IMAGE_LOADER_FACTORY = new ResourceImageLoaderFactory();
+    private static final IResourceLoaderFactory DESIGNER_IMAGE_LOADER_FACTORY = new ClassLoaderResourceLoaderFactory();
 
-    private static final IImageLoaderFactory IMAGE_LOADER_FACTORY;
+    private static final IResourceLoaderFactory IMAGE_LOADER_FACTORY;
 
     static {
 
         if (USE_INCLUDE_IMAGE_LOADER_FACTORY) {
-            IMAGE_LOADER_FACTORY = new IncludeImageLoaderFactory();
+            IMAGE_LOADER_FACTORY = new IncludeResourceLoaderFactory();
 
         } else {
             IMAGE_LOADER_FACTORY = DESIGNER_IMAGE_LOADER_FACTORY;
@@ -50,11 +53,11 @@ public class Constants {
         return CONSTANT_PREFIX;
     }
 
-    public static final IImageLoaderFactory getImageLoaderFactory() {
+    public static final IResourceLoaderFactory getImageLoaderFactory() {
         return IMAGE_LOADER_FACTORY;
     }
 
-    public static final IImageLoaderFactory getDesignerImageLoaderFactory() {
+    public static final IResourceLoaderFactory getDesignerImageLoaderFactory() {
         return DESIGNER_IMAGE_LOADER_FACTORY;
     }
 }

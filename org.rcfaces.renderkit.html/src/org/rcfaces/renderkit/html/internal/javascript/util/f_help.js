@@ -216,7 +216,7 @@ var __statics = {
 		if (!f_help._FindZone) {
 			return;
 		}
-		f_help._HelpZone = f_core.GetChildByClass(document,f_helpMessageZone.f_getName());
+		f_help._HelpZone = f_core.GetChildByClass(document, f_helpMessageZone.f_getName());
 	},
 	/**
 	 * @method protected static

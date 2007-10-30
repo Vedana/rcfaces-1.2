@@ -3,6 +3,7 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.SpinnerComponent;
@@ -23,6 +24,14 @@ public class SpinnerRenderer extends TextEntryRenderer {
     protected static final int SPINNER_BUTTON_WIDTH = 16;
 
     protected static final int SPINNER_BUTTON_HEIGHT = 10;
+
+    private static final String UP_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "up";
+
+    private static final String DOWN_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "down";
 
     protected boolean isNameEqualsId() {
         return false;
@@ -107,6 +116,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         int spinnerButtonHeight = getSpinnerButtonHeight();
 
         htmlWriter.startElement(IHtmlWriter.IMG);
+        htmlWriter.writeId(getUpButtonId(htmlWriter));
         htmlWriter.writeClass(getUpButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
         htmlWriter.writeWidth(spinnerButtonWidth);
@@ -114,6 +124,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         htmlWriter.endElement(IHtmlWriter.IMG);
 
         htmlWriter.startElement(IHtmlWriter.IMG);
+        htmlWriter.writeId(getDownButtonId(htmlWriter));
         htmlWriter.writeClass(getDownButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
         htmlWriter.writeWidth(spinnerButtonWidth);
@@ -156,6 +167,11 @@ public class SpinnerRenderer extends TextEntryRenderer {
         return className;
     }
 
+    protected String getUpButtonId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + UP_ID_SUFFIX;
+    }
+
     protected String getDownButtonClassName(IHtmlWriter htmlWriter,
             boolean disabled) {
         String className = getMainStyleClassName() + "_down";
@@ -164,6 +180,11 @@ public class SpinnerRenderer extends TextEntryRenderer {
         }
 
         return className;
+    }
+
+    protected String getDownButtonId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + DOWN_ID_SUFFIX;
     }
 
     protected void writeSpinnerAttributes(IHtmlWriter htmlWriter)

@@ -4,13 +4,12 @@
 
 package org.rcfaces.core.internal.images;
 
-import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IFiltredImageAccessor extends IContentAccessor {
-    String getFilter();
+public interface IFiltredImageAccessor extends IFiltredContentAccessor {
 }

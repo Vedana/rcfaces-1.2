@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.images;
+package org.rcfaces.core.internal.resource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,19 +31,19 @@ import org.rcfaces.core.internal.util.IncludeHttpServletResponse;
  * @version $Revision$ $Date$
  */
 
-public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
+public class IncludeResourceLoaderFactory extends AbstractResourceLoaderFactory {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
-            .getLog(IncludeImageLoaderFactory.class);
+            .getLog(IncludeResourceLoaderFactory.class);
 
     public String getName() {
-        return "Load image by servlet inclusion.";
+        return "Load resource by servlet inclusion.";
     }
 
-    public IImageLoader loadImage(ServletContext context,
+    public IResourceLoader loadResource(ServletContext context,
             HttpServletRequest request, HttpServletResponse response, String uri) {
-        return new IncludeImageLoader(context, request, response, uri);
+        return new IncludeResourceLoader(context, request, response, uri);
     }
 
     /**
@@ -51,10 +51,10 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class IncludeImageLoader implements IImageLoader {
+    private static class IncludeResourceLoader implements IResourceLoader {
         private static final String REVISION = "$Revision$";
 
-        private static final String TEMP_FILE_PREFIX = "include-image.";
+        private static final String TEMP_FILE_PREFIX = "include-resource.";
 
         private static final String TEMP_FILE_SUFFIX = ".tmp";
 
@@ -86,7 +86,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
 
         private byte bufferArray[];
 
-        public IncludeImageLoader(ServletContext servletContext,
+        public IncludeResourceLoader(ServletContext servletContext,
                 HttpServletRequest servletRequest,
                 HttpServletResponse servletResponse, String uri) {
             this.servletContext = servletContext;
@@ -138,7 +138,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
 
                 } catch (FileNotFoundException e) {
                     LOG.error("Can not open buffer file '" + bufferFile
-                            + "' for image url '" + uri + "'.", e);
+                            + "' for resource url '" + uri + "'.", e);
                 }
             }
 
@@ -168,7 +168,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Use temp file='"
                                 + fileTemp.getAbsolutePath()
-                                + "' to store response of image request '"
+                                + "' to store response of resource request '"
                                 + uri + "'.");
                     }
 
@@ -187,7 +187,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Use memory byte array (size="
                                 + BUFFER_DEFAULT_SIZE
-                                + ") to store response of image request '"
+                                + ") to store response of resource request '"
                                 + uri + "'.");
                     }
                 }
@@ -206,7 +206,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
                 }
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Send request to get image content of '"
+                    LOG.debug("Send request to get resource content of '"
                             + requestURI + "'.");
                 }
 
@@ -279,7 +279,7 @@ public class IncludeImageLoaderFactory extends AbstractImageLoaderFactory {
         protected void finalize() throws Throwable {
             if (bufferFile != null) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Finalize image loader, delete file '"
+                    LOG.debug("Finalize resource loader, delete file '"
                             + bufferFile.getAbsolutePath() + "'.");
                 }
                 try {

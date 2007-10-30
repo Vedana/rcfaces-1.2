@@ -9,6 +9,20 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+ 
+var __statics = {
+	/**
+	 * @field hidden static final String
+	 */
+	_INPUT_ID_SUFFIX: "::input",
+	
+	/**
+	 * @field private static final String
+	 */
+	_TEXT_ID_SUFFIX: "::text"
+	
+}
+
 var __members = {
 	
 	/**
@@ -17,12 +31,7 @@ var __members = {
 	f_initializeInput: function() {
 		var inputTagName=this.f_getInputTagName();
 		
-		var input=f_core.GetFirstElementByTagName(this, inputTagName);
-		if (input) {
-			return input;
-		}
-		
-		input=f_core.GetChildByCssClass(this, this.f_getMainStyleClass()+"_input");
+		var input=this.ownerDocument.getElementById(this.id+f_checkButton._INPUT_ID_SUFFIX);
 		if (input) {
 			return input;
 		}
@@ -49,7 +58,7 @@ var __members = {
 			return label;
 		}
 		
-		label=f_core.GetFirstElementByTagName(this, "label");
+		label=this.ownerDocument.getElementById(this.id+f_checkButton._TEXT_ID_SUFFIX);
 		this._label=label;
 		
 		return label;
@@ -61,7 +70,7 @@ var __members = {
 	f_isSelected: function() {
 		f_core.Assert(this._input, "f_checkButton.f_isSelected: Input is not found for selected property !");
 
-		return (this._input.checked==true);
+		return (this._input.checked);
 	},
 
 	/**
@@ -155,13 +164,13 @@ var __members = {
 	 * @return void
 	 */
 	f_serializeValue: function() {
-		if (this.f_isDisabled() && this.f_isSelected()) {			
-			this.f_setProperty(f_prop.SELECTED, this._input.value);
-		}
+		// On sérialise systematiquement car il faut traiter le cas du disabled
+		this.f_setProperty(f_prop.SELECTED, (this._input.checked)?this._input.value:"");
 	}
 }
 
 new f_class("f_checkButton", {
 	extend: f_button,
-	members: __members
+	members: __members,
+	statics: __statics
 });

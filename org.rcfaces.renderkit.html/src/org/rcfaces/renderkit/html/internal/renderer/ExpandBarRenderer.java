@@ -137,7 +137,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
         if (collapsed) {
             if (asyncRenderEnable) {
-                asyncRender = htmlRenderContext.getAsyncRenderMode(expandBarComponent);
+                asyncRender = htmlRenderContext
+                        .getAsyncRenderMode(expandBarComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", true);
@@ -231,7 +232,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             String url = buttonImageAccessor.resolveURL(facesContext, null,
                     null);
             if (url != null) {
-                htmlWriter.writeAttribute("src", url);
+                htmlWriter.writeSrc(url);
             }
         }
 

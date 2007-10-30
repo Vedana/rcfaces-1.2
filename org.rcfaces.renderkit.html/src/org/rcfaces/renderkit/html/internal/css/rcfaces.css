@@ -1,4 +1,6 @@
 /* Listes des imports CSS */
+@charset "UTF-8";
+
 @import url(f_core.css);					//module:core
 @import url(f_border_flat.css);					//module:border
 @import url(f_border_relief.css);					//module:border

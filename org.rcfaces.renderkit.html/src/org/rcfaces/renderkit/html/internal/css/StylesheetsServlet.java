@@ -208,6 +208,9 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             if (noCache == false) {
                 this.repository = r;
+
+            } else {
+                LOG.debug("'noCache' is enable, ignore new repository !");
             }
 
             return r;
@@ -392,7 +395,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         byte workBytes[] = bout.toByteArray();
 
         if (charset == null) {
-            charset = null;
+            charset = getCharset();
         }
 
         if (useFilterExtensions.contains(extension)) {
@@ -471,7 +474,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             if (CAMELIA_CSS_URL.equals(url)) {
-                setResponse(new StyleSheetRepositoryResponse(CSS_MIME_TYPE,
+                setResponse(new StyleSheetRepositoryResponse(CSS_MIME_TYPE+"; charset="+getCharset(),
                         getRepository()), httpRequest, httpResponse);
                 return;
             }
@@ -646,6 +649,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final String mimeType;
 
+        private String charSet;
+
         public AbstractResponse(String mimeType) {
             this.mimeType = mimeType;
         }
@@ -708,7 +713,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             byte buf[] = getBuffer();
-
+            
             response.setContentType(mimeType);
 
             byte gzip[] = getGZipedBuffer();

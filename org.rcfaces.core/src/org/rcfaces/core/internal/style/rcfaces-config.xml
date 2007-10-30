@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rcfaces-config>
+	<providers>
+  		<provider>
+  			<provider-id>org.rcfaces.core.STYLE_CONTENT_PROVIDER</provider-id>
+  			<provider-class>org.rcfaces.core.internal.style.StyleContentAccessorHandler</provider-class>
+  			<required>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</required>
+  		</provider>
+  	</providers>
+
+	<style-operations>
+		<operation>
+			<operation-id>merge</operation-id>
+			<operation-name>Inline styles operation</operation-name>
+			<operation-class>
+				org.rcfaces.core.internal.style.InlineImportsStyleOperation
+			</operation-class>
+		</operation>
+	</style-operations>
+</rcfaces-config>

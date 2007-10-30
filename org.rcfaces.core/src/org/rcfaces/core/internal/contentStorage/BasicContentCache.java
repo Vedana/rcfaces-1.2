@@ -117,6 +117,7 @@ public class BasicContentCache {
      * @version $Revision$ $Date$
      */
     private static class Cache {
+        private static final String REVISION = "$Revision$";
 
         final String key;
 

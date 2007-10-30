@@ -42,8 +42,10 @@ var __statics = {
 		
 		var columns=dataGridPopup._columns;
 		
+		var dataGridPopupId=dataGridPopup.id+"::popup";
+		
 		var properties= { 
-			id: dataGridPopup.id+fa_namingContainer.GetSeparator()+"popup", 
+			id: dataGridPopupId,
 			"v:nc": "true", 
 			role: "wairole:grid", 
 			className: "f_grid", 
@@ -88,6 +90,7 @@ var __statics = {
 		
 		if (!headerVisible) {
 			var divDataTitle=f_core.CreateElement(divDataGrid, "div", { 
+				id: dataGridPopupId + f_grid._DATA_TITLE_SCROLL_ID_SUFFIX,
 				className: "f_grid_dataTitle_scroll",
 				cssWidth: width+"px",
 				cssHeight: f_dataGridPopup._TITLE_HEIGHT+"px"
@@ -96,6 +99,7 @@ var __statics = {
 			height-=f_dataGridPopup._TITLE_HEIGHT;
 			
 			properties={ 
+				id: dataGridPopupId + f_grid._FIXED_HEADER_ID_SUFFIX,
 				className: "f_grid_fttitle",
 				cellPadding: 0,
 				cellSpacing: 0
@@ -158,7 +162,8 @@ var __statics = {
 			f_core.CreateElement(tableTTitle, "tbody");
 		}
 				
-		var divDataBody=f_core.CreateElement(divDataGrid, "div", { 
+		var divDataBody=f_core.CreateElement(divDataGrid, "div", {
+			 id: dataGridPopupId + f_grid._DATA_BODY_SCROLL_ID_SUFFIX,			 
 			className: "f_grid_dataBody_scroll",
 			cssWidth: width+"px",
 			cssHeight: height+"px"
@@ -166,6 +171,7 @@ var __statics = {
 		
 			
 		properties={ 
+			id: dataGridPopupId + f_grid._DATA_TABLE_ID_SUFFIX,			 
 			className: "f_grid_table",
 			cellPadding: 0,
 			cellSpacing: 0

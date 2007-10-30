@@ -9,6 +9,16 @@
  */
 
 var __statics = {
+	
+	/**
+	 * @field private static final String
+	 */
+	_UP_ID_SUFFIX: "::up",
+	
+	/**
+	 * @field private static final String
+	 */
+	_DOWN_ID_SUFFIX: "::down",
 
 	/**
 	 * @field private static final number
@@ -199,14 +209,18 @@ var __statics = {
 
 var __members = {
 	fa_spinner: function() {			
-		var disabledSuffix=(this.f_isDisabled())?"_disabled":"";
+		//var disabledSuffix=(this.f_isDisabled())?"_disabled":"";
 		
 		this._cycleValue=f_core.GetBooleanAttribute(this, "v:cycle", false);
 		
-		this._spinnerUp=f_core.GetChildByCssClass(this, "f_spinner_up"+disabledSuffix);
+		//this._spinnerUp=f_core.GetChildByCssClass(this, "f_spinner_up"+disabledSuffix);
+		this._spinnerUp=this.ownerDocument.getElementById(this.id+fa_spinner._UP_ID_SUFFIX);
+		
 		this._installSpinnerButton(this._spinnerUp, "_up",  1);
 		
-		this._spinnerDown=f_core.GetChildByCssClass(this, "f_spinner_down"+disabledSuffix);
+		//this._spinnerDown=f_core.GetChildByCssClass(this, "f_spinner_down"+disabledSuffix);
+		this._spinnerDown=this.ownerDocument.getElementById(this.id+fa_spinner._DOWN_ID_SUFFIX);
+
 		this._installSpinnerButton(this._spinnerDown, "_down", -1);
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performSpinnerKeyDown);
@@ -379,23 +393,27 @@ var __members = {
 	 * @method protected
 	 */
 	f_updateSpinnerButton: function(button) {		
-		var suffix=button._suffix;
+		var suffix;
 		if (this.f_isDisabled()) {
-			suffix+="_disabled";
+			suffix="_disabled";
 		
 		} else if (button._keyPress) {
-			suffix+="_pushed";
+			suffix="_pushed";
 			
 		} else if (button._hover) {
 			if (button._pushed) {
-				suffix+="_pushed";
+				suffix="_pushed";
 				
 			} else {
-				suffix+="_hover";
+				suffix="_hover";
 			}
 		}
 		
-		var cname=this.f_computeStyleClass(suffix);
+		var cname=this.f_getMainStyleClass()+button._suffix;
+		
+		if (suffix) {
+			cname+=" "+cname+suffix;
+		}
 		
 		if (button.className==cname) {
 			return;

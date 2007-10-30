@@ -14,7 +14,22 @@ var __statics = {
 	/**
 	 * @field private static final String
 	 */
-	_EMPTY_IMAGE_URL: "/imageButton/blank.gif"
+	_EMPTY_IMAGE_URL: "/imageButton/blank.gif",
+	
+	/**
+	 * @field private static final String
+	 */	  
+	_IMAGE_ID_SUFFIX: "::image",
+
+	/**
+	 * @field private static final String
+	 */	  
+	_INPUT_ID_SUFFIX: "::input",
+	
+	/**
+	 * @field private static final String
+	 */	  
+	_TEXT_ID_SUFFIX: "::text"
 }
  
 var __members = {
@@ -30,43 +45,11 @@ var __members = {
 		}
 		
 		if (!this._image) {
-			var images=this.getElementsByTagName("img");
-			if (images.length) {
-				var cl=this.f_getMainStyleClass()+"_image";
-				var image;
-				for(var i=0;i<images.length;i++) {
-					var img=images[i];
-					
-					if (img.className!=cl) {
-						continue;
-					}
-					
-					image=img;
-					break;
-				}
-				this._image = image;
-
-//				f_core.Assert(image, "Can not find IMAGE tag into ImageButton ! (classname='"+cl+"', id="+this.id+")");
-			}
+			this._image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
 		}
 		
-		var texts=this.getElementsByTagName("span");
-		if (texts.length) {
-			var cl=this.f_getMainStyleClass()+"_text";
-			var text;
-			for(var i=0;i<texts.length;i++) {
-				var txt=texts[i];
-				
-				if (txt.className!=cl) {
-					continue;
-				}
-				
-				text=txt;
-				break;
-			}
-
-			f_core.Assert(text, "Can not find SPAN tag into ImageButton ! (classname='"+cl+"', id="+this.id+")");
-			
+		var text=this.ownerDocument.getElementById(this.id+f_imageButton._TEXT_ID_SUFFIX);
+		if (text) {
 			this._text = text;
 			text.f_link=this;
 	
@@ -176,29 +159,30 @@ var __members = {
 
 		case "a":
 			// Il faut recuperer le click pour empecher le submit !
-			this._image=f_core.GetFirstElementByTagName(this, "img", true);
+			this._image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
 			break;
 
 		default:
-			var link=f_core.GetFirstElementByTagName(this, "input", false);
-			if (!link) {
-				// Fred : to allow imageButton without image !
-				link=f_core.GetFirstElementByTagName(this, "a", false);
-			}
+			var image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
 			
-			if (link) {
+			if (image) {
 				var tabIndex=f_core.GetAttribute(this, "tabIndex");
 				if (!tabIndex) {
 					tabIndex=0;
 				}
 			
-				if (link.tagName.toLowerCase()=="input") {				
-					this._image=link;
-					
-				} else {
-					this._image=f_core.GetFirstElementByTagName(link, "img", false);
-					
-					f_core.Assert(this._image, "f_imageButton.f_getEventComponent: Can not find Image of component '"+this.id+"'.");
+				this._image=image;
+				var link=image;
+			
+				if (image.tagName.toLowerCase()!="input") {				
+					var input=this.ownerDocument.getElementById(this.id+f_imageButton._INPUT_ID_SUFFIX);
+					if (input) {
+						link=input;
+					}
+			//if (!link) { // OO: On est passé en ID !
+				// Fred : to allow imageButton without image !
+			//	link=f_core.GetFirstElementByTagName(this, "a", false);
+			//}
 				}
 				
 				eventComponent=link;

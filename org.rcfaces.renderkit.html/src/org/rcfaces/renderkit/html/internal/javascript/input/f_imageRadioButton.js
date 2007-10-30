@@ -9,7 +9,19 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-var __members = {
+var __members = {	
+	
+	f_imageRadioButton: function() {
+		this.f_super(arguments);
+		
+		var groupName=f_core.GetAttribute(this, "v:groupName");
+		if (groupName ) {	
+			this._groupName=groupName;
+		
+			this.f_addToGroup(groupName, this);
+		}
+			
+	},
 
 /*
 	f_finalize: function() {
@@ -31,18 +43,6 @@ var __members = {
 		
 		this.f_setSelected(!this.f_isSelected());
 		return true;
-	},
-	/**
-	 * @method protected
-	 */
-	f_parseAttributes: function() {
-    	var groupName=f_core.GetAttribute(this, "v:groupName");
-    	
- 		if (groupName) {
-			this.f_setGroupName(groupName);
-		}
-
-		this.f_super(arguments);
 	},
 	/**
 	 * Set selected state.
@@ -74,13 +74,13 @@ var __members = {
 	f_getGroupName: function() {
 		return this._groupName;
 	},
-	/**
+	/*
 	 * Set the group name of the button.
 	 *
 	 * @method protected
 	 * @param String group
 	 * @return void
-	 */
+	 *
 	f_setGroupName: function(group) {
 		if (group==this._groupName) {
 			return;
@@ -90,6 +90,7 @@ var __members = {
 		this._groupName = group;
 		this.f_setProperty(f_prop.GROUPNAME, group);
 	},
+	*/
 	/**
 	 * Returns the selected button of the same group of this button.
 	 *
@@ -114,7 +115,14 @@ var __members = {
 	},
 	fa_updateRequired: function() {
 	},
-	fa_getRadioScope: fa_groupName.GlobalScope
+	fa_getRadioScope: fa_groupName.GlobalScope,
+	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	fa_isRadioElementName: function() {
+		return false;
+	}
 }
 
 new f_class("f_imageRadioButton", {

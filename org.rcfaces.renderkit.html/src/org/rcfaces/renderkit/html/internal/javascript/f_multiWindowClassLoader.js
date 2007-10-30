@@ -46,7 +46,7 @@ if (window._RCFACES_LEVEL3) {
 	 * @return void
 	 */
 	f_multiWindowClassLoader.prototype.f_requiresBundle=function(bundleNames) {
-		f_core.Profile(false, "f_core.multiWindow.initializing");
+		f_core.Profile(false, "f_core.multiWindow.f_requiresBundles");
 		
 		var cnt=0;
 		try {
@@ -75,7 +75,7 @@ if (window._RCFACES_LEVEL3) {
 			}
 			
 		} finally {
-			f_core.Profile(true, "f_core.multiWindow.initializing("+cnt+" classes)");	
+			f_core.Profile(true, "f_core.multiWindow.f_requiresBundles("+cnt+" classes)");	
 		}
 	}
 	

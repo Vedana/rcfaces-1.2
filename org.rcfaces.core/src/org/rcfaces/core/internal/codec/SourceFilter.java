@@ -59,6 +59,10 @@ public final class SourceFilter {
             }
 
             if (c == '\'' || c == '\"') {
+                if (space) {
+                    space = false;
+                    bufs[pos++] = ' ';
+                }
                 bufs[pos++] = c;
                 for (i++; i < bufs.length; i++) {
                     char c2 = bufs[i];
@@ -138,6 +142,10 @@ public final class SourceFilter {
             }
 
             if (c == '\'' || c == '\"') {
+                if (space) {
+                    space = false;
+                    bufs[pos++] = ' ';
+                }
                 bufs[pos++] = c;
                 for (i++; i < bufs.length; i++) {
                     char c2 = bufs[i];

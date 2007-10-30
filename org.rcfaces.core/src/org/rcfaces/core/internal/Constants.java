@@ -19,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.component.ComponentsFactory;
 import org.rcfaces.core.internal.component.IFactory;
-import org.rcfaces.core.internal.images.IImageLoaderFactory;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.util.Delay;
 
 /**
@@ -109,7 +109,7 @@ public class Constants {
 
     private static final IFactory defaultFactory;
 
-    public static final IImageLoaderFactory IMAGE_LOADER_FACTORY = null;
+    public static final IResourceLoaderFactory IMAGE_LOADER_FACTORY = null;
 
     public static final boolean CACHED_LOCALE_FORMATS = true;
 

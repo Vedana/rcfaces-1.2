@@ -1280,6 +1280,13 @@ var __members = {
 	fa_getRadioScope: function() {
 		return this;
 	},
+	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	fa_isRadioElementName: function() {
+		return false;
+	},
 	fa_destroyItems: function(items) {
 	},	
 	/**

@@ -651,9 +651,14 @@ var f_core = {
 			
 			f_core.Profile(null, "f_core.initializing", initDate);
 		}
-			
+
 		if (win.rcfacesBuildId) {
 			f_core.Info(f_core, "_InitLibrary: RCFaces buildId: "+rcfacesBuildId);
+		}
+	
+		// Bug sous IE en LEVEL3 ... on ne peut pas compter sur le this !
+		f_core._OnExit=function() {
+			f_core.ExitWindow(win);
 		}
 	
 		f_core.AddEventListener(win, "load", f_core._OnInit);
@@ -954,7 +959,7 @@ var f_core = {
 				
 				f.submit = f_core._SystemSubmit;
 				
-				f._oldSubmit = old;
+				f._rcfacesOldSubmit = old;
 			} catch (x) {
 				// Dans certaines versions de IE, il n'est pas possible de changer le submit !
 			}
@@ -972,6 +977,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @return void
 	 * @context window:win
 	 */
 	_OnExit: function() {
@@ -1002,10 +1008,19 @@ var f_core = {
 			win=f(win);
 	
 			if (!win) {
-				alert("RCFACES: PANIC can not identify unloaded window !");
+				alert("RCFACES: PANIC can not identify unloaded window ! (root="+this.location+")");
+				return;
 			}
 		}
-		
+	
+		f_core.ExitWindow(win);
+	},
+	/**
+	 * @method hidden static
+	 * @return void
+	 * @context window:win
+	 */
+	ExitWindow: function(win) {
 		if (win._rcfacesExiting) {
 			return;
 		}
@@ -1050,15 +1065,15 @@ var f_core = {
 					form.f_findComponent=undefined; // function
 //					form._serializedInputs=undefined; // Map<String, String>			
 					
-					if (form._oldSubmit) {
+					if (form._rcfacesOldSubmit) {
 						try {
-							form.submit = form._oldSubmit;
+							form.submit = form._rcfacesOldSubmit;
 							
 						} catch (x) {
 							// Dans certaines versions de IE, il n'est pas possible de changer le submit !
 						}
 						
-						form._oldSubmit = undefined;
+						form._rcfacesOldSubmit = undefined;
 					}
 				}
 				
@@ -1674,26 +1689,26 @@ var f_core = {
 	
 			// Keep the previous for further restore
 			if (url) {
-				if (!form._old_action) {
-					form._old_action = form.action;
+				if (!form._rcfacesOldAction) {
+					form._rcfacesOldAction = form.action;
 				}
 				
 				form.action = url;
 				
-			} else if (form._old_action) {
-				form.action=form._old_action;
+			} else if (form._rcfacesOldAction) {
+				form.action=form._rcfacesOldAction;
 			}
 	
 			// Keep the previous for further restore
 			if (target) {
-				if (form._old_target===undefined) {
-					form._old_target = form.target;
+				if (form._rcfacesOldTarget===undefined) {
+					form._rcfacesOldTarget = form.target;
 				}
 				
 				form.target = target;
 				
-			} else if (form._old_target!==undefined) {
-				form.target=form._old_target;
+			} else if (form._rcfacesOldTarget!==undefined) {
+				form.target=form._rcfacesOldTarget;
 			}
 	
 			win.f_event.EnterEventLock(f_event.SUBMIT_LOCK);
@@ -1714,7 +1729,7 @@ var f_core = {
 				
 				// Don't replace the current handler form.submit() and call the previous
 				if (win._rcfacesNoSubmit!==true) {
-					form._oldSubmit();
+					form._rcfacesOldSubmit();
 				}
 	
 				f_core.Profile(null, "f_core._submit.postSubmit");
@@ -3318,15 +3333,16 @@ var f_core = {
 				newLink.rel="stylesheet";
 				newLink.type="text/css";
 	
-				if (link.href) {
+				var content=link.ownerNode.textContent;
+				if (link.href && !content) {
 					// C'est un lien
 					newLink.href=link.href;
 					
 					head.appendChild(newLink);
 					continue;
-				}		
+				}
 	
-				newLink.nodeValue=link.ownerNode.nodeValue;
+				newLink.textContent=content;
 				
 				head.appendChild(newLink);
 			}
@@ -5240,14 +5256,18 @@ var f_core = {
 		if (window.frames.length) {
 			function f(win,index) {				
 				try {
-					if (!win._rcfacesClassLoader) {
-						return "\n"+index+": "+win.location;
-					}
+					var msg;
 					
-					var msg="\n"+index+": "+win._rcfacesClassLoader;
-			
+					if (!win._rcfacesClassLoader) {
+						msg="\n"+index+": "+win.location;
+
+					} else {					
+						msg="\n"+index+": "+win._rcfacesClassLoader;
+					}
+
 					if (index=="Root") {
 						index="";
+
 					} else {
 						index+=".";
 					}

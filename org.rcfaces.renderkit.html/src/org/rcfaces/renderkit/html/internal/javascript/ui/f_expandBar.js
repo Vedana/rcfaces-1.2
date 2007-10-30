@@ -66,12 +66,6 @@ var __statics = {
 var __members = {
 	f_expandBar: function() {
 		this.f_super(arguments);
-		
-		var groupName=f_core.GetAttribute(this, "v:groupName");
-		if (groupName) {
-			this._groupName=groupName;
-			this.f_addToGroup(groupName, this);
-		}
 
 		var txt=null;
 		var lis=this.getElementsByTagName("li");
@@ -103,11 +97,19 @@ var __members = {
 		this._normalText=f_core.GetAttribute(this, "v:text", txt);
 		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText", txt);
 	
+		var groupName=f_core.GetAttribute(this, "v:groupName");
+		if (groupName ) {	
+			this._groupName=groupName;
+		
+			this.f_addToGroup(groupName, this);
+		}
+	
 		this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
 	},
 	f_finalize: function() {
 		// this._normalText=undefined; // String
 		// this._collapsedText=undefined; // String
+		// this._groupName=undefined; // String
 	
 		var effect=this._effect;
 		if (effect) {
@@ -125,8 +127,6 @@ var __members = {
 			f_core.VerifyProperties(content);
 		}
 			
-		// this._groupName=undefined; // String		
-		
 		var head=this._head;
 		if (head) {
 			this._head=undefined; // HtmlLiElement
@@ -315,8 +315,9 @@ var __members = {
 				body.className=bodyClassName;
 			}
 		}
-				
-		if (!set && this._groupName) {
+		
+		var groupName=this.f_getGroupName();		
+		if (!set && groupName) {
 			var p=this;
 			
 			function unselect(item) {
@@ -331,7 +332,7 @@ var __members = {
 				item.f_setCollapsed(true);
 			}
 	
-			this.f_findIntoGroup(this._groupName, unselect);
+			this.f_findIntoGroup(groupName, unselect);
 		}
 	},
 	/**
@@ -392,6 +393,13 @@ var __members = {
 		return this._groupName;
 	},
 	fa_getRadioScope: fa_groupName.GlobalScope,
+	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	fa_isRadioElementName: function() {
+		return false;
+	},
 	/**
 	 * @method public
 	 * @param String text Text to change.

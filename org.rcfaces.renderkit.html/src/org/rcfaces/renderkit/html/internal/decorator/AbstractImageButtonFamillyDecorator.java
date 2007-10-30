@@ -5,6 +5,7 @@ package org.rcfaces.renderkit.html.internal.decorator;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
@@ -57,6 +58,18 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     // private static final String DISABLED_IMAGE_RENDERED =
     // "imageButton.disabled.rendered";
+
+    private static final String IMAGE_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "image";
+
+    private static final String TEXT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "text";
+
+    private static final String INPUT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "input";
 
     private static final String IMAGE_CLASSNAME_SUFFIX = "_image";
 
@@ -340,6 +353,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writeInputAttributes(writer);
 
                     writer.startElement(IHtmlWriter.IMG);
+                    writer.writeId(getImageId(writer, htmlBorderWriter));
                     writer.writeClass(getImageClassName(htmlBorderWriter));
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
@@ -611,6 +625,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
             writer.writeName(writer.getComponentRenderContext()
                     .getComponentClientId());
+            writer.writeId(getImageId(writer, htmlBorderWriter));
             writeImageAttributes();
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
@@ -619,13 +634,13 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 writer.writeAlt(alternateText);
             }
 
-            writeImageAttributes();
-
         } else {
             writeImageAttributes();
             writer.writeHRef("javascript:void(0)");
+            writer.writeId(getInputId(writer, htmlBorderWriter));
 
             writer.startElement(IHtmlWriter.IMG);
+            writer.writeId(getImageId(writer, htmlBorderWriter));
             writer.writeClass(getImageClassName(htmlBorderWriter));
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
@@ -656,6 +671,18 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     protected String getImageClassName(IHtmlBorderRenderer htmlBorderWriter) {
         return getMainClassName() + IMAGE_CLASSNAME_SUFFIX;
+    }
+
+    protected String getImageId(IHtmlWriter writer,
+            IHtmlBorderRenderer htmlBorderWriter) {
+        return writer.getComponentRenderContext().getComponentClientId()
+                + IMAGE_ID_SUFFIX;
+    }
+
+    protected String getInputId(IHtmlWriter writer,
+            IHtmlBorderRenderer htmlBorderWriter) {
+        return writer.getComponentRenderContext().getComponentClientId()
+                + INPUT_ID_SUFFIX;
     }
 
     protected void writeText() throws WriterException {
@@ -785,6 +812,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 halign, valign, width, height, 1, 1);
 
         writer.startElement(IHtmlWriter.SPAN);
+        writer.writeId(getTextId(writer, htmlBorderWriter));
         writer.writeClass(getTextClassName(htmlBorderWriter));
 
         UIComponent mainComponent = writer.getComponentRenderContext()
@@ -810,6 +838,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         writer.endElement(IHtmlWriter.SPAN);
 
         htmlBorderWriter.endChild(writer);
+    }
+
+    protected String getTextId(IHtmlWriter writer,
+            IHtmlBorderRenderer htmlBorderWriter) {
+        return writer.getComponentRenderContext().getComponentClientId()
+                + TEXT_ID_SUFFIX;
     }
 
     protected String getTextClassName(IHtmlBorderRenderer htmlBorderWriter) {

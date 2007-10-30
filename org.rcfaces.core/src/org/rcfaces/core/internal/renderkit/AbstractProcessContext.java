@@ -3,13 +3,9 @@
  */
 package org.rcfaces.core.internal.renderkit;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import javax.faces.FacesException;
@@ -19,9 +15,9 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.tools.PageConfiguration;
+import org.rcfaces.core.internal.util.PathUtil;
 
 /**
  * 
@@ -173,7 +169,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
                 p = uri;
             }
 
-            p = normalizePath(p);
+            p = PathUtil.normalizePath(p);
             if (LOG.isDebugEnabled()) {
                 LOG
                         .debug("Returns path='" + p + "' [uri=absolute]  ('"
@@ -189,7 +185,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
             if (baseHREF.charAt(0) == '/') {
                 // base HREF absolue !
 
-                String p = normalizePath(baseHREF + uri);
+                String p = PathUtil.normalizePath(baseHREF + uri);
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Returns path='" + p
@@ -200,7 +196,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
             }
             // base HREF relatif !
 
-            String p = normalizePath(contextPath + servletPath + "/" + baseHREF
+            String p = PathUtil.normalizePath(contextPath + servletPath + "/" + baseHREF
                     + uri);
 
             if (LOG.isDebugEnabled()) {
@@ -212,7 +208,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
             return p;
         }
 
-        String p = normalizePath(contextPath + servletPath + "/" + uri);
+        String p = PathUtil.normalizePath(contextPath + servletPath + "/" + uri);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Returns path='" + p
@@ -287,67 +283,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
             return baseHREF;
         }
 
-        return normalizePath(contextPath + servletPath + baseHREF);
-    }
-
-    protected String normalizePath(String path) {
-        boolean modified = false;
-
-        StringTokenizer st = new StringTokenizer(path, "/", true);
-
-        List l = new ArrayList((st.countTokens() / 2) + 1);
-        boolean sep = true;
-        for (; st.hasMoreTokens();) {
-            String segment = st.nextToken();
-            if (segment.equals("/")) {
-                if (sep) {
-                    sep = false;
-                    continue;
-                }
-                modified = true;
-                continue;
-            }
-            sep = true;
-            l.add(segment);
-        }
-
-        for (int i = 0; i < l.size();) {
-            String segment = (String) l.get(i);
-
-            if (segment.equals("..")) {
-                modified = true;
-
-                l.remove(i);
-                if (i < 1) {
-                    continue;
-                }
-
-                i--;
-                l.remove(i);
-                continue;
-            }
-
-            if (segment.equals(".")) {
-                modified = true;
-
-                l.remove(i);
-                continue;
-            }
-
-            i++;
-        }
-
-        if (modified == false) {
-            return path;
-        }
-
-        StringAppender sa = new StringAppender(path.length());
-        for (Iterator it = l.iterator(); it.hasNext();) {
-            sa.append('/');
-            sa.append((String) it.next());
-        }
-
-        return sa.toString();
+        return PathUtil.normalizePath(contextPath + servletPath + baseHREF);
     }
 
     protected static void setProcessContext(IProcessContext externalContext) {

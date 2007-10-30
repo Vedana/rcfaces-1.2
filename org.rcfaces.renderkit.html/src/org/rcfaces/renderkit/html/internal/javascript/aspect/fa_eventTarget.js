@@ -343,7 +343,7 @@ var __members = {
 		al = new f_actionList(this, type);
 		actionLists[type] = al;
 		
-		f_core.Debug(fa_eventTarget, "Create actionList '"+type+"' for component '"+this.id+"'.");
+		f_core.Debug(fa_eventTarget, "f_openActionList: Create actionList '"+type+"' for component '"+this.id+"'.");
 		
 		if (this.f_setDomEvent) {
 			this.f_setDomEvent(type, this);
@@ -359,11 +359,15 @@ var __members = {
 			return;
 		}
 		
-		// Gros problèmes de stack overflow avec MSIE >=6.0.29
-		var component=this;
+		// Gros problèmes de stack overflow avec MSIE >=6.0.29, on passe en asynchrone !
+		var self=this;
 		
 		window.setTimeout(function() {
-			component.f_fireEvent(f_event.PROPERTY_CHANGE, null, null, {
+			if (window._rcfacesExiting) {
+				return;
+			}
+			
+			self.f_fireEvent(f_event.PROPERTY_CHANGE, null, null, {
 				name: name,
 				value: value, 
 				oldValue: oldValue });
@@ -371,11 +375,14 @@ var __members = {
 	},
 	/**
 	 * @method protected final
-	 * @param String type
-	 * @param boolean value
+	 * @param String type Name of the type of event.
+	 * @param boolean value Boolean value or undefined.
 	 * @return void
 	 */
 	f_setForcedEventReturn: function(type, value) {
+		f_core.Assert(typeof(type)=="string", "fa_eventTarget.f_setForcedEventReturn: Invalid type parameter '"+type+"'.");
+		f_core.Assert(value===undefined || typeof(value)=="boolean", "fa_eventTarget.f_setForcedEventReturn: Invalid value parameter '"+value+"'.");
+
 		var fer=this._forcedEventReturns;
 		if (!fer) {
 			fer=new Object();

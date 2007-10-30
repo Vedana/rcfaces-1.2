@@ -4,15 +4,16 @@
  */
 package org.rcfaces.core.image;
 
+import org.rcfaces.core.internal.content.AbstractBufferOperation;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractImageOperation implements IImageOperation {
+public abstract class AbstractImageOperation extends AbstractBufferOperation
+        implements IImageOperation {
     private static final String REVISION = "$Revision$";
-
-    private String name;
 
     private String forceSuffix;
 
@@ -42,14 +43,6 @@ public abstract class AbstractImageOperation implements IImageOperation {
 
     public final void setForceSuffix(String forceSuffix) {
         this.forceSuffix = forceSuffix;
-    }
-
-    public final String getName() {
-        return name;
-    }
-
-    public final void setName(String name) {
-        this.name = name;
     }
 
 }

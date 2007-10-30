@@ -5,11 +5,11 @@ package org.rcfaces.core.internal.images;
 
 import java.awt.image.RenderedImage;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.imageio.ImageWriter;
 
-import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
+import org.rcfaces.core.internal.content.IFileBuffer;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
 
 /**
  * 
@@ -17,32 +17,8 @@ import org.rcfaces.core.internal.images.IImageLoaderFactory.IImageLoader;
  * @version $Revision$ $Date$
  */
 
-public interface IBufferedImage {
-    void initialize(IImageLoader imageDownloader, String contentType,
-            RenderedImage renderedImage, ImageWriter imageWriter, int imageType)
+public interface IBufferedImage extends IFileBuffer {
+    void initialize(IResourceLoader imageDownloader, String contentType,
+            RenderedImage renderedImage, ImageWriter imageWriter, int imageType, long lastModified)
             throws IOException;
-
-    String getName();
-
-    void initializeRedirection(String url) throws IOException;
-
-    String getRedirection();
-
-    int getSize();
-
-    boolean isErrored();
-
-    void setErrored();
-
-    boolean isInitialized();
-
-    InputStream getContent() throws IOException;
-
-    String getContentType();
-
-    long getModificationDate();
-
-    String getHash();
-
-    String getETag();
 }

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 
 /**
  * 
@@ -146,7 +146,7 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         }
 
         if (this.lastModified == 0
-                && ConfiguredHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
+                && ExtendedHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
 
             this.lastModified = date;
         }
@@ -160,10 +160,10 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         }
 
         if (lastModified == 0
-                && ConfiguredHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
+                && ExtendedHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
 
             try {
-                Date d = ConfiguredHttpServlet.parseHttpDate(value);
+                Date d = ExtendedHttpServlet.parseHttpDate(value);
                 LOG.trace("Inclusion set Last-Modified property to " + d);
 
                 if (d != null) {

@@ -44,6 +44,7 @@ import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.style.StyleContentAccessorHandler;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.internal.version.ResourceVersionHandlerImpl;
@@ -76,6 +77,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
             ResourceVersionHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
             ImageContentAccessorHandlerImpl.class.getPackage(),
+            StyleContentAccessorHandler.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
             ContentStorageAccessorHandler.class.getPackage() };
 

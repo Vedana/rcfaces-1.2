@@ -345,7 +345,11 @@ var __members = {
 		var id=component;
 		if (component && component.id) {
 			id=component.id;
-		}
+		
+		} else if (id.length && typeof(id)=="string") {
+			// On initialise à tout hasard le composant !
+			component=f_core.GetElementByClientId(id);
+		}		
 		
 		if (id===null && this._parent) {
 			f_core.Debug(f_messageContext, "f_addMessageObject["+this.form+"] Add message object to parent !");
@@ -360,6 +364,7 @@ var __members = {
 				
 		} else if (id===null) {
 			id=f_messageContext._GLOBAL_COMPONENT_ID;
+
 		}
 	
 		var messages=this._messages;

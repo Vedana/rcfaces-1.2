@@ -36,7 +36,7 @@ var __members = {
 	 * @method protected
 	 * @return any
 	 */
-	f_delFromGroup: function(groupName, obj) {
+	f_deleteFromGroup: function(groupName, obj) {
 		var g = this.f_listGroup(groupName);
 		if (!g) {
 			return null;
@@ -58,7 +58,7 @@ var __members = {
 	 */
 	f_changeGroup: function(groupName, newGroupName, obj) {
 		if (groupName) {
-			this.f_delFromGroup(groupName, obj);
+			this.f_deleteFromGroup(groupName, obj);
 		}
 		if (newGroupName) {
 			this.f_addToGroup(newGroupName, obj);
@@ -66,8 +66,15 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @param String groupName
+	 * @param function fct
+	 * @return any
 	 */
 	f_findIntoGroup: function(groupName, fct) {
+		if (!groupName) {
+			return null;
+		} 
+	
 		var g = this.f_listGroup(groupName);
 		if (!g) {
 			return null;
@@ -84,9 +91,12 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @param String groupName
+	 * @param boolean create
+	 * @return Array
 	 */
 	f_listGroup: function(groupName, create) {
-		f_core.Assert(groupName, "You must specify a groupName !");
+		f_core.Assert(typeof(groupName)=="string", "fa_groupName.f_listGroup: Invalid groupName parameter ("+groupName+") !");
 	
 		var scope=this.fa_getRadioScope();
 		if (!scope) {
@@ -95,10 +105,6 @@ var __members = {
 		
 		var wg=scope._Groups;
 		if (!wg) {
-			if (!create) {
-				return null;
-			}
-
 			wg=new Object;
 			scope._Groups=wg;
 		}
@@ -106,21 +112,45 @@ var __members = {
 		var groupKey=this.f_getClass().f_getName();
 		var groups=wg[groupKey];
 		if (!groups) {
-			if (!create) {
-				return null;
-			}
 			groups=new Object;
 			wg[groupKey]=groups;
 		}
 		
-		var group=groups[groupName];
-		if (!create) {
+		var group=groups[groupName];		
+		if (group) {
 			return group;
 		}
 		
-		if (!group) {
-			group=new Array;
-			groups[groupName]=group;
+		group=new Array;
+		groups[groupName]=group;
+
+		if (!this.fa_isRadioElementName()) {
+			// Les composants ont été enregistré à la construction
+			return group;
+		}
+
+		f_core.Debug(fa_groupName, "f_listGroup: Search elements by name '"+groupName+"' ...");
+
+		var elements=document.getElementsByName(groupName);
+		for(var i=0;i<elements.length;i++) {
+			var element=elements[i];
+			
+			var elementId=element.id;
+
+			var inputSuffixPos=elementId.indexOf(f_checkButton._INPUT_ID_SUFFIX);
+			if (inputSuffixPos>0) {
+				elementId=elementId.substring(0, inputSuffixPos);
+			}
+			
+			element=f_core.GetElementByClientId(elementId);
+
+			f_core.Debug(fa_groupName, "f_listGroup: Found element id='"+element.id+"' mainId='"+elementId+"' element='"+element+"'.");
+
+			if (!element) {
+				continue;
+			}
+			
+			group.push(element);			
 		}
 
 		return group;
@@ -128,8 +158,15 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
+	 * @return String
 	 */
-	fa_getRadioScope: f_class.ABSTRACT
+	fa_getRadioScope: f_class.ABSTRACT,
+	
+	/**
+	 * @method protected abstract
+	 * @return boolean
+	 */
+	fa_isRadioElementName: f_class.ABSTRACT
 }
 
 new f_aspect("fa_groupName", {

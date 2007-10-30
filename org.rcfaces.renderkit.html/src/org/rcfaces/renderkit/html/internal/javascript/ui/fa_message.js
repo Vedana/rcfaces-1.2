@@ -18,7 +18,6 @@ var __members = {
 	_messageContext: undefined,
 	
 	fa_message: function() {
-
 		var messageContext=f_messageContext.Get(this);
 		this._messageContext=messageContext;
 		

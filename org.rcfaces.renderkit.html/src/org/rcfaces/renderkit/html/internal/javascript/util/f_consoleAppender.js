@@ -606,7 +606,7 @@ var __members = {
 		tds.onmousedown=f_consoleAppender._ResizeClick;
 		tds._console=this;
 		
-		f_core.GetFirstElementByTagName(doc, "body").appendChild(table);
+		doc.body.appendChild(table);
 		
 		this._console=table;
 		this._updateConsole();

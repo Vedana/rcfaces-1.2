@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.images;
+package org.rcfaces.core.internal.resource;
 
 import java.io.InputStream;
 
@@ -14,14 +14,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IImageLoaderFactory {
+public interface IResourceLoaderFactory {
 
     String getName();
 
-    IImageLoader loadImage(ServletContext context, HttpServletRequest request,
+    IResourceLoader loadResource(ServletContext context, HttpServletRequest request,
             HttpServletResponse response, String uri);
 
-    public interface IImageLoader {
+    public interface IResourceLoader {
 
         boolean isErrored();
 

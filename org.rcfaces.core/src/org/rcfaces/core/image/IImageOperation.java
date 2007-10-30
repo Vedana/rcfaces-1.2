@@ -7,16 +7,14 @@ package org.rcfaces.core.image;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
+import org.rcfaces.core.internal.content.IBufferOperation;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IImageOperation {
-
-    String getName();
-
-    void setName(String name);
+public interface IImageOperation extends IBufferOperation {
 
     String getForceSuffix();
 
@@ -29,8 +27,6 @@ public interface IImageOperation {
     String getInternalContentType();
 
     void setInternalContentType(String contentType);
-
-    void configure(Map configuration);
 
     BufferedImage filter(Map requestParameter, BufferedImage source,
             BufferedImage destination);

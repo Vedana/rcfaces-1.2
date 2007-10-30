@@ -151,38 +151,43 @@ var __statics = {
 	_ID: 0,
 	
 	/**
-	 * @field public static number
+	 * @field public static final number
 	 */
 	CREATED_STATUS: 0x00,
 	
 	/**
-	 * @field public static number
+	 * @field public static final number
 	 */
 	OPENING_STATUS: 0x10,
 	
 	/**
-	 * @field public static number
+	 * @field public static final number
 	 */
 	OPENED_STATUS: 0x12,
 	
 	/**
-	 * @field public static number
+	 * @field public static final number
 	 */	
 	CLOSING_STATUS: 0x20,
 	
+	/**
+	 * @field public static final number
+	 */	
+	ABOUT_TO_CLOSE_STATUS: 0x21,
+	
 	
 	/**
-	 * @field public static number
+	 * @field public static final number
 	 */
-	CLOSED_STATUS: 0x21,
+	CLOSED_STATUS: 0x24,
 	
 	/**
-	 * @field public static number
+	 * @field public static final number
 	 */
 	DESTROYING_STATUS: 0x30,
 	
 	/**
-	 * @field public static number
+	 * @field public static final number
 	 */
 	DESTROYED_STATUS: 0x31
 }
@@ -221,6 +226,11 @@ var __members = {
 	 * @field private number
 	 */
 	_shellStatus: 0,
+	
+	/**
+	 * @field hidden boolean
+	 */
+	_showNextShell: true,
 	
 	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
@@ -550,23 +560,7 @@ var __members = {
 		
 		// On découple la destruction ... pour éviter des problèmes de sécurité !
 		window.setTimeout(function() {
-			
-			var returnValueFunction=self._returnValueFunction;
-					
-			self._shellManager.f_closeShell(self, !returnValueFunction);
-			
-			if (!returnValueFunction) {
-				return;
-			}
-			
-			try {
-				returnValueFunction.call(self, returnValue);
-	
-			} catch (x) {
-				f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
-			}
-			
-			self._shellManager.f_closeShell(null, true);
+			self._shellManager.f_closeShell(self);
 		}, 0);
 	},
 	f_preConstruct: function() {
@@ -574,8 +568,22 @@ var __members = {
 	f_postConstruct: function() {		
 	},
 	f_preDestruction: function() {
+		this.f_setStatus(f_shell.ABOUT_TO_CLOSE_STATUS);
 	},
 	f_postDestruction: function() {
+		this.f_setStatus(f_shell.DESTROYED_STATUS);
+
+		var returnValueFunction=this._returnValueFunction;
+		if (typeof(returnValueFunction)!="function") {
+			return;
+		}
+			
+		try {
+			this._showNextShell=returnValueFunction.call(this, returnValue);
+
+		} catch (x) {
+			f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
+		}
 	},
 	/**
 	 * @method public
@@ -617,12 +625,15 @@ var __members = {
 	},
 	/**
 	 * @method public
+	 * @return number
 	 */
 	f_getStatus: function() {
 		return this._shellStatus;
 	},
 	/**
 	 * @method hidden
+	 * @param number status
+	 * @return void
 	 */
 	f_setStatus: function(status) {
 		f_core.Assert(typeof(status)=="number", "f_shell.f_setStatus: Invalid status parameter ("+status+")");
