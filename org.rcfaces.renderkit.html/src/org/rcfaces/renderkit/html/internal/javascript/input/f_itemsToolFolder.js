@@ -49,6 +49,15 @@ var __members = {
 	},
 	fa_destroyItems: function(items) {
 	},	
+	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
+		if (type==f_event.SELECTION) {			
+			if (!value) {
+    			 return false;
+			}
+		}	
+		
+		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
+	},
 	/**
 	 * @method hidden
 	 * @param String id
