@@ -111,7 +111,7 @@ public class ImageRenderer extends AbstractCssRenderer {
         return JavaScriptClasses.IMAGE;
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
+    public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
             Set classes) {
         super.addRequiredJavaScriptClassNames(htmlWriter, classes);
 

@@ -193,8 +193,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return gridRenderContext;
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set classes) {
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
         super.addRequiredJavaScriptClassNames(writer, classes);
 
         IGridComponent dataGridComponent = (IGridComponent) writer

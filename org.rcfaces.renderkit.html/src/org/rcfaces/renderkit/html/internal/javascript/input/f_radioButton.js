@@ -128,6 +128,7 @@ var __members = {
 		}
 		
 		if (!set) {
+			input.checked = false;
 			return;
 		}
 

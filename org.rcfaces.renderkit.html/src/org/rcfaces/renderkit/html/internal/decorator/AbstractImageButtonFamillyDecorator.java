@@ -4,8 +4,10 @@
 package org.rcfaces.renderkit.html.internal.decorator;
 
 import javax.faces.FacesException;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
@@ -31,6 +33,7 @@ import org.rcfaces.core.internal.images.operation.SelectedOperation;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
@@ -343,7 +346,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
                     writer.writeName(writer.getComponentRenderContext()
                             .getComponentClientId());
-                    writer.writeValue(getInputValue());
+                    writer.writeValue(getInputValue(true));
                     writeInputAttributes(writer);
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly); // jbos@unedic.fr
@@ -608,7 +611,25 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return IHtmlWriter.A;
     }
 
-    protected String getInputValue() {
+    protected String getInputValue(boolean forceValue) {
+        UIComponent component = writer.getComponentRenderContext()
+                .getComponent();
+
+        String value = null;
+
+        if (component instanceof ValueHolder) {
+            value = ValuesTools.valueToString((ValueHolder) component, writer
+                    .getComponentRenderContext().getFacesContext());
+
+        } else if (component instanceof UICommand) {
+            value = ValuesTools.valueToString((UICommand) component, writer
+                    .getComponentRenderContext().getFacesContext());
+        }
+
+        if (forceValue == false || value != null) {
+            return value;
+        }
+
         return "SELECTED";
     }
 

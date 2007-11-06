@@ -245,6 +245,7 @@ var __members= {
 	 */
 	f_callActions: function(evt) {
 		f_core.Assert(this._link, "f_callActions: No linked component for this actionList !");
+		var win=window; // Il faut garder une référence ...
 		
 		var ret = true;
 
@@ -284,13 +285,21 @@ var __members= {
 				ret = fct.call(link, evt);
 				
 			} catch (ex) {
+				if (win._rcfacesExiting) {
+					return false;
+				}
+
 				f_actionList._ShowEventException(i, this._type, link, evt, fct, ex);
 				ret=false;
 				
 			} finally {
-				if (f_event && f_event.SetEvent) {
+				if (!win._rcfacesExiting && f_event && f_event.SetEvent) {
 					f_event.SetEvent(oldEvent);
 				}
+			}
+			
+			if (win._rcfacesExiting) {
+				return false;
 			}
 	
 			if (f_core) {

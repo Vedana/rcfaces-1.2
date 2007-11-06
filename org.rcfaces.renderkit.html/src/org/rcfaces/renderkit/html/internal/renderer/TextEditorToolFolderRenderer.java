@@ -405,6 +405,10 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
     public static class FontNameItem extends SelectItem implements
             IStyleClassItem {
 
+        private static final String REVISION = "$Revision$";
+
+        private static final long serialVersionUID = -6713360676011803876L;
+
         private final String styleClass;
 
         public FontNameItem(String fontNameValue, String fontNameLabel,

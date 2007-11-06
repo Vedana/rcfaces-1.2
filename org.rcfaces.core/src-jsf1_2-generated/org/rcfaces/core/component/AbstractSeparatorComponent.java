@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
+import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.HashSet;
-import java.lang.String;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.component.ISeparatorComponent;
+import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.component.ISeparatorComponent;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.

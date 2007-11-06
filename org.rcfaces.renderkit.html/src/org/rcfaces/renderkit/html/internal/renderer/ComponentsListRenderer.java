@@ -208,7 +208,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        boolean filtred = false;
+        //boolean filtred = false;
         /*
          * DataModel dataModel = listContext.getDataModel();
          * 
@@ -620,8 +620,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         return new ListContext(facesContext, dgc, rowIndex, filterExpression);
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set classes) {
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
         super.addRequiredJavaScriptClassNames(writer, classes);
 
         ComponentsListComponent componentsListComponent = (ComponentsListComponent) writer

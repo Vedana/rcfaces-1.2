@@ -4,13 +4,15 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.Set;
+
 import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IJavaScriptComponent {
+public interface IJavaScriptComponentRenderer {
     void initializeJavaScript(IJavaScriptWriter javaScriptWriter)
             throws WriterException;
 
@@ -22,4 +24,7 @@ public interface IJavaScriptComponent {
 
     void releaseJavaScript(IJavaScriptWriter javaScriptWriter)
             throws WriterException;
+
+    void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            Set waitingRequiredClasses);
 }

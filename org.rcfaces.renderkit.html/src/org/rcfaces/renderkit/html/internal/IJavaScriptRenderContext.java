@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Collection;
 
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
@@ -25,7 +26,8 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
 
     void clearJavaScriptStubForced();
 
-    void computeRequires(IHtmlWriter writer, AbstractJavaScriptRenderer renderer);
+    void computeRequires(IHtmlWriter writer,
+            IJavaScriptComponentRenderer renderer);
 
     String[] popUnitializedComponentsClientId();
 
@@ -35,9 +37,9 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
 
     IJavaScriptRenderContext pushInteractive();
 
-    String allocateVarName();
+    void popInteractive(IJavaScriptRenderContext oldJavaScriptRenderContext);
 
-    boolean isUnitializedComponentsPending();
+    String allocateVarName();
 
     void pushUnitializedComponent(String componentId);
 
@@ -56,4 +58,22 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
             String requiredId);
 
     boolean canLazyTagUsesBrother();
+
+    IJavaScriptWriter removeJavaScriptWriter(IHtmlWriter writer);
+
+    IJavaScriptWriter getJavaScriptWriter(IHtmlWriter writer,
+            IJavaScriptComponentRenderer javaScriptComponent)
+            throws WriterException;
+
+    void initializePendingComponents(IJavaScriptWriter writer)
+            throws WriterException;
+
+    void initializeJavaScriptComponent(IJavaScriptWriter writer)
+            throws WriterException;
+
+    void releaseComponentJavaScript(IJavaScriptWriter writer,
+            boolean sendComplete, AbstractHtmlRenderer htmlComponentRenderer)
+            throws WriterException;
+
+    void declareLazyJavaScriptRenderer(IComponentWriter writer);
 }

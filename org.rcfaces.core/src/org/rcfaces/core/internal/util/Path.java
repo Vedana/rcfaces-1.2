@@ -63,14 +63,14 @@ public class Path implements IPath {
         if (absolute) {
             return this;
         }
-        return new Path(segments, absolute);
+        return new Path(segments, true);
     }
 
     public IPath makeRelative() {
         if (absolute == false) {
             return this;
         }
-        return new Path(segments, absolute);
+        return new Path(segments, false);
     }
 
     public String segment(int index) {

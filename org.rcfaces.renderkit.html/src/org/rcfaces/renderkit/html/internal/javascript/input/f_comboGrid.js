@@ -13,6 +13,16 @@
 var __statics = {
 
 	/**
+	 * @field private static final String
+	 */
+	_BUTTON_ID_SUFFIX: "::button",
+
+	/**
+	 * @field private static final String
+	 */
+	_INPUT_ID_SUFFIX: "::input",
+
+	/**
 	 * @field private static final number
 	 */
 	_DEFAULT_SUGGESTION_DELAY_MS: 300,
@@ -156,7 +166,7 @@ var __members = {
 		
 		this._filtred=true;
 		
-		var button=f_core.GetFirstElementByTagName(this, "img", true);
+		var button=this.ownerDocument.getElementById(this.id+f_comboGrid._BUTTON_ID_SUFFIX);
 		this._button=button;
 		
 		this._formattedValue=this.f_getInput().value;
@@ -363,6 +373,14 @@ var __members = {
 		f_core.Debug(f_comboGrid, "f_getEventLocked: menuOpened="+this.f_isDataGridPopupOpened()+" mask="+mask+" showAlert="+showAlert);
 
 		return this.f_super(arguments, evt, showAlert, mask);
+	},
+	/**
+	 * @method private
+	 * @param f_event evt
+	 * @return boolean
+	 */
+	f_initializeInput: function() {
+		return this.ownerDocument.getElementById(this.id+f_comboGrid._INPUT_ID_SUFFIX);
 	},
 	/**
 	 * @method private

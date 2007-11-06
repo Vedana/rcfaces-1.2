@@ -18,7 +18,6 @@ import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.ToolFolderComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
-import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -120,10 +119,9 @@ public class ToolBarRenderer extends AbstractCssRenderer {
             return;
         }
 
-        IRenderContext renderContext = getRenderContext(facesContext);
+        //IRenderContext renderContext = getRenderContext(facesContext);
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) renderContext
-                .getComponentWriter();
+       // IHtmlWriter htmlWriter = (IHtmlWriter) renderContext.getComponentWriter();
 
         // htmlWriter.startElement(IHtmlWriter.LI);
         // htmlWriter.writeClass("f_toolBar_item");

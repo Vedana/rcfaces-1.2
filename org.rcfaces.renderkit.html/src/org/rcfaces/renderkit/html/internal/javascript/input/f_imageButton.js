@@ -5,7 +5,7 @@
 /**
  * f_imageButton class
  *
- * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate
+ * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate, fa_value
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */ 
@@ -577,12 +577,25 @@ var __members = {
 		}
 		
 		cmp.focus();
+	},
+	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
+		if (type==f_event.SELECTION) {			
+			if (this.f_isReadOnly() || this.f_isDisabled()) {
+				return false;
+			}
+			
+			if (!value) {
+				value=this.f_getValue();
+			}
+		}	
+		
+		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
 	}
 }
 
 new f_class("f_imageButton", {
 	extend: f_component, 
-	aspects: [ fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate ],
+	aspects: [ fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate, fa_value ],
 	statics: __statics,
 	members: __members
 });

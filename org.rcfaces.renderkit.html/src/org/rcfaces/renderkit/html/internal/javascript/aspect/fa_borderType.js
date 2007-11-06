@@ -13,6 +13,11 @@
 var __statics = {
 	
 	/** 
+	 * @field private static final String 
+	 */
+	_BORDER_ID_SUFFIX: "::border",
+	
+	/** 
 	 * @field hidden static final String 
 	 */
 	NONE_BORDER_TYPE: "none",
@@ -73,7 +78,7 @@ var __members = {
 		
 		var v_borderType=f_core.GetAttribute(this, "v:borderType");
 		if (v_borderType && v_borderType!=fa_borderType.NONE_BORDER_TYPE) {
-			var border=f_core.GetFirstElementByTagName(this, "table", false);
+			var border=this.ownerDocument.getElementById(this.id+fa_borderType._BORDER_ID_SUFFIX);
 			borderType=v_borderType;
 			
 			if (border) {

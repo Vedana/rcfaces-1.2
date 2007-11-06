@@ -21,9 +21,10 @@ function f_classLoader(win) {
 	}
 	
 	f_core.Assert(win, "f_classLoader.f_classLoader: Invalid window parameter ("+win+")");
-	
+
+	//this._tagId=new Date().getTime() % 100000;	
 	this._window=win;
-	f_classLoader._window=win;
+	//f_classLoader._window=win;
 
 	this._objectPool=new Array;
 	this._componentPool=new Array;
@@ -117,7 +118,7 @@ f_classLoader.prototype = {
 		f_core.Debug(f_classLoader, "f_declareClass: Registering class "+claz._name+((claz._lookId)?" (lookId="+claz._lookId+")":"")+".");
 	
 		this._window[claz._name]=claz;
-		f_classLoader._InitializeStaticMembers(claz);
+		this._initializeStaticMembers(claz);
 	},
 	
 	/**
@@ -137,7 +138,7 @@ f_classLoader.prototype = {
 		this._aspects[name] = aspect;
 		this._window[name] = aspect;
 
-		f_classLoader._InitializeStaticMembers(aspect);
+		this._initializeStaticMembers(aspect);
 	},
 	
 	/**
@@ -1013,6 +1014,53 @@ f_classLoader.prototype = {
 
 		f_core.Profile(true, "f_classLoader.loadBundle("+name+")");
 	},
+	/**
+	 * @method private 
+	 * @param f_class claz
+	 * @return void
+	 */
+	_initializeStaticMembers: function(claz) {
+		// Attention: Code pour Classes et Aspects
+			
+		var staticMembers=claz._staticMembers;
+		if (staticMembers) {
+		/*
+			if (staticMembers instanceof _remapContext) {
+				staticMembers=this._classLoader._remapContext(staticMembers);
+				claz._staticMembers=staticMembers;
+			}
+		*/
+			for(var memberName in staticMembers) {				
+				var member=staticMembers[memberName];
+				
+				/*			
+				f_core.Assert(
+					typeof(member)=="number" || 
+					typeof(member)=="string" || 
+					member===null ||
+					member===false ||
+					member===true ||
+					memberName=="_EVENTS" || // Ok c'est pas joli, mais bon ...
+					memberName=="_ACCENTS_MAPPER" ||
+					memberName=="_CALLBACKS" ||
+					typeof(member)=="function", "Static member '"+memberName+"' is not litteral or function for aspect/class '"+claz._name+"' !");
+				*/
+						
+				claz[memberName]=member;
+			}
+		}
+				
+		var staticInitializer=claz.Initializer;
+		if (staticInitializer) {
+			f_core.Assert(typeof(staticInitializer)=="function", "f_classLoader._initializeStaticMembers: Invalid 'Initializer' field, it must be a function ! value="+staticInitializer);
+			try {	
+				staticInitializer.call(claz);
+				
+			} catch (x) {
+				f_core.Error(f_classLoader, "_initializeStaticMembers: Initializer of aspect/class '"+claz._name+"' throws exception.", x);
+			}
+		}
+	},
 
 	toString: function() {
 		if (!this._window) {
@@ -1047,51 +1095,6 @@ f_classLoader._MakeClassName=function(claz, lookId) {
 	return claz+f_class._LOOK+lookId;
 }
 
-/**
- * @method private static final
- */
-f_classLoader._InitializeStaticMembers=function(claz) {
-	// Attention: Code pour Classes et Aspects
-		
-	var staticMembers=claz._staticMembers;
-	if (staticMembers) {
-	/*
-		if (staticMembers instanceof _remapContext) {
-			staticMembers=this._classLoader._remapContext(staticMembers);
-			claz._staticMembers=staticMembers;
-		}
-	*/
-		for(var memberName in staticMembers) {				
-			var member=staticMembers[memberName];
-			
-			/*			
-			f_core.Assert(
-				typeof(member)=="number" || 
-				typeof(member)=="string" || 
-				member===null ||
-				member===false ||
-				member===true ||
-				memberName=="_EVENTS" || // Ok c'est pas joli, mais bon ...
-				memberName=="_ACCENTS_MAPPER" ||
-				memberName=="_CALLBACKS" ||
-				typeof(member)=="function", "Static member '"+memberName+"' is not litteral or function for aspect/class '"+claz._name+"' !");
-			*/
-					
-			claz[memberName]=member;
-		}
-	}
-			
-	var staticInitializer=claz.Initializer;
-	if (staticInitializer) {
-		f_core.Assert(typeof(staticInitializer)=="function", "f_classLoader._InitializeStaticMembers: Invalid 'Initializer' field, it must be a function ! value="+staticInitializer);
-		try {	
-			staticInitializer.call(claz);
-			
-		} catch (x) {
-			f_core.Error(f_classLoader, "_InitializeStaticMembers: Initializer of aspect/class '"+claz._name+"' throws exception.", x);
-		}
-	}
-}
 
 /**
  * @method hidden static

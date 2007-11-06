@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CardBoxComponent;
@@ -18,7 +20,7 @@ import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.IJavaScriptComponent;
+import org.rcfaces.renderkit.html.internal.IJavaScriptComponentRenderer;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -32,7 +34,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
     private static final String CARD_SUFFIX = "_card";
 
-    private static final IJavaScriptComponent CARD_JAVASCRIPT_COMPONENT = new IJavaScriptComponent() {
+    private static final IJavaScriptComponentRenderer CARD_JAVASCRIPT_COMPONENT = new IJavaScriptComponentRenderer() {
         private static final String REVISION = "$Revision$";
 
         public void initializeJavaScript(IJavaScriptWriter javaScriptWriter)
@@ -49,6 +51,10 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         }
 
         public void initializePendingComponents(IJavaScriptWriter writer) {
+        }
+
+        public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+                Set waitingRequiredClasses) {
         }
     };
 
@@ -79,15 +85,15 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
 
-        htmlRenderContext.removeJavaScriptWriter(htmlWriter);
-
         IJavaScriptRenderContext javascriptRenderContext = htmlRenderContext
                 .getJavaScriptRenderContext();
+
+        javascriptRenderContext.removeJavaScriptWriter(htmlWriter);
 
         // Il faut calculer les dependances
         javascriptRenderContext.computeRequires(htmlWriter, this);
 
-        IJavaScriptWriter js = htmlRenderContext.getJavaScriptWriter(
+        IJavaScriptWriter js = javascriptRenderContext.getJavaScriptWriter(
                 htmlWriter, CARD_JAVASCRIPT_COMPONENT);
 
         initializePendingComponents(js);
@@ -234,7 +240,8 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
         if (selected == false) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                asyncRender = htmlRenderContext.getAsyncRenderMode(cardBoxComponent);
+                asyncRender = htmlRenderContext
+                        .getAsyncRenderMode(cardBoxComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     writer.getHtmlComponentRenderContext()

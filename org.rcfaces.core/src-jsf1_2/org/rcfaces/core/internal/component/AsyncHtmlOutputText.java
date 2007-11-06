@@ -14,15 +14,22 @@ import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
  * @version $Revision$ $Date$
  */
 public class AsyncHtmlOutputText extends HtmlOutputText {
+    private static final String REVISION = "$Revision$";
 
     public boolean isTransient() {
-        UIComponent parent = getParent();
-        for (; parent != null; parent = parent.getParent()) {
+        if (super.isTransient() == false) {
+            return false;
+        }
+
+        for (UIComponent parent = getParent(); parent != null; parent = parent
+                .getParent()) {
             if (parent instanceof IAsyncRenderComponent) {
+
+                setTransient(false);
                 return false;
             }
         }
 
-        return super.isTransient();
+        return true;
     }
 }

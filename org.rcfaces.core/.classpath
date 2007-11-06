@@ -13,6 +13,5 @@
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsf-api_04.jar" sourcepath="C:/Users/oeuillot/Downloads/jsf-1_2_04-p02-src.zip"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsp-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/servlet-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.steadystate.css"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

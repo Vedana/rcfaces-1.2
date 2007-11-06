@@ -50,7 +50,7 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
 
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
-        setAlreadyLazyComponent(htmlWriter);
+        declareLazyJavaScriptRenderer(htmlWriter);
 
         super.encodeEnd(htmlWriter);
     }

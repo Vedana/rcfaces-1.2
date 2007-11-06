@@ -123,6 +123,11 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
 
         protected void encodeAttributes(FacesContext facesContext)
                 throws WriterException {
+            String value = getInputValue(false);
+            if (value != null) {
+                writer.writeAttribute("v:value", value);
+            }
+
             if (imageButtonFamilly.isDisabled(facesContext)) {
                 writer.writeAttribute("v:disabled", true);
             }

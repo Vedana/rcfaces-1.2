@@ -678,16 +678,12 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
-
-        jsWriter.write("for(var cl,v=window;v && !cl;v=v.opener) try{ cl=v.");
-        jsWriter.write(cameliaClassLoader);
-        jsWriter.writeln("}catch(x){}");
-        jsWriter.write("if (!cl && top) cl=top.");
-        jsWriter.write(cameliaClassLoader);
-        jsWriter.writeln(";");
-        jsWriter.write("if (cl && cl.");
+        
+        jsWriter.write("var cl=(function(v){try{return (v.opener && v.opener!=v && arguments.callee(v.opener)) || v.").write(cameliaClassLoader).write("}catch(x){}})(window) || (function(v){try{return (v.parent && v.parent!=v && arguments.callee(v.parent)) || v.").write(cameliaClassLoader).write("}catch(x){}})(window)  || (function(v){try{return v.top.").write(cameliaClassLoader).write("}catch(x){}})(window);");
+        
+        jsWriter.write("if(cl&&cl.");
         jsWriter.writeSymbol("f_newWindowClassLoader");
-        jsWriter.write(") ");
+        jsWriter.write(")");
         jsWriter.write(cameliaClassLoader);
         jsWriter.write("=cl.");
 

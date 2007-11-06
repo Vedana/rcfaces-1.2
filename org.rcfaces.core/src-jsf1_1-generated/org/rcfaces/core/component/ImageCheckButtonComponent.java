@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.CheckButtonComponent;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.CheckButtonComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The imageCheckButton Component is a <a href="/comps/checkButtonComponent.html">checkButton Component</a> with an image instead of the checkBox.</p>
@@ -33,7 +33,7 @@ public class ImageCheckButtonComponent extends CheckButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CheckButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="selected";
 
@@ -237,17 +237,17 @@ public class ImageCheckButtonComponent extends CheckButtonComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public IContentAccessors getImageAccessors(FacesContext facesContext) {
-
-
-			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
-		
-	}
-
 	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
+		
+	}
+
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 

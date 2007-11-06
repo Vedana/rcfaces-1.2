@@ -157,7 +157,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         htmlWriter.endElement(IHtmlWriter.UL);
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
+    public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
             Set classes) {
         super.addRequiredJavaScriptClassNames(htmlWriter, classes);
 

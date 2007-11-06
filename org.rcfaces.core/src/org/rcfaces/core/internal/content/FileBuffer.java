@@ -122,8 +122,11 @@ public class FileBuffer implements IFileBuffer {
 
         this.lastModified = lastModified;
 
-        LOG.debug("Store file buffer '" + bufferName + "' into " + size
-                + " bytes. (disk location='" + file.getAbsolutePath() + "')");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Store file buffer '" + bufferName + "' into " + size
+                    + " bytes. (disk location='" + file.getAbsolutePath()
+                    + "')");
+        }
     }
 
     public int getSize() {

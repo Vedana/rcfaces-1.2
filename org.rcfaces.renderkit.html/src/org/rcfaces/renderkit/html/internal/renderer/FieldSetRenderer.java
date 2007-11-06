@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 
@@ -36,6 +37,10 @@ public class FieldSetRenderer extends AbstractCssRenderer {
     private static final String BORDER_RENDERER = "camelia.customButton.borderRenderer";
 
     private static final String DIV_BODY = "_cellBody";
+
+    private static final String TITLE_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "label";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -85,10 +90,12 @@ public class FieldSetRenderer extends AbstractCssRenderer {
                 String text = fieldSetComponent.getText(facesContext);
                 if (text != null) {
                     text = ParamUtils.formatMessage(fieldSetComponent, text);
-
-                    ((ITitledBorderRenderer) borderRenderer).setText(
-                            htmlWriter, text);
                 }
+
+                ((ITitledBorderRenderer) borderRenderer).setText(htmlWriter,
+                        text, componentRenderContext.getComponentClientId()
+                                + TITLE_ID_SUFFIX);
+
             }
 
             borderRenderer.startComposite(htmlWriter);

@@ -22,12 +22,15 @@ var __members = {
 	 * @return String or <code>null</code> if not defined !
 	 */
 	f_getValue: function() {
-		if (this._value===undefined) {
-			// Appel depuis le constructor de l'objet !
-			this._value=f_core.GetAttribute(this, "v:value", null);
+		var value=this._value;
+		if (value!==undefined) {
+			return value;
 		}
 		
-		return this._value;
+		value=f_core.GetAttribute(this, "v:value", null);
+		this._value=value;
+		
+		return value;
 	},
 	/**
 	 * Set value state.

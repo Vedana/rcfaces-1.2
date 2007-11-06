@@ -133,7 +133,7 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
         }
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
-        setAlreadyLazyComponent(htmlWriter);
+        declareLazyJavaScriptRenderer(htmlWriter);
 
         super.encodeEnd(htmlWriter);
 

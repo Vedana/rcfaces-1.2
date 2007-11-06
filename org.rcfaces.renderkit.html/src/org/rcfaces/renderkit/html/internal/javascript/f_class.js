@@ -587,7 +587,7 @@ var __statics = {
 		f_core.Assert(!cls._name, "f_class._DeclarePrototypeClass: Invalid constructor ! ("+cls._name+")");
 		
 		cls.prototype=methods;
-		cls.prototype._kclass=cls;
+		//cls.prototype._kclass=cls; // Pas en LEVEL3
 		cls._members=methods; // On en a besoin pour le multiWindow
 		cls._name=name;
 		cls._classLoader=classLoader;
@@ -616,6 +616,8 @@ var __statics = {
 	 */
 	_CreateConstructor: function(constructorFct) {
 		return function() {
+			this._kclass=arguments.callee;
+			
 			if (constructorFct) {
 				constructorFct.apply(this, arguments);
 			}

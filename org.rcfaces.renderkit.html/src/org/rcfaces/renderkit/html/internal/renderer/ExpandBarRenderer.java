@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import java.util.Set;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ExpandBarComponent;
@@ -49,6 +50,26 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
     private static final int DEFAULT_BUTTON_IMAGE_HEIGHT = 16;
 
     private static final String TITLE_TEXT_ATTRIBUTE = "org.rcfaces.html.EXPAND_BAR_TITLE";
+
+    private static final String HEAD_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "head";
+
+    private static final String BODY_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "body";
+
+    private static final String CONTENT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "content";
+
+    private static final String LABEL_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "label";
+
+    private static final String BUTTON_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "button";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -120,6 +141,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.LI);
+        htmlWriter.writeId(getHeadId(htmlWriter));
         htmlWriter.writeClass(getHeadClassName(htmlWriter, collapsed));
 
         writeHeader(htmlWriter);
@@ -152,16 +174,37 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         setAsyncRenderer(htmlWriter, expandBarComponent, asyncRender);
 
         htmlWriter.startElement(IHtmlWriter.LI);
-
+        htmlWriter.writeId(getBodyId(htmlWriter));
         htmlWriter.writeClass(getBodyClassName(htmlWriter, collapsed));
 
         htmlWriter.startElement(IHtmlWriter.DIV);
+        htmlWriter.writeId(getContentId(htmlWriter));
         htmlWriter.writeClass(getContentClassName(htmlWriter, collapsed));
         if (collapsed) {
             // On masque le LI le Javascript masquera le DIV !
         }
 
         htmlWriter.enableJavaScript();
+    }
+
+    protected String getHeadId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + HEAD_ID_SUFFIX;
+    }
+
+    protected String getBodyId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + BODY_ID_SUFFIX;
+    }
+
+    protected String getContentId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + CONTENT_ID_SUFFIX;
+    }
+
+    protected String getLabelId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + LABEL_ID_SUFFIX;
     }
 
     protected String computeComponentStyleClass(UIComponent component,
@@ -217,12 +260,13 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         ExpandBarComponent expandBarComponent = (ExpandBarComponent) componentContext
                 .getComponent();
 
-        String buttonId = componentContext.getComponentClientId() + "__button";
+        String buttonId = componentContext.getComponentClientId()
+                + BUTTON_ID_SUFFIX;
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
+        htmlWriter.writeId(buttonId);
         htmlWriter.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
         htmlWriter.writeClass(getInputClassName(htmlWriter));
-        htmlWriter.writeId(buttonId);
 
         boolean collapsed = expandBarComponent.isCollapsed(facesContext);
 
@@ -245,6 +289,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
         htmlWriter.startElement(IHtmlWriter.LABEL);
+        htmlWriter.writeClass(getLabelId(htmlWriter));
         htmlWriter.writeFor(buttonId);
         htmlWriter.writeClass(getLabelClassName(htmlWriter));
         writeTextDirection(htmlWriter, expandBarComponent);
@@ -360,7 +405,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         return JavaScriptClasses.EXPAND_BAR;
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
+    public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
             Set classes) {
         super.addRequiredJavaScriptClassNames(htmlWriter, classes);
 

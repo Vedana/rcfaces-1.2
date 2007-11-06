@@ -8,7 +8,6 @@ import java.util.Set;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
-import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -33,11 +32,6 @@ public interface IHtmlRenderContext extends IRenderContext {
     String ALL_CLIENT_MESSAGES = "all";
 
     IHtmlProcessContext getHtmlProcessContext();
-
-    IJavaScriptWriter removeJavaScriptWriter(IHtmlWriter writer);
-
-    IJavaScriptWriter getJavaScriptWriter(IHtmlWriter writer,
-            IJavaScriptComponent javaScriptComponent) throws WriterException;
 
     void pushInteractiveRenderComponent(IHtmlWriter writer);
 

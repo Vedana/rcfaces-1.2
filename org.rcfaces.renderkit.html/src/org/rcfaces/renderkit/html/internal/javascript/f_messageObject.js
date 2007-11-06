@@ -46,7 +46,8 @@ var __statics = {
     
     /**
      * @method hidden static
-     */
+     * @context document:tag.ownerDocument
+     */     
     CreateFromTag: function(tag) {
     	f_core.Assert(tag && tag.nodeType==f_core.ELEMENT_NODE, "f_messageObject.CreateFromTag: Invalid tag parameter '"+tag+"'.");
     	

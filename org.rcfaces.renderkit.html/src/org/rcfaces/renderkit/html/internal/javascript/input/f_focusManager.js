@@ -173,7 +173,8 @@ var __members={
 		if (activeElement) {
 			return activeElement.id;
 		}
-		return null;
+		
+		return this._initFocusId;
 	},
 	/**
 	 * @method public

@@ -38,6 +38,8 @@ public abstract class AbstractFieldSetBorderRenderer extends
 
     protected String title;
 
+    protected String textComponentClientId;
+
     protected boolean hasBorder() {
         return true;
     }
@@ -46,7 +48,7 @@ public abstract class AbstractFieldSetBorderRenderer extends
             throws WriterException {
 
         if (title == null) {
-            return super.writeCellBorderNorth(writer);
+         //   return super.writeCellBorderNorth(writer);
         }
 
         writer.startElement(IHtmlWriter.TD);
@@ -73,6 +75,10 @@ public abstract class AbstractFieldSetBorderRenderer extends
         writer.startElement(IHtmlWriter.TD);
 
         writer.startElement(IHtmlWriter.LABEL);
+        String textComponentId = getLabelComponentClientId(writer);
+        if (textComponentId != null) {
+            writer.writeId(textComponentId);
+        }
         writer.writeClass(getLabelClassName(writer));
 
         if (component instanceof ITextDirectionCapability) {
@@ -121,6 +127,10 @@ public abstract class AbstractFieldSetBorderRenderer extends
         return writer;
     }
 
+    protected String getLabelComponentClientId(IHtmlWriter writer) {
+        return textComponentClientId;
+    }
+
     protected String getTableHeadClassName(IHtmlWriter writer) {
         return getClassName() + TABLE_HEAD;
     }
@@ -141,12 +151,14 @@ public abstract class AbstractFieldSetBorderRenderer extends
         return getClassName() + CELL_HEAD;
     }
 
-    public void setText(IComponentWriter writer, String text) {
+    public void setText(IComponentWriter writer, String text,
+            String textComponentId) {
         if (text != null && text.length() < 1) {
             text = null;
         }
 
         this.title = text;
+        this.textComponentClientId = textComponentId;
     }
 
 }

@@ -40,7 +40,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
 
     private Set requestedModules = null;
 
-    protected IJavaScriptComponent javaScriptComponent;
+    protected IJavaScriptComponentRenderer javaScriptComponent;
 
     private boolean useMetaContentScriptType;
 
@@ -73,7 +73,7 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
     }
 
     public void setWriter(IHtmlWriter writer,
-            IJavaScriptComponent javaScriptComponent,
+            IJavaScriptComponentRenderer javaScriptComponent,
             IJavaScriptRenderContext javascriptRenderContext,
             boolean useMetaContentScriptType, boolean useScriptCData)
             throws WriterException {

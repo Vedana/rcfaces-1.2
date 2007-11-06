@@ -165,8 +165,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 maxResultNumber);
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set classes) {
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
         super.addRequiredJavaScriptClassNames(writer, classes);
 
         FacesContext facesContext = writer.getComponentRenderContext()

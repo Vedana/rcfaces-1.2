@@ -373,7 +373,7 @@ var __members = {
 			 */
 	 		onInit: function(request) {
 	 		 	var waiting=combo._waiting;
-	 			if (!waiting && combo.childNodes.length<1) {
+	 			if (!waiting && !combo.childNodes.length) {
 		 			waiting=combo.ownerDocument.createElement("option");
 		 			waiting.disabled=true;
 		 			
@@ -381,6 +381,7 @@ var __members = {
 		 			if (combo.size>1) {
 		 				// Pas de selection si il y a plusieurs elements affichés dans la liste
 		 				combo.selectedIndex=-1;
+		 				
 		 			} else {
 			 			combo.selectedIndex=0;
 			 		}
@@ -398,7 +399,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_combo, "Bad status: "+status);
+	 			f_core.Info(f_combo, "f_callServer.onError: Bad status: "+status);
 	 			
 				if (combo.f_processNextCommand()) {
 					return;
@@ -448,7 +449,6 @@ var __members = {
 						combo.style.width=combo._oldWidth;
 						combo._oldWidth=undefined;
 					}
-					combo.className=combo._className;
 
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
 						combo.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
@@ -485,6 +485,7 @@ var __members = {
 
 				} finally {
 					combo._loading=undefined;	
+					combo.className=combo.f_computeStyleClass();
 				}
 				
 				/* A voir ! @TODO

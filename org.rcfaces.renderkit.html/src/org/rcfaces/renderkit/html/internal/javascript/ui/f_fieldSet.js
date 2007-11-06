@@ -10,13 +10,15 @@
  * @version $Revision$ $Date$
  */
  
+var __statics = {
+	/**
+	 * @field private static final String
+	 */
+	_LABEL_ID_SUFFIX: "::label"
+	
+}
+ 
 var __members = {
-	f_fieldSet: function() {
-		this.f_super(arguments);
-		
-		// Le premier LABEL est forcement notre titre !
-		this._titleLabel = f_core.GetFirstElementByTagName(this, "label");		
-	},
 	f_finalize: function() {
 		var text=this._titleLabel;
 		if (text) {
@@ -32,6 +34,11 @@ var __members = {
 	 */
 	f_getText: function() {
 		var titleLabel=this._titleLabel;
+		if (titleLabel===undefined) {		
+			// Le premier LABEL est forcement notre titre !
+			titleLabel = this.ownerDocument.getElementById(this.id+f_fieldSet._LABEL_ID_SUFFIX);
+			this._titleLabel = titleLabel;		
+		}
 
 		if (!titleLabel) {
 			return "";
@@ -48,9 +55,13 @@ var __members = {
 	f_setText: function(text) {
 		f_core.Assert(text===null || typeof(text)=="string", "f_fieldSet.f_setText: Invalid text parameter ('"+text+"')");
 
+		if (text==this.f_getText()) {
+			return;
+		}
+	
 		var titleLabel=this._titleLabel;
 
-		f_core.Debug(f_fieldSet, "Change Label ("+titleLabel+") to text '"+text+"'");
+		f_core.Debug(f_fieldSet, "f_setText: Change Label ("+titleLabel+") to text '"+text+"'");
 
 		if (!titleLabel) {
 			return;
@@ -78,5 +89,6 @@ var __members = {
 }
 new f_class("f_fieldSet", {
 	extend: f_component,
-	members: __members
+	members: __members,
+	statics: __statics
 });

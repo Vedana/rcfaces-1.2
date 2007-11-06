@@ -135,7 +135,7 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         return JavaScriptClasses.COMBO;
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
+    public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
             Set classes) {
         super.addRequiredJavaScriptClassNames(htmlWriter, classes);
 

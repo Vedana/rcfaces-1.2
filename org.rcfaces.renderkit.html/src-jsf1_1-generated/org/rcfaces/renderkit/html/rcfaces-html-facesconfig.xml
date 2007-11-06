@@ -21,6 +21,10 @@
 		<component-type>org.rcfaces.html.nameSpace</component-type>
 		<component-class>org.rcfaces.renderkit.html.component.NameSpaceComponent</component-class>
 	</component>
+	<component>
+		<component-type>org.rcfaces.html.javaScriptCollector</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.JavaScriptCollectorComponent</component-class>
+	</component>
 	<render-kit>
 		<renderer>
 			<component-family>rcfaces</component-family>
@@ -406,6 +410,11 @@
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.html.nameSpace</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.NameSpaceRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.html.javaScriptCollector</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.JavaScriptCollectorRenderer</renderer-class>
 		</renderer>
 	</render-kit>
 </faces-config>

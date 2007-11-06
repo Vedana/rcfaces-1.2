@@ -55,7 +55,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         IHtmlRenderContext htmlRenderContext = componentRenderContext
                 .getHtmlRenderContext();
 
- //       FacesContext facesContext = componentRenderContext.getFacesContext();
+        // FacesContext facesContext = componentRenderContext.getFacesContext();
 
         BoxComponent box = (BoxComponent) componentRenderContext.getComponent();
 
@@ -65,8 +65,8 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
         if (hidden) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                asyncRender=htmlRenderContext.getAsyncRenderMode(box);
-                
+                asyncRender = htmlRenderContext.getAsyncRenderMode(box);
+
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", true);
 
@@ -138,8 +138,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         return -1;
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set classes) {
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
         super.addRequiredJavaScriptClassNames(writer, classes);
 
         BoxComponent boxComponent = (BoxComponent) writer

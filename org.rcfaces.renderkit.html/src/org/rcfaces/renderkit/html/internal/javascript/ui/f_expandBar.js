@@ -18,6 +18,31 @@ var __statics = {
 	_HEAD_CLASSNAME: "f_expandBar_head",
 
 	/**
+	 * @field private static final String
+	 */
+	_HEAD_ID_SUFFIX: "::head",
+
+	/**
+	 * @field private static final String
+	 */
+	_BODY_ID_SUFFIX: "::body",
+
+	/**
+	 * @field private static final String
+	 */
+	_CONTENT_ID_SUFFIX: "::content",
+
+	/**
+	 * @field private static final String
+	 */
+	_LABEL_ID_SUFFIX: "::label",
+
+	/**
+	 * @field private static final String
+	 */
+	_BUTTON_ID_SUFFIX: "::button",
+	
+	/**
 	 * @method private static
 	 * @param Event evt
 	 * @return boolean
@@ -67,9 +92,10 @@ var __members = {
 	f_expandBar: function() {
 		this.f_super(arguments);
 
+		var doc=this.ownerDocument;
+
 		var txt=null;
-		var lis=this.getElementsByTagName("li");
-		var head=lis[0];
+		var head=doc.getElementById(this.id+f_expandBar._HEAD_ID_SUFFIX);
 		if (head) {
 			this._head=head;
 			head._link=this;
@@ -77,7 +103,7 @@ var __members = {
 			head.onmouseover=f_expandBar._OnHeadOver;
 			head.onmouseout=f_expandBar._OnHeadOut;
 		
-			var text=f_core.GetFirstElementByTagName(head, "label");
+			var text=doc.getElementById(this.id+f_expandBar._LABEL_ID_SUFFIX);
 			if (text) {
 				this._text=text;
 				text._link=this;
@@ -87,11 +113,11 @@ var __members = {
 			}
 		}
 		
-		var body=lis[1];
+		var body=doc.getElementById(this.id+f_expandBar._BODY_ID_SUFFIX);
 		if (body) {
 			this._body=body;
 			
-			this._content=f_core.GetFirstElementByTagName(body, "div");
+			this._content=doc.getElementById(this.id+f_expandBar._CONTENT_ID_SUFFIX);
 		}
 			
 		this._normalText=f_core.GetAttribute(this, "v:text", txt);
@@ -184,11 +210,9 @@ var __members = {
 			return button;
 		}
 		
-		button=f_core.GetFirstElementByTagName(this, "input");
+		button=document.getElementById(this.id+f_expandBar._BUTTON_ID_SUFFIX);
 		if (button) {
 			button.f_link=this;
-		} else {
-			button=null;
 		}
 		
 		this._button=button;

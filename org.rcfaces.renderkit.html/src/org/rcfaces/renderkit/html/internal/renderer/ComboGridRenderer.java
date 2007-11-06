@@ -13,6 +13,7 @@ import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -60,6 +61,14 @@ public class ComboGridRenderer extends DataGridRenderer {
     private static final int ARROW_IMAGE_WIDTH = 16;
 
     private static final int ARROW_IMAGE_HEIGHT = 16;
+
+    private static final String BUTTON_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "button";
+
+    private static final String INPUT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "input";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMBO_GRID;
@@ -267,6 +276,8 @@ public class ComboGridRenderer extends DataGridRenderer {
 
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
 
+        htmlWriter.writeId(componentRenderContext.getComponentClientId()
+                + INPUT_ID_SUFFIX);
         htmlWriter.writeClass(getMainStyleClassName() + "_input");
 
         if (disabled) {
@@ -289,6 +300,8 @@ public class ComboGridRenderer extends DataGridRenderer {
         htmlWriter.writeClass(getMainStyleClassName() + "_buttonCell");
 
         htmlWriter.startElement(IHtmlWriter.IMG);
+        htmlWriter.writeId(componentRenderContext.getComponentClientId()
+                + BUTTON_ID_SUFFIX);
         htmlWriter.writeClass(getMainStyleClassName() + "_button");
         htmlWriter.writeWidth(ARROW_IMAGE_WIDTH);
         htmlWriter.writeHeight(ARROW_IMAGE_HEIGHT);

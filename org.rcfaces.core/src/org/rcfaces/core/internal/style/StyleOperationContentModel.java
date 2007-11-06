@@ -49,6 +49,8 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
 
     private static final String DEFAULT_CHARSET = "UTF-8";
 
+    private static final String STYLE_SUFFIX = "css";
+
     private ICssParser cssParser;
 
     public StyleOperationContentModel(String resourceURL, String contentType,
@@ -57,6 +59,8 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
             IStyleOperation styleOperation, ICssParser cssParser) {
         super(resourceURL, contentType, versionId, operationId,
                 filterParametersToParse, attributes, styleOperation);
+
+        setURLSuffix(STYLE_SUFFIX);
 
         this.cssParser = cssParser;
     }
@@ -94,8 +98,11 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
                     new IStyleOperation[] { styleOperation },
                     new Map[] { getFilterParameters() });
 
+            newStyleSheetContent = "@charset \"" + contentInfo[0].charSet
+                    + "\";\n" + newStyleSheetContent;
+
             String contentType = getContentType() + "; charset="
-                    + contentInfo[0];
+                    + contentInfo[0].charSet;
 
             styleSheetFile.initialize(contentType, newStyleSheetContent
                     .getBytes(contentInfo[0].getCharSet()), contentInfo[0]

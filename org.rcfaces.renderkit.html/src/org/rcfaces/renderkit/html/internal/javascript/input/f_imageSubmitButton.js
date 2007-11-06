@@ -15,15 +15,17 @@ var __members = {
 	 * @param f_event event
 	 * @return boolean
 	 */
-	f_performImageSelection: function(event) {		
+	f_performImageSelection: function(event) {	
+		/*	
 		var form = f_core.GetParentForm(this);
 		if (form) {
 			f_core.Debug(f_imageSubmitButton, "f_performImageSelection: Submit form !");
-			form.submit();
 			
 		} else {
 			f_core.Error(f_imageSubmitButton, "f_performImageSelection: FORM component was not found !");
 		}
+	*/
+		f_core.SubmitEvent(event);
 				
 		return false;
 	}

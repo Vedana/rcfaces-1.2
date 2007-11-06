@@ -3,6 +3,8 @@
  */
 package org.rcfaces.renderkit.html.internal.border;
 
+import javax.faces.component.UINamingContainer;
+
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -49,6 +51,10 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
     protected static final String BORDER_BLANK_IMAGEURL_PROPERTY = "camelia.borderWriter.blank.imageURL";
 
     protected static final String MARKER_IMAGEURL = "blank.gif";
+
+    private static final String BORDER_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "border";
 
     protected String width;
 
@@ -156,6 +162,9 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         }
 
         writer.startElement(IHtmlWriter.TABLE);
+        writer.writeId(writer.getComponentRenderContext()
+                .getComponentClientId()
+                + BORDER_ID_SUFFIX);
 
         String className = getClassName();
         if (className != null) {

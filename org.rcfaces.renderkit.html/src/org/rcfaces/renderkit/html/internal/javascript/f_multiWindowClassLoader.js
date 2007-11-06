@@ -15,6 +15,7 @@ function f_multiWindowClassLoader(win) {
 	
 	this._kclass=f_multiWindowClassLoader;	
 	this._parent=window._rcfacesClassLoader;
+	this._location=win.location.toString();
 	
 	win._rcfacesClassLoader=this;
 	
@@ -129,6 +130,10 @@ if (window._RCFACES_LEVEL3) {
 			
 			newClassLoader._window=this._window;
 			this._window[className]=newClassLoader;
+			
+			if (className=="f_class" || className=="f_aspect") {
+				newClassLoader._classLoader=this;
+			}
 			
 			return newClassLoader;
 		}

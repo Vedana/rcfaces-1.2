@@ -28,7 +28,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
-import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
 
 /**
@@ -47,8 +46,6 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private static final String JAVASCRIPT_CONTEXT = "camelia.html.javascript.context";
 
-    private static final String JAVASCRIPT_WRITER = "camelia.html.javascript.writer";
-
     private List interactiveRenderComponents;
 
     private IAsyncRenderComponent lastInteractiveRenderComponent;
@@ -61,7 +58,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private boolean asyncRenderer = false;
 
-    private IHtmlProcessContext htmlExternalContext;
+    private IHtmlProcessContext htmlProcessContext;
 
     private String invalidBrowserURL;
 
@@ -89,7 +86,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
                     + asyncRenderer + ".");
         }
 
-        htmlExternalContext = HtmlProcessContextImpl
+        htmlProcessContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
     }
 
@@ -206,31 +203,6 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return hrc;
     }
 
-    public final IJavaScriptWriter removeJavaScriptWriter(IHtmlWriter writer) {
-        return (IJavaScriptWriter) writer.getComponentRenderContext()
-                .removeAttribute(JAVASCRIPT_WRITER);
-    }
-
-    public final IJavaScriptWriter getJavaScriptWriter(IHtmlWriter writer,
-            IJavaScriptComponent javaScriptComponent) throws WriterException {
-        IJavaScriptWriter js = (IJavaScriptWriter) writer
-                .getComponentRenderContext().getAttribute(JAVASCRIPT_WRITER);
-        if (js != null) {
-            return js;
-        }
-
-        JavaScriptWriterImpl jsImpl = new JavaScriptWriterImpl();
-        jsImpl.setWriter(writer, javaScriptComponent,
-                getJavaScriptRenderContext(), htmlExternalContext
-                        .useMetaContentScriptType(), htmlExternalContext
-                        .useScriptCData());
-
-        writer.getComponentRenderContext().setAttribute(JAVASCRIPT_WRITER,
-                jsImpl);
-
-        return jsImpl;
-    }
-
     public void pushInteractiveRenderComponent(IHtmlWriter writer) {
         if (interactiveRenderComponents == null) {
             interactiveRenderComponents = new LinkedList();
@@ -247,6 +219,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
                 .getComponent();
         lastInteractiveRenderComponentClientId = componentRenderContext
                 .getComponentClientId();
+
         javascriptRenderContext = javascriptRenderContext.pushInteractive();
     }
 
@@ -268,8 +241,13 @@ public class HtmlRenderContext extends AbstractRenderContext implements
                 .remove(0);
         lastInteractiveRenderComponentClientId = (String) interactiveRenderComponents
                 .remove(0);
+
+        IJavaScriptRenderContext oldJavaScriptRenderContext = javascriptRenderContext;
+
         javascriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
                 .remove(0);
+
+        oldJavaScriptRenderContext.popInteractive(javascriptRenderContext);
     }
 
     public void encodeEnd(UIComponent component) {
@@ -289,7 +267,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     }
 
     public String getComponentClientId(UIComponent component) {
-        if (htmlExternalContext.isFlatIdentifierEnabled()) {
+        if (htmlProcessContext.isFlatIdentifierEnabled()) {
             String id = component.getId();
 
             if (id == null || id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
@@ -304,7 +282,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     public String computeBrotherComponentClientId(UIComponent brotherComponent,
             String componentId) {
-        if (htmlExternalContext.isFlatIdentifierEnabled()) {
+        if (htmlProcessContext.isFlatIdentifierEnabled()) {
             return componentId;
         }
 
@@ -312,7 +290,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
                 .getClientId(getFacesContext());
 
         if (Constants.CLIENT_NAMING_SEPARATOR_SUPPORT) {
-            String separatorChar = htmlExternalContext.getNamingSeparator();
+            String separatorChar = htmlProcessContext.getNamingSeparator();
 
             if (separatorChar != null) {
                 int idx = brotherComponentId.lastIndexOf(separatorChar);
@@ -402,11 +380,11 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     }
 
     public IHtmlProcessContext getHtmlProcessContext() {
-        return htmlExternalContext;
+        return htmlProcessContext;
     }
 
     public IProcessContext getProcessContext() {
-        return htmlExternalContext;
+        return htmlProcessContext;
     }
 
     public boolean isAsyncRenderEnable() {

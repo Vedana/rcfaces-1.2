@@ -201,6 +201,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
         fileBuffer = createFileBuffer();
 
+        setContentType(fileBuffer.getContentType());
+
         return fileBuffer;
     }
 

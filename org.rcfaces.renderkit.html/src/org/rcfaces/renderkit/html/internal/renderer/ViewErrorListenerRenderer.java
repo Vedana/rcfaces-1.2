@@ -28,7 +28,7 @@ public class ViewErrorListenerRenderer extends AbstractJavaScriptRenderer {
 
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
-        setAlreadyLazyComponent(htmlWriter);
+        declareLazyJavaScriptRenderer(htmlWriter);
     }
 
     protected String getJavaScriptClassName() {

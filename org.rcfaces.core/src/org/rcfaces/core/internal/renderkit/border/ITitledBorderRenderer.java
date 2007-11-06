@@ -12,5 +12,5 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
  * @version $Revision$ $Date$
  */
 public interface ITitledBorderRenderer {
-    void setText(IComponentWriter writer, String text);
+    void setText(IComponentWriter writer, String text, String textComponentId);
 }

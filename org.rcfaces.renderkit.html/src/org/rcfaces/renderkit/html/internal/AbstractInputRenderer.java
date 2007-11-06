@@ -178,7 +178,7 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
         return -1;
     }
 
-    protected void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
+    public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
             Set classes) {
         super.addRequiredJavaScriptClassNames(htmlWriter, classes);
 

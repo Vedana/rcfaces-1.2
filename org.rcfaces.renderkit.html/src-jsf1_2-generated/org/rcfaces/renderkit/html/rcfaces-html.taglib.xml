@@ -42,4 +42,12 @@
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
+	<tag>
+		<tag-name>javaScriptCollector</tag-name>
+		<component>
+			<component-type>org.rcfaces.html.javaScriptCollector</component-type>
+			<renderer-type>org.rcfaces.html.javaScriptCollector</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
 </facelet-taglib>

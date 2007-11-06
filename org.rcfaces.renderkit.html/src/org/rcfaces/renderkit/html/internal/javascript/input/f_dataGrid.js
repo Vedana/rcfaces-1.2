@@ -986,7 +986,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onProgress: function(request, content, length, contentType) {
-				if (waitingObject) {
+				if (waitingObject && f_class.IsObjectInitialized(waitingObject)) {
 	 				waitingObject.f_setText(f_waiting.GetReceivingMessage());
 				}	 			
 	 		},

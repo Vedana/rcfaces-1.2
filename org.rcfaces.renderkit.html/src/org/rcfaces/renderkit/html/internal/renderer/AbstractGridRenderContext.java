@@ -63,7 +63,6 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
-import org.rcfaces.core.model.BasicFiltredContentModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;

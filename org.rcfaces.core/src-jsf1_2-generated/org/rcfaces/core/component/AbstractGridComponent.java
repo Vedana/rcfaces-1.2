@@ -1,150 +1,84 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.CameliaGridComponent;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
-import org.rcfaces.core.component.capability.IUserEventCapability;
-import java.util.Collections;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IServerDataCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import javax.faces.model.DataModel;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
-import org.rcfaces.core.component.capability.IResetEventCapability;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.component.capability.IKeyEventCapability;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ISortManagerCapability;
-import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaGridComponent;
+import java.lang.Object;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Collections;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import javax.faces.model.DataModel;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IResetEventCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import java.lang.String;
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
+import java.util.Map;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.ISortManagerCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
  */
 public abstract class AbstractGridComponent extends CameliaGridComponent implements 
-	IMarginCapability,
-	IResetEventCapability,
-	IKeyEventCapability,
-	IPositionCapability,
-	IUserEventCapability,
-	IHelpCapability,
-	IClientDataCapability,
-	IStyleClassCapability,
-	ILookAndFeelCapability,
-	ISizeCapability,
-	IFocusBlurEventCapability,
-	IForegroundBackgroundColorCapability,
 	IVisibilityCapability,
-	IErrorEventCapability,
-	ISortManagerCapability,
-	IWAIRoleCapability,
+	ISizeCapability,
+	IHelpCapability,
 	IMouseEventCapability,
+	ISortManagerCapability,
+	IClientDataCapability,
 	IUnlockedClientAttributesCapability,
-	IInitEventCapability,
-	IPropertyChangeEventCapability,
-	IHiddenModeCapability,
+	ILookAndFeelCapability,
+	IPositionCapability,
+	IFocusBlurEventCapability,
+	IErrorEventCapability,
+	IMarginCapability,
+	IForegroundBackgroundColorCapability,
+	IKeyEventCapability,
+	IResetEventCapability,
+	IStyleClassCapability,
+	IUserEventCapability,
 	IServerDataCapability,
-	IClientDataManager,
-	IServerDataManager {
+	IHiddenModeCapability,
+	IWAIRoleCapability,
+	IPropertyChangeEventCapability,
+	IInitEventCapability,
+	IServerDataManager,
+	IClientDataManager {
 
 	 private transient int rowIndex;
 	 private transient String var;
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","marginLeft","backgroundColor","var","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","hiddenMode","mouseOverListener","mouseOutListener","waiRole","foregroundColor","lookId","helpMessage","userEventListener","marginTop","marginRight","styleClass","width","keyUpListener","keyPressListener","resetListener","rows","initListener","unlockedClientAttributeNames","marginBottom","toolTipText","first","y","sortManager","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
 	}
 
-
-	public Map getServerDataMap(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
- 		if (dataMapAccessor==null) {
-			return Collections.EMPTY_MAP;
-		}
-            
-		Map map=dataMapAccessor.getDataMap(facesContext);
-		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
-			if (map.isEmpty()) {
-				return Collections.EMPTY_MAP;
-			}
-			map=Collections.unmodifiableMap(map);
-		}
-		return map;
-		
-	}
-
-	public void setRowIndex(int rowIndex) {
-
-
-				setRowIndex(rowIndex, null);
-			
-	}
-
-	public Map getClientDataMap(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
-		if (dataMapAccessor==null) {
-			return Collections.EMPTY_MAP;
-		}
-            
-		return dataMapAccessor.getDataMap(facesContext);
-		
-	}
-
-	public int getRowIndex() {
-
-
-			return rowIndex;
-			
-	}
-
-	public void setServerData(String name, ValueExpression value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public String[] listClientDataKeys(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		if (dataMapAccessor==null) {
-			return ComponentTools.STRING_EMPTY_ARRAY;
-		}
-		
-		return dataMapAccessor.listDataKeys(facesContext);
-		
-	}
 
 	public void setClientData(String name, ValueExpression value) {
 
@@ -167,6 +101,25 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
+	public int getRowIndex() {
+
+
+			return rowIndex;
+			
+	}
+
+	public Map getClientDataMap(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "clientData", false);
+		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
+
 	public Object getServerData(String name, FacesContext facesContext) {
 
 
@@ -186,22 +139,19 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 			
 	}
 
-	public String[] listServerDataKeys(FacesContext facesContext) {
+	public void setRowIndex(int rowIndex) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-			return ComponentTools.STRING_EMPTY_ARRAY;
-		}
-		
-		return dataMapAccessor.listDataKeys(facesContext);
-		
+				setRowIndex(rowIndex, null);
+			
 	}
 
-	public void setHiddenMode(String hiddenMode) {
+	public void setServerData(String name, ValueExpression value) {
 
 
-			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -240,6 +190,30 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 			
 	}
 
+	public String[] listServerDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
+	public String[] listClientDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
 	public Boolean getVisibleState(FacesContext facesContext) {
 
 
@@ -249,6 +223,406 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 			
 			return Boolean.valueOf(isVisible(facesContext));
 		
+	}
+
+	public Map getServerDataMap(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(facesContext, "serverData", false);
+ 		if (dataMapAccessor==null) {
+			return Collections.EMPTY_MAP;
+		}
+            
+		Map map=dataMapAccessor.getDataMap(facesContext);
+		if (Constants.READ_ONLY_COLLECTION_LOCK_ENABLED) {
+			if (map.isEmpty()) {
+				return Collections.EMPTY_MAP;
+			}
+			map=Collections.unmodifiableMap(map);
+		}
+		return map;
+		
+	}
+
+	public void setHiddenMode(String hiddenMode) {
+
+
+			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
+		
+	}
+
+	public boolean isVisible() {
+		return isVisible(null);
+	}
+
+	/**
+	 * See {@link #isVisible() isVisible()} for more details
+	 */
+	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "visible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVisibleSetted() {
+		return engine.isPropertySetted(Properties.VISIBLE);
+	}
+
+	public void setVisible(boolean visible) {
+		engine.setProperty(Properties.VISIBLE, visible);
+	}
+
+	public Boolean getVisibleState() {
+
+
+			return getVisibleState(null);
+		
+	}
+
+	public java.lang.String getWidth() {
+		return getWidth(null);
+	}
+
+	/**
+	 * See {@link #getWidth() getWidth()} for more details
+	 */
+	public java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WIDTH, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "width" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWidthSetted() {
+		return engine.isPropertySetted(Properties.WIDTH);
+	}
+
+	public void setWidth(java.lang.String width) {
+		engine.setProperty(Properties.WIDTH, width);
+	}
+
+	public java.lang.String getHeight() {
+		return getHeight(null);
+	}
+
+	/**
+	 * See {@link #getHeight() getHeight()} for more details
+	 */
+	public java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HEIGHT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "height" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHeightSetted() {
+		return engine.isPropertySetted(Properties.HEIGHT);
+	}
+
+	public void setHeight(java.lang.String height) {
+		engine.setProperty(Properties.HEIGHT, height);
+	}
+
+	public java.lang.String getHelpMessage() {
+		return getHelpMessage(null);
+	}
+
+	/**
+	 * See {@link #getHelpMessage() getHelpMessage()} for more details
+	 */
+	public java.lang.String getHelpMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HELP_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "helpMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHelpMessageSetted() {
+		return engine.isPropertySetted(Properties.HELP_MESSAGE);
+	}
+
+	public void setHelpMessage(java.lang.String helpMessage) {
+		engine.setProperty(Properties.HELP_MESSAGE, helpMessage);
+	}
+
+	public java.lang.String getHelpURL() {
+		return getHelpURL(null);
+	}
+
+	/**
+	 * See {@link #getHelpURL() getHelpURL()} for more details
+	 */
+	public java.lang.String getHelpURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.HELP_URL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "helpURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHelpURLSetted() {
+		return engine.isPropertySetted(Properties.HELP_URL);
+	}
+
+	public void setHelpURL(java.lang.String helpURL) {
+		engine.setProperty(Properties.HELP_URL, helpURL);
+	}
+
+	public java.lang.String getToolTipText() {
+		return getToolTipText(null);
+	}
+
+	/**
+	 * See {@link #getToolTipText() getToolTipText()} for more details
+	 */
+	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isToolTipTextSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
+	}
+
+	public void setToolTipText(java.lang.String toolTipText) {
+		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
+	}
+
+	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listMouseOutListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IMouseOutListener.class);
+	}
+
+	public final void addMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listMouseOverListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
+	}
+
+	public java.lang.String getSortManager() {
+		return getSortManager(null);
+	}
+
+	/**
+	 * See {@link #getSortManager() getSortManager()} for more details
+	 */
+	public java.lang.String getSortManager(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SORT_MANAGER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "sortManager" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSortManagerSetted() {
+		return engine.isPropertySetted(Properties.SORT_MANAGER);
+	}
+
+	public void setSortManager(java.lang.String sortManager) {
+		engine.setProperty(Properties.SORT_MANAGER, sortManager);
+	}
+
+	public Map getClientDataMap() {
+
+
+		return getClientDataMap(null);
+		
+	}
+
+	public int getClientDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+		 
+		 return dataMapAccessor.getDataCount();
+		
+	}
+
+	public String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public String[] listClientDataKeys() {
+
+
+			return listClientDataKeys(null);
+		
+	}
+
+	public String removeClientData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
+		if (dataMapAccessor==null) {
+			return null;
+		}
+            
+		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public java.lang.String getUnlockedClientAttributeNames() {
+		return getUnlockedClientAttributeNames(null);
+	}
+
+	/**
+	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 */
+	public java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "unlockedClientAttributeNames" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isUnlockedClientAttributeNamesSetted() {
+		return engine.isPropertySetted(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES);
+	}
+
+	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	}
+
+	public java.lang.String getLookId() {
+		return getLookId(null);
+	}
+
+	/**
+	 * See {@link #getLookId() getLookId()} for more details
+	 */
+	public java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "lookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLookIdSetted() {
+		return engine.isPropertySetted(Properties.LOOK_ID);
+	}
+
+	public void setLookId(java.lang.String lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
+	}
+
+	public java.lang.String getX() {
+		return getX(null);
+	}
+
+	/**
+	 * See {@link #getX() getX()} for more details
+	 */
+	public java.lang.String getX(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.X, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "x" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isXSetted() {
+		return engine.isPropertySetted(Properties.X);
+	}
+
+	public void setX(java.lang.String x) {
+		engine.setProperty(Properties.X, x);
+	}
+
+	public java.lang.String getY() {
+		return getY(null);
+	}
+
+	/**
+	 * See {@link #getY() getY()} for more details
+	 */
+	public java.lang.String getY(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.Y, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "y" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isYSetted() {
+		return engine.isPropertySetted(Properties.Y);
+	}
+
+	public void setY(java.lang.String y) {
+		engine.setProperty(Properties.Y, y);
+	}
+
+	public final void addBlurListener(org.rcfaces.core.event.IBlurListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeBlurListener(org.rcfaces.core.event.IBlurListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listBlurListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IBlurListener.class);
+	}
+
+	public final void addFocusListener(org.rcfaces.core.event.IFocusListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeFocusListener(org.rcfaces.core.event.IFocusListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listFocusListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
+	}
+
+	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listErrorListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
 	public java.lang.String getMarginBottom() {
@@ -343,351 +717,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
-	public final void addResetListener(org.rcfaces.core.event.IResetListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeResetListener(org.rcfaces.core.event.IResetListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listResetListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
-	}
-
-	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listKeyUpListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
-	}
-
-	public final void addKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listKeyDownListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyDownListener.class);
-	}
-
-	public final void addKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
-	}
-
-	public java.lang.String getX() {
-		return getX(null);
-	}
-
-	/**
-	 * See {@link #getX() getX()} for more details
-	 */
-	public java.lang.String getX(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.X, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "x" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isXSetted() {
-		return engine.isPropertySetted(Properties.X);
-	}
-
-	public void setX(java.lang.String x) {
-		engine.setProperty(Properties.X, x);
-	}
-
-	public java.lang.String getY() {
-		return getY(null);
-	}
-
-	/**
-	 * See {@link #getY() getY()} for more details
-	 */
-	public java.lang.String getY(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.Y, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "y" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isYSetted() {
-		return engine.isPropertySetted(Properties.Y);
-	}
-
-	public void setY(java.lang.String y) {
-		engine.setProperty(Properties.Y, y);
-	}
-
-	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listUserEventListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
-	}
-
-	public java.lang.String getHelpMessage() {
-		return getHelpMessage(null);
-	}
-
-	/**
-	 * See {@link #getHelpMessage() getHelpMessage()} for more details
-	 */
-	public java.lang.String getHelpMessage(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HELP_MESSAGE, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "helpMessage" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isHelpMessageSetted() {
-		return engine.isPropertySetted(Properties.HELP_MESSAGE);
-	}
-
-	public void setHelpMessage(java.lang.String helpMessage) {
-		engine.setProperty(Properties.HELP_MESSAGE, helpMessage);
-	}
-
-	public java.lang.String getHelpURL() {
-		return getHelpURL(null);
-	}
-
-	/**
-	 * See {@link #getHelpURL() getHelpURL()} for more details
-	 */
-	public java.lang.String getHelpURL(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HELP_URL, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "helpURL" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isHelpURLSetted() {
-		return engine.isPropertySetted(Properties.HELP_URL);
-	}
-
-	public void setHelpURL(java.lang.String helpURL) {
-		engine.setProperty(Properties.HELP_URL, helpURL);
-	}
-
-	public java.lang.String getToolTipText() {
-		return getToolTipText(null);
-	}
-
-	/**
-	 * See {@link #getToolTipText() getToolTipText()} for more details
-	 */
-	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "toolTipText" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isToolTipTextSetted() {
-		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
-	}
-
-	public void setToolTipText(java.lang.String toolTipText) {
-		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
-	}
-
-	public int getClientDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-		 
-		 return dataMapAccessor.getDataCount();
-		
-	}
-
-	public String[] listClientDataKeys() {
-
-
-			return listClientDataKeys(null);
-		
-	}
-
-	public String removeClientData(String name) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", false);
-		if (dataMapAccessor==null) {
-			return null;
-		}
-            
-		return (String)dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public String getClientData(String name) {
-
-
-		 return getClientData(name, null);
-		
-	}
-
-	public Map getClientDataMap() {
-
-
-		return getClientDataMap(null);
-		
-	}
-
-	public java.lang.String getStyleClass() {
-		return getStyleClass(null);
-	}
-
-	/**
-	 * See {@link #getStyleClass() getStyleClass()} for more details
-	 */
-	public java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "styleClass" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isStyleClassSetted() {
-		return engine.isPropertySetted(Properties.STYLE_CLASS);
-	}
-
-	public void setStyleClass(java.lang.String styleClass) {
-		engine.setProperty(Properties.STYLE_CLASS, styleClass);
-	}
-
-	public java.lang.String getLookId() {
-		return getLookId(null);
-	}
-
-	/**
-	 * See {@link #getLookId() getLookId()} for more details
-	 */
-	public java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "lookId" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isLookIdSetted() {
-		return engine.isPropertySetted(Properties.LOOK_ID);
-	}
-
-	public void setLookId(java.lang.String lookId) {
-		engine.setProperty(Properties.LOOK_ID, lookId);
-	}
-
-	public java.lang.String getWidth() {
-		return getWidth(null);
-	}
-
-	/**
-	 * See {@link #getWidth() getWidth()} for more details
-	 */
-	public java.lang.String getWidth(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WIDTH, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "width" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isWidthSetted() {
-		return engine.isPropertySetted(Properties.WIDTH);
-	}
-
-	public void setWidth(java.lang.String width) {
-		engine.setProperty(Properties.WIDTH, width);
-	}
-
-	public java.lang.String getHeight() {
-		return getHeight(null);
-	}
-
-	/**
-	 * See {@link #getHeight() getHeight()} for more details
-	 */
-	public java.lang.String getHeight(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.HEIGHT, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "height" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isHeightSetted() {
-		return engine.isPropertySetted(Properties.HEIGHT);
-	}
-
-	public void setHeight(java.lang.String height) {
-		engine.setProperty(Properties.HEIGHT, height);
-	}
-
-	public final void addBlurListener(org.rcfaces.core.event.IBlurListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeBlurListener(org.rcfaces.core.event.IBlurListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listBlurListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IBlurListener.class);
-	}
-
-	public final void addFocusListener(org.rcfaces.core.event.IFocusListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeFocusListener(org.rcfaces.core.event.IFocusListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listFocusListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
-	}
-
 	public java.lang.String getBackgroundColor() {
 		return getBackgroundColor(null);
 	}
@@ -734,221 +763,87 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.FOREGROUND_COLOR, foregroundColor);
 	}
 
-	public boolean isVisible() {
-		return isVisible(null);
-	}
-
-	/**
-	 * See {@link #isVisible() isVisible()} for more details
-	 */
-	public boolean isVisible(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.VISIBLE, true, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "visible" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isVisibleSetted() {
-		return engine.isPropertySetted(Properties.VISIBLE);
-	}
-
-	public void setVisible(boolean visible) {
-		engine.setProperty(Properties.VISIBLE, visible);
-	}
-
-	public Boolean getVisibleState() {
-
-
-			return getVisibleState(null);
-		
-	}
-
-	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+	public final void addKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
 		addFacesListener(listener);
 	}
 
-	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
+	public final void removeKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
 		removeFacesListener(listener);
 	}
 
-	public final javax.faces.event.FacesListener [] listErrorListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
 	}
 
-	public java.lang.String getSortManager() {
-		return getSortManager(null);
-	}
-
-	/**
-	 * See {@link #getSortManager() getSortManager()} for more details
-	 */
-	public java.lang.String getSortManager(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SORT_MANAGER, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "sortManager" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSortManagerSetted() {
-		return engine.isPropertySetted(Properties.SORT_MANAGER);
-	}
-
-	public void setSortManager(java.lang.String sortManager) {
-		engine.setProperty(Properties.SORT_MANAGER, sortManager);
-	}
-
-	public java.lang.String getWaiRole() {
-		return getWaiRole(null);
-	}
-
-	/**
-	 * See {@link #getWaiRole() getWaiRole()} for more details
-	 */
-	public java.lang.String getWaiRole(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.WAI_ROLE, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "waiRole" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isWaiRoleSetted() {
-		return engine.isPropertySetted(Properties.WAI_ROLE);
-	}
-
-	public void setWaiRole(java.lang.String waiRole) {
-		engine.setProperty(Properties.WAI_ROLE, waiRole);
-	}
-
-	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
+	public final void addKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
 		addFacesListener(listener);
 	}
 
-	public final void removeMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
+	public final void removeKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
 		removeFacesListener(listener);
 	}
 
-	public final javax.faces.event.FacesListener [] listMouseOutListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IMouseOutListener.class);
+	public final javax.faces.event.FacesListener [] listKeyDownListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyDownListener.class);
 	}
 
-	public final void addMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
+	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
 		addFacesListener(listener);
 	}
 
-	public final void removeMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
+	public final void removeKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
 		removeFacesListener(listener);
 	}
 
-	public final javax.faces.event.FacesListener [] listMouseOverListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
+	public final javax.faces.event.FacesListener [] listKeyUpListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
 	}
 
-	public java.lang.String getUnlockedClientAttributeNames() {
-		return getUnlockedClientAttributeNames(null);
+	public final void addResetListener(org.rcfaces.core.event.IResetListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeResetListener(org.rcfaces.core.event.IResetListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listResetListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
+	}
+
+	public java.lang.String getStyleClass() {
+		return getStyleClass(null);
 	}
 
 	/**
-	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 * See {@link #getStyleClass() getStyleClass()} for more details
 	 */
-	public java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
+	public java.lang.String getStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.STYLE_CLASS, facesContext);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "unlockedClientAttributeNames" is set.
+	 * Returns <code>true</code> if the attribute "styleClass" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isUnlockedClientAttributeNamesSetted() {
-		return engine.isPropertySetted(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES);
+	public final boolean isStyleClassSetted() {
+		return engine.isPropertySetted(Properties.STYLE_CLASS);
 	}
 
-	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
-		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	public void setStyleClass(java.lang.String styleClass) {
+		engine.setProperty(Properties.STYLE_CLASS, styleClass);
 	}
 
-	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
+	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
 		addFacesListener(listener);
 	}
 
-	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
+	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
 		removeFacesListener(listener);
 	}
 
-	public final javax.faces.event.FacesListener [] listInitListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
-	}
-
-	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removePropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listPropertyChangeListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
-	}
-
-	public int getHiddenMode() {
-		return getHiddenMode(null);
-	}
-
-	/**
-	 * See {@link #getHiddenMode() getHiddenMode()} for more details
-	 */
-	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "hiddenMode" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isHiddenModeSetted() {
-		return engine.isPropertySetted(Properties.HIDDEN_MODE);
-	}
-
-	public void setHiddenMode(int hiddenMode) {
-		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
-	}
-
-	public String[] listServerDataKeys() {
-
-
-			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public Map getServerDataMap() {
-
-
-		return getServerDataMap(null);
-		
-	}
-
-	public int getServerDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-            
-		return dataMapAccessor.getDataCount();
-		
+	public final javax.faces.event.FacesListener [] listUserEventListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
 	}
 
 	public Object getServerData(String name) {
@@ -975,24 +870,109 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
-	public int getRows() {
-		return getRows(null);
+	public Map getServerDataMap() {
+
+
+		return getServerDataMap(null);
+		
 	}
 
-	public int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	public int getServerDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
+		
 	}
 
-	public void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public String[] listServerDataKeys() {
+
+
+			return listServerDataKeys(null);
+		
+	}
+
+	public int getHiddenMode() {
+		return getHiddenMode(null);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * See {@link #getHiddenMode() getHiddenMode()} for more details
+	 */
+	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "hiddenMode" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
+	public final boolean isHiddenModeSetted() {
+		return engine.isPropertySetted(Properties.HIDDEN_MODE);
+	}
+
+	public void setHiddenMode(int hiddenMode) {
+		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public java.lang.String getWaiRole() {
+		return getWaiRole(null);
+	}
+
+	/**
+	 * See {@link #getWaiRole() getWaiRole()} for more details
+	 */
+	public java.lang.String getWaiRole(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WAI_ROLE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "waiRole" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWaiRoleSetted() {
+		return engine.isPropertySetted(Properties.WAI_ROLE);
+	}
+
+	public void setWaiRole(java.lang.String waiRole) {
+		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removePropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listPropertyChangeListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IPropertyChangeListener.class);
+	}
+
+	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeInitListener(org.rcfaces.core.event.IInitListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listInitListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
 	public int getFirst() {
@@ -1013,6 +993,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isFirstSetted() {
 		return engine.isPropertySetted(Properties.FIRST);
+	}
+
+	public int getRows() {
+		return getRows(null);
+	}
+
+	public int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	}
+
+	public void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	public String getVar() {

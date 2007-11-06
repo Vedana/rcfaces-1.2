@@ -3,6 +3,8 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Set;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -13,7 +15,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.IJavaScriptComponent;
+import org.rcfaces.renderkit.html.internal.IJavaScriptComponentRenderer;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -27,7 +29,7 @@ import org.w3c.dom.Document;
 public class TextEditorRenderer extends AbstractInputRenderer {
     private static final String REVISION = "$Revision$";
 
-    private static final IJavaScriptComponent TEXTEDITOR_JAVASCRIPT_COMPONENT = new IJavaScriptComponent() {
+    private static final IJavaScriptComponentRenderer TEXTEDITOR_JAVASCRIPT_COMPONENT = new IJavaScriptComponentRenderer() {
         private static final String REVISION = "$Revision$";
 
         public void initializeJavaScript(IJavaScriptWriter javaScriptWriter)
@@ -45,6 +47,10 @@ public class TextEditorRenderer extends AbstractInputRenderer {
 
         public void initializePendingComponents(IJavaScriptWriter writer) {
         }
+
+        public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+                Set waitingRequiredClasses) {
+        }
     };
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
@@ -56,7 +62,8 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         // Il faut que la JAVASCRIPT f_textEditor soit dispo ICI ! (a cause du
         // onload)
 
-        htmlRenderContext.removeJavaScriptWriter(htmlWriter);
+        htmlRenderContext.getJavaScriptRenderContext().removeJavaScriptWriter(
+                htmlWriter);
 
         IJavaScriptRenderContext javascriptRenderContext = htmlRenderContext
                 .getJavaScriptRenderContext();
@@ -64,8 +71,9 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         // Il faut calculer les dependances
         javascriptRenderContext.computeRequires(htmlWriter, this);
 
-        IJavaScriptWriter js = htmlRenderContext.getJavaScriptWriter(
-                htmlWriter, TEXTEDITOR_JAVASCRIPT_COMPONENT);
+        IJavaScriptWriter js = htmlRenderContext.getJavaScriptRenderContext()
+                .getJavaScriptWriter(htmlWriter,
+                        TEXTEDITOR_JAVASCRIPT_COMPONENT);
 
         initializePendingComponents(js);
 
@@ -87,8 +95,8 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         htmlWriter.writeAttribute("marginheight", 0);
         htmlWriter.writeAttribute("hspace", 0);
         htmlWriter.writeAttribute("vspace", 0);
-        htmlWriter.writeAttribute("name", htmlWriter
-                .getComponentRenderContext().getComponentClientId());
+        htmlWriter.writeName(htmlWriter.getComponentRenderContext()
+                .getComponentClientId());
 
         String onLoad = "f_textEditor."
                 + htmlWriter.getHtmlComponentRenderContext().getRenderContext()

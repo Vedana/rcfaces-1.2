@@ -18,8 +18,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.model.DataModel;
-import java.util.HashSet;
 import java.util.Arrays;
+import java.util.HashSet;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;

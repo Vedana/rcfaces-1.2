@@ -40,6 +40,9 @@ if (window._RCFACES_LEVEL3) {
 
 			} else if (evt.toElement) { // IE
 				win=evt.toElement.ownerDocument.parentWindow;
+
+			} else if (evt.srcElement) { // IE
+				win=evt.srcElement.ownerDocument.parentWindow;
 			}
 		}
 		
@@ -62,7 +65,7 @@ if (window._RCFACES_LEVEL3) {
 				throw new Error("RCFaces: Unknown this object type !");
 			}
 		}
-		
+			
 		for(var w=win;w;w=w.opener) {
 			try {
 				if (w._rcfacesClassLoader) {
@@ -72,17 +75,27 @@ if (window._RCFACES_LEVEL3) {
 			}			
 		}
 		
-		for(var w=win.top;w;w=w.top) {
+		for(var w=win.parent;w;w=w.parent) {
 			try {
 				if (w._rcfacesClassLoader) {
 					return w;
 				}
 			} catch(x) {
 			}			
-			if (w.top==w) {
+			if (w.parent==w) {
 				break;
 			}
 		}
+		
+		try {
+			var w=win.top;
+
+			if (w._rcfacesClassLoader) {
+				return w;
+			}
+			
+		} catch(x) {		
+		}		
 		
 		throw new Error("RCFaces: Can not identify the rcfaces window !");
 	}

@@ -1,13 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.ComboComponent;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IMultipleSelectCapability;
+import org.rcfaces.core.internal.component.Properties;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.ComboComponent;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The list Component is based on the standard HTML tag &lt;SELECT&gt;.</p>
@@ -30,7 +30,7 @@ public class ListComponent extends ComboComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ComboComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"multipleSelect","doubleClickListener","rowNumber"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"rowNumber","doubleClickListener","multipleSelect"}));
 	}
 
 	public ListComponent() {

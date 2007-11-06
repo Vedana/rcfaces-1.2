@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.el.ValueExpression;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.AbstractCommandComponent;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>

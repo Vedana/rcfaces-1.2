@@ -210,16 +210,18 @@ var __statics = {
 var __members = {
 	fa_spinner: function() {			
 		//var disabledSuffix=(this.f_isDisabled())?"_disabled":"";
+
+		var doc=this.ownerDocument;
 		
 		this._cycleValue=f_core.GetBooleanAttribute(this, "v:cycle", false);
 		
 		//this._spinnerUp=f_core.GetChildByCssClass(this, "f_spinner_up"+disabledSuffix);
-		this._spinnerUp=this.ownerDocument.getElementById(this.id+fa_spinner._UP_ID_SUFFIX);
+		this._spinnerUp=doc.getElementById(this.id+fa_spinner._UP_ID_SUFFIX);
 		
 		this._installSpinnerButton(this._spinnerUp, "_up",  1);
 		
 		//this._spinnerDown=f_core.GetChildByCssClass(this, "f_spinner_down"+disabledSuffix);
-		this._spinnerDown=this.ownerDocument.getElementById(this.id+fa_spinner._DOWN_ID_SUFFIX);
+		this._spinnerDown=doc.getElementById(this.id+fa_spinner._DOWN_ID_SUFFIX);
 
 		this._installSpinnerButton(this._spinnerDown, "_down", -1);
 		

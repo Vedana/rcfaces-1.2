@@ -1,85 +1,117 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.component.AbstractCommandComponent;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.AbstractCommandComponent;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(AbstractCommandTag.class);
 
-	private String helpMessage;
-	private String helpURL;
-	private String toolTipText;
+	private String width;
+	private String height;
+	private String visible;
+	private String mouseOutListeners;
+	private String mouseOverListeners;
+	private String disabled;
+	private String unlockedClientAttributeNames;
 	private String blurListeners;
 	private String focusListeners;
+	private String errorListeners;
 	private String backgroundColor;
 	private String foregroundColor;
-	private String visible;
-	private String errorListeners;
-	private String disabled;
-	private String validationListeners;
+	private String styleClass;
 	private String fontBold;
 	private String fontItalic;
 	private String fontName;
 	private String fontSize;
 	private String fontUnderline;
-	private String mouseOutListeners;
-	private String mouseOverListeners;
+	private String initListeners;
+	private String helpMessage;
+	private String helpURL;
+	private String toolTipText;
 	private String tabIndex;
-	private String unlockedClientAttributeNames;
-	private String propertyChangeListeners;
+	private String x;
+	private String y;
+	private String lookId;
+	private String validationListeners;
 	private String marginBottom;
 	private String marginLeft;
 	private String marginRight;
 	private String marginTop;
-	private String userEventListeners;
-	private String x;
-	private String y;
-	private String styleClass;
-	private String lookId;
-	private String width;
-	private String height;
 	private String textAlignment;
-	private String accessKey;
+	private String userEventListeners;
 	private String waiRole;
-	private String initListeners;
 	private String hiddenMode;
+	private String propertyChangeListeners;
+	private String accessKey;
 	private String margins;
 	private String immediate;
 	private String value;
-	public final String getHelpMessage() {
-		return helpMessage;
+	public final String getWidth() {
+		return width;
 	}
 
-	public final void setHelpMessage(String helpMessage) {
-		this.helpMessage = helpMessage;
+	public final void setWidth(String width) {
+		this.width = width;
 	}
 
-	public final String getHelpURL() {
-		return helpURL;
+	public final String getHeight() {
+		return height;
 	}
 
-	public final void setHelpURL(String helpURL) {
-		this.helpURL = helpURL;
+	public final void setHeight(String height) {
+		this.height = height;
 	}
 
-	public final String getToolTipText() {
-		return toolTipText;
+	public final String getVisible() {
+		return visible;
 	}
 
-	public final void setToolTipText(String toolTipText) {
-		this.toolTipText = toolTipText;
+	public final void setVisible(String visible) {
+		this.visible = visible;
+	}
+
+	public final String getMouseOutListener() {
+		return mouseOutListeners;
+	}
+
+	public final void setMouseOutListener(String mouseOutListeners) {
+		this.mouseOutListeners = mouseOutListeners;
+	}
+
+	public final String getMouseOverListener() {
+		return mouseOverListeners;
+	}
+
+	public final void setMouseOverListener(String mouseOverListeners) {
+		this.mouseOverListeners = mouseOverListeners;
+	}
+
+	public final String getDisabled() {
+		return disabled;
+	}
+
+	public final void setDisabled(String disabled) {
+		this.disabled = disabled;
+	}
+
+	public final String getUnlockedClientAttributeNames() {
+		return unlockedClientAttributeNames;
+	}
+
+	public final void setUnlockedClientAttributeNames(String unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
 	public final String getBlurListener() {
@@ -98,6 +130,14 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.focusListeners = focusListeners;
 	}
 
+	public final String getErrorListener() {
+		return errorListeners;
+	}
+
+	public final void setErrorListener(String errorListeners) {
+		this.errorListeners = errorListeners;
+	}
+
 	public final String getBackgroundColor() {
 		return backgroundColor;
 	}
@@ -114,36 +154,12 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final String getVisible() {
-		return visible;
+	public final String getStyleClass() {
+		return styleClass;
 	}
 
-	public final void setVisible(String visible) {
-		this.visible = visible;
-	}
-
-	public final String getErrorListener() {
-		return errorListeners;
-	}
-
-	public final void setErrorListener(String errorListeners) {
-		this.errorListeners = errorListeners;
-	}
-
-	public final String getDisabled() {
-		return disabled;
-	}
-
-	public final void setDisabled(String disabled) {
-		this.disabled = disabled;
-	}
-
-	public final String getValidationListener() {
-		return validationListeners;
-	}
-
-	public final void setValidationListener(String validationListeners) {
-		this.validationListeners = validationListeners;
+	public final void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
 	}
 
 	public final String getFontBold() {
@@ -186,20 +202,36 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final String getMouseOutListener() {
-		return mouseOutListeners;
+	public final String getInitListener() {
+		return initListeners;
 	}
 
-	public final void setMouseOutListener(String mouseOutListeners) {
-		this.mouseOutListeners = mouseOutListeners;
+	public final void setInitListener(String initListeners) {
+		this.initListeners = initListeners;
 	}
 
-	public final String getMouseOverListener() {
-		return mouseOverListeners;
+	public final String getHelpMessage() {
+		return helpMessage;
 	}
 
-	public final void setMouseOverListener(String mouseOverListeners) {
-		this.mouseOverListeners = mouseOverListeners;
+	public final void setHelpMessage(String helpMessage) {
+		this.helpMessage = helpMessage;
+	}
+
+	public final String getHelpURL() {
+		return helpURL;
+	}
+
+	public final void setHelpURL(String helpURL) {
+		this.helpURL = helpURL;
+	}
+
+	public final String getToolTipText() {
+		return toolTipText;
+	}
+
+	public final void setToolTipText(String toolTipText) {
+		this.toolTipText = toolTipText;
 	}
 
 	public final String getTabIndex() {
@@ -210,20 +242,36 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.tabIndex = tabIndex;
 	}
 
-	public final String getUnlockedClientAttributeNames() {
-		return unlockedClientAttributeNames;
+	public final String getX() {
+		return x;
 	}
 
-	public final void setUnlockedClientAttributeNames(String unlockedClientAttributeNames) {
-		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
+	public final void setX(String x) {
+		this.x = x;
 	}
 
-	public final String getPropertyChangeListener() {
-		return propertyChangeListeners;
+	public final String getY() {
+		return y;
 	}
 
-	public final void setPropertyChangeListener(String propertyChangeListeners) {
-		this.propertyChangeListeners = propertyChangeListeners;
+	public final void setY(String y) {
+		this.y = y;
+	}
+
+	public final String getLookId() {
+		return lookId;
+	}
+
+	public final void setLookId(String lookId) {
+		this.lookId = lookId;
+	}
+
+	public final String getValidationListener() {
+		return validationListeners;
+	}
+
+	public final void setValidationListener(String validationListeners) {
+		this.validationListeners = validationListeners;
 	}
 
 	public final String getMarginBottom() {
@@ -258,62 +306,6 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.marginTop = marginTop;
 	}
 
-	public final String getUserEventListener() {
-		return userEventListeners;
-	}
-
-	public final void setUserEventListener(String userEventListeners) {
-		this.userEventListeners = userEventListeners;
-	}
-
-	public final String getX() {
-		return x;
-	}
-
-	public final void setX(String x) {
-		this.x = x;
-	}
-
-	public final String getY() {
-		return y;
-	}
-
-	public final void setY(String y) {
-		this.y = y;
-	}
-
-	public final String getStyleClass() {
-		return styleClass;
-	}
-
-	public final void setStyleClass(String styleClass) {
-		this.styleClass = styleClass;
-	}
-
-	public final String getLookId() {
-		return lookId;
-	}
-
-	public final void setLookId(String lookId) {
-		this.lookId = lookId;
-	}
-
-	public final String getWidth() {
-		return width;
-	}
-
-	public final void setWidth(String width) {
-		this.width = width;
-	}
-
-	public final String getHeight() {
-		return height;
-	}
-
-	public final void setHeight(String height) {
-		this.height = height;
-	}
-
 	public final String getTextAlignment() {
 		return textAlignment;
 	}
@@ -322,12 +314,12 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.textAlignment = textAlignment;
 	}
 
-	public final String getAccessKey() {
-		return accessKey;
+	public final String getUserEventListener() {
+		return userEventListeners;
 	}
 
-	public final void setAccessKey(String accessKey) {
-		this.accessKey = accessKey;
+	public final void setUserEventListener(String userEventListeners) {
+		this.userEventListeners = userEventListeners;
 	}
 
 	public final String getWaiRole() {
@@ -338,20 +330,28 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
-	public final String getInitListener() {
-		return initListeners;
-	}
-
-	public final void setInitListener(String initListeners) {
-		this.initListeners = initListeners;
-	}
-
 	public final String getHiddenMode() {
 		return hiddenMode;
 	}
 
 	public final void setHiddenMode(String hiddenMode) {
 		this.hiddenMode = hiddenMode;
+	}
+
+	public final String getPropertyChangeListener() {
+		return propertyChangeListeners;
+	}
+
+	public final void setPropertyChangeListener(String propertyChangeListeners) {
+		this.propertyChangeListeners = propertyChangeListeners;
+	}
+
+	public final String getAccessKey() {
+		return accessKey;
+	}
+
+	public final void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
 	}
 
 	public final void setMargins(String margins) {
@@ -376,34 +376,34 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("  helpMessage='"+helpMessage+"'");
-			LOG.debug("  helpURL='"+helpURL+"'");
-			LOG.debug("  toolTipText='"+toolTipText+"'");
-			LOG.debug("  backgroundColor='"+backgroundColor+"'");
-			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  width='"+width+"'");
+			LOG.debug("  height='"+height+"'");
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
+			LOG.debug("  backgroundColor='"+backgroundColor+"'");
+			LOG.debug("  foregroundColor='"+foregroundColor+"'");
+			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  fontBold='"+fontBold+"'");
 			LOG.debug("  fontItalic='"+fontItalic+"'");
 			LOG.debug("  fontName='"+fontName+"'");
 			LOG.debug("  fontSize='"+fontSize+"'");
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
+			LOG.debug("  helpMessage='"+helpMessage+"'");
+			LOG.debug("  helpURL='"+helpURL+"'");
+			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
-			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
+			LOG.debug("  x='"+x+"'");
+			LOG.debug("  y='"+y+"'");
+			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
 			LOG.debug("  marginTop='"+marginTop+"'");
-			LOG.debug("  x='"+x+"'");
-			LOG.debug("  y='"+y+"'");
-			LOG.debug("  styleClass='"+styleClass+"'");
-			LOG.debug("  lookId='"+lookId+"'");
-			LOG.debug("  width='"+width+"'");
-			LOG.debug("  height='"+height+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
-			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
 		super.setProperties(uiComponent);
@@ -419,33 +419,61 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
-		if (helpMessage != null) {
-			if (isValueReference(helpMessage)) {
-				ValueBinding vb = application.createValueBinding(helpMessage);
-				component.setValueBinding(Properties.HELP_MESSAGE, vb);
+		if (width != null) {
+			if (isValueReference(width)) {
+				ValueBinding vb = application.createValueBinding(width);
+				component.setValueBinding(Properties.WIDTH, vb);
 
 			} else {
-				component.setHelpMessage(helpMessage);
+				component.setWidth(width);
 			}
 		}
 
-		if (helpURL != null) {
-			if (isValueReference(helpURL)) {
-				ValueBinding vb = application.createValueBinding(helpURL);
-				component.setValueBinding(Properties.HELP_URL, vb);
+		if (height != null) {
+			if (isValueReference(height)) {
+				ValueBinding vb = application.createValueBinding(height);
+				component.setValueBinding(Properties.HEIGHT, vb);
 
 			} else {
-				component.setHelpURL(helpURL);
+				component.setHeight(height);
 			}
 		}
 
-		if (toolTipText != null) {
-			if (isValueReference(toolTipText)) {
-				ValueBinding vb = application.createValueBinding(toolTipText);
-				component.setValueBinding(Properties.TOOL_TIP_TEXT, vb);
+		if (visible != null) {
+			if (isValueReference(visible)) {
+				ValueBinding vb = application.createValueBinding(visible);
+				component.setValueBinding(Properties.VISIBLE, vb);
 
 			} else {
-				component.setToolTipText(toolTipText);
+				component.setVisible(getBool(visible));
+			}
+		}
+
+		if (mouseOutListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+		}
+
+		if (mouseOverListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+		}
+
+		if (disabled != null) {
+			if (isValueReference(disabled)) {
+				ValueBinding vb = application.createValueBinding(disabled);
+				component.setValueBinding(Properties.DISABLED, vb);
+
+			} else {
+				component.setDisabled(getBool(disabled));
+			}
+		}
+
+		if (unlockedClientAttributeNames != null) {
+			if (isValueReference(unlockedClientAttributeNames)) {
+				ValueBinding vb = application.createValueBinding(unlockedClientAttributeNames);
+				component.setValueBinding(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, vb);
+
+			} else {
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames);
 			}
 		}
 
@@ -455,6 +483,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 		if (focusListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
+		}
+
+		if (errorListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
 		if (backgroundColor != null) {
@@ -477,32 +509,14 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (visible != null) {
-			if (isValueReference(visible)) {
-				ValueBinding vb = application.createValueBinding(visible);
-				component.setValueBinding(Properties.VISIBLE, vb);
+		if (styleClass != null) {
+			if (isValueReference(styleClass)) {
+				ValueBinding vb = application.createValueBinding(styleClass);
+				component.setValueBinding(Properties.STYLE_CLASS, vb);
 
 			} else {
-				component.setVisible(getBool(visible));
+				component.setStyleClass(styleClass);
 			}
-		}
-
-		if (errorListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
-		}
-
-		if (disabled != null) {
-			if (isValueReference(disabled)) {
-				ValueBinding vb = application.createValueBinding(disabled);
-				component.setValueBinding(Properties.DISABLED, vb);
-
-			} else {
-				component.setDisabled(getBool(disabled));
-			}
-		}
-
-		if (validationListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
 		}
 
 		if (fontBold != null) {
@@ -555,12 +569,38 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (mouseOutListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
+		if (initListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (mouseOverListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.MOUSE_OVER_LISTENER_TYPE, mouseOverListeners);
+		if (helpMessage != null) {
+			if (isValueReference(helpMessage)) {
+				ValueBinding vb = application.createValueBinding(helpMessage);
+				component.setValueBinding(Properties.HELP_MESSAGE, vb);
+
+			} else {
+				component.setHelpMessage(helpMessage);
+			}
+		}
+
+		if (helpURL != null) {
+			if (isValueReference(helpURL)) {
+				ValueBinding vb = application.createValueBinding(helpURL);
+				component.setValueBinding(Properties.HELP_URL, vb);
+
+			} else {
+				component.setHelpURL(helpURL);
+			}
+		}
+
+		if (toolTipText != null) {
+			if (isValueReference(toolTipText)) {
+				ValueBinding vb = application.createValueBinding(toolTipText);
+				component.setValueBinding(Properties.TOOL_TIP_TEXT, vb);
+
+			} else {
+				component.setToolTipText(toolTipText);
+			}
 		}
 
 		if (tabIndex != null) {
@@ -573,18 +613,38 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (unlockedClientAttributeNames != null) {
-			if (isValueReference(unlockedClientAttributeNames)) {
-				ValueBinding vb = application.createValueBinding(unlockedClientAttributeNames);
-				component.setValueBinding(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, vb);
+		if (x != null) {
+			if (isValueReference(x)) {
+				ValueBinding vb = application.createValueBinding(x);
+				component.setValueBinding(Properties.X, vb);
 
 			} else {
-				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames);
+				component.setX(x);
 			}
 		}
 
-		if (propertyChangeListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		if (y != null) {
+			if (isValueReference(y)) {
+				ValueBinding vb = application.createValueBinding(y);
+				component.setValueBinding(Properties.Y, vb);
+
+			} else {
+				component.setY(y);
+			}
+		}
+
+		if (lookId != null) {
+			if (isValueReference(lookId)) {
+				ValueBinding vb = application.createValueBinding(lookId);
+				component.setValueBinding(Properties.LOOK_ID, vb);
+
+			} else {
+				component.setLookId(lookId);
+			}
+		}
+
+		if (validationListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
 		}
 
 		if (marginBottom != null) {
@@ -627,70 +687,6 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (userEventListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
-		}
-
-		if (x != null) {
-			if (isValueReference(x)) {
-				ValueBinding vb = application.createValueBinding(x);
-				component.setValueBinding(Properties.X, vb);
-
-			} else {
-				component.setX(x);
-			}
-		}
-
-		if (y != null) {
-			if (isValueReference(y)) {
-				ValueBinding vb = application.createValueBinding(y);
-				component.setValueBinding(Properties.Y, vb);
-
-			} else {
-				component.setY(y);
-			}
-		}
-
-		if (styleClass != null) {
-			if (isValueReference(styleClass)) {
-				ValueBinding vb = application.createValueBinding(styleClass);
-				component.setValueBinding(Properties.STYLE_CLASS, vb);
-
-			} else {
-				component.setStyleClass(styleClass);
-			}
-		}
-
-		if (lookId != null) {
-			if (isValueReference(lookId)) {
-				ValueBinding vb = application.createValueBinding(lookId);
-				component.setValueBinding(Properties.LOOK_ID, vb);
-
-			} else {
-				component.setLookId(lookId);
-			}
-		}
-
-		if (width != null) {
-			if (isValueReference(width)) {
-				ValueBinding vb = application.createValueBinding(width);
-				component.setValueBinding(Properties.WIDTH, vb);
-
-			} else {
-				component.setWidth(width);
-			}
-		}
-
-		if (height != null) {
-			if (isValueReference(height)) {
-				ValueBinding vb = application.createValueBinding(height);
-				component.setValueBinding(Properties.HEIGHT, vb);
-
-			} else {
-				component.setHeight(height);
-			}
-		}
-
 		if (textAlignment != null) {
 			if (isValueReference(textAlignment)) {
 				ValueBinding vb = application.createValueBinding(textAlignment);
@@ -701,14 +697,8 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (accessKey != null) {
-			if (isValueReference(accessKey)) {
-				ValueBinding vb = application.createValueBinding(accessKey);
-				component.setValueBinding(Properties.ACCESS_KEY, vb);
-
-			} else {
-				component.setAccessKey(accessKey);
-			}
+		if (userEventListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
 		if (waiRole != null) {
@@ -721,10 +711,6 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (initListeners != null) {
-			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
-		}
-
 		if (hiddenMode != null) {
 			if (isValueReference(hiddenMode)) {
 				ValueBinding vb = application.createValueBinding(hiddenMode);
@@ -732,6 +718,20 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setHiddenMode(hiddenMode);
+			}
+		}
+
+		if (propertyChangeListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
+		}
+
+		if (accessKey != null) {
+			if (isValueReference(accessKey)) {
+				ValueBinding vb = application.createValueBinding(accessKey);
+				component.setValueBinding(Properties.ACCESS_KEY, vb);
+
+			} else {
+				component.setAccessKey(accessKey);
 			}
 		}
 
@@ -764,43 +764,43 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
-		helpMessage = null;
-		helpURL = null;
-		toolTipText = null;
+		width = null;
+		height = null;
+		visible = null;
+		mouseOutListeners = null;
+		mouseOverListeners = null;
+		disabled = null;
+		unlockedClientAttributeNames = null;
 		blurListeners = null;
 		focusListeners = null;
+		errorListeners = null;
 		backgroundColor = null;
 		foregroundColor = null;
-		visible = null;
-		errorListeners = null;
-		disabled = null;
-		validationListeners = null;
+		styleClass = null;
 		fontBold = null;
 		fontItalic = null;
 		fontName = null;
 		fontSize = null;
 		fontUnderline = null;
-		mouseOutListeners = null;
-		mouseOverListeners = null;
+		initListeners = null;
+		helpMessage = null;
+		helpURL = null;
+		toolTipText = null;
 		tabIndex = null;
-		unlockedClientAttributeNames = null;
-		propertyChangeListeners = null;
+		x = null;
+		y = null;
+		lookId = null;
+		validationListeners = null;
 		marginBottom = null;
 		marginLeft = null;
 		marginRight = null;
 		marginTop = null;
-		userEventListeners = null;
-		x = null;
-		y = null;
-		styleClass = null;
-		lookId = null;
-		width = null;
-		height = null;
 		textAlignment = null;
-		accessKey = null;
+		userEventListeners = null;
 		waiRole = null;
-		initListeners = null;
 		hiddenMode = null;
+		propertyChangeListeners = null;
+		accessKey = null;
 		margins = null;
 		immediate = null;
 		value = null;

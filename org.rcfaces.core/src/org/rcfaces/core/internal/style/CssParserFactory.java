@@ -19,23 +19,38 @@ public class CssParserFactory {
 
     private static final Log LOG = LogFactory.getLog(CssParserFactory.class);
 
-    private static final String CSSOMPARSER = "com.steadystate.css.parser.CSSOMParser";
+    private static final String STEADY_STATE_PARSER_CLASSNAME = "org.rcfaces.css.internal.CssSteadyStateParser";
 
     public static final ICssParser getCssParser() {
+        Class clazz = null;
+
         try {
-            CssParserFactory.class.getClassLoader().loadClass(CSSOMPARSER);
+            LOG.debug("Try CSS steady state parser ...");
 
-            LOG.info("Enable 'SteadyState' css parser.");
-
-            return new CssSteadyStateParser();
+            clazz = CssParserFactory.class.getClassLoader().loadClass(
+                    STEADY_STATE_PARSER_CLASSNAME);
 
         } catch (Exception ex) {
             LOG.trace(ex);
         }
 
-        LOG.info("No css parser found.");
+        if (clazz == null) {
+            LOG.info("No known css parsers found.");
 
-        return null;
+            return null;
+        }
+
+        LOG.info("Instanciate css parser '" + clazz.getName() + "' ...");
+
+        try {
+            return (ICssParser) clazz.newInstance();
+
+        } catch (Throwable e) {
+            LOG.error("Can not instanciate css parser '" + clazz.getName()
+                    + "'.", e);
+
+            return null;
+        }
     }
 
     /**

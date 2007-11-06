@@ -385,6 +385,7 @@
 				<required-class name="fa_disabled" />
 				<required-class name="fa_images" />
 				<required-class name="fa_immediate" />
+				<required-class name="fa_value" />
 
 				<required-style name="f_imageButton.css" />
 			</class>

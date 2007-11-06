@@ -968,7 +968,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @context window:this
+	 * @context event:evt
 	 */
 	_Ie_unload: function(evt) {
 		var doc=this.document;
