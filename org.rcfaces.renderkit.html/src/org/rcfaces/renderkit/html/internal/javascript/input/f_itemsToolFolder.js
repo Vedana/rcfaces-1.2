@@ -49,12 +49,33 @@ var __members = {
 	},
 	fa_destroyItems: function(items) {
 	},	
-	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
-		if (type==f_event.SELECTION && !value) {
-   			 return false;
-		}	
+	f_setDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.DBLCLICK:
+		case f_event.SELECTION: 
+		case f_event.BLUR:
+		case f_event.FOCUS:
+		case f_event.KEYDOWN:
+		case f_event.KEYPRESS:
+		case f_event.KEYUP:
+			return;
+		}
 		
-		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
+		this.f_super(arguments, type, target);
+	},
+	f_clearDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.DBLCLICK:
+		case f_event.SELECTION: 
+		case f_event.BLUR:
+		case f_event.FOCUS:
+		case f_event.KEYDOWN:
+		case f_event.KEYPRESS:
+		case f_event.KEYUP:
+			return;
+		}
+		
+		this.f_super(arguments, type, target);
 	},
 	/**
 	 * @method hidden
