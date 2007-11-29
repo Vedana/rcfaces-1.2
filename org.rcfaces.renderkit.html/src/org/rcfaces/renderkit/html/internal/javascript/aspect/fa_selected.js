@@ -13,6 +13,7 @@ var __members = {
 /*
 	f_finalize: function() {
 		// this._selected=undefined; // boolean
+		// this._initialSelection=undefined; // boolean
 	},
 	*/
 	/**
@@ -25,6 +26,7 @@ var __members = {
 		if (this._selected===undefined) {
 			// Appel depuis le constructor de l'objet !
 			this._selected=f_core.GetBooleanAttribute(this, "v:selected", false);
+			this._initialSelection=this._selected;
 		}
 		
 		return this._selected;
@@ -51,6 +53,18 @@ var __members = {
 		this.f_setProperty(f_prop.SELECTED, set);
 	
 		this.fa_updateSelected(set);
+	},
+	
+	/**
+	 * @method hidden
+	 * @return boolean
+	 */
+	fa_getInitialSelection: function() {
+		if (this._initialSelection===undefined) {
+			this.f_isSelected();
+		}
+		
+		return this._initialSelection;
 	},
 	
 	/**

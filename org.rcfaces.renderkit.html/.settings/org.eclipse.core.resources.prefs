@@ -1,4 +1,4 @@
-#Tue May 15 15:17:49 CEST 2007
+#Fri Nov 09 18:56:31 CET 2007
 eclipse.preferences.version=1
 encoding//src/org/rcfaces/renderkit/html/internal/css/f_border_flat.css=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/css/f_dataGrid.css=UTF-8
@@ -18,7 +18,6 @@ encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_accelerator
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_button.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_checkButton.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_combo.js=UTF-8
-encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_comboEx.js__old=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_dataGrid.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_helpButton.js=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/javascript/input/f_hyperLink.js=UTF-8

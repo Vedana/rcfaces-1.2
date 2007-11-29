@@ -51,6 +51,12 @@ var __statics = {
 	 */
 	THROWING_ASPECT: "throwing",
 
+
+	/**
+	 * @field private static final boolean
+	 */
+	_CLEAN_METHODS: false,
+
 	/**
 	 * @method private static final string
 	 */
@@ -77,11 +83,12 @@ var __statics = {
 			var cls=callee._kclass;
 			f_core.Assert(cls instanceof f_class, "f_class._Super: Can not find class of object '"+caller+"'\n["+caller.callee+"'\nclass='"+cls+"'\nname='"+name+"' !");
 	
-			var p = cls._parent;
 			if (window._RCFACES_LEVEL3) {
 				// On recherche le parent du bon contexte !
-				p = this._kclass._classLoader.f_getClass(p._name, p._lookId); 
+				cls = this._kclass._classLoader.f_getClass(cls._name, cls._lookId); 
 			}
+	
+			var p = cls._parent;
 
 			f_core.Assert(p instanceof f_class, "f_class._Super: No parent class ! (className='"+cls._name+", method='"+name+"')");
 		
@@ -536,17 +543,19 @@ var __statics = {
 				f_core.Error(f_class, "Call of method f_finalize of class '"+cls._name+"' throws exception.", x);
 			}
 	
-			// Desinherit		
-			var methods=cls._kmethods;
-			for (var fname in methods) {
-				obj[fname] = undefined;
+			if (f_class._CLEAN_METHODS) {
+				// Desinherit		
+				var methods=cls._kmethods;
+				for (var fname in methods) {
+					obj[fname] = undefined;
+				}
+				
+				obj.f_super = undefined;
 			}
-			
-			obj.f_super = undefined;
 	
 			obj._kclass = undefined;
 			
-			if (obj.tagName) {
+			if (obj.nodeType) {
 				// Un composant du DOM !
 				f_core.VerifyProperties(obj);
 			}
@@ -587,7 +596,7 @@ var __statics = {
 		f_core.Assert(!cls._name, "f_class._DeclarePrototypeClass: Invalid constructor ! ("+cls._name+")");
 		
 		cls.prototype=methods;
-		//cls.prototype._kclass=cls; // Pas en LEVEL3
+		//cls.prototype._kclass=cls; // SURTOUT Pas pour le LEVEL3
 		cls._members=methods; // On en a besoin pour le multiWindow
 		cls._name=name;
 		cls._classLoader=classLoader;
@@ -606,6 +615,8 @@ var __statics = {
 			staticMembers.toString=f_class.toString;
 		}			
 
+		//cls._kernelClass=(name=="f_class");		
+
 		if (name!="f_classLoader") {
 			cls._classLoader.f_declareClass(cls);
 		}
@@ -613,6 +624,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @return function
+	 * @dontInline arguments
 	 */
 	_CreateConstructor: function(constructorFct) {
 		return function() {
@@ -889,4 +901,3 @@ var __members = {
 }
 
 __statics._DeclarePrototypeClass(window._rcfacesClassLoader, "f_class", __statics, __members, __statics._CreateConstructor);
-

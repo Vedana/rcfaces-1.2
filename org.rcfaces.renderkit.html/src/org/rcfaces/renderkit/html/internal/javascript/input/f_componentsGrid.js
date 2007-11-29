@@ -221,7 +221,7 @@ var __members = {
 					}
 				}
 	
-				var event=new f_event(dataGrid, f_event.CHANGE);
+				var event=new f_event(dataGrid, f_event.LOAD);
 				try {
 					dataGrid.f_fireEvent(event);
 					
@@ -421,7 +421,7 @@ var __members = {
 					
 					var cell=cells[cellIdx];
 					
-					cell._cellStyleClass=f_core.GetAttribute(cell, "v:class");
+					cell._cellStyleClass=f_core.GetAttribute(cell, "v:className");
 				}
 			}
 			
@@ -494,7 +494,7 @@ var __members = {
 			var row=trs[i];
 			row._curIndex=null;
 			
-			body.appendChild(row);
+			f_core.AppendChild(body, row);
 		}
 
 		var rowClasses= this._rowStyleClass;
@@ -507,7 +507,7 @@ var __members = {
 			this.fa_updateElementStyle(row);
 		}
 	
-		this._table.appendChild(body);	
+		f_core.AppendChild(this._table, body);	
 	},
 	/**
 	 * @method hidden
@@ -533,7 +533,7 @@ var __members = {
 			
 		} else {
 			row=document.createElement("tr");
-			this._tbody.appendChild(row);
+			f_core.AppendChild(this._tbody, row);
 		}
 		this._rowsPool.push(row);
 		row._dataGrid=this;
@@ -620,7 +620,7 @@ var __members = {
 				
 			} else {
 				td=document.createElement("td");
-				row.appendChild(td);
+				f_core.AppendChild(row, td);
 			}
 			
 			this._cellsPool.push(td);

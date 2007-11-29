@@ -20,4 +20,8 @@ public interface IContentInformation {
     boolean isFiltredModel();
 
     void setFiltredModel(boolean filtredModel);
+
+    boolean isTransient();
+
+    void setTransient(boolean transientState);
 }

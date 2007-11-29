@@ -36,6 +36,13 @@ var __statics = {
 	 * @field public static final String
 	 */
 	OPAQUE_BACKGROUND_MODE: "opaque",
+
+	/**
+	 * Style constant for resize area trim
+	 * 
+	 * @field public static final number
+	 */
+	MOVE_STYLE: 1<<3,
 	
 	/**
 	 * Style constant for resize area trim
@@ -238,8 +245,8 @@ var __members = {
 	 *
 	 * @method public
 	 * @param optional number style the style of control to construct
-	 * @param optional function drawingFunction
-	 * @param optional function returnValueFunction
+	 * @param optional Function drawingFunction
+	 * @param optional Function returnValueFunction
 	 */
 	f_shell: function(style, drawingFunction, returnValueFunction) {
 		this.f_super(arguments);
@@ -530,7 +537,7 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @param function returnValueFunction
+	 * @param Function returnValueFunction
 	 * @return void
 	 */
 	f_open: function(returnValueFunction) {
@@ -587,7 +594,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Strint title
+	 * @param String title
 	 * @return void
 	 */
 	f_setTitle: function(title) {

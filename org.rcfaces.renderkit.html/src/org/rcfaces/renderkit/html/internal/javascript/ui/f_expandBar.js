@@ -48,7 +48,7 @@ var __statics = {
 	 * @return boolean
 	 * @context object:expandBar
 	 */
-	_OnHeadOver: function() {
+	_OnHeadOver: function(evt) {
 		var expandBar=this._link;
 		
 		var cls=f_expandBar._HEAD_CLASSNAME;
@@ -62,7 +62,7 @@ var __statics = {
 	 * @return boolean
 	 * @context object:expandBar
 	 */
-	_OnHeadOut: function() {
+	_OnHeadOut: function(evt) {
 		var expandBar=this._link;
 
 		this.className=f_expandBar._HEAD_CLASSNAME;
@@ -416,7 +416,6 @@ var __members = {
 	f_getGroupName: function() {
 		return this._groupName;
 	},
-	fa_getRadioScope: fa_groupName.GlobalScope,
 	/**
 	 * @method protected
 	 * @return boolean

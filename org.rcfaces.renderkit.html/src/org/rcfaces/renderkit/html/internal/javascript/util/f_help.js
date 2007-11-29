@@ -56,29 +56,17 @@ var __statics = {
 	 * @field private static f_component
 	 */
 	_HelpZone: undefined,
-
-	/**
-	 * @field private static boolean
-	 */
-	_FindZone: undefined, 
 	
 	/**
 	 * @field private static Window
 	 */
-	_Window: undefined,
+	_HelpWindow: undefined,
 
 	/**
 	 * @method hidden static
 	 */
 	SetHelpMessageZone: function(elt) {
-		if (!f_help._HelpZone && !elt) {
-			f_help._FindZone = true;
-			return;
-		}
-
-		if (elt) {
-			f_help._HelpZone = elt;
-		}
+		f_help._HelpZone = elt;
 	},
 	/**
 	 * @method hidden static
@@ -185,7 +173,7 @@ var __statics = {
 			return false;
 		}
 		
-		var win=f_help._Window;
+		var win=f_help._HelpWindow;
 		if (!win || win.closed) {
 			var id = f_env.Get("WINHELP_ID", f_help._ID);
 			var w = f_env.Get("WINHELP_W", f_help._W);
@@ -201,7 +189,7 @@ var __statics = {
 				width: w,
 				height: h });
 			
-			f_help._Window = win;
+			f_help._HelpWindow = win;
 		}
 			
 		win.location.href = url;
@@ -213,9 +201,10 @@ var __statics = {
 	 * @method protected static
 	 */
 	DocumentComplete: function() {
-		if (!f_help._FindZone) {
+		if (f_help._HelpZone!==false) {
 			return;
 		}
+		
 		f_help._HelpZone = f_core.GetChildByClass(document, f_helpMessageZone.f_getName());
 	},
 	/**
@@ -225,7 +214,7 @@ var __statics = {
 	Finalizer: function() {
 		f_help._FocusElement=undefined;
 		f_help._HelpZone=undefined;
-		f_help._Window=undefined;
+		f_help._HelpWindow=undefined;
 	}
 }
 

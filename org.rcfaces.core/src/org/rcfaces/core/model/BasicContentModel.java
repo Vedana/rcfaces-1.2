@@ -122,4 +122,28 @@ public class BasicContentModel extends AbstractContentModel {
         setAttribute(PROCESS_DATA_AT_REQUEST, (state) ? Boolean.TRUE : null);
     }
 
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((attributes == null) ? 0 : attributes.hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final BasicContentModel other = (BasicContentModel) obj;
+        if (attributes == null) {
+            if (other.attributes != null)
+                return false;
+        } else if (!attributes.equals(other.attributes))
+            return false;
+        return true;
+    }
+
 }

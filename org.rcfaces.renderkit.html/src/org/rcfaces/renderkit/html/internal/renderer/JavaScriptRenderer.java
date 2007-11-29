@@ -19,6 +19,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IModule;
@@ -231,7 +232,7 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
 
         jsWriter.writeCall(cameliaClassLoader, "f_requiresBundle");
 
-        Locale locale = repositoryContext.getLocale();
+        Locale locale = ContextTools.getUserLocale(facesContext);
         for (int i = 0; i < fs.length; i++) {
             String src = fs[i].getURI(locale);
 

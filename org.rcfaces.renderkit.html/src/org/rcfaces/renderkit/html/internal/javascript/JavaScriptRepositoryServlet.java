@@ -114,7 +114,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     private static final Locale SYMBOL_LOCALE = new Locale("SYMBOLS");
 
+    private static final String JAVASCRIPT_VERSION_PROPERTY = "javascript.version";
+
     private static final Set SYMBOLS_FILENAMES = new HashSet(2);
+
     static {
         SYMBOLS_FILENAMES.add(SYMBOLS_FILENAME);
     }
@@ -213,9 +216,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
             String buildId = htmlRCFacesBuildId;
 
-            boolean compiledVersion = isCompiledVersion();
-            if (compiledVersion) {
-                buildId += "c";
+            String compiledVersion = getCompiledJavascriptVersion();
+            if (compiledVersion != null) {
+                buildId += compiledVersion;
             }
 
             String configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
@@ -343,7 +346,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         return repository;
     }
 
-    protected boolean isCompiledVersion() {
+    protected String getCompiledJavascriptVersion() {
         ServletContext servletContext = getServletContext();
 
         String symbolURL = MAIN_REPOSITORY_DIRECTORY_LOCATION
@@ -351,10 +354,34 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         URL url = ClassLocator.getResource(symbolURL, this, servletContext);
         if (url == null) {
-            return false;
+            return null;
         }
 
-        return true;
+        try {
+            InputStream ins = url.openStream();
+            try {
+                Properties p = new Properties();
+
+                p.load(ins);
+
+                String version = p.getProperty(JAVASCRIPT_VERSION_PROPERTY);
+                if (version != null) {
+                    return version;
+                }
+
+            } finally {
+                try {
+                    ins.close();
+                } catch (IOException ex2) {
+                    LOG.debug(ex2);
+                }
+            }
+
+        } catch (IOException ex) {
+            LOG.error(ex);
+        }
+
+        return "c";
     }
 
     protected String getSetURI(String setName) {

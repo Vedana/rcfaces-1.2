@@ -30,6 +30,7 @@ import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
+import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.provider.AbstractProvider;
 
@@ -238,13 +239,13 @@ public class StyleContentAccessorHandler extends AbstractProvider implements
                     .getResourceVersion(facesContext, resourceURL, null);
         }
 
+        IContentModel contentModel = new StyleOperationContentModel(
+                resourceURL, contentType, versionId, operationId, parameters,
+                contentAccessor.getAttributes(), styleOperation, cssParser);
+
         IContentAccessor newContentAccessor = contentStorageEngine
-                .registerContentModel(facesContext,
-                        new StyleOperationContentModel(resourceURL,
-                                contentType, versionId, operationId,
-                                parameters, contentAccessor.getAttributes(),
-                                styleOperation, cssParser), null, contentAccessor
-                                .getType());
+                .registerContentModel(facesContext, contentModel, null,
+                        contentAccessor.getType());
 
         // pas de versionning dans ce content Accessor !
 

@@ -59,9 +59,6 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
-	f_initializeInput: function() {
-		return this;
-	},
 	/**
 	 * @method public 
 	 * @param String value
@@ -264,6 +261,8 @@ var __members = {
 			input.removeChild(items[i]);
 		}
 		
+		this._waiting=null;
+		
 		return cnt;
 	},
 	/**
@@ -377,7 +376,7 @@ var __members = {
 		 			waiting=combo.ownerDocument.createElement("option");
 		 			waiting.disabled=true;
 		 			
-		 			combo.appendChild(waiting);
+		 			f_core.AppendChild(combo, waiting);
 		 			if (combo.size>1) {
 		 				// Pas de selection si il y a plusieurs elements affichés dans la liste
 		 				combo.selectedIndex=-1;
@@ -444,6 +443,7 @@ var __members = {
 				try {
 					if (waiting) {
 						combo.removeChild(waiting);
+						waiting=null;
 					}
 					if (combo._oldWidth) {
 						combo.style.width=combo._oldWidth;
@@ -488,15 +488,13 @@ var __members = {
 					combo.className=combo.f_computeStyleClass();
 				}
 				
-				/* A voir ! @TODO
-				var event=new f_event(combo, f_event.CHANGE);
+				var event=new f_event(combo, f_event.LOAD);
 				try {
 					combo.f_fireEvent(event);
 					
 				} finally {
 					f_classLoader.Destroy(event);
 				}
-				*/
 	 		}
 		});
 
@@ -533,7 +531,7 @@ var __members = {
 			// Pas de SetTextNode: ca marche pas !
 			optgroup.innerHTML=f_core.EncodeHtml(label);
 			
-			this.appendChild(optgroup);
+			f_core.AppendChild(this, optgroup);
 			return optgroup;
 		}
 		
@@ -562,7 +560,7 @@ var __members = {
 		// Pas de SetTextNode: ca marche pas !
 		option.innerHTML=f_core.EncodeHtml(label);
 		
-		this.appendChild(option);
+		f_core.AppendChild(this, option);
 		
 		return option;
 	},

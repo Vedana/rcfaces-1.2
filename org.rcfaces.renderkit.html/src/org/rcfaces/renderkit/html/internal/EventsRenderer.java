@@ -32,6 +32,10 @@ public class EventsRenderer {
     // On conserve le mot clef coté client !
     private static final String DEFAULT_SUBMIT_JAVA_SCRIPT = "submit";
 
+    private static final String DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME = "fa_eventTarget";
+
+    private static final String DEFAULT_SUBMIT_JAVA_SCRIPT_CB = "DefaultSubmit";
+
     private static final String ADD_EVENT_LISTENERS = "f_addEventListener";
 
     private static final FacesListener DEFAULT_SUBMIT_FACES_LISTENER = new AbstractScriptListener(
@@ -134,12 +138,17 @@ public class EventsRenderer {
                             + listenerType + "'.");
                 }
 
-                command = DEFAULT_SUBMIT_JAVA_SCRIPT;
                 clientSubmit = true;
                 needSubmit = false;
-            }
 
-            js.writeString(command);
+                js.write(DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME).write('.');
+                js.write(js.getJavaScriptRenderContext().convertSymbol(
+                        DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME,
+                        DEFAULT_SUBMIT_JAVA_SCRIPT_CB));
+
+            } else {
+                js.writeString(command);
+            }
         }
 
         if (needSubmit) {
@@ -150,7 +159,10 @@ public class EventsRenderer {
             }
 
             js.write(',');
-            js.writeString(DEFAULT_SUBMIT_JAVA_SCRIPT);
+            js.write(DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME).write('.');
+            js.write(js.getJavaScriptRenderContext().convertSymbol(
+                    DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME,
+                    DEFAULT_SUBMIT_JAVA_SCRIPT_CB));
         }
 
         if (first == false) {
@@ -161,7 +173,13 @@ public class EventsRenderer {
     public static final void encodeJavaScriptEventSubmit(IJavaScriptWriter js,
             String varName, String listenerType) throws WriterException {
         js.writeCall(varName, ADD_EVENT_LISTENERS).write(listenerType);
-        js.write(',').writeString(DEFAULT_SUBMIT_JAVA_SCRIPT);
+        js.write(',');
+
+        js.write(DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME).write('.');
+        js.write(js.getJavaScriptRenderContext().convertSymbol(
+                DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME,
+                DEFAULT_SUBMIT_JAVA_SCRIPT_CB));
+
         js.writeln(");");
     }
 
@@ -170,7 +188,12 @@ public class EventsRenderer {
         String command = scriptListener.getCommand();
 
         if (DEFAULT_SUBMIT.equals(command)) {
-            command = DEFAULT_SUBMIT_JAVA_SCRIPT;
+            js.write(DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME).write('.');
+            js.write(js.getJavaScriptRenderContext().convertSymbol(
+                    DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME,
+                    DEFAULT_SUBMIT_JAVA_SCRIPT_CB));
+
+            return;
         }
 
         js.writeString(command);
@@ -278,7 +301,7 @@ public class EventsRenderer {
             }
 
             if (last < i) {
-                sa.append(chs, last, i-last);
+                sa.append(chs, last, i - last);
                 last = i + 1;
             }
 

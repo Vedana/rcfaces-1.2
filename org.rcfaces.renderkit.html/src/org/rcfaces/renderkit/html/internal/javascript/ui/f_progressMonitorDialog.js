@@ -77,7 +77,7 @@ var __statics = {
 		
 		var dialog=doc.createElement("v:progressMonitorDialog");
 		
-		doc.body.appendChild(dialog);
+		f_core.AppendChild(doc.body, dialog);
 		
 		var dialog=f_progressMonitorDialog.f_decorateInstance(dialog);
 		

@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.ComponentsGridComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.core.component.ComponentsGridComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public class ComponentsGridTag extends AbstractDataTag implements Tag {
 
@@ -27,6 +27,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression clientAdditionalInformationFullState;
 	private ValueExpression additionalInformationCardinality;
 	private ValueExpression doubleClickListeners;
+	private ValueExpression loadListeners;
 	private ValueExpression required;
 	private ValueExpression border;
 	private ValueExpression rowStyleClass;
@@ -79,6 +80,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 
 	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
+	}
+
+	public final void setLoadListener(ValueExpression loadListeners) {
+		this.loadListeners = loadListeners;
 	}
 
 	public final void setRequired(ValueExpression required) {
@@ -231,6 +236,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DOUBLE_CLICK_LISTENER_TYPE, doubleClickListeners);
 		}
 
+		if (loadListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+		}
+
 		if (required != null) {
 			if (required.isLiteralText()==false) {
 				component.setValueExpression(Properties.REQUIRED, required);
@@ -359,6 +368,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		clientAdditionalInformationFullState = null;
 		additionalInformationCardinality = null;
 		doubleClickListeners = null;
+		loadListeners = null;
 		required = null;
 		border = null;
 		rowStyleClass = null;

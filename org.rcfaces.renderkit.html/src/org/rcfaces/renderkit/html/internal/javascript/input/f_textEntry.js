@@ -11,10 +11,17 @@
  */
 
 var __members = {
+	/*
 	f_textEntry: function() {
 		this.f_super(arguments);
-		
-		this._autoTab=f_core.GetBooleanAttribute(this, "v:autoTab");
+	},
+	*/
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_initializeOnFocus: function() {
+		this.f_super(arguments);
 				
 		if (f_class.IsClassDefined("f_clientValidator")) {
 			f_clientValidator.InstallValidator(this);
@@ -37,14 +44,6 @@ var __members = {
 		this.f_super(arguments);
 	},
 	/**
-	 * 
-	 * @method protected
-	 * @return String
-	 */
-	f_getInputTagName: function() {
-		return "input";
-	},
-	/**
 	 * @method public
 	 * @return number
 	 */
@@ -56,7 +55,15 @@ var __members = {
 	 * @return boolean Returns <code>true</code> if auto tab facility is enabled.
 	 */
 	f_isAutoTab: function() {
-		return !!this._autoTab;
+		var autoTab=this._autoTab;
+		if (autoTab!==undefined) {
+			return autoTab;
+		}
+				
+		autoTab=!!f_core.GetBooleanAttribute(this, "v:autoTab");
+		this._autoTab=autoTab;
+				
+		return autoTab;
 	},
 	/**
 	 * @method protected
@@ -96,11 +103,11 @@ var __members = {
 		
 		return f_core.GetAttribute(input, "autoComplete")!="off";	
 	},
-	/**
+	/*
 	 * @method public
 	 * @param optional boolean complete
 	 * @return void
-	 */
+	 *
 	f_setAutoCompletion: function(complete) {
 		if (complete===undefined) {
 			complete=true;
@@ -116,6 +123,7 @@ var __members = {
 		
 		this.f_setProperty(f_prop.AUTO_COMPLETION, complete);
 	},
+	*/
 	/**
 	 * @method private
 	 * @return void

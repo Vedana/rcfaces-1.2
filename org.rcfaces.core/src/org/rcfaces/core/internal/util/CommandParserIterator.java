@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.faces.FacesException;
 
-import org.rcfaces.core.internal.validator.IParameter;
+import org.rcfaces.core.validator.IParameter;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)

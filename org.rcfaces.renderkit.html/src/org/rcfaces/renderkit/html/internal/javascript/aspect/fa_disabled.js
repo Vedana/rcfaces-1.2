@@ -13,6 +13,7 @@ var __members = {
 /*
 	f_finalize: function() {
 		// this._disabled=undefined;  // boolean
+		// this._initialDisabled=undefined; // boolean
 	},
 	*/
 	/**
@@ -25,6 +26,7 @@ var __members = {
 		if (this._disabled===undefined) {
 			// Appel depuis le constructor de l'objet !
 		  	this._disabled=f_core.GetBooleanAttribute(this, "v:disabled", false);
+		  	this._initialDisabled=this._disabled;
 		}
 		
 		return this._disabled;
@@ -53,6 +55,18 @@ var __members = {
 		this.f_setProperty(f_prop.DISABLED, set);
 
 		this.fa_updateDisabled(set);
+	},
+
+	/**
+	 * @method hidden
+	 * @return boolean
+	 */
+	fa_getInitialDisabled: function() {
+		if (this._initialDisabled===undefined) {
+			this.f_isDisabled();
+		}
+		
+		return this._initialDisabled;
 	},
 	
 	/**

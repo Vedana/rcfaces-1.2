@@ -175,7 +175,7 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 		
 						f_core.Debug("f_asyncClassLoader", "f_processScripts: Script URL url='"+scriptElement.src+"' type='"+scriptElement.type+"' charset="+scriptElement.charset+"' defer=false");		
 						
-						this._htmlNode.appendChild(scriptElement);						
+						f_core.AppendChild(this._htmlNode, scriptElement);						
 						break;
 
 					case "scriptText":
@@ -543,6 +543,6 @@ f_classLoader.prototype._asyncSystemLoadBundle=function(bundleName) {
 		};
 	}
 	
-	document.body.appendChild(script);
+	f_core.AppendChild(document.body, script);
 }
 

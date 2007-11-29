@@ -23,10 +23,9 @@ var __members = {
 		
 		messageContext.f_addMessageListener(this);
 		
-		var messages=messageContext.f_listMessages(this);
-		
-		f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"' = "+messages);
-		if (messages.length) {
+		if (messageContext.f_containsMessagesFor(this.id)) {
+			f_core.Debug(fa_message, "fa_message: message detected for component id='"+this.id+"'");
+
 			this.f_performMessageChanges(messageContext);
 		}
 	},

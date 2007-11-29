@@ -59,7 +59,7 @@ Array.prototype.f_removeElements=function() {
  * @param Object element element to be added.
  */
 Array.prototype.f_addElement=function(element) {
-	if (this.f_contains(element)) {
+	if (this.length && this.f_contains(element)) {
 		return false;
 	}
 

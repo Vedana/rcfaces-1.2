@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.internal.renderkit;
 
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -10,7 +11,7 @@ import javax.faces.context.FacesContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IRenderContext {
+public interface IRenderContext extends StateHolder {
 
     // Pas de FacesContext car en cas de traitement à la Tiles ca marche plus !
 
@@ -41,9 +42,10 @@ public interface IRenderContext {
 
     UIComponent getComponent();
 
-    void encodeEnd(UIComponent component);
+    void encodeEnd(IComponentWriter writer) throws WriterException;
 
-    void pushScopeVar(String varName, Object value, Object valueBinding, boolean valueMustBeStored);
+    void pushScopeVar(String varName, Object value, Object valueBinding,
+            boolean valueMustBeStored);
 
     void popScopeVar(String varName);
 }

@@ -13,6 +13,7 @@ import org.rcfaces.core.model.IFiltredModel;
  */
 public class ImageFiltredContentModel extends ImageContentModel implements
         IFiltredModel {
+    private static final String REVISION = "$Revision$";
 
     private IFilterProperties filter;
 

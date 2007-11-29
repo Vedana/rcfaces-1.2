@@ -97,7 +97,7 @@ var __members = {
 	 * @param optional String defaultValue the value returned if the popup is closed without selecting a button
 	 */
 	f_messageDialog: function(title, text, defaultValue) {
-		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE);
+		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE | f_shell.MOVE_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			this._text=f_core.GetAttribute(this, "v:text");
@@ -197,8 +197,8 @@ var __members = {
 	 * @method public 
 	 * @param String value the value of the action
 	 * @param String text the text displayed for the action
-	 * @param optionnal boolean disabled true if the button must be disabled
-	 * @param optionnal boolean submitButton true if the button is the default value for the messageDialog
+	 * @param optional boolean disabled true if the button must be disabled
+	 * @param optional boolean submitButton true if the button is the default value for the messageDialog
 	 * @return void
 	 */
 	f_addAction: function(value, text, disabled, submitButton) {
@@ -267,11 +267,11 @@ var __members = {
 		// form to catch the return
 		var actForm = docBase.createElement("form");
 		actForm.className = "f_messageDialog_form";
-		base.appendChild(actForm);		
+		f_core.AppendChild(base, actForm);		
 		
 		// Creation de la table
 		var table = docBase.createElement("table");
-		actForm.appendChild(table);
+		f_core.AppendChild(actForm, table);
 
 		table.className = "f_messageDialog_body";
 
@@ -284,17 +284,17 @@ var __members = {
 		table.cellSpacing=0;
 
 		var tbod = docBase.createElement("tbody");
-		table.appendChild(tbod);
+		f_core.AppendChild(table, tbod);
 		
 		// Creation de la ligne de texte
 		var ligne = docBase.createElement("tr");
-		tbod.appendChild(ligne);
+		f_core.AppendChild(tbod, ligne);
 		ligne.className = "f_messageDialog_body_tr";
 		ligne.style.height = (this.f_getHeight() - 60)+"px";
 		
 		// cell for image
 		cell = docBase.createElement("td");
-		ligne.appendChild(cell);
+		f_core.AppendChild(ligne, cell);
 		cell.className = "f_messageDialog_image_td";
 		
 		var imageURL=this.f_getImageResolvedURL();
@@ -302,17 +302,17 @@ var __members = {
 			zone = docBase.createElement("img");
 			zone.className="f_messageDialog_image"
 			zone.src=imageURL;
-			cell.appendChild(zone);
+			f_core.AppendChild(cell, zone);
 		}
 
 		// cell for text
 		var cell = docBase.createElement("td");
-		ligne.appendChild(cell);
+		f_core.AppendChild(ligne, cell);
 
 		cell.className = "f_messageDialog_text_td";
 		
 		var zone = docBase.createElement("span");
-		cell.appendChild(zone);
+		f_core.AppendChild(cell, zone);
 		zone.className ="f_messageDialog_text";
 		
 		var text=this._text;
@@ -322,12 +322,12 @@ var __members = {
 
 		// Creation de la ligne de boutons
 		var ligne = docBase.createElement("tr");
-		tbod.appendChild(ligne);
+		f_core.AppendChild(tbod, ligne);
 		ligne.className = "f_messageDialog_actions_tr";
 		ligne.style.height = "60px";
 		
 		cell = docBase.createElement("td");
-		ligne.appendChild(cell);
+		f_core.AppendChild(ligne, cell);
 
 		cell.colSpan = 2;
 
@@ -335,13 +335,13 @@ var __members = {
 		cell.align = "center";
 		
 		var actTable = docBase.createElement("table");
-		cell.appendChild(actTable);
+		f_core.AppendChild(cell, actTable);
 
 		var actTbod = docBase.createElement("tbody");
-		actTable.appendChild(actTbod);
+		f_core.AppendChild(actTable, actTbod);
 
 		var actTr = docBase.createElement("tr");
-		actTbod.appendChild(actTr);
+		f_core.AppendChild(actTbod, actTr);
 		
 		var actions=this._actions;
 		if (!actions.length) {
@@ -356,7 +356,7 @@ var __members = {
 			var action=actions[i];
 
 			var cellb = docBase.createElement("td");
-			actTr.appendChild(cellb);			
+			f_core.AppendChild(actTr, cellb);			
 
 			var button = docBase.createElement("input");
 			
@@ -379,11 +379,13 @@ var __members = {
 			button._messageBox= this;
 			this._buttons.push(button);			
 	
-			cellb.appendChild(button);
+			f_core.AppendChild(cellb, button);
 		}
 	},
 	f_preDestruction: function() {
 		this._cleanInputs();
+
+		this.f_super(arguments);
 	},
 	/**
 	 * @method private

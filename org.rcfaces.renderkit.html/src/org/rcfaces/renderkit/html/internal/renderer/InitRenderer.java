@@ -678,9 +678,18 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
-        
-        jsWriter.write("var cl=(function(v){try{return (v.opener && v.opener!=v && arguments.callee(v.opener)) || v.").write(cameliaClassLoader).write("}catch(x){}})(window) || (function(v){try{return (v.parent && v.parent!=v && arguments.callee(v.parent)) || v.").write(cameliaClassLoader).write("}catch(x){}})(window)  || (function(v){try{return v.top.").write(cameliaClassLoader).write("}catch(x){}})(window);");
-        
+
+        jsWriter
+                .write(
+                        "var cl=(function(v){try{return (v.opener && v.opener!=v && arguments.callee(v.opener)) || v.")
+                .write(cameliaClassLoader)
+                .write(
+                        "}catch(x){}})(window) || (function(v){try{return (v.parent && v.parent!=v && arguments.callee(v.parent)) || v.")
+                .write(cameliaClassLoader)
+                .write(
+                        "}catch(x){}})(window)  || (function(v){try{return v.top.")
+                .write(cameliaClassLoader).write("}catch(x){}})(window);");
+
         jsWriter.write("if(cl&&cl.");
         jsWriter.writeSymbol("f_newWindowClassLoader");
         jsWriter.write(")");
@@ -1119,10 +1128,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 throw new WriterException("Can not write buffer.", e, null);
             }
             return null;
-        }
-
-        public void addRequestedModule(String moduleName) {
-            throw new UnsupportedOperationException("Not implemented !");
         }
 
         public String allocateString(String string) throws WriterException {

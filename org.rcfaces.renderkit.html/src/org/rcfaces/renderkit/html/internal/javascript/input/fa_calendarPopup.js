@@ -80,7 +80,7 @@ var __statics={
 					body.className="f_dateChooser_popup";
 					body.style.visibility="inherit";
 	
-					pdoc.body.appendChild(body);
+					f_core.AppendChild(pdoc.body, body);
 				}
 								
 			} else {
@@ -93,7 +93,7 @@ var __statics={
 				body=popup;
 				
 				var parent=dateChooser;				
-				parent.ownerDocument.body.appendChild(popup);
+				f_core.AppendChild(parent.ownerDocument.body, popup);
 			}
 			dateChooser._popupCalendar=popup;
 			
@@ -103,9 +103,11 @@ var __statics={
 				calendar.f_constructComponent(body);
 				f_core.Debug(fa_calendarPopup, "_OpenPopup: Create new popup for dateChooser='"+dateChooser.id+"'.");
 				
-				if (this._initialSelection) {
-					calendar.f_setSelection(this._initialSelection);
-					this._initialSelection=undefined;
+				var initialDateSelection=this._initialDateSelection;
+				if (initialDateSelection) {
+					this._initialDateSelection=undefined;
+					
+					calendar.f_setSelection(initialDateSelection);
 				}
 				
 			} else {
@@ -347,6 +349,7 @@ var __members={
 	f_finalize: {
 		after: function() {
 			this._iePopup=undefined;
+			this._initialDateSelection=undefined;
 		
 			var calendar=this._calendar;
 			if (calendar) {
@@ -443,7 +446,7 @@ var __members={
 	f_getSelection: function() {
 		var calendar=this._calendar;
 		if (!calendar) {
-			return this._initialSelection;
+			return this._initialDateSelection;
 		}
 		
 		var selection=calendar.f_getSelection();
@@ -461,7 +464,7 @@ var __members={
 	f_setSelection: function(selection) {
 		var calendar=this._calendar;
 		if (!calendar) {
-			this._initialSelection=selection;
+			this._initialDateSelection=selection;
 			return;
 		}
 		

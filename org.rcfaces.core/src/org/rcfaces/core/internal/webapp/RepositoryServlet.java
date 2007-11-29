@@ -254,12 +254,10 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             if (hasGZipSupport() && hasGzipSupport(request)) {
                 byte jsGZip[] = record.getGZipedBuffer();
                 if (jsGZip != null) {
-                    if (hasGzipSupport(request)) {
-                        setGzipContentEncoding(response);
+                    setGzipContentEncoding(response);
 
-                        buf = jsGZip;
-                        noHeader = true;
-                    }
+                    buf = jsGZip;
+                    noHeader = true;
                 }
             }
             if (buf == null) {
@@ -576,11 +574,15 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
                 DateFormat dateFormat = DateFormat.getDateTimeInstance(
                         DateFormat.SHORT, DateFormat.MEDIUM);
 
-                LOG.debug("Load record '" + file.getFilename() + "' into "
-                        + buffer.length + " bytes, modified date="
+                LOG.debug("Load record '"
+                        + file.getFilename()
+                        + "' into "
+                        + buffer.length
+                        + " bytes, modified date="
                         + dateFormat.format(new Date(lastModificationDate))
-                        + ((beforeUpdate>0)?("  (update-ratio "
-                        + (buffer.length * 100 / beforeUpdate) + "%)"):""));
+                        + ((beforeUpdate > 0) ? ("  (update-ratio "
+                                + (buffer.length * 100 / beforeUpdate) + "%)")
+                                : ""));
             }
 
             if (hasEtagSupport()) {

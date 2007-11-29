@@ -31,7 +31,7 @@ public class AdditionalInformationRenderer extends AbstractCssRenderer {
         encodeComponent(htmlWriter);
 
         htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .pushInteractiveRenderComponent(htmlWriter);
+                .pushInteractiveRenderComponent(htmlWriter, null);
     }
 
     protected void encodeComponent(IHtmlWriter htmlWriter)

@@ -4,9 +4,7 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -37,8 +35,6 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
     private boolean initializing = false;
 
     private String varId = null;
-
-    private Set requestedModules = null;
 
     protected IJavaScriptComponentRenderer javaScriptComponent;
 
@@ -169,11 +165,6 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
                 initializing = true;
                 initialized = 1;
 
-                if (requestedModules != null
-                        && requestedModules.isEmpty() == false) {
-                    writeRequestedModule();
-                }
-
                 if (javaScriptComponent != null) {
                     javaScriptComponent.initializeJavaScript(this);
                 }
@@ -289,26 +280,18 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#isClosed()
-     */
     public boolean isOpened() {
         return start;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#getComponentVarId()
-     */
     public String getComponentVarName() {
         if (varId != null) {
             return varId;
         }
 
-        throw new FacesException("Var is not initialized yet !");
+        // Plus d'exception car on peut initialiser le componentVarName en conséquence ...
+        // throw new FacesException("Var is not initialized yet !");
+        return null;
     }
 
     public void setComponentVarName(String varName) {
@@ -359,18 +342,6 @@ public final class JavaScriptWriterImpl extends AbstractJavaScriptWriter {
         write("var ").write(varId).write("=").writeString(string).writeln(";");
 
         return varId;
-    }
-
-    public void addRequestedModule(String moduleName) {
-        if (start) {
-            throw new FacesException("Can not add requested module !");
-        }
-
-        if (requestedModules == null) {
-            requestedModules = new HashSet(4);
-        }
-
-        requestedModules.add(moduleName);
     }
 
     protected final String convertSymbol(String className, String memberName) {

@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.CameliaCommandComponent;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IKeyPressEventCapability;
 import java.util.Arrays;
 import java.util.Set;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.rcfaces.core.internal.component.CameliaCommandComponent;
 
 /**
  * <p>The accelerator Component is a non-visual component.</p>
@@ -31,7 +31,7 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"forItemValue","keyBinding","validationListener","immediate","keyPressListener","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","forItemValue","for","keyBinding","keyPressListener","validationListener"}));
 	}
 
 	public AcceleratorComponent() {

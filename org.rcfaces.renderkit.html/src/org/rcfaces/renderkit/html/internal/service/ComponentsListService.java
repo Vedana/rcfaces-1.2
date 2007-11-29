@@ -322,11 +322,13 @@ public class ComponentsListService extends AbstractHtmlService {
         IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
                 .getRenderContext();
 
-        Object state = htmlRenderContext.saveRenderContextState();
+        FacesContext facesContext = htmlRenderContext.getFacesContext();
+
+        Object state = htmlRenderContext.saveState(facesContext);
 
         if (state != null) {
-            String contentType = htmlRenderContext.getFacesContext()
-                    .getResponseWriter().getContentType();
+            String contentType = facesContext.getResponseWriter()
+                    .getContentType();
 
             dataListComponent.getAttributes().put(RENDER_CONTEXT_STATE,
                     new Object[] { state, contentType });

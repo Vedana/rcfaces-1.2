@@ -253,7 +253,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 IHtmlRenderContext htmlRenderContext = writer
                         .getHtmlComponentRenderContext().getHtmlRenderContext();
 
-                Object state = htmlRenderContext.saveRenderContextState();
+                Object state = htmlRenderContext.saveState(htmlRenderContext
+                        .getFacesContext());
 
                 if (state != null) {
                     String contentType = htmlRenderContext.getFacesContext()

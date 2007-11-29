@@ -2,7 +2,7 @@
  * $Id$
  * 
  */
-package org.rcfaces.core.internal.validator;
+package org.rcfaces.core.validator;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)

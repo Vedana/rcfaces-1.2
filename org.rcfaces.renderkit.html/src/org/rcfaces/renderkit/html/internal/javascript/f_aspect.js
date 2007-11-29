@@ -124,3 +124,4 @@ f_aspect.f_getName=function() {
 }
 
 f_aspect._nativeClass=true;
+//f_aspect._kernelClass=true;

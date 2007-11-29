@@ -17,7 +17,7 @@ var __members = {
 
 		this.f_setForcedEventReturn(f_event.SELECTION, false);
 		
-		var input=this._input;
+		var input=this.f_getInput();
 		if (input.tagName.toLowerCase()=="a") {
 			if (!input.href) {
 				input.href=f_core.JAVASCRIPT_VOID;
@@ -25,12 +25,9 @@ var __members = {
 		}
 		
 		var d=f_core.GetAttribute(this, "DISABLED");
-		if (d!==undefined && d!==false) {
+		if (d) {
 			this.f_setDisabled(true);
 		}
-	},
-	f_initializeInput: function() {
-		return this;
 	},
 	/**
 	 * Returns the text of the link.
@@ -49,7 +46,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setText: function(text) {
-		f_core.SetTextNode(this, text, this._accessKey);
+		f_core.SetTextNode(this, text, this.f_getAccessKey());
 		
 		this.f_setProperty(f_prop.TEXT,text);
 	},

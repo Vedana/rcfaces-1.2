@@ -99,7 +99,7 @@ var __members = {
 	 */
 	f_getSelectedInGroup: function() {
 		function search(item) {
-			return item.f_isSelected.call(item)?item:null;
+			return item.f_isSelected()?item:null;
 		}
 
 		return this.f_findIntoGroup(this.f_getGroupName(), search);
@@ -115,7 +115,6 @@ var __members = {
 	},
 	fa_updateRequired: function() {
 	},
-	fa_getRadioScope: fa_groupName.GlobalScope,
 	/**
 	 * @method protected
 	 * @return boolean

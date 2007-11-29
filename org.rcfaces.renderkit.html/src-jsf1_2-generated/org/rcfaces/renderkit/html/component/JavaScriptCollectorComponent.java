@@ -1,10 +1,10 @@
 package org.rcfaces.renderkit.html.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
 
 public class JavaScriptCollectorComponent extends CameliaBaseComponent {
 

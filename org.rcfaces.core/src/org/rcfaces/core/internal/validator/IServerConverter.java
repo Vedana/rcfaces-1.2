@@ -6,6 +6,8 @@ package org.rcfaces.core.internal.validator;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import org.rcfaces.core.validator.IParameter;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)

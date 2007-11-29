@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Java Team (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public final class StringAppender {
+public final class StringAppender implements CharSequence {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(StringAppender.class);
@@ -39,6 +39,11 @@ public final class StringAppender {
     public StringAppender(String str, int length) {
         this(str.length() + length);
         append(str);
+    }
+
+    public StringAppender(char ch) {
+        this(4);
+        value[count++] = ch;
     }
 
     public int length() {
@@ -299,5 +304,13 @@ public final class StringAppender {
                 StringAppender.this.append(s);
             }
         };
+    }
+
+    public CharSequence subSequence(int start, int end) {
+        StringAppender sa = new StringAppender(end - start);
+
+        sa.append(value, start, end - start);
+
+        return sa;
     }
 }

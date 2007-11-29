@@ -1,9 +1,8 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.contentStorage;
+package org.rcfaces.core.internal.lang;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,10 +18,10 @@ import org.rcfaces.core.internal.Constants;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class BasicContentCache {
+public class LimitedMap {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(BasicContentCache.class);
+    private static final Log LOG = LogFactory.getLog(LimitedMap.class);
 
     // Il faut un cache des erreurs .... et des autres !
 
@@ -34,7 +33,7 @@ public class BasicContentCache {
 
     private List cacheList = new LinkedList();
 
-    public BasicContentCache(int maxCacheSize) {
+    public LimitedMap(int maxCacheSize) {
         this.maxCacheSize = maxCacheSize;
 
         caches = new HashMap(maxCacheSize + 2);
@@ -52,7 +51,7 @@ public class BasicContentCache {
 
     }
 
-    public synchronized Serializable get(String key) {
+    public synchronized Object get(Object key) {
         Cache cache = (Cache) caches.get(key);
         if (cache == null && weakCache != null) {
             cache = (Cache) weakCache.get(key);
@@ -70,7 +69,15 @@ public class BasicContentCache {
         return cache.serializable;
     }
 
-    public synchronized void put(String key, Serializable serializable) {
+    public synchronized void remove(Object key) {
+        Cache cache = (Cache) caches.remove(key);
+        if (cache == null) {
+            return;
+        }
+        cacheList.remove(cache);
+    }
+
+    public synchronized void put(Object key, Object serializable) {
         Cache cache = (Cache) caches.get(key);
         if (cache != null) {
             cache.serializable = serializable;
@@ -119,11 +126,11 @@ public class BasicContentCache {
     private static class Cache {
         private static final String REVISION = "$Revision$";
 
-        final String key;
+        final Object key;
 
-        Serializable serializable;
+        Object serializable;
 
-        public Cache(String key, Serializable serializable) {
+        public Cache(Object key, Object serializable) {
             this.key = key;
             this.serializable = serializable;
         }

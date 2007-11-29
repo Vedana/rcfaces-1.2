@@ -30,7 +30,7 @@ var __members = {
 	 * @method hidden
 	 * @param String menuId
 	 * @param optional Object properties
-	 * @return object
+	 * @return Object
 	 */
 	f_newSubMenu: function(menuId, properties) {
 		f_class.IsClassDefined("f_menu", true);

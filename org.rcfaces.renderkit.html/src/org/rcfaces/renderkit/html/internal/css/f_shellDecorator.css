@@ -71,6 +71,7 @@
 
 .f_shellDecorator_title_text {
 	padding: 6px 0 0 20px;
+	cursor: default;
 }
 
 .f_shellDecorator_close {

@@ -167,7 +167,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
                     htmlWriter.getHtmlComponentRenderContext()
                             .getHtmlRenderContext()
-                            .pushInteractiveRenderComponent(htmlWriter);
+                            .pushInteractiveRenderComponent(htmlWriter, null);
                 }
             }
         }
@@ -260,11 +260,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         ExpandBarComponent expandBarComponent = (ExpandBarComponent) componentContext
                 .getComponent();
 
-        String buttonId = componentContext.getComponentClientId()
+        String buttonClientId = componentContext.getComponentClientId()
                 + BUTTON_ID_SUFFIX;
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
-        htmlWriter.writeId(buttonId);
+        htmlWriter.writeId(buttonClientId);
         htmlWriter.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
         htmlWriter.writeClass(getInputClassName(htmlWriter));
 
@@ -290,7 +290,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.startElement(IHtmlWriter.LABEL);
         htmlWriter.writeClass(getLabelId(htmlWriter));
-        htmlWriter.writeFor(buttonId);
+        htmlWriter.writeFor(buttonClientId);
         htmlWriter.writeClass(getLabelClassName(htmlWriter));
         writeTextDirection(htmlWriter, expandBarComponent);
 

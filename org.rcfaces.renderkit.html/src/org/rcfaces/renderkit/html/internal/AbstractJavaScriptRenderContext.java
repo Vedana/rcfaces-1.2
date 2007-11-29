@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.log.LogService;
 import org.rcfaces.core.internal.tools.ContextTools;
@@ -48,8 +49,6 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private static final Log LOG = LogFactory
             .getLog(AbstractJavaScriptRenderContext.class);
-
-    private static final String STRING_EMPTY_ARRAY[] = new String[0];
 
     private static final String LAZY_TAG_USES_BROTHER_PARAMETER = Constants
             .getPackagePrefix()
@@ -91,9 +90,7 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private IRepository.IContext declaredFiles;
 
-    private IFile[] filesToRequire;
-
-    private Set uninitializedComponents = new HashSet();
+    private IFile[] filesToRequire = FILE_EMPTY_ARRAY;
 
     private boolean symbolsInitialized = false;
 
@@ -112,6 +109,8 @@ public abstract class AbstractJavaScriptRenderContext implements
     private boolean javaScriptStubForced;
 
     private boolean lazyTagUsesBrother = Constants.LAZY_TAG_USES_BROTHER_DEFAULT_VALUE;
+
+    private boolean transientState;
 
     public AbstractJavaScriptRenderContext(FacesContext facesContext) {
         parent = null;
@@ -155,8 +154,6 @@ public abstract class AbstractJavaScriptRenderContext implements
 
         this.filesToRequire = parent.filesToRequire;
         isRequiresPending(); // Ca calcule !
-
-        this.uninitializedComponents = new HashSet(uninitializedComponents);
     }
 
     public void computeRequires(IHtmlWriter writer,
@@ -167,16 +164,21 @@ public abstract class AbstractJavaScriptRenderContext implements
                 .addRequiredJavaScriptClassNames(writer, waitingRequiredClasses);
     }
 
-    public String[] popUnitializedComponentsClientId() {
-        if (uninitializedComponents.isEmpty()) {
-            return STRING_EMPTY_ARRAY;
+    protected IFile[] computeFilesToRequire() {
+        if (waitingRequiredClasses.isEmpty()) {
+            return FILE_EMPTY_ARRAY;
         }
 
-        String old[] = (String[]) uninitializedComponents
-                .toArray(new String[uninitializedComponents.size()]);
-        uninitializedComponents.clear();
+        // Ok on recherche les fichiers à inclure
+        IFile filesToRequire[] = repository
+                .computeFiles(waitingRequiredClasses,
+                        IJavaScriptRepository.CLASS_NAME_COLLECTION_TYPE,
+                        declaredFiles);
 
-        return old;
+        // Le declaredFiles est altéré !
+        waitingRequiredClasses.clear();
+
+        return filesToRequire;
     }
 
     public IRepository.IFile[] popRequiredFiles() {
@@ -192,25 +194,13 @@ public abstract class AbstractJavaScriptRenderContext implements
     }
 
     public boolean isRequiresPending() {
-        if (waitingRequiredClasses.isEmpty() == false) {
-
-            // Ok on recherche les fichiers à inclure
-            filesToRequire = repository.computeFiles(waitingRequiredClasses,
-                    IJavaScriptRepository.CLASS_NAME_COLLECTION_TYPE,
-                    declaredFiles);
-
-            waitingRequiredClasses.clear();
+        if (filesToRequire.length > 0) {
+            return true;
         }
 
-        if (filesToRequire == null) {
-            return false;
-        }
+        filesToRequire = computeFilesToRequire();
 
         return filesToRequire.length > 0;
-    }
-
-    public void pushUnitializedComponent(String clientId) {
-        uninitializedComponents.add(clientId);
     }
 
     public String allocateVarName() {
@@ -456,16 +446,26 @@ public abstract class AbstractJavaScriptRenderContext implements
         initializeJavaScript(writer, repository);
     }
 
-    public void restoreState(Object state) {
+    public void restoreState(FacesContext facesContext, Object state) {
         Object ret[] = (Object[]) state;
 
         initialized = ((Boolean) ret[0]).booleanValue();
         declaredFiles.restoreState(repository, ret[1]);
     }
 
-    public Object saveState() {
+    public Object saveState(FacesContext facesContext) {
+        initialized = true; // Il est forcement initialisé !
+
         return new Object[] { Boolean.valueOf(initialized),
                 declaredFiles.saveState() };
+    }
+
+    public boolean isTransient() {
+        return transientState;
+    }
+
+    public void setTransient(boolean newTransientValue) {
+        transientState = newTransientValue;
     }
 
     public Locale getUserLocale() {
@@ -476,6 +476,10 @@ public abstract class AbstractJavaScriptRenderContext implements
         userLocale = ContextTools.getUserLocale(null);
 
         return userLocale;
+    }
+
+    protected final IJavaScriptRepository getRepository() {
+        return repository;
     }
 
     public void appendRequiredClasses(Collection classNames, String className,
@@ -495,6 +499,13 @@ public abstract class AbstractJavaScriptRenderContext implements
         for (int i = 0; i < requiredClasses.length; i++) {
             classNames.add(requiredClasses[i].getName());
         }
+    }
+
+    protected static boolean isJavaScriptInitialized(FacesContext facesContext) {
+        ExternalContext externalContext = facesContext.getExternalContext();
+
+        Map requestMap = externalContext.getRequestMap();
+        return requestMap.containsKey(JAVASCRIPT_INITIALIZED_PROPERTY);
     }
 
     public static void initializeJavaScript(IJavaScriptWriter writer,
@@ -808,10 +819,6 @@ public abstract class AbstractJavaScriptRenderContext implements
             IHtmlWriter writer, IJavaScriptComponentRenderer javaScriptComponent)
             throws WriterException;
 
-    protected boolean isUnitializedComponentsPending() {
-        return uninitializedComponents.size() > 0;
-    }
-
     private static String getRequestURL(FacesContext facesContext,
             UIViewRoot viewRoot) {
 
@@ -823,5 +830,47 @@ public abstract class AbstractJavaScriptRenderContext implements
         url = externalContext.encodeActionURL(url);
 
         return url;
+    }
+
+    protected IJavaScriptWriter writeJsInitComponent(IJavaScriptWriter writer)
+            throws WriterException {
+
+        IComponentRenderContext componentRenderContext = writer
+                .getHtmlComponentRenderContext();
+
+        String componentId = componentRenderContext.getComponentClientId();
+
+        boolean declare[] = new boolean[1];
+
+        String componentVarName = writer.getComponentVarName();
+        if (componentVarName == null) {
+            componentVarName = allocateComponentVarId(componentId, declare);
+
+            writer.setComponentVarName(componentVarName);
+        } else {
+            declare[0] = true;
+        }
+
+        String cameliaClassLoader = convertSymbol("f_classLoader",
+                "_rcfacesClassLoader");
+
+        if (declare[0]) {
+            writer.write("var ").write(componentVarName);
+
+            writer.write('=').writeCall(cameliaClassLoader, "f_init");
+            writer.writeString(componentId);
+            writer.writeln(");");
+
+            return writer;
+        }
+
+        writer.writeCall(cameliaClassLoader, "f_init");
+        writer.write(componentVarName).writeln(");");
+
+        return writer;
+    }
+
+    public boolean isCollectorMode() {
+        return false;
     }
 }

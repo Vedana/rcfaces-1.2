@@ -20,13 +20,13 @@ var __statics={
 			keyPress: f_event.KEYPRESS,
 			propertyChange: f_event.PROPERTY_CHANGE,
 			user: f_event.USER
-	},
+	}
 	
-	/**
+	/*
 	 * @field private static
-	 */
+	 *
 	 _AcceleratorsByFor: undefined,
-	
+	*/
 	/*
 	 * @field hidden static final
 	 * @return Object
@@ -46,43 +46,61 @@ var __statics={
 	},
 	*/
 	
-	/**
+	/*
 	 * @method protected static
 	 * @return void
-	 */
+	 *
 	Finalizer: function() {
 		f_accelerator._AcceleratorsByFor=undefined;
 	}
+	*/
 }
 
 var __members={
 
-	f_accelerator: function() {
+	f_accelerator: function(character, virtualKeys, keyFlags, forComponent, forItemValue) {
 		this.f_super(arguments);
-
-		this._character=f_core.GetAttribute(this, "v:character", undefined);
-
-		var vk=f_core.GetAttribute(this, "v:virtualKey");
-		if (vk) {
-			this._virtualKeys = [ parseInt(vk, 10) ];
-		}
-
-		this._keyFlags = f_core.GetNumberAttribute(this, "v:keyFlags");
-
-		f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent);
-
-		var events=f_core.GetAttribute(this, "v:events");
-		if (events) {
-			this.f_initEventAtts(f_accelerator._EVENTS, events);
-		}
 		
-		var forComponent=f_core.GetAttribute(this, "v:for");
-		
-		if (forComponent) {
-			this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
-			this._forItemValue=f_core.GetAttribute(this, "v:forItemValue");
-				
-			this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);
+		if (this.nodeType==f_core.ELEMENT_NODE) {
+			// Du DOM
+			this._character=f_core.GetAttribute(this, "v:character", undefined);
+	
+			var vk=f_core.GetAttribute(this, "v:virtualKey");
+			if (vk) {
+				this._virtualKeys = [ parseInt(vk, 10) ];
+			}
+	
+			this._keyFlags = f_core.GetNumberAttribute(this, "v:keyFlags");
+	
+			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent);
+	
+			var events=f_core.GetAttribute(this, "v:events");
+			if (events) {
+				this.f_initEventAtts(f_accelerator._EVENTS, events);
+			}
+			
+			var forComponent=f_core.GetAttribute(this, "v:for");
+			
+			if (forComponent) {
+				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
+				this._forItemValue=f_core.GetAttribute(this, "v:forItemValue");
+					
+				this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);
+			}
+			
+		} else {
+			this._character=character;
+			this._virtualKeys=virtualKeys;
+			this._keyFlags=keyFlags;
+	
+			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent);
+
+			if (forComponent) {
+				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
+				this._forItemValue=forItemValue;
+					
+				this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);				
+			}
 		}
 	},
 	/*

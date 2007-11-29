@@ -288,7 +288,7 @@ var __members = {
 		// this._tabIndex=undefined; // number
 		this._overTab=undefined; // f_tab
 		// this._imageURL=undefined; // string
-		this.onresize=null;
+		// this.onresize=null; // ????
 		// this._resizeHeight=undefined; // boolean
 		// this._resizeWidth=undefined; //boolean
 		
@@ -323,6 +323,12 @@ var __members = {
 	 */
 	f_documentComplete: function() {
 		this.f_super(arguments);
+		
+		f_core.Assert(this.fa_componentUpdated, "f_tabbedPane.f_documentComplete: Component is not updated !");
+		if (!this.fa_componentUpdated) {
+			// Lors d'une erreur le documentComplete peut etre appelé !
+			return;
+		}
 		
 		if (!this._title) {
 			return;
@@ -365,6 +371,7 @@ var __members = {
 	 * @method private
 	 */
 	_resize:function() {
+		
 		var width=undefined;
 		if (this._resizeWidth) {		
 			width=this.offsetWidth+"px";
@@ -377,6 +384,8 @@ var __members = {
 			var tab=cards[i];
 
 			var _tab=tab._ccard;
+		
+			f_core.Assert(_tab, "f_tabbedPane._resize: Invalid ccard for tab#"+i+" component=#"+tab.id+"."+tab.className+" .");
 		
 		/*	
 			if (this._resizeHeight) {
@@ -806,17 +815,17 @@ var __members = {
 			// Premier !
 			
 			var tdTitleLeft=document.createElement("td");
-			trTitle.appendChild(tdTitleLeft);
+			f_core.AppendChild(trTitle, tdTitleLeft);
 			
 			var leftTTitleImage=document.createElement("img");
 			tab._leftTTitleImage=leftTTitleImage;
 			leftTTitleImage.src=blankImage;
 			leftTTitleImage.width=5;
 			leftTTitleImage.height=5;
-			tdTitleLeft.appendChild(leftTTitleImage);
+			f_core.AppendChild(tdTitleLeft, leftTTitleImage);
 			
 			tab._leftTitle=document.createElement("td");
-			trText.appendChild(tab._leftTitle);
+			f_core.AppendChild(trText, tab._leftTitle);
 			
 		} else {
 			//var tdTitleLeft=cellsTitle[cellsTitle.length-1];
@@ -826,11 +835,11 @@ var __members = {
 		}
 		
 		tab._textTTitle=document.createElement("td");		
-		trTitle.appendChild(tab._textTTitle);
+		f_core.AppendChild(trTitle, tab._textTTitle);
 	
 		var textTitle=document.createElement("td");
 		tab._textTitle=textTitle;
-		trText.appendChild(textTitle);
+		f_core.AppendChild(trText, textTitle);
 
 		textTitle._tab=tab;
 		textTitle.onclick=f_tabbedPane._TabbedPane_click;
@@ -839,7 +848,7 @@ var __members = {
 		
 		var textLink=document.createElement("a");
 		tab._textLink=textLink;
-		textTitle.appendChild(textLink);
+		f_core.AppendChild(textTitle, textLink);
 		
 		if (accessKey && f_core.IsInternetExplorer()) {
 			// Il faut positionner l'accessKey !
@@ -855,7 +864,7 @@ var __members = {
 			icon.border=0;
 			icon.className="f_tabbedPane_titleIcon";
 
-			textLink.appendChild(icon);
+			f_core.AppendChild(textLink, icon);
 		}
 		
 		if (text) {
@@ -876,17 +885,17 @@ var __members = {
 		textLink.href=f_core.JAVASCRIPT_VOID;
 	
 		var tdTitleRight=document.createElement("td");
-		trTitle.appendChild(tdTitleRight);
+		f_core.AppendChild(trTitle, tdTitleRight);
 
 		var rightTTitleImage=document.createElement("img");
 		tab._rightTTitleImage=rightTTitleImage;
 		rightTTitleImage.src=blankImage;
 		rightTTitleImage.width=5;
 		rightTTitleImage.height=5;
-		tdTitleRight.appendChild(rightTTitleImage);		
+		f_core.AppendChild(tdTitleRight, rightTTitleImage);		
 		
 		tab._rightTitle=document.createElement("td");
-		trText.appendChild(tab._rightTitle);
+		f_core.AppendChild(trText, tab._rightTitle);
 		
 		this.f_updateCardStyle(tab);
 	},

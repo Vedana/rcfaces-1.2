@@ -8,12 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
+import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.BasicContentModel;
 
@@ -100,6 +106,12 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     private transient IFileBuffer fileBuffer;
 
+    private boolean sourceInfoRecorded = false;
+
+    private long sourceLastModified;
+
+    private long sourceLength;
+
     public AbstractOperationContentModel(String resourceURL,
             String contentType, String versionId, String operationId,
             String filterParametersToParse, Map attributes,
@@ -180,10 +192,14 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     public Object getAdapter(Class adapter, Object parameter) {
         if (IResolvedContent.class.equals(adapter)) {
-            return this;
+            return getResolvedContent();
         }
 
         return null;
+    }
+
+    protected IResolvedContent getResolvedContent() {
+        return this;
     }
 
     public boolean isProcessAtRequest() {
@@ -210,14 +226,6 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return getFileBuffer().getContent();
     }
 
-    public long getModificationDate() {
-        return getFileBuffer().getModificationDate();
-    }
-
-    public int getLength() {
-        return getFileBuffer().getSize();
-    }
-
     public IBufferOperation getBufferOperation(FacesContext facesContext) {
         if (bufferOperation != null) {
             return bufferOperation;
@@ -241,6 +249,14 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         return operationId;
     }
 
+    public long getModificationDate() {
+        return getFileBuffer().getModificationDate();
+    }
+
+    public int getLength() {
+        return getFileBuffer().getSize();
+    }
+
     public String getETag() {
         return getFileBuffer().getETag();
     }
@@ -259,6 +275,89 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     public void setVersioned(boolean versioned) {
         this.versioned = versioned;
+    }
+
+    public void appendHashInformations(StringAppender sa) {
+        loadSourceInfos(null);
+
+        if (sourceLastModified > 0) {
+            sa.append(sourceLastModified);
+        }
+
+        if (sourceLength > 0) {
+            sa.append(sourceLength);
+        }
+    }
+
+    private synchronized void loadSourceInfos(FacesContext facesContext) {
+        if (sourceInfoRecorded) {
+            return;
+        }
+        sourceInfoRecorded = true;
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        IResourceLoaderFactory resourceLoaderFactory = getResourceLoaderFactory(facesContext);
+
+        ExternalContext externalContext = facesContext.getExternalContext();
+
+        HttpServletRequest request = (HttpServletRequest) externalContext
+                .getRequest();
+        HttpServletResponse response = (HttpServletResponse) externalContext
+                .getResponse();
+        ServletContext context = (ServletContext) externalContext.getContext();
+
+        IResourceLoader resourceLoader = resourceLoaderFactory.loadResource(
+                context, request, response, getResourceURL());
+
+        sourceLastModified = resourceLoader.getLastModified();
+        sourceLength = resourceLoader.getContentLength();
+    }
+
+    protected abstract IResourceLoaderFactory getResourceLoaderFactory(
+            FacesContext facesContext);
+
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime
+                * result
+                + ((filterParametersToParse == null) ? 0
+                        : filterParametersToParse.hashCode());
+        result = prime * result
+                + ((operationId == null) ? 0 : operationId.hashCode());
+        result = prime * result
+                + ((resourceURL == null) ? 0 : resourceURL.hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final AbstractOperationContentModel other = (AbstractOperationContentModel) obj;
+        if (filterParametersToParse == null) {
+            if (other.filterParametersToParse != null)
+                return false;
+        } else if (!filterParametersToParse
+                .equals(other.filterParametersToParse))
+            return false;
+        if (operationId == null) {
+            if (other.operationId != null)
+                return false;
+        } else if (!operationId.equals(other.operationId))
+            return false;
+        if (resourceURL == null) {
+            if (other.resourceURL != null)
+                return false;
+        } else if (!resourceURL.equals(other.resourceURL))
+            return false;
+        return true;
     }
 
 }

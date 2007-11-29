@@ -21,7 +21,7 @@ var __statics = {
 	 * @method private static
 	 */
 	_AddText: function(container, text) {
-		container.appendChild(container.ownerDocument.createTextNode(text));	
+		f_core.AppendChild(container, container.ownerDocument.createTextNode(text));	
 	},
 	
 	/**
@@ -59,9 +59,9 @@ var __statics = {
 			button.title=tooltip;
 		}
 		
-		button.appendChild(doc.createTextNode(text));
+		f_core.AppendChild(button, doc.createTextNode(text));
 		
-		container.appendChild(button);
+		f_core.AppendChild(container, button);
 		
 		var buttons=dataPager._buttons;
 		if (!buttons) {
@@ -530,7 +530,7 @@ var __members = {
 				f_pager._AddText(component, message.substring(idx, next));
 			}
 			
-			component.appendChild(component.ownerDocument.createElement("br"));
+			f_core.AppendChild(component, component.ownerDocument.createElement("br"));
 			
 			idx=next+1;
 		}

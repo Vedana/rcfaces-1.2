@@ -134,20 +134,6 @@ public class TabRenderer extends CardRenderer {
             pred++;
         }
 
-        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
-
-        if (selected == false) {
-            if (htmlRenderContext.isAsyncRenderEnable()) {
-                asyncRender = htmlRenderContext.getAsyncRenderMode(tabbedPane);
-
-                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    htmlRenderContext.pushInteractiveRenderComponent(writer);
-                }
-            }
-        }
-
-        setAsyncRenderer(writer, tab, asyncRender);
-
         if (tab.isDisabled(facesContext)) {
             for (; pred > 0; pred--) {
                 js.write(',').writeNull();
@@ -194,6 +180,20 @@ public class TabRenderer extends CardRenderer {
         }
 
         js.writeln(");");
+
+        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
+
+        if (selected == false) {
+            if (htmlRenderContext.isAsyncRenderEnable()) {
+                asyncRender = htmlRenderContext.getAsyncRenderMode(tabbedPane);
+
+                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
+                    htmlRenderContext.pushInteractiveRenderComponent(writer, null);
+                }
+            }
+        }
+
+        setAsyncRenderer(writer, tab, asyncRender);
 
         return asyncRender;
     }

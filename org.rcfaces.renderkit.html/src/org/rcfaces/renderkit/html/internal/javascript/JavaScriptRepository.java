@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,6 +43,8 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
     private static final IClass[] CLASS_EMPTY_ARRAY = new IClass[0];
 
     private static final String JAVASCRIPT_BASE_URI_PROPERTY = "org.rfaces.core.repository.JAVASCRIPT_BASE_URI";
+
+    private static final boolean KEEP_LANGUAGE_LOCALE = false;
 
     private final Map classByName = new HashMap();
 
@@ -136,6 +139,18 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
             classes.add(name);
         }
+    }
+
+    protected Locale adaptLocale(Locale locale, IFile file) {
+        if (KEEP_LANGUAGE_LOCALE) {
+            if (locale != null
+                    && (locale.getCountry().length() > 0 || locale.getVariant()
+                            .length() > 0)) {
+                locale = new Locale(locale.getLanguage());
+            }
+        }
+
+        return super.adaptLocale(locale, file);
     }
 
     protected void addRules(Digester digester, Object container) {

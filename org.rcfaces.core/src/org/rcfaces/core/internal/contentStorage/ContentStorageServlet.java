@@ -184,6 +184,11 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
             return;
         }
 
+        if (resolvedContent instanceof IResolvedContentWrapper) {
+            resolvedContent = ((IResolvedContentWrapper) resolvedContent)
+                    .getResolvedContent();
+        }
+
         long modificationDate = resolvedContent.getModificationDate();
         if (modificationDate > 0) {
             modificationDate -= (modificationDate % 1000);
@@ -227,6 +232,15 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
             }
         }
 
+        if (resolvedContent instanceof IGzippedResolvedContent) {
+            IGzippedResolvedContent gzippedResolvedContent = (IGzippedResolvedContent) resolvedContent;
+
+            if (hasGzipSupport(request) == false
+                    || gzippedResolvedContent.isGzipped() == false) {
+                resolvedContent = gzippedResolvedContent.getSource();
+            }
+        }
+
         String hash = resolvedContent.getHash();
         if (different == false && hash != null) {
             String isHash = request.getHeader(HTTP_IF_NOT_HASH);
@@ -262,6 +276,10 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                     return;
                 }
             }
+        }
+
+        if (resolvedContent instanceof IGzippedResolvedContent) {
+            setGzipContentEncoding(response);
         }
 
         String contentType = resolvedContent.getContentType();

@@ -57,7 +57,7 @@ var __statics = {
 					body.style.width=dataGridPopup._popupWidth+"px";
 					body.style.height=dataGridPopup._popupHeight+"px";
 	
-					pdoc.body.appendChild(body);
+					f_core.AppendChild(pdoc.body, body);
 
 					dataGridPopup._popup=popup;
 				
@@ -84,7 +84,7 @@ var __statics = {
 			
 			var parent=dataGridPopup;
 			
-			parent.ownerDocument.body.appendChild(popup);
+			f_core.AppendChild(parent.ownerDocument.body, popup);
 
 			dataGridPopup._popup=popup;
 		
@@ -254,7 +254,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @param Event evt
+	 * @param Event jsEvent
 	 * @return boolean
 	 * @context object:dataGridPopup
 	 */
@@ -274,7 +274,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @param Event evt
+	 * @param Event jsEvent
 	 * @return boolean
 	 * @context object:dataGridPopup
 	 */
@@ -736,7 +736,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event jsEvt
-	 * @return boolean 
+	 * @return void 
 	 */
 	_onSearchClick: function(jsEvt) {
 		var timerId=this._timerId;

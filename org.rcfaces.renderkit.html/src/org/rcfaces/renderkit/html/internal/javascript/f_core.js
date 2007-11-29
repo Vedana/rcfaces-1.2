@@ -20,27 +20,27 @@ var f_core = {
 	/**
 	 * @field private static final String
 	 */
-	_COMPONENT:	"VFC_COMPONENT",
+	_COMPONENT:			"VFC_COMPONENT",
 
 	/**
 	 * @field private static final String
 	 */
-	_EVENT: 	"VFC_EVENT",
+	_EVENT: 			"VFC_EVENT",
 
 	/**
 	 * @field private static final String
 	 */
-	_VALUE:		"VFC_VALUE",
+	_VALUE:				"VFC_VALUE",
 
 	/**
 	 * @field private static final String
 	 */
-	_ITEM:		"VFC_ITEM",
+	_ITEM:				"VFC_ITEM",
 
 	/**
 	 * @field private static final String
 	 */
-	_DETAIL:	"VFC_DETAIL",
+	_DETAIL:			"VFC_DETAIL",
 		
 	/**
 	 * @field private static final number
@@ -182,7 +182,7 @@ var f_core = {
 	_FocusTimeoutID: undefined,
 	
 	/**
-	 * @field private static HTMLComponent
+	 * @field private static HTMLElement
 	 */
 	_FocusComponent: undefined,
 	
@@ -213,6 +213,12 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @param number level
+	 * @param String name
+	 * @param String message
+	 * @param optional Error exception
+	 * @param optional Window win
+	 * @return void
 	 */
 	_AddLog: function(level, name, message, exception, win) {
 		if (!win) {
@@ -223,6 +229,7 @@ var f_core = {
 			window.rcfacesLogCB.apply(window, arguments);
 			return;
 		}
+		
 		if (f_core._Logging) {
 			if (exception) {
 				throw exception;
@@ -231,7 +238,8 @@ var f_core = {
 				window.status="Exception: "+message;
 			}
 			return;
-		}	
+		}
+			
 		try {
 			f_core._Logging=true;
 
@@ -609,40 +617,42 @@ var f_core = {
 		var profilerCB=win.rcfacesProfilerCB;
 		var logCB=win.rcfacesLogCB;
 
-		if (window._rcfacesMultiWindowMode!==false) {
-			if (window._rcfacesMultiWindowClassLoader===true && !f_core._multiWindowCore) {
+		if (window._rcfacesMultiWindowMode!==false && window._RCFACES_LEVEL3 && window._rcfacesMultiWindowClassLoader===true && !f_core._multiWindowCore) { 
 				// Il faut copier les members de CORE pour les retrouver !
-				
-				var kmethods=new Object;
-				f_core._kmethods=kmethods;
-				
-				for(var memberName in f_core) {
-					kmethods[memberName]=f_core[memberName];
-				}
+								
+			var methods=new Object;
+			for(var memberName in f_core) {
+				methods[memberName]=f_core[memberName];
 			}
 
-			try {
-				for(var w=win;w && w.parent!=w;w=w.parent) {
-					var f=w.parent.rcfacesProfilerCB
-					if (!f) {
-						f=w.parent.f_profilerCB; // Legacy !
-					}
-					
-					if (f) {
-						profilerCB=f;
-						win.rcfacesProfilerCB=profilerCB;
-					}
-					
-					f=w.parent.rcfacesLogCB
-					if (f) {
-						logCB=f;
-						win.rcfacesLogCB=logCB;
-					}
-				}
-			} catch (x) {
-				// Il y aura peut etre des problemes de sécurité ... on laisse tomber !
-			}
+			var kmethods=function() {};
+			f_core._kmethodsPrototype=kmethods;
+			kmethods.prototype=methods;
 		}
+
+
+		try {
+			for(var w=win;w && w.parent!=w;w=w.parent) {
+				var f=w.parent.rcfacesProfilerCB
+				if (!f) {
+					f=w.parent.f_profilerCB; // Legacy !
+				}
+				
+				if (f) {
+					profilerCB=f;
+					win.rcfacesProfilerCB=profilerCB;
+				}
+				
+				f=w.parent.rcfacesLogCB;
+				if (f) {
+					logCB=f;
+					win.rcfacesLogCB=logCB;
+				}
+			}
+		} catch (x) {
+			// Il y aura peut etre des problemes de sécurité ... on laisse tomber !
+		}
+		
 				
 		f_core.Info(f_core, "_InitLibrary: start date="+initDate);
 		
@@ -1012,6 +1022,10 @@ var f_core = {
 				return;
 			}
 		}
+
+		if (win._rcfacesExiting) {
+			return;
+		}
 	
 		f_core.ExitWindow(win);
 	},
@@ -1110,7 +1124,8 @@ var f_core = {
 		f_core._FocusComponent=undefined; // HTMLElement
 		f_core._PostSubmitListeners=undefined; // List<function>
 		f_core._FocusTimeoutID=undefined; // any ???
-		f_core._kmethods=undefined; // Map<name, object>
+		f_core._kmethodsPrototype=undefined; // Map<name, object>
+		f_core._CachedForm=undefined; // HTMLFormElement
 	},
 	/**
 	 * @method hidden static
@@ -1180,21 +1195,30 @@ var f_core = {
 	GetParentForm: function(elt) {
 		f_core.Assert(elt.ownerDocument, "f_core.GetParentForm: Invalid parameter element ("+elt+")");
 	
+		var form=f_core._CachedForm;
+		if (form!==undefined) {
+			return form;
+		}
+	
 		// Optimisation s'il n'y a qu'une seule form !
 		var forms=elt.ownerDocument.forms;
 		switch(forms.length) {
 		case 0:
 			f_core.Debug(f_core, "GetParentForm: No form into document !");
+			f_core._CachedForm=null;
 			return null;
 
 		case 1:
 //			f_core.Debug(f_core, "GetParentForm: Only one form into document, returns "+forms[0].id);
-			return forms[0];
+
+			form=forms[0];
+			f_core._CachedForm=form;
+			return form;
 		}
 	
-		for(var f=elt;f;f=f.parentNode) {
-			var tagName=f.tagName;
-			if (!tagName || f.nodeType!=f_core.ELEMENT_NODE) {
+		for(form=elt;form;form=form.parentNode) {
+			var tagName=form.tagName;
+			if (form.nodeType!=f_core.ELEMENT_NODE || !tagName) {
 				continue;
 			}
 			
@@ -1204,7 +1228,7 @@ var f_core = {
 			
 			f_core.Debug(f_core, "GetParentForm: Parent form of '"+elt.id+"': "+f.id);
 			
-			return f;
+			return form;
 		}
 
 		f_core.Debug(f_core, "GetParentForm: Can not find any parent form for component '"+elt.id+"'.");
@@ -1227,7 +1251,7 @@ var f_core = {
 	},
 	/**
 	 * @method static hidden
-	 * @param HTLMElement parent
+	 * @param HTMLElement parent
 	 * @param String tagName
 	 * @param Object properties
 	 * @return HTMLElement
@@ -1290,7 +1314,7 @@ var f_core = {
 						break;
 					
 					default:	
-						if (!name.indexOf("css")) {
+						if (!name.indexOf("css")) { /* ==0 !!! */
 							element.style[name.substring(3, 4).toLowerCase()+name.substring(4)]=value;
 							break;
 						}
@@ -1561,6 +1585,14 @@ var f_core = {
 			
 			if (!win._rcfacesSubmitting) {
 				f_core._PostSubmit(form);
+
+				if (win._rcfacesCleanUpOnSubmit) {
+					win.setTimeout(function () {
+						if (win.f_core && win.f_core.ExitWindow) {
+							win.f_core.ExitWindow(win);
+						}
+					}, 50);
+				}
 			}
 				
 			return true;
@@ -1744,8 +1776,16 @@ var f_core = {
 
 				} else {
 					f_core._PostSubmit(form);
+								
+					if (win._rcfacesCleanUpOnSubmit) {
+						win.setTimeout(function () {
+							if (win.f_core && win.f_core.ExitWindow) {
+								win.f_core.ExitWindow(win);
+							}
+						}, 50);
+					}
 				}
-				
+								
 			} catch (ex) {
 				// Dans le cas d'une exception, on libere les evenements, mais on renvoie l'exception ...
 				unlockEvents=true;
@@ -2388,14 +2428,14 @@ var f_core = {
 		
 		f_core.Assert(doc, "f_core.GetWindow: Can not find window of component '"+elt+"'.");
 		
-		view=doc.defaultView; // DOM Level 2
+		view=doc.defaultView; // DOM Level 2  (Firefox)
 		if (view) { 
 			return view;
 		}
 		
 		f_core.Assert(doc.parentWindow, "f_core.GetWindow: Invalid document: "+doc);
 		
-		return doc.parentWindow;
+		return doc.parentWindow; // (IE)
 	},
 	/**
 	 * @method private static
@@ -2518,7 +2558,7 @@ var f_core = {
 	 *
 	 * @method public static
 	 * @param String id The identifier of the component. (naming separator is ':')
-	 * @param optional Document doc The document.
+	 * @param optional HTMLDocument doc The document.
 	 * @return HTMLElement
 	 */
 	FindComponent: function(id, doc) {
@@ -2536,10 +2576,12 @@ var f_core = {
 	 *
 	 * @method public static
 	 * @param String id  The identifier of the component. (naming separator might not be is ':')
+	 * @param optional HTMLDocument document
+	 * @param hidden optional boolean noCompleteComponent
 	 * @deprecated Replaced by f_core.GetElementByClientId() .
 	 * @return HTMLElement
 	 */
-	GetElementById: function(id, doc, noCompleteComponent) {
+	GetElementById: function(id, document, noCompleteComponent) {
 		return f_core.GetElementByClientId.apply(f_core, arguments);
 	},
 	/**
@@ -2547,8 +2589,8 @@ var f_core = {
 	 *
 	 * @method public static
 	 * @param String id  The identifier of the component. (naming separator might not be is ':')
-	 * @param optional Document doc Document.
-	 * @param hidden boolean noCompleteComponent Dont complete component !
+	 * @param optional HTMLDocument doc Document.
+	 * @param hidden optional boolean noCompleteComponent Dont complete component !
 	 * @return HTMLElement
 	 */
 	GetElementByClientId: function(id, doc, noCompleteComponent) {
@@ -2688,6 +2730,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param HTMLElement component
 	 * @return boolean
 	 */
 	ForceComponentVisibility: function(component) {
@@ -2839,6 +2882,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @return boolean
 	 */
 	IsGeckoDisableDispatchKeyEvent: function() {
 		if (!f_core.IsGecko()) {
@@ -3003,6 +3047,17 @@ var f_core = {
 		return false;
 	},
 	/**
+	 * @method static hidden
+	 * @pararm Object target
+	 * @return void
+	 */
+	CopyCoreFields: function(target) {
+		target._browser=f_core._browser;
+		target._browser_major=f_core._browser_major;
+		target._browser_release=f_core._browser_release;
+		target._browser_minor=f_core._browser_minor;		
+	},
+	/**
 	 * @method hidden static
 	 * @param Event evt Javascript event
 	 * @return boolean
@@ -3040,6 +3095,8 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param Event evt
+	 * @return boolean
 	 * @context event:evt
 	 */
 	CancelJsEvent: function(evt) {
@@ -3069,8 +3126,8 @@ var f_core = {
 	 * Returns the size of the View.
 	 *
 	 * @method public static 
-	 * @param optional Object values
-	 * @param optional Document doc
+	 * @param optional Object values Object which will contain the result or <code>null</code>.
+	 * @param optional HTMLDocument doc
 	 * @return Object Object which defines 2 fields: width and height 
 	 */
 	GetViewSize: function(values, doc) {
@@ -3090,7 +3147,6 @@ var f_core = {
 		}
 		
 		if (f_core.IsInternetExplorer()) {
-			
 			var docElement=doc.documentElement;
 			
 			if (docElement && docElement.clientWidth) {
@@ -3157,6 +3213,8 @@ var f_core = {
 
 		var ie=f_core.IsInternetExplorer();		
 		
+		var width=(ie)?"Width":"-width";
+		
 		for(var i=1;i<arguments.length;i++) {
 			side=arguments[i];
 
@@ -3177,7 +3235,7 @@ var f_core = {
 				length+=parseInt(padding);
 			}
 		
-			var border=f_core.GetCurrentStyleProperty(component, "border"+side);
+			var border=f_core.GetCurrentStyleProperty(component, "border"+side+width);
 			if (border && border.indexOf("px")>0) {
 				length+=parseInt(border);
 			}
@@ -3350,11 +3408,11 @@ var f_core = {
 			return;
 		}
 	},
-	/**
+	/*
 	 * Returns the position of the Window.
 	 *
 	 * @method public static 
-	 * @param optional Document doc
+	 * @param optional HTMLDocument doc
 	 * @return Object Object which defines 2 fields: x and y 
 	 */
 	GetViewPosition: function(doc) {
@@ -3381,7 +3439,7 @@ var f_core = {
 	 *
 	 * @method hidden static 
 	 * @param Event event
-	 * @param optional Document doc
+	 * @param optional HTMLDocument doc
 	 * @return number[]
 	 */
 	GetJsEventPosition: function(event, doc) {
@@ -5241,7 +5299,32 @@ var f_core = {
 			f_core.Info(f_core, "ShowComponent: can not change scroll position !", x);
 		}
 	},
-	
+	/**
+	 * @method hidden static
+	 * @param HTMLElement parent
+	 * @param HTMLElement child
+	 * @return void
+	 */
+	AppendChild: function(parent, child) {
+		f_core.Assert(parent.ownerDocument==child.ownerDocument, "f_core.AppendChild: Different owner document. (parent, child)");
+		f_core.Assert(parent.ownerDocument.location, "f_core.AppendChild: Invalid parent. (invalid document)");
+		
+		parent.appendChild(child);
+	},
+	/**
+	 * @method hidden static
+	 * @param HTMLElement parent
+	 * @param HTMLElement child
+	 * @param HTMLElement childBefore
+	 * @return void
+	 */
+	InsertBefore: function(parent, child, childBefore) {
+		f_core.Assert(parent.ownerDocument==child.ownerDocument, "f_core.InsertBefore: Different owner document. (parent, child)");
+		f_core.Assert(parent.ownerDocument.location, "f_core.InsertBefore: Invalid parent. (invalid document)");
+		f_core.Assert(!childBefore || child.ownerDocument==childBefore.ownerDocument, "f_core.InsertBefore: Different owner document. (child, childBefore)");
+		
+		parent.insertBefore(child, childBefore);
+	},
 	/**
 	 * @method public static
 	 * @return void
@@ -5305,7 +5388,8 @@ var f_core = {
 	},
 	/**
 	 * @method public static
-	 * @param window win
+	 * @param Window win
+	 * @return void
 	 */
 	ProfileExit: function(win) {
 		win._rcfacesNoSubmit=true;

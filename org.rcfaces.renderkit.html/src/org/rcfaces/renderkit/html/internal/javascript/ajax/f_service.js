@@ -466,6 +466,8 @@ var __members={
 			
 		} catch (x) {
 			f_core.Debug(f_service, "_sendRequest: Request exception ", x);
+			
+			throw x;
 		}
 	},
 	

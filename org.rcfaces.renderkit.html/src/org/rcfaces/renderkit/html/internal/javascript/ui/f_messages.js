@@ -126,23 +126,23 @@ var __members = {
 			var summaryLabel;
 			if (this.f_isShowSummary()) {
 				summaryLabel=document.createElement("td");
-				tr.appendChild(summaryLabel);
+				f_core.AppendChild(tr, summaryLabel);
 			}
 			
 			var detailLabel;
 			if (this.f_isShowDetail()) {		
 				detailLabel=document.createElement("td");
-				tr.appendChild(detailLabel);
+				f_core.AppendChild(tr, detailLabel);
 			}
 			
 			f_message.FillComponent(this.f_computeStyleClass(), tr, null, summaryLabel, detailLabel, message, styleMessage);
 			
-			tbody.appendChild(tr);
+			f_core.AppendChild(tbody, tr);
 		}
 		
 		if (!this._tbody) {
 			this._tbody=tbody;
-			this.appendChild(tbody);
+			f_core.AppendChild(this, tbody);
 		}
 	}
 }

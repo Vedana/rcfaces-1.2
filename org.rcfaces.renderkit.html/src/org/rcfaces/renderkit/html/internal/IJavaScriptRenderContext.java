@@ -29,27 +29,23 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
     void computeRequires(IHtmlWriter writer,
             IJavaScriptComponentRenderer renderer);
 
-    String[] popUnitializedComponentsClientId();
-
     IRepository.IFile[] popRequiredFiles();
 
     boolean isRequiresPending();
 
-    IJavaScriptRenderContext pushInteractive();
+    IJavaScriptRenderContext createChild();
 
-    void popInteractive(IJavaScriptRenderContext oldJavaScriptRenderContext);
+    void pushChild(IJavaScriptRenderContext javaScriptRenderContext,
+            IHtmlWriter htmlWriter) throws WriterException;
+
+    void popChild(IJavaScriptRenderContext javaScriptRenderContext,
+            IHtmlWriter htmlWriter) throws WriterException;
 
     String allocateVarName();
-
-    void pushUnitializedComponent(String componentId);
 
     String allocateString(String text, boolean mustDeclare[]);
 
     String allocateComponentVarId(String componentId, boolean mustDeclare[]);
-
-    void restoreState(Object state);
-
-    Object saveState();
 
     void initializeJavaScriptDocument(IJavaScriptWriter writer)
             throws WriterException;
@@ -76,4 +72,8 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
             throws WriterException;
 
     void declareLazyJavaScriptRenderer(IComponentWriter writer);
+
+    boolean isJavaScriptRendererDeclaredLazy(IComponentWriter writer);
+
+    boolean isCollectorMode();
 }

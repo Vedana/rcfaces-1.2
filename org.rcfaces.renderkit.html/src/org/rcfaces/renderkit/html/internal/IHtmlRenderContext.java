@@ -5,9 +5,11 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Set;
 
+import javax.faces.component.UIComponent;
+
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
+import org.rcfaces.core.internal.renderkit.WriterException;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -33,17 +35,18 @@ public interface IHtmlRenderContext extends IRenderContext {
 
     IHtmlProcessContext getHtmlProcessContext();
 
-    void pushInteractiveRenderComponent(IHtmlWriter writer);
+    void pushInteractiveRenderComponent(IHtmlWriter writer,
+            IJavaScriptRenderContext newJavaScriptRenderContext)
+            throws WriterException;
 
-    void popInteractiveRenderComponent();
+    void popInteractiveRenderComponent(IHtmlWriter htmlWriter)
+            throws WriterException;
 
     IJavaScriptRenderContext getJavaScriptRenderContext();
 
-    IAsyncRenderComponent getCurrentInteractiveRenderComponent();
+    UIComponent getCurrentInteractiveRenderComponent();
 
     String getCurrentInteractiveRenderComponentClientId();
-
-    Object saveRenderContextState();
 
     boolean canUseLazyTag();
 

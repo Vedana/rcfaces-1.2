@@ -122,13 +122,14 @@ var __statics = {
 		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
 	},
 
-	/**
+	/*
 	 * @method public static
 	 * @context object:validator
-	 */
+	 *
 	Filter_date: function(validator, keyCode, keyChar) {
 		return f_clientValidator.Filter_generic(validator, /[0-9\/]/, keyCode, keyChar);
 	},
+	*/
 
 	/**
 	 * @method public static
@@ -203,17 +204,18 @@ var __statics = {
 	 */
 	Filter_num: function(validator, keyCode, keyChar) {
 		var exp = "[0-9";
-		var sup = "";
 		if (validator.f_getBoolParameter("num.signed", false)) {
-			sup = validator.f_getParameter("num.negSign", "-");
+			var sup = validator.f_getParameter("num.negSign", "-");
 			exp += f_vb._BuildEscaped(sup);
 		}
-		if (validator.f_getIntParameter("num.decimal", -1) !== 0) {
-			sup = validator.f_getParameter("num.decSign");
+		if (true /*validator.f_getIntParameter("num.decimal", -1) !== 0*/) {
+			// On laisse le signe de décimal ... car sinon surprise !
+			var sup = validator.f_getParameter("num.decSign");
 			exp += f_vb._BuildEscaped(sup);
 		}
-	   	sup = validator.f_getParameter("num.sepSign");
-		exp += (f_vb._BuildEscaped(sup) + "]");
+		
+	   	var sup = validator.f_getParameter("num.sepSign");
+		exp += f_vb._BuildEscaped(sup) + "]";
 		return f_clientValidator.Filter_generic(validator, new RegExp(exp), keyCode, keyChar);
 	},
 
@@ -866,12 +868,13 @@ var __statics = {
 		var sTmp = inVal;
 		//var signed = validator.f_getBoolParameter("num.signed");
 		var decimal = validator.f_getIntParameter("num.cutDecimal", -1);
+		var showDecimal = validator.f_getIntParameter("num.decimal", -1);
 		var dec = validator.f_getParameter("num.decSign");
 		var neg = validator.f_getParameter("num.negSign","-");
 		var sep = validator.f_getParameter("num.sepSign");
 		
 		if (sep) {
-			sTmp=sTmp.replace(new RegExp(f_vb._BuildEscaped(sep), "g"), "");			
+			sTmp=sTmp.replace(new RegExp("["+f_vb._BuildEscaped(sep)+"]", "g"), "");			
 		}
 
 		var exp = "^("+ f_vb._BuildEscaped(neg) +"?)(\\d*)([" + f_vb._BuildEscaped(dec)+ "]?)(\\d*)$";
@@ -916,8 +919,13 @@ var __statics = {
 				ip=(r[2])?r[2]:"0";				
 			}
 		}
+		
+		if (showDecimal<1) {
+			showDecimal=1;
+		}
+		
 		// Retire les 0 à la fin !
-		for(;dp.length>1;) {
+		for(;dp.length>showDecimal;) {
 			if (dp.charAt(dp.length-1)!="0") {
 				break;
 			}
@@ -930,6 +938,7 @@ var __statics = {
 		
 		// Rebuild string
 		sTmp = n+ip+d+dp;
+		
 		// Math runtime uses dot as decimal separator
 		var v = parseFloat(n+ip+"."+dp);
 		validator.f_setObject(v);
@@ -1032,7 +1041,12 @@ var __statics = {
 		// Reverse the string by split to array of chars and join
 		// Replace every occurence of 3 digits pattern with and additional trailing space
 		// Reverse the string again and there it is !
-		ip = ip.split("").reverse().join("").replace(/(\d{3})/g,"$1 ").split("").reverse().join("");
+		
+		if (!sep) {
+			sep=" ";
+		}
+		
+		ip = ip.split("").reverse().join("").replace(/(\d{3})/g,"$1"+f_vb._BuildEscaped(sep.charAt(0))).split("").reverse().join("");
 		// Remove leading space if any
 		ip = ip.replace(/^(\s)/,"");
 		// Rebuild string

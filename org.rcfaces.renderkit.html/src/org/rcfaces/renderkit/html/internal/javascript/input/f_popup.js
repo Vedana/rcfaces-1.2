@@ -106,6 +106,17 @@ var __statics = {
 			popup.document._rootPopup=true;
 		}
 	},
+	DocumentComplete: function() {
+		if (f_core.IsInternetExplorer()) {
+			window.setTimeout(function() {
+				if (!document._rcfacesIEPopup) {
+					return;
+				}
+				
+				f_popup._Ie_InitializePopup(document._rcfacesIEPopup, document);			
+			},10);
+		}
+	},
 	
 	/**
 	 * @method protected static
@@ -155,6 +166,8 @@ var __statics = {
 				
 		if (useIt) {
 			var pdocument=popup.document;
+	
+			f_popup._Ie_InitializePopup(popup, doc);
 			
 			f_popup._Ie_PreparePopup(pdocument);
 
@@ -173,7 +186,7 @@ var __statics = {
 	 * @param Document doc
 	 * @param number type
 	 * @param function readyFunction
-	 * @return HtmlElement
+	 * @return HTMLElement
 	 */
 	Ie_GetPopup: function(doc, type, readyFunction) {
 		f_core.Debug(f_popup, "Ie_GetPopup: Prepare popup for document="+doc+" type="+type);
@@ -212,7 +225,7 @@ var __statics = {
 			
 			iframe.className="f_popup_iframe";
 			
-			document.body.insertBefore(iframe, document.body.firstChild);
+			f_core.InsertBefore(document.body, iframe, document.body.firstChild);
 			
 			iframe.src="about:blank";
 			
@@ -237,24 +250,34 @@ var __statics = {
 	
 		return popup;
 	},
-	/**	 * @method private static
+	/**
+	 * @method private static
+	 * @return void
 	 */
-	_Ie_CreatePopup: function(doc) {
-		var popup=doc.parentWindow.createPopup();
-				
+	_Ie_InitializePopup: function(popup, doc) {
 		var pdocument=popup.document;
+		if (pdocument._rcfacesInitializedPopup) {
+			return;
+		}
+		
+		pdocument._rcfacesInitializedPopup=true;
 		
 		var bases=doc.getElementsByTagName("BASE");
 		if (bases.length) {
 			var base=bases[bases.length-1];	// On prend le dernier !
-			
+		
 			var pbase=pdocument.createElement(base.tagName);
 			pbase.href=base.href;
 
-			pdocument.appendChild(pbase);
+			f_core.AppendChild(pdocument, pbase);
 		}
 		
-		f_core.CopyStyleSheets(pdocument, doc);
+		f_core.CopyStyleSheets(pdocument, doc);		
+	},
+	/**	 * @method private static
+	 */
+	_Ie_CreatePopup: function(doc) {
+		var popup=doc.parentWindow.createPopup();
 		
 		return popup;
 	},
@@ -532,6 +555,8 @@ var __statics = {
 		// alert("Focus !");
 	},
 	/**
+	 * @method private static
+	 * @return boolean
 	 * @context event:evt
 	 */
 	_Ie_OnMouseDown: function(evt) {
@@ -560,13 +585,14 @@ var __statics = {
 	},
 	/**
 	 * @method private static
+	 * @return boolean
 	 * @context document:this
 	 */
 	_Gecko_OnClick: function(evt) {	
 		f_core.Debug(f_popup, "OnClick: click on "+this+" target="+evt.target+"/"+evt.target.className);
 
 		if (!f_popup.Component) {
-			return;
+			return true;
 		}
 
 		if (f_core.IsPopupButton(evt)) {

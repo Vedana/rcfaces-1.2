@@ -3,10 +3,10 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,13 +21,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
+import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
 
 /**
@@ -42,13 +42,15 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private static final String META_DATA_INITIALIZED_PROPERTY = "org.rcfaces.renderkit.html.META_DATA_INITIALIZED";
 
-    protected static final String RENDER_CONTEXT = "camelia.render.html.context";
+    protected static final String RENDER_CONTEXT_PROPERTY = "camelia.render.html.context";
 
-    private static final String JAVASCRIPT_CONTEXT = "camelia.html.javascript.context";
+    private static final String JAVASCRIPT_CONTEXT_PROPERTY = "camelia.html.javascript.context";
+
+    private static final int INTERACTIVE_RENDER_COMPONENTS_INITIAL_SIZE = 4 * 3;
 
     private List interactiveRenderComponents;
 
-    private IAsyncRenderComponent lastInteractiveRenderComponent;
+    private UIComponent lastInteractiveRenderComponent;
 
     private String lastInteractiveRenderComponentClientId;
 
@@ -104,14 +106,14 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         Map requestMap = facesContext.getExternalContext().getRequestMap();
 
         javascriptRenderContext = (IJavaScriptRenderContext) requestMap
-                .get(JAVASCRIPT_CONTEXT);
+                .get(JAVASCRIPT_CONTEXT_PROPERTY);
         if (javascriptRenderContext != null) {
             return javascriptRenderContext;
         }
 
         javascriptRenderContext = allocateJavaScriptContext(facesContext);
 
-        requestMap.put(JAVASCRIPT_CONTEXT, javascriptRenderContext);
+        requestMap.put(JAVASCRIPT_CONTEXT_PROPERTY, javascriptRenderContext);
 
         return javascriptRenderContext;
     }
@@ -121,61 +123,29 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return new JavaScriptRenderContext(facesContext);
     }
 
-    static final IHtmlRenderContext getRenderContext(FacesContext context) {
-        if (context == null) {
-            context = FacesContext.getCurrentInstance();
-        }
-
-        Map requestMap = context.getExternalContext().getRequestMap();
-
-        IHtmlRenderContext renderContext = (IHtmlRenderContext) requestMap
-                .get(RENDER_CONTEXT);
-        if (renderContext != null) {
-            return renderContext;
-        }
-
-        renderContext = createRenderContext(context);
-        requestMap.put(RENDER_CONTEXT, renderContext);
-
-        return renderContext;
-    }
-
-    public static final IHtmlRenderContext restoreRenderContext(
-            FacesContext facesContext, Object state, boolean noLazyTag) {
-        HtmlRenderContext renderContext = (HtmlRenderContext) getRenderContext(facesContext);
-
-        renderContext.restoreState(state);
-
-        if (noLazyTag) {
-            renderContext.noLazyTag = true;
-        }
-
-        return renderContext;
-    }
-
-    public void restoreState(Object state) {
+    public void restoreState(FacesContext facesContext, Object state) {
         Object ret[] = (Object[]) state;
         if (ret == null) {
             return;
         }
 
-        super.restoreState(ret[0]);
+        super.restoreState(facesContext, ret[0]);
 
         if (ret[1] != null) {
             IJavaScriptRenderContext javaScriptRenderContext = getJavaScriptRenderContext();
-            javaScriptRenderContext.restoreState(ret[1]);
+            javaScriptRenderContext.restoreState(facesContext, ret[1]);
         }
 
         waiRolesNS = (String) ret[2];
     }
 
-    public Object saveRenderContextState() {
+    public Object saveState(FacesContext facesContext) {
         Object ret[] = new Object[3];
 
-        ret[0] = super.saveRenderContextState();
+        ret[0] = super.saveState(facesContext);
 
         if (javascriptRenderContext != null) {
-            ret[1] = javascriptRenderContext.saveState();
+            ret[1] = javascriptRenderContext.saveState(facesContext);
         }
 
         ret[2] = waiRolesNS;
@@ -183,29 +153,12 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return ret;
     }
 
-    /*
-     * public static final void releaseRenderContext(IRenderContext
-     * renderContext) { FacesContext facesContext =
-     * renderContext.getFacesContext();
-     * 
-     * Map requestMap = facesContext.getExternalContext().getRequestMap();
-     * 
-     * IRenderContext rc = (IRenderContext) requestMap.get(RENDER_CONTEXT); if
-     * (rc != renderContext) { return; }
-     * 
-     * requestMap.remove(RENDER_CONTEXT); }
-     */
-
-    static final IHtmlRenderContext createRenderContext(FacesContext context) {
-        HtmlRenderContext hrc = new HtmlRenderContext();
-        hrc.initialize(context);
-
-        return hrc;
-    }
-
-    public void pushInteractiveRenderComponent(IHtmlWriter writer) {
+    public void pushInteractiveRenderComponent(IHtmlWriter writer,
+            IJavaScriptRenderContext newJavaScriptRenderContext)
+            throws WriterException {
         if (interactiveRenderComponents == null) {
-            interactiveRenderComponents = new LinkedList();
+            interactiveRenderComponents = new ArrayList(
+                    INTERACTIVE_RENDER_COMPONENTS_INITIAL_SIZE);
         }
 
         interactiveRenderComponents.add(lastInteractiveRenderComponent);
@@ -215,15 +168,42 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
-        lastInteractiveRenderComponent = (IAsyncRenderComponent) componentRenderContext
-                .getComponent();
-        lastInteractiveRenderComponentClientId = componentRenderContext
-                .getComponentClientId();
+        lastInteractiveRenderComponent = componentRenderContext.getComponent();
 
-        javascriptRenderContext = javascriptRenderContext.pushInteractive();
+        if (newJavaScriptRenderContext == null) {
+            // On ne les change que si c'est un JavaScriptRenderContext imposé
+            lastInteractiveRenderComponentClientId = componentRenderContext
+                    .getComponentClientId();
+
+            newJavaScriptRenderContext = javascriptRenderContext.createChild();
+        }
+
+        javascriptRenderContext.pushChild(newJavaScriptRenderContext, writer);
+
+        javascriptRenderContext = newJavaScriptRenderContext;
     }
 
-    public IAsyncRenderComponent getCurrentInteractiveRenderComponent() {
+    public void popInteractiveRenderComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
+        if (interactiveRenderComponents.isEmpty()) {
+            throw new IllegalStateException(
+                    "No more elements into interactive render components");
+        }
+
+        lastInteractiveRenderComponent = (UIComponent) interactiveRenderComponents
+                .remove(0);
+        lastInteractiveRenderComponentClientId = (String) interactiveRenderComponents
+                .remove(0);
+
+        IJavaScriptRenderContext oldJavaScriptRenderContext = javascriptRenderContext;
+        javascriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
+                .remove(0);
+
+        oldJavaScriptRenderContext
+                .popChild(javascriptRenderContext, htmlWriter);
+    }
+
+    public UIComponent getCurrentInteractiveRenderComponent() {
         return lastInteractiveRenderComponent;
     }
 
@@ -231,31 +211,13 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return lastInteractiveRenderComponentClientId;
     }
 
-    public void popInteractiveRenderComponent() {
-        if (interactiveRenderComponents.isEmpty()) {
-            throw new IllegalStateException(
-                    "No more elements into interactive render components");
+    public void encodeEnd(IComponentWriter writer) throws WriterException {
+        if (lastInteractiveRenderComponent == writer
+                .getComponentRenderContext().getComponent()) {
+            popInteractiveRenderComponent((IHtmlWriter) writer);
         }
 
-        lastInteractiveRenderComponent = (IAsyncRenderComponent) interactiveRenderComponents
-                .remove(0);
-        lastInteractiveRenderComponentClientId = (String) interactiveRenderComponents
-                .remove(0);
-
-        IJavaScriptRenderContext oldJavaScriptRenderContext = javascriptRenderContext;
-
-        javascriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
-                .remove(0);
-
-        oldJavaScriptRenderContext.popInteractive(javascriptRenderContext);
-    }
-
-    public void encodeEnd(UIComponent component) {
-        if (lastInteractiveRenderComponent == component) {
-            popInteractiveRenderComponent();
-        }
-
-        super.encodeEnd(component);
+        super.encodeEnd(writer);
     }
 
     public boolean canUseLazyTag() {
@@ -315,21 +277,6 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         return brotherComponentId.substring(0, idx + 1) + componentId;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.render.Renderer#convertClientId(javax.faces.context.FacesContext,
-     *      java.lang.String)
-     * 
-     * public String convertClientId(FacesContext context, String clientId) {
-     * int idx = clientId.lastIndexOf(NamingContainer.SEPARATOR_CHAR); if (idx <
-     * 0 || idx == clientId.length()) { return clientId; }
-     * 
-     * String id = clientId.substring(idx + 1); if
-     * (id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) { return clientId; }
-     * 
-     * return id; }
-     */
     protected IComponentWriter createWriter(UIComponent component) {
         return new HtmlWriterImpl(this);
     }
@@ -347,7 +294,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     protected static class HtmlWriterImpl extends AbstractHtmlWriter {
         private static final String REVISION = "$Revision$";
 
-        private static final String ENABLE_JAVASCRIPT = "camelia.html.javascript.enable";
+        private static final String ENABLE_JAVASCRIPT_PROPERTY = "camelia.html.javascript.enable";
 
         private boolean javaScriptEnabled = false;
 
@@ -360,7 +307,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             super(context, responseWriter);
 
             javaScriptEnabled = ((ITransientAttributesManager) getComponent())
-                    .getTransientAttribute(ENABLE_JAVASCRIPT) != null;
+                    .getTransientAttribute(ENABLE_JAVASCRIPT_PROPERTY) != null;
         }
 
         public boolean isJavaScriptEnabled() {
@@ -375,7 +322,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
             javaScriptEnabled = true;
 
             ((ITransientAttributesManager) getComponent())
-                    .setTransientAttribute(ENABLE_JAVASCRIPT, Boolean.TRUE);
+                    .setTransientAttribute(ENABLE_JAVASCRIPT_PROPERTY,
+                            Boolean.TRUE);
         }
     }
 
@@ -389,11 +337,6 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     public boolean isAsyncRenderEnable() {
         return asyncRenderer;
-    }
-
-    public static void setMetaDataInitialized(FacesContext facesContext) {
-        facesContext.getExternalContext().getRequestMap().put(
-                META_DATA_INITIALIZED_PROPERTY, Boolean.TRUE);
     }
 
     public String getInvalidBrowserURL() {
@@ -487,6 +430,50 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         }
 
         return mode;
+    }
+
+    public static final IHtmlRenderContext restoreRenderContext(
+            FacesContext facesContext, Object state, boolean noLazyTag) {
+        HtmlRenderContext renderContext = (HtmlRenderContext) getRenderContext(facesContext);
+
+        renderContext.restoreState(facesContext, state);
+
+        if (noLazyTag) {
+            renderContext.noLazyTag = true;
+        }
+
+        return renderContext;
+    }
+
+    static final IHtmlRenderContext getRenderContext(FacesContext context) {
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+
+        Map requestMap = context.getExternalContext().getRequestMap();
+
+        IHtmlRenderContext renderContext = (IHtmlRenderContext) requestMap
+                .get(RENDER_CONTEXT_PROPERTY);
+        if (renderContext != null) {
+            return renderContext;
+        }
+
+        renderContext = createRenderContext(context);
+        requestMap.put(RENDER_CONTEXT_PROPERTY, renderContext);
+
+        return renderContext;
+    }
+
+    static final IHtmlRenderContext createRenderContext(FacesContext context) {
+        HtmlRenderContext hrc = new HtmlRenderContext();
+        hrc.initialize(context);
+
+        return hrc;
+    }
+
+    public static void setMetaDataInitialized(FacesContext facesContext) {
+        facesContext.getExternalContext().getRequestMap().put(
+                META_DATA_INITIALIZED_PROPERTY, Boolean.TRUE);
     }
 
 }

@@ -45,6 +45,8 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     private static final String NODE_ROW_ID = "#node";
 
+    private static final String FOCUS_ID_SUFFIX = "::focus";
+
     protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeBeforeDecorator(htmlWriter, componentDecorator);
@@ -115,6 +117,21 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         }
 
         htmlWriter.enableJavaScript();
+
+        htmlWriter.startElement(IHtmlWriter.A);
+        htmlWriter.writeId(componentContext.getComponentClientId()
+                + FOCUS_ID_SUFFIX);
+        htmlWriter.writeClass("f_tree_focus");
+
+        Integer tabIndex = treeComponent.getTabIndex();
+        if (tabIndex != null) {
+            htmlWriter.writeTabIndex(tabIndex.intValue());
+        } else {
+            htmlWriter.writeTabIndex(0);
+        }
+
+        htmlWriter.endElement(IHtmlWriter.A);
+
     }
 
     protected String getWAIRole() {

@@ -20,12 +20,14 @@ var __members = {
 	 * @return boolean
 	 */
 	f_isRequired: function() {
-		if (this._required===undefined) {
+		var required=this._required;
+		if (required===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._required=f_core.GetBooleanAttribute(this, "v:required", false);
+			required=f_core.GetBooleanAttribute(this, "v:required", false);
+			this._required=required;
 		}
 
-		return this._required;
+		return required;
 	},
 	/**
 	 * @method public

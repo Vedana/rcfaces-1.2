@@ -59,9 +59,11 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
+        /*
         if (button.isDisabled(facesContext)) {
             htmlWriter.writeAttribute("DISABLED");
         }
+        */
 
         if (button instanceof IRequiredCapability) {
             IRequiredCapability requiredCapability = (IRequiredCapability) button;
@@ -116,10 +118,13 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
         htmlWriter.writeClass(className + INPUT_STYLECLASS_SUFFIX);
 
+        /*
+         * On se base sur le separator !        
         if (htmlWriter.isJavaScriptEnabled() == false) {
             // Pour le FOCUS, pour retrouver le composant parent !
             htmlWriter.writeAttribute("v:container", componentClientId);
         }
+        */
 
         String accessKey = button.getAccessKey(facesContext);
         if (accessKey != null) {

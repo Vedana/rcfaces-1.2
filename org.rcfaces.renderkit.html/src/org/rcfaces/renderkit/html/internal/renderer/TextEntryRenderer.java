@@ -40,8 +40,16 @@ import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.internal.util.CommandParserIterator.ICommand;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
-import org.rcfaces.core.internal.validator.IParameter;
 import org.rcfaces.core.internal.validator.IServerConverter;
+import org.rcfaces.core.internal.validator.ITaskDescriptor;
+import org.rcfaces.core.validator.IBehaviorTask;
+import org.rcfaces.core.validator.ICheckerTask;
+import org.rcfaces.core.validator.IClientValidatorContext;
+import org.rcfaces.core.validator.IFilterTask;
+import org.rcfaces.core.validator.IFormatterTask;
+import org.rcfaces.core.validator.IOnErrorTask;
+import org.rcfaces.core.validator.IParameter;
+import org.rcfaces.core.validator.ITranslatorTask;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -67,6 +75,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     private static final String DEFAULT_VALIDATOR_REQUIRED_CLASSES[] = { "f_vb" };
 
     private static final boolean ALLOCATE_VALIDATOR_PARAMETERS = false;
+
+    private static final String VALUE_ATTRIBUTE = "camelia.validator.value";
 
     // private static final boolean ATTRIBUTE_VALIDATOR = true;
 
@@ -186,13 +196,21 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
     protected void writeValueAttributes(IHtmlWriter htmlWriter)
             throws WriterException {
+
+        String text = (String) htmlWriter.getComponentRenderContext()
+                .getAttribute(VALUE_ATTRIBUTE);
+        if (text != null) {
+            htmlWriter.writeValue(text);
+            return;
+        }
+
         TextEntryComponent textEntryComponent = (TextEntryComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        String text = convertValue(facesContext, textEntryComponent);
+        text = convertValue(facesContext, textEntryComponent);
         if (text != null) {
             htmlWriter.writeValue(text);
         }
@@ -211,11 +229,13 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
+        writeValidatorAttributes(htmlWriter); // Le validateur peut influencer
+        // sur le CSS !
+
         writeCssAttributes(htmlWriter);
 
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
-        writeValidatorAttributes(htmlWriter);
         writeValueAttributes(htmlWriter);
         writeTextDirection(htmlWriter, textEntryComponent);
         writeAlternateText(htmlWriter, textEntryComponent);
@@ -406,39 +426,307 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         htmlWriter.writeAttribute("v:clientValidator", sb.toString());
 
         if (validatorDescriptor != null) {
-            String filter = validatorDescriptor.getFilterCall();
-            if (filter != null) {
-                htmlWriter.writeAttribute("v:vFilter", filter);
+            boolean internalValue = true;
+
+            ITaskDescriptor filterTask = validatorDescriptor.getFilterTask();
+            if (filterTask != null) {
+                writeTaskDescriptor(htmlWriter, filterTask, "v:vFilter");
+
+                if (filterTask.getClientTaskExpression() != null
+                        && filterTask.getServerTask() == null) {
+                    internalValue = false;
+                }
             }
-            String translator = validatorDescriptor.getTranslatorCall();
-            if (translator != null) {
-                htmlWriter.writeAttribute("v:vTranslator", translator);
+
+            ITaskDescriptor translatorTask = validatorDescriptor
+                    .getTranslatorTask();
+            if (translatorTask != null) {
+                writeTaskDescriptor(htmlWriter, translatorTask, "v:vTranslator");
+
+                if (translatorTask.getClientTaskExpression() != null
+                        && translatorTask.getServerTask() == null) {
+                    internalValue = false;
+                }
             }
-            String checker = validatorDescriptor.getCheckerCall();
-            if (checker != null) {
-                htmlWriter.writeAttribute("v:vChecker", checker);
+
+            ITaskDescriptor checkerTask = validatorDescriptor.getCheckerTask();
+            if (checkerTask != null) {
+                writeTaskDescriptor(htmlWriter, checkerTask, "v:vChecker");
+
+                if (checkerTask.getClientTaskExpression() != null
+                        && checkerTask.getServerTask() == null) {
+                    internalValue = false;
+                }
             }
-            String formatter = validatorDescriptor.getFormatterCall();
-            if (formatter != null) {
-                htmlWriter.writeAttribute("v:vFormatter", formatter);
+
+            ITaskDescriptor formatterTask = validatorDescriptor
+                    .getFormatterTask();
+            if (formatterTask != null) {
+                writeTaskDescriptor(htmlWriter, formatterTask, "v:vFormatter");
+
+                if (formatterTask.getClientTaskExpression() != null
+                        && formatterTask.getServerTask() == null) {
+                    internalValue = false;
+                }
             }
-            String behavior = validatorDescriptor.getBehaviorCall();
-            if (behavior != null) {
-                htmlWriter.writeAttribute("v:vBehavior", behavior);
+
+            ITaskDescriptor behaviorTask = validatorDescriptor
+                    .getBehaviorTask();
+            if (behaviorTask != null) {
+                writeTaskDescriptor(htmlWriter, behaviorTask, "v:vBehavior");
+
+                if (behaviorTask.getClientTaskExpression() != null
+                        && behaviorTask.getServerTask() == null) {
+                    internalValue = false;
+                }
             }
-            String error = validatorDescriptor.getOnErrorCall();
-            if (error != null) {
-                htmlWriter.writeAttribute("v:vError", error);
+
+            ITaskDescriptor errorTask = validatorDescriptor.getOnErrorTask();
+            if (errorTask != null) {
+                writeTaskDescriptor(htmlWriter, errorTask, "v:vError");
+
+                if (errorTask.getClientTaskExpression() != null
+                        && errorTask.getServerTask() == null) {
+                    internalValue = false;
+                }
             }
-            String checkError = validatorDescriptor.getOnCheckErrorCall();
-            if (checkError != null) {
-                htmlWriter.writeAttribute("v:vCheckError", checkError);
+
+            ITaskDescriptor checkErrorTask = validatorDescriptor
+                    .getOnCheckErrorTask();
+            if (checkErrorTask != null) {
+                writeTaskDescriptor(htmlWriter, checkErrorTask, "v:vCheckError");
+
+                if (checkErrorTask.getClientTaskExpression() != null
+                        && checkErrorTask.getServerTask() == null) {
+                    internalValue = false;
+                }
             }
+
             String converter = validatorDescriptor.getConverter();
             if (converter != null) {
                 htmlWriter.writeAttribute("v:converter", converter);
             }
+
+            if (internalValue) {
+                IParameter ps[] = new IParameter[params.size() / 2];
+                int cnt = 0;
+                for (Iterator it = params.iterator(); it.hasNext();) {
+                    final String name = (String) it.next();
+                    final String value = (String) it.next();
+
+                    ps[cnt++] = new IParameter() {
+
+                        public String getName() {
+                            return name;
+                        }
+
+                        public String getValue() {
+                            return value;
+                        }
+                    };
+                }
+
+                computeInternalValue(htmlWriter, validatorDescriptor, ps);
+            }
         }
+    }
+
+    private void computeInternalValue(IHtmlWriter htmlWriter,
+            IClientValidatorDescriptor validatorDescriptor,
+            IParameter parameters[]) throws WriterException {
+        TextEntryComponent textEntryComponent = (TextEntryComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        String text = convertValue(facesContext, textEntryComponent);
+
+        IClientValidatorContext context = new ClientValidatorContext(htmlWriter
+                .getComponentRenderContext(), parameters, text);
+
+        if (text != null && text.length() > 0) {
+            IFilterTask filterTask = null;
+            ITranslatorTask translatorTask = null;
+
+            ITaskDescriptor filterTaskDescriptor = validatorDescriptor
+                    .getFilterTask();
+            if (filterTaskDescriptor != null) {
+                filterTask = (IFilterTask) filterTaskDescriptor.getServerTask();
+            }
+
+            ITaskDescriptor translatorTaskDescriptor = validatorDescriptor
+                    .getTranslatorTask();
+            if (translatorTaskDescriptor != null) {
+                translatorTask = (ITranslatorTask) translatorTaskDescriptor
+                        .getServerTask();
+            }
+
+            if (filterTask != null || translatorTask != null) {
+                char chs[] = text.toCharArray();
+
+                char out[] = new char[chs.length];
+                int newLen = 0;
+
+                boolean modified = false;
+
+                for (int i = 0; i < chs.length; i++) {
+                    char ch = chs[i];
+
+                    if (filterTask != null
+                            && filterTask.applyFilter(context, ch) == false) {
+                        modified = true;
+                        continue;
+                    }
+
+                    if (translatorTask != null) {
+                        char newCh = translatorTask
+                                .applyTranslator(context, ch);
+
+                        if (newCh != ch) {
+                            modified = true;
+                            ch = newCh;
+                        }
+                    }
+
+                    out[newLen++] = ch;
+                }
+
+                if (modified) {
+                    String newText = new String(out, 0, newLen);
+
+                    context.setInputValue(newText);
+                    context.setOutputValue(newText);
+                }
+            }
+        }
+
+        IOnErrorTask errorTask = null;
+
+        ITaskDescriptor onErrorTaskDescriptor = validatorDescriptor
+                .getOnErrorTask();
+        if (onErrorTaskDescriptor != null) {
+            // errorTask = (IOnErrorTask) onErrorTaskDescriptor.getServerTask();
+            // Pas besoin ?
+        }
+
+        boolean onError = false;
+
+        ITaskDescriptor checkerTaskDescriptor = validatorDescriptor
+                .getCheckerTask();
+        if (checkerTaskDescriptor != null && text != null) {
+            ICheckerTask checkerTask = (ICheckerTask) checkerTaskDescriptor
+                    .getServerTask();
+
+            if (checkerTask != null) {
+                String newText = checkerTask.applyChecker(context, context
+                        .getOutputValue());
+
+                if (newText != null) {
+                    context.setOutputValue(newText);
+                    context.setInputValue(newText);
+
+                    if (errorTask != null) {
+                        errorTask.performError(context,
+                                IOnErrorTask.CHECK_TASK, false);
+                    }
+
+                } else {
+                    // On error !
+                    onError = true;
+
+                    if (errorTask != null) {
+                        errorTask.performError(context,
+                                IOnErrorTask.CHECK_TASK, true);
+                    }
+
+                }
+            }
+        }
+
+        if (onError == false) {
+            ITaskDescriptor formatterTaskDescriptor = validatorDescriptor
+                    .getFormatterTask();
+            if (formatterTaskDescriptor != null && text != null) {
+                IFormatterTask formatterTask = (IFormatterTask) formatterTaskDescriptor
+                        .getServerTask();
+
+                if (formatterTask != null) {
+                    String newText = formatterTask.applyFormatter(context,
+                            context.getOutputValue());
+
+                    if (newText != null) {
+                        context.setOutputValue(newText);
+
+                        if (errorTask != null) {
+                            errorTask.performError(context,
+                                    IOnErrorTask.FORMATTER_TASK, false);
+                        }
+
+                    } else {
+                        // On error !
+                        onError = true;
+
+                        if (errorTask != null) {
+                            errorTask.performError(context,
+                                    IOnErrorTask.FORMATTER_TASK, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (onError == false) {
+            // Normalement, meme avec une erreur on appelle le Behavior
+            ITaskDescriptor behaviorTaskDescriptor = validatorDescriptor
+                    .getBehaviorTask();
+            if (behaviorTaskDescriptor != null) {
+                IBehaviorTask behaviorTask = (IBehaviorTask) checkerTaskDescriptor
+                        .getServerTask();
+
+                if (behaviorTask != null) {
+                    if (behaviorTask.applyBehavior(context, context
+                            .getOutputValue())) {
+
+                        if (errorTask != null) {
+                            errorTask.performError(context,
+                                    IOnErrorTask.BEHAVIOR_TASK, false);
+                        }
+
+                    } else {
+                        // On error !
+                        onError = true;
+
+                        if (errorTask != null) {
+                            errorTask.performError(context,
+                                    IOnErrorTask.BEHAVIOR_TASK, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (onError) {
+            // Pas de raccourci s'il y a des erreurs !
+            return;
+        }
+
+        htmlWriter.writeAttribute("v:internalValue", context.getInput());
+
+        htmlWriter.getComponentRenderContext().setAttribute(VALUE_ATTRIBUTE,
+                context.getOutputValue());
+    }
+
+    protected void writeTaskDescriptor(IHtmlWriter htmlWriter,
+            ITaskDescriptor filter, String attributeName)
+            throws WriterException {
+
+        String expression = filter.getClientTaskExpression();
+        if (expression == null || expression.length() < 1) {
+            return;
+        }
+
+        htmlWriter.writeAttribute(attributeName, expression);
     }
 
     /*
@@ -491,10 +779,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
     }
 
-    protected final void writeClientValidator(IJavaScriptWriter htmlWriter)
+    protected final void writeClientValidator(IJavaScriptWriter jsWriter)
             throws WriterException {
 
-        IComponentRenderContext componentRenderContext = htmlWriter
+        IComponentRenderContext componentRenderContext = jsWriter
                 .getHtmlComponentRenderContext();
 
         CommandParserIterator.ICommand command = (ICommand) componentRenderContext
@@ -522,14 +810,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 }
 
                 if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    name = htmlWriter.allocateString(name);
+                    name = jsWriter.allocateString(name);
                 }
                 params.add(name);
 
                 String value = parameter.getValue();
                 // Value peut etre null !
                 if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    value = htmlWriter.allocateString(value);
+                    value = jsWriter.allocateString(value);
                 }
                 params.add(value);
             }
@@ -539,22 +827,22 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
                 String name = parameter.getName();
                 if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    name = htmlWriter.allocateString(name);
+                    name = jsWriter.allocateString(name);
                 }
                 params.add(name);
 
                 String value = parameter.getValue();
                 // Value peut etre null !
                 if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    value = htmlWriter.allocateString(value);
+                    value = jsWriter.allocateString(value);
                 }
                 params.add(value);
             }
 
         }
 
-        htmlWriter.write("var validator=").writeCall("f_clientValidator",
-                "f_newInstance").write(htmlWriter.getComponentVarName());
+        jsWriter.write("var validator=").writeCall("f_clientValidator",
+                "f_newInstance").write(jsWriter.getComponentVarName());
 
         if (params.isEmpty() == false) {
             int pred = 0;
@@ -568,56 +856,61 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 }
 
                 for (; pred > 0; pred--) {
-                    htmlWriter.write(',').writeNull();
+                    jsWriter.write(',').writeNull();
                 }
 
-                htmlWriter.write(',');
+                jsWriter.write(',');
                 if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    htmlWriter.write(value);
+                    jsWriter.write(value);
 
                 } else {
-                    htmlWriter.writeString(value);
+                    jsWriter.writeString(value);
                 }
             }
         }
 
-        htmlWriter.writeln(");");
+        jsWriter.writeln(");");
 
-        String filter = validatorDescriptor.getFilterCall();
+        ITaskDescriptor filter = validatorDescriptor.getFilterTask();
         if (filter != null) {
-            htmlWriter.writeCall("validator", "f_addFilter")
-                    .writeSymbol(filter).writeln(");");
+            writeTaskDescriptor(jsWriter, filter, "f_addFilter");
         }
-        String translator = validatorDescriptor.getTranslatorCall();
+        ITaskDescriptor translator = validatorDescriptor.getTranslatorTask();
         if (translator != null) {
-            htmlWriter.writeCall("validator", "f_addTranslator").writeSymbol(
-                    translator).writeln(");");
+            writeTaskDescriptor(jsWriter, translator, "f_addTranslator");
         }
-        String checker = validatorDescriptor.getCheckerCall();
+        ITaskDescriptor checker = validatorDescriptor.getCheckerTask();
         if (checker != null) {
-            htmlWriter.writeCall("validator", "f_addChecker").writeSymbol(
-                    checker).writeln(");");
+            writeTaskDescriptor(jsWriter, checker, "f_addChecker");
         }
-        String formatter = validatorDescriptor.getFormatterCall();
+        ITaskDescriptor formatter = validatorDescriptor.getFormatterTask();
         if (formatter != null) {
-            htmlWriter.writeCall("validator", "f_addFormatter").writeSymbol(
-                    formatter).writeln(");");
+            writeTaskDescriptor(jsWriter, formatter, "f_addFormatter");
         }
-        String behavior = validatorDescriptor.getBehaviorCall();
+        ITaskDescriptor behavior = validatorDescriptor.getBehaviorTask();
         if (behavior != null) {
-            htmlWriter.writeCall("validator", "f_addBehavior").writeSymbol(
-                    behavior).writeln(");");
+            writeTaskDescriptor(jsWriter, behavior, "f_addBehavior");
         }
-        String error = validatorDescriptor.getOnErrorCall();
+        ITaskDescriptor error = validatorDescriptor.getOnErrorTask();
         if (error != null) {
-            htmlWriter.writeCall("validator", "f_addOnError")
-                    .writeSymbol(error).writeln(");");
+            writeTaskDescriptor(jsWriter, error, "f_addOnError");
         }
-        String checkError = validatorDescriptor.getOnCheckErrorCall();
+        ITaskDescriptor checkError = validatorDescriptor.getOnCheckErrorTask();
         if (checkError != null) {
-            htmlWriter.writeCall("validator", "f_addOnCheckError").writeSymbol(
-                    checkError).writeln(");");
+            writeTaskDescriptor(jsWriter, checkError, "f_addOnCheckError");
         }
+    }
+
+    protected void writeTaskDescriptor(IJavaScriptWriter jsWriter,
+            ITaskDescriptor filter, String command) throws WriterException {
+
+        String call = filter.getClientTaskExpression();
+        if (call == null) {
+            return;
+        }
+
+        jsWriter.writeCall("validator", command).writeSymbol(call)
+                .writeln(");");
     }
 
     protected String getJavaScriptClassName() {

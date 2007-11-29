@@ -18,11 +18,14 @@ var __members={
 			this._forValueFormat=f_core.GetAttribute(this, "v:forValueFormat");
 		}
 	},
+	/*
 	f_finalize: function() {
-		this._initialSelection=undefined; // any ?
-	
+		// this._forComponent=undefined; // String
+		// this._forValueFormat=undefined; // String
+
 		this.f_super(arguments);
 	},
+	*/
 	f_imageButtonSelect: function(event) {
 		f_core.Debug(f_dateChooser, "f_imageButtonSelect: "+event+" detail="+event.f_getDetail());
 

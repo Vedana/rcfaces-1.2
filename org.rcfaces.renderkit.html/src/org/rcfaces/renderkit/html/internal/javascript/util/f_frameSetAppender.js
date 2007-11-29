@@ -40,7 +40,8 @@ var __statics={
 				
 				uri=link.href.substring(0, idx);
 			}
-			if (!uri) {
+			
+			if (!uri || window.top!=window) {
 				return;
 			}
 			

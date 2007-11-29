@@ -98,7 +98,7 @@ var __statics = {
 	/**
 	 * @method hidden static
 	 * @param String textEditorId
-	 * @param f_textEditorButton button
+	 * @param f_textEditorImageButton button
 	 * @return void
 	 */
 	RegisterTextEditorButton: function(textEditorId, button) {
@@ -129,7 +129,7 @@ var __statics = {
 	/**
 	 * @method hidden static
 	 * @param String textEditorId
-	 * @param f_textEditorButton button
+	 * @param f_textEditorImageButton button
 	 * @return void
 	 */
 	PerformCommand: function(textEditorId, button, parameter) {
@@ -379,6 +379,10 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
+	/**
+	 * @method public
+	 * @return String
+	 */
 	f_getText: function() {
 		var contentDocument=this._contentDocument;
 		if (!contentDocument) {

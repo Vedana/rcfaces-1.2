@@ -35,7 +35,7 @@ var __members = {
 	
 
 	/**
-	 * @field private HtmlIFrame
+	 * @field private HTMLIFrameElement
 	 */
 	_iframe: undefined,
 

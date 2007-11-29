@@ -530,7 +530,10 @@ var __statics = {
 		f_core.Debug(f_key, "_SearchDef: KeyEvent keyCode="+keyCode+" charCode="+charCode+" keyChar="+keyChar);
 		
 		if (f_core.IsGecko()) {
-			if (keyCode<=0) {
+			if (jsEvent.type=="keypress" && jsEvent.which) {
+				keyChar=0; // C'est une touche de fonction !
+				
+			} else if (keyCode<=0) {
 				keyCode=charCode;
 			}
 		}
@@ -658,12 +661,13 @@ var __statics = {
 		if (f_core.IsInternetExplorer()) {
 			if (set) {
 				document.onkeydown=f_key._PerformKey;
-				document.onkeypress=f_key._CatchKey;
+				
+//				document.onkeypress=f_key._CatchKey; // Ca peut jamais arrivé, car on a changé le code touche !
 //				document.attachEvent("onkeydown", listener);
 				
 			} else  {
 				document.onkeydown=null;
-				document.onkeypress=null;
+//				document.onkeypress=null;
 	//			document.detachEvent("onkeydown", listener);
 			}
 			
@@ -680,6 +684,21 @@ var __statics = {
 			document.removeEventListener("keypress", f_key._CatchKey, true);
 			//window.removeEventListener("keydown", listener, false);
 		}
+	},
+	/**
+	 * @method hidden static
+	 * @param number keyCode
+	 * @return boolean
+	 */
+	IsModifierKey: function(keyCode) {
+		if (keyCode==f_key.VK_SHIFT || 
+				keyCode==f_key.VK_CONTROL || 
+				/*keyCode==f_key.VK_META || ??? */ 
+				keyCode==f_key.VK_ALT) {
+			return true;
+		}   
+		
+		return false;
 	}
 }
 

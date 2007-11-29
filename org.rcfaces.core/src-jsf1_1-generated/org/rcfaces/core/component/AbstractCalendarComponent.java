@@ -1,30 +1,30 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.converter.WeekDaysConverter;
-import org.rcfaces.core.internal.component.Properties;
 import java.util.TimeZone;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import javax.faces.FacesException;
-import java.util.Date;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
-import java.util.Locale;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.WeekDaysConverter;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import javax.faces.FacesException;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.Locale;
+import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
+import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
+import javax.faces.el.ValueBinding;
+import java.util.Date;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import java.util.HashSet;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractInputComponent;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -40,7 +40,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalTimeZone","maxDate","literalLocale","componentLocale","clientDatesStrategy","componentTimeZone","readOnly","disabledWeekDays","twoDigitYearStart","minDate"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalLocale","readOnly","maxDate","componentTimeZone","componentLocale","literalTimeZone","disabledWeekDays","minDate","clientDatesStrategy","twoDigitYearStart"}));
 	}
 
 
@@ -338,7 +338,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Returns a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
 	 * @return pivot year
 	 */
-	public Date getTwoDigitYearStart() {
+	public java.util.Date getTwoDigitYearStart() {
 		return getTwoDigitYearStart(null);
 	}
 
@@ -346,7 +346,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 * Sets a string value specifying the year considered as base for selecting a date when the associated dateEntry's value's year has only two digits.
 	 * @param twoDigitYearStart pivot year
 	 */
-	public void setTwoDigitYearStart(Date twoDigitYearStart) {
+	public void setTwoDigitYearStart(java.util.Date twoDigitYearStart) {
 		engine.setProperty(Properties.TWO_DIGIT_YEAR_START, twoDigitYearStart);
 	}
 

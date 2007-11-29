@@ -131,9 +131,9 @@ var __statics = {
      * @method public static
      * @return Object size (width, height)
      */
-    GetScreenSize: function() {
- 		var viewSize=f_core.GetViewSize();
- 		var docSize=f_core.GetDocumentSize();
+    GetScreenSize: function(doc) {
+ 		var viewSize=f_core.GetViewSize(null, doc);
+ 		var docSize=f_core.GetDocumentSize(null, doc);
  		
  		var size= { 
  			width: (viewSize.width>docSize.width)?viewSize.width:docSize.width, 
@@ -319,23 +319,8 @@ var __members = {
 		var self=this;
 		this._onResizeCB=function() {
 			//get the greying div
-			var div = self._backgroundElement;
-			if (!div) {
-				// On ne sait jamais ...
-				return;
-			}
-	
-			// Get the document' size
-			var size=f_shellManager.GetScreenSize();
 			
-			if (f_core.IsGecko()) {
-				size.width-=1; //f_core.ComputeBorderLength(div.ownerDocument.body, "left", "right")+1;
-				size.height-=1; //f_core.ComputeBorderLength(div.ownerDocument.body, "top", "bottom")+2;
-			}
-					
-			//Modify the size
-			div.style.width=size.width+"px";
-			div.style.height=size.height+"px";
+			self._performResizeEvent();
 		};
 		
 		//Resize Handler
@@ -349,7 +334,48 @@ var __members = {
 		}
 		
 		//Attach
-		document.body.insertBefore(div, document.body.firstChild);
+		f_core.InsertBefore(document.body, div, document.body.firstChild);
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_performResizeEvent: function() {
+		
+		var self=this;
+		
+		function f() {
+			
+			var div = self._backgroundElement;
+			if (div) {
+				// Get the document' size
+				var size=f_shellManager.GetScreenSize();
+						
+				//Modify the size
+				div.style.width=size.width+"px";
+				div.style.height=size.height+"px";		
+			}
+
+					
+			var shells=self._shells;
+			if (shells) {
+				for(var i=0;i<shells.length;i++) {
+					var shell=shells[i];
+					
+					if (shell.f_getStatus()!=f_shell.OPENED_STATUS) {
+						continue;
+					}
+					
+					var shellDecorator=self.f_getShellDecorator(shell);
+					
+					shellDecorator.f_performViewResizeEvent();
+				}
+			}
+		}
+		
+		f();
+		
+		window.setTimeout(f,10);
 	},
 	/**
 	 * @method private
@@ -521,6 +547,10 @@ var __members = {
 		
 		if (shell.f_getStatus()==f_shell.DESTROYING_STATUS) {
 			shell.f_postDestruction();
+		}
+		
+		if (shell.f_getStatus()==f_shell.DESTROYED_STATUS) {
+			this.f_showNextShell();
 		}
 	},
 	/**

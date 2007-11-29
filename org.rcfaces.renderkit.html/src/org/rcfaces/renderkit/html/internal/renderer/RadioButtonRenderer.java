@@ -60,9 +60,12 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+        
+        /*
         if (button.isDisabled(facesContext)) {
             htmlWriter.writeDisabled();
         }
+        */
 
         if (button.isRequired()) {
             htmlWriter.writeAttribute("v:required", true);
@@ -125,10 +128,13 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         htmlWriter.writeClass(className);
 
+        /*
+         * On se base sur le separator !        
         if (htmlWriter.isJavaScriptEnabled() == false) {
             // Pour le FOCUS, pour retrouver le composant parent !
             htmlWriter.writeAttribute("v:container", componentClientId);
         }
+        */
 
         String accessKey = radioButtonComponent.getAccessKey(facesContext);
         if (accessKey != null) {

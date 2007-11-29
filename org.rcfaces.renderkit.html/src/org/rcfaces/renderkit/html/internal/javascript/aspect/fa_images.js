@@ -19,32 +19,34 @@ var __members = {
 	},
 	*/
 	/**
-	 * @method private
+	 * @method protected
 	 * @return void
 	 */
-	_parseImageURLs: function(imageURL) {
+	fa_parseImageURLs: function() {
 		if (this._imageURL!==undefined) {
 			return;
 		}
 		
+		var imageURL=this.fa_getInitialImageURL();
+		
 		var v_imageURL=f_core.GetAttribute(this, "v:imageURL");
 		if (v_imageURL) {
-			if (this.f_isDisabled && this.f_isDisabled()) {
+			if (this.fa_getInitialDisabled && this.fa_getInitialDisabled()) {
 				this._disabledImageURL=imageURL;
 				
-			} else if (this.f_isSelected && this.f_isSelected()) {
+			} else if (this.fa_getInitialSelection && this.fa_getInitialSelection()) {
 				this._selectedImageURL=imageURL;
 			}
 
 			imageURL=v_imageURL;
 			f_imageRepository.PrepareImage(imageURL);
 			
-		} else if (this.f_isDisabled && this.f_isDisabled()) {
+		} else if (this.fa_getInitialDisabled && this.fa_getInitialDisabled()) {
 			// Il n'y a que le disabled qui est spécifié !
 			this._disabledImageURL=imageURL;
 			imageURL=null;
 			
-		} else if (this.f_isSelected && this.f_isSelected()) {
+		} else if (this.fa_getInitialSelection && this.fa_getInitialSelection()) {
 			// Il n'y a que le selected qui est spécifié !
 			this._selectedImageURL=imageURL;
 			imageURL=null;
@@ -82,9 +84,8 @@ var __members = {
 	 * @return String
 	 */
 	f_getImageURL: function() {
-		if (this._imageURL===undefined) {
-			this._parseImageURLs();
-		}
+		this.fa_parseImageURLs();
+
 		return this._imageURL;
 	},
 	/**
@@ -92,7 +93,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getHoverImageURL: function() { 
-		this._parseImageURLs();
+		this.fa_parseImageURLs();
 		
 		return this._hoverImageURL; 
 	},
@@ -101,7 +102,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getSelectedImageURL: function() { 
-		this._parseImageURLs();
+		this.fa_parseImageURLs();
 		
 		return this._selectedImageURL; 
 	},
@@ -110,7 +111,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getDisabledImageURL: function() { 
-		this._parseImageURLs();
+		this.fa_parseImageURLs();
 		
 		return this._disabledImageURL; 
 	},
@@ -216,6 +217,23 @@ var __members = {
 	},
 
 	/**
+	 * @method protected
+	 * @return boolean
+	 */
+	fa_hasOverImageURL: function() {
+		if (this._imageURL!==undefined) {
+			return this._hoverImageURL!==undefined;
+		}
+				
+		return f_core.GetAttribute(this, "v:hoverImageURL")!=null;
+	},
+	
+	/**
+	 * @method protected abstract
+	 * @return void
+	 */
+
+	/**
 	 * @method protected abstract
 	 * @return void
 	 */
@@ -225,8 +243,13 @@ var __members = {
 	 * @method protected abstract
 	 * @return void
 	 */
-	fa_updateImages: f_class.ABSTRACT
-	
+	fa_updateImages: f_class.ABSTRACT,
+		
+	/**
+	 * @method protected abstract
+	 * @return void
+	 */
+	fa_getInitialImageURL: f_class.ABSTRACT
 }
 
 new f_aspect("fa_images", {

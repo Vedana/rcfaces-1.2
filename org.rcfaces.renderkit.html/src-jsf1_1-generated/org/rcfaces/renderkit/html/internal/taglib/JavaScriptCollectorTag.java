@@ -1,14 +1,14 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.taglib.CameliaTag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.apache.commons.logging.Log;
 import org.rcfaces.renderkit.html.component.JavaScriptCollectorComponent;
 import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.taglib.CameliaTag;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.internal.tools.ListenersTools;
 
 public class JavaScriptCollectorTag extends CameliaTag implements Tag {
 

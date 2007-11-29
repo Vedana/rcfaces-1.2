@@ -5,7 +5,7 @@
 /**
  * <p><strong>f_shellDecorator</strong> represents shell decorator.
  *
- * @class public f_shellDecorator
+ * @class public f_shellDecorator extends f_object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -96,7 +96,126 @@ var __statics = {
 		this._selected=false;
 		
 		shellDecorator._updateTitleButton(button);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return void
+	 * @context object:shellDecorator
+	 */
+	_TitleMove_onmousedown: function(evt) {
+		var shellDecorator=this._shellDecorator;
 		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+/* ????
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
+		}
+*/
+	
+		var iframe=shellDecorator._iframe;
+		if (!iframe) {
+			return false;
+		}
+
+		var shellDocument=iframe.contentWindow.document;
+		
+		f_shellDecorator._decoratorDragged=shellDecorator;
+
+	 	f_core.CancelJsEvent(evt);
+
+		var eventPos=f_core.GetJsEventPosition(evt, shellDocument);
+		var cursorPos=f_core.GetAbsolutePosition(shellDecorator._titleMoveButton);
+		
+		shellDecorator._dragDeltaX=eventPos.x-cursorPos.x;
+		shellDecorator._dragDeltaY=eventPos.y-cursorPos.y;
+		shellDecorator._dragOrigin=eventPos;
+		
+		f_core.AddEventListener(shellDocument, "mousemove", f_shellDecorator._TitleMove_dragMove, shellDocument.body);
+		f_core.AddEventListener(shellDocument, "mouseup",   f_shellDecorator._TitleMove_dragStop, shellDocument.body);
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return void
+	 * @context object:shellDecorator
+	 */
+	_TitleMove_dragMove: function(evt) {
+		var shellDecorator=f_shellDecorator._decoratorDragged;
+
+		var iframe=shellDecorator._iframe;
+		if (!iframe) {
+			return false;
+		}	
+
+		var shellDocument=iframe.contentWindow.document;
+
+		var eventPos=f_core.GetJsEventPosition(evt, shellDocument);
+		var cursorPos=f_core.GetAbsolutePosition(shellDecorator._titleMoveButton);
+		
+		var deltaX=eventPos.x-cursorPos.x-shellDecorator._dragDeltaX;
+		var deltaY=eventPos.y-cursorPos.y-shellDecorator._dragDeltaY;
+		
+		var x=parseInt(iframe.style.left)+deltaX;
+		var y=parseInt(iframe.style.top)+deltaY;
+		
+		var w=iframe._initialWidth;
+		var h=iframe._initialHeight;
+		
+		var screenSize=f_shellManager.GetScreenSize(iframe.ownerDocument);
+		if (f_core.IsGecko()) {
+			screenSize.width-=f_core.ComputeBorderLength(iframe, "left", "right");
+			screenSize.height-=f_core.ComputeBorderLength(iframe, "top", "bottom");
+		}
+		
+		if (x+w>=screenSize.width) {
+			w=screenSize.width-x-1;
+			if (w<1) {
+				w=1;
+			}
+		}
+		if (w!=parseInt(iframe.style.width)) {
+			iframe.style.width=w+"px";
+		}
+
+		if (y+h>=screenSize.height) {
+			h=screenSize.height-y-1;
+			if (h<1) {
+				h=1;
+			}
+		}			
+		if (h!=parseInt(iframe.style.height)) {
+			iframe.style.height=h+"px";
+		}
+		
+		iframe.style.left=x+"px";
+		iframe.style.top=y+"px";
+	},
+	/**
+ * @method private static
+	 * @param Event evt
+	 * @return void
+	 * @context object:shellDecorator
+	 */
+	_TitleMove_dragStop: function(evt) {
+		var shellDecorator=f_shellDecorator._decoratorDragged;
+		f_shellDecorator._decoratorDragged=undefined; // f_shellDecorator
+		
+		var iframe=shellDecorator._iframe;
+		if (!iframe) {
+			return;
+		}	
+
+		var shellDocument=iframe.contentWindow.document;
+
+		f_core.RemoveEventListener(shellDocument, "mousemove", f_shellDecorator._TitleMove_dragMove, shellDocument.body);
+		f_core.RemoveEventListener(shellDocument, "mouseup",   f_shellDecorator._TitleMove_dragStop, shellDocument.body);
+		
+	},
+	Finalizer: function() {
+		f_shellDecorator._decoratorDragged=undefined; // f_shellDecorator
 	}
 }
 
@@ -139,6 +258,14 @@ var __members = {
 				
 				this.f_clearButton(button);
 			}
+		}
+		
+		var titleMoveButton=this._titleMoveButton;
+		if (titleMoveButton) {
+			this._titleMoveButton=undefined;
+			
+			titleMoveButton._shellDecorator=undefined;
+			titleMoveButton.onmousedown=null;
 		}
 		
 		this.f_super(arguments);
@@ -205,8 +332,8 @@ var __members = {
 		var iframe = document.createElement("iframe");
 		this._iframe=iframe;
 
-		iframe.id = "iframe_"+this._shell.f_getId();
-		iframe.name = iframe.id+"_name";
+		iframe.id = this._shell.f_getId()+"::iframe";
+		iframe.name = iframe.id+"::name";
 		iframe._shell=this._shell;
 
 		iframe.frameBorder = 0;
@@ -258,7 +385,7 @@ var __members = {
 
 		iframe.src="about:blank";
 		
-		document.body.insertBefore(iframe, document.body.firstChild);
+		f_core.InsertBefore(document.body, iframe, document.body.firstChild);
 		
 		iframe.src="about:blank";
 		f_core.Debug(f_shellDecorator, "f_createDecoration: wait decoration creation");
@@ -348,44 +475,32 @@ var __members = {
 			this._shellBody=shellDocument.body;
 			return;
 		}
-					
-		var table=shellDocument.createElement("table");
-		table.cellPadding=0;
-		table.cellSpacing=0;
-		table.style.width="100%";
-		table.style.height="100%";
 		
-		if (style & f_shell.TRANSPARENT) { 
-			table.className="f_shellDecorator_background_tranparent";
-		} else {
-			table.className="f_shellDecorator_background";
-		}
-
-		shellDocument.body.appendChild(table);		
-
-		var tbody=shellDocument.createElement("tbody");
-		table.appendChild(tbody);
+		var tbody=f_core.CreateElement(shellDocument.body, "table", {
+			cellPadding: 0,
+			cellSpacing: 0,
+			cssWidth: "100%",
+			cssHeight: "100%",
+			className: (style & f_shell.TRANSPARENT)?"f_shellDecorator_background_tranparent":"f_shellDecorator_background"
+		}, "tbody");
 	
 		if (style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE)) {
-			
-			var tr=shellDocument.createElement("tr");
-			tr.className="f_shellDecorator_title";
-			tbody.appendChild(tr);
+			var td=f_core.CreateElement(tbody, "tr", {
+				className: "f_shellDecorator_title"	
 
-			var td=shellDocument.createElement("td");
-			td.className="f_shellDecorator_title_cell";
-			tr.appendChild(td);
+			}, "td", {
+				className: "f_shellDecorator_title_cell"
+			});
 			
 			this.f_createTitle(td);
 		}
 		
-		var tr=shellDocument.createElement("tr");
-		tr.className="f_shellDecorator_body";
-		tbody.appendChild(tr);			
-		
-		var td=shellDocument.createElement("td");
-		td.className="f_shellDecorator_body_cell";
-		tr.appendChild(td);
+		var td=f_core.CreateElement(tbody, "tr", {
+			className: "f_shellDecorator_body"	
+
+		}, "td", {
+			className: "f_shellDecorator_body_cell"
+		});
 		
 		this._shellBody=td;
 	},
@@ -425,7 +540,14 @@ var __members = {
 				className: "f_shellDecorator_title_text",
 				textNode: title
 			});
-		}		
+		}
+		
+		if (style & f_shell.MOVE_STYLE) {
+			this._titleMoveButton=parent;
+			
+			parent._shellDecorator=this;
+			parent.onmousedown=f_shellDecorator._TitleMove_onmousedown;
+		}
 	},
 	/**
 	 * @method protected
@@ -475,6 +597,10 @@ var __members = {
 		iframe.style.left = x+"px";
 		iframe.style.height = height+"px";
 		iframe.style.width = width+"px";
+						
+		iframe._initialWidth=width;
+		iframe._initialHeight=height;
+		
 		
 		var table=iframe.contentWindow.document.body; //.firstChild;
 		if (table) {
@@ -592,6 +718,50 @@ var __members = {
 			shell.f_close();
 			break;
 		}		
+		
+		return true;
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_performViewResizeEvent: function() {
+		var iframe=this._iframe;
+		if (!iframe) {
+			return;
+		}
+		
+		var x=parseInt(iframe.style.left);
+		var y=parseInt(iframe.style.top);
+		var w=iframe._initialWidth;
+		var h=iframe._initialHeight;
+		
+		var screenSize=f_shellManager.GetScreenSize(iframe.ownerDocument);
+		if (f_core.IsGecko()) {
+			screenSize.width-=f_core.ComputeBorderLength(iframe, "left", "right");
+			screenSize.height-=f_core.ComputeBorderLength(iframe, "top", "bottom");
+		}
+		
+		if (x+w>=screenSize.width) {
+			w=screenSize.width-x-1;
+			if (w<1) {
+				w=1;
+			}
+		}
+		if (w!=parseInt(iframe.style.width)) {
+			iframe.style.width=w+"px";
+		}
+
+		if (y+h>=screenSize.height) {
+			h=screenSize.height-y-1;
+			if (h<1) {
+				h=1;
+			}
+		}			
+		if (h!=parseInt(iframe.style.height)) {
+			iframe.style.height=h+"px";
+		}
+		
 	}
 }
 

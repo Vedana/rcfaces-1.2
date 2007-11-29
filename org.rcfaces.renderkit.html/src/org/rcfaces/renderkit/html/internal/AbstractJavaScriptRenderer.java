@@ -50,7 +50,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
     // private static final String INIT_BY_NAME = "javascript.InitByName";
 
-    static final boolean ENCODE_EVENT_ATTRIBUTE = true;
+    // static final boolean ENCODE_EVENT_ATTRIBUTE = true;
 
     /*
      * protected void setInitializeByName(IComponentRenderContext renderContext) {
@@ -136,10 +136,11 @@ public abstract class AbstractJavaScriptRenderer extends
     public final IHtmlWriter writeJavaScriptAttributes(IHtmlWriter writer)
             throws WriterException {
         // Les evenements ....
-        if (ENCODE_EVENT_ATTRIBUTE == false) {
+        if (writer.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode()) {
             return writer;
         }
-        
+
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
@@ -240,7 +241,8 @@ public abstract class AbstractJavaScriptRenderer extends
 
         boolean hasAction = false;
         Map listenersByType = null;
-        if (ENCODE_EVENT_ATTRIBUTE == false
+        if (writer.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode()
                 && htmlRenderContext.getProcessContext().isDesignerMode() == false) {
             // On recherche l'attribut Action
             hasAction = hasComponentAction(component);
@@ -268,7 +270,7 @@ public abstract class AbstractJavaScriptRenderer extends
                 enableJavascript = writer.isJavaScriptEnabled();
             }
 
-            if (javaScriptStubForced) {
+            if (enableJavascript == false && javaScriptStubForced) {
                 IRCFacesComponent cameliaParent = null;
 
                 for (UIComponent parent = component.getParent(); parent != null; parent = parent
@@ -283,7 +285,8 @@ public abstract class AbstractJavaScriptRenderer extends
                 if (cameliaParent != null) {
                     javaScriptStubForced = false;
 
-                } else {
+                } else if (javascriptRenderContext
+                        .isJavaScriptRendererDeclaredLazy(writer) == false) {
                     enableJavascript = true;
                 }
             }
@@ -368,7 +371,8 @@ public abstract class AbstractJavaScriptRenderer extends
     protected final void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
 
         writer.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext().declareLazyJavaScriptRenderer(writer);
+                .getJavaScriptRenderContext().declareLazyJavaScriptRenderer(
+                        writer);
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {

@@ -140,6 +140,10 @@ public abstract class AbstractRepository implements IRepository {
         }
     }
 
+    protected Locale adaptLocale(Locale locale, IFile file) {
+        return locale;
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -206,7 +210,7 @@ public abstract class AbstractRepository implements IRepository {
             return localizedFile.getURI();
         }
 
-        private synchronized LocalizedFile getLocalizedFile(Locale locale) {
+        protected synchronized LocalizedFile getLocalizedFile(Locale locale) {
             if (locale == null) {
                 if (unlocalizedFile != null) {
                     return unlocalizedFile;
@@ -216,6 +220,8 @@ public abstract class AbstractRepository implements IRepository {
                         unlocalizedURI, unlocalizedContentLocation);
                 return unlocalizedFile;
             }
+          
+            locale = adaptLocale(locale, this);
 
             if (localizedFiles == null) {
                 localizedFiles = new HashMap(4);
@@ -254,7 +260,7 @@ public abstract class AbstractRepository implements IRepository {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class LocalizedFile {
+    protected static class LocalizedFile {
         private static final String REVISION = "$Revision$";
 
         private final String uri;

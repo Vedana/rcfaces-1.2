@@ -3,13 +3,17 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 
 /**
  * 
@@ -29,13 +33,17 @@ public class JavaScriptCollectorRenderer extends AbstractHtmlRenderer {
 
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
-        
-       // htmlRenderContext.getJavaScriptRenderContext().pushInteractive()
+
+        IJavaScriptRenderContext newJavaScriptRenderContext = new JavaScriptCollectorRenderContext(
+                htmlRenderContext.getFacesContext());
+
+        htmlRenderContext.pushInteractiveRenderComponent(htmlWriter,
+                newJavaScriptRenderContext);
 
     }
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        super.encodeEnd(writer);
+    public IAsyncRenderer getAsyncRenderer(FacesContext facesContext) {
+        return null;
     }
 
 }

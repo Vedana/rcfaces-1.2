@@ -4,6 +4,7 @@
 package org.rcfaces.core.internal.contentStorage;
 
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.lang.LimitedMap;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.version.HashCodeTools;
 import org.rcfaces.core.model.IContentModel;
@@ -18,10 +19,10 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
 
     private static int id;
 
-    private final BasicContentCache resolvedContentByKey;
+    private final LimitedMap resolvedContentByKey;
 
     public BasicContentStorageRepository() {
-        resolvedContentByKey = new BasicContentCache(
+        resolvedContentByKey = new LimitedMap(
                 Constants.BASIC_CONTENT_CACHE_SIZE);
     }
 
@@ -62,15 +63,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
 
             StringAppender sa = new StringAppender(resourceKey, 32);
 
-            long date = content.getModificationDate();
-            if (date > 0) {
-                sa.append(date);
-            } else {
-                int length = content.getLength();
-                if (length > 0) {
-                    sa.append(length);
-                }
-            }
+            content.appendHashInformations(sa);
 
             String suffix = content.getURLSuffix();
             if (suffix != null) {

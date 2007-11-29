@@ -91,7 +91,15 @@ var __members={
 						source=source.f_link;
 						
 					} else if (!f_class.IsObjectInitialized(source) && source.nodeType==f_core.ELEMENT_NODE) {
-						var containerId=f_core.GetAttribute(source, "v:container");
+						var sourceId=source.id;
+						
+						var suffix=sourceId.lastIndexOf("::");
+						if (suffix>0) {
+							containerId=sourceId.substring(0, suffix);
+							
+						} else {						
+							containerId=f_core.GetAttribute(source, "v:container");
+						}
 						
 						if (containerId) {
 							source=document.getElementById(containerId);

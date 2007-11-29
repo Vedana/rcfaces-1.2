@@ -237,7 +237,7 @@ var __members = {
 	f_addMessageListener: function(listener) {
 		var l=this._listeners;
 	
-		f_core.Debug(f_messageContext, "Add a new message event listener !");
+		f_core.Debug(f_messageContext, "f_addMessageListener: Add a new message event listener !");
 		
 		return l.f_addElement(listener);
 	},
@@ -249,6 +249,8 @@ var __members = {
 	 */
 	f_removeMessageListener: function(listener) {
 		var l=this._listeners;
+	
+		f_core.Debug(f_messageContext, "f_removeMessageListener: Remove a new message event listener !");
 		
 		return l.f_removeElement(listener);
 	},
@@ -331,6 +333,31 @@ var __members = {
 	},
 	
 	/**
+	 * @method public
+	 * @param String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
+	 * @return boolean
+	 */
+	f_containsMessagesFor: function(componentId) {
+		f_core.Assert(typeof(componentId)=="string", "f_messageContext.f_containsMessagesFor: Component parameter must be an id !");
+
+		var messages=this._messages;	
+		if (!messages) {
+			return false;
+		}
+
+		var l=messages[componentId];
+		if (!l) {
+			return false;
+		}
+		
+		for(var dummy in l) {
+			return true;
+		}
+		
+		return false;
+	},
+	
+	/**
 	 * @method hidden
 	 *
 	 * @param HTMLElement component componentOrId Component to add the message. (If the parameter is an ID, the naming container separator might not be ":")
@@ -346,7 +373,7 @@ var __members = {
 		if (component && component.id) {
 			id=component.id;
 		
-		} else if (id.length && typeof(id)=="string") {
+		} else if (typeof(id)=="string" && id.length) {
 			// On initialise à tout hasard le composant !
 			component=f_core.GetElementByClientId(id);
 		}		

@@ -120,13 +120,13 @@ var __statics = {
 			message=f_waiting.GetLoadingMessage();
 		}
 		
-		node.appendChild(doc.createTextNode(message));
+		f_core.AppendChild(node, doc.createTextNode(message));
 		
 		if (parentElement.tagName.toLowerCase()=="select") {
 			parentElement=parentElement.parentNode;
 		}
 
-		parentElement.appendChild(node);
+		f_core.AppendChild(parentElement, node);
 
 		if (typeof(marginH)=="number") {
 			node._marginH=marginH;

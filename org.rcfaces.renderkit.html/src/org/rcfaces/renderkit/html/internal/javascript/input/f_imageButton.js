@@ -37,51 +37,18 @@ var __members = {
 	f_imageButton: function() {
 		this.f_super(arguments);
 
-		var tabIndex=this.tabIndex;
-		
-		var eventComponent=this.f_getEventComponent();		
-		if (eventComponent!=this) {
-			this.f_openActionList(f_event.SELECTION);		
-		}
-		
-		if (!this._image) {
-			this._image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
-		}
-		
-		var text=this.ownerDocument.getElementById(this.id+f_imageButton._TEXT_ID_SUFFIX);
-		if (text) {
-			this._text = text;
-			text.f_link=this;
-	
-//			text.onmousedown=f_imageButton._MouseDown;
-//			text.onmouseup=f_imageButton._MouseUp;
-		}
+		this.onselectstart=f_core.CancelJsEventHandler;
 			
 		this.f_parseAttributes();
-	
-		var border=this.f_getBorderComponent();
-		if (border) {
-//			border.onmousedown=f_imageButton._MouseDown;
-//			border.onmouseup=f_imageButton._MouseUp;
-			this._border=border;	
-		}
-
-		var image=this._image;
-		if (image) {
-//			image.onmousedown=f_imageButton._MouseDown;
-//			image.onmouseup=f_imageButton._MouseUp;
-				
-			image.f_link=this;
-		}
 		
 		this.f_insertEventListenerFirst(f_event.SELECTION, this.f_imageButtonSelect);
 		this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
 		
-		this._tabIndex=tabIndex;
-		if (this.f_isDisabled()) {			
-			eventComponent.tabIndex=-1;
-			eventComponent.hideFocus=true;
+		this._tabIndex=this.tabIndex;
+		
+		if (this.f_isDisabled()) {
+			this.fa_updateDisabled(true); // Pas d'update de l'image car le composant n'a pas enocre été updaté
 		}
 	},
 	f_finalize: function() {
@@ -93,29 +60,19 @@ var __members = {
 		// this._mouseDown = undefined; // boolean
 		// this._mouseDown_out = undefined;	// boolean
 		
+		this.onselectstart=null;
+		
 		var image=this._image;
 		if (image) {
 			this._image=undefined;
-			
-			image.onmousedown=null;
-			image.onmouseup=null;
-			
-			image.f_link=undefined;
 		}
 
 		var text=this._text;
 		if (text) {
 			this._text=undefined;
-			
-			text.onmousedown=null;
-			text.onmouseup=null;
-			text.f_link=undefined;
 		}
 		
 		// Le border est traité par le borderFinalizer !
-
-		this.onmousedown=null;
-		this.onmouseup=null;
 
 		this.f_super(arguments);
 
@@ -123,11 +80,11 @@ var __members = {
 		// car c'est soit NULL ou _image !
 		// On efface le link aprés car on en a besoin lors du clearDomEvent !
 		var eventComponent=this._eventComponent;
-		this._eventComponent=undefined;
+		if (eventComponent) {
+			this._eventComponent=undefined;
+		}
 		
 		if (eventComponent!=this) {
-			eventComponent.f_link=undefined;
-			
 			f_core.VerifyProperties(eventComponent);
 		}
 		
@@ -143,89 +100,70 @@ var __members = {
 	 * @method protected
 	 * @return HTMLElement
 	 */
-	f_getEventComponent: function() {
+	f_getEventElement: function() {
 		var eventComponent=this._eventComponent;
 		if (eventComponent!==undefined) {
 			return eventComponent;
 		}
 		
 		eventComponent=this;
+	
+		var image=null;
 		
 		switch(this.tagName.toLowerCase()) {
 		case "input":
 			// Il faut recuperer le click pour empecher le submit !
-			this._image=this;
+			image=this;
 			break;
 
 		case "a":
 			// Il faut recuperer le click pour empecher le submit !
-			this._image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
+			image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
 			break;
 
 		default:
-			var image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
+			image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
 			
-			if (image) {
-				var tabIndex=f_core.GetAttribute(this, "tabIndex");
-				if (!tabIndex) {
-					tabIndex=0;
-				}
-			
-				this._image=image;
-				var link=image;
+			if (image) {	
+				var eventComponent=image;
 			
 				if (image.tagName.toLowerCase()!="input") {				
 					var input=this.ownerDocument.getElementById(this.id+f_imageButton._INPUT_ID_SUFFIX);
 					if (input) {
-						link=input;
+						eventComponent=input;
 					}
-			//if (!link) { // OO: On est passé en ID !
-				// Fred : to allow imageButton without image !
-			//	link=f_core.GetFirstElementByTagName(this, "a", false);
-			//}
 				}
 				
-				eventComponent=link;
-				link.f_link=this;
-				
+				var tabIndex=f_core.GetAttribute(this, "tabIndex");
+				if (!tabIndex) {
+					tabIndex=0;
+				}
 				if (tabIndex>=0) {
-					link.tabIndex=tabIndex;
+					eventComponent.tabIndex=tabIndex;
 				}
 			}
 		}
 		
 		this._eventComponent=eventComponent;
+		this._image=image;
 		
 		return eventComponent;
 	},
 	
 	/**
-	 * @method private
-	 */
-	fa_borderFinalizer: function(border) {
-		border.onmousedown=null;
-		border.onmouseup=null;
-	},
-	
-	/**
 	 * 
 	 * @method protected
+	 * @return void
 	 */
 	f_parseAttributes: function() {
-		if (this.f_getBorderType()!=fa_borderType.NONE_BORDER_TYPE) {			
+		if (this.fa_hasOverImageURL() || this.f_getBorderType()) {
 			this._installHoverFocus();
-		}
-
-		if (this._image) {
-			this._parseImageURLs(this._image.src);
-		
-			if (this.f_getHoverImageURL()) {
-				this._installHoverFocus();
-			}
 		}
 	},
 	/**
 	 * @method protected
+	 * @param f_event event
+	 * @return voolean
 	 */
 	f_imageButtonSelect: function(event) {
 		f_core.Debug(f_imageButton, "f_imageButtonSelect: focus="+this._focus);
@@ -256,9 +194,11 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param f_event event
+	 * @return boolean
 	 */
-	_onMouseDown: function() {
-		f_core.Debug(f_imageButton, "onMouseDown on imageButton '"+this.id+"'.");
+	_onMouseDown: function(event) {
+		f_core.Debug(f_imageButton, "_onMouseDown: mouse down on imageButton '"+this.id+"'.");
 		
 		if (this.f_isReadOnly() || this.f_isDisabled()) {
 			return false;
@@ -278,8 +218,12 @@ var __members = {
 
 	/**
 	 * @method private
+	 * @param f_event event
+	 * @return boolean
 	 */
 	_onMouseUp: function() {
+		f_core.Debug(f_imageButton, "_onMouseUp: mouse up on imageButton '"+this.id+"'.");
+
 		if (!this._mouseDown) {
 			return false;
 		}
@@ -433,8 +377,8 @@ var __members = {
 			}
 		}
 
-		var image=this._image;		
-		if (image && url && image.src!=url) {
+		var image=this.f_getImageElement();
+		if (image&& url && image.src!=url) {
 			image.src = url;
 		}		
 	},
@@ -452,43 +396,41 @@ var __members = {
 		if (this._hoverInstalled) {
 			return;
 		}
-
 		this._hoverInstalled = true;
+		
 		this.f_insertEventListenerFirst(f_event.MOUSEOVER, this._onMouseOver);
 		this.f_insertEventListenerFirst(f_event.MOUSEOUT, this._onMouseOut);
 		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
 	f_setDomEvent: function(type, target) {
-		var link=this.f_getEventComponent();
-		if (link) {
-			switch(type) {
-/*			case f_event.SELECTION: 
-*/
-			case f_event.BLUR: 
-			case f_event.FOCUS: 
-			case f_event.KEYDOWN: 
-			case f_event.KEYUP: 
+		switch(type) {
+		case f_event.BLUR: 
+		case f_event.FOCUS: 
+		case f_event.KEYDOWN: 
+		case f_event.KEYUP: 
+		case f_event.KEYPRESS: 
+			var link=this.f_getEventElement();
+			if (link) {
 				target=link;
-				break;
 			}
+			break;
 		}
 						
 		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent: function(type, target) {
-		var link=this.f_getEventComponent();
-		if (link) {
-			switch(type) {
-/*			case f_event.SELECTION: 
-*/
-			case f_event.BLUR: 
-			case f_event.FOCUS: 
-			case f_event.KEYDOWN: 
-			case f_event.KEYUP: 
+		switch(type) {
+		case f_event.BLUR: 
+		case f_event.FOCUS: 
+		case f_event.KEYDOWN: 
+		case f_event.KEYUP: 
+		case f_event.KEYPRESS: 
+			var link=this.f_getEventElement();
+			if (link) {
 				target=link;
-				break;
 			}
+			break;		
 		}
 				
 		this.f_super(arguments, type, target);
@@ -501,7 +443,7 @@ var __members = {
 		this._updateImage();
 	},
 	fa_updateDisabled: function(disabled) {
-		var cmp=this.f_getEventComponent();
+		var cmp=this.f_getEventElement();
 
 		if (disabled) {
 			cmp.tabIndex=-1;
@@ -520,10 +462,41 @@ var __members = {
 	},
 	fa_updateReadOnly: function() {
 	},
+	/* Pourquoi ????
 	f_update: function() {
 		this._updateImage();
 		
 		this.f_super(arguments);
+	},
+	*/
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getTextElement: function() {
+		var text=this._text;
+		if (text!==undefined) {
+			return text;
+		}
+		
+		text=doc.getElementById(this.id+f_imageButton._TEXT_ID_SUFFIX);
+		this._text=text;
+		
+		return text;
+	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getImageElement: function() {
+		var image=this._image;
+		if (image!==undefined) {
+			return image;
+		}
+		
+		this.f_getEventElement();		
+	
+		return this._image;
 	},
 	/**
 	 * Set the text of the button
@@ -533,11 +506,12 @@ var __members = {
 	 * @return void
 	 */	
 	f_setText: function(text) {
-		if (!this._text) {
+		var textElement=this.f_getTextElement();
+		if (!textElement) {
 			return;
 		}
 		
-		f_core.SetTextNode(this._text, text, this._accessKey);
+		f_core.SetTextNode(textElement, text, this._accessKey);
 		
 		this.f_setProperty(f_prop.TEXT,text);
 	},
@@ -545,14 +519,15 @@ var __members = {
 	 * Returns the text of the button.
 	 * 
 	 * @method public 
-	 * @return boolean
+	 * @return String
 	 */	
 	f_getText: function() {
-		if (!this._text) {
+		var textElement=this.f_getTextElement();
+		if (!textElement) {
 			return null;
 		}
 		
-		return f_core.GetTextNode(this._text, true);
+		return f_core.GetTextNode(textElement, true);
 	},
 	/**
 	 * Set the focus to this component.
@@ -571,7 +546,7 @@ var __members = {
 
 		f_core.Debug(f_imageButton, "f_setFocus: Set focus on imageButton '"+this.id+"'.");
 		
-		var cmp=this.f_getEventComponent();
+		var cmp=this.f_getEventElement();
 		if (!cmp) {
 			cmp=this;
 		}
@@ -590,6 +565,15 @@ var __members = {
 		}	
 		
 		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
+	},
+	fa_getInitialImageURL: function() {
+		var imageElement=this.f_getImageElement();
+		
+		if (imageElement==null) {
+			return null;
+		}
+		
+		return imageElement.src;
 	}
 }
 

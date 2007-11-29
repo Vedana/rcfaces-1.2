@@ -33,6 +33,10 @@ public class SpinnerRenderer extends TextEntryRenderer {
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "down";
 
+    public static final String INPUT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "input";
+
     protected boolean isNameEqualsId() {
         return false;
     }
@@ -54,8 +58,9 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
+        writeValidatorAttributes(htmlWriter); // Le validateur peut
+        // impfluencer le format !
         writeCssAttributes(htmlWriter);
-        writeValidatorAttributes(htmlWriter);
         writeSpinnerAttributes(htmlWriter);
 
         htmlWriter.startElement(IHtmlWriter.COL);
@@ -90,6 +95,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
+        htmlWriter.writeId(getInputClientId(htmlWriter));
         if (inputWidth > 0) {
             htmlWriter.writeStyle().writeWidth(inputWidth + "px");
         }
@@ -116,7 +122,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         int spinnerButtonHeight = getSpinnerButtonHeight();
 
         htmlWriter.startElement(IHtmlWriter.IMG);
-        htmlWriter.writeId(getUpButtonId(htmlWriter));
+        htmlWriter.writeId(getUpButtonClientId(htmlWriter));
         htmlWriter.writeClass(getUpButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
         htmlWriter.writeWidth(spinnerButtonWidth);
@@ -124,7 +130,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         htmlWriter.endElement(IHtmlWriter.IMG);
 
         htmlWriter.startElement(IHtmlWriter.IMG);
-        htmlWriter.writeId(getDownButtonId(htmlWriter));
+        htmlWriter.writeId(getDownButtonClientId(htmlWriter));
         htmlWriter.writeClass(getDownButtonClassName(htmlWriter, disabled));
         htmlWriter.writeSrc(blankImageURL);
         htmlWriter.writeWidth(spinnerButtonWidth);
@@ -167,7 +173,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         return className;
     }
 
-    protected String getUpButtonId(IHtmlWriter htmlWriter) {
+    protected String getUpButtonClientId(IHtmlWriter htmlWriter) {
         return htmlWriter.getComponentRenderContext().getComponentClientId()
                 + UP_ID_SUFFIX;
     }
@@ -182,9 +188,14 @@ public class SpinnerRenderer extends TextEntryRenderer {
         return className;
     }
 
-    protected String getDownButtonId(IHtmlWriter htmlWriter) {
+    protected String getDownButtonClientId(IHtmlWriter htmlWriter) {
         return htmlWriter.getComponentRenderContext().getComponentClientId()
                 + DOWN_ID_SUFFIX;
+    }
+
+    protected String getInputClientId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + INPUT_ID_SUFFIX;
     }
 
     protected void writeSpinnerAttributes(IHtmlWriter htmlWriter)

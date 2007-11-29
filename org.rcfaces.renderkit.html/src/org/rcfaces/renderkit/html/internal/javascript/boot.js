@@ -55,7 +55,10 @@ if (window._RCFACES_LEVEL3) {
 				win=thiz.defaultView;
 				
 			} else if (thiz.ownerDocument) {
-				win=thiz.ownerDocument.parentWindow;
+				win=thiz.ownerDocument.defaultView; // Firefox
+				if (!win) {
+					win=thiz.ownerDocument.parentWindow; // IE
+				}
 	
 			} else if (thiz.frames) {
 				win=thiz;			

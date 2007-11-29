@@ -16,7 +16,9 @@ import org.rcfaces.core.model.IContentModel;
 public class BasicContentInformation implements IContentInformation {
     private static final String REVISION = "$Revision$";
 
-    protected static final String FILTRED_MODEL_PROPERTY = "org.rcfaces.org.FILTRED_MODEL";
+    private static final String FILTRED_MODEL_PROPERTY = "org.rcfaces.org.FILTRED_MODEL";
+
+    private static final String TRANSIENT_PROPERTY = "org.rcfaces.org.TRANSIENT_PROPERTY";
 
     private Map attributes;
 
@@ -55,6 +57,43 @@ public class BasicContentInformation implements IContentInformation {
 
     public void setFiltredModel(boolean filtredModel) {
         setAttribute(FILTRED_MODEL_PROPERTY, Boolean.valueOf(filtredModel));
+    }
+
+    public boolean isTransient() {
+        Boolean val = (Boolean) getAttribute(TRANSIENT_PROPERTY);
+        if (val == null) {
+            return false;
+        }
+
+        return val.booleanValue();
+    }
+
+    public void setTransient(boolean transientState) {
+        setAttribute(TRANSIENT_PROPERTY, Boolean.valueOf(transientState));
+    }
+
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((attributes == null) ? 0 : attributes.hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final BasicContentInformation other = (BasicContentInformation) obj;
+        if (attributes == null) {
+            if (other.attributes != null)
+                return false;
+        } else if (!attributes.equals(other.attributes))
+            return false;
+        return true;
     }
 
 }

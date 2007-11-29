@@ -95,15 +95,15 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
                 .getRequest();
         HttpServletResponse response = (HttpServletResponse) externalContext
                 .getResponse();
-        ServletContext context = (ServletContext) externalContext.getContext();
+        ServletContext servletContext = (ServletContext) externalContext
+                .getContext();
 
-        RcfacesContext rcfacesContext = RcfacesContext
-                .getInstance(facesContext);
+        IResourceLoaderFactory resourceLoaderFactory = getResourceLoaderFactory(facesContext);
 
-        IResourceLoader imageDownloader = getImageLoader(rcfacesContext,
-                getResourceURL(), context, request, response);
+        IResourceLoader resourceLoader = resourceLoaderFactory.loadResource(
+                servletContext, request, response, getResourceURL());
 
-        String downloadedContentType = imageDownloader.getContentType();
+        String downloadedContentType = resourceLoader.getContentType();
         if (downloadedContentType == null
                 || downloadedContentType.equals(getContentType()) == false) {
             LOG.error("Different content types request='" + getContentType()
@@ -113,7 +113,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
             return INVALID_BUFFERED_FILE;
         }
 
-        InputStream inputStream = imageDownloader.openStream();
+        InputStream inputStream = resourceLoader.openStream();
 
         if (inputStream == null) {
             LOG.error("Can not get image specified by path '"
@@ -205,9 +205,9 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
                     new Map[] { getFilterParameters() });
 
             try {
-                bufferedImage.initialize(imageDownloader, externalContentType,
+                bufferedImage.initialize(resourceLoader, externalContentType,
                         renderedImage, imageWriter, sourceImageType,
-                        imageDownloader.getLastModified());
+                        resourceLoader.getLastModified());
 
             } catch (IOException e) {
                 LOG.error("Can not create filtred image '" + getResourceURL()
@@ -227,20 +227,21 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
         return new FileRenderedImage(imageName);
     }
 
-    private IResourceLoader getImageLoader(RcfacesContext context, String url,
-            ServletContext servletContext, HttpServletRequest request,
-            HttpServletResponse response) {
+    protected IResourceLoaderFactory getResourceLoaderFactory(
+            FacesContext facesContext) {
+
+        RcfacesContext rcfacesContext = RcfacesContext
+                .getInstance(facesContext);
 
         IResourceLoaderFactory imageLoaderFactory;
-        if (context.isDesignerMode()) {
+        if (rcfacesContext.isDesignerMode()) {
             imageLoaderFactory = Constants.getDesignerImageLoaderFactory();
 
         } else {
             imageLoaderFactory = Constants.getImageLoaderFactory();
         }
 
-        return imageLoaderFactory.loadResource(servletContext, request,
-                response, url);
+        return imageLoaderFactory;
     }
 
     protected RenderedImage filter(BufferedImage image,

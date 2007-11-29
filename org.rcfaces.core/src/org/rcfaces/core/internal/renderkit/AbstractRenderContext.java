@@ -42,6 +42,8 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
     private Map attributes;
 
+    private boolean transientState;
+
     protected AbstractRenderContext() {
     }
 
@@ -254,7 +256,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
     protected abstract IComponentWriter createWriter(UIComponent component);
 
-    public void encodeEnd(UIComponent component) {
+    public void encodeEnd(IComponentWriter writer) throws WriterException {
     }
 
     public void popScopeVar(String varName) {
@@ -294,13 +296,12 @@ public abstract class AbstractRenderContext implements IRenderContext {
                 varScopeState.getVarName(), varScopeState.getValue());
     }
 
-    public Object saveRenderContextState() {
+    public Object saveState(FacesContext facesContext) {
         if (scopeVars == null || scopeVars.isEmpty()) {
             return null;
         }
 
         Object sv[] = new Object[scopeVars.size()];
-        FacesContext facesContext = getFacesContext();
 
         int idx = 0;
         for (Iterator it = scopeVars.iterator(); it.hasNext();) {
@@ -312,13 +313,11 @@ public abstract class AbstractRenderContext implements IRenderContext {
         return sv;
     }
 
-    public void restoreState(Object object) {
+    public void restoreState(FacesContext facesContext, Object object) {
         Object sv[] = (Object[]) object;
         if (sv == null) {
             return;
         }
-
-        FacesContext facesContext = getFacesContext();
 
         for (int i = 0; i < sv.length; i++) {
             VarScopeState varScopeState = new VarScopeState();
@@ -327,6 +326,14 @@ public abstract class AbstractRenderContext implements IRenderContext {
 
             pushScopeVar(varScopeState);
         }
+    }
+
+    public boolean isTransient() {
+        return transientState;
+    }
+
+    public void setTransient(boolean newTransientValue) {
+        this.transientState = newTransientValue;
     }
 
     /**

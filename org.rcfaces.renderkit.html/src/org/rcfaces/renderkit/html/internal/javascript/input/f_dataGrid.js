@@ -330,7 +330,7 @@ var __members = {
 			
 		} else {
 			row=doc.createElement("tr");
-			this._tbody.appendChild(row);
+			f_core.AppendChild(this._tbody, row);
 		}
 		this._rowsPool.push(row);
 		row._dataGrid=this;
@@ -422,7 +422,7 @@ var __members = {
 						
 					} else {
 						td=doc.createElement("td");
-						row.appendChild(td);
+						f_core.AppendChild(row, td);
 					}
 					
 					this._cellsPool.push(td);
@@ -450,7 +450,7 @@ var __members = {
 						if ((this._additionalInformations || this._checkable) && f_core.IsInternetExplorer()) {
 							ctrlContainer=doc.createElement("div");
 							ctrlContainer.noWrap=true;
-							td.appendChild(ctrlContainer);
+							f_core.AppendChild(td, ctrlContainer);
 						}
 						
 						if (this._additionalInformations) {
@@ -466,7 +466,7 @@ var __members = {
 							
 							row._additionalButton=button;
 
-							ctrlContainer.appendChild(button);
+							f_core.AppendChild(ctrlContainer, button);
 						}
 						
 						if (this._checkable) {
@@ -499,7 +499,7 @@ var __members = {
 								input.disabled=true;
 							}
 							
-							ctrlContainer.appendChild(input);
+							f_core.AppendChild(ctrlContainer, input);
 						}
 					}
 
@@ -535,7 +535,7 @@ var __members = {
 						}
 						cellImages[countTd]=cellImage;
 
-						ctrlContainer.appendChild(cellImage);
+						f_core.AppendChild(ctrlContainer, cellImage);
 					}
 
 					var labelComponent=doc.createElement("label");
@@ -543,9 +543,9 @@ var __members = {
 					if (!cellText) {
 						cellText=" ";
 					}
-					labelComponent.appendChild(doc.createTextNode(cellText));
+					f_core.AppendChild(labelComponent, doc.createTextNode(cellText));
 					labelComponent.className="f_grid_label";
-					ctrlContainer.appendChild(labelComponent);
+					f_core.AppendChild(ctrlContainer, labelComponent);
 					
 					countTd++;
 					
@@ -1060,7 +1060,7 @@ var __members = {
 					}
 				}
 	
-				var event=new f_event(dataGrid, f_event.CHANGE);
+				var event=new f_event(dataGrid, f_event.LOAD);
 				try {
 					dataGrid.f_fireEvent(event);
 					
@@ -1164,7 +1164,7 @@ var __members = {
 		if (tbody && !this._partialWaiting) {
 			f_core.Assert(tbody.parentNode!=this._table, "f_dataGrid.f_updateNewPage: Tbody has not been detached !");
 			
-			this._table.appendChild(tbody);
+			f_core.AppendChild(this._table, tbody);
 			
 			var rows=f_grid.ListRows(this._table);
 			for(var i=0;i<rows.length;i++) {
@@ -1357,7 +1357,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @param HTMLRowElement row
+	 * @param HTMLTableRowElement row
 	 * @param Object... Properties of each row
 	 * @return void
 	 */
@@ -1544,7 +1544,7 @@ var __members = {
 			var row=trs[i];
 			row._curIndex=null;
 			
-			body.appendChild(row);
+			f_core.AppendChild(body, row);
 		}
 
 		var rowClasses= this._rowStyleClasses;
@@ -1564,7 +1564,7 @@ var __members = {
 			}
 		}		
 	
-		this._table.appendChild(body);	
+		f_core.AppendChild(this._table, body);	
 	}
 }
 

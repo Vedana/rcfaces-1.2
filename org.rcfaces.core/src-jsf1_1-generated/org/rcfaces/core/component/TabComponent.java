@@ -1,27 +1,27 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.MenuTools;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.TabbedPaneComponent;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.CardComponent;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.CardComponent;
+import java.util.Set;
+import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.TabbedPaneComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IFontCapability;
 
 /**
  * An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> and holding the components.
@@ -40,7 +40,7 @@ public class TabComponent extends CardComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","hoverImageURL","imageURL","disabledImageURL","disabled","fontSize","accessKey","fontItalic","textDirection","fontBold","text","selectedImageURL","fontName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","text","fontName","accessKey","hoverImageURL","fontBold","fontSize","textDirection","selectedImageURL","fontItalic","fontUnderline","disabled","imageURL"}));
 	}
 
 	public TabComponent() {
@@ -372,17 +372,17 @@ public class TabComponent extends CardComponent implements
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

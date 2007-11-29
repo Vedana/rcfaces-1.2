@@ -54,6 +54,10 @@ var __statics = {
 	PrepareImage: function(url) {
 		f_core.Assert(url, "f_imageRepository.PrepareImage: URL must be not NULL !");
 		
+		if (window._rcfacesPrepareImages===false) {
+			return;
+		}
+		
 		var images=f_imageRepository._Images;
 		if (!images) {
 			images=new Object;

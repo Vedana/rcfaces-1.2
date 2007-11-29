@@ -67,8 +67,6 @@ public interface IJavaScriptWriter extends IComponentWriter {
 
     IJavaScriptWriter writeString(String s) throws WriterException;
 
-    void addRequestedModule(String moduleName);
-
     String allocateString(String text) throws WriterException;
 
     IJavaScriptWriter writeBoolean(boolean value) throws WriterException;

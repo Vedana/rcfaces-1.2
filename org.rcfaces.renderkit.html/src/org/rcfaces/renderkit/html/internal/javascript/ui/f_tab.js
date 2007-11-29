@@ -147,7 +147,7 @@ var __members = {
 		this._mask=mask;
 		mask.className="f_tabbedPane_tab_mask";
 		
-		this.insertBefore(mask, this.firstChild);
+		f_core.InsertBefore(this, mask, this.firstChild);
 	},
 	/**
 	 * @method public

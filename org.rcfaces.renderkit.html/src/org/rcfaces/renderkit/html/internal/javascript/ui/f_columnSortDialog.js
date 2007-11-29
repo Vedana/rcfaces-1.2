@@ -222,7 +222,7 @@ var __statics = {
 	 * @method private static
 	 * @param Object[] selects
 	 * @param number i
-	 * @param HTMLRadioElement[] radios
+	 * @param HTMLInputElement[] radios
 	 * @return void
 	 */
 	_UpdateRadioButtons: function(selects, i, radios) {		
@@ -280,7 +280,7 @@ var __statics = {
 	    }
 	    
         newOpt.value = text;
-        newOpt.appendChild(selectComp.ownerDocument.createTextNode(text));
+        f_core.AppendChild(newOpt, selectComp.ownerDocument.createTextNode(text));
         newOpt._columnIndex = columnIndex;
         
         return selectComp.appendChild(newOpt);

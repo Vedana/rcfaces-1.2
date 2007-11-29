@@ -10,21 +10,21 @@ package org.rcfaces.core.internal.validator;
  */
 public interface IClientValidatorDescriptor extends IDescriptor {
 
-    String getFilterCall();
+    ITaskDescriptor getFilterTask();
 
-    String getTranslatorCall();
+    ITaskDescriptor getTranslatorTask();
 
-    String getCheckerCall();
+    ITaskDescriptor getCheckerTask();
 
-    String getFormatterCall();
+    ITaskDescriptor getFormatterTask();
 
-    String getBehaviorCall();
+    ITaskDescriptor getBehaviorTask();
 
-    String getProcessorCall();
+    ITaskDescriptor getProcessorTask();
 
-    String getOnErrorCall();
+    ITaskDescriptor getOnErrorTask();
 
-    String getOnCheckErrorCall();
+    ITaskDescriptor getOnCheckErrorTask();
 
     String getConverter();
 

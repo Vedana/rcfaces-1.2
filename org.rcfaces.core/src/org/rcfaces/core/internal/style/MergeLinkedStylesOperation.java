@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
+import org.rcfaces.core.internal.style.CssParserFactory.ICssParser.IParserContext;
 
 /**
  * 
@@ -22,8 +23,9 @@ public class MergeLinkedStylesOperation extends AbstractStyleOperation {
 
     public String filter(IResourceLoaderFactory resourceLoaderFactory,
             ICssParser cssParser, String styleSheetURL,
-            String styleSheetContent, String defaultCharset) throws IOException {
+            String styleSheetContent, IParserContext mergeContext)
+            throws IOException {
         return cssParser.mergesBuffer(resourceLoaderFactory, styleSheetURL,
-                styleSheetContent, defaultCharset);
+                styleSheetContent, mergeContext);
     }
 }

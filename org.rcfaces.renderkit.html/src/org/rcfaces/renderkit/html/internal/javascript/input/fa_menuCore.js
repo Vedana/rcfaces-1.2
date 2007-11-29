@@ -504,7 +504,7 @@ var __members = {
 
 		uiPopup._popupObject=popupObject;
 	
-		container.appendChild(uiPopup);
+		f_core.AppendChild(container, uiPopup);
 		
 		this._uiMenuPopups[parentItem]=uiPopup;
 		
@@ -536,7 +536,7 @@ var __members = {
 			if (itemId) {
 				uiItem.id=itemId;
 			}
-			uiPopup.appendChild(uiItem);
+			f_core.AppendChild(uiPopup, uiItem);
 			
 			this._uiMenuItems[item]=uiItem;
 			uiItem._item=item;
@@ -578,7 +578,7 @@ var __members = {
 			image.className="f_menu_item_image";
 			uiItem._icon=image;
 			
-			uiItem.appendChild(image);
+			f_core.AppendChild(uiItem, image);
 			
 			var div=doc.createElement("label");
 			div.className="f_menu_item_text";
@@ -592,7 +592,7 @@ var __members = {
 			var label=this.f_getItemLabel(item);
 			f_component.AddLabelWithAccessKey(div, label, accessKey);
 			
-			uiItem.appendChild(div);
+			f_core.AppendChild(uiItem, div);
 	
 			var acceleratorKey=item._acceleratorKey;
 			if (acceleratorKey) {
@@ -600,12 +600,12 @@ var __members = {
 				var accelV=doc.createElement("label");
 				accelV.className="f_menu_item_accelV";
 				accelV.innerHTML=htmlAcceleratorKey;
-				uiItem.appendChild(accelV);
+				f_core.AppendChild(uiItem, accelV);
 		
 				var accel=doc.createElement("label");
 				accel.className="f_menu_item_accel";
 				accel.innerHTML=htmlAcceleratorKey;
-				uiItem.appendChild(accel);
+				f_core.AppendChild(uiItem, accel);
 			}
 			
 			uiItem.onmouseover=fa_menuCore._MenuItem_mouseOver;

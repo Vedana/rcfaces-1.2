@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.internal.contentStorage;
 
+import org.rcfaces.core.internal.lang.StringAppender;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -51,6 +53,18 @@ public abstract class AbstractResolvedContent implements IResolvedContent {
 
     public void setVersioned(boolean versioned) {
         this.versioned = versioned;
+    }
+
+    public void appendHashInformations(StringAppender sa) {
+        long date = getModificationDate();
+        if (date > 0) {
+            sa.append(date);
+        }
+
+        int length = getLength();
+        if (length > 0) {
+            sa.append(length);
+        }
     }
 
 }

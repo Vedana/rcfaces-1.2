@@ -352,9 +352,10 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
         }
 
         public InteractiveContext(IHtmlRenderContext htmlRenderContext) {
-            contextState = htmlRenderContext.saveRenderContextState();
-            contentType = htmlRenderContext.getFacesContext()
-                    .getResponseWriter().getContentType();
+            FacesContext facesContext = htmlRenderContext.getFacesContext();
+
+            contextState = htmlRenderContext.saveState(facesContext);
+            contentType = facesContext.getResponseWriter().getContentType();
         }
 
         private InteractiveBuffer renderTree(FacesContext facesContext,
@@ -608,7 +609,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
                 int length = content.length();
                 gzippedContent = NO_GZIPPED_CONTENT;
-                if (length >= Constants.INTERACTIVE_RENDER_MINIMUM_GZIP_BUFFER_SIZE) {
+                if (length >= org.rcfaces.core.internal.Constants.MINIMUM_GZIP_BUFFER_SIZE) {
                     try {
                         ByteBufferOutputStream bos = new ByteBufferOutputStream(
                                 content.length());
@@ -647,7 +648,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                                 .debug("Buffer is too small to try compression ! ("
                                         + length
                                         + "<"
-                                        + Constants.INTERACTIVE_RENDER_MINIMUM_GZIP_BUFFER_SIZE
+                                        + org.rcfaces.core.internal.Constants.MINIMUM_GZIP_BUFFER_SIZE
                                         + ")");
 
                     }

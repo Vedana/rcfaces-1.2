@@ -667,7 +667,7 @@ var __members = {
 			}
 		}
 		
-		this.appendChild(uiItem);
+		f_core.AppendChild(this, uiItem);
 
 		return menuBarItem;
 	},

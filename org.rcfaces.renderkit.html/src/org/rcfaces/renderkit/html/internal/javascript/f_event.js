@@ -164,7 +164,7 @@ var __members= {
 	 */
 	f_preventDefault: function() {
 		var evt=this._jsEvent;
-		f_core.Assert(evt, "Javascript Event is null !");
+		f_core.Assert(evt, "f_event.f_preventDefault: Javascript Event is null !");
 	
 		f_core.CancelJsEvent(evt);
 		

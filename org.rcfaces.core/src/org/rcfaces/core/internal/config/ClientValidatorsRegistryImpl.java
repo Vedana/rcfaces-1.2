@@ -35,8 +35,10 @@ import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
-import org.rcfaces.core.internal.validator.IParameter;
 import org.rcfaces.core.internal.validator.IServerConverter;
+import org.rcfaces.core.internal.validator.ITaskDescriptor;
+import org.rcfaces.core.validator.IClientValidatorTask;
+import org.rcfaces.core.validator.IParameter;
 import org.xml.sax.Attributes;
 
 /**
@@ -107,38 +109,133 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
         digester.addSetProperties(
                 "rcfaces-config/clientValidators/render-kit/clientValidator",
                 "package", "packageName");
+
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/filter",
-                        "call", "filter");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator.setFilter(new TaskDescriptor(
+                                        attributes));
+                            }
+                        });
+
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/translator",
-                        "call", "translator");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator
+                                        .setTranslator(new TaskDescriptor(
+                                                attributes));
+                            }
+                        });
+
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/checker",
-                        "call", "checker");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator.setChecker(new TaskDescriptor(
+                                        attributes));
+                            }
+                        });
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/formatter",
-                        "call", "formatter");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator
+                                        .setFormatter(new TaskDescriptor(
+                                                attributes));
+                            }
+                        });
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/behavior",
-                        "call", "behavior");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator.setBehavior(new TaskDescriptor(
+                                        attributes));
+                            }
+                        });
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/onerror",
-                        "call", "onerror");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator.setOnerror(new TaskDescriptor(
+                                        attributes));
+                            }
+                        });
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/oncheckerror",
-                        "call", "oncheckerror");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator
+                                        .setOncheckerror(new TaskDescriptor(
+                                                attributes));
+                            }
+                        });
         digester
-                .addSetProperties(
+                .addRule(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/processor",
-                        "call", "processor");
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                clientValidator
+                                        .setProcessor(new TaskDescriptor(
+                                                attributes));
+                            }
+                        });
         digester
                 .addSetProperties(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/converter",
@@ -310,47 +407,47 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         private String requiredClasses[];
 
-        private String filter;
+        private ITaskDescriptor filter;
 
-        private String translator;
+        private ITaskDescriptor translator;
 
-        private String checker;
+        private ITaskDescriptor checker;
 
-        private String formatter;
+        private ITaskDescriptor formatter;
 
-        private String behavior;
+        private ITaskDescriptor behavior;
 
-        private String processor;
+        private ITaskDescriptor processor;
 
-        private String onerror;
+        private ITaskDescriptor onerror;
 
-        private String oncheckerror;
+        private ITaskDescriptor oncheckerror;
 
         private String converter;
 
         private IServerConverter serverConverter;
 
-        public final String getBehaviorCall() {
+        public final ITaskDescriptor getBehaviorTask() {
             return behavior;
         }
 
-        public final String getCheckerCall() {
+        public final ITaskDescriptor getCheckerTask() {
             return checker;
         }
 
-        public final String getFilterCall() {
+        public final ITaskDescriptor getFilterTask() {
             return filter;
         }
 
-        public final String getFormatterCall() {
+        public final ITaskDescriptor getFormatterTask() {
             return formatter;
         }
 
-        public final String getOnCheckErrorCall() {
+        public final ITaskDescriptor getOnCheckErrorTask() {
             return oncheckerror;
         }
 
-        public final String getOnErrorCall() {
+        public final ITaskDescriptor getOnErrorTask() {
             return onerror;
         }
 
@@ -358,39 +455,39 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             return requiredClasses;
         }
 
-        public final String getTranslatorCall() {
+        public final ITaskDescriptor getTranslatorTask() {
             return translator;
         }
 
-        public String getProcessorCall() {
+        public ITaskDescriptor getProcessorTask() {
             return processor;
         }
 
-        public void setProcessor(String processor) {
+        public void setProcessor(ITaskDescriptor processor) {
             this.processor = processor;
         }
 
-        public final void setBehavior(String behavior) {
+        public final void setBehavior(ITaskDescriptor behavior) {
             this.behavior = behavior;
         }
 
-        public final void setChecker(String checker) {
+        public final void setChecker(ITaskDescriptor checker) {
             this.checker = checker;
         }
 
-        public final void setFilter(String filter) {
+        public final void setFilter(ITaskDescriptor filter) {
             this.filter = filter;
         }
 
-        public final void setFormatter(String formatter) {
+        public final void setFormatter(ITaskDescriptor formatter) {
             this.formatter = formatter;
         }
 
-        public final void setOncheckerror(String oncheckerror) {
+        public final void setOncheckerror(ITaskDescriptor oncheckerror) {
             this.oncheckerror = oncheckerror;
         }
 
-        public final void setOnerror(String onerror) {
+        public final void setOnerror(ITaskDescriptor onerror) {
             this.onerror = onerror;
         }
 
@@ -398,7 +495,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             this.requiredClasses = requiredClasses;
         }
 
-        public final void setTranslator(String translator) {
+        public final void setTranslator(ITaskDescriptor translator) {
             this.translator = translator;
         }
 
@@ -430,7 +527,76 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static class TaskDescriptor implements ITaskDescriptor {
+        private static final String REVISION = "$Revision$";
+
+        private final String clientTaskExpression;
+
+        private final IClientValidatorTask clientValidatorTask;
+
+        public TaskDescriptor(Attributes attributes) {
+            clientTaskExpression = attributes.getValue("call");
+
+            String serverTaskClassName = attributes.getValue("class");
+
+            if (serverTaskClassName != null) {
+                LOG.debug("Instanciate filter '" + serverTaskClassName + "'.");
+                
+                Class clazz;
+                try {
+                    clazz = ClassLocator.load(serverTaskClassName, null,
+                            FacesContext.getCurrentInstance());
+
+                } catch (Throwable th) {
+                    LOG.error("Can not load client validator task class '"
+                            + serverTaskClassName + "'.", th);
+
+                    throw new FacesException(
+                            "Can not initialize server filter.", th);
+                }
+
+                try {
+                    clientValidatorTask = (IClientValidatorTask) clazz
+                            .newInstance();
+
+                } catch (Throwable th) {
+                    LOG.error("Can not instanciate client validator task '"
+                            + clazz + "'.", th);
+
+                    throw new FacesException(
+                            "Can not initialize server filter.", th);
+                }
+
+            } else {
+                clientValidatorTask = null;
+            }
+        }
+
+        public String getClientTaskExpression() {
+            return clientTaskExpression;
+        }
+
+        public String getClientTaskExpressionType() {
+            return null;
+        }
+
+        public IClientValidatorTask getServerTask() {
+            return clientValidatorTask;
+        }
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
     public static class ParametersContainer {
+        private static final String REVISION = "$Revision$";
 
         private IParameter[] parameters;
 

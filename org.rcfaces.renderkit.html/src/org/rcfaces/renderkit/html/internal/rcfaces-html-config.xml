@@ -102,153 +102,10 @@
 	<clientValidators>
 		<render-kit> <!-- render-kit-id="HTML_BASIC" -->
 
-<!--
-/**
- * Contrôle de  validation  effectuant une saisie formatée en entrée et en
- * sortie d'une date.
- * La gestion d'erreur sur perte de focus est de type colorisation.
- * La gestion d'erreur sur soumission de la vue est de type message.
- *
- * @param	date.input		Format d'entrée de format date Java
- * @param	date.separator	Separateur
- * @param	date.output		Format de sortie de format date Java
- * @example	clientValidator="date"
- */
 
-	<clientValidator id="xdate" package="xvalidators">
-		<parameter name="date.input" value="ddMMyyyy" />
-		<parameter name="date.separator" value="/" />
-		<parameter name="date.output" value="dd/MM/yyyy" />
-		<filter call="f_vb.Filter_date" />
-		<checker call="f_vx.Checker_date" />
-		<formatter call="f_vx.Formatter_date" />
-		<!- -
-			<onerror call="f_clientValidator.Error_msg_color" />
-			<oncheckerror call="f_clientValidator.Error_default" />
-			- ->
-		<stringAdapter formatterId="date" />
-		<description lang="fr">
-			Filtrage d'une date JJ/MM/AAAF.
-		</description>
- 		<informations lang="fr">
- 			<html>
- 				<font color='darkgray'>Validateur :</font> <b>F.date</b><br/>
-				Contrôle de validation effectuant un filtrage pour ne conserver que les caractères autorisés par le format de la date.<br/>
-	 			<br/>
-	 			<font color='darkgray'>Voir formatteur :</font>	F.date
-	 			<font color='darkgray'>Exemple :</font>	clientValidator="date"
-	 		</html>
-		</informations>
-	</clientValidator>
--->
-<!--
-/**
- * Contrôle de  validation  effectuant une saisie formatée en entrée et en
- * sortie d'une heure.
- * La gestion d'erreur sur perte de focus est de type colorisation.
- * La gestion d'erreur sur soumission de la vue est de type message.
- *
- * @param	time.input		Format d'entrée de format heure Java
- * @param	time.separator	Separateur
- * @param	time.output		Format de sortie de format heure Java
- * @example	clientValidator="xhour"
- */
 
-	<clientValidator id="xhour" package="xvalidators">
-		<parameter name="time.input" value="HHmmss" />
-		<parameter name="time.separator" value=":" />
-		<parameter name="time.output" value="HH:mm:ss" />
-		<filter call="f_vb.Filter_time" />
-		<checker call="f_vx.Checker_time" />
-		<formatter call="f_vx.Formatter_time" />
-		<!- -
-			<onerror call="f_clientValidator.Error_msg_color" />
-			<oncheckerror call="f_clientValidator.Error_default" />
-			- ->
-		<stringAdapter formatterId="hour" />
-	</clientValidator>
--->
-<!--
-/**
- * Contrôle de  validation  effectuant une saisie formatée en entrée et en
- * sortie d'un nombre entier.
- * La gestion d'erreur sur perte de focus est de type colorisation.
- * La gestion d'erreur sur soumission de la vue est de type message.
- *
- * @param	number.input	Format d'entrée de format nombre Java
- * @param	number.locale	Localisation au format Java
- * @param	number.output	Format de sortie de format nombre Java
- * @example	clientValidator="integer"
- */
 
-	<clientValidator id="xinteger" package="xvalidators">
-		<parameter name="number.input" value="#;-#" />
-		<parameter name="number.locale" value="fr_FR" />
-		<parameter name="number.output" value="# ###;-# ###" />
-		<filter call="f_vb.Filter_integer" />
-		<checker call="f_vx.Checker_number" />
-		<formatter call="f_vx.Formatter_number" />
-		<!- -
-			<onerror call="f_clientValidator.Error_msg_color" />
-			<oncheckerror call="f_clientValidator.Error_default" />
-			- ->
-		<stringAdapter formatterId="integer" />
-	</clientValidator>
--->
-<!--
-/**
- * Contrôle de  validation  effectuant une saisie formatée en entrée et en
- * sortie d'un nombre entier signé.
- * La gestion d'erreur sur perte de focus est de type colorisation.
- * La gestion d'erreur sur soumission de la vue est de type message.
- *
- * @param	number.input	Format d'entrée de format nombre Java
- * @param	number.locale	Localisation au format Java
- * @param	number.output	Format de sortie de format nombre Java
- * @example	clientValidator="signed"
- */
 
-	<clientValidator id="xsigned" package="xvalidators">
-		<parameter name="number.input" value="#;-#" />
-		<parameter name="number.locale" value="fr_FR" />
-		<parameter name="number.output" value="# ###;-# ###" />
-		<filter call="f_vb.Filter_signed" />
-		<checker call="f_vx.Checker_number" />
-		<formatter call="f_vx.Formatter_number" />
-		<!- -
-			<onerror call="f_clientValidator.Error_msg_color" />
-			<oncheckerror call="f_clientValidator.Error_default" />
-			- ->
-		<stringAdapter formatterId="integer" />
-	</clientValidator>
--->
-<!--
-/**
- * Contrôle de  validation  effectuant une saisie formatée en entrée et en
- * sortie d'un nombre décimal.
- * La gestion d'erreur sur perte de focus est de type colorisation.
- * La gestion d'erreur sur soumission de la vue est de type message.
- *
- * @param	number.input	Format d'entrée de format nombre Java
- * @param	number.locale	Localisation au format Java
- * @param	number.output	Format de sortie de format nombre Java
- * @example	clientValidator="number"
- */
-
-	<clientValidator id="xnumber" package="xvalidators">
-		<parameter name="number.input" value="#,#;-#,#" />
-		<parameter name="number.locale" value="fr_FR" />
-		<parameter name="number.output" value="# ##0,00;-# ##0,00" />
-		<filter call="f_vb.Filter_number" />
-		<checker call="f_vx.Checker_number" />
-		<formatter call="f_vx.Formatter_number" />
-		<!- -
-			<onerror call="f_clientValidator.Error_msg_color" />
-			<oncheckerror call="f_clientValidator.Error_default" />
-			- ->
-		<stringAdapter formatterId="number" />
-	</clientValidator>
--->
 <!--
 /**
  * Contrôle de  validation  effectuant un filtrage des caractères espace.
@@ -257,7 +114,7 @@
  */
 -->
 	<clientValidator id="noblank">
-		<filter call="f_vb.Filter_noblank" />
+		<filter call="f_vb.Filter_noblank" class="org.rcfaces.core.internal.validator.impl.NoBlankFilter" />
 		<description lang="fr">
 			Filtrage les espaces.
 		</description>
@@ -306,7 +163,7 @@
  */
 -->
 	<clientValidator id="code">
-		<filter call="f_vb.Filter_code" />
+		<filter call="f_vb.Filter_code" class="org.rcfaces.core.internal.validator.impl.AlphaFilter" />
 	</clientValidator>
 
 <!--
@@ -320,22 +177,8 @@
 -->
 	<clientValidator id="alpha">
 		<parameter name="alpha.otherChars" value="" />
-		<filter call="f_vb.Filter_alpha" />
+		<filter call="f_vb.Filter_alpha" class="org.rcfaces.core.internal.validator.impl.AlphaFilter" />
 	</clientValidator>
-
-<!--
-/**
- * Contrôle de  validation  effectuant un filtrage des caractères valides pour
- * la saisie d'un alphanumérique: [0-9a-zA-Z]
- *
- * @param	alpha.otherChars	Chaîne de caractères supplémentaires autorisés
- * @example	clientValidator="alphanum('@._')"
- */
-	<clientValidator id="alphanum">
-		<parameter name="alpha.otherChars" value="" />
-		<filter call="f_vb.Filter_alphanum" />
-	</clientValidator>
--->
 
 <!--
 /**
@@ -358,7 +201,7 @@
 		<parameter name="num.negSign" value="-" />
 		<parameter name="num.decSign" value=",." />
 		<parameter name="num.sepSign" value=" " />
-		<filter call="f_vb.Filter_num" />
+		<filter call="f_vb.Filter_num" class="org.rcfaces.core.internal.validator.impl.NumFilter" />
 	</clientValidator>
 
 <!--
@@ -382,7 +225,7 @@
  */
 -->
 	<clientValidator id="name">
-		<filter call="f_vb.Filter_name" />
+		<filter call="f_vb.Filter_name" class="org.rcfaces.core.internal.validator.impl.NameFilter" />
 	</clientValidator>
 
 <!--
@@ -394,7 +237,7 @@
  */
 -->
 	<clientValidator id="removeaccent">
-		<translator call="f_vb.Translator_removeaccent" />
+		<translator call="f_vb.Translator_removeaccent" class="org.rcfaces.core.internal.validator.impl.RemoveAccentTranslator" />
 	</clientValidator>
 
 <!--
@@ -406,7 +249,7 @@
  */
 -->
 	<clientValidator id="skipBlank">
-		<checker call="f_vb.Checker_trim" />
+		<checker call="f_vb.Checker_trim" class="org.rcfaces.core.internal.validator.impl.TrimChecker" />
 	</clientValidator>
 
 
@@ -427,7 +270,7 @@
 -->
 	<clientValidator id="alpha_fr">
 		<parameter name="alpha.otherChars" value="" />
-		<filter call="f_vb.Filter_alpha_fr" />
+		<filter call="f_vb.Filter_alpha_fr" class="org.rcfaces.core.internal.validator.impl.AlphaFrFilter" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -446,8 +289,8 @@
 -->
 	<clientValidator id="alpha_fr_upper">
 		<parameter name="alpha.otherChars" value="" />
-		<filter call="f_vb.Filter_alpha_fr" />
-		<translator call="f_vb.Translator_uppercase" />
+		<filter call="f_vb.Filter_alpha_fr" class="org.rcfaces.core.internal.validator.impl.AlphaFrFilter"  />
+		<translator call="f_vb.Translator_uppercase" class="org.rcfaces.core.internal.validator.impl.UpperCaseTranslator" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -466,8 +309,8 @@
 -->
 	<clientValidator id="alpha_fr_lower">
 		<parameter name="alpha.otherChars" value="" />
-		<filter call="f_vb.Filter_alpha_fr" />
-		<translator call="f_vb.Translator_lowercase" />
+		<filter call="f_vb.Filter_alpha_fr" class="org.rcfaces.core.internal.validator.impl.AlphaFrFilter" />
+		<translator call="f_vb.Translator_lowercase" class="org.rcfaces.core.internal.validator.impl.LowerCaseTranslator" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -484,7 +327,7 @@
  */
 -->
 	<clientValidator id="digit">
-		<filter call="f_vb.Filter_digit" />
+		<filter call="f_vb.Filter_digit" class="org.rcfaces.core.internal.validator.impl.DigitFilter"  />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -505,7 +348,7 @@
 -->
 	<clientValidator id="alpha_digit">
 		<parameter name="alpha.otherChars" value="" />
-		<filter call="f_vb.Filter_alphanum" />
+		<filter call="f_vb.Filter_alphanum" class="org.rcfaces.core.internal.validator.impl.AlphaNumFilter" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -522,7 +365,7 @@
  */
 -->
 	<clientValidator id="upper">
-		<translator call="f_vb.Translator_uppercase" />
+		<translator call="f_vb.Translator_uppercase" class="org.rcfaces.core.internal.validator.impl.UpperCaseTranslator" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -539,7 +382,7 @@
  */
 -->
 	<clientValidator id="lower">
-		<translator call="f_vb.Translator_lowercase" />
+		<translator call="f_vb.Translator_lowercase" class="org.rcfaces.core.internal.validator.impl.LowerCaseTranslator" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -556,7 +399,7 @@
  */
 -->
 	<clientValidator id="dps">
-		<filter call="f_vb.Filter_dps" />
+		<filter call="f_vb.Filter_dps" class="org.rcfaces.core.internal.validator.impl.DPSFilter" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -587,8 +430,8 @@
  */
 -->
 	<clientValidator id="insee">
-		<filter call="f_vb.Filter_insee" />
-		<translator call="f_vb.Translator_uppercase" />
+		<filter call="f_vb.Filter_insee" class="org.rcfaces.core.internal.validator.impl.INSEEFilter" />
+		<translator call="f_vb.Translator_uppercase" class="org.rcfaces.core.internal.validator.impl.UpperCaseTranslator" />
 		<checker call="f_vb.Checker_insee" />
 		<formatter call="f_vb.Formatter_insee" />
 		<!--
@@ -627,9 +470,9 @@
 	<clientValidator id="date">
 		<parameter name="date.sepSign" value="/-." />
 		<parameter name="date.pivot" value="90" />
-		<filter call="f_vb.Filter_dat" />
-		<translator call="f_vb.Translator_date" />
-		<checker call="f_vb.Checker_dat" />
+		<filter call="f_vb.Filter_dat" class="org.rcfaces.core.internal.validator.impl.DateFilter" />
+		<translator call="f_vb.Translator_date" class="org.rcfaces.core.internal.validator.impl.DateTranslator" />
+		<checker call="f_vb.Checker_dat" class="org.rcfaces.core.internal.validator.impl.DateChecker" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
@@ -668,8 +511,8 @@
 	<clientValidator id="date_msa">
 		<parameter name="date.sepSign" value="/-." />
 		<parameter name="date.pivot" value="90" />
-		<filter call="f_vb.Filter_dat" />
-		<translator call="f_vb.Translator_date" />
+		<filter call="f_vb.Filter_dat" class="org.rcfaces.core.internal.validator.impl.DateFilter"/>
+		<translator call="f_vb.Translator_date" class="org.rcfaces.core.internal.validator.impl.DateTranslator" />
 		<checker call="f_vb.Checker_dat_msa" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
@@ -703,8 +546,8 @@
 -->
 	<clientValidator id="date_naiss">
 		<parameter name="date.sepSign" value="/-." />
-		<filter call="f_vb.Filter_dat" />
-		<translator call="f_vb.Translator_date" />
+		<filter call="f_vb.Filter_dat" class="org.rcfaces.core.internal.validator.impl.DateFilter"/>
+		<translator call="f_vb.Translator_date" class="org.rcfaces.core.internal.validator.impl.DateTranslator" />
 		<checker call="f_vb.Checker_dat_nai" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
@@ -775,10 +618,10 @@
 		<parameter name="num.negSign" value="-" />
 		<parameter name="num.decSign" value=",." />
 		<parameter name="num.sepSign" value=" " />
-		<filter call="f_vb.Filter_num" />
-		<translator call="f_vb.Translator_num" />
-		<checker call="f_vb.Checker_num" />
-		<formatter call="f_vb.Formatter_num" />
+		<filter call="f_vb.Filter_num" class="org.rcfaces.core.internal.validator.impl.NumFilter"/>
+		<translator call="f_vb.Translator_num" class="org.rcfaces.core.internal.validator.impl.NumTranslator"/>
+		<checker call="f_vb.Checker_num" class="org.rcfaces.core.internal.validator.impl.NumChecker"/>
+		<formatter call="f_vb.Formatter_num" class="org.rcfaces.core.internal.validator.impl.NumFormatter" />
 		<converter object="f_vb.Converter_num" />
 		
 		<!--
@@ -788,14 +631,14 @@
 	</clientValidator>
 
 	<clientValidator id="ident">
-		<filter call="f_vb.Filter_alpha" />
-		<translator call="f_vb.Translator_uppercase" />
+		<filter call="f_vb.Filter_alpha" class="org.rcfaces.core.internal.validator.impl.AlphaFilter" />
+		<translator call="f_vb.Translator_uppercase" class="org.rcfaces.core.internal.validator.impl.UpperCaseTranslator" />
 	</clientValidator>
 
 	<clientValidator id="email">
 		<parameter name="alpha.otherChars" value="0123456789@.-_" />
-		<filter call="f_vb.Filter_alpha_fr" />
-		<translator call="f_vb.Translator_lowercase" />
+		<filter call="f_vb.Filter_alpha_fr" class="org.rcfaces.core.internal.validator.impl.AlphaFrFilter" />
+		<translator call="f_vb.Translator_lowercase" class="org.rcfaces.core.internal.validator.impl.LowerCaseTranslator" />
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />

@@ -15,14 +15,14 @@ import org.rcfaces.core.internal.renderkit.AbstractComponentRenderContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractHtmlComponentlRenderContext extends
+public abstract class AbstractHtmlComponentRenderContext extends
         AbstractComponentRenderContext implements IHtmlComponentRenderContext {
 
     private static final String REVISION = "$Revision$";
 
     private static final String CLIENT_DATA_COUNT_PROPERTY_NAME = "org.rcfaces.renderkit.html.CLIENT_DATA_COUNT";
 
-    protected AbstractHtmlComponentlRenderContext(FacesContext facesContext,
+    protected AbstractHtmlComponentRenderContext(FacesContext facesContext,
             UIComponent component, String componentClientId) {
         super(facesContext, component, componentClientId);
     }

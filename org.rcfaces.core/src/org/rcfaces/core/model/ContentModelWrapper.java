@@ -50,4 +50,13 @@ public class ContentModelWrapper implements IContentModel {
     public void setContentEngineId(String contentEngineId) {
         contentModel.setContentEngineId(contentEngineId);
     }
+
+    public boolean equals(Object obj) {
+        return contentModel.equals(obj);
+    }
+
+    public int hashCode() {
+        return contentModel.hashCode();
+    }
+
 }

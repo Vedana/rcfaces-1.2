@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
@@ -23,6 +24,8 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.images.ImageAdapterFactory;
+import org.rcfaces.core.internal.lang.LimitedMap;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.provider.AbstractProvider;
@@ -42,6 +45,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     private static final FileNameMap fileNameMap = URLConnection
             .getFileNameMap();
 
+    private static final String DISABLE_CACHE_PARAMETER = "org.rcfaces.core.contentStorage.DISABLE_CACHE";
+
     private final IContentStorageRepository contentStorageRepository = new BasicContentStorageRepository();
 
     private int contentStorageServletPathType;
@@ -49,6 +54,11 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     private String contentStorageServletURL;
 
     private IAdapterManager adapterManager;
+
+    private boolean disableCache = false;
+
+    private final LimitedMap registredContents = new LimitedMap(
+            Constants.CONTENT_STORAGE_CACHE_SIZE);
 
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
@@ -69,6 +79,14 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                     .info("Content storage engine is disabled. (No started Content Storage Servlet)");
         }
 
+        disableCache = "true"
+                .equalsIgnoreCase(facesContext.getExternalContext()
+                        .getInitParameter(DISABLE_CACHE_PARAMETER));
+        if (disableCache) {
+            LOG.info("Content storage cache is disabled. (Parameter '"
+                    + DISABLE_CACHE_PARAMETER + "' is setted to true.)");
+        }
+
         contentStorageServletPathType = IContentAccessor.CONTEXT_PATH_TYPE;
 
         adapterManager = rcfacesContext.getAdapterManager();
@@ -83,7 +101,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     }
 
     public IContentAccessor registerContentModel(FacesContext facesContext,
-            IContentModel contentModel, IContentInformation information,
+            IContentModel contentModel, IContentInformation contentInformation,
             IContentType contentType) {
 
         if (contentStorageServletURL == null) {
@@ -93,11 +111,28 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
         }
 
+        Content content = null;
+        boolean contentEngineMustBeRegistred = false;
+
         IContentStorageRepository repository = getRepository();
 
         IResolvedContent resolvedContent = null;
 
-        String contentEngineId = contentModel.getContentEngineId();
+        String contentEngineId = null;
+        if (disableCache == false) {
+            contentEngineId = contentModel.getContentEngineId();
+            if (contentEngineId == null
+                    && (contentInformation == null || contentInformation
+                            .isTransient() == false)) {
+                content = new Content(contentModel, contentInformation,
+                        contentType);
+
+                contentEngineId = (String) registredContents.get(content);
+
+                contentEngineMustBeRegistred = (contentEngineId == null);
+            }
+        }
+
         if (contentEngineId != null) {
             if (contentModel.checkNotModified()) {
                 if (LOG.isDebugEnabled()) {
@@ -108,7 +143,12 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             }
 
             if (resolvedContent == null) {
+                contentEngineId = null;
                 contentModel.setContentEngineId(null);
+
+                if (content != null) {
+                    registredContents.remove(content);
+                }
             }
         }
 
@@ -137,10 +177,18 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                             + contentModel.getClass()
                             + "' to IResolvedContentModel !");
                 }
+
             }
         }
 
         String url = repository.save(resolvedContent, contentModel);
+
+        if (contentEngineMustBeRegistred) {
+            contentEngineId = contentModel.getContentEngineId();
+            if (contentEngineId != null) {
+                registredContents.put(content, contentEngineId);
+            }
+        }
 
         if (contentType == null) {
             contentType = IContentType.USER;
@@ -209,8 +257,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         private final IContentModel contentModel;
 
-        private final String contentType;
-
         private final String suffix;
 
         // private final Map parameters;
@@ -237,12 +283,12 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             }
 
             this.suffix = suffix;
-            this.contentType = contentType;
             // this.parameters = contentModel.getAttributes();
         }
 
         public String getContentType() {
-            return contentType;
+            // Le contentType peut changer ...
+            return getResolvedContent().getContentType();
         }
 
         public String getURLSuffix() {
@@ -259,6 +305,12 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         public int getLength() {
             return getResolvedContent().getLength();
+        }
+
+        public void appendHashInformations(StringAppender sa) {
+            // Il faut les infos du content model ???
+
+            getResolvedContent().appendHashInformations(sa);
         }
 
         public synchronized IResolvedContent getResolvedContent() {
@@ -337,6 +389,64 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             }
 
             return getResolvedContent().getResourceKey();
+        }
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static class Content {
+        private final IContentModel contentModel;
+
+        private final IContentInformation information;
+
+        private final IContentType contentType;
+
+        public Content(IContentModel contentModel,
+                IContentInformation information, IContentType contentType) {
+            this.contentModel = contentModel;
+            this.information = information;
+            this.contentType = contentType;
+        }
+
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result
+                    + ((contentModel == null) ? 0 : contentModel.hashCode());
+            result = prime * result
+                    + ((contentType == null) ? 0 : contentType.hashCode());
+            result = prime * result
+                    + ((information == null) ? 0 : information.hashCode());
+            return result;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            final Content other = (Content) obj;
+            if (contentModel == null) {
+                if (other.contentModel != null)
+                    return false;
+            } else if (!contentModel.equals(other.contentModel))
+                return false;
+            if (contentType == null) {
+                if (other.contentType != null)
+                    return false;
+            } else if (!contentType.equals(other.contentType))
+                return false;
+            if (information == null) {
+                if (other.information != null)
+                    return false;
+            } else if (!information.equals(other.information))
+                return false;
+            return true;
         }
 
     }

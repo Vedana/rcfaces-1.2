@@ -19,12 +19,12 @@ var __statics = {
 	 _EventId: undefined,
 	/**
 	 * 
-	 * @method private static
+	 * @method hidden static
 	 * @param f_event event 
 	 * @return boolean
 	 * @context object:this
 	 */
-	 _Submit: function(event) {
+	 DefaultSubmit: function(event) {
 	 	f_core.SubmitEvent(event);
 	 	return false;
 	 }
@@ -75,7 +75,7 @@ var __members = {
 			f_core.Debug(fa_eventTarget, "f_initEventAtts: Register event '"+eventName+"' on component '"+this.id+"' => "+commands);
 
 			if (commands.length==2 && commands[1]=="submit") {
-				this.f_addEventListener(eventType, fa_eventTarget._Submit);
+				this.f_addEventListener(eventType, fa_eventTarget.DefaultSubmit);
 				continue;
 			}
 

@@ -17,7 +17,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
-import org.rcfaces.renderkit.html.internal.AbstractHtmlComponentlRenderContext;
+import org.rcfaces.renderkit.html.internal.AbstractHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
@@ -33,7 +33,7 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  * @version $Revision$ $Date$
  */
 public class JavaScriptResponseWriter extends
-        AbstractHtmlComponentlRenderContext implements IJavaScriptWriter {
+        AbstractHtmlComponentRenderContext implements IJavaScriptWriter {
     private static final String REVISION = "$Revision$";
 
     private final PrintWriter out;
@@ -53,6 +53,8 @@ public class JavaScriptResponseWriter extends
     private ServletContext servletContext;
 
     private IRenderContext renderContext;
+
+    private IHtmlComponentRenderContext componentRenderContext;
 
     public JavaScriptResponseWriter(FacesContext facesContext, PrintWriter out,
             String characterEncoding, UIComponent component, String componentId) {
@@ -216,7 +218,10 @@ public class JavaScriptResponseWriter extends
      * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#getComponentRenderContext()
      */
     public final IHtmlComponentRenderContext getHtmlComponentRenderContext() {
-        return this;
+        if (componentRenderContext == null) {
+            componentRenderContext = this;
+        }
+        return componentRenderContext;
     }
 
     public IComponentRenderContext getComponentRenderContext() {
@@ -238,14 +243,6 @@ public class JavaScriptResponseWriter extends
 
     public IHtmlWriter getWriter() {
         throw new FacesException("Not supported !");
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter#addRequestedModule(java.lang.String)
-     */
-    public void addRequestedModule(String moduleName) {
     }
 
     public IJavaScriptWriter writeSymbol(String symbol) {
@@ -374,6 +371,11 @@ public class JavaScriptResponseWriter extends
 
     public final void setRenderContext(IRenderContext renderContext) {
         this.renderContext = renderContext;
+    }
+
+    public final void setComponentRenderContext(
+            IHtmlComponentRenderContext componentRenderContext) {
+        this.componentRenderContext = componentRenderContext;
     }
 
 }

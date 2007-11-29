@@ -24,20 +24,6 @@ var __statics = {
 }
 
 var __members = {
-	
-	/**
-	 * @method protected
-	 */
-	f_initializeInput: function() {
-		var inputTagName=this.f_getInputTagName();
-		
-		var input=this.ownerDocument.getElementById(this.id+f_checkButton._INPUT_ID_SUFFIX);
-		if (input) {
-			return input;
-		}
-		
-		return this.f_super(arguments);
-	},
 	f_finalize: function() {
 		var labelComponent=this._label;
 		if (labelComponent) {
@@ -47,7 +33,13 @@ var __members = {
 		}
 		this.f_super(arguments);
 	},
-
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_initializeInput: function() {
+		return this.ownerDocument.getElementById(this.id+f_checkButton._INPUT_ID_SUFFIX);
+	},
 	/**
 	 * @method protected
 	 * @return HTMLElement
@@ -68,9 +60,11 @@ var __members = {
 	 * @return boolean
 	 */
 	f_isSelected: function() {
-		f_core.Assert(this._input, "f_checkButton.f_isSelected: Input is not found for selected property !");
+		var input=this.f_getInput();
+		
+		f_core.Assert(input, "f_checkButton.f_isSelected: Input is not found for selected property !");
 
-		return (this._input.checked);
+		return (input.checked);
 	},
 
 	/**
@@ -79,42 +73,15 @@ var __members = {
 	 * @return void
 	 */
 	f_setSelected: function(set) {
-		f_core.Assert(this._input, "f_checkButton.f_setSelected: Input is not found for selected property !");
+		var input=this.f_getInput();
 
-		if (this._input.checked==set) {
+		f_core.Assert(input, "f_checkButton.f_setSelected: Input is not found for selected property !");
+
+		if (input.checked==set) {
 			return;
 		}
 		
-		this._input.checked = set;
-	},
-
-	/**
-	 * @method protected
-	 */
-	f_setDomEvent: function(type, target) {
-	
-		switch(type) {
-		case f_event.SELECTION:
-		case f_event.DBLCLICK:
-			target=this.f_getInput();
-			break;
-		}
-		
-		this.f_super(arguments, type, target);
-	},
-	
-	/**
-	 * @method protected
-	 */
-	f_clearDomEvent: function(type, target) {
-		switch(type) {
-		case f_event.SELECTION:
-		case f_event.DBLCLICK:
-			target=this.f_getInput();
-			break;
-		}
-		
-		this.f_super(arguments, type, target);
+		input.checked = set;
 	},
 
 	/**
@@ -165,7 +132,9 @@ var __members = {
 	 */
 	f_serializeValue: function() {
 		// On sérialise systematiquement car il faut traiter le cas du disabled
-		this.f_setProperty(f_prop.SELECTED, (this._input.checked)?this._input.value:"");
+		var input=this.f_getInput();
+		
+		this.f_setProperty(f_prop.SELECTED, (input.checked)?input.value:"");
 	}
 }
 

@@ -12,6 +12,7 @@ A set of components specific to the html render-kit.
 	<tag>
 		<name>init</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 <description><![CDATA[
 <p><b>Mandatory</b>.</p>
@@ -137,6 +138,7 @@ A boolean value specifying if the HTML BASE tag must be generated.
 	<tag>
 		<name>javaScript</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 <description><![CDATA[
 Specifies includes and required javascript classes.
@@ -213,6 +215,7 @@ A string value specifying a list of javascript classes to include.
 	<tag>
 		<name>cssStyle</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.CssStyleTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 <description><![CDATA[
 Css style
@@ -267,6 +270,7 @@ A string value sprecifying the charset associated to the "src" files.
 	<tag>
 		<name>loadBundle</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadBundleTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description><![CDATA[
@@ -324,6 +328,7 @@ Base name of the resource bundle to be loaded.
 	<tag>
 		<name>nameSpace</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.NameSpaceTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description><![CDATA[
@@ -362,6 +367,7 @@ A boolean value indicating whether or not this component should be rendered
 	<tag>
 		<name>javaScriptCollector</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.JavaScriptCollectorTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description><![CDATA[

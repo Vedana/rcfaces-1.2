@@ -69,7 +69,7 @@ var __statics = {
 		userDataComponent=document.createElement("div");
 		userDataComponent.className="f_userDataClientStorage";
 		
-		document.body.appendChild(userDataComponent);
+		f_core.AppendChild(document.body, userDataComponent);
 		
 		if (!f_userDataClientStorage._Exited) {
 			f_userDataClientStorage._UserDataComponent=userDataComponent;

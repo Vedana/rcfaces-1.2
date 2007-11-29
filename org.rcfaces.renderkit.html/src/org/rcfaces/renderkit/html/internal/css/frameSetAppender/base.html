@@ -24,7 +24,9 @@ window.rcfacesProfilerCB=function(timeEnd, name, date, win) {
 		window._frameLoaded=false;
 		window._logAppender.call(this, "loadFrame");
 
-		window._toolBarFrame.document.getElementsByName("location")[0].value=win.document.location.toString();
+		if (window._toolBarFrame) {
+			window._toolBarFrame.document.getElementsByName("location")[0].value=win.document.location.toString();
+		}
 	}
 	
 	if (timeEnd===false) {

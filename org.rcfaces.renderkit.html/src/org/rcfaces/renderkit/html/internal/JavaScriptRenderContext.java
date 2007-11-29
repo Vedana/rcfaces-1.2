@@ -4,7 +4,9 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -32,6 +34,10 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
     private static final String LAZY_JAVASCRIPT_RENDERER = "camelia.lazy.js.renderer";
 
+    private static final String STRING_EMPTY_ARRAY[] = new String[0];
+
+    private Set uninitializedComponents = new HashSet();
+
     public JavaScriptRenderContext(FacesContext facesContext) {
         super(facesContext);
     }
@@ -39,6 +45,9 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
     protected JavaScriptRenderContext(
             JavaScriptRenderContext javaScriptRenderContext) {
         super(javaScriptRenderContext);
+
+        this.uninitializedComponents = new HashSet(
+                javaScriptRenderContext.uninitializedComponents);
     }
 
     protected IJavaScriptWriter createJavaScriptWriter(IHtmlWriter writer,
@@ -56,10 +65,9 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
                 .useScriptCData());
 
         return jsImpl;
-
     }
 
-    public IJavaScriptRenderContext pushInteractive() {
+    public IJavaScriptRenderContext createChild() {
         if (isInitialized() == false) {
             throw new FacesException(
                     "Can not push interactive while javaScript is not initialized !");
@@ -67,8 +75,12 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
         return new JavaScriptRenderContext(this);
     }
 
-    public void popInteractive(
-            IJavaScriptRenderContext oldJavaScriptRenderContext) {
+    public void pushChild(IJavaScriptRenderContext javaScriptRenderContext,
+            IHtmlWriter htmlWriter) {
+    }
+
+    public void popChild(IJavaScriptRenderContext javaScriptRenderContext,
+            IHtmlWriter htmlWriter) {
     }
 
     public void initializePendingComponents(IJavaScriptWriter writer)
@@ -159,6 +171,10 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
                 LAZY_JAVASCRIPT_RENDERER, Boolean.TRUE);
     }
 
+    public boolean isJavaScriptRendererDeclaredLazy(IComponentWriter writer) {
+        return writer.getComponentRenderContext().containsAttribute(LAZY_JAVASCRIPT_RENDERER);
+    }
+    
     public void initializeJavaScriptComponent(IJavaScriptWriter writer)
             throws WriterException {
 
@@ -172,36 +188,24 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
         }
     }
 
-    protected IJavaScriptWriter writeJsInitComponent(IJavaScriptWriter writer)
-            throws WriterException {
+    protected boolean isUnitializedComponentsPending() {
+        return uninitializedComponents.size() > 0;
+    }
 
-        IComponentRenderContext componentRenderContext = writer
-                .getHtmlComponentRenderContext();
-
-        String componentId = componentRenderContext.getComponentClientId();
-
-        boolean declare[] = new boolean[1];
-        String componentVarName = allocateComponentVarId(componentId, declare);
-
-        writer.setComponentVarName(componentVarName);
-
-        String cameliaClassLoader = convertSymbol("f_classLoader",
-                "_rcfacesClassLoader");
-
-        if (declare[0]) {
-            writer.write("var ").write(componentVarName);
-
-            writer.write('=').writeCall(cameliaClassLoader, "f_init");
-            writer.writeString(componentId);
-            writer.writeln(");");
-
-            return writer;
+    public String[] popUnitializedComponentsClientId() {
+        if (uninitializedComponents.isEmpty()) {
+            return STRING_EMPTY_ARRAY;
         }
 
-        writer.writeCall(cameliaClassLoader, "f_init");
-        writer.write(componentVarName).writeln(");");
+        String old[] = (String[]) uninitializedComponents
+                .toArray(new String[uninitializedComponents.size()]);
+        uninitializedComponents.clear();
 
-        return writer;
+        return old;
+    }
+
+    public void pushUnitializedComponent(String clientId) {
+        uninitializedComponents.add(clientId);
     }
 
 }

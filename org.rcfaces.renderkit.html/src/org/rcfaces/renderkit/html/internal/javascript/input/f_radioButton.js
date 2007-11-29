@@ -21,7 +21,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getGroupName: function() {
-		var input=this._input;
+		var input=this.f_getInput();
 		if (!input) {
 			return null;
 		}
@@ -108,7 +108,7 @@ var __members = {
 	 * @return boolean
 	 */
 	f_isSelected: function() {
-		var input=this._input;
+		var input=this.f_getInput();
 		if (!input) {
 			return false;
 		}
@@ -121,7 +121,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setSelected: function(set) {
-		var input=this._input;
+		var input=this.f_getInput();
 		
 		if (!input || input.checked==set) {
 			return;
@@ -135,8 +135,10 @@ var __members = {
 		if (f_core.IsGecko()) {
 			// Pour Gecko, il faut le faire à la main !
 			function unselect(item) {
-				if (item._input && item._input.checked) {
-					item._input.checked=false;
+				var itemInput=item.f_getInput();;
+				
+				if (itemInput && itemInput.checked) {
+					itemInput.checked=false;
 				}
 			}
 	
@@ -150,7 +152,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getRadioValue: function() {
-		var input=this._input;
+		var input=this.f_getInput();
 		
 		if (!input) {
 			return undefined;
@@ -167,11 +169,10 @@ var __members = {
 	f_serializeValue: function() {
 		var selectedButton=this.f_getSelectedInGroup();
 		
-		var value=(selectedButton)?selectedButton._input.value:null;
+		var value=(selectedButton)?selectedButton.f_getInput().value:null;
 		
 		this.f_setProperty(f_prop.SELECTED, value);
 	},
-	fa_getRadioScope: fa_groupName.GlobalScope,
 	/**
 	 * @method protected
 	 * @return boolean

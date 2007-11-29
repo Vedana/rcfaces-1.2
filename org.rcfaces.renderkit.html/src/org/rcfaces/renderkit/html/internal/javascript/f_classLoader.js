@@ -66,25 +66,27 @@ f_classLoader.prototype = {
 	 * @return f_class
 	 */
 	f_getClass: function(className, lookId) {
-		var claz; 
-		for(;;) {
-			var name=f_classLoader._MakeClassName(className, lookId);
-			
-			claz=this._classes[name];
+		if (lookId) {
+			var claz=this._classes[className+f_class._LOOK+lookId];
 			if (claz) {
-				break;
+				if (!claz._initialized) {
+					f_class.InitializeClass(claz);
+				}
+				
+				return claz;
 			}
-	
-			if (!lookId) {
-				return null;
-			}
-			
-			lookId=undefined;
 		}
 		
-		f_class.InitializeClass(claz);
+		var claz=this._classes[className];
+		if (claz) {
+			if (!claz._initialized) {
+				f_class.InitializeClass(claz);
+			}
+			
+			return claz;
+		}
 		
-		return claz;
+		return null;
 	},
 	
 	/**
@@ -117,8 +119,43 @@ f_classLoader.prototype = {
 	
 		f_core.Debug(f_classLoader, "f_declareClass: Registering class "+claz._name+((claz._lookId)?" (lookId="+claz._lookId+")":"")+".");
 	
-		this._window[claz._name]=claz;
-		this._initializeStaticMembers(claz);
+		if (!claz._lookId) {
+			this._window[claz._name]=claz;
+		}
+		
+		if (window._RCFACES_LEVEL3 && !f_core._multiWindowCore && window._rcfacesMultiWindowClassLoader===true && !claz._multiWindowCore && /* !claz._kernelClass && */ !claz._nativeClass) {
+			var proto=new f_class();
+			
+			proto._name=claz._name;
+			proto._lookId=claz._lookId;
+			proto._members = claz._members;
+			proto._systemClass=claz._systemClass;
+			proto._nativeClass=claz._nativeClass; 
+			proto._initialized=true;
+			proto._dontCopyStaticMembers=true;
+			
+			staticMembers=claz._staticMembers;
+			proto._staticMembers=staticMembers;
+			
+			for(var name in staticMembers) {
+				proto[name]=staticMembers[name];				
+			}
+			
+			f_class.InitializeClass(claz);
+			
+			proto._kmethods=claz._kmethods;
+			proto._constructor=claz._constructor;
+
+			var classPrototype=function() { };
+			classPrototype.prototype=proto;
+			
+			claz._classPrototype=classPrototype;
+			
+			this._initializeStaticMembers(claz);
+			return;
+		}
+	
+		this._initializeStaticMembers(claz, claz._dontCopyStaticMembers);
 	},
 	
 	/**
@@ -138,7 +175,30 @@ f_classLoader.prototype = {
 		this._aspects[name] = aspect;
 		this._window[name] = aspect;
 
-		this._initializeStaticMembers(aspect);
+		if (window._RCFACES_LEVEL3 && !aspect._multiWindowCore && window._rcfacesMultiWindowClassLoader===true && !f_core._multiWindowCore) {
+			var proto=new f_aspect();				
+			
+			proto._name = aspect._name;
+			proto._members = aspect._members;
+			proto._multiWindowCore=true;
+			
+			var staticMembers=aspect._staticMembers;
+			proto._staticMembers=staticMembers;
+			
+			for(var name in staticMembers) {
+				proto[name]=staticMembers[name];				
+			}
+
+			var classPrototype=function() { };
+			classPrototype.prototype=proto;
+			
+			aspect._classPrototype=classPrototype;
+			
+			this._initializeStaticMembers(aspect);
+			return;
+		}
+
+		this._initializeStaticMembers(aspect, aspect._multiWindowCore);
 	},
 	
 	/**
@@ -413,7 +473,7 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_initializeObjects: function() {
-		if (this._interactiveMode) {
+		if (this._interactiveMode || window._rcfacesDisableInitSearch) {
 			return;
 		}
 	
@@ -425,7 +485,7 @@ f_classLoader.prototype = {
 		
 		var lazys=root.getElementsByTagName("v:init");
 		
-		f_core.Debug(f_classLoader, lazys.length+" lazy object(s) found !"+
+		f_core.Debug(f_classLoader, "f_initializeObjects: "+lazys.length+" lazy object(s) found !"+
 			((this._lazyIndex)?"(Current index="+this._lazyIndex+")":""));
 		
 		if (!lazys.length) {
@@ -577,6 +637,30 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden
+	 * @param String... ids
+	 * @return void
+	 */
+	f_initIds: function(ids) {
+		for(var i=0;i<arguments.length;i++) {
+			var obj=this.f_init(arguments[i]);
+			if (!obj) {
+				continue;
+			}
+			
+			var completeComponent=obj.f_completeComponent;
+			if (typeof(completeComponent)=="function") {
+				try {
+					completeComponent.call(obj);
+		
+				} catch (x) {
+					f_core.Error(f_classLoader, "f_initIds: f_completeComponent throws exception for component '"+obj.id+"'.", x);
+				}
+			}
+			
+		}
+	},
+	/**
+	 * @method hidden
 	 * @param Object obj Object or String
 	 * @param boolean ignoreNotFound
 	 * @return Object
@@ -639,7 +723,11 @@ f_classLoader.prototype = {
 		var look = f_core.GetAttribute(obj, "v:lookid");
 	
 		var cls=this.f_getClass(claz, look);
-		f_core.Assert(cls, "f_classLoader._init: Class '"+claz+"' lookId '"+look+"' not found !");
+		if (!cls) {
+			f_core.Assert(cls, "f_classLoader._init: Class '"+claz+"' lookId '"+look+"' not found !");
+	
+			throw new Error("f_classLoader._init: Class not found: name='"+claz+"' lookId='"+look+"'.");		
+		}
 	
 		return f_class.Init(obj, cls, f_classLoader._EMPTY_ARGUMENTS);
 	},
@@ -1019,11 +1107,11 @@ f_classLoader.prototype = {
 	 * @param f_class claz
 	 * @return void
 	 */
-	_initializeStaticMembers: function(claz) {
+	_initializeStaticMembers: function(claz, onlyInitializer) {
 		// Attention: Code pour Classes et Aspects
 			
 		var staticMembers=claz._staticMembers;
-		if (staticMembers) {
+		if (!onlyInitializer && staticMembers) {
 		/*
 			if (staticMembers instanceof _remapContext) {
 				staticMembers=this._classLoader._remapContext(staticMembers);
@@ -1053,11 +1141,20 @@ f_classLoader.prototype = {
 		var staticInitializer=claz.Initializer;
 		if (staticInitializer) {
 			f_core.Assert(typeof(staticInitializer)=="function", "f_classLoader._initializeStaticMembers: Invalid 'Initializer' field, it must be a function ! value="+staticInitializer);
-			try {	
+			try {
+				if (f_classLoader._ProfileInitializer) {
+					f_core.Profile(false, "f_classLoader._initializeStaticMembers: Call static initializer");			
+				}
+				
 				staticInitializer.call(claz);
 				
 			} catch (x) {
 				f_core.Error(f_classLoader, "_initializeStaticMembers: Initializer of aspect/class '"+claz._name+"' throws exception.", x);
+
+			} finally {
+				if (f_classLoader._ProfileInitializer) {
+					f_core.Profile(true, "f_classLoader._initializeStaticMembers: End of static initializer");			
+				}				
 			}
 		}
 	},
@@ -1075,6 +1172,11 @@ f_classLoader.prototype = {
  * @field private static final String
  */
 f_classLoader._LOOK="~";
+
+/**
+ * @field private static final boolean
+ */
+f_classLoader._ProfileInitializer=false;
 
 /**
  * @field private static final Array
@@ -1345,5 +1447,7 @@ f_classLoader.Get=function(win) {
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
 }
+
+f_classLoader._kernelClass=true;
 
 window._rcfacesClassLoader=new f_classLoader(window);

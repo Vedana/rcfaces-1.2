@@ -6,7 +6,8 @@
  * HTTP request support.
  *
  * @class f_httpRequest
- * @author Joel Merlin + Olivier Oeuillot
+ * @author Joel Merlin
+ * @author Olivier Oeuillot
  */
 var __statics = {
 

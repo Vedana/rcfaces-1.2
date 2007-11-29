@@ -23,11 +23,14 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.content.AbstractOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
+import org.rcfaces.core.internal.contentStorage.GZipedResolvedContent;
+import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.images.Constants;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
 import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
+import org.rcfaces.core.internal.style.CssParserFactory.ICssParser.IParserContext;
 
 /**
  * 
@@ -76,12 +79,9 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
             return INVALID_BUFFERED_FILE;
         }
 
-        RcfacesContext rcfacesContext = RcfacesContext
-                .getInstance(facesContext);
+        IResourceLoaderFactory resourceLoaderFactory = getResourceLoaderFactory(facesContext);
 
-        IResourceLoaderFactory resourceLoaderFactory = getResourceLoaderFactory(rcfacesContext);
-
-        ContentInfo contentInfo[] = new ContentInfo[1];
+        ContentInformation contentInfo[] = new ContentInformation[1];
 
         String styleSheetContent = loadContent(facesContext,
                 resourceLoaderFactory, getResourceURL(), getDefaultCharset(),
@@ -93,20 +93,23 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
 
         IStyleSheetFile styleSheetFile = createNewStyleSheetFile(getResourceURL());
         try {
+            IParserContext parserContext = new ParserContext(
+                    contentInfo[0].charSet, contentInfo[0].getLastModified());
+
             String newStyleSheetContent = filter(resourceLoaderFactory,
                     cssParser, getResourceURL(), styleSheetContent,
                     new IStyleOperation[] { styleOperation },
-                    new Map[] { getFilterParameters() });
+                    new Map[] { getFilterParameters() }, parserContext);
 
-            newStyleSheetContent = "@charset \"" + contentInfo[0].charSet
+            newStyleSheetContent = "@charset \"" + parserContext.getCharset()
                     + "\";\n" + newStyleSheetContent;
 
             String contentType = getContentType() + "; charset="
-                    + contentInfo[0].charSet;
+                    + parserContext.getCharset();
 
             styleSheetFile.initialize(contentType, newStyleSheetContent
-                    .getBytes(contentInfo[0].getCharSet()), contentInfo[0]
-                    .getLastModified());
+                    .getBytes(parserContext.getCharset()), parserContext
+                    .getLastModifiedDate());
 
         } catch (IOException e) {
             LOG.error("Can not create filtred image '" + getResourceURL()
@@ -192,11 +195,14 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
         return new StyleSheetFileBuffer(resourceURL);
     }
 
-    private IResourceLoaderFactory getResourceLoaderFactory(
-            RcfacesContext context) {
+    protected IResourceLoaderFactory getResourceLoaderFactory(
+            FacesContext facesContext) {
+
+        RcfacesContext rcfacesContext = RcfacesContext
+                .getInstance(facesContext);
 
         IResourceLoaderFactory resourceLoaderFactory;
-        if (context.isDesignerMode()) {
+        if (rcfacesContext.isDesignerMode()) {
             resourceLoaderFactory = Constants.getDesignerImageLoaderFactory();
 
         } else {
@@ -209,7 +215,7 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
     protected String filter(IResourceLoaderFactory resourceLoaderFactory,
             ICssParser cssParser, String styleSheetURL,
             String styleSheetContent, IStyleOperation styleOperations[],
-            Map parameters[]) throws IOException {
+            Map parameters[], IParserContext parserContext) throws IOException {
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("Process " + styleOperations.length + " style operation"
@@ -225,11 +231,14 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
             }
 
             styleSheetURL = styleOperation.filter(resourceLoaderFactory,
-                    cssParser, styleSheetURL, styleSheetContent,
-                    getDefaultCharset());
+                    cssParser, styleSheetURL, styleSheetContent, parserContext);
         }
 
         return styleSheetURL;
+    }
+
+    protected IResolvedContent getResolvedContent() {
+        return new GZipedResolvedContent(this);
     }
 
     /**
@@ -237,7 +246,7 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    public static class ContentInfo {
+    public static class ContentInformation {
         private String charSet;
 
         private long lastModified;
@@ -259,7 +268,7 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
 
     public static String loadContent(FacesContext facesContext,
             IResourceLoaderFactory resourceLoaderFactory, String path,
-            String defaultCharset, ContentInfo contentInfoRef[]) {
+            String defaultCharset, ContentInformation contentInfoRef[]) {
 
         if (facesContext == null) {
             facesContext = FacesContext.getCurrentInstance();
@@ -294,7 +303,7 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
             return null;
         }
 
-        ContentInfo contentInfo = new ContentInfo();
+        ContentInformation contentInfo = new ContentInformation();
 
         if (contentInfoRef != null) {
             contentInfoRef[0] = contentInfo;
@@ -348,5 +357,38 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
                 LOG.debug("Can not close resource '" + path + "'.", ex);
             }
         }
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    protected static class ParserContext implements IParserContext {
+        private String charset;
+
+        private long lastModifiedDate;
+
+        public ParserContext(String charset, long lastModifiedDate) {
+            this.charset = charset;
+            this.lastModifiedDate = lastModifiedDate;
+        }
+
+        public final String getCharset() {
+            return charset;
+        }
+
+        public final void setCharset(String charset) {
+            this.charset = charset;
+        }
+
+        public final long getLastModifiedDate() {
+            return lastModifiedDate;
+        }
+
+        public final void setLastModifiedDate(long lastModifiedDate) {
+            this.lastModifiedDate = lastModifiedDate;
+        }
+
     }
 }

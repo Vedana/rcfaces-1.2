@@ -71,7 +71,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
                     htmlWriter.writeAttribute("v:asyncRender", true);
 
                     htmlRenderContext
-                            .pushInteractiveRenderComponent(htmlWriter);
+                            .pushInteractiveRenderComponent(htmlWriter, null);
                 }
             }
         }

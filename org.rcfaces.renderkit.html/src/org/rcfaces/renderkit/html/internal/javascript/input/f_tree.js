@@ -188,7 +188,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
-	 * @param Event
+	 * @param Event evt
 	 * @return boolean
 	 * @context object:tree
 	 */
@@ -232,7 +232,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
-	 * @param Even evt
+	 * @param Event evt
 	 * @return boolean
 	 * @context object:tree
 	 */
@@ -272,6 +272,8 @@ var __statics = {
 	 * @context object:tree
 	 */
 	_Link_bodyOnfocus: function(evt) {
+		f_core.Debug(f_tree, "_Link_bodyOnfocus: focus body ");
+		
 		var tree=this._tree;
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
@@ -291,6 +293,8 @@ var __statics = {
 	 * @context object:tree
 	 */
 	_Link_onfocus: function(evt) {
+		f_core.Debug(f_tree, "_Link_onfocus: on focus ");
+
 		var tree=this._tree;
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
@@ -336,7 +340,9 @@ var __statics = {
 		}
 		
 		if (tree._cursor) {
-			tree.fa_showElement(tree._cursor);
+			if (!tree._lastFocusDesactivate || new Date().getTime()-tree._lastFocusDesactivate>300) {
+				tree.fa_showElement(tree._cursor);
+			}
 		}
 
 		tree.f_fireEvent(f_event.FOCUS, evt);
@@ -390,8 +396,10 @@ var __statics = {
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}
+				
+		var showAlert=!f_key.IsModifierKey(evt.keyCode);
 
-		if (tree.f_getEventLocked(evt, true)) {
+		if (tree.f_getEventLocked(evt, showAlert)) {
 			return false;
 		}
 		
@@ -509,77 +517,60 @@ var __members = {
 		
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
-		if (false && f_core.IsInternetExplorer()) {
-			if (!this.tabIndex) {
-				this.tabIndex=0;
-			}
-			
+		
+		var focus=this.ownerDocument.getElementById(this.id+"::focus");
+		this._cfocus=focus;
+
+		focus.onfocus=f_tree._Link_onfocus;
+		focus.onblur=f_tree._Link_onblur;
+		focus.onkeydown=f_tree._Link_onkeydown;
+		focus.onkeypress=f_tree._Link_onkeypress;
+		focus.onkeyup=f_tree._Link_onkeyup;
+		focus.href=f_core.JAVASCRIPT_VOID;
+		focus._tree=this;
+
+		// Gestion du focus lors du click dans le TREE !
+		this.onfocus=f_tree._Link_bodyOnfocus;
+		this.onblur=f_tree._Link_onblur;
+		this._tree=this;
+
+		this.tabIndex=-1;
+
+		// f_core.InsertBefore(this, focus, this.firstChild);
+		
+		if (f_core.IsInternetExplorer()) {
 			this.hideFocus=true;
-			this.onfocus=f_tree._Link_onfocus;
-			this.onblur=f_tree._Link_onblur;
-			this.onkeydown=f_tree._Link_onkeydown;
-			this.onkeyup=f_tree._Link_onkeyup;
-			this.onkeypress=f_tree._Link_onkeypress;
-			this._tree=this;
 			
-		} else {
-			var focus=document.createElement("a");
-			this._cfocus=focus;
+			var self=this;
+			
+			focus.onbeforeactivate=function() {
 
-			focus.className="f_tree_focus";
-			focus.onfocus=f_tree._Link_onfocus;
-			focus.onblur=f_tree._Link_onblur;
-			focus.onkeydown=f_tree._Link_onkeydown;
-			focus.onkeypress=f_tree._Link_onkeypress;
-			focus.onkeyup=f_tree._Link_onkeyup;
-			focus.href=f_core.JAVASCRIPT_VOID;
-			focus._tree=this;
-			focus.f_link=this;
-	
-			// Gestion du focus lors du click dans le TREE !
-			this.onfocus=f_tree._Link_bodyOnfocus;
-			this.onblur=f_tree._Link_onblur;
-			this._tree=this;
-
-			if (this.tabIndex>0) {
-				focus.tabIndex=this.tabIndex;
+				var evt = f_core.GetJsEvent(this);
 				
-			}  else {
-				focus.tabIndex=0;
+				evt.cancelBubble=true;
 			}
 
-			this.tabIndex=-1;
+			focus.onbeforedeactivate=function() {
 
-			this.insertBefore(focus, this.firstChild);
-			
-			if (f_core.IsInternetExplorer()) {
-				this.hideFocus=true;
+				self._lastFocusDesactivate=new Date().getTime();
+
+				var evt = f_core.GetJsEvent(this);
 				
-				var self=this;
-				
-				focus.onbeforeactivate=function() {
-					var evt = f_core.GetJsEvent(this);
-					
-					evt.cancelBubble=true;
+				var toElement=evt.toElement;
+				if (toElement==self) {
+					// Necessaire pour la scrollBar !
+					return true;
 				}
-				
-				focus.onbeforedeactivate=function() {
-					var evt = f_core.GetJsEvent(this);
-					
-					var next=evt.toElement;
-	
-					if (!next || next.tagName!="UL") {
-						return;
+			
+				for(;toElement.parentNode;toElement=toElement.parentNode) {
+					if (toElement!=self) {
+						continue;
 					}
-					
-					if (next._tree!=self || next==self) {
-						return;
-					}
-
-					f_core.Debug(f_tree, "CANCEL On before DE activate "+next.tagName);
 					
 					return f_core.CancelJsEvent(evt);
 				}
+				
+				return true;
 			}
 		}
 		
@@ -618,11 +609,10 @@ var __members = {
 			cfocus.onkeydown=null;
 			cfocus.onkeyup=null;
 			cfocus.onkeypress=null;
-			cfocus.onbeforedeactivate=null;
 			cfocus.onbeforeactivate=null;
+			cfocus.onbeforedeactivate=null;
 			
 			cfocus._tree=undefined;
-			cfocus.f_link=undefined;
 			
 			if (cfocus!=this) {
 				f_core.VerifyProperties(cfocus);
@@ -637,7 +627,7 @@ var __members = {
 		this.onmousedown=null;
 		this.onmouseup=null;
 		this.onclick=null;
-				
+			
 //		this._blankNodeImageURL=undefined; // string
 
 //		this._defaultImageURL=undefined; // string
@@ -889,7 +879,7 @@ var __members = {
 			
 			this._nodesList.push(li);
 			
-			container.appendChild(li); // Evite les fuites memoires
+			f_core.AppendChild(container, li); // Evite les fuites memoires
 
 			var divNode=document.createElement("div");
 			li._divNode=divNode;
@@ -904,7 +894,7 @@ var __members = {
 			divNode.onclick=f_core.CancelJsEventHandler;
 			divNode.ondblclick=f_tree._DivNode_dblClick;
 
-			li.appendChild(divNode);
+			f_core.AppendChild(li, divNode);
 			
 			var d=depth;
 			if (this._userExpandable) {
@@ -916,7 +906,7 @@ var __members = {
 					command.src=this._blankNodeImageURL;
 					command._node=li;
 		
-					divNode.appendChild(command);
+					f_core.AppendChild(divNode, command);
 					li._command=command;
 									
 					command.onmousedown=f_tree._Command_mouseDown;
@@ -956,12 +946,12 @@ var __members = {
 					input.name=input.id;
 				}
 
-				divNode.appendChild(input);
+				f_core.AppendChild(divNode, input);
 			}
 
 			var span=document.createElement("span");
 			li._span=span;
-			divNode.appendChild(span);
+			f_core.AppendChild(divNode, span);
 			
 			span._node=li;
 			span.onmouseover=f_tree._NodeLabel_mouseOver;
@@ -973,20 +963,20 @@ var __members = {
 				image.className="f_tree_image";
 				image._node=li;
 
-				span.appendChild(image);
+				f_core.AppendChild(span, image);
 				li._image=image;
 			}
 			
 			var label=document.createElement("label");
 
-			span.appendChild(label);
+			f_core.AppendChild(span, label);
 			li._label=label;
 
 			label.className="f_tree_label";
 			label._node=li;
 			
 			if (node._label) {
-				label.appendChild(document.createTextNode(node._label));
+				f_core.AppendChild(label, document.createTextNode(node._label));
 			}
 			
 			if (this._selectable) {
@@ -1012,7 +1002,7 @@ var __members = {
 				ul.style.display="none";
 				ul.className="f_tree_parent";
 
-				li.appendChild(ul);
+				f_core.AppendChild(li, ul);
 				
 				li._nodes=ul;
 				
@@ -1126,7 +1116,7 @@ var __members = {
 				ul.className="f_tree_parent";
 				ul.role="treegroup";
 			
-				li.appendChild(ul);
+				f_core.AppendChild(li, ul);
 			
 				li._nodes=ul;
 			} else {
@@ -1134,7 +1124,7 @@ var __members = {
 			}
 							
 			var waitingNode=this._newWaitingNode(li._depth);
-			ul.appendChild(waitingNode);
+			f_core.AppendChild(ul, waitingNode);
 	
 			if (!this._waitingNodes) {
 				this._waitingNodes=new Array;
@@ -1170,7 +1160,7 @@ var __members = {
 		var ul=this;
 	
 		var waitingNode=this._newWaitingNode(0);
-		ul.appendChild(waitingNode);
+		f_core.AppendChild(ul, waitingNode);
 
 		if (!this._waitingNodes) {
 			this._waitingNodes=new Array;
@@ -1330,7 +1320,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param number parentDepth
-	 * @return HTMLLiElement
+	 * @return HTMLLIElement
 	 */
 	_newWaitingNode: function(parentDepth) {
 		var li=document.createElement("li");
@@ -1338,12 +1328,12 @@ var __members = {
 		li.className="f_tree_parent";
 		
 		var divNode=document.createElement("div");
-		li.appendChild(divNode);
+		f_core.AppendChild(li, divNode);
 		divNode.className="f_tree_depth"+(parentDepth+1)+" f_tree_waiting"
 		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 		
 		var command=document.createElement("img");
-		divNode.appendChild(command);
+		f_core.AppendChild(divNode, command);
 
 		command.align="center";
 		command.width=f_tree._COMMAND_IMAGE_WIDTH;
@@ -1351,10 +1341,10 @@ var __members = {
 		command.src=this._blankNodeImageURL;
 
 		var span=document.createElement("span");
-		divNode.appendChild(span);
+		f_core.AppendChild(divNode, span);
 		
 		var image=document.createElement("img");
-		span.appendChild(image);
+		f_core.AppendChild(span, image);
 
 		image.align="center";
 		image.width=f_waiting.WAIT_IMAGE_WIDTH;
@@ -1364,13 +1354,13 @@ var __members = {
 		li._image=image;
 			
 		var label=document.createElement("label");
-		span.appendChild(label);
+		f_core.AppendChild(span, label);
 		li._label=label;
 
 		label.className="f_tree_label";
 
 		var txt=f_waiting.GetLoadingMessage();
-		label.appendChild(document.createTextNode(txt));
+		f_core.AppendChild(label, document.createTextNode(txt));
 
 		return li;		
 	},
@@ -1970,7 +1960,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param Event Event
+	 * @param Event evt
 	 * @param number selection
 	 * @eturn void
 	 */
@@ -1984,7 +1974,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param Event Event
+	 * @param Event evt
 	 * @param number selection
 	 * @eturn void
 	 */
@@ -2031,7 +2021,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param Event Event
+	 * @param Event evt
 	 * @param number selection
 	 * @eturn void
 	 */
@@ -2045,7 +2035,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param Event Event
+	 * @param Event evt
 	 * @param number selection
 	 * @eturn void
 	 */
@@ -2078,7 +2068,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param Event Event
+	 * @param Event evt
 	 * @param number selection
 	 * @eturn void
 	 */
@@ -2323,7 +2313,7 @@ var __members = {
 		if (!f_core.ForceComponentVisibility(this)) {
 			return;
 		}
-
+		
 		if (this._cfocus) {
 			this._cfocus.focus();
 			return;

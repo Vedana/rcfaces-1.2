@@ -123,7 +123,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
             ((ISgmlWriter) writer).endComponent();
         }
 
-        renderContext.encodeEnd(component);
+        renderContext.encodeEnd(writer);
 
         try {
             encodeEnd(writer);

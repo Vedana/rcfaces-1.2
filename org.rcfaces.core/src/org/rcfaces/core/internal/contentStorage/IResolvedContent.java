@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import org.rcfaces.core.internal.lang.StringAppender;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -35,4 +37,6 @@ public interface IResolvedContent extends IResourceKey, Serializable {
     boolean isVersioned();
 
     void setVersioned(boolean versioned);
+
+    void appendHashInformations(StringAppender sa);
 }

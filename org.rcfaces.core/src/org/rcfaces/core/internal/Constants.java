@@ -133,6 +133,10 @@ public class Constants {
 
     private static final boolean VERIFY_IMPLEMENTATION = true;
 
+    public static final int MINIMUM_GZIP_BUFFER_SIZE = 128;
+
+    public static final int CONTENT_STORAGE_CACHE_SIZE = 512;
+
     static {
         LOG.info("READ_ONLY_COLLECTION_LOCK_ENABLED="
                 + READ_ONLY_COLLECTION_LOCK_ENABLED);
@@ -176,6 +180,8 @@ public class Constants {
                 + VERSIONED_URI_HASHCODE_MAX_SIZE);
 
         LOG.info("REPOSITORY_DEFAULT_LOCALE=" + REPOSITORY_DEFAULT_LOCALE);
+
+        LOG.info("CONTENT_STORAGE_CACHE_SIZE=" + CONTENT_STORAGE_CACHE_SIZE);
 
         LOG.info("FACELETS_SUPPORT=" + FACELETS_SUPPORT);
 

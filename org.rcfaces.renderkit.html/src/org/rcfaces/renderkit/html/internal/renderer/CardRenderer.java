@@ -246,7 +246,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     writer.getHtmlComponentRenderContext()
                             .getHtmlRenderContext()
-                            .pushInteractiveRenderComponent(writer);
+                            .pushInteractiveRenderComponent(writer, null);
                 }
             }
         }

@@ -54,7 +54,7 @@ var __statics = {
 		var doc=parent.ownerDocument;
 	
 		if (!accessKey || accessKey.length!=1) {
-			parent.appendChild(doc.createTextNode(label));
+			f_core.AppendChild(parent, doc.createTextNode(label));
 			
 			return null;
 		}
@@ -65,22 +65,22 @@ var __statics = {
 		var idx=lab.indexOf(accessKey);
 		
 		if (idx<0) {
-			parent.appendChild(doc.createTextNode(label));
+			f_core.AppendChild(parent, doc.createTextNode(label));
 	
 			return null;
 		}
 		
 		if (idx) {
-			parent.appendChild(doc.createTextNode(label.substring(0, idx)));
+			f_core.AppendChild(parent, doc.createTextNode(label.substring(0, idx)));
 		}
 
 		var sub=doc.createElement("u");
 		sub.className="f_accessKey";
-		parent.appendChild(sub);
-		sub.appendChild(doc.createTextNode(label.substring(idx, idx+1)));				
+		f_core.AppendChild(parent, sub);
+		f_core.AppendChild(sub, doc.createTextNode(label.substring(idx, idx+1)));				
 		
 		if (idx+1<lab.length) {
-			parent.appendChild(doc.createTextNode(label.substring(idx+1, lab.length)));
+			f_core.AppendChild(parent, doc.createTextNode(label.substring(idx+1, lab.length)));
 		}
 		
 		return sub;
@@ -403,6 +403,10 @@ var __members = {
 	 * @method public
 	 * @param String mode
 	 * @return void
+	 * @see f_component#DEFAULT_HIDDEN_MODE f_component.DEFAULT_HIDDEN_MODE
+	 * @see f_component#HIDDEN_MODE_IGNORE f_component.HIDDEN_MODE_IGNORE
+	 * @see f_component#HIDDEN_MODE_PHANTOM f_component.HIDDEN_MODE_PHANTOM
+	 * @see f_component#HIDDEN_MODE_SERVER f_component.HIDDEN_MODE_SERVER
 	 */
 	f_setHiddenMode: function(mode) {
 		f_core.Assert(typeof(mode)=="number", "Hidden mode parameter must be a number ! ("+mode+")");
@@ -416,6 +420,10 @@ var __members = {
 	/**
 	 * @method public
 	 * @return number
+	 * @see f_component#DEFAULT_HIDDEN_MODE f_component.DEFAULT_HIDDEN_MODE
+	 * @see f_component#HIDDEN_MODE_IGNORE f_component.HIDDEN_MODE_IGNORE
+	 * @see f_component#HIDDEN_MODE_PHANTOM f_component.HIDDEN_MODE_PHANTOM
+	 * @see f_component#HIDDEN_MODE_SERVER f_component.HIDDEN_MODE_SERVER
 	 */
 	f_getHiddenMode: function() {
 		var hiddenMode=this._hiddenMode;
@@ -677,7 +685,7 @@ var __members = {
 	 		this.f_update(true);
 	 		
 	 	} catch (x) {
-	 	alert(x);
+		// 	alert(x);
 
 	 		f_core.Error(f_component, "f_completeComponent: Call of f_update throws exception !", x);	 		
 	 	}

@@ -9,23 +9,43 @@
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
+ 
+var __statics = {
+	/**
+	 * @field private static
+	 */
+	_REDIRECT_INPUT: new Object,
+	
+	Initializer: function() {
+		var redirect=f_input._REDIRECT_INPUT;
+		
+ 		redirect[f_event.BLUR]=true;
+ 		redirect[f_event.FOCUS]=true;
+ 		redirect[f_event.KEYPRESS]=true;
+ 		redirect[f_event.KEYDOWN]=true;
+ 		redirect[f_event.KEYUP]=true;
+	}
+}
+ 
 var __members = {
 
 	f_input: function() {
 		this.f_super(arguments);
-
-		var input=this.f_getInput();
-		if (input!=this) {
-			input.f_link=this;
-		}
-			
-		var focusStyleClass=this.f_getFocusStyleClass();
-		if (focusStyleClass) {
-			this.f_insertEventListenerFirst(f_event.FOCUS, this._focusFocusEvent);
-			this.f_insertEventListenerFirst(f_event.BLUR, this._focusBlurEvent);
-		}
 		
-		f_core.Debug(f_input, "f_input: Input associated to component '"+this.id+"' is id='"+input.id+"', tagName="+input.tagName+", name='"+input.name+"'.");
+		var self=this;
+		this.f_insertEventListenerFirst(f_event.FOCUS, function(event) {
+			self.f_removeEventListener(f_event.FOCUS, arguments.callee);
+			
+			self.f_initializeOnFocus();
+			
+			return self.f_fireEvent(event);
+		});
+		
+		if (f_core.IsDebugEnabled(f_input)) {
+			var input=this.f_getInput();
+			
+			f_core.Debug(f_input, "f_input: Input associated to component '"+this.id+"' is id='"+input.id+"', tagName="+input.tagName+", name='"+input.name+"'.");
+		}
 	},
 	f_finalize: function() {
 //		this._hasFocus=undefined; // boolean
@@ -39,11 +59,22 @@ var __members = {
 		var input=this._input;
 		if (input) {
 			this._input=undefined;
-			input.f_link=undefined;
-		}
 
-		if (input && input!=this) {
-			f_core.VerifyProperties(input);
+			if (input!=this) {
+				f_core.VerifyProperties(input);
+			}
+		}
+	},
+	
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_initializeOnFocus: function() {						
+		var focusStyleClass=this.f_getFocusStyleClass();
+		if (focusStyleClass) {
+			this.f_insertEventListenerFirst(f_event.FOCUS, this._focusFocusEvent);
+			this.f_insertEventListenerFirst(f_event.BLUR, this._focusBlurEvent);
 		}
 	},
 	/**
@@ -56,10 +87,10 @@ var __members = {
 		if (input) {
 			return input;
 		}
-		
+
 		input=this.f_initializeInput();
 		if (!input) {
-			throw new Error("Can not find input associated to component '"+this.id+"'.");
+			throw new Error("Can not find input associated to component '#"+this.id+"."+this.className+"' class='"+this.f_getClass()+"'.");
 		}
 		this._input=input;
 		
@@ -79,24 +110,15 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	f_initializeInput: function() {
-		var inputTagName=this.f_getInputTagName();
-		
-		var tagName=this.tagName;
-		if (tagName && tagName.toLowerCase()==inputTagName) {
-			return this;
-		}
-		
-		var input=f_core.GetFirstElementByTagName(this, inputTagName, true);
+		return this;
+		/*
+		var input=this.ownerDocument.getElementById(this.id+XXXXX._INPUT_ID_SUFFIX);
+		if (input) {
+			return input;
+		}		
 
 		return input;
-	},
-	/**
-	 * 
-	 * @method protected
-	 * @return String
-	 */
-	f_getInputTagName: function() {
-		return "input";
+		*/
 	},
 	/**
 	 * @method public
@@ -255,28 +277,16 @@ var __members = {
 		if (this.className!=claz) {
 			this.className=claz;
 		}
-	},
+	},	
 	/*
 	f_update: function() {
-		// Check for an extended validator
-		//if (this.f_clientValidatorEx) {
-		//var view = this.f_getView();
-		//view.f_addCheckElement(this);
-		//}
-		// Update value if necessary
-		//if (this.value && this.f_clientValidatorEx) {
-		//this.f_clientValidatorEx.fa_componentUpdatedValue(this.value);
-		//}
-
-		this.f_super(arguments);
-	},
-	*/
-	
-	f_update: function() {
-		this.f_performMessageChanges();	
+		/ * C'est déjà dans le constructeur de fa_messages ...
+			this.f_performMessageChanges();
+		* /
 				
 		return this.f_super(arguments);	
 	},
+	*/
 	/**
 	 * Returns the value associated to the input component.
 	 *
@@ -430,11 +440,35 @@ var __members = {
 		this._hasFocus=undefined;
 		
 		this.f_updateStyleClass();
+	},
+	/**
+	 * @method protected
+	 */
+	f_setDomEvent: function(type, target) {
+	
+		if (f_input._REDIRECT_INPUT[type]) {
+			target=this.f_getInput();
+		}
+		
+		this.f_super(arguments, type, target);
+	},
+	
+	/**
+	 * @method protected
+	 */
+	f_clearDomEvent: function(type, target) {
+	
+		if (f_input._REDIRECT_INPUT[type]) {
+			target=this.f_getInput();
+		}
+		
+		this.f_super(arguments, type, target);
 	}
 }
 
 new f_class("f_input", {
 	extend: f_component, 
 	aspects: [ fa_message, fa_focusStyleClass ],
-	members: __members
+	members: __members,
+	statics: __statics
 });

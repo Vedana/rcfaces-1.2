@@ -39,7 +39,7 @@ var __statics = {
 	 * @return void
 	 */
 	Finalizer: function() {
-		fa_borderType._LastFlatBorder=undefined;
+		fa_borderType._LastFlatBorder=undefined; // fa_borderType
 	}
 }
 
@@ -54,9 +54,6 @@ var __members = {
 			this._border=undefined;
 
 			// border._className=undefined; // string
-			border.f_link=undefined;
-			
-			this.fa_borderFinalizer(border);
 		
 			f_core.VerifyProperties(border);
 		}
@@ -68,13 +65,13 @@ var __members = {
 	 * @return String
 	 */
 	f_getBorderType: function() {
-		if (this._borderType!==undefined) {
-			return this._borderType;
+		var borderType=this._borderType;
+
+		if (borderType!==undefined) {
+			return borderType;
 		}
 		
 		// Appel depuis le constructor de l'objet !
-
-		var borderType=null;
 		
 		var v_borderType=f_core.GetAttribute(this, "v:borderType");
 		if (v_borderType && v_borderType!=fa_borderType.NONE_BORDER_TYPE) {
@@ -84,8 +81,6 @@ var __members = {
 			if (border) {
 	//			f_core.Assert(border, "Can not find border of component '"+this.id+"' (borderType='"+v_borderType+"').");
 				this._border=border;
-				
-				border.f_link=this;
 				
 				var cl=f_core.GetAttribute(border, "v:className");
 				if (cl) {
@@ -97,6 +92,8 @@ var __members = {
 				
 				this._flatType=f_core.GetBooleanAttribute(this, "v:flatMode", false);
 			}
+		} else {
+			borderType=null;
 		}
 	
 		this._borderType=borderType;
@@ -150,14 +147,7 @@ var __members = {
 		}
 		
 		fa_borderType._LastFlatBorder=this;
-	},
-	
-	/**
-	 * @method protected abstract
-	 * @param HTMLElement border
-	 * @return void
-	 */
-	fa_borderFinalizer: f_class.ABSTRACT
+	}
 }
 
 new f_aspect("fa_borderType", {

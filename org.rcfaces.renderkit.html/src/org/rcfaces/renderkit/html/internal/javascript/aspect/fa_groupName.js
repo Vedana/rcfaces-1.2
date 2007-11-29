@@ -11,13 +11,6 @@
  */
 var __statics = {
 	/**
-	 * @method hidden static
-	 */
-	GlobalScope: function() {
-		return fa_groupName;
-	},
-	
-	/**
 	 * @method protected static
 	 * @return void
 	 */
@@ -27,9 +20,11 @@ var __statics = {
 }
 var __members = {
 	f_finalize: function() {
-		var scope=this.fa_getRadioScope();
-		if (scope) {
-			scope._Groups=undefined; // Map<string,List<any>>
+		if (typeof(this.fa_getRadioScope)=="function") {
+			var scope=this.fa_getRadioScope();
+			if (scope) {
+				scope._Groups=undefined; // Map<string,List<any>>
+			}
 		}
 	},
 	/**
@@ -98,11 +93,11 @@ var __members = {
 	f_listGroup: function(groupName, create) {
 		f_core.Assert(typeof(groupName)=="string", "fa_groupName.f_listGroup: Invalid groupName parameter ("+groupName+") !");
 	
-		var scope=this.fa_getRadioScope();
-		if (!scope) {
-			scope=fa_groupName;
+		var scope=fa_groupName;
+		if (typeof(this.fa_getRadioScope)=="function") {
+			scope=this.fa_getRadioScope();
 		}
-		
+				
 		var wg=scope._Groups;
 		if (!wg) {
 			wg=new Object;
@@ -160,7 +155,7 @@ var __members = {
 	 * @method protected abstract
 	 * @return String
 	 */
-	fa_getRadioScope: f_class.ABSTRACT,
+	fa_getRadioScope: f_class.OPTIONAL_ABSTRACT,
 	
 	/**
 	 * @method protected abstract

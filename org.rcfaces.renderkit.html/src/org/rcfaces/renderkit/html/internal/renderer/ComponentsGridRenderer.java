@@ -613,7 +613,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 if (csc != null) {
                     styleClass = csc;
 
-                    htmlWriter.writeAttribute("v:class", csc);
+                    htmlWriter.writeAttribute("v:className", csc);
                 }
             }
 

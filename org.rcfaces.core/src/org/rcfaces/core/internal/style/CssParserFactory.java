@@ -30,7 +30,7 @@ public class CssParserFactory {
             clazz = CssParserFactory.class.getClassLoader().loadClass(
                     STEADY_STATE_PARSER_CLASSNAME);
 
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             LOG.trace(ex);
         }
 
@@ -63,6 +63,22 @@ public class CssParserFactory {
 
         String mergesBuffer(IResourceLoaderFactory resourceLoaderFactory,
                 String styleSheetURL, String styleSheetBuffer,
-                String defaultCharSet) throws IOException;
+                IParserContext mergeContext) throws IOException;
+
+        /**
+         * 
+         * @author Olivier Oeuillot (latest modification by $Author$)
+         * @version $Revision$ $Date$
+         */
+        public interface IParserContext {
+            String getCharset();
+
+            void setCharset(String charset);
+
+            long getLastModifiedDate();
+
+            void setLastModifiedDate(long lastModifiedDate);
+        }
     }
+
 }

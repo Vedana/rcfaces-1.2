@@ -24,7 +24,6 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
     private static final String REVISION = "$Revision$";
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
-
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 

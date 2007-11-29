@@ -62,8 +62,8 @@ var __members = {
 	
 		var border=this.f_getBorderComponent();
 		if (border) {
-			border.onmousedown=f_customButton._MouseDown;
-			border.onmouseup=f_customButton._MouseUp;			
+			//border.onmousedown=f_customButton._MouseDown;
+			//border.onmouseup=f_customButton._MouseUp;			
 			installSelectionListener=true;
 
 			this._installHoverFocus();
@@ -142,10 +142,6 @@ var __members = {
 			
 			links.push(div);
 		}
-	},
-	fa_borderFinalizer: function(border) {
-		border.onmousedown=null;
-		border.onmouseup=null;
 	},
 	f_onSelect: function(evt) { 
 		if (this.f_isReadOnly() || this.f_isDisabled()) {

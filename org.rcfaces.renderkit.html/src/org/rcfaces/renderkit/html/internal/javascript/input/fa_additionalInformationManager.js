@@ -102,7 +102,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param HtmlElement element
+	 * @param HTMLElement element
 	 * @param boolean shown
 	 * @return boolean
 	 */

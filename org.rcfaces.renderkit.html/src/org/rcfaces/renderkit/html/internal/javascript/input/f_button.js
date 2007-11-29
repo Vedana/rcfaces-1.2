@@ -15,6 +15,33 @@ var __members = {
 		this.f_super(arguments);
 
 		this.f_setForcedEventReturn(f_event.SELECTION, true);
+	},
+
+	/**
+	 * @method protected
+	 */
+	f_setDomEvent: function(type, target) {
+	
+		switch(type) {
+		case f_event.SELECTION:
+			target=this.f_getInput();
+			break;
+		}
+		
+		this.f_super(arguments, type, target);
+	},
+	
+	/**
+	 * @method protected
+	 */
+	f_clearDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.SELECTION:
+			target=this.f_getInput();
+			break;
+		}
+		
+		this.f_super(arguments, type, target);
 	}
 }
 

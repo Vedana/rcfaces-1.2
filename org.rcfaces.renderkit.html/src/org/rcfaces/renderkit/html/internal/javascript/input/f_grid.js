@@ -306,7 +306,7 @@ var __statics = {
 	/**
 	 * @method protected static
 	 * @param HTMLTableElement element
-	 * @return HTMLTrElement
+	 * @return HTMLTableRowElement
 	 */
 	GetFirstRow: function(element, assertIfNotFound) {
 		f_core.Assert(element && element.tagName.toLowerCase()=="table", "f_grid.GetFistRow: Invalid table parameter ("+element+")");
@@ -332,7 +332,7 @@ var __statics = {
 	/**
 	 * @method protected static
 	 * @param HTMLTableElement element
-	 * @return HTMLTrElement
+	 * @return HTMLTableRowElement
 	 */
 	ListRows: function(element) {
 		f_core.Assert(element && 
@@ -406,7 +406,7 @@ var __statics = {
 					}
 		
 					if (!dataGrid._cursor && dataGrid._table) {
-						var tr=f_grid.GetFirstRow(dataGrid._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr");
+						var tr=f_grid.GetFirstRow(dataGrid._table);
 				
 						if (tr) {
 							dataGrid._cursor=tr;
@@ -418,7 +418,7 @@ var __statics = {
 				}
 
 			} else if (!dataGrid._cursor && dataGrid._table) {
-				var tr=f_grid.GetFirstRow(dataGrid._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr");
+				var tr=f_grid.GetFirstRow(dataGrid._table);
 		
 				if (tr) {
 					dataGrid._cursor=tr;
@@ -530,7 +530,10 @@ var __statics = {
 		}
 
 		// On peut vouloir faire PAGE-DOWN/UP avec un repeat ! => pas de boite d'alerte !
-		if (dataGrid.f_getEventLocked(evt, !dataGrid._waitingLoading)) {
+		
+		var showAlert=!dataGrid._waitingLoading && !f_key.IsModifierKey(evt.keyCode);
+		
+		if (dataGrid.f_getEventLocked(evt, showAlert)) {
 			return false;
 		}
 	
@@ -874,14 +877,6 @@ var __statics = {
 		f_core.AddEventListener(doc, "mousemove", f_grid._TitleCursorDragMove, dataGrid);
 		f_core.AddEventListener(doc, "mouseup",   f_grid._TitleCursorDragStop, dataGrid);
 
-		if (f_core.IsInternetExplorer()) {
-			if (false) {
-				doc.onlosecapture=function() {
-					f_core.Debug(f_grid, "Lose capture !");
-				}
-			}
-		}
-
 	 	f_core.CancelJsEvent(evt);
 
 		var eventPos=f_core.GetJsEventPosition(evt, doc);
@@ -912,7 +907,7 @@ var __statics = {
 	_TitleCursorDragMove: function(evt) {
 		var column=f_grid._DragColumn;
 		if (!column) {
-			return;
+			return false;
 		}
 		
 		var dataGrid=column._dataGrid;
@@ -1238,6 +1233,7 @@ var __statics = {
 	 * @method public static
 	 * @param String name
 	 * @param Function callback
+	 * @return void
 	 */
 	RegisterSortManager: function(name, callback) {
 		var sortManagers=f_grid._SortManagers;
@@ -1310,7 +1306,7 @@ var __members = {
 			sortIndicator.onmouseup=f_grid._SortIndication_onmouseup;
 		
 			this._sortIndicator=sortIndicator
-			this.appendChild(sortIndicator);
+			f_core.AppendChild(this, sortIndicator);
 			
 			var img=this.ownerDocument.createElement("IMG");
 			img.className="f_grid_sortManager_image";
@@ -1322,7 +1318,7 @@ var __members = {
 			var resourceBundle=f_resourceBundle.Get(f_grid);
 			img.title=resourceBundle.f_get("SORT_CONFIGURATION");
 
-			sortIndicator.appendChild(img);
+			f_core.AppendChild(sortIndicator, img);
 		}
 
 		var focus;
@@ -1400,7 +1396,7 @@ var __members = {
 
 			}	
 			
-			this.insertBefore(focus, this.firstChild);
+			f_core.InsertBefore(this, focus, this.firstChild);
 		}
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);		
@@ -1471,7 +1467,7 @@ var __members = {
 			f_classLoader.Destroy(waiting);
 		}				
 		 
-		this._waitingRow=undefined; // HTMLTrElement
+		this._waitingRow=undefined; // HTMLTableRowElement
 //		this._waitingLoading=undefined; // boolean
 
 		var pagedWaiting=this._pagedWaiting;
@@ -1754,7 +1750,7 @@ var __members = {
 //			f_core.Assert(this._tbody.parentNode!=this._table, "Tbody has not been detached !");
 // C'est normal dans un componentsGrid
 
-			this._table.appendChild(this._tbody);
+			f_core.AppendChild(this._table, this._tbody);
 
 			this.f_updateScrollPosition();
 		}
@@ -1881,13 +1877,13 @@ var __members = {
 		for (var i=0;i<diff;i++) {
 			var tr=doc.createElement("tr");
 			shadows.push(tr);
-			body.appendChild(tr);
+			f_core.AppendChild(body, tr);
 			
 			var td=doc.createElement("td");
 			td.colSpan=this._visibleColumnsCount;
 			td.className=this._cellStyleClass+"_shadow f_grid_cell_shadow";
 
-			tr.appendChild(td);
+			f_core.AppendChild(tr, td);
 			
 			td.innerHTML="&nbsp;";
 		}
@@ -1923,7 +1919,7 @@ var __members = {
 		f_core.Assert(tbody, "f_grid.f_addPagedWait: No Tbody for dataGrid ???");
 	
 		var waitTR=doc.createElement("tr");
-		tbody.appendChild(waitTR);
+		f_core.AppendChild(tbody, waitTR);
 		this._waitingRow=waitTR;
 		this._waitingLoading=undefined;
 		
@@ -1932,7 +1928,7 @@ var __members = {
 		waitTR.className=this._rowStyleClasses[rowIdx % this._rowStyleClasses.length];
 		
 		var td=doc.createElement("td");
-		waitTR.appendChild(td);
+		f_core.AppendChild(waitTR, td);
 		td.colSpan=this._visibleColumnsCount;
 	
 		var waiting=f_waiting.Create(td, null, true);
@@ -2701,7 +2697,7 @@ var __members = {
 	 */
 	f_releaseRows: function() {
 		f_core.Debug(f_grid, "f_releaseRows: release all rows");
-		this._cursor=undefined; // HTMLRowElement
+		this._cursor=undefined; // HTMLTableRowElement
 
 		var list=this._rowsPool;
 		if (!list || !list.length) {
@@ -4212,9 +4208,9 @@ var __members = {
 			var colsPos=this._title.getElementsByTagName("col");
 			var lastCol=colsPos[colsPos.length-1];
 			if (!lastCol.nextSibling) {
-				this._title.appendChild(col);
+				f_core.AppendChild(this._title, col);
 			} else {
-				this._title.insertBefore(col, lastCol.nextSibling);
+				f_core.InsertBefore(this._title, col, lastCol.nextSibling);
 			}
 		
 			var th=doc.createElement("th");
@@ -4226,7 +4222,7 @@ var __members = {
 			th.innerHTML="&nbsp;";
 			
 			var ths0=f_grid.GetFirstRow(this._title, true); //f_core.GetFirstElementByTagName(dataGrid._title, "tr", true);
-			ths0.appendChild(th);
+			f_core.AppendChild(ths0, th);
 			
 			total+=scrollBarWidth;
 			
@@ -4456,7 +4452,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param HTMLRowElement row
+	 * @param HTMLTableRowElement row
 	 * @param boolean animated
 	 * @return void
 	 */
@@ -4470,7 +4466,7 @@ var __members = {
 			if (!additionalRow.parentNode || !additionalRow.parentOffset) {
 				// Déjà affiché !
 				
-				row.parentNode.insertBefore(additionalRow, row.nextSibling);
+				f_core.InsertBefore(row.parentNode, additionalRow, row.nextSibling);
 			} 
 			
 			// On sait jamais, apres un tri, ca peut changer !							
@@ -4509,7 +4505,7 @@ var __members = {
 			additionalRow=doc.createElement("tr");
 		}
 
-		this._tbody.insertBefore(additionalRow, row.nextSibling);
+		f_core.InsertBefore(this._tbody, additionalRow, row.nextSibling);
 
 		additionalRow._additionalBody=true;
 		additionalRow._row=row;
@@ -4524,7 +4520,7 @@ var __members = {
 
 		if (!additionalCell) {
 			additionalCell=doc.createElement("td");
-			additionalRow.appendChild(additionalCell);
+			f_core.AppendChild(additionalRow, additionalCell);
 		}
 
 		additionalCell.className="f_grid_additional_body";						
@@ -4680,7 +4676,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param HTMLRowElement row
+	 * @param HTMLTableRowElement row
 	 * @param boolean animated
 	 * @return void
 	 */

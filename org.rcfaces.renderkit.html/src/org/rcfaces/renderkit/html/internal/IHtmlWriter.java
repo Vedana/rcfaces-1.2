@@ -13,7 +13,14 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  * @version $Revision$ $Date$
  */
 public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
+
+    int INIT_LAZY_MODE = 1;
+
+    int ONFOCUS_LAZY_MODE = 2;
+
     void enableJavaScript();
+
+    //void enableJavaScript(int lazyMode);
 
     boolean isJavaScriptEnabled();
 

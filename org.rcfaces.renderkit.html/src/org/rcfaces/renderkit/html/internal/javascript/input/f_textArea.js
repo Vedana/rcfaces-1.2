@@ -55,20 +55,10 @@ var __members = {
 	f_textArea: function() {
 		this.f_super(arguments);
 		
-		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
-		
-		if (this._emptyMessage) {
-			this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
-			this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
-		}
-		
 		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
 		if (this._maxTextLength>0) {
 			this.f_addEventListener(f_event.VALIDATION, f_textArea._VerifyMaxTextLength);
 		}
-
-		// On peut pas le mêtre dans le f_setDomEvent, la profondeur de la pile ne le permet pas !
-		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);
 	},
 	/*
 	f_finalize: function() {
@@ -80,6 +70,23 @@ var __members = {
 		this.f_super(arguments);
 	},
 	*/
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_initializeOnFocus: function() {
+		this.f_super(arguments);
+				
+		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
+		
+		if (this._emptyMessage) {
+			this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
+			this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
+		}
+
+		// On peut pas le mettre dans le f_setDomEvent, la profondeur de la pile ne le permet pas !
+		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);		
+	},
 	f_update: function() {
 
 		var menu=this.f_getSubMenuById(f_textArea._TEXT_MENU_ID);
@@ -132,40 +139,18 @@ var __members = {
 			this.f_getInput().value="";
 		}
 	},
-	/**
-	 * 
-	 * @method protected
-	 * @return String
-	 */
-	f_getInputTagName: function() {
-		return "textarea";
-	},
 	f_setDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.SELECTION: 
 			return;
-			
-		case f_event.KEYPRESS:
-		case f_event.KEYDOWN:
-		case f_event.KEYUP:
-		case f_event.FOCUS:
-		case f_event.BLUR:
-			// Car _input est peut etre pas encore initialisé !
-			target=this.f_getInput();
-			break;
 		}
 		
 		this.f_super(arguments, type, target);
 	},
 	f_clearDomEvent: function(type, target) {
 		switch(type) {
-		case f_event.KEYPRESS:
-		case f_event.KEYDOWN:
-		case f_event.KEYUP:
-		case f_event.FOCUS:
-		case f_event.BLUR:
-			target=this.f_getInput();
-			break;
+		case f_event.SELECTION: 
+			return;
 		}
 		
 		this.f_super(arguments, type, target);

@@ -161,12 +161,12 @@ var __members = {
 			
 		if (summaryLabel && !this._summaryLabel) {
 			this._summaryLabel=summaryLabel;
-			this.appendChild(summaryLabel);
+			f_core.AppendChild(this, summaryLabel);
 		}
 			
 		if (detailLabel && !this._detailLabel) {
 			this._detailLabel=detailLabel;
-			this.appendChild(detailLabel);
+			f_core.AppendChild(this, detailLabel);
 		}
 		
 		if (image) {
@@ -371,7 +371,7 @@ var __members = {
 				textLabel.style.display="none";
 			}
 			
-			this.appendChild(textLabel);
+			f_core.AppendChild(this, textLabel);
 		
 			this._textLabel=textLabel;
 		}
