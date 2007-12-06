@@ -296,7 +296,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
         private static final String ENABLE_JAVASCRIPT_PROPERTY = "camelia.html.javascript.enable";
 
-        private boolean javaScriptEnabled = false;
+        private JavaScriptEnableModeImpl enableJavaScriptMode;
 
         public HtmlWriterImpl(HtmlRenderContext context) {
             this(context, context.getFacesContext().getResponseWriter());
@@ -306,25 +306,28 @@ public class HtmlRenderContext extends AbstractRenderContext implements
                 ResponseWriter responseWriter) {
             super(context, responseWriter);
 
-            javaScriptEnabled = ((ITransientAttributesManager) getComponent())
-                    .getTransientAttribute(ENABLE_JAVASCRIPT_PROPERTY) != null;
+            enableJavaScriptMode = (JavaScriptEnableModeImpl) ((ITransientAttributesManager) getComponent())
+                    .getTransientAttribute(ENABLE_JAVASCRIPT_PROPERTY);
         }
 
-        public boolean isJavaScriptEnabled() {
-            return javaScriptEnabled;
-        }
-
-        public void enableJavaScript() {
-            if (javaScriptEnabled) {
-                return;
+        public IJavaScriptEnableMode getJavaScriptEnableMode() {
+            if (enableJavaScriptMode != null) {
+                return enableJavaScriptMode;
             }
 
-            javaScriptEnabled = true;
+            enableJavaScriptMode = new JavaScriptEnableModeImpl();
 
             ((ITransientAttributesManager) getComponent())
                     .setTransientAttribute(ENABLE_JAVASCRIPT_PROPERTY,
-                            Boolean.TRUE);
+                            enableJavaScriptMode);
+
+            return enableJavaScriptMode;
         }
+
+        public void enableJavaScript() {
+            getJavaScriptEnableMode().enableOnInit();
+        }
+
     }
 
     public IHtmlProcessContext getHtmlProcessContext() {

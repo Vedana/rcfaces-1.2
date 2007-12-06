@@ -6,7 +6,6 @@ package org.rcfaces.renderkit.html.internal;
 import java.util.Arrays;
 import java.util.Locale;
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;

@@ -50,7 +50,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         Calendar componentCalendar = CalendarTools.getCalendar(htmlWriter);
         writeCalendarAttributes(htmlWriter, componentCalendar);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         super.encodeBeforeDecorator(htmlWriter, componentDecorator);
     }

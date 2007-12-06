@@ -144,7 +144,7 @@ public class NumberEntryRenderer extends AbstractCompositeRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
-        htmlWriter.enableJavaScript();
+        // htmlWriter.enableJavaScript(); // Sur le focus seulement
     }
 
     protected String getWAIRole() {

@@ -46,9 +46,12 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
         htmlWriter.endElement(IHtmlWriter.TEXTAREA);
 
+        htmlWriter.addSubFocusableComponent(htmlWriter
+                .getComponentRenderContext().getComponentClientId());
+
         if (textAreaComponent.isRequired()) {
             // Il nous faut le javascript, car c'est un traitement javascript !
-            htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
     }
 
@@ -73,7 +76,8 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         if (maxTextLength > 0) {
             htmlWriter.writeAttribute("v:maxTextLength", maxTextLength);
 
-            htmlWriter.enableJavaScript();
+            // htmlWriter.enableJavaScript(); Bof bof ... on peut le faire à la
+            // génération ?
         }
 
     }

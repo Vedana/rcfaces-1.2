@@ -65,7 +65,7 @@ if (window._RCFACES_LEVEL3) {
 			}
 			
 			if (!win) {
-				throw new Error("RCFaces: Unknown this object type !");
+				throw new Error("RCFaces: Unknown 'this' object type ! ("+this+")");
 			}
 		}
 			

@@ -51,8 +51,15 @@ public class TextEditorComboRenderer extends ComboRenderer {
         String forProperty = combo.getFor(facesContext);
         if (forProperty != null) {
             htmlWriter.writeAttribute("v:for", forProperty);
-        }
 
-        htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Pour
+                                                                    // positionner
+                                                                    // la combo
+                                                                    // en
+                                                                    // fonction
+                                                                    // de l'état
+                                                                    // de la
+                                                                    // target
+        }
     }
 }

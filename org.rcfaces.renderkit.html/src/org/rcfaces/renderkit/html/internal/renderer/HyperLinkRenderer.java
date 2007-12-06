@@ -46,10 +46,8 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("DISABLED");
         }
 
-        /*
-         * Le Javascript s'occupe de ca ! htmlWriter.writeAttribute("href",
-         * "javascript:void(0)");
-         */
+        // Il faut le laisser pour le lazy FOCUS
+        htmlWriter.writeAttribute("href", "javascript:void(0)");
 
         String text = component.getText(facesContext);
         if (text != null) {
@@ -62,7 +60,9 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.A);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.addSubFocusableComponent(htmlWriter
+                .getComponentRenderContext().getComponentClientId());
+        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
 
         super.encodeEnd(writer);
     }

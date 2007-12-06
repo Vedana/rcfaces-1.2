@@ -29,7 +29,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);

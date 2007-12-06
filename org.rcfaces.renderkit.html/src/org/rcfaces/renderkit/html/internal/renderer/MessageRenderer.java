@@ -137,7 +137,7 @@ public class MessageRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnMessage(); // Pour les messages ?
     }
 
     protected String getNoMessageClassName(IHtmlWriter htmlWriter) {

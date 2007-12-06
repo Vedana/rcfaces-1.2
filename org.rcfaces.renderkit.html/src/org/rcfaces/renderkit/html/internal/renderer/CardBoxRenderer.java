@@ -56,7 +56,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.enableJavaScript();
+        // htmlWriter.enableJavaScript(); // Pourquoi ?
 
         htmlWriter.startElement(IHtmlWriter.DIV);
 
@@ -89,7 +89,7 @@ public class CardBoxRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(writer);
     }

@@ -1531,6 +1531,7 @@ var __members = {
 	 */
 	f_parseComponentAttributes: function(component) {
 		var internalValue=f_core.GetAttribute(component, "v:internalValue");
+		this._initialValue=(internalValue)?internalValue:"";
 		
 		var filter=f_core.GetAttribute(component, "v:vFilter");
 		if (filter) {

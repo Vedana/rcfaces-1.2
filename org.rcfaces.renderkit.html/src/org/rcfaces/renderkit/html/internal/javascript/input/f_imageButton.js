@@ -268,6 +268,7 @@ var __members = {
 
 	/**
 	 * @method private
+	 * @return boolean
 	 */
 	_onFocus: function() {
 		this.f_updateLastFlatBorder();
@@ -280,6 +281,7 @@ var __members = {
 
 	/**
 	 * @method private
+	 * @return boolean
 	 */
 	_onBlur: function() {
 		this._focus = undefined;
@@ -290,6 +292,7 @@ var __members = {
 
 	/**
 	 * @method protected
+	 * @return void
 	 */
 	_updateImage: function() {
 		var url=null;
@@ -391,6 +394,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @return void
 	 */
 	_installHoverFocus: function() {
 		if (this._hoverInstalled) {

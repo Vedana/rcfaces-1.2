@@ -32,14 +32,18 @@ var __members = {
 	f_input: function() {
 		this.f_super(arguments);
 		
-		var self=this;
-		this.f_insertEventListenerFirst(f_event.FOCUS, function(event) {
-			self.f_removeEventListener(f_event.FOCUS, arguments.callee);
-			
-			self.f_initializeOnFocus();
-			
-			return self.f_fireEvent(event);
-		});
+		if (false) {
+			var self=this;
+			this.f_insertEventListenerFirst(f_event.FOCUS, function(event) {
+				self.f_removeEventListener(f_event.FOCUS, arguments.callee);
+				
+				self.f_initializeOnFocus();
+				
+				return self.f_fireEvent(event);
+			});
+		} else {
+			this.f_initializeOnFocus();
+		}			
 		
 		if (f_core.IsDebugEnabled(f_input)) {
 			var input=this.f_getInput();

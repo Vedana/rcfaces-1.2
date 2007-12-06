@@ -4,6 +4,7 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -45,6 +46,95 @@ public class EventsRenderer {
     };
 
     private static final FacesListener[] DEFAULT_SUBMIT_FACES_LISTENERS = new FacesListener[] { DEFAULT_SUBMIT_FACES_LISTENER };
+
+    private static final IJavascriptMode ONFOCUS_JAVASCRIPT_ENABLE = new IJavascriptMode() {
+        private static final String REVISION = "$Revision$";
+
+        public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
+            // mode.enableOnFocus(com);
+            // Normalement les IDs sont déjà positionnés !
+            
+            mode.enableOnFocus();
+        }
+    };
+
+    private static final IJavascriptMode ONINIT_JAVASCRIPT_ENABLE = new IJavascriptMode() {
+        private static final String REVISION = "$Revision$";
+
+        public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
+            mode.enableOnInit();
+        }
+    };
+
+    private static final IJavascriptMode NONE_JAVASCRIPT_ENABLE = new IJavascriptMode() {
+        private static final String REVISION = "$Revision$";
+
+        public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
+        }
+    };
+
+    private static final IJavascriptMode SUBMIT_JAVASCRIPT_ENABLE = new IJavascriptMode() {
+        private static final String REVISION = "$Revision$";
+
+        public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
+            mode.enableOnSubmit();
+        }
+    };
+
+    private static final Map ENABLE_JAVASCRIPT_BY_LISTENER_TYPE = new HashMap(8);
+    static {
+        // INIT
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_INIT_ATTRIBUTE,
+                ONINIT_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_VALIDATION_ATTRIBUTE,
+                ONINIT_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_MOUSEOVER, ONINIT_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_MOUSEOUT, ONINIT_JAVASCRIPT_ENABLE);
+
+        // FOCUS
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_BLUR_ATTRIBUTE,
+                ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_FOCUS_ATTRIBUTE,
+                ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_KEYDOWN_ATTRIBUTE,
+                ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_KEYPRESS, ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_KEYUP_ATTRIBUTE,
+                ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_SELECTION, ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_DBLCLICK, ONFOCUS_JAVASCRIPT_ENABLE);
+
+        // NONE
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_USER_ATTRIBUTE, NONE_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_LOAD_ATTRIBUTE, NONE_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
+                .put(JavaScriptClasses.EVENT_PROPERTY_CHANGE,
+                        NONE_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_MENU_ATTRIBUTE, NONE_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_VALUE_CHANGE_ATTRIBUTE,
+                NONE_JAVASCRIPT_ENABLE);
+
+        // SUBMIT/RESET
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_RESET_ATTRIBUTE,
+                SUBMIT_JAVASCRIPT_ENABLE);
+
+    }
 
     public static void encodeEventListeners(IJavaScriptWriter js,
             String varName, Map listenersByType, String actionListenerType)
@@ -202,7 +292,7 @@ public class EventsRenderer {
     public static void encodeAttributeEventListeners(
             IRenderContext renderContext, StringAppender sb,
             String listenerType, FacesListener[] facesListeners,
-            boolean submitSupport) {
+            boolean submitSupport, IJavaScriptEnableMode javaScriptEnableMode) {
 
         int cnt = 0;
 
@@ -275,6 +365,15 @@ public class EventsRenderer {
             appendCommand(sb, command);
 
             cnt++;
+
+            IJavascriptMode javascriptMode = (IJavascriptMode) ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
+                    .get(listenerType);
+            if (javascriptMode != null) {
+                javascriptMode.enableJavaScriptMode(javaScriptEnableMode);
+
+            } else {
+                javaScriptEnableMode.enableOnInit();
+            }
         }
 
         if (needSubmit) {
@@ -287,6 +386,15 @@ public class EventsRenderer {
             sb.append(listenerType);
             sb.append(':');
             sb.append(DEFAULT_SUBMIT_JAVA_SCRIPT);
+
+            IJavascriptMode javascriptMode = (IJavascriptMode) ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
+                    .get(listenerType);
+            if (javascriptMode != null) {
+                javascriptMode.enableJavaScriptMode(javaScriptEnableMode);
+
+            } else {
+                javaScriptEnableMode.enableOnInit();
+            }
         }
     }
 
@@ -326,5 +434,9 @@ public class EventsRenderer {
 
     public static FacesListener[] getSubmitJavaScriptListeners() {
         return DEFAULT_SUBMIT_FACES_LISTENERS;
+    }
+
+    private static interface IJavascriptMode {
+        void enableJavaScriptMode(IJavaScriptEnableMode mode);
     }
 }

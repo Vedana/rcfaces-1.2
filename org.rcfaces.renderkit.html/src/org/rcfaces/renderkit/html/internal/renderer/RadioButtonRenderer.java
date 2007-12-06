@@ -60,17 +60,15 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
-        
+
         /*
-        if (button.isDisabled(facesContext)) {
-            htmlWriter.writeDisabled();
-        }
-        */
+         * if (button.isDisabled(facesContext)) { htmlWriter.writeDisabled(); }
+         */
 
         if (button.isRequired()) {
             htmlWriter.writeAttribute("v:required", true);
 
-            htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
 
         String buttonId = componentRenderContext.getComponentClientId();
@@ -97,7 +95,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         htmlWriter.endElement(IHtmlWriter.LABEL);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
 
     protected String getInputClassName(IHtmlWriter htmlWriter) {
@@ -119,6 +117,8 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         writeInputAttributes(htmlWriter, inputId);
         writeChecked(htmlWriter, radioButtonComponent);
 
+        htmlWriter.addSubFocusableComponent(inputId);
+
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
         String svalue = getValueAsText(facesContext, radioButtonComponent);
@@ -129,12 +129,10 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         htmlWriter.writeClass(className);
 
         /*
-         * On se base sur le separator !        
-        if (htmlWriter.isJavaScriptEnabled() == false) {
-            // Pour le FOCUS, pour retrouver le composant parent !
-            htmlWriter.writeAttribute("v:container", componentClientId);
-        }
-        */
+         * On se base sur le separator ! if (htmlWriter.isJavaScriptEnabled() ==
+         * false) { // Pour le FOCUS, pour retrouver le composant parent !
+         * htmlWriter.writeAttribute("v:container", componentClientId); }
+         */
 
         String accessKey = radioButtonComponent.getAccessKey(facesContext);
         if (accessKey != null) {
@@ -202,8 +200,8 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         String svalue = clientData.getStringProperty("selected");
         if (svalue == null) {
             svalue = clientData.getParameter(gb);
-            
-            if (svalue==null && isDisabled) {
+
+            if (svalue == null && isDisabled) {
                 // Pas de changement d'états.
                 return;
             }

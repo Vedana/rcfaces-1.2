@@ -790,7 +790,7 @@ var __members = {
 		this.f_super(arguments);		
 			
 		if (!this.f_isVisible()) {
-			this.f_getClass().f_getClassLoader().addVisibleComponentListener(this);
+			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
 		}		
 	},	
 	/**
@@ -1612,39 +1612,62 @@ var __members = {
 	},
 	/** 
 	 * @method hidden
+	 * @param Object parent Parent node
+	 * @param Object node  New node
+	 * @return Object New node
 	 */
-	f_appendNode2: function(parent, properties) {
-		
-		var node=this.f_appendNode(parent, properties._label, properties._value, properties._description, properties._disabled);
+	f_appendNode2: function(parent, node) {
+		node._tooltip=node._description;
+		node._opened=node._expanded;
 
-		if (properties._expanded) {
+		if (node._opened===undefined && !this._userExpandable) {
 			node._opened=true;
 		}
-
-		if (properties._selected) {
-			node._selected=true;
-		}
-
-		if (properties._checked) {
-			node._checked=true;
+		
+		if (!parent._nodes) {
+			parent._nodes=new Array;
+			parent._container=true;
 		}
 		
-		if (properties._imageURL) {
+		node._parentTreeNode=parent;
+		
+		parent._nodes.push(node);
+		
+		var imageURL=node._imageURL;
+		var disabledImageURL=node._disabledImageURL;
+		var selectedImageURL=node._selectedImageURL;
+		var expandedImageURL=node._expandedImageURL;
+		
+		if (imageURL || disabledImageURL || selectedImageURL || expandedImageURL) {
 			this._images=true; // C'est peut-etre trop tard ?  en Ajax ! ?
 			
-			this.f_setItemImages(node, 
-				properties._imageURL, 
-				properties._disabledImageURL, 
-				properties._hoverImageURL, 
-				properties._selectedImageURL);
+			if (imageURL) {
+				this.f_setNodeImageURL(node, imageURL);
+			}
+
+			// Le hover ???
+			// var hoverImageURL=node._hoverImageURL;
+			// if (hoverImageURL) {
+			//	  this.f_setHoverNodeImageURL(node, hoverImageURL);
+			// }
+
+			
+			if (expandedImageURL) {
+				this.f_setExpandedNodeImageURL(node, expandedImageURL);
+			}
+				
+			if (selectedImageURL) {
+				this.f_setSelectedNodeImageURL(node, selectedImageURL);
+			}
+				
+			if (disabledImageURL) {
+				this.f_setDisabledNodeImageURL(node, disabledImageURL);				
+			}
 		}
 		
-		if (properties._clientDatas) {
-			this.f_setItemClientDatas(node, properties._clientDatas);
-		}
-		
-		if (properties._styleClass) {
-			node._styleClass=properties._styleClass;
+		var clientDatas=node._clientDatas;
+		if (clientDatas) {
+			this.f_setItemClientDatas(node, clientDatas);
 		}
 		
 		return node;
@@ -1685,6 +1708,13 @@ var __members = {
 		
 		return node;
 	},
+	/**
+	 * @method private
+	 * @param Array args
+	 * @param number atts
+	 * @param Object node
+	 * @return void
+	 */
 	_checkNodeAttributes: function(args, atts, node) {
 		if (atts>=args.length) {
 			return;

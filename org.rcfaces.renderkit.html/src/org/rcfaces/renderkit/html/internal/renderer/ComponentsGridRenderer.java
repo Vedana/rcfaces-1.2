@@ -153,7 +153,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         encodeBodyTableEnd(writer, tableContext);
 
-        writer.enableJavaScript();
+        writer.getJavaScriptEnableMode().enableOnInit();
 
         super.encodeBodyEnd(writer, tableContext);
     }

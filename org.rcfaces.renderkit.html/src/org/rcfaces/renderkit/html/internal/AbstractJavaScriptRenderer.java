@@ -6,7 +6,6 @@ package org.rcfaces.renderkit.html.internal;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -50,7 +49,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
     // private static final String INIT_BY_NAME = "javascript.InitByName";
 
-    // static final boolean ENCODE_EVENT_ATTRIBUTE = true;
+    private static final boolean ENCODE_EVENT_ATTRIBUTE_ON_COLLECTOR_MODE = true;
 
     /*
      * protected void setInitializeByName(IComponentRenderContext renderContext) {
@@ -136,8 +135,7 @@ public abstract class AbstractJavaScriptRenderer extends
     public final IHtmlWriter writeJavaScriptAttributes(IHtmlWriter writer)
             throws WriterException {
         // Les evenements ....
-        if (writer.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext().isCollectorMode()) {
+        if (encodeEventsInAttributes(writer) == false) {
             return writer;
         }
 
@@ -150,8 +148,6 @@ public abstract class AbstractJavaScriptRenderer extends
         }
 
         UIComponent component = componentRenderContext.getComponent();
-
-        boolean initJavascript = false;
 
         // On recherche les ActionListeners
         Map listenersByType = ListenerTools.getListenersByType(
@@ -177,15 +173,20 @@ public abstract class AbstractJavaScriptRenderer extends
 
             if (sa.length() > 0) {
                 writer.writeAttribute("v:events", sa.toString());
-                initJavascript = true;
             }
         }
 
-        if (initJavascript) {
-            writer.enableJavaScript();
+        return writer;
+    }
+
+    protected boolean encodeEventsInAttributes(IHtmlWriter writer) {
+        if (writer.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode() == false) {
+            return true;
         }
 
-        return writer;
+        return ENCODE_EVENT_ATTRIBUTE_ON_COLLECTOR_MODE;
+
     }
 
     protected String getActionEventName(INameSpace nameSpace) {
@@ -196,6 +197,10 @@ public abstract class AbstractJavaScriptRenderer extends
             IHtmlWriter writer, Map listenersByType) {
         IRenderContext renderContext = writer.getComponentRenderContext()
                 .getRenderContext();
+
+        IJavaScriptEnableMode javaScriptEnableMode = writer
+                .getJavaScriptEnableMode();
+
         for (Iterator it = listenersByType.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
@@ -209,7 +214,8 @@ public abstract class AbstractJavaScriptRenderer extends
             }
 
             EventsRenderer.encodeAttributeEventListeners(renderContext, sa,
-                    listenerType, listeners, submitSupport);
+                    listenerType, listeners, submitSupport,
+                    javaScriptEnableMode);
         }
     }
 
@@ -241,8 +247,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
         boolean hasAction = false;
         Map listenersByType = null;
-        if (writer.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext().isCollectorMode()
+        if (encodeEventsInAttributes(writer) == false
                 && htmlRenderContext.getProcessContext().isDesignerMode() == false) {
             // On recherche l'attribut Action
             hasAction = hasComponentAction(component);
@@ -267,7 +272,10 @@ public abstract class AbstractJavaScriptRenderer extends
                 .isJavaScriptStubForced();
         if (js == null) {
             if (enableJavascript == false) {
-                enableJavascript = writer.isJavaScriptEnabled();
+                JavaScriptEnableModeImpl javaScriptEnableMode = (JavaScriptEnableModeImpl) writer
+                        .getJavaScriptEnableMode();
+
+                enableJavascript = (javaScriptEnableMode.getMode() > 0);
             }
 
             if (enableJavascript == false && javaScriptStubForced) {
@@ -346,9 +354,9 @@ public abstract class AbstractJavaScriptRenderer extends
 
         String ak = accessKeyCapability.getAccessKey();
 
-        if (ak != null) {
+        if (ak != null && ak.length() > 0) {
             writer.writeAttribute("v:accessKey", ak);
-            writer.enableJavaScript();
+            writer.getJavaScriptEnableMode().enableOnAccessKey();
         }
 
         return writer;
@@ -362,7 +370,7 @@ public abstract class AbstractJavaScriptRenderer extends
             IHelpCapability helpComponent) {
         if ((helpComponent.getHelpURL() != null)
                 || (helpComponent.getHelpMessage() != null)) {
-            writer.enableJavaScript();
+            // writer.enableJavaScript(); // ????
         }
 
         return writer;
@@ -375,10 +383,11 @@ public abstract class AbstractJavaScriptRenderer extends
                         writer);
     }
 
-    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            IJavaScriptRenderContext javaScriptRenderContext) {
         String className = getJavaScriptClassName();
         if (className != null) {
-            classes.add(className);
+            javaScriptRenderContext.appendRequiredClass(className, null);
         }
     }
 }

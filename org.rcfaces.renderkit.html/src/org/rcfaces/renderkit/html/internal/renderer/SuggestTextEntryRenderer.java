@@ -34,9 +34,10 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
-        htmlWriter.enableJavaScript();
 
         super.encodeComponent(htmlWriter);
+
+        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
 
     protected IHtmlWriter writeInputAttributes(IHtmlWriter htmlWriter)

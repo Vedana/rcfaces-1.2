@@ -4,6 +4,8 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.faces.component.UIComponent;
@@ -11,6 +13,7 @@ import javax.faces.context.ResponseWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
@@ -28,6 +31,8 @@ public abstract class AbstractHtmlWriter extends
 
     private static final Log LOG = LogFactory.getLog(AbstractHtmlWriter.class);
 
+    private static final String[] STRING_EMPTY_ARRAY = new String[0];
+
     private static final char LF = '\n';
 
     private static final String TAG_STACK_PROPERTY = "org.rcfaces.core.internal.writer.TAG_STACK";
@@ -35,6 +40,9 @@ public abstract class AbstractHtmlWriter extends
     private static final String NONE_WAI_ROLE_NS = "none";
 
     protected static final boolean VERIFY_TAG_STACK = LOG.isDebugEnabled();
+
+    private static final String SUB_COMPONENTS_IDS_PROPERTY = "org.rcfaces.core.internal.writer.SUB_COMPONENTS_IDS";
+
     static {
         if (VERIFY_TAG_STACK) {
             LOG.debug("Verify tags stack enabled.");
@@ -46,6 +54,8 @@ public abstract class AbstractHtmlWriter extends
     protected final AbstractRenderContext renderContext;
 
     private ICssWriter cssWriter;
+
+    private Set subComponents;
 
     public AbstractHtmlWriter(AbstractRenderContext renderContext) {
         this(renderContext, renderContext.getFacesContext().getResponseWriter());
@@ -59,6 +69,10 @@ public abstract class AbstractHtmlWriter extends
         this.renderContext = renderContext;
 
         this.responseWriter = responseWriter;
+
+        subComponents = (Set) ((ITransientAttributesManager) renderContext
+                .getComponent())
+                .getTransientAttribute(SUB_COMPONENTS_IDS_PROPERTY);
     }
 
     public final IComponentRenderContext getComponentRenderContext() {
@@ -566,10 +580,27 @@ public abstract class AbstractHtmlWriter extends
 
         return this;
     }
-    
-    /*
-    public void enableJavaScript() {
-        enableJavaScript(INIT_LAZY_MODE);
+
+    public void addSubFocusableComponent(String subComponentClientId) {
+        if (subComponents == null) {
+            subComponents = new HashSet(4);
+
+            ((ITransientAttributesManager) renderContext.getComponent())
+                    .setTransientAttribute(SUB_COMPONENTS_IDS_PROPERTY,
+                            subComponents);
+        }
+
+        getJavaScriptEnableMode().enableOnFocus();
+
+        subComponents.add(subComponentClientId);
     }
-    */
+
+    public String[] listSubFocusableComponents() {
+        if (subComponents == null) {
+            return STRING_EMPTY_ARRAY;
+        }
+
+        return (String[]) subComponents
+                .toArray(new String[subComponents.size()]);
+    }
 }

@@ -60,10 +60,9 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         writeCssAttributes(htmlWriter);
 
         /*
-        if (button.isDisabled(facesContext)) {
-            htmlWriter.writeAttribute("DISABLED");
-        }
-        */
+         * if (button.isDisabled(facesContext)) {
+         * htmlWriter.writeAttribute("DISABLED"); }
+         */
 
         if (button instanceof IRequiredCapability) {
             IRequiredCapability requiredCapability = (IRequiredCapability) button;
@@ -71,7 +70,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
             if (requiredCapability.isRequired()) {
                 htmlWriter.writeAttribute("v:required", true);
 
-                htmlWriter.enableJavaScript();
+                htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
             }
         }
 
@@ -96,6 +95,8 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         }
 
         htmlWriter.endElement(IHtmlWriter.LABEL);
+
+        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
 
     protected void writeInput(IHtmlWriter htmlWriter,
@@ -109,6 +110,8 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         writeInputAttributes(htmlWriter, inputId);
         writeChecked(htmlWriter, button);
 
+        htmlWriter.addSubFocusableComponent(inputId);
+
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
         String value = getValue(facesContext, button);
@@ -119,12 +122,10 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         htmlWriter.writeClass(className + INPUT_STYLECLASS_SUFFIX);
 
         /*
-         * On se base sur le separator !        
-        if (htmlWriter.isJavaScriptEnabled() == false) {
-            // Pour le FOCUS, pour retrouver le composant parent !
-            htmlWriter.writeAttribute("v:container", componentClientId);
-        }
-        */
+         * On se base sur le separator ! if (htmlWriter.isJavaScriptEnabled() ==
+         * false) { // Pour le FOCUS, pour retrouver le composant parent !
+         * htmlWriter.writeAttribute("v:container", componentClientId); }
+         */
 
         String accessKey = button.getAccessKey(facesContext);
         if (accessKey != null) {
@@ -203,7 +204,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         } else if (isDisabled) {
             // Pas d'état du composant ! (A cause du lazy mode)
             return;
-           
+
         } else {
             String values[] = clientData.getComponentParameters();
 

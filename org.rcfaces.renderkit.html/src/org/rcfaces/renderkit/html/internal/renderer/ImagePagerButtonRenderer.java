@@ -11,6 +11,7 @@ import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 
@@ -37,6 +38,9 @@ public class ImagePagerButtonRenderer extends ImageButtonRenderer {
         if (imagePagerButtonComponent.isHideIfDisabled(facesContext)) {
             imagePagerButtonComponent.setVisible(false);
         }
+
+        // Il faut intialiser le bouton au début pour retirer le disabled si necessaire !
+        ((IHtmlWriter)writer).getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(writer);
     }

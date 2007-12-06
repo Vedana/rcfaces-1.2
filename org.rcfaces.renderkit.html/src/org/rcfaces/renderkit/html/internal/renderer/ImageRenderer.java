@@ -3,8 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Set;
-
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ImageComponent;
@@ -112,19 +110,16 @@ public class ImageRenderer extends AbstractCssRenderer {
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(htmlWriter, classes);
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(htmlWriter,
+                javaScriptRenderContext);
 
         if (htmlWriter.getComponentRenderContext().containsAttribute(
                 FILTRED_CONTENT_PROPERTY)) {
 
-            IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
-                    .getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .getJavaScriptRenderContext();
-
             // On prend .COMBO en dure, car le filter n'est pas defini pour les
             // classes qui en héritent !
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.IMAGE, "filter");
         }
     }

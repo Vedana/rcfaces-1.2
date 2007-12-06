@@ -45,7 +45,7 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) p_Writer;
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
 
         htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);

@@ -6,7 +6,6 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -165,8 +164,9 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 maxResultNumber);
     }
 
-    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
-        super.addRequiredJavaScriptClassNames(writer, classes);
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
 
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
@@ -174,16 +174,12 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         AbstractCalendarComponent calendarComponent = (AbstractCalendarComponent) writer
                 .getComponentRenderContext().getComponent();
 
-        IJavaScriptRenderContext javaScriptRenderContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
-
         int clientDatesStrategy = calendarComponent
                 .getClientDatesStrategy(facesContext);
         if (clientDatesStrategy == IClientDatesStrategyCapability.MONTH_DATES_STRATEGY
                 || clientDatesStrategy == IClientDatesStrategyCapability.YEAR_DATES_STRATEGY) {
 
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.CALENDAR_OBJECT, "ajax");
         }
     }

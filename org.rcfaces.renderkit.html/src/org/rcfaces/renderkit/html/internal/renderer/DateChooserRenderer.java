@@ -183,10 +183,6 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             }
         }
 
-        protected boolean initializeJavaScript() {
-            return true;
-        }
-
         protected void writeEndRow(int nextRowCount) throws WriterException {
             if (firstLine == false) {
                 super.writeEndRow(nextRowCount);

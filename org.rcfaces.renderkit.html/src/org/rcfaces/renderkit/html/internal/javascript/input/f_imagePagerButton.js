@@ -80,6 +80,11 @@ var __members = {
 		f_core.Debug(f_imagePagerButton, "fa_pagedComponentInitialized: Update image: id="+this.id+" type="+type+" disabled="+disabled+" first="+first+" rows="+rows+" rowCount="+rowCount);
 		
 		this.f_setDisabled(disabled);	
+		
+		if (!this.fa_componentUpdated && !disabled) {
+			// Et oui, le bouton est généré DISABLED et il peut passer en ENABLED lors de la construction ! 
+			this._updateImage();
+		}
 	},
 	
 	fa_updateDisabled: function() {

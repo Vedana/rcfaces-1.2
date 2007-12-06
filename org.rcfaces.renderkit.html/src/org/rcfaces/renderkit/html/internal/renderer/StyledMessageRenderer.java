@@ -42,7 +42,7 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
 
         super.encodeEnd(writer);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
     }
 
     protected void writeComponentAttributes(IHtmlWriter htmlWriter)
@@ -72,6 +72,7 @@ public class StyledMessageRenderer extends AbstractCssRenderer {
         if (forValue != null) {
             htmlWriter.writeAttribute("v:for", forValue);
         }
+        
         if (showIfMessage) {
             htmlWriter.writeAttribute("v:showIfMessage", true);
         }

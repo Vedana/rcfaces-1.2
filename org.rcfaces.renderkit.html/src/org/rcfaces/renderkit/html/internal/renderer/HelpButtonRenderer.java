@@ -33,7 +33,7 @@ public class HelpButtonRenderer extends ImageButtonRenderer {
     public void encodeEnd(IComponentWriter writer) throws WriterException {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(writer);
     }

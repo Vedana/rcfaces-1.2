@@ -57,7 +57,7 @@ public class MessagesRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnMessage();
     }
 
     /*

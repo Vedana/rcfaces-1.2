@@ -212,6 +212,29 @@ f_classLoader.prototype = {
 		
 		this._exiting=true;
 		
+		//
+		var onFocusIds=this._onFocusIds;
+		if (onFocusIds) {
+			this._onFocusIds=undefined;
+			
+			var functionToRemove=this._onFocusToInitSelf;
+			this._onFocusToInitSelf=undefined;
+	
+			var cs=[];		
+			for(var clientId in onFocusIds) {
+				var inputComponent=document.getElementById(clientId);
+				if (!inputComponent) {
+					continue;
+				}
+				
+				cs.push(inputComponent);
+			}
+			
+			f_core.RemoveEventListeners(cs, "focus", functionToRemove);
+			
+			f_core.Debug("f_classLoader","f_onExit: Clean "+cs.length+" input focus handler !");			
+		}		
+		
 		this._visibleListeners=undefined; // List<f_component>
 	
 		// Vide le pool des objets AVANT !
@@ -661,6 +684,161 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden
+	 * @param String... ids
+	 * @return void
+	 */
+	f_initOnMessage: function(ids) {
+		var onMessageIds=this._onMessageIds;
+		if (!onMessageIds) {
+			onMessageIds=ids;
+			
+			this._onMessageIds=onMessageIds;
+			return;
+		}
+		
+		onMessageIds.push.apply(onMessageIds, ids);		
+	},
+	/**
+	 * @method hidden
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	f_verifyOnMessage: function(form) {
+		var onMessageIds=this._onMessageIds;
+		if (!onMessageIds) {
+			return;
+		}
+		this._onMessageIds=undefined;
+		
+		f_core.Info(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
+		
+		this._initializeIds(onMessageIds);
+	},
+	/**
+	 * @method private
+	 * @param String[] ids
+	 * @return void
+	 */
+	_initializeIds: function(ids) {
+		for(var i=0;i<ids.length;i++) {
+			var componentId=ids[i];
+						
+			var component=document.getElementById(componentId);
+			if (!component) {
+				f_core.Error(f_classLoader,"f_verifyOnMessage: Can not find component '"+componentId+"'.");
+				continue;
+			}
+				
+			if (f_class.IsObjectInitialized(component)) {
+				return true;
+			}
+			
+			try {
+				this.f_init(component);
+				
+				if (typeof(component.f_completeComponent)=="function") {
+					component.f_completeComponent();
+				}
+				
+			} catch (ex) {
+				f_core.Error(f_classLoader, "f_verifyOnMessage: Can not initialize component '"+componentId+"'.", ex);
+			}			
+		}
+	},
+	/**
+	 * @method hidden
+	 * @param String... ids
+	 * @return void
+	 */
+	f_initOnAccessIds: function(ids) {
+		
+		//f_key.AddKeyHandler(null, accessKey, this, this.f_performAccessKey);
+	},
+	/**
+	 * @method hidden
+	 * @param String[] ids
+	 * @return void
+	 */
+	f_initOnSubmitIds: function(ids) {
+		var onSubmitIds=this._onSubmitIds;
+		if (!onSubmitIds) {
+			onSubmitIds=ids;
+			
+			this._onSubmitIds=onSubmitIds;
+			return;
+		}
+		
+		onSubmitIds.push.apply(onSubmitIds, ids);
+	},
+	/**
+	 * @method hidden
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	f_verifyOnSubmit: function(form) {
+		var onSubmitIds=this._onSubmitIds;
+		if (!onSubmitIds) {
+			return;
+		}
+		this._onSubmitIds=undefined;
+		
+		f_core.Info(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
+		
+		this._initializeIds(onSubmitIds);
+	},
+	/**
+	 * @method hidden
+	 * @param String... ids
+	 * @return void
+	 */
+	f_initOnFocusIds: function(ids) {
+		var onFocusIds=this._onFocusIds;
+		if (!onFocusIds) {
+			onFocusIds=new Object;
+			
+			this._onFocusIds=onFocusIds;
+		
+			var self=this;
+			this._onFocusToInitSelf=function(evt) {
+				return self._onFocusToInit(this, evt);
+			}
+		}
+		var onFocusToInitSelf=this._onFocusToInitSelf;
+				
+		for(var i=0;i<arguments.length;) {
+			var clientId=arguments[i++];
+			
+			if (i==arguments.length || typeof(arguments[i])=="string") {
+				var component=document.getElementById(clientId);
+				if (component==null) {
+					f_core.Error(f_classLoader,"f_initOnFocusIds: unknown component '"+clientId+"'. (self input)");
+					continue;
+				}
+				
+				onFocusIds[clientId]=clientId;
+				f_core.AddEventListener(component, "focus", onFocusToInitSelf);
+
+				continue;				
+			}
+			
+			var subIds=arguments[i++];			
+			for(var j=0;j<subIds.length;j++) {
+				var subId=subIds[j];
+				
+				var subComponent=document.getElementById(subId);
+				if (subComponent==null) {
+					f_core.Error(f_classLoader,"f_initOnFocusIds: unknown component '"+subId+"'.");
+					continue;
+				}
+				
+				onFocusIds[subId]=clientId;
+				f_core.AddEventListener(subComponent, "focus", onFocusToInitSelf);
+					
+			}
+		}
+	},
+	/**
+	 * @method hidden
 	 * @param Object obj Object or String
 	 * @param boolean ignoreNotFound
 	 * @return Object
@@ -910,11 +1088,11 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden
 	 */
-	addVisibleComponentListener: function(component) {
+	f_addVisibleComponentListener: function(component) {
 		f_core.Assert(component.f_performComponentVisible, "Callback 'f_performComponentVisible' not found !");
 	
 		if (this._exiting) {
-			throw "This classloader is exiting ... [addVisibleComponentListener]";
+			throw "This classloader is exiting ... [f_addVisibleComponentListener]";
 		}
 		
 		if (f_core.IsComponentVisible(component)) {
@@ -1157,6 +1335,65 @@ f_classLoader.prototype = {
 				}				
 			}
 		}
+	},
+
+	/**
+	 * @method private 
+	 * @param HTMLElement inputComponent
+	 * @param Event evt
+	 * @return boolean
+	 */
+	_onFocusToInit: function(inputComponent, evt) {
+		if (f_core.IsInternetExplorer()) {
+			evt=this._window.event; // Space ... mais le inputComponent vaut la fenetre root !!! 
+			inputComponent=evt.srcElement;
+		}
+	
+		f_core.RemoveEventListener(inputComponent, "focus", this._onFocusToInitSelf);	
+		
+		var ids=this._onFocusIds;
+		
+		var inputId=inputComponent.id;
+		
+		var componentId=ids[inputId];
+		if (!componentId) {
+			return true;
+		}
+		
+		delete ids[inputId];
+	
+		var component=document.getElementById(componentId);
+		if (!component) {
+			f_core.Error(f_classLoader,"_OnFocusToInit: Can not find component '"+componentId+"' associated to input '"+inputId+"'.");
+			return true;
+		}
+		
+		if (f_class.IsObjectInitialized(component)) {
+			return true;
+		}
+		
+		try {
+			this.f_init(component);
+			
+			if (typeof(component.f_completeComponent)=="function") {
+				component.f_completeComponent();
+			}
+			
+		} catch (ex) {
+			f_core.Error(f_classLoader, "_OnFocusToInit: Can not initialize component '"+componentId+"'.", ex);
+			
+			return true;
+		}
+		
+		if (f_core.IsInternetExplorer()) {
+			var newEvt = inputComponent.ownerDocument.createEventObject()
+	    	newEvt.srcElement=inputComponent;
+	   		return inputComponent.fireEvent("onfocus", newEvt);
+		}
+		
+		var event = inputComponent.ownerDocument.createEvent("HTMLEvents");
+		event.initEvent("focus", false, false);
+		return inputComponent.dispatchEvent(event);
 	},
 
 	toString: function() {
@@ -1428,6 +1665,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 		}
 	}		
 }
+
 
 
 /**

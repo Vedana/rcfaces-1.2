@@ -48,7 +48,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         // Il faut activer le Javascript
         // car l'attribut SELECTED doit être envoyé a chaque requete du client
         // vers le serveur !
-        ((IHtmlWriter) writer).enableJavaScript();
+        ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(writer);
     }

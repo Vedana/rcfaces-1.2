@@ -28,6 +28,7 @@ import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
@@ -106,7 +107,7 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
             return;
         }
 
-        List files = new ArrayList(32);
+        final List files = new ArrayList(32);
 
         if (requiredFiles != null) {
             StringTokenizer st = new StringTokenizer(requiredFiles, ",");
@@ -207,6 +208,16 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
         }
 
         if (files.isEmpty()) {
+            return;
+        }
+
+        IJavaScriptRenderContext javaScriptRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
+        if (javaScriptRenderContext.isCollectorMode()) {
+            javaScriptRenderContext.appendRequiredFiles((IFile[]) files
+                    .toArray(new IFile[files.size()]));
+            
             return;
         }
 

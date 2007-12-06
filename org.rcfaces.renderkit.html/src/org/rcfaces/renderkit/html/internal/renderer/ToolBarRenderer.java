@@ -81,7 +81,8 @@ public class ToolBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
-        htmlWriter.enableJavaScript(); // Pour masquer les separateurs
+        // Pour masquer les separateurs
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(writer);
     }
@@ -119,9 +120,10 @@ public class ToolBarRenderer extends AbstractCssRenderer {
             return;
         }
 
-        //IRenderContext renderContext = getRenderContext(facesContext);
+        // IRenderContext renderContext = getRenderContext(facesContext);
 
-       // IHtmlWriter htmlWriter = (IHtmlWriter) renderContext.getComponentWriter();
+        // IHtmlWriter htmlWriter = (IHtmlWriter)
+        // renderContext.getComponentWriter();
 
         // htmlWriter.startElement(IHtmlWriter.LI);
         // htmlWriter.writeClass("f_toolBar_item");

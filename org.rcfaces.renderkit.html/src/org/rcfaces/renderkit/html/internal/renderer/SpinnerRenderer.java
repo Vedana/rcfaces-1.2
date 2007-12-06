@@ -95,7 +95,10 @@ public class SpinnerRenderer extends TextEntryRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
-        htmlWriter.writeId(getInputClientId(htmlWriter));
+        String inputId = getInputClientId(htmlWriter);
+        htmlWriter.writeId(inputId);
+        htmlWriter.addSubFocusableComponent(inputId);
+        
         if (inputWidth > 0) {
             htmlWriter.writeStyle().writeWidth(inputWidth + "px");
         }
@@ -143,8 +146,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
-        htmlWriter.enableJavaScript();
-
+        htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Pour les fleches !
     }
 
     protected String getWAIRole() {

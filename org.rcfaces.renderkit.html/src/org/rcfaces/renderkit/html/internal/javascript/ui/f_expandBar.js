@@ -110,6 +110,9 @@ var __members = {
 				text.onclick=f_expandBar._OnHeadClick;
 				
 				txt=f_core.GetTextNode(text, true);
+				if (txt) {
+					txt=f_core.DecodeHtml(txt);
+				}
 			}
 		}
 		
@@ -310,7 +313,9 @@ var __members = {
 			
 			f_core.Debug(f_expandBar, "fa_updateCollapsed: Change text to '"+collapsedText+"'.");
 			
-			f_core.SetTextNode(this._text, collapsedText, this._accessKey);
+			var htmlText=f_core.EncodeHtml(collapsedText);
+			
+			f_core.SetTextNode(this._text, htmlText, this._accessKey);
 		}
 		
 		f_core.Debug(f_expandBar, "fa_updateCollapsed: Call effect '"+effect+"'.");
@@ -439,7 +444,9 @@ var __members = {
 		if (!this.f_isCollapsed() && this._collapsedText) {
 			var textLabel=this._text;
 			if (textLabel) {
-				f_core.SetTextNode(textLabel, text, this._accessKey);
+				var htmlText=f_core.EncodeHtml(text);
+				
+				f_core.SetTextNode(textLabel, htmlText, this._accessKey);
 			}
 		}
 				
@@ -468,7 +475,9 @@ var __members = {
 		if (this.f_isCollapsed()) {
 			var textLabel=this._text;
 			if (textLabel) {
-				f_core.SetTextNode(textLabel, text, this._accessKey);
+				var htmlText=f_core.EncodeHtml(text);
+				
+				f_core.SetTextNode(textLabel, htmlText, this._accessKey);
 			}
 		}
 				

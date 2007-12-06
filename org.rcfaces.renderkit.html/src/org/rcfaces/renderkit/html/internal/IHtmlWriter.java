@@ -14,15 +14,11 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  */
 public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
 
-    int INIT_LAZY_MODE = 1;
-
-    int ONFOCUS_LAZY_MODE = 2;
-
     void enableJavaScript();
 
-    //void enableJavaScript(int lazyMode);
-
-    boolean isJavaScriptEnabled();
+    IJavaScriptEnableMode getJavaScriptEnableMode();
+    
+    void addSubFocusableComponent(String subComponentClientId);
 
     IHtmlComponentRenderContext getHtmlComponentRenderContext();
 
@@ -107,5 +103,4 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
 
     // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws
     // WriterException;
-
 }

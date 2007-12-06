@@ -73,7 +73,7 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);

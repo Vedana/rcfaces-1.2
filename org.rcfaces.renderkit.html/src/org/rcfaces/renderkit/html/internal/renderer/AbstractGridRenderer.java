@@ -193,8 +193,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return gridRenderContext;
     }
 
-    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
-        super.addRequiredJavaScriptClassNames(writer, classes);
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
 
         IGridComponent dataGridComponent = (IGridComponent) writer
                 .getComponentRenderContext().getComponent();
@@ -202,15 +203,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(writer
                 .getHtmlComponentRenderContext());
 
-        IJavaScriptRenderContext javaScriptRenderContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
-
         if (dataGridComponent instanceof IMenuCapability) {
             IMenuIterator menuIterator = ((IMenuCapability) dataGridComponent)
                     .listMenus();
             if (menuIterator.hasNext()) {
-                javaScriptRenderContext.appendRequiredClasses(classes,
+                javaScriptRenderContext.appendRequiredClass(
                         JavaScriptClasses.GRID, "menu");
             }
         }
@@ -246,7 +243,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (gridRenderContext.hasAdditionalInformations()) {
             ajax = true;
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.GRID, "additional");
 
             if (needAdditionalInformationContextState()) {
@@ -268,7 +265,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         if (ajax) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.GRID, "ajax");
         }
 
@@ -277,7 +274,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                     .getSortManager();
             if (sortManager != null && sortManager.indexOf('(') < 0) {
                 if ("dialog".equals(sortManager)) {
-                    javaScriptRenderContext.appendRequiredClasses(classes,
+                    javaScriptRenderContext.appendRequiredClass(
                             "f_columnSortDialog", null);
                 }
             }
@@ -1228,7 +1225,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected void encodeBodyBegin(IHtmlWriter htmlWriter,
             AbstractGridRenderContext data) throws WriterException {
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
     }
 
     protected void encodeBodyEnd(IHtmlWriter writer,

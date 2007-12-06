@@ -4,12 +4,11 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import java.util.Collection;
-
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.webapp.IRepository.IFile;
 
 /**
  * 
@@ -50,8 +49,7 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
     void initializeJavaScriptDocument(IJavaScriptWriter writer)
             throws WriterException;
 
-    void appendRequiredClasses(Collection classNames, String className,
-            String requiredId);
+    void appendRequiredClass(String className, String requiredId);
 
     boolean canLazyTagUsesBrother();
 
@@ -76,4 +74,6 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
     boolean isJavaScriptRendererDeclaredLazy(IComponentWriter writer);
 
     boolean isCollectorMode();
+
+    void appendRequiredFiles(IFile[] files);
 }

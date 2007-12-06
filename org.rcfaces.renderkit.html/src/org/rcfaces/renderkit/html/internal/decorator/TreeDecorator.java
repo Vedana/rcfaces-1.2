@@ -64,7 +64,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         IComponentRenderContext componentContext = htmlWriter
                 .getComponentRenderContext();
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         mapSelectItems(componentContext, SelectItemMappers.SEARCH_IMAGE_MAPPER);
 

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.component.UIColumn;
@@ -208,7 +207,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        //boolean filtred = false;
+        // boolean filtred = false;
         /*
          * DataModel dataModel = listContext.getDataModel();
          * 
@@ -359,7 +358,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(htmlWriter);
     }
@@ -620,24 +619,21 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         return new ListContext(facesContext, dgc, rowIndex, filterExpression);
     }
 
-    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
-        super.addRequiredJavaScriptClassNames(writer, classes);
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
 
         ComponentsListComponent componentsListComponent = (ComponentsListComponent) writer
                 .getComponentRenderContext().getComponent();
 
-        IJavaScriptRenderContext javaScriptRenderContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
-
         IMenuIterator menuIterator = componentsListComponent.listMenus();
         if (menuIterator.hasNext()) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.COMPONENTS_LIST, "menu");
         }
 
         if (componentsListComponent.getRows() > 0) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.COMPONENTS_LIST, "ajax");
         }
     }

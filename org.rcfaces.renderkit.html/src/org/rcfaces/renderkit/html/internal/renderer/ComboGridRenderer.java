@@ -320,7 +320,7 @@ public class ComboGridRenderer extends DataGridRenderer {
         htmlWriter.endElement(IHtmlWriter.TBODY);
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         htmlWriter.endComponent();
     }

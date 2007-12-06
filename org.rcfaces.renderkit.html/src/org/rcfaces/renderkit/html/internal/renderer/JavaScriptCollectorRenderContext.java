@@ -12,17 +12,20 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
+import org.rcfaces.renderkit.html.internal.AbstractHtmlWriter;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -30,6 +33,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptComponentRenderer;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptEnableModeImpl;
 
 /**
  * 
@@ -42,9 +46,6 @@ public class JavaScriptCollectorRenderContext extends
 
     private static final Log LOG = LogFactory
             .getLog(JavaScriptCollectorRenderContext.class);
-
-    private static final Log LOG_INTERMEDIATE_PROFILING = LogFactory
-            .getLog("org.rcfaces.html.javascript.LOG_INTERMEDIATE_PROFILING");
 
     private static final Object DISABLE_VINIT_SEARCH_PROPERTY = "camelia.jsCollector.disable.vinit";
 
@@ -64,8 +65,9 @@ public class JavaScriptCollectorRenderContext extends
     }
 
     public void declareLazyJavaScriptRenderer(IComponentWriter writer) {
-        components.add(writer.getComponentRenderContext()
-                .getComponentClientId());
+        // Ce sont des lazys mais ils n'ont pas besoin d'être initialisés
+
+        // components.add(writer.getComponentRenderContext().getComponentClientId());
     }
 
     public boolean isJavaScriptRendererDeclaredLazy(IComponentWriter writer) {
@@ -163,8 +165,32 @@ public class JavaScriptCollectorRenderContext extends
                 }
 
                 if (initialized == false) {
-                    components.add(writer.getComponentRenderContext()
-                            .getComponentClientId());
+                    JavaScriptEnableModeImpl js = (JavaScriptEnableModeImpl) writer
+                            .getJavaScriptEnableMode();
+
+                    int mode = js.getMode();
+                    String accessKey = null;
+
+                    if ((mode & JavaScriptEnableModeImpl.ONACCESSKEY) > 0) {
+                        UIComponent component = getWriter()
+                                .getComponentRenderContext().getComponent();
+                        if (component instanceof IAccessKeyCapability) {
+                            accessKey = ((IAccessKeyCapability) component)
+                                    .getAccessKey();
+                        }
+                    }
+
+                    String subComponents[] = null;
+                    if ((mode & JavaScriptEnableModeImpl.ONFOCUS) > 0) {
+                        subComponents = ((AbstractHtmlWriter) getWriter())
+                                .listSubFocusableComponents();
+                    }
+
+                    components.add(new ComponentId(
+                            writer.getComponentRenderContext()
+                                    .getComponentClientId(), js.getMode(),
+                            accessKey, subComponents));
+
                     return;
                 }
             }
@@ -325,7 +351,7 @@ public class JavaScriptCollectorRenderContext extends
                 jsWriter = InitRenderer.openScriptTag(htmlWriter);
             }
 
-            if (LOG_INTERMEDIATE_PROFILING.isDebugEnabled()) {
+            if (LOG_INTERMEDIATE_PROFILING.isInfoEnabled()) {
                 logProfiling = true;
 
                 jsWriter.writeCall("f_core", "Profile").writeln(
@@ -352,7 +378,7 @@ public class JavaScriptCollectorRenderContext extends
         for (Iterator it = components.iterator(); it.hasNext();) {
             Object object = it.next();
 
-            if (object instanceof String) {
+            if (object instanceof ComponentId) {
                 initializeIds.add(object);
 
                 if (logIntermediateProfiling) {
@@ -438,25 +464,36 @@ public class JavaScriptCollectorRenderContext extends
             currendId = jsWriter.getComponentRenderContext()
                     .getComponentClientId();
         }
-        boolean currendIdDetected = false;
+
+        String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
+                .convertSymbol("f_classLoader", "_rcfacesClassLoader");
+
+        ComponentId currendIdDetected = null;
+
+        List others = null;
 
         boolean first = true;
         for (Iterator it = initializeIds.iterator(); it.hasNext();) {
+            ComponentId componentId = (ComponentId) it.next();
 
-            String clientId = (String) it.next();
+            String clientId = componentId.clientId;
 
             if (clientId.equals(currendId)) {
-                currendIdDetected = true;
+                currendIdDetected = componentId;
+                continue;
+            }
+
+            if (componentId.mode > 0
+                    && (componentId.mode & JavaScriptEnableModeImpl.ONINIT) == 0) {
+                if (others == null) {
+                    others = new ArrayList(initializeIds.size());
+                }
+                others.add(componentId);
                 continue;
             }
 
             if (first) {
                 first = false;
-
-                String cameliaClassLoader = jsWriter
-                        .getJavaScriptRenderContext().convertSymbol(
-                                "f_classLoader", "_rcfacesClassLoader");
-
                 jsWriter.writeCall(cameliaClassLoader, "f_initIds");
 
             } else {
@@ -464,20 +501,179 @@ public class JavaScriptCollectorRenderContext extends
             }
 
             jsWriter.writeString(clientId);
-
         }
 
         if (first == false) {
             jsWriter.writeln(");");
         }
 
+        if (others != null) {
+            first = true;
+            for (Iterator it = others.iterator(); it.hasNext();) {
+                ComponentId componentId = (ComponentId) it.next();
+
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONACCESSKEY) == 0) {
+                    continue;
+                }
+
+                if (first) {
+                    first = false;
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnAccessIds");
+
+                } else {
+                    jsWriter.write(',');
+                }
+
+                jsWriter.writeString(componentId.clientId).write(',')
+                        .writeString(componentId.accessKey);
+            }
+            if (first == false) {
+                jsWriter.writeln(");");
+            }
+
+            first = true;
+            for (Iterator it = others.iterator(); it.hasNext();) {
+                ComponentId componentId = (ComponentId) it.next();
+
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONSUBMIT) == 0) {
+                    continue;
+                }
+
+                if (first) {
+                    first = false;
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnSubmitIds")
+                            .write('[');
+
+                } else {
+                    jsWriter.write(',');
+                }
+
+                jsWriter.writeString(componentId.clientId);
+            }
+            if (first == false) {
+                jsWriter.writeln("]);");
+            }
+
+            first = true;
+            for (Iterator it = others.iterator(); it.hasNext();) {
+                ComponentId componentId = (ComponentId) it.next();
+
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONFOCUS) == 0) {
+                    continue;
+                }
+
+                if (first) {
+                    first = false;
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnFocusIds");
+
+                } else {
+                    jsWriter.write(',');
+                }
+
+                jsWriter.writeString(componentId.clientId);
+
+                String clientIds[] = componentId.subClientIds;
+
+                if (clientIds.length == 1
+                        && componentId.clientId.equals(clientIds[0])) {
+                    continue;
+                }
+
+                jsWriter.write(",[");
+                for (int i = 0; i < clientIds.length; i++) {
+                    if (i > 0) {
+                        jsWriter.write(',');
+                    }
+
+                    jsWriter.writeString(clientIds[i]);
+                }
+
+                jsWriter.write("]");
+            }
+            if (first == false) {
+                jsWriter.writeln(");");
+            }
+
+            first = true;
+            for (Iterator it = others.iterator(); it.hasNext();) {
+                ComponentId componentId = (ComponentId) it.next();
+
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONMESSAGE) == 0) {
+                    continue;
+                }
+
+                if (first) {
+                    first = false;
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnMessage")
+                            .write('[');
+
+                } else {
+                    jsWriter.write(',');
+                }
+
+                jsWriter.writeString(componentId.clientId);
+            }
+            if (first == false) {
+                jsWriter.writeln("]);");
+            }
+
+        }
+
         initializeIds.clear();
-        if (currendIdDetected) {
-            initializeIds.add(currendId);
+        if (currendIdDetected != null) {
+            initializeIds.add(currendIdDetected);
         }
     }
 
     public boolean isCollectorMode() {
         return true;
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static class ComponentId {
+        final int mode;
+
+        final String clientId;
+
+        final String accessKey;
+
+        final String subClientIds[];
+
+        public ComponentId(String clientId, int mode, String accessKey,
+                String subClientIds[]) {
+            this.mode = mode;
+            this.clientId = clientId;
+            this.accessKey = accessKey;
+            this.subClientIds = subClientIds;
+        }
+
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result
+                    + ((clientId == null) ? 0 : clientId.hashCode());
+            return result;
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            final ComponentId other = (ComponentId) obj;
+            if (clientId == null) {
+                if (other.clientId != null)
+                    return false;
+            } else if (!clientId.equals(other.clientId))
+                return false;
+            return true;
+        }
+
     }
 }

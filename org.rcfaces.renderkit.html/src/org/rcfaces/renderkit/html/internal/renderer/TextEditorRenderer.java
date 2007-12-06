@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -49,7 +48,7 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         }
 
         public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-                Set waitingRequiredClasses) {
+                IJavaScriptRenderContext javaScriptRenderContext) {
         }
     };
 
@@ -139,7 +138,7 @@ public class TextEditorRenderer extends AbstractInputRenderer {
 
         htmlWriter.endElement(IHtmlWriter.IFRAME);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
     }
 
     private void formatTextHtml(IHtmlWriter htmlWriter, Object value) {

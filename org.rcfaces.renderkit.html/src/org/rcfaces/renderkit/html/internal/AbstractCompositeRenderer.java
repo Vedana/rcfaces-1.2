@@ -73,6 +73,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
 
         } else {
             sa.append(NamingContainer.SEPARATOR_CHAR);
+            sa.append(NamingContainer.SEPARATOR_CHAR);
         }
 
         sa.append(ch);
@@ -86,6 +87,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
         htmlWriter.writeName(subId);
         htmlWriter.writeMaxLength(length);
         htmlWriter.writeSize(length);
+        htmlWriter.addSubFocusableComponent(subId);
 
         UIComponent component = componentRenderContext.getComponent();
         if (component instanceof ITextDirectionCapability) {

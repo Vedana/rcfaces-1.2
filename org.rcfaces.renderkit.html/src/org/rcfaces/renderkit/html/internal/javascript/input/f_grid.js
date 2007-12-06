@@ -1755,6 +1755,8 @@ var __members = {
 			this.f_updateScrollPosition();
 		}
 		
+		this._tbody.style.display="block";
+		
 		this.f_super(arguments);
 		
 		if (this._initSort) {
@@ -1777,7 +1779,7 @@ var __members = {
 		this.f_performPagedComponentInitialized();
 		
 		if (!this.f_isVisible()) {
-			this.f_getClass().f_getClassLoader().addVisibleComponentListener(this);
+			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
 			
 		} else {
 			// Visible !			
@@ -3992,9 +3994,10 @@ var __members = {
 		var firstTBody=table.tBodies[0];
 		
 		this._tbody=firstTBody; //bodies[0];
-		if (firstTBody && !firstTBody.firstChild) {			
-			table.removeChild(firstTBody);
-		}
+//		if (firstTBody && !firstTBody.firstChild) {			
+//			table.removeChild(firstTBody);
+//		}
+		this._tbody.style.display="none";
 
 		var scrollBody=this;
 		var catchScrollEvent=false;
@@ -4003,13 +4006,18 @@ var __members = {
 		if (this._title) {
 			//this._scrollTitle=f_core.GetChildByCssClass(this, "f_grid_dataTitle_scroll");
 			this._scrollTitle=this.ownerDocument.getElementById(this.id+f_grid._DATA_TITLE_SCROLL_ID_SUFFIX);
-			if (this._scrollTitle) {
-				// var dataBodyClassName="f_grid_dataBody_scroll";
-				//scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
-				scrollBody=this.ownerDocument.getElementById(this.id+f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
-				
-				catchScrollEvent=true;
+		}
+		
+		if (true) {
+			// var dataBodyClassName="f_grid_dataBody_scroll";
+			//scrollBody=f_core.GetChildByCssClass(this, dataBodyClassName);
+			scrollBody=this.ownerDocument.getElementById(this.id+f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
+			
+			if (!scrollBody) {
+				scrollBody=this;
 			}
+			
+			catchScrollEvent=true;
 		}
 		
 		if (scrollBody) {
@@ -4205,7 +4213,7 @@ var __members = {
 			var col=doc.createElement("col");
 			col.style.width=scrollBarWidth+"px";
 		
-			var colsPos=this._title.getElementsByTagName("col");
+			var colsPos=cols; //this._title.getElementsByTagName("col");
 			var lastCol=colsPos[colsPos.length-1];
 			if (!lastCol.nextSibling) {
 				f_core.AppendChild(this._title, col);

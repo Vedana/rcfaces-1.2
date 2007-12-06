@@ -55,10 +55,10 @@ var __statics = {
 	/**
 	 * @field private static final boolean
 	 */
-	_CLEAN_METHODS: false,
+	_CLEAN_METHODS: true,
 
 	/**
-	 * @method private static final string
+	 * @method private static final
 	 */
 	_Call: function(obj,m,a) {
 		if (!a || !a.length) {
@@ -66,6 +66,7 @@ var __statics = {
 		}
 		return m.apply(obj, a);
 	},
+	
 	/**
 	 * @method private static 
 	 * @param Object caller
@@ -594,6 +595,17 @@ var __statics = {
 		
 		var cls=constructorFactory(constructorFct);
 		f_core.Assert(!cls._name, "f_class._DeclarePrototypeClass: Invalid constructor ! ("+cls._name+")");
+	
+		if (!methods.f_getClass) {
+			if (name!="f_class") {
+				methods.f_getClass=f_class._ObjectGetClass;
+			}
+		}				
+		if (!methods.toString) {	
+			if (name!="f_class") {
+				methods.toString=f_class._ObjectToString;
+			}
+		}
 		
 		cls.prototype=methods;
 		//cls.prototype._kclass=cls; // SURTOUT Pas pour le LEVEL3
@@ -609,6 +621,12 @@ var __statics = {
 		
 		if (!staticMembers.f_getName) {
 			staticMembers.f_getName=f_class.f_getName;
+		}
+		
+		if (!staticMembers.f_getClassLoader) {
+			if (name!="f_class") {
+				staticMembers.f_getClassLoader=f_class._ClassGetClassLoader;
+			}
 		}
 		
 		if (!staticMembers.toString) {	
@@ -658,7 +676,36 @@ var __statics = {
 		
 		return false;
 	},
-	
+	/**
+	 * @method private static
+	 * @return f_class
+	 */
+	_ObjectGetClass: function() {
+		return this._kclass;
+	},
+	/**
+	 * @method private static
+	 * @return f_class
+	 */
+	_ObjectToString: function() {
+		var s="[object";
+		
+		var kclazz=this._kclass;
+		if (kclazz) {
+			s+=" class=\""+kclazz.f_getName()+"\"";
+		} else {
+			s+=" class=*undefined*";
+		}
+		
+		return s+"]";
+	},
+	/**
+	 * @method private static
+	 * @return f_class
+	 */
+	_ClassGetClassLoader: function() {
+		return this._classLoader;
+	},
 	/**
 	 * @method public static 
 	 * @return String

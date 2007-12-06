@@ -728,10 +728,31 @@ var f_core = {
 		    return;
 		}
 
-		if (capture) {
-			capture=true;
+	    component.addEventListener(name, fct, !!capture);
+	},
+	/**
+	 * @method hidden static
+	 * @param HTMLElement component[]
+	 * @param String name Event name
+	 * @param function Called callback.
+	 * @return void
+	 */
+	RemoveEventListeners: function(components, name, fct) {
+		
+	 	if (f_core.IsInternetExplorer()) {
+	 		name="on"+name;
+	 		
+			for(var i=0;i<components.length;i++) {
+				components[i].detachEvent(name, fct);	
+			}
+			    
+		    return;
 		}
-	    component.addEventListener(name, fct, capture);
+
+		
+		for(var i=0;i<components.length;i++) {
+		    components[i].removeEventListener(name, fct, false);		
+		}
 	},
 	/**
 	 * @method hidden static
@@ -1468,6 +1489,8 @@ var f_core = {
 			}
 		}
 		
+		f_classLoader.Get(win).f_verifyOnSubmit();
+		
 		f_core._CallFormResetListeners(form, evt);
 		
 		// Appel de la validation ?
@@ -1564,7 +1587,10 @@ var f_core = {
 					f_core.Debug(f_core, "Test immediate property of '"+component.id+"' = "+immediate);
 				}
 			}
-						
+			
+					
+			f_classLoader.Get(win).f_verifyOnSubmit();		
+			
 			if (immediate!==true && f_env.GetCheckValidation()) {
 				var valid=f_core._CallFormCheckListeners(form);
 				
@@ -2274,9 +2300,10 @@ var f_core = {
 	 * @method hidden static hidden
 	 * @param HTMLElement component 
 	 * @param optional Object listener
+	 * @param optional boolean first
 	 * @return void
 	 */
-	AddCheckListener: function(component, listener) {
+	AddCheckListener: function(component, listener, first) {
 		f_core.Assert(listener===undefined || typeof(listener)=="object", "f_core.AddCheckListener: Listener must be an object ! ("+listener+")");
 		f_core.Assert(component.nodeType, "f_core.AddCheckListener: Invalid component parameter ("+component+")");
 
@@ -2289,8 +2316,12 @@ var f_core = {
 			form._checkListeners=checkListeners;
 		}
 		
-		checkListeners.push(component);
-		checkListeners.push(listener);
+		if (first) {
+			checkListeners.unshift(component, listener);
+			return;
+		}
+		
+		checkListeners.push(component, listener);
 	},
 	/**
 	 * @method hidden static hidden
@@ -2709,6 +2740,10 @@ var f_core = {
 	IsComponentVisible: function(component) {
 		f_core.Assert(component, "f_core.IsComponentVisible: Component is null !");
 		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.IsComponentVisible: Component parameter is invalid ("+component+")");
+
+		if (component.clientWidth || component.clientHeight) {
+			return true;
+		}
 
 		for(;component;component=component.parentNode) {
 			var style=component.style;
@@ -5018,6 +5053,16 @@ var f_core = {
 		f_core.Assert(typeof(text)=="string", "f_core.EncodeHtml: Invalid text parameter ("+text+").");
 
 		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	},
+	/**
+	 * @method hidden static 
+	 * @param String text Text to decode from HTML form
+	 * @return String UTF8 text.
+	 */
+	DecodeHtml: function(text) {
+		f_core.Assert(typeof(text)=="string", "f_core.DecodeHtml: Invalid text parameter ("+text+").");
+
+		return text.replace(/&gt;/gi, ">").replace(/&lt;/gi, "<").replace(/&amp;/gi, "&");
 	},
 	/** 
 	 * @method hidden static 

@@ -95,7 +95,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
 
     protected String getWAIRole() {

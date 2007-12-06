@@ -301,10 +301,10 @@ var __statics = {
 	 * @method hidden static final
 	 */
 	SetAltKeyMode: function(scopeName, needAltKey) {
-		f_core.Assert(f_key._Scopes, "No scopes defined.");
+		f_core.Assert(f_key._Scopes, "f_key.SetAltKeyMode: No scopes defined.");
 		
 		var scope=f_key._Scopes[scopeName];
-		f_core.Assert(scope, "Scope '"+scopeName+"' not found.");
+		f_core.Assert(scope, "f_key.SetAltKeyMode: Scope '"+scopeName+"' not found.");
 			
 		scope._altKey=needAltKey;
 	},
@@ -358,7 +358,7 @@ var __statics = {
 		def._parameter=parameter;
 		
 		keyName=keyName.toUpperCase();
-		f_core.Assert(!scope[keyName], "Le scope '"+scopeName+"' contient déjà une definition pour la touche '"+keyName+"'.");
+		f_core.Assert(!scope[keyName], "f_key.AddKeyHandler: The scope '"+scopeName+"' already contains a definition for the key '"+keyName+"'.");
 		
 		var keyHandlers=scope._keyHandlers;
 		if (!keyHandlers) {

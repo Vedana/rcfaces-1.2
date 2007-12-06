@@ -160,7 +160,7 @@ var __members = {
 			}	
 		}	
 		
-		f_core.AddCheckListener(form, this);
+		f_core.AddCheckListener(form, this, true);
 	},
 	
 	f_finalize: function() {
@@ -404,6 +404,8 @@ var __members = {
 		f_core.Info(f_messageContext, "f_addMessageObject["+this.form+"] Add message object to component '"+id+"'.\nmessage="+message);
 	
 		l2.push(message);
+		
+		this.f_getClass().f_getClassLoader().f_verifyOnMessage(this.form);
 		
 		if (performEvent!==false) {
 			this._fireMessageEvent();

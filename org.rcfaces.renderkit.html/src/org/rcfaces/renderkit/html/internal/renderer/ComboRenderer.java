@@ -5,7 +5,6 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItems;
@@ -51,6 +50,9 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
         writeCssAttributes(htmlWriter);
 
         writeComboAttributes(htmlWriter);
+
+        htmlWriter.addSubFocusableComponent(htmlWriter
+                .getComponentRenderContext().getComponentClientId());
     }
 
     protected void writeComboAttributes(IHtmlWriter htmlWriter)
@@ -136,19 +138,16 @@ public class ComboRenderer extends AbstractSelectItemsRenderer implements
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(htmlWriter, classes);
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(htmlWriter,
+                javaScriptRenderContext);
 
         if (htmlWriter.getComponentRenderContext().containsAttribute(
                 FILTRED_COLLECTION_PROPERTY)) {
 
-            IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
-                    .getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .getJavaScriptRenderContext();
-
             // On prend .COMBO en dure, car le filter n'est pas defini pour les
             // classes qui en héritent !
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.COMBO, "filter");
         }
     }

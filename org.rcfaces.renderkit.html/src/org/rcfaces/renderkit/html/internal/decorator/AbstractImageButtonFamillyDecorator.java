@@ -265,7 +265,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 writer.writeAttribute("v:className", getComponentClassName());
             }
 
-            boolean initJavascript = initializeJavaScript();
+            initializeJavaScript(writer);
 
             if (imageAccessor != null) {
                 imageSrc = imageAccessor.resolveURL(facesContext, null, null);
@@ -273,8 +273,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             if (disabled) {
                 if (disabledImageAccessor != null) {
-                    initJavascript = true;
-
                     if (imageSrc != null) {
                         writer.writeAttribute("v:imageURL", imageSrc);
                     }
@@ -288,7 +286,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                             facesContext, null, null);
 
                     if (selectedSrc != null) {
-                        initJavascript = true;
+                        writer.getJavaScriptEnableMode().enableOnFocus();
+
                         writer
                                 .writeAttribute("v:selectedImageURL",
                                         selectedSrc);
@@ -301,7 +300,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                             facesContext, null, null);
 
                     if (selectedImageURL != null) {
-                        initJavascript = true;
+                        writer.getJavaScriptEnableMode().enableOnFocus();
 
                         if (selected) {
                             if (imageSrc != null) {
@@ -317,8 +316,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 }
 
                 if (disabledImageAccessor != null) {
-                    initJavascript = true;
-
                     String disabledImageURL = disabledImageAccessor.resolveURL(
                             facesContext, null, null);
 
@@ -334,7 +331,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                         facesContext, null, null);
 
                 if (hoverImageURL != null) {
-                    initJavascript = true;
+                    writer.getJavaScriptEnableMode().enableOnInit();
                     writer.writeAttribute("v:hoverImageURL", hoverImageURL);
                 }
             }
@@ -371,10 +368,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
              * imageJavascript == false) { writer.writeAttribute("href",
              * "javascript:void(0)"); }
              */
-
-            if (initJavascript) {
-                writer.enableJavaScript();
-            }
 
             if (htmlBorderWriter != null) {
                 htmlBorderWriter.startComposite(writer);
@@ -538,8 +531,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return getImageButtonAccessors(htmlWriter).getImageAccessor();
     }
 
-    protected boolean initializeJavaScript() {
-        return false;
+    protected void initializeJavaScript(IHtmlWriter writer) {
     }
 
     protected final String getComponentClassName() {
@@ -644,9 +636,14 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (IHtmlWriter.INPUT.equals(inputElement)) {
             writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
+            
             writer.writeName(writer.getComponentRenderContext()
                     .getComponentClientId());
-            writer.writeId(getImageId(writer, htmlBorderWriter));
+
+            String inputId=getImageId(writer, htmlBorderWriter);            
+            writer.writeId(inputId);            
+            writer.addSubFocusableComponent(inputId);
+
             writeImageAttributes();
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
@@ -658,7 +655,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         } else {
             writeImageAttributes();
             writer.writeHRef("javascript:void(0)");
-            writer.writeId(getInputId(writer, htmlBorderWriter));
+
+            String inputId=getInputId(writer, htmlBorderWriter);
+            writer.writeId(inputId);
+            writer.addSubFocusableComponent(inputId);
 
             writer.startElement(IHtmlWriter.IMG);
             writer.writeId(getImageId(writer, htmlBorderWriter));

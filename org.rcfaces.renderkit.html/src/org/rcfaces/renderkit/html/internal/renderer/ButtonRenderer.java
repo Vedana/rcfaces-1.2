@@ -51,6 +51,9 @@ public class ButtonRenderer extends AbstractInputRenderer {
         }
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
+
+        htmlWriter.addSubFocusableComponent(htmlWriter
+                .getComponentRenderContext().getComponentClientId());
     }
 
     protected boolean isNameEqualsId() {

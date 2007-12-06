@@ -424,7 +424,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
             // L'API IE spécifie une majuscule à Key !
             writer.writeAccessKey(ak);
 
-            writer.enableJavaScript();
+            writer.getJavaScriptEnableMode().enableOnAccessKey();
         }
 
         return writer;

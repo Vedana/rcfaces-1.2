@@ -339,7 +339,7 @@ var __members = {
 		
 		var idx=0;
 		row._index=arguments[idx++];
-		row.id=this.id+":row"+rowIdx;
+		row.id=this.id+"::row"+rowIdx;
 		
 		if (this._selectable || this._checkable) {
 			row.onmousedown=f_grid.RowMouseDown;

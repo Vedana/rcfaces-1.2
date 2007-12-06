@@ -3,8 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Set;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
@@ -70,6 +68,10 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
     private static final String BUTTON_ID_SUFFIX = ""
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "button";
+
+    private static final String BUTTON_IMAGE_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "image";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -184,7 +186,9 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             // On masque le LI le Javascript masquera le DIV !
         }
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Il faut
+        // positionner
+        // les hovers !
     }
 
     protected String getHeadId(IHtmlWriter htmlWriter) {
@@ -250,6 +254,10 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         return getMainStyleClassName() + "_button";
     }
 
+    protected String getInputImageClassName(IHtmlWriter writer) {
+        return getMainStyleClassName() + "_image";
+    }
+
     private void writeHeader(IHtmlWriter htmlWriter) throws WriterException {
 
         IComponentRenderContext componentContext = htmlWriter
@@ -263,12 +271,30 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         String buttonClientId = componentContext.getComponentClientId()
                 + BUTTON_ID_SUFFIX;
 
-        htmlWriter.startElement(IHtmlWriter.INPUT);
+        htmlWriter.startElement(IHtmlWriter.A);
         htmlWriter.writeId(buttonClientId);
-        htmlWriter.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
+        // Il faut le laisser pour le lazy FOCUS
+        htmlWriter.writeAttribute("href", "javascript:void(0)");
         htmlWriter.writeClass(getInputClassName(htmlWriter));
 
+        htmlWriter.addSubFocusableComponent(buttonClientId);
+
         boolean collapsed = expandBarComponent.isCollapsed(facesContext);
+
+        htmlWriter.writeWidth(getButtonImageWidth(htmlWriter));
+        htmlWriter.writeHeight(getButtonImageHeight(htmlWriter));
+
+        writeAccessKey(htmlWriter, expandBarComponent);
+        writeTabIndex(htmlWriter, expandBarComponent);
+
+        htmlWriter.startElement(IHtmlWriter.IMG);
+        String buttonImageClientId = componentContext.getComponentClientId()
+                + BUTTON_IMAGE_ID_SUFFIX;
+        htmlWriter.writeId(buttonImageClientId);
+        htmlWriter.writeClass(getInputImageClassName(htmlWriter));
+
+        htmlWriter.writeWidth(getButtonImageWidth(htmlWriter));
+        htmlWriter.writeHeight(getButtonImageHeight(htmlWriter));
 
         IContentAccessor buttonImageAccessor = getButtonImage(htmlWriter,
                 collapsed);
@@ -280,16 +306,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             }
         }
 
-        htmlWriter.writeWidth(getButtonImageWidth(htmlWriter));
-        htmlWriter.writeHeight(getButtonImageHeight(htmlWriter));
+        htmlWriter.endElement(IHtmlWriter.IMG);
 
-        writeAccessKey(htmlWriter, expandBarComponent);
-        writeTabIndex(htmlWriter, expandBarComponent);
-
-        htmlWriter.endElement(IHtmlWriter.INPUT);
+        htmlWriter.endElement(IHtmlWriter.A);
 
         htmlWriter.startElement(IHtmlWriter.LABEL);
-        htmlWriter.writeClass(getLabelId(htmlWriter));
+        htmlWriter.writeId(getLabelId(htmlWriter));
         htmlWriter.writeFor(buttonClientId);
         htmlWriter.writeClass(getLabelClassName(htmlWriter));
         writeTextDirection(htmlWriter, expandBarComponent);
@@ -406,8 +428,9 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(htmlWriter, classes);
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(htmlWriter,
+                javaScriptRenderContext);
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -416,11 +439,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         if (expandBarComponent.getCollapseEffect(componentRenderContext
                 .getFacesContext()) != null) {
 
-            IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
-                    .getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .getJavaScriptRenderContext();
-
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.EXPAND_BAR, "effect");
         }
     }

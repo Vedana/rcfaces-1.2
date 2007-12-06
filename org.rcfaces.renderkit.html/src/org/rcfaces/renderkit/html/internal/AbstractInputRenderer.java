@@ -3,8 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import java.util.Set;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -74,7 +72,7 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
                 componentRenderContext.getComponentClientId()).hasNext()) {
 
             // Il y a une erreur, on active le JavaScript ...
-            htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
 
         super.encodeEnd(writer);
@@ -179,8 +177,9 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(htmlWriter, classes);
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(htmlWriter,
+                javaScriptRenderContext);
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -193,11 +192,7 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
             IMenuIterator menuIterator = menuCapability.listMenus();
             if (menuIterator.hasNext()) {
 
-                IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
-                        .getHtmlComponentRenderContext().getHtmlRenderContext()
-                        .getJavaScriptRenderContext();
-
-                javaScriptRenderContext.appendRequiredClasses(classes,
+                javaScriptRenderContext.appendRequiredClass(
                         getJavaScriptClassName(), "menu");
             }
         }

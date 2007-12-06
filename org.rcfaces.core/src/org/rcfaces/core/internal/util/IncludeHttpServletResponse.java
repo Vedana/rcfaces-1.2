@@ -162,6 +162,11 @@ public class IncludeHttpServletResponse extends HttpServletResponseWrapper {
         if (lastModified == 0
                 && ExtendedHttpServlet.HTTP_LAST_MODIFIED.equals(name)) {
 
+            if (value == null || value.length() < 1) {
+                lastModified = 0;
+                return;
+            }
+
             try {
                 Date d = ExtendedHttpServlet.parseHttpDate(value);
                 LOG.trace("Inclusion set Last-Modified property to " + d);

@@ -4,13 +4,11 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 
 import javax.faces.FacesException;
@@ -123,7 +121,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             htmlWriter.writeAttribute("v:helpMessage", helpMessage);
 
-            htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
         String emptyMessage = textEntryComponent.getEmptyMessage(facesContext);
@@ -133,16 +131,18 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             htmlWriter.writeAttribute("v:emptyMessage", emptyMessage);
 
-            htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
-        boolean useValidator = false;
+        // boolean useValidator = false;
+
+        htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
 
         if (textEntryComponent.isAutoTab(facesContext)) {
             htmlWriter.writeAttribute("v:autoTab", true);
 
             // C'est un validateur, il faut forcer le stub pour le RESET
-            useValidator = true;
+            // useValidator = true;
         }
 
         boolean renderValidator = false;
@@ -153,7 +153,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                     validator);
 
             // C'est un validateur, il faut forcer le stub pour le RESET
-            useValidator = true;
+            // useValidator = true;
         }
 
         if (renderValidator == false) {
@@ -164,6 +164,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         if (renderValidator) {
             renderAttributeValidator(htmlWriter);
+
+            htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
         Validator validators[] = textEntryComponent.getValidators();
@@ -171,23 +173,23 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             appendValidators(facesContext, htmlWriter, validators);
         }
 
-        if (htmlWriter.isJavaScriptEnabled() == false) {
-            if (textEntryComponent.isRequired()) {
-                // Il nous faut le javascript, car c'est un traitement
-                // javascript !
+        // if (textEntryComponent.isRequired()) {
+        // Il nous faut le javascript, car c'est un traitement
+        // javascript !
 
-                // C'est un validateur, il faut forcer le stub pour le RESET
-                useValidator = true;
+        // C'est un validateur, il faut forcer le stub pour le RESET
+        // useValidator = true;
+        // Le enableSubmit est déjà positionné !
+        // }
 
-            } else if (textEntryComponent.getFocusStyleClass(facesContext) != null) {
-                htmlWriter.enableJavaScript();
-            }
+        if (textEntryComponent.getFocusStyleClass(facesContext) != null) {
+            htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
-        if (useValidator) {
-            htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .getJavaScriptRenderContext().forceJavaScriptStub();
-        }
+        // if (useValidator) {
+        // htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+        // .getJavaScriptRenderContext().forceJavaScriptStub();
+        // }
     }
 
     protected boolean useHtmlAccessKeyAttribute() {
@@ -241,6 +243,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeAlternateText(htmlWriter, textEntryComponent);
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
+
+        htmlWriter.addSubFocusableComponent(htmlWriter
+                .getComponentRenderContext().getComponentClientId());
     }
 
     protected boolean isNameEqualsId() {
@@ -918,12 +923,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(htmlWriter, classes);
-
-        IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(htmlWriter,
+                javaScriptRenderContext);
 
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
@@ -934,7 +936,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IClientValidatorDescriptor validatorDescriptor = (IClientValidatorDescriptor) componentRenderContext
                 .getAttribute(VALIDATOR_DESCRIPTOR);
         if (validatorDescriptor != null) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.TEXT_ENTRY, "validator");
 
             String requiredClasses[] = validatorDescriptor
@@ -944,12 +946,15 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             }
 
             if (requiredClasses != null && requiredClasses.length > 0) {
-                classes.addAll(Arrays.asList(requiredClasses));
+                for (int i = 0; i < requiredClasses.length; i++) {
+                    javaScriptRenderContext.appendRequiredClass(
+                            requiredClasses[i], null);
+                }
             }
         }
 
         if (component.isAutoTab(facesContext) || component.isRequired()) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.TEXT_ENTRY, "features");
         }
     }

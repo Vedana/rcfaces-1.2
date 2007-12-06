@@ -536,6 +536,8 @@ var __members = {
 	
 		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
 		if (title) {
+			title=f_core.EncodeHtml(title);			
+			
 			this._title=f_core.CreateElement(parent, "div", {
 				className: "f_shellDecorator_title_text",
 				textNode: title

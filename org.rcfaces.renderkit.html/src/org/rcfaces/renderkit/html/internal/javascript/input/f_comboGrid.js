@@ -579,11 +579,11 @@ var __members = {
 			input.value=this._formattedValue;
 		}
 		
-		if (!focusNext) {			
+		if (focusNext===false) {		
+			/* Ca redonne le focus sous IE !!! (donc il doit être egal à undefined pour lors de l'appel ajax de vérification) */	
 			f_core.SelectText(input, value.length);
-		}
-		
-		if (focusNext) {
+
+		} else if (focusNext===true) {
 			var comp=f_core.GetNextFocusableComponent(this);
 			
 			if (comp) {

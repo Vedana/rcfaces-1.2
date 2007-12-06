@@ -5,7 +5,7 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,6 +50,9 @@ public abstract class AbstractJavaScriptRenderContext implements
     private static final Log LOG = LogFactory
             .getLog(AbstractJavaScriptRenderContext.class);
 
+    protected static final Log LOG_INTERMEDIATE_PROFILING = LogFactory
+            .getLog("org.rcfaces.html.javascript.LOG_INTERMEDIATE_PROFILING");
+
     private static final String LAZY_TAG_USES_BROTHER_PARAMETER = Constants
             .getPackagePrefix()
             + ".LAZY_TAG_USES_BROTHER";
@@ -82,7 +85,7 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private final IJavaScriptRepository repository;
 
-    private final Set waitingRequiredClasses = new HashSet();
+    private final Set waitingRequiredClassesNames = new HashSet();
 
     private VariablePool variablePool;
 
@@ -160,25 +163,70 @@ public abstract class AbstractJavaScriptRenderContext implements
             IJavaScriptComponentRenderer renderer) {
 
         // On recupere les fichiers à inclure ...
-        renderer
-                .addRequiredJavaScriptClassNames(writer, waitingRequiredClasses);
+        renderer.addRequiredJavaScriptClassNames(writer, this);
     }
 
     protected IFile[] computeFilesToRequire() {
-        if (waitingRequiredClasses.isEmpty()) {
+        if (waitingRequiredClassesNames.isEmpty()) {
             return FILE_EMPTY_ARRAY;
         }
 
         // Ok on recherche les fichiers à inclure
-        IFile filesToRequire[] = repository
-                .computeFiles(waitingRequiredClasses,
-                        IJavaScriptRepository.CLASS_NAME_COLLECTION_TYPE,
-                        declaredFiles);
+        IFile filesToRequire[] = repository.computeFiles(
+                waitingRequiredClassesNames,
+                IJavaScriptRepository.FILE_COLLECTION_TYPE, declaredFiles);
 
         // Le declaredFiles est altéré !
-        waitingRequiredClasses.clear();
+        waitingRequiredClassesNames.clear();
 
         return filesToRequire;
+    }
+
+    public void appendRequiredClass(String className, String requiredId) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Append required class '" + className + "' requiredId='"
+                    + requiredId + "'.");
+        }
+
+        IClass clazz = repository.getClassByName(className);
+        if (clazz == null) {
+            LOG.error("appendRequiredClasses: Unknown class '" + className
+                    + "'.");
+            return;
+        }
+
+        waitingRequiredClassesNames.add(clazz.getFile());
+
+        IClass requiredClasses[] = clazz.listRequiredClasses(requiredId);
+        if (requiredClasses == null || requiredClasses.length < 1) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Append required class '" + className
+                        + "' requiredId='" + requiredId
+                        + "' => nothing required");
+            }
+
+            return;
+        }
+
+        for (int i = 0; i < requiredClasses.length; i++) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Append required class '" + className
+                        + "' requiredId='" + requiredId + "' => add '"
+                        + requiredClasses[i].getName() + "'");
+            }
+
+            waitingRequiredClassesNames.add(requiredClasses[i].getFile());
+        }
+    }
+
+    public void appendRequiredFiles(IFile[] files) {
+        if (LOG.isTraceEnabled()) {
+            for (int i = 0; i < files.length; i++) {
+                LOG.trace("Append required files '" + files[i] + "'");
+            }
+        }
+
+        waitingRequiredClassesNames.addAll(Arrays.asList(files));
     }
 
     public IRepository.IFile[] popRequiredFiles() {
@@ -482,25 +530,6 @@ public abstract class AbstractJavaScriptRenderContext implements
         return repository;
     }
 
-    public void appendRequiredClasses(Collection classNames, String className,
-            String requiredId) {
-        IClass clazz = repository.getClassByName(className);
-        if (clazz == null) {
-            LOG.error("appendRequiredClasses: Unknown class '" + className
-                    + "'.");
-            return;
-        }
-
-        IClass requiredClasses[] = clazz.listRequiredClasses(requiredId);
-        if (requiredClasses == null || requiredClasses.length < 1) {
-            return;
-        }
-
-        for (int i = 0; i < requiredClasses.length; i++) {
-            classNames.add(requiredClasses[i].getName());
-        }
-    }
-
     protected static boolean isJavaScriptInitialized(FacesContext facesContext) {
         ExternalContext externalContext = facesContext.getExternalContext();
 
@@ -527,6 +556,11 @@ public abstract class AbstractJavaScriptRenderContext implements
         if ("false".equalsIgnoreCase((String) initParameter
                 .get(ENABLE_SCRIPT_VERIFY_PARAMETER)) == false) {
             writer.writeln(SCRIPT_VERIFY);
+        }
+
+        if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
+            writer.writeCall("f_core", "Profile").writeln(
+                    "false,\"javascript.initialize\");");
         }
 
         IHtmlRenderContext htmlRenderContext = writer.getHtmlRenderContext();
@@ -744,6 +778,11 @@ public abstract class AbstractJavaScriptRenderContext implements
 
                 sa.setLength(0);
             }
+        }
+
+        if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
+            writer.writeCall("f_core", "Profile").writeln(
+                    "true,\"javascript.initialize\");");
         }
 
         LOG.debug("Javascript initialized.");

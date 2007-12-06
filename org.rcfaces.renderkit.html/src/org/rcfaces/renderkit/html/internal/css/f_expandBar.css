@@ -48,6 +48,12 @@
 	cursor: pointer;
 }
 
+.f_expandBar_image {
+	vertical-align: middle;
+	border: 0;
+}
+
+
 .f_expandBar_label {
 	font-size: 10pt;
 	vertical-align: middle;

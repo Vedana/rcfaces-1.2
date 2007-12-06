@@ -151,7 +151,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     }
 
     protected void preEncodeContainer() throws WriterException {
-        htmlWriter.enableJavaScript();
+
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         FacesContext facesContext = getComponentRenderContext()
                 .getFacesContext();
@@ -615,7 +616,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
 
         if (selectItem instanceof IStyleClassItem) {
-        	IStyleClassItem lookIdItem = (IStyleClassItem) selectItem;
+            IStyleClassItem lookIdItem = (IStyleClassItem) selectItem;
 
             String cssClass = lookIdItem.getStyleClass();
             if (cssClass != null

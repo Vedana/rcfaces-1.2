@@ -3,8 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Set;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -70,8 +68,8 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", true);
 
-                    htmlRenderContext
-                            .pushInteractiveRenderComponent(htmlWriter, null);
+                    htmlRenderContext.pushInteractiveRenderComponent(
+                            htmlWriter, null);
                 }
             }
         }
@@ -88,7 +86,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
         IMenuIterator menuIterator = boxComponent.listMenus();
         if (menuIterator.hasNext()) {
-            htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
         super.encodeEnd(writer);
     }
@@ -138,20 +136,16 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         return -1;
     }
 
-    public void addRequiredJavaScriptClassNames(IHtmlWriter writer, Set classes) {
-        super.addRequiredJavaScriptClassNames(writer, classes);
+    public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
 
         BoxComponent boxComponent = (BoxComponent) writer
                 .getComponentRenderContext().getComponent();
         IMenuIterator menuIterator = boxComponent.listMenus();
+
         if (menuIterator.hasNext()) {
-            IHtmlRenderContext htmlRenderContext = writer
-                    .getHtmlComponentRenderContext().getHtmlRenderContext();
-
-            IJavaScriptRenderContext javaScriptRenderContext = htmlRenderContext
-                    .getJavaScriptRenderContext();
-
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.BOX, "menu");
         }
     }

@@ -4,7 +4,6 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.lang.reflect.Array;
-import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -116,7 +115,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
         }
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         htmlWriter.startElement(IHtmlWriter.A);
         htmlWriter.writeId(componentContext.getComponentClientId()
@@ -175,27 +174,24 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
-            Set classes) {
-        super.addRequiredJavaScriptClassNames(htmlWriter, classes);
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addRequiredJavaScriptClassNames(htmlWriter,
+                javaScriptRenderContext);
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
-
-        IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
 
         TreeComponent treeComponent = (TreeComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
         IMenuIterator menuIterator = treeComponent.listMenus();
         if (menuIterator.hasNext()) {
 
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.TREE, "menu");
         }
 
         if (treeComponent.getPreloadedLevelDepth(facesContext) > 0) {
-            javaScriptRenderContext.appendRequiredClasses(classes,
+            javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.TREE, "ajax");
         }
     }

@@ -82,7 +82,7 @@ public class TextRenderer extends AbstractCssRenderer {
         if (writeText(htmlWriter, textComponent)) {
             // Un accessKey est postionné !
 
-            htmlWriter.enableJavaScript();
+            htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
         }
 
         htmlWriter.endElement(element);

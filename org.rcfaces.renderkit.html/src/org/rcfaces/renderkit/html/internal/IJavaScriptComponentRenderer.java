@@ -4,7 +4,6 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import java.util.Set;
 
 import org.rcfaces.core.internal.renderkit.WriterException;
 
@@ -26,5 +25,5 @@ public interface IJavaScriptComponentRenderer {
             throws WriterException;
 
     void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-            Set waitingRequiredClasses);
+            IJavaScriptRenderContext javaScriptRenderContext);
 }

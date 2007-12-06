@@ -4,7 +4,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.Set;
 
 import javax.faces.context.FacesContext;
 
@@ -54,7 +53,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         }
 
         public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
-                Set waitingRequiredClasses) {
+                IJavaScriptRenderContext javaScriptRenderContext) {
         }
     };
 

@@ -696,7 +696,7 @@ var __members = {
 	_rowSelection: function(dataGrid, jsEvent) {
 		f_core.Debug(fa_dataGridPopup, "_rowSelection: dataGrid.selection="+dataGrid.f_getSelection());
 
-		this._focusNext=undefined;
+		this._focusNext=false;
 
 		var selection=dataGrid.f_getSelection();
 		
@@ -711,7 +711,6 @@ var __members = {
 
 		this.f_closeDataGridPopup(jsEvent);
 
-		
 		if (values) {
 			for(var name in values) {
 				array[name]=values[name];

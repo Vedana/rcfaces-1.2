@@ -108,7 +108,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
         encodeSubComponents(htmlWriter, dateEntryComponent, componentCalendar,
                 dateFormat);
 
-        htmlWriter.enableJavaScript();
+        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
 
     protected String getWAIRole() {
