@@ -675,8 +675,8 @@ public class HtmlTools {
             month = calendar.get(Calendar.MONTH);
             day = calendar.get(Calendar.DATE);
 
-            if (onlyDate) {
-                hours = calendar.get(Calendar.HOUR);
+            if (onlyDate == false) {
+                hours = calendar.get(Calendar.HOUR_OF_DAY);
                 minutes = calendar.get(Calendar.MINUTE);
                 seconds = calendar.get(Calendar.SECOND);
                 millis = calendar.get(Calendar.MILLISECOND);
@@ -700,19 +700,20 @@ public class HtmlTools {
                         }
                         sa.append('d');
                         sa.append(Integer.toString((year * 12 + month) * 31
-                                + day, RADIX));
+                                + (day - 1), RADIX));
                         return;
                     }
                     sa.append('H');
-                    sa.append(Integer.toString(((year * 12 + month) * 31 + day)
-                            * 24 + hours, RADIX));
+                    sa.append(Integer
+                            .toString(((year * 12 + month) * 31 + (day - 1))
+                                    * 24 + hours, RADIX));
                     return;
                 }
 
                 sa.append('m');
                 sa.append(Long.toString(
-                        (((year * 12 + month) * 31 + day) * 24 + hours) * 60
-                                + minutes, RADIX));
+                        (((year * 12 + month) * 31 + (day - 1)) * 24 + hours)
+                                * 60 + minutes, RADIX));
                 return;
             }
 
@@ -720,7 +721,7 @@ public class HtmlTools {
             sa
                     .append(Long
                             .toString(
-                                    ((((year * 12 + month) * 31 + day) * 24 + hours) * 60 + minutes)
+                                    ((((year * 12 + month) * 31 + (day - 1)) * 24 + hours) * 60 + minutes)
                                             * 60 + seconds, RADIX));
             return;
         }
@@ -729,7 +730,7 @@ public class HtmlTools {
         sa
                 .append(Long
                         .toString(
-                                (((((year * 12 + month) * 31 + day) * 24 + hours) * 60 + minutes) * 60 + seconds)
+                                (((((year * 12 + month) * 31 + (day - 1)) * 24 + hours) * 60 + minutes) * 60 + seconds)
                                         * 1000 + millis, RADIX));
     }
 

@@ -81,7 +81,7 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private static final String SCRIPT_VERIFY = "try { f_core; } catch(x) { alert(\"RCFaces Javascript Components are not initialized properly !\"); }";
 
-    private final AbstractJavaScriptRenderContext parent;
+    protected final AbstractJavaScriptRenderContext parent;
 
     private final IJavaScriptRepository repository;
 
@@ -871,21 +871,21 @@ public abstract class AbstractJavaScriptRenderContext implements
         return url;
     }
 
-    protected IJavaScriptWriter writeJsInitComponent(IJavaScriptWriter writer)
+    protected IJavaScriptWriter writeJsInitComponent(IJavaScriptWriter jsWriter)
             throws WriterException {
 
-        IComponentRenderContext componentRenderContext = writer
+        IComponentRenderContext componentRenderContext = jsWriter
                 .getHtmlComponentRenderContext();
 
         String componentId = componentRenderContext.getComponentClientId();
 
         boolean declare[] = new boolean[1];
 
-        String componentVarName = writer.getComponentVarName();
+        String componentVarName = jsWriter.getComponentVarName();
         if (componentVarName == null) {
             componentVarName = allocateComponentVarId(componentId, declare);
 
-            writer.setComponentVarName(componentVarName);
+            jsWriter.setComponentVarName(componentVarName);
         } else {
             declare[0] = true;
         }
@@ -893,20 +893,29 @@ public abstract class AbstractJavaScriptRenderContext implements
         String cameliaClassLoader = convertSymbol("f_classLoader",
                 "_rcfacesClassLoader");
 
-        if (declare[0]) {
-            writer.write("var ").write(componentVarName);
-
-            writer.write('=').writeCall(cameliaClassLoader, "f_init");
-            writer.writeString(componentId);
-            writer.writeln(");");
-
-            return writer;
+        if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
+            jsWriter.writeCall("f_core", "Profile").writeln(
+                    "false,\"javascript.initComponent\");");
         }
 
-        writer.writeCall(cameliaClassLoader, "f_init");
-        writer.write(componentVarName).writeln(");");
+        if (declare[0]) {
+            jsWriter.write("var ").write(componentVarName);
 
-        return writer;
+            jsWriter.write('=').writeCall(cameliaClassLoader, "f_init");
+            jsWriter.writeString(componentId);
+            jsWriter.writeln(");");
+
+        } else {
+            jsWriter.writeCall(cameliaClassLoader, "f_init");
+            jsWriter.write(componentVarName).writeln(");");
+        }
+
+        if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
+            jsWriter.writeCall("f_core", "Profile").writeln(
+                    "true,\"javascript.initComponent\");");
+        }
+
+        return jsWriter;
     }
 
     public boolean isCollectorMode() {

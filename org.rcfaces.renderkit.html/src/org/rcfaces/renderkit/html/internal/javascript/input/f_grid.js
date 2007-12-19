@@ -1246,7 +1246,24 @@ var __statics = {
 	},
 	Finalizer: function() {
 		f_grid._SortManagers=undefined;
-	}	 
+	},
+	/**
+	 * @method private static
+	 * @param HTMLTableElement table
+	 * @return HTMLColElement[]
+	 */
+	_ListCols: function(table) {
+		var l=new Array;
+		for(var node=table.firstChild;node;node=node.nextSibling) {
+			if (node.tagName.toLowerCase()!="col") {
+				break;
+			}
+			
+			l.push(node);
+		}
+		
+		return l;
+	}
 }
  
 var __members = {	
@@ -1287,7 +1304,8 @@ var __members = {
 		
 		this.f_initializeTableLayout();
 		
-		this._tbody.style.visibility="hidden";
+//		this._tbody.style.visibility="hidden";
+		this._tbody.style.display="none";
 		
 		this._blankImageURL=f_env.GetBlankImageURL();
 			
@@ -1721,7 +1739,6 @@ var __members = {
 	f_update: function() {
 		var rowCount=this._rowCount;
 		
-		try {
 		if (this._rows>0 && !this._paged) {
 			// Pas de mode page,
 			// On affiche un wait !
@@ -1755,8 +1772,6 @@ var __members = {
 			this.f_updateScrollPosition();
 		}
 		
-		this._tbody.style.display="block";
-		
 		this.f_super(arguments);
 		
 		if (this._initSort) {
@@ -1774,25 +1789,21 @@ var __members = {
 			scrollBody.onclick=f_grid.FiltredCancelJsEventHandler;
 		}					
 
-		this._tbody.style.visibility="inherit";	
+//		 this._tbody.style.visibility="inherit";	
+		if (f_core.IsInternetExplorer()) {
+			this._tbody.style.display="block";
+		} else {
+			this._tbody.style.display="table-row-group";			
+		}	
 	
 		this.f_performPagedComponentInitialized();
 		
+		/*
 		if (!this.f_isVisible()) {
 			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
 			
-		} else {
-			// Visible !			
-	
-	/* On le fait sur le onload !
-			if (!f_core.IsInternetExplorer()) {
-				f_grid.UpdateTitle(this);
-			}
-			*/
-		}
-		} catch (x) {
-			alert(x.message);
-		}
+		} 
+		*/
 	},
 	/**
 	 * @method protected
@@ -2167,7 +2178,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	fa_updateElementStyle: function(row) {
+	fa_updateElementStyle: function(row, updateCells) {
 		var suffix;
 		if (this.f_isDisabled()) {
 			suffix="_disabled"; //+"_disabled"; // La classe par du .f_grid_disabled
@@ -2190,7 +2201,7 @@ var __members = {
 		
 		var className=this._rowStyleClass;
 		var cl=className;
-		var rowClassName=row._className;		
+		var rowClassName=row._className;
 		if (rowClassName) {
 			cl+=" "+rowClassName;
 		}
@@ -2219,9 +2230,10 @@ var __members = {
 			row._hasCursor=undefined;
 		}
 		
-		this._updateCellsStyle(row, updateFirstOnly);
+		if (updateCells!==false) {
+			this._updateCellsStyle(row, updateFirstOnly);
+		}
 
-	
 		var button=row._additionalButton;
 		if (button) {
 			var buttonClassName="f_grid_additional_button";
@@ -3994,9 +4006,10 @@ var __members = {
 		var firstTBody=table.tBodies[0];
 		
 		this._tbody=firstTBody; //bodies[0];
-//		if (firstTBody && !firstTBody.firstChild) {			
-//			table.removeChild(firstTBody);
-//		}
+		if (firstTBody && !firstTBody.firstChild) {			
+			table.removeChild(firstTBody);
+		}
+	//	this._tbody.style.visibility="hidden";
 		this._tbody.style.display="none";
 
 		var scrollBody=this;
@@ -4143,9 +4156,9 @@ var __members = {
 		this._titleLayout=true;		
 
 		var ttr=f_grid.GetFirstRow(this._title); //f_core.GetFirstElementByTagName(dataGrid._title, "tr");
-		var tths=ttr.getElementsByTagName("th");
+		var tths=ttr.childNodes; // +rapide ?getElementsByTagName("th");
 		
-		var ths=tr.getElementsByTagName("td");
+		var ths=tr.childNodes; // +rapide ?getElementsByTagName("td");
 
 		var body=this._scrollBody;
 		var clientWidth=body.clientWidth;
@@ -4160,17 +4173,20 @@ var __members = {
 			}
 		}
 
+		//var cols=f_grid._ListCols(this._title); //.getElementsByTagName("col");
 		var cols=this._title.getElementsByTagName("col");
+		
 		var tcols=null;
 		var tds=null;
 		var columns=this._columns;
 		if (!columns[0]._tcol) {
+			//tcols=f_grid._ListCols(this._table); 
 			tcols=this._table.getElementsByTagName("col");
-			var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr", false);
+			// C'est déjà tr   var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr", false);
 			
 			if (tr) {
 				// Quid ?
-				tds=tr.getElementsByTagName("td");
+				tds=ths; // déjà fait !   tr.childNodes; // + rapide ?  tr.getElementsByTagName("td");
 			}
 		}
 		
@@ -4223,14 +4239,14 @@ var __members = {
 		
 			var th=doc.createElement("th");
 			var thClassName="f_grid_tcell";
-			if (this.f_isDisabled()) {
+			//if (this.f_isDisabled()) {
 				//thClassName+=" "+thClassName+"_disabled"; // On part du f_grid_disabled
-			}
+			//}
 			th.className=thClassName;
 			th.innerHTML="&nbsp;";
 			
-			var ths0=f_grid.GetFirstRow(this._title, true); //f_core.GetFirstElementByTagName(dataGrid._title, "tr", true);
-			f_core.AppendChild(ths0, th);
+			// var ths0=ttr; // + rapide ? f_grid.GetFirstRow(this._title, true); //f_core.GetFirstElementByTagName(dataGrid._title, "tr", true);
+			f_core.AppendChild(ttr, th);
 			
 			total+=scrollBarWidth;
 			

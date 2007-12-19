@@ -53,7 +53,7 @@ public class EventsRenderer {
         public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
             // mode.enableOnFocus(com);
             // Normalement les IDs sont déjà positionnés !
-            
+
             mode.enableOnFocus();
         }
     };
@@ -81,6 +81,14 @@ public class EventsRenderer {
         }
     };
 
+    private static final IJavascriptMode OVER_JAVASCRIPT_ENABLE = new IJavascriptMode() {
+        private static final String REVISION = "$Revision$";
+
+        public void enableJavaScriptMode(IJavaScriptEnableMode mode) {
+            mode.enableOnOver();
+        }
+    };
+
     private static final Map ENABLE_JAVASCRIPT_BY_LISTENER_TYPE = new HashMap(8);
     static {
         // INIT
@@ -90,10 +98,12 @@ public class EventsRenderer {
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_VALIDATION_ATTRIBUTE,
                 ONINIT_JAVASCRIPT_ENABLE);
+
+        // OVER
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
-                JavaScriptClasses.EVENT_MOUSEOVER, ONINIT_JAVASCRIPT_ENABLE);
+                JavaScriptClasses.EVENT_MOUSEOVER, OVER_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
-                JavaScriptClasses.EVENT_MOUSEOUT, ONINIT_JAVASCRIPT_ENABLE);
+                JavaScriptClasses.EVENT_MOUSEOUT, OVER_JAVASCRIPT_ENABLE);
 
         // FOCUS
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(

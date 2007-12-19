@@ -331,7 +331,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                         facesContext, null, null);
 
                 if (hoverImageURL != null) {
-                    writer.getJavaScriptEnableMode().enableOnInit();
+                    writer.getJavaScriptEnableMode().enableOnOver();
                     writer.writeAttribute("v:hoverImageURL", hoverImageURL);
                 }
             }

@@ -406,6 +406,12 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
+    public final IHtmlWriter writeBorder(int size) throws WriterException {
+        writeAttribute("border", size);
+
+        return this;
+    }
+
     public final IHtmlWriter writeStyle(String style) throws WriterException {
         writeAttribute("style", style);
 

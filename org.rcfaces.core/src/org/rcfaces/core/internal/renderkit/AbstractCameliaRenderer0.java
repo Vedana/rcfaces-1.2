@@ -15,6 +15,7 @@ import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -31,6 +32,8 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
 
     private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
 
+    private static final String COMPONENT_HIDDEN = "camelia.COMPONENT_HIDDEN";
+
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
 
@@ -43,6 +46,25 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
         renderContext.pushComponent(component, clientId);
 
         IComponentWriter writer = renderContext.getComponentWriter();
+
+        /*
+        if (component instanceof IVisibilityCapability) {
+            IComponentRenderContext componentRenderContext = writer
+                    .getComponentRenderContext();
+
+            if (componentRenderContext.containsAttribute(COMPONENT_HIDDEN) == false) {
+                if (Boolean.FALSE.equals(((IVisibilityCapability) component)
+                        .getVisibleState())) {
+
+                    // Visibilité PHANTOM
+
+                    componentRenderContext.setAttribute(COMPONENT_HIDDEN,
+                            component);
+                }
+            }
+        }
+        */
+
         try {
             encodeBegin(writer);
 
@@ -143,6 +165,17 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
         if (writer instanceof ISgmlWriter) {
             ((ISgmlWriter) writer).endComponent();
         }
+
+        /*
+        if (component instanceof IVisibilityCapability) {
+            IComponentRenderContext componentRenderContext = writer
+                    .getComponentRenderContext();
+
+            if (componentRenderContext.getAttribute(COMPONENT_HIDDEN) == component) {
+                componentRenderContext.removeAttribute(COMPONENT_HIDDEN);
+            }
+        }
+        */
 
         renderContext.popComponent(component);
     }
@@ -252,5 +285,10 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
 
     protected Object getValue(UIComponent component) {
         return ValuesTools.getValue(component);
+    }
+
+    protected boolean isComponentVisible(
+            IComponentRenderContext componentRenderContext) {
+        return componentRenderContext.containsAttribute(COMPONENT_HIDDEN) == false;
     }
 }

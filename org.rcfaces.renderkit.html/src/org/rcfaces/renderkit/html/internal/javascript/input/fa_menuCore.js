@@ -544,15 +544,15 @@ var __members = {
 			
 			switch(item._inputType) {				
 			case fa_items.AS_CHECK_BUTTON:
-				uiItem.role="menuitemcheckbox";
+				uiItem.setAttribute("role", "menuitemcheckbox");
 				break;
 			
 			case fa_items.AS_RADIO_BUTTON:
-				uiItem.role="menuitemradio";
+				uiItem.setAttribute("role", "menuitemradio");
 				break;
 			
 			case fa_items.AS_SEPARATOR:
-				uiItem.role="menuitemradio";
+				uiItem.setAttribute("role", "menuitemseparator");
 				uiItem.className="f_menu_item_sep";
 				uiItem.onmousedown=fa_menuCore._SeparatorItem_click;
 				sep=true;

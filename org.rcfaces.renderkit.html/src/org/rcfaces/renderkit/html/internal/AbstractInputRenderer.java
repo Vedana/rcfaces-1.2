@@ -65,8 +65,6 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
-        encodeComponent(htmlWriter);
-
         // On active le javascript pour le traitement des facesMessages !
         if (componentRenderContext.getFacesContext().getMessages(
                 componentRenderContext.getComponentClientId()).hasNext()) {
@@ -74,6 +72,8 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
             // Il y a une erreur, on active le JavaScript ...
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
+
+        encodeComponent(htmlWriter);
 
         super.encodeEnd(writer);
     }

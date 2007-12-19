@@ -29,6 +29,8 @@ public class JavaScriptEnableModeImpl implements IJavaScriptEnableMode,
 
     public static final int ONMESSAGE = 0x400;
 
+    public static final int ONOVER = 0x800;
+
     private int mode = 0;
 
     JavaScriptEnableModeImpl() {
@@ -54,6 +56,10 @@ public class JavaScriptEnableModeImpl implements IJavaScriptEnableMode,
         mode |= ONMESSAGE;
     }
 
+    public void enableOnOver() {
+        mode |= ONOVER;
+    }
+
     public int getMode() {
         return mode;
     }
@@ -72,4 +78,9 @@ public class JavaScriptEnableModeImpl implements IJavaScriptEnableMode,
 
         return s + " (" + mode + ")]";
     }
+
+    public boolean isOnInitEnabled() {
+        return (getMode() & ONINIT) > 0;
+    }
+
 }

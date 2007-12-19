@@ -212,7 +212,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        boolean ajax = (dataGridComponent.getRows() > 0);
+        boolean ajax = needAjaxJavaScriptClasses(writer, dataGridComponent);
 
         if (ajax == false) {
             // On a des colonnes triables coté serveur ?
@@ -243,8 +243,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (gridRenderContext.hasAdditionalInformations()) {
             ajax = true;
-            javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.GRID, "additional");
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+                    "additional");
 
             if (needAdditionalInformationContextState()) {
                 IHtmlRenderContext htmlRenderContext = writer
@@ -265,8 +265,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         if (ajax) {
-            javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.GRID, "ajax");
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+                    "ajax");
         }
 
         if (dataGridComponent instanceof ISortManagerCapability) {
@@ -279,6 +279,20 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 }
             }
         }
+    }
+
+    protected boolean needAjaxJavaScriptClasses(IHtmlWriter writer,
+            IGridComponent dataGridComponent) {
+        if (dataGridComponent.getRows() > 0) {
+            return true;
+        }
+
+        DataModel dataModel = dataGridComponent.getDataModelValue();
+        if (dataModel instanceof IFiltredModel) {
+            return true;
+        }
+
+        return false;
     }
 
     public Object[] getAdditionalInformationsRenderContextState(

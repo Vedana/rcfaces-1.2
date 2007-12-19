@@ -261,17 +261,19 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	fa_updateElementStyle: function(row) {
-		this.f_super(arguments, row);	
+	fa_updateElementStyle: function(row, updateCells) {
+		this.f_super(arguments, row, updateCells);	
 		
-		var input=row._input;
-		if (input && row._cheked!=input.checked) {
-			input.checked=row._checked;
-			
-			if (f_core.IsInternetExplorer()) {
-				// Il se peut que le composant ne soit jamais affiché 
-				// auquel cas il faut utiliser le defaultChecked !
-				input.defaultChecked=row._checked;
+		if (updateCells!==false) {
+			var input=row._input;
+			if (input && row._cheked!=input.checked) {
+				input.checked=row._checked;
+				
+				if (f_core.IsInternetExplorer()) {
+					// Il se peut que le composant ne soit jamais affiché 
+					// auquel cas il faut utiliser le defaultChecked !
+					input.defaultChecked=row._checked;
+				}
 			}
 		} 
 	},
@@ -362,16 +364,21 @@ var __members = {
 		}
 		row.className=className;
 		row._className=className;
-				
+		
+		var cellClassName=this._cellStyleClass;
+		var selected=false;
 		if (this._selectable) {
-			row._selected=false;
-			var selected=false;
+			row._selected=false;			
 			
 			if (!this._selectionFullState && properties) {
 				selected=properties._selected;
 			}
 			
-			this.f_updateElementSelection(row, selected);
+			selected=this.f_updateElementSelection(row, selected);
+			
+			if (selected) {
+				cellClassName+=" f_grid_cell_selected";
+			}
 		}
 		
 		var checked=undefined;
@@ -389,6 +396,12 @@ var __members = {
 			if (!this._additionalFullState) {
 				additional=properties._additional;
 			}
+		}
+		
+		var initCursorValue=this._initCursorValue;
+		if (!this._cursor && row._index==initCursorValue) {
+			this._cursor=row;
+			this._initCursorValue=undefined;
 		}
 		
 		var cells=new Array;
@@ -414,21 +427,39 @@ var __members = {
 				}
 		
 				if (col._visibility) {
+					var cClassName=cellClassName;					
+					
+					if (!selected) {
+						var colStyleClasses=col._cellStyleClasses;		
+						if (colStyleClasses) {
+							var csc=colStyleClasses[row._index % colStyleClasses.length];
+							if (csc) {
+								cClassName+=" "+csc;
+							}
+						}						
+					}
+					
 					if (firstCell) {
 						td=firstCell;
 						td.colSpan=1; // pour le shadow
 						td.className="";
 						firstCell=undefined;
 						
+						cClassName+=" f_grid_cell_left";
+						if (row._hasCursor && this._focus && this._showCursor) {
+							cClassName+=" f_grid_cell_cursor";
+						}
+						
 					} else {
 						td=doc.createElement("td");
-						f_core.AppendChild(row, td);
+						f_core.AppendChild(row, td);								
 					}
 					
 					this._cellsPool.push(td);
 					
 					td.valign="top";
 					td.noWrap=true;
+					td.className=cClassName;
 					td._text=cellText;
 					td.onbeforeactivate=f_core.CancelJsEventHandler;
 					
@@ -500,6 +531,8 @@ var __members = {
 							}
 							
 							f_core.AppendChild(ctrlContainer, input);
+							
+							this.fa_updateElementCheck(row, checked);
 						}
 					}
 
@@ -557,16 +590,6 @@ var __members = {
 			cells.push(td);
 		}
 		
-		var initCursorValue=this._initCursorValue;
-		if (!this._cursor && row._index==initCursorValue) {
-			this._cursor=row;
-			this._initCursorValue=undefined;
-		}
-					
-		if (row._input) {
-			this.fa_updateElementCheck(row, checked);
-		}
-		
 		if (row._additionalButton) {			
 			var additionalContent=row._additionalContent;
 			if (typeof(additionalContent)=="string") {
@@ -583,7 +606,7 @@ var __members = {
 			}
 		}
 		
-		this.fa_updateElementStyle(row);
+		this.fa_updateElementStyle(row, false);
 		
 		return row;
 	},

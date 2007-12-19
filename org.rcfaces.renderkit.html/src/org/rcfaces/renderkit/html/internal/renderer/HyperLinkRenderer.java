@@ -43,11 +43,11 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         writeCssAttributes(htmlWriter);
 
         if (component.isDisabled(facesContext)) {
-            htmlWriter.writeAttribute("DISABLED");
+            htmlWriter.writeDisabled();
         }
 
         // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeAttribute("href", "javascript:void(0)");
+        htmlWriter.writeHRef("javascript:void(0)");
 
         String text = component.getText(facesContext);
         if (text != null) {

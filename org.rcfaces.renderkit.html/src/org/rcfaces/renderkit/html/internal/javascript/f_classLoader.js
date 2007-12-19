@@ -217,22 +217,7 @@ f_classLoader.prototype = {
 		if (onFocusIds) {
 			this._onFocusIds=undefined;
 			
-			var functionToRemove=this._onFocusToInitSelf;
-			this._onFocusToInitSelf=undefined;
-	
-			var cs=[];		
-			for(var clientId in onFocusIds) {
-				var inputComponent=document.getElementById(clientId);
-				if (!inputComponent) {
-					continue;
-				}
-				
-				cs.push(inputComponent);
-			}
-			
-			f_core.RemoveEventListeners(cs, "focus", functionToRemove);
-			
-			f_core.Debug("f_classLoader","f_onExit: Clean "+cs.length+" input focus handler !");			
+			document.body.onfocusin=null;
 		}		
 		
 		this._visibleListeners=undefined; // List<f_component>
@@ -788,53 +773,148 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden
-	 * @param String... ids
+	 * @param Object ids
 	 * @return void
 	 */
 	f_initOnFocusIds: function(ids) {
 		var onFocusIds=this._onFocusIds;
 		if (!onFocusIds) {
-			onFocusIds=new Object;
-			
+			onFocusIds=ids;
 			this._onFocusIds=onFocusIds;
-		
+			
 			var self=this;
-			this._onFocusToInitSelf=function(evt) {
-				return self._onFocusToInit(this, evt);
-			}
-		}
-		var onFocusToInitSelf=this._onFocusToInitSelf;
-				
-		for(var i=0;i<arguments.length;) {
-			var clientId=arguments[i++];
 			
-			if (i==arguments.length || typeof(arguments[i])=="string") {
-				var component=document.getElementById(clientId);
-				if (component==null) {
-					f_core.Error(f_classLoader,"f_initOnFocusIds: unknown component '"+clientId+"'. (self input)");
-					continue;
+			var initFct=function(component) {
+				var componentId=component.id;
+				
+				var idx=componentId.lastIndexOf('::');
+				var mainId=(idx>0)?componentId.substring(0, idx):componentId;
+				
+				if (!(mainId in onFocusIds)) {
+					return;
+				}				
+				delete onFocusIds[mainId];
+				
+				if (componentId!=mainId) {
+					component=component.ownerDocument.getElementById(mainId)
 				}
 				
-				onFocusIds[clientId]=clientId;
-				f_core.AddEventListener(component, "focus", onFocusToInitSelf);
-
-				continue;				
-			}
-			
-			var subIds=arguments[i++];			
-			for(var j=0;j<subIds.length;j++) {
-				var subId=subIds[j];
-				
-				var subComponent=document.getElementById(subId);
-				if (subComponent==null) {
-					f_core.Error(f_classLoader,"f_initOnFocusIds: unknown component '"+subId+"'.");
-					continue;
+				if (f_class.IsObjectInitialized(component)) {
+					return true;
 				}
 				
-				onFocusIds[subId]=clientId;
-				f_core.AddEventListener(subComponent, "focus", onFocusToInitSelf);
+				try {
+					self.f_init(component);
 					
+					if (typeof(component.f_completeComponent)=="function") {
+						component.f_completeComponent();
+					}
+					
+				} catch (ex) {
+					f_core.Error(f_classLoader, "f_initOnFocusIds: Can not initialize component '"+componentId+"'.", ex);
+				}	
 			}
+			
+			if (f_core.IsInternetExplorer()) {
+				document.body.onfocusin=function() {
+					if (self._exiting) {
+						return;
+					}
+
+					initFct(window.event.srcElement);
+				};
+			} else {
+				f_core.AddEventListener(document.body, "focus", function(evt) {
+					if (self._exiting) {
+						return;
+					}
+
+					initFct(evt.target);
+				}, document.body)
+			}
+			
+			return;
+		}		
+
+		for(var i in ids) {
+			onFocusIds[i]=true;
+		}
+	},
+	/**
+	 * @method hidden
+	 * @param Object ids
+	 * @return void
+	 */
+	f_initOnOverIds: function(ids) {
+		var onOverIds=this._onOverIds;
+		if (!onOverIds) {
+			onOverIds=ids;
+			this._onOverIds=onOverIds;
+			
+			var self=this;
+			
+			var initFct=function(component, retargetIE) {
+				var componentId=component.id;
+				
+				var idx=componentId.lastIndexOf('::');
+				var mainId=(idx>0)?componentId.substring(0, idx):componentId;
+				
+				if (!(mainId in onOverIds)) {
+					return;
+				}				
+				delete onOverIds[mainId];
+				
+					window.title="OVER "+mainId;
+					document.title="OVER "+mainId;
+				
+				if (componentId!=mainId) {
+					component=component.ownerDocument.getElementById(mainId)
+				}
+				
+				if (f_class.IsObjectInitialized(component)) {
+					return true;
+				}
+				
+				try {
+					self.f_init(component);
+					
+					if (typeof(component.f_completeComponent)=="function") {
+						component.f_completeComponent();
+					}
+					
+				} catch (ex) {
+					f_core.Error(f_classLoader, "f_initOnOverIds: Can not initialize component '"+componentId+"'.", ex);
+				}	
+				
+				if (retargetIE) {						
+					var newEvt = component.ownerDocument.createEventObject(window.event)
+			   		return component.fireEvent("onmouseover", newEvt);
+				}
+			}
+			
+			if (f_core.IsInternetExplorer()) {
+				document.body.onmouseover=function() {
+					if (self._exiting) {
+						return;
+					}
+	
+					initFct(window.event.srcElement, true);
+				};
+			} else {
+				f_core.AddEventListener(document.body, "mouseover", function(evt) {
+					if (self._exiting) {
+						return;
+					}
+
+					initFct(evt.target);
+				}, document.body)
+			}
+			
+			return;
+		}		
+
+		for(var i in ids) {
+			onOverIds[i]=true;
 		}
 	},
 	/**
@@ -1113,9 +1193,11 @@ f_classLoader.prototype = {
 		
 	/**
 	 * @method hidden
+	 * @param HTMLElement componentSource
+	 * @return void
 	 */
 	fireVisibleEvent: function(componentSource) {
-		f_core.Debug("f_classLoader", "Fire visible event for '"+componentSource.id+"'.");
+		f_core.Debug(f_classLoader, "fireVisibleEvent: Fire visible event for '"+componentSource.id+"'.");
 		var components=this._visibleListeners;
 		if (!components) {
 			return;
@@ -1131,20 +1213,20 @@ f_classLoader.prototype = {
 			
 			components.splice(i, 1);
 		
-			f_core.Debug("f_classLoader", "New visible registred component: '"+component.id+"', call callback.");
+			f_core.Debug(f_classLoader, "f_classLoader.fireVisibleEvent: New visible registred component: '"+component.id+"', call callback.");
 			
 			var fct=component.f_performComponentVisible;
 			if (fct===undefined) {
 				continue;
 			}
 			
-			f_core.Assert(typeof(fct)=="function", "f_performComponentVisible of component '"+component.id+"' is not a function !");
+			f_core.Assert(typeof(fct)=="function", "f_classLoader.fireVisibleEvent: f_performComponentVisible of component '"+component.id+"' is not a function !");
 			
 			try {
 				fct.call(component, componentSource);
 				
 			} catch (x) {
-				f_core.Error("f_classLoader", "Call of method f_performComponentVisible of component '"+component.id+"' throws exception.", x);
+				f_core.Error(f_classLoader, "fireVisibleEvent: Call of method f_performComponentVisible of component '"+component.id+"' throws exception.", x);
 			}
 		}
 	},
@@ -1337,65 +1419,7 @@ f_classLoader.prototype = {
 		}
 	},
 
-	/**
-	 * @method private 
-	 * @param HTMLElement inputComponent
-	 * @param Event evt
-	 * @return boolean
-	 */
-	_onFocusToInit: function(inputComponent, evt) {
-		if (f_core.IsInternetExplorer()) {
-			evt=this._window.event; // Space ... mais le inputComponent vaut la fenetre root !!! 
-			inputComponent=evt.srcElement;
-		}
 	
-		f_core.RemoveEventListener(inputComponent, "focus", this._onFocusToInitSelf);	
-		
-		var ids=this._onFocusIds;
-		
-		var inputId=inputComponent.id;
-		
-		var componentId=ids[inputId];
-		if (!componentId) {
-			return true;
-		}
-		
-		delete ids[inputId];
-	
-		var component=document.getElementById(componentId);
-		if (!component) {
-			f_core.Error(f_classLoader,"_OnFocusToInit: Can not find component '"+componentId+"' associated to input '"+inputId+"'.");
-			return true;
-		}
-		
-		if (f_class.IsObjectInitialized(component)) {
-			return true;
-		}
-		
-		try {
-			this.f_init(component);
-			
-			if (typeof(component.f_completeComponent)=="function") {
-				component.f_completeComponent();
-			}
-			
-		} catch (ex) {
-			f_core.Error(f_classLoader, "_OnFocusToInit: Can not initialize component '"+componentId+"'.", ex);
-			
-			return true;
-		}
-		
-		if (f_core.IsInternetExplorer()) {
-			var newEvt = inputComponent.ownerDocument.createEventObject()
-	    	newEvt.srcElement=inputComponent;
-	   		return inputComponent.fireEvent("onfocus", newEvt);
-		}
-		
-		var event = inputComponent.ownerDocument.createEvent("HTMLEvents");
-		event.initEvent("focus", false, false);
-		return inputComponent.dispatchEvent(event);
-	},
-
 	toString: function() {
 		if (!this._window) {
 			return "[ClassLoader]";

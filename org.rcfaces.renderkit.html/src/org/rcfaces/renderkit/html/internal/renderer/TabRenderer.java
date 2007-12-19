@@ -8,10 +8,12 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.TabComponent;
-import org.rcfaces.core.component.TabbedPaneComponent;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -19,6 +21,7 @@ import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -29,6 +32,102 @@ public class TabRenderer extends CardRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final String TAB = "_tab";
+
+    protected void writeCardAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
+        super.writeCardAttributes(htmlWriter);
+
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+
+        FacesContext facesContext = htmlRenderContext.getFacesContext();
+
+        TabComponent tab = (TabComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        if (htmlRenderContext
+                .containsAttribute(TabbedPaneRenderer.TABBED_PANE_JSF12_PROPERTY)) {
+
+            htmlWriter.writeAttribute("v:tabbedPaneId", tab.getTabbedPane()
+                    .getClientId(facesContext));
+
+            Object value = tab.getValue();
+            String clientValue = null;
+            if (value instanceof String) {
+                clientValue = (String) value;
+
+            } else if (value != null) {
+                clientValue = convertValue(facesContext, tab, value);
+            }
+
+            if (clientValue != null) {
+                htmlWriter.writeAttribute("v:value", clientValue);
+            }
+
+            if (isCardSelected(tab)) {
+                htmlWriter.writeAttribute("v:selected", true);
+            }
+
+            String text = tab.getText(facesContext);
+            if (text != null) {
+                text = ParamUtils.formatMessage(tab, text);
+
+                htmlWriter.writeAttribute("v:text", text);
+            }
+
+            String accessKey = tab.getAccessKey(facesContext);
+            if (accessKey != null) {
+                htmlWriter.writeAttribute("v:accessKey", accessKey);
+            }
+
+            if (tab.isDisabled(facesContext)) {
+                htmlWriter.writeAttribute("v:disabled", true);
+            }
+
+            IContentAccessors contentAccessors = tab
+                    .getImageAccessors(facesContext);
+
+            if (contentAccessors instanceof IImageAccessors) {
+                IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+
+                IContentAccessor contentAccessor = imageAccessors
+                        .getImageAccessor();
+
+                if (contentAccessor != null) {
+                    htmlWriter.writeAttribute("v:imageURL", contentAccessor
+                            .resolveURL(facesContext, null, null));
+                }
+
+                if (imageAccessors instanceof IStatesImageAccessors) {
+                    IStatesImageAccessors statesImageAccessors = (IStatesImageAccessors) imageAccessors;
+
+                    contentAccessor = statesImageAccessors
+                            .getDisabledImageAccessor();
+                    if (contentAccessor != null) {
+                        htmlWriter.writeAttribute("v:disabledImageURL",
+                                contentAccessor.resolveURL(facesContext, null,
+                                        null));
+                    }
+
+                    contentAccessor = statesImageAccessors
+                            .getHoverImageAccessor();
+                    if (contentAccessor != null) {
+                        htmlWriter.writeAttribute("v:hoverImageURL",
+                                contentAccessor.resolveURL(facesContext, null,
+                                        null));
+                    }
+
+                    contentAccessor = statesImageAccessors
+                            .getSelectedImageAccessor();
+                    if (contentAccessor != null) {
+                        htmlWriter.writeAttribute("v:selectedImageURL",
+                                contentAccessor.resolveURL(facesContext, null,
+                                        null));
+                    }
+                }
+            }
+        }
+    }
 
     protected String getDefaultCardStyleClassPrefix() {
         return JavaScriptClasses.TABBED_PANE;
@@ -42,46 +141,44 @@ public class TabRenderer extends CardRenderer {
         return JavaScriptClasses.TAB;
     }
 
-    protected int declareCard(IJavaScriptWriter js,
-            CardComponent cardComponent, String var, boolean selected)
-            throws WriterException {
+    protected void declareCard(IJavaScriptWriter js,
+            CardComponent cardComponent, String tabbedPaneClientId,
+            boolean selected) throws WriterException {
+
+        boolean declare[] = new boolean[1];
+        String var = js.getJavaScriptRenderContext().allocateComponentVarId(
+                tabbedPaneClientId, declare);
+        if (declare[0]) {
+            js.write("var ").write(var).write('=').writeCall("f_core",
+                    "GetElementByClientId").writeString(tabbedPaneClientId)
+                    .writeln(", document, true);");
+        }
 
         TabComponent tab = (TabComponent) cardComponent;
-        TabbedPaneComponent tabbedPane = tab.getTabbedPane();
+        // TabbedPaneComponent tabbedPane = tab.getTabbedPane();
 
         IHtmlWriter writer = js.getWriter();
 
-        IHtmlRenderContext htmlRenderContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext();
+        // IHtmlRenderContext htmlRenderContext =
+        // writer.getHtmlComponentRenderContext().getHtmlRenderContext();
 
         FacesContext facesContext = js.getFacesContext();
-
-        String imageURL = tab.getImageURL(facesContext);
-        if (imageURL != null) {
-            imageURL = js.allocateString(imageURL);
-        }
-
-        String disabledImageURL = tab.getDisabledImageURL(facesContext);
-        if (disabledImageURL != null) {
-            disabledImageURL = js.allocateString(disabledImageURL);
-        }
-
-        String selectedImageURL = tab.getSelectedImageURL(facesContext);
-        if (selectedImageURL != null) {
-            selectedImageURL = js.allocateString(selectedImageURL);
-        }
-
-        String hoverImageURL = tab.getHoverImageURL(facesContext);
-        if (hoverImageURL != null) {
-            hoverImageURL = js.allocateString(hoverImageURL);
-        }
 
         String tadComponentId = writer.getComponentRenderContext()
                 .getComponentClientId();
 
-        js.writeCall(var, "f_declareTab").writeString(tadComponentId);
+        js.writeCall(var, "f_declareCard");
 
-        int pred = 0;
+        IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(false);
+
+        if (js.getComponentRenderContext().getRenderContext()
+                .containsAttribute(
+                        TabbedPaneRenderer.TABBED_PANE_JSF12_PROPERTY)) {
+            objectLiteralWriter.writeProperty("_titleGenerated").writeBoolean(
+                    true);
+        }
+
+        objectLiteralWriter.writeProperty("_id").writeString(tadComponentId);
 
         Object value = tab.getValue();
         String clientValue = null;
@@ -93,109 +190,79 @@ public class TabRenderer extends CardRenderer {
         }
 
         if (clientValue != null) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-
-            js.write(',').writeString(clientValue);
-        } else {
-            pred++;
+            objectLiteralWriter.writeProperty("_value")
+                    .writeString(clientValue);
         }
 
         if (selected) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-
-            js.write(',').writeBoolean(true);
-        } else {
-            pred++;
+            objectLiteralWriter.writeProperty("_selected").writeBoolean(true);
         }
 
         String text = tab.getText(facesContext);
         if (text != null) {
             text = ParamUtils.formatMessage(tab, text);
 
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-            js.write(',').writeString(text);
-        } else {
-            pred++;
+            objectLiteralWriter.writeProperty("_text").writeString(text);
         }
 
         String accessKey = tab.getAccessKey(facesContext);
         if (accessKey != null) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-            js.write(',').writeString(accessKey);
-        } else {
-            pred++;
+            objectLiteralWriter.writeProperty("_accessKey").writeString(
+                    accessKey);
         }
 
         if (tab.isDisabled(facesContext)) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-            js.write(',').writeBoolean(true);
-        } else {
-            pred++;
+            objectLiteralWriter.writeProperty("_disabled").writeBoolean(true);
         }
 
-        if (imageURL != null) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
+        IContentAccessors contentAccessors = tab
+                .getImageAccessors(facesContext);
+
+        if (contentAccessors instanceof IImageAccessors) {
+            IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+
+            IContentAccessor contentAccessor = imageAccessors
+                    .getImageAccessor();
+
+            if (contentAccessor != null) {
+                objectLiteralWriter.writeProperty("_imageURL").writeString(
+                        contentAccessor.resolveURL(facesContext, null, null));
             }
-            js.write(',').write(imageURL);
-        } else {
-            pred++;
-        }
 
-        if (disabledImageURL != null) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-            js.write(',').write(disabledImageURL);
-        } else {
-            pred++;
-        }
+            if (imageAccessors instanceof IStatesImageAccessors) {
+                IStatesImageAccessors statesImageAccessors = (IStatesImageAccessors) imageAccessors;
 
-        if (selectedImageURL != null) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-            js.write(',').write(selectedImageURL);
-        } else {
-            pred++;
-        }
+                contentAccessor = statesImageAccessors
+                        .getDisabledImageAccessor();
+                if (contentAccessor != null) {
+                    objectLiteralWriter.writeProperty("_disabledImageURL")
+                            .writeString(
+                                    contentAccessor.resolveURL(facesContext,
+                                            null, null));
+                }
 
-        if (hoverImageURL != null) {
-            for (; pred > 0; pred--) {
-                js.write(',').writeNull();
-            }
-            js.write(',').write(hoverImageURL);
-        } else {
-            pred++;
-        }
+                contentAccessor = statesImageAccessors.getHoverImageAccessor();
+                if (contentAccessor != null) {
+                    objectLiteralWriter.writeProperty("_hoverImageURL")
+                            .writeString(
+                                    contentAccessor.resolveURL(facesContext,
+                                            null, null));
+                }
 
-        js.writeln(");");
-
-        int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
-
-        if (selected == false) {
-            if (htmlRenderContext.isAsyncRenderEnable()) {
-                asyncRender = htmlRenderContext.getAsyncRenderMode(tabbedPane);
-
-                if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    htmlRenderContext.pushInteractiveRenderComponent(writer, null);
+                contentAccessor = statesImageAccessors
+                        .getSelectedImageAccessor();
+                if (contentAccessor != null) {
+                    objectLiteralWriter.writeProperty("_selectedImageURL")
+                            .writeString(
+                                    contentAccessor.resolveURL(facesContext,
+                                            null, null));
                 }
             }
         }
 
-        setAsyncRenderer(writer, tab, asyncRender);
+        objectLiteralWriter.end();
 
-        return asyncRender;
+        js.writeln(");");
     }
 
     protected void decode(IRequestContext context, UIComponent component,

@@ -403,46 +403,37 @@ var __members = {
 
 			var mask=_tab._mask;
 			var textTitle=tab._textTitle;
+			
 			var mleft=textTitle.offsetLeft;
-			var mright=textTitle.offsetLeft+textTitle.offsetWidth;
+			var mright=textTitle.offsetLeft+textTitle.offsetWidth-1;
 			
-			var borderSize=f_core.GetCurrentStyleProperty(_tab, "border-left-width");
-			if (!borderSize) {
-				borderSize=f_core.GetCurrentStyleProperty(_tab, "borderLeftWidth");
-			}
-			
-			var borderSize=parseInt(borderSize, 10);
-			if (!isNaN(borderSize)) {
-				mleft+=1-borderSize;
-				mright+=1-borderSize;
+			if (true) {
+				//mleft-=f_core.ComputeBorderLength(textTitle, "left");
+				//mright-=f_core.ComputeBorderLength(textTitle, "right");
+				
+				var l=f_core.ComputeBorderLength(mask.parentNode, "left")
+				mleft-=l;
+				mright-=l;
 			}
 			
 			var w=tab._leftTitle.offsetWidth;
 			if (!tab._prev) {
-				mleft-=w;
+				mleft-=w-1;
 			} else {
-				mleft-=w-2;
+				mleft-=w-3;
 			}
 			
 			w=tab._rightTitle.offsetWidth;			
 			if (!tab._next) {
-				mright+=w-2;
+				mright+=w-1;
 			} else {
-				mright+=w-4;
+				mright+=w-1;
 			}
-			
-			/*
-			mleft-=2;
-			
-			if (!tab._right) {
-				mright+=2;
-			}
-			*/
-			
+					
 			f_core.Debug(f_tabbedPane, "_resize: Set mask position "+mleft+" to "+mright);
 			
 			mask.style.left=(mleft)+"px";
-			mask.style.width=(mright-mleft)+"px";
+			mask.style.width=(mright-mleft+1)+"px";
 		}
 	
 		if (this.style.height) {
@@ -759,145 +750,180 @@ var __members = {
 	/**
 	 * @method hidden
 	 */
-	f_declareTab: function(tabBodyId, tabValue, selected, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
-		f_core.Assert(typeof(tabBodyId)=="string", "f_tabbedPane.f_declareTab: Invalid tabBodyId parameter ("+tabBodyId+")");
-		f_core.Assert(!tabValue || typeof(tabValue)=="string", "f_tabbedPane.f_declareTab: Invalid tabValue parameter ("+tabValue+")");
-		f_core.Assert(!selected || typeof(selected)=="boolean", "f_tabbedPane.f_declareTab: Invalid selected parameter ("+selected+")");
-		f_core.Assert(!text || typeof(text)=="string", "f_tabbedPane.f_declareTab: Invalid text parameter ("+text+")");
+	f_declareCard: function(tab) {
+		f_core.Assert(tab._value===undefined || typeof(tab._value)=="string", "f_tabbedPane.f_declareTab: Invalid tabValue parameter ("+tab._value+")");
+		f_core.Assert(tab._selected===undefined || typeof(tab._selected)=="boolean", "f_tabbedPane.f_declareTab: Invalid selected parameter ("+tab._selected+")");
+		f_core.Assert(tab._text===undefined || typeof(tab._text)=="string", "f_tabbedPane.f_declareTab: Invalid text parameter ("+tab._text+")");
 		
-		var tab=this.f_declareCard(tabBodyId, tabValue, selected);
+		tab=this.f_super(arguments, tab);
 
-		f_core.Debug(f_tabbedPane, "Declare tab : "+tab);
+		f_core.Debug(f_tabbedPane, "f_declareCard: Declare tab : "+tab);
 
-		if (disabled===undefined) {
-			disabled=false;
-		}
-		tab._disabled=disabled;
-		
 		var blankImage=f_env.GetBlankImageURL();
 		
-		tab._imageURL=imageURL;
-		if (imageURL) {
-			f_imageRepository.PrepareImage(imageURL);
+		/*
+		if (tab._imageURL) {
+			f_imageRepository.PrepareImage(tab._imageURL);
 		}
+		if (tab._disabledImageURL) {
+			f_imageRepository.PrepareImage(tab._disabledImageURL);
+		}
+		if (tab._hoverImageURL) {
+			f_imageRepository.PrepareImage(tab._hoverImageURL);
+		}
+		if (tab._selectedImageURL) {
+			f_imageRepository.PrepareImage(tab._selectedImageURL);
+		}
+		*/
 		
-		tab._disabledImageURL=disabledImageURL;
-		if (disabledImageURL) {
-			f_imageRepository.PrepareImage(disabledImageURL);
-		}
-		
-		tab._hoverImageURL=hoverImageURL;
-		if (hoverImageURL) {
-			f_imageRepository.PrepareImage(hoverImageURL);
-		}
-		
-		tab._selectedImageURL=selectedImageURL;
-		if (selectedImageURL) {
-			f_imageRepository.PrepareImage(selectedImageURL);
-		}
+		var doc=this.ownerDocument;
 		
 		var table=this._title;
 		if (!table) {
-			table=this.ownerDocument.getElementById(this.id+f_tabbedPane._TITLE_ID_SUFFIX);
+			table=doc.getElementById(this.id+f_tabbedPane._TITLE_ID_SUFFIX);
 			//table=f_core.GetChildByCssClass(this,"f_tabbedPane_title");
 			this._title=table;
 			table._tabbedPane=this;
 		}
+		
 		var rows=table.rows;
 		
 		var trTitle=rows[0];
 		var trText=rows[1];
 		
-		//var cellsTitle=trTitle.cells;
-		var cellsText=trText.cells;
+		var textTitle;
+		var textLink;
+		var rightTitle;
+		var rightTTitleImage;
+		var leftTitle;
+		var leftTTitleImage;
+		var textTTitle;
+		var icon;
 		
-		if (!tab._prev) {
-			// Premier !
+		if (tab._titleGenerated) {
+			var cards=this._cards;
+			var indexGenerated=(cards.length-1)*2;
 			
-			var tdTitleLeft=document.createElement("td");
-			f_core.AppendChild(trTitle, tdTitleLeft);
-			
-			var leftTTitleImage=document.createElement("img");
-			tab._leftTTitleImage=leftTTitleImage;
-			leftTTitleImage.src=blankImage;
-			leftTTitleImage.width=5;
-			leftTTitleImage.height=5;
-			f_core.AppendChild(tdTitleLeft, leftTTitleImage);
-			
-			tab._leftTitle=document.createElement("td");
-			f_core.AppendChild(trText, tab._leftTitle);
-			
-		} else {
-			//var tdTitleLeft=cellsTitle[cellsTitle.length-1];
-			tab._leftTTitleImage=tab._prev._rightTTitleImage;
-			tab._leftTTitleImage.width=7;
-			tab._leftTitle=cellsText[cellsText.length-1];
-		}
-		
-		tab._textTTitle=document.createElement("td");		
-		f_core.AppendChild(trTitle, tab._textTTitle);
-	
-		var textTitle=document.createElement("td");
-		tab._textTitle=textTitle;
-		f_core.AppendChild(trText, textTitle);
+			var nodes=trTitle.childNodes;
 
-		textTitle._tab=tab;
+			leftTTitleImage=nodes[indexGenerated].firstChild;
+			textTTitle=nodes[indexGenerated+1];
+			rightTTitleImage=nodes[indexGenerated+2].firstChild;
+			
+			nodes=trText.childNodes;
+			
+			leftTitle=nodes[indexGenerated];
+			textTitle=nodes[indexGenerated+1];
+			textLink=textTitle.firstChild;
+			rightTitle=nodes[indexGenerated+2];
+			if (tab._imageURL) {
+				icon=textLink.firstChild;
+			}
+			
+		} else {		
+			//var cellsTitle=trTitle.cells;
+			var cellsText=trText.cells;
+			
+			if (!tab._prev) {
+				// Premier !
+				
+				var tdTitleLeft=doc.createElement("td");
+				f_core.AppendChild(trTitle, tdTitleLeft);
+				
+				leftTTitleImage=doc.createElement("img");
+				leftTTitleImage.src=blankImage;
+				leftTTitleImage.width=5;
+				leftTTitleImage.height=5;
+				f_core.AppendChild(tdTitleLeft, leftTTitleImage);
+				
+				leftTitle=doc.createElement("td");
+				f_core.AppendChild(trText, leftTitle);
+				
+			} else {
+				//var tdTitleLeft=cellsTitle[cellsTitle.length-1];
+				leftTTitleImage=tab._prev._rightTTitleImage;
+				leftTTitleImage.width=7;
+				leftTitle=cellsText[cellsText.length-1];
+			}
+			
+			textTTitle=doc.createElement("td");		
+			f_core.AppendChild(trTitle, textTTitle);
+		
+			textTitle=doc.createElement("td");
+			f_core.AppendChild(trText, textTitle);
+			
+			textLink=f_core.CreateElement(textTitle, "a", {
+				href: f_core.JAVASCRIPT_VOID
+	//			tabIndex: (this._tabIndex)?(this._tabIndex):0  // ????
+			});
+			
+			if (tab._accessKey && f_core.IsInternetExplorer()) {
+				// Il faut positionner l'accessKey !
+				textLink.accessKey=tab._accessKey;
+			}
+	
+			var imageURL=tab._imageURL;
+			if (imageURL) {
+				icon=f_core.CreateElement(textLink, "img", {
+					src: imageURL,
+					align: "center", 
+					border: 0,
+					className: "f_tabbedPane_titleIcon"
+				});
+			}
+			
+			if (tab._text) {
+				f_component.AddLabelWithAccessKey(textLink, tab._text, tab._accessKey);
+			}		
+		
+			var tdTitleRight=doc.createElement("td");
+			f_core.AppendChild(trTitle, tdTitleRight);
+	
+			rightTTitleImage=doc.createElement("img");
+			rightTTitleImage.src=blankImage;
+			rightTTitleImage.width=5;
+			rightTTitleImage.height=5;
+			f_core.AppendChild(tdTitleRight, rightTTitleImage);		
+			
+			rightTitle=doc.createElement("td");
+			f_core.AppendChild(trText, rightTitle);
+		}
+
+		f_core.Assert(textTitle && textTitle.nodeType==f_core.ELEMENT_NODE, "f_tabbedPane.f_declareCard: Invalid textTitle component ("+textTitle+")");
 		textTitle.onclick=f_tabbedPane._TabbedPane_click;
 		textTitle.onmouseover=f_tabbedPane._TabbedPane_mouseover;
 		textTitle.onmouseout=f_tabbedPane._TabbedPane_mouseout;
-		
-		var textLink=document.createElement("a");
-		tab._textLink=textLink;
-		f_core.AppendChild(textTitle, textLink);
-		
-		if (accessKey && f_core.IsInternetExplorer()) {
-			// Il faut positionner l'accessKey !
-			textLink.accessKey=accessKey;
-		}
+		textTitle._tab=tab;
+		tab._textTitle=textTitle;
 
-		//var imageURL=tab._imageURL;
-		if (imageURL) {
-			var icon=document.createElement("img");
-			tab._icon=icon;
-			icon.src=imageURL;
-			icon.align="center";
-			icon.border=0;
-			icon.className="f_tabbedPane_titleIcon";
-
-			f_core.AppendChild(textLink, icon);
-		}
-		
-		if (text) {
-			f_component.AddLabelWithAccessKey(textLink, text, accessKey);
-		}
-		
-		textLink._tab=tab;
-		if (this._tabIndex) {
-			textLink.tabIndex=this._tabIndex;
-		} else {
-			textLink.tabIndex=0;
-		}
-		textLink._tab=tab;
+		f_core.Assert(textLink && textLink.nodeType==f_core.ELEMENT_NODE, "f_tabbedPane.f_declareCard: Invalid textLink component ("+textLink+")");
 		textLink.onclick=f_tabbedPane._TabbedPane_click;
 		textLink.onfocus=f_tabbedPane._TabbedPane_focus;
 		textLink.onkeydown=f_tabbedPane._TabbedPane_keyDown;
 		textLink.onkeypress=f_tabbedPane._TabbedPane_keyPress;
-		textLink.href=f_core.JAVASCRIPT_VOID;
-	
-		var tdTitleRight=document.createElement("td");
-		f_core.AppendChild(trTitle, tdTitleRight);
+		textLink._tab=tab;		
+		tab._textLink=textLink;
 
-		var rightTTitleImage=document.createElement("img");
+		f_core.Assert(rightTTitleImage && rightTTitleImage.nodeType==f_core.ELEMENT_NODE, "f_tabbedPane.f_declareCard: Invalid rightTTitleImage component ("+rightTTitleImage+")");
 		tab._rightTTitleImage=rightTTitleImage;
-		rightTTitleImage.src=blankImage;
-		rightTTitleImage.width=5;
-		rightTTitleImage.height=5;
-		f_core.AppendChild(tdTitleRight, rightTTitleImage);		
 		
-		tab._rightTitle=document.createElement("td");
-		f_core.AppendChild(trText, tab._rightTitle);
+		f_core.Assert(textTTitle && textTTitle.nodeType==f_core.ELEMENT_NODE, "f_tabbedPane.f_declareCard: Invalid textTTitle component ("+textTTitle+")");
+		tab._textTTitle=textTTitle;
+
+		f_core.Assert(leftTTitleImage && leftTTitleImage.nodeType==f_core.ELEMENT_NODE, "f_tabbedPane.f_declareCard: Invalid leftTTitleImage component ("+tab.leftTTitleImage+")");
+		tab._leftTTitleImage=leftTTitleImage;
+
+		f_core.Assert(rightTitle && rightTitle.nodeType==f_core.ELEMENT_NODE, "f_tabbedPane.f_declareCard: Invalid rightTitle component ("+rightTitle+")");
+		tab._rightTitle=rightTitle;
+
+		f_core.Assert(leftTitle && leftTitle.nodeType==f_core.ELEMENT_NODE, "f_tabbedPane.f_declareCard: Invalid leftTitle component ("+leftTitle+")");
+		tab._leftTitle=leftTitle;
 		
-		this.f_updateCardStyle(tab);
+		tab._icon=icon;
+		
+		if (!tab._titleGenerated) {
+			this.f_updateCardStyle(tab);
+		}		
 	},
 	/**
 	 * @method protected

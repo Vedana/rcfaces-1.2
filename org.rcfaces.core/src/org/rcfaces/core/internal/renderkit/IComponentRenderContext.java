@@ -27,4 +27,6 @@ public interface IComponentRenderContext {
     Object setAttribute(String key, Object value);
 
     Object removeAttribute(String key);
+
+    boolean isComponentVisible();
 }

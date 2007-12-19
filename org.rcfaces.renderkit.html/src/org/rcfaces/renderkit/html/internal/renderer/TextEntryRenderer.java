@@ -50,6 +50,7 @@ import org.rcfaces.core.validator.IParameter;
 import org.rcfaces.core.validator.ITranslatorTask;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -66,15 +67,17 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
     private static final IClientValidatorDescriptor AUTO_TAB_VALIDATOR_DESCRIPTOR = new ClientValidator();
 
-    private static final String VALIDATOR_COMMAND = "camelia.validator.command";
+    private static final String VALIDATOR_COMMAND_PROPERTY = "camelia.validator.command";
 
-    private static final String VALIDATOR_DESCRIPTOR = "camelia.validator.descriptor";
+    private static final String VALIDATOR_DESCRIPTOR_PROPERTY = "camelia.validator.descriptor";
 
     private static final String DEFAULT_VALIDATOR_REQUIRED_CLASSES[] = { "f_vb" };
 
     private static final boolean ALLOCATE_VALIDATOR_PARAMETERS = false;
 
-    private static final String VALUE_ATTRIBUTE = "camelia.validator.value";
+    private static final String VALIDATOR_VALUE_PROPERTY = "camelia.validator.value";
+
+    private static final String VALIDATOR_INTERNAL_VALUE_ATTRIBUTE = "camelia.validator.internalValue";
 
     // private static final boolean ATTRIBUTE_VALIDATOR = true;
 
@@ -200,7 +203,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             throws WriterException {
 
         String text = (String) htmlWriter.getComponentRenderContext()
-                .getAttribute(VALUE_ATTRIBUTE);
+                .getAttribute(VALIDATOR_VALUE_PROPERTY);
         if (text != null) {
             htmlWriter.writeValue(text);
             return;
@@ -246,6 +249,34 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         htmlWriter.addSubFocusableComponent(htmlWriter
                 .getComponentRenderContext().getComponentClientId());
+
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+        if (componentRenderContext.getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode()) {
+            if (htmlWriter.getComponentRenderContext().getAttribute(
+                    VALIDATOR_COMMAND_PROPERTY) != null) {
+                if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+
+                    String value = (String) componentRenderContext
+                            .getAttribute(VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
+
+                    if (value != null) {
+                        htmlWriter.startElement(IHtmlWriter.INPUT);
+                        htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+
+                        String name = componentRenderContext
+                                .getComponentClientId()
+                                + "::value";
+                        htmlWriter.writeName(name);
+
+                        htmlWriter.writeValue(value);
+
+                        htmlWriter.endElement(IHtmlWriter.INPUT);
+                    }
+                }
+            }
+        }
     }
 
     protected boolean isNameEqualsId() {
@@ -293,8 +324,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                     + renderContext.getComponentClientId() + "' !");
         }
 
-        renderContext.setAttribute(VALIDATOR_COMMAND, command);
-        renderContext.setAttribute(VALIDATOR_DESCRIPTOR, validatorDescriptor);
+        renderContext.setAttribute(VALIDATOR_COMMAND_PROPERTY, command);
+        renderContext.setAttribute(VALIDATOR_DESCRIPTOR_PROPERTY,
+                validatorDescriptor);
 
         UIComponent component = renderContext.getComponent();
         if (component instanceof ValueHolder) {
@@ -350,10 +382,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         List params = new ArrayList(8);
 
         IClientValidatorDescriptor validatorDescriptor = (IClientValidatorDescriptor) componentRenderContext
-                .getAttribute(VALIDATOR_DESCRIPTOR);
+                .getAttribute(VALIDATOR_DESCRIPTOR_PROPERTY);
         if (validatorDescriptor != null) {
             CommandParserIterator.ICommand command = (ICommand) componentRenderContext
-                    .getAttribute(VALIDATOR_COMMAND);
+                    .getAttribute(VALIDATOR_COMMAND_PROPERTY);
 
             IParameter expressionParameters[] = command.listParameters();
             IParameter defaultParameters[] = validatorDescriptor
@@ -716,10 +748,16 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             return;
         }
 
-        htmlWriter.writeAttribute("v:internalValue", context.getInput());
+        String internalValue = context.getInput();
+        if (internalValue != null) {
+            htmlWriter.writeAttribute("v:internalValue", internalValue);
 
-        htmlWriter.getComponentRenderContext().setAttribute(VALUE_ATTRIBUTE,
-                context.getOutputValue());
+            htmlWriter.getComponentRenderContext().setAttribute(
+                    VALIDATOR_INTERNAL_VALUE_ATTRIBUTE, internalValue);
+        }
+
+        htmlWriter.getComponentRenderContext().setAttribute(
+                VALIDATOR_VALUE_PROPERTY, context.getOutputValue());
     }
 
     protected void writeTaskDescriptor(IHtmlWriter htmlWriter,
@@ -791,9 +829,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 .getHtmlComponentRenderContext();
 
         CommandParserIterator.ICommand command = (ICommand) componentRenderContext
-                .getAttribute(VALIDATOR_COMMAND);
+                .getAttribute(VALIDATOR_COMMAND_PROPERTY);
         IClientValidatorDescriptor validatorDescriptor = (IClientValidatorDescriptor) componentRenderContext
-                .getAttribute(VALIDATOR_DESCRIPTOR);
+                .getAttribute(VALIDATOR_DESCRIPTOR_PROPERTY);
 
         List params = new ArrayList();
         IParameter cParameters[] = command.listParameters();
@@ -934,7 +972,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 .getComponent();
 
         IClientValidatorDescriptor validatorDescriptor = (IClientValidatorDescriptor) componentRenderContext
-                .getAttribute(VALIDATOR_DESCRIPTOR);
+                .getAttribute(VALIDATOR_DESCRIPTOR_PROPERTY);
         if (validatorDescriptor != null) {
             javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.TEXT_ENTRY, "validator");

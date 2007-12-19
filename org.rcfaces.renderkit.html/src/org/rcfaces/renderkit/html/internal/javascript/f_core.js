@@ -2741,6 +2741,7 @@ var f_core = {
 		f_core.Assert(component, "f_core.IsComponentVisible: Component is null !");
 		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.IsComponentVisible: Component parameter is invalid ("+component+")");
 
+		// En visibility="hidden"  il y a peut être 
 		if (component.clientWidth || component.clientHeight) {
 			return true;
 		}

@@ -265,11 +265,17 @@ var __statics = {
 		var bases=doc.getElementsByTagName("BASE");
 		if (bases.length) {
 			var base=bases[bases.length-1];	// On prend le dernier !
-		
+	
+			var head=f_core.GetFirstElementByTagName(pdocument, "head");
+			if (!head) {
+				head=pdocument.createElement("head");
+				pdocument.appendChild(head);
+			}
+	
 			var pbase=pdocument.createElement(base.tagName);
 			pbase.href=base.href;
 
-			f_core.AppendChild(pdocument, pbase);
+			f_core.AppendChild(head, pbase);
 		}
 		
 		f_core.CopyStyleSheets(pdocument, doc);		

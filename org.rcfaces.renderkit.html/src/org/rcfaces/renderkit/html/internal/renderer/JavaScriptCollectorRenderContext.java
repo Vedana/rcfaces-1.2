@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -33,6 +34,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptComponentRenderer;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptEnableModeImpl;
 
 /**
@@ -94,11 +96,41 @@ public class JavaScriptCollectorRenderContext extends
 
     public void pushChild(IJavaScriptRenderContext javaScriptRenderContext,
             IHtmlWriter htmlWriter) throws WriterException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Push child " + javaScriptRenderContext);
+        }
+
+        if (RcfacesContext.isJSF1_2()) {
+            // Nous sommes en asyncRenderMode= tree
+            return;
+        }
+
         flushComponents(htmlWriter, true);
     }
 
     public void popChild(IJavaScriptRenderContext javaScriptRenderContext,
             IHtmlWriter htmlWriter) throws WriterException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Pop child " + javaScriptRenderContext);
+        }
+
+        if (parent != null && RcfacesContext.isJSF1_2()) {
+            // Nous sommes en asyncRenderMode= tree
+
+            ((JavaScriptCollectorRenderContext) parent).components
+                    .addAll(components);
+
+            String currentId = htmlWriter.getComponentRenderContext()
+                    .getComponentClientId();
+            ((JavaScriptCollectorRenderContext) parent).components
+                    .add(new ComponentId(currentId,
+                            ((JavaScriptEnableModeImpl) htmlWriter
+                                    .getJavaScriptEnableMode()).getMode(),
+                            null, null));
+
+            return;
+        }
+
         flushComponents(htmlWriter, false);
     }
 
@@ -282,12 +314,22 @@ public class JavaScriptCollectorRenderContext extends
         return javaScriptWriter;
     }
 
-    public void releaseComponentJavaScript(IJavaScriptWriter writer,
+    public void releaseComponentJavaScript(IJavaScriptWriter jsWriter,
             boolean sendComplete, AbstractHtmlRenderer htmlComponentRenderer)
             throws WriterException {
 
         if (sendComplete) {
-            writer.writeMethodCall("f_completeComponent").writeln(");");
+            if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "false,\"javascript.completeComponent\");");
+            }
+
+            jsWriter.writeMethodCall("f_completeComponent").writeln(");");
+
+            if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "true,\"javascript.completeComponent\");");
+            }
         }
     }
 
@@ -374,6 +416,11 @@ public class JavaScriptCollectorRenderContext extends
         }
 
         List initializeIds = new ArrayList(16);
+        List accessIds = new ArrayList(16);
+        List messageIds = new ArrayList(16);
+        List focusIds = new ArrayList();
+        List submitIds = new ArrayList(16);
+        List hoverIds = new ArrayList(16);
 
         for (Iterator it = components.iterator(); it.hasNext();) {
             Object object = it.next();
@@ -386,7 +433,9 @@ public class JavaScriptCollectorRenderContext extends
                         jsWriter = InitRenderer.openScriptTag(htmlWriter);
                     }
 
-                    writeInitIds(jsWriter, initializeIds, beginRender);
+                    writeInitIds(jsWriter, initializeIds, beginRender,
+                            focusIds, hoverIds, messageIds, accessIds,
+                            submitIds);
 
                     jsWriter.writeCall("f_core", "Profile").writeln(
                             "null,\"javascriptCollector.initIds(#"
@@ -401,7 +450,8 @@ public class JavaScriptCollectorRenderContext extends
                     jsWriter = InitRenderer.openScriptTag(htmlWriter);
                 }
 
-                writeInitIds(jsWriter, initializeIds, beginRender);
+                writeInitIds(jsWriter, initializeIds, beginRender, focusIds,
+                        hoverIds, messageIds, accessIds, submitIds);
 
                 if (logIntermediateProfiling) {
                     jsWriter.writeCall("f_core", "Profile").writeln(
@@ -434,7 +484,92 @@ public class JavaScriptCollectorRenderContext extends
                 jsWriter = InitRenderer.openScriptTag(htmlWriter);
             }
 
-            writeInitIds(jsWriter, initializeIds, beginRender);
+            writeInitIds(jsWriter, initializeIds, beginRender, focusIds,
+                    hoverIds, messageIds, accessIds, submitIds);
+        }
+
+        if (accessIds.isEmpty() == false || messageIds.isEmpty() == false
+                || focusIds.isEmpty() == false || submitIds.isEmpty() == false
+                || hoverIds.isEmpty() == false) {
+            if (jsWriter == null) {
+                jsWriter = InitRenderer.openScriptTag(htmlWriter);
+            }
+
+            String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
+                    .convertSymbol("f_classLoader", "_rcfacesClassLoader");
+
+            if (accessIds.isEmpty() == false) {
+                boolean first = true;
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnAccessIds");
+                for (Iterator it = accessIds.iterator(); it.hasNext();) {
+
+                    if (first) {
+                        first = false;
+
+                    } else {
+                        jsWriter.write(',');
+                    }
+
+                    jsWriter.writeString((String) it.next()).write(',')
+                            .writeString((String) it.next());
+                }
+                jsWriter.writeln(");");
+            }
+
+            if (messageIds.isEmpty() == false) {
+                boolean first = true;
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnMessage");
+                for (Iterator it = messageIds.iterator(); it.hasNext();) {
+
+                    if (first) {
+                        first = false;
+
+                    } else {
+                        jsWriter.write(',');
+                    }
+
+                    jsWriter.writeString((String) it.next());
+                }
+                jsWriter.writeln(");");
+            }
+
+            if (focusIds.isEmpty() == false) {
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnFocusIds");
+
+                IObjectLiteralWriter objWriter = jsWriter
+                        .writeObjectLiteral(false);
+                for (Iterator it = focusIds.iterator(); it.hasNext();) {
+
+                    objWriter.writeProperty((String) it.next()).writeInt(1);
+                }
+                objWriter.end();
+                jsWriter.writeln(");");
+            }
+
+            if (submitIds.isEmpty() == false) {
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnSubmitIds");
+
+                IObjectLiteralWriter objWriter = jsWriter
+                        .writeObjectLiteral(false);
+                for (Iterator it = submitIds.iterator(); it.hasNext();) {
+                    objWriter.writeProperty((String) it.next()).writeInt(1);
+                }
+                objWriter.end();
+                jsWriter.writeln(");");
+            }
+
+            if (hoverIds.isEmpty() == false) {
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnOverIds");
+
+                IObjectLiteralWriter objWriter = jsWriter
+                        .writeObjectLiteral(false);
+                for (Iterator it = hoverIds.iterator(); it.hasNext();) {
+                    objWriter.writeProperty((String) it.next()).writeInt(1);
+                }
+                objWriter.end();
+                jsWriter.writeln(");");
+            }
+
         }
 
         if (logProfiling) {
@@ -457,7 +592,9 @@ public class JavaScriptCollectorRenderContext extends
     }
 
     private static void writeInitIds(IJavaScriptWriter jsWriter,
-            List initializeIds, boolean beginRender) throws WriterException {
+            List initializeIds, boolean beginRender, List focusIds,
+            List hoverIds, List messagesIds, List accessIds, List submitIds)
+            throws WriterException {
 
         String currendId = null;
         if (beginRender) {
@@ -508,7 +645,6 @@ public class JavaScriptCollectorRenderContext extends
         }
 
         if (others != null) {
-            first = true;
             for (Iterator it = others.iterator(); it.hasNext();) {
                 ComponentId componentId = (ComponentId) it.next();
 
@@ -516,22 +652,10 @@ public class JavaScriptCollectorRenderContext extends
                     continue;
                 }
 
-                if (first) {
-                    first = false;
-                    jsWriter.writeCall(cameliaClassLoader, "f_initOnAccessIds");
-
-                } else {
-                    jsWriter.write(',');
-                }
-
-                jsWriter.writeString(componentId.clientId).write(',')
-                        .writeString(componentId.accessKey);
-            }
-            if (first == false) {
-                jsWriter.writeln(");");
+                accessIds.add(componentId.clientId);
+                accessIds.add(componentId.accessKey);
             }
 
-            first = true;
             for (Iterator it = others.iterator(); it.hasNext();) {
                 ComponentId componentId = (ComponentId) it.next();
 
@@ -539,22 +663,9 @@ public class JavaScriptCollectorRenderContext extends
                     continue;
                 }
 
-                if (first) {
-                    first = false;
-                    jsWriter.writeCall(cameliaClassLoader, "f_initOnSubmitIds")
-                            .write('[');
-
-                } else {
-                    jsWriter.write(',');
-                }
-
-                jsWriter.writeString(componentId.clientId);
-            }
-            if (first == false) {
-                jsWriter.writeln("]);");
+                submitIds.add(componentId.clientId);
             }
 
-            first = true;
             for (Iterator it = others.iterator(); it.hasNext();) {
                 ComponentId componentId = (ComponentId) it.next();
 
@@ -562,39 +673,9 @@ public class JavaScriptCollectorRenderContext extends
                     continue;
                 }
 
-                if (first) {
-                    first = false;
-                    jsWriter.writeCall(cameliaClassLoader, "f_initOnFocusIds");
-
-                } else {
-                    jsWriter.write(',');
-                }
-
-                jsWriter.writeString(componentId.clientId);
-
-                String clientIds[] = componentId.subClientIds;
-
-                if (clientIds.length == 1
-                        && componentId.clientId.equals(clientIds[0])) {
-                    continue;
-                }
-
-                jsWriter.write(",[");
-                for (int i = 0; i < clientIds.length; i++) {
-                    if (i > 0) {
-                        jsWriter.write(',');
-                    }
-
-                    jsWriter.writeString(clientIds[i]);
-                }
-
-                jsWriter.write("]");
-            }
-            if (first == false) {
-                jsWriter.writeln(");");
+                focusIds.add(componentId.clientId);
             }
 
-            first = true;
             for (Iterator it = others.iterator(); it.hasNext();) {
                 ComponentId componentId = (ComponentId) it.next();
 
@@ -602,21 +683,18 @@ public class JavaScriptCollectorRenderContext extends
                     continue;
                 }
 
-                if (first) {
-                    first = false;
-                    jsWriter.writeCall(cameliaClassLoader, "f_initOnMessage")
-                            .write('[');
+                messagesIds.add(componentId.clientId);
+            }
 
-                } else {
-                    jsWriter.write(',');
+            for (Iterator it = others.iterator(); it.hasNext();) {
+                ComponentId componentId = (ComponentId) it.next();
+
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONOVER) == 0) {
+                    continue;
                 }
 
-                jsWriter.writeString(componentId.clientId);
+                hoverIds.add(componentId.clientId);
             }
-            if (first == false) {
-                jsWriter.writeln("]);");
-            }
-
         }
 
         initializeIds.clear();

@@ -186,9 +186,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             // On masque le LI le Javascript masquera le DIV !
         }
 
-        htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Il faut
-        // positionner
-        // les hovers !
+        htmlWriter.getJavaScriptEnableMode().enableOnInit(); 
+        // Il faut positionner les hovers en javascript
     }
 
     protected String getHeadId(IHtmlWriter htmlWriter) {
@@ -274,7 +273,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.A);
         htmlWriter.writeId(buttonClientId);
         // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeAttribute("href", "javascript:void(0)");
+        htmlWriter.writeHRef("javascript:void(0)");
         htmlWriter.writeClass(getInputClassName(htmlWriter));
 
         htmlWriter.addSubFocusableComponent(buttonClientId);

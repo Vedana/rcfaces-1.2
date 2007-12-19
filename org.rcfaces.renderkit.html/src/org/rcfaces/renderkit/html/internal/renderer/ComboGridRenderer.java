@@ -325,6 +325,11 @@ public class ComboGridRenderer extends DataGridRenderer {
         htmlWriter.endComponent();
     }
 
+    protected boolean needAjaxJavaScriptClasses(IHtmlWriter writer,
+            IGridComponent dataGridComponent) {
+        return true;
+    }
+
     private String formatValue(FacesContext facesContext,
             ComboGridComponent comboGridComponent, String convertedSelectedValue) {
 

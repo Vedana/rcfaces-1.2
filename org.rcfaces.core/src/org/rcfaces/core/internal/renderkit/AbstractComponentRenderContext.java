@@ -31,6 +31,8 @@ public abstract class AbstractComponentRenderContext implements
 
     private Map attributes;
 
+    private boolean componentVisible = true;
+
     protected AbstractComponentRenderContext(FacesContext facesContext,
             UIComponent component, String componentClientId) {
         this.facesContext = facesContext;
@@ -99,4 +101,11 @@ public abstract class AbstractComponentRenderContext implements
         return attributes.remove(key);
     }
 
+    public boolean isComponentVisible() {
+        return componentVisible;
+    }
+
+    public void setComponentHidden() {
+        componentVisible = false;
+    }
 }

@@ -47,7 +47,7 @@ public class MessageFieldSetRenderer extends FieldSetRenderer {
             htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
         }
 
-        htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Pour les messages
+        htmlWriter.getJavaScriptEnableMode().enableOnMessage(); // Pour les messages
     }
 
     /*

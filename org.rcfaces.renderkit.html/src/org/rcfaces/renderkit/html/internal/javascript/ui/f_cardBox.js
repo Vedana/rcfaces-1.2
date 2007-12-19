@@ -98,8 +98,10 @@ var __members={
 	 * @method hidden
 	 * @return f_card
 	 */
-	f_declareCard: function(cardBodyId, cardValue, selected) {
-		var card=new Object;
+	f_declareCard: function(card) {
+		f_core.Assert(typeof(card._id)=="string", "f_cardBox.f_declareCard: Invalid card id parameter ("+card._id+")");
+
+		//var card=new Object;
 
 		var cards=this._cards;
 		if (cards.length) {
@@ -110,16 +112,16 @@ var __members={
 		cards.push(card);	
 			
 		card._cardBox=this;
-		card._value=cardValue;
-		card._id=cardBodyId;
+		//card._value=cardValue;
+		//card._id=cardBodyId;
 			
-		if (selected) {
+		if (card._selected) {
 			this._selectedCard=card;
 		}
 	
 		if (f_core.IsDebugEnabled(f_cardBox)) {		
 			card.toString=function() {
-				return "[card id="+this._id+" value="+this._value+" selected="+this._selectedCard+"]";
+				return "[card id="+this._id+" value="+this._value+" selected="+this._selected+"]";
 			}
 		}
 				

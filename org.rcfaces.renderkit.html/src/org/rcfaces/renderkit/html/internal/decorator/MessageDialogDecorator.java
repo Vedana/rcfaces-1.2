@@ -23,8 +23,6 @@ public class MessageDialogDecorator extends AbstractSelectItemsDecorator {
 
     protected void preEncodeContainer() throws WriterException {
         super.preEncodeContainer();
-
-        htmlWriter.getJavaScriptEnableMode().enableOnInit();
     }
 
     protected SelectItemsContext createJavaScriptContext()

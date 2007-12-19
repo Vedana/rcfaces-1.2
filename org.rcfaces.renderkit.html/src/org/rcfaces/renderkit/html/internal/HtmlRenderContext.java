@@ -54,7 +54,7 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private String lastInteractiveRenderComponentClientId;
 
-    private IJavaScriptRenderContext javascriptRenderContext;
+    private IJavaScriptRenderContext javaScriptRenderContext;
 
     private boolean noLazyTag = false;
 
@@ -97,25 +97,25 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     }
 
     public final IJavaScriptRenderContext getJavaScriptRenderContext() {
-        if (javascriptRenderContext != null) {
-            return javascriptRenderContext;
+        if (javaScriptRenderContext != null) {
+            return javaScriptRenderContext;
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         Map requestMap = facesContext.getExternalContext().getRequestMap();
 
-        javascriptRenderContext = (IJavaScriptRenderContext) requestMap
+        javaScriptRenderContext = (IJavaScriptRenderContext) requestMap
                 .get(JAVASCRIPT_CONTEXT_PROPERTY);
-        if (javascriptRenderContext != null) {
-            return javascriptRenderContext;
+        if (javaScriptRenderContext != null) {
+            return javaScriptRenderContext;
         }
 
-        javascriptRenderContext = allocateJavaScriptContext(facesContext);
+        javaScriptRenderContext = allocateJavaScriptContext(facesContext);
 
-        requestMap.put(JAVASCRIPT_CONTEXT_PROPERTY, javascriptRenderContext);
+        requestMap.put(JAVASCRIPT_CONTEXT_PROPERTY, javaScriptRenderContext);
 
-        return javascriptRenderContext;
+        return javaScriptRenderContext;
     }
 
     protected IJavaScriptRenderContext allocateJavaScriptContext(
@@ -144,8 +144,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
         ret[0] = super.saveState(facesContext);
 
-        if (javascriptRenderContext != null) {
-            ret[1] = javascriptRenderContext.saveState(facesContext);
+        if (javaScriptRenderContext != null) {
+            ret[1] = javaScriptRenderContext.saveState(facesContext);
         }
 
         ret[2] = waiRolesNS;
@@ -163,24 +163,26 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
         interactiveRenderComponents.add(lastInteractiveRenderComponent);
         interactiveRenderComponents.add(lastInteractiveRenderComponentClientId);
-        interactiveRenderComponents.add(javascriptRenderContext);
+        interactiveRenderComponents.add(javaScriptRenderContext);
 
         IComponentRenderContext componentRenderContext = writer
                 .getComponentRenderContext();
 
         lastInteractiveRenderComponent = componentRenderContext.getComponent();
 
+        IJavaScriptRenderContext javaScriptRenderContext = getJavaScriptRenderContext();
+
         if (newJavaScriptRenderContext == null) {
             // On ne les change que si c'est un JavaScriptRenderContext imposé
             lastInteractiveRenderComponentClientId = componentRenderContext
                     .getComponentClientId();
 
-            newJavaScriptRenderContext = javascriptRenderContext.createChild();
+            newJavaScriptRenderContext = javaScriptRenderContext.createChild();
         }
 
-        javascriptRenderContext.pushChild(newJavaScriptRenderContext, writer);
+        javaScriptRenderContext.pushChild(newJavaScriptRenderContext, writer);
 
-        javascriptRenderContext = newJavaScriptRenderContext;
+        this.javaScriptRenderContext = newJavaScriptRenderContext;
     }
 
     public void popInteractiveRenderComponent(IHtmlWriter htmlWriter)
@@ -195,12 +197,12 @@ public class HtmlRenderContext extends AbstractRenderContext implements
         lastInteractiveRenderComponentClientId = (String) interactiveRenderComponents
                 .remove(0);
 
-        IJavaScriptRenderContext oldJavaScriptRenderContext = javascriptRenderContext;
-        javascriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
+        IJavaScriptRenderContext oldJavaScriptRenderContext = javaScriptRenderContext;
+        javaScriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
                 .remove(0);
 
         oldJavaScriptRenderContext
-                .popChild(javascriptRenderContext, htmlWriter);
+                .popChild(javaScriptRenderContext, htmlWriter);
     }
 
     public UIComponent getCurrentInteractiveRenderComponent() {

@@ -41,7 +41,11 @@ public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
             parent.write(',');
         }
 
-        parent.write(propertyName);
+        if (propertyName.indexOf(':') >= 0 || propertyName.indexOf('-') >= 0) {
+            parent.writeString(propertyName);
+        } else {
+            parent.write(propertyName);
+        }
 
         parent.write(':');
 

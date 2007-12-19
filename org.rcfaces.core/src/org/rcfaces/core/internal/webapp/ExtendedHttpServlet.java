@@ -4,6 +4,7 @@
  */
 package org.rcfaces.core.internal.webapp;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -239,4 +241,29 @@ public class ExtendedHttpServlet extends HttpServlet {
             LOG.debug("Set GZIP content encoding.");
         }
     }
+
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        try {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Process http request requestURI='"
+                        + req.getRequestURI() + "'.");
+            }
+
+            super.service(req, resp);
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Http request processed requestURI='"
+                        + req.getRequestURI() + "'. (response contentType="
+                        + resp.getContentType() + ")");
+            }
+
+        } catch (RuntimeException ex) {
+            LOG.error("Exception request=" + req.getRequestURI(), ex);
+
+        } catch (Error ex) {
+            LOG.error("Error request=" + req.getRequestURI(), ex);
+        }
+    }
+
 }

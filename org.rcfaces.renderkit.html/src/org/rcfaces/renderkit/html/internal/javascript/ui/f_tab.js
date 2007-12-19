@@ -11,6 +11,32 @@
  */
 
 var __members = {
+	
+	f_tab: function() {
+		this.f_super(arguments);
+		
+		var tabbedPaneClientId=f_core.GetAttribute(this, "v:tabbedPaneId");
+		if (tabbedPaneClientId) {
+			var properties= {
+				_id:				this.id,
+				_titleGenerated:	true,
+				_value: 			f_core.GetAttribute(this, "v:value"),
+				_selected: 			f_core.GetBooleanAttribute(this, "v:selected", false),
+				_disabled: 			f_core.GetBooleanAttribute(this, "v:disabled", false),
+				_text: 				f_core.GetAttribute(this, "v:text"),
+				_accessKey: 		f_core.GetAttribute(this, "v:accessKey"),
+				_imageURL: 			f_core.GetAttribute(this, "v:imageURL"),
+				_selectedImageURL: 	f_core.GetAttribute(this, "v:selectedImageURL"),
+				_hoverImageURL: 	f_core.GetAttribute(this, "v:hoverImageURL"),
+				_disabledImageURL: 	f_core.GetAttribute(this, "v:disabledImageURL")
+			};
+			
+			var tabbedPane=f_core.GetElementByClientId(tabbedPaneClientId, this.ownerDocument, true);
+			
+			tabbedPane.f_declareCard(properties);			
+		}
+	},
+	
 	f_finalize: function() {		
 		this._mask=undefined;  // HTMLElement
 		// this._text=undefined;  // String
@@ -121,6 +147,8 @@ var __members = {
 		if (cardBox) {
 			cardBox.f_setTabDisabled(this, disabled);
 		}
+		
+		this.f_setProperty(f_prop.DISABLED, disabled);
 	},
 	/**
 	 * @method public
@@ -129,14 +157,14 @@ var __members = {
 	f_isDisabled: function() {
 		return this._disabled;
 	},
+	/**
+	 * @method hidden
+	 */
 	f_declareTab: function(tabbedPane, value, text, accessKey, disabled, imageURL, disabledImageURL, selectedImageURL, hoverImageURL) {
 		this.f_declareCard(tabbedPane, value);
 
 		this._text=text;
 		this._accessKey=accessKey;
-		if (disabled===undefined) {
-			disabled=true;
-		}
 		this._disabled=disabled;
 		this._imageURL=imageURL;
 		this._disabledImageURL=disabledImageURL;

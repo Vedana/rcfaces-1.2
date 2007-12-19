@@ -788,10 +788,12 @@ var __members = {
 		}
 		
 		this.f_super(arguments);		
-			
+		
+		/*
 		if (!this.f_isVisible()) {
 			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
-		}		
+		}	
+		*/	
 	},	
 	/**
 	 * @method protected
@@ -853,7 +855,7 @@ var __members = {
 	f_performComponentVisible: function() {
 		if (this._interactiveShow) {
 			// Appel si un onglet etait en Ajax et il charge la liste !
-			this.f_setFirst(this._first, this._currentCursor);			
+			// ???? this.f_setFirst(this._first, this._currentCursor);			
 		}
 		
 		this.f_updateScrollPosition();		
@@ -879,14 +881,15 @@ var __members = {
 			
 			this._nodesList.push(li);
 			
-			f_core.AppendChild(container, li); // Evite les fuites memoires
+			// On prefere la performance aux fuites mémoires ! on le met à la fin
+			// f_core.AppendChild(container, li); // Evite les fuites memoires
 
 			var divNode=document.createElement("div");
 			li._divNode=divNode;
 			divNode._node=li;
 			divNode.className="f_tree_depth"+depth;
 			
-			divNode.role="treeitem";
+			divNode.setAttribute("role", "treeitem");
 			divNode.onmouseover=f_tree._DivNode_mouseOver;
 			divNode.onmouseout=f_tree._DivNode_mouseOut;
 			divNode.onmousedown=f_tree._DivNode_mouseDown;
@@ -998,7 +1001,7 @@ var __members = {
 				// On peut etre un container sans posseder (encore) d'enfants.
 				
 				var ul=document.createElement("ul");
-				ul.role="treegroup";				
+				ul.setAttribute("role", "treegroup");
 				ul.style.display="none";
 				ul.className="f_tree_parent";
 
@@ -1017,6 +1020,9 @@ var __members = {
 					li._nodes.style.display="list-item";
 				}
 			}
+
+			// On prefere la performance aux fuites mémoires !
+			f_core.AppendChild(container, li); // Evite les fuites memoires
 		}
 	},
 	/**
@@ -1114,7 +1120,7 @@ var __members = {
 			if (!ul) {
 				ul=document.createElement("ul");
 				ul.className="f_tree_parent";
-				ul.role="treegroup";
+				ul.setAttribute("role", "treegroup");
 			
 				f_core.AppendChild(li, ul);
 			

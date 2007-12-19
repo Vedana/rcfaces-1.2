@@ -16,6 +16,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
@@ -32,6 +33,8 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
 
     public static final String IMAGE_BUTTON_WRITER = "camelia.writer.ImageButton";
 
+    private static final String INTERNAL_VALUE_ATTRIBUTE = "camelia.internalValue";
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_BUTTON;
     }
@@ -41,14 +44,40 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
         if (hasComponenDecoratorSupport() == false) {
-            encodeComponent((IHtmlWriter) writer);
+            encodeComponent(htmlWriter);
         }
 
         // Il faut activer le Javascript
         // car l'attribut SELECTED doit être envoyé a chaque requete du client
         // vers le serveur !
-        ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
+        // TODO ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
+
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+        if (componentRenderContext.getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode()) {
+            if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+
+                String value = (String) componentRenderContext
+                        .getAttribute(INTERNAL_VALUE_ATTRIBUTE);
+
+                if (value != null) {
+                    htmlWriter.startElement(IHtmlWriter.INPUT);
+                    htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+
+                    String name = componentRenderContext.getComponentClientId()
+                            + "::value";
+                    htmlWriter.writeName(name);
+
+                    htmlWriter.writeValue(value);
+
+                    htmlWriter.endElement(IHtmlWriter.INPUT);
+                }
+            }
+        }
 
         super.encodeEnd(writer);
     }
@@ -126,6 +155,9 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             String value = getInputValue(false);
             if (value != null) {
                 writer.writeAttribute("v:value", value);
+
+                writer.getComponentRenderContext().setAttribute(
+                        INTERNAL_VALUE_ATTRIBUTE, value);
             }
 
             if (imageButtonFamilly.isDisabled(facesContext)) {

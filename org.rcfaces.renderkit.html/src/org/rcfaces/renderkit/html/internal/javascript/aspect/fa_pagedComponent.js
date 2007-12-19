@@ -87,6 +87,9 @@ var __members = {
 		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
 		
 		this._interactiveShow=f_core.GetBooleanAttribute(this, "v:interactiveShow");
+		if (this._interactiveShow && !this.f_isVisible()) {
+			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
+		}
 		
 		this._rows=f_core.GetNumberAttribute(this, "v:rows", 0); // Nombre ligne a afficher
 		

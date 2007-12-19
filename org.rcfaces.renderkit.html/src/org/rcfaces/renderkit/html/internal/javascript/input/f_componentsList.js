@@ -64,9 +64,11 @@ var __members = {
 		
 		this.f_performPagedComponentInitialized();
 		
+		/*
 		if (!this.f_isVisible()) {
 			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);			
 		}
+		*/
 	},
 	/**
 	 * @method protected
