@@ -6,17 +6,23 @@
 	<property name="build-html"  value="${basedir}/../org.rcfaces.renderkit.html"/>
 	<property name="java.target"  value="1.5"/>
 	
-	<path id="generator.class.path">
+	<property name="generator.xml" value="lib-generator" />
+	<property name="optimizer.classpath.dir" value="lib-optimizer/optimizer.jar" />
+	<property name="generator.classpath.dir" value="lib-generator/generator.jar" />
+
+	<path id="generator.classpath">
+		<pathelement location="${generator.classpath.dir}" />
 		<fileset dir="lib-generator">
 			<include name="*.jar"/>
+			<exclude name="generator.jar"/>
 		</fileset>
 	</path>
 	
-	<path id="optimizer.class.path">
-		<pathelement location="lib-optimizer/optimizer.jar"/>
+	<path id="optimizer.classpath">
+		<pathelement location="${optimizer.classpath.dir}" />
 	</path>
 	
-	<path id="commons.class.path">
+	<path id="commons.classpath">
 		<pathelement location="lib/commons-logging.jar" />
 		<pathelement location="lib/commons-digester.jar" />
 		<pathelement location="lib/commons-collections.jar" />
@@ -36,9 +42,9 @@
 		<mkdir dir="${build}/js_optimizer1" />
 
 		<java classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
-			<classpath refid="generator.class.path" />
-			<classpath refid="optimizer.class.path" />
-			<classpath refid="commons.class.path" />
+			<classpath refid="generator.classpath" />
+			<classpath refid="optimizer.classpath" />
+			<classpath refid="commons.classpath" />
 
 			<arg value="-source"/>
             <arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
@@ -61,9 +67,9 @@
 		<mkdir dir="${build}/js_optimizer2" />
 
 		<java classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
-			<classpath refid="generator.class.path" />
-			<classpath refid="optimizer.class.path" />
-			<classpath refid="commons.class.path" />
+			<classpath refid="generator.classpath" />
+			<classpath refid="optimizer.classpath" />
+			<classpath refid="commons.classpath" />
 
 			<arg value="-source"/>
             <arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
@@ -90,9 +96,9 @@
 		<mkdir dir="${build}/js_optimizer3" />
 
 		<java classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
-			<classpath refid="generator.class.path" />
-			<classpath refid="optimizer.class.path" />
-			<classpath refid="commons.class.path" />
+			<classpath refid="generator.classpath" />
+			<classpath refid="optimizer.classpath" />
+			<classpath refid="commons.classpath" />
 
 			<arg value="-source"/>
             <arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
@@ -226,8 +232,8 @@
 
 		<mkdir dir="${build.path}" />
 
-		<delete failonerror="false" dir="${build.version.path}">
-		</delete>
+		<delete failonerror="false" dir="${build.version.path}" />
+
 		<mkdir dir="${build.version.path}" />
 		
 		<mkdir dir="${build.version.path}/src-core" />
@@ -276,20 +282,10 @@
 			</fileset>
 		</copy>
 
-		<!-- Une premiere compile -->		
-		<javac srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" encoding="utf-8" failonerror="false">
-			<classpath>
-				<fileset dir="${build-core}/lib">
-					<include name="*.jar"/>
-				</fileset>
-				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<include name="*.jar"/>
-				</fileset>
-			</classpath>
-		</javac>
-
 		<path id="generated.classpath">
-		    <pathelement path="${build.version.path}/bin-core"/>
+			<!-- Nous sommes obligés d'avoir une base compilée !!! -->
+			<pathelement location="${build-core}/bin"/>
+			
 			<fileset dir="${build-core}/lib">
 				<include name="*.jar"/>
 			</fileset>
@@ -298,11 +294,12 @@
 			</fileset>
 		</path>
 
-		<echo message="Call generator ${generator.classname}" />
+		<echo message="Call generator ${generator.classname}   xml-path=${generator.xml}" />
 		<java classname="${generator.classname}">
-			<classpath refid="generator.class.path" />
-			
-			<arg path="lib-generator"/>
+			<classpath refid="generator.classpath" />
+			<classpath refid="generated.classpath" />
+						
+			<arg path="${generator.xml}"/>
 			<arg pathref="generated.classpath"/>
 			<arg path="${build-core}/src-jsf${jsf.version}-generated"/>
 			<arg path="${build-html}/src-jsf${jsf.version}-generated"/>
@@ -336,8 +333,8 @@
 		<mkdir dir="${build.version.path}/src-html" />
 
 		<mkdir dir="${build.version.path}/bin-html" />
+		
 		<mkdir dir="${build.version.path}/bin-htmlc" />
-	
 		
 		<copy todir="${build.version.path}/src-html">
 			<fileset dir="${build-html}/src">
