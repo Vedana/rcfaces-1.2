@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.context.FacesContext;
@@ -10,10 +13,17 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
+/**
+ * 
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$
+ */
 public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
+    private static final String REVISION = "$Revision$";
 
     public ViewDialogRenderer() {
         super();
@@ -77,7 +87,8 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         return JavaScriptClasses.VIEW_DIALOG;
     }
 
-    protected boolean sendCompleteComponent() {
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
         return false;
     }
 

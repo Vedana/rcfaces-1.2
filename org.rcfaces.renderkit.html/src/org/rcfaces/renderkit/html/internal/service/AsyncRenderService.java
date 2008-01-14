@@ -42,7 +42,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.tools.ComponentTreeRenderProcessorFactory;
 import org.rcfaces.core.internal.renderkit.tools.IComponentTreeRenderProcessor;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
@@ -50,6 +49,7 @@ import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 
 /**
  * 
@@ -149,9 +149,10 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
             componentId = HtmlTools.computeComponentId(facesContext,
                     componentId);
-            UIComponent component = ComponentTools.getForComponent(
-                    facesContext, componentId, viewRoot);
-            if (component == null) {
+
+            ILocalizedComponent localizedComponent = HtmlTools
+                    .localizeComponent(facesContext, componentId);
+            if (localizedComponent == null) {
                 AbstractHtmlService.sendJsError(facesContext, componentId,
                         AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
                         "Can not find component '" + componentId + "'.", null);
@@ -159,67 +160,85 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 return;
             }
 
-            if ((component instanceof IAsyncRenderComponent) == false) {
-                AbstractHtmlService.sendJsError(facesContext, componentId,
-                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find AsyncRenderComponent (id='" + componentId
-                                + "').", null);
-                return;
-            }
+            UIComponent component = localizedComponent.getComponent();
 
-            Object object = component.getAttributes().remove(INTERACTIVE_KEY);
-            if (object instanceof InteractiveBuffer) {
-                InteractiveBuffer interactiveBuffer = (InteractiveBuffer) object;
+            try {
 
-                ServletResponse response = (ServletResponse) facesContext
-                        .getExternalContext().getResponse();
-
-                AbstractHtmlService.setNoCache(response);
-                response.setContentType(IHtmlRenderContext.HTML_TYPE
-                        + "; charset=" + AbstractHtmlService.RESPONSE_CHARSET);
-                AbstractHtmlService.setCameliaResponse(response,
-                        ASYNC_RENDER_SERVICE_VERSION);
-
-                try {
-                    interactiveBuffer.sendBuffer(facesContext);
-
-                } catch (IOException ex) {
-                    throw new FacesException(
-                            "Can not write async content of component id='"
-                                    + componentId + "'.", ex);
+                if ((component instanceof IAsyncRenderComponent) == false) {
+                    AbstractHtmlService
+                            .sendJsError(
+                                    facesContext,
+                                    componentId,
+                                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                                    "Can not find AsyncRenderComponent (id='"
+                                            + componentId + "').", null);
+                    return;
                 }
 
-            } else if (object instanceof InteractiveContext) {
-                InteractiveContext interactiveContext = (InteractiveContext) object;
+                Object object = component.getAttributes().remove(
+                        INTERACTIVE_KEY);
+                if (object instanceof InteractiveBuffer) {
+                    InteractiveBuffer interactiveBuffer = (InteractiveBuffer) object;
 
-                ServletResponse response = (ServletResponse) facesContext
-                        .getExternalContext().getResponse();
+                    ServletResponse response = (ServletResponse) facesContext
+                            .getExternalContext().getResponse();
 
-                AbstractHtmlService.setNoCache(response);
-                response.setContentType(IHtmlRenderContext.HTML_TYPE
-                        + "; charset=" + AbstractHtmlService.RESPONSE_CHARSET);
-                AbstractHtmlService.setCameliaResponse(response,
-                        ASYNC_RENDER_SERVICE_VERSION);
+                    AbstractHtmlService.setNoCache(response);
+                    response.setContentType(IHtmlRenderContext.HTML_TYPE
+                            + "; charset="
+                            + AbstractHtmlService.RESPONSE_CHARSET);
+                    AbstractHtmlService.setCameliaResponse(response,
+                            ASYNC_RENDER_SERVICE_VERSION);
 
-                try {
-                    InteractiveBuffer interactiveBuffer = interactiveContext
-                            .renderTree(facesContext, component, componentId);
+                    try {
+                        interactiveBuffer.sendBuffer(facesContext);
 
-                    interactiveBuffer.sendBuffer(facesContext);
+                    } catch (IOException ex) {
+                        throw new FacesException(
+                                "Can not write async content of component id='"
+                                        + componentId + "'.", ex);
+                    }
 
-                } catch (IOException ex) {
-                    throw new FacesException(
-                            "Can not write async content of component id='"
-                                    + componentId + "'.", ex);
+                } else if (object instanceof InteractiveContext) {
+                    InteractiveContext interactiveContext = (InteractiveContext) object;
+
+                    ServletResponse response = (ServletResponse) facesContext
+                            .getExternalContext().getResponse();
+
+                    AbstractHtmlService.setNoCache(response);
+                    response.setContentType(IHtmlRenderContext.HTML_TYPE
+                            + "; charset="
+                            + AbstractHtmlService.RESPONSE_CHARSET);
+                    AbstractHtmlService.setCameliaResponse(response,
+                            ASYNC_RENDER_SERVICE_VERSION);
+
+                    try {
+                        InteractiveBuffer interactiveBuffer = interactiveContext
+                                .renderTree(facesContext, component,
+                                        componentId);
+
+                        interactiveBuffer.sendBuffer(facesContext);
+
+                    } catch (IOException ex) {
+                        throw new FacesException(
+                                "Can not write async content of component id='"
+                                        + componentId + "'.", ex);
+                    }
+
+                } else {
+                    AbstractHtmlService
+                            .sendJsError(
+                                    facesContext,
+                                    componentId,
+                                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                                    "No content for component id='"
+                                            + componentId + "'.", null);
+
+                    return;
                 }
 
-            } else {
-                AbstractHtmlService.sendJsError(facesContext, componentId,
-                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
-                        "No content for component id='" + componentId + "'.",
-                        null);
-
-                return;
+            } finally {
+                localizedComponent.end();
             }
 
         } catch (RuntimeException ex) {

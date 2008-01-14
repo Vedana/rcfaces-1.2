@@ -334,10 +334,31 @@ var __statics={
 var __members={
 
 	fa_calendarPopup: function() {
-		var calendar=f_calendarObject.CreateCalendarFromComponent(this,
-			f_calendarObject.MONTH_CURSOR_LAYOUT | 
-			f_calendarObject.DAY_LIST_LAYOUT |
-			f_calendarObject.HOME_DATE_LAYOUT);
+
+		var layout;
+		switch(f_core.GetNumberAttribute(this, "v:layout", f_calendar.DEFAULT_LAYOUT)) {
+		case f_calendar.LONG_LAYOUT:
+		case f_calendar.FULL_LAYOUT:
+			layout=f_calendarObject.YEAR_CURSOR_LAYOUT | 
+				f_calendarObject.MONTH_LIST_LAYOUT |
+				f_calendarObject.DAY_LIST_LAYOUT |
+				f_calendarObject.HOME_DATE_LAYOUT;
+			break;
+
+		case f_calendar.SHORT_LAYOUT:		
+			layout=f_calendarObject.MONTH_CURSOR_LAYOUT | 
+				f_calendarObject.DAY_LIST_LAYOUT;
+			break;
+
+		default:		
+			layout=f_calendarObject.MONTH_CURSOR_LAYOUT | 
+				f_calendarObject.DAY_LIST_LAYOUT |
+				f_calendarObject.HOME_DATE_LAYOUT;
+			break;
+		}
+		
+		
+		var calendar=f_calendarObject.CreateCalendarFromComponent(this, layout);
 		this._calendar=calendar;
 		
 		calendar.f_insertEventListenerFirst(f_event.SELECTION, fa_calendarPopup._DateSelectedEvent);

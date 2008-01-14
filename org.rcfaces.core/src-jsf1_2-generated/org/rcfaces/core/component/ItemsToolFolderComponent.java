@@ -15,6 +15,7 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
@@ -132,7 +133,7 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
 	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+		return engine.getIntProperty(Properties.TEXT_POSITION,IHorizontalTextPositionCapability.DEFAULT_POSITION, facesContext);
 	}
 
 	/**

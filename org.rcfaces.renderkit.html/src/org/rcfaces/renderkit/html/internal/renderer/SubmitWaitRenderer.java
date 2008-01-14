@@ -15,7 +15,9 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -45,25 +47,114 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) p_Writer;
 
-        htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
-
-        htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-
         /*
          * String backgroundMode = component.getBackgroundMode(facesContext); if
          * (backgroundMode != null) {
          * htmlWriter.writeAttribute("v:backgroundMode", backgroundMode); }
          */
 
-        String width = submitWaitComponent.getWidth(facesContext);
-        String height = submitWaitComponent.getHeight(facesContext);
+        if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode() == false) {
+
+            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            writeHtmlAttributes(htmlWriter);
+            writeJavaScriptAttributes(htmlWriter);
+
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+
+            String width = submitWaitComponent.getWidth(facesContext);
+            String height = submitWaitComponent.getHeight(facesContext);
+
+            IContentAccessor imageAccessor = null;
+
+            if (submitWaitComponent.isImageURLSetted()) {
+                IContentAccessors contentAccessors = submitWaitComponent
+                        .getImageAccessors(facesContext);
+
+                if (contentAccessors instanceof IImageAccessors) {
+                    IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+                    imageAccessor = imageAccessors.getImageAccessor();
+                }
+            }
+
+            IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
+                    .getHtmlComponentRenderContext();
+
+            if (imageAccessor == null) {
+                imageAccessor = getDefaultImageAccessor(htmlComponentRenderContext);
+                if (imageAccessor != null) {
+                    width = String
+                            .valueOf(getDefaultImageWidth(htmlComponentRenderContext));
+                    height = String
+                            .valueOf(getDefaultImageHeight(htmlComponentRenderContext));
+                }
+            }
+
+            if (imageAccessor != null) {
+                String imageSrc = imageAccessor.resolveURL(facesContext, null,
+                        null);
+                if (imageSrc != null) {
+                    htmlWriter.writeAttribute("v:imageURL", imageSrc);
+                }
+            }
+
+            if (width != null) {
+                htmlWriter.writeAttribute("v:width", width);
+            }
+
+            if (height != null) {
+                htmlWriter.writeAttribute("v:height", height);
+            }
+
+            String text = submitWaitComponent.getText(facesContext);
+            if (text == null) {
+                text = getDefaultText(htmlComponentRenderContext);
+            }
+            if (text != null) {
+                htmlWriter.writeAttribute("v:text", text);
+            }
+
+            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+
+            declareLazyJavaScriptRenderer(htmlWriter);
+
+        } else {
+            htmlWriter.enableJavaScript();
+        }
+
+        super.encodeEnd(htmlWriter);
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        super.encodeJavaScript(jsWriter);
+
+        if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
+            return;
+        }
+
+        jsWriter.setIgnoreComponentInitialization();
+
+        String varName = jsWriter.getJavaScriptRenderContext()
+                .allocateVarName();
+        jsWriter.setComponentVarName(varName);
+
+        SubmitWaitComponent submitWaitComponent = (SubmitWaitComponent) jsWriter
+                .getComponentRenderContext().getComponent();
+
+        jsWriter.write(varName).write('=').writeCall("f_waitingShell",
+                "f_newInstance");
+
+        jsWriter.writeln(");");
 
         IContentAccessor imageAccessor = null;
 
-        if (submitWaitComponent.isImageURLSetted()) {
+        FacesContext facesContext = jsWriter.getFacesContext();
 
+        String width = submitWaitComponent.getWidth(facesContext);
+        String height = submitWaitComponent.getHeight(facesContext);
+
+        if (submitWaitComponent.isImageURLSetted()) {
             IContentAccessors contentAccessors = submitWaitComponent
                     .getImageAccessors(facesContext);
 
@@ -73,11 +164,16 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
             }
         }
 
+        IHtmlComponentRenderContext htmlComponentRenderContext = jsWriter
+                .getHtmlComponentRenderContext();
+
         if (imageAccessor == null) {
-            imageAccessor = getDefaultImageAccessor(htmlWriter);
+            imageAccessor = getDefaultImageAccessor(htmlComponentRenderContext);
             if (imageAccessor != null) {
-                width = String.valueOf(getDefaultImageWidth(htmlWriter));
-                height = String.valueOf(getDefaultImageHeight(htmlWriter));
+                width = String
+                        .valueOf(getDefaultImageWidth(htmlComponentRenderContext));
+                height = String
+                        .valueOf(getDefaultImageHeight(htmlComponentRenderContext));
             }
         }
 
@@ -85,50 +181,50 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
             String imageSrc = imageAccessor
                     .resolveURL(facesContext, null, null);
             if (imageSrc != null) {
-                htmlWriter.writeAttribute("v:imageURL", imageSrc);
+                jsWriter.writeMethodCall("f_setImageURL").writeString(imageSrc)
+                        .writeln(");");
             }
         }
 
         if (width != null) {
-            htmlWriter.writeAttribute("v:width", width);
+            jsWriter.writeMethodCall("f_setWidth").write(width).writeln(");");
         }
 
         if (height != null) {
-            htmlWriter.writeAttribute("v:height", height);
+            jsWriter.writeMethodCall("f_setHeight").write(height).writeln(");");
         }
 
         String text = submitWaitComponent.getText(facesContext);
         if (text == null) {
-            text = getDefaultText(htmlWriter);
+            text = getDefaultText(htmlComponentRenderContext);
         }
         if (text != null) {
-            htmlWriter.writeAttribute("v:text", text);
+            jsWriter.writeMethodCall("f_setText").writeString(text).writeln(
+                    ");");
         }
 
-        htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-
-        declareLazyJavaScriptRenderer(htmlWriter);
-
-        super.encodeEnd(htmlWriter);
+        jsWriter.writeMethodCall("f_installShowOnSubmit").writeln(");");
     }
 
-    protected String getDefaultText(IHtmlWriter htmlWriter) {
+    protected String getDefaultText(IHtmlComponentRenderContext htmlWriter) {
         return null;
     }
 
-    protected IContentAccessor getDefaultImageAccessor(IHtmlWriter htmlWriter) {
-        return htmlWriter.getHtmlComponentRenderContext()
-                .getHtmlRenderContext().getHtmlProcessContext()
-                .getStyleSheetContentAccessor(DEFAULT_SUBMIT_WAIT_IMAGE_URL,
-                        null);
+    protected IContentAccessor getDefaultImageAccessor(
+            IHtmlComponentRenderContext componentRenderContext) {
+        return componentRenderContext.getHtmlRenderContext()
+                .getHtmlProcessContext().getStyleSheetContentAccessor(
+                        DEFAULT_SUBMIT_WAIT_IMAGE_URL, null);
 
     }
 
-    protected int getDefaultImageWidth(IHtmlWriter htmlWriter) {
+    protected int getDefaultImageWidth(
+            IHtmlComponentRenderContext componentRenderContext) {
         return DEFAULT_SUBMIT_WAIT_IMAGE_WIDTH;
     }
 
-    protected int getDefaultImageHeight(IHtmlWriter htmlWriter) {
+    protected int getDefaultImageHeight(
+            IHtmlComponentRenderContext componentRenderContext) {
         return DEFAULT_SUBMIT_WAIT_IMAGE_HEIGHT;
     }
 
@@ -136,7 +232,8 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
         return JavaScriptClasses.WAITING_SHELL;
     }
 
-    protected boolean sendCompleteComponent() {
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
         return false;
     }
 

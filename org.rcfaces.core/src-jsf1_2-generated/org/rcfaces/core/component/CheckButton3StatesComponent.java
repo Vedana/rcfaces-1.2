@@ -139,7 +139,7 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
 	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+		return engine.getIntProperty(Properties.TEXT_POSITION,IHorizontalTextPositionCapability.DEFAULT_POSITION, facesContext);
 	}
 
 	/**

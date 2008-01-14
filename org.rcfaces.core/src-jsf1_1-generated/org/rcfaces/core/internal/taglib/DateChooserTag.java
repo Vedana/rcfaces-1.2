@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.DateChooserComponent;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.DateChooserComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DateChooserTag extends AbstractCalendarTag implements Tag {
 
@@ -30,6 +30,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 	private String imageWidth;
 	private String valueChangeListeners;
 	private String forValue;
+	private String calendarLayout;
 	private String forValueFormat;
 	private String homeDate;
 	private String homeDateLabel;
@@ -133,6 +134,14 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		this.forValue = forValue;
 	}
 
+	public final String getCalendarLayout() {
+		return calendarLayout;
+	}
+
+	public final void setCalendarLayout(String calendarLayout) {
+		this.calendarLayout = calendarLayout;
+	}
+
 	public final void setForValueFormat(String forValueFormat) {
 		this.forValueFormat = forValueFormat;
 	}
@@ -161,6 +170,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  forValue='"+forValue+"'");
+			LOG.debug("  calendarLayout='"+calendarLayout+"'");
 			LOG.debug("  forValueFormat='"+forValueFormat+"'");
 			LOG.debug("  homeDate='"+homeDate+"'");
 			LOG.debug("  homeDateLabel='"+homeDateLabel+"'");
@@ -292,6 +302,16 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (calendarLayout != null) {
+			if (isValueReference(calendarLayout)) {
+				ValueBinding vb = application.createValueBinding(calendarLayout);
+				component.setValueBinding(Properties.CALENDAR_LAYOUT, vb);
+
+			} else {
+				component.setCalendarLayout(calendarLayout);
+			}
+		}
+
 		if (forValueFormat != null) {
 			if (isValueReference(forValueFormat)) {
 				ValueBinding vb = application.createValueBinding(forValueFormat);
@@ -336,6 +356,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		imageWidth = null;
 		valueChangeListeners = null;
 		forValue = null;
+		calendarLayout = null;
 		forValueFormat = null;
 		homeDate = null;
 		homeDateLabel = null;

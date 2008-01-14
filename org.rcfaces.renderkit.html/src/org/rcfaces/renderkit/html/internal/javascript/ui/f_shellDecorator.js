@@ -265,7 +265,12 @@ var __members = {
 			this._titleMoveButton=undefined;
 			
 			titleMoveButton._shellDecorator=undefined;
-			titleMoveButton.onmousedown=null;
+			
+			try {
+				titleMoveButton.onmousedown=null;
+			} catch (x) {
+				// Le composant peut ne plus être rattaché !
+			}
 		}
 		
 		this.f_super(arguments);

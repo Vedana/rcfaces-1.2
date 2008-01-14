@@ -26,12 +26,12 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.component.UIData2;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.AbstractGridRenderer;
 
 /**
@@ -72,9 +72,11 @@ public class AdditionalInformationService extends AbstractHtmlService {
 
             componentId = HtmlTools.computeComponentId(facesContext,
                     componentId);
-            UIComponent component = ComponentTools.getForComponent(
-                    facesContext, componentId, viewRoot);
-            if (component == null) {
+
+            ILocalizedComponent localizedComponent = HtmlTools
+                    .localizeComponent(facesContext, componentId);
+
+            if (localizedComponent == null) {
                 AbstractHtmlService.sendJsError(facesContext, componentId,
                         INVALID_PARAMETER_SERVICE_ERROR,
                         "Can not find component '" + componentId + "'.", null);
@@ -82,82 +84,92 @@ public class AdditionalInformationService extends AbstractHtmlService {
                 return;
             }
 
-            if ((component instanceof IGridComponent) == false) {
-                AbstractHtmlService.sendJsError(facesContext, componentId,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find IAdditionalInformationProvider (id='"
-                                + componentId + "').", null);
-                return;
-            }
-
-            String rowValue = (String) parameters.get("rowValue");
-            if (rowValue == null) {
-                AbstractHtmlService.sendJsError(facesContext, null,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find 'rowValue' parameter.", null);
-                return;
-            }
-
-            String rowIndex = (String) parameters.get("rowIndex");
-            if (rowIndex == null) {
-                AbstractHtmlService.sendJsError(facesContext, null,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find 'rowIndex' parameter.", null);
-                return;
-            }
-
-            AbstractGridRenderer gridRenderer = getGridRenderer(facesContext,
-                    (IGridComponent) component);
-            if (gridRenderer == null) {
-                sendJsError(facesContext, componentId,
-                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find grid renderer. (gridId='" + componentId
-                                + "')", null);
-                return;
-            }
-
-            decodeSubComponents(facesContext, (IGridComponent) component,
-                    parameters, rowIndex);
-
-            ServletResponse response = (ServletResponse) facesContext
-                    .getExternalContext().getResponse();
-
-            setNoCache(response);
-            response.setContentType(IHtmlRenderContext.HTML_TYPE + "; charset="
-                    + RESPONSE_CHARSET);
-            setCameliaResponse(response, ADDITIONAL_INFORMATION_SERVICE_VERSION);
-
-            boolean useGzip = canUseGzip(facesContext);
-
-            PrintWriter printWriter = null;
+            UIComponent component = localizedComponent.getComponent();
 
             try {
-                if (useGzip == false) {
-                    printWriter = response.getWriter();
-
-                } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response);
-
-                    OutputStream outputStream = response.getOutputStream();
-
-                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                            outputStream, DEFAULT_BUFFER_SIZE);
-
-                    Writer writer = new OutputStreamWriter(gzipOutputStream,
-                            RESPONSE_CHARSET);
-
-                    printWriter = new PrintWriter(writer, false);
+                if ((component instanceof IGridComponent) == false) {
+                    AbstractHtmlService.sendJsError(facesContext, componentId,
+                            INVALID_PARAMETER_SERVICE_ERROR,
+                            "Can not find IAdditionalInformationProvider (id='"
+                                    + componentId + "').", null);
+                    return;
                 }
 
-                writeAdditionalInformations(facesContext, printWriter,
-                        (IGridComponent) component, gridRenderer, rowValue,
-                        rowIndex);
+                String rowValue = (String) parameters.get("rowValue");
+                if (rowValue == null) {
+                    AbstractHtmlService.sendJsError(facesContext, null,
+                            INVALID_PARAMETER_SERVICE_ERROR,
+                            "Can not find 'rowValue' parameter.", null);
+                    return;
+                }
+
+                String rowIndex = (String) parameters.get("rowIndex");
+                if (rowIndex == null) {
+                    AbstractHtmlService.sendJsError(facesContext, null,
+                            INVALID_PARAMETER_SERVICE_ERROR,
+                            "Can not find 'rowIndex' parameter.", null);
+                    return;
+                }
+
+                AbstractGridRenderer gridRenderer = getGridRenderer(
+                        facesContext, (IGridComponent) component);
+                if (gridRenderer == null) {
+                    sendJsError(
+                            facesContext,
+                            componentId,
+                            AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                            "Can not find grid renderer. (gridId='"
+                                    + componentId + "')", null);
+                    return;
+                }
+
+                decodeSubComponents(facesContext, (IGridComponent) component,
+                        parameters, rowIndex);
+
+                ServletResponse response = (ServletResponse) facesContext
+                        .getExternalContext().getResponse();
+
+                setNoCache(response);
+                response.setContentType(IHtmlRenderContext.HTML_TYPE
+                        + "; charset=" + RESPONSE_CHARSET);
+                setCameliaResponse(response,
+                        ADDITIONAL_INFORMATION_SERVICE_VERSION);
+
+                boolean useGzip = canUseGzip(facesContext);
+
+                PrintWriter printWriter = null;
+
+                try {
+                    if (useGzip == false) {
+                        printWriter = response.getWriter();
+
+                    } else {
+                        ConfiguredHttpServlet
+                                .setGzipContentEncoding((HttpServletResponse) response);
+
+                        OutputStream outputStream = response.getOutputStream();
+
+                        GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+                                outputStream, DEFAULT_BUFFER_SIZE);
+
+                        Writer writer = new OutputStreamWriter(
+                                gzipOutputStream, RESPONSE_CHARSET);
+
+                        printWriter = new PrintWriter(writer, false);
+                    }
+
+                    writeAdditionalInformations(facesContext, printWriter,
+                            (IGridComponent) component, gridRenderer, rowValue,
+                            rowIndex);
+
+                } finally {
+                    if (printWriter != null) {
+                        printWriter.close();
+                    }
+                }
 
             } finally {
-                if (printWriter != null) {
-                    printWriter.close();
-                }
+                localizedComponent.end();
             }
 
         } catch (IOException ex) {

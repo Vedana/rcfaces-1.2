@@ -8,17 +8,53 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+ 
+var __statics = {
+	
+	/**
+	 * @field public static final number
+	 */
+    SHORT_LAYOUT: 1,
+
+ 	/**
+	 * @field public static final number
+	 */
+    MEDIUM_LAYOUT: 2,
+
+ 	/**
+	 * @field public static final number
+	 */
+    LONG_LAYOUT: 3,
+
+ 	/**
+	 * @field public static final number
+	 */
+    FULL_LAYOUT: 4,
+
+ 	/**
+	 * @field public static final number
+	 */
+    DEFAULT_LAYOUT: 2
+}
 
 var __members = {
 	
 	f_calendar: function() {
 		this.f_super(arguments);
-
-		this._calendar=f_calendarObject.CreateCalendarFromComponent(this, 
-			f_calendarObject.YEAR_CURSOR_LAYOUT | 
-			f_calendarObject.MONTH_LIST_LAYOUT |
-			f_calendarObject.DAY_LIST_LAYOUT |
-			f_calendarObject.UNIT_CURSOR_LAYOUT);
+		
+		var layout;
+		switch(f_core.GetNumberAttribute(this, "v:layout", f_calendar.DEFAULT_LAYOUT)) {
+		default:		
+			layout=f_calendarObject.YEAR_CURSOR_LAYOUT | 
+				f_calendarObject.MONTH_LIST_LAYOUT |
+				f_calendarObject.DAY_LIST_LAYOUT |
+				f_calendarObject.UNIT_CURSOR_LAYOUT |
+				f_calendarObject.SELECT_DAY_LAYOUT |
+				f_calendarObject.SELECT_WEEK_LAYOUT;
+			break;
+		}
+		
+		this._calendar=f_calendarObject.CreateCalendarFromComponent(this, layout);
 	},
 	
 	f_finalize: function() {
@@ -66,4 +102,9 @@ var __members = {
 	}
 }
  
-new f_class("f_calendar", null, null, __members, f_component, fa_readOnly, fa_disabled, fa_itemsWrapper);
+new f_class("f_calendar", {
+	extend: f_component,
+	aspects: [ fa_readOnly, fa_disabled, fa_itemsWrapper ],
+	statics: __statics,
+	members: __members
+});

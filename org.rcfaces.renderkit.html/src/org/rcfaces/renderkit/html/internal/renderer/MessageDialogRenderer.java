@@ -13,6 +13,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -39,7 +40,8 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
         // return null;
     }
 
-    protected boolean sendCompleteComponent() {
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
         return false;
     }
 

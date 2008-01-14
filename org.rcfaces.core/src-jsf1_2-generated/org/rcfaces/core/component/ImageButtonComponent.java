@@ -6,6 +6,7 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import javax.faces.convert.Converter;
 import javax.el.ValueExpression;
 import java.util.HashSet;
@@ -207,7 +208,7 @@ public class ImageButtonComponent extends ButtonComponent implements
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
 	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+		return engine.getIntProperty(Properties.TEXT_POSITION,IHorizontalTextPositionCapability.DEFAULT_POSITION, facesContext);
 	}
 
 	/**

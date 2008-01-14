@@ -504,7 +504,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @overided
+	 * @override
 	 */
 	f_performErrorEvent: function(param, messageCode, message) {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);

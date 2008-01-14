@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 
 /**
  * 
@@ -58,7 +59,8 @@ public class ClientValidationRenderer extends AbstractJavaScriptRenderer {
         return null;
     }
 
-    protected boolean sendCompleteComponent() {
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
         return false;
     }
 }

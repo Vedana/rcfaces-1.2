@@ -1,18 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ButtonComponent;
-import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
-import javax.faces.el.ValueBinding;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
-import java.util.HashSet;
-import java.util.Set;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import java.util.Arrays;
-import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import java.util.HashSet;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.component.ButtonComponent;
+import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
  * <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
@@ -35,7 +36,7 @@ public class ImageButtonComponent extends ButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
 	}
 
 	public ImageButtonComponent() {
@@ -207,7 +208,7 @@ public class ImageButtonComponent extends ButtonComponent implements
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
 	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+		return engine.getIntProperty(Properties.TEXT_POSITION,IHorizontalTextPositionCapability.DEFAULT_POSITION, facesContext);
 	}
 
 	/**
@@ -268,17 +269,17 @@ public class ImageButtonComponent extends ButtonComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public IContentAccessors getImageAccessors(FacesContext facesContext) {
-
-
-			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
-		
-	}
-
 	public IContentAccessors getImageAccessors() {
 
 
 			return getImageAccessors(null);
+		
+	}
+
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 

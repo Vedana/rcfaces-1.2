@@ -97,7 +97,7 @@ var __statics = {
 					break;
 				}
 				if (nb<3) { // MM
-					ret+=(m>8)?(m+1):"0"+(m+1);
+					ret+=(m>8)?(m+1):("0"+(m+1));
 					break;
 				}
 					
@@ -111,7 +111,7 @@ var __statics = {
 					break;
 				}
 				
-				ret+=(d>9)?d:"0"+d;
+				ret+=(d>9)?(d):("0"+d);
 				break;
 	
 			case "E":

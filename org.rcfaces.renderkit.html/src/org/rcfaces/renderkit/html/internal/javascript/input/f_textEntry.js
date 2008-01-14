@@ -67,6 +67,8 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @param Event evt
+	 * @return void
 	 */
 	f_performSelectionEvent: function(evt) {
 		if (this.f_isDisabled()) {

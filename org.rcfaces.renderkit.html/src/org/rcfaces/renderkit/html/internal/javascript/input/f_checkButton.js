@@ -121,7 +121,6 @@ var __members = {
 	 * @return void
 	 */
 	f_serialize: function() {
-		
 		this.f_serializeValue();
 		
 		this.f_super(arguments);

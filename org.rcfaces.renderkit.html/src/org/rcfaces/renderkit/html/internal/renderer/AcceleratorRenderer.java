@@ -11,6 +11,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.KeyTools;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
@@ -95,7 +96,8 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
         return nameSpace.getKeyPressEventName();
     }
 
-    protected boolean sendCompleteComponent() {
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
         return false;
     }
 }

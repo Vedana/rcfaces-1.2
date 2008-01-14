@@ -24,6 +24,8 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
 
     private static final String LF = "\n";
 
+    private boolean ignoreComponentInitialization;
+
     public IJavaScriptWriter writeSymbol(String symbol) throws WriterException {
         int idx = symbol.indexOf('.');
 
@@ -32,8 +34,7 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         if (idx >= 0) {
             className = symbol.substring(0, idx);
 
-            write(convertSymbol(null, className));
-            write('.');
+            write(convertSymbol(null, className)).write('.');
 
             symbol = symbol.substring(idx + 1);
         }
@@ -54,11 +55,9 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
         }
 
         String converted = convertSymbol(null, object);
-        write(converted);
-        write('.');
+        write(converted).write('.');
 
-        write(convertSymbol(converted, symbol));
-        write('(');
+        write(convertSymbol(converted, symbol)).write('(');
 
         return this;
     }
@@ -82,9 +81,7 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
             throw new FacesException("Component var name is not defined !");
         }
         write(componentVarName); // Pas de convertion !
-        write('.');
-        write(convertSymbol(null, symbol));
-        write('(');
+        write('.').write(convertSymbol(null, symbol)).write('(');
 
         return this;
     }
@@ -97,9 +94,7 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
             LOG.debug("Write constructor symbol='" + symbol + "'.");
         }
 
-        write("new ");
-        write(convertSymbol(null, symbol));
-        write('(');
+        write("new ").write(convertSymbol(null, symbol)).write('(');
 
         return this;
     }
@@ -164,5 +159,13 @@ public abstract class AbstractJavaScriptWriter implements IJavaScriptWriter {
     }
 
     protected abstract String convertSymbol(String className, String memberName);
+
+    public void setIgnoreComponentInitialization() {
+        ignoreComponentInitialization = true;
+    }
+
+    public boolean isIgnoreComponentInitialization() {
+        return ignoreComponentInitialization;
+    }
 
 }

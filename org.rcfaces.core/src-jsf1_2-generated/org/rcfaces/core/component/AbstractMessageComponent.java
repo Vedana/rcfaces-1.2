@@ -65,7 +65,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","visible","marginLeft","backgroundColor","for","errorListener","propertyChangeListener","helpURL","height","mouseOverListener","hiddenMode","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","showDetail","initListener","marginBottom","toolTipText","y","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","visible","for","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","height","mouseOverListener","hiddenMode","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","showDetail","initListener","marginBottom","toolTipText","y","x","margins"}));
 	}
 
 
@@ -723,7 +723,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
 	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+		return engine.getIntProperty(Properties.HIDDEN_MODE,IHiddenModeCapability.DEFAULT_HIDDEN_MODE, facesContext);
 	}
 
 	/**

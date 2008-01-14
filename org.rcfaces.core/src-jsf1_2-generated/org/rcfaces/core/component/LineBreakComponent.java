@@ -122,7 +122,7 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
 	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+		return engine.getIntProperty(Properties.HIDDEN_MODE,IHiddenModeCapability.DEFAULT_HIDDEN_MODE, facesContext);
 	}
 
 	/**

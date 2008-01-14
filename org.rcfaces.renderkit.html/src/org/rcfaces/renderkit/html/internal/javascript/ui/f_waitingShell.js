@@ -56,11 +56,10 @@ var __members = {
 				this.f_setText(text);
 			}
 
-			var self=this;
-			var submitCb=function() {
-				self.f_open();
+			var visible=f_core.GetBooleanAttribute(this, "v:visible", true);
+			if (visible) {
+				this.f_installShowOnSubmit();
 			}
-			f_core.AddPostSubmitListener(submitCb);
 		}
 	},
 	/*
@@ -71,6 +70,17 @@ var __members = {
 	},
 	*/
 
+	/**
+	 * @method public
+	 * @return void
+	 */
+	f_installShowOnSubmit: function() {
+		var self=this;
+		var submitCb=function() {
+			self.f_open();
+		}
+		f_core.AddPostSubmitListener(submitCb);
+	},
 	/**
 	 *  <p>Fill a modal iFrame. 
 	 *  </p>

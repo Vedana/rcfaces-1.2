@@ -56,6 +56,8 @@ public class JavaScriptResponseWriter extends
 
     private IHtmlComponentRenderContext componentRenderContext;
 
+    private boolean ignoreComponentInitialization;
+
     public JavaScriptResponseWriter(FacesContext facesContext, PrintWriter out,
             String characterEncoding, UIComponent component, String componentId) {
         super(facesContext, component, componentId);
@@ -378,4 +380,11 @@ public class JavaScriptResponseWriter extends
         this.componentRenderContext = componentRenderContext;
     }
 
+    public boolean isIgnoreComponentInitialization() {
+        return ignoreComponentInitialization;
+    }
+
+    public void setIgnoreComponentInitialization() {
+        ignoreComponentInitialization = true;
+    }
 }

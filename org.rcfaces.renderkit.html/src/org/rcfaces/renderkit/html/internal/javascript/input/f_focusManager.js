@@ -35,116 +35,19 @@ var __statics={
 
 var __members={
 
-	f_focusManager: function() {
+	f_focusManager: function(focusId) {
 		this.f_super(arguments);
 		
 		if (!f_focusManager._Instance) {
 			f_focusManager._Instance=this;
 		}
 	
-		var ch=f_core.GetAttribute(this, "v:focusId");
-		if (ch) {
-			this._initFocusId =  ch;
-		}
-		
-		if (false) {
-			f_core.AddEventListener(document, "focus", function() {
-				var evt=f_core.GetJsEvent(this);
-				
-				var message="Focus: ";
-				
-				if (evt.srcElement) {
-					message+=" src="+evt.srcElement.tagName+"#"+evt.srcElement.id;
-				}
-				
-				if (evt.toElement) {
-					message+=" to="+evt.toElement.tagName+"#"+evt.toElement.id;
-				}
-				
-				f_core.Debug(f_focusManager, message);
-			});
-			
-			f_core.AddEventListener(document, "blur", function() {
-				var evt = f_core.GetJsEvent(this);
-				
-				var message="Blur: ";
-				
-				if (evt.srcElement) {
-					message+=" src="+evt.srcElement.tagName+"#"+evt.srcElement.id;
-				}
-				
-				if (evt.toElement) {
-					message+=" to="+evt.toElement.tagName+"#"+evt.toElement.id;
-				}
-				
-				f_core.Debug(f_focusManager, message);
-			});
-		}
-				
-		if (false && f_core.IsGecko()) {
-			var focusManager=this;
-			this._onFocus=function(event) {
-			
-				try {
-					var source=event.target;
-					if (source.f_link) {
-						source=source.f_link;
-						
-					} else if (!f_class.IsObjectInitialized(source) && source.nodeType==f_core.ELEMENT_NODE) {
-						var sourceId=source.id;
-						
-						var suffix=sourceId.lastIndexOf("::");
-						if (suffix>0) {
-							containerId=sourceId.substring(0, suffix);
-							
-						} else {						
-							containerId=f_core.GetAttribute(source, "v:container");
-						}
-						
-						if (containerId) {
-							source=document.getElementById(containerId);
-							if (!source) {
-								f_core.Error(f_focusManager, "_onfocus: Can not find containerId '"+containerId+"'.");
-							}
-						}
-					}
-	
-					f_core.Debug(f_focusManager, "_onfocus: target="+event.target+" currentTarget="+event.currentTarget+" source="+source+" ");
-					
-					var id=source.id;
-					if (!id) {
-						id=null;
-					}
-					
-					focusManager._recordFocus(id);
-					
-				} catch (x) {
-					f_core.Error(f_focusManager, "_onfocus: Exception on onFocus()",x);
-				}
-			}
-		
-			this._onBlur=function(event) {
-				try {
-					focusManager._recordFocus(null);
-					
-				} catch (x) {
-					f_core.Error(f_focusManager, "f_focusManager: Exception on onBlur()", x);
-				}
-			}
-			
-		
-			f_core.AddEventListener(document, "focus", this._onFocus, document);
-			f_core.AddEventListener(document, "blur", this._onBlur, document);
-		}
+		if (this.nodeType==f_core.ELEMENT_NODE) {	
+			focusId=f_core.GetAttribute(this, "v:focusId");
+		}		
+		this._initFocusId =  focusId;
 	},
 	f_finalize: function() {
-		if (this._onFocus) {
-			f_core.RemoveEventListener(document, "focus", this._onFocus, document);
-			this._onFocus=undefined;
-
-			f_core.RemoveEventListener(document, "blur", this._onBlur, document);
-			this._onBlur=undefined;
-		}
 
 		// this._initFocusId=undefined; // String
 		// this._focusId=undefined; // String

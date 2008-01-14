@@ -2,12 +2,15 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
+import org.rcfaces.core.component.capability.ICalendarLayoutCapability;
 import java.util.Date;
 import org.rcfaces.core.component.capability.IForCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import javax.el.ValueExpression;
@@ -36,13 +39,14 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
 public class DateChooserComponent extends AbstractCalendarComponent implements 
 	IImageButtonFamilly,
 	IValueChangeEventCapability,
-	IForCapability {
+	IForCapability,
+	ICalendarLayoutCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateChooser";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","for","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","valueChangeListener","homeDate","readOnly","forValueFormat","border","homeDateLabel","imageURL","disabled","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","for","borderType","textPosition","hoverImageURL","calendarLayout","selectedImageURL","selectionListener","valueChangeListener","homeDate","readOnly","forValueFormat","border","homeDateLabel","imageURL","disabled","imageWidth"}));
 	}
 
 	public DateChooserComponent() {
@@ -84,6 +88,13 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 
 			setTextPosition(((Integer)getTextPositionConverter().getAsObject(null, this, textPosition)).intValue());
+		
+	}
+
+	public void setCalendarLayout(String layout) {
+
+
+			setCalendarLayout(((Integer)CalendarLayoutConverter.SINGLETON.getAsObject(null, this, layout)).intValue());
 		
 	}
 
@@ -256,7 +267,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
 	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+		return engine.getIntProperty(Properties.TEXT_POSITION,IHorizontalTextPositionCapability.DEFAULT_POSITION, facesContext);
 	}
 
 	/**
@@ -364,6 +375,29 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	public void setFor(java.lang.String forValue) {
 		engine.setProperty(Properties.FOR, forValue);
+	}
+
+	public int getCalendarLayout() {
+		return getCalendarLayout(null);
+	}
+
+	/**
+	 * See {@link #getCalendarLayout() getCalendarLayout()} for more details
+	 */
+	public int getCalendarLayout(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CALENDAR_LAYOUT,ICalendarLayoutCapability.DEFAULT_LAYOUT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "calendarLayout" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCalendarLayoutSetted() {
+		return engine.isPropertySetted(Properties.CALENDAR_LAYOUT);
+	}
+
+	public void setCalendarLayout(int calendarLayout) {
+		engine.setProperty(Properties.CALENDAR_LAYOUT, calendarLayout);
 	}
 
 	/**

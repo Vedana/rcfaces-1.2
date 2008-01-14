@@ -235,6 +235,7 @@ var __statics = {
 	 */
 	RowMouseDblClick: function(evt) {
 		var dataGrid=this._dataGrid;
+		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
@@ -397,7 +398,7 @@ var __statics = {
 			
 			dataGrid._focus=true;
 		
-			if (this._selectable) {
+			if (dataGrid._selectable) {
 				if (!dataGrid._cursor) {
 					var currentSelection=dataGrid._currentSelection;
 					if (currentSelection.length) {
@@ -413,10 +414,10 @@ var __statics = {
 							dataGrid._initCursorValue=undefined;
 						}
 					}
-							
-					dataGrid._updateCurrentSelection();
 				}
-
+				
+				dataGrid._updateCurrentSelection();
+			
 			} else if (!dataGrid._cursor && dataGrid._table) {
 				var tr=f_grid.GetFirstRow(dataGrid._table);
 		
@@ -4105,7 +4106,7 @@ var __members = {
 			head.onmousedown=f_grid._Title_onMouseDown;
 			head.onmouseup=f_grid._Title_onMouseUp;
 			//head.onbeforeactivate=f_core.CancelJsEventHandler;
-			head.tabIndex=-1;
+			//head.tabIndex=-1;
 			
 			head._column=column;
 			column._head=head;
@@ -4153,6 +4154,8 @@ var __members = {
 			return;
 		}
 		
+		var t0=new Date().getTime();
+		
 		this._titleLayout=true;		
 
 		var ttr=f_grid.GetFirstRow(this._title); //f_core.GetFirstElementByTagName(dataGrid._title, "tr");
@@ -4173,15 +4176,15 @@ var __members = {
 			}
 		}
 
-		//var cols=f_grid._ListCols(this._title); //.getElementsByTagName("col");
-		var cols=this._title.getElementsByTagName("col");
+		var cols=f_grid._ListCols(this._title); //.getElementsByTagName("col");
+		//var cols=this._title.getElementsByTagName("col");
 		
 		var tcols=null;
 		var tds=null;
 		var columns=this._columns;
 		if (!columns[0]._tcol) {
-			//tcols=f_grid._ListCols(this._table); 
-			tcols=this._table.getElementsByTagName("col");
+			tcols=f_grid._ListCols(this._table); 
+			//tcols=this._table.getElementsByTagName("col");
 			// C'est déjà tr   var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr", false);
 			
 			if (tr) {
@@ -4189,7 +4192,17 @@ var __members = {
 				tds=ths; // déjà fait !   tr.childNodes; // + rapide ?  tr.getElementsByTagName("td");
 			}
 		}
-		
+	
+		var t1=new Date().getTime();
+	
+		var fakeCol=null;
+		var fakeCell=null;
+		if (!this._createFakeTH && (this._resizable || offsetWidth>clientWidth)) {
+			this._createFakeTH=true;
+			
+			fakeCol=doc.getElementById(this.id+"::fakeCol");
+		}
+				
 		var total=0;
 		var ci=0;
 		for(var i=0;i<ths.length;i++) {
@@ -4204,7 +4217,7 @@ var __members = {
 			total+=w;
 			
 			var cs;
-			for(;;ci) {
+			for(;;) {
 				cs=columns[ci++];
 				if (cs._head) {
 					break;
@@ -4223,30 +4236,11 @@ var __members = {
 			}			
 		}
 		
-		if (!this._createFakeTH && (this._resizable || offsetWidth>clientWidth)) {
-			this._createFakeTH=true;
-			
-			var col=doc.createElement("col");
-			col.style.width=scrollBarWidth+"px";
+		var t2=new Date().getTime();
 		
-			var colsPos=cols; //this._title.getElementsByTagName("col");
-			var lastCol=colsPos[colsPos.length-1];
-			if (!lastCol.nextSibling) {
-				f_core.AppendChild(this._title, col);
-			} else {
-				f_core.InsertBefore(this._title, col, lastCol.nextSibling);
-			}
 		
-			var th=doc.createElement("th");
-			var thClassName="f_grid_tcell";
-			//if (this.f_isDisabled()) {
-				//thClassName+=" "+thClassName+"_disabled"; // On part du f_grid_disabled
-			//}
-			th.className=thClassName;
-			th.innerHTML="&nbsp;";
-			
-			// var ths0=ttr; // + rapide ? f_grid.GetFirstRow(this._title, true); //f_core.GetFirstElementByTagName(dataGrid._title, "tr", true);
-			f_core.AppendChild(ttr, th);
+		if (fakeCol) {
+			fakeCol.style.width=scrollBarWidth+"px";
 			
 			total+=scrollBarWidth;
 			
@@ -4280,6 +4274,10 @@ var __members = {
 		}
 		
 		this._title.scrollLeft=this._scrollBody.scrollLeft;
+		
+		var t3=new Date().getTime();
+		
+		document.title="t1="+(t3-t0)+" t2="+(t2-t0)+" t3="+(t1-t0);
 	},
 	/**
 	 * @method protected

@@ -161,6 +161,8 @@ var __members = {
 		}
 	},
 	/**
+	 * 
+	 * 
 	 * @method protected
 	 * @param f_event event
 	 * @return voolean
@@ -185,6 +187,8 @@ var __members = {
 		return this.f_performImageSelection(event);
 	},
 	/**
+	 * 
+	 * 
 	 * @method protected
 	 * @param f_event event
 	 * @return boolean
@@ -236,6 +240,8 @@ var __members = {
 
 	/**
 	 * @method private
+	 * @param f_event event
+	 * @return boolean
 	 */
 	_onMouseOver: function(event) {
 		if (this.f_getEventLocked(event.f_getJsEvent(), false)) {
@@ -252,6 +258,7 @@ var __members = {
 
 	/**
 	 * @method private
+	 * @return boolean
 	 */
 	_onMouseOut: function() {
 		if (!this._hover) {
@@ -348,7 +355,6 @@ var __members = {
 			this.className=className;
 		}
 
-
 		f_core.Debug(f_imageButton, "_updateImage: Update class: "+className+" mouseDown="+this._mouseDown+" selected="+this._selected+" focus="+this._focus);
 /*		
 		var text=this._text;
@@ -407,6 +413,9 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
 		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
+	/**
+	 * 
+	 */
 	f_setDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.BLUR: 

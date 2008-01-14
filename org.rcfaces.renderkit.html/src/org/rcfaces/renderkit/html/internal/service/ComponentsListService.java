@@ -39,6 +39,7 @@ import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsListRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -109,9 +110,9 @@ public class ComponentsListService extends AbstractHtmlService {
 
         int rowIndex = Integer.parseInt(index_s);
 
-        UIComponent component = HtmlTools.getForComponent(facesContext,
-                componentsListId, viewRoot);
-        if (component == null) {
+        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+                facesContext, componentsListId);
+        if (localizedComponent == null) {
             // Cas special: la session a du expir�e ....
 
             sendJsError(facesContext, componentsListId,
@@ -122,98 +123,107 @@ public class ComponentsListService extends AbstractHtmlService {
             return;
         }
 
-        if ((component instanceof ComponentsListComponent) == false) {
-            sendJsError(facesContext, componentsListId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Invalid componentsListComponent (id='" + componentsListId
-                            + "').", null);
-            return;
-        }
+        UIComponent component = localizedComponent.getComponent();
 
-        ComponentsListComponent dgc = (ComponentsListComponent) component;
-
-        ISortedComponent sortedComponents[] = null;
-
-        /*
-         * String sortIndex_s = (String) parameters.get("sortIndex"); if
-         * (sortIndex_s != null) { DataColumnComponent columns[] =
-         * dgc.listColumns().toArray();
-         * 
-         * String sortOrder_s = (String) parameters.get("sortOrder");
-         * 
-         * StringTokenizer st1 = new StringTokenizer(sortIndex_s, ",");
-         * StringTokenizer st2 = null; if (sortOrder_s != null) { st2 = new
-         * StringTokenizer(sortOrder_s, ","); }
-         * 
-         * sortedComponents = new ISortedComponent[st1.countTokens()];
-         * 
-         * for (int i = 0; st1.hasMoreTokens(); i++) { String tok1 =
-         * st1.nextToken(); String tok2 = null; if (st2 != null) { tok2 =
-         * st2.nextToken(); }
-         * 
-         * int idx = Integer.parseInt(tok1); boolean order =
-         * "true".equalsIgnoreCase(tok2);
-         * 
-         * sortedComponents[i] = new DefaultSortedComponent(columns[idx], idx,
-         * order); } }
-         */
-
-        ComponentsListRenderer dgr = getDataListRenderer(facesContext, dgc);
-        if (dgr == null) {
-            sendJsError(facesContext, componentsListId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find componentsListRenderer. (dataListId='"
-                            + componentsListId + "')", null);
-            return;
-        }
-
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-        setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
-
-        boolean useGzip = canUseGzip(facesContext);
-
-        PrintWriter printWriter = null;
         try {
 
-            if (useGzip == false) {
-                printWriter = response.getWriter();
-
-            } else {
-                ConfiguredHttpServlet
-                        .setGzipContentEncoding((HttpServletResponse) response);
-
-                OutputStream outputStream = response.getOutputStream();
-
-                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                        outputStream, DEFAULT_BUFFER_SIZE);
-
-                Writer writer = new OutputStreamWriter(gzipOutputStream,
-                        RESPONSE_CHARSET);
-
-                printWriter = new PrintWriter(writer, false);
+            if ((component instanceof ComponentsListComponent) == false) {
+                sendJsError(facesContext, componentsListId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Invalid componentsListComponent (id='"
+                                + componentsListId + "').", null);
+                return;
             }
 
-            writeJs(facesContext, printWriter, dgc, componentsListId, dgr,
-                    rowIndex, sortedComponents, filterExpression);
+            ComponentsListComponent dgc = (ComponentsListComponent) component;
 
-        } catch (IOException ex) {
+            ISortedComponent sortedComponents[] = null;
 
-            throw new FacesException("Can not write componentsList rows !", ex);
+            /*
+             * String sortIndex_s = (String) parameters.get("sortIndex"); if
+             * (sortIndex_s != null) { DataColumnComponent columns[] =
+             * dgc.listColumns().toArray();
+             * 
+             * String sortOrder_s = (String) parameters.get("sortOrder");
+             * 
+             * StringTokenizer st1 = new StringTokenizer(sortIndex_s, ",");
+             * StringTokenizer st2 = null; if (sortOrder_s != null) { st2 = new
+             * StringTokenizer(sortOrder_s, ","); }
+             * 
+             * sortedComponents = new ISortedComponent[st1.countTokens()];
+             * 
+             * for (int i = 0; st1.hasMoreTokens(); i++) { String tok1 =
+             * st1.nextToken(); String tok2 = null; if (st2 != null) { tok2 =
+             * st2.nextToken(); }
+             * 
+             * int idx = Integer.parseInt(tok1); boolean order =
+             * "true".equalsIgnoreCase(tok2);
+             * 
+             * sortedComponents[i] = new DefaultSortedComponent(columns[idx],
+             * idx, order); } }
+             */
 
-        } catch (RuntimeException ex) {
-            LOG.error("Catch runtime exception !", ex);
+            ComponentsListRenderer dgr = getDataListRenderer(facesContext, dgc);
+            if (dgr == null) {
+                sendJsError(facesContext, componentsListId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Can not find componentsListRenderer. (dataListId='"
+                                + componentsListId + "')", null);
+                return;
+            }
 
-            throw ex;
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
+
+            setNoCache(response);
+            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+                    + "; charset=" + RESPONSE_CHARSET);
+            setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
+
+            boolean useGzip = canUseGzip(facesContext);
+
+            PrintWriter printWriter = null;
+            try {
+
+                if (useGzip == false) {
+                    printWriter = response.getWriter();
+
+                } else {
+                    ConfiguredHttpServlet
+                            .setGzipContentEncoding((HttpServletResponse) response);
+
+                    OutputStream outputStream = response.getOutputStream();
+
+                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+                            outputStream, DEFAULT_BUFFER_SIZE);
+
+                    Writer writer = new OutputStreamWriter(gzipOutputStream,
+                            RESPONSE_CHARSET);
+
+                    printWriter = new PrintWriter(writer, false);
+                }
+
+                writeJs(facesContext, printWriter, dgc, componentsListId, dgr,
+                        rowIndex, sortedComponents, filterExpression);
+
+            } catch (IOException ex) {
+
+                throw new FacesException("Can not write componentsList rows !",
+                        ex);
+
+            } catch (RuntimeException ex) {
+                LOG.error("Catch runtime exception !", ex);
+
+                throw ex;
+
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            }
 
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
-            }
+            localizedComponent.end();
         }
 
         facesContext.responseComplete();

@@ -23,6 +23,10 @@ public interface IJavaScriptWriter extends IComponentWriter {
 
     void setComponentVarName(String varName);
 
+    void setIgnoreComponentInitialization();
+
+    boolean isIgnoreComponentInitialization();
+
     /*
      * Peut ne pas être implementée !
      */

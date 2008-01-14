@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
+import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -134,6 +135,24 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
         writeAlternateText(htmlWriter, button);
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
+
+        if (Constants.KEEP_DISABLED_STATE) {
+            if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+                if (button.isDisabled(facesContext) && button.isSelected()) {
+                    htmlWriter.startElement(IHtmlWriter.INPUT);
+                    htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+
+                    String name = htmlWriter.getComponentRenderContext()
+                            .getComponentClientId()
+                            + "::value";
+                    htmlWriter.writeName(name);
+
+                    htmlWriter.writeValue("CHECKED");
+
+                    htmlWriter.endElement(IHtmlWriter.INPUT);
+                }
+            }
+        }
     }
 
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
@@ -184,26 +203,19 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
         CheckButtonComponent button = (CheckButtonComponent) element;
 
-        boolean isDisabled = button.isDisabled(facesContext);
-
         super.decode(context, element, componentData);
 
-        parseSelectedProperty(facesContext, button, componentData, isDisabled);
+        parseSelectedProperty(facesContext, button, componentData);
     }
 
     protected void parseSelectedProperty(FacesContext facesContext,
-            CheckButtonComponent button, IComponentData clientData,
-            boolean isDisabled) {
+            CheckButtonComponent button, IComponentData clientData) {
 
         boolean selected = false;
 
         String selectedProperty = clientData.getStringProperty("selected");
         if (selectedProperty != null) {
             selected = (selectedProperty.length() > 0);
-
-        } else if (isDisabled) {
-            // Pas d'état du composant ! (A cause du lazy mode)
-            return;
 
         } else {
             String values[] = clientData.getComponentParameters();
@@ -213,6 +225,14 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
                     selected = (values[i].length() > 0);
 
                     break;
+                }
+
+            } else {
+                // Pas d'état du composant ! (A cause du lazy mode)
+
+                String name = button.getClientId(facesContext) + "::value";
+                if (clientData.getParameter(name) != null) {
+                    selected = false;
                 }
             }
         }

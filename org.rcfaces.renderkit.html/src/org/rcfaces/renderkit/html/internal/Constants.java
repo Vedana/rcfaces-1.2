@@ -73,6 +73,8 @@ public class Constants {
 
     private static final String buildId;
 
+    public static final boolean KEEP_DISABLED_STATE = false;
+
     static {
         version = org.rcfaces.core.internal.Constants.searchVersion(
                 Constants.class, RCFACES_HTML_VERSION_SYSTEM_PARAMETER,

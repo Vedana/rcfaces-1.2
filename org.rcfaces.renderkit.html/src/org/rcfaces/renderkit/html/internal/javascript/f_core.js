@@ -3851,33 +3851,36 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static 
+	 * @param Object p
+	 * @param optional String sep
+	 * @return String
 	 */
 	EncodeObject: function(p, sep) {
 		if (!sep) {
 			sep="&";
 		}
 		
-		var d = "";
+		var d = new Array;
 		for (var i in p) {
-			if (d) { 
-				d+=sep;
+			if (d.length) { 
+				d.push(sep);
 			}
 			
-			d+=i+"=";
+			d.push(i, "=");
 			
 			var v=p[i];
 			if (v===null || v===undefined) {
-				d+="L";
+				d.push("L");
 				continue;
 			}
 
 			if (v===true) {
-				d+="T";
+				d.push("T");
 				continue;
 			}			
 
 			if (v===false) {
-				d+="F";
+				d.push("F");
 				continue;
 			}
 			
@@ -3888,7 +3891,7 @@ var f_core = {
 			
 			if (typeof(v)=="number") {
 				if (v==0) {
-					d+="0";
+					d.push("0");
 					continue;
 				}
 				
@@ -3900,34 +3903,34 @@ var f_core = {
 				}
 				
 				if (v<0.0) {
-					d+="-";
+					d.push("-");
 					v=-v;
 				}
 				
 			} else if (typeof(v)=="string") {
-				d+="S";
+				d.push("S");
 				
 			} else if (v instanceof Date) {
-				d+="D";
+				d.push("D");
 				v=f_core.SerializeDate(v);
 				
 			} else if (v instanceof Document) {
-				d+="X";
+				d.push("X");
 				v=f_xml.Serialize(v);
 				
 			} else if (f_class.IsClassDefined("f_time") && (v instanceof f_time)) {
-				d+="M";
+				d.push("M");
 				v=f_time.SerializeTime(v);
 
 			} else {
-				f_core.Error(f_core, "Can not serialize '"+v+"'.");
+				f_core.Error(f_core, "EncodeObject: Can not serialize '"+v+"'.");
 				continue;
 			}
 			
-			d+=encodeURIComponent(v);
+			d.push(encodeURIComponent(v));
 		}
 	
-		return d;
+		return d.join('');
 	},
 	/**
 	 * @method hidden static
@@ -4021,7 +4024,7 @@ var f_core = {
 				data=undefined;
 			}
 			
-			f_core.Debug(f_core, "Deserialize attribute '"+name+"' = '"+data+"'");
+			f_core.Debug(f_core, "DecodeObject: Deserialize attribute '"+name+"' = '"+data+"'");
 			obj[name]=data;
 		}
 

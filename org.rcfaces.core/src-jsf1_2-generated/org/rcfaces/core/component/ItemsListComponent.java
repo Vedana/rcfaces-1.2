@@ -1,29 +1,30 @@
 package org.rcfaces.core.component;
 
 import javax.faces.component.NamingContainer;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import java.lang.String;
 import org.rcfaces.core.component.ToolBarComponent;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ITextPositionCapability;
-import java.util.HashSet;
-import org.rcfaces.core.internal.tools.ToolBarTools;
 import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.ITextPositionCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import java.util.HashSet;
+import java.util.Arrays;
+import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 public class ItemsListComponent extends AbstractInputComponent implements 
 	IInitEventCapability,
@@ -102,7 +103,7 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 * See {@link #getTextPosition() getTextPosition()} for more details
 	 */
 	public int getTextPosition(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TEXT_POSITION,0, facesContext);
+		return engine.getIntProperty(Properties.TEXT_POSITION,IHorizontalTextPositionCapability.DEFAULT_POSITION, facesContext);
 	}
 
 	/**

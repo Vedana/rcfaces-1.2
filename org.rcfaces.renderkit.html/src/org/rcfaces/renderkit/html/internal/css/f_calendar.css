@@ -90,7 +90,8 @@
 	background-position: -144px 0;
 }
 
-.f_calendar_year {
+.f_calendar_cursorYearLabel,
+.f_calendar_cursorMonthLabel {
 	font-size: 9pt;
 	font-weight: bold;
 	text-decoration: none;
@@ -98,7 +99,8 @@
 	display: block;
 }
 
-.f_calendar_year:hover {
+.f_calendar_cursorMonthLabel:hover,
+.f_calendar_cursorYearLabel:hover {
 	text-decoration: underline;
 }
 

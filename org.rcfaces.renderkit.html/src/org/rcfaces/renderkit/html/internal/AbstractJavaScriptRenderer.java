@@ -93,7 +93,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
     public void releaseJavaScript(IJavaScriptWriter writer)
             throws WriterException {
-        IComponentRenderContext componentRenderContext = writer
+        IHtmlComponentRenderContext componentRenderContext = writer
                 .getHtmlComponentRenderContext();
 
         IHtmlRenderContext renderContext = (IHtmlRenderContext) componentRenderContext
@@ -102,19 +102,21 @@ public abstract class AbstractJavaScriptRenderer extends
         IJavaScriptRenderContext javascriptRenderContext = renderContext
                 .getJavaScriptRenderContext();
 
+        boolean sendCompleteComponent = sendCompleteComponent(componentRenderContext);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Release Javascript javascriptInitialized="
                     + javascriptRenderContext.isInitialized() + " writer.open="
                     + writer.isOpened() + "  canUseLazyTag="
                     + renderContext.canUseLazyTag() + " sendComplete="
-                    + sendCompleteComponent());
+                    + sendCompleteComponent);
         }
 
         javascriptRenderContext.releaseComponentJavaScript(writer,
-                sendCompleteComponent(), this);
+                sendCompleteComponent, this);
     }
 
-    protected abstract boolean sendCompleteComponent();
+    protected abstract boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext);
 
     protected String getJavaScriptClassName() {
         return null;

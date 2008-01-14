@@ -35,8 +35,6 @@ var __members = {
 	f_setReadOnly: function(set) {
 		if (set!==false) {
 			set=true;
-		} else {
-			set=!!set;
 		}
 		
 		if (this.f_isReadOnly()==set) {

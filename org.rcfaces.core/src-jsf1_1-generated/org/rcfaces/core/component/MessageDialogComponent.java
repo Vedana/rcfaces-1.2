@@ -2,29 +2,29 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IDialogPriorityCapability;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import java.util.HashSet;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IDialogPriorityCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
+import java.lang.String;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 
 public class MessageDialogComponent extends CameliaInputComponent implements 
 	IImageCapability,
@@ -46,7 +46,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","text","visible","styleClass","width","dialogPriority","textDirection","selectionListener","immediate","title","height","hiddenMode","defaultValue","imageURL","waiRole","validationListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","imageURL","width","defaultValue","validationListener","title","waiRole","hiddenMode","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId"}));
 	}
 
 	public MessageDialogComponent() {
@@ -301,7 +301,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
 	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+		return engine.getIntProperty(Properties.HIDDEN_MODE,IHiddenModeCapability.DEFAULT_HIDDEN_MODE, facesContext);
 	}
 
 	/**

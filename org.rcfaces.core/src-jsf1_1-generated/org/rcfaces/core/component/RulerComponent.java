@@ -1,24 +1,24 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.component.Properties;
 import java.lang.String;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import javax.faces.el.ValueBinding;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Arrays;
+import org.rcfaces.core.internal.component.Properties;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IOrientationCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 
 /**
  * <p>The ruler Component is the &lt;HR&gt; HTML equivalent.</p>
@@ -47,7 +47,7 @@ public class RulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alignment","lookId","orientation","visible","marginLeft","marginTop","backgroundColor","marginRight","width","rendered","marginBottom","height","hiddenMode","foregroundColor","y","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","alignment","orientation","hiddenMode","rendered","foregroundColor","marginBottom","height","margins","y","visible","marginLeft","lookId","marginTop","backgroundColor","x"}));
 	}
 
 	public RulerComponent() {
@@ -306,7 +306,7 @@ public class RulerComponent extends CameliaBaseComponent implements
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
 	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+		return engine.getIntProperty(Properties.HIDDEN_MODE,IHiddenModeCapability.DEFAULT_HIDDEN_MODE, facesContext);
 	}
 
 	/**

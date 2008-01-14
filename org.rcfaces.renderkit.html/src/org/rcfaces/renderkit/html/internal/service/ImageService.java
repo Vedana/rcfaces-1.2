@@ -36,6 +36,7 @@ import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
@@ -93,9 +94,9 @@ public class ImageService extends AbstractHtmlService {
 
         String filterExpression = (String) parameters.get("filterExpression");
 
-        UIComponent component = HtmlTools.getForComponent(facesContext,
-                componentId, viewRoot);
-        if (component == null) {
+        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+                facesContext, componentId);
+        if (localizedComponent == null) {
             // Cas special: la session a du expir�e ....
 
             sendJsError(facesContext, componentId,
@@ -105,86 +106,96 @@ public class ImageService extends AbstractHtmlService {
             return;
         }
 
-        if ((component instanceof ImageComponent) == false) {
-            sendJsError(facesContext, componentId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Component can not be filtred. (not an ImageComponent)",
-                    null);
-            return;
-        }
-
-        ImageComponent imageComponent = (ImageComponent) component;
-
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        setCameliaResponse(response, IMAGE_SERVICE_VERSION);
-
-        boolean useGzip = canUseGzip(facesContext);
-
-        PrintWriter printWriter = null;
         try {
 
-            if (useGzip == false) {
-                printWriter = response.getWriter();
+            UIComponent component = localizedComponent.getComponent();
 
-            } else {
-                ConfiguredHttpServlet
-                        .setGzipContentEncoding((HttpServletResponse) response);
-
-                OutputStream outputStream = response.getOutputStream();
-
-                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                        outputStream, DEFAULT_BUFFER_SIZE);
-
-                Writer writer = new OutputStreamWriter(gzipOutputStream,
-                        RESPONSE_CHARSET);
-
-                printWriter = new PrintWriter(writer, false);
+            if ((component instanceof ImageComponent) == false) {
+                sendJsError(
+                        facesContext,
+                        componentId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Component can not be filtred. (not an ImageComponent)",
+                        null);
+                return;
             }
 
-            IFilterProperties filterProperties = HtmlTools
-                    .decodeFilterExpression(null, component, filterExpression);
+            ImageComponent imageComponent = (ImageComponent) component;
 
-            IImageAccessors contentAccessors = (IImageAccessors) imageComponent
-                    .getImageAccessors(facesContext);
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
 
-            IContentAccessor imageAccessor = contentAccessors
-                    .getImageAccessor();
+            setNoCache(response);
+            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+                    + "; charset=" + RESPONSE_CHARSET);
 
-            ImageContentInformation contentInformation = new ImageContentInformation();
+            setCameliaResponse(response, IMAGE_SERVICE_VERSION);
 
-            String url = null;
-            if (imageAccessor != null) {
-                url = imageAccessor.resolveURL(facesContext,
-                        contentInformation, filterProperties);
+            boolean useGzip = canUseGzip(facesContext);
+
+            PrintWriter printWriter = null;
+            try {
+
+                if (useGzip == false) {
+                    printWriter = response.getWriter();
+
+                } else {
+                    ConfiguredHttpServlet
+                            .setGzipContentEncoding((HttpServletResponse) response);
+
+                    OutputStream outputStream = response.getOutputStream();
+
+                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+                            outputStream, DEFAULT_BUFFER_SIZE);
+
+                    Writer writer = new OutputStreamWriter(gzipOutputStream,
+                            RESPONSE_CHARSET);
+
+                    printWriter = new PrintWriter(writer, false);
+                }
+
+                IFilterProperties filterProperties = HtmlTools
+                        .decodeFilterExpression(null, component,
+                                filterExpression);
+
+                IImageAccessors contentAccessors = (IImageAccessors) imageComponent
+                        .getImageAccessors(facesContext);
+
+                IContentAccessor imageAccessor = contentAccessors
+                        .getImageAccessor();
+
+                ImageContentInformation contentInformation = new ImageContentInformation();
+
+                String url = null;
+                if (imageAccessor != null) {
+                    url = imageAccessor.resolveURL(facesContext,
+                            contentInformation, filterProperties);
+                }
+
+                writeJs(facesContext, printWriter, imageComponent, componentId,
+                        url, contentInformation);
+
+            } catch (IOException ex) {
+
+                throw new FacesException(
+                        "Can not write dataGrid javascript rows !", ex);
+
+            } catch (RuntimeException ex) {
+                LOG.error("Catch runtime exception !", ex);
+
+                throw ex;
+
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
             }
-
-            writeJs(facesContext, printWriter, imageComponent, componentId,
-                    url, contentInformation);
-
-        } catch (IOException ex) {
-
-            throw new FacesException(
-                    "Can not write dataGrid javascript rows !", ex);
-
-        } catch (RuntimeException ex) {
-            LOG.error("Catch runtime exception !", ex);
-
-            throw ex;
 
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
-            }
+            localizedComponent.end();
         }
 
         facesContext.responseComplete();
-
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
@@ -204,8 +215,7 @@ public class ImageService extends AbstractHtmlService {
         String varId = jsWriter.getComponentVarName();
 
         jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentId).writeln(
-                ");");
+                "GetElementByClientId").writeString(componentId).writeln(");");
 
         int width = imageContentInformation.getImageWidth();
         int height = imageContentInformation.getImageHeight();

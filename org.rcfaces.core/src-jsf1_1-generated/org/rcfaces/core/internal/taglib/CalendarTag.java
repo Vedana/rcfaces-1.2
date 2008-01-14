@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.CalendarComponent;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.CalendarComponent;
+import javax.faces.application.Application;
 
 public class CalendarTag extends AbstractCalendarTag implements Tag {
 
@@ -19,6 +19,7 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(CalendarTag.class);
 
 	private String border;
+	private String calendarLayout;
 	private String mode;
 	public String getComponentType() {
 		return CalendarComponent.COMPONENT_TYPE;
@@ -30,6 +31,14 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 
 	public final void setBorder(String border) {
 		this.border = border;
+	}
+
+	public final String getCalendarLayout() {
+		return calendarLayout;
+	}
+
+	public final void setCalendarLayout(String calendarLayout) {
+		this.calendarLayout = calendarLayout;
 	}
 
 	public final String getMode() {
@@ -46,6 +55,7 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  border='"+border+"'");
+			LOG.debug("  calendarLayout='"+calendarLayout+"'");
 			LOG.debug("  mode='"+mode+"'");
 		}
 		super.setProperties(uiComponent);
@@ -71,6 +81,16 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (calendarLayout != null) {
+			if (isValueReference(calendarLayout)) {
+				ValueBinding vb = application.createValueBinding(calendarLayout);
+				component.setValueBinding(Properties.CALENDAR_LAYOUT, vb);
+
+			} else {
+				component.setCalendarLayout(calendarLayout);
+			}
+		}
+
 		if (mode != null) {
 			if (isValueReference(mode)) {
 				ValueBinding vb = application.createValueBinding(mode);
@@ -84,6 +104,7 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 
 	public void release() {
 		border = null;
+		calendarLayout = null;
 		mode = null;
 
 		super.release();

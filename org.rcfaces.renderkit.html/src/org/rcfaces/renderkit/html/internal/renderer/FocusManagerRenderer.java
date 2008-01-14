@@ -15,7 +15,9 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -39,20 +41,46 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
+        if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode() == false) {
 
-        String focusId = focusManagerComponent.getFocusId(facesContext);
-        if (focusId != null) {
-            htmlWriter.writeAttribute("v:focusId", focusId);
+            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            writeHtmlAttributes(htmlWriter);
+            writeJavaScriptAttributes(htmlWriter);
+
+            String focusId = focusManagerComponent.getFocusId(facesContext);
+            if (focusId != null) {
+                htmlWriter.writeAttribute("v:focusId", focusId);
+            }
+
+            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+
+            declareLazyJavaScriptRenderer(htmlWriter);
         }
 
-        htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-
-        declareLazyJavaScriptRenderer(htmlWriter);
-
         super.encodeEnd(htmlWriter);
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        super.encodeJavaScript(jsWriter);
+
+        if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
+            return;
+        }
+
+        FocusManagerComponent focusManagerComponent = (FocusManagerComponent) jsWriter
+                .getComponentRenderContext().getComponent();
+
+        jsWriter.writeCall("f_focusManager", "f_newInstance");
+
+        String focusId = focusManagerComponent.getFocusId(jsWriter
+                .getFacesContext());
+        if (focusId != null) {
+            jsWriter.writeString(focusId);
+        }
+
+        jsWriter.writeln(");");
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -85,7 +113,8 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
         return JavaScriptClasses.FOCUS_MANAGER;
     }
 
-    protected boolean sendCompleteComponent() {
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
         return false;
     }
 }

@@ -107,6 +107,16 @@ var __statics = {
 	UNIT_CURSOR_LAYOUT: 0x20,
 
 	/**
+	 * @field hidden static final number
+	 */
+	SELECT_DAY_LAYOUT: 0x40,
+
+	/**
+	 * @field hidden static final number
+	 */
+	SELECT_WEEK_LAYOUT: 0x80,
+
+	/**
 	 * @field private static final number
 	 */
 	_DEFAULT_UNIT: 0,
@@ -1222,6 +1232,11 @@ var __members = {
 			this._nextMonthImage=undefined;	// HtmlImageElement
 			this._monthText=undefined; // TextNode
 		}
+	
+		if (this._monthCursors) {
+			f_calendarObject._DestroyButtons(this._monthCursors);
+			this._monthCursors=undefined;
+		}
 				
 		f_calendarObject._DestroyButtons(this._weekDayButtons);
 		this._weekDayButtons=undefined;
@@ -1591,7 +1606,8 @@ var __members = {
 		var tr=doc.createElement("tr");
 		f_core.AppendChild(tbody, tr);
 
-		if (!this._popupMode) {
+		var selectWeek=this._layout & f_calendarObject.SELECT_WEEK_LAYOUT;
+		if (selectWeek) {
 			var td=doc.createElement("td");
 			f_core.AppendChild(tr, td);
 		}
@@ -1600,6 +1616,7 @@ var __members = {
 
 		var locale=this._locale;
 
+		var selectDay=this._layout & f_calendarObject.SELECT_DAY_LAYOUT;
 		var dof=this._firstDayOfWeek;
 		for(var j=0;j<7;j++) {
 			var td=doc.createElement("td");
@@ -1607,7 +1624,7 @@ var __members = {
 			f_core.AppendChild(tr, td);
 				
 			var link;
-			if (!this._popupMode) {
+			if (selectDay) {
 				link=doc.createElement("a");
 				link.href=f_core.JAVASCRIPT_VOID;
 				link.onclick=f_calendarObject._OnWeekDayClick;
@@ -1646,7 +1663,7 @@ var __members = {
 				tr.className=className+"_rday";
 				f_core.AppendChild(tbody, tr);
 
-				if (!this._popupMode) {
+				if (selectWeek) {
 					var td=doc.createElement("td");
 					td.align="center";
 					f_core.AppendChild(tr, td);
@@ -1785,7 +1802,7 @@ var __members = {
 
 		var year=doc.createElement("a");
 		f_core.AppendChild(td, year);
-		year.className=className+"_year";
+		year.className=className+"_cursorYearLabel";
 		year.href=f_core.JAVASCRIPT_VOID;
 		year.onclick=f_calendarObject._OnYearClick;
 		year.onkeydown=f_calendarObject._OnYearKey;		
@@ -1822,7 +1839,7 @@ var __members = {
 	 * @method private
 	 */
 	_createMonthCursor: function(doc, component, className, blankImageURL) {			
-		this._monthButtons=new Array;
+		this._monthCursors=new Array;
 		
 		var table=doc.createElement("table");
 		table.align="center";
@@ -1843,7 +1860,7 @@ var __members = {
 		link.className=className+"_prevMonth";
 		f_core.AppendChild(td, link);
 		link.href=f_core.JAVASCRIPT_VOID;
-		this._monthButtons.push(link);
+		this._monthCursors.push(link);
 		link.onclick=f_calendarObject._OnPrevMonthClick;
 		link.onkeydown=f_calendarObject._OnMonthKey;
 		link._calendar=this;		
@@ -1862,7 +1879,7 @@ var __members = {
 
 		var month=doc.createElement("div");
 		f_core.AppendChild(td, month);
-		month.className=className+"_month";
+		month.className=className+"_cursorMonthLabel";
 		
 		var name=doc.createTextNode("");
 		f_core.AppendChild(month, name);
@@ -1875,7 +1892,7 @@ var __members = {
 		link.className=className+"_nextMonth";
 		f_core.AppendChild(td, link);
 		link.href=f_core.JAVASCRIPT_VOID;
-		this._monthButtons.push(link);
+		this._monthCursors.push(link);
 		link.onclick=f_calendarObject._OnNextMonthClick;
 		link.onkeydown=f_calendarObject._OnMonthKey;
 		link._calendar=this;
@@ -1915,41 +1932,40 @@ var __members = {
 			this._yearText.data=date.getFullYear();
 		}
 		
+		var monthCursors=this._monthCursors;
+		if (monthCursors) {
+			var d=new Date(time);
+			d.setDate(1);
+			// Pas de title , y a rien a y mettre !				
+			var monthName=this._locale.f_getMonthName(d.getMonth(), f_locale.LONG);
+			this._monthText.data=f_core.UpperCaseFirstChar(monthName)+" "+date.getFullYear();
+	
+			d=new Date(d.getTime());
+			d.setMonth(d.getMonth()-1);
+			monthCursors[0]._date=d;
+			monthCursors[0].title=f_core.UpperCaseFirstChar(this._locale.f_getMonthName(d.getMonth(), f_locale.LONG))+" "+d.getFullYear();
+	
+			d=new Date(d.getTime());
+			d.setMonth(d.getMonth()+2);
+			monthCursors[1]._date=d;
+			monthCursors[1].title=f_core.UpperCaseFirstChar(this._locale.f_getMonthName(d.getMonth(), f_locale.LONG))+" "+d.getFullYear();
+		}
+		
 		var monthButtons=this._monthButtons;
 		if (monthButtons) {
-			if (this._popupMode) {
-				var d=new Date(time);
-				d.setDate(1);
-				// Pas de title , y a rien a y mettre !				
-				var monthName=this._locale.f_getMonthName(d.getMonth(), f_locale.LONG);
-				this._monthText.data=f_core.UpperCaseFirstChar(monthName)+" "+date.getFullYear();
-		
-				d=new Date(d.getTime());
-				d.setMonth(d.getMonth()-1);
-				monthButtons[0]._date=d;
-				monthButtons[0].title=f_core.UpperCaseFirstChar(this._locale.f_getMonthName(d.getMonth(), f_locale.LONG))+" "+d.getFullYear();
-		
-				d=new Date(d.getTime());
-				d.setMonth(d.getMonth()+2);
-				monthButtons[1]._date=d;
-				monthButtons[1].title=f_core.UpperCaseFirstChar(this._locale.f_getMonthName(d.getMonth(), f_locale.LONG))+" "+d.getFullYear();
+			var d=new Date(time);
+			for(var i=0;i<monthButtons.length;i++) {
+				var but=monthButtons[i];
 	
-				
-			} else {
-				var d=new Date(time);
-				for(var i=0;i<monthButtons.length;i++) {
-					var but=monthButtons[i];
-		
-					d.setDate(1);
-					d.setMonth(i);
-		
-					var t=d.getTime();
-					but._date=new Date(t);
-		
-					if (f_calendarObject._COMPUTE_TOOLTIP) {
-						but.title=f_calendarObject._LongFormatMonth(d, this._locale);
-					}
-				}
+				d.setDate(1);
+				d.setMonth(i);
+	
+				var t=d.getTime();
+				but._date=new Date(t);
+	
+				if (f_calendarObject._COMPUTE_TOOLTIP) {
+					but.title=f_calendarObject._LongFormatMonth(d, this._locale);
+				}	
 			}
 		}
 		
@@ -2015,7 +2031,7 @@ var __members = {
 		var dayButtons=this._dayButtons;
 		var itemDates=this._getItemDates();
 		var day=0;
-		var defaultStyleClass=this.className+"_day";
+		var defaultStyleClass=this._className+"_day";
 		for(;day<totalDay;day++) {
 			var but=dayButtons[day];
 			
@@ -2025,7 +2041,7 @@ var __members = {
 			but.firstChild.data=d.getDate();
 
 			var tooltip=null;
-			var styleClass=null;
+			var styleClass=defaultStyleClass;
 			
 			if (itemDates) {
 				var item=f_calendarObject._FindDateItem(itemDates, t);
@@ -2033,13 +2049,11 @@ var __members = {
 				if (item) {
 					tooltip=item._label;
 					
-					if (item._styleClass) {
-						styleClass=item._styleClass;
+					var itemStyleClass=item._styleClass;
+					if (itemStyleClass) {
+						styleClass+= " "+itemStyleClass;
 					}
 				}
-			}
-			if (!styleClass) {
-				styleClass=defaultStyleClass;
 			}
 
 			if (f_calendarObject._COMPUTE_TOOLTIP && !tooltip) {
@@ -2129,7 +2143,7 @@ var __members = {
 		}
 		
 		var monthButtons=this._monthButtons;
-		if (monthButtons && !this._popupMode) {
+		if (monthButtons) {
 			for(var i=0;i<monthButtons.length;i++) {
 				var but=monthButtons[i];
 	

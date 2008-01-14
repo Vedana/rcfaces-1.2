@@ -30,6 +30,7 @@ import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.ComboGridRenderer;
 import org.rcfaces.renderkit.html.internal.renderer.ComboGridRenderer.ComboGridRenderContext;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
@@ -79,9 +80,9 @@ public class ComboGridKeyService extends AbstractHtmlService {
 
         String filterExpression = (String) parameters.get("filterExpression");
 
-        UIComponent component = HtmlTools.getForComponent(facesContext,
-                componentClientId, viewRoot);
-        if (component == null) {
+        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+                facesContext, componentClientId);
+        if (localizedComponent == null) {
             // Cas special: la session a du expir�e ....
 
             sendJsError(facesContext, componentClientId,
@@ -91,73 +92,82 @@ public class ComboGridKeyService extends AbstractHtmlService {
             return;
         }
 
-        if ((component instanceof ComboGridComponent) == false) {
-            sendJsError(facesContext, componentClientId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Component is invalid. (not an ComboGridComponent)", null);
-            return;
-        }
-
-        ComboGridComponent comboGridComponent = (ComboGridComponent) component;
-
-        ComboGridRenderer comboGridRenderer = getComboGridRenderer(
-                facesContext, comboGridComponent);
-        if (comboGridRenderer == null) {
-            sendJsError(facesContext, componentClientId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find comboGridRenderer.", null);
-            return;
-        }
-
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        setCameliaResponse(response, COMBO_GRID_KEY_SERVICE_VERSION);
-
-        boolean useGzip = canUseGzip(facesContext);
-
-        PrintWriter printWriter = null;
         try {
 
-            if (useGzip == false) {
-                printWriter = response.getWriter();
+            UIComponent component = localizedComponent.getComponent();
 
-            } else {
-                ConfiguredHttpServlet
-                        .setGzipContentEncoding((HttpServletResponse) response);
-
-                OutputStream outputStream = response.getOutputStream();
-
-                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                        outputStream, DEFAULT_BUFFER_SIZE);
-
-                Writer writer = new OutputStreamWriter(gzipOutputStream,
-                        RESPONSE_CHARSET);
-
-                printWriter = new PrintWriter(writer, false);
+            if ((component instanceof ComboGridComponent) == false) {
+                sendJsError(facesContext, componentClientId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Component is invalid. (not an ComboGridComponent)",
+                        null);
+                return;
             }
 
-            writeJs(facesContext, printWriter, comboGridComponent,
-                    comboGridRenderer, filterExpression, componentClientId,
-                    rowKey);
+            ComboGridComponent comboGridComponent = (ComboGridComponent) component;
 
-        } catch (IOException ex) {
-            throw new FacesException(
-                    "Can not write dataGrid javascript rows !", ex);
+            ComboGridRenderer comboGridRenderer = getComboGridRenderer(
+                    facesContext, comboGridComponent);
+            if (comboGridRenderer == null) {
+                sendJsError(facesContext, componentClientId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Can not find comboGridRenderer.", null);
+                return;
+            }
 
-        } catch (RuntimeException ex) {
-            LOG.error("Catch runtime exception !", ex);
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
 
-            throw ex;
+            setNoCache(response);
+            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+                    + "; charset=" + RESPONSE_CHARSET);
+
+            setCameliaResponse(response, COMBO_GRID_KEY_SERVICE_VERSION);
+
+            boolean useGzip = canUseGzip(facesContext);
+
+            PrintWriter printWriter = null;
+            try {
+
+                if (useGzip == false) {
+                    printWriter = response.getWriter();
+
+                } else {
+                    ConfiguredHttpServlet
+                            .setGzipContentEncoding((HttpServletResponse) response);
+
+                    OutputStream outputStream = response.getOutputStream();
+
+                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+                            outputStream, DEFAULT_BUFFER_SIZE);
+
+                    Writer writer = new OutputStreamWriter(gzipOutputStream,
+                            RESPONSE_CHARSET);
+
+                    printWriter = new PrintWriter(writer, false);
+                }
+
+                writeJs(facesContext, printWriter, comboGridComponent,
+                        comboGridRenderer, filterExpression, componentClientId,
+                        rowKey);
+
+            } catch (IOException ex) {
+                throw new FacesException(
+                        "Can not write dataGrid javascript rows !", ex);
+
+            } catch (RuntimeException ex) {
+                LOG.error("Catch runtime exception !", ex);
+
+                throw ex;
+
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            }
 
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
-            }
+            localizedComponent.end();
         }
 
         facesContext.responseComplete();

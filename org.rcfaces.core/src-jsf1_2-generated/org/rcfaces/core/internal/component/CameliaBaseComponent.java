@@ -126,11 +126,18 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
 			LOG.trace("Restoring state of component '"+getId()+"'.");
 		}
 		
-		Object states[] = (Object[]) state;
-
-		super.restoreState(context, states[0]);
-
-		engine.restoreState(context, states[1]);
+		try {
+			Object states[] = (Object[]) state;
+	
+			super.restoreState(context, states[0]);
+	
+			engine.restoreState(context, states[1]);
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not restore state of component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
 
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("State of component '"+getId()+"' restored.");
@@ -143,9 +150,15 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
 		}
 
 		Object states[] = new Object[2];
-
-		states[0] = super.saveState(context);
-		states[1] = engine.saveState(context);
+		try {	
+			states[0] = super.saveState(context);
+			states[1] = engine.saveState(context);
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not save state of component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
 
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("State of component '"+getId()+"' saved.");
@@ -198,83 +211,99 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
 		}
 	}
 */
-/*
+
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("FacesContext is null");
 		}
 
-		if (isRendered()==false || isClientRendered()==false) {
-			return;
-		}
-
-    	super.encodeBegin(context);    	
+		try {	
+	    	super.encodeBegin(context);
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not encode-begin component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
 	}
 	
     public void encodeChildren(FacesContext context) throws IOException {
 		if (context == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("FacesContext is null");
 		}
 
-		if (isRendered()==false || isClientRendered()==false) {
-			return;
-		}
-
-    	super.encodeChildren(context);    	
+		try {
+	    	super.encodeChildren(context);    	
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not encode children of component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
 	}
 	
     public void encodeEnd(FacesContext context) throws IOException {
 		if (context == null) {
-			throw new NullPointerException();
+			throw new NullPointerException("FacesContext is null");
 		}
 
-		if (isRendered()==false || isClientRendered()==false) {
-			return;
-		}
-
-    	super.encodeEnd(context);    	
+		try  {	
+	    	super.encodeEnd(context);    	
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not encode-end component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
 	}
-	*/
 	
 	public void processDecodes(FacesContext context) {
 		if (context == null) {
 			throw new NullPointerException();
 		}
-
-		if (isRendered()==false) {
-			return;
-		}
-
-        ComponentTools.IVarScope varScope = null;
-        if (this instanceof IVariableScopeCapability) {
-            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
-        }
-
-		engine.startDecodes(context);
 		
-		Renderer renderer = getRenderer(context);
-        if ((renderer instanceof IRendererExtension) == false) {
-            super.processDecodes(context);
-
-        } else  {
-	        CameliaComponents.processDecodes(context, this, renderer);
-	    }
-		
-  		if (this instanceof IValidationEventCapability) {
-            boolean immediate=false;
-            if (this instanceof IImmediateCapability) {
-                immediate=((IImmediateCapability)this).isImmediate();
-            }
- 			if (immediate) {
-				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
-					this.broadcast(new ValidationEvent(this));
+		try {
+	
+			if (isRendered()==false) {
+				return;
+			}
+	
+	        ComponentTools.IVarScope varScope = null;
+	        if (this instanceof IVariableScopeCapability) {
+	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+	        }
+	
+			engine.startDecodes(context);
+			
+			Renderer renderer = getRenderer(context);
+	        if ((renderer instanceof IRendererExtension) == false) {
+	            super.processDecodes(context);
+	
+	        } else  {
+		        CameliaComponents.processDecodes(context, this, renderer);
+		    }
+			
+	  		if (this instanceof IValidationEventCapability) {
+	            boolean immediate=false;
+	            if (this instanceof IImmediateCapability) {
+	                immediate=((IImmediateCapability)this).isImmediate();
+	            }
+	 			if (immediate) {
+					if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+						this.broadcast(new ValidationEvent(this));
+					}
 				}
 			}
-		}
-       
-        if (varScope!=null) {
-            varScope.popVar(context);
-        }
+	       
+	        if (varScope!=null) {
+	            varScope.popVar(context);
+	        }
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not decode component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
 	}
 
 	public void processValidators(FacesContext context) {
@@ -282,54 +311,69 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
             throw new NullPointerException("Context is NULL to processValidators");
         }
 
-        // Skip processing if our rendered flag is false
-		if (isRendered()==false) {
-            return;
-        }
-
-        ComponentTools.IVarScope varScope = null;
-        if (this instanceof IVariableScopeCapability) {
-            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
-        }
-
-		super.processValidators(context);
-		
- 		if (this instanceof IValidationEventCapability) {
-            boolean immediate=false;
-            if (this instanceof IImmediateCapability) {
-                immediate=((IImmediateCapability)this).isImmediate();
-            }
- 			
-			if (immediate==false) {
-				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
-					this.broadcast(new ValidationEvent(this));
+		try {
+	        // Skip processing if our rendered flag is false
+			if (isRendered()==false) {
+	            return;
+	        }
+	
+	        ComponentTools.IVarScope varScope = null;
+	        if (this instanceof IVariableScopeCapability) {
+	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+	        }
+	
+			super.processValidators(context);
+			
+	 		if (this instanceof IValidationEventCapability) {
+	            boolean immediate=false;
+	            if (this instanceof IImmediateCapability) {
+	                immediate=((IImmediateCapability)this).isImmediate();
+	            }
+	 			
+				if (immediate==false) {
+					if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+						this.broadcast(new ValidationEvent(this));
+					}
 				}
 			}
-		}
-		       
-        if (varScope!=null) {
-            varScope.popVar(context);
-        }
+			       
+	        if (varScope!=null) {
+	            varScope.popVar(context);
+	        }
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not valid component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
 	}
 
     public void processUpdates(FacesContext context) {
 
- 		if (isRendered()==false) {
-            return;
-        }
-
-		ComponentTools.IVarScope varScope = null;
-        if (this instanceof IVariableScopeCapability) {
-            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
-        }
-
-        engine.processUpdates(context);
-
-        super.processUpdates(context);
-        
-        if (varScope!=null) {
-            varScope.popVar(context);
-        }
+		try {
+	
+	 		if (isRendered()==false) {
+	            return;
+	        }        
+	
+			ComponentTools.IVarScope varScope = null;
+	        if (this instanceof IVariableScopeCapability) {
+	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+	        }
+	
+	        engine.processUpdates(context);
+	
+	        super.processUpdates(context);
+	        
+	        if (varScope!=null) {
+	            varScope.popVar(context);
+	        }
+	    	
+	    } catch (RuntimeException ex) {
+	    	LOG.error("Can not update component '"+getId()+"'.", ex);
+	    	
+	    	throw ex;
+	    }
     }
 
 	/*

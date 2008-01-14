@@ -6,16 +6,20 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
@@ -23,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.URLFormCodec;
+import org.rcfaces.core.internal.component.UIData2;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -74,6 +79,9 @@ public class HtmlTools {
     private static final Number NUMBER_0 = new Double(0);
 
     private static final int RADIX = 32;
+
+    private static final String NAMING_SEPARATOR_STRING = ""
+            + NamingContainer.SEPARATOR_CHAR;
 
     public static Map decodeParametersToMap(IProcessContext processContext,
             UIComponent component, String values, char sep, Object noValue) {
@@ -958,6 +966,184 @@ public class HtmlTools {
         }
 
         clientObjectLiteralWriter.end();
+    }
 
+    public static ILocalizedComponent localizeComponent(FacesContext context,
+            String componentId) {
+
+        componentId = computeComponentId(context, componentId);
+
+        final UIComponent component = ComponentTools.getForComponent(context,
+                componentId, context.getViewRoot());
+
+        if (component != null) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Search component '" + componentId + "' => "
+                        + component);
+            }
+
+            return new ILocalizedComponent() {
+
+                public UIComponent getComponent() {
+                    return component;
+                }
+
+                public void end() {
+                }
+            };
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Search component '" + componentId
+                    + "': not found, try grids ...");
+        }
+
+        IHtmlRenderContext htmlRenderContext = HtmlRenderContext
+                .getRenderContext(context);
+
+        String separatorChar = htmlRenderContext.getHtmlProcessContext()
+                .getNamingSeparator();
+        if (separatorChar != null
+                && separatorChar.equals(NAMING_SEPARATOR_STRING) == false) {
+
+            if (LOG.isErrorEnabled()) {
+                LOG.error("Search component '" + componentId + "': separator '"
+                        + separatorChar + "' not supported !");
+            }
+            return null;
+        }
+
+        final List rowsSetted = new ArrayList();
+
+        UIComponent parent = context.getViewRoot();
+
+        StringTokenizer st = new StringTokenizer(componentId,
+                NAMING_SEPARATOR_STRING);
+        for (; st.hasMoreTokens();) {
+            String id = st.nextToken();
+
+            boolean onlyDigit = true;
+            char chs[] = id.toCharArray();
+            for (int i = 0; i < chs.length; i++) {
+                if (Character.isDigit(chs[i])) {
+                    continue;
+                }
+                onlyDigit = false;
+                break;
+            }
+
+            if (onlyDigit == false) {
+                UIComponent child = parent.findComponent(id);
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Search component '" + componentId
+                            + "': current '" + parent.getClientId(context)
+                            + "' id='" + id + "' onlyDigit=" + onlyDigit
+                            + " => " + child);
+                }
+
+                if (child == null) {
+                    parent = null;
+                    break;
+                }
+
+                parent = child;
+
+                continue;
+            }
+
+            int rowIndex = Integer.parseInt(id);
+
+            if (parent instanceof UIData) {
+                UIData uiData = (UIData) parent;
+
+                uiData.setRowIndex(rowIndex);
+
+                if (uiData.isRowAvailable()) {
+                    rowsSetted.add(uiData);
+                    continue;
+                }
+
+                parent = null;
+                break;
+            }
+
+            if (parent instanceof UIData2) {
+                UIData2 uiData2 = (UIData2) parent;
+
+                uiData2.setRowIndex(rowIndex);
+
+                if (uiData2.isRowAvailable()) {
+                    rowsSetted.add(uiData2);
+                    continue;
+                }
+
+                parent = null;
+                break;
+            }
+
+            if (LOG.isErrorEnabled()) {
+                LOG.error("Search component '" + componentId + "': current '"
+                        + parent.getClientId(context) + "' id='" + id
+                        + "' rowIndex=" + rowIndex + " => unknown child "
+                        + parent.getClass());
+            }
+
+            parent = null;
+            break;
+        }
+
+        if (parent == null) {
+            if (rowsSetted.isEmpty() == false) {
+                releaseGrids(rowsSetted);
+            }
+
+            return null;
+        }
+
+        final UIComponent result = parent;
+
+        return new ILocalizedComponent() {
+
+            public UIComponent getComponent() {
+                return result;
+            }
+
+            public void end() {
+                releaseGrids(rowsSetted);
+            }
+
+        };
+    }
+
+    private static final void releaseGrids(List rowsSetted) {
+        Collections.reverse(rowsSetted);
+
+        for (Iterator it = rowsSetted.iterator(); it.hasNext();) {
+            UIComponent component = (UIComponent) it.next();
+
+            if (component instanceof UIData) {
+                ((UIData) component).setRowIndex(-1);
+                continue;
+            }
+
+            if (component instanceof UIData2) {
+                ((UIData2) component).setRowIndex(-1);
+                continue;
+            }
+        }
+
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public interface ILocalizedComponent {
+        UIComponent getComponent();
+
+        void end();
     }
 }

@@ -366,7 +366,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return writer;
     }
 
-    protected final IHtmlWriter writeTabIndex(IHtmlWriter writer,
+    protected IHtmlWriter writeTabIndex(IHtmlWriter writer,
             ITabIndexCapability tabIndexCapability) throws WriterException {
         Integer index = tabIndexCapability.getTabIndex();
         if (index == null) {
@@ -971,7 +971,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return false;
     }
 
-    protected final IHtmlWriter writeReadOnly(IHtmlWriter writer,
+    protected IHtmlWriter writeReadOnly(IHtmlWriter writer,
             IReadOnlyCapability readOnlyCapability) throws WriterException {
         if (readOnlyCapability.isReadOnly()) {
             writer.writeReadOnly();
@@ -980,7 +980,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return writer;
     }
 
-    protected final IHtmlWriter writeEnabled(IHtmlWriter writer,
+    protected IHtmlWriter writeEnabled(IHtmlWriter writer,
             IDisabledCapability enabledCapability) throws WriterException {
         if (enabledCapability.isDisabled()) {
             writer.writeDisabled();

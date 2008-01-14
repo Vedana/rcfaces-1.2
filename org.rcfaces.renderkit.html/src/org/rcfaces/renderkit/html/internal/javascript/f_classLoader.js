@@ -1136,18 +1136,19 @@ f_classLoader.prototype = {
 	 * @return String
 	 */
 	f_getSerializedState: function() {
-		var serial="";
+		var serial=new Array;
 		
 		var serializedStates=this._serializedStates;
 	
 		for(var id in serializedStates) {
-			if (serial) {
-				serial+=",";
-			}
-			serial+=id+"=["+serializedStates[id]+"]";
+			serial.push(id+"=["+serializedStates[id]+"]");
 		}		
 		
-		return serial;		
+		if (!serial.length) {
+			return "";
+		}
+		
+		return serial.join(",");		
 	},
 	/**
 	 * @method hidden

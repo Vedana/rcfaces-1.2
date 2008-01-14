@@ -5,6 +5,7 @@
 package org.rcfaces.core.internal.taglib;
 
 import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,6 +49,51 @@ public abstract class CameliaTag extends UIComponentELTag {
 
     public String getRendererType() {
         return null;
+    }
+
+    public int doAfterBody() throws JspException {
+        try {
+            return super.doAfterBody();
+
+        } catch (RuntimeException ex) {
+            LOG.error("Can not doAfterBody component '" + getId() + "'.", ex);
+
+            throw ex;
+        }
+    }
+
+    public int doEndTag() throws JspException {
+        try {
+            return super.doEndTag();
+
+        } catch (RuntimeException ex) {
+            LOG.error("Can not doEndTag component '" + getId() + "'.", ex);
+
+            throw ex;
+        }
+    }
+
+    public void doInitBody() throws JspException {
+        try {
+            super.doInitBody();
+
+        } catch (RuntimeException ex) {
+            LOG.error("Can not doInitBody component '" + getId() + "'.", ex);
+
+            throw ex;
+        }
+
+    }
+
+    public int doStartTag() throws JspException {
+        try {
+            return super.doStartTag();
+
+        } catch (RuntimeException ex) {
+            LOG.error("Can not doStartTag component '" + getId() + "'.", ex);
+
+            throw ex;
+        }
     }
 
 }

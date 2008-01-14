@@ -1,15 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractCalendarComponent;
-import org.rcfaces.core.internal.converter.CalendarModeConverter;
-import java.util.HashSet;
 import java.lang.String;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
-import java.util.Arrays;
-import java.util.Set;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.converter.CalendarModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.ICalendarLayoutCapability;
+import java.util.Set;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.AbstractCalendarComponent;
 
 /**
  * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
@@ -28,13 +30,14 @@ import org.rcfaces.core.component.capability.IBorderCapability;
  */
 public class CalendarComponent extends AbstractCalendarComponent implements 
 	IBorderCapability,
+	ICalendarLayoutCapability,
 	ICalendarModeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.calendar";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"border","mode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"mode","calendarLayout","border"}));
 	}
 
 	public CalendarComponent() {
@@ -51,6 +54,13 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 
 			setMode(((Integer)CalendarModeConverter.SINGLETON.getAsObject(null, this, calendarMode)).intValue());
 			
+	}
+
+	public void setCalendarLayout(String layout) {
+
+
+			setCalendarLayout(((Integer)CalendarLayoutConverter.SINGLETON.getAsObject(null, this, layout)).intValue());
+		
 	}
 
 	public boolean isBorder() {
@@ -74,6 +84,29 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 
 	public void setBorder(boolean border) {
 		engine.setProperty(Properties.BORDER, border);
+	}
+
+	public int getCalendarLayout() {
+		return getCalendarLayout(null);
+	}
+
+	/**
+	 * See {@link #getCalendarLayout() getCalendarLayout()} for more details
+	 */
+	public int getCalendarLayout(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CALENDAR_LAYOUT,ICalendarLayoutCapability.DEFAULT_LAYOUT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "calendarLayout" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCalendarLayoutSetted() {
+		return engine.isPropertySetted(Properties.CALENDAR_LAYOUT);
+	}
+
+	public void setCalendarLayout(int calendarLayout) {
+		engine.setProperty(Properties.CALENDAR_LAYOUT, calendarLayout);
 	}
 
 	public int getMode() {

@@ -35,6 +35,7 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IFilteredItemsRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
@@ -94,9 +95,10 @@ public class ItemsService extends AbstractHtmlService {
 
         String filterExpression = (String) parameters.get("filterExpression");
 
-        UIComponent component = HtmlTools.getForComponent(facesContext,
-                componentId, viewRoot);
-        if (component == null) {
+        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+                facesContext, componentId);
+
+        if (localizedComponent == null) {
             // Cas special: la session a du expiree .... !?
 
             sendJsError(facesContext, componentId,
@@ -106,97 +108,106 @@ public class ItemsService extends AbstractHtmlService {
             return;
         }
 
-        if ((component instanceof IFilterCapability) == false) {
-            sendJsError(facesContext, componentId,
-                    INVALID_PARAMETER_SERVICE_ERROR, "Component (id='"
-                            + componentId + "') can not be filtred.", null);
-            return;
-        }
+        UIComponent component = localizedComponent.getComponent();
 
-        int maxResultNumber = -1;
-        if (component instanceof IMaxResultNumberCapability) {
-            String s = (String) parameters.get("maxResultNumber");
-            if (s != null) {
-                maxResultNumber = Integer.parseInt(s);
-            }
-        }
-
-        IFilterCapability filterCapability = (IFilterCapability) component;
-
-        IFilteredItemsRenderer filtredItemsRenderer;
-        try {
-            filtredItemsRenderer = getFilteredItemsRenderer(facesContext,
-                    filterCapability);
-
-        } catch (ApplicationException ex) {
-            sendJsError(facesContext, ex, componentId);
-            return;
-        }
-
-        if (filtredItemsRenderer == null) {
-            sendJsError(facesContext, componentId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find filtredItemsRenderer. (componentId='"
-                            + componentId + "')", null);
-            return;
-        }
-
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-
-        setCameliaResponse(response, ITEMS_SERVICE_VERSION);
-
-        boolean useGzip = canUseGzip(facesContext);
-
-        PrintWriter printWriter = null;
         try {
 
-            if (useGzip == false) {
-                printWriter = response.getWriter();
-
-            } else {
-                ConfiguredHttpServlet
-                        .setGzipContentEncoding((HttpServletResponse) response);
-
-                OutputStream outputStream = response.getOutputStream();
-
-                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                        outputStream, DEFAULT_BUFFER_SIZE);
-
-                Writer writer = new OutputStreamWriter(gzipOutputStream,
-                        RESPONSE_CHARSET);
-
-                printWriter = new PrintWriter(writer, false);
+            if ((component instanceof IFilterCapability) == false) {
+                sendJsError(facesContext, componentId,
+                        INVALID_PARAMETER_SERVICE_ERROR, "Component (id='"
+                                + componentId + "') can not be filtred.", null);
+                return;
             }
 
-            IFilterProperties filterProperties = HtmlTools
-                    .decodeFilterExpression(null, component, filterExpression);
+            int maxResultNumber = -1;
+            if (component instanceof IMaxResultNumberCapability) {
+                String s = (String) parameters.get("maxResultNumber");
+                if (s != null) {
+                    maxResultNumber = Integer.parseInt(s);
+                }
+            }
 
-            writeJs(facesContext, printWriter, filterCapability, componentId,
-                    filtredItemsRenderer, filterProperties, maxResultNumber);
+            IFilterCapability filterCapability = (IFilterCapability) component;
 
-        } catch (IOException ex) {
+            IFilteredItemsRenderer filtredItemsRenderer;
+            try {
+                filtredItemsRenderer = getFilteredItemsRenderer(facesContext,
+                        filterCapability);
 
-            throw new FacesException(
-                    "Can not write dataGrid javascript rows !", ex);
+            } catch (ApplicationException ex) {
+                sendJsError(facesContext, ex, componentId);
+                return;
+            }
 
-        } catch (RuntimeException ex) {
-            LOG.error("Catch runtime exception !", ex);
+            if (filtredItemsRenderer == null) {
+                sendJsError(facesContext, componentId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Can not find filtredItemsRenderer. (componentId='"
+                                + componentId + "')", null);
+                return;
+            }
 
-            throw ex;
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
+
+            setNoCache(response);
+            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+                    + "; charset=" + RESPONSE_CHARSET);
+
+            setCameliaResponse(response, ITEMS_SERVICE_VERSION);
+
+            boolean useGzip = canUseGzip(facesContext);
+
+            PrintWriter printWriter = null;
+            try {
+
+                if (useGzip == false) {
+                    printWriter = response.getWriter();
+
+                } else {
+                    ConfiguredHttpServlet
+                            .setGzipContentEncoding((HttpServletResponse) response);
+
+                    OutputStream outputStream = response.getOutputStream();
+
+                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+                            outputStream, DEFAULT_BUFFER_SIZE);
+
+                    Writer writer = new OutputStreamWriter(gzipOutputStream,
+                            RESPONSE_CHARSET);
+
+                    printWriter = new PrintWriter(writer, false);
+                }
+
+                IFilterProperties filterProperties = HtmlTools
+                        .decodeFilterExpression(null, component,
+                                filterExpression);
+
+                writeJs(facesContext, printWriter, filterCapability,
+                        componentId, filtredItemsRenderer, filterProperties,
+                        maxResultNumber);
+
+            } catch (IOException ex) {
+
+                throw new FacesException(
+                        "Can not write dataGrid javascript rows !", ex);
+
+            } catch (RuntimeException ex) {
+                LOG.error("Catch runtime exception !", ex);
+
+                throw ex;
+
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            }
 
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
-            }
+            localizedComponent.end();
         }
 
         facesContext.responseComplete();
-
     }
 
     private IFilteredItemsRenderer getFilteredItemsRenderer(

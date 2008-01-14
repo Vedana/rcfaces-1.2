@@ -174,6 +174,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "fixedHeader";
 
+    private static final String FIXED_FAKE_COLUMN_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "fakeCol";
+
+    /*
+    private static final String FIXED_FAKE_CELL_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "fakeCell";
+            */
+
     public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return GRID_STYLE_CLASS;
     }
@@ -832,7 +842,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             htmlWriter.endElement(IHtmlWriter.COL);
         }
-        // htmlWriter.startElement(IHtmlWriter.COL");
+
+        htmlWriter.startElement(IHtmlWriter.COL); // Fake col !
+        htmlWriter.writeId(getFakeColumnClientId(htmlWriter));
+        htmlWriter.endElement(IHtmlWriter.COL);
 
         htmlWriter.startElement(IHtmlWriter.THEAD);
         htmlWriter.startElement(IHtmlWriter.TR);
@@ -868,6 +881,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             tableWidth += wp;
         }
 
+        htmlWriter.startElement(IHtmlWriter.TH); // Fake TD
+//        htmlWriter.writeId(getFakeHeadCellClientId(htmlWriter));
+        htmlWriter.writeClass("f_grid_tcell");
+        htmlWriter.write("&nbsp;");
+        htmlWriter.endElement(IHtmlWriter.TH);
+
         // Fin des titres ....
         htmlWriter.endElement(IHtmlWriter.TR);
         htmlWriter.endElement(IHtmlWriter.THEAD);
@@ -881,6 +900,18 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         return tableWidth;
+    }
+
+    /*
+    private String getFakeHeadCellClientId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + FIXED_FAKE_CELL_ID_SUFFIX;
+    }
+    */
+
+    private String getFakeColumnClientId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + FIXED_FAKE_COLUMN_ID_SUFFIX;
     }
 
     private String getTitleTableBodyClassName(IHtmlWriter htmlWriter) {

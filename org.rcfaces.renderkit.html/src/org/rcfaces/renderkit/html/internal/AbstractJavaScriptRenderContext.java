@@ -874,6 +874,10 @@ public abstract class AbstractJavaScriptRenderContext implements
     protected IJavaScriptWriter writeJsInitComponent(IJavaScriptWriter jsWriter)
             throws WriterException {
 
+        if (jsWriter.isIgnoreComponentInitialization()) {
+            return jsWriter;
+        }
+
         IComponentRenderContext componentRenderContext = jsWriter
                 .getHtmlComponentRenderContext();
 

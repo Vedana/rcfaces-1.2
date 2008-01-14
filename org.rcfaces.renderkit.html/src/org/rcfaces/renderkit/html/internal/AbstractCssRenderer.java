@@ -422,7 +422,8 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return margin;
     }
 
-    protected boolean sendCompleteComponent() {
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
         return true;
     }
 }

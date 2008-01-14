@@ -501,6 +501,7 @@ var __members = {
 						}
 						
 						if (this._checkable) {
+							
 							var input=doc.createElement("input");
 							row._input=input;
 							
@@ -532,7 +533,11 @@ var __members = {
 							
 							f_core.AppendChild(ctrlContainer, input);
 							
-							this.fa_updateElementCheck(row, checked);
+							if (checked) {
+								input.checked=true;
+								input.defaultChecked=true;
+								this.fa_updateElementCheck(row, checked);
+							}
 						}
 					}
 

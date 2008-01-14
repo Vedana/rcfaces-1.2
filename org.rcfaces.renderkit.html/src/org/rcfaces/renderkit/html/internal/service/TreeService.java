@@ -35,6 +35,7 @@ import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SelectItemsContext;
 import org.rcfaces.renderkit.html.internal.renderer.TreeRenderer;
@@ -108,9 +109,9 @@ public class TreeService extends AbstractHtmlService {
             return;
         }
 
-        UIComponent component = HtmlTools.getForComponent(facesContext, treeId,
-                viewRoot);
-        if (component == null) {
+        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+                facesContext, treeId);
+        if (localizedComponent == null) {
             // Cas special: la session a du expir�e ....
 
             sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
@@ -120,74 +121,83 @@ public class TreeService extends AbstractHtmlService {
             return;
         }
 
-        if ((component instanceof TreeComponent) == false) {
-            sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
-                    "Invalid treeComponent (id='" + treeId + "').", waitingId);
-            return;
-        }
-
-        TreeComponent treeComponent = (TreeComponent) component;
-
-        TreeRenderer treeRenderer = getTreeRenderer(facesContext, treeComponent);
-        if (treeRenderer == null) {
-            sendJsError(facesContext, treeId, INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find treeRenderer. (treeId='" + treeId + "')",
-                    waitingId);
-            return;
-        }
-
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-        setCameliaResponse(response, TREE_SERVICE_VERSION);
-
-        boolean useGzip = canUseGzip(facesContext);
-
-        PrintWriter printWriter = null;
         try {
+            UIComponent component = localizedComponent.getComponent();
 
-            if (useGzip == false) {
-                printWriter = response.getWriter();
-
-            } else {
-                ConfiguredHttpServlet
-                        .setGzipContentEncoding((HttpServletResponse) response);
-
-                OutputStream outputStream = response.getOutputStream();
-
-                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                        outputStream, DEFAULT_BUFFER_SIZE);
-
-                Writer writer = new OutputStreamWriter(gzipOutputStream,
-                        RESPONSE_CHARSET);
-
-                printWriter = new PrintWriter(writer, false);
+            if ((component instanceof TreeComponent) == false) {
+                sendJsError(facesContext, treeId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Invalid treeComponent (id='" + treeId + "').",
+                        waitingId);
+                return;
             }
 
-            writeJs(facesContext, printWriter, treeComponent, treeId,
-                    treeRenderer, waitingId, node);
+            TreeComponent treeComponent = (TreeComponent) component;
 
-        } catch (IOException ex) {
+            TreeRenderer treeRenderer = getTreeRenderer(facesContext,
+                    treeComponent);
+            if (treeRenderer == null) {
+                sendJsError(facesContext, treeId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Can not find treeRenderer. (treeId='" + treeId + "')",
+                        waitingId);
+                return;
+            }
 
-            throw new FacesException(
-                    "Can not write dataGrid javascript rows !", ex);
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
 
-        } catch (RuntimeException ex) {
-            LOG.error("Catch runtime exception !", ex);
+            setNoCache(response);
+            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+                    + "; charset=" + RESPONSE_CHARSET);
+            setCameliaResponse(response, TREE_SERVICE_VERSION);
 
-            throw ex;
+            boolean useGzip = canUseGzip(facesContext);
+
+            PrintWriter printWriter = null;
+            try {
+
+                if (useGzip == false) {
+                    printWriter = response.getWriter();
+
+                } else {
+                    ConfiguredHttpServlet
+                            .setGzipContentEncoding((HttpServletResponse) response);
+
+                    OutputStream outputStream = response.getOutputStream();
+
+                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+                            outputStream, DEFAULT_BUFFER_SIZE);
+
+                    Writer writer = new OutputStreamWriter(gzipOutputStream,
+                            RESPONSE_CHARSET);
+
+                    printWriter = new PrintWriter(writer, false);
+                }
+
+                writeJs(facesContext, printWriter, treeComponent, treeId,
+                        treeRenderer, waitingId, node);
+
+            } catch (IOException ex) {
+                throw new FacesException(
+                        "Can not write dataGrid javascript rows !", ex);
+
+            } catch (RuntimeException ex) {
+                LOG.error("Catch runtime exception !", ex);
+
+                throw ex;
+
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            }
 
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
-            }
+            localizedComponent.end();
         }
 
         facesContext.responseComplete();
-
     }
 
     private TreeRenderer getTreeRenderer(FacesContext facesContext,

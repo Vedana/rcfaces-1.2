@@ -20,6 +20,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
+import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
@@ -141,6 +142,25 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
+        if (Constants.KEEP_DISABLED_STATE) {
+            if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+                if (radioButtonComponent.isDisabled(facesContext)
+                        && isChecked(htmlWriter, radioButtonComponent)) {
+                    htmlWriter.startElement(IHtmlWriter.INPUT);
+                    htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+
+                    String name = htmlWriter.getComponentRenderContext()
+                            .getComponentClientId()
+                            + "::value";
+                    htmlWriter.writeName(name);
+
+                    htmlWriter.writeValue(svalue);
+
+                    htmlWriter.endElement(IHtmlWriter.INPUT);
+                }
+            }
+        }
+
         return htmlWriter;
     }
 
@@ -172,17 +192,14 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
 
         RadioButtonComponent radioButton = (RadioButtonComponent) element;
 
-        boolean isDisabled = radioButton.isDisabled();
-
         super.decode(context, element, componentData);
 
         parseSelectedProperty((IHtmlRequestContext) context, radioButton,
-                componentData, isDisabled);
+                componentData);
     }
 
     protected void parseSelectedProperty(IHtmlRequestContext requestContext,
-            RadioButtonComponent radioButton, IComponentData clientData,
-            boolean isDisabled) {
+            RadioButtonComponent radioButton, IComponentData clientData) {
 
         String gb = radioButton.getGroupName();
         if (gb == null) {
@@ -201,7 +218,13 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         if (svalue == null) {
             svalue = clientData.getParameter(gb);
 
-            if (svalue == null && isDisabled) {
+            if (svalue == null) {
+                // On est peut etre en CollectionMode
+                String name = radioButton.getClientId(facesContext) + "::value";
+                svalue = clientData.getParameter(name);
+            }
+
+            if (svalue == null) {
                 // Pas de changement d'états.
                 return;
             }
@@ -281,19 +304,23 @@ public class RadioButtonRenderer extends AbstractInputRenderer {
         return component.getClientId(facesContext);
     }
 
-    protected IHtmlWriter writeChecked(IHtmlWriter writer,
-            ISelectedCapability selectedCapability) throws WriterException {
-        IRadioValueCapability radioValueCapability = (IRadioValueCapability) selectedCapability;
+    protected boolean isChecked(IHtmlWriter writer,
+            IRadioValueCapability radioValueCapability) {
 
         Object radioValue = radioValueCapability.getRadioValue();
         if (radioValue == null) {
-            return super.writeChecked(writer, selectedCapability);
+            return ((ISelectedCapability) radioValueCapability).isSelected();
         }
 
         ValueHolder valueHolder = (ValueHolder) radioValueCapability;
 
         Object currentValue = valueHolder.getValue();
-        if (radioValue.equals(currentValue)) {
+        return radioValue.equals(currentValue);
+    }
+
+    protected IHtmlWriter writeChecked(IHtmlWriter writer,
+            ISelectedCapability selectedCapability) throws WriterException {
+        if (isChecked(writer, (IRadioValueCapability) selectedCapability)) {
             writer.writeChecked();
         }
 

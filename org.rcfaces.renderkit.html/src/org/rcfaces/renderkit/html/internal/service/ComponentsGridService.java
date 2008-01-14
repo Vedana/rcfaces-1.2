@@ -42,6 +42,7 @@ import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -124,9 +125,9 @@ public class ComponentsGridService extends AbstractHtmlService {
         String showAdditional = (String) parameters.get("showAdditional");
         String hideAdditional = (String) parameters.get("hideAdditional");
 
-        UIComponent component = HtmlTools.getForComponent(facesContext,
-                componentsGridId, viewRoot);
-        if (component == null) {
+        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+                facesContext, componentsGridId);
+        if (localizedComponent == null) {
             // Cas special: la session a du expir�e ....
 
             sendJsError(facesContext, componentsGridId,
@@ -137,100 +138,105 @@ public class ComponentsGridService extends AbstractHtmlService {
             return;
         }
 
-        if ((component instanceof ComponentsGridComponent) == false) {
-            sendJsError(facesContext, componentsGridId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Invalid componentsGrid component (id='" + componentsGridId
-                            + "').", null);
-            return;
-        }
-
-        ComponentsGridComponent dgc = (ComponentsGridComponent) component;
-
-        decodeSubComponents(facesContext, dgc, parameters);
-
-        ISortedComponent sortedComponents[] = null;
-
-        String sortIndex_s = (String) parameters.get("sortIndex");
-        if (sortIndex_s != null) {
-            UIColumn columns[] = dgc.listColumns().toArray();
-
-            StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
-
-            sortedComponents = new ISortedComponent[st1.countTokens() / 2];
-
-            for (int i = 0; st1.hasMoreTokens(); i++) {
-                String tok1 = st1.nextToken();
-                String tok2 = st1.nextToken();
-
-                int idx = Integer.parseInt(tok1);
-                boolean order = "true".equalsIgnoreCase(tok2);
-
-                sortedComponents[i] = new DefaultSortedComponent(columns[idx],
-                        idx, order);
-            }
-        }
-
-        ComponentsGridRenderer dgr = getComponentsGridRenderer(facesContext,
-                dgc);
-        if (dgr == null) {
-            sendJsError(facesContext, componentsGridId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find componentsGrid renderer. (componentsGridId='"
-                            + componentsGridId + "')", null);
-            return;
-        }
-
-        ServletResponse response = (ServletResponse) facesContext
-                .getExternalContext().getResponse();
-
-        setNoCache(response);
-        response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                + "; charset=" + RESPONSE_CHARSET);
-        setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
-
-        boolean useGzip = canUseGzip(facesContext);
-
-        PrintWriter printWriter = null;
         try {
+            UIComponent component = localizedComponent.getComponent();
 
-            if (useGzip == false) {
-                printWriter = response.getWriter();
-
-            } else {
-                ConfiguredHttpServlet
-                        .setGzipContentEncoding((HttpServletResponse) response);
-
-                OutputStream outputStream = response.getOutputStream();
-
-                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                        outputStream, DEFAULT_BUFFER_SIZE);
-
-                Writer writer = new OutputStreamWriter(gzipOutputStream,
-                        RESPONSE_CHARSET);
-
-                printWriter = new PrintWriter(writer, false);
+            if ((component instanceof ComponentsGridComponent) == false) {
+                sendJsError(facesContext, componentsGridId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Invalid componentsGrid component (id='"
+                                + componentsGridId + "').", null);
+                return;
             }
 
-            writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
-                    rowIndex, forcedRows, sortedComponents, filterExpression,
-                    showAdditional, hideAdditional);
+            ComponentsGridComponent dgc = (ComponentsGridComponent) component;
 
-        } catch (IOException ex) {
-            throw new FacesException(
-                    "Can not write dataGrid javascript rows !", ex);
+            decodeSubComponents(facesContext, dgc, parameters);
 
-        } catch (RuntimeException ex) {
-            LOG.error("Catch runtime exception !", ex);
+            ISortedComponent sortedComponents[] = null;
 
-            throw ex;
+            String sortIndex_s = (String) parameters.get("sortIndex");
+            if (sortIndex_s != null) {
+                UIColumn columns[] = dgc.listColumns().toArray();
 
+                StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
+
+                sortedComponents = new ISortedComponent[st1.countTokens() / 2];
+
+                for (int i = 0; st1.hasMoreTokens(); i++) {
+                    String tok1 = st1.nextToken();
+                    String tok2 = st1.nextToken();
+
+                    int idx = Integer.parseInt(tok1);
+                    boolean order = "true".equalsIgnoreCase(tok2);
+
+                    sortedComponents[i] = new DefaultSortedComponent(
+                            columns[idx], idx, order);
+                }
+            }
+
+            ComponentsGridRenderer dgr = getComponentsGridRenderer(
+                    facesContext, dgc);
+            if (dgr == null) {
+                sendJsError(facesContext, componentsGridId,
+                        INVALID_PARAMETER_SERVICE_ERROR,
+                        "Can not find componentsGrid renderer. (componentsGridId='"
+                                + componentsGridId + "')", null);
+                return;
+            }
+
+            ServletResponse response = (ServletResponse) facesContext
+                    .getExternalContext().getResponse();
+
+            setNoCache(response);
+            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+                    + "; charset=" + RESPONSE_CHARSET);
+            setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
+
+            boolean useGzip = canUseGzip(facesContext);
+
+            PrintWriter printWriter = null;
+            try {
+
+                if (useGzip == false) {
+                    printWriter = response.getWriter();
+
+                } else {
+                    ConfiguredHttpServlet
+                            .setGzipContentEncoding((HttpServletResponse) response);
+
+                    OutputStream outputStream = response.getOutputStream();
+
+                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+                            outputStream, DEFAULT_BUFFER_SIZE);
+
+                    Writer writer = new OutputStreamWriter(gzipOutputStream,
+                            RESPONSE_CHARSET);
+
+                    printWriter = new PrintWriter(writer, false);
+                }
+
+                writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
+                        rowIndex, forcedRows, sortedComponents,
+                        filterExpression, showAdditional, hideAdditional);
+
+            } catch (IOException ex) {
+                throw new FacesException(
+                        "Can not write dataGrid javascript rows !", ex);
+
+            } catch (RuntimeException ex) {
+                LOG.error("Catch runtime exception !", ex);
+
+                throw ex;
+
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            }
         } finally {
-            if (printWriter != null) {
-                printWriter.close();
-            }
+            localizedComponent.end();
         }
-
         facesContext.responseComplete();
     }
 

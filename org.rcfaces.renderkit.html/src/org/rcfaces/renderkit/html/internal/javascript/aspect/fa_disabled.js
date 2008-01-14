@@ -41,8 +41,6 @@ var __members = {
 	f_setDisabled: function(set) {
 		if (set!==false) {
 			set=true;
-		} else {
-			set=!!set;
 		}
 		
 		if (this.f_isDisabled()==set) {
@@ -71,6 +69,7 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
+	 * @param boolean set
 	 * @return void
 	 */
 	fa_updateDisabled: f_class.ABSTRACT,

@@ -795,6 +795,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             newValue = componentData.getStringProperty("text");
 
             if (newValue == null) {
+                // On est peut-etre en mode Collector ... on recherche le
+                // ::value    (La valeur n'est pas forcement celle dans le form !)
+                String name = textEntryComponent.getClientId(facesContext)
+                        + "::value";
+                newValue = componentData.getParameter(name);
+            }
+
+            if (newValue == null) {
                 // Toujours rien ... on essaye les données du form !
 
                 newValue = componentData.getComponentParameter();

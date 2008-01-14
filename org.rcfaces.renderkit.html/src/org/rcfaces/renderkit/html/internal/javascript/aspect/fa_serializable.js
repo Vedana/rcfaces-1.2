@@ -10,6 +10,16 @@
  * @version $Revision$ $Date$
  */
 var __members = {
+	
+	/**
+	 * @field private boolean
+	 */
+	 _noPropertyUpdates: undefined,
+	 
+	/**
+	 * @field private Object
+	 */
+	 _properties: undefined,
 
 	f_finalize: function() {
 		this._properties = undefined;  // Map<string, Object>
@@ -62,11 +72,15 @@ var __members = {
 			} else {
 				for (var propertyName in value) {
 					if (!values) {
-						values=propertyName;
+						values=[propertyName];
 						continue;
 					}
-
-					values += listSep + propertyName;					
+					
+					values.push(propertyName);
+				}
+				
+				if (values && values.length>1) {
+					values=values.join(listSep);					
 				}
 			}
 		

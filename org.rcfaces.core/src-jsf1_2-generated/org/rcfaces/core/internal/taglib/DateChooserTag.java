@@ -30,6 +30,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 	private ValueExpression imageWidth;
 	private ValueExpression valueChangeListeners;
 	private ValueExpression forValue;
+	private ValueExpression calendarLayout;
 	private ValueExpression forValueFormat;
 	private ValueExpression homeDate;
 	private ValueExpression homeDateLabel;
@@ -85,6 +86,10 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		this.forValue = forValue;
 	}
 
+	public final void setCalendarLayout(ValueExpression calendarLayout) {
+		this.calendarLayout = calendarLayout;
+	}
+
 	public final void setForValueFormat(ValueExpression forValueFormat) {
 		this.forValueFormat = forValueFormat;
 	}
@@ -113,6 +118,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 			LOG.debug("  forValue='"+forValue+"'");
+			LOG.debug("  calendarLayout='"+calendarLayout+"'");
 			LOG.debug("  forValueFormat='"+forValueFormat+"'");
 			LOG.debug("  homeDate='"+homeDate+"'");
 			LOG.debug("  homeDateLabel='"+homeDateLabel+"'");
@@ -232,6 +238,15 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (calendarLayout != null) {
+			if (calendarLayout.isLiteralText()==false) {
+				component.setValueExpression(Properties.CALENDAR_LAYOUT, calendarLayout);
+
+			} else {
+				component.setCalendarLayout(calendarLayout.getExpressionString());
+			}
+		}
+
 		if (forValueFormat != null) {
 			if (forValueFormat.isLiteralText()==false) {
 				component.setValueExpression(Properties.FOR_VALUE_FORMAT, forValueFormat);
@@ -273,6 +288,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		imageWidth = null;
 		valueChangeListeners = null;
 		forValue = null;
+		calendarLayout = null;
 		forValueFormat = null;
 		homeDate = null;
 		homeDateLabel = null;

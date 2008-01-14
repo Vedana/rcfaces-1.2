@@ -238,7 +238,8 @@ var __members = {
 		this.f_super(arguments, type, target);
 	},
 	/** 
-	 * @method boolean
+	 * @method private
+	 * @return boolean
 	 */
 	_onSelect: function() {
 		if (!this._focus)  {
@@ -274,6 +275,9 @@ var __members = {
 		f_core.Debug(f_expandBar, "f_setFocus: focus component '"+cmp+"' for expandBar '"+this.id+"'.");
 		cmp.focus();
 	},
+	/**
+	 * 
+	 */
 	f_performAccessKey: function(evt) {
 		if (this.f_isReadOnly() || this.f_isDisabled()) {
 			return false;

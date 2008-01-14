@@ -254,6 +254,10 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_onLoad: function() {
 		f_core.Debug(f_textEditor, "_onLoad: Initialize textEditor");
 		this.onload=null;
@@ -331,6 +335,11 @@ var __members = {
 		f_core.RemoveEventListener(contentDocument, "focus", f_textEditor._OnFocus);
 		f_core.RemoveEventListener(contentDocument, "blur", f_textEditor._OnBlur);					
 	},
+	/**
+	 * @method private
+	 * @param Event jsEvent
+	 * @return void
+	 */
 	_onFocus: function(jsEvent) {
 		f_core.Debug(f_textEditor, "_onFocus: Get focus");
 		
@@ -352,6 +361,11 @@ var __members = {
 			}, f_textEditor._BUTTONS_UPDATE_TIMER);
 		}		
 	},
+	/**
+	 * @method private
+	 * @param Event jsEvent
+	 * @return void
+	 */
 	_onBlur: function(jsEvent) {
 		f_core.Debug(f_textEditor, "_onFocus: Lost focus");		
 		
@@ -367,10 +381,12 @@ var __members = {
 		}
 		this._focused=undefined;
 	},
+	/*
 	f_update: function() {
 		
 		this.f_super(arguments);
 	},
+	*/
 	f_serialize: function() {
 		var contentDocument=this._contentDocument;	
 		if (contentDocument) {

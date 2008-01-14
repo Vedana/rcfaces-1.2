@@ -31,6 +31,7 @@ import org.rcfaces.core.lang.ApplicationException;
 import org.rcfaces.core.progressMonitor.IProgressMonitor;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.w3c.dom.Document;
 
 /**
@@ -116,99 +117,109 @@ public class ClientService extends AbstractClientService {
             return;
         }
 
-        UIComponent component = HtmlTools.getForComponent(facesContext,
-                componentId, viewRoot);
-        if (component == null) {
+        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+                facesContext, componentId);
+        if (localizedComponent == null) {
             AbstractHtmlService.sendJsError(facesContext, componentId,
                     AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
                     "Can not get view '" + componentId + "' !", null);
             return;
         }
 
-        if ((component instanceof ServiceComponent) == false) {
-            AbstractHtmlService.sendJsError(facesContext, componentId,
-                    AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
-                    "Component '" + componentId
-                            + "' does not implement ServiceComponent !", null);
-            return;
-        }
+        UIComponent component = localizedComponent.getComponent();
 
-        ServiceComponent serviceComponent = (ServiceComponent) component;
-
-        int syncMode = IClientServiceRegistry.SYNC_MODE;
-
-        String syncModeAtt = (String) requestHeader.get(SYNC_MODE);
-        if ("asynchronous".equals(syncModeAtt)) {
-            syncMode = IClientServiceRegistry.ASYNC_MODE;
-        }
-
-        Object parameter = null;
-
-        String progressMonitorValue = (String) requestHeader
-                .get(CAMELIA_PROGRESS_MONITOR);
-
-        boolean formParameters = true;
-        String cameliaContentType = (String) requestHeader
-                .get(CAMELIA_CONTENT_TYPE);
-        if ("xml".equals(cameliaContentType)) {
-            formParameters = false;
-
-            // Deserialize le Document xml
-            parameter = null; // <<< ICI
-            progressMonitorValue = null;
-        }
-
-        // On a besoin du processContext pour "parser"/formater les dates qui
-        // proviennent du client !
-        IProcessContext processContext = HtmlProcessContextImpl
-                .getProcessContext(facesContext);
-
-        if (formParameters) {
-            Map request = externalContext.getRequestParameterMap();
-
-            String parameterType = (String) request.get(PARAMETER_TYPE);
-
-            String parameterString = (String) request.get(PARAMETER);
-
-            parameter = deserializeParameter(processContext, serviceComponent,
-                    parameterType, parameterString);
-        }
-
-        IClientServiceRegistry operationsRegistry = getClientServiceRegistry(facesContext);
-
-        IClientService clientService;
         try {
-            clientService = operationsRegistry.createClientService(requestId,
-                    serviceComponent, parameter, syncMode);
 
-        } catch (ClientServiceException ex) {
-            LOG.error("Can not create operation '" + requestId + "'.", ex);
-
-            clientService = null;
-        }
-
-        IProgressMonitor progressMonitor = null;
-
-        if (syncMode == IClientServiceRegistry.SYNC_MODE) {
-            operationsRegistry.startClientService(clientService);
-
-            Object ret;
-            try {
-                ret = operationsRegistry.waitClientService(clientService,
-                        progressMonitor);
-
-            } catch (ApplicationException ex) {
-                sendClientError(facesContext, ex, processContext, component);
+            if ((component instanceof ServiceComponent) == false) {
+                AbstractHtmlService.sendJsError(facesContext, componentId,
+                        AbstractHtmlService.INVALID_PARAMETER_SERVICE_ERROR,
+                        "Component '" + componentId
+                                + "' does not implement ServiceComponent !",
+                        null);
                 return;
             }
 
-            sendResponse(facesContext, ret, progressMonitor, processContext,
-                    component);
+            ServiceComponent serviceComponent = (ServiceComponent) component;
 
-            return;
+            int syncMode = IClientServiceRegistry.SYNC_MODE;
+
+            String syncModeAtt = (String) requestHeader.get(SYNC_MODE);
+            if ("asynchronous".equals(syncModeAtt)) {
+                syncMode = IClientServiceRegistry.ASYNC_MODE;
+            }
+
+            Object parameter = null;
+
+            String progressMonitorValue = (String) requestHeader
+                    .get(CAMELIA_PROGRESS_MONITOR);
+
+            boolean formParameters = true;
+            String cameliaContentType = (String) requestHeader
+                    .get(CAMELIA_CONTENT_TYPE);
+            if ("xml".equals(cameliaContentType)) {
+                formParameters = false;
+
+                // Deserialize le Document xml
+                parameter = null; // <<< ICI
+                progressMonitorValue = null;
+            }
+
+            // On a besoin du processContext pour "parser"/formater les dates
+            // qui
+            // proviennent du client !
+            IProcessContext processContext = HtmlProcessContextImpl
+                    .getProcessContext(facesContext);
+
+            if (formParameters) {
+                Map request = externalContext.getRequestParameterMap();
+
+                String parameterType = (String) request.get(PARAMETER_TYPE);
+
+                String parameterString = (String) request.get(PARAMETER);
+
+                parameter = deserializeParameter(processContext,
+                        serviceComponent, parameterType, parameterString);
+            }
+
+            IClientServiceRegistry operationsRegistry = getClientServiceRegistry(facesContext);
+
+            IClientService clientService;
+            try {
+                clientService = operationsRegistry.createClientService(
+                        requestId, serviceComponent, parameter, syncMode);
+
+            } catch (ClientServiceException ex) {
+                LOG.error("Can not create operation '" + requestId + "'.", ex);
+
+                clientService = null;
+            }
+
+            IProgressMonitor progressMonitor = null;
+
+            if (syncMode == IClientServiceRegistry.SYNC_MODE) {
+                operationsRegistry.startClientService(clientService);
+
+                Object ret;
+                try {
+                    ret = operationsRegistry.waitClientService(clientService,
+                            progressMonitor);
+
+                } catch (ApplicationException ex) {
+                    sendClientError(facesContext, ex, processContext, component);
+                    return;
+                }
+
+                sendResponse(facesContext, ret, progressMonitor,
+                        processContext, component);
+
+                return;
+            }
+
+            sendOperationStatus(facesContext, clientService, true);
+
+        } finally {
+            localizedComponent.end();
         }
-
-        sendOperationStatus(facesContext, clientService, true);
     }
 
     private void sendClientError(FacesContext facesContext,

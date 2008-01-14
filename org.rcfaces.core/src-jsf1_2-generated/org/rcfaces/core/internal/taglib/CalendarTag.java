@@ -19,6 +19,7 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(CalendarTag.class);
 
 	private ValueExpression border;
+	private ValueExpression calendarLayout;
 	private ValueExpression mode;
 	public String getComponentType() {
 		return CalendarComponent.COMPONENT_TYPE;
@@ -26,6 +27,10 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 
 	public final void setBorder(ValueExpression border) {
 		this.border = border;
+	}
+
+	public final void setCalendarLayout(ValueExpression calendarLayout) {
+		this.calendarLayout = calendarLayout;
 	}
 
 	public final void setMode(ValueExpression mode) {
@@ -38,6 +43,7 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  border='"+border+"'");
+			LOG.debug("  calendarLayout='"+calendarLayout+"'");
 			LOG.debug("  mode='"+mode+"'");
 		}
 		super.setProperties(uiComponent);
@@ -61,6 +67,15 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (calendarLayout != null) {
+			if (calendarLayout.isLiteralText()==false) {
+				component.setValueExpression(Properties.CALENDAR_LAYOUT, calendarLayout);
+
+			} else {
+				component.setCalendarLayout(calendarLayout.getExpressionString());
+			}
+		}
+
 		if (mode != null) {
 			if (mode.isLiteralText()==false) {
 				component.setValueExpression(Properties.MODE, mode);
@@ -73,6 +88,7 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 
 	public void release() {
 		border = null;
+		calendarLayout = null;
 		mode = null;
 
 		super.release();

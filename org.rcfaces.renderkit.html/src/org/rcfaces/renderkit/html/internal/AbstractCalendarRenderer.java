@@ -11,6 +11,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.AbstractCalendarComponent;
+import org.rcfaces.core.component.capability.ICalendarLayoutCapability;
 import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -86,6 +87,14 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                     clientDatesStrategy);
         }
 
+        if (calendarComponent instanceof ICalendarLayoutCapability) {
+            ICalendarLayoutCapability calendarLayout = (ICalendarLayoutCapability) calendarComponent;
+
+            int layout = calendarLayout.getCalendarLayout();
+            if (layout != ICalendarLayoutCapability.DEFAULT_LAYOUT) {
+                htmlWriter.writeAttribute("v:layout", layout);
+            }
+        }
     }
 
     protected static String convertDate(Calendar calendar, Date dates[],

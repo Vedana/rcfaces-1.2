@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
+import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.HashSet;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The lineBreak Component is the &lt;BR&gt; HTML equivalent.</p>
@@ -31,7 +31,7 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","hiddenMode","styleClass","rendered"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","visible","hiddenMode","rendered"}));
 	}
 
 	public LineBreakComponent() {
@@ -122,7 +122,7 @@ public class LineBreakComponent extends CameliaBaseComponent implements
 	 * See {@link #getHiddenMode() getHiddenMode()} for more details
 	 */
 	public int getHiddenMode(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.HIDDEN_MODE,0, facesContext);
+		return engine.getIntProperty(Properties.HIDDEN_MODE,IHiddenModeCapability.DEFAULT_HIDDEN_MODE, facesContext);
 	}
 
 	/**
