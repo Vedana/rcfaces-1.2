@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project basedir="." default="build">
+
+	<target name="build">
+		<jar destfile="dist/rcfaces-css.jar">
+			<fileset dir="bin">
+			</fileset>
+		</jar>
+	</target>
+		
+	<target name="javacc">
+		<javacc
+		    target="src/com/steadystate/css/parser/css2.jj"
+		    outputdirectory="src-generated/com/steadystate/css/parser/"
+		    javacchome="${javacc.home}"
+		/>
+	</target>
+</project>
