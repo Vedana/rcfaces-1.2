@@ -351,7 +351,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
             IComponentDecorator componentDecorator) throws WriterException {
     }
 
-    protected final IHtmlWriter writeTitle(IHtmlWriter writer,
+    protected IHtmlWriter writeTitle(IHtmlWriter writer,
             IToolTipCapability element) throws WriterException {
         String title = element.getToolTipText();
 
@@ -366,7 +366,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return writer;
     }
 
-    protected final IHtmlWriter writeTabIndex(IHtmlWriter writer,
+    protected IHtmlWriter writeTabIndex(IHtmlWriter writer,
             ITabIndexCapability tabIndexCapability) throws WriterException {
         Integer index = tabIndexCapability.getTabIndex();
         if (index == null) {
@@ -386,7 +386,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return writer;
     }
 
-    protected final IHtmlWriter writeRequired(IHtmlWriter writer,
+    protected IHtmlWriter writeRequired(IHtmlWriter writer,
             IRequiredCapability component) throws WriterException {
         if (component.isRequired()) {
             writer.writeAttribute("v:required", true);
@@ -395,7 +395,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return writer;
     }
 
-    protected final IHtmlWriter writeImmediate(IHtmlWriter writer,
+    protected IHtmlWriter writeImmediate(IHtmlWriter writer,
             IImmediateCapability component) throws WriterException {
         if (component.isImmediate()) {
             writer.writeAttribute("v:immediate", true);
@@ -585,7 +585,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return htmlWriter;
     }
 
-    protected final IHtmlWriter writeScroll(IHtmlWriter writer,
+    protected IHtmlWriter writeScroll(IHtmlWriter writer,
             IScrollableCapability scrollableComponent) throws WriterException {
 
         int horizontalScrollPosition = scrollableComponent
@@ -971,7 +971,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return false;
     }
 
-    protected final IHtmlWriter writeReadOnly(IHtmlWriter writer,
+    protected IHtmlWriter writeReadOnly(IHtmlWriter writer,
             IReadOnlyCapability readOnlyCapability) throws WriterException {
         if (readOnlyCapability.isReadOnly()) {
             writer.writeReadOnly();
@@ -980,7 +980,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return writer;
     }
 
-    protected final IHtmlWriter writeEnabled(IHtmlWriter writer,
+    protected IHtmlWriter writeEnabled(IHtmlWriter writer,
             IDisabledCapability enabledCapability) throws WriterException {
         if (enabledCapability.isDisabled()) {
             writer.writeDisabled();

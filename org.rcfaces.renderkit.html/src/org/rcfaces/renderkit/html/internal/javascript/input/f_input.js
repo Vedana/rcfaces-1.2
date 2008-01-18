@@ -83,7 +83,7 @@ var __members = {
 	},
 	/**
 	 * 
-	 * @method protected final
+	 * @method public final
 	 * @return HTMLElement
 	 */
 	f_getInput: function() {
@@ -260,7 +260,7 @@ var __members = {
 		this.f_updateStyleClass();
 	},
 	/**
-	 * @method protected
+	 * @method public
 	 * @return void
 	 */
 	f_updateStyleClass: function(postSuffix) {

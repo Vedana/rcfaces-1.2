@@ -280,12 +280,7 @@ public class ComboGridRenderer extends DataGridRenderer {
                 + INPUT_ID_SUFFIX);
         htmlWriter.writeClass(getMainStyleClassName() + "_input");
 
-        if (disabled) {
-            htmlWriter.writeDisabled();
-        }
-        if (readOnly || editable == false) {
-            htmlWriter.writeReadOnly();
-        }
+        writeInputAttributes(htmlWriter);
 
         if (formattedValue != null) {
             htmlWriter.writeValue(formattedValue);
@@ -812,4 +807,27 @@ public class ComboGridRenderer extends DataGridRenderer {
         }
 
     }
+    
+    protected void writeInputAttributes(IHtmlWriter htmlWriter)
+			throws WriterException {
+
+		IHtmlComponentRenderContext componentRenderContext = htmlWriter
+				.getHtmlComponentRenderContext();
+
+		FacesContext facesContext = componentRenderContext.getFacesContext();
+
+		ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
+				.getComponent();
+
+		boolean disabled = comboGridComponent.isDisabled(facesContext);
+		boolean readOnly = comboGridComponent.isReadOnly(facesContext);
+		boolean editable = comboGridComponent.isEditable(facesContext);
+
+		if (disabled) {
+			htmlWriter.writeDisabled();
+		}
+		if (readOnly || editable == false) {
+			htmlWriter.writeReadOnly();
+		}
+	}
 }
