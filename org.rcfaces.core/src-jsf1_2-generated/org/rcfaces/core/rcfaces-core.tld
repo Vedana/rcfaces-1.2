@@ -15257,6 +15257,13 @@ A string specifying the identifier for this component.  This value must be
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>alternateText</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>

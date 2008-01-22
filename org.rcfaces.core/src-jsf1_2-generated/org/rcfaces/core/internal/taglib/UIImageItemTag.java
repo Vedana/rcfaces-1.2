@@ -25,6 +25,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 	private ValueExpression selectedImageURL;
 	private ValueExpression imageURL;
 	private ValueExpression rendered;
+	private ValueExpression alternateText;
 	public String getComponentType() {
 		return UIImageItemComponent.COMPONENT_TYPE;
 	}
@@ -57,6 +58,10 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		this.rendered = rendered;
 	}
 
+	public final void setAlternateText(ValueExpression alternateText) {
+		this.alternateText = alternateText;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (UIImageItemComponent.COMPONENT_TYPE==getComponentType()) {
@@ -69,6 +74,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  rendered='"+rendered+"'");
+			LOG.debug("  alternateText='"+alternateText+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -144,6 +150,16 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 				component.setRendered(getBool(rendered.getExpressionString()));
 			}
 		}
+		
+		if (alternateText != null) {
+			if (alternateText.isLiteralText()==false) {
+				component.setValueExpression(Properties.ALTERNATE_TEXT, alternateText);
+
+			} else {
+				component.setAlternateText(alternateText.getExpressionString());
+			}
+		}
+
 	}
 
 	public void release() {
@@ -154,6 +170,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		selectedImageURL = null;
 		imageURL = null;
 		rendered = null;
+		alternateText = null;
 
 		super.release();
 	}

@@ -347,6 +347,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writeInputAttributes(writer);
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly); // jbos@unedic.fr
+                    if (alternateText != null) {
+                        writer.writeAlt(alternateText);
+                    }
 
                 } else {
                     writer.writeHRef("javascript:void(0)");
@@ -357,6 +360,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeClass(getImageClassName(htmlBorderWriter));
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
+                    if (alternateText != null) {
+                        writer.writeAlt(alternateText);
+                    }
                     writer.endElement(IHtmlWriter.IMG);
                 }
 

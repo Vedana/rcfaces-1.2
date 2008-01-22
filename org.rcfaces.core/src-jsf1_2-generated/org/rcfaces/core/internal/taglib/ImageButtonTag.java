@@ -25,6 +25,7 @@ public class ImageButtonTag extends ButtonTag implements Tag {
 	private ValueExpression border;
 	private ValueExpression borderType;
 	private ValueExpression textPosition;
+	private ValueExpression alternateText;
 	private ValueExpression imageHeight;
 	private ValueExpression imageWidth;
 	public String getComponentType() {
@@ -67,6 +68,10 @@ public class ImageButtonTag extends ButtonTag implements Tag {
 		this.imageWidth = imageWidth;
 	}
 
+	public final void setAlternateText(ValueExpression alternateText) {
+		this.alternateText = alternateText;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ImageButtonComponent.COMPONENT_TYPE==getComponentType()) {
@@ -79,6 +84,7 @@ public class ImageButtonTag extends ButtonTag implements Tag {
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 			LOG.debug("  textPosition='"+textPosition+"'");
+			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 		}
@@ -174,6 +180,16 @@ public class ImageButtonTag extends ButtonTag implements Tag {
 				component.setImageWidth(getInt(imageWidth.getExpressionString()));
 			}
 		}
+		
+		if (alternateText != null) {
+			if (alternateText.isLiteralText()==false) {
+				component.setValueExpression(Properties.ALTERNATE_TEXT, alternateText);
+
+			} else {
+				component.setAlternateText(alternateText.getExpressionString());
+			}
+		}
+
 	}
 
 	public void release() {
@@ -186,6 +202,7 @@ public class ImageButtonTag extends ButtonTag implements Tag {
 		textPosition = null;
 		imageHeight = null;
 		imageWidth = null;
+		alternateText = null;
 
 		super.release();
 	}

@@ -2,6 +2,7 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.ButtonComponent;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import java.lang.String;
 import javax.faces.context.FacesContext;
@@ -29,13 +30,14 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * </p>
  */
 public class ImageButtonComponent extends ButtonComponent implements 
-	IImageButtonFamilly {
+	IImageButtonFamilly,
+	IAlternateTextCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageButton";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alternateText","disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 
 	public ImageButtonComponent() {
@@ -285,4 +287,29 @@ public class ImageButtonComponent extends ButtonComponent implements
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
+	}
+
+
 }

@@ -1,5 +1,6 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.familly.IContentAccessors;
@@ -22,13 +23,14 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 	IVisibilityCapability,
 	IToolTipCapability,
 	IStatesImageCapability,
-	IImageAccessorsCapability {
+	IImageAccessorsCapability,
+	IAlternateTextCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectedImageURL","disabledImageURL","visible","hoverImageURL","rendered","toolTipText","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alternateText","selectedImageURL","disabledImageURL","visible","hoverImageURL","rendered","toolTipText","imageURL"}));
 	}
 
 	public UIImageItemComponent() {
@@ -234,4 +236,28 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 		}
 		super.setValueExpression(name, binding);
 	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
+	}
+
 }

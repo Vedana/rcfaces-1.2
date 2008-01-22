@@ -36,6 +36,7 @@ import org.rcfaces.core.component.ToolBarComponent;
 import org.rcfaces.core.component.ToolItemComponent;
 import org.rcfaces.core.component.ToolItemSeparatorComponent;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IExpandImageCapability;
@@ -594,6 +595,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        if (selectItem instanceof IAlternateTextItem) {
+        	String alternateText = ((IAlternateTextItem) selectItem).getAlternateText();
+
+        	if (alternateText != null
+        			&& (itemComponent instanceof IAlternateTextCapability)) {
+        		((IAlternateTextCapability) itemComponent).setAlternateText(alternateText);
+        	}
+        } 
+        
         String description = selectItem.getDescription();
         if (description != null
                 && (itemComponent instanceof IToolTipCapability)) {
