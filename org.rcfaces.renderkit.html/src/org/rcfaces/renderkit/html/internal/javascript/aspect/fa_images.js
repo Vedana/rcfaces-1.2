@@ -234,7 +234,7 @@ var __members = {
 	 */
 
 	/**
-	 * @method protected abstract
+	 * @method public abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT,

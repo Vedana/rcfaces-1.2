@@ -62,7 +62,7 @@ var __members = {
 	fa_updateValue: f_class.OPTIONAL_ABSTRACT,
 
 	/**
-	 * @method protected abstract
+	 * @method public abstract
 	 * @return void
 	 */
 	f_setProperty: f_class.ABSTRACT

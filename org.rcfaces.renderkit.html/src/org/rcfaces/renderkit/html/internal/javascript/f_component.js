@@ -570,7 +570,7 @@ var __members = {
 		return styleClass;
 	},
 	/** 
-	 * @method protected
+	 * @method public
 	 * @return String
 	 */
 	f_getMainStyleClass: function() {

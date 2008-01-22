@@ -83,7 +83,7 @@ var __members = {
 	},
 	/**
 	 * 
-	 * @method public final
+	 * @method public
 	 * @return HTMLElement
 	 */
 	f_getInput: function() {

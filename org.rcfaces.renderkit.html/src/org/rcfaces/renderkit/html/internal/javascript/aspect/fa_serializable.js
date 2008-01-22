@@ -36,7 +36,7 @@ var __members = {
 	},
 	/**
 	 * 
-	 * @method protected
+	 * @method public
 	 * @return void
 	 */
 	f_setProperty: function(name, value, isList, listSep) {

@@ -38,7 +38,7 @@ var __members={
 		return true;		
 	},
 	/**
-	 * @method protected
+	 * @method public
 	 * @return void
 	 */
 	f_updateStyleClass: function(postSuffix) {
