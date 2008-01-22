@@ -4,6 +4,7 @@
 package org.rcfaces.core.internal.style;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
@@ -17,8 +18,8 @@ import org.rcfaces.core.internal.style.CssParserFactory.ICssParser.IParserContex
  */
 public interface IStyleOperation extends IBufferOperation {
 
-    String filter(IResourceLoaderFactory resourceLoaderFactory,
-            ICssParser cssParser, String styleSheetURL,
-            String styleSheetContent, IParserContext mergeContext)
+    String filter(Map applicationParameters,
+            IResourceLoaderFactory resourceLoaderFactory, ICssParser cssParser,
+            String styleSheetURL, String styleSheetContent, IParserContext mergeContext)
             throws IOException;
 }

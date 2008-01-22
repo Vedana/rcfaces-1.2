@@ -40,7 +40,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalLocale","readOnly","maxDate","componentTimeZone","componentLocale","literalTimeZone","disabledWeekDays","minDate","clientDatesStrategy","twoDigitYearStart"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalLocale","cursorDate","readOnly","maxDate","componentTimeZone","componentLocale","literalTimeZone","disabledWeekDays","minDate","clientDatesStrategy","twoDigitYearStart"}));
 	}
 
 
@@ -174,6 +174,25 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 
 		setComponentTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
+		
+	}
+
+	public void setCursorDate(String date) {
+
+
+			engine.setProperty(Properties.CURSOR_DATE, date);
+		
+	}
+
+	public Date getCursorDate(FacesContext facesContext) {
+
+
+			Object value=engine.getProperty(Properties.CURSOR_DATE, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
 		
 	}
 
@@ -416,6 +435,22 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 */
 	public boolean isMaxDateSetted() {
 		return engine.isPropertySetted(Properties.MAX_DATE);
+	}
+
+	public java.util.Date getCursorDate() {
+		return getCursorDate(null);
+	}
+
+	public void setCursorDate(java.util.Date cursorDate) {
+		engine.setProperty(Properties.CURSOR_DATE, cursorDate);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cursorDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isCursorDateSetted() {
+		return engine.isPropertySetted(Properties.CURSOR_DATE);
 	}
 
 	/**

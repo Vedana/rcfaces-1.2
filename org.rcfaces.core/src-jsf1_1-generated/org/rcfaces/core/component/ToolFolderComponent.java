@@ -1,23 +1,23 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
+import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IMenuCapability;
+import java.lang.String;
+import org.rcfaces.core.component.ToolBarComponent;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import java.util.HashSet;
+import org.rcfaces.core.internal.tools.ToolBarTools;
+import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.ToolBarComponent;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import org.rcfaces.core.internal.tools.ToolBarTools;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 /**
  * <b>EXPERIMENTAL</b>
@@ -34,7 +34,7 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalAlignment","initListener","doubleClickListener","mouseOverListener","borderType","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalAlignment","borderType","mouseOverListener","doubleClickListener","mouseOutListener","initListener"}));
 	}
 
 	public ToolFolderComponent() {
@@ -65,17 +65,17 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

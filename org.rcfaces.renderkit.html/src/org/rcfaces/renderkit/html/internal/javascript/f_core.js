@@ -3853,6 +3853,7 @@ var f_core = {
 	 * @method hidden static 
 	 * @param Object p
 	 * @param optional String sep
+	 * @param hidden Array d
 	 * @return String
 	 */
 	EncodeObject: function(p, sep) {
@@ -3861,38 +3862,55 @@ var f_core = {
 		}
 		
 		var d = new Array;
-		for (var i in p) {
-			if (d.length) { 
-				d.push(sep);
-			}
-			
-			d.push(i, "=");
-			
-			var v=p[i];
+		
+		function f(d, v) {
 			if (v===null || v===undefined) {
 				d.push("L");
-				continue;
+				return;
 			}
 
 			if (v===true) {
 				d.push("T");
-				continue;
+				return;
 			}			
 
 			if (v===false) {
 				d.push("F");
-				continue;
+				return;
 			}
 			
 			if (v==="") {
 				// Vide !
-				continue;
+				return;
+			}
+			
+			if (v instanceof Array) {
+				var l=v.length;
+				
+				if (!l) {
+					d.push("[0]");
+					return;
+				}
+				
+				d.push("[", String(l), ":");
+
+				for(var i=0;i<l;i++) {
+					if (i) {
+						d.push(',');
+					}
+						
+					arguments.callee(d, v[i]);
+				}
+				
+				d.push("]");
+
+				return;
 			}
 			
 			if (typeof(v)=="number") {
-				if (v==0) {
+				if (!v) {
 					d.push("0");
-					continue;
+					return;
 				}
 				
 //				d+="N";
@@ -3920,14 +3938,28 @@ var f_core = {
 				
 			} else if (f_class.IsClassDefined("f_time") && (v instanceof f_time)) {
 				d.push("M");
-				v=f_time.SerializeTime(v);
+				v=f_time.Serialize(v);
+				
+			} else if (f_class.IsClassDefined("f_period") && (v instanceof f_period)) {
+				d.push("P");
+				v=f_period.Serialize(v);
 
 			} else {
 				f_core.Error(f_core, "EncodeObject: Can not serialize '"+v+"'.");
-				continue;
+				return;
 			}
 			
 			d.push(encodeURIComponent(v));
+		}
+		
+		for (var i in p) {
+			if (d.length) { 
+				d.push(sep);
+			}
+			
+			d.push(i, "=");
+			
+			f(d, p[i]);
 		}
 	
 		return d.join('');
@@ -3976,7 +4008,13 @@ var f_core = {
 			case 'M':
 				f_class.IsClassDefined("f_time", "f_time class is required to deserialize a time object !");
 				
-				data=f_time.DeserializeTime(data);
+				data=f_time.Deserialize(data);
+				break;
+
+			case 'P':
+				f_class.IsClassDefined("f_period", "f_period class is required to deserialize a period object !");
+				
+				data=f_period.Deserialize(data);
 				break;
 
 			case 'X':

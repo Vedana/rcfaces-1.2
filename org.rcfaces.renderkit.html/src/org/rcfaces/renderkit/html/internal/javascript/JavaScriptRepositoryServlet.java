@@ -36,6 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ContextTools;
+import org.rcfaces.core.internal.util.ApplicationParametersMap;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
@@ -53,6 +54,7 @@ import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
+import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClassFile;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -234,8 +236,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     + " setted for servlet '" + getServletName() + "'.");
         }
 
+        Map applicationParamaters = new ApplicationParametersMap(servletContext);
+
         AbstractHierarchicalRepository repository = new JavaScriptRepository(
-                mainRepositoryURI, repositoryVersion);
+                mainRepositoryURI, repositoryVersion, applicationParamaters);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
         List repositoriesLocation = new ArrayList();
@@ -504,7 +508,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                             urlsc[i] = url;
 
                             LOG.debug("Use compiled record of '"
-                                    + file.getFilename() + "'.");
+                                    + file.getFilename() + "' (" + surl + ")");
                         }
                     } finally {
                         content.release();
@@ -512,7 +516,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
                 } catch (IOException ex) {
                     LOG.error("Can not get connection of '"
-                            + file.getFilename() + "'.", ex);
+                            + file.getFilename() + "'. (" + surl + ")", ex);
                 }
             }
 
@@ -525,7 +529,6 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
             prolog = null;
             if (enableSymbols) {
-
                 if (SYMBOLS_FILENAMES.contains(fileName) == false) {
                     JavaScriptRepositoryServlet.this
                             .reloadSymbols(getRepository());
@@ -533,6 +536,11 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             }
 
             String content = new String(buffer, getInputCharset());
+
+            if (enableSymbols) {
+                content = ((IClassFile) file).convertSymbols(getSymbols(),
+                        content);
+            }
 
             return content.getBytes(getOuputCharset());
         }

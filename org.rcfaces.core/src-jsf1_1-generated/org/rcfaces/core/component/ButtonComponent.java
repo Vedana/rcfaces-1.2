@@ -1,15 +1,16 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractCommandComponent;
-import java.util.Arrays;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
@@ -28,13 +29,14 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	ITextCapability,
 	ITextDirectionCapability,
 	ISelectionEventCapability,
-	IReadOnlyCapability {
+	IReadOnlyCapability,
+	IAlternateTextCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.button";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","readOnly","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","readOnly","alternateText","textDirection"}));
 	}
 
 	public ButtonComponent() {
@@ -125,6 +127,29 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	public void setReadOnly(boolean readOnly) {
 		engine.setProperty(Properties.READ_ONLY, readOnly);
+	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
 	}
 
 	protected Set getCameliaFields() {

@@ -174,11 +174,11 @@ public class TabRenderer extends CardRenderer {
         if (js.getComponentRenderContext().getRenderContext()
                 .containsAttribute(
                         TabbedPaneRenderer.TABBED_PANE_JSF12_PROPERTY)) {
-            objectLiteralWriter.writeProperty("_titleGenerated").writeBoolean(
+            objectLiteralWriter.writeSymbol("_titleGenerated").writeBoolean(
                     true);
         }
 
-        objectLiteralWriter.writeProperty("_id").writeString(tadComponentId);
+        objectLiteralWriter.writeSymbol("_id").writeString(tadComponentId);
 
         Object value = tab.getValue();
         String clientValue = null;
@@ -190,29 +190,28 @@ public class TabRenderer extends CardRenderer {
         }
 
         if (clientValue != null) {
-            objectLiteralWriter.writeProperty("_value")
-                    .writeString(clientValue);
+            objectLiteralWriter.writeSymbol("_value").writeString(clientValue);
         }
 
         if (selected) {
-            objectLiteralWriter.writeProperty("_selected").writeBoolean(true);
+            objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
         }
 
         String text = tab.getText(facesContext);
         if (text != null) {
             text = ParamUtils.formatMessage(tab, text);
 
-            objectLiteralWriter.writeProperty("_text").writeString(text);
+            objectLiteralWriter.writeSymbol("_text").writeString(text);
         }
 
         String accessKey = tab.getAccessKey(facesContext);
         if (accessKey != null) {
-            objectLiteralWriter.writeProperty("_accessKey").writeString(
-                    accessKey);
+            objectLiteralWriter.writeSymbol("_accessKey")
+                    .writeString(accessKey);
         }
 
         if (tab.isDisabled(facesContext)) {
-            objectLiteralWriter.writeProperty("_disabled").writeBoolean(true);
+            objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
         }
 
         IContentAccessors contentAccessors = tab
@@ -225,7 +224,7 @@ public class TabRenderer extends CardRenderer {
                     .getImageAccessor();
 
             if (contentAccessor != null) {
-                objectLiteralWriter.writeProperty("_imageURL").writeString(
+                objectLiteralWriter.writeSymbol("_imageURL").writeString(
                         contentAccessor.resolveURL(facesContext, null, null));
             }
 
@@ -235,7 +234,7 @@ public class TabRenderer extends CardRenderer {
                 contentAccessor = statesImageAccessors
                         .getDisabledImageAccessor();
                 if (contentAccessor != null) {
-                    objectLiteralWriter.writeProperty("_disabledImageURL")
+                    objectLiteralWriter.writeSymbol("_disabledImageURL")
                             .writeString(
                                     contentAccessor.resolveURL(facesContext,
                                             null, null));
@@ -243,7 +242,7 @@ public class TabRenderer extends CardRenderer {
 
                 contentAccessor = statesImageAccessors.getHoverImageAccessor();
                 if (contentAccessor != null) {
-                    objectLiteralWriter.writeProperty("_hoverImageURL")
+                    objectLiteralWriter.writeSymbol("_hoverImageURL")
                             .writeString(
                                     contentAccessor.resolveURL(facesContext,
                                             null, null));
@@ -252,7 +251,7 @@ public class TabRenderer extends CardRenderer {
                 contentAccessor = statesImageAccessors
                         .getSelectedImageAccessor();
                 if (contentAccessor != null) {
-                    objectLiteralWriter.writeProperty("_selectedImageURL")
+                    objectLiteralWriter.writeSymbol("_selectedImageURL")
                             .writeString(
                                     contentAccessor.resolveURL(facesContext,
                                             null, null));

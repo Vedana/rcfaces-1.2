@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.UIImageItemComponent;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.UIImageItemComponent;
-import javax.faces.application.Application;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public class UIImageItemTag extends AbstractItemTag implements Tag {
 
@@ -24,6 +24,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 	private String hoverImageURL;
 	private String selectedImageURL;
 	private String imageURL;
+	private String alternateText;
 	private String rendered;
 	public String getComponentType() {
 		return UIImageItemComponent.COMPONENT_TYPE;
@@ -77,6 +78,14 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		this.imageURL = imageURL;
 	}
 
+	public final String getAlternateText() {
+		return alternateText;
+	}
+
+	public final void setAlternateText(String alternateText) {
+		this.alternateText = alternateText;
+	}
+
 	public final void setRendered(String rendered) {
 		this.rendered = rendered;
 	}
@@ -92,6 +101,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
 			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  rendered='"+rendered+"'");
 		}
 		super.setProperties(uiComponent);
@@ -167,6 +177,16 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			}
 		}
 
+		if (alternateText != null) {
+			if (isValueReference(alternateText)) {
+				ValueBinding vb = application.createValueBinding(alternateText);
+				component.setValueBinding(Properties.ALTERNATE_TEXT, vb);
+
+			} else {
+				component.setAlternateText(alternateText);
+			}
+		}
+
 		if (rendered != null) {
 			if (isValueReference(rendered)) {
 				ValueBinding vb = application.createValueBinding(rendered);
@@ -185,6 +205,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		hoverImageURL = null;
 		selectedImageURL = null;
 		imageURL = null;
+		alternateText = null;
 		rendered = null;
 
 		super.release();

@@ -20,7 +20,9 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 
 	private ValueExpression border;
 	private ValueExpression calendarLayout;
+	private ValueExpression multipleSelect;
 	private ValueExpression mode;
+	private ValueExpression autoSelection;
 	public String getComponentType() {
 		return CalendarComponent.COMPONENT_TYPE;
 	}
@@ -33,8 +35,16 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 		this.calendarLayout = calendarLayout;
 	}
 
+	public final void setMultipleSelect(ValueExpression multipleSelect) {
+		this.multipleSelect = multipleSelect;
+	}
+
 	public final void setMode(ValueExpression mode) {
 		this.mode = mode;
+	}
+
+	public final void setAutoSelection(ValueExpression autoSelection) {
+		this.autoSelection = autoSelection;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -44,7 +54,9 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 			}
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  calendarLayout='"+calendarLayout+"'");
+			LOG.debug("  multipleSelect='"+multipleSelect+"'");
 			LOG.debug("  mode='"+mode+"'");
+			LOG.debug("  autoSelection='"+autoSelection+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -76,6 +88,15 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (multipleSelect != null) {
+			if (multipleSelect.isLiteralText()==false) {
+				component.setValueExpression(Properties.MULTIPLE_SELECT, multipleSelect);
+
+			} else {
+				component.setMultipleSelect(getBool(multipleSelect.getExpressionString()));
+			}
+		}
+
 		if (mode != null) {
 			if (mode.isLiteralText()==false) {
 				component.setValueExpression(Properties.MODE, mode);
@@ -84,12 +105,23 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 				component.setMode(mode.getExpressionString());
 			}
 		}
+
+		if (autoSelection != null) {
+			if (autoSelection.isLiteralText()==false) {
+				component.setValueExpression(Properties.AUTO_SELECTION, autoSelection);
+
+			} else {
+				component.setAutoSelection(getBool(autoSelection.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
 		border = null;
 		calendarLayout = null;
+		multipleSelect = null;
 		mode = null;
+		autoSelection = null;
 
 		super.release();
 	}

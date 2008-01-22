@@ -27,6 +27,10 @@ public class NumFormatter extends AbstractClientValidatorTask implements
             .compile("^(\\s)");
 
     public String applyFormatter(IClientValidatorContext context, String value) {
+        if (value.length() < 1) {
+            return value;
+        }
+
         int decimal = getIntParameter(context, "num.decimal", -1);
         String dec = getParameter(context, "num.decSign");
         String neg = getParameter(context, "num.negSign", "-");
@@ -84,6 +88,10 @@ public class NumFormatter extends AbstractClientValidatorTask implements
                     dp += "0";
                 }
             }
+
+            if (n.length() == 0) {
+                n = "0";
+            }
         }
 
         // Check if no need
@@ -103,8 +111,8 @@ public class NumFormatter extends AbstractClientValidatorTask implements
             for (int l = ip.length() - 3; l > 0; l -= 3) {
                 sa.insert(l, c);
             }
-            
-            ip=sa.toString();
+
+            ip = sa.toString();
         }
 
         // Rebuild string

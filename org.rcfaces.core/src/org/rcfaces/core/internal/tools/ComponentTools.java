@@ -141,40 +141,68 @@ public final class ComponentTools {
             for (UIComponent currentParent = component; currentParent != null; currentParent = currentParent
                     .getParent()) {
 
-                UIComponent result = currentParent.findComponent(forComponent);
-                if (result != null) {
-                    return result;
+                try {
+                    UIComponent result = currentParent
+                            .findComponent(forComponent);
+                    if (result != null) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Get for component '" + forComponent
+                                    + "' returns " + result.getId());
+                        }
+                        return result;
+                    }
+
+                } catch (IllegalArgumentException ex) {
+                    LOG.error("Compute for component '" + component.getId()
+                            + "'", ex);
+
+                    break;
                 }
             }
 
             return findUIComponentBelow(context.getViewRoot(), forComponent);
 
         } catch (RuntimeException ex) {
-            throw ex;
+            LOG.error("Compute for component '" + component.getId() + "'", ex);
 
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw ex;
         }
     }
 
     private static UIComponent findUIComponentBelow(UIComponent startPoint,
             String forComponent) {
-        UIComponent retComp = null;
         List children = startPoint.getChildren();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Find component below '" + startPoint.getId() + "' to '"
+                    + forComponent + "'.");
+        }
 
         int size = children.size();
         for (int i = 0; i < size; i++) {
             UIComponent comp = (UIComponent) children.get(i);
 
             if (comp instanceof NamingContainer) {
-                retComp = comp.findComponent(forComponent);
-                if (retComp != null) {
-                    return retComp;
+                try {
+                    UIComponent retComp = comp.findComponent(forComponent);
+
+                    if (retComp != null) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Find component below '" + forComponent
+                                    + "' returns " + retComp.getId());
+                        }
+
+                        return retComp;
+                    }
+
+                } catch (IllegalArgumentException ex) {
+                    LOG.error("Find component below '" + startPoint.getId()
+                            + "' to '" + forComponent + "' exception:", ex);
                 }
             }
 
             if (comp.getChildCount() > 0) {
-                retComp = findUIComponentBelow(comp, forComponent);
+                UIComponent retComp = findUIComponentBelow(comp, forComponent);
                 if (retComp != null) {
                     return retComp;
                 }
@@ -450,7 +478,7 @@ public final class ComponentTools {
         if (found) {
             return;
         }
-        
+
         BindingTools.invokeActionListener(facesContext, component, facesEvent);
 
         // Invoke the default ActionListener

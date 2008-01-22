@@ -116,7 +116,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
                             .pushInteractiveRenderComponent(htmlWriter, null);
                 }
             }
-            
+
             setAsyncRenderer(htmlWriter, cardComponent, asyncRender);
         }
 
@@ -226,7 +226,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         IObjectLiteralWriter objectLiteralWriter = js.writeObjectLiteral(false);
 
-        objectLiteralWriter.writeProperty("_id").writeString(
+        objectLiteralWriter.writeSymbol("_id").writeString(
                 componentRenderContext.getComponentClientId());
 
         Object value = cardComponent.getValue();
@@ -239,12 +239,12 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         }
 
         if (clientValue != null) {
-            objectLiteralWriter.writeProperty("_value")
-                    .writeString(clientValue);
+
+            objectLiteralWriter.writeSymbol("_value").writeString(clientValue);
         }
 
         if (selected) {
-            objectLiteralWriter.writeProperty("_selected").writeBoolean(true);
+            objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
         }
 
         objectLiteralWriter.end();

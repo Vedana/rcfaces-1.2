@@ -4,18 +4,23 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CalendarComponent;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
+import org.rcfaces.core.lang.Period;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -83,6 +88,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         super.writeCalendarAttributes(htmlWriter, componentCalendar);
 
         writeCalendarMode(htmlWriter, componentCalendar);
+
     }
 
     protected void writeCalendarMode(IHtmlWriter htmlWriter,
@@ -90,20 +96,33 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
         CalendarComponent calendarComponent = (CalendarComponent) componentRenderContext
                 .getComponent();
 
-        int mode = calendarComponent.getMode();
+        int mode = calendarComponent.getMode(facesContext);
         if (mode != 0) {
             htmlWriter.writeAttribute("v:mode", mode);
         }
 
         Object value = calendarComponent.getValue();
         String s_value = null;
+        Object sourceValue = value;
 
-        StringAppender sb = new StringAppender(12);
+        StringAppender sb = new StringAppender(32);
         switch (mode) {
-        case ICalendarModeCapability.CALENDAR_MODE_DATE:
+        case ICalendarModeCapability.DATE_CALENDAR_MODE:
+            if ((value instanceof Date) == false
+                    && (value instanceof Date[]) == false) {
+                if (calendarComponent.isMultipleSelect(facesContext)) {
+                    value = convertValueToDateArray(facesContext, value);
+
+                } else {
+                    value = convertValueToDate(facesContext, value);
+                }
+            }
+
             if (value instanceof Date) {
                 Date d = (Date) value;
 
@@ -112,40 +131,47 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
 
                 s_value = sb.toString();
 
-            } else if (value != null) {
-                throw new FacesException("Value for calendarMode " + mode
-                        + " must be a Date object.");
+            } else if (value instanceof Date[]) {
+                Date[] d = (Date[]) value;
+
+                sb.setLength(0);
+                appendDates(componentCalendar, d, sb, true);
+
+                s_value = sb.toString();
+
+            } else if (sourceValue != null) {
+                throw new FacesException(
+                        "Value for calendarMode "
+                                + mode
+                                + " must be a Date object or an array of Date object. ("
+                                + sourceValue + ")");
             }
 
             break;
 
-        case ICalendarModeCapability.CALENDAR_MODE_PERIOD:
-            if (value instanceof Date[][]) {
-                Date ds[][] = (Date[][]) value;
+        case ICalendarModeCapability.PERIOD_CALENDAR_MODE:
+            if ((value instanceof Period) == false
+                    && (value instanceof Period[]) == false) {
+                if (calendarComponent.isMultipleSelect(facesContext)) {
+                    value = convertValueToPeriodArray(facesContext, value);
 
-                if (ds.length > 1) {
-                    throw new FacesException(
-                            "Only one period is accepted for calendarMode '"
-                                    + mode + "'.");
+                } else {
+                    value = convertValueToPeriod(facesContext, value);
                 }
+            }
 
-                if (ds.length > 0) {
-                    s_value = convertDate(componentCalendar, ds[0], true);
-                }
+            if (value instanceof Period) {
+                s_value = convertPeriod(componentCalendar, (Period) value, true);
 
-            } else if (value != null) {
+            } else if (value instanceof Period[]) {
+                s_value = convertPeriods(componentCalendar, (Period[]) value,
+                        true);
+
+            } else if (sourceValue != null) {
                 throw new FacesException("Value for calendarMode " + mode
-                        + " must be an array of Date object.");
+                        + " must be a Period object. (" + sourceValue + ")");
             }
 
-            break;
-
-        case ICalendarModeCapability.CALENDAR_MODE_PERIODS:
-            if (value instanceof Date[][]) {
-                // Date ds[][] = (Date[][]) value;
-
-                // String s = convertDate(calendar, ds);
-            }
             break;
 
         default:
@@ -155,6 +181,41 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         if (s_value != null) {
             htmlWriter.writeAttribute("v:value", s_value);
         }
+
+        if (calendarComponent.isAutoSelection(facesContext)) {
+            htmlWriter.writeAttribute("v:autoSelection", true);
+        }
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        CalendarComponent calendarComponent = (CalendarComponent) component;
+
+        Object dateValue = componentData.getProperty("value");
+
+        if (dateValue instanceof Collection) {
+            Collection c = (Collection) dateValue;
+
+            switch (calendarComponent.getMode(context.getFacesContext())) {
+            case ICalendarModeCapability.DATE_CALENDAR_MODE:
+                dateValue = c.toArray(new Date[c.size()]);
+                break;
+
+            case ICalendarModeCapability.PERIOD_CALENDAR_MODE:
+                dateValue = c.toArray(new Period[c.size()]);
+                break;
+            }
+        }
+
+        Object date = null;
+        if (dateValue != null
+                && calendarComponent.isValueLocked(context.getFacesContext()) == false) {
+            date = dateValue;
+        }
+
+        calendarComponent.setSubmittedExternalValue(date);
     }
 
 }

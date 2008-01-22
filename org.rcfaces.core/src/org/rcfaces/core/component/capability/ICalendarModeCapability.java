@@ -21,37 +21,27 @@ public interface ICalendarModeCapability {
     /**
      * 
      */
-    int CALENDAR_MODE_DATE = 0;
+    int DATE_CALENDAR_MODE = 0;
 
     /**
      * 
      */
-    String CALENDAR_MODE_DATE_NAME = "date";
+    String DATE_CALENDAR_MODE_NAME = "date";
 
     /**
      * 
      */
-    int CALENDAR_MODE_PERIOD = 1;
+    int PERIOD_CALENDAR_MODE = 1;
 
     /**
      * 
      */
-    String CALENDAR_MODE_PERIOD_NAME = "period";
+    String PERIOD_CALENDAR_MODE_NAME = "period";
 
     /**
      * 
      */
-    int CALENDAR_MODE_PERIODS = 2;
-
-    /**
-     * 
-     */
-    String CALENDAR_MODE_PERIODS_NAME = "periods";
-
-    /**
-     * 
-     */
-    int DEFAULT_CALENDAR_MODE = CALENDAR_MODE_DATE;
+    int DEFAULT_CALENDAR_MODE = DATE_CALENDAR_MODE;
 
     /**
      * 
@@ -61,7 +51,9 @@ public interface ICalendarModeCapability {
     /**
      * Returns a int value specifying the selection mode.
      * 
-     * @return 0:date|1:period|2:periods
+     * @return mode
+     * @see #DATE_CALENDAR_MODE
+     * @see #PERIOD_CALENDAR_MODE
      */
     int getMode();
 
@@ -69,7 +61,8 @@ public interface ICalendarModeCapability {
      * Sets a int value specifying the selection mode.
      * 
      * @param mode
-     *            0:date|1:period|2:periods
+     * @see #DATE_CALENDAR_MODE
+     * @see #PERIOD_CALENDAR_MODE
      */
     void setMode(int mode);
 }

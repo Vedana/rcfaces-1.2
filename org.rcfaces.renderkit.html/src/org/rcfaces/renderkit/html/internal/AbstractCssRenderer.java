@@ -54,7 +54,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return getMainStyleClassName();
     }
 
-    public final String getMainStyleClassName() {
+    public String getMainStyleClassName() {
         return getJavaScriptClassName();
     }
 

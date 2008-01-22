@@ -1,19 +1,20 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import java.lang.String;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractItemComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
 import org.rcfaces.core.component.capability.IToolTipCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
  * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
@@ -22,13 +23,14 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 	IVisibilityCapability,
 	IToolTipCapability,
 	IStatesImageCapability,
+	IAlternateTextCapability,
 	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","disabledImageURL","selectedImageURL","toolTipText","visible","rendered"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectedImageURL","disabledImageURL","alternateText","visible","hoverImageURL","rendered","toolTipText","imageURL"}));
 	}
 
 	public UIImageItemComponent() {
@@ -222,6 +224,29 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 			return getImageAccessors(null);
 		
+	}
+
+	public java.lang.String getAlternateText() {
+		return getAlternateText(null);
+	}
+
+	/**
+	 * See {@link #getAlternateText() getAlternateText()} for more details
+	 */
+	public java.lang.String getAlternateText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALTERNATE_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alternateText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlternateTextSetted() {
+		return engine.isPropertySetted(Properties.ALTERNATE_TEXT);
+	}
+
+	public void setAlternateText(java.lang.String alternateText) {
+		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
 	}
 
 	protected Set getCameliaFields() {

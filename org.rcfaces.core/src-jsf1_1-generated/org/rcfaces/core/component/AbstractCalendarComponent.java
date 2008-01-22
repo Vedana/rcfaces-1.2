@@ -1,30 +1,30 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.converter.WeekDaysConverter;
-import org.rcfaces.core.internal.component.Properties;
 import java.util.TimeZone;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
-import javax.faces.FacesException;
-import java.util.Date;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
-import java.util.Locale;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.WeekDaysConverter;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import javax.faces.FacesException;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.Locale;
+import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
+import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
+import javax.faces.el.ValueBinding;
+import java.util.Date;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import java.util.HashSet;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractInputComponent;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -40,7 +40,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalTimeZone","maxDate","literalLocale","componentLocale","clientDatesStrategy","componentTimeZone","readOnly","disabledWeekDays","twoDigitYearStart","minDate"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalLocale","cursorDate","readOnly","maxDate","componentTimeZone","componentLocale","literalTimeZone","disabledWeekDays","minDate","clientDatesStrategy","twoDigitYearStart"}));
 	}
 
 
@@ -174,6 +174,25 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 
 		setComponentTimeZone((TimeZone)TimeZoneConverter.SINGLETON.getAsObject(null, this, timeZone));
+		
+	}
+
+	public void setCursorDate(String date) {
+
+
+			engine.setProperty(Properties.CURSOR_DATE, date);
+		
+	}
+
+	public Date getCursorDate(FacesContext facesContext) {
+
+
+			Object value=engine.getProperty(Properties.CURSOR_DATE, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
 		
 	}
 
@@ -416,6 +435,22 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	 */
 	public boolean isMaxDateSetted() {
 		return engine.isPropertySetted(Properties.MAX_DATE);
+	}
+
+	public java.util.Date getCursorDate() {
+		return getCursorDate(null);
+	}
+
+	public void setCursorDate(java.util.Date cursorDate) {
+		engine.setProperty(Properties.CURSOR_DATE, cursorDate);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cursorDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isCursorDateSetted() {
+		return engine.isPropertySetted(Properties.CURSOR_DATE);
 	}
 
 	/**

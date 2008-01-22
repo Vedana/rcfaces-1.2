@@ -247,4 +247,9 @@ public abstract class RcfacesContext {
     public static boolean isJSF1_2() {
         return isJSF1_2;
     }
+
+    public static Object getService(String providerId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

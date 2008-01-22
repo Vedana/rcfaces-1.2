@@ -719,15 +719,15 @@
 		</converter>
 	</tag>
 	<tag>
-		<tag-name>selectionListener</tag-name>
+		<tag-name>checkListener</tag-name>
 		<handler-class>
-			org.rcfaces.core.internal.facelets.SelectionListenerHandler
+			org.rcfaces.core.internal.facelets.CheckListenerHandler
 		</handler-class>
 	</tag>
 	<tag>
-		<tag-name>validationParameter</tag-name>
+		<tag-name>selectionListener</tag-name>
 		<handler-class>
-			org.rcfaces.core.internal.facelets.ValidationParameterHandler
+			org.rcfaces.core.internal.facelets.SelectionListenerHandler
 		</handler-class>
 	</tag>
 	<tag>
@@ -737,21 +737,9 @@
 		</handler-class>
 	</tag>
 	<tag>
-		<tag-name>checkListener</tag-name>
+		<tag-name>validationParameter</tag-name>
 		<handler-class>
-			org.rcfaces.core.internal.facelets.CheckListenerHandler
-		</handler-class>
-	</tag>
-	<tag>
-		<tag-name>doubleClickListener</tag-name>
-		<handler-class>
-			org.rcfaces.core.internal.facelets.DoubleClickListenerHandler
-		</handler-class>
-	</tag>
-	<tag>
-		<tag-name>propertyChangeListener</tag-name>
-		<handler-class>
-			org.rcfaces.core.internal.facelets.PropertyChangeListenerHandler
+			org.rcfaces.core.internal.facelets.ValidationParameterHandler
 		</handler-class>
 	</tag>
 	<tag>
@@ -764,6 +752,18 @@
 		<tag-name>errorListener</tag-name>
 		<handler-class>
 			org.rcfaces.core.internal.facelets.ErrorListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>doubleClickListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.DoubleClickListenerHandler
+		</handler-class>
+	</tag>
+	<tag>
+		<tag-name>propertyChangeListener</tag-name>
+		<handler-class>
+			org.rcfaces.core.internal.facelets.PropertyChangeListenerHandler
 		</handler-class>
 	</tag>
 	<tag>

@@ -12,11 +12,11 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.rcfaces.core.component.DateItemComponent;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -26,6 +26,7 @@ import org.rcfaces.core.item.BasicSelectItem;
 import org.rcfaces.core.item.DateItem;
 import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IStyleClassItem;
+import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -92,6 +93,7 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
         if (selectItemValue == null) {
             return EVAL_NODE;
         }
+        Object sourceValue = selectItemValue;
 
         javaScriptWriter.writeMethodCall("f_appendDateItem");
 
@@ -101,24 +103,45 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
                     false);
         }
 
-        StringAppender sb = new StringAppender(32);
-        if (selectItemValue instanceof Date) {
-            AbstractCalendarRenderer.appendDate(calendar,
-                    (Date) selectItemValue, sb, onlyDay);
+        if ((selectItemValue instanceof Date) == false
+                && (selectItemValue instanceof Date[]) == false
+                && (selectItemValue instanceof Period) == false
+                && (selectItemValue instanceof Period[]) == false) {
 
-        } else if (selectItemValue instanceof Date[]) {
-            AbstractCalendarRenderer.appendDates(calendar,
-                    (Date[]) selectItemValue, sb, onlyDay);
+            FacesContext facesContext = getComponentRenderContext()
+                    .getFacesContext();
 
-        } else if (selectItemValue instanceof Date[][]) {
-            AbstractCalendarRenderer.appendPeriods(calendar,
-                    (Date[][]) selectItemValue, sb, onlyDay);
-        } else {
-            throw new FacesException("Invalid value for date '"
-                    + selectItemValue + "'.");
+            selectItemValue = AbstractCalendarRenderer.convertValueToPeriod(
+                    facesContext, sourceValue);
+
+            if (selectItemValue == null) {
+                selectItemValue = AbstractCalendarRenderer
+                        .convertValueToPeriodArray(facesContext, sourceValue);
+            }
         }
 
-        javaScriptWriter.writeString(sb.toString());
+        String svalue;
+        if (selectItemValue instanceof Date) {
+            svalue = AbstractCalendarRenderer.convertDate(calendar,
+                    (Date) selectItemValue, onlyDay);
+
+        } else if (selectItemValue instanceof Date[]) {
+            svalue = AbstractCalendarRenderer.convertDates(calendar,
+                    (Date[]) selectItemValue, onlyDay);
+
+        } else if (selectItemValue instanceof Period) {
+            svalue = AbstractCalendarRenderer.convertPeriod(calendar,
+                    (Period) selectItemValue, onlyDay);
+
+        } else if (selectItemValue instanceof Period[]) {
+            svalue = AbstractCalendarRenderer.convertPeriods(calendar,
+                    (Period[]) selectItemValue, onlyDay);
+        } else {
+            throw new FacesException("Invalid value for date '" + sourceValue
+                    + "'.");
+        }
+
+        javaScriptWriter.writeString(svalue);
 
         int pred = 0;
 

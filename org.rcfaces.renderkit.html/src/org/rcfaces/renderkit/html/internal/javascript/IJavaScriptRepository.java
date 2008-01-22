@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal.javascript;
 
+import java.util.Map;
+
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 
@@ -22,6 +24,8 @@ public interface IJavaScriptRepository extends IHierarchicalRepository {
 
     public interface IClassFile extends IHierarchicalFile {
         IClass[] listClasses();
+
+        String convertSymbols(Map symbols, String code);
     }
 
     /**

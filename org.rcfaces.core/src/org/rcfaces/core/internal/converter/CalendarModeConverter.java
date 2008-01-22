@@ -28,12 +28,10 @@ public class CalendarModeConverter extends AbstractConverter {
 
     private static Map CALENDAR_MODES = new HashMap(5);
     static {
-        CALENDAR_MODES.put(ICalendarModeCapability.CALENDAR_MODE_DATE_NAME,
-                new Integer(ICalendarModeCapability.CALENDAR_MODE_DATE));
-        CALENDAR_MODES.put(ICalendarModeCapability.CALENDAR_MODE_PERIOD_NAME,
-                new Integer(ICalendarModeCapability.CALENDAR_MODE_PERIOD));
-        CALENDAR_MODES.put(ICalendarModeCapability.CALENDAR_MODE_PERIODS_NAME,
-                new Integer(ICalendarModeCapability.CALENDAR_MODE_PERIODS));
+        CALENDAR_MODES.put(ICalendarModeCapability.DATE_CALENDAR_MODE_NAME,
+                new Integer(ICalendarModeCapability.DATE_CALENDAR_MODE));
+        CALENDAR_MODES.put(ICalendarModeCapability.PERIOD_CALENDAR_MODE_NAME,
+                new Integer(ICalendarModeCapability.PERIOD_CALENDAR_MODE));
         CALENDAR_MODES.put(ICalendarModeCapability.DEFAULT_CALENDAR_MODE_NAME,
                 new Integer(ICalendarModeCapability.DEFAULT_CALENDAR_MODE));
     }
@@ -93,14 +91,11 @@ public class CalendarModeConverter extends AbstractConverter {
 
     public static final String getName(int hiddenMode) {
         switch (hiddenMode) {
-        case ICalendarModeCapability.CALENDAR_MODE_DATE:
-            return ICalendarModeCapability.CALENDAR_MODE_DATE_NAME;
+        case ICalendarModeCapability.DATE_CALENDAR_MODE:
+            return ICalendarModeCapability.DATE_CALENDAR_MODE_NAME;
 
-        case ICalendarModeCapability.CALENDAR_MODE_PERIOD:
-            return ICalendarModeCapability.CALENDAR_MODE_PERIOD_NAME;
-
-        case ICalendarModeCapability.CALENDAR_MODE_PERIODS:
-            return ICalendarModeCapability.CALENDAR_MODE_PERIODS_NAME;
+        case ICalendarModeCapability.PERIOD_CALENDAR_MODE:
+            return ICalendarModeCapability.PERIOD_CALENDAR_MODE_NAME;
         }
 
         return null;

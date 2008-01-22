@@ -99,6 +99,21 @@ var __members = {
 	 */
 	f_getCalendarObject: function() {
 		return this._calendar;
+	},
+	f_serialize: function() {
+		var calendarObject=this.f_getCalendarObject();
+		
+		var value=calendarObject.f_getSelection();
+		if (value) {
+			this.f_setProperty(f_prop.VALUE, value);
+		}
+		
+		var cursorDate=calendarObject.f_getCursorDate();
+		if (cursorDate) {
+			this.f_setProperty(f_prop.CURSOR, cursorDate);
+		}
+
+		this.f_super(arguments);
 	}
 }
  

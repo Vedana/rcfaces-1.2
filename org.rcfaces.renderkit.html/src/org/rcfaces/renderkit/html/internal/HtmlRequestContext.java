@@ -50,7 +50,11 @@ public class HtmlRequestContext extends AbstractRequestContext implements
 
     private static final String REQUEST_CONTEXT = "camelia.request.context";
 
-    private static final char PROPERTY_SEPARATOR = ',';
+    private static final String PROPERTY_SEPARATORS = ",}";
+
+    private static final char PROPERTY_START = '{';
+
+    private static final char PROPERTY_END = '}';
 
     private Map parameters;
 
@@ -133,7 +137,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         if (values != null) {
             // Il faut transformer la valeur serialisée en Map
             properties = HtmlTools.decodeParametersToMap(getProcessContext(),
-                    component, values, PROPERTY_SEPARATOR, "");
+                    component, values, PROPERTY_SEPARATORS, "");
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Decode component data of '" + componentId + "' to "
@@ -299,7 +303,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                 throwFormatException("EOF", i, datas);
             }
 
-            if (cs[i++] != '[') {
+            if (cs[i++] != PROPERTY_START) {
                 throwFormatException("Bad Char ", i, datas);
             }
 
@@ -308,7 +312,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             for (; i < cs.length; i++) {
                 c = cs[i];
 
-                if (c != ']') {
+                if (c != PROPERTY_END) {
                     continue;
                 }
 
@@ -330,7 +334,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                 break;
             }
 
-            if (cs[i] != ',') {
+            if (PROPERTY_SEPARATORS.indexOf(cs[i]) < 0) {
                 throwFormatException("Bad Char ", i, datas);
             }
             i++;

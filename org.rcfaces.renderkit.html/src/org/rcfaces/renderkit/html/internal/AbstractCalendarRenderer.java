@@ -4,8 +4,13 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -13,10 +18,18 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.component.capability.ICalendarLayoutCapability;
 import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import org.rcfaces.core.component.capability.IMultipleSelectCapability;
+import org.rcfaces.core.event.PropertyChangeEvent;
+import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.decorator.CalendarDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -28,6 +41,26 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
  */
 public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        AbstractCalendarComponent calendarComponent = (AbstractCalendarComponent) component;
+
+        Date cursorDate = (Date) componentData.getProperty("cursor");
+        if (cursorDate != null) {
+            Date old = calendarComponent.getCursorDate(context
+                    .getFacesContext());
+
+            if (cursorDate.equals(old) == false) {
+                calendarComponent.setCursorDate(cursorDate);
+
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.CURSOR_DATE, old, cursorDate));
+            }
+        }
+    }
 
     protected void writeCalendarAttributes(IHtmlWriter htmlWriter,
             Calendar componentCalendar) throws WriterException {
@@ -47,8 +80,10 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         Date minDate = calendarComponent.getMinDate(facesContext);
         Date twoDigitYearStart = calendarComponent
                 .getTwoDigitYearStart(facesContext);
+        Date cursorDate = calendarComponent.getCursorDate(facesContext);
 
-        if (maxDate != null || minDate != null || twoDigitYearStart != null) {
+        if (maxDate != null || minDate != null || twoDigitYearStart != null
+                || cursorDate != null) {
             StringAppender sb = new StringAppender(12);
 
             if (maxDate != null) {
@@ -63,6 +98,13 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 HtmlTools.formatDate(minDate, sb, processContext,
                         calendarComponent, true);
                 htmlWriter.writeAttribute("v:minDate", sb.toString());
+            }
+
+            if (cursorDate != null) {
+                sb.setLength(0);
+                HtmlTools.formatDate(cursorDate, sb, processContext,
+                        calendarComponent, true);
+                htmlWriter.writeAttribute("v:cursorDate", sb.toString());
             }
 
             if (twoDigitYearStart != null) {
@@ -95,22 +137,47 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 htmlWriter.writeAttribute("v:layout", layout);
             }
         }
+
+        if (calendarComponent instanceof IMultipleSelectCapability) {
+            if (((IMultipleSelectCapability) calendarComponent)
+                    .isMultipleSelect()) {
+                htmlWriter.writeAttribute("v:multiple", true);
+            }
+        }
     }
 
-    protected static String convertDate(Calendar calendar, Date dates[],
+    public static String convertPeriod(Calendar calendar, Period period,
             boolean onlyDate) {
-        StringAppender sb = new StringAppender(dates.length * 10);
+        StringAppender sb = new StringAppender(2 * 10);
 
-        appendDates(calendar, dates, sb, onlyDate);
+        appendPeriod(calendar, period, sb, onlyDate);
 
         return sb.toString();
     }
 
-    protected static String convertDate(Calendar calendar, Date date,
+    public static String convertPeriods(Calendar calendar, Period periods[],
+            boolean onlyDate) {
+        StringAppender sb = new StringAppender(periods.length * 20);
+
+        appendPeriods(calendar, periods, sb, onlyDate);
+
+        return sb.toString();
+    }
+
+    public static String convertDate(Calendar calendar, Date date,
             boolean onlyDate) {
         StringAppender sb = new StringAppender(10);
 
         HtmlTools.formatDate(date, sb, calendar, onlyDate);
+
+        return sb.toString();
+    }
+
+    public static String convertDates(Calendar calendar, Date dates[],
+            boolean onlyDate) {
+        StringAppender sb = new StringAppender(10 * dates.length);
+
+        appendDates(calendar, dates, sb, onlyDate);
 
         return sb.toString();
     }
@@ -138,11 +205,28 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         }
     }
 
-    public static void appendPeriods(Calendar calendar, Date dates[][],
+    public static void appendPeriod(Calendar calendar, Period period,
             StringAppender sb, boolean onlyDate) {
 
-        for (int i = 0; i < dates.length; i++) {
-            Date d[] = dates[i];
+        Date d = period.getStart();
+        if (d != null) {
+            HtmlTools.formatDate(d, sb, calendar, onlyDate);
+
+            d = period.getEnd();
+            if (d != null) {
+                sb.append(':');
+
+                HtmlTools.formatDate(d, sb, calendar, onlyDate);
+            }
+        }
+
+    }
+
+    public static void appendPeriods(Calendar calendar, Period periods[],
+            StringAppender sb, boolean onlyDate) {
+
+        for (int i = 0; i < periods.length; i++) {
+            Period d = periods[i];
             if (d == null) {
                 continue;
             }
@@ -151,14 +235,14 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 sb.append(',');
             }
 
-            HtmlTools.formatDate(d[0], sb, calendar, onlyDate);
-            if (d.length < 2 || d[0].equals(d[1])) {
+            HtmlTools.formatDate(d.getStart(), sb, calendar, onlyDate);
+            if (d.getEnd() == null || d.getStart().equals(d.getEnd())) {
                 continue;
             }
 
             sb.append(':');
 
-            HtmlTools.formatDate(d[1], sb, calendar, onlyDate);
+            HtmlTools.formatDate(d.getEnd(), sb, calendar, onlyDate);
         }
     }
 
@@ -191,6 +275,196 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
             javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.CALENDAR_OBJECT, "ajax");
         }
+    }
+
+    public static Date convertValueToDate(FacesContext facesContext,
+            Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Date) {
+            return (Date) value;
+        }
+
+        if (value instanceof Date[]) {
+            Date d[] = (Date[]) value;
+
+            if (d.length == 0) {
+                return null;
+            }
+
+            return d[0];
+        }
+
+        if (value instanceof Date[][]) {
+            Date d[][] = (Date[][]) value;
+
+            if (d.length == 0) {
+                return null;
+            }
+
+            if (d[0] == null || d[0].length == 0) {
+                return null;
+            }
+
+            return d[0][0];
+        }
+
+        if (value instanceof IAdaptable) {
+            return (Date) ((IAdaptable) value).getAdapter(Date.class, null);
+        }
+
+        return (Date) RcfacesContext.getInstance(facesContext)
+                .getAdapterManager().getAdapter(value, Date.class, null);
+    }
+
+    public static Date[] convertValueToDateArray(FacesContext facesContext,
+            Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Date[]) {
+            return (Date[]) value;
+        }
+
+        if (value.getClass().isArray()) {
+            Date ds[] = new Date[Array.getLength(value)];
+
+            for (int i = 0; i < ds.length; i++) {
+                Date next = convertValueToDate(facesContext, Array
+                        .get(value, i));
+
+                if (next == null) {
+                    return null;
+                }
+
+                ds[i] = next;
+            }
+
+            return ds;
+        }
+
+        if (value instanceof Collection) {
+            Collection c = (Collection) value;
+
+            if (c.isEmpty()) {
+                return null;
+            }
+
+            List ds = new ArrayList(c.size());
+
+            for (Iterator it = c.iterator(); it.hasNext();) {
+                Date next = convertValueToDate(facesContext, it.next());
+
+                if (next == null) {
+                    return null;
+                }
+
+                ds.add(next);
+            }
+
+            return (Date[]) ds.toArray(new Date[ds.size()]);
+        }
+
+        return (Date[]) RcfacesContext.getCurrentInstance().getAdapterManager()
+                .getAdapter(value, Date[].class, null);
+    }
+
+    public static Period convertValueToPeriod(FacesContext facesContext,
+            Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Period) {
+            return (Period) value;
+        }
+
+        if (value instanceof Period[]) {
+            Period d[] = (Period[]) value;
+
+            if (d.length == 0) {
+                return null;
+            }
+
+            return d[0];
+        }
+
+        if (value instanceof Period[][]) {
+            Period d[][] = (Period[][]) value;
+
+            if (d.length == 0) {
+                return null;
+            }
+
+            if (d[0] == null || d[0].length == 0) {
+                return null;
+            }
+
+            return d[0][0];
+        }
+
+        if (value instanceof IAdaptable) {
+            return (Period) ((IAdaptable) value).getAdapter(Period.class, null);
+        }
+
+        return (Period) RcfacesContext.getCurrentInstance().getAdapterManager()
+                .getAdapter(value, Period.class, null);
+    }
+
+    public static Period[] convertValueToPeriodArray(FacesContext facesContext,
+            Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Period[]) {
+            return (Period[]) value;
+        }
+
+        if (value.getClass().isArray()) {
+            Period ds[] = new Period[Array.getLength(value)];
+
+            for (int i = 0; i < ds.length; i++) {
+                Period next = convertValueToPeriod(facesContext, Array.get(
+                        value, i));
+
+                if (next == null) {
+                    return null;
+                }
+
+                ds[i] = next;
+            }
+
+            return ds;
+        }
+
+        if (value instanceof Collection) {
+            Collection c = (Collection) value;
+
+            if (c.isEmpty()) {
+                return null;
+            }
+
+            List ds = new ArrayList(c.size());
+
+            for (Iterator it = c.iterator(); it.hasNext();) {
+                Period next = convertValueToPeriod(facesContext, it.next());
+
+                if (next == null) {
+                    return null;
+                }
+
+                ds.add(next);
+            }
+
+            return (Period[]) ds.toArray(new Period[ds.size()]);
+        }
+
+        return (Period[]) RcfacesContext.getCurrentInstance()
+                .getAdapterManager().getAdapter(value, Period[].class, null);
     }
 
 }

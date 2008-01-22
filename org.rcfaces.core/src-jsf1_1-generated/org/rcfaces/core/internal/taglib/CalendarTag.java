@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.apache.commons.logging.Log;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.CalendarComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.component.Properties;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public class CalendarTag extends AbstractCalendarTag implements Tag {
 
@@ -20,7 +20,9 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 
 	private String border;
 	private String calendarLayout;
+	private String multipleSelect;
 	private String mode;
+	private String autoSelection;
 	public String getComponentType() {
 		return CalendarComponent.COMPONENT_TYPE;
 	}
@@ -41,12 +43,24 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 		this.calendarLayout = calendarLayout;
 	}
 
+	public final String getMultipleSelect() {
+		return multipleSelect;
+	}
+
+	public final void setMultipleSelect(String multipleSelect) {
+		this.multipleSelect = multipleSelect;
+	}
+
 	public final String getMode() {
 		return mode;
 	}
 
 	public final void setMode(String mode) {
 		this.mode = mode;
+	}
+
+	public final void setAutoSelection(String autoSelection) {
+		this.autoSelection = autoSelection;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -56,7 +70,9 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 			}
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  calendarLayout='"+calendarLayout+"'");
+			LOG.debug("  multipleSelect='"+multipleSelect+"'");
 			LOG.debug("  mode='"+mode+"'");
+			LOG.debug("  autoSelection='"+autoSelection+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -91,6 +107,16 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (multipleSelect != null) {
+			if (isValueReference(multipleSelect)) {
+				ValueBinding vb = application.createValueBinding(multipleSelect);
+				component.setValueBinding(Properties.MULTIPLE_SELECT, vb);
+
+			} else {
+				component.setMultipleSelect(getBool(multipleSelect));
+			}
+		}
+
 		if (mode != null) {
 			if (isValueReference(mode)) {
 				ValueBinding vb = application.createValueBinding(mode);
@@ -100,12 +126,24 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 				component.setMode(mode);
 			}
 		}
+
+		if (autoSelection != null) {
+			if (isValueReference(autoSelection)) {
+				ValueBinding vb = application.createValueBinding(autoSelection);
+				component.setValueBinding(Properties.AUTO_SELECTION, vb);
+
+			} else {
+				component.setAutoSelection(getBool(autoSelection));
+			}
+		}
 	}
 
 	public void release() {
 		border = null;
 		calendarLayout = null;
+		multipleSelect = null;
 		mode = null;
+		autoSelection = null;
 
 		super.release();
 	}

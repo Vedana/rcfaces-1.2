@@ -22,6 +22,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 	private ValueExpression textDirection;
 	private ValueExpression selectionListeners;
 	private ValueExpression readOnly;
+	private ValueExpression alternateText;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
@@ -44,6 +45,10 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		this.readOnly = readOnly;
 	}
 
+	public final void setAlternateText(ValueExpression alternateText) {
+		this.alternateText = alternateText;
+	}
+
 	public final void setAction(ValueExpression action) {
 		this.action=action;
 	}
@@ -60,6 +65,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -106,6 +112,15 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			}
 		}
 
+		if (alternateText != null) {
+			if (alternateText.isLiteralText()==false) {
+				component.setValueExpression(Properties.ALTERNATE_TEXT, alternateText);
+
+			} else {
+				component.setAlternateText(alternateText.getExpressionString());
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -120,6 +135,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		textDirection = null;
 		selectionListeners = null;
 		readOnly = null;
+		alternateText = null;
 		action = null;
 		actionListeners = null;
 

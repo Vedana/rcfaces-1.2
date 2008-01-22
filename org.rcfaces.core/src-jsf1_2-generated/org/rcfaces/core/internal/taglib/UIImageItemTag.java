@@ -24,6 +24,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 	private ValueExpression hoverImageURL;
 	private ValueExpression selectedImageURL;
 	private ValueExpression imageURL;
+	private ValueExpression alternateText;
 	private ValueExpression rendered;
 	public String getComponentType() {
 		return UIImageItemComponent.COMPONENT_TYPE;
@@ -53,6 +54,10 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		this.imageURL = imageURL;
 	}
 
+	public final void setAlternateText(ValueExpression alternateText) {
+		this.alternateText = alternateText;
+	}
+
 	public final void setRendered(ValueExpression rendered) {
 		this.rendered = rendered;
 	}
@@ -68,6 +73,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
 			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
+			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  rendered='"+rendered+"'");
 		}
 		super.setProperties(uiComponent);
@@ -136,6 +142,15 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 			}
 		}
 
+		if (alternateText != null) {
+			if (alternateText.isLiteralText()==false) {
+				component.setValueExpression(Properties.ALTERNATE_TEXT, alternateText);
+
+			} else {
+				component.setAlternateText(alternateText.getExpressionString());
+			}
+		}
+
 		if (rendered != null) {
 			if (rendered.isLiteralText()==false) {
 				component.setValueExpression(Properties.RENDERED, rendered);
@@ -153,6 +168,7 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 		hoverImageURL = null;
 		selectedImageURL = null;
 		imageURL = null;
+		alternateText = null;
 		rendered = null;
 
 		super.release();

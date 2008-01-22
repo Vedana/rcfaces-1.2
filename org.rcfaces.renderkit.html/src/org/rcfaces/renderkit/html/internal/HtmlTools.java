@@ -34,6 +34,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
+import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.lang.Time;
 import org.rcfaces.core.model.IFilterProperties;
 import org.w3c.dom.Document;
@@ -72,7 +73,11 @@ public class HtmlTools {
 
     private static final char TIME_TYPE = 'M';
 
+    private static final char PERIOD_TYPE = 'P';
+
     private static final char DOCUMENT_TYPE = 'X';
+
+    private static final char ARRAY_TYPE = '[';
 
     private static final char ZERO_TYPE = '0';
 
@@ -83,166 +88,206 @@ public class HtmlTools {
     private static final String NAMING_SEPARATOR_STRING = ""
             + NamingContainer.SEPARATOR_CHAR;
 
+    private static final char PERIOD_SEPARATOR = ':';
+
     public static Map decodeParametersToMap(IProcessContext processContext,
-            UIComponent component, String values, char sep, Object noValue) {
+            UIComponent component, String values, String separators,
+            Object noValue) {
         if (values == null || values.length() < 1) {
             return Collections.EMPTY_MAP;
         }
 
-        FacesContext facesContext = null;
-
         char cs[] = values.toCharArray();
 
+        Position position = new Position(values);
+
         Map properties = new HashMap((cs.length / 16) + 1);
-        for (int i = 0; i < cs.length;) {
-            int nameStart = i;
-            int nameEnd = 0;
+        for (; position.start < cs.length;) {
+            int nameStart = position.start;
 
-            char c = 0;
-
-            for (; i < cs.length; i++) {
-                c = cs[i];
+            for (; position.start < cs.length; position.start++) {
+                char c = cs[position.start];
 
                 if (c != '=') {
                     continue;
                 }
 
-                nameEnd = i;
                 break;
             }
-            if (i == cs.length) {
-                throw createFormatException("EOF", i, values, null);
+            if (position.start == cs.length) {
+                throw createFormatException("EOF", position.start, values, null);
             }
 
-            i++;
-            if (i == cs.length) {
-                properties.put(values.substring(nameStart, nameEnd), noValue);
+            String name = values.substring(nameStart, position.start);
+
+            position.start++;
+            if (position.start == cs.length) {
+                properties.put(name, noValue);
                 // System.out.println(">>>decode '"+values+"' => "+properties);
                 return properties;
             }
 
-            int valueStart = i;
-            int valueEnd = 0;
-            for (; i < cs.length; i++) {
-                c = cs[i];
+            Object vs = decodeObject(cs, position, processContext, component,
+                    separators);
 
-                if (c != sep) {
-                    continue;
-                }
-
-                valueEnd = i;
-                break;
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Decode '" + name + "'=>" + vs);
             }
 
-            if (i == cs.length) {
-                valueEnd = i;
-
-            } else if (c == sep) {
-                i++;
-            }
-
-            Object vs;
-
-            if (valueStart >= valueEnd) {
-                vs = "";
-
-            } else {
-                char type = values.charAt(valueStart++);
-                switch (type) {
-                case STRING_TYPE:
-                    if (valueStart == valueEnd) {
-                        vs = "";
-                        break;
-                    }
-                    vs = URLFormCodec.decodeURL(cs, valueStart, valueEnd);
-                    break;
-
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    if (valueStart == valueEnd) {
-                        type -= '0';
-                        if (type == 0) {
-                            vs = NUMBER_0;
-                        } else {
-                            vs = new Double(type);
-                        }
-                        break;
-                    }
-
-                    // J'ai pas oublié le break !
-
-                case '-':
-                    vs = Double.valueOf(URLFormCodec.decodeURL(cs,
-                            valueStart - 1, valueEnd));
-
-                    break;
-
-                case TRUE_TYPE:
-                    vs = Boolean.TRUE;
-                    break;
-
-                case FALSE_TYPE:
-                    vs = Boolean.FALSE;
-                    break;
-
-                case NULL_TYPE:
-                    vs = null;
-                    break;
-
-                case DATE_TYPE:
-                    String date = URLFormCodec.decodeURL(cs, valueStart,
-                            valueEnd);
-
-                    vs = parseDate(date, processContext, component);
-
-                    break;
-
-                case TIME_TYPE:
-                    String time = URLFormCodec.decodeURL(cs, valueStart,
-                            valueEnd);
-
-                    vs = parseTime(time);
-
-                    break;
-
-                case DOCUMENT_TYPE:
-                    String xml = URLFormCodec.decodeURL(cs, valueStart,
-                            valueEnd);
-
-                    if (facesContext == null) {
-                        if (processContext != null) {
-                            facesContext = processContext.getFacesContext();
-                        }
-
-                        if (facesContext == null) {
-                            facesContext = FacesContext.getCurrentInstance();
-                        }
-                    }
-
-                    vs = parseDocument(facesContext, xml);
-
-                    break;
-
-                default:
-                    throw createFormatException("Unknown serialized type '"
-                            + type + "'.", i, values, null);
-                }
-            }
-
-            properties.put(values.substring(nameStart, nameEnd), vs);
+            properties.put(name, vs);
         }
 
-        // System.out.println(">>>decode '"+values+"' => "+properties);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Decode '" + values + "'=>" + properties);
+        }
 
         return properties;
+    }
+
+    private static Object decodeObject(char cs[], Position position,
+            IProcessContext processContext, UIComponent component,
+            String separators) {
+
+        if (position.start >= cs.length) {
+            return "";
+        }
+        if (separators.indexOf(cs[position.start]) >= 0) {
+            position.start++;
+            return "";
+        }
+
+        char type = cs[position.start++];
+
+        if (type == ARRAY_TYPE) {
+            if (cs[position.start] == '0') {
+                position.start += 2; // + le ']'
+                return Collections.EMPTY_LIST;
+            }
+
+            int length = 0;
+
+            for (; cs[position.start] != ':'; position.start++) {
+                length = length * 10 + (cs[position.start] - '0');
+            }
+            position.start++; // le ':'
+
+            List l = new ArrayList(length);
+
+            for (; position.start < cs.length;) {
+
+                Object v = decodeObject(cs, position, processContext,
+                        component, ",]");
+
+                l.add(v);
+
+                if (position.start <= cs.length & cs[position.start - 1] == ']') {
+                    break;
+                }
+            }
+
+            position.start++; // Fermeture mangée , reste le separateur
+
+            return l;
+        }
+
+        int start = position.start;
+        int end = start;
+        for (; end < cs.length; end++) {
+            if (separators.indexOf(cs[end]) >= 0) {
+                break;
+            }
+        }
+
+        position.start = end + 1;
+
+        switch (type) {
+        case STRING_TYPE:
+            if (start == end) {
+                return "";
+            }
+            return URLFormCodec.decodeURL(cs, start, end);
+
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            if (start == end) {
+                type -= '0';
+                if (type == 0) {
+                    return NUMBER_0;
+                }
+
+                return new Double(type);
+            }
+
+            // J'ai pas oublié le break !
+
+        case '-':
+            return Double.valueOf(URLFormCodec.decodeURL(cs, start - 1, end));
+
+        case TRUE_TYPE:
+            return Boolean.TRUE;
+
+        case FALSE_TYPE:
+            return Boolean.FALSE;
+
+        case NULL_TYPE:
+            return null;
+
+        case DATE_TYPE:
+            String date = URLFormCodec.decodeURL(cs, start, end);
+
+            return parseDate(date, processContext, component);
+
+        case TIME_TYPE:
+            String time = URLFormCodec.decodeURL(cs, start, end);
+
+            return parseTime(time);
+
+        case PERIOD_TYPE:
+            String period = URLFormCodec.decodeURL(cs, start, end);
+
+            Date startDate = null;
+            Date endDate = null;
+
+            int idx = period.indexOf(PERIOD_SEPARATOR);
+            if (idx < 0) {
+                startDate = parseDate(period, processContext, component);
+                endDate = startDate;
+
+            } else {
+                startDate = parseDate(period.substring(0, idx), processContext,
+                        component);
+                endDate = parseDate(period.substring(idx + 1), processContext,
+                        component);
+            }
+
+            return new Period(startDate, endDate);
+
+        case DOCUMENT_TYPE:
+            String xml = URLFormCodec.decodeURL(cs, start, end);
+
+            FacesContext facesContext = null;
+            if (processContext != null) {
+                facesContext = processContext.getFacesContext();
+            }
+
+            if (facesContext == null) {
+                facesContext = FacesContext.getCurrentInstance();
+
+            }
+
+            return parseDocument(facesContext, xml);
+        }
+
+        throw createFormatException("Unknown serialized type '" + type + "'.",
+                position.start, position.values, null);
     }
 
     private static FacesException createFormatException(String message, int i,
@@ -297,7 +342,7 @@ public class HtmlTools {
             String filterExpression) {
 
         Map filter = HtmlTools.decodeParametersToMap(processContext, component,
-                filterExpression, '&', "");
+                filterExpression, "&", "");
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Decode filter expression to " + filter);
@@ -890,6 +935,23 @@ public class HtmlTools {
             return;
         }
 
+        if (value instanceof Period) {
+            Period period = (Period) value;
+
+            sb.append(PERIOD_TYPE);
+
+            Date start = period.getStart();
+            formatDate(start, sb, processContext, component, false);
+
+            Date end = period.getEnd();
+            if (end != null && end.equals(start) == false) {
+                sb.append(PERIOD_SEPARATOR);
+                formatDate(end, sb, processContext, component, false);
+            }
+
+            return;
+        }
+
         if ((value instanceof Number) && ((Number) value).doubleValue() == 0.0) {
             sb.append(ZERO_TYPE);
             return;
@@ -1145,5 +1207,26 @@ public class HtmlTools {
         UIComponent getComponent();
 
         void end();
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static class Position {
+
+        public final String values;
+
+        public int start;
+
+        public Position(String values) {
+            this.values = values;
+        }
+
+        public Position(Position position) {
+            values = position.values;
+            start = position.start;
+        }
     }
 }

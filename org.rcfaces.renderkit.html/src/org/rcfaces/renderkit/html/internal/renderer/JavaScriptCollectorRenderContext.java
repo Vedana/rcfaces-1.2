@@ -518,7 +518,8 @@ public class JavaScriptCollectorRenderContext extends
 
             if (messageIds.isEmpty() == false) {
                 boolean first = true;
-                jsWriter.writeCall(cameliaClassLoader, "f_initOnMessage");
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnMessage")
+                        .write('[');
                 for (Iterator it = messageIds.iterator(); it.hasNext();) {
 
                     if (first) {
@@ -530,7 +531,7 @@ public class JavaScriptCollectorRenderContext extends
 
                     jsWriter.writeString((String) it.next());
                 }
-                jsWriter.writeln(");");
+                jsWriter.writeln("]);");
             }
 
             if (focusIds.isEmpty() == false) {
@@ -547,15 +548,20 @@ public class JavaScriptCollectorRenderContext extends
             }
 
             if (submitIds.isEmpty() == false) {
-                jsWriter.writeCall(cameliaClassLoader, "f_initOnSubmitIds");
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnSubmitIds")
+                        .write('[');
 
-                IObjectLiteralWriter objWriter = jsWriter
-                        .writeObjectLiteral(false);
+                boolean first = true;
                 for (Iterator it = submitIds.iterator(); it.hasNext();) {
-                    objWriter.writeProperty((String) it.next()).writeInt(1);
+                    if (first) {
+                        first = false;
+                    } else {
+                        jsWriter.write(',');
+                    }
+
+                    jsWriter.writeString((String) it.next());
                 }
-                objWriter.end();
-                jsWriter.writeln(");");
+                jsWriter.writeln("]);");
             }
 
             if (hoverIds.isEmpty() == false) {
@@ -609,6 +615,9 @@ public class JavaScriptCollectorRenderContext extends
 
         List others = null;
 
+        boolean hasMessages = jsWriter.getFacesContext()
+                .getClientIdsWithMessages().hasNext();
+
         boolean first = true;
         for (Iterator it = initializeIds.iterator(); it.hasNext();) {
             ComponentId componentId = (ComponentId) it.next();
@@ -621,7 +630,9 @@ public class JavaScriptCollectorRenderContext extends
             }
 
             if (componentId.mode > 0
-                    && (componentId.mode & JavaScriptEnableModeImpl.ONINIT) == 0) {
+                    && (componentId.mode & JavaScriptEnableModeImpl.ONINIT) == 0
+                    && (hasMessages == false || (componentId.mode & JavaScriptEnableModeImpl.ONMESSAGE) == 0)) {
+
                 if (others == null) {
                     others = new ArrayList(initializeIds.size());
                 }

@@ -28,6 +28,7 @@ import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
@@ -106,8 +107,8 @@ public class ComboGridRenderer extends DataGridRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.TABLE);
-        htmlWriter.writeAttribute("cellspacing", 0);
-        htmlWriter.writeAttribute("cellpadding", 0);
+        htmlWriter.writeCellPadding(0);
+        htmlWriter.writeCellSpacing(0);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -127,6 +128,9 @@ public class ComboGridRenderer extends DataGridRenderer {
         }
         if (readOnly) {
             htmlWriter.writeAttribute("v:readOnly", true);
+        }
+        if (disabled) {
+            htmlWriter.writeAttribute("v:disabled", true);
         }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
@@ -269,35 +273,32 @@ public class ComboGridRenderer extends DataGridRenderer {
         htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeClass(getMainStyleClassName() + "_inputCell");
 
-        htmlWriter.startElement(IHtmlWriter.INPUT);
-        if (colWidth > 0) {
-            htmlWriter.writeStyle().writeWidth((colWidth - 4) + "px");
-        }
-
-        htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
-
-        htmlWriter.writeId(componentRenderContext.getComponentClientId()
-                + INPUT_ID_SUFFIX);
-        htmlWriter.writeClass(getMainStyleClassName() + "_input");
-
-        if (disabled) {
-            htmlWriter.writeDisabled();
-        }
-        if (readOnly || editable == false) {
-            htmlWriter.writeReadOnly();
-        }
-
-        if (formattedValue != null) {
-            htmlWriter.writeValue(formattedValue);
-        }
-
-        htmlWriter.endElement(IHtmlWriter.INPUT);
+        writeInputSubComponent(htmlWriter, formattedValue, colWidth);
 
         htmlWriter.endElement(IHtmlWriter.TD);
 
         htmlWriter.startElement(IHtmlWriter.TD);
         htmlWriter.writeWidth(ARROW_IMAGE_WIDTH);
         htmlWriter.writeClass(getMainStyleClassName() + "_buttonCell");
+
+        writeImageSubComponent(htmlWriter);
+
+        htmlWriter.endElement(IHtmlWriter.TD);
+
+        htmlWriter.endElement(IHtmlWriter.TR);
+        htmlWriter.endElement(IHtmlWriter.TBODY);
+        htmlWriter.endElement(IHtmlWriter.TABLE);
+
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
+
+        htmlWriter.endComponent();
+    }
+
+    protected void writeImageSubComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
+
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
 
         htmlWriter.startElement(IHtmlWriter.IMG);
         htmlWriter.writeId(componentRenderContext.getComponentClientId()
@@ -313,16 +314,64 @@ public class ComboGridRenderer extends DataGridRenderer {
         htmlWriter.writeSrc(url);
 
         htmlWriter.endElement(IHtmlWriter.IMG);
+    }
 
-        htmlWriter.endElement(IHtmlWriter.TD);
+    protected void writeInputSubComponent(IHtmlWriter htmlWriter,
+            String formattedValue, int colWidth) throws WriterException {
 
-        htmlWriter.endElement(IHtmlWriter.TR);
-        htmlWriter.endElement(IHtmlWriter.TBODY);
-        htmlWriter.endElement(IHtmlWriter.TABLE);
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
 
-        htmlWriter.getJavaScriptEnableMode().enableOnInit();
+        ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
+                .getComponent();
 
-        htmlWriter.endComponent();
+        htmlWriter.startElement(IHtmlWriter.INPUT);
+        if (colWidth > 0) {
+            htmlWriter.writeStyle().writeWidth((colWidth - 4) + "px");
+        }
+
+        htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
+
+        htmlWriter.writeId(componentRenderContext.getComponentClientId()
+                + INPUT_ID_SUFFIX);
+        htmlWriter.writeClass(getMainStyleClassName() + "_input");
+
+        writeInputAttributes(htmlWriter);
+
+        Integer tabIndex = comboGridComponent
+                .getTabIndex(componentRenderContext.getFacesContext());
+        if (tabIndex != null) {
+            htmlWriter.writeTabIndex(tabIndex.intValue());
+        }
+
+        if (formattedValue != null) {
+            htmlWriter.writeValue(formattedValue);
+        }
+
+        htmlWriter.endElement(IHtmlWriter.INPUT);
+    }
+
+    protected void writeInputAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
+
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
+                .getComponent();
+
+        boolean disabled = comboGridComponent.isDisabled(facesContext);
+        boolean readOnly = comboGridComponent.isReadOnly(facesContext);
+        boolean editable = comboGridComponent.isEditable(facesContext);
+
+        if (disabled) {
+            htmlWriter.writeDisabled();
+        }
+        if (readOnly || editable == false) {
+            htmlWriter.writeReadOnly();
+        }
     }
 
     protected boolean needAjaxJavaScriptClasses(IHtmlWriter writer,

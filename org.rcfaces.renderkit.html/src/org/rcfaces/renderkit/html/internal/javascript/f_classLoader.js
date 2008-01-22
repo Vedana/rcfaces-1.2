@@ -1141,7 +1141,7 @@ f_classLoader.prototype = {
 		var serializedStates=this._serializedStates;
 	
 		for(var id in serializedStates) {
-			serial.push(id+"=["+serializedStates[id]+"]");
+			serial.push(id+"={"+serializedStates[id]+"}");
 		}		
 		
 		if (!serial.length) {

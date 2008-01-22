@@ -14,7 +14,9 @@ import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
@@ -96,6 +98,22 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
         return htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetContentAccessor(DATE_CHOOSER_DISABLED_IMAGEURL,
                         IContentType.IMAGE);
+    }
+
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
+
+        DateChooserComponent dateChooserComponent = (DateChooserComponent) component;
+
+        Date dateValue = (Date) componentData.getProperty("value");
+        Date date = null;
+        if (dateValue != null
+                && dateChooserComponent.isValueLocked(context.getFacesContext()) == false) {
+            date = dateValue;
+        }
+
+        dateChooserComponent.setSubmittedExternalValue(date);
     }
 
     /**

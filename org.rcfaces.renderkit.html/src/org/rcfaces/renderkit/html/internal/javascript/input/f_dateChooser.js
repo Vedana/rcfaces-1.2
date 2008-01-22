@@ -59,6 +59,25 @@ var __members={
 		f_core.Debug(f_dateChooser, "_onDateSelected: Selected date: "+date);
 		
 		return this.f_fireEvent(f_event.CHANGE, jsEvent, null, date);
+	},
+	f_serialize: function() {
+		var calendarObject=this.f_getCalendarObject();
+		
+		var value=calendarObject.f_getSelection();
+		if (value) {				
+			this.f_setProperty(f_prop.VALUE, value);
+		}
+		
+		/*
+		 * On risque d'avoir des problemes lors de la réouverture du Popup qui ne sera pas positionné correctement.
+		 * 		
+		var cursorDate=calendarObject.f_getCursorDate();
+		if (cursorDate) {
+			this.f_setProperty(f_prop.CURSOR, cursorDate);
+		}
+		*/
+
+		this.f_super(arguments);
 	}
 }
  

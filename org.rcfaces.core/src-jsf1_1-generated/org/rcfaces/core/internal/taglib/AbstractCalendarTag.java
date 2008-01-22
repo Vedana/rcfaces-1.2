@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.component.AbstractCalendarComponent;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.AbstractCalendarComponent;
-import javax.faces.application.Application;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public abstract class AbstractCalendarTag extends AbstractInputTag implements Tag {
 
@@ -28,6 +28,7 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 	private String twoDigitYearStart;
 	private String minDate;
 	private String maxDate;
+	private String cursorDate;
 	private String disabledWeekDays;
 	public final String getSelectionListener() {
 		return selectionListeners;
@@ -97,6 +98,10 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 		this.maxDate = maxDate;
 	}
 
+	public final void setCursorDate(String cursorDate) {
+		this.cursorDate = cursorDate;
+	}
+
 	public final void setDisabledWeekDays(String disabledWeekDays) {
 		this.disabledWeekDays = disabledWeekDays;
 	}
@@ -112,6 +117,7 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 			LOG.debug("  twoDigitYearStart='"+twoDigitYearStart+"'");
 			LOG.debug("  minDate='"+minDate+"'");
 			LOG.debug("  maxDate='"+maxDate+"'");
+			LOG.debug("  cursorDate='"+cursorDate+"'");
 			LOG.debug("  disabledWeekDays='"+disabledWeekDays+"'");
 		}
 		super.setProperties(uiComponent);
@@ -221,6 +227,16 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 			}
 		}
 
+		if (cursorDate != null) {
+			if (isValueReference(cursorDate)) {
+				ValueBinding vb = application.createValueBinding(cursorDate);
+				component.setValueBinding(Properties.CURSOR_DATE, vb);
+
+			} else {
+				component.setCursorDate(cursorDate);
+			}
+		}
+
 		if (disabledWeekDays != null) {
 			if (isValueReference(disabledWeekDays)) {
 				ValueBinding vb = application.createValueBinding(disabledWeekDays);
@@ -243,6 +259,7 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 		twoDigitYearStart = null;
 		minDate = null;
 		maxDate = null;
+		cursorDate = null;
 		disabledWeekDays = null;
 
 		super.release();

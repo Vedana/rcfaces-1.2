@@ -95,8 +95,10 @@ var __members = {
 		f_core.Assert(typeof(value)=="string" 
 			|| typeof(value)=="number" 
 			|| typeof(value)=="boolean" 
+			|| (value instanceof Array) 
 			|| (value instanceof Date)
 			|| (f_class.IsClassDefined("f_time") && (value instanceof f_time))
+			|| (f_class.IsClassDefined("f_period") && (value instanceof f_period))
 			|| value===null || value===undefined, "fa_serializable.f_setProperty: Invalid value '"+value+"'.");
 		
 		var properties=this._properties;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<repository id="javascript" baseDirectory="org/rcfaces/renderkit/html/internal/javascript">
+<repository id="javascript" baseDirectory="org/rcfaces/renderkit/html/internal/javascript" remapSymbols="false">
 	<module id="core" defaultCoreModule="true">
 		<file name="boot.js">
 		</file>
@@ -1154,6 +1154,10 @@
 			<class name="f_time">
 			</class>
 		</file>
+		<file name="util/f_period.js">
+			<class name="f_period">
+			</class>
+		</file>
 		<file name="util/f_dateFormat.js">
 			<class name="f_dateFormat">
 				<required-class name="f_locale" />
@@ -1166,6 +1170,8 @@
 				<required-class name="fa_items" />
 				<required-class name="fa_selectionProvider" />
 				<required-class name="fa_commands" />
+
+				<required-class name="f_period" />
 
 				<required-class name="f_locale" />
 				<required-class name="f_resourceBundle" />

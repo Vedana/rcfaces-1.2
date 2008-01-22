@@ -4,6 +4,7 @@
 package org.rcfaces.core.internal.style;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
@@ -21,11 +22,12 @@ public class MergeLinkedStylesOperation extends AbstractStyleOperation {
         setName("Merge linked styles");
     }
 
-    public String filter(IResourceLoaderFactory resourceLoaderFactory,
-            ICssParser cssParser, String styleSheetURL,
-            String styleSheetContent, IParserContext mergeContext)
-            throws IOException {
-        return cssParser.mergesBuffer(resourceLoaderFactory, styleSheetURL,
-                styleSheetContent, mergeContext);
+    public String filter(Map applicationParameters,
+            IResourceLoaderFactory resourceLoaderFactory, ICssParser cssParser,
+            String styleSheetURL, String styleSheetContent,
+            IParserContext mergeContext) throws IOException {
+        return cssParser.mergesBuffer(applicationParameters,
+                resourceLoaderFactory, styleSheetURL, styleSheetContent,
+                mergeContext);
     }
 }

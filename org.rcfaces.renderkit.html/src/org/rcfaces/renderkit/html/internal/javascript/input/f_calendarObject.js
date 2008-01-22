@@ -72,11 +72,6 @@ var __statics = {
 	PERIOD_MODE: 1,
 
 	/**
-	 * @field public static final number
-	 */
-	PERIODS_MODE: 2,
-
-	/**
 	 * @field hidden static final number
 	 */
 	YEAR_CURSOR_LAYOUT: 0x1,
@@ -150,6 +145,11 @@ var __statics = {
 	 * @field private static final number
 	 */
 	_WEEKDAY_UNIT: 5, // Passe du lundi au mardi
+	
+	/**
+	 * @field private static final number
+	 */
+	_DAY_MILLIS: 86400000,  // Un jour en millis
 
 	/**
 	 * @method hidden static final
@@ -199,16 +199,26 @@ var __statics = {
 		if (firstDayOfWeek) {
 			calendar._firstDayOfWeek=parseInt(firstDayOfWeek, 10);
 		}
+		
+		calendar._multiple=f_core.GetBooleanAttribute(component, "v:multiple");
 
 		var mode=f_core.GetAttribute(component, "v:mode");
 		if (mode) {
 			calendar._mode=parseInt(mode, 10);
 		}
+
+		var cursorDate=f_core.GetAttribute(component, "v:cursorDate");
 		
 		var date=f_core.GetAttribute(component, "v:value");
 		if (date) {
-			calendar.f_setSelection(date);
+			calendar.f_setSelection(date, !cursorDate);
 		}
+		
+		if (cursorDate) {
+			calendar.f_setCursorDate(cursorDate);			
+		}
+		
+		calendar._autoSelection=f_core.GetBooleanAttribute(component, "v:autoSelection");
 		
 		return calendar;
 	},
@@ -252,7 +262,7 @@ var __statics = {
 				continue;
 			}
 			
-			var d2=f_core.DeserializeDate(ds2[0]);
+			var d2=f_core.DeserializeDate(ds2[1]);
 			if (!d2) {
 				continue;
 			}
@@ -332,6 +342,20 @@ var __statics = {
 			return false;
 		}
 				
+		switch(evt.keyCode) {
+		case f_key.VK_SPACE:
+		case f_key.VK_ENTER:
+		case f_key.VK_RETURN:
+			var date=this._date;
+			if (date instanceof Date) {
+				calendar._onDayClick(evt, this, date);
+			}	
+			return f_core.CancelJsEvent(evt);
+
+		case f_key.VK_TAB:
+			return true;
+		}		
+		
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 7, true, true);
 		
 		if (!delta) {
@@ -486,11 +510,11 @@ var __statics = {
 		}
 
 		var f=null;
-		if (calendar._dates.length) {
+/*		if (calendar._dates.length) {
 			f=calendar._dates[0][0];
-		}
+		} */
 		if (!f) {
-			f=calendar._showDate;
+			f=calendar._cursorDate;
 		}
 		
 		f_calendarObject._SearchButton(calendar._dayButtons, f, true);
@@ -539,6 +563,20 @@ var __statics = {
 		if (calendar.f_getEventLocked(evt)) {
 			return null;
 		}
+					
+		switch(evt.keyCode) {
+		case f_key.VK_SPACE:
+		case f_key.VK_ENTER:
+		case f_key.VK_RETURN:
+			var date=this._date;
+			if (date instanceof Date) {
+				calendar._onMonthClick(evt, this, date);
+			}
+			return f_core.CancelJsEvent(evt);
+			
+		case f_key.VK_TAB:
+			return true;
+		}		
 			
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 6, true);
 		
@@ -574,8 +612,8 @@ var __statics = {
 
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._MONTH_UNIT);
 		
-		if (calendar._dates.length) {
-			var ds=calendar._dates[0][0];
+		var ds=calendar._cursorDate;
+		if (ds) {			
 			f_calendarObject._Focus(calendar._monthButtons[ds.getMonth()]);
 		}
 		
@@ -757,6 +795,21 @@ var __statics = {
 		if (calendar.f_getEventLocked(evt)) {
 			return false;
 		}
+					
+		switch(evt.keyCode) {
+		case f_key.VK_SPACE:
+		case f_key.VK_ENTER:
+		case f_key.VK_RETURN:
+			var date=this._date;
+			if (date instanceof Date) {
+				calendar._onWeekClick(evt, this, date);		
+			}
+			
+			return f_core.CancelJsEvent(evt);
+			
+		case f_key.VK_TAB:
+			return true;
+		}
 		
 		var delta=f_calendarObject._GetDeltaKey(evt, 10, 1);
 		
@@ -767,7 +820,7 @@ var __statics = {
 		if (delta==10) {
 			// Focus le bouton du jour !
 			
-			var date=calendar._showDate;
+			var date=calendar._cursorDate;
 			if (date) {
 				f_calendarObject._SearchButton(calendar._dayButtons, date, true);
 			}
@@ -776,8 +829,10 @@ var __statics = {
 		}
 		
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._WEEK_UNIT);
-		if (calendar._dates.length) {
-			var ds=new Date(calendar._dates[0][0].getTime());
+
+		var day=calendar._cursorDate;
+		if (day) {
+			var ds=new Date(day.getTime());
 			var dday=(ds.getDay()-calendar._firstDayOfWeek) % 7;
 			if (dday<0) {
 				dday=7-dday;
@@ -856,6 +911,22 @@ var __statics = {
 			return false;
 		}
 	
+					
+		switch(evt.keyCode) {
+		case f_key.VK_SPACE:
+		case f_key.VK_ENTER:
+		case f_key.VK_RETURN:
+			var date=this._date;
+			if (date instanceof Date) {
+				calendar._onWeekDayClick(evt, this, date);
+			}		
+	
+			return f_core.CancelJsEvent(evt);
+			
+		case f_key.VK_TAB:
+			return true;
+		}		
+
 		var delta=f_calendarObject._GetDeltaKey(evt, 1, 10);
 		
 		if (!delta || delta==-10) {
@@ -864,7 +935,7 @@ var __statics = {
 		if (delta==10) {
 			// Focus le bouton du jour !
 			
-			var date=calendar._showDate;
+			var date=calendar._cursorDate;
 			if (date) {
 				f_calendarObject._SearchButton(calendar._dayButtons, date, true);
 			}
@@ -874,18 +945,11 @@ var __statics = {
 	
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._DAYOFWEEK_UNIT);
 
-		var dates=calendar._dates;
-
-		var day;
-		if (dates.length) {
-			day=dates[0][0].getDay();
-
-		} else {		
-			day=calendar._showDate.getDay();
+		var day=calendar._cursorDate;
+		if (day) {
+			f_calendarObject._Focus(calendar._weekDayButtons[(day.getDay() + 7 - calendar._firstDayOfWeek) % 7]);
 		}
-		
-		f_calendarObject._Focus(calendar._weekDayButtons[(day + 7 - calendar._firstDayOfWeek) % 7]);
-				
+			
 		return f_core.CancelJsEvent(evt);
 	},
 	
@@ -967,6 +1031,9 @@ var __statics = {
 			var delta=this._date; // C'est -1 ou 1 dans ce cas de bouton "UNIT"
 			calendar._onUnitClick(evt, this, delta);
 			break;			
+					
+		case f_key.VK_TAB:
+			return true;
 		}
 
 		return f_core.CancelJsEvent(evt);
@@ -1190,7 +1257,7 @@ var __members = {
 	
 		// this._firstDayOfWeek=undefined; // number
 		// this._dates=undefined; // date[]
-		// this._showDate=undefined; // date
+		// this._cursorDate=undefined; // date
 		// this._disabledWeekDays=undefined; // number
 		// this._maxDate=undefined; // date
 		// this._maxTime=undefined; //number
@@ -1202,6 +1269,7 @@ var __members = {
 		this._itemDates=undefined;
 		
 		// this._popupMode=undefined; // boolean
+		// this._autoSelection=undefined; // boolean
 	
 		if (this._parentComponent) {
 			this.f_destroyComponent();
@@ -1273,9 +1341,9 @@ var __members = {
 	 * @method protected
 	 */
 	f_constructComponent: function(parent) {			
-		if (!this._showDate) {
+		if (!this._cursorDate) {
 			var date=new Date();
-			this._showDate=new Date(date.getFullYear(), date.getMonth(), date.getDate());
+			this._cursorDate=new Date(date.getFullYear(), date.getMonth(), date.getDate());
 		}
 
 		if (!this._dayButtons) {
@@ -1321,6 +1389,30 @@ var __members = {
 		}
 		this._minDate=minDate;
 		this._minTime=(minDate)?minDate.getTime():undefined;
+	},
+	/**
+	 * @method public
+	 * @param Date cursorDate
+	 * @return void
+	 */
+	f_setCursorDate: function(cursorDate) {
+		if (typeof(cursorDate)=="string") {
+			cursorDate=f_core.DeserializeDate(cursorDate);
+		}
+		this._cursorDate=cursorDate;
+					
+		if (!this._dayButtons) {
+			return;
+		}
+		
+		this._updateShowDate(cursorDate, true);
+	},
+	/**
+	 * @method public
+	 * @return Date 
+	 */
+	f_getCursorDate: function() {
+		return this._cursorDate;
 	},
 	/**
 	 * @method public
@@ -1372,25 +1464,105 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return Date[][] selection
+	 * @return Object selection, type can be Date, Date[], f_period, f_period[]
 	 */
 	f_getSelection: function() {
-		return this._dates;
+		var dates=this._dates;
+		
+		switch(this._mode) {
+		case f_calendarObject.PERIOD_MODE:
+			if (this._multiple) {
+				var ret=new Array;
+				
+				if (!dates) {
+					return ret;
+				}
+				
+				for(var i=0;i<dates.length;i++) {
+					var period=new f_period(dates[i]);
+					
+					ret.push(period);
+				}								
+				return ret;
+			}
+			
+			if (!dates || !dates.length) {
+				return null;
+			}
+
+			return new f_period(dates[0]);
+			
+		case f_calendarObject.DATE_MODE:
+			if (this._multiple) {
+				var ret=new Array;				
+				if (!dates) {
+					return ret;
+				}
+				
+				for(var i=0;i<dates.length;i++) {
+					ret.push(dates[i][0]);
+				}
+				return ret;
+			}
+			
+			if (!dates || !dates.length) {
+				return null;
+			}
+
+			return dates[0][0];
+		}
+		
+		return null;
 	},
 	/**
 	 * @method public
 	 * @param any selection
+	 * @param boolean showSelection
 	 * @return void
 	 */
-	f_setSelection: function(selection) {
+	f_setSelection: function(selection, showSelection) {
 		if (typeof(selection)=="string") {
 			selection=f_calendarObject._ParsePeriods(selection);
 
 		} else if (selection instanceof Date) {
 			selection=[[selection, selection]];
+
+		} else if (selection instanceof f_period) {
+			selection=[[selection.f_getStart(), selection.f_getEnd()]];
 			
 		} else if (selection instanceof Array) {
-			// On laisse ...
+			if (selection.length) {
+				var e=selection[0];
+				
+				if (e instanceof Date) {
+					
+					var ret=new Array;
+					for(var i=0;i<selection.length;i++) {
+						var d=selection[i];
+						
+						f_core.Assert(d instanceof Date, "f_calendarObject.f_setSelection: Invalid element into value array ("+d+")");
+						
+						ret.push([d,d]);
+					}
+					
+					selection=ret;
+					
+				} else if (e instanceof f_period) {
+					var ret=new Array;
+					for(var i=0;i<selection.length;i++) {
+						var p=selection[i];
+
+						f_core.Assert(p instanceof f_period, "f_calendarObject.f_setSelection: Invalid element into value array ("+p+")");
+
+						ret.push([p.f_getStart(), p.f_getEnd()]);
+					}
+					
+					selection=ret;
+					
+				} else {
+					selection=[];
+				}
+			}
 			
 		} else  {
 			selection=[];
@@ -1398,10 +1570,14 @@ var __members = {
 	
 		this._dates=selection;
 		
-		var nextShowDate=this._showDate;
-		if (selection && selection.length>0) {
+		if (!showSelection) {
+			return;
+		}
+
+		var extShowDate=this._cursorDate;
+		if (selection && selection.length) {
 			var ds=selection[0];
-			if (ds && ds.length>0) {
+			if (ds && ds.length) {
 				f_core.Assert(ds[0] instanceof Date, "f_calendarObject.f_setSelection: Invalid selected date '"+ds[0]+"' into selection '"+selection+"'.");
 
 				nextShowDate=ds[0];
@@ -1409,7 +1585,7 @@ var __members = {
 		}
 		
 		if (!this._dayButtons) {
-			this._showDate=nextShowDate;
+			this._cursorDate=nextShowDate;
 			return;
 		}
 		
@@ -1421,7 +1597,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setCurrentDate: function(date) {
-		this._showDate=new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		this._cursorDate=new Date(date.getFullYear(), date.getMonth(), date.getDate());
 	},
 	/**
 	 * @method protected
@@ -2119,7 +2295,7 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_updateSelection: function(showDate) {
+	_updateSelection: function(cursorDate) {
 		//var firstDate;
 		//var lastDate;
 		
@@ -2157,7 +2333,7 @@ var __members = {
 				d2.setDate(0);
 				d2=d2.getTime();
 				
-				if (m==showDate.getMonth()) {
+				if (m==cursorDate.getMonth()) {
 					cl+="_cursor";
 				}
 				
@@ -2190,12 +2366,16 @@ var __members = {
 		var disabledWeekDays=this._disabledWeekDays;
 		var disabledDates=this._getDisabledDates();
 		
+		var cursorDateTime=(this._cursorDate)?this._cursorDate.getTime():0;
+		
 		var dayButtons=this._dayButtons;
 		var defaultClassName=this._className+"_cday";
 		for(var i=0;i<dayButtons.length;i++) {
 			var but=dayButtons[i];
 
 			var cl=defaultClassName;
+			
+			var showCursor=false;
 			
 			var bd=but._date;
 			if (bd===undefined) {
@@ -2215,7 +2395,7 @@ var __members = {
 					}
 				}
 							
-				if (showDate.getMonth()!=bd.getMonth()) {
+				if (cursorDate.getMonth()!=bd.getMonth()) {
 					cl+="_outside";
 				}
 								
@@ -2225,7 +2405,15 @@ var __members = {
 					(disabledDates && f_calendarObject._FindByDicho(disabledDates, d))) {
 					cl+="_disabled";
 					but.tabIndex=-1;
+				} else {
+					but.tabIndex=this.tabIndex;
 				}
+				
+				showCursor=(d==cursorDateTime);
+			}
+			
+			if (showCursor) {
+				cl+=" "+defaultClassName+"_cursor";
 			}
 								
 			var parent=but.parentNode;	
@@ -2293,7 +2481,7 @@ var __members = {
 				// Il faut peut etre découpé !	
 				ds.push([vstart, vend]);
 				
-				if (this._mode!=f_calendarObject.PERIODS_MODE) {
+				if (this._mode!=f_calendarObject.PERIOD_MODE || !this._multiple) {
 					break;
 				}
 				
@@ -2301,37 +2489,98 @@ var __members = {
 				vstart.setDate(vstart.getDate()+1);
 			}
 
-			if (ds.length>0 && this._mode!=f_calendarObject.PERIODS_MODE) {
+			if (ds.length && (this._mode!=f_calendarObject.PERIOD_MODE || !this._multiple)) {
 				break;
 			}
 		}
 
-		this._dates = ds;
-		if (ds.length>0 && !nextShowDate) {
+		if (ds.length && !nextShowDate) {
 			nextShowDate=ds[0][0];
 		}
+		
+		// Fusion ?
+		if (this._multiple && f_core.IsAppendMode(jsEvent)) {
+			var old=this._dates;
+			
+			if (this._mode==f_calendarObject.PERIOD_MODE) {
+				for(var i=0;i<old.length;i++) {
+					var o=old[i];
+					var start=o[0].getTime();
+					var end=o[1].getTime()+f_calendarObject._DAY_MILLIS;
+					
+					for(var j=0;j<ds.length;j++) {
+						var pStart=ds[j][0].getTime();
+						var pEnd=ds[j][1].getTime()+f_calendarObject._DAY_MILLIS;
+						
+						if (start>pEnd || end<pStart) {
+							continue;
+						}
+						
+						o=null;
+						if (start>pStart) {
+							start=pStart;
+						}
+						if (end<pEnd) {
+							end=pEnd;
+						}
+						
+						ds.splice(j--, 1);
+					}
+					
+					if (o) {
+						ds.push(o);
+						continue;
+					}
+
+					ds.push([ new Date(start), new Date(end-f_calendarObject._DAY_MILLIS)]);
+				}
+				
+				
+			} else { // Date MODE
+				for(var i=0;i<old.length;i++) {
+					var d=old[i][0];
+					var dt=d.getTime();
+					
+					for(var j=0;j<ds.length;j++) {
+						if (ds[j][0].getTime()!=dt) {
+							continue;
+						}
+						d=null;
+						
+						ds.splice(j--, 1)
+						break;
+					}
+					if (!d) {
+						continue;
+					}
+					ds.push(old[i]);
+				}
+			}
+		}
+
+		this._dates = ds;
 		
 		if (nextShowDate) {
 			this._updateShowDate(nextShowDate, canRefocus);
 		}
 
-		f_core.Debug(f_calendarObject, "Fire selection for '"+ds+"' detail='"+selectionDetail+"'.");
+		f_core.Debug(f_calendarObject, "_select: Fire selection for '"+ds+"' detail='"+selectionDetail+"'.");
 		this.f_fireEvent(f_event.SELECTION, jsEvent, null, ds, null, selectionDetail);
 	},
 	/**
 	 * @method private
 	 */
-	_updateShowDate: function(showDate, canRefocus) {
+	_updateShowDate: function(cursorDate, canRefocus) {
 		var refocus=false;
 		
-		var oldShowDate=this._showDate;
-		this._showDate=showDate;
+		var oldShowDate=this._cursorDate;
+		this._cursorDate=cursorDate;
 		
-		if (oldShowDate.getMonth()!=showDate.getMonth() || 
-				oldShowDate.getFullYear()!=showDate.getFullYear()) {		
+		if (oldShowDate.getMonth()!=cursorDate.getMonth() || 
+				oldShowDate.getFullYear()!=cursorDate.getFullYear()) {		
 				
 			// Pas le meme mois, ni la meme année !	
-			this._updateCells(showDate);
+			this._updateCells(cursorDate);
 			
 			refocus=canRefocus;
 		}
@@ -2341,7 +2590,7 @@ var __members = {
 			
 			var dayButtons=this._dayButtons;
 			
-			var t=showDate.getTime();
+			var t=cursorDate.getTime();
 			for(var i=0;i<dayButtons.length;i++) {
 				var but=dayButtons[i];
 				var d=but._date;
@@ -2357,7 +2606,7 @@ var __members = {
 			}			
 		}
 		
-		this._updateSelection(showDate);
+		this._updateSelection(cursorDate);
 		
 		return true;
 	},
@@ -2481,8 +2730,19 @@ var __members = {
 		if (!this._isValidDate(date)) {
 			return;
 		}	
+
+		var startDate=date;
+
+		if (!this._autoSelection && f_core.IsAppendRangeMode(evt) && this._mode==f_calendarObject.PERIOD_MODE) {
+			if (this._lastDateClicked) {
+				startDate=this._lastDateClicked;
+			}
+			
+		} else {
+			this._lastDateClicked=date;
+		}
 		
-		this._select(evt, [ date, date ], f_calendarObject.DAY_SELECTION_DETAIL, true, null);
+		this._select(evt, [ startDate, date ], f_calendarObject.DAY_SELECTION_DETAIL, true, null);
 		this._updateUnit(f_calendarObject._DAY_UNIT, date);
 	},
 	/**
@@ -2492,15 +2752,22 @@ var __members = {
 		var d;
 		var next;
 		
+		if (!this._autoSelection && !f_core.IsAppendMode(evt)) {
+			this._cursorDate=date;
+			this._updateCells(date);
+			this._updateSelection(date);
+			return;
+		}
+		
 		switch(this._mode) {
 		case f_calendarObject.DATE_MODE:
 			// On reste sur le meme jour mais un mois different !
 	
 			var dates=this._dates;
 			if (dates.length<1) {
-				// On change le showDate !
+				// On change le cursorDate !
 				// Car il n'y a pas encore de selection, on bascule tout de suite !
-				this._showDate=date;
+				this._cursorDate=date;
 				this._updateCells(date);
 				this._updateSelection(date);
 				return;
@@ -2518,7 +2785,6 @@ var __members = {
 			break;
 			
 		case f_calendarObject.PERIOD_MODE:
-		case f_calendarObject.PERIODS_MODE:
 			// On selectionne tout le mois !
 			
 			d=new Date(date.getTime());
@@ -2554,7 +2820,6 @@ var __members = {
 			return;
 			
 		case f_calendarObject.PERIOD_MODE:
-		case f_calendarObject.PERIODS_MODE:
 			d=date;
 			next=new Date(date.getTime());
 			next.setFullYear(next.getFullYear()+1);
@@ -2606,7 +2871,6 @@ var __members = {
 			break;
 			
 		case f_calendarObject.PERIOD_MODE: 
-		case f_calendarObject.PERIODS_MODE:
 			var d=new Date(date.getTime());
 			var fd=d.getDay()-this._firstDayOfWeek;
 			if (fd<0) {
@@ -2641,14 +2905,39 @@ var __members = {
 	_onWeekDayClick: function(evt, weekDayButton, date) {
 		var l;
 		
+		var cursorDateTime=this._cursorDate.getTime();
+		
 		switch(this._mode) {
-		case f_calendarObject.DATE_MODE:
+			
 		case f_calendarObject.PERIOD_MODE:
-			// On reste sur la meme semaine, mais on change le jour
-			if (this._dates.length<1) {
-				return;
+			if (this._multiple) {
+				// On selectionne tous le memes jours de la semaine du meme mois
+				var d=new Date(cursorDateTime);
+				var mt=d.getMonth();
+				d.setDate(1);
+				
+				var diff=date.getDay()-d.getDay();
+				if (diff<0) {
+					diff+=7;
+				}
+	
+				d.setDate(d.getDate()+diff);
+				
+				var l=new Array;
+				for(;d.getMonth()==mt;) {
+					var dt=new Date(d.getTime());
+					l.push(dt, dt);
+					
+					d.setDate(d.getDate()+7);
+				}
+				break;
 			}
-			var d=new Date(this._dates[0][0].getTime());
+			
+			// On continue  
+
+		case f_calendarObject.DATE_MODE:
+			// On reste sur la meme semaine, mais on change le jour
+			var d=new Date(cursorDateTime);
 
 			var dt1=d.getDay(); 
 			var dt2=date.getDay(); // Jour de la semaine a rechercher
@@ -2677,28 +2966,6 @@ var __members = {
 			l=[d, next];
 			break;
 			
-		case f_calendarObject.PERIODS_MODE:
-			// On selectionne tous le memes jours de la semaine du meme mois
-			var d=new Date(this._showDate.getTime());
-			var mt=d.getMonth();
-			d.setDate(1);
-			
-			var diff=date.getDay()-d.getDay();
-			if (diff<0) {
-				diff+=7;
-			}
-
-			d.setDate(d.getDate()+diff);
-			
-			var l=new Array;
-			for(;d.getMonth()==mt;) {
-				var dt=new Date(d.getTime());
-				l.push(dt, dt);
-				
-				d.setDate(d.getDate()+7);
-			}
-			break;
-			
 		default:
 			return;									
 		}		
@@ -2719,8 +2986,8 @@ var __members = {
 			this._updateUnit(lastUnit);
 		}
 		
-		var showDate=this._showDate;
-		if (!showDate) {
+		var cursorDate=this._cursorDate;
+		if (!cursorDate) {
 			return;
 		}
 
@@ -2734,12 +3001,11 @@ var __members = {
 		case f_calendarObject._WEEK_UNIT:
 			selectionDetail=f_calendarObject.WEEK_SELECTION_DETAIL;
 			
-			d=new Date(showDate.getTime());
+			d=new Date(cursorDate.getTime());
 			d.setDate(d.getDate()+delta*7);
 			
 			switch(this._mode) {
 			case f_calendarObject.PERIOD_MODE:
-			case f_calendarObject.PERIODS_MODE:
 				next=new Date(d.getTime());
 				next.setDate(next.getDate()+6);
 
@@ -2755,7 +3021,7 @@ var __members = {
 		case f_calendarObject._DAY_UNIT:
 			selectionDetail=f_calendarObject.DAY_SELECTION_DETAIL;
 
-			d=new Date(showDate.getTime());
+			d=new Date(cursorDate.getTime());
 			d.setDate(d.getDate()+delta);
 			
 			canRefocus=true;
@@ -2766,22 +3032,23 @@ var __members = {
 
 			switch(this._mode) {
 			case f_calendarObject.DATE_MODE:
-				d=new Date(showDate.getTime());
+				d=new Date(cursorDate.getTime());
 				d.setDate(d.getDate()+delta);
 			
 				break;
 				
 			case f_calendarObject.PERIOD_MODE:
-				d=new Date(showDate.getTime());
-				d.setDate(d.getDate()+delta);
-				next=new Date(d.getTime());
-				next.setDate(next.getDate()+6);
-				
-				break;
-
-			case f_calendarObject.PERIODS_MODE:
-				// On selectionne tous le memes jours de la semaine du meme mois
-				d=new Date(showDate.getTime());
+				if (!this._multiple) {
+					d=new Date(cursorDate.getTime());
+					d.setDate(d.getDate()+delta);
+					next=new Date(d.getTime());
+					next.setDate(next.getDate()+6);
+					
+					break;
+				}
+			
+				// On selectionne tous les memes jours de la semaine du meme mois
+				d=new Date(cursorDate.getTime());
 				d.setDate(d.getDate()+delta+(delta<0?7:0));
 				next=new Date(d.getTime());
 				var mt=d.getMonth();
@@ -2807,13 +3074,12 @@ var __members = {
 			
 		case f_calendarObject._YEAR_UNIT:
 			selectionDetail=f_calendarObject.YEAR_SELECTION_DETAIL;
-			d=new Date(showDate.getTime());
+			d=new Date(cursorDate.getTime());
 			
 			d.setFullYear(d.getFullYear()+delta);
 
 			switch(this._mode) {
 			case f_calendarObject.PERIOD_MODE:
-			case f_calendarObject.PERIODS_MODE:
 			
 				// On verifie qu'au moins un element peut être selectionné !
 				d.setMonth(0);
@@ -2834,13 +3100,12 @@ var __members = {
 			
 		case f_calendarObject._MONTH_UNIT:
 			selectionDetail=f_calendarObject.MONTH_SELECTION_DETAIL;
-			d=new Date(showDate.getTime());
+			d=new Date(cursorDate.getTime());
 			
 			d.setMonth(d.getMonth()+delta);
 
 			switch(this._mode) {
 			case f_calendarObject.PERIOD_MODE:
-			case f_calendarObject.PERIODS_MODE:
 				d.setDate(1);
 				
 				next=new Date(d.getTime());
@@ -2855,8 +3120,8 @@ var __members = {
 			break;
 		}
 	
-		if (this._popupMode) {
-			// showDate;
+		if (!this._autoSelection) {
+			// cursorDate;
 			this._updateShowDate(d, canRefocus);
 			return;
 		}
@@ -3028,11 +3293,11 @@ var __members = {
 	 * @return void
 	 */
 	f_refreshComponent: function() {		
-		this._updateCells(this._showDate);
+		this._updateCells(this._cursorDate);
 		
 		this._updateUnit(f_calendarObject._DEFAULT_UNIT);
 		
-		this._updateSelection(this._showDate);
+		this._updateSelection(this._cursorDate);
 	},
 	/**
 	 * @method private

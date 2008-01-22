@@ -21,6 +21,7 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Services;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
@@ -50,8 +51,15 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
     private final Map dependenciesById = new HashMap();
 
-    public JavaScriptRepository(String servletURI, String repositoryVersion) {
+    private boolean convertSymbols = false;
+
+    private final Map applicationParameters;
+
+    public JavaScriptRepository(String servletURI, String repositoryVersion,
+            Map applicationParameters) {
         super(servletURI, repositoryVersion);
+
+        this.applicationParameters = applicationParameters;
     }
 
     public void loadRepository(InputStream input, Object container) {
@@ -80,7 +88,8 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
             IContentProvider contentProvider) {
 
         return new JavaScriptFile(module, name, filename, unlocalizedURI,
-                unlocalizedContentLocation, dependencies, contentProvider);
+                unlocalizedContentLocation, dependencies, contentProvider,
+                convertSymbols);
     }
 
     public IClass getClassByName(String className) {
@@ -116,12 +125,16 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
         private List classes;
 
+        private boolean remapSymbols;
+
         public JavaScriptFile(IModule module, String name, String filename,
                 String unlocalizedURI, URL unlocalizedContentLocation,
                 IHierarchicalFile[] dependencies,
-                IContentProvider contentProvider) {
+                IContentProvider contentProvider, boolean remapSymbols) {
             super(module, name, filename, unlocalizedURI,
                     unlocalizedContentLocation, dependencies, contentProvider);
+
+            this.remapSymbols = remapSymbols;
         }
 
         public IClass[] listClasses() {
@@ -139,6 +152,23 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
             classes.add(name);
         }
+
+        public String convertSymbols(Map symbols, String code) {
+            if (remapSymbols == false) {
+                return code;
+            }
+
+            IJavaScriptSymbolsConverter provider = (IJavaScriptSymbolsConverter) Services
+                    .get().getService(IJavaScriptSymbolsConverter.SERVICE_ID);
+
+            if (provider == null) {
+                return code;
+            }
+
+            return provider.convertSymbols(getId(), code, symbols,
+                    applicationParameters);
+        }
+
     }
 
     protected Locale adaptLocale(Locale locale, IFile file) {
@@ -155,6 +185,29 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
     protected void addRules(Digester digester, Object container) {
         super.addRules(digester, container);
+
+        digester.addRule("repository", new Rule() {
+            private static final String REVISION = "$Revision$";
+
+            public void begin(String namespace, String name,
+                    Attributes attributes) throws Exception {
+                super.begin(namespace, name, attributes);
+
+                String convertSymbolsValue = attributes
+                        .getValue("convertSymbols");
+
+                convertSymbols = (convertSymbolsValue == null)
+                        || ("true".equalsIgnoreCase(convertSymbolsValue));
+            }
+
+            public void end(String namespace, String name) throws Exception {
+
+                convertSymbols = false;
+
+                super.end(namespace, name);
+            }
+
+        });
 
         digester.addRule("repository/module/file/class", new Rule() {
             private static final String REVISION = "$Revision$";

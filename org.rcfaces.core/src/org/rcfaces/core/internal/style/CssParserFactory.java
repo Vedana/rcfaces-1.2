@@ -4,9 +4,11 @@
 package org.rcfaces.core.internal.style;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Services;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 
 /**
@@ -19,9 +21,18 @@ public class CssParserFactory {
 
     private static final Log LOG = LogFactory.getLog(CssParserFactory.class);
 
+    private static final String CSS_PARSER_SERVICE_ID = "org.rcfaces.css.CSS_PARSER";
+
     private static final String STEADY_STATE_PARSER_CLASSNAME = "org.rcfaces.css.internal.CssSteadyStateParser";
 
     public static final ICssParser getCssParser() {
+
+        ICssParser cssParser = (ICssParser) Services.get().getService(
+                CSS_PARSER_SERVICE_ID);
+        if (cssParser != null) {
+            return cssParser;
+        }
+
         Class clazz = null;
 
         try {
@@ -61,7 +72,8 @@ public class CssParserFactory {
     public interface ICssParser {
         String getParserName();
 
-        String mergesBuffer(IResourceLoaderFactory resourceLoaderFactory,
+        String mergesBuffer(Map applicationParameters,
+                IResourceLoaderFactory resourceLoaderFactory,
                 String styleSheetURL, String styleSheetBuffer,
                 IParserContext mergeContext) throws IOException;
 

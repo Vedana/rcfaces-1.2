@@ -470,12 +470,7 @@ var __members={
 			return this._initialDateSelection;
 		}
 		
-		var selection=calendar.f_getSelection();
-		if (!selection || !selection.length) {
-			return null;
-		}
-		
-		return selection[0][0];
+		return calendar.f_getSelection();
 	},
 	/**
 	 * @method public

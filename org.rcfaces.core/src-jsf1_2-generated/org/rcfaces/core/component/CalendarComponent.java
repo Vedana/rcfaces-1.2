@@ -1,17 +1,18 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.converter.CalendarModeConverter;
-import javax.el.ValueExpression;
 import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
-import java.util.HashSet;
-import java.lang.String;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
+import java.lang.String;
 import org.rcfaces.core.component.capability.ICalendarLayoutCapability;
-import java.util.Arrays;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IMultipleSelectCapability;
+import org.rcfaces.core.component.AbstractCalendarComponent;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
 
 /**
  * <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
@@ -31,13 +32,14 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 public class CalendarComponent extends AbstractCalendarComponent implements 
 	IBorderCapability,
 	ICalendarLayoutCapability,
+	IMultipleSelectCapability,
 	ICalendarModeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.calendar";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"border","mode","calendarLayout"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"multipleSelect","border","autoSelection","mode","calendarLayout"}));
 	}
 
 	public CalendarComponent() {
@@ -109,6 +111,29 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.CALENDAR_LAYOUT, calendarLayout);
 	}
 
+	public boolean isMultipleSelect() {
+		return isMultipleSelect(null);
+	}
+
+	/**
+	 * See {@link #isMultipleSelect() isMultipleSelect()} for more details
+	 */
+	public boolean isMultipleSelect(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.MULTIPLE_SELECT, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "multipleSelect" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isMultipleSelectSetted() {
+		return engine.isPropertySetted(Properties.MULTIPLE_SELECT);
+	}
+
+	public void setMultipleSelect(boolean multipleSelect) {
+		engine.setProperty(Properties.MULTIPLE_SELECT, multipleSelect);
+	}
+
 	public int getMode() {
 		return getMode(null);
 	}
@@ -130,6 +155,26 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 
 	public void setMode(int mode) {
 		engine.setProperty(Properties.MODE, mode);
+	}
+
+	public boolean isAutoSelection() {
+		return isAutoSelection(null);
+	}
+
+	public boolean isAutoSelection(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.AUTO_SELECTION, false, facesContext);
+	}
+
+	public void setAutoSelection(boolean autoSelection) {
+		engine.setProperty(Properties.AUTO_SELECTION, autoSelection);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "autoSelection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isAutoSelectionSetted() {
+		return engine.isPropertySetted(Properties.AUTO_SELECTION);
 	}
 
 	protected Set getCameliaFields() {

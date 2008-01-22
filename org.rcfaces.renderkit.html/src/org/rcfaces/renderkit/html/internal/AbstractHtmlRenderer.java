@@ -374,12 +374,13 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         }
 
         int idx = index.intValue();
-
+/*
         if (idx < 0 || idx > 32767) {
             throw new WriterException(
                     "Bad tabindex attribute value ! (Value must be a number between 0 and 32767)",
                     null, (UIComponent) tabIndexCapability);
         }
+        */
 
         writer.writeTabIndex(idx);
 

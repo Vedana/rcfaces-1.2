@@ -31,6 +31,7 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
 import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
 import org.rcfaces.core.internal.style.CssParserFactory.ICssParser.IParserContext;
+import org.rcfaces.core.internal.util.ApplicationParametersMap;
 
 /**
  * 
@@ -91,13 +92,16 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
             return INVALID_BUFFERED_FILE;
         }
 
+        Map applicationParameters = new ApplicationParametersMap(facesContext);
+
         IStyleSheetFile styleSheetFile = createNewStyleSheetFile(getResourceURL());
         try {
             IParserContext parserContext = new ParserContext(
                     contentInfo[0].charSet, contentInfo[0].getLastModified());
 
-            String newStyleSheetContent = filter(resourceLoaderFactory,
-                    cssParser, getResourceURL(), styleSheetContent,
+            String newStyleSheetContent = filter(applicationParameters,
+                    resourceLoaderFactory, cssParser, getResourceURL(),
+                    styleSheetContent,
                     new IStyleOperation[] { styleOperation },
                     new Map[] { getFilterParameters() }, parserContext);
 
@@ -212,10 +216,11 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
         return resourceLoaderFactory;
     }
 
-    protected String filter(IResourceLoaderFactory resourceLoaderFactory,
-            ICssParser cssParser, String styleSheetURL,
-            String styleSheetContent, IStyleOperation styleOperations[],
-            Map parameters[], IParserContext parserContext) throws IOException {
+    protected String filter(Map applicationParameters,
+            IResourceLoaderFactory resourceLoaderFactory, ICssParser cssParser,
+            String styleSheetURL, String styleSheetContent,
+            IStyleOperation styleOperations[], Map parameters[],
+            IParserContext parserContext) throws IOException {
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("Process " + styleOperations.length + " style operation"
@@ -230,8 +235,9 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
                         + styleOperation.getName() + "'");
             }
 
-            styleSheetURL = styleOperation.filter(resourceLoaderFactory,
-                    cssParser, styleSheetURL, styleSheetContent, parserContext);
+            styleSheetURL = styleOperation.filter(applicationParameters,
+                    resourceLoaderFactory, cssParser, styleSheetURL,
+                    styleSheetContent, parserContext);
         }
 
         return styleSheetURL;

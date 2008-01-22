@@ -28,6 +28,7 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 	private ValueExpression twoDigitYearStart;
 	private ValueExpression minDate;
 	private ValueExpression maxDate;
+	private ValueExpression cursorDate;
 	private ValueExpression disabledWeekDays;
 	public final void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
@@ -69,6 +70,10 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 		this.maxDate = maxDate;
 	}
 
+	public final void setCursorDate(ValueExpression cursorDate) {
+		this.cursorDate = cursorDate;
+	}
+
 	public final void setDisabledWeekDays(ValueExpression disabledWeekDays) {
 		this.disabledWeekDays = disabledWeekDays;
 	}
@@ -84,6 +89,7 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 			LOG.debug("  twoDigitYearStart='"+twoDigitYearStart+"'");
 			LOG.debug("  minDate='"+minDate+"'");
 			LOG.debug("  maxDate='"+maxDate+"'");
+			LOG.debug("  cursorDate='"+cursorDate+"'");
 			LOG.debug("  disabledWeekDays='"+disabledWeekDays+"'");
 		}
 		super.setProperties(uiComponent);
@@ -183,6 +189,15 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 			}
 		}
 
+		if (cursorDate != null) {
+			if (cursorDate.isLiteralText()==false) {
+				component.setValueExpression(Properties.CURSOR_DATE, cursorDate);
+
+			} else {
+				component.setCursorDate(cursorDate.getExpressionString());
+			}
+		}
+
 		if (disabledWeekDays != null) {
 			if (disabledWeekDays.isLiteralText()==false) {
 				component.setValueExpression(Properties.DISABLED_WEEK_DAYS, disabledWeekDays);
@@ -204,6 +219,7 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 		twoDigitYearStart = null;
 		minDate = null;
 		maxDate = null;
+		cursorDate = null;
 		disabledWeekDays = null;
 
 		super.release();

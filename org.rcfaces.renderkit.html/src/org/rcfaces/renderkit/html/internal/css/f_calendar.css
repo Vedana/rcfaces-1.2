@@ -137,6 +137,11 @@
 	padding: 0;
 }
 
+.f_calendar_month_cursor_disabled {
+	border: #9C9C9C 1px solid;
+	padding: 0;
+}
+
 .f_calendar_month:hover {
 	text-decoration: underline;
 }
@@ -215,6 +220,11 @@
 .f_calendar_cday_selected_disabled A,
 .f_calendar_cday_selected_outside_disabled A {
 	background-color: #CDDEEE;
+}
+
+.f_calendar_cday_cursor A {
+	border: #999 1px solid;
+	padding: 0;
 }
 
 .f_calendar_cday A:hover,

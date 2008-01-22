@@ -16,7 +16,7 @@ var __statics = {
 	 * @param f_time time
 	 * @return String
 	 */
-	SerializeTime: function(time) {
+	Serialize: function(time) {
 		var millis=time.f_getMilliseconds();		
 		if (millis) {
 			return "S"+time.f_getTime().toString(32);
@@ -44,7 +44,7 @@ var __statics = {
 	 * @param String time
 	 * @return f_time
 	 */
-	DeserializeTime: function(time) {
+	Deserialize: function(time) {
 		if (!time.length) {
 			return null;
 		}
@@ -71,7 +71,7 @@ var __statics = {
 			return new f_time(value);
 		}
 		
-		f_core.Error(f_time, "DeserializeTime: Invalid time format ! ("+time+")");
+		f_core.Error(f_time, "Deserialize: Invalid time format ! ("+time+")");
 		return null;
 	}
 }
@@ -102,7 +102,7 @@ var __members = {
 			}
 		}
 	
-		f_core.Assert(typeof(hours)=="number", "Invalid hours parameters ("+hours+")");
+		f_core.Assert(typeof(hours)=="number", "f_time.f_time: Invalid hours parameter ("+hours+")");
 		this._hours=hours;
 	
 		this._minutes=0;
@@ -110,15 +110,15 @@ var __members = {
 		this._millis=0;
 		
 		if (minutes) {
-			f_core.Assert(typeof(minutes)=="number" && minutes>=0 && minutes<=59, "Invalid minutes parameters ("+minutes+")");
+			f_core.Assert(typeof(minutes)=="number" && minutes>=0 && minutes<=59, "f_time.f_time: Invalid minutes parameter ("+minutes+")");
 			this._minutes=minutes;
 		}
 		if (seconds) {
-			f_core.Assert(typeof(seconds)=="number" && seconds>=0 && seconds<=59, "Invalid seconds parameters ("+seconds+")");
+			f_core.Assert(typeof(seconds)=="number" && seconds>=0 && seconds<=59, "f_time.f_time: Invalid seconds parameter ("+seconds+")");
 			this._seconds=seconds;
 		}
 		if (millis) {
-			f_core.Assert(typeof(millis)=="number" && millis>=0 && millis<=999, "Invalid millis parameters ("+millis+")");
+			f_core.Assert(typeof(millis)=="number" && millis>=0 && millis<=999, "f_time.f_time: Invalid millis parameter ("+millis+")");
 			this._millis=millis;
 		}
 	},

@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.component.ButtonComponent;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.ButtonComponent;
 import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public class ButtonTag extends AbstractCommandTag implements Tag {
 
@@ -22,6 +22,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 	private String textDirection;
 	private String selectionListeners;
 	private String readOnly;
+	private String alternateText;
 	private String action;
 	private String actionListeners;
 	public String getComponentType() {
@@ -60,6 +61,14 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		this.readOnly = readOnly;
 	}
 
+	public final String getAlternateText() {
+		return alternateText;
+	}
+
+	public final void setAlternateText(String alternateText) {
+		this.alternateText = alternateText;
+	}
+
 	public final void setAction(String action) {
 		this.action=action;
 	}
@@ -80,6 +89,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
+			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -130,6 +140,16 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			}
 		}
 
+		if (alternateText != null) {
+			if (isValueReference(alternateText)) {
+				ValueBinding vb = application.createValueBinding(alternateText);
+				component.setValueBinding(Properties.ALTERNATE_TEXT, vb);
+
+			} else {
+				component.setAlternateText(alternateText);
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_1.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -144,6 +164,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		textDirection = null;
 		selectionListeners = null;
 		readOnly = null;
+		alternateText = null;
 		action = null;
 		actionListeners = null;
 
