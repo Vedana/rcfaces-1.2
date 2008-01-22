@@ -128,6 +128,9 @@ public class ComboGridRenderer extends DataGridRenderer {
         if (readOnly) {
             htmlWriter.writeAttribute("v:readOnly", true);
         }
+        if (disabled) {
+            htmlWriter.writeAttribute("v:disabled", true);
+        }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
 
