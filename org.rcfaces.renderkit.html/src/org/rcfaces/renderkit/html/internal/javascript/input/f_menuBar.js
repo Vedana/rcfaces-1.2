@@ -631,7 +631,7 @@ var __members = {
 	f_declareBarItem: function(id, label, value, accessKey, disabled) {
 		var menuBarItem=this.f_appendItem(this, id, label, value, accessKey, null, disabled);
 		
-		var uiItem=document.createElement("button");
+		var uiItem=this.ownerDocument.createElement("button");
 		this._uiMenuItems[menuBarItem]=uiItem; // Ben oui 
 		uiItem._item=menuBarItem;
 		

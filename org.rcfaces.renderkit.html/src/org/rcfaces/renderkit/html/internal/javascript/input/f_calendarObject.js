@@ -225,8 +225,12 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @param String value
+	 * @return Date
 	 */
 	_ParseDates: function(value) {
+		f_core.Assert(typeof(value)=="string", "f_calendarObject._ParseDates: Invalid value parameter '"+value+"'.");
+
 		var ds=value.split(",");
 		var ret=new Array;
 		
@@ -3151,12 +3155,12 @@ var __members = {
 	 * @method hidden
 	 */
 	f_appendDateItem: function(date, label, disabled, styleClass, clientDatas) {
-		var item=new Object;
-		item._label=label;
-		item._value=date;
-		item._dates=f_calendarObject._ParseDates(date);
-		item._styleClass=styleClass;
-		item._disabled=disabled;
+		var item= {
+			_label: label,
+			_value: date,
+			_styleClass: styleClass,
+			_disabled: disabled
+		};
 		
 		if (arguments.length>4) {
 			var cd=new Object;
@@ -3165,15 +3169,36 @@ var __members = {
 				cd[arguments[i++]]==arguments[i++];
 			}
 			
-			this.f_setItemClientDatas(item, cd);
+			item._clientDatas=cd;
 		}
 		
+		return this.f_appendDateItem2(item);
+	},
+	/**
+	 * @method hidden
+	 */
+	f_appendDateItem2: function(item) {
+	
+		var dates=item._value;
+		if (dates) {
+			item._dates=f_calendarObject._ParseDates(dates);			
+		}
+	
+		var clientDatas=item._clientDatas;
+		if (clientDatas) {
+			item._clientDatas=undefined;
+			
+			this.f_setItemClientDatas(item, clientDatas);
+		}
+	
 		this.f_addItem(this, item);
 
-		f_core.Debug(f_calendarObject, "Add date item '"+item._dates+"' label="+label);
+		f_core.Debug(f_calendarObject, "f_appendDateItem2: Add date item '"+item._dates+"' label="+item._label);
 
 		this._disabledDates=undefined;
 		this._itemDates=undefined;
+		
+		return item;
 	},
 	fa_updateItemStyle: function() {
 		this._disabledDates=undefined;

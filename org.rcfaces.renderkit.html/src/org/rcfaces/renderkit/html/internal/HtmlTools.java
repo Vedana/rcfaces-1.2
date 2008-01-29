@@ -17,10 +17,14 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -1195,7 +1199,48 @@ public class HtmlTools {
                 continue;
             }
         }
+    }
 
+    public static String computeSubInputComponentId(IHtmlWriter htmlWriter,
+            String clientId) {
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        UIComponent component = facesContext.getViewRoot().findComponent(
+                clientId);
+        if (component == null) {
+            return null;
+        }
+
+        Renderer renderer = getRenderer(facesContext, component);
+        if (renderer == null) {
+            return null;
+        }
+
+        if ((renderer instanceof ISubInputClientIdRenderer) == false) {
+            return null;
+        }
+
+        String subClientId = ((ISubInputClientIdRenderer) renderer)
+                .computeSubInputClientId(htmlWriter.getComponentRenderContext()
+                        .getRenderContext(), component, clientId);
+
+        return subClientId;
+    }
+
+    public static Renderer getRenderer(FacesContext facesContext,
+            UIComponent component) {
+        String rendererType = component.getRendererType();
+        if (rendererType == null) {
+            return null;
+        }
+
+        RenderKitFactory rkFactory = (RenderKitFactory) FactoryFinder
+                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = rkFactory.getRenderKit(facesContext, facesContext
+                .getViewRoot().getRenderKitId());
+
+        return renderKit.getRenderer(component.getFamily(), rendererType);
     }
 
     /**

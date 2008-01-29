@@ -14,6 +14,7 @@ import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
@@ -21,6 +22,7 @@ import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -28,7 +30,8 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CheckButtonRenderer extends AbstractInputRenderer {
+public class CheckButtonRenderer extends AbstractInputRenderer implements
+        ISubInputClientIdRenderer {
     private static final String REVISION = "$Revision$";
 
     protected static final String DEFAULT_VALUE = "CHECKED";
@@ -249,5 +252,10 @@ public class CheckButtonRenderer extends AbstractInputRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.CHECK_BUTTON;
+    }
+
+    public String computeSubInputClientId(IRenderContext renderContext,
+            UIComponent component, String clientId) {
+        return clientId + INPUT_ID_SUFFIX;
     }
 }

@@ -217,7 +217,7 @@ var __members = {
 	 */
 	f_setDisabled: function(disabled) {
 		this.f_getInput().disabled = disabled;
-		this.disabled = disabled;
+//		this.disabled = disabled;
 		this.f_updateDisabled(disabled);
 		this.f_setProperty(f_prop.DISABLED, disabled);
 	},

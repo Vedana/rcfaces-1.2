@@ -64,6 +64,11 @@
 	width: 140px;
 }
 
+.f_dateChooser_popup_3,
+.f_dateChooser_popup_4 {
+	width: 150px;
+}
+
 .f_dateChooser_popup .f_calendar_cursorMonthLabel {
 	width: 80px;
 }

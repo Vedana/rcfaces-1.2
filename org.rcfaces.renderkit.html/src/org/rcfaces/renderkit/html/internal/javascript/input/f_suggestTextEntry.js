@@ -50,6 +50,9 @@ var __members = {
 		this._caseSensitive=f_core.GetBooleanAttribute(this, "v:caseSensitive", false);
 		
 		this._forceProposal=f_core.GetBooleanAttribute(this, "v:forceProposal", false);
+		if (this._forceProposal && this._suggestionMinChars<1) {
+			this._suggestionMinChars=1;
+		}
 		
 		// Permet d'optimiser les propositions !
 		this._orderedResult=f_core.GetAttribute(this, "v:orderedResult");
@@ -62,9 +65,10 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
 		
-		var suggestTextEntry=this;
 		var menu=this.f_newSubMenu(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		menu.f_setCatchOnlyPopupKeys(true);
+
+		var suggestTextEntry=this;
 		menu.f_insertEventListenerFirst(f_event.SELECTION, function(evt) {
 			var jsEvt=evt.f_getJsEvent();
 			//var menu=evt.f_getComponent();
@@ -73,6 +77,9 @@ var __members = {
 	
 			suggestTextEntry._setSuggestion(item._label, item._value, item, jsEvt);
 		});
+
+		this.f_insertEventListenerFirst(f_event.FOCUS, this._onFocus);
+		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
 	f_finalize: function() {
 		var timerId=this._timerId;
@@ -95,6 +102,7 @@ var __members = {
 		// this._orderedResult=undefined; // boolean
 		// this._loading=undefined; // boolean
 		// this._moreResultsMessage=undefined; // String
+		// this._focus=undefined; // boolean
 
 		// this._oldClassName=undefined; // string
 		// this._canSuggest=undefined; // boolean
@@ -109,6 +117,10 @@ var __members = {
 		this.f_super(arguments);
 		
 		this._canSuggest=true;
+		
+		if (typeof(this._rowCount)=="number" && this._results && this._results.length==this._rowCount) { // des infos sont déjà chargées 
+			this._requestedText="";
+		}
 		
 		//this._showProposal();
 	},
@@ -152,6 +164,8 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_onCancelDown: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
@@ -170,6 +184,8 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param Event evt
+	 * @return boolean
 	 */
 	_onSuggest: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
@@ -192,7 +208,9 @@ var __members = {
 				return f_core.CancelJsEvent(jsEvt);
 			}
 
-			if (value==this._lastValue) {
+			var minChars=this._suggestionMinChars;
+
+			if ((minChars<1 || minChars<=value.length) && (value==this._lastValue)) {
 				this._showPopup(jsEvt, (jsEvt.keyCode==f_key.VK_DOWN)?1:-1);
 
 				return f_core.CancelJsEvent(jsEvt);
@@ -231,7 +249,7 @@ var __members = {
 //				return;
 			}
 		}
-			
+				
 		var timerId=this._timerId;
 		if (timerId) {
 			this._timerId=undefined;
@@ -260,6 +278,7 @@ var __members = {
 			this._onSuggestTimeOut();
 			
 		} else {
+			
 			this._lastValue=value;
 
 			var suggestTextEntry=this;
@@ -285,8 +304,13 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param String text
+	 * @return void
 	 */
 	_onSuggestTimeOut: function(text) {
+		if (!this._focus || window._rcfacesExiting) {
+			return;
+		}
 		if (!text) {
 			text=this.f_getText();
 		}
@@ -300,14 +324,24 @@ var __members = {
 		
 		// Peut-on se limiter à ce que l'on a en mémoire ?
 		
-		var results=this._results;
+		var requestedText=this._requestedText;
+		var t=text;
+		
+		if (!this._caseSensitive) {
+			t=text.toLowerCase();
+			if (requestedText) {
+				requestedText=requestedText.toLowerCase();
+			}
+		}
 
-		if (this._requestedText==text) {
+		if (requestedText==t) {
 			this._showProposal();
 			return;
 		}
 
-		if (results && results.length && !text.indexOf(this._requestedText)) {
+		var results=this._results;
+
+		if (results && results.length && typeof(requestedText)=="string" && !t.indexOf(requestedText)) {
 			if (this._filterProposals(new Array(), text)) {
 				this._showProposal();
 				return;
@@ -317,7 +351,7 @@ var __members = {
 		
 		var p=this.f_getFilterProperties();
 		
-		p.text=text;
+		p.text=t;
 		p.caseSensitive=this._caseSensitive;
 		
 		this.f_setFilterProperties(p);
@@ -359,7 +393,7 @@ var __members = {
 		
 			this.f_setLoading(true);
 			
-			f_core.Debug(f_suggestTextEntry, "Call server text='"+text+"' maxResultNumber="+params.maxResultNumber);
+			f_core.Debug(f_suggestTextEntry, "_callServer: Call server text='"+text+"' maxResultNumber="+params.maxResultNumber);
 		
 			var url=f_env.GetViewURI();	
 			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
@@ -369,7 +403,7 @@ var __members = {
 				 * @method public
 				 */
 		 		onError: function(request, status, text) {
-		 			f_core.Info(f_suggestTextEntry, "Bad status: "+status);
+		 			f_core.Info(f_suggestTextEntry, "_callServer: Bad status: "+status);
 
 		 			var continueProcess;
 		 			
@@ -496,12 +530,6 @@ var __members = {
 	 * @return Object New item.
 	 */
 	f_appendItem: function(label, value, description, imageURL, clientDataName1, clientDataValue1, clientDataName2) {
-		var results=this._results;
-		if (!results) {
-			results=new Array;
-			this._results=results;
-		}
-		
 		var clientDatas;
 		if (arguments.length>4) {
 			clientDatas=new Object;
@@ -521,11 +549,26 @@ var __members = {
 			_imageURL: imageURL,
 			_clientDatas: clientDatas
 		};
+	
+		return this.f_appendItem(item);	
+	},
+	
+	/**
+	 * @method hidden
+	 * @return Object New item.
+	 */
+	f_appendItem2: function(item) {
+		var results=this._results;
+		if (!results) {
+			results=new Array;
+			this._results=results;
+		}
 		
 		results.push(item);
 		
-		return item;
+		return item;	
 	},
+	
 	/**
 	 * @method hidden
 	 */
@@ -652,10 +695,15 @@ var __members = {
 	f_showProposal: function(proposalLabel, proposalValue, proposalItem, jsEvt) {
 		var label=this.f_getText();
 		
-		var labelCS=(this._caseSensitive)?label:label.toLowerCase();
-		var proposalLabelCS=(this._caseSensitive)?proposalLabel:proposalLabel.toLowerCase();
+		var labelCS=label
+		var proposalLabelCS=proposalLabel;
 		
-		if (proposalLabelCS.indexOf(labelCS)!=0) {
+		if (!this._caseSensitive) {
+			labelCS=labelCS.toLowerCase();
+			proposalLabelCS=proposalLabelCS.toLowerCase();
+		}
+		
+		if (proposalLabelCS.indexOf(labelCS)) {
 			return;
 		}
 
@@ -695,7 +743,7 @@ var __members = {
 		
 		this.f_setSelection({
 			start: label.length,
-			end: proposalLabel.length-label.length
+			end: proposalLabel.length
 		});
 	},
 	/**
@@ -742,7 +790,11 @@ var __members = {
 	
 			text=this.f_getValue().substring(0, d.start);
 		}
-				
+		
+		if (!this._orderedResult) {
+			return false;
+		}
+		
 		if (!this._caseSensitive) {
 			text=text.toLowerCase();
 		}
@@ -757,51 +809,47 @@ var __members = {
 			
 			if (r.indexOf(text)) { // Ca ne commence pas !
 				if (state==1) {
-					// On avait trouvé, puis c'est la fin
-					state=2;
+					state=2; // On est sur d'avoir fait le tour
+					
+					break;
 				}
 				
 				continue;
 			}
 
-			if (state==0) { 
-				state=1;
+			if (!state) { 
+				state=1; // Il y au moins quelque resultats ...
 			}
 			
 			ret.push(results[i]);
 		}
 
-		var complete=false;
+		var complete;
 	
 //	alert("State="+state+" resultsLength="+results.length+" rowCount="+this._rowCount+" ordered="+this._orderedResult);
 	
 		switch(state) {
-		case 0:
-			if (this._orderedResult) {
-				var requestedText=this._requestedText;
-				if (requestedText && requestedText.length) {
-					// on a une petite chance car on a recherché A 
-					// et on tombe sur AE
-					// on peut en déduire qu'il n'y a pas de AA,AB,AC,AD et c'est donc complet
-					
-					if (!this._caseSensitive) {
-						requestedText=requestedText.toLowerCase();
-					}
-					
-					complete=(text.indexOf(requestedText)==0);
-				}
+		case 0: // On verifie que le premier>=  et que le dernier<
+			var first=results[0]._label;
+			var last=results[results.length-1]._label;
+			if (!this._caseSensitive) {
+				first=first.toLowerCase();
+				last=last.toLowerCase();
 			}
+			
+			complete=(results.length==this._rowCount) || (text>=first && text<last);
 			break;
-		
-		case 1:
+			
+			
+		case 1: // On a quelques resultats, mais on est pas sure qu'il n'y en a pas d'autres
 			complete=(results.length==this._rowCount);
 			break;
 
 		case 2:
-			complete=(this._orderedResult==true);
+			complete=true;
 			break;
 		} 
-		
+			
 		f_core.Debug(f_suggestTextEntry, "_filterProposals: Results="+results.length+" rowCount="+this._rowCount+" Post filter="+ret.length+" complete="+complete+" state="+state);
 			
 		return complete;
@@ -884,6 +932,34 @@ var __members = {
 	 * @method hidden
 	 */
 	fa_cancelFilterRequest: function() {
+	},
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return void
+	 */
+	_onFocus: function(event) {
+		f_core.Debug(f_suggestTextEntry, "_onFocus: _lastValue='"+this._lastValue+"'");
+
+		if (this._focus || this.f_isDisabled()) { // Ca peut être disabled et recevoir le focus !
+			return;
+		}
+
+		this._focus=true;
+	},
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return void
+	 */
+	_onBlur: function(event) {
+		f_core.Debug(f_suggestTextEntry, "_onBlur: _lastValue='"+this._lastValue+"'");
+		
+		if (!this._focus) {
+			return;
+		}
+		
+		this._focus=undefined;
 	}
 }
 

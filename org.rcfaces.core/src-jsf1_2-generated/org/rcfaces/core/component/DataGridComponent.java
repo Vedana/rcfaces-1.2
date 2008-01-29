@@ -28,10 +28,10 @@ import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.AbstractDataComponent;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
@@ -60,6 +60,7 @@ import org.rcfaces.core.component.capability.IAdditionalInformationEventCapabili
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import java.lang.String;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import javax.el.ValueExpression;
@@ -107,7 +108,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IScrollableCapability,
 	IFilterCapability,
 	IShowValueCapability,
-	IPreferenceCapability,
+	IPreferencesSettings,
 	IPagedCapability,
 	IClientSelectionFullStateCapability,
 	IClientCheckFullStateCapability,
@@ -126,7 +127,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","checkListener","selectionCardinality","clientAdditionalInformationFullState","checkCardinality","checkable","loadListener","checkedValues","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","cursorValue","required","border","clientSelectionFullState","filterProperties","clientCheckFullState","doubleClickListener","selectedValues","horizontalScrollPosition","rowCountVar","rowStyleClass","rowValueColumnId","readOnly","selectable","preference","additionalInformationCardinality","rowIndexVar","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","checkListener","selectionCardinality","clientAdditionalInformationFullState","checkCardinality","checkable","loadListener","checkedValues","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","cursorValue","required","border","clientSelectionFullState","preferences","filterProperties","clientCheckFullState","doubleClickListener","selectedValues","horizontalScrollPosition","rowCountVar","rowStyleClass","rowValueColumnId","readOnly","selectable","additionalInformationCardinality","rowIndexVar","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -201,17 +202,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 		
 	}
 
-	public void setCheckCardinality(String cardinality) {
+	public void setClientSelectionFullState(String state) {
 
 
-			setCheckCardinality(((Integer)CheckCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
-		
-	}
-
-	public void setAdditionalInformationCardinality(String cardinality) {
-
-
-			setAdditionalInformationCardinality(((Integer)AdditionalInformationCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
+			setClientSelectionFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
 		
 	}
 
@@ -260,6 +254,20 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
+	public void setCheckCardinality(String cardinality) {
+
+
+			setCheckCardinality(((Integer)CheckCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
+		
+	}
+
+	public void setClientCheckFullState(String state) {
+
+
+			setClientCheckFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
+	}
+
 	public int getCheckedValuesCount() {
 
 
@@ -303,6 +311,20 @@ public class DataGridComponent extends AbstractDataComponent implements
 								
 				engine.setValue(Properties.CHECKED_VALUES, checkedValues);
 			
+	}
+
+	public void setAdditionalInformationCardinality(String cardinality) {
+
+
+			setAdditionalInformationCardinality(((Integer)AdditionalInformationCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
+		
+	}
+
+	public void setClientAdditionalInformationFullState(String state) {
+
+
+			setClientAdditionalInformationFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
 	}
 
 	public int getAdditionalInformationValuesCount() {
@@ -786,15 +808,15 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
-	public boolean isClientAdditionalInformationFullState() {
-		return isClientAdditionalInformationFullState(null);
+	public int getClientAdditionalInformationFullState() {
+		return getClientAdditionalInformationFullState(null);
 	}
 
 	/**
-	 * See {@link #isClientAdditionalInformationFullState() isClientAdditionalInformationFullState()} for more details
+	 * See {@link #getClientAdditionalInformationFullState() getClientAdditionalInformationFullState()} for more details
 	 */
-	public boolean isClientAdditionalInformationFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, false, facesContext);
+	public int getClientAdditionalInformationFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE,0, facesContext);
 	}
 
 	/**
@@ -805,7 +827,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE);
 	}
 
-	public void setClientAdditionalInformationFullState(boolean clientAdditionalInformationFullState) {
+	public void setClientAdditionalInformationFullState(int clientAdditionalInformationFullState) {
 		engine.setProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, clientAdditionalInformationFullState);
 	}
 
@@ -1084,27 +1106,27 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.SHOW_VALUE, showValue);
 	}
 
-	public org.rcfaces.core.preference.IComponentPreference getPreference() {
-		return getPreference(null);
+	public org.rcfaces.core.preference.IComponentPreferences getPreferences() {
+		return getPreferences(null);
 	}
 
 	/**
-	 * See {@link #getPreference() getPreference()} for more details
+	 * See {@link #getPreferences() getPreferences()} for more details
 	 */
-	public org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
-		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
+	public org.rcfaces.core.preference.IComponentPreferences getPreferences(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.preference.IComponentPreferences)engine.getProperty(Properties.PREFERENCES, facesContext);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "preference" is set.
+	 * Returns <code>true</code> if the attribute "preferences" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPreferenceSetted() {
-		return engine.isPropertySetted(Properties.PREFERENCE);
+	public final boolean isPreferencesSetted() {
+		return engine.isPropertySetted(Properties.PREFERENCES);
 	}
 
-	public void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
-		engine.setProperty(Properties.PREFERENCE, preference);
+	public void setPreferences(org.rcfaces.core.preference.IComponentPreferences preferences) {
+		engine.setProperty(Properties.PREFERENCES, preferences);
 	}
 
 	public boolean isPaged() {
@@ -1129,15 +1151,15 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.PAGED, paged);
 	}
 
-	public boolean isClientSelectionFullState() {
-		return isClientSelectionFullState(null);
+	public int getClientSelectionFullState() {
+		return getClientSelectionFullState(null);
 	}
 
 	/**
-	 * See {@link #isClientSelectionFullState() isClientSelectionFullState()} for more details
+	 * See {@link #getClientSelectionFullState() getClientSelectionFullState()} for more details
 	 */
-	public boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
+	public int getClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_SELECTION_FULL_STATE,0, facesContext);
 	}
 
 	/**
@@ -1148,19 +1170,19 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
 	}
 
-	public void setClientSelectionFullState(boolean clientSelectionFullState) {
+	public void setClientSelectionFullState(int clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
-	public boolean isClientCheckFullState() {
-		return isClientCheckFullState(null);
+	public int getClientCheckFullState() {
+		return getClientCheckFullState(null);
 	}
 
 	/**
-	 * See {@link #isClientCheckFullState() isClientCheckFullState()} for more details
+	 * See {@link #getClientCheckFullState() getClientCheckFullState()} for more details
 	 */
-	public boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
+	public int getClientCheckFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_CHECK_FULL_STATE,0, facesContext);
 	}
 
 	/**
@@ -1171,7 +1193,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
 	}
 
-	public void setClientCheckFullState(boolean clientCheckFullState) {
+	public void setClientCheckFullState(int clientCheckFullState) {
 		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 	}
 

@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
@@ -34,6 +36,8 @@ import org.rcfaces.core.component.iterator.IDataColumnIterator;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.util.ComponentIterators;
 import org.rcfaces.core.lang.IAdaptable;
@@ -69,6 +73,8 @@ public class GridTools {
     private static final ISortedComponent[] SORTED_COMPONENTS_EMPTY_ARRAY = new ISortedComponent[0];
 
     private static final UIColumn[] COLUMN_EMPTY_ARRAY = new UIColumn[0];
+
+    private static final UIComponent[] COMPONENT_EMPTY_ARRAY = new UIComponent[0];
 
     public static IColumnIterator listColumns(IGridComponent component,
             Class filter) {
@@ -213,21 +219,38 @@ public class GridTools {
     public static ISortedComponent[] listSortedComponents(FacesContext context,
             ISortedChildrenCapability dataGridComponent) {
 
-        UIComponent columns[] = dataGridComponent.getSortedChildren();
-        if (columns.length < 1) {
+        UIComponent sortedColumns[] = dataGridComponent.getSortedChildren();
+        if (sortedColumns.length < 1) {
             return SORTED_COMPONENTS_EMPTY_ARRAY;
         }
 
-        List l = new ArrayList(columns.length);
-        for (int i = 0; i < columns.length; i++) {
+        UIColumn columns[] = ((IGridComponent) dataGridComponent).listColumns()
+                .toArray();
 
-            UIColumn column = (UIColumn) columns[i];
+        List l = new ArrayList(sortedColumns.length);
+        for (int i = 0; i < sortedColumns.length; i++) {
+
+            UIColumn column = (UIColumn) sortedColumns[i];
 
             if ((column instanceof IOrderCapability) == false) {
                 continue;
             }
 
-            l.add(new DefaultSortedComponent(column, i,
+            int index = -1;
+            for (int j = 0; j < columns.length; j++) {
+                if (columns[j] != column) {
+                    continue;
+                }
+                index = j;
+                break;
+            }
+
+            if (index < 0) {
+                LOG.error("Can not find column #" + i + " " + column);
+                continue;
+            }
+
+            l.add(new DefaultSortedComponent(column, index,
                     ((IOrderCapability) column).isAscending()));
 
         }
@@ -414,14 +437,6 @@ public class GridTools {
 
     public static void setOrderIds(IGridComponent gridComponent,
             String columnsOrder) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public static void setSortIds(IGridComponent gridComponent,
-            String sortedColumnIds) {
-        // TODO Auto-generated method stub
-
     }
 
     public static String getOrderIds(IGridComponent dataGridComponent) {
@@ -429,8 +444,138 @@ public class GridTools {
         return null;
     }
 
-    public static String getSortIds(IGridComponent dataGridComponent) {
-        // TODO Auto-generated method stub
+    public static void setSortIds(IGridComponent gridComponent,
+            String sortedColumnIds) {
+        if (sortedColumnIds == null) {
+            return;
+        }
+
+        if (gridComponent instanceof ISortedComponentsCapability) {
+            ISortedChildrenCapability sortedChildrenCapability = (ISortedChildrenCapability) gridComponent;
+
+            if (sortedColumnIds.length() < 1) {
+                sortedChildrenCapability
+                        .setSortedChildren(COMPONENT_EMPTY_ARRAY);
+                return;
+            }
+
+            UIColumn columns[] = gridComponent.listColumns().toArray();
+
+            StringTokenizer st = new StringTokenizer(sortedColumnIds, ",");
+            List components = new ArrayList(st.countTokens());
+
+            for (; st.hasMoreTokens();) {
+                String id = st.nextToken().trim();
+
+                boolean ascending = false;
+                int idx = id.indexOf("::");
+                if (idx >= 0) {
+                    String cmd = id.substring(0, idx);
+                    id = id.substring(idx + 2);
+
+                    ascending = ("asc".equals(cmd));
+                }
+
+                UIComponent component = null;
+                if (id.charAt(0) == '#') {
+                    int columnIdx = Integer.parseInt(id.substring(1));
+
+                    if (columnIdx >= columns.length) {
+                        continue;
+                    }
+
+                    component = columns[columnIdx];
+
+                } else {
+                    for (int j = 0; j < columns.length; j++) {
+                        if (id.equals(columns[j].getId()) == false) {
+                            continue;
+                        }
+
+                        component = columns[j];
+                        break;
+                    }
+                }
+
+                if (component == null) {
+                    continue;
+                }
+
+                if ((component instanceof UIColumn) == false) {
+                    continue;
+                }
+
+                components.add(component);
+
+                if (component instanceof IOrderCapability) {
+                    ((IOrderCapability) component).setAscending(ascending);
+                }
+            }
+
+            sortedChildrenCapability
+                    .setSortedChildren((UIComponent[]) components
+                            .toArray(new UIComponent[components.size()]));
+            return;
+        }
+
+    }
+
+    public static String getSortIds(IGridComponent gridComponent) {
+        if (gridComponent instanceof ISortedComponentsCapability) {
+            UIComponent components[] = ((ISortedChildrenCapability) gridComponent)
+                    .getSortedChildren();
+
+            if (components.length < 1) {
+                return "";
+            }
+
+            UIColumn children[] = null;
+
+            StringAppender sa = new StringAppender(components.length * 32);
+            for (int i = 0; i < components.length; i++) {
+                UIComponent component = components[i];
+                if (sa.length() > 0) {
+                    sa.append(',');
+                }
+
+                if (component instanceof IOrderCapability) {
+                    if (((IOrderCapability) component).isAscending()) {
+                        sa.append("asc::");
+                    } else {
+                        sa.append("desc::");
+                    }
+                }
+
+                String id = component.getId();
+                if (id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
+                    if (children == null) {
+                        children = gridComponent.listColumns().toArray();
+                    }
+
+                    int index = -1;
+                    for (int j = 0; j < children.length; j++) {
+                        if (children[j] != component) {
+                            continue;
+                        }
+
+                        index = j;
+                        break;
+                    }
+
+                    if (index < 0) {
+                        LOG.error("Can not find column '" + component + "'.");
+                        continue;
+                    }
+
+                    sa.append('#').append(index);
+                    continue;
+                }
+
+                sa.append(id);
+            }
+
+            return sa.toString();
+        }
         return null;
     }
 

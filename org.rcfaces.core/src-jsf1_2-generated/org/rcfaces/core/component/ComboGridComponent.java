@@ -27,8 +27,10 @@ import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.capability.IEditableCapability;
+import java.lang.String;
 import org.rcfaces.core.component.AbstractGridComponent;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import javax.el.ValueExpression;
@@ -128,6 +130,13 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 			return AdditionalInformationTools.listAdditionalInformations(this);
 			
+	}
+
+	public void setClientAdditionalInformationFullState(String state) {
+
+
+			setClientAdditionalInformationFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
 	}
 
 	public int getAdditionalInformationValuesCount() {
@@ -310,15 +319,15 @@ public class ComboGridComponent extends AbstractGridComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
-	public boolean isClientAdditionalInformationFullState() {
-		return isClientAdditionalInformationFullState(null);
+	public int getClientAdditionalInformationFullState() {
+		return getClientAdditionalInformationFullState(null);
 	}
 
 	/**
-	 * See {@link #isClientAdditionalInformationFullState() isClientAdditionalInformationFullState()} for more details
+	 * See {@link #getClientAdditionalInformationFullState() getClientAdditionalInformationFullState()} for more details
 	 */
-	public boolean isClientAdditionalInformationFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, false, facesContext);
+	public int getClientAdditionalInformationFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE,0, facesContext);
 	}
 
 	/**
@@ -329,7 +338,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 		return engine.isPropertySetted(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE);
 	}
 
-	public void setClientAdditionalInformationFullState(boolean clientAdditionalInformationFullState) {
+	public void setClientAdditionalInformationFullState(int clientAdditionalInformationFullState) {
 		engine.setProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, clientAdditionalInformationFullState);
 	}
 

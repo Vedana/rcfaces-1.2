@@ -14,7 +14,8 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.preference.IComponentPreference;
+import org.rcfaces.core.preference.GridPreferences;
+import org.rcfaces.core.preference.IComponentPreferences;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
@@ -48,10 +49,10 @@ public class CardBoxRenderer extends AbstractCssRenderer {
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
 
-        IComponentPreference preference = cardBoxComponent
-                .getPreference(facesContext);
+        IComponentPreferences preference = cardBoxComponent
+                .getPreferences(facesContext);
         if (preference != null) {
-            preference.loadPreference(facesContext, cardBoxComponent);
+            preference.loadPreferences(facesContext, cardBoxComponent);
         }
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
@@ -129,10 +130,17 @@ public class CardBoxRenderer extends AbstractCssRenderer {
             }
         }
 
-        IComponentPreference preference = cardBoxComponent
-                .getPreference(facesContext);
-        if (preference != null) {
-            preference.savePreference(facesContext, cardBoxComponent);
+        IComponentPreferences preferences = cardBoxComponent
+                .getPreferences(facesContext);
+
+        if (preferences == null && cardBoxComponent.isPreferencesSetted()) {
+            preferences = new GridPreferences();
+
+            cardBoxComponent.setPreferences(preferences);
+        }
+
+        if (preferences != null) {
+            preferences.savePreferences(facesContext, cardBoxComponent);
         }
     }
 

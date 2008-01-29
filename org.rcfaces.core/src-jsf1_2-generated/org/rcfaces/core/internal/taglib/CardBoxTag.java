@@ -20,7 +20,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 
 	private ValueExpression selectionListeners;
 	private ValueExpression asyncRenderMode;
-	private ValueExpression preference;
+	private ValueExpression preferences;
 	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
@@ -36,8 +36,8 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
-	public final void setPreference(ValueExpression preference) {
-		this.preference = preference;
+	public final void setPreferences(ValueExpression preferences) {
+		this.preferences = preferences;
 	}
 
 	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
@@ -58,7 +58,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
-			LOG.debug("  preference='"+preference+"'");
+			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
@@ -88,8 +88,8 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 			}
 		}
 
-		if (preference != null) {
-				component.setValueExpression(Properties.PREFERENCE, preference);
+		if (preferences != null) {
+				component.setValueExpression(Properties.PREFERENCES, preferences);
 		}
 
 		if (scopeSaveValue != null) {
@@ -123,7 +123,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 	public void release() {
 		selectionListeners = null;
 		asyncRenderMode = null;
-		preference = null;
+		preferences = null;
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;

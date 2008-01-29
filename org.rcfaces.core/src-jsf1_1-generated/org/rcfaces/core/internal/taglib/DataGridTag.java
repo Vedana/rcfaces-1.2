@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.DataGridComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DataGridTag extends AbstractDataTag implements Tag {
 
@@ -41,7 +41,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private String verticalScrollPosition;
 	private String filterProperties;
 	private String showValue;
-	private String preference;
+	private String preferences;
 	private String paged;
 	private String clientSelectionFullState;
 	private String clientCheckFullState;
@@ -240,12 +240,12 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.showValue = showValue;
 	}
 
-	public final String getPreference() {
-		return preference;
+	public final String getPreferences() {
+		return preferences;
 	}
 
-	public final void setPreference(String preference) {
-		this.preference = preference;
+	public final void setPreferences(String preferences) {
+		this.preferences = preferences;
 	}
 
 	public final String getPaged() {
@@ -335,7 +335,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  showValue='"+showValue+"'");
-			LOG.debug("  preference='"+preference+"'");
+			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
@@ -433,7 +433,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueBinding(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, vb);
 
 			} else {
-				component.setClientAdditionalInformationFullState(getBool(clientAdditionalInformationFullState));
+				component.setClientAdditionalInformationFullState(clientAdditionalInformationFullState);
 			}
 		}
 
@@ -540,9 +540,9 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (preference != null) {
-				ValueBinding vb = application.createValueBinding(preference);
-				component.setValueBinding(Properties.PREFERENCE, vb);
+		if (preferences != null) {
+				ValueBinding vb = application.createValueBinding(preferences);
+				component.setValueBinding(Properties.PREFERENCES, vb);
 		}
 
 		if (paged != null) {
@@ -561,7 +561,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueBinding(Properties.CLIENT_SELECTION_FULL_STATE, vb);
 
 			} else {
-				component.setClientSelectionFullState(getBool(clientSelectionFullState));
+				component.setClientSelectionFullState(clientSelectionFullState);
 			}
 		}
 
@@ -571,7 +571,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueBinding(Properties.CLIENT_CHECK_FULL_STATE, vb);
 
 			} else {
-				component.setClientCheckFullState(getBool(clientCheckFullState));
+				component.setClientCheckFullState(clientCheckFullState);
 			}
 		}
 
@@ -652,7 +652,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		verticalScrollPosition = null;
 		filterProperties = null;
 		showValue = null;
-		preference = null;
+		preferences = null;
 		paged = null;
 		clientSelectionFullState = null;
 		clientCheckFullState = null;

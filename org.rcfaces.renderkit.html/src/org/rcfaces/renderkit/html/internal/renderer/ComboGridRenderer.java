@@ -30,6 +30,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -45,6 +46,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
+import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
@@ -52,7 +54,8 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ComboGridRenderer extends DataGridRenderer {
+public class ComboGridRenderer extends DataGridRenderer implements
+        ISubInputClientIdRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
@@ -832,6 +835,11 @@ public class ComboGridRenderer extends DataGridRenderer {
             component.queueEvent(new PropertyChangeEvent(component,
                     Properties.SELECTED_VALUE, old, convertedSelectedValue));
         }
+    }
+
+    public String computeSubInputClientId(IRenderContext renderContext,
+            UIComponent component, String clientId) {
+        return clientId + INPUT_ID_SUFFIX;
     }
 
     /**

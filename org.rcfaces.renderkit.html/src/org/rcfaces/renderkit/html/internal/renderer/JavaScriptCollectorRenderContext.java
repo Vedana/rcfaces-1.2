@@ -51,6 +51,8 @@ public class JavaScriptCollectorRenderContext extends
 
     private static final Object DISABLE_VINIT_SEARCH_PROPERTY = "camelia.jsCollector.disable.vinit";
 
+    private static final boolean PERFORM_ACCESSKEYS = false; // Le focus devrait faire l'affaire
+
     public final Set components = new OrderedSet();
 
     public JavaScriptCollectorRenderContext(FacesContext facesContext) {
@@ -499,21 +501,16 @@ public class JavaScriptCollectorRenderContext extends
                     .convertSymbol("f_classLoader", "_rcfacesClassLoader");
 
             if (accessIds.isEmpty() == false) {
-                boolean first = true;
                 jsWriter.writeCall(cameliaClassLoader, "f_initOnAccessIds");
+
+                IObjectLiteralWriter objWriter = jsWriter
+                        .writeObjectLiteral(false);
                 for (Iterator it = accessIds.iterator(); it.hasNext();) {
 
-                    if (first) {
-                        first = false;
-
-                    } else {
-                        jsWriter.write(',');
-                    }
-
-                    jsWriter.writeString((String) it.next()).write(',')
-                            .writeString((String) it.next());
+                    objWriter.writeProperty((String) it.next()).writeString(
+                            (String) it.next());
                 }
-                jsWriter.writeln(");");
+                objWriter.end().writeln(");");
             }
 
             if (messageIds.isEmpty() == false) {
@@ -656,15 +653,17 @@ public class JavaScriptCollectorRenderContext extends
         }
 
         if (others != null) {
-            for (Iterator it = others.iterator(); it.hasNext();) {
-                ComponentId componentId = (ComponentId) it.next();
+            if (PERFORM_ACCESSKEYS) {
+                for (Iterator it = others.iterator(); it.hasNext();) {
+                    ComponentId componentId = (ComponentId) it.next();
 
-                if ((componentId.mode & JavaScriptEnableModeImpl.ONACCESSKEY) == 0) {
-                    continue;
+                    if ((componentId.mode & JavaScriptEnableModeImpl.ONACCESSKEY) == 0) {
+                        continue;
+                    }
+
+                    accessIds.add(componentId.clientId);
+                    accessIds.add(componentId.accessKey);
                 }
-
-                accessIds.add(componentId.clientId);
-                accessIds.add(componentId.accessKey);
             }
 
             for (Iterator it = others.iterator(); it.hasNext();) {

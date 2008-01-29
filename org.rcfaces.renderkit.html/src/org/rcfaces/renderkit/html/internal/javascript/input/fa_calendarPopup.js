@@ -66,6 +66,8 @@ var __statics={
 		if (!popup) {
 			var body=null;
 			
+			var className="f_dateChooser_popup f_dateChooser_popup_"+dateChooser._layout;
+			
 			if (dateChooser._iePopup) {
 				var doc=dateChooser.ownerDocument;
 				
@@ -77,7 +79,7 @@ var __statics={
 					pdoc.body.innerHTML="";
 					
 					body=pdoc.createElement("div");
-					body.className="f_dateChooser_popup";
+					body.className=className;
 					body.style.visibility="inherit";
 	
 					f_core.AppendChild(pdoc.body, body);
@@ -85,7 +87,7 @@ var __statics={
 								
 			} else {
 				popup=dateChooser.ownerDocument.createElement("div");
-				popup.className="f_dateChooser_popup";
+				popup.className=className
 	
 				popup.onclick=f_core.CancelJsEventHandlerTrue;
 				popup.onmousedown=f_core.CancelJsEventHandlerTrue;
@@ -335,10 +337,19 @@ var __members={
 
 	fa_calendarPopup: function() {
 
+		this._layout=f_core.GetNumberAttribute(this, "v:layout", f_calendar.DEFAULT_LAYOUT);
 		var layout;
-		switch(f_core.GetNumberAttribute(this, "v:layout", f_calendar.DEFAULT_LAYOUT)) {
-		case f_calendar.LONG_LAYOUT:
+		switch(this._layout) {
 		case f_calendar.FULL_LAYOUT:
+			layout=f_calendarObject.YEAR_CURSOR_LAYOUT | 
+				f_calendarObject.MONTH_LIST_LAYOUT |
+				f_calendarObject.DAY_LIST_LAYOUT |
+				f_calendarObject.SELECT_DAY_LAYOUT |
+				f_calendarObject.SELECT_WEEK_LAYOUT |
+				f_calendarObject.HOME_DATE_LAYOUT;
+			break;
+
+		case f_calendar.LONG_LAYOUT:
 			layout=f_calendarObject.YEAR_CURSOR_LAYOUT | 
 				f_calendarObject.MONTH_LIST_LAYOUT |
 				f_calendarObject.DAY_LIST_LAYOUT |
@@ -369,8 +380,9 @@ var __members={
 
 	f_finalize: {
 		after: function() {
-			this._iePopup=undefined;
-			this._initialDateSelection=undefined;
+			// this._iePopup=undefined; // boolean
+			// this._initialDateSelection=undefined; // Date
+			// this._layout=undefined; // boolean
 		
 			var calendar=this._calendar;
 			if (calendar) {
@@ -446,6 +458,12 @@ var __members={
 	f_appendDateItem: function(date, label, disabled, styleClass) {
 		var calendar=this._calendar;
 		calendar.f_appendDateItem.apply(calendar, arguments);
+	},
+	/**
+	 * @method hidden
+	 */
+	f_appendDateItem2: function(date) {
+		this._calendar.f_appendDateItem2(date);
 	},
 	/**
 	 * @method public

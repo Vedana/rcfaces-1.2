@@ -75,6 +75,15 @@ public class JavaScriptEnableModeImpl implements IJavaScriptEnableMode,
         if ((mode & ONFOCUS) > 0) {
             s += " FOCUS";
         }
+        if ((mode & ONACCESSKEY) > 0) {
+            s += " ACCESSKEY";
+        }
+        if ((mode & ONOVER) > 0) {
+            s += " OVER";
+        }
+        if ((mode & ONMESSAGE) > 0) {
+            s += " MESSAGE";
+        }
 
         return s + " (" + mode + ")]";
     }

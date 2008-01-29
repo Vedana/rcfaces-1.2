@@ -9,8 +9,8 @@ package org.rcfaces.core.preference;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractComponentPreference implements
-        IComponentPreference {
+public abstract class AbstractComponentPreferences implements
+        IComponentPreferences {
     private static final String REVISION = "$Revision$";
 
     private transient boolean transientValue;

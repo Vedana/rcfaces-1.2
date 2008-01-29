@@ -15,8 +15,8 @@ import javax.faces.context.FacesContext;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IComponentPreference extends StateHolder, Serializable {
-    void loadPreference(FacesContext facesContext, UIComponent component);
+public interface IComponentPreferences extends StateHolder, Serializable {
+    void loadPreferences(FacesContext facesContext, UIComponent component);
 
-    void savePreference(FacesContext facesContext, UIComponent component);
+    void savePreferences(FacesContext facesContext, UIComponent component);
 }

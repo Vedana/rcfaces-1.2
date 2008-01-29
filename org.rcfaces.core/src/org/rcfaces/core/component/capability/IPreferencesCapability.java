@@ -4,27 +4,27 @@
  */
 package org.rcfaces.core.component.capability;
 
-import org.rcfaces.core.preference.IComponentPreference;
+import org.rcfaces.core.preference.IComponentPreferences;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IPreferenceCapability {
+public interface IPreferencesCapability {
 
     /**
      * Returns an object that holds the preferences for the component.
      * 
      * @return ComponentPreference object
      */
-    IComponentPreference getPreference();
+    IComponentPreferences getPreferences();
 
     /**
      * Sets an object that holds the preferences for the component.
      * 
-     * @param preference
+     * @param preferences
      *            ComponentPreference object
      */
-    void setPreference(IComponentPreference preference);
+    void setPreferences(IComponentPreferences preferences);
 }

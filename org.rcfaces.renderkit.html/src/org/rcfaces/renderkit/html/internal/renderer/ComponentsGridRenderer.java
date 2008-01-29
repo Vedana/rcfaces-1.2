@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
+import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -191,7 +192,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         encodeJsColumns(jsWriter, gridRenderContext, GENERATE_CELL_STYLE_CLASS);
 
         if (gridRenderContext.isSelectable()
-                && gridRenderContext.isClientSelectionFullState()) {
+                && gridRenderContext.getClientSelectionFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
 
             ISelectionProvider selectionProvider = (ISelectionProvider) gridRenderContext
                     .getGridComponent();
@@ -339,7 +340,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         Set selectedObjects = null;
 
         if (gridRenderContext.isSelectable()
-                && gridRenderContext.isClientSelectionFullState() == false) {
+                && gridRenderContext.getClientSelectionFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
 
             Object selectionModel = componentsGridComponent
                     .getSelectedValues(facesContext);
@@ -386,7 +387,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         boolean writeSelected = true;
-        if (componentsGridComponent.isClientSelectionFullState(facesContext)) {
+        if (componentsGridComponent.getClientSelectionFullState(facesContext) != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
             writeSelected = false;
         }
 

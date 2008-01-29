@@ -1612,7 +1612,7 @@ var f_core = {
 			if (!win._rcfacesSubmitting) {
 				f_core._PostSubmit(form);
 
-				if (win._rcfacesCleanUpOnSubmit) {
+				if (win.rcfacesCleanUpOnSubmit!==false) {
 					win.setTimeout(function () {
 						if (win.f_core && win.f_core.ExitWindow) {
 							win.f_core.ExitWindow(win);
@@ -1803,7 +1803,7 @@ var f_core = {
 				} else {
 					f_core._PostSubmit(form);
 								
-					if (win._rcfacesCleanUpOnSubmit) {
+					if (win.rcfacesCleanUpOnSubmit!==false) {
 						win.setTimeout(function () {
 							if (win.f_core && win.f_core.ExitWindow) {
 								win.f_core.ExitWindow(win);

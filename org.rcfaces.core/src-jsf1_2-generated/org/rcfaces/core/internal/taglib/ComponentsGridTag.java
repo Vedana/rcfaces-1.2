@@ -22,6 +22,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression selectable;
 	private ValueExpression selectionCardinality;
 	private ValueExpression selectedValues;
+	private ValueExpression clientSelectionFullState;
 	private ValueExpression additionalInformationListeners;
 	private ValueExpression additionalInformationValues;
 	private ValueExpression clientAdditionalInformationFullState;
@@ -34,14 +35,13 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression showValue;
 	private ValueExpression horizontalScrollPosition;
 	private ValueExpression verticalScrollPosition;
-	private ValueExpression preference;
+	private ValueExpression preferences;
 	private ValueExpression paged;
 	private ValueExpression headerVisible;
 	private ValueExpression rowCountVar;
 	private ValueExpression rowIndexVar;
 	private ValueExpression rowValue;
 	private ValueExpression rowValueConverter;
-	private ValueExpression clientSelectionFullState;
 	public String getComponentType() {
 		return ComponentsGridComponent.COMPONENT_TYPE;
 	}
@@ -60,6 +60,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 
 	public final void setSelectedValues(ValueExpression selectedValues) {
 		this.selectedValues = selectedValues;
+	}
+
+	public final void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
+		this.clientSelectionFullState = clientSelectionFullState;
 	}
 
 	public final void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
@@ -110,8 +114,8 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final void setPreference(ValueExpression preference) {
-		this.preference = preference;
+	public final void setPreferences(ValueExpression preferences) {
+		this.preferences = preferences;
 	}
 
 	public final void setPaged(ValueExpression paged) {
@@ -138,10 +142,6 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.rowValueConverter = rowValueConverter;
 	}
 
-	public final void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
-		this.clientSelectionFullState = clientSelectionFullState;
-	}
-
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComponentsGridComponent.COMPONENT_TYPE==getComponentType()) {
@@ -150,6 +150,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
 			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  additionalInformationValues='"+additionalInformationValues+"'");
 			LOG.debug("  clientAdditionalInformationFullState='"+clientAdditionalInformationFullState+"'");
 			LOG.debug("  additionalInformationCardinality='"+additionalInformationCardinality+"'");
@@ -159,14 +160,13 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  showValue='"+showValue+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
-			LOG.debug("  preference='"+preference+"'");
+			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  rowValue='"+rowValue+"'");
 			LOG.debug("  rowValueConverter='"+rowValueConverter+"'");
-			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -206,6 +206,15 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
 		}
 
+		if (clientSelectionFullState != null) {
+			if (clientSelectionFullState.isLiteralText()==false) {
+				component.setValueExpression(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
+
+			} else {
+				component.setClientSelectionFullState(clientSelectionFullState.getExpressionString());
+			}
+		}
+
 		if (additionalInformationListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ADDITIONAL_INFORMATION_LISTENER_TYPE, additionalInformationListeners);
 		}
@@ -219,7 +228,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, clientAdditionalInformationFullState);
 
 			} else {
-				component.setClientAdditionalInformationFullState(getBool(clientAdditionalInformationFullState.getExpressionString()));
+				component.setClientAdditionalInformationFullState(clientAdditionalInformationFullState.getExpressionString());
 			}
 		}
 
@@ -294,8 +303,8 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (preference != null) {
-				component.setValueExpression(Properties.PREFERENCE, preference);
+		if (preferences != null) {
+				component.setValueExpression(Properties.PREFERENCES, preferences);
 		}
 
 		if (paged != null) {
@@ -347,15 +356,6 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 				component.setRowValueConverter(rowValueConverter.getExpressionString());
 			}
 		}
-
-		if (clientSelectionFullState != null) {
-			if (clientSelectionFullState.isLiteralText()==false) {
-				component.setValueExpression(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
-
-			} else {
-				component.setClientSelectionFullState(getBool(clientSelectionFullState.getExpressionString()));
-			}
-		}
 	}
 
 	public void release() {
@@ -363,6 +363,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		selectable = null;
 		selectionCardinality = null;
 		selectedValues = null;
+		clientSelectionFullState = null;
 		additionalInformationListeners = null;
 		additionalInformationValues = null;
 		clientAdditionalInformationFullState = null;
@@ -375,14 +376,13 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		showValue = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
-		preference = null;
+		preferences = null;
 		paged = null;
 		headerVisible = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		rowValue = null;
 		rowValueConverter = null;
-		clientSelectionFullState = null;
 
 		super.release();
 	}

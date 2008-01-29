@@ -735,9 +735,8 @@ f_classLoader.prototype = {
 	 * @param String... ids
 	 * @return void
 	 */
-	f_initOnAccessIds: function(ids) {
-		
-		//f_key.AddKeyHandler(null, accessKey, this, this.f_performAccessKey);
+	f_initOnAccessIds: function(keys) {
+		f_key.AddAccessKeyByClientIds(keys);
 	},
 	/**
 	 * @method hidden
@@ -778,66 +777,65 @@ f_classLoader.prototype = {
 	 */
 	f_initOnFocusIds: function(ids) {
 		var onFocusIds=this._onFocusIds;
-		if (!onFocusIds) {
-			onFocusIds=ids;
-			this._onFocusIds=onFocusIds;
-			
-			var self=this;
-			
-			var initFct=function(component) {
-				var componentId=component.id;
-				
-				var idx=componentId.lastIndexOf('::');
-				var mainId=(idx>0)?componentId.substring(0, idx):componentId;
-				
-				if (!(mainId in onFocusIds)) {
-					return;
-				}				
-				delete onFocusIds[mainId];
-				
-				if (componentId!=mainId) {
-					component=component.ownerDocument.getElementById(mainId)
-				}
-				
-				if (f_class.IsObjectInitialized(component)) {
-					return true;
-				}
-				
-				try {
-					self.f_init(component);
-					
-					if (typeof(component.f_completeComponent)=="function") {
-						component.f_completeComponent();
-					}
-					
-				} catch (ex) {
-					f_core.Error(f_classLoader, "f_initOnFocusIds: Can not initialize component '"+componentId+"'.", ex);
-				}	
-			}
-			
-			if (f_core.IsInternetExplorer()) {
-				document.body.onfocusin=function() {
-					if (self._exiting) {
-						return;
-					}
-
-					initFct(window.event.srcElement);
-				};
-			} else {
-				f_core.AddEventListener(document.body, "focus", function(evt) {
-					if (self._exiting) {
-						return;
-					}
-
-					initFct(evt.target);
-				}, document.body)
+		if (onFocusIds) {
+			for(var i in ids) {
+				onFocusIds[i]=true;
 			}
 			
 			return;
-		}		
+		}
+		onFocusIds=ids;
+		this._onFocusIds=onFocusIds;
+		
+		var self=this;
+		
+		var initFct=function(component) {
+			var componentId=component.id;
+			
+			var idx=componentId.lastIndexOf('::');
+			var mainId=(idx>0)?componentId.substring(0, idx):componentId;
+			
+			if (!(mainId in onFocusIds)) {
+				return;
+			}				
+			delete onFocusIds[mainId];
+			
+			if (componentId!=mainId) {
+				component=component.ownerDocument.getElementById(mainId)
+			}
+			
+			if (f_class.IsObjectInitialized(component)) {
+				return true;
+			}
+			
+			try {
+				self.f_init(component);
+				
+				if (typeof(component.f_completeComponent)=="function") {
+					component.f_completeComponent();
+				}
+				
+			} catch (ex) {
+				f_core.Error(f_classLoader, "f_initOnFocusIds: Can not initialize component '"+componentId+"'.", ex);
+			}	
+		}
+		
+		if (f_core.IsInternetExplorer()) {
+			document.body.onfocusin=function() {
+				if (self._exiting) {
+					return;
+				}
 
-		for(var i in ids) {
-			onFocusIds[i]=true;
+				initFct(window.event.srcElement);
+			};
+		} else {
+			f_core.AddEventListener(document.body, "focus", function(evt) {
+				if (self._exiting) {
+					return;
+				}
+
+				initFct(evt.target);
+			}, document.body)
 		}
 	},
 	/**

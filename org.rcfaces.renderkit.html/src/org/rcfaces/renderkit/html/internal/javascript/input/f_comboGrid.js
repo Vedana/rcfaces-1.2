@@ -169,15 +169,15 @@ var __members = {
 		var button=this.ownerDocument.getElementById(this.id+f_comboGrid._BUTTON_ID_SUFFIX);
 		this._button=button;
 		
-		this._formattedValue=this.f_getInput().value;
-		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
-		this._inputValue=this._selectedValue;
-		
 		button._comboGrid=this;
 		button.onmousedown=f_comboGrid._OnButtonMouseDown;
 		button.onmouseup=f_comboGrid._OnButtonMouseUp;
 		button.onmouseover=f_comboGrid._OnButtonMouseOver;
 		button.onmouseout=f_comboGrid._OnButtonMouseOut;
+		
+		this._formattedValue=this.f_getInput().value;
+		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
+		this._inputValue=this._selectedValue;
 		
 		this.f_getInput().onbeforedeactivate=f_comboGrid._OnBeforeDeactivate;
 		
@@ -234,7 +234,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param Event evt
+	 * @param Event jsEvent
 	 * @return void
 	 */
 	_onButtonMouseDown: function(jsEvent) {
@@ -437,7 +437,7 @@ var __members = {
 	 */
 	_onSuggest: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
-		if (jsEvt.cancelBubble) {
+		if (jsEvt.cancelBubble || this.f_isDisabled()) {
 			f_core.Debug(f_comboGrid, "_onSuggest: Event has been canceled !");
 			return true;
 		}
@@ -599,6 +599,10 @@ var __members = {
 	_onFocus: function(event) {
 		f_core.Debug(f_comboGrid, "_onFocus: inputValue='"+this._inputValue+"'  (formattedValue='"+this._formattedValue+"')");
 
+		if (this._focus || this.f_isDisabled()) { // Ca peut être disabled et recevoir le focus !
+			return;
+		}
+
 		this._focus=true;
 		
 		// On affiche la clef, ou la valeur saisie
@@ -618,6 +622,11 @@ var __members = {
 	 */
 	_onBlur: function(event) {
 		f_core.Debug(f_comboGrid, "_onBlur: formattedValue='"+this._formattedValue+"' (inputValue='"+this._inputValue+"')");
+		
+		if (!this._focus) {
+			return;
+		}
+		
 		this._focus=undefined;
 
 		var menuOpened=this.f_isDataGridPopupOpened();

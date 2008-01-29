@@ -26,6 +26,7 @@ import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
@@ -357,7 +358,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         Set selectedObjects = null;
 
         if (tableContext.isSelectable()
-                && (tableContext.isClientSelectionFullState() == false || sendFullStates)) {
+                && (tableContext.getClientSelectionFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE || sendFullStates)) {
 
             Object selectionModel = ((ISelectedValuesCapability) gridComponent)
                     .getSelectedValues();
@@ -367,7 +368,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     selectedIndexes = ((IIndexesModel) selectionModel)
                             .listSortedIndexes();
 
-                    if (tableContext.isClientSelectionFullState()) {
+                    if (tableContext.getClientSelectionFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, "f_setSelectionStates",
                                 selectedIndexes);
                         selectedIndexes = null;
@@ -393,7 +394,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     selectedObjects = CollectionTools.valuesToSet(
                             selectionModel, true);
 
-                    if (tableContext.isClientSelectionFullState()) {
+                    if (tableContext.getClientSelectionFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, tableContext,
                                 "f_setSelectionStates", selectedObjects);
                         selectedObjects = null;
@@ -407,7 +408,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         Set checkedObjects = null;
 
         if (tableContext.isCheckable()
-                && (tableContext.isClientCheckFullState() == false || sendFullStates)) {
+                && (tableContext.getClientCheckFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE || sendFullStates)) {
 
             Object checkModel = ((ICheckedValuesCapability) gridComponent)
                     .getCheckedValues();
@@ -416,7 +417,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     checkedIndexes = ((IIndexesModel) checkModel)
                             .listSortedIndexes();
 
-                    if (tableContext.isClientCheckFullState()) {
+                    if (tableContext.getClientCheckFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, "f_setCheckStates",
                                 checkedIndexes);
                         checkedIndexes = null;
@@ -443,7 +444,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     checkedObjects = CollectionTools.valuesToSet(checkModel,
                             true);
 
-                    if (tableContext.isClientCheckFullState()) {
+                    if (tableContext.getClientCheckFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, tableContext,
                                 "f_setCheckStates", checkedObjects);
                         checkedObjects = null;
@@ -479,7 +480,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     additionalIndexes = ((IIndexesModel) additionalModel)
                             .listSortedIndexes();
 
-                    if (tableContext.isClientAdditionalFullState()) {
+                    if (tableContext.getClientAdditionalFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, "f_setAdditionalStates",
                                 additionalIndexes);
                         additionalIndexes = null;
@@ -506,7 +507,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     additionalObjects = CollectionTools.valuesToSet(
                             additionalModel, true);
 
-                    if (tableContext.isClientAdditionalFullState()) {
+                    if (tableContext.getClientAdditionalFullState() != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                         writeFullStates(jsWriter, tableContext,
                                 "f_setAdditionalStates", additionalObjects);
                         additionalObjects = null;
@@ -884,7 +885,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             if (rowId != null) {
                 jsWriter.writeString(rowId);
-
+            } else if (rowIndex >= 0) {
+                jsWriter.writeInt(rowIndex);
             } else {
                 jsWriter.writeInt(iRowId);
             }
@@ -894,18 +896,21 @@ public class DataGridRenderer extends AbstractGridRenderer {
             IObjectLiteralWriter objectLiteralWriter = jsWriter
                     .writeObjectLiteral(true);
 
-            if (selected && tableContext.isSelectable()
-                    && tableContext.isClientSelectionFullState() == false) {
+            if (selected
+                    && tableContext.isSelectable()
+                    && tableContext.getClientSelectionFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                 objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
             }
 
-            if (checked && tableContext.isCheckable()
-                    && tableContext.isClientCheckFullState() == false) {
+            if (checked
+                    && tableContext.isCheckable()
+                    && tableContext.getClientCheckFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                 objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
 
-            if (additional && tableContext.hasAdditionalInformations()
-                    && tableContext.isClientAdditionalFullState() == false) {
+            if (additional
+                    && tableContext.hasAdditionalInformations()
+                    && tableContext.getClientAdditionalFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                 objectLiteralWriter.writeSymbol("_additional").writeBoolean(
                         true);
             }
@@ -1028,6 +1033,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (rowId != null) {
                 jsWriter.writeString(rowId);
 
+            } else if (rowIndex >= 0) {
+                jsWriter.writeInt(rowIndex);
+
             } else {
                 jsWriter.writeInt(iRowId);
             }
@@ -1037,13 +1045,15 @@ public class DataGridRenderer extends AbstractGridRenderer {
             IObjectLiteralWriter objectLiteralWriter = jsWriter
                     .writeObjectLiteral(true);
 
-            if (selected && tableContext.isSelectable()
-                    && tableContext.isClientSelectionFullState() == false) {
+            if (selected
+                    && tableContext.isSelectable()
+                    && tableContext.getClientSelectionFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                 objectLiteralWriter.writeSymbol("_selected").writeBoolean(true);
             }
 
-            if (checked && tableContext.isCheckable()
-                    && tableContext.isClientCheckFullState() == false) {
+            if (checked
+                    && tableContext.isCheckable()
+                    && tableContext.getClientCheckFullState() == IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
                 objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
 
@@ -1327,6 +1337,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
             String deselectedRows = componentData
                     .getStringProperty("deselectedItems");
             if (selectedRows != null || deselectedRows != null) {
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("selectedItems=" + selectedRows
+                            + "  deselectedItems=" + deselectedRows);
+                }
+
                 if (rowValueColumn != null) {
                     Set selectedValues = SelectionTools.selectionValuesToSet(
                             facesContext, (ISelectionComponent) gridComponent,
@@ -1366,6 +1382,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getStringProperty("checkedItems");
             String uncheckedRows = componentData
                     .getStringProperty("uncheckedItems");
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("checkedItems=" + checkedRows + "  uncheckedItems="
+                        + uncheckedRows);
+            }
+
             if (checkedRows != null || uncheckedRows != null) {
                 if (rowValueColumn != null) {
 
@@ -1407,6 +1429,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getStringProperty("showAdditional");
             String hideAdditionalRows = componentData
                     .getStringProperty("hideAdditional");
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("showAdditional=" + showAdditionalRows
+                        + "  hideAdditional=" + hideAdditionalRows);
+            }
+
             if (showAdditionalRows != null || hideAdditionalRows != null) {
                 if (rowValueColumn != null) {
 
@@ -1450,11 +1478,19 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         String cursorValue = componentData.getStringProperty("cursor");
         if (cursorValue != null) {
+
             Object cursorValueObject = ValuesTools.convertStringToValue(
                     facesContext, rowValueColumn, cursorValue, false);
 
             Object oldCursorValueObject = ((ICursorProvider) gridComponent)
                     .getCursorValue();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("cursorValue=" + cursorValue + "  cursorValueObject="
+                        + cursorValueObject + " oldCursorValueObject="
+                        + oldCursorValueObject);
+            }
+
             if (isEquals(oldCursorValueObject, cursorValueObject) == false) {
                 ((ICursorProvider) gridComponent)
                         .setCursorValue(cursorValueObject);

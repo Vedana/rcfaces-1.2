@@ -32,12 +32,13 @@ import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICardinality;
+import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
+import org.rcfaces.core.component.capability.IPreferencesCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IResizableCapability;
@@ -60,6 +61,7 @@ import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
 import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
@@ -86,7 +88,8 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
-import org.rcfaces.core.preference.IComponentPreference;
+import org.rcfaces.core.preference.GridPreferences;
+import org.rcfaces.core.preference.IComponentPreferences;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
@@ -179,10 +182,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             + UINamingContainer.SEPARATOR_CHAR + "fakeCol";
 
     /*
-    private static final String FIXED_FAKE_CELL_ID_SUFFIX = ""
-            + UINamingContainer.SEPARATOR_CHAR
-            + UINamingContainer.SEPARATOR_CHAR + "fakeCell";
-            */
+     * private static final String FIXED_FAKE_CELL_ID_SUFFIX = "" +
+     * UINamingContainer.SEPARATOR_CHAR + UINamingContainer.SEPARATOR_CHAR +
+     * "fakeCell";
+     */
 
     public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return GRID_STYLE_CLASS;
@@ -501,13 +504,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         IGridComponent gridComponent = (IGridComponent) componentRenderContext
                 .getComponent();
 
-        if (gridComponent instanceof IPreferenceCapability) {
-            IPreferenceCapability preferenceCapability = (IPreferenceCapability) gridComponent;
+        if (gridComponent instanceof IPreferencesCapability) {
+            IPreferencesCapability preferenceCapability = (IPreferencesCapability) gridComponent;
 
-            IComponentPreference preference = preferenceCapability
-                    .getPreference();
+            IComponentPreferences preference = preferenceCapability
+                    .getPreferences();
             if (preference != null) {
-                preference.loadPreference(facesContext,
+                preference.loadPreferences(facesContext,
                         (UIComponent) gridComponent);
             }
         }
@@ -529,14 +532,20 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             htmlWriter.writeAttribute("v:additionalInformationCardinality",
                     cardinality);
+
+            int cfs = gridRenderContext.getClientAdditionalFullState();
+            if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
+                htmlWriter.writeAttribute("v:clientAdditionalFullState", cfs);
+            }
         }
 
         if (gridRenderContext.isSelectable()) {
             htmlWriter.writeAttribute("v:selectionCardinality",
                     gridRenderContext.getSelectionCardinality());
 
-            if (gridRenderContext.isClientSelectionFullState()) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", true);
+            int cfs = gridRenderContext.getClientSelectionFullState();
+            if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
+                htmlWriter.writeAttribute("v:clientSelectionFullState", cfs);
             }
         }
         if (gridRenderContext.isCheckable()) {
@@ -552,8 +561,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 }
             }
 
-            if (gridRenderContext.isClientCheckFullState()) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", true);
+            int cfs = gridRenderContext.getClientCheckFullState();
+            if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
+                htmlWriter.writeAttribute("v:clientCheckFullState", cfs);
             }
         }
 
@@ -882,7 +892,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.TH); // Fake TD
-//        htmlWriter.writeId(getFakeHeadCellClientId(htmlWriter));
+        // htmlWriter.writeId(getFakeHeadCellClientId(htmlWriter));
         htmlWriter.writeClass("f_grid_tcell");
         htmlWriter.write("&nbsp;");
         htmlWriter.endElement(IHtmlWriter.TH);
@@ -903,11 +913,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     /*
-    private String getFakeHeadCellClientId(IHtmlWriter htmlWriter) {
-        return htmlWriter.getComponentRenderContext().getComponentClientId()
-                + FIXED_FAKE_CELL_ID_SUFFIX;
-    }
-    */
+     * private String getFakeHeadCellClientId(IHtmlWriter htmlWriter) { return
+     * htmlWriter.getComponentRenderContext().getComponentClientId() +
+     * FIXED_FAKE_CELL_ID_SUFFIX; }
+     */
 
     private String getFakeColumnClientId(IHtmlWriter htmlWriter) {
         return htmlWriter.getComponentRenderContext().getComponentClientId()
@@ -1929,13 +1938,24 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-        if (gridComponent instanceof IPreferenceCapability) {
-            IPreferenceCapability preferenceCapability = (IPreferenceCapability) gridComponent;
+        if (gridComponent instanceof IPreferencesCapability) {
+            IPreferencesCapability preferenceCapability = (IPreferencesCapability) gridComponent;
 
-            IComponentPreference preference = preferenceCapability
-                    .getPreference();
-            if (preference != null) {
-                preference.savePreference(facesContext,
+            IComponentPreferences preferences = preferenceCapability
+                    .getPreferences();
+
+            if (preferences == null
+                    && (gridComponent instanceof IPreferencesSettings)) {
+                if (((IPreferencesSettings) gridComponent)
+                        .isPreferencesSetted()) {
+
+                    preferences = new GridPreferences();
+
+                    preferenceCapability.setPreferences(preferences);
+                }
+            }
+            if (preferences != null) {
+                preferences.savePreferences(facesContext,
                         (UIComponent) preferenceCapability);
             }
         }

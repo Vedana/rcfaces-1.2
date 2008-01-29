@@ -75,6 +75,12 @@ public class TextRenderer extends AbstractCssRenderer {
                     textComponent, ac);
 
             if (forId != null) {
+                String inputForId = HtmlTools.computeSubInputComponentId(
+                        htmlWriter, forId);
+                if (inputForId != null) {
+                    forId = inputForId;
+                }
+
                 htmlWriter.writeFor(forId);
             }
         }

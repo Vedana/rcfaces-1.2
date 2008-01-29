@@ -1,71 +1,72 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
-import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.internal.tools.CollectionTools;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
+import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.component.DataColumnComponent;
+import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.AbstractDataComponent;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
-import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.capability.ICheckRangeComponent;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
-import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IPagedCapability;
-import org.rcfaces.core.lang.provider.ICursorProvider;
-import org.rcfaces.core.component.capability.ISelectedValuesCapability;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
-import org.rcfaces.core.internal.tools.SortTools;
-import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
-import java.util.Set;
-import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
-import org.rcfaces.core.component.DataColumnComponent;
-import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import java.lang.String;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import java.util.Set;
 import java.util.HashSet;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
-import org.rcfaces.core.internal.tools.CollectionTools;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
@@ -107,26 +108,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IScrollableCapability,
 	IFilterCapability,
 	IShowValueCapability,
-	IPreferenceCapability,
+	IPreferencesSettings,
 	IPagedCapability,
 	IClientSelectionFullStateCapability,
 	IClientCheckFullStateCapability,
 	IHeaderVisibilityCapability,
 	ICursorProvider,
-	IGridComponent,
 	IOrderedChildrenCapability,
-	ISortedChildrenCapability,
-	IComponentValueTypeCapability,
-	ISelectionRangeComponent,
 	ICheckRangeComponent,
+	ISelectionRangeComponent,
 	ISortedComponentsCapability,
-	IAdditionalInformationRangeComponent {
+	IAdditionalInformationRangeComponent,
+	IGridComponent,
+	IComponentValueTypeCapability,
+	ISortedChildrenCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dataGrid";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","checkListener","selectionCardinality","clientAdditionalInformationFullState","checkCardinality","checkable","loadListener","checkedValues","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","cursorValue","required","border","clientSelectionFullState","filterProperties","clientCheckFullState","doubleClickListener","selectedValues","horizontalScrollPosition","rowCountVar","rowStyleClass","rowValueColumnId","readOnly","selectable","preference","additionalInformationCardinality","rowIndexVar","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","rowValueColumnId","horizontalScrollPosition","clientAdditionalInformationFullState","doubleClickListener","preferences","rowIndexVar","additionalInformationValues","selectable","loadListener","showValue","filterProperties","checkable","checkedValues","additionalInformationListener","checkCardinality","border","verticalScrollPosition","paged","required","disabled","cursorValue","additionalInformationCardinality","clientCheckFullState","rowStyleClass","headerVisible","rowCountVar","clientSelectionFullState","checkListener","selectionCardinality","readOnly","selectedValues"}));
 	}
 
 	public DataGridComponent() {
@@ -138,13 +139,6 @@ public class DataGridComponent extends AbstractDataComponent implements
 		setId(componentId);
 	}
 
-	public UIComponent[] getSortedChildren() {
-
-
-				return SortTools.getSortedChildren(null, this, engine, DataColumnComponent.class);
-			
-	}
-
 	public void setSortedChildren(UIComponent[] components) {
 
 
@@ -152,10 +146,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
-	public void setOrderedChildren(UIComponent[] components) {
+	public UIComponent[] getSortedChildren() {
 
 
-				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
+				return SortTools.getSortedChildren(null, this, engine, DataColumnComponent.class);
 			
 	}
 
@@ -163,6 +157,13 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 
 				return OrderTools.getOrderedChildren(null, this, engine, DataColumnComponent.class);
+			
+	}
+
+	public void setOrderedChildren(UIComponent[] components) {
+
+
+				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
 			
 	}
 
@@ -201,17 +202,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 		
 	}
 
-	public void setCheckCardinality(String cardinality) {
+	public void setClientSelectionFullState(String state) {
 
 
-			setCheckCardinality(((Integer)CheckCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
-		
-	}
-
-	public void setAdditionalInformationCardinality(String cardinality) {
-
-
-			setAdditionalInformationCardinality(((Integer)AdditionalInformationCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
+			setClientSelectionFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
 		
 	}
 
@@ -260,6 +254,20 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
+	public void setCheckCardinality(String cardinality) {
+
+
+			setCheckCardinality(((Integer)CheckCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
+		
+	}
+
+	public void setClientCheckFullState(String state) {
+
+
+			setClientCheckFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
+	}
+
 	public int getCheckedValuesCount() {
 
 
@@ -303,6 +311,20 @@ public class DataGridComponent extends AbstractDataComponent implements
 								
 				engine.setValue(Properties.CHECKED_VALUES, checkedValues);
 			
+	}
+
+	public void setAdditionalInformationCardinality(String cardinality) {
+
+
+			setAdditionalInformationCardinality(((Integer)AdditionalInformationCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
+		
+	}
+
+	public void setClientAdditionalInformationFullState(String state) {
+
+
+			setClientAdditionalInformationFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
 	}
 
 	public int getAdditionalInformationValuesCount() {
@@ -786,15 +808,15 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return valueBinding.getType(facesContext);
 	}
 
-	public boolean isClientAdditionalInformationFullState() {
-		return isClientAdditionalInformationFullState(null);
+	public int getClientAdditionalInformationFullState() {
+		return getClientAdditionalInformationFullState(null);
 	}
 
 	/**
-	 * See {@link #isClientAdditionalInformationFullState() isClientAdditionalInformationFullState()} for more details
+	 * See {@link #getClientAdditionalInformationFullState() getClientAdditionalInformationFullState()} for more details
 	 */
-	public boolean isClientAdditionalInformationFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, false, facesContext);
+	public int getClientAdditionalInformationFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE,0, facesContext);
 	}
 
 	/**
@@ -805,7 +827,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE);
 	}
 
-	public void setClientAdditionalInformationFullState(boolean clientAdditionalInformationFullState) {
+	public void setClientAdditionalInformationFullState(int clientAdditionalInformationFullState) {
 		engine.setProperty(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, clientAdditionalInformationFullState);
 	}
 
@@ -971,17 +993,17 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 
@@ -1084,27 +1106,27 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.SHOW_VALUE, showValue);
 	}
 
-	public org.rcfaces.core.preference.IComponentPreference getPreference() {
-		return getPreference(null);
+	public org.rcfaces.core.preference.IComponentPreferences getPreferences() {
+		return getPreferences(null);
 	}
 
 	/**
-	 * See {@link #getPreference() getPreference()} for more details
+	 * See {@link #getPreferences() getPreferences()} for more details
 	 */
-	public org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
-		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
+	public org.rcfaces.core.preference.IComponentPreferences getPreferences(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.preference.IComponentPreferences)engine.getProperty(Properties.PREFERENCES, facesContext);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "preference" is set.
+	 * Returns <code>true</code> if the attribute "preferences" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPreferenceSetted() {
-		return engine.isPropertySetted(Properties.PREFERENCE);
+	public final boolean isPreferencesSetted() {
+		return engine.isPropertySetted(Properties.PREFERENCES);
 	}
 
-	public void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
-		engine.setProperty(Properties.PREFERENCE, preference);
+	public void setPreferences(org.rcfaces.core.preference.IComponentPreferences preferences) {
+		engine.setProperty(Properties.PREFERENCES, preferences);
 	}
 
 	public boolean isPaged() {
@@ -1129,15 +1151,15 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.PAGED, paged);
 	}
 
-	public boolean isClientSelectionFullState() {
-		return isClientSelectionFullState(null);
+	public int getClientSelectionFullState() {
+		return getClientSelectionFullState(null);
 	}
 
 	/**
-	 * See {@link #isClientSelectionFullState() isClientSelectionFullState()} for more details
+	 * See {@link #getClientSelectionFullState() getClientSelectionFullState()} for more details
 	 */
-	public boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
+	public int getClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_SELECTION_FULL_STATE,0, facesContext);
 	}
 
 	/**
@@ -1148,19 +1170,19 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
 	}
 
-	public void setClientSelectionFullState(boolean clientSelectionFullState) {
+	public void setClientSelectionFullState(int clientSelectionFullState) {
 		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
-	public boolean isClientCheckFullState() {
-		return isClientCheckFullState(null);
+	public int getClientCheckFullState() {
+		return getClientCheckFullState(null);
 	}
 
 	/**
-	 * See {@link #isClientCheckFullState() isClientCheckFullState()} for more details
+	 * See {@link #getClientCheckFullState() getClientCheckFullState()} for more details
 	 */
-	public boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
+	public int getClientCheckFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_CHECK_FULL_STATE,0, facesContext);
 	}
 
 	/**
@@ -1171,7 +1193,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
 	}
 
-	public void setClientCheckFullState(boolean clientCheckFullState) {
+	public void setClientCheckFullState(int clientCheckFullState) {
 		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 	}
 

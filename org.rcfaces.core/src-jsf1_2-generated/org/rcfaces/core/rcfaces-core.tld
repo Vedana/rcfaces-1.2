@@ -5995,28 +5995,6 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
-]]></description>
-			<name>rows</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-			<name>value</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A number identifying the row to be displayed at the top of the component.
 ]]></description>
 			<name>first</name>
@@ -6033,6 +6011,28 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
+]]></description>
+			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6147,7 +6147,7 @@ A table of the values associated with checked nodes for the component. (Binding 
 			<name>clientAdditionalInformationFullState</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>boolean</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6274,13 +6274,10 @@ A binded object that hold the filters to use on the server side. This property i
 			</deferred-value>
 		</attribute>
 		<attribute>
-			<description><![CDATA[
-A binded object that holds the preferences for the component.
-]]></description>
-			<name>preference</name>
+			<name>preferences</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>org.rcfaces.core.preference.IComponentPreference</type>
+				<type>org.rcfaces.core.preference.IComponentPreferences</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6303,7 +6300,7 @@ A boolean value indicating wether the client should know about the component's f
 			<name>clientSelectionFullState</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>boolean</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6313,7 +6310,7 @@ A boolean value indicating wether the client should know about the component's f
 			<name>clientCheckFullState</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>boolean</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6805,28 +6802,6 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
-]]></description>
-			<name>rows</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-			<name>value</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A number identifying the row to be displayed at the top of the component.
 ]]></description>
 			<name>first</name>
@@ -6843,6 +6818,28 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
+]]></description>
+			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6898,6 +6895,16 @@ A table of the values associated with selected nodes for the component. (Binding
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+]]></description>
+			<name>clientSelectionFullState</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>additionalInformationListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -6914,7 +6921,7 @@ A table of the values associated with selected nodes for the component. (Binding
 			<name>clientAdditionalInformationFullState</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>boolean</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7009,13 +7016,10 @@ A string value specifying the position of the vertical scroolbar (Browser depend
 			</deferred-value>
 		</attribute>
 		<attribute>
-			<description><![CDATA[
-A binded object that holds the preferences for the component.
-]]></description>
-			<name>preference</name>
+			<name>preferences</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>org.rcfaces.core.preference.IComponentPreference</type>
+				<type>org.rcfaces.core.preference.IComponentPreferences</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7073,16 +7077,6 @@ A string value specifying the name of the variable receiving the index of the cu
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>javax.faces.convert.Converter</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-]]></description>
-			<name>clientSelectionFullState</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 	</tag>
@@ -7491,16 +7485,6 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value holding the name of a request-scope attribute under which the model data for the
           row selected by the current value of the "rowIndex" property (i.e.
           also the current value of the "rowData" property) will be exposed.
@@ -7509,6 +7493,16 @@ A string value holding the name of a request-scope attribute under which the mod
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7563,7 +7557,7 @@ Executed when the component is selected.
 			<name>clientAdditionalInformationFullState</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>boolean</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -8352,28 +8346,6 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
-]]></description>
-			<name>rows</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-			<name>value</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A number identifying the row to be displayed at the top of the component.
 ]]></description>
 			<name>first</name>
@@ -8390,6 +8362,28 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
+]]></description>
+			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -22106,28 +22100,6 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
-]]></description>
-			<name>showSummary</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
-]]></description>
-			<name>showDetail</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A component's id that express the link between the two components.
 ]]></description>
 			<name>for</name>
@@ -22144,6 +22116,28 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+]]></description>
+			<name>showDetail</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+]]></description>
+			<name>showSummary</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -23266,27 +23260,6 @@ A string value specifying the management of invisible state on the client.
 		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
-]]></description>
-			<name>showSummary</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating if the component specific messages should be shown or not.
-]]></description>
-			<name>globalOnly</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "true".
 ]]></description>
 			<name>showDetail</name>
@@ -23303,6 +23276,27 @@ A string value specifying the margins for the component (compliant to CSS margin
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating if the component specific messages should be shown or not.
+]]></description>
+			<name>globalOnly</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+]]></description>
+			<name>showSummary</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -32795,13 +32789,10 @@ A string that indicates the rendering mode for asynchronous capable component.
 			</deferred-value>
 		</attribute>
 		<attribute>
-			<description><![CDATA[
-A binded object that holds the preferences for the component.
-]]></description>
-			<name>preference</name>
+			<name>preferences</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>org.rcfaces.core.preference.IComponentPreference</type>
+				<type>org.rcfaces.core.preference.IComponentPreferences</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -33813,13 +33804,10 @@ A string that indicates the rendering mode for asynchronous capable component.
 			</deferred-value>
 		</attribute>
 		<attribute>
-			<description><![CDATA[
-A binded object that holds the preferences for the component.
-]]></description>
-			<name>preference</name>
+			<name>preferences</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>org.rcfaces.core.preference.IComponentPreference</type>
+				<type>org.rcfaces.core.preference.IComponentPreferences</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -41267,6 +41255,16 @@ A table of the values associated with checked nodes for the component. (Binding 
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+]]></description>
+			<name>clientCheckFullState</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A boolean value indicating wether the component can receive a user's selection
 ]]></description>
 			<name>selectable</name>
@@ -41315,6 +41313,16 @@ A table of the values associated with selected nodes for the component. (Binding
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
+]]></description>
+			<name>clientSelectionFullState</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -41443,26 +41451,6 @@ A boolean value indicating wether the expand sign should be visible for the topm
 A boolean value that indicates wether a node is identified by it's value or by a complete path.
 ]]></description>
 			<name>expansionUseValue</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-]]></description>
-			<name>clientSelectionFullState</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-]]></description>
-			<name>clientCheckFullState</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>

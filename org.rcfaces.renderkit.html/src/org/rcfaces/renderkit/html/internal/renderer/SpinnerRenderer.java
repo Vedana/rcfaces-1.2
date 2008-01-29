@@ -3,22 +3,26 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.SpinnerComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class SpinnerRenderer extends TextEntryRenderer {
+public class SpinnerRenderer extends TextEntryRenderer implements
+        ISubInputClientIdRenderer {
     private static final String REVISION = "$Revision$";
 
     protected static final int SPINNER_BUTTON_WIDTH = 16;
@@ -98,7 +102,7 @@ public class SpinnerRenderer extends TextEntryRenderer {
         String inputId = getInputClientId(htmlWriter);
         htmlWriter.writeId(inputId);
         htmlWriter.addSubFocusableComponent(inputId);
-        
+
         if (inputWidth > 0) {
             htmlWriter.writeStyle().writeWidth(inputWidth + "px");
         }
@@ -146,7 +150,8 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
-        htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Pour les fleches !
+        htmlWriter.getJavaScriptEnableMode().enableOnInit(); // Pour les
+        // fleches !
     }
 
     protected String getWAIRole() {
@@ -244,5 +249,10 @@ public class SpinnerRenderer extends TextEntryRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.SPINNER;
+    }
+
+    public String computeSubInputClientId(IRenderContext renderContext,
+            UIComponent component, String clientId) {
+        return clientId + INPUT_ID_SUFFIX;
     }
 }

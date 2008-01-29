@@ -134,11 +134,17 @@ public class CollectionTools {
         }
 
         public Object getFirst(Object collection, Object refValues) {
-            if (collection instanceof List) {
-                return ((List) collection).get(0);
+            Collection cl = (Collection) collection;
+
+            if (cl.isEmpty()) {
+                return null;
             }
 
-            return ((Collection) collection).iterator().next();
+            if (cl instanceof List) {
+                return ((List) cl).get(0);
+            }
+
+            return cl.iterator().next();
         }
 
         public Object[] listValues(Object collection, Object refValues) {
@@ -605,9 +611,11 @@ public class CollectionTools {
         }
 
         try {
-            Method method = collection.getClass().getMethod("clone", (Class[])null);
+            Method method = collection.getClass().getMethod("clone",
+                    (Class[]) null);
 
-            collection = (Collection) method.invoke(collection, (Object[])null);
+            collection = (Collection) method
+                    .invoke(collection, (Object[]) null);
 
         } catch (Throwable th) {
             LOG.info("Can not copy the collection ! ("

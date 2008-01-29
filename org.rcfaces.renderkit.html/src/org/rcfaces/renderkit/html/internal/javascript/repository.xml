@@ -519,6 +519,11 @@
 	</module>
 
 	<module id="selection">
+		<file name="input/fa_clientFullState.js">
+			<class name="fa_clientFullState">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
 		<file name="input/fa_selectionProvider.js">
 			<class name="fa_selectionProvider">
 				<required-class name="f_aspect" />
@@ -534,19 +539,25 @@
 		<file name="input/fa_selectionManager.js">
 			<class name="fa_selectionManager">
 				<required-class name="fa_itemsManager" />
-				<required-class name="f_prop" />
 				<required-class name="fa_selectionProvider" />
+				<required-class name="fa_clientFullState" />
+
+				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="input/fa_checkManager.js">
 			<class name="fa_checkManager">
 				<required-class name="fa_itemsManager" />
+				<required-class name="fa_clientFullState" />
+
 				<required-class name="f_prop" />
 			</class>
 		</file>
 		<file name="input/fa_additionalInformationManager.js">
 			<class name="fa_additionalInformationManager">
 				<required-class name="fa_itemsManager" />
+				<required-class name="fa_clientFullState" />
+
 				<required-class name="f_prop" />
 			</class>
 		</file>
@@ -1317,7 +1328,7 @@
 		</file>
 	</module>
 
-	<module id="progressMonitors">
+	<module id="service">
 		<file name="util/f_progressMonitor.js">
 			<class name="f_progressMonitor">
 				<required-class name="f_log" />
@@ -1329,6 +1340,24 @@
 				<required-class name="f_progressMonitor" />				
 			</class>
 		</file>
+
+		<file name="ajax/f_service.js">
+			<class name="f_service">
+				<required-class name="f_object" />
+				<required-class name="fa_serializable" />				
+				<required-class name="fa_clientData" />				
+				<required-class name="fa_filterProperties" />				
+				<required-class name="fa_commands" />				
+				<required-class name="f_xml" />				
+				<required-class name="f_httpRequest" />				
+				<required-class name="f_error" />
+				<required-class name="f_progressMonitor" />				
+				<required-class name="f_subProgressMonitor" />				
+			</class>
+		</file>
+	</module>
+
+	<module id="progressMonitors">
 		<file name="ui/f_progressIndicatorMonitor.js">
 			<class name="f_progressIndicatorMonitor">
 				<required-class name="f_progressMonitor" />
@@ -1346,22 +1375,14 @@
 				<required-class name="fa_progressIndicator" />				
 			</class>
 		</file>
-	</module>
 
-	<module id="service">
-		<file name="ajax/f_service.js">
-			<class name="f_service">
-				<required-class name="f_object" />
-				<required-class name="fa_serializable" />				
-				<required-class name="fa_clientData" />				
-				<required-class name="fa_filterProperties" />				
-				<required-class name="fa_commands" />				
-				<required-class name="f_xml" />				
-				<required-class name="f_httpRequest" />				
-				<required-class name="f_error" />
-				<required-class id="progressMonitor" name="f_progressMonitor" />				
+		<file name="ui/f_progressMonitorDialog.js">
+			<class name="f_progressMonitorDialog">
+				<required-class name="f_dialog" />
+				<required-class name="f_progressBar" />
+				<required-class name="fa_progressIndicator" />
 			</class>
-		</file>
+		 </file>
 	</module>
 
 	<module id="clientStorage">
@@ -1414,16 +1435,6 @@
 		<file name="util/f_json.js">
 			<class name="f_json" />
 		</file>
-	</module>
-
-	<module id="progressMonitorDialog">
-		 <file name="ui/f_progressMonitorDialog.js">
-			<class name="f_progressMonitorDialog">
-				<required-class name="f_dialog" />
-				<required-class name="f_progressBar" />
-				<required-class name="fa_progressIndicator" />
-			</class>
-		 </file>
 	</module>
 
 	<module id="textEditor">

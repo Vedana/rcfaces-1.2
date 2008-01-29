@@ -273,6 +273,12 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.A);
+
+        String tabId = computeTabInputId(htmlWriter, tabComponent);
+        if (tabId != null) {
+            htmlWriter.writeId(tabId);
+        }
+
         htmlWriter.writeHRef("javascript:void(0)");
 
         // AccessKey
@@ -340,7 +346,12 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
         }
 
         htmlWriter.endElement(IHtmlWriter.TD);
-
     }
 
+    protected String computeTabInputId(IHtmlWriter htmlWriter,
+            TabComponent tabComponent) {
+        return tabComponent.getClientId(htmlWriter.getComponentRenderContext()
+                .getFacesContext())
+                + TabRenderer.INPUT_ID_SUFFIX;
+    }
 }

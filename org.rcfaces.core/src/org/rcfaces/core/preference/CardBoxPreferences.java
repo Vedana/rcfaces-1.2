@@ -17,14 +17,14 @@ import org.rcfaces.core.component.iterator.ICardIterator;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class CardBoxPreference extends AbstractComponentPreference {
+public class CardBoxPreferences extends AbstractComponentPreferences {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -8616195336828413449L;
 
     private String selectedCardId;
 
-    public void loadPreference(FacesContext facesContext, UIComponent component) {
+    public void loadPreferences(FacesContext facesContext, UIComponent component) {
         if ((component instanceof CardBoxComponent) == false) {
             throw new FacesException("Can not load cardBox preferences !");
         }
@@ -46,7 +46,7 @@ public class CardBoxPreference extends AbstractComponentPreference {
         }
     }
 
-    public void savePreference(FacesContext facesContext, UIComponent component) {
+    public void savePreferences(FacesContext facesContext, UIComponent component) {
         if ((component instanceof CardBoxComponent) == false) {
             throw new FacesException("Can not save cardBox preferences !");
         }

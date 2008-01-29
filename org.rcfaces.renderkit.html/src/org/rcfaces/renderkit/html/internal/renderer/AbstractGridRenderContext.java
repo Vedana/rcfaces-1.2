@@ -91,9 +91,9 @@ public abstract class AbstractGridRenderContext {
 
     public final IGridComponent gridComponent;
 
-    private boolean clientSelectionFullState;
+    private int clientSelectionFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
 
-    private boolean clientCheckFullState;
+    private int clientCheckFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
 
     private boolean checkable;
 
@@ -191,7 +191,7 @@ public abstract class AbstractGridRenderContext {
 
     private AdditionalInformationComponent[] additionalInformations;
 
-    private boolean clientAdditionalFullState = false;
+    private int clientAdditionalFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
 
     private int additionalInformationCardinality;
 
@@ -231,12 +231,12 @@ public abstract class AbstractGridRenderContext {
     protected void computeGridSize(ISizeCapability sizeCapability) {
         String width = sizeCapability.getWidth();
         if (width != null) {
-            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); //9);
+            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
         }
 
         String height = sizeCapability.getHeight();
         if (height != null) {
-            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); //9);
+            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); // 9);
         }
     }
 
@@ -263,7 +263,7 @@ public abstract class AbstractGridRenderContext {
 
                 if (gridComponent instanceof IClientSelectionFullStateCapability) {
                     this.clientSelectionFullState = ((IClientSelectionFullStateCapability) gridComponent)
-                            .isClientSelectionFullState();
+                            .getClientSelectionFullState();
                 }
             }
         }
@@ -283,7 +283,7 @@ public abstract class AbstractGridRenderContext {
 
                 if (gridComponent instanceof IClientCheckFullStateCapability) {
                     this.clientCheckFullState = ((IClientCheckFullStateCapability) gridComponent)
-                            .isClientCheckFullState();
+                            .getClientCheckFullState();
                 }
             }
         }
@@ -294,7 +294,7 @@ public abstract class AbstractGridRenderContext {
 
             if (gridComponent instanceof IClientAdditionalInformationFullStateCapability) {
                 this.clientAdditionalFullState = ((IClientAdditionalInformationFullStateCapability) gridComponent)
-                        .isClientAdditionalInformationFullState();
+                        .getClientAdditionalInformationFullState();
             }
 
             int additionalInformationCardinality = 0;
@@ -923,11 +923,11 @@ public abstract class AbstractGridRenderContext {
         return checkable;
     }
 
-    public final boolean isClientCheckFullState() {
+    public final int getClientCheckFullState() {
         return clientCheckFullState;
     }
 
-    public boolean isClientAdditionalFullState() {
+    public int getClientAdditionalFullState() {
         return clientAdditionalFullState;
     }
 
@@ -939,7 +939,7 @@ public abstract class AbstractGridRenderContext {
         return selectionCardinality;
     }
 
-    public final boolean isClientSelectionFullState() {
+    public final int getClientSelectionFullState() {
         return clientSelectionFullState;
     }
 

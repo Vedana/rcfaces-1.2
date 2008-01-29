@@ -424,7 +424,9 @@ public final class GridServerSort {
                 return value;
             }
 
-            throw new FacesException("Invalid Date for \"date\" sort method !");
+            throw new FacesException(
+                    "Invalid Date for \"date\" sort method ! (class="
+                            + value.getClass() + " object=" + value + ")");
         }
     }
 

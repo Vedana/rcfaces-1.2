@@ -278,7 +278,7 @@ var __members= {
 				
 				if (typeof(fct) == "string") {
 					// Le commande est transformée en fonction !
-					fct=new window.Function("event", fct);
+					fct=new win.Function("event", fct);
 					actions[i]=fct;
 				}
 	
@@ -302,7 +302,7 @@ var __members= {
 				return false;
 			}
 	
-			if (f_core) {
+			if (f_core.IsDebugEnabled(f_actionList)) {
 				var fn=String(fct._kclass?(fct._kclass._name+"."+fct._kname):(fct.name?fct.name:fct));
 				if (fn.length>64) {
 					var idx=fn.indexOf('\n', 64);
@@ -311,7 +311,7 @@ var __members= {
 					}
 				}
 				
-				f_core.Debug(f_actionList, "callActions("+this._type+":"+link.id+"): "+fn+"\n=> returns "+ret);
+				f_core.Debug(f_actionList, "f_callActions: ("+this._type+":"+link.id+") "+fn+"\n=> returns "+ret);
 			}
 			
 			if (ret===false) {
@@ -322,7 +322,7 @@ var __members= {
 		// Attention un submit a pu survenir, et nous sommes plus dans un contexte camelia sain !
 		// => Plus d'appels aux méthodes !
 		
-		f_core.Debug(f_actionList, "Call actions returns "+ret);
+		f_core.Debug(f_actionList, "f_callActions: returns "+ret);
 		return ret;
 	}
 }

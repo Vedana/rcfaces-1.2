@@ -265,7 +265,7 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 				component.setValueExpression(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, clientAdditionalInformationFullState);
 
 			} else {
-				component.setClientAdditionalInformationFullState(getBool(clientAdditionalInformationFullState.getExpressionString()));
+				component.setClientAdditionalInformationFullState(clientAdditionalInformationFullState.getExpressionString());
 			}
 		}
 

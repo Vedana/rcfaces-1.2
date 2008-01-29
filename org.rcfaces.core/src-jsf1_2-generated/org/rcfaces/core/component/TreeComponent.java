@@ -7,6 +7,7 @@ import javax.faces.component.UISelectItem;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
@@ -34,6 +35,8 @@ import org.rcfaces.core.component.capability.IExpandedValuesCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
@@ -72,10 +75,12 @@ public class TreeComponent extends AbstractInputComponent implements
 	ICheckCardinalityCapability,
 	ICheckEventCapability,
 	ICheckedValuesCapability,
+	IClientCheckFullStateCapability,
 	ISelectableCapability,
 	ISelectionCardinalityCapability,
 	ISelectionEventCapability,
 	ISelectedValuesCapability,
+	IClientSelectionFullStateCapability,
 	IPreloadedLevelDepthCapability,
 	IExpandableCapability,
 	IExpandedValuesCapability,
@@ -98,6 +103,20 @@ public class TreeComponent extends AbstractInputComponent implements
 	public TreeComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public void setClientSelectionFullState(String state) {
+
+
+			setClientSelectionFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
+	}
+
+	public void setClientCheckFullState(String state) {
+
+
+			setClientCheckFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
 	}
 
 	public IComponentValueType getComponentValueType() {
@@ -609,6 +628,29 @@ public class TreeComponent extends AbstractInputComponent implements
 		
 	}
 
+	public int getClientCheckFullState() {
+		return getClientCheckFullState(null);
+	}
+
+	/**
+	 * See {@link #getClientCheckFullState() getClientCheckFullState()} for more details
+	 */
+	public int getClientCheckFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_CHECK_FULL_STATE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "clientCheckFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClientCheckFullStateSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
+	}
+
+	public void setClientCheckFullState(int clientCheckFullState) {
+		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
+	}
+
 	public boolean isSelectable() {
 		return isSelectable(null);
 	}
@@ -712,6 +754,29 @@ public class TreeComponent extends AbstractInputComponent implements
 
 			return SelectionTools.listValues(getSelectedValues(), getValue());
 		
+	}
+
+	public int getClientSelectionFullState() {
+		return getClientSelectionFullState(null);
+	}
+
+	/**
+	 * See {@link #getClientSelectionFullState() getClientSelectionFullState()} for more details
+	 */
+	public int getClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CLIENT_SELECTION_FULL_STATE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClientSelectionFullStateSetted() {
+		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
+	}
+
+	public void setClientSelectionFullState(int clientSelectionFullState) {
+		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 	}
 
 	public int getPreloadedLevelDepth() {
@@ -1126,78 +1191,6 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public boolean isExpansionUseValueSetted() {
 		return engine.isPropertySetted(Properties.EXPANSION_USE_VALUE);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public boolean isClientSelectionFullState() {
-		return isClientSelectionFullState(null);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public boolean isClientSelectionFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_SELECTION_FULL_STATE, false, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientSelectionFullState boolean
-	 */
-	public void setClientSelectionFullState(boolean clientSelectionFullState) {
-		engine.setProperty(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientSelectionFullState boolean
-	 */
-	/**
-	 * Returns <code>true</code> if the attribute "clientSelectionFullState" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isClientSelectionFullStateSetted() {
-		return engine.isPropertySetted(Properties.CLIENT_SELECTION_FULL_STATE);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public boolean isClientCheckFullState() {
-		return isClientCheckFullState(null);
-	}
-
-	/**
-	 * Returns a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @return boolean
-	 */
-	public boolean isClientCheckFullState(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLIENT_CHECK_FULL_STATE, false, facesContext);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientCheckFullState boolean
-	 */
-	public void setClientCheckFullState(boolean clientCheckFullState) {
-		engine.setProperty(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
-	}
-
-	/**
-	 * Sets a boolean value indicating wether the client should know about the component's full state even if only a part of the data is present (AJAX).
-	 * @param clientCheckFullState boolean
-	 */
-	/**
-	 * Returns <code>true</code> if the attribute "clientCheckFullState" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isClientCheckFullStateSetted() {
-		return engine.isPropertySetted(Properties.CLIENT_CHECK_FULL_STATE);
 	}
 
 	protected Set getCameliaFields() {

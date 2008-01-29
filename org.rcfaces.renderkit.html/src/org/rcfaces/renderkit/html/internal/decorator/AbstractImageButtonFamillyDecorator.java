@@ -346,12 +346,13 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeValue(getInputValue(true));
                     writeInputAttributes(writer);
                     writeImageSrc(writer, imageSrc);
-                    writeImageSize(writer, imageButtonFamilly); // jbos@unedic.fr
+                    writeImageSize(writer, imageButtonFamilly);
                     if (alternateText != null) {
                         writer.writeAlt(alternateText);
                     }
 
-                } else {
+                } else { 
+                    // C'est un <a href> !
                     writer.writeHRef("javascript:void(0)");
                     writeInputAttributes(writer);
 

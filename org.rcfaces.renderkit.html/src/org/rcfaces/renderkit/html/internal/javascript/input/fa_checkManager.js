@@ -5,23 +5,26 @@
 /**
  * Aspect CheckManager
  *
- * @aspect public abstract fa_checkManager extends fa_itemsManager
+ * @aspect public abstract fa_checkManager extends fa_itemsManager, fa_clientFullState
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 
 var __members = {
 	fa_checkManager: function() {
-		var v_checkCardinality=f_core.GetAttribute(this, "v:checkCardinality");
-		if (!v_checkCardinality) {
+		var v_checkCardinality=f_core.GetNumberAttribute(this, "v:checkCardinality", undefined);
+		if (v_checkCardinality===undefined) {
 			return;
 		}
 		
-		if (f_core.GetAttribute(this, "v:clientCheckFullState")) {
+		var clientCheckFullState=f_core.GetNumberAttribute(this, "v:clientCheckFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+		if (clientCheckFullState) {
+			this._clientCheckFullState=clientCheckFullState;
+
 			this._checkFullState=new Array;
 		}
 		
-		this._checkCardinality=parseInt(v_checkCardinality, 10);
+		this._checkCardinality=v_checkCardinality;
 		this._checkable=true;
 		
 		this._checkedElementValues=new Array;
@@ -36,6 +39,7 @@ var __members = {
 		// this._clearAllCheckedElements=undefined; // boolean
 
 		//this._checkFullState=undefined; // string[] or number[]
+		//this._clientCheckFullState=undefined; // number
 		
 		//this._checkCardinality=undefined; // number
 		//this._checkable=undefined; // boolean
@@ -46,6 +50,13 @@ var __members = {
 			if (!this._checkable) {
 				return;
 			}	
+			
+			if (this._clientCheckFullState==fa_clientFullState.TWOWAYS_CLIENT_FULL_STATE) {
+				this.f_setProperty(f_prop.UNCHECKED_ITEMS, f_prop.ALL_VALUE);
+				
+				this.f_setProperty(f_prop.CHECKED_ITEMS, this.f_getCheckedValues(), true);
+				return;
+			}
 			
 			var checkedElementValues=this._checkedElementValues;
 			if (checkedElementValues.length) {
@@ -327,6 +338,6 @@ var __members = {
 }
 
 new f_aspect("fa_checkManager", {
-	extend: [ fa_itemsManager ],
+	extend: [ fa_itemsManager, fa_clientFullState ],
 	members: __members 
 });

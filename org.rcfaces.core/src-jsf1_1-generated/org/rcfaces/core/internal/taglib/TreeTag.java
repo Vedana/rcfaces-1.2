@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.TreeComponent;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.TreeComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class TreeTag extends AbstractInputTag implements Tag {
 
@@ -29,10 +29,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String checkCardinality;
 	private String checkListeners;
 	private String checkedValues;
+	private String clientCheckFullState;
 	private String selectable;
 	private String selectionCardinality;
 	private String selectionListeners;
 	private String selectedValues;
+	private String clientSelectionFullState;
 	private String preloadedLevelDepth;
 	private String expandable;
 	private String expandedValues;
@@ -47,8 +49,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String hideRootExpandSign;
 	private String cursorValue;
 	private String expansionUseValue;
-	private String clientSelectionFullState;
-	private String clientCheckFullState;
 	public String getComponentType() {
 		return TreeComponent.COMPONENT_TYPE;
 	}
@@ -141,6 +141,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.checkedValues = checkedValues;
 	}
 
+	public final String getClientCheckFullState() {
+		return clientCheckFullState;
+	}
+
+	public final void setClientCheckFullState(String clientCheckFullState) {
+		this.clientCheckFullState = clientCheckFullState;
+	}
+
 	public final String getSelectable() {
 		return selectable;
 	}
@@ -171,6 +179,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setSelectedValues(String selectedValues) {
 		this.selectedValues = selectedValues;
+	}
+
+	public final String getClientSelectionFullState() {
+		return clientSelectionFullState;
+	}
+
+	public final void setClientSelectionFullState(String clientSelectionFullState) {
+		this.clientSelectionFullState = clientSelectionFullState;
 	}
 
 	public final String getPreloadedLevelDepth() {
@@ -241,14 +257,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.expansionUseValue = expansionUseValue;
 	}
 
-	public final void setClientSelectionFullState(String clientSelectionFullState) {
-		this.clientSelectionFullState = clientSelectionFullState;
-	}
-
-	public final void setClientCheckFullState(String clientCheckFullState) {
-		this.clientCheckFullState = clientCheckFullState;
-	}
-
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (TreeComponent.COMPONENT_TYPE==getComponentType()) {
@@ -263,9 +271,11 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
+			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
 			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  preloadedLevelDepth='"+preloadedLevelDepth+"'");
 			LOG.debug("  expandable='"+expandable+"'");
 			LOG.debug("  expandedValues='"+expandedValues+"'");
@@ -280,8 +290,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  hideRootExpandSign='"+hideRootExpandSign+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
-			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
-			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -389,6 +397,16 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setValueBinding(Properties.CHECKED_VALUES, vb);
 		}
 
+		if (clientCheckFullState != null) {
+			if (isValueReference(clientCheckFullState)) {
+				ValueBinding vb = application.createValueBinding(clientCheckFullState);
+				component.setValueBinding(Properties.CLIENT_CHECK_FULL_STATE, vb);
+
+			} else {
+				component.setClientCheckFullState(clientCheckFullState);
+			}
+		}
+
 		if (selectable != null) {
 			if (isValueReference(selectable)) {
 				ValueBinding vb = application.createValueBinding(selectable);
@@ -416,6 +434,16 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		if (selectedValues != null) {
 				ValueBinding vb = application.createValueBinding(selectedValues);
 				component.setValueBinding(Properties.SELECTED_VALUES, vb);
+		}
+
+		if (clientSelectionFullState != null) {
+			if (isValueReference(clientSelectionFullState)) {
+				ValueBinding vb = application.createValueBinding(clientSelectionFullState);
+				component.setValueBinding(Properties.CLIENT_SELECTION_FULL_STATE, vb);
+
+			} else {
+				component.setClientSelectionFullState(clientSelectionFullState);
+			}
 		}
 
 		if (preloadedLevelDepth != null) {
@@ -552,26 +580,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setExpansionUseValue(getBool(expansionUseValue));
 			}
 		}
-
-		if (clientSelectionFullState != null) {
-			if (isValueReference(clientSelectionFullState)) {
-				ValueBinding vb = application.createValueBinding(clientSelectionFullState);
-				component.setValueBinding(Properties.CLIENT_SELECTION_FULL_STATE, vb);
-
-			} else {
-				component.setClientSelectionFullState(getBool(clientSelectionFullState));
-			}
-		}
-
-		if (clientCheckFullState != null) {
-			if (isValueReference(clientCheckFullState)) {
-				ValueBinding vb = application.createValueBinding(clientCheckFullState);
-				component.setValueBinding(Properties.CLIENT_CHECK_FULL_STATE, vb);
-
-			} else {
-				component.setClientCheckFullState(getBool(clientCheckFullState));
-			}
-		}
 	}
 
 	public void release() {
@@ -586,10 +594,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		checkCardinality = null;
 		checkListeners = null;
 		checkedValues = null;
+		clientCheckFullState = null;
 		selectable = null;
 		selectionCardinality = null;
 		selectionListeners = null;
 		selectedValues = null;
+		clientSelectionFullState = null;
 		preloadedLevelDepth = null;
 		expandable = null;
 		expandedValues = null;
@@ -604,8 +614,6 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		hideRootExpandSign = null;
 		cursorValue = null;
 		expansionUseValue = null;
-		clientSelectionFullState = null;
-		clientCheckFullState = null;
 
 		super.release();
 	}

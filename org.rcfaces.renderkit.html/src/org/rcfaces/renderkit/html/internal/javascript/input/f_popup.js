@@ -225,7 +225,7 @@ var __statics = {
 			
 			iframe.className="f_popup_iframe";
 			
-			f_core.InsertBefore(document.body, iframe, document.body.firstChild);
+			f_core.InsertBefore(doc.body, iframe, doc.body.firstChild);
 			
 			iframe.src="about:blank";
 			

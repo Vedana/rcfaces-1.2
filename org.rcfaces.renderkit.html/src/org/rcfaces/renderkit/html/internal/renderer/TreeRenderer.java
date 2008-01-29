@@ -13,6 +13,7 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
@@ -71,8 +72,9 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
             htmlWriter.writeAttribute("v:checkCardinality", cardinality);
 
-            if (treeComponent.isClientCheckFullState(facesContext)) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", true);
+            int ccfs = treeComponent.getClientCheckFullState(facesContext);
+            if (ccfs != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
+                htmlWriter.writeAttribute("v:clientCheckFullState", ccfs);
             }
         }
 
@@ -85,8 +87,9 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
             htmlWriter.writeAttribute("v:selectionCardinality", cardinality);
 
-            if (treeComponent.isClientSelectionFullState(facesContext)) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", true);
+            int csfs = treeComponent.getClientSelectionFullState(facesContext);
+            if (csfs != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
+                htmlWriter.writeAttribute("v:clientSelectionFullState", csfs);
             }
         }
 
@@ -186,13 +189,13 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         IMenuIterator menuIterator = treeComponent.listMenus();
         if (menuIterator.hasNext()) {
 
-            javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.TREE, "menu");
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TREE,
+                    "menu");
         }
 
         if (treeComponent.getPreloadedLevelDepth(facesContext) > 0) {
-            javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.TREE, "ajax");
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TREE,
+                    "ajax");
         }
     }
 

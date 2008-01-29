@@ -327,8 +327,9 @@ var __statics = {
 			return scope;
 		}
 		
-		scope=new Object;
-		scope._name=scopeName;
+		scope= {
+			_name: scopeName
+		};
 		
 		scopes[scopeName]=scope;
 		
@@ -347,15 +348,21 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static
+	 * @param String scopeName
+	 * @param String keyName
+	 * @param HTMLElement component (or String)
+	 * @param function method
+	 * @param Object parameter
 	 * @return boolean
 	 */
-	AddKeyHandler: function(scopeName, keyName, component, method, parameter) {	
+	AddKeyHandler: function(scopeName, keyName, component, method, parameter) {
 		var scope=f_key._GetScopeByName(scopeName);
 	
-		var def=new Object;
-		def._component=component;
-		def._method=method;
-		def._parameter=parameter;
+		var def = {
+			_component: component,
+			_method: method,
+			_parameter: parameter
+		};
 		
 		keyName=keyName.toUpperCase();
 		f_core.Assert(!scope[keyName], "f_key.AddKeyHandler: The scope '"+scopeName+"' already contains a definition for the key '"+keyName+"'.");
@@ -374,6 +381,39 @@ var __statics = {
 	},
 	/** 
 	 * @method hidden static
+	 * @param Object accessKeyByClientIds
+	 * @return void
+	 */
+	AddAccessKeyByClientIds: function(accessKeyByClientIds) {
+		var scope=f_key._GetScopeByName();
+				
+		var keyHandlers=scope._keyHandlers;
+		if (!keyHandlers) {
+			keyHandlers=new Object;
+			scope._keyHandlers=keyHandlers;
+		}
+
+		var method=f_key._SetFocusAccessKey;
+		
+		for(var clientId in accessKeyByClientIds) {
+			var keyName=accessKeyByClientIds[clientId].toUpperCase();
+					
+			keyHandlers[keyName]= {
+				_component: clientId,
+				_method: method
+			};
+		}
+	},
+	/**
+	 * @method private static
+	 * @context window:win
+	 */
+	_SetFocusAccessKey: function(component, parameter, win) {
+		f_core.SetFocus(component);
+	},
+	/** 
+	 * @method hidden static
+	 * @return void
 	 */
 	 AddAccelerator: function(character, virtualKeys, keyFlags, component, method) {
 	 	var scope=f_key._GetScopeByName();
@@ -384,12 +424,13 @@ var __statics = {
 	 		scope._accelerators=accelerators;
 	 	}
 	 		 	
-	 	var def=new Object;
-	 	def._character=character;
-	 	def._virtualKeys=virtualKeys;
-	 	def._keyFlags=keyFlags;
-	 	def._component=component;
-	 	def._method=method;
+	 	var def = {
+	 		_character: character,
+	 		_virtualKeys: virtualKeys,
+	 		_keyFlags: keyFlags,
+	 		_component: component,
+	 		_method: method
+	 	};
 			
 		f_core.Debug(f_key, "AddAccelerator: Add accelerator character='"+character+"' virtualKeys='"+virtualKeys+"' keyFlags='"+keyFlags+"'.");
 	 	
@@ -421,13 +462,14 @@ var __statics = {
 	RemoveScope: function(scopeName) {
 		f_core.Assert(f_key._Scopes, "f_key.RemoveScope: No scopes defined.");
 		
-		var scope=f_key._Scopes[scopeName];
+		var scopes=f_key._Scopes;
+		var scope=scopes[scopeName];
+		f_core.Assert(scope, "f_key.RemoveScope: Scope '"+scopeName+"' not found.");
 		if (!scope) {
 			return false;
 		}
-		f_core.Assert(scope, "f_key.RemoveScope: Scope '"+scopeName+"' not found.");
 		
-		f_key._Scopes[scopeName]=undefined;
+		scopes[scopeName]=undefined;
 		return true;
 	},	
 	/**
@@ -464,14 +506,28 @@ var __statics = {
 		if (method) {
 			f_core.Debug(f_key, "_PerformKey: Call specific method.");
 
-			try {
-				method.call(def._component, jsEvent, def._parameter);
+			var component=def._component;
+			if (typeof(component)=="string") {
+				var cmp=f_core.GetElementByClientId(component);
 				
-			} catch (ex) {
-				f_core.Error(f_key, "_PerformKey: Exception/keyHandler, method="+method, ex);
-				
-				// def._method=undefined;
-			}				
+				if (!cmp) {
+					f_core.Error(f_key, "_PerformKey: Can not find componentClientId '"+component+"'.");
+				} else {
+					component=cmp;
+					def._component=cmp;
+				}
+			}
+
+			if (component) {
+				try {
+					method.call(def._component, jsEvent, def._parameter, window);
+					
+				} catch (ex) {
+					f_core.Error(f_key, "_PerformKey: Exception/keyHandler, method="+method, ex);
+					
+					// def._method=undefined;
+				}				
+			}
 		}
 		
 		if (f_core.IsInternetExplorer()) {
@@ -578,7 +634,7 @@ var __statics = {
 	 */
 	_SearchAccelerator: function(scope, keyChar, keyCode, jsEvent) {
 		var accelerators=scope._accelerators;
-		if (!accelerators || accelerators.length<1) {
+		if (!accelerators || !accelerators.length) {
 			return null;
 		}
 		

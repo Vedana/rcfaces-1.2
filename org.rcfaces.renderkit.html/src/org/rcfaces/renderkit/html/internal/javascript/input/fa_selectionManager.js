@@ -5,7 +5,7 @@
 /**
  * Aspect SelectionManager
  *
- * @aspect public abstract fa_selectionManager extends fa_itemsManager, fa_selectionProvider
+ * @aspect public abstract fa_selectionManager extends fa_itemsManager, fa_selectionProvider, fa_clientFullState
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -118,8 +118,11 @@ var __members = {
 				return;
 			}
 			this._selectionCardinality=v_selectionCardinality;
-							
-			if (f_core.GetAttribute(this, "v:clientSelectionFullState")) {
+			
+			var clientSelectionFullState=f_core.GetNumberAttribute(this, "v:clientSelectionFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+			if (clientSelectionFullState) {
+				this._clientSelectionFullState=clientSelectionFullState;
+
 				this._selectionFullState=new Array;
 			}
 		}
@@ -138,7 +141,9 @@ var __members = {
 		// this._deselectedElementValues=undefined; // string[] or number[]
 		// this._clearAllSelectedElements=undefined; // boolean
 
+
 		// this._selectionFullState=undefined; // string[] or number[]
+		// this._clientSelectionFullState=undefined; // number
 
 		//	this._selectable=undefined;  // boolean
 		//	this._selectionCardinality=undefined; // boolean
@@ -147,6 +152,13 @@ var __members = {
 	f_serialize: {
 		before: function() {
 			if (!this._selectable) {
+				return;
+			}
+			
+			if (this._clientSelectionFullState==fa_clientFullState.TWOWAYS_CLIENT_FULL_STATE) {
+				this.f_setProperty(f_prop.DESELECTED_ITEMS, f_prop.ALL_VALUE);
+				
+				this.f_setProperty(f_prop.SELECTED_ITEMS, this.f_getSelection(), true);
 				return;
 			}
 			
@@ -717,7 +729,7 @@ var __members = {
 }
 
 new f_aspect("fa_selectionManager", {
-	extend: [ fa_itemsManager, fa_selectionProvider],
+	extend: [ fa_itemsManager, fa_selectionProvider, fa_clientFullState],
 	statics: __statics,
 	members: __members 
 });

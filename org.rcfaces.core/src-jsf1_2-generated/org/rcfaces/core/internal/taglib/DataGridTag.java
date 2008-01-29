@@ -41,7 +41,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression verticalScrollPosition;
 	private ValueExpression filterProperties;
 	private ValueExpression showValue;
-	private ValueExpression preference;
+	private ValueExpression preferences;
 	private ValueExpression paged;
 	private ValueExpression clientSelectionFullState;
 	private ValueExpression clientCheckFullState;
@@ -148,8 +148,8 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.showValue = showValue;
 	}
 
-	public final void setPreference(ValueExpression preference) {
-		this.preference = preference;
+	public final void setPreferences(ValueExpression preferences) {
+		this.preferences = preferences;
 	}
 
 	public final void setPaged(ValueExpression paged) {
@@ -215,7 +215,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  showValue='"+showValue+"'");
-			LOG.debug("  preference='"+preference+"'");
+			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
@@ -304,7 +304,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.CLIENT_ADDITIONAL_INFORMATION_FULL_STATE, clientAdditionalInformationFullState);
 
 			} else {
-				component.setClientAdditionalInformationFullState(getBool(clientAdditionalInformationFullState.getExpressionString()));
+				component.setClientAdditionalInformationFullState(clientAdditionalInformationFullState.getExpressionString());
 			}
 		}
 
@@ -401,8 +401,8 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
-		if (preference != null) {
-				component.setValueExpression(Properties.PREFERENCE, preference);
+		if (preferences != null) {
+				component.setValueExpression(Properties.PREFERENCES, preferences);
 		}
 
 		if (paged != null) {
@@ -419,7 +419,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
 
 			} else {
-				component.setClientSelectionFullState(getBool(clientSelectionFullState.getExpressionString()));
+				component.setClientSelectionFullState(clientSelectionFullState.getExpressionString());
 			}
 		}
 
@@ -428,7 +428,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.CLIENT_CHECK_FULL_STATE, clientCheckFullState);
 
 			} else {
-				component.setClientCheckFullState(getBool(clientCheckFullState.getExpressionString()));
+				component.setClientCheckFullState(clientCheckFullState.getExpressionString());
 			}
 		}
 
@@ -506,7 +506,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		verticalScrollPosition = null;
 		filterProperties = null;
 		showValue = null;
-		preference = null;
+		preferences = null;
 		paged = null;
 		clientSelectionFullState = null;
 		clientCheckFullState = null;

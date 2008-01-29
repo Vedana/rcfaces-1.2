@@ -27,7 +27,7 @@ import org.rcfaces.core.model.IFilterProperties;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DataGridPreference extends AbstractComponentPreference {
+public class GridPreferences extends AbstractComponentPreferences {
 
     private static final String REVISION = "$Revision$";
 
@@ -43,8 +43,8 @@ public class DataGridPreference extends AbstractComponentPreference {
 
     private static final int SAVE_POSITION = 0x0010;
 
-    private int saveMask = SAVE_COLUMN_SIZES | SAVE_SORTED_COLUMN_IDS
-            | SAVE_COLUMN_SIZES;
+    private int saveMask = SAVE_COLUMNS_ORDER | SAVE_COLUMN_SIZES
+            | SAVE_SORTED_COLUMN_IDS | SAVE_COLUMN_SIZES;
 
     private String columnsOrder;
 
@@ -57,10 +57,10 @@ public class DataGridPreference extends AbstractComponentPreference {
     private IFilterProperties filterProperties;
 
     // Constructeur public pour le StateHolder !
-    public DataGridPreference() {
+    public GridPreferences() {
     }
 
-    public void loadPreference(FacesContext facesContext, UIComponent component) {
+    public void loadPreferences(FacesContext facesContext, UIComponent component) {
         if ((component instanceof IGridComponent) == false) {
             throw new FacesException("Can not load dataGrid preferences !");
         }
@@ -127,7 +127,7 @@ public class DataGridPreference extends AbstractComponentPreference {
         }
     }
 
-    public void savePreference(FacesContext facesContext, UIComponent component) {
+    public void savePreferences(FacesContext facesContext, UIComponent component) {
         if ((component instanceof IGridComponent) == false) {
             throw new FacesException("Can not save dataGrid preferences !");
         }

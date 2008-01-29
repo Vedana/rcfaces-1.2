@@ -21,6 +21,7 @@ import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -92,37 +93,24 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
             return EVAL_NODE;
         }
 
+        javaScriptWriter.writeMethodCall("f_appendItem2");
+
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
+
         String text = selectItem.getLabel();
-
-        int pred = 0;
-
-        javaScriptWriter.writeMethodCall("f_appendItem");
         if (text != null) {
-            javaScriptWriter.writeString(text);
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_label").writeString(text);
         }
 
         if (value != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeString(value);
-
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_value").writeString(value);
         }
 
         String description = selectItem.getDescription();
         if (description != null) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-            javaScriptWriter.write(',').writeString(description);
-
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_description").writeString(
+                    description);
         }
 
         if (selectItem instanceof IImagesItem) {
@@ -131,17 +119,9 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
             String imageURL = imagesSelectItem.getImageURL();
 
             if (imageURL != null) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-                javaScriptWriter.write(',').writeString(imageURL);
-
-            } else {
-                pred++;
+                objectLiteralWriter.writeSymbol("_imageURL").writeString(
+                        imageURL);
             }
-
-        } else {
-            pred++;
         }
 
         if (selectItem instanceof IClientDataItem) {
@@ -150,9 +130,8 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
             if (clientDataSelectItem.isClientDataEmpty() == false) {
                 Map map = clientDataSelectItem.getClientDataMap();
 
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
+                IObjectLiteralWriter clientDatas = objectLiteralWriter
+                        .writeSymbol("_clientDatas").writeObjectLiteral(true);
 
                 for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
                     Map.Entry entry = (Map.Entry) it.next();
@@ -167,14 +146,15 @@ public class SuggestTextEntryDecorator extends AbstractSelectItemsDecorator {
                         dataValue = String.valueOf(dataValue);
                     }
 
-                    javaScriptWriter.write(',').writeString(dataKey).write(',')
-                            .writeString((String) dataValue);
-
+                    clientDatas.writeProperty(dataKey).writeString(
+                            (String) dataValue);
                 }
+
+                clientDatas.end();
             }
         }
 
-        javaScriptWriter.writeln(");");
+        objectLiteralWriter.end().writeln(");");
 
         return EVAL_NODE;
     }

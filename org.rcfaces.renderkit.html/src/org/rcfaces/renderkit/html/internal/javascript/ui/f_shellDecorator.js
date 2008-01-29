@@ -239,9 +239,7 @@ var __members = {
 		if (iframe) {	
 			this._iframe=undefined; // HtmlIFrame
 			
-			iframe._shell=undefined;
-			
-			f_core.VerifyProperties(iframe);
+			this.f_finalizeIframe(iframe);
 		}
 		
 		this._decorationValues=undefined; // Map<String,any>
@@ -400,11 +398,27 @@ var __members = {
 		f_core.Assert(this._iframe, "f_shellDecorator.f_destroyDecoration: Invalid state, iframe is null !");
 		
 		var iframe=this._iframe;
-		this._iframe=undefined;
-		
+		if (iframe) {
+			this._iframe=undefined;
+			
+			this.f_finalizeIframe(iframe);
+		}
+				
 		iframe.parentNode.removeChild(iframe);
 
 		this._shell.f_setStatus(f_shell.CLOSED_STATUS);
+	},
+	
+	/**
+	 * @method protected
+	 * @param HtmlIFrameElement iframe
+	 * @return void
+	 */
+	f_finalizeIframe: function(iframe) {
+		iframe._shell=undefined;
+		iframe.onreadystatechange=null;
+		
+		f_core.VerifyProperties(iframe);		
 	},
 	
 	f_getShellBody: function() {

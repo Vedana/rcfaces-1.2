@@ -884,10 +884,13 @@ var __members = {
 			// On prefere la performance aux fuites mémoires ! on le met à la fin
 			// f_core.AppendChild(container, li); // Evite les fuites memoires
 
+			var nodeIdx=(this._nodeIdx)?(this._nodeIdx++):1;
+
 			var divNode=document.createElement("div");
 			li._divNode=divNode;
 			divNode._node=li;
 			divNode.className="f_tree_depth"+depth;
+			divNode.id=this.id+"::node"+nodeIdx;
 			
 			divNode.setAttribute("role", "treeitem");
 			divNode.onmouseover=f_tree._DivNode_mouseOver;
@@ -933,10 +936,9 @@ var __members = {
 				input.tabIndex=-1;
 				input.onclick=f_tree._NodeInput_mouseClick;
 		
-				var nodeIdx=(this._nodeIdx)?(this._nodeIdx++):1;
 				this._nodeIdx=nodeIdx;
 			
-				input.id=container.id+"::"+nodeIdx;
+				input.id=this.id+"::input"+nodeIdx;
 	
 				if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
 					input.type="radio";

@@ -30,6 +30,7 @@ import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
  * 
@@ -95,8 +96,6 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
         }
         Object sourceValue = selectItemValue;
 
-        javaScriptWriter.writeMethodCall("f_appendDateItem");
-
         if (calendar == null) {
             calendar = CalendarTools.getCalendar(getComponentRenderContext()
                     .getRenderContext().getProcessContext(), getComponent(),
@@ -141,42 +140,29 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
                     + "'.");
         }
 
-        javaScriptWriter.writeString(svalue);
+        javaScriptWriter.writeMethodCall("f_appendDateItem2");
 
-        int pred = 0;
+        IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
+                .writeObjectLiteral(false);
+
+        objectLiteralWriter.writeSymbol("_value").writeString(svalue);
 
         String text = selectItem.getLabel();
         if (text != null) {
-            javaScriptWriter.write(',').writeString(text);
-
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_label").writeString(text);
         }
 
         if (selectItem.isDisabled()) {
-            for (; pred > 0; pred--) {
-                javaScriptWriter.write(',').writeNull();
-            }
-
-            javaScriptWriter.write(',').writeBoolean(true);
-
-        } else {
-            pred++;
+            objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
         }
 
         if (selectItem instanceof IStyleClassItem) {
             IStyleClassItem dateSelectItem = (IStyleClassItem) selectItem;
 
-            String layer = dateSelectItem.getStyleClass();
-            if (layer != null) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
-
-                javaScriptWriter.write(',').writeString(layer);
-
-            } else {
-                pred++;
+            String styleClass = dateSelectItem.getStyleClass();
+            if (styleClass != null) {
+                objectLiteralWriter.writeSymbol("_styleClass").writeString(
+                        styleClass);
             }
         }
 
@@ -184,9 +170,8 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
             IClientDataItem clientDataItem = (IClientDataItem) selectItem;
 
             if (clientDataItem.isClientDataEmpty() == false) {
-                for (; pred > 0; pred--) {
-                    javaScriptWriter.write(',').writeNull();
-                }
+                IObjectLiteralWriter cds = objectLiteralWriter.writeSymbol(
+                        "_clientDatas").writeObjectLiteral(false);
 
                 Map map = clientDataItem.getClientDataMap();
 
@@ -199,16 +184,14 @@ public class CalendarDecorator extends AbstractSelectItemsDecorator {
                         data = String.valueOf(data);
                     }
 
-                    javaScriptWriter.write(',').writeString(key).write(',')
-                            .writeString((String) data);
+                    cds.writeProperty(key).writeString((String) data);
                 }
 
-            } else {
-                pred++;
+                cds.end();
             }
         }
 
-        javaScriptWriter.writeln(");");
+        objectLiteralWriter.end().writeln(");");
 
         return EVAL_NODE;
     }

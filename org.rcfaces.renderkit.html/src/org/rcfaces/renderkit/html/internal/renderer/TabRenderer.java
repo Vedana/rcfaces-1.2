@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CardComponent;
@@ -15,6 +16,7 @@ import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
@@ -22,16 +24,22 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
+import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class TabRenderer extends CardRenderer {
+public class TabRenderer extends CardRenderer implements
+        ISubInputClientIdRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final String TAB = "_tab";
+
+    public static final String INPUT_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "input";
 
     protected void writeCardAttributes(IHtmlWriter htmlWriter)
             throws WriterException {
@@ -282,5 +290,10 @@ public class TabRenderer extends CardRenderer {
                         Properties.TEXT, old, text));
             }
         }
+    }
+
+    public String computeSubInputClientId(IRenderContext renderContext,
+            UIComponent component, String clientId) {
+        return clientId + INPUT_ID_SUFFIX;
     }
 }

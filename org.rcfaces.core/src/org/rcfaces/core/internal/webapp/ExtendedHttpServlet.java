@@ -206,9 +206,16 @@ public class ExtendedHttpServlet extends HttpServlet {
             }
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("ParseHttpDate has not recognized date '" + date + "'.");
+        if (ex == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ParseHttpDate has not recognized date '" + date
+                        + "'.");
+            }
+
+            return null;
         }
+
+        LOG.error("ParseHttpDate has not recognized date '" + date + "'.", ex);
 
         throw ex;
     }

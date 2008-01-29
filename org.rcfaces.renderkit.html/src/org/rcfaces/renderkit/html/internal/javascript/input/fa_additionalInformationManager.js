@@ -5,7 +5,7 @@
 /**
  * Aspect AdditionalInformationManager
  *
- * @aspect public abstract fa_additionalInformationManager extends fa_itemsManager
+ * @aspect public abstract fa_additionalInformationManager extends fa_itemsManager, fa_clientFullState
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -31,7 +31,10 @@ var __members = {
 			}
 			this._additionalInformationCardinality=v_additionalInformationCardinality;
 							
-			if (f_core.GetAttribute(this, "v:clientAdditionalInformationFullState")) {
+			var clientAdditionalFullState=f_core.GetNumberAttribute(this, "v:clientAdditionalInformationFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+			if (clientAdditionalFullState) {
+				this._clientAdditionalFullState=clientAdditionalFullState;
+
 				this._additionalFullState=new Array;
 			}
 		}
@@ -50,6 +53,7 @@ var __members = {
 		// this._hideAllAdditionalInformations=undefined; // boolean
 
 		// this._additionalFullState=undefined; // string[] or number[]
+		// this._clientAdditionalFullState=undefined; // number
 
 		//	this._additionalInformations=undefined;  // boolean
 		//	this._additionalInformationCardinality=undefined; // boolean
@@ -58,6 +62,13 @@ var __members = {
 	f_serialize: {
 		before: function() {
 			if (!this._additionalInformations) {
+				return;
+			}
+			
+			if (this._clientAdditionalFullState==fa_clientFullState.TWOWAYS_CLIENT_FULL_STATE) {
+				this.f_setProperty(f_prop.HIDE_ADDITIONAL, f_prop.ALL_VALUE);
+				
+				this.f_setProperty(f_prop.SHOW_ADDITIONAL, this.f_getAdditionalInformationValues(), true);
 				return;
 			}
 			
@@ -500,6 +511,6 @@ var __members = {
 }
 
 new f_aspect("fa_additionalInformationManager", {
-	extend: [ fa_itemsManager ],
+	extend: [ fa_itemsManager, fa_clientFullState ],
 	members: __members 
 });

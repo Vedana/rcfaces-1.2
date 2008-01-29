@@ -5,10 +5,10 @@ import org.rcfaces.core.component.iterator.ICardIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import java.lang.String;
-import org.rcfaces.core.component.capability.IPreferenceCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.CardComponent;
@@ -32,14 +32,14 @@ import org.rcfaces.core.component.AbstractInputComponent;
 public class CardBoxComponent extends AbstractInputComponent implements 
 	ISelectionEventCapability,
 	IAsyncRenderModeCapability,
-	IPreferenceCapability,
+	IPreferencesSettings,
 	IVariableScopeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.cardBox";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeSaveValue","scopeVar","preference","scopeValue","asyncRenderMode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeSaveValue","scopeVar","scopeValue","asyncRenderMode","preferences"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -122,27 +122,27 @@ public class CardBoxComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
 	}
 
-	public org.rcfaces.core.preference.IComponentPreference getPreference() {
-		return getPreference(null);
+	public org.rcfaces.core.preference.IComponentPreferences getPreferences() {
+		return getPreferences(null);
 	}
 
 	/**
-	 * See {@link #getPreference() getPreference()} for more details
+	 * See {@link #getPreferences() getPreferences()} for more details
 	 */
-	public org.rcfaces.core.preference.IComponentPreference getPreference(javax.faces.context.FacesContext facesContext) {
-		return (org.rcfaces.core.preference.IComponentPreference)engine.getProperty(Properties.PREFERENCE, facesContext);
+	public org.rcfaces.core.preference.IComponentPreferences getPreferences(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.preference.IComponentPreferences)engine.getProperty(Properties.PREFERENCES, facesContext);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "preference" is set.
+	 * Returns <code>true</code> if the attribute "preferences" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isPreferenceSetted() {
-		return engine.isPropertySetted(Properties.PREFERENCE);
+	public final boolean isPreferencesSetted() {
+		return engine.isPropertySetted(Properties.PREFERENCES);
 	}
 
-	public void setPreference(org.rcfaces.core.preference.IComponentPreference preference) {
-		engine.setProperty(Properties.PREFERENCE, preference);
+	public void setPreferences(org.rcfaces.core.preference.IComponentPreferences preferences) {
+		engine.setProperty(Properties.PREFERENCES, preferences);
 	}
 
 	public boolean isScopeSaveValue() {

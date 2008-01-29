@@ -50,12 +50,6 @@ public class HorizontalTextPositionConverter extends AbstractConverter {
         return DEFAULT_POSITION;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.convert.Converter#getAsObject(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.String)
-     */
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
 
@@ -75,12 +69,6 @@ public class HorizontalTextPositionConverter extends AbstractConverter {
                 + "' is not supported for a text-position type !");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.convert.Converter#getAsString(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent, java.lang.Object)
-     */
     public String getAsString(FacesContext context, UIComponent component,
             Object value) {
 

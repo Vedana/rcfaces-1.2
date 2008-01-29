@@ -8,6 +8,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 
 /**
@@ -40,7 +41,7 @@ public class TreeRenderContext extends SelectItemsJsContext {
         checkable = treeComponent.isCheckable(facesContext);
         if (checkable) {
             writeCheckState = (treeComponent
-                    .isClientCheckFullState(facesContext) == false);
+                    .getClientCheckFullState(facesContext) == IClientFullStateCapability.NONE_CLIENT_FULL_STATE);
         } else {
             writeCheckState = false;
         }
@@ -48,7 +49,7 @@ public class TreeRenderContext extends SelectItemsJsContext {
         selectable = treeComponent.isSelectable(facesContext);
         if (selectable) {
             writeSelectionState = (treeComponent
-                    .isClientSelectionFullState(facesContext) == false);
+                    .getClientSelectionFullState(facesContext) == IClientFullStateCapability.NONE_CLIENT_FULL_STATE);
         } else {
             writeSelectionState = false;
         }

@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.capability.IComponentEngine;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ComponentIterators;
@@ -534,10 +535,6 @@ public final class ComponentTools {
 
                 UIComponent child = (UIComponent) children[idx];
 
-                if (childClass != null && childClass.isInstance(child) == false) {
-                    continue;
-                }
-
                 l.add(child);
                 continue;
             }
@@ -546,10 +543,6 @@ public final class ComponentTools {
                 UIComponent child = (UIComponent) children[i];
 
                 if (id.equals(child.getId()) == false) {
-                    continue;
-                }
-
-                if (childClass != null && childClass.isInstance(child) == false) {
                     continue;
                 }
 
@@ -568,9 +561,69 @@ public final class ComponentTools {
 
     public static void setChildren(UIComponent component,
             IComponentEngine engine, Class classOfChild,
-            UIComponent[] children, String ordered_children) {
-        // TODO Auto-generated method stub
+            UIComponent[] children, String propertyName) {
 
+        String list = createStringFromList(children, classOfChild, component);
+
+        engine.setProperty(propertyName, list);
+    }
+
+    private static String createStringFromList(UIComponent[] components,
+            Class classOfChild, UIComponent component) {
+        if (components == null) {
+            return null;
+        }
+
+        if (components.length < 1) {
+            return "";
+        }
+
+        Object children[] = null;
+
+        StringAppender sa = new StringAppender(components.length * 32);
+        for (int i = 0; i < components.length; i++) {
+            UIComponent child = components[i];
+
+            if (classOfChild.isInstance(child) == false) {
+                continue;
+            }
+
+            if (sa.length() > 0) {
+                sa.append(',');
+            }
+
+            String id = child.getId();
+
+            if (id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
+                int childIndex = -1;
+
+                if (children == null) {
+                    children = ComponentIterators.list(component, classOfChild)
+                            .toArray();
+                }
+
+                for (int j = 0; j < children.length; j++) {
+                    if (children[j] != child) {
+                        continue;
+                    }
+
+                    childIndex = j;
+                    break;
+                }
+                if (childIndex < 0) {
+                    LOG.error("Can not find index of component '" + child
+                            + "'.");
+                    continue;
+                }
+
+                sa.append('#').append(childIndex);
+                continue;
+            }
+
+            sa.append(child.getId());
+        }
+
+        return sa.toString();
     }
 
     public static boolean hasValidationServerListeners(

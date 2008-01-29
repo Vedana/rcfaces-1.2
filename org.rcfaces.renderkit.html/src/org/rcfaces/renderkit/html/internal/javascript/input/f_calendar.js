@@ -86,6 +86,12 @@ var __members = {
 	f_appendDateItem: function(date, label, disabled, styleClass) {
 		this._calendar.f_appendDateItem.apply(this._calendar, arguments);
 	},
+	/**
+	 * @method hidden
+	 */
+	f_appendDateItem2: function(date) {
+		this._calendar.f_appendDateItem2(date);
+	},
 	
 	/**
 	 * @method protected
