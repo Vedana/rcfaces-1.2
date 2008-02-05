@@ -31,11 +31,11 @@ import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class LocaleContentProvider extends FilteredContentProvider {
+public class SystemLocaleContentProvider extends FilteredContentProvider {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
-            .getLog(LocaleContentProvider.class);
+            .getLog(SystemLocaleContentProvider.class);
 
     private static final String JAVASCRIPT_CHARSET = "UTF-8";
 
@@ -43,7 +43,7 @@ public class LocaleContentProvider extends FilteredContentProvider {
 
     private final String bundleName;
 
-    public LocaleContentProvider() {
+    public SystemLocaleContentProvider() {
         ApplicationFactory factory = (ApplicationFactory) FactoryFinder
                 .getFactory(FactoryFinder.APPLICATION_FACTORY);
 
@@ -85,6 +85,7 @@ public class LocaleContentProvider extends FilteredContentProvider {
         return new FilteredURLContent((URL) contentReference, locale);
     }
 
+    /*
     public boolean searchLocale(Object contentReference, Locale locale,
             Locale[] foundLocale) {
         String surl = contentReference.toString();
@@ -95,6 +96,7 @@ public class LocaleContentProvider extends FilteredContentProvider {
 
         return true;
     }
+    */
 
     protected String getCharset() {
         return JAVASCRIPT_CHARSET;

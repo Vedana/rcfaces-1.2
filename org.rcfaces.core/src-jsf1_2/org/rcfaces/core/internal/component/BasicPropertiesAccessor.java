@@ -74,12 +74,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.rcfaces.core.internal.components.IPropertiesAccessor#getProperty(java.lang.String)
-     */
-
     public Object getProperty(String propertyName) {
         if (properties == null || properties.isEmpty()) {
             return null;
@@ -110,7 +104,22 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
             Object old = valueBinding.getValue(context.getELContext());
 
-            valueBinding.setValue(context.getELContext(), value);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Set value '" + value + "' to '"
+                        + valueBinding.getExpressionString() + " old='" + old
+                        + "'");
+            }
+
+            try {
+                valueBinding.setValue(context.getELContext(), value);
+
+            } catch (RuntimeException ex) {
+                LOG.error("Set value '" + value + "' to '"
+                        + valueBinding.getExpressionString() + " old='" + old
+                        + "'", ex);
+
+                throw ex;
+            }
 
             return old;
         }
@@ -136,7 +145,24 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
         Object old = valueBinding.getValue(context.getELContext());
 
-        valueBinding.setValue(context.getELContext(), value);
+        if (LOG.isDebugEnabled()) {
+            LOG
+                    .debug("Set value '" + value + "' to '"
+                            + valueBinding.getExpressionString() + " old='"
+                            + old + "'");
+        }
+
+        try {
+            valueBinding.setValue(context.getELContext(), value);
+
+        } catch (RuntimeException ex) {
+            LOG.error(
+                    "Set value '" + value + "' to '"
+                            + valueBinding.getExpressionString() + " old='"
+                            + old + "'", ex);
+
+            throw ex;
+        }
 
         return old;
     }

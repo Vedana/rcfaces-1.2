@@ -5,7 +5,10 @@ package org.rcfaces.renderkit.html.internal;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -22,6 +25,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
@@ -390,6 +394,42 @@ public abstract class AbstractJavaScriptRenderer extends
         String className = getJavaScriptClassName();
         if (className != null) {
             javaScriptRenderContext.appendRequiredClass(className, null);
+        }
+    }
+
+    public String getResourceBundleValue(IHtmlWriter htmlWriter, String key) {
+
+        IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
+
+        return getResourceBundleValue(javaScriptRenderContext,
+                getJavaScriptClassName(), htmlWriter
+                        .getComponentRenderContext().getRenderContext()
+                        .getProcessContext().getUserLocale(), key);
+    }
+
+    public static String getResourceBundleValue(
+            IJavaScriptRenderContext javaScriptRenderContext,
+            String jsClassName, Locale locale, String key) {
+
+        IClass jsClass = javaScriptRenderContext.getRepository()
+                .getClassByName(jsClassName);
+
+        if (jsClass == null) {
+            return null;
+        }
+
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(jsClass
+                .getResourceBundleName(), locale);
+
+        try {
+            return resourceBundle.getString(key);
+
+        } catch (MissingResourceException ex) {
+            LOG.debug(ex);
+
+            return null;
         }
     }
 }

@@ -37,7 +37,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"caseSensitive","suggestionDelayMs","filterProperties","moreResultsMessage","suggestionConverter","suggestionListener","suggestionValue","forceProposal","maxResultNumber","menuListener","suggestionMinChars"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"caseSensitive","suggestionDelayMs","filterProperties","moreResultsMessage","suggestionConverter","suggestionListener","suggestionValue","forceProposal","maxResultNumber","orderedItems","menuListener","suggestionMinChars"}));
 	}
 
 	public SuggestTextEntryComponent() {
@@ -369,6 +369,26 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 */
 	public boolean isMoreResultsMessageSetted() {
 		return engine.isPropertySetted(Properties.MORE_RESULTS_MESSAGE);
+	}
+
+	public boolean isOrderedItems() {
+		return isOrderedItems(null);
+	}
+
+	public boolean isOrderedItems(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.ORDERED_ITEMS, true, facesContext);
+	}
+
+	public void setOrderedItems(boolean orderedItems) {
+		engine.setProperty(Properties.ORDERED_ITEMS, orderedItems);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "orderedItems" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isOrderedItemsSetted() {
+		return engine.isPropertySetted(Properties.ORDERED_ITEMS);
 	}
 
 	protected Set getCameliaFields() {

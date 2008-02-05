@@ -41,6 +41,7 @@ import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -653,7 +654,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         writeDebugModes(writer, null, disabledCookiesPageURL, debugMode,
                 multiWindowMode, false);
 
-        includeScript(writer, jsBaseURI + "/" + uri,
+        HtmlTools.includeScript(writer, jsBaseURI + "/" + uri,
                 IHtmlRenderContext.JAVASCRIPT_CHARSET);
     }
 
@@ -942,7 +943,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
     }
 
-    static IJavaScriptWriter openScriptTag(IHtmlWriter writer)
+    public static IJavaScriptWriter openScriptTag(IHtmlWriter writer)
             throws WriterException {
 
         IHtmlProcessContext htmlProcessContext = writer
@@ -955,28 +956,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
 
         return new JavaScriptWriterImpl(writer);
-    }
-
-    static void includeScript(IHtmlWriter writer, String src,
-            String javascriptCharset) throws WriterException {
-
-        IHtmlProcessContext htmlProcessContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getHtmlProcessContext();
-
-        writer.startElement(IHtmlWriter.SCRIPT);
-
-        if (htmlProcessContext.useMetaContentScriptType() == false) {
-            writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
-        }
-
-        writer.writeSrc(src);
-
-        if (javascriptCharset != null) {
-            writer.writeCharset(javascriptCharset);
-        }
-
-        writer.endElement(IHtmlWriter.SCRIPT);
     }
 
     static Set parseClientMessageIdFilter(String filter) {

@@ -26,7 +26,6 @@ import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IModule;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
-import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -39,7 +38,7 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class JavaScriptRenderer extends AbstractHtmlRenderer {
+public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(JavaScriptRenderer.class);
@@ -51,7 +50,12 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
         JavaScriptComponent javaScriptComponent = (JavaScriptComponent) writer
                 .getComponentRenderContext().getComponent();
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext();
 
         String requiredFiles = javaScriptComponent
                 .getRequiredFiles(facesContext);
@@ -63,8 +67,8 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
 
         if (requiredFiles != null || requiredClasses != null
                 || requiredModules != null || requiredSets != null) {
-            addRequires(htmlWriter, requiredFiles, requiredClasses,
-                    requiredModules, requiredSets);
+            addRequires(htmlWriter, javaScriptRenderContext, requiredFiles,
+                    requiredClasses, requiredModules, requiredSets);
         }
 
         String src = javaScriptComponent.getSrc(facesContext);
@@ -76,27 +80,63 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
             src = contentAccessor.resolveURL(facesContext, null, null);
 
             if (src != null) {
-                String javaScriptSrcCharSet = javaScriptComponent
-                        .getSrcCharSet(facesContext);
+                includeScript(htmlWriter, javaScriptRenderContext, src);
+            }
+        }
 
-                InitRenderer.includeScript(htmlWriter, src,
-                        javaScriptSrcCharSet);
+        String sources[] = listSources(writer.getComponentRenderContext());
+        if (sources.length > 0) {
+            for (int i = 0; i < sources.length; i++) {
+                String source = sources[i];
+
+                IContentAccessor contentAccessor = ContentAccessorFactory
+                        .createFromWebResource(facesContext, source,
+                                IContentType.SCRIPT);
+
+                source = contentAccessor.resolveURL(facesContext, null, null);
+
+                if (source != null) {
+                    includeScript(htmlWriter, javaScriptRenderContext, source);
+                }
             }
         }
 
         String text = javaScriptComponent.getText(facesContext);
-        if (text != null && text.length() > 0) {
-            IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
+        if (text != null) {
+            text = text.trim();
 
-            jsWriter.write(text);
-
-            jsWriter.end();
+            if (text.length() > 0) {
+                includeRawString(htmlWriter, javaScriptRenderContext, text);
+            }
         }
     }
 
-    public static void addRequires(IHtmlWriter writer, String requiredFiles,
-            String requiredClasses, String requiredModules, String requiredSets)
+    private void includeRawString(IHtmlWriter htmlWriter,
+            IJavaScriptRenderContext javaScriptRenderContext, String text)
             throws WriterException {
+
+        javaScriptRenderContext.writeRaw(htmlWriter, text);
+    }
+
+    private void includeScript(IHtmlWriter htmlWriter,
+            IJavaScriptRenderContext javaScriptRenderContext, String src)
+            throws WriterException {
+
+        JavaScriptComponent javaScriptComponent = (JavaScriptComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        String javaScriptSrcCharSet = javaScriptComponent
+                .getSrcCharSet(htmlWriter.getComponentRenderContext()
+                        .getFacesContext());
+
+        javaScriptRenderContext.includeJavaScript(htmlWriter, src,
+                javaScriptSrcCharSet);
+    }
+
+    public static void addRequires(IHtmlWriter writer,
+            IJavaScriptRenderContext javaScriptRenderContext,
+            String requiredFiles, String requiredClasses,
+            String requiredModules, String requiredSets) throws WriterException {
 
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
@@ -211,13 +251,10 @@ public class JavaScriptRenderer extends AbstractHtmlRenderer {
             return;
         }
 
-        IJavaScriptRenderContext javaScriptRenderContext = writer
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext();
         if (javaScriptRenderContext.isCollectorMode()) {
             javaScriptRenderContext.appendRequiredFiles((IFile[]) files
                     .toArray(new IFile[files.size()]));
-            
+
             return;
         }
 

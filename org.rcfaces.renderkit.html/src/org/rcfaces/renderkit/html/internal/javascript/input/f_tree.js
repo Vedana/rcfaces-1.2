@@ -865,10 +865,17 @@ var __members = {
 	 * @return void
 	 */
 	_constructTree: function(container, nodes, depth) {
+		
+		var doc=this.ownerDocument;
+		
+		if (!this._nodeIdx) {
+			this._nodeIdx=1;
+		}
+		
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
 			
-			var li=document.createElement("li");
+			var li=doc.createElement("li");
 
 			li._node=node;
 			li._depth=depth;
@@ -884,42 +891,39 @@ var __members = {
 			// On prefere la performance aux fuites mémoires ! on le met à la fin
 			// f_core.AppendChild(container, li); // Evite les fuites memoires
 
-			var nodeIdx=(this._nodeIdx)?(this._nodeIdx++):1;
+			var nodeIdx=this._nodeIdx++;
 
-			var divNode=document.createElement("div");
+			var divNode=f_core.CreateElement(li, "div", {
+				id: this.id+"::node"+nodeIdx,
+				className: "f_tree_depth"+depth,
+				_node: li,
+				role: "treeitem",
+				onmouseover: f_tree._DivNode_mouseOver,
+				onmouseout: f_tree._DivNode_mouseOut,
+				onmousedown: f_tree._DivNode_mouseDown,
+				onmouseup: f_core.CancelJsEventHandler,
+				onclick: f_core.CancelJsEventHandler,
+				ondblclick: f_tree._DivNode_dblClick
+			});
+
 			li._divNode=divNode;
-			divNode._node=li;
-			divNode.className="f_tree_depth"+depth;
-			divNode.id=this.id+"::node"+nodeIdx;
-			
-			divNode.setAttribute("role", "treeitem");
-			divNode.onmouseover=f_tree._DivNode_mouseOver;
-			divNode.onmouseout=f_tree._DivNode_mouseOut;
-			divNode.onmousedown=f_tree._DivNode_mouseDown;
-			divNode.onmouseup=f_core.CancelJsEventHandler;
-			divNode.onclick=f_core.CancelJsEventHandler;
-			divNode.ondblclick=f_tree._DivNode_dblClick;
-
-			f_core.AppendChild(li, divNode);
 			
 			var d=depth;
 			if (this._userExpandable) {
 				if (depth>0 || !this._hideRootExpandSign) {
-					var command=document.createElement("img");
-					command.align="center";
-					command.width=f_tree._COMMAND_IMAGE_WIDTH;
-					command.height=f_tree._COMMAND_IMAGE_HEIGHT;
-					command.src=this._blankNodeImageURL;
-					command._node=li;
-		
-					f_core.AppendChild(divNode, command);
-					li._command=command;
-									
-					command.onmousedown=f_tree._Command_mouseDown;
-					command.onmouseup=f_core.CancelJsEventHandler;
-					command.onclick=f_core.CancelJsEventHandler;
 					
-					this._updateCommandStyle(li);					
+					li._command=f_core.CreateElement(divNode, "img", {
+						align: "center",
+						width: f_tree._COMMAND_IMAGE_WIDTH,
+						height: f_tree._COMMAND_IMAGE_HEIGHT,
+						src: this._blankNodeImageURL,
+						_node: li,
+						onmousedown: f_tree._Command_mouseDown,
+						onmouseup: f_core.CancelJsEventHandler,
+						onclick: f_core.CancelJsEventHandler
+					});
+
+					this._updateCommandStyle(li);
 				}
 				if (depth==1 && this._hideRootExpandSign) {
 					d=0;
@@ -929,15 +933,13 @@ var __members = {
 			divNode.style.paddingLeft=(d*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 			
 			if (this._checkable) {
-				var input=document.createElement("input");
+				var input=doc.createElement("input");
 				li._input=input;
 				input._node=li;
 				input.className="f_tree_check";
 				input.tabIndex=-1;
 				input.onclick=f_tree._NodeInput_mouseClick;
 		
-				this._nodeIdx=nodeIdx;
-			
 				input.id=this.id+"::input"+nodeIdx;
 	
 				if (this._checkCardinality==fa_cardinality.ONE_CARDINALITY) {
@@ -954,35 +956,26 @@ var __members = {
 				f_core.AppendChild(divNode, input);
 			}
 
-			var span=document.createElement("span");
-			li._span=span;
-			f_core.AppendChild(divNode, span);
-			
-			span._node=li;
-			span.onmouseover=f_tree._NodeLabel_mouseOver;
-			span.onmouseout=f_tree._NodeLabel_mouseOut;
+			var span=f_core.CreateElement(divNode, "span", {
+				_node: li,
+				onmouseover: f_tree._NodeLabel_mouseOver,
+				onmouseout: f_tree._NodeLabel_mouseOut				
+			});
+			li._span=span;			
 			
 			if (this._images) {
-				var image=document.createElement("img");
-				image.align="center";
-				image.className="f_tree_image";
-				image._node=li;
-
-				f_core.AppendChild(span, image);
-				li._image=image;
+				li._image=f_core.CreateElement(span, "img", {
+					align: "center",
+					className: "f_tree_image",
+					_node: li
+				});
 			}
 			
-			var label=document.createElement("label");
-
-			f_core.AppendChild(span, label);
-			li._label=label;
-
-			label.className="f_tree_label";
-			label._node=li;
-			
-			if (node._label) {
-				f_core.AppendChild(label, document.createTextNode(node._label));
-			}
+			li._label=f_core.CreateElement(span, "label", {
+				className: "f_tree_label",
+				textNode: (node._label)?node._label:null,
+				_node: li				
+			});	
 			
 			if (this._selectable) {
 				this.f_updateElementSelection(li, li._node._selected);
@@ -1002,7 +995,7 @@ var __members = {
 			if (node._container) {
 				// On peut etre un container sans posseder (encore) d'enfants.
 				
-				var ul=document.createElement("ul");
+				var ul=doc.createElement("ul");
 				ul.setAttribute("role", "treegroup");
 				ul.style.display="none";
 				ul.className="f_tree_parent";
@@ -1120,7 +1113,7 @@ var __members = {
 			node._interactive=undefined;
 			
 			if (!ul) {
-				ul=document.createElement("ul");
+				ul=this.ownerDocument.createElement("ul");
 				ul.className="f_tree_parent";
 				ul.setAttribute("role", "treegroup");
 			
@@ -1331,16 +1324,17 @@ var __members = {
 	 * @return HTMLLIElement
 	 */
 	_newWaitingNode: function(parentDepth) {
-		var li=document.createElement("li");
+		var doc=this.ownerDocument;
+		var li=doc.createElement("li");
 
 		li.className="f_tree_parent";
 		
-		var divNode=document.createElement("div");
+		var divNode=doc.createElement("div");
 		f_core.AppendChild(li, divNode);
 		divNode.className="f_tree_depth"+(parentDepth+1)+" f_tree_waiting"
 		divNode.style.paddingLeft=(parentDepth*f_tree._COMMAND_IMAGE_WIDTH)+"px";
 		
-		var command=document.createElement("img");
+		var command=doc.createElement("img");
 		f_core.AppendChild(divNode, command);
 
 		command.align="center";
@@ -1348,10 +1342,10 @@ var __members = {
 		command.height=f_tree._COMMAND_IMAGE_HEIGHT;
 		command.src=this._blankNodeImageURL;
 
-		var span=document.createElement("span");
+		var span=doc.createElement("span");
 		f_core.AppendChild(divNode, span);
 		
-		var image=document.createElement("img");
+		var image=doc.createElement("img");
 		f_core.AppendChild(span, image);
 
 		image.align="center";
@@ -1361,14 +1355,14 @@ var __members = {
 		image.className="f_tree_image";
 		li._image=image;
 			
-		var label=document.createElement("label");
+		var label=doc.createElement("label");
 		f_core.AppendChild(span, label);
 		li._label=label;
 
 		label.className="f_tree_label";
 
 		var txt=f_waiting.GetLoadingMessage();
-		f_core.AppendChild(label, document.createTextNode(txt));
+		f_core.AppendChild(label, doc.createTextNode(txt));
 
 		return li;		
 	},
@@ -1517,15 +1511,18 @@ var __members = {
 			return;
 		}
 
-		var node=li._node;
-		
+		var node=li._node;		
 		
 		var suffix="";
 		if (node._container) {
+	
 			if (!node._opened) {
 				suffix+="_opened";
+				command.alt=f_resourceBundle.Get(f_tree).f_get("OPEN_NODE");
+				
 			} else {
 				suffix+="_closed";
+				command.alt=f_resourceBundle.Get(f_tree).f_get("CLOSE_NODE");
 			}
 		}
 		
@@ -2327,6 +2324,10 @@ var __members = {
 		
 		return false;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_updateSelectedNodes: function() {
 		var cursorLi=this._cursor;
 		
@@ -2342,10 +2343,77 @@ var __members = {
 		
 		if (cursorLi) {
 			this.fa_updateElementStyle(cursorLi);
+		}			
+
+		this.f_updateBreadCrumbs();
+	},
+	/**
+	 * @method public
+	 * @param function callback
+	 * @param optional any The value of a node or an element object (Use cursor value if not specified)
+	 * @return boolean
+	 */
+	f_mapHierarchicalValues: function(callback, value) {
+		f_core.Assert(typeof(callback)=="function", "f_tree.f_mapHierarchicalValues: Invalid callback parameter '"+callback+"'.");
+		
+		if (value===undefined) {
+			value=this._cursor;
 		}
+		
+		var li=value;		
+		if (!li || !li._node) {
+			li=this._searchComponentByNodeOrValue(li);
+			if (!li) {
+				return true;
+			}
+		}
+				
+		for (;li;) {
+			if (callback.call(this, li._node._value, li)===false) {
+				return false;
+			}
+				
+			var parentNode=li._node._parentTreeNode;
+			if (!parentNode || parentNode==this) {
+				break;
+			}
+			
+			li=this._searchComponentByNodeOrValue(parentNode);
+		}
+		
+		return true;
+	},
+	/**
+	 * @method public
+	 * @param optional any The value of a node or an element object (Use cursor value if not specified)
+	 * @return String[]
+	 */
+	f_getHierachicalValues: function(value) {
+		var values=new Array;		
+		
+		this.f_mapHierarchicalValues(function(value, element) {
+			values.unshift(value);
+		}, value)
+		
+		return values;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateBreadCrumbs: function() {
+		var ids=new Array;
+		var values=new Array;
+		
+		this.f_mapHierarchicalValues(function(value, element) {
+			ids.unshift(element._divNode.id);			
+			values.unshift(value);
+		})
+		
+		this.setAttribute("v:breadCrumbsIds", ids.join("|"));
+		this.setAttribute("v:breadCrumbsValues", values.join("|"));
 	},
 	f_setFocus: function() {
-
 		f_core.Debug(f_tree, "f_setFocus: Set focus on tree '"+this.id+"' cfocus="+this._cfocus);
 
 		if (!f_core.ForceComponentVisibility(this)) {

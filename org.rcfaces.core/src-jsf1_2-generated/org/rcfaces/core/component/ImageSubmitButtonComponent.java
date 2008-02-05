@@ -2,9 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.ImageButtonComponent;
-import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The ImageSubmitButton Component is a <a href="/comps/submitButtonComponent.html">submitButton Component</a> that can show an image.</p>
@@ -24,10 +24,6 @@ public class ImageSubmitButtonComponent extends ImageButtonComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageSubmitButton";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public ImageSubmitButtonComponent() {
 		setRendererType(COMPONENT_TYPE);

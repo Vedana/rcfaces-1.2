@@ -24,10 +24,6 @@ public class ImageSubmitButtonComponent extends ImageButtonComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageSubmitButton";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public ImageSubmitButtonComponent() {
 		setRendererType(COMPONENT_TYPE);

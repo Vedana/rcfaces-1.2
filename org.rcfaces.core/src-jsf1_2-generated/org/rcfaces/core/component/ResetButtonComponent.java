@@ -2,9 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.ButtonComponent;
-import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The resetButton Component is based on the standard HTML tag &lt;INPUT TYPE="reset"&gt;. It is a <a href="/comps/buttonComponent.html">button Component</a>.</p>
@@ -23,10 +23,6 @@ public class ResetButtonComponent extends ButtonComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.resetButton";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public ResetButtonComponent() {
 		setRendererType(COMPONENT_TYPE);

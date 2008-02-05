@@ -317,7 +317,7 @@ var __members = {
 		
 		var text=this._text;
 		if (text) {
-			text=f_core.EncodeHtml(text);
+			//text=f_core.EncodeHtml(text);
 			
 			f_core.SetTextNode(zone, text);
 		}

@@ -156,6 +156,9 @@ var __statics = {
 			if (component._shell) {
 				return component._shell;
 			}
+			if (component._shellIdentifier) {
+				return f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
+			}
 			
 			var parent=component.parentNode;
 			if (parent && parent.nodeType!=f_core.DOCUMENT_NODE) {

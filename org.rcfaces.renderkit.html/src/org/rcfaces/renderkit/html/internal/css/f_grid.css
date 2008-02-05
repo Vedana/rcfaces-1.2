@@ -135,13 +135,15 @@
 }
 
 .f_grid_ttext {
-/*	color: #000; Ca sert à qq chose ? */
 /*	text-overflow: ellipsis; */
 	text-overflow: clip;
 	white-space:nowrap;
 	overflow: hidden;
 	vertical-align: middle;
 	line-height: 16px;
+	display: block;
+	color: #000;
+	text-decoration: none;
 }
 
 .f_grid_cell_cursor {

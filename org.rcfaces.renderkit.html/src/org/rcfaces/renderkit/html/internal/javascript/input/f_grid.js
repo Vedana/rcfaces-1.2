@@ -196,14 +196,23 @@ var __statics = {
 		}
 			
 		if (target && target.nodeType==f_core.ELEMENT_NODE) {
+			
+			if (target._dataGrid || target._row) {
+				return true;
+			}
 			var tagName=target.tagName;
 			if (tagName) {
 				switch(tagName.toLowerCase()) {
 				case "input":
 				case "select":
+				case "a":
 					return false;
 				}
+				
+				document.title="Unknown tag:"+tagName;
 			}
+		} else {
+			document.title="Unknown target: "+target;
 		}
 				
 		return true;
@@ -751,6 +760,91 @@ var __statics = {
 		dataGrid._updateTitleStyle(column);
 				
 		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:column
+	 */
+	_Title_onFocus: function(evt) {
+		var column=this._column;
+		var dataGrid=column._dataGrid;
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
+		}
+
+		if (dataGrid.f_isDisabled()) {
+			return f_core.CancelJsEvent(evt);
+		}
+		
+		if (column._focus) {
+			return true;
+		}
+		
+		column._focus=true;
+			
+		if (column.f_fireEvent(f_event.FOCUS, evt, null, null, dataGrid)===false) {
+			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
+		}
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:column
+	 */
+	_Title_onBlur: function(evt) {
+		var column=this._column;
+		var dataGrid=column._dataGrid;
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (!column._focus) {
+			return true;
+		}
+		
+		column._focus=false;
+			
+		if (column.f_fireEvent(f_event.BLUR, evt, null, null, dataGrid)===false) {
+			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
+		}
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:column
+	 */
+	_Title_onClick: function(evt) {
+		var column=this._column;
+		var dataGrid=column._dataGrid;
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
+		}
+
+		if (dataGrid.f_isDisabled()) {
+			return f_core.CancelJsEvent(evt);
+		}
+		
+		var append=(evt.shiftKey);
+		
+		dataGrid.f_setColumnSort(column, undefined, append); 
+		
+		return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
 	},
 	/**
 	 * @method private static
@@ -1380,13 +1474,13 @@ var __members = {
 				focus.tabIndex=0;
 			}
 
-			this.tabIndex=-1;
+			//this.tabIndex=-1;
 			
 			if (f_core.IsInternetExplorer()) {
 				this.hideFocus=true;
 				
 				var self=this;
-				focus.onbeforedeactivate=function() {
+				var onbeforedeactivate=function() {
 					var evt=f_core.GetJsEvent(this);
 					
 					var next=evt.toElement;
@@ -1397,20 +1491,29 @@ var __members = {
 						return;
 					}
 					
-					if ((next.parentNode._dataGrid==self && next.tagName.toLowerCase()!="input") || 
-							(next._column && next._column._dataGrid==self)) {
-
-						f_core.Debug(f_grid, "CANCEL On before DE activate "+next.tagName);
-
-						return f_core.CancelJsEvent(evt);
+					if (next.parentNode._dataGrid==self) { /* || (next._column && next._column._dataGrid==self)*/
+						switch (next.tagName.toLowerCase()) {
+						case "input":
+						case "a":
+							break;
+						
+						default:
+							f_core.Debug(f_grid, "CANCEL On before DE activate "+next.tagName);
+	
+							return f_core.CancelJsEvent(evt);
+						}
 					}
-				}
 					
+					return true;
+				}
+				
+				focus.onbeforedeactivate=onbeforedeactivate;
+				
 				if (this._title) {			
-					this._title.onbeforeactivate=f_core.CancelJsEventHandler;
+					this._title.onbeforeactivate=onbeforedeactivate;
 				}			
 				if (this._scrollTitle) {			
-					this._scrollTitle.onbeforeactivate=f_core.CancelJsEventHandler;
+					this._scrollTitle.onbeforeactivate=onbeforedeactivate;
 				}			
 
 			}	
@@ -2238,6 +2341,8 @@ var __members = {
 		var button=row._additionalButton;
 		if (button) {
 			var buttonClassName="f_grid_additional_button";
+
+			var additionalAlt="";
 	
 			var content=row._additionalContent;
 			if (content===false) {				
@@ -2245,12 +2350,14 @@ var __members = {
 				
 			} else  {
 				var shown=this.fa_isAdditionalElementVisible(row);
-				
+
 				if (shown) {
 					buttonClassName+=" f_grid_additional_button_expanded";
+					additionalAlt=f_resourceBundle.Get(f_grid).f_get("COLLAPSE_BUTTON");
 					
 				} else {
 					buttonClassName+=" f_grid_additional_button_collapsed";				
+					additionalAlt=f_resourceBundle.Get(f_grid).f_get("EXPAND_BUTTON");
 				}
 				
 				if (this.f_isDisabled()) {
@@ -2260,6 +2367,9 @@ var __members = {
 			
 			if (button.className!=buttonClassName) {
 				button.className=buttonClassName;
+			}
+			if (button.alt!=additionalAlt) {
+				button.alt=additionalAlt;
 			}
 		}		
 	},
@@ -2647,9 +2757,26 @@ var __members = {
 				head.onmouseup=null;
 				head.onbeforeactivate=null;
 				
-				f_core.VerifyProperties(head);
-				
+				f_core.VerifyProperties(head);			
 			}
+			
+			var label=column._label;
+			if (label) {
+				column._label=undefined;
+
+				label._column=undefined;
+				//head.onmouseout=null;
+				//head.onmouseover=null;
+				label.onmousedown=null;
+				label.onmouseup=null;
+				label.onfocus=null;
+				label.onclick=null;
+				label.onblur=null;			
+				
+				f_core.VerifyProperties(label);			
+			}
+			
+			
 			var cursor=column._cursor;
 			if (cursor) {
 				column._cursor=undefined;
@@ -2680,7 +2807,6 @@ var __members = {
 			column._tcol=undefined; // HTMLThElement
 			column._tcell=undefined; // HTMLTdElement 
 			column._box=undefined; // HTMLDivElement
-			column._label=undefined; // HTMLDivElement
 			column._image=undefined; // HTMLImageElement
 			
 //			column._titleImageURL=undefined; // String
@@ -3655,15 +3781,21 @@ var __members = {
 		
 		var suffix="";
 		var wc=className;
+		var sortAlt="";
 		if (column._ascendingOrder!==undefined) {
 			if (column._ascendingOrder) {
 				suffix="_ascending";
+				sortAlt=f_resourceBundle.Get(f_grid).f_get("ASCENDING_SORT");
 
 			} else {
 				suffix="_descending";
+				sortAlt=f_resourceBundle.Get(f_grid).f_get("DESCENDING_SORT");
 			}
 			className+=" "+className+suffix;
 			stextClassName+=" "+stextClassName+suffix;
+		
+		} else if (column._method || column._sorter) {
+			sortAlt=f_resourceBundle.Get(f_grid).f_get("NO_SORT");		
 		}
 		
 		var cw=column._col.style.width;
@@ -3672,6 +3804,10 @@ var __members = {
 			
 			if (!cw) {
 				cw=column._width;
+				
+				if (!cw) {
+					cw=column._head.offsetWidth;
+				}
 			}
 		}
 					
@@ -3714,6 +3850,9 @@ var __members = {
 		}
 		if (box.className!=stextClassName) {
 			box.className=stextClassName;
+		}
+		if (label.alt!=sortAlt) {
+			label.alt=sortAlt;
 		}
 		
 		var image=column._image;
@@ -4111,16 +4250,28 @@ var __members = {
 			head._column=column;
 			column._head=head;
 
-			column._box=f_core.GetFirstElementByTagName(head, "div", true);
-			column._label=f_core.GetFirstElementByTagName(column._box, "div");
-
+			var box=f_core.GetFirstElementByTagName(head, "div");
+			column._box=box;
+	
+			var label=f_core.GetFirstElementByTagName(box, (column._sorter!==undefined)?"a":"div");	
+			column._label=label
+			
+			if (column._sorter) {
+				label.onmousedown=f_grid._Title_onMouseDown;
+				label.onmouseup=f_grid._Title_onMouseUp;
+				label.onfocus=f_grid._Title_onFocus;
+				label.onblur=f_grid._Title_onBlur;
+				label.onclick=f_grid._Title_onClick;
+				label._column=column;
+			}
+				
 			var image=f_core.GetFirstElementByTagName(column._label, "img");
 			if (image) {
 				column._image=image;
 			}
 
 			if (column._resizable) {
-				var cursor=f_core.CreateElement(column._box, "div", { title: headCursorTitle, className:  "f_grid_colCursor" });
+				var cursor=f_core.CreateElement(box, "div", { title: headCursorTitle, className:  "f_grid_colCursor" });
 				column._cursor=cursor;
 				cursor._column=column;
 				cursor.onmousedown=f_grid._TitleCursorMouseDown;

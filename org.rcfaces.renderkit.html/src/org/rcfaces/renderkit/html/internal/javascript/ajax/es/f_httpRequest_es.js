@@ -10,6 +10,6 @@
  
 var __resources = {
 
-	STATUS_ERROR: "Status error" // @TODO
+	STATUS_ERROR: "??? Status error"
 }
 f_resourceBundle.Define(f_httpRequest, __resources);

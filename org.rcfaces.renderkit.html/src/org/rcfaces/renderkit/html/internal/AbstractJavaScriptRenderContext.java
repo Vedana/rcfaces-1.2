@@ -526,7 +526,7 @@ public abstract class AbstractJavaScriptRenderContext implements
         return userLocale;
     }
 
-    protected final IJavaScriptRepository getRepository() {
+    public final IJavaScriptRepository getRepository() {
         return repository;
     }
 
@@ -925,4 +925,5 @@ public abstract class AbstractJavaScriptRenderContext implements
     public boolean isCollectorMode() {
         return false;
     }
+
 }

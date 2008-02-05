@@ -25,6 +25,14 @@
 		<component-type>org.rcfaces.html.javaScriptCollector</component-type>
 		<component-class>org.rcfaces.renderkit.html.component.JavaScriptCollectorComponent</component-class>
 	</component>
+	<component>
+		<component-type>org.rcfaces.html.javaScriptItem</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.JavaScriptItemComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.html.cssStyleItem</component-type>
+		<component-class>org.rcfaces.renderkit.html.component.CssStyleItemComponent</component-class>
+	</component>
 	<render-kit>
 		<renderer>
 			<component-family>rcfaces</component-family>

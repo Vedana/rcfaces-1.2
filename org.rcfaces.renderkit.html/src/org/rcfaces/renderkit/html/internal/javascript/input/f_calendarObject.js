@@ -2288,7 +2288,7 @@ var __members = {
 		
 		var unitNames=f_resourceBundle.Get(f_calendarObject).f_get("UNIT_NAMES");
 		
-		var text=unitNames[lastUnit];
+		var text=unitNames.split("|")[lastUnit];
 /*		if (lastUnit==f_calendarObject._DAYOFWEEK_UNIT && lastDate!==undefined) {
 		
 			text=this._locale.f_getDayName(lastDate.getDay(), f_locale.LONG);
@@ -2751,17 +2751,20 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @return void
 	 */
 	_onMonthClick: function(evt, monthButton, date) {
-		var d;
-		var next;
-		
 		if (!this._autoSelection && !f_core.IsAppendMode(evt)) {
 			this._cursorDate=date;
 			this._updateCells(date);
 			this._updateSelection(date);
+
+			this._updateUnit(f_calendarObject._MONTH_UNIT, date);
 			return;
 		}
+
+		var d;
+		var next;
 		
 		switch(this._mode) {
 		case f_calendarObject.DATE_MODE:

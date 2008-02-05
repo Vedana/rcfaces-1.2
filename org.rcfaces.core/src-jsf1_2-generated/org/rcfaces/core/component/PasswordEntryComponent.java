@@ -1,10 +1,10 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.internal.component.Properties;
-import java.util.HashSet;
+import org.rcfaces.core.component.TextEntryComponent;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The passwordEntry Component is based on the standard HTML tag &lt;INPUT TYPE="password"&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
@@ -23,10 +23,6 @@ public class PasswordEntryComponent extends TextEntryComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.passwordEntry";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public PasswordEntryComponent() {
 		setRendererType(COMPONENT_TYPE);

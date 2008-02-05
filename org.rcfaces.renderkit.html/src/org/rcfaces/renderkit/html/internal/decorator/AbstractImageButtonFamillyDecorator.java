@@ -347,11 +347,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writeInputAttributes(writer);
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
-                    if (alternateText != null) {
-                        writer.writeAlt(alternateText);
-                    }
 
-                } else { 
+                } else {
                     // C'est un <a href> !
                     writer.writeHRef("javascript:void(0)");
                     writeInputAttributes(writer);
@@ -361,9 +358,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeClass(getImageClassName(htmlBorderWriter));
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
-                    if (alternateText != null) {
-                        writer.writeAlt(alternateText);
-                    }
                     writer.endElement(IHtmlWriter.IMG);
                 }
 
@@ -429,6 +423,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
+        }
+        if (alternateText != null) {
+            writer.writeAlt(alternateText);
         }
     }
 
@@ -663,6 +660,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writeImageAttributes();
             writer.writeHRef("javascript:void(0)");
 
+            if (alternateText != null) {
+                writer.writeAlt(alternateText);
+            }
+
             String inputId = getInputId(writer, htmlBorderWriter);
             writer.writeId(inputId);
             writer.addSubFocusableComponent(inputId);
@@ -673,9 +674,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             writeImageSrc(writer, imageSrc);
             writeImageSize(writer, imageButtonFamilly);
 
-            if (alternateText != null) {
-                writer.writeAlt(alternateText);
-            }
             writer.endElement(IHtmlWriter.IMG);
         }
 

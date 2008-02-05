@@ -13,10 +13,6 @@ public class MenuSeparatorComponent extends AbstractSeparatorComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuSeparator";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractSeparatorComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public MenuSeparatorComponent() {
 		setRendererType(null);

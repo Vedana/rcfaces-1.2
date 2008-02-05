@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISuggestionEventCapability;
+import javax.el.ValueExpression;
+import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TextEntryComponent;
+import java.util.Arrays;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
-import javax.faces.convert.Converter;
-import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.component.capability.ISuggestionEventCapability;
 
 /**
  * <p>The suggestTextEntry is a <a href="/comps/textEntryCOmponent.html">textEntry Component</a> with an autosuggestion feature that shows in the form of a dropdown list.</p>
@@ -37,7 +37,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","suggestionListener","suggestionConverter","suggestionMinChars","menuListener","maxResultNumber","caseSensitive","suggestionDelayMs","suggestionValue","forceProposal","moreResultsMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"caseSensitive","suggestionDelayMs","filterProperties","moreResultsMessage","suggestionConverter","suggestionListener","suggestionValue","forceProposal","maxResultNumber","orderedItems","menuListener","suggestionMinChars"}));
 	}
 
 	public SuggestTextEntryComponent() {
@@ -369,6 +369,26 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	 */
 	public boolean isMoreResultsMessageSetted() {
 		return engine.isPropertySetted(Properties.MORE_RESULTS_MESSAGE);
+	}
+
+	public boolean isOrderedItems() {
+		return isOrderedItems(null);
+	}
+
+	public boolean isOrderedItems(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.ORDERED_ITEMS, true, facesContext);
+	}
+
+	public void setOrderedItems(boolean orderedItems) {
+		engine.setProperty(Properties.ORDERED_ITEMS, orderedItems);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "orderedItems" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isOrderedItemsSetted() {
+		return engine.isPropertySetted(Properties.ORDERED_ITEMS);
 	}
 
 	protected Set getCameliaFields() {

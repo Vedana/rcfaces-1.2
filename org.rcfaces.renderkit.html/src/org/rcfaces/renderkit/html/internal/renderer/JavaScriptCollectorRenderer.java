@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.component.JavaScriptCollectorComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -34,8 +35,14 @@ public class JavaScriptCollectorRenderer extends AbstractHtmlRenderer {
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
 
+        FacesContext facesContext = htmlRenderContext.getFacesContext();
+
+        JavaScriptCollectorComponent javaScriptCollectorComponent = (JavaScriptCollectorComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
         IJavaScriptRenderContext newJavaScriptRenderContext = new JavaScriptCollectorRenderContext(
-                htmlRenderContext.getFacesContext());
+                htmlRenderContext.getFacesContext(),
+                javaScriptCollectorComponent.isMergeScripts(facesContext));
 
         htmlRenderContext.pushInteractiveRenderComponent(htmlWriter,
                 newJavaScriptRenderContext);

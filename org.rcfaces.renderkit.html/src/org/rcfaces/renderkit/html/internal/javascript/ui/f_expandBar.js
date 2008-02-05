@@ -213,7 +213,7 @@ var __members = {
 			return button;
 		}
 		
-		button=document.getElementById(this.id+f_expandBar._BUTTON_ID_SUFFIX);
+		button=this.ownerDocument.getElementById(this.id+f_expandBar._BUTTON_ID_SUFFIX);
 		if (button) {
 			button.f_link=this;
 		}
@@ -301,6 +301,18 @@ var __members = {
 		if (set) {
 			suffix+="_collapsed";
 		}	
+
+		var alt;
+		if (set) {
+			alt=f_resourceBundle.Get(f_expandBar).f_get("EXPAND_BUTTON");
+			
+		} else {
+			alt=f_resourceBundle.Get(f_expandBar).f_get("COLLAPSE_BUTTON");
+		}
+		var button=this.f_getButton();
+		if (button.alt!=alt) {
+			button.alt=alt;
+		}
 		
 		var cls=this.f_computeStyleClass(suffix);
 		if (cls!=this.className) {
@@ -317,9 +329,7 @@ var __members = {
 			
 			f_core.Debug(f_expandBar, "fa_updateCollapsed: Change text to '"+collapsedText+"'.");
 			
-			var htmlText=f_core.EncodeHtml(collapsedText);
-			
-			f_core.SetTextNode(this._text, htmlText, this._accessKey);
+			f_core.SetTextNode(this._text, collapsedText, this._accessKey);
 		}
 		
 		f_core.Debug(f_expandBar, "fa_updateCollapsed: Call effect '"+effect+"'.");
@@ -448,9 +458,7 @@ var __members = {
 		if (!this.f_isCollapsed() && this._collapsedText) {
 			var textLabel=this._text;
 			if (textLabel) {
-				var htmlText=f_core.EncodeHtml(text);
-				
-				f_core.SetTextNode(textLabel, htmlText, this._accessKey);
+				f_core.SetTextNode(textLabel, text, this._accessKey);
 			}
 		}
 				

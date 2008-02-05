@@ -7,12 +7,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.faces.context.ExternalContext;
@@ -24,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Services;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.util.FilteredContentProvider;
 import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
 import org.xml.sax.Attributes;
 
@@ -52,6 +55,8 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
     private final Map dependenciesById = new HashMap();
 
     private boolean convertSymbols = false;
+
+    private String resourceBundleBaseName = null;
 
     private final Map applicationParameters;
 
@@ -89,7 +94,7 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
         return new JavaScriptFile(module, name, filename, unlocalizedURI,
                 unlocalizedContentLocation, dependencies, contentProvider,
-                convertSymbols);
+                convertSymbols, resourceBundleBaseName);
     }
 
     public IClass getClassByName(String className) {
@@ -125,16 +130,26 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
         private List classes;
 
-        private boolean remapSymbols;
+        private final boolean remapSymbols;
+
+        private final String resourceBundleBaseName;
+
+        private IContentProvider contentProvider;
 
         public JavaScriptFile(IModule module, String name, String filename,
                 String unlocalizedURI, URL unlocalizedContentLocation,
                 IHierarchicalFile[] dependencies,
-                IContentProvider contentProvider, boolean remapSymbols) {
+                IContentProvider contentProvider, boolean remapSymbols,
+                String resourceBundleBaseName) {
             super(module, name, filename, unlocalizedURI,
                     unlocalizedContentLocation, dependencies, contentProvider);
 
             this.remapSymbols = remapSymbols;
+            this.resourceBundleBaseName = resourceBundleBaseName;
+
+            if (resourceBundleBaseName != null) {
+                this.contentProvider = new LocalizedContentProvider(this);
+            }
         }
 
         public IClass[] listClasses() {
@@ -169,6 +184,13 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
                     applicationParameters);
         }
 
+        protected IContentProvider computeContentProvider() {
+            if (contentProvider != null) {
+                return contentProvider;
+            }
+            return super.computeContentProvider();
+        }
+
     }
 
     protected Locale adaptLocale(Locale locale, IFile file) {
@@ -198,11 +220,15 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
 
                 convertSymbols = (convertSymbolsValue == null)
                         || ("true".equalsIgnoreCase(convertSymbolsValue));
+
+                resourceBundleBaseName = attributes
+                        .getValue("resourcesBundleBaseName");
             }
 
             public void end(String namespace, String name) throws Exception {
 
                 convertSymbols = false;
+                resourceBundleBaseName = null;
 
                 super.end(namespace, name);
             }
@@ -411,6 +437,11 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
         public IHierarchicalFile getFile() {
             return file;
         }
+
+        public String getResourceBundleName() {
+            return ((JavaScriptFile) getFile()).resourceBundleBaseName;
+        }
+
     }
 
     public String getBaseURI(IProcessContext processContext) {
@@ -441,4 +472,113 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
         }
         return uri;
     }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public class LocalizedContentProvider extends FilteredContentProvider {
+
+        private final JavaScriptFile javaScriptFile;
+
+        public LocalizedContentProvider(JavaScriptFile javaScriptFile) {
+            this.javaScriptFile = javaScriptFile;
+        }
+
+        protected String updateBuffer(String buffer, URL url, Locale locale) {
+            if (locale == null) {
+                return super.updateBuffer(buffer, url, locale);
+            }
+
+            IClass cls[] = javaScriptFile.listClasses();
+            if (cls.length < 1) {
+                return super.updateBuffer(buffer, url, locale);
+            }
+
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                    javaScriptFile.resourceBundleBaseName, locale);
+
+            StringAppender sa = new StringAppender(buffer, 8000);
+
+            for (int i = 0; i < cls.length; i++) {
+                String className = cls[i].getName();
+
+                String key = className + ".";
+
+                boolean first = true;
+
+                Enumeration keys = resourceBundle.getKeys();
+                for (; keys.hasMoreElements();) {
+                    String resourceKey = (String) keys.nextElement();
+                    if (resourceKey.startsWith(key) == false) {
+                        continue;
+                    }
+
+                    String value = resourceBundle.getString(resourceKey);
+
+                    if (first) {
+                        first = false;
+
+                        sa.append("f_resourceBundle.Define(").append(className)
+                                .append(",{\n");
+                    } else {
+                        sa.append(",\n");
+                    }
+
+                    sa.append(resourceKey.substring(key.length())).append(':');
+
+                    appendString(sa, value);
+                }
+
+                if (first == false) {
+                    sa.append("\n});\n");
+                }
+            }
+
+            return super.updateBuffer(sa.toString(), url, locale);
+        }
+    }
+
+    private static StringAppender appendString(StringAppender sa, String str) {
+        char escape = '\"';
+        if (str.indexOf('\"') >= 0 && str.indexOf('\'') < 0) {
+            escape = '\'';
+        }
+
+        sa.append(escape);
+
+        char chs[] = str.toCharArray();
+        for (int i = 0; i < chs.length; i++) {
+            char c = chs[i];
+
+            if (c == '\n') {
+                sa.append("\\n");
+                continue;
+            }
+            if (c == '\r') {
+                sa.append("\\r");
+                continue;
+            }
+            if (c == escape) {
+                sa.append('\\').append(escape);
+                continue;
+            }
+            if (c == '\t') {
+                sa.append("\\t");
+                continue;
+            }
+            if (c == '\\') {
+                sa.append("\\\\");
+                continue;
+            }
+
+            sa.append(c);
+        }
+
+        sa.append(escape);
+
+        return sa;
+    }
+
 }

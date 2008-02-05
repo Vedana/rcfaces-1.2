@@ -201,6 +201,11 @@ public abstract class AbstractRepository implements IRepository {
             if (contentProvider != null) {
                 return contentProvider;
             }
+
+            return computeContentProvider();
+        }
+
+        protected IContentProvider computeContentProvider() {
             return getDefaultContentProvider();
         }
 
@@ -220,7 +225,7 @@ public abstract class AbstractRepository implements IRepository {
                         unlocalizedURI, unlocalizedContentLocation);
                 return unlocalizedFile;
             }
-          
+
             locale = adaptLocale(locale, this);
 
             if (localizedFiles == null) {

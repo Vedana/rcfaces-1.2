@@ -96,6 +96,12 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
                     moreResultsMessage);
         }
 
+        boolean orderedResult = suggestTextEntryComponent
+                .isOrderedItems(facesContext);
+        if (orderedResult == false) {
+            htmlWriter.writeAttribute("v:orderedResult", false);
+        }
+
         return htmlWriter;
     }
 

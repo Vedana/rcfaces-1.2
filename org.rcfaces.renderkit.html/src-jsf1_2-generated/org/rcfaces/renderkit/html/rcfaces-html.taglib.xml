@@ -50,4 +50,18 @@
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
+	<tag>
+		<tag-name>javaScriptItem</tag-name>
+		<component>
+			<component-type>org.rcfaces.html.javaScriptItem</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>cssStyleItem</tag-name>
+		<component>
+			<component-type>org.rcfaces.html.cssStyleItem</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
 </facelet-taglib>

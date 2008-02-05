@@ -8,7 +8,7 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  */
  
-var __resources = {
+f_resourceBundle.Define(f_locale, {
 /*	MONTH_SHORT_NAMES: [ "J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D" ],
 	MONTH_MED_NAMES: [ "jan", "fév", "mar", "avr", "mai", "juin", "juil", "août", "sep", "oct", "nov", "déc" ],
 	MONTH_LONG_NAMES: [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" ],
@@ -45,6 +45,4 @@ var __resources = {
 	javax_faces_validator_LongRangeValidator_MINIMUM: "$$$javax.faces.validator.LongRangeValidator.MINIMUM$$$",
 	javax_faces_validator_LongRangeValidator_TYPE: "$$$javax.faces.validator.LongRangeValidator.TYPE$$$"
 	
-}
-
-f_resourceBundle.Define(f_locale, __resources);
+});

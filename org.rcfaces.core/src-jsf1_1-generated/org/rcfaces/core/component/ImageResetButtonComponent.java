@@ -24,10 +24,6 @@ public class ImageResetButtonComponent extends ImageButtonComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageResetButton";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public ImageResetButtonComponent() {
 		setRendererType(COMPONENT_TYPE);

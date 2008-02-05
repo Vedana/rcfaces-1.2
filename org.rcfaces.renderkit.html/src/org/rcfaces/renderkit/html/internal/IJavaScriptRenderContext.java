@@ -4,11 +4,11 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
+import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 
 /**
  * 
@@ -69,11 +69,18 @@ public interface IJavaScriptRenderContext extends IScriptRenderContext {
             boolean sendComplete, AbstractHtmlRenderer htmlComponentRenderer)
             throws WriterException;
 
-    void declareLazyJavaScriptRenderer(IComponentWriter writer);
+    void declareLazyJavaScriptRenderer(IHtmlWriter writer);
 
-    boolean isJavaScriptRendererDeclaredLazy(IComponentWriter writer);
+    boolean isJavaScriptRendererDeclaredLazy(IHtmlWriter writer);
 
     boolean isCollectorMode();
 
     void appendRequiredFiles(IFile[] files);
+
+    void includeJavaScript(IHtmlWriter htmlWriter, String src,
+            String javaScriptSrcCharSet) throws WriterException;
+
+    void writeRaw(IHtmlWriter htmlWriter, String text) throws WriterException;
+
+    IJavaScriptRepository getRepository();
 }

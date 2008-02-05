@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.SuggestTextEntryComponent;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.SuggestTextEntryComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 
@@ -29,6 +29,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 	private ValueExpression suggestionValue;
 	private ValueExpression suggestionConverter;
 	private ValueExpression moreResultsMessage;
+	private ValueExpression orderedItems;
 	public String getComponentType() {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
@@ -77,6 +78,10 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		this.moreResultsMessage = moreResultsMessage;
 	}
 
+	public final void setOrderedItems(ValueExpression orderedItems) {
+		this.orderedItems = orderedItems;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SuggestTextEntryComponent.COMPONENT_TYPE==getComponentType()) {
@@ -91,6 +96,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  suggestionValue='"+suggestionValue+"'");
 			LOG.debug("  suggestionConverter='"+suggestionConverter+"'");
 			LOG.debug("  moreResultsMessage='"+moreResultsMessage+"'");
+			LOG.debug("  orderedItems='"+orderedItems+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -187,6 +193,15 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 				component.setMoreResultsMessage(moreResultsMessage.getExpressionString());
 			}
 		}
+
+		if (orderedItems != null) {
+			if (orderedItems.isLiteralText()==false) {
+				component.setValueExpression(Properties.ORDERED_ITEMS, orderedItems);
+
+			} else {
+				component.setOrderedItems(getBool(orderedItems.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -201,6 +216,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		suggestionValue = null;
 		suggestionConverter = null;
 		moreResultsMessage = null;
+		orderedItems = null;
 
 		super.release();
 	}

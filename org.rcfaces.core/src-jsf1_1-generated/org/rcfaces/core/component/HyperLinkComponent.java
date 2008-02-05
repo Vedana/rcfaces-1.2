@@ -23,10 +23,6 @@ public class HyperLinkComponent extends ButtonComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.hyperLink";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public HyperLinkComponent() {
 		setRendererType(COMPONENT_TYPE);

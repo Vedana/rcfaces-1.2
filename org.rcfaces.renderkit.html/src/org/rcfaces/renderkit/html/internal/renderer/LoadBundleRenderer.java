@@ -146,7 +146,9 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
         }
 
         if (clientSide) {
-            JavaScriptRenderer.addRequires(htmlWriter, null,
+            JavaScriptRenderer.addRequires(htmlWriter, htmlWriter
+                    .getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getJavaScriptRenderContext(), null,
                     BUNDLE_REQUIRED_CLASSES, null, null);
 
             IJavaScriptRepository repository = JavaScriptRepositoryServlet

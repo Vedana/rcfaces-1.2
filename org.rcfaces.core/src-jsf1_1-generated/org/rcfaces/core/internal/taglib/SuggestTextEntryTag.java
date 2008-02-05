@@ -29,6 +29,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 	private String suggestionValue;
 	private String suggestionConverter;
 	private String moreResultsMessage;
+	private String orderedItems;
 	public String getComponentType() {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
@@ -93,6 +94,10 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		this.moreResultsMessage = moreResultsMessage;
 	}
 
+	public final void setOrderedItems(String orderedItems) {
+		this.orderedItems = orderedItems;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SuggestTextEntryComponent.COMPONENT_TYPE==getComponentType()) {
@@ -107,6 +112,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  suggestionValue='"+suggestionValue+"'");
 			LOG.debug("  suggestionConverter='"+suggestionConverter+"'");
 			LOG.debug("  moreResultsMessage='"+moreResultsMessage+"'");
+			LOG.debug("  orderedItems='"+orderedItems+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -213,6 +219,16 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 				component.setMoreResultsMessage(moreResultsMessage);
 			}
 		}
+
+		if (orderedItems != null) {
+			if (isValueReference(orderedItems)) {
+				ValueBinding vb = application.createValueBinding(orderedItems);
+				component.setValueBinding(Properties.ORDERED_ITEMS, vb);
+
+			} else {
+				component.setOrderedItems(getBool(orderedItems));
+			}
+		}
 	}
 
 	public void release() {
@@ -227,6 +243,7 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		suggestionValue = null;
 		suggestionConverter = null;
 		moreResultsMessage = null;
+		orderedItems = null;
 
 		super.release();
 	}

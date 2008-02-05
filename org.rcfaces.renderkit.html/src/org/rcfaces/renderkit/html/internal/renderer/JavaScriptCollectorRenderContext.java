@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import java.io.CharArrayWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -20,8 +21,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.lang.OrderedSet;
@@ -51,30 +52,63 @@ public class JavaScriptCollectorRenderContext extends
 
     private static final Object DISABLE_VINIT_SEARCH_PROPERTY = "camelia.jsCollector.disable.vinit";
 
-    private static final boolean PERFORM_ACCESSKEYS = false; // Le focus devrait faire l'affaire
+    private static final boolean PERFORM_ACCESSKEYS = false;
 
-    public final Set components = new OrderedSet();
+    // Le focus devrait faire l'affaire
 
-    public JavaScriptCollectorRenderContext(FacesContext facesContext) {
+    private final Set components = new OrderedSet();
+
+    private final List scriptsToInclude = new ArrayList();
+
+    private final List rawsToInclude = new ArrayList();
+
+    private final boolean mergeScripts;
+
+    private static final Integer UTF8_charset = new Integer(0);
+
+    private static final Map charSets = new HashMap(8);
+    static {
+        charSets.put("utf8", UTF8_charset);
+        charSets.put("utf-8", UTF8_charset);
+        charSets.put("utf_8", UTF8_charset);
+
+        for (int i = 1; i < 16; i++) {
+            Integer intISO8859x = new Integer(i);
+
+            charSets.put("iso8859" + i, intISO8859x);
+            charSets.put("iso8859-" + i, intISO8859x);
+            charSets.put("iso8859_" + i, intISO8859x);
+            charSets.put("iso-8859-" + i, intISO8859x);
+            charSets.put("8859-" + i, intISO8859x);
+            charSets.put("8859_" + i, intISO8859x);
+        }
+    }
+
+    public JavaScriptCollectorRenderContext(FacesContext facesContext,
+            boolean mergeScripts) {
         super(facesContext);
+
+        this.mergeScripts = mergeScripts;
     }
 
     protected JavaScriptCollectorRenderContext(
             JavaScriptCollectorRenderContext parent) {
         super(parent);
+
+        this.mergeScripts = parent.mergeScripts;
     }
 
     public IJavaScriptRenderContext createChild() {
         return new JavaScriptCollectorRenderContext(this);
     }
 
-    public void declareLazyJavaScriptRenderer(IComponentWriter writer) {
+    public void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
         // Ce sont des lazys mais ils n'ont pas besoin d'être initialisés
 
         // components.add(writer.getComponentRenderContext().getComponentClientId());
     }
 
-    public boolean isJavaScriptRendererDeclaredLazy(IComponentWriter writer) {
+    public boolean isJavaScriptRendererDeclaredLazy(IHtmlWriter writer) {
         return false;
     }
 
@@ -575,6 +609,46 @@ public class JavaScriptCollectorRenderContext extends
 
         }
 
+        if (scriptsToInclude.isEmpty() == false) {
+            if (jsWriter == null) {
+                jsWriter = InitRenderer.openScriptTag(htmlWriter);
+            }
+
+            if (logProfiling) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "null,\"javascriptCollector.scripts("
+                                + (scriptsToInclude.size() / 2) + ")\");");
+            }
+
+            jsWriter.writeCall("f_core", "IncludesScript");
+
+            includesScript(jsWriter);
+
+            jsWriter.writeln(");");
+
+            scriptsToInclude.clear();
+        }
+
+        if (rawsToInclude.isEmpty() == false) {
+            if (jsWriter == null) {
+                jsWriter = InitRenderer.openScriptTag(htmlWriter);
+            }
+
+            if (logProfiling) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "null,\"javascriptCollector.raws("
+                                + (scriptsToInclude.size()) + ")\");");
+            }
+
+            for (Iterator it = rawsToInclude.iterator(); it.hasNext();) {
+                String text = (String) it.next();
+
+                jsWriter.writeln(text);
+            }
+
+            rawsToInclude.clear();
+        }
+
         if (logProfiling) {
             if (jsWriter != null) {
                 jsWriter.writeCall("f_core", "Profile").writeln(
@@ -587,6 +661,88 @@ public class JavaScriptCollectorRenderContext extends
         }
 
         components.clear();
+    }
+
+    private void includesScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+
+        if (mergeScripts) {
+            // Resoudre les urls
+
+            StringAppender sa = new StringAppender("jsmerge::",
+                    (scriptsToInclude.size() / 2) * 32);
+
+            boolean first = true;
+            for (Iterator it = scriptsToInclude.iterator(); it.hasNext();) {
+                String src = (String) it.next();
+                String charSet = (String) it.next();
+
+                if (charSet == null) {
+                    charSet = "UTF-8";
+                }
+
+                if (first) {
+                    first = false;
+                } else {
+                    sa.append('+');
+                }
+
+                encodeParameter(sa, charSet);
+                sa.append(':');
+                encodeParameter(sa, src);
+            }
+
+            String collectedURL = null;
+
+            jsWriter.writeString(collectedURL);
+
+            return;
+        }
+
+        boolean first = true;
+        for (Iterator it = scriptsToInclude.iterator(); it.hasNext();) {
+            String src = (String) it.next();
+            String charSet = (String) it.next();
+
+            if (first) {
+                first = false;
+            } else {
+                jsWriter.write(',');
+            }
+
+            jsWriter.writeString(src);
+
+            Integer charsetKey = UTF8_charset;
+            if (charSet != null && charSet.length() > 0) {
+                charSet = charSet.toLowerCase().trim();
+
+                charsetKey = (Integer) charSets.get(charSet);
+                if (charsetKey == null) {
+                    jsWriter.write(',').writeString(charSet);
+                    continue;
+                }
+            }
+
+            if (charsetKey == UTF8_charset && it.hasNext() == false) {
+                break;
+            }
+
+            jsWriter.write(',').writeInt(charsetKey.intValue());
+        }
+    }
+
+    private void encodeParameter(StringAppender sa, String value) {
+        char chs[] = value.toCharArray();
+
+        for (int i = 0; i < chs.length; i++) {
+            char c = chs[i];
+
+            if (Character.isLetterOrDigit(c) || c == '/' || c == '.') {
+                sa.append(c);
+                continue;
+            }
+        }
+
     }
 
     protected boolean isProfilerOn(IHtmlWriter writer) {
@@ -715,6 +871,18 @@ public class JavaScriptCollectorRenderContext extends
 
     public boolean isCollectorMode() {
         return true;
+    }
+
+    public void includeJavaScript(IHtmlWriter htmlWriter, String src,
+            String javaScriptSrcCharSet) throws WriterException {
+
+        scriptsToInclude.add(src);
+        scriptsToInclude.add(javaScriptSrcCharSet);
+    }
+
+    public void writeRaw(IHtmlWriter htmlWriter, String text)
+            throws WriterException {
+        rawsToInclude.add(text);
     }
 
     /**

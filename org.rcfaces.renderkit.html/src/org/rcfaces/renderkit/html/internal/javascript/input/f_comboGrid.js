@@ -609,6 +609,9 @@ var __members = {
 		var input=this.f_getInput();
 		
 		if (this.f_isEditable() && !this.f_isReadOnly()) {
+			
+			this.setAttribute("v:notFocusedValue", input.value);
+			
 			input.value=this._inputValue;
 		}
 		

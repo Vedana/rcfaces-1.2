@@ -17,6 +17,16 @@ var __statics = {
 	TITLE_DECORATOR: "title",
 	
 	/**
+	 * @field private static number
+	 */
+	_ShellIdentifier: 0,
+	
+	/**
+	 * @field private static Object
+	 */
+	_FrameShells: undefined,
+	
+	/**
 	 * @method private static
 	 * @param Event evt
 	 * @return void
@@ -194,7 +204,7 @@ var __statics = {
 		iframe.style.top=y+"px";
 	},
 	/**
- * @method private static
+ 	 * @method private static
 	 * @param Event evt
 	 * @return void
 	 * @context object:shellDecorator
@@ -214,8 +224,17 @@ var __statics = {
 		f_core.RemoveEventListener(shellDocument, "mouseup",   f_shellDecorator._TitleMove_dragStop, shellDocument.body);
 		
 	},
+	/**
+	 * @method hidden static 
+	 * @param number shellIdentifier
+	 * @return f_shell
+	 */
+	GetShellFromIdentifier: function(shellIdentifier) {
+		return f_shellDecorator._FrameShells[shellIdentifier];
+	},
 	Finalizer: function() {
 		f_shellDecorator._decoratorDragged=undefined; // f_shellDecorator
+		f_shellDecorator._FrameShells=undefined; // Map<id, shell>
 	}
 }
 
@@ -261,10 +280,10 @@ var __members = {
 		var titleMoveButton=this._titleMoveButton;
 		if (titleMoveButton) {
 			this._titleMoveButton=undefined;
-			
-			titleMoveButton._shellDecorator=undefined;
-			
+					
 			try {
+				titleMoveButton._shellDecorator=undefined;
+
 				titleMoveButton.onmousedown=null;
 			} catch (x) {
 				// Le composant peut ne plus être rattaché !
@@ -337,7 +356,18 @@ var __members = {
 
 		iframe.id = this._shell.f_getId()+"::iframe";
 		iframe.name = iframe.id+"::name";
-		iframe._shell=this._shell;
+	
+		var shell=this._shell;
+		
+		var shellIdentifier="rcfaces_shell_"+(f_shellDecorator._ShellIdentifier++);
+		iframe._shellIdentifier=shellIdentifier;
+		
+		var frameShells=f_shellDecorator._FrameShells;
+		if (!frameShells) {
+			frameShells=new Object;
+			f_shellDecorator._FrameShells=frameShells;
+		}
+		frameShells[shellIdentifier]=shell;
 
 		iframe.frameBorder = 0;
 		iframe.scrolling="no";
@@ -370,7 +400,7 @@ var __members = {
 				
 				self.f_decorateFrame(this);
 				
-				functionWhenReady.call(window, self, self._shell);
+				functionWhenReady.call(window, self, shell);
 			};
 			
 		} else {
@@ -382,7 +412,7 @@ var __members = {
 				
 				self.f_decorateFrame(this);
 				
-				functionWhenReady.call(window, self, self._shell);
+				functionWhenReady.call(window, self, shell);
 			};
 		}
 
@@ -415,8 +445,8 @@ var __members = {
 	 * @return void
 	 */
 	f_finalizeIframe: function(iframe) {
-		iframe._shell=undefined;
 		iframe.onreadystatechange=null;
+		// iframe._shellIdentifier=undefined;  // number
 		
 		f_core.VerifyProperties(iframe);		
 	},
@@ -555,8 +585,6 @@ var __members = {
 	
 		var title=this._decorationValues[f_shellDecorator.TITLE_DECORATOR];
 		if (title) {
-			title=f_core.EncodeHtml(title);			
-			
 			this._title=f_core.CreateElement(parent, "div", {
 				className: "f_shellDecorator_title_text",
 				textNode: title

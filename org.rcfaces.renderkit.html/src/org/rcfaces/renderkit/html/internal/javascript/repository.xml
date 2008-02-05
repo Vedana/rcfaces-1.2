@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<repository id="javascript" baseDirectory="org/rcfaces/renderkit/html/internal/javascript" remapSymbols="false">
+<repository id="javascript" baseDirectory="org/rcfaces/renderkit/html/internal/javascript" remapSymbols="false" resourcesBundleBaseName="org.rcfaces.renderkit.html.internal.LocalStrings">
 	<module id="core" defaultCoreModule="true">
 		<file name="boot.js">
 		</file>
@@ -105,7 +105,7 @@
 				<required-class name="f_messageObject" />
 			</class>
 		</file>
-		<file name="util/f_locale.js" contentProvider="org.rcfaces.renderkit.html.internal.javascript.LocaleContentProvider">
+		<file name="util/f_locale.js" contentProvider="org.rcfaces.renderkit.html.internal.javascript.SystemLocaleContentProvider">
 			<class name="f_locale">
 				<required-class name="f_object" />
 			</class>

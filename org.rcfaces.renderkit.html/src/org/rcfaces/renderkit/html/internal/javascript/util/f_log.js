@@ -102,6 +102,14 @@ var __statics = {
 		f_core.Assert(typeof(logName)=="string", "f_log.GetLog: logname parameter is invalid. ('"+logName+"')");
 
 		var logs=f_log._logs;
+		if (window._rcfacesExiting) {
+			if (logs) {
+				return logs[logName];
+			}
+			
+			return null;
+		}
+	
 		if (!logs) {
 			logs=new Object;
 			f_log._logs=logs;

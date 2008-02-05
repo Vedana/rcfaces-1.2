@@ -1274,4 +1274,26 @@ public class HtmlTools {
             start = position.start;
         }
     }
+
+    public static void includeScript(IHtmlWriter writer, String src,
+            String javascriptCharset) throws WriterException {
+    
+        IHtmlProcessContext htmlProcessContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getHtmlProcessContext();
+    
+        writer.startElement(IHtmlWriter.SCRIPT);
+    
+        if (htmlProcessContext.useMetaContentScriptType() == false) {
+            writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
+        }
+    
+        writer.writeSrc(src);
+    
+        if (javascriptCharset != null) {
+            writer.writeCharset(javascriptCharset);
+        }
+    
+        writer.endElement(IHtmlWriter.SCRIPT);
+    }
 }

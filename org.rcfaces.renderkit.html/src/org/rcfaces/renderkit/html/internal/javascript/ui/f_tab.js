@@ -171,9 +171,9 @@ var __members = {
 		this._hoverImageURL=hoverImageURL;
 		this._selectedImageURL=selectedImageURL;
 		
-		var mask=document.createElement("div");
-		this._mask=mask;
+		var mask=this.ownerDocument.createElement("div");
 		mask.className="f_tabbedPane_tab_mask";
+		this._mask=mask;
 		
 		f_core.InsertBefore(this, mask, this.firstChild);
 	},

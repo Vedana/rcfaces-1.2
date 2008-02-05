@@ -16,9 +16,9 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.renderkit.html.internal.renderer.InitRenderer;
 
 /**
  * 
@@ -166,15 +166,16 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
         }
     }
 
-    public void declareLazyJavaScriptRenderer(IComponentWriter writer) {
+    public void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
         writer.getComponentRenderContext().setAttribute(
                 LAZY_JAVASCRIPT_RENDERER, Boolean.TRUE);
     }
 
-    public boolean isJavaScriptRendererDeclaredLazy(IComponentWriter writer) {
-        return writer.getComponentRenderContext().containsAttribute(LAZY_JAVASCRIPT_RENDERER);
+    public boolean isJavaScriptRendererDeclaredLazy(IHtmlWriter writer) {
+        return writer.getComponentRenderContext().containsAttribute(
+                LAZY_JAVASCRIPT_RENDERER);
     }
-    
+
     public void initializeJavaScriptComponent(IJavaScriptWriter writer)
             throws WriterException {
 
@@ -206,6 +207,22 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
     public void pushUnitializedComponent(String clientId) {
         uninitializedComponents.add(clientId);
+    }
+
+    public void includeJavaScript(IHtmlWriter htmlWriter, String src,
+            String javaScriptSrcCharSet) throws WriterException {
+        HtmlTools.includeScript(htmlWriter, src, javaScriptSrcCharSet);
+    }
+
+    public void writeRaw(IHtmlWriter htmlWriter, String text)
+            throws WriterException {
+
+        IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
+
+        jsWriter.write(text);
+
+        jsWriter.end();
+
     }
 
 }

@@ -259,12 +259,18 @@ f_classLoader.prototype = {
 		f_core.Assert(classes, "f_classLoader.f_onExit: Invalid Classes pool !");
 		this._classes=undefined;
 	
+		var systemClasses;
+	
 		for (var claz in classes) {
 			var cls = classes[claz];
+
+			/*
+			Surtout pas ! Car des méthodés statiques ont put être utilisées sans une seule instanciation ...  
 	
 			if (!cls._initialized) {
 				continue;
 			}
+			*/
 	
 			var staticMembers=cls._staticMembers;
 			if (!staticMembers) {
@@ -273,6 +279,14 @@ f_classLoader.prototype = {
 	
 			var staticFinalizer=staticMembers.Finalizer;
 			if (!staticFinalizer) {
+				continue;
+			}
+
+			if (cls._systemClass) {
+				if (!systemClasses) {
+					systemClasses=new Array;
+				}
+				systemClasses.push(cls);
 				continue;
 			}
 		
@@ -291,13 +305,18 @@ f_classLoader.prototype = {
 		var aspects=this._aspects;
 		f_core.Assert(aspects, "f_classLoader.f_onExit: Invalid Aspects pool !");
 		this._aspects=undefined;
-		
+				
 		for (var name in aspects) {
 			var aspect = aspects[name];
 	
+			/*
+			Surtout pas ! Car des méthodés statiques ont put être utilisées sans une seule instanciation ...  
+			 
 			if (!aspect._initialized) {
 				continue;
 			}
+			
+			*/
 	
 			var staticMembers=aspect._staticMembers;
 			if (!staticMembers) {
@@ -317,6 +336,35 @@ f_classLoader.prototype = {
 			} catch (x) {
 				f_core.Error("f_classLoader", "f_onExit: Call of method Finalizer of aspect '"+aspect._name+"' throws exception.", x);
 			}
+		}		
+
+		f_core.Profile(null, "f_classLoader.onExit.clean(aspects)");
+
+		if (systemClasses) {
+			for(var i=0;i<systemClasses.length;i++) {
+				var cls=systemClasses[i];
+				
+				var staticMembers=cls._staticMembers;
+				if (!staticMembers) {
+					continue;
+				}
+		
+				var staticFinalizer=staticMembers.Finalizer;
+				if (!staticFinalizer) {
+					continue;
+				}
+			
+				f_core.Assert(typeof(staticFinalizer)=="function", "f_classLoader.f_onExit: Type of Finalizer callback of class '"+cls._name+"' is not a function  ! ("+staticFinalizer+")");
+				
+				try {
+					staticFinalizer.call(cls);
+					
+				} catch (x) {
+					f_core.Error("f_classLoader", "f_onExit: Call of method Finalizer of class '"+cls._name+"' throws exception.", x);
+				}			
+			}
+			
+			f_core.Profile(null, "f_classLoader.onExit.clean(systemClasses)");
 		}		
 
 		var win=this._window;
@@ -1460,10 +1508,10 @@ f_classLoader._MakeClassName=function(claz, lookId) {
 
 /**
  * @method hidden static
- * @param Object... object
+ * @param Object... objects
  * @return void
  */
-f_classLoader.Destroy=function(object1, object2) {
+f_classLoader.Destroy=function(objects) {
 
 	var lastClassLoader=undefined;
 	var toDestroy=undefined;

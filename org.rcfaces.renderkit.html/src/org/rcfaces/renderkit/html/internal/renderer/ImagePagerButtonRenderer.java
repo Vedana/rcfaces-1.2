@@ -3,9 +3,13 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.text.MessageFormat;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ImagePagerButtonComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -23,6 +27,9 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 public class ImagePagerButtonRenderer extends ImageButtonRenderer {
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory
+            .getLog(ImagePagerButtonRenderer.class);
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_PAGER_BUTTON;
     }
@@ -39,8 +46,53 @@ public class ImagePagerButtonRenderer extends ImageButtonRenderer {
             imagePagerButtonComponent.setVisible(false);
         }
 
-        // Il faut intialiser le bouton au début pour retirer le disabled si necessaire !
-        ((IHtmlWriter)writer).getJavaScriptEnableMode().enableOnInit();
+        if (imagePagerButtonComponent.getAlternateText(facesContext) == null) {
+            String type = imagePagerButtonComponent.getType(facesContext);
+
+            if (type != null) {
+                type = type.trim().toLowerCase();
+            }
+
+            if (type != null && type.length() > 0) {
+                String key = null;
+                Object arguments[] = null;
+                if (Character.isDigit(type.charAt(0))) {
+                    try {
+                        int page = Integer.parseInt(type);
+
+                        key = "f_imagePagerButton.INDEX";
+                        arguments = new Integer[] { new Integer(page) };
+
+                    } catch (NumberFormatException ex) {
+                        LOG.debug(ex);
+                    }
+                }
+
+                if (key == null) {
+                    if ("prev".equals(type)) {
+                        type = "PREVIOUS";
+                    }
+
+                    key = "f_imagePagerButton." + type.toUpperCase();
+                }
+
+                if (key != null) {
+                    String alt = getResourceBundleValue((IHtmlWriter) writer,
+                            key);
+                    if (alt != null) {
+                        if (arguments != null) {
+                            alt = MessageFormat.format(alt, arguments);
+                        }
+
+                        imagePagerButtonComponent.setAlternateText(alt);
+                    }
+                }
+            }
+        }
+
+        // Il faut intialiser le bouton au début pour retirer le disabled si
+        // necessaire !
+        ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(writer);
     }

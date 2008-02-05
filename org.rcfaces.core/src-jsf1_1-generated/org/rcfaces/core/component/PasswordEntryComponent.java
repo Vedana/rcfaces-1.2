@@ -23,10 +23,6 @@ public class PasswordEntryComponent extends TextEntryComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.passwordEntry";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public PasswordEntryComponent() {
 		setRendererType(COMPONENT_TYPE);

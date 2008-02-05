@@ -10,6 +10,6 @@
  
 var __resources = {
 
-	STATUS_ERROR: "Erreur de status (connection rompue ?)" // @TODO
+	STATUS_ERROR: "Erreur de status (connection rompue ?)"
 }
 f_resourceBundle.Define(f_httpRequest, __resources);

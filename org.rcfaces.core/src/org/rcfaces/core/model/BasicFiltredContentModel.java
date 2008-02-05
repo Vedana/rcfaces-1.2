@@ -34,5 +34,4 @@ public class BasicFiltredContentModel extends BasicContentModel implements
     protected IFilterProperties getFilter() {
         return filter;
     }
-
 }

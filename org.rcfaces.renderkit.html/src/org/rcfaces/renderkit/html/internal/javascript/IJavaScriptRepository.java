@@ -41,5 +41,7 @@ public interface IJavaScriptRepository extends IHierarchicalRepository {
         IClass[] listRequiredClasses(String requireId);
 
         IHierarchicalFile[] listRequiredResources(String requiredId);
+
+        String getResourceBundleName();
     }
 }

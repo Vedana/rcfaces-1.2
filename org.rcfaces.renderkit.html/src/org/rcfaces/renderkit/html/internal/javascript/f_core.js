@@ -303,36 +303,52 @@ var f_core = {
 	
 			var log=f_log.GetLog(name);
 			var fct;
-			
-			switch(level) {
-			case 0:
-				fct=log.f_fatal;
-				break;
-
-			case 1:
-				fct=log.f_error;
-				break;
-
-			case 2:
-				fct=log.f_warn;
-				break;
+						
+			if (log) { 
+				switch(level) {
+				case 0:
+					fct=log.f_fatal;
+					break;
 	
-			case 3:
-				fct=log.f_info;
-				break;
-				
-			case 4:
-				fct=log.f_debug;
-				break;
-				
-			case 5:
-				fct=log.f_trace;
-				break;
-				
-			default:
-				fct=log.f_error;
+				case 1:
+					fct=log.f_error;
+					break;
+	
+				case 2:
+					fct=log.f_warn;
+					break;
+		
+				case 3:
+					fct=log.f_info;
+					break;
+					
+				case 4:
+					fct=log.f_debug;
+					break;
+					
+				case 5:
+					fct=log.f_trace;
+					break;
+					
+				default:
+					fct=log.f_error;
+				}
 			}
 			
+			if (!fct && window._rcfacesExiting) {
+				// Ok normal ...
+				if (level<2) {
+					var msg="Error: ("+name+"): "+message;
+					if (exception) {
+						msg+="\nException:\n"+exception;
+					}
+					
+					alert(msg);
+				}
+				
+				return false;
+			}
+	
 			f_core.Assert(typeof(fct)=="function", "f_core._AddLog: Log function is invalid '"+fct+"'.");
 			if (!fct) {
 				return false;
@@ -1338,9 +1354,19 @@ var f_core = {
 						if (!name.indexOf("css")) { /* ==0 !!! */
 							element.style[name.substring(3, 4).toLowerCase()+name.substring(4)]=value;
 							break;
+							
+						}
+						
+						switch(typeof(value)) {
+						case "function":
+						case "object":
+							element[name]=value;
+							break;
+							
+						default:
+							element.setAttribute(name, value);
 						}
 									
-						element.setAttribute(name, value);
 					}
 				}
 			}
@@ -1370,7 +1396,12 @@ var f_core = {
 		f_core.Assert(accessKey===undefined || accessKey===null || typeof(accessKey)=="string", "f_core.SetTextNode: Invalid accessKey parameter ("+accessKey+")");
 		
 		var doc=component.ownerDocument;
-		
+
+/*		
+		if (text && f_core.IsGecko()) {
+			text=f_core.EncodeHtml(text);			
+		}
+	*/	
 		if (text && accessKey && accessKey.length) {
 			var idx=text.toLowerCase().indexOf(accessKey.toLowerCase());
 			if (idx>=0) {
@@ -1850,7 +1881,7 @@ var f_core = {
 					postSubmitListener.call(f_core, form);
 					
 				} catch (x) {
-					f_core.Error(f_core, "_Submit: PostSubmitListener ("+pos+") threw an exception.", x);
+					f_core.Error(f_core, "_Submit: PostSubmitListener ("+postSubmitListener+") threw an exception.", x);
 				}
 			}
 	
@@ -2683,9 +2714,11 @@ var f_core = {
 				// Transforme les &quote; =>  "
 				// et pour finir transforme les &amp; => &
 
-				if (value.length>4 && value.indexOf('&')>=0) {
+/*
+				if (value.length>4 && value.indexOf('&')>=0 && f_core.IsGecko()) {
 					value=value.replace(/&quote;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, "&");
 				}
+				*/
 
 				return value;
 			}
@@ -5160,7 +5193,12 @@ var f_core = {
 	Trim: function(text) {
 		f_core.Assert(typeof(text)=="string", "f_core.Trim: Invalid text parameter ("+text+").");
 
-		return text.replace(/^\s*|\s*$/g, "");
+		text = text.replace(/^\s\s*/, '');
+		
+		var ws = /\s/;
+		for(var i = str.length;ws.test(text.charAt(--i)););
+		
+		return text.slice(0, i + 1);
 	},
 	/** 
 	 * @method hidden static
@@ -5411,6 +5449,26 @@ var f_core = {
 		f_core.Assert(!childBefore || child.ownerDocument==childBefore.ownerDocument, "f_core.InsertBefore: Different owner document. (child, childBefore)");
 		
 		parent.insertBefore(child, childBefore);
+	},
+	/**
+	 * @method hidden static
+	 * @param String... urls
+	 * @return void
+	 */
+	IncludesScript: function(urls) {
+		for(var i=0;i<arguments.length;) { 
+			var url=arguments[i++];
+			var charSet=arguments[i++];
+			
+			if (!charSet) {
+				charSet="UTF-8";
+				
+			} else if (typeof(charSet)=="number") {
+				charSet="ISO-8859-"+charSet;
+			}
+		
+			document.write("<SCRIPT type=\"text/javascript\" charset=\""+charSet+"\" src=\""+url+"\"></SCRIPT>");
+		}		
 	},
 	/**
 	 * @method public static

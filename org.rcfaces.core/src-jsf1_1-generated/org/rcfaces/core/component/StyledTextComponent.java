@@ -25,10 +25,6 @@ public class StyledTextComponent extends TextComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.styledText";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextComponent.CAMELIA_ATTRIBUTES);
-	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {}));
-	}
 
 	public StyledTextComponent() {
 		setRendererType(COMPONENT_TYPE);
