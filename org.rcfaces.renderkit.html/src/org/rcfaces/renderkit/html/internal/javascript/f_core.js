@@ -1263,7 +1263,7 @@ var f_core = {
 				continue;
 			}
 			
-			f_core.Debug(f_core, "GetParentForm: Parent form of '"+elt.id+"': "+f.id);
+			f_core.Debug(f_core, "GetParentForm: Parent form of '"+elt.id+"': "+form.id);
 			
 			return form;
 		}
