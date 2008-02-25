@@ -10,10 +10,14 @@
  * @version $Revision$ $Date$
  */
  
+/*
 var __statics = {
 }
 
 var __members = {
 }
+*/
  
-new f_class("f_toolFolder", null, __statics, __members, f_component);
+new f_class("f_toolFolder", {
+	extend: f_component
+});

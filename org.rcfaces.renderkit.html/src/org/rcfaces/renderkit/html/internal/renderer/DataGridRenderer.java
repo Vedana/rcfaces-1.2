@@ -55,6 +55,7 @@ import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.provider.ICursorProvider;
+import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
@@ -278,6 +279,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         boolean filtred = false;
         int firstCount = tableContext.getRowCount();
+
+        if (dataModel instanceof IComponentRefModel) {
+            ((IComponentRefModel) dataModel)
+                    .setComponent((UIComponent) gridComponent);
+        }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
         if (filtersMap != null) {

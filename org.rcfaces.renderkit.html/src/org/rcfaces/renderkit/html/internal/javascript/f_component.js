@@ -295,7 +295,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setToolTipText: function(title) {
-		f_core.Assert(title===null || typeof(title)=="string", "Title parameter must be a string ! ("+title+")");
+		f_core.Assert(title===null || typeof(title)=="string", "f_component.f_setToolTipText: Title parameter must be a string ! ("+title+")");
 
 		this.title = title;
 		this.f_setProperty(f_prop.TOOLTIP,title);
@@ -352,7 +352,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setVisible: function(visible) {
-		f_core.Assert(typeof(visible)=="boolean", "Visible parameter must be a boolean ! ("+visible+")");
+		f_core.Assert(typeof(visible)=="boolean", "f_component.f_setVisible: Visible parameter must be a boolean ! ("+visible+")");
 
 		visible=!!visible;
 
@@ -409,7 +409,7 @@ var __members = {
 	 * @see f_component#HIDDEN_MODE_SERVER f_component.HIDDEN_MODE_SERVER
 	 */
 	f_setHiddenMode: function(mode) {
-		f_core.Assert(typeof(mode)=="number", "Hidden mode parameter must be a number ! ("+mode+")");
+		f_core.Assert(typeof(mode)=="number", "f_component.f_setHiddenMode: Hidden mode parameter must be a number ! ("+mode+")");
 
 		if (mode==this.f_getHiddenMode()) {
 			return;
@@ -465,7 +465,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setHelpURL: function(url) {
-		f_core.Assert(url===null || typeof(url)=="string", "Help URL parameter must be a string ! ("+url+")");
+		f_core.Assert(url===null || typeof(url)=="string", "f_component.f_setHelpURL: Help URL parameter must be a string ! ("+url+")");
 
 		if (url==this.f_getHelpURL()) {
 			return;
@@ -618,7 +618,7 @@ var __members = {
 	 */	 
 	f_show: function(scroll) {
 		if (!this.f_parentShow()) {
-			f_core.Debug(f_component, "f_show of '"+this.id+"' returns false");
+			f_core.Debug(f_component, "f_show: Show component '"+this.id+"' returns false");
 			return false;
 		}
 		

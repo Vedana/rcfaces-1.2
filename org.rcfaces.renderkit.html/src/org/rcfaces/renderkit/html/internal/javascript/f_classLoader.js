@@ -66,6 +66,9 @@ f_classLoader.prototype = {
 	 * @return f_class
 	 */
 	f_getClass: function(className, lookId) {
+		f_core.Assert(typeof(className)=="string", "f_classLoader.f_getClass: Invalid className parameter ("+className+")");
+		f_core.Assert(lookId===undefined || typeof(lookId)=="string", "f_classLoader.f_getClass: Invalid lookId parameter ("+lookId+")");
+		
 		if (lookId) {
 			var claz=this._classes[className+f_class._LOOK+lookId];
 			if (claz) {
@@ -95,6 +98,8 @@ f_classLoader.prototype = {
 	 * @return f_aspect
 	 */
 	f_getAspect: function(aspectName) {
+		f_core.Assert(typeof(aspectName)=="string", "f_classLoader.f_getAspect: Invalid aspectName parameter ("+aspectName+")");
+
 		var aspect=this._aspects[aspectName];
 		if (aspect) {
 			return aspect;

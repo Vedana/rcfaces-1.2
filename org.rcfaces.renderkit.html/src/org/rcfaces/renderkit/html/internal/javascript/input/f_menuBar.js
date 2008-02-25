@@ -282,7 +282,7 @@ var __members = {
 				
 		var openMode=this._openMode;
 		
-		f_core.Info(f_menuBar, "OVER: cur="+old+" param="+menuBarItem+" openMode="+this._openMode);
+		f_core.Info(f_menuBar, "_menuBarItem_over: cur="+old+" param="+menuBarItem+" openMode="+this._openMode);
 		
 		if (old==menuBarItem) {
 			// Le selectionné est le méme que l'ancien selectionné !
@@ -323,7 +323,7 @@ var __members = {
 	_menuBarItem_out: function(menuBarItem) {
 		var old=this.f_uiGetSelectedItem(this);
 		
-		f_core.Info(f_menuBar, "OUT: cur="+old+" param="+menuBarItem+" openMode="+this._openMode);
+		f_core.Info(f_menuBar, "_menuBarItem_out: cur="+old+" param="+menuBarItem+" openMode="+this._openMode);
 
 		if (old!=menuBarItem) {
 			return;

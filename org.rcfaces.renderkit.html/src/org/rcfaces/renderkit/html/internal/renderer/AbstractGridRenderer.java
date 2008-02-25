@@ -85,6 +85,7 @@ import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.provider.ICheckProvider;
+import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -399,6 +400,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
                 .getHtmlComponentRenderContext());
         DataModel dataModel = tableContext.getDataModel();
+
+        if (dataModel instanceof IComponentRefModel) {
+            ((IComponentRefModel) dataModel)
+                    .setComponent((UIComponent) gridComponent);
+        }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
         if (filtersMap != null) {
@@ -1027,7 +1033,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.DIV);
         htmlWriter.writeClass(getTitleDivContainerClassName(htmlWriter));
 
-
         if (width != null) {
             String widthRightPadding = computeSizeInPixel(width, -1,
                     -TEXT_RIGHT_PADDING);
@@ -1041,14 +1046,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
-
         String columnTagName = IHtmlWriter.DIV;
 
         if (tableContext.getSortCommand(columnIndex) != null) {
             columnTagName = IHtmlWriter.A;
         }
         htmlWriter.startElement(columnTagName);
-        
+
         if (columnTagName == IHtmlWriter.A) {
             htmlWriter.writeHRef("javascript:void(0)");
 

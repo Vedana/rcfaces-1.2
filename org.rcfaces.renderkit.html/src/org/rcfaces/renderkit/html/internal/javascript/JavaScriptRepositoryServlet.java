@@ -74,11 +74,13 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String MAIN_REPOSITORY_DIRECTORY_LOCATION = JavaScriptRepository.class
             .getPackage().getName().replace('.', '/');
 
-    private static final String MAIN_REPOSITORY_LOCATION = MAIN_REPOSITORY_DIRECTORY_LOCATION
-            + "/repository.xml";
+    private static final String MAIN_REPOSITORY_LOCATION = "/repository.xml";
 
     private static final String PARAMETER_PREFIX = Constants.getPackagePrefix()
             + ".javascript";
+
+    private static final String MAIN_REPOSITORY_DIRECTORY_LOCATION_PARAMETER = PARAMETER_PREFIX
+            + ".MAIN_REPOSITORY_DIRECTORY";
 
     private static final String REPOSITORY_DEV_MODE_PARAMETER = PARAMETER_PREFIX
             + ".REPOSITORY_DEV_MODE";
@@ -141,6 +143,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
     private boolean profilerMode;
 
+    private String mainRepositoryDirectoryLocation;
+
     public JavaScriptRepositoryServlet() {
     }
 
@@ -149,6 +153,12 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     }
 
     public void init(ServletConfig config) throws ServletException {
+
+        mainRepositoryDirectoryLocation = config
+                .getInitParameter(MAIN_REPOSITORY_DIRECTORY_LOCATION_PARAMETER);
+        if (mainRepositoryDirectoryLocation == null) {
+            mainRepositoryDirectoryLocation = MAIN_REPOSITORY_DIRECTORY_LOCATION;
+        }
 
         htmlRCFacesBuildId = Constants.getBuildId();
 
@@ -242,8 +252,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 mainRepositoryURI, repositoryVersion, applicationParamaters);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
-        List repositoriesLocation = new ArrayList();
-        repositoriesLocation.add(MAIN_REPOSITORY_LOCATION);
+        List repositoriesLocation = new ArrayList(32);
+        repositoriesLocation.add(getMainRepositoryDirectoryLocation()
+                + MAIN_REPOSITORY_LOCATION);
 
         String repositoryParameter = config
                 .getInitParameter(REPOSITORIES_PARAMETER);
@@ -329,8 +340,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         IFile file = null;
         try {
             file = repository.declareFile(SYMBOLS_FILENAME,
-                    MAIN_REPOSITORY_DIRECTORY_LOCATION, null, null, container,
-                    null);
+                    getMainRepositoryDirectoryLocation(), null, null,
+                    container, null);
 
             if (file != null) {
                 LOG.info("Javascript symbols detected.");
@@ -353,7 +364,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     protected String getCompiledJavascriptVersion() {
         ServletContext servletContext = getServletContext();
 
-        String symbolURL = MAIN_REPOSITORY_DIRECTORY_LOCATION
+        String symbolURL = getMainRepositoryDirectoryLocation()
                 + SYMBOLS_FILENAME;
 
         URL url = ClassLocator.getResource(symbolURL, this, servletContext);
@@ -386,6 +397,10 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         }
 
         return "c";
+    }
+
+    protected String getMainRepositoryDirectoryLocation() {
+        return mainRepositoryDirectoryLocation;
     }
 
     protected String getSetURI(String setName) {

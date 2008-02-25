@@ -165,6 +165,8 @@ public abstract class AbstractRepository implements IRepository {
 
         private final IContentProvider contentProvider;
 
+        private final int hashCode;
+
         private LocalizedFile unlocalizedFile;
 
         private Map localizedFiles;
@@ -177,6 +179,7 @@ public abstract class AbstractRepository implements IRepository {
             this.unlocalizedURI = unlocalizedURI;
             this.unlocalizedContentLocation = unlocalizedContentLocation;
             this.contentProvider = contentProvider;
+            this.hashCode = filename.hashCode();
         }
 
         public IRepository getRepository() {
@@ -246,6 +249,9 @@ public abstract class AbstractRepository implements IRepository {
         }
 
         public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
             if (obj == null || (obj instanceof File) == false) {
                 return false;
             }
@@ -256,7 +262,7 @@ public abstract class AbstractRepository implements IRepository {
         }
 
         public int hashCode() {
-            return filename.hashCode();
+            return hashCode;
         }
     }
 

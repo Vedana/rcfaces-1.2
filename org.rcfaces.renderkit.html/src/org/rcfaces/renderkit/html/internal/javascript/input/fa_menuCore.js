@@ -243,7 +243,7 @@ var __members = {
 		
 		f_imageRepository.PrepareImage(this._blankMenuImageURL);
 	},
-	f_finalize:  function() {
+	f_finalize: function() {
 		this._menu=undefined; // fa_menuCore
 		
 		// this._blankMenuImageURL=undefined; // string

@@ -173,6 +173,9 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
     }
 
     public void commit() {
+        if (order instanceof ArrayList) {
+            ((ArrayList) order).trimToSize();
+        }
         this.commited = true;
     }
 

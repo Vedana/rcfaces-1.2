@@ -324,6 +324,13 @@ var __members= {
 		
 		f_core.Debug(f_actionList, "f_callActions: returns "+ret);
 		return ret;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		return "[f_actionList type="+this._type+"]";
 	}
 }
 

@@ -139,13 +139,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         // boolean useValidator = false;
 
-        htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+        if (textEntryComponent.isRequired()) {
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+        }
 
         if (textEntryComponent.isAutoTab(facesContext)) {
             htmlWriter.writeAttribute("v:autoTab", true);
 
-            // C'est un validateur, il faut forcer le stub pour le RESET
-            // useValidator = true;
+            htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
         boolean renderValidator = false;
@@ -796,7 +797,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             if (newValue == null) {
                 // On est peut-etre en mode Collector ... on recherche le
-                // ::value    (La valeur n'est pas forcement celle dans le form !)
+                // ::value (La valeur n'est pas forcement celle dans le form !)
                 String name = textEntryComponent.getClientId(facesContext)
                         + "::value";
                 newValue = componentData.getParameter(name);

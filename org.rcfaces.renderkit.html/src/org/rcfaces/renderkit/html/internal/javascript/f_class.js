@@ -526,7 +526,7 @@ var __statics = {
 	 * @method hidden static final
 	 */
 	Clean: function(objs) {
-		f_core.Assert(objs instanceof Array,"f_class.Clean: Invalid array of objects ("+objs+")");
+		f_core.Assert(objs instanceof Array, "f_class.Clean: Invalid array of objects ("+objs+")");
 
 		for(var i=0;i<objs.length;i++) {
 			var obj=objs[i];
@@ -535,15 +535,19 @@ var __statics = {
 			}
 			
 			var cls=obj._kclass;
-			f_core.Assert(cls instanceof f_class,"f_class.Clean: Not a class object ? ("+cls+")");
+			f_core.Assert((cls instanceof f_class) || (typeof(cls)=="function"), "f_class.Clean: Not a class object ? ("+cls+")");
 			
-			try {
-				obj.f_finalize();
-				
-			} catch (x) {
-				f_core.Error(f_class, "Call of method f_finalize of class '"+cls._name+"' throws exception.", x);
+			var finalizer=obj.f_finalize;
+			f_core.Assert((typeof(finalizer)=="function") || (typeof(finalizer)=="undefined"),"f_class.Clean: f_finalize not a function ? ("+finalizer+")");
+			if (typeof(finalizer)=="function") {
+				try {
+					finalizer.call(obj);
+					
+				} catch (x) {
+					f_core.Error(f_class, "Clean: Call of method f_finalize of class '"+cls._name+"' throws exception.", x);
+				}
 			}
-	
+				
 			if (f_class._CLEAN_METHODS) {
 				// Desinherit		
 				var methods=cls._kmethods;
@@ -646,11 +650,16 @@ var __statics = {
 	 */
 	_CreateConstructor: function(constructorFct) {
 		return function() {
-			this._kclass=arguments.callee;
+			var cls=arguments.callee;
+			this._kclass=cls;
+
+			if (typeof(this.f_finalize)=="function") {
+				cls._classLoader._newInstance(this);
+			}
 			
 			if (constructorFct) {
 				constructorFct.apply(this, arguments);
-			}
+			}			
 		};
 	},
 	/**

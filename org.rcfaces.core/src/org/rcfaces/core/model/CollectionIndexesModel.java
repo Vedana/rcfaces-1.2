@@ -4,6 +4,7 @@
 package org.rcfaces.core.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -201,6 +202,10 @@ public class CollectionIndexesModel extends AbstractIndexesModel implements
 
     public void commit() {
         this.commited = true;
+
+        if (collection instanceof ArrayList) {
+            ((ArrayList) collection).trimToSize();
+        }
     }
 
     public boolean isCommited() {

@@ -269,7 +269,17 @@ var __members = {
 		for(var name in values) {
 			properties[name]=values[name];
 		}
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	toString: function() {
+		return "[f_resourceBundle name="+this._name+"]";
 	}
 }
 
-new f_class("f_resourceBundle", null, __statics, __members);
+new f_class("f_resourceBundle", {
+	statics: __statics,
+	members: __members
+});

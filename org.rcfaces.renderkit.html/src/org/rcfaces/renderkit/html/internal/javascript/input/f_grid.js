@@ -767,6 +767,128 @@ var __statics = {
 	 * @return boolean
 	 * @context object:column
 	 */
+	_Title_onKeyDown: function(evt) {
+		var column=this._column;
+		var dataGrid=column._dataGrid;
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
+		}
+		
+		var ascending;
+		var cancel;
+
+		var code=evt.keyCode;
+		switch(code) {
+		case f_key.VK_DOWN: // FLECHE VERS LE BAS
+			ascending=false;
+			break
+						
+		case f_key.VK_UP: // FLECHE VERS LE HAUT
+			ascending=true;
+			break;
+
+		case f_key.VK_HOME:
+			var columns=dataGrid._columns;
+			for(var i=0;i<columns.length;i++) {
+				var cl=columns[i];
+				
+				if (!cl._visibility) {
+					continue;
+				}
+				
+				if (cl!=column) {
+					dataGrid.f_setFocusColumn(cl);
+				}
+				break;
+			}
+			cancel=true;
+			break;
+
+		case f_key.VK_END:
+			var columns=dataGrid._columns;
+			for(var i=columns.length-1;i>=0;i--) {
+				var cl=columns[i];
+				
+				if (!cl._visibility) {
+					continue;
+				}
+				
+				if (cl!=column) {
+					dataGrid.f_setFocusColumn(cl);
+				}
+				break;
+			}
+			cancel=true;
+			break;
+
+		case f_key.VK_LEFT:
+			var columns=dataGrid._columns;
+			var pred=null;
+			for(var i=0;i<columns.length;i++) {
+				var cl=columns[i];
+				
+				if (!cl._visibility) {
+					continue;
+				}
+				
+				if (cl==column) {
+					if (pred) {
+						dataGrid.f_setFocusColumn(pred);
+					}
+					break;
+				}
+				
+				pred=cl;
+			}
+			cancel=true;
+			break;
+			
+		case f_key.VK_RIGHT:
+			var columns=dataGrid._columns;
+			var next=false;
+			for(var i=0;i<columns.length;i++) {
+				var cl=columns[i];
+				
+				if (!cl._visibility) {
+					continue;
+				}
+				
+				if (next) {
+					dataGrid.f_setFocusColumn(cl);
+					break;
+				}
+				next=(cl==column);
+			}
+			break;
+		}
+		
+		if (ascending!==undefined) {
+			if (column.f_fireEvent(f_event.SELECTION, evt, column, ascending, dataGrid)===false) {
+				return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
+			}			
+			
+			var append=(evt.shiftKey);
+			
+			dataGrid.f_setColumnSort(column, ascending, append); 
+			cancel=true;
+		}
+		
+		if (cancel) {
+			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !				
+		}
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:column
+	 */
 	_Title_onFocus: function(evt) {
 		var column=this._column;
 		var dataGrid=column._dataGrid;
@@ -778,6 +900,20 @@ var __statics = {
 			return false;
 		}
 
+		// S'il y a un scroll, il faut l'aligner ...
+		if (dataGrid._scrollTitle) {
+			window.setTimeout(function () {
+				var scrollTitleLeft=dataGrid._scrollTitle.scrollLeft;
+				
+				var scrollBodyLeft=dataGrid._scrollBody.scrollLeft;
+				
+				if (scrollTitleLeft!=scrollBodyLeft) {
+					dataGrid._scrollBody.scrollLeft=scrollTitleLeft;
+				}
+			}, 50);
+		}
+		
+
 		if (dataGrid.f_isDisabled()) {
 			return f_core.CancelJsEvent(evt);
 		}
@@ -788,7 +924,7 @@ var __statics = {
 		
 		column._focus=true;
 			
-		if (column.f_fireEvent(f_event.FOCUS, evt, null, null, dataGrid)===false) {
+		if (column.f_fireEvent(f_event.FOCUS, evt, column, null, dataGrid)===false) {
 			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
 		}
 		
@@ -839,6 +975,10 @@ var __statics = {
 		if (dataGrid.f_isDisabled()) {
 			return f_core.CancelJsEvent(evt);
 		}
+			
+		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid)===false) {
+			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
+		}			
 		
 		var append=(evt.shiftKey);
 		
@@ -873,7 +1013,9 @@ var __statics = {
 		}
 		
 		dataGrid._columnSelected=undefined;
-	
+		
+		return;
+	/*
 		if (oldColumn!=column) {
 			if (oldColumn) {
 				dataGrid._updateTitleStyle(oldColumn);
@@ -892,7 +1034,8 @@ var __statics = {
 		dataGrid.f_setColumnSort(column, undefined, append); 
 		
 		return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
-		//return true;
+		//return true;		
+		 */
 	},
 	/**
 	 * @method private static
@@ -2755,6 +2898,7 @@ var __members = {
 				head.onmouseover=null;
 				head.onmousedown=null;
 				head.onmouseup=null;
+				head.onclick=null;
 				head.onbeforeactivate=null;
 				
 				f_core.VerifyProperties(head);			
@@ -2767,11 +2911,11 @@ var __members = {
 				label._column=undefined;
 				//head.onmouseout=null;
 				//head.onmouseover=null;
-				label.onmousedown=null;
-				label.onmouseup=null;
+				//label.onmousedown=null;
+				//label.onmouseup=null;
 				label.onfocus=null;
+				label.onblur=null;
 				label.onclick=null;
-				label.onblur=null;			
 				
 				f_core.VerifyProperties(label);			
 			}
@@ -4244,6 +4388,7 @@ var __members = {
 			head.onmouseout=f_grid._Title_onMouseOut;
 			head.onmousedown=f_grid._Title_onMouseDown;
 			head.onmouseup=f_grid._Title_onMouseUp;
+			head.onclick=f_grid._Title_onClick;
 			//head.onbeforeactivate=f_core.CancelJsEventHandler;
 			//head.tabIndex=-1;
 			
@@ -4257,11 +4402,12 @@ var __members = {
 			column._label=label
 			
 			if (column._sorter) {
-				label.onmousedown=f_grid._Title_onMouseDown;
-				label.onmouseup=f_grid._Title_onMouseUp;
+//				label.onmousedown=f_grid._Title_onMouseDown;
+//				label.onmouseup=f_grid._Title_onMouseUp;
 				label.onfocus=f_grid._Title_onFocus;
 				label.onblur=f_grid._Title_onBlur;
 				label.onclick=f_grid._Title_onClick;
+				label.onkeydown=f_grid._Title_onKeyDown;
 				label._column=column;
 			}
 				
@@ -4846,6 +4992,16 @@ var __members = {
 		}
 				
 		request.f_doFormRequest(params);		
+	},
+	/**
+	 * @method protected
+	 * @param any column Column object or index
+	 * @return void
+	 */
+	f_setFocusColumn: function(column) {
+		if (typeof(column)=="object") {
+			f_core.SetFocus(column._label);
+		}
 	},
 	/**
 	 * @method protected

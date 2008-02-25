@@ -135,4 +135,21 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
     public abstract String getContentType(String url);
 
     public abstract boolean isValidContenType(String contentType);
+
+    public static boolean isOperationSupported(FacesContext facesContext,
+            String operationId, IContentAccessor imageContentAccessor) {
+        RcfacesContext rcfacesContext = RcfacesContext
+                .getInstance(facesContext);
+
+        ImageContentAccessorHandler imageOperationRepository = (ImageContentAccessorHandler) rcfacesContext
+                .getProvidersRegistry().getProvider(
+                        ImageContentAccessorHandler.IMAGE_CONTENT_PROVIDER_ID);
+
+        return imageOperationRepository.isOperationSupported(operationId,
+                imageContentAccessor);
+
+    }
+
+    protected abstract boolean isOperationSupported(String operationId,
+            IContentAccessor imageContentAccessor);
 }

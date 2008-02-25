@@ -49,6 +49,7 @@ import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
+import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
@@ -299,6 +300,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 .listSortedComponents();
 
         DataModel dataModel = componentsGridComponent.getDataModelValue();
+
+        if (dataModel instanceof IComponentRefModel) {
+            ((IComponentRefModel) dataModel)
+                    .setComponent(componentsGridComponent);
+        }
 
         if (sortedComponents != null && sortedComponents.length > 0) {
 

@@ -45,6 +45,10 @@ public class ImageContentAccessorHandlerImpl extends
     private static final Log LOG = LogFactory
             .getLog(ImageContentAccessorHandlerImpl.class);
 
+    private static final String GIF_WRITER_PARAMETER = "org.rcfaces.core.images.GIF_WRITER";
+
+    private static final String GIF_MIME_TYPE = "image/gif";
+
     private final Map operationsById = new HashMap(32);
 
     private final Map validContentTypes = new HashMap(8);
@@ -54,6 +58,8 @@ public class ImageContentAccessorHandlerImpl extends
     private boolean contentAccessorAvailable;
 
     private RcfacesContext rcfacesContext;
+
+    private Boolean gifWriterEnabled;
 
     public ImageContentAccessorHandlerImpl() {
         fileNameMap = URLConnection.getFileNameMap();
@@ -77,6 +83,36 @@ public class ImageContentAccessorHandlerImpl extends
 
         } else {
             LOG.debug("ImageContentAccessorImpl available");
+        }
+
+        String gifWriterValue = facesContext.getExternalContext()
+                .getInitParameter(GIF_WRITER_PARAMETER);
+
+        if (gifWriterValue != null) {
+            gifWriterValue = gifWriterValue.trim().toLowerCase();
+
+            if ("true".equals(gifWriterValue)) {
+                gifWriterEnabled = Boolean.TRUE;
+                LOG.info("ImageContentAccessorImpl force gif writer enabled.");
+
+            } else if ("false".equals(gifWriterValue)) {
+                gifWriterEnabled = Boolean.FALSE;
+                LOG.info("ImageContentAccessorImpl force gif writer disabled.");
+
+            } else if (gifWriterValue.length() > 0
+                    && "auto".equals(gifWriterValue) == false) {
+                throw new FacesException("Invalid value for parameter '"
+                        + GIF_WRITER_PARAMETER + ".");
+            }
+        }
+
+        if (gifWriterEnabled == null) {
+            Iterator it = ImageIO.getImageWritersByMIMEType(GIF_MIME_TYPE);
+
+            gifWriterEnabled = Boolean.valueOf(it.hasNext());
+            LOG.info("ImageContentAccessorImpl gif writer auto detection: "
+                    + gifWriterEnabled);
+
         }
     }
 
@@ -365,6 +401,23 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         return valid.booleanValue();
+    }
+
+    protected boolean isOperationSupported(String operationId,
+            IContentAccessor imageContentAccessor) {
+
+        Object ref = imageContentAccessor.getContentRef();
+        if (ref instanceof String) {
+            String contentType = getContentType((String) ref);
+
+            if (GIF_MIME_TYPE.equals(contentType)) {
+                if (gifWriterEnabled != null) {
+                    return gifWriterEnabled.booleanValue();
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

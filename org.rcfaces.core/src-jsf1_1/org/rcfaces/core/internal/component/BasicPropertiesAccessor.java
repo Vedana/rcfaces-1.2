@@ -31,6 +31,8 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
     private static final Log LOG = LogFactory
             .getLog(BasicPropertiesAccessor.class);
 
+    private static final boolean debugEnabled = LOG.isDebugEnabled();
+
     private static final Set PRIMITIVE_CLASSES = new HashSet(8);
     static {
         PRIMITIVE_CLASSES.add(String.class);
@@ -62,7 +64,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
                 ICommitableObject commitableObject = (ICommitableObject) value;
 
                 if (commitableObject.isCommited() == false) {
-                    if (LOG.isDebugEnabled()) {
+                    if (debugEnabled) {
                         LOG.debug("Commit object '" + commitableObject + "'.");
                     }
 

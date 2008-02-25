@@ -125,6 +125,11 @@ var f_core = {
 	JAVASCRIPT_VOID: "javascript:void(0)",
 
 	/**
+	 * @field private static final number
+	 */
+	_CLEAN_UP_ON_SUBMIT_DELAY: 20,
+	
+	/**
 	 * @field private static final RegExp
 	 */
 	_BLOCK_TAGS: new RegExp(
@@ -578,10 +583,24 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param optional boolean cleanUpOnSubmit
+	 * @return void
+	 */
+	SetCleanUpOnSubmit: function(cleanUpOnSubmit) {
+		f_core.Assert(cleanUpOnSubmit===undefined || typeof(cleanUpOnSubmit)=="boolean", "f_core.SetCleanUpOnSubmit invalid cleanUpOnSubmit parameter ("+cleanUpOnSubmit+")");
+
+		if (cleanUpOnSubmit===undefined) {
+			cleanUpOnSubmit=true;
+		}
+		f_core._rcfacesCleanUpOnSubmit=cleanUpOnSubmit;
+	},
+	/**
+	 * @method hidden static
+	 * @param optional boolean debugMode  
 	 * @return void
 	 */
 	SetDebugMode: function(debugMode) {
-		f_core.Assert(debugMode===undefined || typeof(debugMode)=="function", "f_core.SetDebugMode: Invalid debugMode parameter ("+debugMode+")");
+		f_core.Assert(debugMode===undefined || typeof(debugMode)=="boolean", "f_core.SetDebugMode: Invalid debugMode parameter ("+debugMode+")");
 
 		if (debugMode===undefined) {
 			debugMode=true;
@@ -590,7 +609,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @param function profilerMode
+	 * @param optional function profilerMode
 	 * @return void
 	 */
 	SetProfilerMode: function(profilerMode) {
@@ -621,6 +640,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param Window win
 	 * @return void
 	 */
 	_InitLibrary: function(win) {
@@ -1068,10 +1088,12 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param Window win
+	 * @param optional boolean asyncExit
 	 * @return void
 	 * @context window:win
 	 */
-	ExitWindow: function(win) {
+	ExitWindow: function(win, asyncExit) {
 		if (win._rcfacesExiting) {
 			return;
 		}
@@ -1082,7 +1104,7 @@ var f_core = {
 		try {		
 			var doc=win.document;
 	
-			f_core.Profile(false, "f_core.onExit");
+			f_core.Profile(false, "f_core.onExit("+((asyncExit)?true:false)+")");
 			try {				
 				f_core.RemoveEventListener(win, "load", f_core._OnInit);
 				f_core.RemoveEventListener(win, "unload", f_core._OnExit);
@@ -1114,7 +1136,7 @@ var f_core = {
 					form._resetListeners=undefined; // List<method>
 					form._messageContext=undefined; // f_messageContext
 					form.f_findComponent=undefined; // function
-//					form._serializedInputs=undefined; // Map<String, String>			
+					form._serializedInputs=undefined; // Map<String, String>			
 					
 					if (form._rcfacesOldSubmit) {
 						try {
@@ -1638,17 +1660,17 @@ var f_core = {
 				f_classLoader.SerializeInputsIntoForm(form);
 				
 				f_core.Profile(null, "f_core.SubmitEvent.serialized");
-			}
 			
+			}
 			if (!win._rcfacesSubmitting) {
 				f_core._PostSubmit(form);
 
-				if (win.rcfacesCleanUpOnSubmit!==false) {
+				if (win._rcfacesCleanUpOnSubmit!==false) {
 					win.setTimeout(function () {
 						if (win.f_core && win.f_core.ExitWindow) {
-							win.f_core.ExitWindow(win);
+							win.f_core.ExitWindow(win, true);
 						}
-					}, 50);
+					}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
 				}
 			}
 				
@@ -1834,12 +1856,12 @@ var f_core = {
 				} else {
 					f_core._PostSubmit(form);
 								
-					if (win.rcfacesCleanUpOnSubmit!==false) {
+					if (win._rcfacesCleanUpOnSubmit!==false) {
 						win.setTimeout(function () {
 							if (win.f_core && win.f_core.ExitWindow) {
-								win.f_core.ExitWindow(win);
+								win.f_core.ExitWindow(win, true);
 							}
-						}, 50);
+						}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
 					}
 				}
 								
@@ -5196,7 +5218,8 @@ var f_core = {
 		text = text.replace(/^\s\s*/, '');
 		
 		var ws = /\s/;
-		for(var i = str.length;ws.test(text.charAt(--i)););
+		var i;
+		for(i = text.length;ws.test(text.charAt(--i)););
 		
 		return text.slice(0, i + 1);
 	},

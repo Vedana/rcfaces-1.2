@@ -27,6 +27,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.DisableOperation;
 import org.rcfaces.core.internal.images.operation.HoverOperation;
 import org.rcfaces.core.internal.images.operation.SelectedOperation;
@@ -499,10 +500,20 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return contentAccessor;
         }
 
+        IContentAccessor imageContentAccessor = getImageAccessor(htmlWriter);
+
+        // RcfacesContext rcfacesContext =
+        // RcfacesContext.getInstance(htmlWriter.getHtmlComponentRenderContext().getFacesContext()).getImage();
+
+        if (ImageContentAccessorHandler.isOperationSupported(htmlWriter
+                .getComponentRenderContext().getFacesContext(),
+                HoverOperation.ID, imageContentAccessor) == false) {
+            return contentAccessor;
+        }
+
         return ContentAccessorFactory.createFromWebResource(null,
                 HoverOperation.ID + IContentAccessor.FILTER_SEPARATOR,
-                getImageAccessor(htmlWriter));
-
+                imageContentAccessor);
     }
 
     protected IContentAccessor getSelectedImageAccessor(IHtmlWriter htmlWriter) {
@@ -512,10 +523,17 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return contentAccessor;
         }
 
+        IContentAccessor imageContentAccessor = getImageAccessor(htmlWriter);
+
+        if (ImageContentAccessorHandler.isOperationSupported(htmlWriter
+                .getComponentRenderContext().getFacesContext(),
+                SelectedOperation.ID, imageContentAccessor) == false) {
+            return contentAccessor;
+        }
+
         return ContentAccessorFactory.createFromWebResource(null,
                 SelectedOperation.ID + IContentAccessor.FILTER_SEPARATOR,
-                getImageAccessor(htmlWriter));
-
+                imageContentAccessor);
     }
 
     protected IContentAccessor getDisabledImageAccessor(IHtmlWriter htmlWriter) {
@@ -525,10 +543,17 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             return contentAccessor;
         }
 
+        IContentAccessor imageContentAccessor = getImageAccessor(htmlWriter);
+
+        if (ImageContentAccessorHandler.isOperationSupported(htmlWriter
+                .getComponentRenderContext().getFacesContext(),
+                DisableOperation.ID, imageContentAccessor) == false) {
+            return contentAccessor;
+        }
+
         return ContentAccessorFactory.createFromWebResource(null,
                 DisableOperation.ID + IContentAccessor.FILTER_SEPARATOR,
-                getImageAccessor(htmlWriter));
-
+                imageContentAccessor);
     }
 
     protected IContentAccessor getImageAccessor(IHtmlWriter htmlWriter) {

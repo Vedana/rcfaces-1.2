@@ -35,6 +35,19 @@ var __members= {
 	},
 	
 	/**
+	 * @method protected
+	 */
+	f_finalize: function() {
+		//this._type = undefined;
+		this._component = undefined;
+		this._jsEvent = undefined;
+		this._item = undefined;
+		this._value = undefined;
+		this._selectionProvider = undefined;
+		this._detail = undefined;		
+	},
+	
+	/**
 	 * Returns the type of event.
 	 * @method public
 	 * @return String The type of event.
@@ -599,7 +612,7 @@ var __statics = {
 			
 				var ret;
 				if (target) {
-					ret=f_popup.IsChildOfDocument(target);
+					ret=f_popup.IsChildOfDocument(target, jsEvent);
 				}
 				
 				f_core.Debug(f_event, "GetEventLocked: Search popup child: target="+target+" return="+ret);
@@ -728,5 +741,5 @@ var __statics = {
 new f_class("f_event", {
 	statics: __statics,
 	members: __members,
-	_systemClass: true
+	_systemClass: true // Il est systeme car on peut sortir de l'appli sur un evenement
 });

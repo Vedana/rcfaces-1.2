@@ -500,7 +500,7 @@ var __statics = {
 		
 		// Si la target n'est pas dans une popup on ferme !
 		
-		var found=f_popup.IsChildOfDocument(evt.target);
+		var found=f_popup.IsChildOfDocument(evt.target, evt);
 		f_core.Debug(f_popup, "OnMouseDown search parent="+found);
 
 		if (found) {
@@ -525,7 +525,7 @@ var __statics = {
 	/**
 	 * @method hidden static
 	 */
-	IsChildOfDocument: function(target) {
+	IsChildOfDocument: function(target, event) {
 		f_core.Debug(f_popup, "IsChildOfDocument: Search parent target='"+target+"' document='"+f_popup.Popup+"'.");
 
 		var popupDocument=f_popup.Popup;
@@ -548,8 +548,8 @@ var __statics = {
 			}
 			
 			var isPopupLock=target.f_isPopupLock;
-			if (typeof(isPopupLock)=="function" && isPopupLock.call(target, popupDocument)==false) {
-				f_core.Debug(f_popup, "IsChildOfDocument: f_isPopupLock return false => true");
+			if (typeof(isPopupLock)=="function" && isPopupLock.call(target, popupDocument, event)===false) {
+				f_core.Debug(f_popup, "IsChildOfDocument: f_isPopupLock returns false => true");
 				return true;
 			}
 		}
@@ -570,7 +570,7 @@ var __statics = {
 		
 		f_core.Debug(f_popup, "_Ie_OnMouseDown: click on "+this+" fromElement="+evt.srcElement+"/"+evt.srcElement.className);
 		
-		var found=f_popup.IsChildOfDocument(evt.srcElement);
+		var found=f_popup.IsChildOfDocument(evt.srcElement, evt);
 		f_core.Debug(f_popup, "_Ie_OnMouseDown: search parent="+found);
 
 		if (found) {
@@ -642,7 +642,7 @@ var __statics = {
 			return;
 		}
 		
-		var found=f_popup.IsChildOfDocument(evt.target);
+		var found=f_popup.IsChildOfDocument(evt.target, evt);
 		f_core.Debug(f_popup, "OnFocus search parent="+found);
 
 		if (found) {

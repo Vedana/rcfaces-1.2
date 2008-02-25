@@ -31,6 +31,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     private static final Log LOG = LogFactory
             .getLog(BasicComponentEngine.class);
 
+    private static final boolean debugEnabled = LOG.isDebugEnabled();
+
     private static final String VALIDATORS_KEY = "camelia.validators";
 
     private static final String CONVERTER_ID_PROPERTY = "camalia.converterId";
@@ -137,7 +139,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         Object value = propertiesAccessor.getProperty(propertyName);
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG
                     .debug("getLocalProperty(\"" + propertyName
                             + "\") returns null");
@@ -152,7 +154,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         Object object = getLocalProperty(propertyName);
         if (object == null) {
 
-            if (LOG.isDebugEnabled()) {
+            if (debugEnabled) {
                 LOG.debug("getInternalProperty(\""
                         + propertyName
                         + "\" ["
@@ -171,7 +173,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
             object = valueBinding.getValue(facesContext.getELContext());
 
-            if (LOG.isDebugEnabled()) {
+            if (debugEnabled) {
                 LOG.debug("getInternalProperty(\""
                         + propertyName
                         + "\" ["
@@ -182,7 +184,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             return object;
         }
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG.debug("getInternalProperty(\""
                     + propertyName
                     + "\" ["
@@ -205,7 +207,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     protected final void setInternalProperty(String propertyName, Object value) {
         IPropertiesAccessor pa = getPropertiesAccessor(true);
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
                     + ")");
         }
@@ -217,7 +219,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             ValueExpression value) {
         IPropertiesAccessor pa = getPropertiesAccessor(true);
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
                     + ")");
         }
@@ -544,7 +546,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         this.converter = converter;
         this.converterSetted = true;
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG.debug("Set converter: " + converter);
         }
     }
@@ -556,7 +558,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
         Object value = transientAttributes.get(name);
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG.debug("Get transient attribute '" + name + "' => " + value);
         }
 
@@ -568,7 +570,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             transientAttributes = factory.createMap(4);
         }
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG.debug("Set transient attribute '" + name + "'=" + value);
         }
 
@@ -586,7 +588,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     public void processUpdates(FacesContext context) {
 
-        if (LOG.isDebugEnabled()) {
+        if (debugEnabled) {
             LOG.debug("Process update, enableDelta=" + enableDelta);
         }
 
@@ -614,8 +616,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     public void startDecodes(FacesContext context) {
         enableDelta = true;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Start decode component");
+        if (debugEnabled) {
+            LOG.debug("Start decode component ");
         }
     }
 

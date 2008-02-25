@@ -192,14 +192,16 @@ public class HtmlRenderContext extends AbstractRenderContext implements
                     "No more elements into interactive render components");
         }
 
+        int pos = interactiveRenderComponents.size() - 3;
+
         lastInteractiveRenderComponent = (UIComponent) interactiveRenderComponents
-                .remove(0);
+                .remove(pos);
         lastInteractiveRenderComponentClientId = (String) interactiveRenderComponents
-                .remove(0);
+                .remove(pos);
 
         IJavaScriptRenderContext oldJavaScriptRenderContext = javaScriptRenderContext;
         javaScriptRenderContext = (IJavaScriptRenderContext) interactiveRenderComponents
-                .remove(0);
+                .remove(pos);
 
         oldJavaScriptRenderContext
                 .popChild(javaScriptRenderContext, htmlWriter);

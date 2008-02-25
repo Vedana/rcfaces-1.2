@@ -38,6 +38,7 @@ import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
+import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -386,6 +387,11 @@ public class ComboGridRenderer extends DataGridRenderer implements
             ComboGridComponent comboGridComponent, String convertedSelectedValue) {
 
         DataModel dataModel = comboGridComponent.getDataModelValue();
+
+        if (dataModel instanceof IComponentRefModel) {
+            ((IComponentRefModel) dataModel).setComponent(comboGridComponent);
+        }
+
         if ((dataModel instanceof IFiltredModel) == false) {
             if (true) {
                 return null;
@@ -716,6 +722,10 @@ public class ComboGridRenderer extends DataGridRenderer implements
                 .getGridComponent();
 
         DataModel dataModel = tableContext.getDataModel();
+
+        if (dataModel instanceof IComponentRefModel) {
+            ((IComponentRefModel) dataModel).setComponent(comboGridComponent);
+        }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
         if (filtersMap != null) {

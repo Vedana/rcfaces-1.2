@@ -576,6 +576,8 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
 
         private final IModule module;
 
+        private final int hashCode;
+
         private IHierarchicalFile[] dependencies;
 
         public HierarchicalFile(IModule module, String name, String filename,
@@ -590,8 +592,15 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
 
             if (module != null) {
                 ((Module) module).addFile(this);
-
             }
+
+            int h = super.hashCode();
+            if (module != null) {
+                // ((Module) module).addFile(this);
+                h ^= module.getFilename().hashCode();
+            }
+
+            this.hashCode = h;
         }
 
         public void addDependencies(IHierarchicalFile dependencies[]) {
@@ -623,19 +632,12 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
         }
 
         public int hashCode() {
-            int h = super.hashCode();
-            if (module != null) {
-                // ((Module) module).addFile(this);
-                h ^= module.getFilename().hashCode();
-            }
-
-            return h;
+            return hashCode;
         }
 
         public String toString() {
             return "[HFile " + getId() + "]";
         }
-
     }
 
     /**

@@ -26,6 +26,7 @@ import org.rcfaces.core.image.ImageContentInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -515,7 +516,12 @@ public class InitRenderer extends AbstractHtmlRenderer {
         favoriteImageURL = favoriteContentAccessor.resolveURL(facesContext,
                 favoriteImageOperation, null);
 
-        if (favoriteImageURL == null) {
+        if (favoriteImageURL == null || favoriteImageURL.endsWith(".ico")) {
+            return;
+        }
+
+        if (ImageContentAccessorHandler.isOperationSupported(facesContext,
+                IEFavoriteIconOperation.ID, favoriteContentAccessor) == false) {
             return;
         }
 

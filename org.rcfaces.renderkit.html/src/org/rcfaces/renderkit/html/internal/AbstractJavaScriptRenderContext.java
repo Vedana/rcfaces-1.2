@@ -65,6 +65,10 @@ public abstract class AbstractJavaScriptRenderContext implements
             .getPackagePrefix()
             + ".client.SCRIPT_VERIFY";
 
+    private static final String CLEAN_UP_ON_SUBMIT_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".client.CLEAN_UP_ON_SUBMIT";
+
     private static final String JAVASCRIPT_WRITER = "camelia.html.javascript.writer";
 
     private static final String VARIABLES_POOL_PROPERTY = "org.rcfaces.renderkit.html.POOL_PROPERTY";
@@ -81,11 +85,16 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private static final String SCRIPT_VERIFY = "try { f_core; } catch(x) { alert(\"RCFaces Javascript Components are not initialized properly !\"); }";
 
+    private static final int DECLARED_CLASSES_INIT_SIZE = 512;
+
     protected final AbstractJavaScriptRenderContext parent;
 
     private final IJavaScriptRepository repository;
 
-    private final Set waitingRequiredClassesNames = new HashSet();
+    private final Set waitingRequiredClassesNames = new HashSet(
+            DECLARED_CLASSES_INIT_SIZE);
+
+    private final Set declaredClasses;
 
     private VariablePool variablePool;
 
@@ -121,6 +130,7 @@ public abstract class AbstractJavaScriptRenderContext implements
         repository = JavaScriptRepositoryServlet.getRepository(facesContext);
         declaredFiles = JavaScriptRepositoryServlet
                 .getContextRepository(facesContext);
+        declaredClasses = new HashSet(DECLARED_CLASSES_INIT_SIZE);
 
         Map map = facesContext.getExternalContext().getApplicationMap();
         synchronized (facesContext.getApplication()) {
@@ -153,6 +163,7 @@ public abstract class AbstractJavaScriptRenderContext implements
         this.parent = parent;
         this.repository = parent.repository;
         this.declaredFiles = parent.declaredFiles.copy();
+        this.declaredClasses = new HashSet(parent.declaredClasses);
         this.initialized = parent.initialized;
 
         this.filesToRequire = parent.filesToRequire;
@@ -188,6 +199,19 @@ public abstract class AbstractJavaScriptRenderContext implements
                     + requiredId + "'.");
         }
 
+        if (requiredId == null) {
+            if (declaredClasses.add(className) == false) {
+                return;
+            }
+        } else {
+            String key = className + "$" + requiredId;
+
+            if (declaredClasses.add(key) == false) {
+                return;
+            }
+            declaredClasses.add(className);
+        }
+
         IClass clazz = repository.getClassByName(className);
         if (clazz == null) {
             LOG.error("appendRequiredClasses: Unknown class '" + className
@@ -208,15 +232,20 @@ public abstract class AbstractJavaScriptRenderContext implements
             return;
         }
 
+        boolean trace = LOG.isTraceEnabled();
         for (int i = 0; i < requiredClasses.length; i++) {
-            if (LOG.isTraceEnabled()) {
+            if (trace) {
                 LOG.trace("Append required class '" + className
                         + "' requiredId='" + requiredId + "' => add '"
                         + requiredClasses[i].getName() + "'");
             }
 
-            waitingRequiredClassesNames.add(requiredClasses[i].getFile());
+            addWaitingRequiredClassName(requiredClasses[i]);
         }
+    }
+
+    public void addWaitingRequiredClassName(IClass clazz) {
+        waitingRequiredClassesNames.add(clazz.getFile());
     }
 
     public void appendRequiredFiles(IFile[] files) {
@@ -576,6 +605,23 @@ public abstract class AbstractJavaScriptRenderContext implements
          * 
          * writer.writeln(");"); }
          */
+
+        String cleanUpOnSubmitParameter = externalContext
+                .getInitParameter(CLEAN_UP_ON_SUBMIT_PARAMETER);
+        if (cleanUpOnSubmitParameter != null) {
+            cleanUpOnSubmitParameter = cleanUpOnSubmitParameter.trim()
+                    .toLowerCase();
+
+            writer.writeCall("f_core", "SetCleanUpOnSubmit");
+            if ("true".equals(cleanUpOnSubmitParameter)) {
+                writer.writeBoolean(true);
+
+            } else if ("false".equals(cleanUpOnSubmitParameter)) {
+                writer.writeBoolean(false);
+            }
+
+            writer.writeln(");");
+        }
 
         Boolean profilerMode = processContext.getProfilerMode();
         if (profilerMode != null) {

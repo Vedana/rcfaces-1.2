@@ -31,7 +31,7 @@ var __members = {
 	_onKeyDown: function(event) {
 		var code=event.f_getJsEvent().keyCode;
 
-		if (code!=f_key.VK_DOWN) {
+		if (code!=f_key.VK_DOWN && code!=f_key.VK_UP) {
 			return true;
 		}
 
@@ -42,7 +42,7 @@ var __members = {
 			menu.f_open(event.f_getJsEvent(), {
 				component: this,
 				position: f_popup.BOTTOM_COMPONENT
-				});
+			}, (code==f_key.VK_DOWN)?1:-1);
 		}
 		
 		return false;
@@ -82,7 +82,7 @@ var __members = {
 		menu.f_open(evt, {
 			component: this,
 			position: f_popup.BOTTOM_COMPONENT
-			});
+		});
 		
 		f_core.Debug(f_imageCombo, "f_imageButtonSelect: Menu open (menu='"+menu+"')");
 		return false;
@@ -96,6 +96,9 @@ var __members = {
 	},	
 	fa_getItemsWrapper: function() {
 		return this.f_getSubMenuById(f_imageCombo._MENU_ID);
+	},
+	f_isPopupLock: function(popupDocument, event) {
+		return false;
 	}
 }		
 

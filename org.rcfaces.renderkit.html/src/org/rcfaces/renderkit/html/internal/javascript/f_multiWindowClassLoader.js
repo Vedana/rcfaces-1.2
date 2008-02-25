@@ -66,7 +66,6 @@ if (window._RCFACES_LEVEL3) {
 		
 		var cnt=0;
 		try {
-		
 			var parent=this._parent;
 		
 			for(var i=0;i<arguments.length;i++) {
@@ -154,8 +153,7 @@ if (window._RCFACES_LEVEL3) {
 			case "f_classLoader":
 			case "f_multiWindowClassLoader":
 			case "f_aspect":
-			case "f_class":
-			
+			case "f_class":			
 				var parentClassLoader=this._parent._window[className];
 				var newClassLoader=function() {
 					parentClassLoader.apply(this, arguments);		

@@ -37,6 +37,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptEnableModeImpl;
+import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 
 /**
  * 
@@ -368,6 +369,17 @@ public class JavaScriptCollectorRenderContext extends
             }
         }
     }
+
+    /*
+    public void addWaitingRequiredClassName(IClass clazz) {
+        if (parent != null) {
+            parent.addWaitingRequiredClassName(clazz);
+            return;
+        }
+
+        super.addWaitingRequiredClassName(clazz);
+    }
+    */
 
     public boolean isRequiresPending() {
         return false;

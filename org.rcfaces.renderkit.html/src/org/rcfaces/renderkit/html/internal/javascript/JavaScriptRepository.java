@@ -169,7 +169,7 @@ public class JavaScriptRepository extends AbstractHierarchicalRepository
         }
 
         public String convertSymbols(Map symbols, String code) {
-            if (remapSymbols == false) {
+            if (remapSymbols == false || symbols == null) {
                 return code;
             }
 

@@ -616,11 +616,14 @@ var __statics = {
 
 		calendar._onUnitClick(evt, this, delta, f_calendarObject._MONTH_UNIT);
 		
-		var ds=calendar._cursorDate;
-		if (ds) {			
-			f_calendarObject._Focus(calendar._monthButtons[ds.getMonth()]);
+		var monthButtons=calendar._monthButtons;
+		if (monthButtons) {
+			var ds=calendar._cursorDate;
+			if (ds) {			
+				f_calendarObject._Focus(monthButtons[ds.getMonth()]);
+			}
 		}
-		
+				
 		return f_core.CancelJsEvent(evt);
 	},
 	
@@ -1788,8 +1791,7 @@ var __members = {
 
 		var selectWeek=this._layout & f_calendarObject.SELECT_WEEK_LAYOUT;
 		if (selectWeek) {
-			var td=doc.createElement("td");
-			f_core.AppendChild(tr, td);
+			f_core.CreateElement(tr, "td");
 		}
 		
 		this._weekDayButtons=new Array;
@@ -1838,7 +1840,7 @@ var __members = {
 		
 		//var idx=0;
 		for(var j=0;j<42;j++) {
-			if ((j % 7)==0) {
+			if (!(j % 7)) {
 				tr=doc.createElement("tr");
 				tr.className=className+"_rday";
 				f_core.AppendChild(tbody, tr);
