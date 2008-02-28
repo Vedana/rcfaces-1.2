@@ -755,7 +755,7 @@ var __members = {
 	 * @return boolean 
 	 */
 	_onSearchSuggest: function(jsEvt) {
-		f_core.Debug(f_comboGrid, "_onSearchSuggest: Charcode ("+jsEvt.keyCode+")");
+		f_core.Debug(fa_dataGridPopup, "_onSearchSuggest: Charcode ("+jsEvt.keyCode+")");
 
 		var cancel=false;
 	//	var value=this.f_getValue();
@@ -782,7 +782,7 @@ var __members = {
 		
 		var newInputValue=this._searchInput.value;
 		if (newInputValue==this._lastValue) {
-			f_core.Debug(f_comboGrid, "_onSearchSuggest: Same value ! (value='"+newInputValue+"' / last='"+this._lastValue+"')");
+			f_core.Debug(fa_dataGridPopup, "_onSearchSuggest: Same value ! (value='"+newInputValue+"' / last='"+this._lastValue+"')");
 			return true;
 		}
 		this._lastValue=newInputValue;
@@ -800,7 +800,7 @@ var __members = {
 			return true;
 		}
 		
-		f_core.Debug(f_comboGrid, "_onSearchSuggest: Set timeout to "+suggestionDelayMs);
+		f_core.Debug(fa_dataGridPopup, "_onSearchSuggest: Set timeout to "+suggestionDelayMs);
 		
 		var delay=suggestionDelayMs;
 
@@ -814,7 +814,7 @@ var __members = {
 				self._onSuggestTimeOut();
 				
 			} catch (x) {
-				f_core.Error(f_comboGrid, "_onSearchSuggest.timer: Timeout processing error !", x);
+				f_core.Error(fa_dataGridPopup, "_onSearchSuggest.timer: Timeout processing error !", x);
 			}
 		}, delay);
 		
@@ -833,7 +833,7 @@ var __members = {
 		}
 		
 		var minChars=this.f_getSuggestionMinChars();
-		f_core.Debug(f_comboGrid, "_onSuggestTimeOut: text='"+text+"'. (minChars="+minChars+")");
+		f_core.Debug(fa_dataGridPopup, "_onSuggestTimeOut: text='"+text+"'. (minChars="+minChars+")");
 
 		if (minChars>0 && text.length<minChars) {
 			return;
