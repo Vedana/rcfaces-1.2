@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import javax.faces.el.ValueBinding;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import javax.faces.el.ValueBinding;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 
 /**
  * <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
@@ -40,7 +40,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alternateText","imageHeight","imageURL","filterProperties","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","filterProperties","alternateText","imageWidth","imageURL"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="imageURL";
 

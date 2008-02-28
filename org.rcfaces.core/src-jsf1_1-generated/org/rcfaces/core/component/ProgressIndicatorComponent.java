@@ -1,16 +1,16 @@
 package org.rcfaces.core.component;
 
+import javax.faces.component.NamingContainer;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.component.IInitializationState;
-import javax.faces.el.ValueBinding;
 import javax.faces.FacesException;
 import org.rcfaces.core.component.ProgressBarComponent;
-import java.util.Arrays;
-import javax.faces.component.NamingContainer;
-import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.internal.component.IInitializationState;
+import java.util.Arrays;
+import java.util.Set;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractBasicComponent;
 
 /**

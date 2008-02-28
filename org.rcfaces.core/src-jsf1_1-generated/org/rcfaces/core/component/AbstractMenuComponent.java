@@ -1,22 +1,22 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.capability.ICheckComponent;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.AbstractConverterCommandComponent;
-import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.MenuTools;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.ICheckComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.tools.CheckTools;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -27,12 +27,12 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 	ICheckedValuesCapability,
 	IReadOnlyCapability,
 	ICheckComponent,
-	IComponentValueTypeCapability,
-	IMenuComponent {
+	IMenuComponent,
+	IComponentValueTypeCapability {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractConverterCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","checkedValues","checkListener","removeAllWhenShown","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkedValues","checkListener","selectionListener","readOnly","removeAllWhenShown"}));
 	}
 
 
@@ -139,6 +139,13 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 		return valueBinding.getType(facesContext);
 	}
 
+	public Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues(), getValue());
+		
+	}
+
 	public int getCheckedValuesCount() {
 
 
@@ -150,13 +157,6 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
-		
-	}
-
-	public Object getFirstCheckedValue() {
-
-
-			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 

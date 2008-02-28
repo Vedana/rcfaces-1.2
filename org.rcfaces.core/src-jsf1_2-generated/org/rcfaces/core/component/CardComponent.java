@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import java.util.Arrays;
+import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.internal.tools.CardBoxTools;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 /**
  * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
@@ -28,7 +28,7 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment","scopeSaveValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeSaveValue","verticalAlignment","scopeVar","textAlignment","scopeValue","loadListener"}));
 	}
 
 	public CardComponent() {

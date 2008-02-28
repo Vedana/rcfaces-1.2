@@ -2,11 +2,11 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.AbstractMessagesComponent;
-import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.AbstractMessagesComponent;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 
 /**
  * <p>The messages Component is a placeholder for error messages (several messages can be shown simultaneously).</p>
@@ -29,7 +29,7 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessagesComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showActiveComponentMessage","errorStyleClass","showIfMessage","styleClass","fatalStyleClass","infoStyleClass","warnStyleClass"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fatalStyleClass","showIfMessage","warnStyleClass","errorStyleClass","infoStyleClass","styleClass","showActiveComponentMessage"}));
 	}
 
 	public MessagesComponent() {

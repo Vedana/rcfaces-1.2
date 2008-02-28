@@ -18,11 +18,11 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.model.DataModel;
-import java.util.Arrays;
-import javax.faces.component.NamingContainer;
 import org.rcfaces.core.internal.tools.GridTools;
+import javax.faces.component.NamingContainer;
+import javax.faces.model.DataModel;
 import java.util.HashSet;
+import java.util.Arrays;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
