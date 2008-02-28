@@ -37,7 +37,6 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptEnableModeImpl;
-import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
 
 /**
  * 
@@ -371,15 +370,11 @@ public class JavaScriptCollectorRenderContext extends
     }
 
     /*
-    public void addWaitingRequiredClassName(IClass clazz) {
-        if (parent != null) {
-            parent.addWaitingRequiredClassName(clazz);
-            return;
-        }
-
-        super.addWaitingRequiredClassName(clazz);
-    }
-    */
+     * public void addWaitingRequiredClassName(IClass clazz) { if (parent !=
+     * null) { parent.addWaitingRequiredClassName(clazz); return; }
+     * 
+     * super.addWaitingRequiredClassName(clazz); }
+     */
 
     public boolean isRequiresPending() {
         return false;
@@ -396,7 +391,7 @@ public class JavaScriptCollectorRenderContext extends
         if (filesToRequire.length > 0) {
             IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
 
-            initializeJavaScript(jsWriter, getRepository());
+            initializeJavaScript(jsWriter, getRepository(), false);
 
             String cameliaClassLoader = convertSymbol("f_classLoader",
                     "_rcfacesClassLoader");
@@ -428,7 +423,7 @@ public class JavaScriptCollectorRenderContext extends
                 jsWriter = InitRenderer.openScriptTag(htmlWriter);
             }
 
-            initializeJavaScript(jsWriter, getRepository());
+            initializeJavaScript(jsWriter, getRepository(), true);
         }
 
         boolean isProfilerOn = isProfilerOn(htmlWriter);
@@ -659,6 +654,20 @@ public class JavaScriptCollectorRenderContext extends
             }
 
             rawsToInclude.clear();
+        }
+
+        if (hasMessagesPending(htmlWriter.getHtmlComponentRenderContext()
+                .getHtmlRenderContext())) {
+            if (jsWriter == null) {
+                jsWriter = InitRenderer.openScriptTag(htmlWriter);
+            }
+
+            if (logProfiling) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "null,\"javascriptCollector.messages\");");
+            }
+
+            writeMessages(jsWriter);
         }
 
         if (logProfiling) {
