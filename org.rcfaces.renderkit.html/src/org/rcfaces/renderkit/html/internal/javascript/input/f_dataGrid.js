@@ -342,6 +342,7 @@ var __members = {
 		var idx=0;
 		row._index=arguments[idx++];
 		row.id=this.id+"::row"+rowIdx;
+		row.tabIndex=-1;
 		
 		if (this._selectable || this._checkable) {
 			row.onmousedown=f_grid.RowMouseDown;
@@ -492,6 +493,7 @@ var __members = {
 							button._row=row;
 							button.onclick=f_dataGrid._AdditionalInformationSelect;
 							button.onfocus=f_grid.GotFocus;
+							button.tabIndex=-1;
 							
 							button.className="f_grid_additional_button";
 							
@@ -524,7 +526,7 @@ var __members = {
 							input.onfocus=f_grid.GotFocus;
 							input._row=row;
 							input._dontSerialize=true;
-							// input.tabIndex=-1; // ???
+							input.tabIndex=-1; // -1 car sinon pas de sortie du focus du grid
 							input.className="f_grid_input";
 							
 							if (this.f_isDisabled()) {
@@ -1575,7 +1577,7 @@ var __members = {
 			f_core.AppendChild(body, row);
 		}
 
-		var rowClasses= this._rowStyleClasses;
+		var rowClasses=this._rowStyleClasses;
 
 		for(var i=0;i<trs.length;i++) {
 			var row=trs[i];
