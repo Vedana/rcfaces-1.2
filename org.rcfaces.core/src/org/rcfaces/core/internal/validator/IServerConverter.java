@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.internal.validator;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
@@ -21,5 +22,5 @@ public interface IServerConverter {
 
     IParameter[] listParameters();
 
-    Converter getInstance(FacesContext facesContext);
+    Converter getInstance(FacesContext facesContext, UIComponent component);
 }

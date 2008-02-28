@@ -16,6 +16,7 @@ import java.util.TimeZone;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.validator.DoubleRangeValidator;
@@ -37,6 +38,7 @@ import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.IServerConverter;
 import org.rcfaces.core.internal.validator.ITaskDescriptor;
+import org.rcfaces.core.lang.IParametredConverter;
 import org.rcfaces.core.validator.IClientValidatorTask;
 import org.rcfaces.core.validator.IParameter;
 import org.xml.sax.Attributes;
@@ -546,7 +548,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
             if (serverTaskClassName != null) {
                 LOG.debug("Instanciate filter '" + serverTaskClassName + "'.");
-                
+
                 Class clazz;
                 try {
                     clazz = ClassLocator.load(serverTaskClassName, null,
@@ -688,7 +690,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             this.id = id;
         }
 
-        public Converter getInstance(FacesContext facesContext) {
+        public Converter getInstance(FacesContext facesContext,
+                UIComponent component) {
 
             Converter converter = null;
 
@@ -704,6 +707,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
                 } else {
                     converter = application.createConverter(id);
+                    // C'est une nouvelle instance à chaque fois !
                     setParameters = true;
                 }
             }
@@ -751,41 +755,86 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                                 + "' className='" + getClassName() + "'.", e);
             }
 
-            PropertyDescriptor propertyDescriptors[] = beanInfo
-                    .getPropertyDescriptors();
+            Map listProperties = propertyDescriptorsByName(beanInfo);
+
+            IParametredConverter parametredConverter = null;
 
             for (int i = 0; i < parameters.length; i++) {
                 IParameter parameter = parameters[i];
 
                 String name = parameter.getName();
 
-                for (int j = 0; j < propertyDescriptors.length; j++) {
-                    PropertyDescriptor propertyDescriptor = propertyDescriptors[j];
+                PropertyDescriptor propertyDescriptor = (PropertyDescriptor) listProperties
+                        .get(name);
 
-                    if (propertyDescriptor.getName().equals(name) == false) {
-                        continue;
-                    }
-
+                if (propertyDescriptor != null) {
                     Class propertyType = propertyDescriptor.getPropertyType();
 
                     Object value = Convertor.convert(parameter.getValue(),
                             propertyType);
+
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Set parameter '" + name
+                                + "', converted value='" + value
+                                + "' to converter " + converter
+                                + " [IParametredConverter method]");
+                    }
 
                     try {
                         propertyDescriptor.getWriteMethod().invoke(converter,
                                 new Object[] { value });
 
                     } catch (Throwable th) {
-                        LOG.error("Can not set property '"
-                                + propertyDescriptor.getPropertyType()
-                                + "' to " + value, th);
+                        LOG.error("Can not set property '" + name
+                                + "' converted value='" + value
+                                + "' to converter " + converter, th);
                     }
 
-                    break;
+                    continue;
+                }
+
+                if (parametredConverter != null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Set parameter '" + name + "' value='"
+                                + parameter.getValue() + "' to converter "
+                                + converter + " [IParametredConverter method]");
+                    }
+
+                    try {
+                        parametredConverter.setParameter(name, parameter
+                                .getValue());
+
+                    } catch (Throwable th) {
+                        LOG.error("Can not set parameter '" + name + "' to "
+                                + parameter.getValue(), th);
+                    }
+                    continue;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Can not set parameter '" + name + "' ("
+                            + parameter.getValue() + ") to converter "
+                            + converter);
                 }
             }
 
             return converter;
+        }
+
+        private Map propertyDescriptorsByName(BeanInfo beanInfo) {
+
+            PropertyDescriptor propertyDescriptors[] = beanInfo
+                    .getPropertyDescriptors();
+
+            Map map = new HashMap(propertyDescriptors.length);
+
+            for (int j = 0; j < propertyDescriptors.length; j++) {
+                PropertyDescriptor p = propertyDescriptors[j];
+
+                map.put(p.getName(), p);
+            }
+
+            return map;
         }
     }
 

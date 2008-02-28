@@ -339,7 +339,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
                 if (serverConverter != null) {
                     Converter converter = computeConverter(facesContext,
-                            serverConverter, command.getName());
+                            component, serverConverter, command.getName());
 
                     if (converter != null) {
                         valueHolder.setConverter(converter);
@@ -352,8 +352,8 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     }
 
     private Converter computeConverter(FacesContext facesContext,
-            IServerConverter serverConverter, String validatorId) {
-        Converter converter = serverConverter.getInstance(facesContext);
+            UIComponent component, IServerConverter serverConverter, String validatorId) {
+        Converter converter = serverConverter.getInstance(facesContext, component);
 
         if (converter == null) {
             throw new FacesException(
