@@ -520,7 +520,7 @@ public abstract class AbstractJavaScriptRenderContext implements
 
         initialized = true;
 
-        initializeJavaScript(writer, repository);
+        initializeJavaScript(writer, repository, true);
     }
 
     public void restoreState(FacesContext facesContext, Object state) {
@@ -567,7 +567,8 @@ public abstract class AbstractJavaScriptRenderContext implements
     }
 
     public static void initializeJavaScript(IJavaScriptWriter writer,
-            IJavaScriptRepository repository) throws WriterException {
+            IJavaScriptRepository repository, boolean generateMessages)
+            throws WriterException {
 
         FacesContext facesContext = writer.getFacesContext();
         ExternalContext externalContext = facesContext.getExternalContext();
@@ -771,59 +772,8 @@ public abstract class AbstractJavaScriptRenderContext implements
             }
         }
 
-        Map messages = null;
-        Set clientMessageIdFilters = htmlRenderContext
-                .getClientMessageIdFilters();
-
-        if (clientMessageIdFilters
-                .contains(IHtmlRenderContext.NO_CLIENT_MESSAGES) == false) {
-            StringAppender sa = null;
-            Iterator messageClientIds = facesContext.getClientIdsWithMessages();
-
-            for (; messageClientIds.hasNext();) {
-                String clientId = (String) messageClientIds.next();
-
-                if (clientMessageIdFilters.isEmpty() == false
-                        && clientMessageIdFilters.contains(clientId) == false) {
-                    continue;
-                }
-
-                if (messages == null) {
-                    messages = new HashMap();
-                }
-
-                Iterator it = facesContext.getMessages(clientId);
-                for (; it.hasNext();) {
-                    FacesMessage facesMessage = (FacesMessage) it.next();
-
-                    String varName = (String) messages.get(facesMessage);
-                    if (varName == null) {
-                        varName = JavaScriptTools.writeMessage(facesContext,
-                                writer, facesMessage);
-
-                        messages.put(facesMessage, varName);
-
-                    }
-                    if (sa == null) {
-                        sa = new StringAppender(32);
-                    }
-
-                    if (sa.length() > 0) {
-                        sa.append(',');
-                    }
-                    sa.append(varName);
-                }
-
-                if (sa == null || sa.length() < 1) {
-                    continue;
-                }
-
-                writer.writeCall("f_messageContext", "AppendMessages")
-                        .writeString(clientId).write(',').write(sa.toString())
-                        .writeln(");");
-
-                sa.setLength(0);
-            }
+        if (generateMessages) {
+            writeMessages(writer);
         }
 
         if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
@@ -832,6 +782,99 @@ public abstract class AbstractJavaScriptRenderContext implements
         }
 
         LOG.debug("Javascript initialized.");
+    }
+
+    protected static boolean hasMessagesPending(
+            IHtmlRenderContext htmlRenderContext) {
+
+        Set clientMessageIdFilters = htmlRenderContext
+                .getClientMessageIdFilters();
+
+        if (clientMessageIdFilters
+                .contains(IHtmlRenderContext.NO_CLIENT_MESSAGES)) {
+            return false;
+        }
+
+        FacesContext facesContext = htmlRenderContext.getFacesContext();
+        Iterator messageClientIds = facesContext.getClientIdsWithMessages();
+        for (; messageClientIds.hasNext();) {
+            String clientId = (String) messageClientIds.next();
+
+            if (clientMessageIdFilters.isEmpty() == false
+                    && clientMessageIdFilters.contains(clientId) == false) {
+                continue;
+            }
+
+            Iterator it = facesContext.getMessages(clientId);
+            if (it.hasNext()) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    protected static void writeMessages(IJavaScriptWriter writer)
+            throws WriterException {
+        IHtmlRenderContext htmlRenderContext = writer.getHtmlRenderContext();
+
+        Set clientMessageIdFilters = htmlRenderContext
+                .getClientMessageIdFilters();
+
+        if (clientMessageIdFilters
+                .contains(IHtmlRenderContext.NO_CLIENT_MESSAGES)) {
+            return;
+        }
+
+        Map messages = null;
+        StringAppender sa = null;
+
+        FacesContext facesContext = htmlRenderContext.getFacesContext();
+        Iterator messageClientIds = facesContext.getClientIdsWithMessages();
+        for (; messageClientIds.hasNext();) {
+            String clientId = (String) messageClientIds.next();
+
+            if (clientMessageIdFilters.isEmpty() == false
+                    && clientMessageIdFilters.contains(clientId) == false) {
+                continue;
+            }
+
+            if (messages == null) {
+                messages = new HashMap();
+            }
+
+            Iterator it = facesContext.getMessages(clientId);
+            for (; it.hasNext();) {
+                FacesMessage facesMessage = (FacesMessage) it.next();
+
+                String varName = (String) messages.get(facesMessage);
+                if (varName == null) {
+                    varName = JavaScriptTools.writeMessage(facesContext,
+                            writer, facesMessage);
+
+                    messages.put(facesMessage, varName);
+
+                }
+                if (sa == null) {
+                    sa = new StringAppender(32);
+                }
+
+                if (sa.length() > 0) {
+                    sa.append(',');
+                }
+                sa.append(varName);
+            }
+
+            if (sa == null || sa.length() < 1) {
+                continue;
+            }
+
+            writer.writeCall("f_messageContext", "AppendMessages").writeString(
+                    clientId).write(',').write(sa.toString()).writeln(");");
+
+            sa.setLength(0);
+        }
     }
 
     public void clearJavaScriptStubForced() {
