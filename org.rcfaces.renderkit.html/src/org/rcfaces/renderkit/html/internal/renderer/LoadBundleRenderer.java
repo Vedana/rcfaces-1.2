@@ -156,7 +156,7 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
             IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
 
-            JavaScriptRenderContext.initializeJavaScript(jsWriter, repository);
+            JavaScriptRenderContext.initializeJavaScript(jsWriter, repository, true);
 
             jsWriter.writeCall("f_resourceBundle", "Load").writeString(
                     bundleName).write(',').writeString(baseName).write(',');

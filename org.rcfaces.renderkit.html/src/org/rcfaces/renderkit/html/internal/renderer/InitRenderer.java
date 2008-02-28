@@ -441,7 +441,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         IJavaScriptWriter jsWriter = openScriptTag(writer);
 
-        JavaScriptRenderContext.initializeJavaScript(jsWriter, repository);
+        JavaScriptRenderContext.initializeJavaScript(jsWriter, repository, true);
 
         jsWriter.end();
     }

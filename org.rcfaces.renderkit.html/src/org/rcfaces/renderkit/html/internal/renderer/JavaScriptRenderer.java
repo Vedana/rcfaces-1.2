@@ -273,7 +273,7 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
 
         IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(writer);
 
-        JavaScriptRenderContext.initializeJavaScript(jsWriter, repository);
+        JavaScriptRenderContext.initializeJavaScript(jsWriter, repository, true);
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
