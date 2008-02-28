@@ -1661,7 +1661,12 @@ var __members = {
 
 			}	
 			
-			f_core.InsertBefore(this, focus, this.firstChild);
+			if (this._scrollBody) {			
+				f_core.InsertBefore(this, focus, this._scrollBody);
+				
+			} else {
+				f_core.InsertBefore(this, focus, this.firstChild);
+			}
 		}
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);		
