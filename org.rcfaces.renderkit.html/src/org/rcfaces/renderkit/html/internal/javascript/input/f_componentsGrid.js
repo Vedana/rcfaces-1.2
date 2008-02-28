@@ -14,6 +14,7 @@ var __members = {
 	f_componentsGrid: function() {
 		this.f_super(arguments);
 		
+		this._showCursor=true; // On affiche le curseur
 		this._cellStyleClass="f_cGrid_cell";
 		this._rowStyleClass="f_cGrid_row";
 	},
@@ -406,12 +407,12 @@ var __members = {
 			row._index=f_core.GetAttribute(row, "v:rowValue");
 			row._rowIndex=f_core.GetNumberAttribute(row, "v:rowIndex");
 			if (!row.id) {
-				row.id=this.id+fa_namingContainer.GetSeparator()+"row"+i;
+				row.id=this.id+"::row"+i;
 			}
 
 			row._namingContainer=true;
 
-			row._className=rowClasses[i % rowClasses.length];
+			row._className=rowClasses[(i+1) % rowClasses.length];
 			
 			if (cellStyleClassSetted) {
 				var cells=row.cells;
