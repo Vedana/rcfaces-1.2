@@ -11,11 +11,14 @@ package org.rcfaces.core.component.capability;
 public interface IClientCheckFullStateCapability extends
         IClientFullStateCapability {
     /**
-     * Returns a boolean value indicating wether the client should know about
+     * Returns an integer value indicating wether the client should know about
      * the component's full state even if only a part of the data is present
      * (AJAX).
      * 
-     * @return
+     * @return An integer value indicating wether the client should know about the component's full state.
+     * @see IClientFullStateCapability#NONE_CLIENT_FULL_STATE 
+     * @see IClientFullStateCapability#ONEWAY_CLIENT_FULL_STATE 
+     * @see IClientFullStateCapability#TWOWAYS_CLIENT_FULL_STATE 
      */
     int getClientCheckFullState();
 
@@ -24,7 +27,9 @@ public interface IClientCheckFullStateCapability extends
      * component's full state even if only a part of the data is present (AJAX).
      * 
      * @param clientCheckFullState
-     * 
+     * @see IClientFullStateCapability#NONE_CLIENT_FULL_STATE 
+     * @see IClientFullStateCapability#ONEWAY_CLIENT_FULL_STATE 
+     * @see IClientFullStateCapability#TWOWAYS_CLIENT_FULL_STATE 
      */
     void setClientCheckFullState(int clientCheckFullState);
 }
