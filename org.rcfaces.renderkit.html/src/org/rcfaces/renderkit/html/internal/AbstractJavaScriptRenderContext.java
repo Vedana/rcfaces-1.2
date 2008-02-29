@@ -240,14 +240,15 @@ public abstract class AbstractJavaScriptRenderContext implements
                         + requiredClasses[i].getName() + "'");
             }
 
-            addWaitingRequiredClassName(requiredClasses[i]);
+            waitingRequiredClassesNames.add(requiredClasses[i].getFile());
+//            addWaitingRequiredClassName(requiredClasses[i]);
         }
     }
-
+/*
     public void addWaitingRequiredClassName(IClass clazz) {
-        waitingRequiredClassesNames.add(clazz.getFile());
+  waitingRequiredClassesNames.add(clazz.getFile());      
     }
-
+*/
     public void appendRequiredFiles(IFile[] files) {
         if (LOG.isTraceEnabled()) {
             for (int i = 0; i < files.length; i++) {
