@@ -113,7 +113,11 @@ public class Constants {
 
     public static final boolean CACHED_LOCALE_FORMATS = true;
 
-    public static final boolean COMPACTED_PROPERTY_NAME = true;
+    /**
+     * <code>false</code> Optimize for CPU
+     * <code>true</code>Optimize for Memory
+     */
+    public static final boolean COMPACTED_PROPERTY_NAME = false;
 
     public static final boolean LOCKED_CLIENT_ATTRIBUTES_DEFAULT_VALUE = false;
 
