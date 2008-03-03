@@ -33,19 +33,19 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
     private static final boolean debugEnabled = LOG.isDebugEnabled();
 
-    private static final Set PRIMITIVE_CLASSES = new HashSet(8);
+    private static final Set PRIMITIVE_CLASSES = new HashSet(12);
     static {
-        PRIMITIVE_CLASSES.add(String.class);
-        PRIMITIVE_CLASSES.add(Long.class);
-        PRIMITIVE_CLASSES.add(Integer.class);
-        PRIMITIVE_CLASSES.add(Short.class);
-        PRIMITIVE_CLASSES.add(Byte.class);
-        PRIMITIVE_CLASSES.add(Boolean.class);
-        PRIMITIVE_CLASSES.add(Double.class);
-        PRIMITIVE_CLASSES.add(Float.class);
-        PRIMITIVE_CLASSES.add(Character.class);
-        PRIMITIVE_CLASSES.add(Date.class);
-        PRIMITIVE_CLASSES.add(Time.class);
+        PRIMITIVE_CLASSES.add(String.class.getName());
+        PRIMITIVE_CLASSES.add(Long.class.getName());
+        PRIMITIVE_CLASSES.add(Integer.class.getName());
+        PRIMITIVE_CLASSES.add(Short.class.getName());
+        PRIMITIVE_CLASSES.add(Byte.class.getName());
+        PRIMITIVE_CLASSES.add(Boolean.class.getName());
+        PRIMITIVE_CLASSES.add(Double.class.getName());
+        PRIMITIVE_CLASSES.add(Float.class.getName());
+        PRIMITIVE_CLASSES.add(Character.class.getName());
+        PRIMITIVE_CLASSES.add(Date.class.getName());
+        PRIMITIVE_CLASSES.add(Time.class.getName());
     }
 
     private Map properties;
@@ -257,7 +257,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
             return true;
         }
 
-        return PRIMITIVE_CLASSES.contains(value.getClass());
+        return PRIMITIVE_CLASSES.contains(value.getClass().getName());
     }
 
     public void release() {
