@@ -42,10 +42,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private String initListeners;
 	private String propertyChangeListeners;
 	private String hiddenMode;
-	private String showSummary;
+	private String margins;
 	private String forVal;
 	private String showDetail;
-	private String margins;
+	private String showSummary;
 	public final String getMarginBottom() {
 		return marginBottom;
 	}
@@ -238,8 +238,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setShowSummary(String showSummary) {
-		this.showSummary = showSummary;
+	public final void setMargins(String margins) {
+		this.margins = margins;
 	}
 
 	public final void setFor(String forVal) {
@@ -250,8 +250,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.showDetail = showDetail;
 	}
 
-	public final void setMargins(String margins) {
-		this.margins = margins;
+	public final void setShowSummary(String showSummary) {
+		this.showSummary = showSummary;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -274,10 +274,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
+			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  forVal='"+forVal+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
-			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -496,14 +496,11 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (showSummary != null) {
-			if (isValueReference(showSummary)) {
-				ValueBinding vb = application.createValueBinding(showSummary);
-				component.setValueBinding(Properties.SHOW_SUMMARY, vb);
-
-			} else {
-				component.setShowSummary(getBool(showSummary));
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
+				component.setMargins(margins);
 		}
 
 		if (forVal != null) {
@@ -526,11 +523,14 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (isValueReference(margins)) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+		if (showSummary != null) {
+			if (isValueReference(showSummary)) {
+				ValueBinding vb = application.createValueBinding(showSummary);
+				component.setValueBinding(Properties.SHOW_SUMMARY, vb);
+
+			} else {
+				component.setShowSummary(getBool(showSummary));
 			}
-				component.setMargins(margins);
 		}
 	}
 
@@ -559,10 +559,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		initListeners = null;
 		propertyChangeListeners = null;
 		hiddenMode = null;
-		showSummary = null;
+		margins = null;
 		forVal = null;
 		showDetail = null;
-		margins = null;
+		showSummary = null;
 
 		super.release();
 	}

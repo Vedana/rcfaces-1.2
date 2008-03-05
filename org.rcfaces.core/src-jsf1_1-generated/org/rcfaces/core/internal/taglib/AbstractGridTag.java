@@ -52,8 +52,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private String propertyChangeListeners;
 	private String hiddenMode;
 	private String first;
-	private String var;
 	private String margins;
+	private String var;
 	private String rows;
 	private String value;
 	public final String getMarginBottom() {
@@ -324,12 +324,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.first = first;
 	}
 
-	public final void setVar(String var) {
-		this.var = var;
-	}
-
 	public final void setMargins(String margins) {
 		this.margins = margins;
+	}
+
+	public final void setVar(String var) {
+		this.var = var;
 	}
 
 	public final void setRows(String rows) {
@@ -368,8 +368,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  first='"+first+"'");
-			LOG.debug("  var='"+var+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  var='"+var+"'");
 			LOG.debug("  rows='"+rows+"'");
 		}
 		super.setProperties(uiComponent);
@@ -653,6 +653,13 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins);
+		}
+
 		if (var != null) {
 			if (isValueReference(var)) {
 				ValueBinding vb = application.createValueBinding(var);
@@ -661,13 +668,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			} else {
 				component.setVar(var);
 			}
-		}
-
-		if (margins != null) {
-			if (isValueReference(margins)) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins);
 		}
 
 		if (rows != null) {
@@ -726,8 +726,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		hiddenMode = null;
 		first = null;
-		var = null;
 		margins = null;
+		var = null;
 		rows = null;
 		value = null;
 

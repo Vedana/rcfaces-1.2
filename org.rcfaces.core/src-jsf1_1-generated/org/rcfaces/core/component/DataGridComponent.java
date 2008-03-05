@@ -598,6 +598,16 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
+	protected void restoreDescendantState() {
+
+
+	}
+
+	protected void saveDescendantState() {
+
+
+	}
+
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
 		addFacesListener(listener);
 	}
