@@ -41,25 +41,42 @@ var __members = {
      * initial values.</p>
 	 *
 	 * @method public
+	 * @param String imageURL
+	 * @param String text
+	 * @param number width
+	 * @param number height
+	 * @param boolean visible
 	 */
-	f_waitingShell: function() {
+	f_waitingShell: function(imageURL, text, width, height, showOnSubmit) {
 		this.f_super(arguments, f_shell.TRANSPARENT);
-		
+
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var imageURL=f_core.GetAttribute(this, "v:imageURL");
-			if (imageURL) {
-				this.f_setImageURL(imageURL);
+			if (!imageURL) {
+				imageURL=f_core.GetAttribute(this, "v:imageURL");
 			}
 
-			var text=f_core.GetAttribute(this, "v:text");
-			if (text) {
-				this.f_setText(text);
+			if (!text) { 
+				text=f_core.GetAttribute(this, "v:text");
 			}
 
-			var visible=f_core.GetBooleanAttribute(this, "v:visible", true);
-			if (visible) {
-				this.f_installShowOnSubmit();
+			if (showOnSubmit===undefined) {
+				showOnSubmit=f_core.GetBooleanAttribute(this, "v:visible", true);
 			}
+		}
+		if (imageURL) {
+			this.f_setImageURL(imageURL);
+		}
+		if (text) {
+			this.f_setText(text);
+		}
+		if (width>0) {
+			this.f_setWidth(width);
+		}
+		if (height>0) {
+			this.f_setHeight(height);
+		}
+		if (showOnSubmit) {
+			this.f_installShowOnSubmit();
 		}
 	},
 	/*

@@ -135,15 +135,8 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
 
         jsWriter.setIgnoreComponentInitialization();
 
-        String varName = jsWriter.getJavaScriptRenderContext()
-                .allocateVarName();
-        jsWriter.setComponentVarName(varName);
-
         SubmitWaitComponent submitWaitComponent = (SubmitWaitComponent) jsWriter
                 .getComponentRenderContext().getComponent();
-
-        jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
-                "f_newInstance").writeln(");");
 
         IContentAccessor imageAccessor = null;
 
@@ -175,33 +168,55 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
             }
         }
 
+        String imageSrc = null;
         if (imageAccessor != null) {
-            String imageSrc = imageAccessor
-                    .resolveURL(facesContext, null, null);
-            if (imageSrc != null) {
-                jsWriter.writeMethodCall("f_setImageURL").writeString(imageSrc)
-                        .writeln(");");
-            }
-        }
-
-        if (width != null) {
-            jsWriter.writeMethodCall("f_setWidth").write(width).writeln(");");
-        }
-
-        if (height != null) {
-            jsWriter.writeMethodCall("f_setHeight").write(height).writeln(");");
+            imageSrc = imageAccessor.resolveURL(facesContext, null, null);
         }
 
         String text = submitWaitComponent.getText(facesContext);
         if (text == null) {
             text = getDefaultText(htmlComponentRenderContext);
         }
-        if (text != null) {
-            jsWriter.writeMethodCall("f_setText").writeString(text).writeln(
-                    ");");
+
+        boolean constructorParameters = (imageSrc != null && width != null && height != null);
+
+        if (constructorParameters == false) {
+            String varName = jsWriter.getJavaScriptRenderContext()
+                    .allocateVarName();
+            jsWriter.setComponentVarName(varName);
+
+            jsWriter.write(varName).write('=');
         }
 
-        jsWriter.writeMethodCall("f_installShowOnSubmit").writeln(");");
+        jsWriter.writeCall(getJavaScriptClassName(), "f_newInstance");
+
+        if (constructorParameters) {
+            jsWriter.writeString(imageSrc).write(',').writeString(text).write(
+                    ',').write(width).write(',').write(height).write(',')
+                    .writeBoolean(true).writeln(");");
+        } else {
+            jsWriter.writeln(");");
+
+            if (imageSrc != null) {
+                jsWriter.writeMethodCall("f_setImageURL").writeString(imageSrc)
+                        .writeln(");");
+            }
+            if (text != null) {
+                jsWriter.writeMethodCall("f_setText").writeString(text)
+                        .writeln(");");
+            }
+            if (width != null) {
+                jsWriter.writeMethodCall("f_setWidth").write(width).writeln(
+                        ");");
+            }
+
+            if (height != null) {
+                jsWriter.writeMethodCall("f_setHeight").write(height).writeln(
+                        ");");
+            }
+
+            jsWriter.writeMethodCall("f_installShowOnSubmit").writeln(");");
+        }
     }
 
     protected String getDefaultText(IHtmlComponentRenderContext htmlWriter) {
