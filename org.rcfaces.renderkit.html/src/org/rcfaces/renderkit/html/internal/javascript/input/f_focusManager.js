@@ -22,7 +22,12 @@ var __statics={
 	 * @return f_focusManager
 	 */
 	Get: function() {
-		return f_focusManager._Instance;
+		var instance=f_focusManager._Instance;
+		if (!instance) {
+			instance=f_focusManager.f_newInstance();
+		}
+		
+		return instance;
 	},
 	/**
 	 * @method protected static
@@ -51,6 +56,7 @@ var __members={
 
 		// this._initFocusId=undefined; // String
 		// this._focusId=undefined; // String
+		// this._documentComplete=undefined; // boolean
 
 		this.f_super(arguments);
 	},
@@ -59,6 +65,8 @@ var __members={
 	 * @return void
 	 */
 	f_documentComplete: function() {
+		this._documentComplete=true;
+		
 		var focusId=this._initFocusId;
 		if (!focusId) {
 			return;
@@ -72,6 +80,10 @@ var __members={
 	 * @return String
 	 */
 	f_getFocusId: function() {
+		if (!this._documentComplete) {
+			return this._initFocusId;
+		}
+
 		var activeElement;
 		
 		if (f_core.IsInternetExplorer()) {
@@ -120,8 +132,13 @@ var __members={
 		var component=focus;
 		
 		if (typeof(focus)=="string") {
+			if (!this._documentComplete) {
+				this._initFocusId=focus;
+				return undefined;
+			}
+			
 			f_core.Debug(f_focusManager, "f_setFocus: search component id='"+focus+"' async='"+async+"'.");
-		
+
 			try {
 				component=f_core.GetElementByClientId(focus);
 				
@@ -130,6 +147,9 @@ var __members={
 				
 				component=document.getElementById(focus);
 			}
+		} else if (!this._documentComplete) {
+			// C'est déjà positionné !
+			this._initFocusId=undefined;
 		}
 			
 		if (!component) {

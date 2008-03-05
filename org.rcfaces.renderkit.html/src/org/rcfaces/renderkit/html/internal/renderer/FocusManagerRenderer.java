@@ -10,7 +10,6 @@ import org.rcfaces.core.component.FocusManagerComponent;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -31,24 +30,18 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
     protected static final String NONE_FOCUS_ID = "--none--";
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
-
-        FacesContext facesContext = componentRenderContext.getFacesContext();
-
-        FocusManagerComponent focusManagerComponent = (FocusManagerComponent) componentRenderContext
-                .getComponent();
-
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+        IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+        if (htmlComponentRenderContext.getHtmlRenderContext()
                 .getJavaScriptRenderContext().isCollectorMode() == false) {
 
             htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
             writeHtmlAttributes(htmlWriter);
             writeJavaScriptAttributes(htmlWriter);
 
-            String focusId = focusManagerComponent.getFocusId(facesContext);
+            String focusId = getFocusId(htmlComponentRenderContext);
             if (focusId != null) {
                 htmlWriter.writeAttribute("v:focusId", focusId);
             }
@@ -69,18 +62,23 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
             return;
         }
 
-        FocusManagerComponent focusManagerComponent = (FocusManagerComponent) jsWriter
-                .getComponentRenderContext().getComponent();
+        jsWriter.writeCall(getJavaScriptClassName(), "f_newInstance");
 
-        jsWriter.writeCall("f_focusManager", "f_newInstance");
-
-        String focusId = focusManagerComponent.getFocusId(jsWriter
-                .getFacesContext());
+        String focusId = getFocusId(jsWriter.getHtmlComponentRenderContext());
         if (focusId != null) {
             jsWriter.writeString(focusId);
         }
 
         jsWriter.writeln(");");
+    }
+
+    protected String getFocusId(
+            IHtmlComponentRenderContext componentRenderContext) {
+        FocusManagerComponent focusManagerComponent = (FocusManagerComponent) componentRenderContext
+                .getComponent();
+
+        return focusManagerComponent.getFocusId(componentRenderContext
+                .getFacesContext());
     }
 
     protected void decode(IRequestContext context, UIComponent component,
