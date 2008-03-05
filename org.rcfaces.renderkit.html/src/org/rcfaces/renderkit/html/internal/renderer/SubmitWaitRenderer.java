@@ -142,10 +142,8 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
         SubmitWaitComponent submitWaitComponent = (SubmitWaitComponent) jsWriter
                 .getComponentRenderContext().getComponent();
 
-        jsWriter.write(varName).write('=').writeCall("f_waitingShell",
-                "f_newInstance");
-
-        jsWriter.writeln(");");
+        jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
+                "f_newInstance").writeln(");");
 
         IContentAccessor imageAccessor = null;
 
