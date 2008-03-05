@@ -33,9 +33,11 @@ var __members = {
 			}, messageCode); 
 		});
 		
-		var events=f_core.GetAttribute(this, "v:events");
-		if (events) {
-			this.f_initEventAtts(f_viewErrorListener._EVENTS, events);
+		if (this.nodeType) {
+			var events=f_core.GetAttribute(this, "v:events");
+			if (events) {
+				this.f_initEventAtts(f_viewErrorListener._EVENTS, events);
+			}
 		}
 	}
 }
