@@ -58,9 +58,9 @@ public class JavaScriptCollectorRenderContext extends
 
     private final Set components = new OrderedSet();
 
-    private final List scriptsToInclude = new ArrayList();
+    // private final List scriptsToInclude = new ArrayList();
 
-    private final List rawsToInclude = new ArrayList();
+    // private final List rawsToInclude = new ArrayList();
 
     private final boolean mergeScripts;
 
@@ -465,6 +465,9 @@ public class JavaScriptCollectorRenderContext extends
         List submitIds = new ArrayList(16);
         List hoverIds = new ArrayList(16);
 
+        List scripts = null;
+        List raws = null;
+
         for (Iterator it = components.iterator(); it.hasNext();) {
             Object object = it.next();
 
@@ -485,6 +488,22 @@ public class JavaScriptCollectorRenderContext extends
                                     + (profilerId++) + ")\");");
                 }
 
+                continue;
+            }
+
+            if (object instanceof Script) {
+                if (scripts == null) {
+                    scripts = new ArrayList(8);
+                }
+                scripts.add(object);
+                continue;
+            }
+
+            if (object instanceof Raw) {
+                if (raws == null) {
+                    raws = new ArrayList(8);
+                }
+                raws.add(object);
                 continue;
             }
 
@@ -616,7 +635,7 @@ public class JavaScriptCollectorRenderContext extends
 
         }
 
-        if (scriptsToInclude.isEmpty() == false) {
+        if (scripts != null) {
             if (jsWriter == null) {
                 jsWriter = InitRenderer.openScriptTag(htmlWriter);
             }
@@ -624,36 +643,37 @@ public class JavaScriptCollectorRenderContext extends
             if (logProfiling) {
                 jsWriter.writeCall("f_core", "Profile").writeln(
                         "null,\"javascriptCollector.scripts("
-                                + (scriptsToInclude.size() / 2) + ")\");");
+                                + (scripts.size()) + ")\");");
             }
 
-            jsWriter.writeCall("f_core", "IncludesScript");
-
-            includesScript(jsWriter);
-
-            jsWriter.writeln(");");
-
-            scriptsToInclude.clear();
+            includesScript(jsWriter, scripts);
         }
 
-        if (rawsToInclude.isEmpty() == false) {
+        if (raws != null) {
             if (jsWriter == null) {
                 jsWriter = InitRenderer.openScriptTag(htmlWriter);
             }
 
             if (logProfiling) {
                 jsWriter.writeCall("f_core", "Profile").writeln(
-                        "null,\"javascriptCollector.raws("
-                                + (scriptsToInclude.size()) + ")\");");
+                        "null,\"javascriptCollector.raws(" + (raws.size())
+                                + ")\");");
             }
 
-            for (Iterator it = rawsToInclude.iterator(); it.hasNext();) {
-                String text = (String) it.next();
+            int idx = 1;
+            for (Iterator it = raws.iterator(); it.hasNext(); idx++) {
+                Raw raw = (Raw) it.next();
+
+                String text = raw.getText();
 
                 jsWriter.writeln(text);
-            }
 
-            rawsToInclude.clear();
+                if (logIntermediateProfiling) {
+                    jsWriter.writeCall("f_core", "Profile").writeln(
+                            "null,\"javascriptCollector.raws(" + idx + "/"
+                                    + (raws.size()) + ")\");");
+                }
+            }
         }
 
         if (hasMessagesPending(htmlWriter.getHtmlComponentRenderContext()
@@ -684,19 +704,23 @@ public class JavaScriptCollectorRenderContext extends
         components.clear();
     }
 
-    private void includesScript(IJavaScriptWriter jsWriter)
+    private void includesScript(IJavaScriptWriter jsWriter, List scripts)
             throws WriterException {
+
+        jsWriter.writeCall("f_core", "IncludesScript");
 
         if (mergeScripts) {
             // Resoudre les urls
 
             StringAppender sa = new StringAppender("jsmerge::",
-                    (scriptsToInclude.size() / 2) * 32);
+                    (scripts.size() / 2) * 32);
 
             boolean first = true;
-            for (Iterator it = scriptsToInclude.iterator(); it.hasNext();) {
-                String src = (String) it.next();
-                String charSet = (String) it.next();
+            for (Iterator it = scripts.iterator(); it.hasNext();) {
+                Script script = (Script) it.next();
+
+                String src = script.getSource();
+                String charSet = script.getCharSet();
 
                 if (charSet == null) {
                     charSet = "UTF-8";
@@ -715,15 +739,17 @@ public class JavaScriptCollectorRenderContext extends
 
             String collectedURL = null;
 
-            jsWriter.writeString(collectedURL);
+            jsWriter.writeString(collectedURL).writeln(");");
 
             return;
         }
 
         boolean first = true;
-        for (Iterator it = scriptsToInclude.iterator(); it.hasNext();) {
-            String src = (String) it.next();
-            String charSet = (String) it.next();
+        for (Iterator it = scripts.iterator(); it.hasNext();) {
+            Script script = (Script) it.next();
+
+            String src = script.getSource();
+            String charSet = script.getCharSet();
 
             if (first) {
                 first = false;
@@ -750,6 +776,8 @@ public class JavaScriptCollectorRenderContext extends
 
             jsWriter.write(',').writeInt(charsetKey.intValue());
         }
+
+        jsWriter.writeln(");");
     }
 
     private void encodeParameter(StringAppender sa, String value) {
@@ -897,13 +925,12 @@ public class JavaScriptCollectorRenderContext extends
     public void includeJavaScript(IHtmlWriter htmlWriter, String src,
             String javaScriptSrcCharSet) throws WriterException {
 
-        scriptsToInclude.add(src);
-        scriptsToInclude.add(javaScriptSrcCharSet);
+        components.add(new Script(src, javaScriptSrcCharSet));
     }
 
     public void writeRaw(IHtmlWriter htmlWriter, String text)
             throws WriterException {
-        rawsToInclude.add(text);
+        components.add(new Raw(text));
     }
 
     /**
@@ -951,6 +978,50 @@ public class JavaScriptCollectorRenderContext extends
                 return false;
             return true;
         }
+    }
 
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static class Script {
+        private static final String REVISION = "$Revision$";
+
+        private final String src;
+
+        private final String charSet;
+
+        public Script(String src, String charSet) {
+            this.src = src;
+            this.charSet = charSet;
+        }
+
+        public String getCharSet() {
+            return charSet;
+        }
+
+        public String getSource() {
+            return src;
+        }
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    private static class Raw {
+        private static final String REVISION = "$Revision$";
+
+        private final String text;
+
+        public Raw(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
     }
 }
