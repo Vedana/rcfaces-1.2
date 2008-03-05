@@ -157,7 +157,10 @@ var __statics = {
 				return component._shell;
 			}
 			if (component._shellIdentifier) {
-				return f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
+				var win=f_core.GetWindow(component);
+			
+				var shell=win.f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
+				return shell;
 			}
 			
 			var parent=component.parentNode;
