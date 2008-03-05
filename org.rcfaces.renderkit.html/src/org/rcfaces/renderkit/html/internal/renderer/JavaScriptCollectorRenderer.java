@@ -40,17 +40,20 @@ public class JavaScriptCollectorRenderer extends AbstractHtmlRenderer {
         JavaScriptCollectorComponent javaScriptCollectorComponent = (JavaScriptCollectorComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
+        boolean mergeScripts = javaScriptCollectorComponent
+                .isMergeScripts(facesContext);
+        if (mergeScripts) {
+            // On vérifie que c'est possible !
+        }
+
         IJavaScriptRenderContext newJavaScriptRenderContext = new JavaScriptCollectorRenderContext(
-                htmlRenderContext.getFacesContext(),
-                javaScriptCollectorComponent.isMergeScripts(facesContext));
+                htmlRenderContext.getFacesContext(), mergeScripts);
 
         htmlRenderContext.pushInteractiveRenderComponent(htmlWriter,
                 newJavaScriptRenderContext);
-
     }
 
     public IAsyncRenderer getAsyncRenderer(FacesContext facesContext) {
         return null;
     }
-
 }
