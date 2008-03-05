@@ -111,7 +111,7 @@ var __members = {
 	
 //		this._dateFormats=undefined; // string[]
 	
-		this.f_super(arguments);
+		// this.f_super(arguments); // C'est un OBJECT !
 	},
 	/**
 	 * @method public 
