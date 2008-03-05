@@ -33,6 +33,7 @@ function f_classLoader(win) {
 	this._aspects=new Object;
 	this._bundles=new Object;
 	this._serializedStates=new Object;
+	this._documentCompleteObjects=new Array;
 	this._kclass=f_classLoader;
 }
 
@@ -226,6 +227,7 @@ f_classLoader.prototype = {
 		}		
 		
 		this._visibleListeners=undefined; // List<f_component>
+		this._documentCompleteObjects=undefined; // List<Object>
 	
 		// Vide le pool des objets AVANT !
 		var pool=this._componentPool;
@@ -431,27 +433,23 @@ f_classLoader.prototype = {
 	
 		nb=0;
 	
-		var componentPool = this._componentPool;
-		f_core.Debug(f_classLoader, "f_onDocumentComplete: Calling f_documentComplete methods ... ("+componentPool.length+" objects)");
-		for (var i=0; i<componentPool.length; i++) {
-			var obj = componentPool[i];
+		var documentCompleteObjects = this._documentCompleteObjects;
+		this._documentCompleteObjects=undefined;
+		
+		f_core.Debug(f_classLoader, "f_onDocumentComplete: Calling f_documentComplete methods ... ("+documentCompleteObjects.length+" objects)");
+		for (var i=0; i<documentCompleteObjects.length; i++) {
+			var obj = documentCompleteObjects[i];
 			if (!obj) {
 				continue;
 			}
 			
 			var fct=obj.f_documentComplete;
-			if (!fct) {
-				continue;
-			}
-				
-			f_core.Assert(typeof(fct)=="function", "f_classLoader.f_onDocumentComplete: Type of f_documentComplete callback is not a function ! ("+fct+")");
-			
 			nb++;
 			try {
 				fct.call(obj);
 				
 			} catch (x) {
-				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during documentComplete event for component "+obj.id+"/"+obj.tagName, x);
+				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during documentComplete event for object "+obj.id+"/"+obj.tagName, x);
 			}
 		}	
 	
@@ -481,6 +479,11 @@ f_classLoader.prototype = {
 		
 		f_core.Assert(pool, "f_classLoader._newInstance: Pool must be defined !");
 		pool.push(object);
+		
+		var documentCompleteObjects=this._documentCompleteObjects;
+		if (documentCompleteObjects && typeof(object.f_documentComplete)=="function") {
+			documentCompleteObjects.push(object);
+		}
 	},
 	
 	/**
