@@ -1229,7 +1229,7 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
      * <code>setRowIndex()</code>.
      * </p>
      */
-    private void restoreDescendantState() {
+    protected void restoreDescendantState() {
 
         FacesContext context = getFacesContext();
         Iterator kids = getChildren().iterator();
@@ -1312,7 +1312,7 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
      * <code>setRowIndex()</code>.
      * </p>
      */
-    private void saveDescendantState() {
+    protected void saveDescendantState() {
 
         FacesContext context = getFacesContext();
         Iterator kids = getChildren().iterator();
