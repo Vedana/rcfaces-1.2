@@ -230,7 +230,11 @@ var __statics = {
 	 * @return f_shell
 	 */
 	GetShellFromIdentifier: function(shellIdentifier) {
-		return f_shellDecorator._FrameShells[shellIdentifier];
+		var frameShells=f_shellDecorator._FrameShells;
+		if (!frameShells) {
+			return null;
+		}
+		return frameShells[shellIdentifier];
 	},
 	Finalizer: function() {
 		f_shellDecorator._decoratorDragged=undefined; // f_shellDecorator
