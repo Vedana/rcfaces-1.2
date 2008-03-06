@@ -53,22 +53,10 @@ var __statics = {
 			return root;	
 		}	
 	
-		if (false && typeof(component)=="string") {
+		if (typeof(component)=="string") {
 			var componentId=component;
 			
-			for(;;) {
-				component=f_core.GetElementByClientId(componentId);
-				if (component) {
-					break;
-				}
-				
-				var idx=componentId.lastIndexOf(':');
-				if (idx<0) {
-					break;
-				}
-				
-				componentId=componentId.substring(0, idx);
-			}
+			component=f_core.GetElementByClientId(componentId);
 	
 			f_core.Assert(component, "f_messageContext.Get: Can not get component id="+componentId);
 
@@ -94,12 +82,16 @@ var __statics = {
 	
 	/**
 	 * @method hidden static
+	 * @param String clientId
+	 * @param f_messageObject... messages
 	 */
 	AppendMessages: function(clientId, messages) {
-		var root=f_messageContext.Get();
+		var component=f_core.GetElementByClientId(clientId);
+		
+		var messageContext=f_messageContext.Get(component);			
 		
 		for(var i=1;i<arguments.length;i++) {
-			root.f_addMessageObject(clientId, arguments[i]);
+			messageContext.f_addMessageObject(component, arguments[i]);
 		}
 	},
 	/**
