@@ -425,6 +425,7 @@ var __members = {
 			return;
 		}
 		
+		f_core.Assert(typeof(msg)=="object" || msg===undefined, "f_input.f_performMessageChanges: Invalid message object ("+msg+").");
 		this._currentMessage=msg;
 		
 		this.f_updateStyleClass();

@@ -156,7 +156,9 @@ var __members = {
 			return;
 		}
 
-		f_core.Debug(fa_message1, "f_performMessageChanges: change message: "+msg);
+		f_core.Assert(typeof(msg)=="object" || msg===undefined, "fa_message1.f_performMessageChanges: Invalid message object ("+msg+").");
+
+		f_core.Debug(fa_message1, "f_performMessageChanges: change message to "+msg);
 		
 		this._currentMessage=msg;
 		
