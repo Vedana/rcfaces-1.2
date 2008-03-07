@@ -104,12 +104,13 @@ var __members={
 			}
 		}
 		
-		f_core.Debug(f_compositeNumEntry, "Change message to '"+msg+"' for component "+this.id+".");
+		f_core.Debug(f_compositeNumEntry, "f_performMessageChanges: Change message to '"+msg+"' for component "+this.id+".");
 						
 		if (msg==this._currentMessage) {
 			return;
 		}
 		
+		f_core.Assert(typeof(msg)=="object" || msg===undefined, "f_compositeNumEntry.f_performMessageChanges: Invalid message object ("+msg+").");
 		this._currentMessage=msg;
 		
 		this.f_updateStyleClass();
@@ -141,7 +142,7 @@ var __members={
 
 		var messageContext=f_messageContext.Get(this);
 
-		messageContext.f_addMessageObject(this, severity, summary, detail);
+		messageContext.f_addMessage(this, severity, summary, detail);
 	},
 	
 	f_update: function() {
