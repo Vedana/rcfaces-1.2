@@ -86,9 +86,15 @@ var __statics = {
 	 * @param f_messageObject... messages
 	 */
 	AppendMessages: function(clientId, messages) {
-		var component=f_core.GetElementByClientId(clientId);
-		
-		var messageContext=f_messageContext.Get(component);			
+		var component=null;
+		var messageContext;
+		if (clientId) {
+			component=f_core.GetElementByClientId(clientId);
+			messageContext=f_messageContext.Get(component);
+
+		} else {
+			messageContext=f_messageContext.Get();
+		}
 		
 		for(var i=1;i<arguments.length;i++) {
 			messageContext.f_addMessageObject(component, arguments[i]);
@@ -360,6 +366,7 @@ var __members = {
 	f_addMessageObject: function(component, message, performEvent) {	
 		f_core.Assert(component===null || component===false || component.id || typeof(component)=="string", "f_messageContext.f_addMessageObject: Component parameter must be a component or an id !");
 //		f_core.Assert(typeof(component)!="string" || component.length, "f_messageContext.f_addMessageObject: Parameter componentId is invalid ! ('"+component+"')"); 
+		f_core.Assert(message instanceof f_messageObject, "f_messageContext.f_addMessageObject: message parameter must be a component or an id !");
 	
 		var id=component;
 		if (component && component.id) {
