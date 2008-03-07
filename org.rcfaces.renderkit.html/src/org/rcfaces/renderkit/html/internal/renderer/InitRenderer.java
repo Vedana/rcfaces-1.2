@@ -211,13 +211,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
             htmlWriter.endElement(IHtmlWriter.META);
         }
 
-        if (disableIEImageBar) {
-            // Desactive la toolbar Image de IE !
-            htmlWriter.startElement(IHtmlWriter.META);
-            htmlWriter.writeHttpEquiv("imagetoolbar", "no");
-            htmlWriter.endElement(IHtmlWriter.META);
-        }
-
         HtmlRenderContext htmlRenderContext = (HtmlRenderContext) htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
         if (disableContextMenu) {
@@ -318,31 +311,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
             }
         }
 
-        String favoriteImageURL = initComponent
-                .getFavoriteImageURL(facesContext);
-        if (favoriteImageURL == null) {
-            favoriteImageURL = appParams.favoriteImageURL;
-        }
-        if (favoriteImageURL != null) {
-            writeFavoriteImageURL(htmlWriter, favoriteImageURL);
-        }
-
-        ICssConfig cssConfig = StylesheetsServlet.getConfig(htmlProcessContext);
-        if (cssConfig != null) {
-            htmlWriter.startElement(IHtmlWriter.LINK);
-            htmlWriter.writeRel("stylesheet");
-            if (htmlProcessContext.useMetaContentStyleType() == false) {
-                htmlWriter.writeType("text/css");
-            }
-
-            String styleSheetURI = htmlProcessContext.getStyleSheetURI(
-                    cssConfig.getStyleSheetFileName(), true);
-
-            htmlWriter.writeHRef(styleSheetURI);
-
-            htmlWriter.endElement(IHtmlWriter.LINK);
-        }
-
         String disabledScriptPageURL = initComponent
                 .getDisabledScriptPageURL(facesContext);
         if ("false".equals(disabledScriptPageURL)) {
@@ -399,6 +367,40 @@ public class InitRenderer extends AbstractHtmlRenderer {
             }
         }
 
+        // On met ces initialisations apres pour des questions de performances !
+        
+        if (disableIEImageBar) {
+            // Desactive la toolbar Image de IE !
+            htmlWriter.startElement(IHtmlWriter.META);
+            htmlWriter.writeHttpEquiv("imagetoolbar", "no");
+            htmlWriter.endElement(IHtmlWriter.META);
+        }
+
+        String favoriteImageURL = initComponent
+                .getFavoriteImageURL(facesContext);
+        if (favoriteImageURL == null) {
+            favoriteImageURL = appParams.favoriteImageURL;
+        }
+        if (favoriteImageURL != null) {
+            writeFavoriteImageURL(htmlWriter, favoriteImageURL);
+        }
+
+        ICssConfig cssConfig = StylesheetsServlet.getConfig(htmlProcessContext);
+        if (cssConfig != null) {
+            htmlWriter.startElement(IHtmlWriter.LINK);
+            htmlWriter.writeRel("stylesheet");
+            if (htmlProcessContext.useMetaContentStyleType() == false) {
+                htmlWriter.writeType("text/css");
+            }
+
+            String styleSheetURI = htmlProcessContext.getStyleSheetURI(
+                    cssConfig.getStyleSheetFileName(), true);
+
+            htmlWriter.writeHRef(styleSheetURI);
+
+            htmlWriter.endElement(IHtmlWriter.LINK);
+        }
+
         if (invalidBrowserPageURL != null) {
             initializeJavaScript(htmlWriter, appParams, invalidBrowserPageURL);
         }
@@ -441,7 +443,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         IJavaScriptWriter jsWriter = openScriptTag(writer);
 
-        JavaScriptRenderContext.initializeJavaScript(jsWriter, repository, true);
+        JavaScriptRenderContext
+                .initializeJavaScript(jsWriter, repository, true);
 
         jsWriter.end();
     }
@@ -605,6 +608,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
             boolean multiWindowClassLoader) throws WriterException {
 
         boolean closeJsWriter = false;
+
+        jsWriter.writeln("window._rcfacesInitTimer=new Date();");
 
         if (disabledCookiesPageURL != null) {
             if (jsWriter == null) {
