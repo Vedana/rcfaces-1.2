@@ -94,22 +94,6 @@ public class BasicContentModel extends AbstractContentModel {
         return new HashMap(attributes);
     }
 
-    public void setWidth(int width) {
-        if (width < 1) {
-            setAttribute(WIDTH_PROPERTY, null);
-            return;
-        }
-        setAttribute(WIDTH_PROPERTY, new Integer(width));
-    }
-
-    public void setHeight(int height) {
-        if (height < 1) {
-            setAttribute(HEIGHT_PROPERTY, null);
-            return;
-        }
-        setAttribute(HEIGHT_PROPERTY, new Integer(height));
-    }
-
     public void setContentType(String contentType) {
         setAttribute(CONTENT_TYPE_PROPERTY, contentType);
     }

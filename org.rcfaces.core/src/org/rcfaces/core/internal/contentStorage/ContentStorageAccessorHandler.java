@@ -5,6 +5,7 @@ package org.rcfaces.core.internal.contentStorage;
 
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -25,7 +26,8 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
     private static final String REVISION = "$Revision$";
 
     private static final String COPY_ATTRIBUTES[] = {
-            IContentModel.WIDTH_PROPERTY, IContentModel.HEIGHT_PROPERTY };
+            IImageContentModel.WIDTH_PROPERTY,
+            IImageContentModel.HEIGHT_PROPERTY };
 
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);

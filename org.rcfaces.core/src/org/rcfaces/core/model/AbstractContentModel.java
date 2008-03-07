@@ -40,24 +40,6 @@ public abstract class AbstractContentModel implements IContentModel {
         return computeURL(this);
     }
 
-    public int getWidth() {
-        Integer width = (Integer) getAttribute(WIDTH_PROPERTY);
-        if (width == null) {
-            return 0;
-        }
-
-        return width.intValue();
-    }
-
-    public int getHeight() {
-        Integer height = (Integer) getAttribute(HEIGHT_PROPERTY);
-        if (height == null) {
-            return 0;
-        }
-
-        return height.intValue();
-    }
-
     public String getContentType() {
         return (String) getAttribute(CONTENT_TYPE_PROPERTY);
     }

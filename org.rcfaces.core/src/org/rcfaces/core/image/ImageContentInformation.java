@@ -4,7 +4,6 @@
 package org.rcfaces.core.image;
 
 import org.rcfaces.core.internal.contentAccessor.BasicContentInformation;
-import org.rcfaces.core.model.IContentModel;
 
 /**
  * 
@@ -15,7 +14,7 @@ public class ImageContentInformation extends BasicContentInformation {
     private static final String REVISION = "$Revision$";
 
     public final int getImageHeight() {
-        Integer i = (Integer) getAttribute(IContentModel.HEIGHT_PROPERTY);
+        Integer i = (Integer) getAttribute(IImageContentModel.HEIGHT_PROPERTY);
         if (i == null) {
             return 0;
         }
@@ -24,11 +23,12 @@ public class ImageContentInformation extends BasicContentInformation {
     }
 
     public final void setImageHeight(int imageHeight) {
-        setAttribute(IContentModel.HEIGHT_PROPERTY, new Integer(imageHeight));
+        setAttribute(IImageContentModel.HEIGHT_PROPERTY, new Integer(
+                imageHeight));
     }
 
     public final int getImageWidth() {
-        Integer i = (Integer) getAttribute(IContentModel.WIDTH_PROPERTY);
+        Integer i = (Integer) getAttribute(IImageContentModel.WIDTH_PROPERTY);
         if (i == null) {
             return 0;
         }
@@ -37,7 +37,7 @@ public class ImageContentInformation extends BasicContentInformation {
     }
 
     public final void setImageWidth(int imageWidth) {
-        setAttribute(IContentModel.WIDTH_PROPERTY, new Integer(imageWidth));
+        setAttribute(IImageContentModel.WIDTH_PROPERTY, new Integer(imageWidth));
     }
 
 }

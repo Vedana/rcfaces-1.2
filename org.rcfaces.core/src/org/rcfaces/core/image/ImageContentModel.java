@@ -16,7 +16,8 @@ import org.rcfaces.core.model.BasicContentModel;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ImageContentModel extends BasicContentModel {
+public class ImageContentModel extends BasicContentModel implements
+        IImageContentModel {
     private static final String REVISION = "$Revision$";
 
     public static final String IMAGE_WRITE_PARAM_PROPERTY = "javax.imageio.ImageWriteParam";

@@ -20,10 +20,6 @@ public interface IContentModel {
 
     String URL_SUFFIX_PROPERTY = "org.rcfaces.url.Suffix";
 
-    String WIDTH_PROPERTY = "org.rfcaces.core.model.WIDTH";
-
-    String HEIGHT_PROPERTY = "org.rfcaces.core.model.HEIGHT";
-
     Object getAttribute(String attributeName);
 
     Map getAttributes();
