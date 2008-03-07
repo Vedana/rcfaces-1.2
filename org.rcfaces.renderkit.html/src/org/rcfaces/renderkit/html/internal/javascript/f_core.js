@@ -645,7 +645,7 @@ var f_core = {
 	 */
 	_InitLibrary: function(win) {
 		this._window=win;
-		
+						
 		var initDate=win._rcfacesInitLibraryDate;
 		
 		f_core.DebugMode=win._rcfacesDebugMode;
@@ -694,6 +694,11 @@ var f_core = {
 		
 		if (profilerCB) {
 			f_core.Info(f_core, "_InitLibrary: Enable profiler mode");
+		
+			var pageInit=win._rcfacesInitTimer;
+			if (pageInit) {
+				f_core.Profile(null, "page.init", pageInit);
+			}
 			
 			f_core.Profile(null, "f_core.initializing", initDate);
 		}
@@ -935,7 +940,7 @@ var f_core = {
 				}
 			}
 		}
-			
+		
 		f_core.Profile(false, "f_core.onInit", now);
 		try {		
 			f_core._FlushLogs();	
