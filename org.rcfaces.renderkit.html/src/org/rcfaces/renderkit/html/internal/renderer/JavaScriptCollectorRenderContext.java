@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import java.io.CharArrayWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,9 +22,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.script.ScriptContentInformation;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
@@ -31,6 +36,9 @@ import org.rcfaces.renderkit.html.internal.AbstractHtmlWriter;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlElements;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptComponentRenderer;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
@@ -67,6 +75,8 @@ public class JavaScriptCollectorRenderContext extends
     private static final Integer UTF8_charset = new Integer(0);
 
     private static final Map charSets = new HashMap(8);
+
+    private static final String MERGE_DEFAULT_CHARSET = "UTF-8";
     static {
         charSets.put("utf8", UTF8_charset);
         charSets.put("utf-8", UTF8_charset);
@@ -386,35 +396,92 @@ public class JavaScriptCollectorRenderContext extends
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
+        List scripts = null;
+        List raws = null;
+
+        for (Iterator it = components.iterator(); it.hasNext();) {
+            Object object = it.next();
+
+            if (object instanceof Script) {
+                if (scripts == null) {
+                    scripts = new ArrayList(8);
+                }
+                scripts.add(object);
+
+                it.remove();
+                continue;
+            }
+
+            if (object instanceof Raw) {
+                if (raws == null) {
+                    raws = new ArrayList(8);
+                }
+                raws.add(object);
+
+                it.remove();
+                continue;
+            }
+        }
+
+        boolean isProfilerOn = isProfilerOn(htmlWriter);
+        int profilerId = 0;
+        boolean logProfiling = false;
+        boolean logIntermediateProfiling = false;
+
+        if (isProfilerOn) {
+            if (LOG_INTERMEDIATE_PROFILING.isInfoEnabled()) {
+                logProfiling = true;
+            }
+            if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
+                logIntermediateProfiling = true;
+            }
+        }
+
         IRepository.IFile filesToRequire[] = computeFilesToRequire();
 
-        if (filesToRequire.length > 0) {
+        if (filesToRequire.length > 0 || scripts != null) {
             IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(htmlWriter);
 
             initializeJavaScript(jsWriter, getRepository(), false);
 
-            String cameliaClassLoader = convertSymbol("f_classLoader",
-                    "_rcfacesClassLoader");
-
-            jsWriter.writeCall(cameliaClassLoader, "f_requiresBundle");
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Write javascript dependencies: "
-                        + Arrays.asList(filesToRequire));
+            if (false && logProfiling) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "false,\"javascriptCollector.includes\");");
             }
 
-            Locale locale = getUserLocale();
-            for (int i = 0; i < filesToRequire.length; i++) {
-                IRepository.IFile file = filesToRequire[i];
+            if (filesToRequire.length > 0) {
+                String cameliaClassLoader = convertSymbol("f_classLoader",
+                        "_rcfacesClassLoader");
 
-                if (i > 0) {
-                    jsWriter.write(',');
+                jsWriter.writeCall(cameliaClassLoader, "f_requiresBundle");
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Write javascript dependencies: "
+                            + Arrays.asList(filesToRequire));
                 }
-                jsWriter.writeString(file.getURI(locale));
+
+                Locale locale = getUserLocale();
+                for (int i = 0; i < filesToRequire.length; i++) {
+                    IRepository.IFile file = filesToRequire[i];
+
+                    if (i > 0) {
+                        jsWriter.write(',');
+                    }
+                    jsWriter.writeString(file.getURI(locale));
+                }
+                jsWriter.writeln(");");
             }
-            jsWriter.writeln(");");
+
+            if (false && logProfiling) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "true,\"javascriptCollector.includes\");");
+            }
 
             jsWriter.end();
+
+            if (scripts != null) {
+                includesScript(htmlWriter, scripts);
+            }
         }
 
         IJavaScriptWriter jsWriter = null;
@@ -426,25 +493,13 @@ public class JavaScriptCollectorRenderContext extends
             initializeJavaScript(jsWriter, getRepository(), true);
         }
 
-        boolean isProfilerOn = isProfilerOn(htmlWriter);
-        int profilerId = 0;
-        boolean logProfiling = false;
-        boolean logIntermediateProfiling = false;
-
-        if (isProfilerOn) {
+        if (logProfiling) {
             if (jsWriter == null) {
                 jsWriter = InitRenderer.openScriptTag(htmlWriter);
             }
 
-            if (LOG_INTERMEDIATE_PROFILING.isInfoEnabled()) {
-                logProfiling = true;
-
-                jsWriter.writeCall("f_core", "Profile").writeln(
-                        "false,\"javascriptCollector\");");
-            }
-            if (LOG_INTERMEDIATE_PROFILING.isTraceEnabled()) {
-                logIntermediateProfiling = true;
-            }
+            jsWriter.writeCall("f_core", "Profile").writeln(
+                    "false,\"javascriptCollector\");");
         }
 
         ExternalContext externalContext = facesContext.getExternalContext();
@@ -464,9 +519,6 @@ public class JavaScriptCollectorRenderContext extends
         List focusIds = new ArrayList();
         List submitIds = new ArrayList(16);
         List hoverIds = new ArrayList(16);
-
-        List scripts = null;
-        List raws = null;
 
         for (Iterator it = components.iterator(); it.hasNext();) {
             Object object = it.next();
@@ -488,22 +540,6 @@ public class JavaScriptCollectorRenderContext extends
                                     + (profilerId++) + ")\");");
                 }
 
-                continue;
-            }
-
-            if (object instanceof Script) {
-                if (scripts == null) {
-                    scripts = new ArrayList(8);
-                }
-                scripts.add(object);
-                continue;
-            }
-
-            if (object instanceof Raw) {
-                if (raws == null) {
-                    raws = new ArrayList(8);
-                }
-                raws.add(object);
                 continue;
             }
 
@@ -538,6 +574,33 @@ public class JavaScriptCollectorRenderContext extends
                 jsWriter.writeCall("f_core", "Profile").writeln(
                         "null,\"javascriptCollector.buffer(#" + (profilerId++)
                                 + ")\");");
+            }
+        }
+
+        if (raws != null) {
+            if (jsWriter == null) {
+                jsWriter = InitRenderer.openScriptTag(htmlWriter);
+            }
+
+            if (logProfiling) {
+                jsWriter.writeCall("f_core", "Profile").writeln(
+                        "null,\"javascriptCollector.raws(" + (raws.size())
+                                + ")\");");
+            }
+
+            int idx = 1;
+            for (Iterator it = raws.iterator(); it.hasNext(); idx++) {
+                Raw raw = (Raw) it.next();
+
+                String text = raw.getText();
+
+                jsWriter.writeln(text);
+
+                if (logIntermediateProfiling) {
+                    jsWriter.writeCall("f_core", "Profile").writeln(
+                            "null,\"javascriptCollector.raws(" + idx + "/"
+                                    + (raws.size()) + ")\");");
+                }
             }
         }
 
@@ -635,47 +698,6 @@ public class JavaScriptCollectorRenderContext extends
 
         }
 
-        if (scripts != null) {
-            if (jsWriter == null) {
-                jsWriter = InitRenderer.openScriptTag(htmlWriter);
-            }
-
-            if (logProfiling) {
-                jsWriter.writeCall("f_core", "Profile").writeln(
-                        "null,\"javascriptCollector.scripts("
-                                + (scripts.size()) + ")\");");
-            }
-
-            includesScript(jsWriter, scripts);
-        }
-
-        if (raws != null) {
-            if (jsWriter == null) {
-                jsWriter = InitRenderer.openScriptTag(htmlWriter);
-            }
-
-            if (logProfiling) {
-                jsWriter.writeCall("f_core", "Profile").writeln(
-                        "null,\"javascriptCollector.raws(" + (raws.size())
-                                + ")\");");
-            }
-
-            int idx = 1;
-            for (Iterator it = raws.iterator(); it.hasNext(); idx++) {
-                Raw raw = (Raw) it.next();
-
-                String text = raw.getText();
-
-                jsWriter.writeln(text);
-
-                if (logIntermediateProfiling) {
-                    jsWriter.writeCall("f_core", "Profile").writeln(
-                            "null,\"javascriptCollector.raws(" + idx + "/"
-                                    + (raws.size()) + ")\");");
-                }
-            }
-        }
-
         if (hasMessagesPending(htmlWriter.getHtmlComponentRenderContext()
                 .getHtmlRenderContext())) {
             if (jsWriter == null) {
@@ -704,10 +726,12 @@ public class JavaScriptCollectorRenderContext extends
         components.clear();
     }
 
-    private void includesScript(IJavaScriptWriter jsWriter, List scripts)
+    private void includesScript(IHtmlWriter htmlWriter, List scripts)
             throws WriterException {
 
-        jsWriter.writeCall("f_core", "IncludesScript");
+        IHtmlProcessContext htmlProcessContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getHtmlProcessContext();
 
         if (mergeScripts) {
             // Resoudre les urls
@@ -722,62 +746,61 @@ public class JavaScriptCollectorRenderContext extends
                 String src = script.getSource();
                 String charSet = script.getCharSet();
 
-                if (charSet == null) {
-                    charSet = "UTF-8";
-                }
-
                 if (first) {
                     first = false;
                 } else {
                     sa.append('+');
                 }
 
-                encodeParameter(sa, charSet);
+                if (charSet != null) {
+                    encodeParameter(sa, charSet);
+                }
+
                 sa.append(':');
                 encodeParameter(sa, src);
             }
 
-            String collectedURL = null;
+            FacesContext facesContext = htmlWriter
+                    .getHtmlComponentRenderContext().getFacesContext();
 
-            jsWriter.writeString(collectedURL).writeln(");");
+            IContentAccessor contentAccessor = ContentAccessorFactory
+                    .createFromWebResource(facesContext, sa.toString(),
+                            IContentType.SCRIPT);
 
-            return;
+            if (contentAccessor != null) {
+                ScriptContentInformation contentInformation = new ScriptContentInformation();
+
+                String collectedURL = contentAccessor.resolveURL(facesContext,
+                        contentInformation, null);
+                if (collectedURL != null) {
+                    String charSet = contentInformation.getCharSet();
+                    if (charSet == null) {
+                        charSet = MERGE_DEFAULT_CHARSET;
+                    }
+
+                    scripts = Collections.singletonList(new Script(
+                            collectedURL, charSet));
+                }
+            }
         }
 
-        boolean first = true;
         for (Iterator it = scripts.iterator(); it.hasNext();) {
             Script script = (Script) it.next();
 
             String src = script.getSource();
             String charSet = script.getCharSet();
 
-            if (first) {
-                first = false;
-            } else {
-                jsWriter.write(',');
-            }
-
-            jsWriter.writeString(src);
-
-            Integer charsetKey = UTF8_charset;
+            htmlWriter.startElement(IHtmlElements.SCRIPT);
+            htmlWriter.writeSrc(src);
             if (charSet != null && charSet.length() > 0) {
-                charSet = charSet.toLowerCase().trim();
-
-                charsetKey = (Integer) charSets.get(charSet);
-                if (charsetKey == null) {
-                    jsWriter.write(',').writeString(charSet);
-                    continue;
-                }
+                htmlWriter.writeCharset(charSet);
             }
 
-            if (charsetKey == UTF8_charset && it.hasNext() == false) {
-                break;
+            if (htmlProcessContext.useMetaContentScriptType() == false) {
+                htmlWriter.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
             }
-
-            jsWriter.write(',').writeInt(charsetKey.intValue());
+            htmlWriter.endElement(IHtmlElements.SCRIPT);
         }
-
-        jsWriter.writeln(");");
     }
 
     private void encodeParameter(StringAppender sa, String value) {
