@@ -72,12 +72,13 @@ public class HashCodeTools {
             buffer = (byte[]) content;
 
         } else if (content instanceof InputStream) {
-            ByteBufferOutputStream bos = new ByteBufferOutputStream(4000);
+            ByteBufferOutputStream bos = new ByteBufferOutputStream(
+                    INITIAL_BUFFER_SIZE);
 
             InputStream ins = (InputStream) content;
 
             try {
-                byte buf[] = new byte[4000];
+                byte buf[] = new byte[INITIAL_BUFFER_SIZE];
                 for (;;) {
                     int ret = ins.read(buf);
                     if (ret < 1) {
@@ -112,7 +113,8 @@ public class HashCodeTools {
                             + buffer.length
                             + ") using '"
                             + org.rcfaces.core.internal.Constants.RESOURCE_VERSION_DIGEST_ALGORITHM
-                            + " algorithm.");
+                            + " algorithm (maxHashCodeSize=" + maxHashCodeSize
+                            + ")");
         }
 
         try {
@@ -173,7 +175,7 @@ public class HashCodeTools {
         }
         try {
             ByteBufferOutputStream out = new ByteBufferOutputStream(length);
-            byte buf[] = new byte[8000];
+            byte buf[] = new byte[INITIAL_BUFFER_SIZE];
             for (;;) {
                 int ret = ins.read(buf);
                 if (ret < 1) {
