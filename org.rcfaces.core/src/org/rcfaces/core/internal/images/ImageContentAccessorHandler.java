@@ -145,9 +145,12 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
                 .getProvidersRegistry().getProvider(
                         ImageContentAccessorHandler.IMAGE_CONTENT_PROVIDER_ID);
 
+        if (imageOperationRepository == null) {
+            return false;
+        }
+
         return imageOperationRepository.isOperationSupported(operationId,
                 imageContentAccessor);
-
     }
 
     protected abstract boolean isOperationSupported(String operationId,
