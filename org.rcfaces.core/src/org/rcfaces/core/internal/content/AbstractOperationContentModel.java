@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
@@ -127,7 +128,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
             sa.append(filterParametersToParse);
         }
 
-        sa.append("::");
+        sa.append(IContentAccessor.FILTER_SEPARATOR);
 
         sa.append(resourceURL);
 
