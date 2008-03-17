@@ -42,9 +42,6 @@ public class JavaScriptCollectorRenderer extends AbstractHtmlRenderer {
 
         boolean mergeScripts = javaScriptCollectorComponent
                 .isMergeScripts(facesContext);
-        if (mergeScripts) {
-            // On vérifie que c'est possible !
-        }
 
         IJavaScriptRenderContext newJavaScriptRenderContext = new JavaScriptCollectorRenderContext(
                 htmlRenderContext.getFacesContext(), mergeScripts);

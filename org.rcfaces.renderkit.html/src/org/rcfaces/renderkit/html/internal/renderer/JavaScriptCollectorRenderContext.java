@@ -23,11 +23,14 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
+import org.rcfaces.core.internal.contentAccessor.ICompositeContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
-import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.contentAccessor.ICompositeContentAccessorHandler.ICompositeURLDescriptor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.script.AbstractScriptContentAccessorHandler;
+import org.rcfaces.core.internal.script.IScriptContentAccessorHandler;
 import org.rcfaces.core.internal.script.ScriptContentInformation;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.lang.OrderedSet;
@@ -729,58 +732,63 @@ public class JavaScriptCollectorRenderContext extends
     private void includesScript(IHtmlWriter htmlWriter, List scripts)
             throws WriterException {
 
-        IHtmlProcessContext htmlProcessContext = htmlWriter
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
+        IHtmlRenderContext htmlRenderContext = htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+
+        IHtmlProcessContext htmlProcessContext = htmlRenderContext
                 .getHtmlProcessContext();
 
-        if (mergeScripts) {
+        if (mergeScripts && scripts.size() > 1) {
             // Resoudre les urls
-
-            StringAppender sa = new StringAppender("jsmerge::",
-                    (scripts.size() / 2) * 32);
-
-            boolean first = true;
-            for (Iterator it = scripts.iterator(); it.hasNext();) {
-                Script script = (Script) it.next();
-
-                String src = script.getSource();
-                String charSet = script.getCharSet();
-
-                if (first) {
-                    first = false;
-                } else {
-                    sa.append('+');
-                }
-
-                if (charSet != null) {
-                    encodeParameter(sa, charSet);
-                }
-
-                sa.append(':');
-                encodeParameter(sa, src);
-            }
 
             FacesContext facesContext = htmlWriter
                     .getHtmlComponentRenderContext().getFacesContext();
 
-            IContentAccessor contentAccessor = ContentAccessorFactory
-                    .createFromWebResource(facesContext, sa.toString(),
-                            IContentType.SCRIPT);
+            IScriptContentAccessorHandler scriptContentAccessorHandler = AbstractScriptContentAccessorHandler
+                    .getScriptContentAccessorHandler(facesContext);
 
-            if (contentAccessor != null) {
-                ScriptContentInformation contentInformation = new ScriptContentInformation();
+            if (scriptContentAccessorHandler.isOperationSupported(
+                    ICompositeContentAccessorHandler.COMPOSITE_OPERATION_ID,
+                    null)) {
 
-                String collectedURL = contentAccessor.resolveURL(facesContext,
-                        contentInformation, null);
-                if (collectedURL != null) {
-                    String charSet = contentInformation.getCharSet();
-                    if (charSet == null) {
-                        charSet = MERGE_DEFAULT_CHARSET;
-                    }
+                ICompositeURLDescriptor scriptsMergeBuilder = scriptContentAccessorHandler
+                        .createCompositeURLDescriptor(MERGE_DEFAULT_CHARSET);
 
-                    scripts = Collections.singletonList(new Script(
-                            collectedURL, charSet));
+                for (Iterator it = scripts.iterator(); it.hasNext();) {
+                    Script script = (Script) it.next();
+
+                    String src = script.getSource();
+                    String charSet = script.getCharSet();
+
+                    scriptsMergeBuilder.addUrl(src, charSet);
                 }
+
+                String mergeURL = scriptsMergeBuilder.generateURL();
+
+                IContentAccessor contentAccessor = ContentAccessorFactory
+                        .createFromWebResource(facesContext, mergeURL,
+                                IContentType.SCRIPT);
+
+                if (contentAccessor != null) {
+                    ScriptContentInformation contentInformation = new ScriptContentInformation();
+
+                    String collectedURL = contentAccessor.resolveURL(
+                            facesContext, contentInformation, null);
+                    if (collectedURL != null) {
+                        String charSet = contentInformation.getCharSet();
+                        if (charSet == null) {
+                            charSet = MERGE_DEFAULT_CHARSET;
+                        }
+
+                        scripts = Collections.singletonList(new Script(
+                                collectedURL, charSet));
+                    }
+                }
+            } else {
+                LOG
+                        .debug("Script operation '"
+                                + ICompositeContentAccessorHandler.COMPOSITE_OPERATION_ID
+                                + "' is not supported !");
             }
         }
 
@@ -801,20 +809,6 @@ public class JavaScriptCollectorRenderContext extends
             }
             htmlWriter.endElement(IHtmlElements.SCRIPT);
         }
-    }
-
-    private void encodeParameter(StringAppender sa, String value) {
-        char chs[] = value.toCharArray();
-
-        for (int i = 0; i < chs.length; i++) {
-            char c = chs[i];
-
-            if (Character.isLetterOrDigit(c) || c == '/' || c == '.') {
-                sa.append(c);
-                continue;
-            }
-        }
-
     }
 
     protected boolean isProfilerOn(IHtmlWriter writer) {
