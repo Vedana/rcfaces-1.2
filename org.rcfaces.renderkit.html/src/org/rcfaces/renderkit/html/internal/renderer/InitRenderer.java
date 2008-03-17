@@ -368,7 +368,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
 
         // On met ces initialisations apres pour des questions de performances !
-        
+
         if (disableIEImageBar) {
             // Desactive la toolbar Image de IE !
             htmlWriter.startElement(IHtmlWriter.META);
@@ -609,7 +609,13 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         boolean closeJsWriter = false;
 
-        jsWriter.writeln("window._rcfacesInitTimer=new Date();");
+        if (Constants.GENERATE_RCFACES_INIT_TIMER) {
+            if (jsWriter == null) {
+                jsWriter = openScriptTag(writer);
+                closeJsWriter = true;
+            }
+            jsWriter.writeln("window._rcfacesInitTimer=new Date();");
+        }
 
         if (disabledCookiesPageURL != null) {
             if (jsWriter == null) {

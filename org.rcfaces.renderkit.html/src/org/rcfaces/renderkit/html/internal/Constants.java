@@ -75,6 +75,8 @@ public class Constants {
 
     public static final boolean KEEP_DISABLED_STATE = false;
 
+    public static final boolean GENERATE_RCFACES_INIT_TIMER = true;
+
     static {
         version = org.rcfaces.core.internal.Constants.searchVersion(
                 Constants.class, RCFACES_HTML_VERSION_SYSTEM_PARAMETER,
