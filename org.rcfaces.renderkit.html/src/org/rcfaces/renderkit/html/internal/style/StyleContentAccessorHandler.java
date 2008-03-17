@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.style;
+package org.rcfaces.renderkit.html.internal.style;
 
 import java.net.FileNameMap;
 import java.net.URLConnection;
@@ -14,53 +14,53 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.contentAccessor.AbstractCompositeContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
-import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
+import org.rcfaces.core.internal.style.Constants;
+import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
+import org.rcfaces.core.internal.style.IStyleOperation;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.provider.AbstractProvider;
+import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class StyleContentAccessorHandler extends AbstractProvider implements
-        IContentAccessorHandler {
+public class StyleContentAccessorHandler extends
+        AbstractCompositeContentAccessorHandler implements
+        IStyleContentAccessorHandler {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
-            .getLog(ImageContentAccessorHandler.class);
-
-    public static final String STYLE_CONTENT_PROVIDER_ID = "org.rcfaces.core.STYLE_CONTENT_PROVIDER";
+            .getLog(StyleContentAccessorHandler.class);
 
     private static final String CSS_PARSER_ENABLED = Constants
             .getPackagePrefix()
             + ".MERGE_STYLE_FILES";
+
+    private final Map operationsById = new HashMap(32);
+
+    private final FileNameMap fileNameMap;
 
     private ICssParser cssParser = null;
 
     private boolean contentAccessorAvailable;
 
     private RcfacesContext rcfacesContext;
-
-    private final Map operationsById = new HashMap(32);
-
-    private final FileNameMap fileNameMap;
 
     public StyleContentAccessorHandler() {
         fileNameMap = URLConnection.getFileNameMap();
@@ -239,8 +239,8 @@ public class StyleContentAccessorHandler extends AbstractProvider implements
                     .getResourceVersion(facesContext, resourceURL, null);
         }
 
-        IContentModel contentModel = new StyleOperationContentModel(
-                resourceURL, contentType, versionId, operationId, parameters,
+        IContentModel contentModel = new CssOperationContentModel(resourceURL,
+                contentType, versionId, operationId, parameters,
                 contentAccessor.getAttributes(), styleOperation, cssParser);
 
         IContentAccessor newContentAccessor = contentStorageEngine

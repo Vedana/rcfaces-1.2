@@ -1,14 +1,15 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.style;
+package org.rcfaces.renderkit.html.internal.style;
 
 import java.io.IOException;
 import java.util.Map;
 
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
-import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
-import org.rcfaces.core.internal.style.CssParserFactory.ICssParser.IParserContext;
+import org.rcfaces.core.internal.style.AbstractStyleOperation;
+import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
+import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IParserContext;
 
 /**
  * 

@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.style;
+package org.rcfaces.renderkit.html.internal.style;
 
 import java.io.IOException;
 import java.util.Map;

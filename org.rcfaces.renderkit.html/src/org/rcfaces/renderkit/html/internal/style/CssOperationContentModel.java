@@ -1,53 +1,45 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.style;
+package org.rcfaces.renderkit.html.internal.style;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.content.AbstractOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
-import org.rcfaces.core.internal.contentStorage.GZipedResolvedContent;
-import org.rcfaces.core.internal.contentStorage.IResolvedContent;
-import org.rcfaces.core.internal.images.Constants;
-import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
-import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
-import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
-import org.rcfaces.core.internal.style.CssParserFactory.ICssParser.IParserContext;
+import org.rcfaces.core.internal.style.AbstractBufferOperationContentModel;
+import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
+import org.rcfaces.core.internal.style.IStyleOperation;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
+import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
+import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IParserContext;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class StyleOperationContentModel extends AbstractOperationContentModel {
+public class CssOperationContentModel extends
+        AbstractBufferOperationContentModel {
 
     private static final String REVISION = "$Revision$";
 
-    private static final long serialVersionUID = -2523152290767529042L;
-
     private static final Log LOG = LogFactory
-            .getLog(StyleOperationContentModel.class);
+            .getLog(CssOperationContentModel.class);
 
-    private static final int INITIAL_BUFFER_SIZE = 8 * 1024;
+    private static final long serialVersionUID = -7274200606212145834L;
 
     private static final String STYLE_CONTENT_TYPE = "text/css";
 
@@ -55,9 +47,9 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
 
     private static final String STYLE_SUFFIX = "css";
 
-    private ICssParser cssParser;
+    private final ICssParser cssParser;
 
-    public StyleOperationContentModel(String resourceURL, String contentType,
+    public CssOperationContentModel(String resourceURL, String contentType,
             String versionId, String operationId,
             String filterParametersToParse, Map attributes,
             IStyleOperation styleOperation, ICssParser cssParser) {
@@ -84,9 +76,10 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
 
         ContentInformation contentInfo[] = new ContentInformation[1];
 
-        String styleSheetContent = loadContent(facesContext,
-                resourceLoaderFactory, getResourceURL(), getDefaultCharset(),
-                contentInfo);
+        String styleSheetContent = null;
+        String resourceURL = getResourceURL();
+        styleSheetContent = loadContent(facesContext, resourceLoaderFactory,
+                resourceURL, getDefaultCharset(), contentInfo);
 
         if (styleSheetContent == null) {
             return INVALID_BUFFERED_FILE;
@@ -94,13 +87,13 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
 
         Map applicationParameters = new ApplicationParametersMap(facesContext);
 
-        IStyleSheetFile styleSheetFile = createNewStyleSheetFile(getResourceURL());
+        IStyleSheetFile styleSheetFile = createNewStyleSheetFile(resourceURL);
         try {
-            IParserContext parserContext = new ParserContext(
-                    contentInfo[0].charSet, contentInfo[0].getLastModified());
+            IParserContext parserContext = new ParserContext(contentInfo[0]
+                    .getCharSet(), contentInfo[0].getLastModified());
 
             String newStyleSheetContent = filter(applicationParameters,
-                    resourceLoaderFactory, cssParser, getResourceURL(),
+                    resourceLoaderFactory, cssParser, resourceURL,
                     styleSheetContent,
                     new IStyleOperation[] { styleOperation },
                     new Map[] { getFilterParameters() }, parserContext);
@@ -125,11 +118,7 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
         return styleSheetFile;
     }
 
-    protected String getDefaultCharset() {
-        return DEFAULT_CHARSET;
-    }
-
-    private static String getCharsetFromStream(InputStream inputStream) {
+    protected String getCharsetFromStream(InputStream inputStream) {
 
         BufferedInputStream bins = new BufferedInputStream(inputStream, 128);
         inputStream.mark(128);
@@ -185,9 +174,9 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
 
-        StyleContentAccessorHandler styleOperationRepository = (StyleContentAccessorHandler) rcfacesContext
+        IStyleContentAccessorHandler styleOperationRepository = (IStyleContentAccessorHandler) rcfacesContext
                 .getProvidersRegistry().getProvider(
-                        StyleContentAccessorHandler.STYLE_CONTENT_PROVIDER_ID);
+                        IStyleContentAccessorHandler.STYLE_CONTENT_PROVIDER_ID);
 
         IStyleOperation styleOperation = styleOperationRepository
                 .getStyleOperation(getOperationId());
@@ -197,23 +186,6 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
 
     private IStyleSheetFile createNewStyleSheetFile(String resourceURL) {
         return new StyleSheetFileBuffer(resourceURL);
-    }
-
-    protected IResourceLoaderFactory getResourceLoaderFactory(
-            FacesContext facesContext) {
-
-        RcfacesContext rcfacesContext = RcfacesContext
-                .getInstance(facesContext);
-
-        IResourceLoaderFactory resourceLoaderFactory;
-        if (rcfacesContext.isDesignerMode()) {
-            resourceLoaderFactory = Constants.getDesignerImageLoaderFactory();
-
-        } else {
-            resourceLoaderFactory = Constants.getImageLoaderFactory();
-        }
-
-        return resourceLoaderFactory;
     }
 
     protected String filter(Map applicationParameters,
@@ -228,7 +200,7 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
         }
 
         for (int i = 0; i < styleOperations.length; i++) {
-            IStyleOperation styleOperation = styleOperations[i];
+            ICssOperation styleOperation = (ICssOperation) styleOperations[i];
 
             if (LOG.isTraceEnabled()) {
                 LOG.trace("Process style operation #" + i + " '"
@@ -243,126 +215,16 @@ public class StyleOperationContentModel extends AbstractOperationContentModel {
         return styleSheetURL;
     }
 
-    protected IResolvedContent getResolvedContent() {
-        return new GZipedResolvedContent(this);
+    protected String getDefaultCharset() {
+        return DEFAULT_CHARSET;
     }
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    public static class ContentInformation {
-        private String charSet;
-
-        private long lastModified;
-
-        private long length;
-
-        public final String getCharSet() {
-            return charSet;
-        }
-
-        public final long getLastModified() {
-            return lastModified;
-        }
-
-        public final long getLength() {
-            return length;
-        }
+    protected String getDefaultMimeType() {
+        return STYLE_CONTENT_TYPE;
     }
 
-    public static String loadContent(FacesContext facesContext,
-            IResourceLoaderFactory resourceLoaderFactory, String path,
-            String defaultCharset, ContentInformation contentInfoRef[]) {
-
-        if (facesContext == null) {
-            facesContext = FacesContext.getCurrentInstance();
-        }
-
-        ExternalContext externalContext = facesContext.getExternalContext();
-
-        HttpServletRequest request = (HttpServletRequest) externalContext
-                .getRequest();
-        HttpServletResponse response = (HttpServletResponse) externalContext
-                .getResponse();
-        ServletContext context = (ServletContext) externalContext.getContext();
-
-        IResourceLoader resourceLoader = resourceLoaderFactory.loadResource(
-                context, request, response, path);
-
-        String downloadedContentType = resourceLoader.getContentType();
-        if (downloadedContentType == null
-                || downloadedContentType.equals(STYLE_CONTENT_TYPE) == false) {
-            LOG.error("Different content types requested='"
-                    + STYLE_CONTENT_TYPE + "' loaded='" + downloadedContentType
-                    + "' for path '" + path + "'.");
-
-            return null;
-        }
-
-        InputStream inputStream = resourceLoader.openStream();
-
-        if (inputStream == null) {
-            LOG.error("Can not get resource specified by path '" + path + "'.");
-
-            return null;
-        }
-
-        ContentInformation contentInfo = new ContentInformation();
-
-        if (contentInfoRef != null) {
-            contentInfoRef[0] = contentInfo;
-        }
-
-        try {
-            int size = INITIAL_BUFFER_SIZE;
-            long originalSize = resourceLoader.getContentLength();
-            contentInfo.length = originalSize;
-
-            if (originalSize > 0 && originalSize < INITIAL_BUFFER_SIZE) {
-                size = (int) originalSize + 256;
-            }
-
-            ByteBufferOutputStream bous = new ByteBufferOutputStream(size);
-
-            byte b[] = new byte[size];
-            for (;;) {
-                int ret = inputStream.read(b);
-                if (ret <= 0) {
-                    break;
-                }
-
-                bous.write(b, 0, ret);
-            }
-
-            bous.close();
-
-            byte buffer[] = bous.toByteArray();
-
-            String charSet = getCharsetFromStream(new ByteArrayInputStream(
-                    buffer));
-
-            if (charSet == null) {
-                charSet = defaultCharset;
-            }
-
-            contentInfo.charSet = charSet;
-            contentInfo.lastModified = resourceLoader.getLastModified();
-
-            return new String(buffer, charSet);
-
-        } catch (IOException ex) {
-            return null;
-
-        } finally {
-            try {
-                inputStream.close();
-
-            } catch (IOException ex) {
-                LOG.debug("Can not close resource '" + path + "'.", ex);
-            }
-        }
+    protected boolean isMimeTypeValid(String contentType) {
+        return STYLE_CONTENT_TYPE.equalsIgnoreCase(contentType);
     }
 
     /**

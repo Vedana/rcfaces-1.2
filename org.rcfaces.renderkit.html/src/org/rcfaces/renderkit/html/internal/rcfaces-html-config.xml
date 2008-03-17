@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rcfaces-config>
+	<!-- Merge des CSS -->
+	<providers>
+  		<provider>
+  			<provider-id>org.rcfaces.core.STYLE_CONTENT_PROVIDER</provider-id>
+  			<provider-class>org.rcfaces.renderkit.html.internal.style.StyleContentAccessorHandler</provider-class>
+  			<required>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</required>
+  		</provider>
+  	</providers>
+
+	<!-- Services AJAX -->
 	<services>
   		<render-kit> <!--  render-kit-id="HTML_BASE" -->
 			<service id="org.rcfaces.core.AsyncRender" class="org.rcfaces.renderkit.html.internal.service.AsyncRenderService">

@@ -214,7 +214,7 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             return url;
         }
 
-        int doubleColon = url.indexOf("::", colon);
+        int doubleColon = url.indexOf(IContentAccessor.FILTER_SEPARATOR, colon);
         if (doubleColon > 0 && (slash < 0 || slash > doubleColon)
                 && (colon == doubleColon)) {
             // Y a un doubleColon
