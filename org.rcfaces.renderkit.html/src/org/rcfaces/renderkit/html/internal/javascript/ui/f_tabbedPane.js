@@ -280,8 +280,7 @@ var __members = {
 		if (title) {
 			this._title=undefined;
 			
-			title.onresize=null;
-			f_core.RemoveResizeEventListener(this._title, f_tabbedPane._TabbedPane_onresize);
+			f_core.RemoveResizeEventListener(title, f_tabbedPane._TabbedPane_onresize);
 
 			title._tabbedPane=undefined; // f_tabbedPane
 			f_core.VerifyProperties(title);
