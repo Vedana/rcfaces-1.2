@@ -398,6 +398,8 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
      * @version $Revision$ $Date$
      */
     private static class Content {
+        private static final String REVISION = "$Revision$";
+
         private final IContentModel contentModel;
 
         private final IContentInformation information;
