@@ -61,7 +61,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
             resourceKey = HashCodeTools.computeURLFormat(null, resourceKey,
                     resourceKey, -1);
 
-            StringAppender sa = new StringAppender(resourceKey, 32);
+            StringAppender sa = new StringAppender(resourceKey, 64);
 
             content.appendHashInformations(sa);
 
