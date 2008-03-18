@@ -9,13 +9,93 @@
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
+var __statics = {
+	_InstallRequired: function(radioButton) {		
+		var checkCallbacks={
+			f_performCheckValue: function(event) {
+				if (radioButton.f_getSelectedInGroup()) {
+					return;
+				}
+	
+				// Rien de sélectionné !
+				//
+				
+				var summary=radioButton.f_getClientValidatorParameter("REQUIRED_ERROR_SUMMARY");
+				var detail=radioButton.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
+				
+				if (!summary) {
+					var resourceBundle=f_resourceBundle.Get(f_radioButton);
+					summary=resourceBundle.f_formatParams("REQUIRED_ERROR_SUMMARY");
+					//detail=resourceBundle.f_formatParams("REQUIRED_ERROR_DETAIL");
+					
+					if (!summary) {	
+						summary=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_REQUIRED", null, "Radio button selection is required.");
+					}
+				}
+					
+				var messageContext=f_messageContext.Get(radioButton);	
+				messageContext.f_addMessage(radioButton, f_messageObject.SEVERITY_ERROR, summary, detail);
+				
+				/* On met l'erreur sur le composant qui contient Required
+				var components=radioButton.f_listAllInGroup();		
+				for(var i=0;i<components.length;i++) {
+					var component=components[i];
+			
+					var messageContext=f_messageContext.Get(component);	
+					messageContext.f_addMessage(component, f_messageObject.SEVERITY_ERROR, message, null);
+				}
+				*/
+				
+				return false;
+			}
+		};
+		
+		radioButton._checkCallbacks=checkCallbacks;
+		f_core.AddCheckListener(radioButton, checkCallbacks); 
+	}
+}
+
 var __members = {
 
-	/*
+	
 	f_radioButton: function() {
 		this.f_super(arguments);
+		
+		if (this.f_isRequired()) { // Installe le handler si nécessaire !
+			f_radioButton._InstallRequired(this);
+		}
+
+		var params=f_core.GetAttribute(this, "v:clientValidator", null);
+		if (params) { // Il peut être "" !
+			this._clientValidatorParameters=f_core.ParseParameters(params);
+		}
 	},
-	*/
+	
+	f_finalizer: function() {
+		var checkCallbacks=radioButton._checkCallbacks;
+		if (checkCallbacks) {
+			radioButton._checkCallbacks=undefined;
+			
+			f_core.RemoveCheckListener(this, checkCallbacks);
+		} 
+		
+		// this._clientValidatorParameters=undefined; // Map<String,String>
+	},
+	
+	/**
+	 * @method protected
+	 * @param String key
+	 * @return String
+	 */
+	 f_getClientValidatorParameter: function(key) {
+	 	var clientValidatorParameters=this._clientValidatorParameters;
+	 	if (!clientValidatorParameters) {
+	 		return null;
+	 	}
+	 	
+	 	return clientValidatorParameters[key];
+	 },
+	
 	/**
 	 * @method public 
 	 * @return String
@@ -50,13 +130,11 @@ var __members = {
 	 * @return f_radioButton
 	 */
 	f_getSelectedInGroup: function() {
-		var groupName=this.f_getGroupName();
-		
-		function search(item) {
-			return item.f_isSelected()?item:false;
-		}
-
-		return this.f_findIntoGroup(groupName, search);
+		return this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
+			if (item.f_isSelected()) {
+				return item;
+			}
+		});
 	},
 	/**
 	 * Returns the value of the selected button of the group.
@@ -81,20 +159,18 @@ var __members = {
 	 * @return boolean <code>true</code> if the button has been found.
 	 */
 	f_setValue: function(value) {
-		function search(item) {
+		return this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
 			if (!item.f_getRadioValue) {
-				return false;
+				return undefined;
 			}
 			
 			if (value!=item.f_getRadioValue()) {
-				return false;
+				return undefined;
 			}
 			
 			item.f_setSelected(true);
 			return true;
-		}
-
-		return this.f_findIntoGroup(this.f_getGroupName(), search);		
+		});		
 	},
 	/**
 	 * @method public 
@@ -134,15 +210,14 @@ var __members = {
 
 		if (f_core.IsGecko()) {
 			// Pour Gecko, il faut le faire à la main !
-			function unselect(item) {
-				var itemInput=item.f_getInput();;
+			
+			this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
+				var itemInput=item.f_getInput();
 				
 				if (itemInput && itemInput.checked) {
 					itemInput.checked=false;
 				}
-			}
-	
-			this.f_findIntoGroup(this.f_getGroupName(), unselect);
+			});
 		}
 				
 		input.checked = true;
@@ -160,8 +235,6 @@ var __members = {
 		
 		return input.value;
 	},
-	fa_updateRequired: function() {
-	},
 	/**
 	 * @method protected
 	 * @return void
@@ -177,13 +250,21 @@ var __members = {
 	 * @method protected
 	 * @return boolean
 	 */
-	fa_isRadioElementName: function() {
+	fa_isNativeRadioElement: function() {
 		return true;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	fa_updateRequired: function() {
+		this.f_updateStyleClass();
 	}
 }
 
 new f_class("f_radioButton", {
 	extend: f_checkButton,
 	aspects: [ fa_groupName, fa_required],
-	members: __members
+	members: __members,
+	statics: __statics
 });
