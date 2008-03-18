@@ -98,11 +98,11 @@ var __members = {
 	 * @return f_imageRadioButton
 	 */
 	f_getSelectedInGroup: function() {
-		function search(item) {
-			return item.f_isSelected()?item:null;
-		}
-
-		return this.f_findIntoGroup(this.f_getGroupName(), search);
+		return this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
+			if (item.f_isSelected()) {
+				return item;
+			}
+		});
 	},
 	/**
 	 * List all buttons of same group.
@@ -114,13 +114,6 @@ var __members = {
 		return this.f_listGroup(this.f_getGroupName());
 	},
 	fa_updateRequired: function() {
-	},
-	/**
-	 * @method protected
-	 * @return boolean
-	 */
-	fa_isRadioElementName: function() {
-		return false;
 	}
 }
 

@@ -363,7 +363,7 @@ var __members = {
 		if (!set && groupName) {
 			var p=this;
 			
-			function unselect(item) {
+			this.f_mapIntoGroup(groupName, function(item) {
 				if (item==p) {
 					return;
 				}
@@ -373,9 +373,7 @@ var __members = {
 				}
 				
 				item.f_setCollapsed(true);
-			}
-	
-			this.f_findIntoGroup(groupName, unselect);
+			});
 		}
 	},
 	/**
@@ -434,13 +432,6 @@ var __members = {
 	 */
 	f_getGroupName: function() {
 		return this._groupName;
-	},
-	/**
-	 * @method protected
-	 * @return boolean
-	 */
-	fa_isRadioElementName: function() {
-		return false;
 	},
 	/**
 	 * @method public

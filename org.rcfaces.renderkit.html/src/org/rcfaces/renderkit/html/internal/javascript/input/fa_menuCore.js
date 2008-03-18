@@ -1248,11 +1248,11 @@ var __members = {
 	 * @return Object
 	 */
 	f_getCheckedItemInGroup: function(item) {
-		function search(i) {
-			return this.f_isItemChecked(i)?i:null;
-		}
-
-		return this.f_findIntoGroup(this.f_getItemGroupName(item), search);
+		return this.f_mapIntoGroup(this.f_getItemGroupName(item), function(i) {
+			if (this.f_isItemChecked(i)) {
+				return i;
+			}
+		});
 	},
 	/**
 	 * @method public
@@ -1279,13 +1279,6 @@ var __members = {
 	},
 	fa_getRadioScope: function() {
 		return this;
-	},
-	/**
-	 * @method protected
-	 * @return boolean
-	 */
-	fa_isRadioElementName: function() {
-		return false;
 	},
 	fa_destroyItems: function(items) {
 	},	
