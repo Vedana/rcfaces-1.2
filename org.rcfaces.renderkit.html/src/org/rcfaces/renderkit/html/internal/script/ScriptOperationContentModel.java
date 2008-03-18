@@ -12,13 +12,13 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.script.IScriptContentAccessorHandler;
 import org.rcfaces.core.internal.script.IScriptOperation;
 import org.rcfaces.core.internal.script.IScriptOperationContext;
-import org.rcfaces.core.internal.style.AbstractBufferOperationContentModel;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
 
 /**
