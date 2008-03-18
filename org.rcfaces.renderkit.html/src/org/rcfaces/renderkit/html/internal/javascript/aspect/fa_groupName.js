@@ -10,6 +10,17 @@
  * @version $Revision$ $Date$
  */
 var __statics = {
+
+	/**
+	 * @method private static 
+	 * @param f_component component
+	 * @param String groupName
+	 * @param optional boolean create
+	 * @return f_component[]
+	 */
+	ListGroupFromComponent: function(component, groupName, create) {
+	},
+	
 	/**
 	 * @method protected static
 	 * @return void
@@ -60,12 +71,14 @@ var __members = {
 		}
 	},
 	/**
-	 * @method protected
+	 * @method public
 	 * @param String groupName
 	 * @param function fct
 	 * @return any
 	 */
-	f_findIntoGroup: function(groupName, fct) {
+	f_mapIntoGroup: function(groupName, fct) {
+		f_core.Assert(typeof(fct)=="function", "fa_groupName.f_mapIntoGroup: Invalid fct parameter ("+fct+") !");
+
 		if (!groupName) {
 			return null;
 		} 
@@ -78,7 +91,7 @@ var __members = {
 		for(var i=0;i<g.length;i++) {
 			var ret=fct.call(this, g[i]);
 			
-			if (ret) {
+			if (ret!==undefined) {
 				return ret;
 			}
 		}
@@ -87,26 +100,39 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param String groupName
-	 * @param boolean create
-	 * @return Array
+	 * @param optional boolean create
+	 * @return f_component[]
 	 */
 	f_listGroup: function(groupName, create) {
 		f_core.Assert(typeof(groupName)=="string", "fa_groupName.f_listGroup: Invalid groupName parameter ("+groupName+") !");
-	
+			
 		var scope=fa_groupName;
 		if (typeof(this.fa_getRadioScope)=="function") {
 			scope=this.fa_getRadioScope();
 		}
-				
+
+		var groupKey=this.f_getClass().f_getName();
+		
+		var isNativeRadioElement=this.fa_isNativeRadioElement()
+		if (isNativeRadioElement) {
+			create=true;
+		}
+	
 		var wg=scope._Groups;
 		if (!wg) {
+			if (!create) {
+				return [];
+			}
 			wg=new Object;
 			scope._Groups=wg;
 		}
 		
-		var groupKey=this.f_getClass().f_getName();
 		var groups=wg[groupKey];
 		if (!groups) {
+			if (!create) {
+				return [];
+			}
+
 			groups=new Object;
 			wg[groupKey]=groups;
 		}
@@ -119,14 +145,16 @@ var __members = {
 		group=new Array;
 		groups[groupName]=group;
 
-		if (!this.fa_isRadioElementName()) {
-			// Les composants ont été enregistré à la construction
+		if (!create || !isNativeRadioElement) {
+			// Les composants ont été enregistré à la construction car ils ne sont pas nativement regroupable par groupes.
 			return group;
 		}
 
-		f_core.Debug(fa_groupName, "f_listGroup: Search elements by name '"+groupName+"' ...");
+		// Des radios natifs, on les recherche ...
 
-		var elements=document.getElementsByName(groupName);
+		f_core.Debug(fa_groupName, "ListGroup: Search elements by name '"+groupName+"' ...");
+
+		var elements=this.ownerDocument.getElementsByName(groupName);
 		for(var i=0;i<elements.length;i++) {
 			var element=elements[i];
 			
@@ -135,11 +163,11 @@ var __members = {
 			var inputSuffixPos=elementId.indexOf(f_checkButton._INPUT_ID_SUFFIX);
 			if (inputSuffixPos>0) {
 				elementId=elementId.substring(0, inputSuffixPos);
+						
+				element=f_core.GetElementByClientId(elementId);
 			}
-			
-			element=f_core.GetElementByClientId(elementId);
 
-			f_core.Debug(fa_groupName, "f_listGroup: Found element id='"+element.id+"' mainId='"+elementId+"' element='"+element+"'.");
+			f_core.Debug(fa_groupName, "ListGroup: Found element id='"+element.id+"' mainId='"+elementId+"' element='"+element+"'.");
 
 			if (!element) {
 				continue;
@@ -161,7 +189,7 @@ var __members = {
 	 * @method protected abstract
 	 * @return boolean
 	 */
-	fa_isRadioElementName: f_class.ABSTRACT
+	fa_isNativeRadioElement: f_class.OPTIONAL_ABSTRACT
 }
 
 new f_aspect("fa_groupName", {
