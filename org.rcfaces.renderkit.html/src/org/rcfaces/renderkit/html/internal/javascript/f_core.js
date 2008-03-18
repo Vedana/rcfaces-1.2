@@ -2385,10 +2385,17 @@ var f_core = {
 	 * @method hidden static hidden
 	 * @param HTMLElement component 
 	 * @param Object listener
-	 * @return void
+	 * @return boolean
 	 */
 	RemoveCheckListener: function(component, listener) {
+		var form=f_core.GetParentForm(component);
+
+		var checkListeners=form._checkListeners;
+		if (!checkListeners) {
+			return false;
+		}
 		
+		return checkListeners.f_removeElement(listener);
 	},
 	/**
 	 * @method hidden static hidden
