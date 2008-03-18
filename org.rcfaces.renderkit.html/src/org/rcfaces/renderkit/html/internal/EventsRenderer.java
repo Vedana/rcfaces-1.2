@@ -411,6 +411,8 @@ public class EventsRenderer {
     public static void appendCommand(StringAppender sa, String command) {
         char chs[] = command.toCharArray();
 
+        sa.ensure(chs.length * 3 / 2);
+
         int last = 0;
         for (int i = 0; i < chs.length; i++) {
             char c = chs[i];
