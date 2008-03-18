@@ -55,7 +55,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         IComponentRenderContext componentRenderContext = htmlWriter
                 .getComponentRenderContext();
 
-        RadioButtonComponent button = (RadioButtonComponent) componentRenderContext
+        RadioButtonComponent radioButton = (RadioButtonComponent) componentRenderContext
                 .getComponent();
 
         FacesContext facesContext = componentRenderContext.getFacesContext();
@@ -64,12 +64,9 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+        writeValidatorParameters(htmlWriter, radioButton);
 
-        /*
-         * if (button.isDisabled(facesContext)) { htmlWriter.writeDisabled(); }
-         */
-
-        if (button.isRequired()) {
+        if (radioButton.isRequired()) {
             htmlWriter.writeAttribute("v:required", true);
 
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
@@ -81,25 +78,29 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
 
         String inputClassName = getInputClassName(htmlWriter);
 
-        int horizontalTextPosition = button.getTextPosition(facesContext);
+        int horizontalTextPosition = radioButton.getTextPosition(facesContext);
         if (horizontalTextPosition == 0) {
             horizontalTextPosition = IHorizontalTextPositionCapability.DEFAULT_POSITION;
         }
 
         if (horizontalTextPosition == IHorizontalTextPositionCapability.LEFT_POSITION) {
-            writeLabel(htmlWriter, button, labelClassName, buttonId);
+            writeLabel(htmlWriter, radioButton, labelClassName, buttonId);
 
-            writeInput(htmlWriter, button, inputClassName, buttonId);
+            writeInput(htmlWriter, radioButton, inputClassName, buttonId);
 
         } else {
-            writeInput(htmlWriter, button, inputClassName, buttonId);
+            writeInput(htmlWriter, radioButton, inputClassName, buttonId);
 
-            writeLabel(htmlWriter, button, labelClassName, buttonId);
+            writeLabel(htmlWriter, radioButton, labelClassName, buttonId);
         }
 
         htmlWriter.endElement(IHtmlWriter.LABEL);
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
+
+        if (radioButton.isRequired()) {
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+        }
     }
 
     protected String getInputClassName(IHtmlWriter htmlWriter) {
