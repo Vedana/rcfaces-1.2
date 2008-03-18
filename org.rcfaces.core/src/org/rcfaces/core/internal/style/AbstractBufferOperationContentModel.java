@@ -32,7 +32,7 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader
  * @version $Revision$ $Date$
  */
 public abstract class AbstractBufferOperationContentModel extends
-        AbstractOperationContentModel {
+        AbstractOperationContentModel implements IOperationContentLoader {
 
     private static final String REVISION = "$Revision$";
 
