@@ -191,7 +191,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                             ASYNC_RENDER_SERVICE_VERSION);
 
                     try {
-                        interactiveBuffer.sendBuffer(facesContext);
+                        interactiveBuffer.sendBuffer(facesContext, useGzip);
 
                     } catch (IOException ex) {
                         throw new FacesException(
@@ -217,7 +217,7 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                                 .renderTree(facesContext, component,
                                         componentId);
 
-                        interactiveBuffer.sendBuffer(facesContext);
+                        interactiveBuffer.sendBuffer(facesContext, useGzip);
 
                     } catch (IOException ex) {
                         throw new FacesException(
@@ -468,35 +468,10 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
             this.hasSaveStateFieldMarker = componentTreeRenderProcessor
                     .hasSaveStateFieldMarker(content);
-
-            /*
-             * String content = null; byte gzipped[] = null; try {
-             * BufferOutputStream bout = new BufferOutputStream(length);
-             * OutputStream gzip = new GZIPOutputStream(bout, length); Writer
-             * writer = new OutputStreamWriter(gzip,
-             * AbstractHtmlService.RESPONSE_CHARSET);
-             * 
-             * bodyContent.writeOut(writer);
-             * 
-             * writer.close(); // ferme bout !
-             * 
-             * gzipped = bout.toByteArray();
-             * 
-             * if (gzipped.length < length) { content = null;
-             * 
-             * if (LOG.isInfoEnabled()) { LOG.info("Compression: original=" +
-             * length + " z=" + gzipped.length + " (" + (gzipped.length * 100 /
-             * length) + " %)"); } } else { if (LOG.isInfoEnabled()) { LOG
-             * .info("Compression: bad performance, cancel compression ! (" +
-             * (gzipped.length * 100 / length) + " %)"); } gzipped = null;
-             * content = bodyContent.getString(); } } catch (IOException ex) {
-             * LOG.error("Can GZIP buffer !", ex); }
-             * 
-             * this.content = content; this.gzipped = gzipped;
-             */
         }
 
-        public void sendBuffer(FacesContext facesContext) throws IOException {
+        public void sendBuffer(FacesContext facesContext, boolean useGzip)
+                throws IOException {
 
             ServletResponse response = (ServletResponse) facesContext
                     .getExternalContext().getResponse();
@@ -504,8 +479,10 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
             OutputStream responseStream = response.getOutputStream();
             OutputStream outputStream = responseStream;
 
-            boolean useGzip = ConfiguredHttpServlet
-                    .hasGzipSupport(facesContext);
+            if (useGzip) {
+                // On verifie que le GZIP est supporté aussi par le client
+                useGzip = ConfiguredHttpServlet.hasGzipSupport(facesContext);
+            }
 
             if (LOG.isTraceEnabled()) {
                 LOG.trace("Send interactiveBuffer[" + id + "] (Use gzip: "
@@ -535,7 +512,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                 GZIPInputStream gin = new GZIPInputStream(ins,
                         gzippedContent.length);
 
-                Reader reader = new InputStreamReader(gin, "UTF-8");
+                Reader reader = new InputStreamReader(gin,
+                        AbstractHtmlService.RESPONSE_CHARSET);
 
                 StringAppender sa = new StringAppender(
                         gzippedContent.length * 2);
@@ -634,7 +612,9 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                                 content.length());
                         GZIPOutputStream out = new GZIPOutputStream(bos, 4096);
 
-                        out.write(content.getBytes("UTF-8"));
+                        out
+                                .write(content
+                                        .getBytes(AbstractHtmlService.RESPONSE_CHARSET));
 
                         out.close();
 
