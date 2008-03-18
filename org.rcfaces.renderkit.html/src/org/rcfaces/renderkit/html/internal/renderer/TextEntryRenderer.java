@@ -446,7 +446,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         StringAppender sb = new StringAppender(128);
         if (params.isEmpty() == false) {
             for (Iterator it = params.iterator(); it.hasNext();) {
-                String value = (String) it.next();
+                String value = (String) it.next(); // Dans la liste, nous avons: KEY1,VALUE1, KEY2,VALUE2, ...
 
                 if (sb.length() > 0) {
                     sb.append(':');
