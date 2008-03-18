@@ -15,11 +15,10 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
-import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
-import org.rcfaces.core.internal.style.AbstractBufferOperationContentModel;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
 import org.rcfaces.core.internal.style.IStyleOperation;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
@@ -209,7 +208,7 @@ public class CssOperationContentModel extends
 
             styleSheetURL = styleOperation.filter(applicationParameters,
                     resourceLoaderFactory, cssParser, styleSheetURL,
-                    styleSheetContent, parserContext);
+                    styleSheetContent, parserContext, this);
         }
 
         return styleSheetURL;

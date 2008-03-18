@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Services;
+import org.rcfaces.core.internal.content.IOperationContentLoader;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 
 /**
@@ -75,7 +76,9 @@ public class CssParserFactory {
         String mergesBuffer(Map applicationParameters,
                 IResourceLoaderFactory resourceLoaderFactory,
                 String styleSheetURL, String styleSheetBuffer,
-                IParserContext mergeContext) throws IOException;
+                IParserContext mergeContext,
+                IOperationContentLoader operationContentLoader)
+                throws IOException;
 
         /**
          * 
