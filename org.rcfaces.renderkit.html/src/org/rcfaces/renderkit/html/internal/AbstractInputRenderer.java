@@ -3,6 +3,9 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -14,6 +17,8 @@ import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -229,5 +234,44 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
         }
 
         return super.writeStyleClass(writer, classSuffix);
+    }
+
+    protected void writeValidatorParameters(IHtmlWriter htmlWriter,
+            IValidationParameters validationParameters) throws WriterException {
+        Map parametersMap = validationParameters
+                .getClientValidationParametersMap();
+
+        if (parametersMap.isEmpty()) {
+            return;
+        }
+
+        StringAppender sb = new StringAppender(parametersMap.size() * 64);
+
+        for (Iterator it = parametersMap.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String key = (String) entry.getKey();
+            String value = (String) entry.getValue();
+
+            if (sb.length() > 0) {
+                sb.append(':');
+            }
+            if (key == null) {
+                key = "%";
+            }
+
+            EventsRenderer.appendCommand(sb, key);
+
+            sb.append(':');
+            if (value == null) {
+                value = "%";
+            }
+
+            EventsRenderer.appendCommand(sb, value);
+        }
+
+        // Meme vide ! Car c'est cet attribut qui spécifie qu'il y a un
+        // validateur !
+        htmlWriter.writeAttribute("v:clientValidator", sb.toString());
     }
 }
