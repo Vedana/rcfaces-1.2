@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.style;
+package org.rcfaces.core.internal.content;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.content.AbstractOperationContentModel;
-import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.contentStorage.GZipedResolvedContent;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.images.Constants;

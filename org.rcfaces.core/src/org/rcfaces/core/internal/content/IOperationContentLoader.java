@@ -1,12 +1,12 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.style;
+package org.rcfaces.core.internal.content;
 
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel.ContentInformation;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
-import org.rcfaces.core.internal.style.AbstractBufferOperationContentModel.ContentInformation;
 
 /**
  * 
