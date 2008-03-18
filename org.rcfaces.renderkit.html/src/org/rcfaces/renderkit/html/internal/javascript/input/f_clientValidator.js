@@ -126,16 +126,16 @@ var __statics = {
 				f=f_core.WindowScopeEval(expr);
 				
 			} catch (x) {
-				f_core.Error(f_clientValidator, "Can not eval expression '"+expr+"'.", x);
+				f_core.Error(f_clientValidator, "_EvalFunction: Can not eval expression '"+expr+"'.", x);
 				return null;
 			}
 		}
 		
 		if (resolveObject) {
-			f_core.Assert(typeof(f)=="object", "Invalid expression for object : '"+expr+"'='"+f+"'.");
+			f_core.Assert(typeof(f)=="object", "f_clientValidator._EvalFunction: Invalid expression for object : '"+expr+"'='"+f+"'.");
 
 		} else {
-			f_core.Assert(typeof(f)=="function" || (f instanceof RegExp), "Invalid expression for function : '"+expr+"'='"+f+"'.");
+			f_core.Assert(typeof(f)=="function" || (f instanceof RegExp), "f_clientValidator._EvalFunction: Invalid expression for function : '"+expr+"'='"+f+"'.");
 		}
 			
 		expressions[expr]=f;
@@ -1355,14 +1355,14 @@ var __members = {
 	 * @method public final
 	 */
 	f_setLastError: function(summary, detail, severity) {
-		f_core.Debug(f_clientValidator, "SetLastError: summary='"+summary+"' detail='"+detail+"' severity='"+severity+"'.");
+		f_core.Debug(f_clientValidator, "f_setLastError: summary='"+summary+"' detail='"+detail+"' severity='"+severity+"'.");
 	
 		if (typeof(severity)=="string") {
 			try {
 				severity=parseInt(severity, 10);
 				
 			} catch (x) {
-				f_core.Error(f_clientValidator, "Invalid severity expression '"+severity+"'.", x);
+				f_core.Error(f_clientValidator, "f_setLastError: Invalid severity expression '"+severity+"'.", x);
 			}
 		}
 	
