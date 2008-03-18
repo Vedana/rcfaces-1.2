@@ -24,6 +24,10 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 	private String selectionListeners;
 	private String readOnly;
 	private String alternateText;
+	private String errorStyleClass;
+	private String fatalStyleClass;
+	private String infoStyleClass;
+	private String warnStyleClass;
 	private String selected;
 	private String radioValue;
 	private String groupName;
@@ -80,6 +84,38 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 		this.alternateText = alternateText;
 	}
 
+	public final String getErrorStyleClass() {
+		return errorStyleClass;
+	}
+
+	public final void setErrorStyleClass(String errorStyleClass) {
+		this.errorStyleClass = errorStyleClass;
+	}
+
+	public final String getFatalStyleClass() {
+		return fatalStyleClass;
+	}
+
+	public final void setFatalStyleClass(String fatalStyleClass) {
+		this.fatalStyleClass = fatalStyleClass;
+	}
+
+	public final String getInfoStyleClass() {
+		return infoStyleClass;
+	}
+
+	public final void setInfoStyleClass(String infoStyleClass) {
+		this.infoStyleClass = infoStyleClass;
+	}
+
+	public final String getWarnStyleClass() {
+		return warnStyleClass;
+	}
+
+	public final void setWarnStyleClass(String warnStyleClass) {
+		this.warnStyleClass = warnStyleClass;
+	}
+
 	public final String getSelected() {
 		return selected;
 	}
@@ -122,6 +158,10 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
+			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
+			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  selected='"+selected+"'");
 			LOG.debug("  radioValue='"+radioValue+"'");
 			LOG.debug("  groupName='"+groupName+"'");
@@ -194,6 +234,46 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (errorStyleClass != null) {
+			if (isValueReference(errorStyleClass)) {
+				ValueBinding vb = application.createValueBinding(errorStyleClass);
+				component.setValueBinding(Properties.ERROR_STYLE_CLASS, vb);
+
+			} else {
+				component.setErrorStyleClass(errorStyleClass);
+			}
+		}
+
+		if (fatalStyleClass != null) {
+			if (isValueReference(fatalStyleClass)) {
+				ValueBinding vb = application.createValueBinding(fatalStyleClass);
+				component.setValueBinding(Properties.FATAL_STYLE_CLASS, vb);
+
+			} else {
+				component.setFatalStyleClass(fatalStyleClass);
+			}
+		}
+
+		if (infoStyleClass != null) {
+			if (isValueReference(infoStyleClass)) {
+				ValueBinding vb = application.createValueBinding(infoStyleClass);
+				component.setValueBinding(Properties.INFO_STYLE_CLASS, vb);
+
+			} else {
+				component.setInfoStyleClass(infoStyleClass);
+			}
+		}
+
+		if (warnStyleClass != null) {
+			if (isValueReference(warnStyleClass)) {
+				ValueBinding vb = application.createValueBinding(warnStyleClass);
+				component.setValueBinding(Properties.WARN_STYLE_CLASS, vb);
+
+			} else {
+				component.setWarnStyleClass(warnStyleClass);
+			}
+		}
+
 		if (selected != null) {
 			if (isValueReference(selected)) {
 				ValueBinding vb = application.createValueBinding(selected);
@@ -242,6 +322,10 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 		selectionListeners = null;
 		readOnly = null;
 		alternateText = null;
+		errorStyleClass = null;
+		fatalStyleClass = null;
+		infoStyleClass = null;
+		warnStyleClass = null;
 		selected = null;
 		radioValue = null;
 		groupName = null;
