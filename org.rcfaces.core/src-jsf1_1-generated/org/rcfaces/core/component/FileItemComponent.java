@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.component.CameliaItemComponent;
-import java.util.HashSet;
-import java.lang.String;
+import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
-import javax.faces.el.ValueBinding;
+import java.util.HashSet;
 
 public abstract class FileItemComponent extends CameliaItemComponent {
 

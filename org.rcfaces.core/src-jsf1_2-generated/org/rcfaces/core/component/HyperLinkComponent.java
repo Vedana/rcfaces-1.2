@@ -1,10 +1,14 @@
 package org.rcfaces.core.component;
 
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.capability.IConvertValueHolder;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.ButtonComponent;
-import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The hyperLink Component translates into a classic hyperlink and is a <A href="/comps/buttonComponent.html">button</A>.</p>
@@ -19,10 +23,15 @@ import java.util.Set;
  * </ul>
  * </p>
  */
-public class HyperLinkComponent extends ButtonComponent {
+public class HyperLinkComponent extends ButtonComponent implements 
+	IConvertValueHolder {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.hyperLink";
 
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"converter"}));
+	}
 
 	public HyperLinkComponent() {
 		setRendererType(COMPONENT_TYPE);
@@ -31,6 +40,52 @@ public class HyperLinkComponent extends ButtonComponent {
 	public HyperLinkComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public void setConverter(String converterId) {
+
+
+			 setConverter(null, converterId);
+		
+	}
+
+	public void setConverter(FacesContext facesContext, String converterId) {
+
+
+			if (facesContext==null) {
+				facesContext=FacesContext.getCurrentInstance();
+			}
+			Converter converter = facesContext.getApplication().createConverter(converterId);
+            this.setConverter(converter);
+		
+	}
+
+	public void setConverter(Converter converter) {
+
+
+        	engine.setProperty("converter", converter);
+		
+	}
+
+	public Converter getConverter() {
+
+
+        	return (Converter)engine.getProperty("converter", null);
+		
+	}
+
+	public Converter getConverter(FacesContext facesContext) {
+
+
+        	return (Converter)engine.getProperty("converter", facesContext);
+		
+	}
+
+	public Object getLocalValue() {
+
+
+		return engine.getLocalValue(Properties.VALUE);
+		
 	}
 
 	protected Set getCameliaFields() {
