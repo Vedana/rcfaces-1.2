@@ -48,11 +48,11 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
 
         Object value = getValue(hiddenValueComponent);
         if (value != null) {
-            String svalue = convertValue(facesContext, hiddenValueComponent,
-                    value);
+            String convertedValue = convertValue(facesContext,
+                    hiddenValueComponent, value);
 
-            if (svalue != null) {
-                htmlWriter.writeValue(svalue);
+            if (convertedValue != null) {
+                htmlWriter.writeValue(convertedValue);
             }
         }
 

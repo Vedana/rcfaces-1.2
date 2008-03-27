@@ -137,8 +137,14 @@ var __members = {
 	 * @return String Serialized form.
 	 */
 	f_serialize0: function() {
-		if (this.f_serialize) {
-			this.f_serialize();
+		var serialize=this.f_serialize;
+		if (serialize) {
+			try {
+				serialize.call(this);
+				
+			} catch (x) {
+				f_core.Error(fa_serializable, "f_serialize0: Can not serialize component '"+this.id+"'.", x);
+			}
 		}
 		
 		var p = this._properties;
