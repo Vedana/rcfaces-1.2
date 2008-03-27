@@ -31,20 +31,24 @@
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
+
+import org.w3c.css.sac.ElementSelector;
+import org.w3c.css.sac.Selector;
 
 public class ElementSelectorImpl implements ElementSelector, Serializable {
 
-    private String _localName;
+    private static final long serialVersionUID = 7547133098473780696L;
+
+    private final String _localName;
 
     public ElementSelectorImpl(String localName) {
         _localName = localName;
     }
-    
+
     public short getSelectorType() {
         return Selector.SAC_ELEMENT_NODE_SELECTOR;
     }
-    
+
     public String getNamespaceURI() {
         return null;
     }
@@ -52,7 +56,7 @@ public class ElementSelectorImpl implements ElementSelector, Serializable {
     public String getLocalName() {
         return _localName;
     }
-    
+
     public String toString() {
         return (getLocalName() != null) ? getLocalName() : "*";
     }

@@ -2,18 +2,29 @@ package org.rcfaces.css.internal;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.content.IOperationContentLoader;
+import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel.ContentInformation;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
-import org.rcfaces.core.internal.style.StyleOperationContentModel;
-import org.rcfaces.core.internal.style.CssParserFactory.ICssParser;
-import org.rcfaces.core.internal.style.StyleOperationContentModel.ContentInformation;
 import org.rcfaces.core.internal.util.IPath;
 import org.rcfaces.core.internal.util.Path;
+import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
+import org.w3c.css.sac.ConditionalSelector;
+import org.w3c.css.sac.DescendantSelector;
+import org.w3c.css.sac.ElementSelector;
 import org.w3c.css.sac.InputSource;
+import org.w3c.css.sac.Selector;
+import org.w3c.css.sac.SelectorList;
+import org.w3c.css.sac.SiblingSelector;
+import org.w3c.css.sac.SimpleSelector;
 import org.w3c.dom.css.CSSCharsetRule;
 import org.w3c.dom.css.CSSImportRule;
 import org.w3c.dom.css.CSSPrimitiveValue;
@@ -26,6 +37,7 @@ import org.w3c.dom.css.CSSValue;
 import org.w3c.dom.css.CSSValueList;
 
 import com.steadystate.css.parser.CSSOMParser;
+import com.steadystate.css.parser.selectors.SelectorsRule;
 
 /**
  * 
@@ -35,6 +47,9 @@ import com.steadystate.css.parser.CSSOMParser;
 public class CssSteadyStateParser implements ICssParser {
     private static final String REVISION = "$Revision$";
 
+    public static final Log PARSING_LOG = LogFactory
+            .getLog("org.rcfaces.css.Parsing");
+
     private static final Log LOG = LogFactory
             .getLog(CssSteadyStateParser.class);
 
@@ -42,18 +57,37 @@ public class CssSteadyStateParser implements ICssParser {
         LOG.info("Enable 'CssSteadyState' css parser.");
     }
 
+    private static final Set VALID_ELEMENTS = new HashSet(Arrays
+            .asList(new String[] { "A", "ABBR", "ACRONYM", "ADDRESS", "APPLET",
+                    "AREA", "B", "BASE", "BASEFONT", "BDO", "BIG",
+                    "BLOCKQUOTE", "BODY", "BR", "BUTTON", "CAPTION", "CENTER",
+                    "CITE", "CODE", "COL", "COLGROUP", "DD", "DEL", "DFN",
+                    "DIR", "DIV", "DL", "DT", "EM", "FIELDSET", "FONT", "FORM",
+                    "FRAME", "FRAMESET", "H1", "H2", "H3", "H4", "H5", "H6",
+                    "HEAD", "HR", "HTML", "I", "IFRAME", "IMG", "INPUT", "INS",
+                    "ISINDEX", "KBD", "LABEL", "LEGEND", "LI", "LINK", "MAP",
+                    "MENU", "META", "NOFRAMES", "NOSCRIPT", "OBJECT", "OL",
+                    "OPTGROUP", "OPTION", "P", "PARAM", "PRE", "Q", "S",
+                    "SAMP", "SCRIPT", "SELECT", "SMALL", "SPAN", "STRIKE",
+                    "STRONG", "STYLE", "SUB", "SUP", "TABLE", "TBODY", "TD",
+                    "TEXTAREA", "TFOOT", "TH", "THEAD", "TITLE", "TR", "TT",
+                    "U", "UL", "VAR" }));
+
     public String getParserName() {
         return "Steady State Css parser";
     }
 
-    public String mergesBuffer(IResourceLoaderFactory resourceLoaderFactory,
-            String baseURL, String styleSheetContent,
-            IParserContext parserContext) throws IOException {
+    public String mergesBuffer(Map applicationParameters,
+            IResourceLoaderFactory resourceLoaderFactory, String baseURL,
+            String styleSheetContent, IParserContext parserContext,
+            IOperationContentLoader operationContentLoader) throws IOException {
 
         CSSOMParser parser = new CSSOMParser();
 
-        CSSStyleSheet styleSheet = parser.parseStyleSheet(new InputSource(
-                new StringReader(styleSheetContent)));
+        InputSource inputSource = new InputSource(new StringReader(
+                styleSheetContent));
+        inputSource.setTitle(baseURL);
+        CSSStyleSheet styleSheet = parser.parseStyleSheet(inputSource);
 
         IPath base = new Path(baseURL).makeRelative();
         IPath relative = new Path("..").append(base.removeLastSegments(1));
@@ -64,13 +98,14 @@ public class CssSteadyStateParser implements ICssParser {
         }
 
         computeStyleSheet(styleSheet, base, relative, new ParserContext(
-                resourceLoaderFactory, parserContext));
+                resourceLoaderFactory, parserContext), operationContentLoader);
 
         return styleSheet.toString();
     }
 
     private void computeStyleSheet(CSSStyleSheet styleSheet, IPath base,
-            IPath relativePath, ParserContext parserContext) {
+            IPath relativePath, ParserContext parserContext,
+            IOperationContentLoader operationContentLoader) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Refactor stylesheet: '" + base + "'.");
@@ -91,8 +126,13 @@ public class CssSteadyStateParser implements ICssParser {
             }
 
             if (rule instanceof CSSStyleRule) {
-                CSSStyleDeclaration declaration = ((CSSStyleRule) rule)
-                        .getStyle();
+                CSSStyleRule styleRule = (CSSStyleRule) rule;
+                CSSStyleDeclaration declaration = styleRule.getStyle();
+
+                if (styleRule instanceof SelectorsRule) {
+                    verifySelectors(((SelectorsRule) styleRule)
+                            .getSelectorList(), base.toString());
+                }
 
                 for (int j = 0; j < declaration.getLength(); j++) {
                     String property = declaration.item(j);
@@ -175,7 +215,7 @@ public class CssSteadyStateParser implements ICssParser {
             try {
                 ContentInformation contentInformationRef[] = new ContentInformation[1];
 
-                String childContent = StyleOperationContentModel.loadContent(
+                String childContent = operationContentLoader.loadContent(
                         parserContext.facesContext,
                         parserContext.resourceLoaderFactory, importedPath,
                         parserContext.parserContext.getCharset(),
@@ -201,6 +241,7 @@ public class CssSteadyStateParser implements ICssParser {
 
                 InputSource inputSource = new InputSource(new StringReader(
                         childContent));
+                inputSource.setTitle(importedPath);
 
                 CSSOMParser parser = new CSSOMParser();
 
@@ -208,7 +249,7 @@ public class CssSteadyStateParser implements ICssParser {
                         .parseStyleSheet(inputSource);
 
                 computeStyleSheet(importedStyleSheet, newPath, newRelativePath,
-                        parserContext);
+                        parserContext, operationContentLoader);
 
                 styleSheet.deleteRule(i);
 
@@ -242,6 +283,57 @@ public class CssSteadyStateParser implements ICssParser {
 
         if (LOG.isTraceEnabled()) {
             LOG.debug("Css content of '" + base + "': " + styleSheet);
+        }
+    }
+
+    private void verifySelectors(SelectorList selectors, String source) {
+        for (int i = 0; i < selectors.getLength(); i++) {
+            Selector selector = selectors.item(i);
+
+            verifySelector(selector, source);
+        }
+    }
+
+    private void verifySelector(Selector selector, String source) {
+        if (selector instanceof ConditionalSelector) {
+            ConditionalSelector conditionalSelector = (ConditionalSelector) selector;
+
+            SimpleSelector simpleSelector = conditionalSelector
+                    .getSimpleSelector();
+            if (simpleSelector instanceof ElementSelector) {
+                if ("*".equals(((ElementSelector) simpleSelector)
+                        .getLocalName())) {
+                    PARSING_LOG.error("* simple selector is not necessery '"
+                            + selector + "'. [source:" + source + "]");
+                }
+            }
+        }
+
+        if (selector instanceof DescendantSelector) {
+            DescendantSelector descendantSelector = (DescendantSelector) selector;
+
+            verifySelector(descendantSelector.getAncestorSelector(), source);
+            verifySelector(descendantSelector.getSimpleSelector(), source);
+            return;
+        }
+
+        if (selector instanceof SiblingSelector) {
+            SiblingSelector descendantSelector = (SiblingSelector) selector;
+
+            verifySelector(descendantSelector.getSiblingSelector(), source);
+            verifySelector(descendantSelector.getSelector(), source);
+            return;
+        }
+
+        if (selector instanceof ElementSelector) {
+            ElementSelector elementSelector = (ElementSelector) selector;
+
+            String name = elementSelector.getLocalName().toUpperCase();
+
+            if (VALID_ELEMENTS.contains(name) == false) {
+                PARSING_LOG.error("Invalid element name '" + name + "': rule="
+                        + selector + " [source:" + source + "]");
+            }
         }
     }
 

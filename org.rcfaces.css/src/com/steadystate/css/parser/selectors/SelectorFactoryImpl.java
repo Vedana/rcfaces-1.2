@@ -35,8 +35,7 @@ import org.w3c.css.sac.*;
 public class SelectorFactoryImpl implements SelectorFactory {
 
     public ConditionalSelector createConditionalSelector(
-        SimpleSelector selector,
-        Condition condition) throws CSSException {
+            SimpleSelector selector, Condition condition) throws CSSException {
         return new ConditionalSelectorImpl(selector, condition);
     }
 
@@ -48,13 +47,13 @@ public class SelectorFactoryImpl implements SelectorFactory {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public NegativeSelector createNegativeSelector(SimpleSelector selector) 
-	    throws CSSException {
+    public NegativeSelector createNegativeSelector(SimpleSelector selector)
+            throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public ElementSelector createElementSelector(String namespaceURI, String localName)
-        throws CSSException {
+    public ElementSelector createElementSelector(String namespaceURI,
+            String localName) throws CSSException {
         if (namespaceURI != null) {
             throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
         } else {
@@ -63,52 +62,46 @@ public class SelectorFactoryImpl implements SelectorFactory {
     }
 
     public CharacterDataSelector createTextNodeSelector(String data)
-        throws CSSException {
+            throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
     public CharacterDataSelector createCDataSectionSelector(String data)
-        throws CSSException {
+            throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
     public ProcessingInstructionSelector createProcessingInstructionSelector(
-        String target,
-        String data) throws CSSException {
+            String target, String data) throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
     public CharacterDataSelector createCommentSelector(String data)
-        throws CSSException {
+            throws CSSException {
         throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
     }
 
-    public ElementSelector createPseudoElementSelector(
-        String namespaceURI, 
-        String pseudoName) throws CSSException {
+    public ElementSelector createPseudoElementSelector(String namespaceURI,
+            String pseudoName) throws CSSException {
         if (namespaceURI != null) {
             throw new CSSException(CSSException.SAC_NOT_SUPPORTED_ERR);
-        } else {
-            return new PseudoElementSelectorImpl(pseudoName);
         }
+        
+        return new PseudoElementSelectorImpl(pseudoName);
     }
 
-    public DescendantSelector createDescendantSelector(
-        Selector parent,
-        SimpleSelector descendant) throws CSSException {
+    public DescendantSelector createDescendantSelector(Selector parent,
+            SimpleSelector descendant) throws CSSException {
         return new DescendantSelectorImpl(parent, descendant);
     }
 
-    public DescendantSelector createChildSelector(
-        Selector parent,
-        SimpleSelector child) throws CSSException {
+    public DescendantSelector createChildSelector(Selector parent,
+            SimpleSelector child) throws CSSException {
         return new ChildSelectorImpl(parent, child);
     }
 
-    public SiblingSelector createDirectAdjacentSelector(
-        short nodeType,
-        Selector child,
-        SimpleSelector directAdjacent) throws CSSException {
+    public SiblingSelector createDirectAdjacentSelector(short nodeType,
+            Selector child, SimpleSelector directAdjacent) throws CSSException {
         return new DirectAdjacentSelectorImpl(nodeType, child, directAdjacent);
     }
 }

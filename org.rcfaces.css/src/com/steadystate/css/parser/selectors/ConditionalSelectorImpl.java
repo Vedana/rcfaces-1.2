@@ -31,16 +31,21 @@
 package com.steadystate.css.parser.selectors;
 
 import java.io.Serializable;
-import org.w3c.css.sac.*;
 
-public class ConditionalSelectorImpl implements ConditionalSelector, Serializable {
+import org.w3c.css.sac.Condition;
+import org.w3c.css.sac.ConditionalSelector;
+import org.w3c.css.sac.Selector;
+import org.w3c.css.sac.SimpleSelector;
+
+public class ConditionalSelectorImpl implements ConditionalSelector,
+        Serializable {
 
     private SimpleSelector _simpleSelector;
+
     private Condition _condition;
 
-    public ConditionalSelectorImpl(
-        SimpleSelector simpleSelector,
-        Condition condition) {
+    public ConditionalSelectorImpl(SimpleSelector simpleSelector,
+            Condition condition) {
         _simpleSelector = simpleSelector;
         _condition = condition;
     }
@@ -56,8 +61,15 @@ public class ConditionalSelectorImpl implements ConditionalSelector, Serializabl
     public Condition getCondition() {
         return _condition;
     }
-    
+
     public String toString() {
-        return _simpleSelector.toString() + _condition.toString();
+        String selector = _simpleSelector.toString();
+        String condition = _condition.toString();
+
+        if (condition.length() > 0 && "*".equals(selector)) {
+            return condition;
+        }
+
+        return selector + condition;
     }
 }

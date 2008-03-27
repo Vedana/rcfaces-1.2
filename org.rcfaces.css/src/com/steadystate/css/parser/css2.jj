@@ -46,6 +46,8 @@ import java.net.*;
 import java.util.*;
 import org.w3c.css.sac.*;
 import com.steadystate.css.parser.selectors.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author David Schweinsberg
@@ -53,13 +55,15 @@ import com.steadystate.css.parser.selectors.*;
  */
 public class SACParser implements Parser {
 
+	private static final Log LOG = LogFactory.getLog(SACParser.class);
+	private static final Log PARSING_LOG=org.rcfaces.css.internal.CssSteadyStateParser.PARSING_LOG;
+
     private InputSource _source = null;
     private Locale _locale = null;
     private DocumentHandler _docHandler = null;
     private ErrorHandler _errHandler = null;
     private SelectorFactory _selectorFactory = new SelectorFactoryImpl();
     private ConditionFactory _conditionFactory = new ConditionFactoryImpl();
-    private boolean _quiet = true;
 
     public SACParser() {
         this((CharStream) null);
@@ -188,7 +192,9 @@ PARSER_END(SACParser)
 
 TOKEN_MGR_DECLS :
 {
-    private boolean _quiet = true;
+	private static final Log LOG = LogFactory.getLog(SACParserTokenManager.class);
+	private static final Log PARSING_LOG=org.rcfaces.css.internal.CssSteadyStateParser.PARSING_LOG;
+
 /*
   private int getLastNumPos(StringBuffer sb) {
     int i;
@@ -332,9 +338,7 @@ TOKEN_MGR_DECLS :
 {
     < UNKNOWN: ~[] >
     {
-        if (!_quiet) {
-            System.err.println("Illegal character : " + image.toString());
-        }
+           PARSING_LOG.error("Illegal character : " + image.toString()+":"+(matchedToken.beginLine+1));
     }
 }
 
@@ -646,7 +650,8 @@ void styleRule() :
         ( <SEMICOLON> ( <S> )* ( declaration() )? )*
         <RBRACE>
     } catch(ParseException e) {
-//        System.err.println("Exception in styleRule()");
+		PARSING_LOG.error("Exception in styleRule() [source="+_source.getTitle()+":"+(e.currentToken.beginLine+1)+"]", e);
+//        System.err.println();
 //        System.err.println(e.getMessage());
         noError = false;
         error_skipblock();
@@ -672,7 +677,7 @@ SelectorList selectorList() :
             return selList;
         }
     } catch (ParseException e) {
-        System.err.println("Exception in selectorList()");
+		PARSING_LOG.error("Exception in selectorList() [source="+_source.getTitle()+":"+(e.currentToken.beginLine+1)+"]", e);
     }
 }
 
@@ -930,7 +935,7 @@ void declaration() :
             _docHandler.property(p, e, priority);
         }
     } catch (ParseException ex) {
-        System.err.println("Exception in declaration()");
+		PARSING_LOG.error("Exception in declaration() [source="+_source.getTitle()+":"+(ex.currentToken.beginLine+1)+"]", ex);
         noError = false;
         error_skipdecl();
     }
@@ -1267,10 +1272,8 @@ String skip() {
 
 JAVACODE
 void error_skipblock() {
-  if (!_quiet) {
     ParseException e = generateParseException();
-    System.err.println( "** error_skipblock **\n" + e.toString() );
-  }
+    PARSING_LOG.error("Error_skipblock [source="+_source.getTitle()+":"+(e.currentToken.beginLine+1)+"]",e);
 
   Token t;
   int nesting = 0;
@@ -1288,10 +1291,8 @@ void error_skipblock() {
 
 JAVACODE
 void error_skipdecl() {
-  if (!_quiet) {
     ParseException e = generateParseException();
-    System.err.println("** error_skipdecl **\n" + e.toString());
-  }
+    PARSING_LOG.error("error_skipdecl [source="+_source.getTitle()+":"+(e.currentToken.beginLine+1)+"]",e);
 
   Token t = getToken(1);
   while (t.kind != SEMICOLON && t.kind != RBRACE && t.kind != EOF ) {

@@ -30,17 +30,21 @@
 
 package com.steadystate.css.parser.selectors;
 
-import org.w3c.css.sac.*;
 import java.io.Serializable;
+
+import org.w3c.css.sac.ElementSelector;
+import org.w3c.css.sac.Selector;
 
 public class PseudoElementSelectorImpl implements ElementSelector, Serializable {
 
-    private String _localName;
+    private static final long serialVersionUID = -1502134052768742290L;
+
+    private final String _localName;
 
     public PseudoElementSelectorImpl(String localName) {
         _localName = localName;
     }
-    
+
     public short getSelectorType() {
         return Selector.SAC_PSEUDO_ELEMENT_SELECTOR;
     }
