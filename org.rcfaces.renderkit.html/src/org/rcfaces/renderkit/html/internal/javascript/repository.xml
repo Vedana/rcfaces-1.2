@@ -321,6 +321,8 @@
 		<file name="input/f_hyperLink.js">
 			<class name="f_hyperLink">
 				<required-class name="f_input" />
+				<required-class name="fa_immediate" />
+				<required-class name="fa_value" />
 
 				<required-style name="f_hyperLink.css" />
 			</class>
