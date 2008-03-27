@@ -49,6 +49,15 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         // Il faut le laisser pour le lazy FOCUS
         htmlWriter.writeHRef("javascript:void(0)");
 
+        Object value = getValue(component);
+        if (value != null) {
+            String convertedValue = convertValue(facesContext, component, value);
+
+            if (convertedValue != null) {
+                htmlWriter.writeAttribute("v:value", convertedValue);
+            }
+        }
+
         String text = component.getText(facesContext);
         if (text != null) {
             if (text != null) {
@@ -96,6 +105,21 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
                 component.queueEvent(new PropertyChangeEvent(component,
                         Properties.TEXT, old, text));
+            }
+        }
+
+        Object value = componentData.getProperty("value");
+        if (value != null) {
+            value = getConvertedValue(facesContext, hyperlinkComponent, value);
+
+            if (value != null) {
+                Object old = hyperlinkComponent.getValue();
+                if (value.equals(old) == false) {
+                    hyperlinkComponent.setValue(value);
+
+                    hyperlinkComponent.queueEvent(new PropertyChangeEvent(
+                            hyperlinkComponent, Properties.VALUE, old, value));
+                }
             }
         }
     }

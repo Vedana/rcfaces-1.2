@@ -5,7 +5,7 @@
 /**
  * class f_hyperLink
  *
- * @class f_hyperLink extends f_input, fa_immediate
+ * @class f_hyperLink extends f_input, fa_immediate, fa_value
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -66,6 +66,6 @@ var __members = {
 }
 new f_class("f_hyperLink", {
 	extend: f_input,
-	aspects: [ fa_immediate ],
+	aspects: [ fa_immediate, fa_value ],
 	members: __members
 });
