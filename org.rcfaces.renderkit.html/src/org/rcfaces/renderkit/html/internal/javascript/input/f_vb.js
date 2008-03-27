@@ -430,6 +430,7 @@ var __statics = {
 		var test = new Date(y,m-1,d,12,0,0,0);
 		if (test.getDate() == d && test.getMonth() == (m-1) && test.getFullYear() == y) {
 			validator.f_setObject(test);
+
 		} else {
 			validator.f_setObject(null);
 			validator.f_setLastError("VALIDATION DATE",
@@ -437,7 +438,7 @@ var __statics = {
 			);
 			sTmp = null;
 		}
-		validator.f_setObject(sTmp);
+		
 		return sTmp;
 	},
 
@@ -1223,6 +1224,12 @@ var __statics = {
 		// parameter name="date.pivot" value="90"
 
 		f_getAsObject: function(validator, text) {
+			var object=validator.f_getObject();
+			if (object instanceof Date) {
+				return object;
+			}
+			
+			return null;			
 		},
 		f_getAsString: function(validator, object) {
 			if (!(object instanceof Date)) {
