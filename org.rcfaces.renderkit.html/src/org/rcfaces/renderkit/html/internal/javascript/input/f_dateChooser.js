@@ -78,6 +78,25 @@ var __members={
 		*/
 
 		this.f_super(arguments);
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getFor: function() {
+		return this._forComponent;
+	},
+	/**
+	 * @method public
+	 * @return f_component
+	 */
+	f_getForComponent: function() {
+		var forComponent=this._forComponent;
+		if (!forComponent) {
+			return null;
+		}
+		
+		return f_core.FindComponent(forComponent);
 	}
 }
  
