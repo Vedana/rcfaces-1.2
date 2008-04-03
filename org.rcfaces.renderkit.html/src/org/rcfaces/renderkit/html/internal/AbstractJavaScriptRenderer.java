@@ -119,6 +119,11 @@ public abstract class AbstractJavaScriptRenderer extends
                 sendCompleteComponent, this);
     }
 
+    /**
+     * Generation of 'f_completeComponent' javascript call.
+     * @param htmlComponentContext
+     * @return If the 'f_completeComponent' javascript call might be generated.
+     */
     protected abstract boolean sendCompleteComponent(
             IHtmlComponentRenderContext htmlComponentContext);
 
