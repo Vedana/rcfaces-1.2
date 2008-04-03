@@ -5,7 +5,7 @@
 
 /**
  * 
- * @class f_comboGrid extends f_textEntry, fa_dataGridPopup, fa_commands, fa_readOnly, fa_editable
+ * @class f_comboGrid extends f_textEntry, fa_dataGridPopup, fa_commands, fa_readOnly, fa_editable, fa_clientValidatorParameters
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -188,6 +188,13 @@ var __members = {
 	},
 
 	f_finalize: function() {
+		
+		var checkListeners=this._checkListeners;
+		if (checkListeners) {
+			this._checkListeners=undefined;
+			
+			f_core.RemoveCheckListener(this, checkListeners);			
+		}
 
 		this.f_getInput().onbeforedeactivate=null;
 	
@@ -829,12 +836,53 @@ var __members = {
 	},
 	fa_updateEditable: function(set) {
 		this.fa_updateReadOnly();
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	fa_updateRequired: function() {
+		this.f_updateStyleClass();
+
+		if (this._checkListeners) {
+			return;
+		}
+
+		var comboGrid=this;
+		var checkListeners={
+			f_performCheckValue: function(event) {
+				if (comboGrid._inputValue) {
+					return;
+				}
+				
+				var summary=comboGrid.f_getClientValidatorParameter("REQUIRED_ERROR_SUMMARY");
+				var detail=comboGrid.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
+				
+				if (!summary) {
+					var resourceBundle=f_resourceBundle.Get(f_comboGrid);
+					summary=resourceBundle.f_formatParams("REQUIRED_ERROR_SUMMARY");
+					//detail=resourceBundle.f_formatParams("REQUIRED_ERROR_DETAIL");
+					
+					if (!summary) {	
+						summary=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_REQUIRED", null, "A value is required.");
+					}
+				}
+					
+				var messageContext=f_messageContext.Get(comboGrid);	
+				messageContext.f_addMessage(comboGrid, f_messageObject.SEVERITY_ERROR, summary, detail);
+				
+				return false;
+			}		
+		};
+
+		this._checkListeners=checkListeners;
+		f_core.AddCheckListener(this, checkListeners);			
 	}
 }
 
 new f_class("f_comboGrid", {
 	extend: f_textEntry,
-	aspects: [ fa_dataGridPopup, fa_commands, fa_readOnly, fa_editable ],
+	aspects: [ fa_dataGridPopup, fa_commands, fa_readOnly, fa_editable, fa_clientValidatorParameters ],
 	statics: __statics,
 	members: __members
 });
