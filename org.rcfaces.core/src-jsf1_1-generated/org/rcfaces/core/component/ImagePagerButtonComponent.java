@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.ImageButtonComponent;
+import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IForCapability;
+import javax.faces.el.ValueBinding;
 
 /**
  * <p>The imagePagerButton Component is an <a href="/comps/imageButtonComponent.html">imageButton Component</a> that works like the keyword in the <a href="/comps/pagerComponent.html">pager Component</a> and is linked to the <a href="/comps/dataGridComponent.html">dataGrid Component</a>.
@@ -40,7 +40,7 @@ public class ImagePagerButtonComponent extends ImageButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"type","hideIfDisabled","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"for","hideIfDisabled","type"}));
 	}
 
 	public ImagePagerButtonComponent() {

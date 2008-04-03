@@ -2,11 +2,11 @@ package org.rcfaces.renderkit.html.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * Css style
@@ -18,7 +18,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"text","srcCharSet","src"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"srcCharSet","text","src"}));
 	}
 
 	public CssStyleComponent() {

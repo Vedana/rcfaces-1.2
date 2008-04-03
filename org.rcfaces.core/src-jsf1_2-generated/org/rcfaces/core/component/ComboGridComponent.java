@@ -1,47 +1,47 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.SortTools;
-import java.util.Arrays;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
-import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.IPagerMessageCapability;
-import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
-import org.rcfaces.core.internal.tools.CollectionTools;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IEditableCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
-import org.rcfaces.core.component.AbstractGridComponent;
-import org.rcfaces.core.internal.converter.ClientFullStateConverter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
-import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
-import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
-import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.component.capability.IPagedCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.ComboColumnComponent;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
+import java.util.Set;
+import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
+import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.capability.IEditableCapability;
+import java.lang.String;
+import org.rcfaces.core.component.AbstractGridComponent;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import org.rcfaces.core.internal.tools.CollectionTools;
+import org.rcfaces.core.component.capability.IPagerMessageCapability;
 
 public class ComboGridComponent extends AbstractGridComponent implements 
 	ISelectionEventCapability,
@@ -61,17 +61,17 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	IFilterCapability,
 	IPagedCapability,
 	IHeaderVisibilityCapability,
-	IOrderedChildrenCapability,
-	IAdditionalInformationRangeComponent,
 	IGridComponent,
+	IOrderedChildrenCapability,
+	ISortedChildrenCapability,
 	IComponentValueTypeCapability,
-	ISortedChildrenCapability {
+	IAdditionalInformationRangeComponent {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.comboGrid";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","editable","suggestionDelayMs","horizontalScrollPosition","pagerStyleClass","message","clientAdditionalInformationFullState","valueColumnId","rowIndexVar","additionalInformationValues","pagerLookId","oneResultMessage","filterProperties","zeroResultMessage","additionalInformationListener","valueFormat","border","gridStyleClass","labelColumnId","suggestionMinChars","gridLookId","verticalScrollPosition","paged","required","disabled","selectedValue","maxTextLength","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","manyResultsMessage","popupWidth","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","clientAdditionalInformationFullState","suggestionMinChars","valueFormat","gridLookId","selectionListener","paged","additionalInformationValues","additionalInformationListener","verticalScrollPosition","popupHeight","labelColumnId","suggestionDelayMs","selectedValue","border","required","popupWidth","filterProperties","manyResultsMessage","pagerStyleClass","horizontalScrollPosition","rowStyleClass","rowCountVar","zeroResultMessage","gridStyleClass","pagerLookId","editable","message","maxTextLength","readOnly","oneResultMessage","additionalInformationCardinality","valueColumnId","rowIndexVar","disabled"}));
 	}
 
 	public ComboGridComponent() {
@@ -83,13 +83,6 @@ public class ComboGridComponent extends AbstractGridComponent implements
 		setId(componentId);
 	}
 
-	public void setSortedChildren(UIComponent[] components) {
-
-
-				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, components);
-			
-	}
-
 	public UIComponent[] getSortedChildren() {
 
 
@@ -97,10 +90,10 @@ public class ComboGridComponent extends AbstractGridComponent implements
 			
 	}
 
-	public UIComponent[] getOrderedChildren() {
+	public void setSortedChildren(UIComponent[] components) {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, ComboColumnComponent.class);
+				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, components);
 			
 	}
 
@@ -108,6 +101,13 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 
 				OrderTools.setOrderedChildren(null, this, engine, ComboColumnComponent.class, components);
+			
+	}
+
+	public UIComponent[] getOrderedChildren() {
+
+
+				return OrderTools.getOrderedChildren(null, this, engine, ComboColumnComponent.class);
 			
 	}
 
