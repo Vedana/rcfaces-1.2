@@ -17,58 +17,59 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class ViewErrorListenerRenderer extends AbstractJavaScriptRenderer {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	public void encodeBegin(IComponentWriter writer) throws WriterException {
-		super.encodeBegin(writer);
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+    public void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
-				.getHtmlComponentRenderContext();
-		if (htmlComponentRenderContext.getHtmlRenderContext()
-				.getJavaScriptRenderContext().isCollectorMode() == false) {
+        IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+        if (htmlComponentRenderContext.getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode() == false) {
 
-			htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-			writeHtmlAttributes(htmlWriter);
-			writeJavaScriptAttributes(htmlWriter);
+            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            writeHtmlAttributes(htmlWriter);
+            writeJavaScriptAttributes(htmlWriter);
 
-			htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
-			declareLazyJavaScriptRenderer(htmlWriter);
+            declareLazyJavaScriptRenderer(htmlWriter);
 
-		} else {
-			htmlWriter.enableJavaScript();
-		}
-	}
+        } else {
+            htmlWriter.enableJavaScript();
+        }
+    }
 
-	protected void encodeJavaScript(IJavaScriptWriter jsWriter)
-			throws WriterException {
-		super.encodeJavaScript(jsWriter);
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        super.encodeJavaScript(jsWriter);
 
-		if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
-			return;
-		}
+        if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
+            return;
+        }
 
-		jsWriter.setIgnoreComponentInitialization();
+        jsWriter.setIgnoreComponentInitialization();
 
-		String varName = jsWriter.getJavaScriptRenderContext()
-				.allocateVarName();
-		jsWriter.setComponentVarName(varName);
+        String varName = jsWriter.getJavaScriptRenderContext()
+                .allocateVarName();
+        jsWriter.setComponentVarName(varName);
 
-		jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
-				"f_newInstance").writeln(");");
-	}
+        jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
+                "f_newInstance").writeln(");");
+    }
 
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.VIEW_ERROR_LISTENER;
-	}
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.VIEW_ERROR_LISTENER;
+    }
 
-	protected boolean encodeEventsInAttributes(IHtmlWriter writer) {
-		return false;
-	}
+    protected boolean encodeEventsInAttributes(IHtmlWriter writer) {
+        return writer.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode() == false;
+    }
 
-	protected boolean sendCompleteComponent(
-			IHtmlComponentRenderContext htmlComponentContext) {
-		return false;
-	}
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
+        return false;
+    }
 }
