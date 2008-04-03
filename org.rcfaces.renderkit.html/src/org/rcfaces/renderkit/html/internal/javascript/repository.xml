@@ -231,6 +231,13 @@
 				<required-class name="f_aspect" />
 			</class>
 		</file>
+	
+		<file name="aspect/fa_clientValidatorParameters.js">
+			<class name="fa_clientValidatorParameters">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
+		
 		
 	</module>
 	
@@ -332,7 +339,8 @@
 				<required-class name="f_checkButton" />
 				<required-class name="fa_groupName" />
 				<required-class name="fa_required" />
-
+				<required-class name="fa_clientValidatorParameters" />
+	
 				<required-style name="f_radioButton.css" />
 			</class>
 		</file>
@@ -485,6 +493,7 @@
 				<required-class name="f_component" />
 				<required-class name="fa_required" />
 				<required-class name="fa_message" />
+				<required-class name="fa_clientValidatorParameters" />
 
 				<required-class name="fa_compositeNumEntry" />
 			</class>
@@ -1067,6 +1076,7 @@
 				<required-class name="fa_dataGridPopup" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_editable" />
+				<required-class name="fa_clientValidatorParameters" />
 				
 				<required-style name="f_comboGrid.css" />
 			</class>

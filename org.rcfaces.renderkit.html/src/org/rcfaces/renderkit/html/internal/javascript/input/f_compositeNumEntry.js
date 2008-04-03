@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_compositeNumEntry extends f_component, fa_compositeNumEntry, fa_required, fa_message
+ * @class public f_compositeNumEntry extends f_component, fa_compositeNumEntry, fa_required, fa_message, fa_clientValidatorParameters
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -14,21 +14,13 @@ var __members={
 	f_compositeNumEntry: function() {
 		this.f_super(arguments);
 		
-		var validatorParams=f_core.GetAttribute(this, "v:clientValidatorParams");
-		if (validatorParams) {
-			this._validatorParams=f_core.ParseParameters(validatorParams);
-		}
-		
 		f_core.AddCheckListener(this, this);	
 	},
-	/*
 	f_finalize: function() {
-
-		// this._validatorParams=undefined; // Map<String, String>
+		f_core.RemoveCheckListener(this, this);
 					
 		this.f_super(arguments);
 	},
-	*/
 	/**
 	 * @method hidden
 	 * @param f_event event
@@ -124,15 +116,12 @@ var __members={
 		var detail=null;
 		var severity=f_messageObject.SEVERITY_ERROR;
 		
-		var validatorParams=this._validatorParams;
-		if (validatorParams) {
-			summary=validatorParams[errorMessage+".summary"];
-			if (summary) {
-				detail=validatorParams[errorMessage+".detail"];
-			} else {
-				summary=validatorParams[errorMessage];
-			}			
-		}
+		var summary=this.f_getClientValidatorParameter(errorMessage+".summary");
+		if (summary) {
+			detail=this.f_getClientValidatorParameter(errorMessage+".detail");
+		} else {
+			summary=this.f_getClientValidatorParameter(errorMessage);
+		}			
 		
 		if (!summary) {
 			var resourceBundle=f_resourceBundle.Get(clazz);
@@ -154,6 +143,6 @@ var __members={
  
 new f_class("f_compositeNumEntry", {
 	extend: f_component,
-	aspects: [ fa_compositeNumEntry, fa_required, fa_message ],
+	aspects: [ fa_compositeNumEntry, fa_required, fa_message, fa_clientValidatorParameters ],
 	members: __members
 });

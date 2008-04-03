@@ -5,7 +5,7 @@
 /** 
  * Class f_radioButton
  *
- * @class public f_radioButton extends f_checkButton, fa_groupName, fa_required
+ * @class public f_radioButton extends f_checkButton, fa_groupName, fa_required, fa_clientValidatorParameters
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -64,11 +64,6 @@ var __members = {
 		if (this.f_isRequired()) { // Installe le handler si nécessaire !
 			f_radioButton._InstallRequired(this);
 		}
-
-		var params=f_core.GetAttribute(this, "v:clientValidator", null);
-		if (params) { // Il peut être "" !
-			this._clientValidatorParameters=f_core.ParseParameters(params);
-		}
 	},
 	
 	f_finalizer: function() {
@@ -78,23 +73,7 @@ var __members = {
 			
 			f_core.RemoveCheckListener(this, checkCallbacks);
 		} 
-		
-		// this._clientValidatorParameters=undefined; // Map<String,String>
 	},
-	
-	/**
-	 * @method protected
-	 * @param String key
-	 * @return String
-	 */
-	 f_getClientValidatorParameter: function(key) {
-	 	var clientValidatorParameters=this._clientValidatorParameters;
-	 	if (!clientValidatorParameters) {
-	 		return null;
-	 	}
-	 	
-	 	return clientValidatorParameters[key];
-	 },
 	
 	/**
 	 * @method public 
@@ -264,7 +243,7 @@ var __members = {
 
 new f_class("f_radioButton", {
 	extend: f_checkButton,
-	aspects: [ fa_groupName, fa_required],
+	aspects: [ fa_groupName, fa_required, fa_clientValidatorParameters],
 	members: __members,
 	statics: __statics
 });
