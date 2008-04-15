@@ -178,6 +178,12 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
             text = getDefaultText(htmlComponentRenderContext);
         }
 
+        String backgroundMode = submitWaitComponent
+                .getBackgroundMode(facesContext);
+        if (backgroundMode == null) {
+            backgroundMode = getDefaultBackgroundMode(htmlComponentRenderContext);
+        }
+
         boolean constructorParameters = (imageSrc != null && width != null && height != null);
 
         if (constructorParameters == false) {
@@ -193,7 +199,12 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
         if (constructorParameters) {
             jsWriter.writeString(imageSrc).write(',').writeString(text).write(
                     ',').write(width).write(',').write(height).write(',')
-                    .writeBoolean(true).writeln(");");
+                    .writeBoolean(true);
+            if (backgroundMode != null) {
+                jsWriter.write(',').writeString(backgroundMode);
+            }
+
+            jsWriter.writeln(");");
         } else {
             jsWriter.writeln(");");
 
@@ -214,9 +225,18 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
                 jsWriter.writeMethodCall("f_setHeight").write(height).writeln(
                         ");");
             }
+            if (backgroundMode != null) {
+                jsWriter.writeMethodCall("f_setBackgroundMode").write(
+                        backgroundMode).writeln(");");
+            }
 
             jsWriter.writeMethodCall("f_installShowOnSubmit").writeln(");");
         }
+    }
+
+    protected String getDefaultBackgroundMode(
+            IHtmlComponentRenderContext htmlComponentRenderContext) {
+        return null;
     }
 
     protected String getDefaultText(IHtmlComponentRenderContext htmlWriter) {

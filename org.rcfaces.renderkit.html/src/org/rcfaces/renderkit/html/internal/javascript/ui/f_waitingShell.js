@@ -41,13 +41,14 @@ var __members = {
      * initial values.</p>
 	 *
 	 * @method public
-	 * @param String imageURL
-	 * @param String text
-	 * @param number width
-	 * @param number height
-	 * @param boolean visible
+	 * @param optional String imageURL
+	 * @param optional String text
+	 * @param optional number width
+	 * @param optional number height
+	 * @param optional boolean showOnSubmit
+	 * @param optional String backgroundMode
 	 */
-	f_waitingShell: function(imageURL, text, width, height, showOnSubmit) {
+	f_waitingShell: function(imageURL, text, width, height, showOnSubmit, backgroundMode) {
 		this.f_super(arguments, f_shell.TRANSPARENT);
 
 		if (this.nodeType==f_core.ELEMENT_NODE) {
@@ -78,6 +79,9 @@ var __members = {
 		if (showOnSubmit) {
 			this.f_installShowOnSubmit();
 		}
+		if (backgroundMode) {
+			this.f_setBackgroundMode(backgroundMode);			
+		}
 	},
 	/*
 	f_finalize: function() {
@@ -86,7 +90,13 @@ var __members = {
 		//this._text=undefined; // String
 	},
 	*/
-
+	/**
+	 * @method protected
+	 * @return Object
+	 */
+	f_getDefaultFeatures: function() {
+		return f_waitingShell._DEFAULT_FEATURES;
+	},
 	/**
 	 * @method public
 	 * @return void
