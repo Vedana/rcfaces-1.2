@@ -57,6 +57,8 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
     private static final IParameter[] PARAMETER_EMPTY_ARRAY = new IParameter[0];
 
+    private static final String[] STRING_EMPTY_ARRAY = new String[0];
+
     public IClientValidatorDescriptor getClientValidatorById(
             FacesContext facesContext, String validatorId, Locale locale,
             TimeZone timeZone) {
@@ -111,6 +113,20 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
         digester.addSetProperties(
                 "rcfaces-config/clientValidators/render-kit/clientValidator",
                 "package", "packageName");
+
+        digester.addRule(
+                "rcfaces-config/clientValidators/render-kit/clientValidator",
+                new Rule() {
+
+                    public void end(String namespace, String name)
+                            throws Exception {
+                        ClientValidator clientValidator = (ClientValidator) getDigester()
+                                .peek();
+
+                        clientValidator.prepare();
+                    }
+
+                });
 
         digester
                 .addRule(
@@ -238,6 +254,27 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                                                 attributes));
                             }
                         });
+        digester
+                .addRule(
+                        "rcfaces-config/clientValidators/render-kit/clientValidator/required-class",
+                        new Rule() {
+                            private static final String REVISION = "$Revision$";
+
+                            public void begin(String namespace, String name,
+                                    Attributes attributes) throws Exception {
+                                ClientValidator clientValidator = (ClientValidator) getDigester()
+                                        .peek();
+
+                                String className = attributes.getValue("name");
+                                if (className == null) {
+                                    throw new IllegalStateException(
+                                            "Name attribute is not defined for required-class element.");
+                                }
+
+                                clientValidator.addRequiredClass(className);
+                            }
+                        });
+
         digester
                 .addSetProperties(
                         "rcfaces-config/clientValidators/render-kit/clientValidator/converter",
@@ -407,7 +444,9 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         private String id;
 
-        private String requiredClasses[];
+        private List requiredClassesList;
+
+        private String requiredClasses[] = STRING_EMPTY_ARRAY;
 
         private ITaskDescriptor filter;
 
@@ -431,6 +470,14 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
 
         public final ITaskDescriptor getBehaviorTask() {
             return behavior;
+        }
+
+        public void addRequiredClass(String className) {
+            if (requiredClassesList == null) {
+                requiredClassesList = new ArrayList();
+            }
+
+            requiredClassesList.add(className);
         }
 
         public final ITaskDescriptor getCheckerTask() {
@@ -527,6 +574,13 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             this.serverConverter = serverConverter;
         }
 
+        public void prepare() {
+            if (requiredClassesList != null) {
+                requiredClasses = (String[]) requiredClassesList
+                        .toArray(new String[requiredClassesList.size()]);
+                requiredClassesList = null;
+            }
+        }
     }
 
     /**

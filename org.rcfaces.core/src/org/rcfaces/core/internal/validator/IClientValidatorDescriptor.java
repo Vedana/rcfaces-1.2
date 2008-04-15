@@ -30,6 +30,8 @@ public interface IClientValidatorDescriptor extends IDescriptor {
 
     IServerConverter getServerConverter();
 
+    String[] listRequiredClasses();
+
     // IStringAdapterDescriptor getStringFormatter();
 
 }

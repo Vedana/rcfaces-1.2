@@ -352,8 +352,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     }
 
     private Converter computeConverter(FacesContext facesContext,
-            UIComponent component, IServerConverter serverConverter, String validatorId) {
-        Converter converter = serverConverter.getInstance(facesContext, component);
+            UIComponent component, IServerConverter serverConverter,
+            String validatorId) {
+        Converter converter = serverConverter.getInstance(facesContext,
+                component);
 
         if (converter == null) {
             throw new FacesException(
@@ -446,7 +448,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         StringAppender sb = new StringAppender(128);
         if (params.isEmpty() == false) {
             for (Iterator it = params.iterator(); it.hasNext();) {
-                String value = (String) it.next(); // Dans la liste, nous avons: KEY1,VALUE1, KEY2,VALUE2, ...
+                String value = (String) it.next(); // Dans la liste, nous
+                // avons: KEY1,VALUE1,
+                // KEY2,VALUE2, ...
 
                 if (sb.length() > 0) {
                     sb.append(':');
@@ -986,12 +990,15 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.TEXT_ENTRY, "validator");
 
-            String requiredClasses[] = validatorDescriptor
-                    .listRequiredClasses();
-            if (requiredClasses == null) {
-                requiredClasses = DEFAULT_VALIDATOR_REQUIRED_CLASSES;
+            String requiredClasses[] = DEFAULT_VALIDATOR_REQUIRED_CLASSES;
+            if (requiredClasses != null && requiredClasses.length > 0) {
+                for (int i = 0; i < requiredClasses.length; i++) {
+                    javaScriptRenderContext.appendRequiredClass(
+                            requiredClasses[i], null);
+                }
             }
 
+            requiredClasses = validatorDescriptor.listRequiredClasses();
             if (requiredClasses != null && requiredClasses.length > 0) {
                 for (int i = 0; i < requiredClasses.length; i++) {
                     javaScriptRenderContext.appendRequiredClass(
