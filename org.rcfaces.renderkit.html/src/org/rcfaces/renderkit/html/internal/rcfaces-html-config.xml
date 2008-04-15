@@ -593,6 +593,7 @@
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
 			-->
+		<required-class name="f_time" />
 	</clientValidator>
 
 <!--

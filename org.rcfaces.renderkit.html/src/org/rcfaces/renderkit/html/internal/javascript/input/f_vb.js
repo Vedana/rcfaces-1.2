@@ -805,7 +805,16 @@ var __statics = {
 	
 		// Valid hour
 		sTmp = ((h<10)? "0":"")+h+s+((m<10)? "0":"")+m+s+((sec<10)? "0":"")+sec;
-		validator.f_setObject(sTmp);
+
+		// Check valid date
+		var object;
+		if (window.f_time) {
+			object=new f_time(h,m,sec);
+		} else {
+			object=new Date(2000,0,1,h,m,sec,0);
+		}
+		validator.f_setObject(object);
+
 		return sTmp;
 	},
 
@@ -1253,19 +1262,40 @@ var __statics = {
 	Converter_hour: {
 		// Parmaters: hour.sepSign" value=":. 
 		f_getAsObject: function(validator, text) {
-		},
-		f_getAsString: function(validator, object) {
-			if (!(object instanceof Date)) {
-				return undefined;
+			var object=validator.f_getObject();
+			if (object instanceof Date) {
+				return object;
+			}
+			if (window.f_time && (object instanceof f_time)) {
+				return object;
 			}
 			
-			var sep = validator.f_getParameter("date.sepSign");
+			return null;
+		},
+		f_getAsString: function(validator, object) {
+			var sep = validator.f_getParameter("hour.sepSign");
 			
 			if (sep.length>1) {
 				sep=sep.charAt(0);
 			}
+
+			if (object instanceof Date) {		
+				return object.getHours()+sep+object.getMinutes()+sep+object.getSeconds();
+			}
 			
-			return object.getHours()+sep+object.getMinutes()+sep+object.getSeconds();	
+			if (window.f_time && (object instanceof f_time)) {
+				return object.f_getHours()+sep+object.f_getMinutes()+sep+object.f_getSeconds();
+			}
+			
+			if (object instanceof number) {
+				var hours=Math.floor(number/(60*60*1000));
+				var minutes=Math.floor(number/(60*1000)) % 60;
+				var seconds=Math.floor(number/1000)%60;
+				
+				return hours+sep+minutes+sep+seconds;
+			}
+			
+			return String(object);
 		}
 	},
 
