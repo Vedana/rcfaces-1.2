@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.core.component.SubmitWaitComponent;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class SubmitWaitTag extends CameliaTag implements Tag {
 
@@ -24,6 +24,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 	private ValueExpression width;
 	private ValueExpression height;
 	private ValueExpression waiRole;
+	private ValueExpression backgroundMode;
 	public String getComponentType() {
 		return SubmitWaitComponent.COMPONENT_TYPE;
 	}
@@ -52,6 +53,10 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final void setBackgroundMode(ValueExpression backgroundMode) {
+		this.backgroundMode = backgroundMode;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (SubmitWaitComponent.COMPONENT_TYPE==getComponentType()) {
@@ -63,6 +68,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  backgroundMode='"+backgroundMode+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -129,6 +135,15 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 				component.setWaiRole(waiRole.getExpressionString());
 			}
 		}
+
+		if (backgroundMode != null) {
+			if (backgroundMode.isLiteralText()==false) {
+				component.setValueExpression(Properties.BACKGROUND_MODE, backgroundMode);
+
+			} else {
+				component.setBackgroundMode(backgroundMode.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -138,6 +153,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		width = null;
 		height = null;
 		waiRole = null;
+		backgroundMode = null;
 
 		super.release();
 	}

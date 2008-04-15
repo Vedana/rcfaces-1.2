@@ -1,26 +1,26 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import java.lang.String;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import javax.faces.convert.Converter;
 import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IWidthCapability;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
-import java.util.HashSet;
-import org.rcfaces.core.component.UIImageItemComponent;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.component.UIImageItemComponent;
 
 /**
  * <b>EXPERIMENTAL</b>
@@ -40,7 +40,7 @@ public class ToolItemComponent extends UIImageItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","imageHeight","accessKey","groupName","textPosition","borderType","styleClass","width","inputType","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","imageHeight","width","inputType","imageWidth","accessKey","borderType","lookId","groupName","textPosition"}));
 	}
 
 	public ToolItemComponent() {

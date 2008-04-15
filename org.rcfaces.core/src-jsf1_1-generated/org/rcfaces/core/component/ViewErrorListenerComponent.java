@@ -1,23 +1,23 @@
 package org.rcfaces.core.component;
 
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.lang.Object;
-import java.util.Collections;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import javax.faces.el.ValueBinding;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import java.util.Set;
+import java.util.Collections;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IServerDataCapability;
 
 public class ViewErrorListenerComponent extends CameliaBaseComponent implements 
 	IClientDataCapability,
@@ -29,7 +29,7 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorListener","propertyChangeListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"propertyChangeListener","errorListener"}));
 	}
 
 	public ViewErrorListenerComponent() {
@@ -138,6 +138,13 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 		
 	}
 
+	public Map getClientDataMap() {
+
+
+		return getClientDataMap(null);
+		
+	}
+
 	public int getClientDataCount() {
 
 
@@ -147,6 +154,13 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 		 }
 		 
 		 return dataMapAccessor.getDataCount();
+		
+	}
+
+	public String getClientData(String name) {
+
+
+		 return getClientData(name, null);
 		
 	}
 
@@ -178,33 +192,27 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 		
 	}
 
-	public String getClientData(String name) {
+	public Object getServerData(String name) {
 
 
-		 return getClientData(name, null);
-		
-	}
-
-	public Map getClientDataMap() {
-
-
-		return getClientDataMap(null);
-		
-	}
-
-	public String[] listServerDataKeys() {
-
-
-			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return null;
+		 }
             
-		return dataMapAccessor.setData(name, value, null);
+		return dataMapAccessor.getData(name, null);
+		
+	}
+
+	public Object removeServerData(String name) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+		 	return null;
+		}
+            
+		return dataMapAccessor.removeData(name, null);
 		
 	}
 
@@ -227,27 +235,19 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 		
 	}
 
-	public Object getServerData(String name) {
+	public Object setServerData(String name, Object value) {
 
 
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		 if (dataMapAccessor==null) {
-		 	return null;
-		 }
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
-		return dataMapAccessor.getData(name, null);
+		return dataMapAccessor.setData(name, value, null);
 		
 	}
 
-	public Object removeServerData(String name) {
+	public String[] listServerDataKeys() {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-		 	return null;
-		}
-            
-		return dataMapAccessor.removeData(name, null);
+			return listServerDataKeys(null);
 		
 	}
 

@@ -1,20 +1,20 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
-import javax.faces.el.ValueBinding;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 
 public class SubmitWaitComponent extends CameliaBaseComponent implements 
 	IImageCapability,
@@ -28,7 +28,7 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"text","height","width","styleClass","waiRole","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","waiRole","backgroundMode"}));
 	}
 
 	public SubmitWaitComponent() {
@@ -190,6 +190,26 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public String getBackgroundMode() {
+		return getBackgroundMode(null);
+	}
+
+	public String getBackgroundMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.BACKGROUND_MODE, facesContext);
+	}
+
+	public void setBackgroundMode(String backgroundMode) {
+		engine.setProperty(Properties.BACKGROUND_MODE, backgroundMode);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "backgroundMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isBackgroundModeSetted() {
+		return engine.isPropertySetted(Properties.BACKGROUND_MODE);
 	}
 
 	protected Set getCameliaFields() {
