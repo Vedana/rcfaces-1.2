@@ -158,6 +158,14 @@ var __members={
 			return false;
 		}
 		
+		var disabledFunction=component.f_isDisabled;
+		if (disabledFunction && disabledFunction.call(component)===true) {
+			f_core.Debug(f_accelerator, "_forListener: Le composant est désactivé.");
+			return false;
+		}
+		
+		f_core.SetFocus(component, false);
+		
 		var f=component.f_fireEvent;
 		if (typeof(f)!="function") {				
 			f_core.Debug(f_accelerator, "_forListener: No callback for component '"+forComponent+"'.");
@@ -167,7 +175,7 @@ var __members={
 		f_core.Debug(f_accelerator, "_forListener: Call onSelect on component '"+forComponent+"'.");
 		
 		try {
-			return f.call(component, event.f_getJsEvent());
+			return f.call(component, f_event.SELECTION, event.f_getJsEvent(), this);
 
 		} catch (ex) {
 			f_core.Error(f_accelerator, "_forListener: Call onSelect on component '"+forComponent+"' throws exception.", ex);
