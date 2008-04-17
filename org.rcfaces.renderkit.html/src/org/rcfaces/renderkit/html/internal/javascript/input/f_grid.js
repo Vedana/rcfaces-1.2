@@ -209,10 +209,10 @@ var __statics = {
 					return false;
 				}
 				
-				document.title="Unknown tag:"+tagName;
+//				document.title="Unknown tag:"+tagName;
 			}
 		} else {
-			document.title="Unknown target: "+target;
+//			document.title="Unknown target: "+target;
 		}
 				
 		return true;
