@@ -1,25 +1,25 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.context.FacesContext;
 import java.util.Map;
-import java.util.HashMap;
-import javax.faces.el.ValueBinding;
-import java.util.Date;
 import java.util.Collections;
+import java.util.Date;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.util.HashMap;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.AbstractCalendarComponent;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.manager.IValidationParameters;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 
 /**
  * <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>
@@ -48,7 +48,7 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","autoCompletion","required","dateFormat","valueChangeListener","showCalendarOnFocus","warnStyleClass","styleClass","infoStyleClass","focusStyleClass","autoTab","defaultDate"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"autoTab","focusStyleClass","fatalStyleClass","styleClass","showCalendarOnFocus","defaultDate","valueChangeListener","errorStyleClass","warnStyleClass","autoCompletion","infoStyleClass","dateFormat","required"}));
 	}
 
 	public DateEntryComponent() {
@@ -58,6 +58,13 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	public DateEntryComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public int getValidationParametersCount() {
+
+		 
+		 return getValidationParametersCount(null);
+		
 	}
 
 	public boolean isClientSideValidationParameter(String name) {
@@ -74,17 +81,17 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
-
-
-		return (String)setValidationParameterData(name, value, client);
-		
-	}
-
 	public String getValidationParameter(String name) {
 
 
 		 return getValidationParameter(name, null);
+		
+	}
+
+	public Map getClientValidationParametersMap() {
+
+
+		return getClientValidationParametersMap(null);
 		
 	}
 
@@ -107,17 +114,10 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public Map getClientValidationParametersMap() {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		return getClientValidationParametersMap(null);
-		
-	}
-
-	public int getValidationParametersCount() {
-
-		 
-		 return getValidationParametersCount(null);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 

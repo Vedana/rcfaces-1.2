@@ -1,19 +1,20 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.convert.Converter;
+import org.rcfaces.core.component.ButtonComponent;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import javax.faces.convert.Converter;
+import javax.el.ValueExpression;
 import java.util.HashSet;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.component.ButtonComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
@@ -30,13 +31,14 @@ import org.rcfaces.core.component.familly.IContentAccessors;
  * </p>
  */
 public class ImageButtonComponent extends ButtonComponent implements 
-	IImageButtonFamilly {
+	IImageButtonFamilly,
+	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageButton";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 
 	public ImageButtonComponent() {
@@ -46,6 +48,13 @@ public class ImageButtonComponent extends ButtonComponent implements
 	public ImageButtonComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public IContentAccessors getImageAccessors(FacesContext facesContext) {
+
+
+			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
 	}
 
 	protected Converter getTextPositionConverter() {
@@ -273,13 +282,6 @@ public class ImageButtonComponent extends ButtonComponent implements
 
 
 			return getImageAccessors(null);
-		
-	}
-
-	public IContentAccessors getImageAccessors(FacesContext facesContext) {
-
-
-			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
 		
 	}
 

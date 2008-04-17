@@ -1,13 +1,13 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
 import org.rcfaces.core.component.AbstractSeparatorComponent;
-import org.rcfaces.core.component.ToolFolderComponent;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.Set;
+import javax.el.ValueExpression;
 import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 
 /**
  * <b>EXPERIMENTAL</b>

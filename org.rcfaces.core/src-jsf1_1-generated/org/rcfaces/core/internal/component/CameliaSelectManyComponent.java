@@ -17,11 +17,11 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.lang.String;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.lang.String;
+import java.util.Arrays;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
