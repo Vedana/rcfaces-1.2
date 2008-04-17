@@ -240,6 +240,11 @@ TOKEN_MGR_DECLS :
   < ~[] > : COMMENT
 }
 
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+}
+
 <DEFAULT> TOKEN :
 {
   < LBRACE: "{" >
@@ -322,7 +327,7 @@ TOKEN_MGR_DECLS :
 | < #Q12: "?" | "??" >
 | < #Q11: "?" >
 
-| < #NMSTART: ["a"-"z"] | <NONASCII> | <ESCAPE> >
+| < #NMSTART: ["a"-"z","-","_"] | <NONASCII> | <ESCAPE> >
 | < #NMCHAR: ["a"-"z","0"-"9","-","_"] | <NONASCII> | <ESCAPE> >
 | < #STRING1: "\"" ( ["\t"," ","!","#","$","%","&","("-"~"] | "\\" <NL> | "\'" | <NONASCII> | <ESCAPE> )* "\"" >
 | < #STRING2: "\'" ( ["\t"," ","!","#","$","%","&","("-"~"] | "\\" <NL> | "\"" | <NONASCII> | <ESCAPE> )* "\'" >
