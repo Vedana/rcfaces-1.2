@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TabComponent;
 import org.rcfaces.core.component.TabbedPaneComponent;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.iterator.ITabIterator;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -79,6 +80,13 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
                 TabComponent tabComponent = tabsIterator.next();
 
                 if (tabComponent.isRendered() == false) {
+                    continue;
+                }
+
+                if (Boolean.FALSE.equals(tabComponent
+                        .getVisibleState(facesContext))) {
+                    tabComponent
+                            .setHiddenMode(IHiddenModeCapability.SERVER_HIDDEN_MODE);
                     continue;
                 }
 
