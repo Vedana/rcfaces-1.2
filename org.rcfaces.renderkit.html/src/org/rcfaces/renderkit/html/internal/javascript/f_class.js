@@ -56,16 +56,6 @@ var __statics = {
 	 * @field private static final boolean
 	 */
 	_CLEAN_METHODS: true,
-
-	/**
-	 * @method private static final
-	 */
-	_Call: function(obj,m,a) {
-		if (!a || !a.length) {
-			return m.call(obj);
-		}
-		return m.apply(obj, a);
-	},
 	
 	/**
 	 * @method private static 
