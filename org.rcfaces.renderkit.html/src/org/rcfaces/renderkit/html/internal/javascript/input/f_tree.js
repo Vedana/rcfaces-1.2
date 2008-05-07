@@ -326,7 +326,7 @@ var __statics = {
 					}
 				}
 			}
-		
+
 			tree._updateSelectedNodes();
 			
 		} else if (!tree._cursor) {
@@ -589,6 +589,7 @@ var __members = {
 //		this._hideRootExpandSign=undefined; // boolean
 		
 		this._cursor=undefined; // HtmlLIElement
+		this._breadCrumbsCursor=undefined; // HtmlLIElement
 		
 //		this._lastKeyDate=undefined; // number
 //		this._lastKey=undefined; // char
@@ -785,6 +786,7 @@ var __members = {
 		var nodes=this._nodes;
 		if (nodes) {
 			this._constructTree(this, nodes, 0);
+			this.f_updateBreadCrumbs();						
 		}
 		
 		this.f_super(arguments);		
@@ -990,7 +992,7 @@ var __members = {
 				this._initCursorValue=undefined;
 			}			
 			
-			this.fa_updateElementStyle(li);
+			this.fa_updateElementStyle(li, true);
 			
 			if (node._container) {
 				// On peut etre un container sans posseder (encore) d'enfants.
@@ -1399,13 +1401,14 @@ var __members = {
 		
 		f_core.ShowComponent(item._span);
 	},
-	fa_updateElementStyle: function(li) {
+	fa_updateElementStyle: function(li, constructMode) {
 		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_updateElementStyle: Invalid LI parameter ("+li+")");
 		
 		var node=li._node;
 	
 		var suffixLabel="";
 		var suffixDivNode="";
+		var cursor=this._cursor;
 	
 		if (node._disabled) {
 			if (!node._container) {
@@ -1434,7 +1437,7 @@ var __members = {
 					suffixLabel+="_focus";
 				}
 			
-			} else if (this._focus && li==this._cursor) {
+			} else if (this._focus && li==cursor) {
 				suffixLabel+="_focus";
 			}
 			
@@ -1480,8 +1483,12 @@ var __members = {
 		}
 		
 		labelClassName="f_tree_label";
-		if (this._cursor==li && this._focus) {
+		if (cursor==li && this._focus) {
 			labelClassName+=" "+labelClassName+"_cursor";
+		}
+		
+		if (this._breadCrumbsCursor!=cursor) {
+			this.f_updateBreadCrumbs();						
 		}
 
 		var label=li._label;
@@ -1936,7 +1943,7 @@ var __members = {
 
 		default:
 			if (f_key.IsLetterOrDigit(code)) {
-				this._searchTreeNode(code, evt);
+				this._searchTreeNode(code, evt, selection);
 				
 				// Dans tous les cas !
 				cancel=true;
@@ -2261,29 +2268,14 @@ var __members = {
 			this.fa_listVisibleElements(ul, listLI);
 		}
 	},
-	_searchTreeNode: function(code, evt) {
-		var lis=this.fa_listVisibleElements();
-		
-		var pos=0;
-
-		var cursorLi=this._cursor;
-		if (cursorLi) {
-			var i;
-			for(i=0;i<lis.length;i++) {
-				var l=lis[i];
-				if (l!=cursorLi) {
-					continue;
-				}
-				
-				i++;
-				break;
-			}
-			
-			if (i<lis.length) {
-				pos=i;
-			}
-		}
-		
+	/**
+	 * @method private
+	 * @param number code Keycode
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return boolean Success
+	 */
+	_searchTreeNode: function(code, evt, selection) {
 		var key=String.fromCharCode(code).toUpperCase();
 	
 		var now=new Date().getTime();
@@ -2291,35 +2283,78 @@ var __members = {
 			var dt=now-this._lastKeyDate;
 			f_core.Debug(f_tree, "_searchTreeNode: Delay key down "+dt+"ms");
 			if (dt<f_tree._SEARCH_KEY_DELAY) {
-				key=this._lastKey+key;
+				var nkey=this._lastKey+key;
+				
+				if (this._searchTreeNodeByText(nkey, false, evt, selection)) {
+					this._lastKeyDate=now;
+					this._lastKey=nkey;
+					return true;
+				}
 			}
 		}
 		
 		this._lastKeyDate=now;
 		this._lastKey=key;
 		
-		var kl=key.length;
+		return this._searchTreeNodeByText(key, true, evt, selection)
+	},
+	/**
+	 * @method private
+	 * @param String key
+	 * @param boolean next
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return boolean Success
+	 */
+	_searchTreeNodeByText: function(key, next, evt, selection) {
+		var lis=this.fa_listVisibleElements();
 		
-		for(;kl>0;kl--) {
+		var pos=undefined;
+
+		var cursorLi=this._cursor;
+		if (cursorLi) {
 			for(var i=0;i<lis.length;i++) {
-				var li=lis[pos++];
-				if (pos>=lis.length) {
-					pos=0;
-				}
-				
-				var label=li._node._label;
-				
-				if (!label) {
+				var l=lis[i];
+				if (l!=cursorLi) {
 					continue;
 				}
 				
-				if (label.substring(0, kl).toUpperCase()!=key.substring(0, kl)) {
-					continue;
-				}
-				
-				this.f_moveCursor(li, true, evt);
-				return true;
+				pos=i;
+				break;
 			}
+		}
+		
+		if (pos===undefined) {
+			pos=0;
+			
+		} else if (next) {
+			pos++;
+		}
+
+		var kl=key.length;
+		for(var i=0;i<lis.length;i++) {
+			if (pos>=lis.length) {
+				pos=0;
+			}
+			
+			var li=lis[pos++];
+			
+			if (li._node._disabled) {
+				continue;
+			}
+			
+			var text=li._node._label;
+			
+			if (!text || text.length<kl) {
+				continue;
+			}
+			
+			if (text.substring(0, kl).toUpperCase()!=key) {
+				continue;
+			}
+			
+			this.f_moveCursor(li, true, evt, selection);
+			return true;
 		}
 		
 		return false;
@@ -2344,8 +2379,6 @@ var __members = {
 		if (cursorLi) {
 			this.fa_updateElementStyle(cursorLi);
 		}			
-
-		this.f_updateBreadCrumbs();
 	},
 	/**
 	 * @method public
@@ -2358,11 +2391,15 @@ var __members = {
 		
 		if (value===undefined) {
 			value=this._cursor;
+			if (value===undefined) {
+				return undefined;
+			}
 		}
 		
+		var cache=new Object;
 		var li=value;		
 		if (!li || !li._node) {
-			li=this._searchComponentByNodeOrValue(li);
+			li=this._searchComponentByNodeOrValue(li, cache);
 			if (!li) {
 				return true;
 			}
@@ -2378,7 +2415,7 @@ var __members = {
 				break;
 			}
 			
-			li=this._searchComponentByNodeOrValue(parentNode);
+			li=this._searchComponentByNodeOrValue(parentNode, cache);
 		}
 		
 		return true;
@@ -2402,16 +2439,23 @@ var __members = {
 	 * @return void
 	 */
 	f_updateBreadCrumbs: function() {
+		this._breadCrumbsCursor=this._cursor;
+
 		var ids=new Array;
 		var values=new Array;
+		var texts=new Array;
+		
+		var exp=/\|/g
 		
 		this.f_mapHierarchicalValues(function(value, element) {
-			ids.unshift(element._divNode.id);			
-			values.unshift(value);
+			ids.unshift(element._divNode.id.replace(exp, " "));			
+			texts.unshift(element._node._label.replace(exp, " "));			
+			values.unshift(value.replace(exp, " "));
 		})
 		
 		this.setAttribute("v:breadCrumbsIds", ids.join("|"));
 		this.setAttribute("v:breadCrumbsValues", values.join("|"));
+		this.setAttribute("v:breadCrumbsTexts", texts.join("|"));
 	},
 	f_setFocus: function() {
 		f_core.Debug(f_tree, "f_setFocus: Set focus on tree '"+this.id+"' cfocus="+this._cfocus);
@@ -2434,8 +2478,50 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_searchComponentByNodeOrValue: function(nodeOrValue) {
-		f_core.Assert(nodeOrValue, "f_tree._searchComponentByNodeOrValue: Value parameter is null !");
+	_searchComponentByNodeOrValue: function(nodeOrValue, cache) {
+		f_core.Assert(nodeOrValue!==undefined, "f_tree._searchComponentByNodeOrValue: Value parameter is null ! ("+nodeOrValue+")");
+		
+		if (cache && typeof(nodeOrValue)=="string") {
+			var found=undefined;
+
+			if (!cache._initialized) {
+				cache._initialized=true;
+				
+				var c=new Object;
+				cache._byValue=c;
+				
+				
+				var lis=this.getElementsByTagName("li");
+				for(var i=0;i<lis.length;i++) {
+					var li=lis[i];
+				
+					var n=li._node;
+					if (!n) {
+						continue;
+					}
+					
+					var v=n._value;
+					c[v]=li;
+					if (v!=nodeOrValue) {
+						continue;
+					}
+					
+					found=li;
+				}
+			
+				if (found) {
+					return found;
+				}
+								
+			} else {
+				var li=cache._byValue[nodeOrValue];
+				if (li) {
+					return li;
+				}
+			}
+			
+			throw new Error("Can not find node with value '"+nodeOrValue+"'.");
+		}
 
 		var lis=this.getElementsByTagName("li");
 		for(var i=0;i<lis.length;i++) {
@@ -2866,6 +2952,9 @@ var __members = {
 				ul.removeChild(li);
 			}
 			
+			this._cursor=undefined;
+			this._breadCrumbsCursor=undefined;
+			
 			this._nodes=new Array;
 			for(var i=0;i<children;i++) {
 				var child=children[i];
@@ -2898,9 +2987,19 @@ var __members = {
 	
 			var children=ul.childNodes;
 			
+			var cursor=this._cursor;
+			var breadCrumbsCursor=this._breadCrumbsCursor;
+			
 			for(var i=0;i<children;i++) {
 				var child=children[i];
 				
+				if (child==cursor) {
+					this._cursor=undefined;
+				}
+				if (child==breadCrumbsCursor) {
+					this._breadCrumbsCursor=undefined;
+				}
+								
 				this._nodeFinalizer(child, true);
 			}
 		}
@@ -2998,7 +3097,7 @@ var __members = {
 		}
 
 		this.fa_updateElementStyle(li);
-	}	
+	}
 }
 
 new f_class("f_tree", {
