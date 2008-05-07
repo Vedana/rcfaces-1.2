@@ -203,6 +203,7 @@ var __members={
 	f_getCardByValue: function(value) {
 		var cards=this._cards;
 		if (!cards) {
+			f_core.Debug(f_cardBox, "f_getCardByValue: No card defined, searched value='"+value+"'.");
 			return null;
 		}
 		
@@ -216,6 +217,7 @@ var __members={
 			return card;
 		}	
 		
+		f_core.Debug(f_cardBox, "f_getCardByValue: Can not find card associated to value='"+value+"'.");
 		return null;
 	},
 	/**
