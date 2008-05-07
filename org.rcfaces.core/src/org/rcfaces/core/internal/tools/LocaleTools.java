@@ -346,25 +346,27 @@ public class LocaleTools {
         return LocaleTools.getCachedLocale(locale).getPattern(type, style);
     }
 
+    public static Locale getLocale(UIComponent component, boolean literalValue) {
+        if (literalValue) {
+            return PageConfiguration.getLiteralLocale(null, component);
+        }
+
+        if (component instanceof IComponentLocaleCapability) {
+            Locale locale = ((IComponentLocaleCapability) component)
+                    .getComponentLocale();
+
+            if (locale != null) {
+                return locale;
+            }
+        }
+
+        return ContextTools.getUserLocale(null);
+    }
+
     public static Format getDefaultFormat(UIComponent component, int type,
             boolean literalValue) {
 
-        Locale locale = null;
-        if (literalValue) {
-            locale = PageConfiguration.getLiteralLocale(null, component);
-
-        } else {
-            if (locale == null) {
-                if (component instanceof IComponentLocaleCapability) {
-                    locale = ((IComponentLocaleCapability) component)
-                            .getComponentLocale();
-                }
-            }
-
-            if (locale == null) {
-                locale = ContextTools.getUserLocale(null);
-            }
-        }
+        Locale locale = getLocale(component, literalValue);
 
         if (Constants.CACHED_LOCALE_FORMATS == false) {
             return getFormatByType(locale, null, type, -1);

@@ -6,6 +6,7 @@ package org.rcfaces.core.internal.tools;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import org.rcfaces.core.component.capability.IDateFormatCapability;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -266,7 +268,7 @@ public class CalendarTools {
     public static Object parseValue(IProcessContext processContext,
             UIComponent component, String value, boolean literalValue) {
 
-        DateFormat dateFormat = getShortDateFormat(processContext, component,
+        DateFormat dateFormat = getDateFormat(processContext, component,
                 literalValue);
 
         if (value.indexOf(':') >= 0) {
@@ -283,7 +285,7 @@ public class CalendarTools {
     public static Date parseDate(IProcessContext processContext,
             UIComponent component, String value, boolean literalValue) {
 
-        DateFormat dateFormat = getShortDateFormat(processContext, component,
+        DateFormat dateFormat = getDateFormat(processContext, component,
                 literalValue);
 
         return parseDate(dateFormat, value);
@@ -291,7 +293,7 @@ public class CalendarTools {
 
     public static String formatDate(UIComponent calendarComponent, Date date,
             boolean literalValue) {
-        DateFormat dateFormat = getShortDateFormat(null, calendarComponent,
+        DateFormat dateFormat = getDateFormat(null, calendarComponent,
                 literalValue);
         synchronized (dateFormat) {
             return dateFormat.format(date);
@@ -316,8 +318,7 @@ public class CalendarTools {
         }
 
         if (onlyDigit == false) {
-            DateFormat dateFormat = getShortDateFormat(null, component,
-                    literalValue);
+            DateFormat dateFormat = getDateFormat(null, component, literalValue);
 
             return parseDate(dateFormat, value);
         }
@@ -336,11 +337,25 @@ public class CalendarTools {
         return calendar.getTime();
     }
 
-    private static DateFormat getShortDateFormat(
-            IProcessContext processContext, UIComponent component,
-            boolean literalValue) {
-        DateFormat dateFormat = (DateFormat) LocaleTools.getDefaultFormat(
-                component, LocaleTools.DATE_TYPE, literalValue);
+    private static DateFormat getDateFormat(IProcessContext processContext,
+            UIComponent component, boolean literalValue) {
+
+        DateFormat dateFormat = null;
+        if (component instanceof IDateFormatCapability) {
+            String dateFormatString = ((IDateFormatCapability) component)
+                    .getDateFormat();
+
+            if (dateFormatString != null) {
+                Locale locale = LocaleTools.getLocale(component, literalValue);
+
+                dateFormat = new SimpleDateFormat(dateFormatString, locale);
+            }
+        }
+
+        if (dateFormat == null) {
+            dateFormat = (DateFormat) LocaleTools.getDefaultFormat(component,
+                    LocaleTools.DATE_TYPE, literalValue);
+        }
 
         TimeZone timeZone = getCalendar(processContext, component, literalValue)
                 .getTimeZone();
