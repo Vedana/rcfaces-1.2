@@ -482,10 +482,13 @@ var __members = {
 	/**
 	 * @method public
 	 * @param f_tab tab Tab to select
-	 * @param boolean setFocus Set focus if possible !
+	 * @param optional boolean setFocus Set focus if possible !
 	 * @return boolean
 	 */
 	f_selectCard: function(tab, setFocus) {
+		f_core.Assert(typeof(tab)=="object" && tab, "f_tabbedPane.f_selectCard: Invalid parameter 'tab' ("+tab+")");
+		f_core.Assert(typeof(setFocus)=="boolean" || setFocus===undefined, "f_tabbedPane.f_selectCard: Invalid parameter 'setFocus' ("+setFocus+")");
+
 		var _tab=tab._vcard;
 		f_core.Assert(_tab, "f_tabbedPane.f_selectCard: L'objet n'est pas un onglet ! ("+tab+")");
 		
@@ -496,16 +499,19 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param String value
-	 * @param optional boolean setFocus
+	 * @param optional boolean setFocus  Set focus if possible !
 	 * @return boolean <code>true</code> if success.
 	 */
 	f_setValue: function(value, setFocus) {
-		var tab=this.f_getCardByValue(setFocus);
+		f_core.Assert(typeof(value)=="string" || value===null, "f_tabbedPane.f_setValue: Invalid parameter 'value' ("+value+")");
+		f_core.Assert(typeof(setFocus)=="boolean" || setFocus===undefined, "f_tabbedPane.f_setValue: Invalid parameter 'setFocus' ("+setFocus+")");
+
+		var tab=this.f_getCardByValue(value);
 		if (!tab) {
 			return false;
 		}
 			
-		return this._selectTab(tab, false, null);			
+		return this._selectTab(tab, setFocus, null);			
 	},
 	/**
 	 * @method private
