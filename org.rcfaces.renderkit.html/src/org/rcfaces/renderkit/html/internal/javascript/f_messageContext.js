@@ -30,7 +30,7 @@ var __statics = {
 	
 	/**
 	 * @method public static
-	 * @param optional HTMLElement component A component or an event.
+	 * @param optional HTMLElement component A component or an event object.
 	 * @return f_messageContext
 	 */
 	Get: function(component) {
