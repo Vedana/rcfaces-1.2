@@ -138,7 +138,7 @@ var __members = {
 	 * @return boolean <code>true</code> if the button has been found.
 	 */
 	f_setValue: function(value) {
-		return this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
+		if (this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
 			if (!item.f_getRadioValue) {
 				return undefined;
 			}
@@ -149,7 +149,21 @@ var __members = {
 			
 			item.f_setSelected(true);
 			return true;
-		});		
+			
+		})) {
+			return true;
+		}	
+		
+		// On déselectionne tout alors !
+		this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
+			var itemInput=item.f_getInput();
+			
+			if (itemInput && itemInput.checked) {
+				itemInput.checked=false;
+			}
+		});
+		
+		return false;
 	},
 	/**
 	 * @method public 
