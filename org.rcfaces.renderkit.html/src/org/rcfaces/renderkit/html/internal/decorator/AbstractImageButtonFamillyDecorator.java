@@ -89,7 +89,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     protected Renderer renderer;
 
-    private String className;
+    private String styleClassNames[];
 
     private String mainClassName;
 
@@ -254,16 +254,17 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             String classSuffix = null;
             if (disabled) {
-                classSuffix = getComponentClassName() + "_disabled";
+                classSuffix = getComponentClassNames() + "_disabled";
 
             } else if (selected) {
-                classSuffix = getComponentClassName() + "_selected";
+                classSuffix = getComponentClassNames() + "_selected";
             }
 
             writeAttributes(classSuffix);
 
             if (classSuffix != null) {
-                writer.writeAttribute("v:className", getComponentClassName());
+                writer.writeAttribute("v:className", getComponentClassNames(),
+                        " ");
             }
 
             initializeJavaScript(writer);
@@ -563,23 +564,23 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     protected void initializeJavaScript(IHtmlWriter writer) {
     }
 
-    protected final String getComponentClassName() {
+    protected final String[] getComponentClassNames() {
         if ((renderer instanceof ICssRenderer) == false) {
             throw new FacesException("Can not compute className !");
         }
 
-        if (className != null) {
-            return className;
+        if (styleClassNames != null) {
+            return styleClassNames;
         }
 
-        className = ((ICssRenderer) renderer)
-                .getComponentStyleClassName(writer);
+        styleClassNames = ((ICssRenderer) renderer)
+                .getComponentStyleClassNames(writer);
 
-        if (className == null) {
+        if (styleClassNames == null) {
             throw new NullPointerException("Component className is null !");
         }
 
-        return className;
+        return styleClassNames;
     }
 
     protected final String getMainClassName() {

@@ -13,6 +13,7 @@ import javax.faces.context.ResponseWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.AbstractRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -177,6 +178,37 @@ public abstract class AbstractHtmlWriter extends
     public ISgmlWriter writeAttribute(String name, String value)
             throws WriterException {
 
+        try {
+            responseWriter.writeAttribute(name, value, null);
+
+        } catch (IOException e) {
+            throw new WriterException(null, e, renderContext.getComponent());
+        }
+
+        return this;
+    }
+
+    public ISgmlWriter writeAttribute(String name, String values[],
+            String separator) throws WriterException {
+
+        String value;
+        if (values.length == 1) {
+            value = values[0];
+            
+        } else {
+            StringAppender sa = new StringAppender((values.length + separator
+                    .length()) * 32);
+            for (int i = 0; i < values.length; i++) {
+                if (i > 0) {
+                    sa.append(separator);
+                }
+
+                sa.append(values[i]);
+            }
+            
+            value = sa.toString();
+        }
+        
         try {
             responseWriter.writeAttribute(name, value, null);
 

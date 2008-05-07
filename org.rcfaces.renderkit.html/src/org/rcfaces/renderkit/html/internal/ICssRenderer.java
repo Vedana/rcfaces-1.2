@@ -9,7 +9,7 @@ package org.rcfaces.renderkit.html.internal;
  * @version $Revision$ $Date$
  */
 public interface ICssRenderer {
-    String getComponentStyleClassName(IHtmlWriter htmlWriter);
+    String[] getComponentStyleClassNames(IHtmlWriter htmlWriter);
 
     String getMainStyleClassName();
 

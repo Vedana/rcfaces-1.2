@@ -50,6 +50,15 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     protected static final int SEVERITY_CLASSES_MASK = 4;
 
+    public String[] getComponentStyleClassNames(IHtmlWriter htmlWriter) {
+        return new String[] { getComponentStyleClassName(htmlWriter) };
+    }
+
+    /**
+     * @deprecated
+     * @param htmlWriter
+     * @return
+     */
     public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return getMainStyleClassName();
     }
@@ -65,15 +74,23 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         StringAppender cssClass = new StringAppender(64);
 
-        String componentStyleClassName = getComponentStyleClassName(writer);
-        cssClass.append(componentStyleClassName);
+        String componentStyleClassNames[] = getComponentStyleClassNames(writer);
+
+        for (int i = 0; i < componentStyleClassNames.length; i++) {
+            if (cssClass.length() > 0) {
+                cssClass.append(' ');
+            }
+            cssClass.append(componentStyleClassNames[i]);
+        }
 
         if (component instanceof IStyleClassCapability) {
             IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
 
             String styleClass = styleClassCapability.getStyleClass();
             if (styleClass != null) {
-                cssClass.append(' ');
+                if (cssClass.length() > 0) {
+                    cssClass.append(' ');
+                }
                 cssClass.append(styleClass);
 
                 writer.writeAttribute("v:styleClass", styleClass);
@@ -83,8 +100,9 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         if (classSuffix == null || classSuffix.length() < 1) {
             classSuffix = computeComponentStyleClass(component, "");
 
-            if (classSuffix != null && classSuffix.length() > 0) {
-                classSuffix = componentStyleClassName + classSuffix;
+            if (classSuffix != null && classSuffix.length() > 0
+                    && componentStyleClassNames.length > 0) {
+                classSuffix = componentStyleClassNames[0] + classSuffix;
             }
         }
 

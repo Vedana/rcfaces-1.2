@@ -651,13 +651,13 @@ public class ComboGridRenderer extends DataGridRenderer implements
         // On ferme pas les DIV
     }
 
-    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
+    public String[] getComponentStyleClassNames(IHtmlWriter htmlWriter) {
 
         if (isDataGridRenderer(htmlWriter)) {
-            return super.getComponentStyleClassName(htmlWriter);
+            return super.getComponentStyleClassNames(htmlWriter);
         }
 
-        return getJavaScriptClassName();
+        return new String[] { getJavaScriptClassName() };
     }
 
     protected boolean isDataGridRenderer(IHtmlWriter htmlWriter) {

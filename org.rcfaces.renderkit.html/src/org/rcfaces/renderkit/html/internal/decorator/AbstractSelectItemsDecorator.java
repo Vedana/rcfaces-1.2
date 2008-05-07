@@ -683,7 +683,22 @@ public abstract class AbstractSelectItemsDecorator extends
             SelectItem selectItem, int depth, boolean visible)
             throws WriterException {
 
+        if (selectItem == null) {
+            throw new NullPointerException(
+                    "The selectItem is null ! (component.id="
+                            + component.getId() + " depth=" + depth
+                            + " visible=" + visible + ")");
+        }
+
         selectItem = transformSelectItem(selectItem, depth, visible);
+
+        if (selectItem == null) {
+            throw new NullPointerException(
+                    "Transformed selectItem is null ! (component.id="
+                            + component.getId() + " depth=" + depth
+                            + " visible=" + visible + ")");
+        }
+        
         selectItemCount++;
 
         /*
@@ -713,6 +728,11 @@ public abstract class AbstractSelectItemsDecorator extends
             if (selectItems != null && selectItems.length > 0) {
                 for (int i = 0; i < selectItems.length; i++) {
                     SelectItem s2 = selectItems[i];
+
+                    if (s2 == null) {
+                        throw new NullPointerException("The selectItem #" + i
+                                + " is null !");
+                    }
 
                     if (encodeSelectItem(component, s2, depth + 1, v) == false) {
                         break;
