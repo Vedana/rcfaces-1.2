@@ -119,6 +119,7 @@
 .f_grid_timage {
 	margin-right: 4px;
 	vertical-align: middle;
+	border: 0;
 }
  
 .f_grid_stext {
