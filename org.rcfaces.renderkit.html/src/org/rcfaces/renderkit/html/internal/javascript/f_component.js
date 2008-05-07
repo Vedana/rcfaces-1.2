@@ -687,7 +687,7 @@ var __members = {
 	 	} catch (x) {
 		// 	alert(x);
 
-	 		f_core.Error(f_component, "f_completeComponent: Call of f_update throws exception !", x);	 		
+	 		f_core.Error(f_component, "f_completeComponent: Call of f_update throws exception ! (#"+this.id+"."+this.className+") class='"+this._kclass._name+"'", x);	 		
 	 	}
 		
 		if (f_class.PROFILE_COMPONENT) {
