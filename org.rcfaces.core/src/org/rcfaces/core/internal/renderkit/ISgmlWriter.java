@@ -28,6 +28,9 @@ public interface ISgmlWriter extends IComponentWriter {
     ISgmlWriter writeAttribute(String name, String value)
             throws WriterException;
 
+    ISgmlWriter writeAttribute(String name, String values[], String separator)
+            throws WriterException;
+
     ISgmlWriter writeAttribute(String name) throws WriterException;
 
     ISgmlWriter writeAttribute(String name, long value) throws WriterException;
