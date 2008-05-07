@@ -12,6 +12,11 @@
 var __statics = {
 	
 	/**
+	 * @field private static final number
+	 */
+	_SEARCH_KEY_DELAY: 400,
+	
+	/**
 	 * @method private static
 	 */
 	_CheckMouseButtons: f_core.CancelJsEventHandler,
@@ -248,12 +253,21 @@ var __members = {
 		this._rowStyleClass="f_dataGrid_row";
 		this._gridUpdadeServiceId="dataGrid.update";
 		this._serviceGridId=this.id;
+		this._keyRowSearch=true;
+		this._cellWrap=f_core.GetAttribute(this, "v:cellTextWrap", false);
+		//this._noCellWrap=false;
+		if (!!this._cellWrap) {
+			this.className+=" f_dataGrid_noWrap";
+		}
 	},
 	/*	
 	f_finalize: function() {
 	 
 		// this._gridUpdadeServiceId=undefined; // String
 		// this._serviceGridId=undefined; // String
+		
+		//		this._lastKeyDate=undefined; // number
+		//		this._lastKey=undefined; // char
 
 		this.f_super(arguments);
 	},
@@ -410,6 +424,7 @@ var __members = {
 		var countTd=0;
 		var rowValueColumnIndex=this._rowValueColumnIndex;
 		var columns=this._columns;
+		var cellWrap=this._cellWrap;
 		for(var i=0;i<columns.length;i++) {
 			var col=columns[i];
 
@@ -459,7 +474,9 @@ var __members = {
 					this._cellsPool.push(td);
 					
 					td.valign="top";
-					td.noWrap=true;
+					if (!cellWrap) {
+						td.noWrap=true;
+					}
 					td.className=cClassName;
 					td._text=cellText;
 					td.onbeforeactivate=f_core.CancelJsEventHandler;
@@ -481,7 +498,9 @@ var __members = {
 					if (!countTd) {
 						if ((this._additionalInformations || this._checkable) && f_core.IsInternetExplorer()) {
 							ctrlContainer=doc.createElement("div");
-							ctrlContainer.noWrap=true;
+							if (!cellWrap) {
+								ctrlContainer.noWrap=true;
+							}
 							f_core.AppendChild(td, ctrlContainer);
 						}
 						
@@ -1595,6 +1614,119 @@ var __members = {
 		}		
 	
 		f_core.AppendChild(this._table, body);	
+	},
+	/**
+	 * @method protected
+	 * @param number code Keycode
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return boolean Success
+	 */
+	f_searchRowNode: function(code, evt, selection) {
+			
+		var key=String.fromCharCode(code).toUpperCase();
+	
+		var now=new Date().getTime();
+		if (this._lastKeyDate!==undefined) {
+			var dt=now-this._lastKeyDate;
+			f_core.Debug(f_dataGrid, "_searchRowNode: Delay key down "+dt+"ms");
+			if (dt<f_dataGrid._SEARCH_KEY_DELAY) {
+				var nkey=this._lastKey+key;
+				
+				if (this._searchRowNodeByText(nkey,false, evt, selection)) {			
+					this._lastKeyDate=now;
+					this._lastKey=nkey;
+					return true;
+				}
+			}
+		}
+		
+		this._lastKeyDate=now;
+		this._lastKey=key;
+		
+		return this._searchRowNodeByText(key, true, evt, selection);
+	},
+	/**
+	 * @method private
+	 * @param String key Complete text to search
+	 * @param boolean next  Skip the current row
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return boolean Success
+	 */
+	_searchRowNodeByText: function(key, next, evt, selection) {
+		var tr=this._cursor;
+		if (!tr) {
+			tr=this._tbody.firstChild;
+			
+		} else if (next) {
+			tr=tr.nextSibling; // A partir du suivant
+		}
+
+		var columns=this._columns;
+
+		var colIndex=undefined;
+		
+		colIndex=this._keySearchColumnIndex;
+		
+		if (colIndex===undefined) {
+			var currentSorts=this._currentSorts;
+			if (currentSorts && currentSorts.length) {
+				var currentSort=currentSorts[0];
+			
+				for(var i=0;i<columns.length;i++) {
+					var col=columns[i];
+	
+					if (col==currentSort) {
+						colIndex=i;
+						break;		
+					}
+				}
+			}
+		}
+				
+		if (colIndex===undefined) {
+			for(var i=0;i<columns.length;i++) {
+				var col=columns[i];
+	
+				if (col._visibility) {
+					colIndex=i;
+					break;
+				}
+			}
+		}
+		
+		if (colIndex===undefined) {
+			return;
+		}
+		
+		var kl=key.length;
+		
+		var size=this._tbody.childNodes.length;
+		for(var i=0;i<size;i++,tr=tr.nextSibling) {
+			if (!tr) {
+				tr=this._tbody.firstChild;
+			}
+			if (!tr._dataGrid) {
+				continue;
+			}
+			
+			var cells=tr._cells;
+				
+			var text=cells[colIndex]._text;
+			if (!text || text.length<kl) {
+				continue;
+			}	
+			
+			if (text.substring(0, kl).toUpperCase()!=key) {
+				continue;
+			}
+			
+			this.f_moveCursor(tr, true, evt, selection);
+			return true;
+		}
+		
+		return false;
 	}
 }
 

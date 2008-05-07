@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +29,7 @@ import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
+import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
@@ -82,6 +85,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
     private static final Log LOG = LogFactory.getLog(DataGridRenderer.class);
 
+    private static final String DATA_GRID_WRAP_CLASSNAME = "f_dataGrid_wrap";
+
     private static final Map SORT_ALIASES = new HashMap(8);
 
     static {
@@ -102,6 +107,27 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.DATA_GRID;
+    }
+
+    public String[] getComponentStyleClassNames(IHtmlWriter htmlWriter) {
+
+        String ret[] = super.getComponentStyleClassNames(htmlWriter);
+
+        IGridComponent dg = (IGridComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
+
+        if (dg instanceof DataGridComponent) {
+            if (((DataGridComponent) dg).isCellTextWrap(htmlWriter
+                    .getComponentRenderContext().getFacesContext())) {
+
+                List l = new ArrayList(Arrays.asList(ret));
+                l.add(DATA_GRID_WRAP_CLASSNAME);
+
+                ret = (String[]) l.toArray(new String[l.size()]);
+            }
+        }
+
+        return ret;
     }
 
     protected boolean needAdditionalInformationContextState() {
@@ -180,6 +206,30 @@ public class DataGridRenderer extends AbstractGridRenderer {
         return null;
     }
 
+    protected UIColumn getKeySearchColumn(IGridComponent dg) {
+        if ((dg instanceof IKeySearchColumnIdCapability) == false) {
+            return null;
+        }
+
+        String keySearchColumnId = ((IKeySearchColumnIdCapability) dg)
+                .getKeySearchColumnId();
+        if (keySearchColumnId == null) {
+            return null;
+        }
+
+        for (IColumnIterator it = dg.listColumns(); it.hasNext();) {
+            UIColumn column = it.next();
+            if (keySearchColumnId.equals(column.getId()) == false) {
+                continue;
+            }
+
+            return column;
+        }
+
+        throw new FacesException("Can not find column '" + keySearchColumnId
+                + "'.");
+    }
+
     protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
         encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES);
@@ -208,6 +258,13 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         if (rowValueColumn == columnComponent) {
             objectWriter.writeSymbol("_valueColumn").writeBoolean(true);
+        }
+
+        UIColumn keySearchColumn = ((DataGridRenderContext) tableContext)
+                .getKeySearchColumn();
+
+        if (keySearchColumn == columnComponent) {
+            objectWriter.writeSymbol("_keySearch").writeBoolean(true);
         }
     }
 
@@ -1234,6 +1291,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         private UIColumn rowValueColumn;
 
+        private UIColumn keySearchColumn;
+
         public DataGridRenderContext(IProcessContext processContext,
                 IScriptRenderContext scriptRenderContext, IGridComponent dg,
                 int rowIndex, int forcedRows,
@@ -1256,6 +1315,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
         protected void initializeDataGrid() {
             rowValueColumn = DataGridRenderer.this
                     .getRowValueColumn(getGridComponent());
+            keySearchColumn = DataGridRenderer.this
+                    .getKeySearchColumn(getGridComponent());
         }
 
         protected String convertAliasCommand(String command) {
@@ -1265,16 +1326,28 @@ public class DataGridRenderer extends AbstractGridRenderer {
         public UIColumn getRowValueColumn() {
             return rowValueColumn;
         }
+
+        public UIColumn getKeySearchColumn() {
+            return keySearchColumn;
+        }
     }
 
     protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
 
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
+        if (dg instanceof DataGridComponent) {
+            if (((DataGridComponent) dg).isCellTextWrap(facesContext)) {
+                htmlWriter.writeAttribute("v:cellTextWrap", true);
+            }
+        }
+
         if (ENABLE_SERVER_REQUEST) {
             DataGridService dataGridServer = DataGridService
-                    .getInstance(htmlWriter.getComponentRenderContext()
-                            .getFacesContext());
+                    .getInstance(facesContext);
             if (dataGridServer != null) {
                 htmlWriter.writeAttribute("v:asyncRender", true);
             }
@@ -1290,9 +1363,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                 if (rowValueColumn != null) {
                     clientCursorValue = ValuesTools.convertValueToString(
-                            cursorValue, rowValueColumn, htmlWriter
-                                    .getComponentRenderContext()
-                                    .getFacesContext());
+                            cursorValue, rowValueColumn, facesContext);
                 }
             }
 
@@ -1312,9 +1383,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
                 if (rowValueColumn != null) {
                     clientShowValue = ValuesTools.convertValueToString(
-                            showValue, rowValueColumn, htmlWriter
-                                    .getComponentRenderContext()
-                                    .getFacesContext());
+                            showValue, rowValueColumn, facesContext);
 
                 } else {
                     clientShowValue = String.valueOf(showValue);

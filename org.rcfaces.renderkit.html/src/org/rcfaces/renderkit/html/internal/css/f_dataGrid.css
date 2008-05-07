@@ -30,3 +30,12 @@
 	padding-left: 3px;
 }
  
+
+.f_dataGrid_wrap .f_grid_label {
+	white-space: normal;
+}
+ 
+.f_dataGrid_wrap .f_dataGrid_row {
+	height: auto;
+}
+ 
