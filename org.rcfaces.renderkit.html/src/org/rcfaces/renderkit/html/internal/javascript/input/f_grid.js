@@ -694,9 +694,9 @@ var __statics = {
 			return false;
 		}
 
-		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted || !column._method) {
-			return false;
-		}
+//		if (dataGrid.f_isDisabled() || !dataGrid._columnCanBeSorted || !column._method) {
+//			return false;
+//		}
 		
 		if (dataGrid._columnSelected==column) {
 			dataGrid._columnSelected=null;
@@ -978,7 +978,7 @@ var __statics = {
 			
 		if (column.f_fireEvent(f_event.SELECTION, evt, null, null, dataGrid)===false) {
 			return f_core.CancelJsEvent(evt);// On bloque le FOCUS !
-		}			
+		}
 		
 		var append=(evt.shiftKey);
 		
@@ -1510,6 +1510,21 @@ var __members = {
 	 */
 	 _additionalInformationCount: 0,
 	
+	/**
+	 * Active la recherche par les touches
+	 * 
+	 * @field protected boolean
+	 */
+	_keyRowSearch: undefined,
+	
+	
+	/**
+	 * Spécifie l'index de la colonne quand il faut rechercher un token
+	 * 
+	 * @field protected number
+	 */
+	_keySearchColumnIndex: undefined,
+	
 	f_grid: function() {
 		this.f_super(arguments);
 		
@@ -1705,6 +1720,7 @@ var __members = {
 		}
 		
 //		this._serializedIndexes=undefined; // number[]
+//		this._keySearchColumnIndex=undefined; // number
 
 //		this._showValue=undefined; // String
 //		this._headerVisible=undefined; // boolean
@@ -2339,6 +2355,10 @@ var __members = {
 				
 				if (column._valueColumn) {
 					this._rowValueColumnIndex=i-1;
+				}
+					
+				if (column._keySearch) {
+					this._keySearchColumnIndex=i-1;
 				}				
 				
 				var defaultCellImage=column._defaultCellImageURL;
@@ -3199,6 +3219,18 @@ var __members = {
 				}
 			}
 			break;
+
+		default:
+			if (this._keyRowSearch && f_key.IsLetterOrDigit(code)) {
+				this.f_searchRowNode(code, evt, selection);				
+
+				// Dans tous les cas !
+				cancel=true;
+								
+			} else {
+				// Rien on laisse faire !			
+			}
+		
 		}
 	
 		if (cancel) {
@@ -3206,6 +3238,16 @@ var __members = {
 		}
 		
 		return true;
+	},
+	/**
+	 * @method protected
+	 * @param number code Keycode
+	 * @param Event evt
+	 * @param boolean selection
+	 * @return boolean Success
+	 */
+	f_searchRowNode: function(code, evt, selection) {
+		return false;
 	},
 	/**
 	 * @method private
@@ -3758,6 +3800,10 @@ var __members = {
 	f_setColumnSort: function(col, ascending, append, col2, ascending2) {
 		//var args=[false];
 		
+		if (!col._method) {
+			return;
+		}
+		
 		if (ascending===undefined) {
 			if (col._ascendingOrder===undefined) {
 				ascending=true;
@@ -4110,6 +4156,8 @@ var __members = {
 	 * @return void
 	 */
 	_sortTable: function() {
+		this.f_updateSortBreadCrumbs();
+		
 		var currentSorts=this._currentSorts;
 		if (!currentSorts || !currentSorts.length) {
 			return;
@@ -5048,6 +5096,46 @@ var __members = {
 		
 		row.parentNode.removeChild(additionalRow);
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateSortBreadCrumbs: function() {
+		var currentSorts=this._currentSorts;
+		if (!currentSorts) {
+			return;
+		}
+		
+		var ids=new Array;
+		var indexes=new Array;
+		var texts=new Array;
+		
+		var exp=/\|/g		
+						
+		for(var i=0;i<currentSorts.length;i++) {
+			var col=currentSorts[i];
+
+			var index=col._index+(col._ascendingOrder?"+":"-");
+			indexes.unshift(index);
+
+			var id=col.id;
+			if (!id) {
+				id="-";
+			}
+			ids.unshift(id.replace(exp, " "));
+			
+			var text=col._text;
+			if (text===undefined) {
+				text=this.f_getColumnName(col);
+			}
+			texts.unshift(text.replace(exp, " "));			
+		}
+		
+		this.setAttribute("v:sortBreadCrumbsIds", ids.join("|"));
+		this.setAttribute("v:sortBreadCrumbsIndexes", indexes.join("|"));
+		this.setAttribute("v:sortBreadCrumbsTexts", texts.join("|"));
+	},
+	
 	/** 
 	 * @method protected abstract
 	 */
