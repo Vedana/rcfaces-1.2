@@ -132,14 +132,14 @@ var __members = {
 				}
 				
 				if (lock!==false && self.f_getEventLocked(jsEvent)) {
-					f_core.Info(f_eventTarget, "f_setDomEvent.handler: Event has been locked ! (type="+type+" comp="+self+" comp.id="+self.id+")");
+					f_core.Info(f_eventTarget, "f_setDomEvent.handler: Event has been locked ! (type="+type+" comp='"+self+"' ["+self.tagName+"#"+self.id+"."+self.className+"])");
 					
 					return false;
 				}
 		
 				var ret = self.f_fireEvent(type, jsEvent);
 		
-				f_core.Debug(f_eventTarget, "f_setDomEvent.handler: Generic call type '"+type+"' comp='"+self+"' returns '"+ret+"'.");
+				f_core.Debug(f_eventTarget, "f_setDomEvent.handler: Generic call type '"+type+"' comp='"+self+"' ["+self.tagName+"#"+self.id+"."+self.className+"] returns '"+ret+"'.");
 				return ret;
 			};
 

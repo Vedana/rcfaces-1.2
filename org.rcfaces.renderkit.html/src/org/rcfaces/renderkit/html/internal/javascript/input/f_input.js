@@ -148,7 +148,7 @@ var __members = {
 			input.focus();
 			
 		} catch (x) {
-			f_core.Error(f_input, "Error while setting focus to '"+input.id+"'.", x);
+			f_core.Error(f_input, "f_setFocus: Error while setting focus to '"+input.id+"'.", x);
 		}
 		
 		if (input.tagName.toLowerCase()=="textarea") {
