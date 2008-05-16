@@ -25,99 +25,109 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	protected static final String NONE_FOCUS_ID = "--none--";
+    protected static final String NONE_FOCUS_ID = "--none--";
 
-	protected void encodeEnd(IComponentWriter writer) throws WriterException {
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
-				.getHtmlComponentRenderContext();
-		if (htmlComponentRenderContext.getHtmlRenderContext()
-				.getJavaScriptRenderContext().isCollectorMode() == false) {
+        IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+        if (htmlComponentRenderContext.getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode() == false) {
 
-			htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-			writeHtmlAttributes(htmlWriter);
-			writeJavaScriptAttributes(htmlWriter);
+            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            writeHtmlAttributes(htmlWriter);
+            writeJavaScriptAttributes(htmlWriter);
 
-			String focusId = getFocusId(htmlComponentRenderContext);
-			if (focusId != null) {
-				htmlWriter.writeAttribute("v:focusId", focusId);
-			}
+            String focusId = getFocusId(htmlComponentRenderContext);
+            if (focusId != null) {
+                htmlWriter.writeAttribute("v:focusId", focusId);
+            }
 
-			htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            FocusManagerComponent focusManagerComponent = (FocusManagerComponent) htmlComponentRenderContext
+                    .getComponent();
 
-			declareLazyJavaScriptRenderer(htmlWriter);
+            if (focusManagerComponent.isSetFocusIfMessageSetted()
+                    && focusManagerComponent
+                            .isSetFocusIfMessage(htmlComponentRenderContext
+                                    .getFacesContext()) == false) {
+                htmlWriter.writeAttribute("v:setFocusIfMessage", false);
+            }
 
-		} else {
-			htmlWriter.enableJavaScript();
-		}
+            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
-		super.encodeEnd(htmlWriter);
-	}
+            declareLazyJavaScriptRenderer(htmlWriter);
 
-	protected void encodeJavaScript(IJavaScriptWriter jsWriter)
-			throws WriterException {
-		super.encodeJavaScript(jsWriter);
+        } else {
+            htmlWriter.enableJavaScript();
+        }
 
-		if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
-			return;
-		}
+        super.encodeEnd(htmlWriter);
+    }
 
-		jsWriter.setIgnoreComponentInitialization();
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        super.encodeJavaScript(jsWriter);
 
-		jsWriter.writeCall(getJavaScriptClassName(), "f_newInstance");
+        if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
+            return;
+        }
 
-		String focusId = getFocusId(jsWriter.getHtmlComponentRenderContext());
-		if (focusId != null && focusId.length() > 0) {
-			jsWriter.writeString(focusId);
-		}
+        jsWriter.setIgnoreComponentInitialization();
 
-		jsWriter.writeln(");");
-	}
+        jsWriter.writeCall(getJavaScriptClassName(), "f_newInstance");
 
-	protected String getFocusId(
-			IHtmlComponentRenderContext componentRenderContext) {
-		FocusManagerComponent focusManagerComponent = (FocusManagerComponent) componentRenderContext
-				.getComponent();
+        String focusId = getFocusId(jsWriter.getHtmlComponentRenderContext());
+        if (focusId != null && focusId.length() > 0) {
+            jsWriter.writeString(focusId);
+        }
 
-		return focusManagerComponent.getFocusId(componentRenderContext
-				.getFacesContext());
-	}
+        jsWriter.writeln(");");
+    }
 
-	protected void decode(IRequestContext context, UIComponent component,
-			IComponentData componentData) {
-		super.decode(context, component, componentData);
+    protected String getFocusId(
+            IHtmlComponentRenderContext componentRenderContext) {
+        FocusManagerComponent focusManagerComponent = (FocusManagerComponent) componentRenderContext
+                .getComponent();
 
-		FacesContext facesContext = context.getFacesContext();
+        return focusManagerComponent.getFocusId(componentRenderContext
+                .getFacesContext());
+    }
 
-		FocusManagerComponent focusManagerComponent = (FocusManagerComponent) component;
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
 
-		String focusId = componentData.getStringProperty("focusId");
-		if (focusId != null) {
-			if (focusId.length() < 1) {
-				focusId = null;
-			}
+        FacesContext facesContext = context.getFacesContext();
 
-			String oldFocusId = focusManagerComponent.getFocusId(facesContext);
+        FocusManagerComponent focusManagerComponent = (FocusManagerComponent) component;
 
-			if (oldFocusId != focusId
-					&& (oldFocusId == null || oldFocusId.equals(focusId) == false)) {
-				focusManagerComponent.setFocusId(focusId);
+        String focusId = componentData.getStringProperty("focusId");
+        if (focusId != null) {
+            if (focusId.length() < 1) {
+                focusId = null;
+            }
 
-				component.queueEvent(new PropertyChangeEvent(component,
-						Properties.FOCUS_ID, oldFocusId, focusId));
-			}
-		}
-	}
+            String oldFocusId = focusManagerComponent.getFocusId(facesContext);
 
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.FOCUS_MANAGER;
-	}
+            if (oldFocusId != focusId
+                    && (oldFocusId == null || oldFocusId.equals(focusId) == false)) {
+                focusManagerComponent.setFocusId(focusId);
 
-	protected boolean sendCompleteComponent(
-			IHtmlComponentRenderContext htmlComponentContext) {
-		return false;
-	}
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.FOCUS_ID, oldFocusId, focusId));
+            }
+        }
+    }
+
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.FOCUS_MANAGER;
+    }
+
+    protected boolean sendCompleteComponent(
+            IHtmlComponentRenderContext htmlComponentContext) {
+        return false;
+    }
 }

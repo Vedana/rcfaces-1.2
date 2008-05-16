@@ -40,7 +40,7 @@ var __statics={
 
 var __members={
 
-	f_focusManager: function(focusId) {
+	f_focusManager: function(focusId, setFocusIfMessage) {
 		this.f_super(arguments);
 		
 		if (!f_focusManager._Instance) {
@@ -49,11 +49,32 @@ var __members={
 	
 		if (this.nodeType==f_core.ELEMENT_NODE) {	
 			focusId=f_core.GetAttribute(this, "v:focusId");
-		}		
+			
+			setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
+		}
+		
 		this._initFocusId =  focusId;
+		this._setFocusIfMessage=setFocusIfMessage;
+
+		if (setFocusIfMessage!==false) {
+			var messageContext=f_messageContext.Get();
+			if (messageContext) {
+				this._messageContext=messageContext;
+			
+				messageContext.f_addMessageListener(this);
+			}		
+		}
 	},
 	f_finalize: function() {
+		
+		var messageContext=this._messageContext;
+		if (messageContext) {
+			this._messageContext=undefined;
+			
+			messageContext.f_removeMessageListener(this);
+		}
 
+		// this._setFocusIfMessage=undefined; // boolean
 		// this._initFocusId=undefined; // String
 		// this._focusId=undefined; // String
 		// this._documentComplete=undefined; // boolean
@@ -184,6 +205,51 @@ var __members={
 		var focusId=this.f_getFocusId();
 		
 		this.f_setProperty(f_prop.FOCUS_ID, focusId);
+	},
+	f_performMessageChanges: function(messageContext, messageEvent) {
+		f_core.Debug(f_focusManager, "f_performMessageChanges: MessageEvent.type="+messageEvent.type);
+		
+		switch(messageEvent.type) {
+		case f_messageContext.POST_CHECK_EVENT_TYPE:
+		case f_messageContext.ADD_MESSAGE_EVENT_TYPE:
+			break;
+			
+		default:
+			return;
+		}
+		
+		var selectedComponentClientId;
+		var selectedSeverity=-1;
+		
+		var clientIds=messageContext.f_listComponentIdsWithMessages(true);
+		for(var i=0;i<clientIds.length;i++) {
+			var clientId=clientIds[i];
+			
+			if (!clientId) { // On traite pas les globaux
+				continue;
+			}
+			
+			var messages=messageContext.f_listMessages(clientId);
+			if (!messages || !messages.length) {
+				continue;
+			}
+			
+			for(var j=0;j<messages.length;j++) {
+				var message=messages[j];
+				var severity=message.f_getSeverity();
+				
+				if (selectedComponentClientId && severity<=selectedSeverity) {
+					continue;
+				}
+				
+				selectedComponentClientId=clientId;
+				selectedSeverity=severity;
+			}
+		}
+		
+		if (selectedComponentClientId) {
+			this.f_setFocus(selectedComponentClientId);
+		}
 	}
 }
  
