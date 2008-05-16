@@ -29,6 +29,21 @@ var __statics = {
 	_Root: undefined,
 	
 	/**
+	 * @field public static final
+	 */
+	ADD_MESSAGE_EVENT_TYPE: "ADD",
+	
+	/**
+	 * @field public static final
+	 */
+	CLEAR_MESSAGES_EVENT_TYPE: "CLEAR",
+	
+	/**
+	 * @field public static final
+	 */
+	POST_CHECK_EVENT_TYPE: "POSTCHECK",
+	
+	/**
 	 * @method public static
 	 * @param optional HTMLElement component A component or an event object.
 	 * @return f_messageContext
@@ -120,6 +135,12 @@ var __statics = {
 }
 
 var __members = {
+	
+	/**
+	 * @field private number
+	 */
+	 _stopOnSeverity: 2, // 2=SEVERITY_ERROR
+	
 	/** 
 	 * @method private
 	 */
@@ -172,6 +193,7 @@ var __members = {
 			this._listeners=undefined; // function[]
 		}
 		
+		// this._stopOnSeverity=undefined; // number
 		// this._messages=undefined;  // f_messageObject[]	
 	},
 
@@ -186,14 +208,17 @@ var __members = {
 
 	/**
 	 * @method hidden
-	 * @param boolean result
-	 * @param HTMLElement form
 	 * @return boolean 
 	 */
 	f_performCheckPost: function(event) {
 		// Methode appelée lors du check de la form !
 		
-		this._fireMessageEvent();
+		// On initialize le focusManager pour qu'il réagisse aux messages !
+		f_focusManager.Get(); 
+		
+		this._fireMessageEvent({
+			type: f_messageContext.POST_CHECK_EVENT_TYPE
+		});
 		
 		if (event.f_getDetail()===false) {
 			// C'est déjà bloqué !
@@ -202,28 +227,26 @@ var __members = {
 		
 		var messages=this._messages;
 		
-		// On bloque si il y a des erreurs !
-		for(var clientId in messages) {
-			var ms=messages[clientId];
-			
-			for(var i=0;i<ms.length;i++) {
-				var message=ms[i];
+		var stopOnSeverity=this._stopOnSeverity;
+		if (stopOnSeverity!==undefined) {
+			// On bloque si il y a des erreurs !
+			for(var clientId in messages) {
+				var ms=messages[clientId];
 				
-				if (message.f_getSeverity()<f_messageObject.SEVERITY_ERROR) {
-					continue;
+				for(var i=0;i<ms.length;i++) {
+					var message=ms[i];
+					
+					if (message.f_getSeverity()<stopOnSeverity) {
+						continue;
+					}
+					
+					// Positionne le focus ?
+					return false;
 				}
-				
-				// Positionne le focus ?
-				
-				var component=f_core.GetElementByClientId(clientId);
-				if (component) {
-					f_core.SetFocus(component, true);
-				}
-				
-				return false;
 			}
 		}
-		
+			
+		// On bloque rien si on ne trouve pas le composant !
 		return true;
 	},
 	
@@ -249,6 +272,10 @@ var __members = {
 		var l=this._listeners;
 	
 		f_core.Debug(f_messageContext, "f_removeMessageListener: Remove a new message event listener !");
+
+		if (!l) {
+			return;
+		}
 		
 		return l.f_removeElement(listener);
 	},
@@ -407,7 +434,14 @@ var __members = {
 		this.f_getClass().f_getClassLoader().f_verifyOnMessage(this.form);
 		
 		if (performEvent!==false) {
-			this._fireMessageEvent();
+			// On initialize le focusManager pour qu'il réagisse aux messages !
+			f_focusManager.Get(); 
+						
+			this._fireMessageEvent({ 
+				type: f_messageContext.ADD_MESSAGE_EVENT_TYPE, 
+				message: message,
+				component: component
+			});
 		}
 	},
 	
@@ -487,7 +521,9 @@ var __members = {
 			f_core.Info(f_messageContext,  "_clearMessages["+this._form+"] Clear all messages.");
 			
 			if (performEvent) {
-				this._fireMessageEvent();
+				this._fireMessageEvent( { 
+					type: f_messageContext.CLEAR_MESSAGES_EVENT_TYPE
+				});
 			}
 			return true;
 		}
@@ -530,7 +566,9 @@ var __members = {
 		}
 		
 		if (performEvent) {
-			this._fireMessageEvent();
+			this._fireMessageEvent( { 
+				type: f_messageContext.CLEAR_MESSAGES_EVENT_TYPE
+			});
 		}
 		
 		return true;
@@ -538,23 +576,49 @@ var __members = {
 	
 	/**
 	 * @method private
+	 * @param Object messageEvent
 	 * @return void
 	 */
-	_fireMessageEvent: function() {
+	_fireMessageEvent: function(messageEvent) {
 	
 		var l=this._listeners;
 		if (!l) {
-			f_core.Debug(f_messageContext, "_fireMessageEvent["+this._form+"] No listeners...");
+			f_core.Debug(f_messageContext, "_fireMessageEvent["+this._form+"] No listeners... messageEvent.type="+messageEvent.type);
 			return;
 		}
 		
-		f_core.Debug(f_messageContext, "_fireMessageEvent["+this._form+"] : Fire event message modifications to "+l.length+" listeners...");
+		f_core.Debug(f_messageContext, "_fireMessageEvent["+this._form+"]: Fire event message modifications to "+l.length+" listeners... messageEvent.type="+messageEvent.type);
 	
 		for(var i=0;i<l.length;i++) {
 			var listener=l[i];
 			
-			listener.f_performMessageChanges(this);
+			listener.f_performMessageChanges(this, messageEvent);
 		}
+	},
+	/**
+	 * @method public
+	 * @param number level Level of severity
+	 * @return void
+	 * @see f_messageObject#SEVERITY_INFO
+	 * @see f_messageObject#SEVERITY_WARN
+	 * @see f_messageObject#SEVERITY_ERROR
+	 * @see f_messageObject#SEVERITY_FATAL
+	 */
+	f_setStopSeverity: function(level) {
+		f_core.Assert(typeof(level)=="number", "f_messageContext.f_setFocusOnError: Invalid level parameter ("+level+")");
+
+		this._stopOnSeverity=level;
+	},
+	/**
+	 * @method public
+	 * @return number The level of severity
+	 * @see f_messageObject#SEVERITY_INFO
+	 * @see f_messageObject#SEVERITY_WARN
+	 * @see f_messageObject#SEVERITY_ERROR
+	 * @see f_messageObject#SEVERITY_FATAL
+	 */
+	f_getStopSeverity: function() {
+		return this._stopOnSeverity;
 	},
 	/**
 	 * @method public
