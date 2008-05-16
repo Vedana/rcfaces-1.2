@@ -255,7 +255,7 @@ var __members = {
 	 * @return void
 	 */
 	f_addFocusAndBlurListener: function() {
-     	f_core.Debug(f_message, "f_addFocusAndBlurListener: Install focus eblur hooks");
+     	f_core.Debug(f_message, "f_addFocusAndBlurListener: Install focus/blur hooks");
 		
 		var message=this;
 		
@@ -269,7 +269,8 @@ var __members = {
 				evt = f_core.GetJsEvent(this);
 			}
   			
-  			f_core.Debug(f_message, "anonymous this._onFocusCb on :"+this.id);
+  			// this = document ... normalement
+  			f_core.Debug(f_message, "f_addFocusAndBlurListener: this._onFocusCb on "+this);
   			message._performOnFocus(evt);
 		}
 		
@@ -278,23 +279,6 @@ var __members = {
 			capture = document;
 		}
 		f_core.AddEventListener(document, "focus", this._onFocusCb, capture);
-
-/*
-		this._onBlurCb=function(evt) {
-	    	if (window._rcfacesExiting) {
-	     		// On sait jamais, nous sommes peut etre dans un context foireux ...
-	     		return;
-	     	}
-	 
-	 		if (!evt) {
-				evt = f_core.GetJsEvent(this);
-			}
-  			
-  			message._performOnBlur(evt);
-		}
-		
-		f_core.AddEventListener(document, "blur", this._onBlurCb);
-*/
 	},
 
 	/**
@@ -303,10 +287,10 @@ var __members = {
 	 * @return void
 	 */
 	_performOnFocus: function(evt) {
-     	f_core.Debug(f_message, "_performOnFocus: entering ");
+     	f_core.Debug(f_message, "_performOnFocus: event="+evt);
 
 		if (!evt) {
-				evt = f_core.GetJsEvent(this);
+			evt = f_core.GetJsEvent(this);
 		}
 
 		var target;
@@ -316,12 +300,13 @@ var __members = {
 		} else if (evt.srcElement) {
 			target = evt.srcElement;
 		}
-     	f_core.Debug(f_message, "_performOnFocus: target : "+target.id+"\ntarget "+target.tagName);
+		
+     	f_core.Debug(f_message, "_performOnFocus: target="+target.tagName+"#"+target.id+"."+target.className);
 		var compId = target.id;
 		if (compId) {
 			var msgCtx=f_messageContext.Get(target);
 			var listMsg=msgCtx.f_listMessages(compId);
-			if (listMsg.length == 0) {
+			if (!listMsg.length) {
 				compId=null;
 			}
 		}		
@@ -335,7 +320,7 @@ var __members = {
 	 * @return void
 	 */
 	_performOnBlur: function(evt) {
-     	f_core.Debug(f_message, "_performOnBlur: entering");
+     	f_core.Debug(f_message, "_performOnBlur: event="+evt);
 
 		this._fors=this._forsTranslated=[null];
 		this.f_performMessageChanges();
