@@ -316,8 +316,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             if (dataModel instanceof ISortedDataModel) {
                 // On delegue au modele, le tri !
 
-                // Nous devons �tre OBLIGATOIREMENT en mode rowValueColumnId
-                if (gridRenderContext.isRowValueSetted()) {
+                // Nous devons êctre OBLIGATOIREMENT en mode rowValueColumnId
+                if (gridRenderContext.isRowValueSetted() == false) {
                     throw new FacesException(
                             "Can not sort dataModel without attribute rowValue attribute specified !");
                 }
