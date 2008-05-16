@@ -345,7 +345,8 @@ var __statics = {
 		var message=new f_messageObject(severity, lastError.summary, lastError.detail);
 		messageContext.f_addMessageObject(component, message);
 
-		f_core.SetFocus(component, true);
+		// Au message context ou f_message de se debrouiller ?
+		// f_core.SetFocus(component, true);
 
 		return true; // On arrete la, les messages ...
 	},
