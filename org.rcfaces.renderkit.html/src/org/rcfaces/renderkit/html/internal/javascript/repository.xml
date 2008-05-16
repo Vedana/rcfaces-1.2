@@ -251,6 +251,7 @@
 		<file name="input/f_focusManager.js">
 			<class name="f_focusManager">
 				<required-class name="f_object" />
+				<required-class name="f_messageContext" />
 			</class>
 		</file>
 		<file name="f_eventTarget.js">
