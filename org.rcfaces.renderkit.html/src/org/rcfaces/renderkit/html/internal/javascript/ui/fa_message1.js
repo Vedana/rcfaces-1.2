@@ -11,9 +11,11 @@
  */
 
 var __members = {
-/*
+
+	/*
 	fa_message1: function() {
-	}
+		this.f_super(arguments);
+	},
 	*/
 	
 	f_finalize: function() {
@@ -21,6 +23,7 @@ var __members = {
 		// this._forsTranslated=undefined; // String[]
 		
 		this._currentMessage=undefined; // f_messageObject
+		this.f_super(arguments);
  	},
 	f_update: {
 		after: function() {
@@ -85,27 +88,6 @@ var __members = {
 		
 		return this._forsTranslated;
 	},
-	/**
-	 * @method public 
-	 * @return boolean
-	 */
-	f_isSetFocusIfMessage: function() {
-		if (this._setFocusIfMessage===undefined) {
-			this._setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", false);
-		}
-		
-		return this._setFocusIfMessage;
-	},
-	/**
-	 * @method public 
-	 * @param boolean setFocusIfMessage
-	 * @return void
-	 */
-	f_setFocusIfMessage: function(setFocusIfMessage) {
-		f_core.Assert(typeof(setFocusIfMessage)=="boolean", "Invalid setFocusIfMessage parameter ('"+setFocusIfMessage+"')");
-
-		this._setFocusIfMessage=setFocusIfMessage;
-	},
 	f_performMessageChanges: function() {
 
 		var keys=this._getForTranslatedComponentIds();
@@ -163,18 +145,6 @@ var __members = {
 		this._currentMessage=msg;
 		
 		this.fa_updateMessages();
-		
-		if (msg && this.f_isSetFocusIfMessage()) {
-			var forComponent=this.f_getFor();
-			
-			// Pas de GLOBAL pour le for !
-			if (forComponent) {
-				var comp=this.f_findComponent(forComponent);
-				if (comp) {
-					f_core.SetFocus(comp, true); // async SVP !
-				}
-			}
-		}
 	}
 }
 

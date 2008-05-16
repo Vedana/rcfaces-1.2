@@ -72,9 +72,11 @@ public class MessageRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:showIfMessage", true);
         }
 
+        /*
         if (messageComponent.isSetFocusIfMessage(facesContext)) {
             htmlWriter.writeAttribute("v:setFocusIfMessage", true);
         }
+        */
 
         if (messageComponent.isShowSummary()) {
             htmlWriter.writeAttribute("v:showSummary", true);
