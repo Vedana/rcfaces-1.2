@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.CheckButtonComponent;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.CheckButtonComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class CheckButtonTag extends AbstractInputTag implements Tag {
 
@@ -24,6 +24,7 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 	private String selectionListeners;
 	private String readOnly;
 	private String alternateText;
+	private String focusStyleClass;
 	private String selected;
 	public String getComponentType() {
 		return CheckButtonComponent.COMPONENT_TYPE;
@@ -77,6 +78,14 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 		this.alternateText = alternateText;
 	}
 
+	public final String getFocusStyleClass() {
+		return focusStyleClass;
+	}
+
+	public final void setFocusStyleClass(String focusStyleClass) {
+		this.focusStyleClass = focusStyleClass;
+	}
+
 	public final String getSelected() {
 		return selected;
 	}
@@ -95,6 +104,7 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
+			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
 			LOG.debug("  selected='"+selected+"'");
 		}
 		super.setProperties(uiComponent);
@@ -164,6 +174,16 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (focusStyleClass != null) {
+			if (isValueReference(focusStyleClass)) {
+				ValueBinding vb = application.createValueBinding(focusStyleClass);
+				component.setValueBinding(Properties.FOCUS_STYLE_CLASS, vb);
+
+			} else {
+				component.setFocusStyleClass(focusStyleClass);
+			}
+		}
+
 		if (selected != null) {
 			if (isValueReference(selected)) {
 				ValueBinding vb = application.createValueBinding(selected);
@@ -182,6 +202,7 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 		selectionListeners = null;
 		readOnly = null;
 		alternateText = null;
+		focusStyleClass = null;
 		selected = null;
 
 		super.release();

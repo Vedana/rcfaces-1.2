@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.ButtonComponent;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.ButtonComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class ButtonTag extends AbstractCommandTag implements Tag {
 
@@ -23,6 +23,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 	private ValueExpression selectionListeners;
 	private ValueExpression readOnly;
 	private ValueExpression alternateText;
+	private ValueExpression focusStyleClass;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
@@ -49,6 +50,10 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		this.alternateText = alternateText;
 	}
 
+	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+		this.focusStyleClass = focusStyleClass;
+	}
+
 	public final void setAction(ValueExpression action) {
 		this.action=action;
 	}
@@ -66,6 +71,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			LOG.debug("  textDirection='"+textDirection+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
+			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -121,6 +127,15 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 			}
 		}
 
+		if (focusStyleClass != null) {
+			if (focusStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
+
+			} else {
+				component.setFocusStyleClass(focusStyleClass.getExpressionString());
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -136,6 +151,7 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		selectionListeners = null;
 		readOnly = null;
 		alternateText = null;
+		focusStyleClass = null;
 		action = null;
 		actionListeners = null;
 

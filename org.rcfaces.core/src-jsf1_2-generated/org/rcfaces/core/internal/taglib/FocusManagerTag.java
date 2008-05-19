@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.FocusManagerComponent;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.FocusManagerComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class FocusManagerTag extends CameliaTag implements Tag {
 
@@ -19,6 +19,7 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(FocusManagerTag.class);
 
 	private ValueExpression focusId;
+	private ValueExpression setFocusIfMessage;
 	public String getComponentType() {
 		return FocusManagerComponent.COMPONENT_TYPE;
 	}
@@ -27,12 +28,17 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 		this.focusId = focusId;
 	}
 
+	public final void setSetFocusIfMessage(ValueExpression setFocusIfMessage) {
+		this.setFocusIfMessage = setFocusIfMessage;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (FocusManagerComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  focusId='"+focusId+"'");
+			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -54,10 +60,20 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 				component.setFocusId(focusId.getExpressionString());
 			}
 		}
+
+		if (setFocusIfMessage != null) {
+			if (setFocusIfMessage.isLiteralText()==false) {
+				component.setValueExpression(Properties.SET_FOCUS_IF_MESSAGE, setFocusIfMessage);
+
+			} else {
+				component.setSetFocusIfMessage(getBool(setFocusIfMessage.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
 		focusId = null;
+		setFocusIfMessage = null;
 
 		super.release();
 	}

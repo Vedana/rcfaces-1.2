@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.DataGridComponent;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.DataGridComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DataGridTag extends AbstractDataTag implements Tag {
 
@@ -41,6 +41,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private String verticalScrollPosition;
 	private String filterProperties;
 	private String showValue;
+	private String keySearchColumnId;
 	private String preferences;
 	private String paged;
 	private String clientSelectionFullState;
@@ -50,6 +51,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private String rowValueColumnId;
 	private String rowCountVar;
 	private String rowIndexVar;
+	private String cellTextWrap;
 	private String action;
 	private String actionListeners;
 	public String getComponentType() {
@@ -240,6 +242,14 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.showValue = showValue;
 	}
 
+	public final String getKeySearchColumnId() {
+		return keySearchColumnId;
+	}
+
+	public final void setKeySearchColumnId(String keySearchColumnId) {
+		this.keySearchColumnId = keySearchColumnId;
+	}
+
 	public final String getPreferences() {
 		return preferences;
 	}
@@ -300,6 +310,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.rowIndexVar = rowIndexVar;
 	}
 
+	public final void setCellTextWrap(String cellTextWrap) {
+		this.cellTextWrap = cellTextWrap;
+	}
+
 	public final void setAction(String action) {
 		this.action=action;
 	}
@@ -335,6 +349,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  showValue='"+showValue+"'");
+			LOG.debug("  keySearchColumnId='"+keySearchColumnId+"'");
 			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
@@ -344,6 +359,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
+			LOG.debug("  cellTextWrap='"+cellTextWrap+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -540,6 +556,16 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (keySearchColumnId != null) {
+			if (isValueReference(keySearchColumnId)) {
+				ValueBinding vb = application.createValueBinding(keySearchColumnId);
+				component.setValueBinding(Properties.KEY_SEARCH_COLUMN_ID, vb);
+
+			} else {
+				component.setKeySearchColumnId(keySearchColumnId);
+			}
+		}
+
 		if (preferences != null) {
 				ValueBinding vb = application.createValueBinding(preferences);
 				component.setValueBinding(Properties.PREFERENCES, vb);
@@ -619,6 +645,16 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setRowIndexVar(rowIndexVar);
 		}
 
+		if (cellTextWrap != null) {
+			if (isValueReference(cellTextWrap)) {
+				ValueBinding vb = application.createValueBinding(cellTextWrap);
+				component.setValueBinding(Properties.CELL_TEXT_WRAP, vb);
+
+			} else {
+				component.setCellTextWrap(getBool(cellTextWrap));
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_1.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -652,6 +688,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		verticalScrollPosition = null;
 		filterProperties = null;
 		showValue = null;
+		keySearchColumnId = null;
 		preferences = null;
 		paged = null;
 		clientSelectionFullState = null;
@@ -661,6 +698,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		rowValueColumnId = null;
 		rowCountVar = null;
 		rowIndexVar = null;
+		cellTextWrap = null;
 		action = null;
 		actionListeners = null;
 

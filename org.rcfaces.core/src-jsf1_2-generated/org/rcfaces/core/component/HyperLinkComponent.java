@@ -1,14 +1,14 @@
 package org.rcfaces.core.component;
 
+import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import org.rcfaces.core.internal.component.Properties;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.ButtonComponent;
-import java.util.HashSet;
-import java.lang.String;
 import java.util.Arrays;
 import java.util.Set;
-import javax.faces.context.FacesContext;
+import java.util.HashSet;
 
 /**
  * <p>The hyperLink Component translates into a classic hyperlink and is a <A href="/comps/buttonComponent.html">button</A>.</p>

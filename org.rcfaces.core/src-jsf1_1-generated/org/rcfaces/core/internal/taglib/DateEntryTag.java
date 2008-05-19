@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.DateEntryComponent;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.DateEntryComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
@@ -26,9 +26,9 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 	private String fatalStyleClass;
 	private String infoStyleClass;
 	private String warnStyleClass;
+	private String dateFormat;
 	private String showCalendarOnFocus;
 	private String autoCompletion;
-	private String dateFormat;
 	private String defaultDate;
 	private String action;
 	private String actionListeners;
@@ -100,16 +100,20 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
+	public final String getDateFormat() {
+		return dateFormat;
+	}
+
+	public final void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
 	public final void setShowCalendarOnFocus(String showCalendarOnFocus) {
 		this.showCalendarOnFocus = showCalendarOnFocus;
 	}
 
 	public final void setAutoCompletion(String autoCompletion) {
 		this.autoCompletion = autoCompletion;
-	}
-
-	public final void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
 	}
 
 	public final void setDefaultDate(String defaultDate) {
@@ -140,9 +144,9 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
 			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
+			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  showCalendarOnFocus='"+showCalendarOnFocus+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
-			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  defaultDate='"+defaultDate+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
@@ -234,6 +238,16 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (dateFormat != null) {
+			if (isValueReference(dateFormat)) {
+				ValueBinding vb = application.createValueBinding(dateFormat);
+				component.setValueBinding(Properties.DATE_FORMAT, vb);
+
+			} else {
+				component.setDateFormat(dateFormat);
+			}
+		}
+
 		if (showCalendarOnFocus != null) {
 			if (isValueReference(showCalendarOnFocus)) {
 				ValueBinding vb = application.createValueBinding(showCalendarOnFocus);
@@ -251,16 +265,6 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
 			} else {
 				component.setAutoCompletion(getBool(autoCompletion));
-			}
-		}
-
-		if (dateFormat != null) {
-			if (isValueReference(dateFormat)) {
-				ValueBinding vb = application.createValueBinding(dateFormat);
-				component.setValueBinding(Properties.DATE_FORMAT, vb);
-
-			} else {
-				component.setDateFormat(dateFormat);
 			}
 		}
 
@@ -292,9 +296,9 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		fatalStyleClass = null;
 		infoStyleClass = null;
 		warnStyleClass = null;
+		dateFormat = null;
 		showCalendarOnFocus = null;
 		autoCompletion = null;
-		dateFormat = null;
 		defaultDate = null;
 		action = null;
 		actionListeners = null;

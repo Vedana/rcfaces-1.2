@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
-import javax.servlet.jsp.tagext.Tag;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
-import org.rcfaces.core.component.DateEntryComponent;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.servlet.jsp.tagext.Tag;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.component.DateEntryComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
@@ -26,9 +26,9 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 	private ValueExpression fatalStyleClass;
 	private ValueExpression infoStyleClass;
 	private ValueExpression warnStyleClass;
+	private ValueExpression dateFormat;
 	private ValueExpression showCalendarOnFocus;
 	private ValueExpression autoCompletion;
-	private ValueExpression dateFormat;
 	private ValueExpression defaultDate;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
@@ -68,16 +68,16 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		this.warnStyleClass = warnStyleClass;
 	}
 
+	public final void setDateFormat(ValueExpression dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
 	public final void setShowCalendarOnFocus(ValueExpression showCalendarOnFocus) {
 		this.showCalendarOnFocus = showCalendarOnFocus;
 	}
 
 	public final void setAutoCompletion(ValueExpression autoCompletion) {
 		this.autoCompletion = autoCompletion;
-	}
-
-	public final void setDateFormat(ValueExpression dateFormat) {
-		this.dateFormat = dateFormat;
 	}
 
 	public final void setDefaultDate(ValueExpression defaultDate) {
@@ -104,9 +104,9 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
 			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
+			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  showCalendarOnFocus='"+showCalendarOnFocus+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
-			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  defaultDate='"+defaultDate+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
@@ -190,6 +190,15 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (dateFormat != null) {
+			if (dateFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.DATE_FORMAT, dateFormat);
+
+			} else {
+				component.setDateFormat(dateFormat.getExpressionString());
+			}
+		}
+
 		if (showCalendarOnFocus != null) {
 			if (showCalendarOnFocus.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_CALENDAR_ON_FOCUS, showCalendarOnFocus);
@@ -205,15 +214,6 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
 			} else {
 				component.setAutoCompletion(getBool(autoCompletion.getExpressionString()));
-			}
-		}
-
-		if (dateFormat != null) {
-			if (dateFormat.isLiteralText()==false) {
-				component.setValueExpression(Properties.DATE_FORMAT, dateFormat);
-
-			} else {
-				component.setDateFormat(dateFormat.getExpressionString());
 			}
 		}
 
@@ -244,9 +244,9 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		fatalStyleClass = null;
 		infoStyleClass = null;
 		warnStyleClass = null;
+		dateFormat = null;
 		showCalendarOnFocus = null;
 		autoCompletion = null;
-		dateFormat = null;
 		defaultDate = null;
 		action = null;
 		actionListeners = null;

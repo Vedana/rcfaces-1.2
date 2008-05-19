@@ -1,16 +1,17 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractCommandComponent;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
@@ -30,13 +31,14 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	ITextDirectionCapability,
 	ISelectionEventCapability,
 	IReadOnlyCapability,
-	IAlternateTextCapability {
+	IAlternateTextCapability,
+	IFocusStyleClassCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.button";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","text","readOnly","alternateText","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","alternateText","text","readOnly","focusStyleClass","textDirection"}));
 	}
 
 	public ButtonComponent() {
@@ -150,6 +152,29 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	public void setAlternateText(java.lang.String alternateText) {
 		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
+	}
+
+	public java.lang.String getFocusStyleClass() {
+		return getFocusStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getFocusStyleClass() getFocusStyleClass()} for more details
+	 */
+	public java.lang.String getFocusStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FOCUS_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "focusStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFocusStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FOCUS_STYLE_CLASS);
+	}
+
+	public void setFocusStyleClass(java.lang.String focusStyleClass) {
+		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
 	protected Set getCameliaFields() {

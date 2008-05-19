@@ -1,25 +1,26 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
-import java.util.Collections;
-import java.util.Date;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.util.HashMap;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.AbstractCalendarComponent;
 import javax.el.ValueExpression;
-import java.util.HashSet;
-import java.util.Set;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import javax.faces.context.FacesContext;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Date;
+import java.util.Collections;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
+import java.util.Set;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.manager.IValidationParameters;
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.IDateFormatCapability;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
 
 /**
  * <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>
@@ -42,13 +43,14 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	IValueChangeEventCapability,
 	IFocusStyleClassCapability,
 	ISeverityStyleClassCapability,
+	IDateFormatCapability,
 	IValidationParameters {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateEntry";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"autoTab","focusStyleClass","fatalStyleClass","styleClass","showCalendarOnFocus","defaultDate","valueChangeListener","errorStyleClass","warnStyleClass","autoCompletion","infoStyleClass","dateFormat","required"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","autoCompletion","required","dateFormat","valueChangeListener","showCalendarOnFocus","warnStyleClass","styleClass","infoStyleClass","focusStyleClass","autoTab","defaultDate"}));
 	}
 
 	public DateEntryComponent() {
@@ -58,13 +60,6 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	public DateEntryComponent(String componentId) {
 		this();
 		setId(componentId);
-	}
-
-	public int getValidationParametersCount() {
-
-		 
-		 return getValidationParametersCount(null);
-		
 	}
 
 	public boolean isClientSideValidationParameter(String name) {
@@ -81,10 +76,10 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		setValidationParameterData(name, value, client);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
@@ -92,13 +87,6 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 
 
 		 return getValidationParameter(name, null);
-		
-	}
-
-	public Map getClientValidationParametersMap() {
-
-
-		return getClientValidationParametersMap(null);
 		
 	}
 
@@ -121,10 +109,24 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
+	public Map getClientValidationParametersMap() {
 
 
-		return (String)setValidationParameterData(name, value, client);
+		return getClientValidationParametersMap(null);
+		
+	}
+
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
+		
+	}
+
+	public int getValidationParametersCount() {
+
+		 
+		 return getValidationParametersCount(null);
 		
 	}
 
@@ -433,6 +435,29 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
+	public java.lang.String getDateFormat() {
+		return getDateFormat(null);
+	}
+
+	/**
+	 * See {@link #getDateFormat() getDateFormat()} for more details
+	 */
+	public java.lang.String getDateFormat(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DATE_FORMAT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dateFormat" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDateFormatSetted() {
+		return engine.isPropertySetted(Properties.DATE_FORMAT);
+	}
+
+	public void setDateFormat(java.lang.String dateFormat) {
+		engine.setProperty(Properties.DATE_FORMAT, dateFormat);
+	}
+
 	/**
 	 * Returns a boolean value indicating wether the associated <a href="/comps/dateCHooserComponent.html">dateChooser Component</a> should be automatically opened when the component gets the focus.
 	 * @return true if calendar is to be shown
@@ -503,42 +528,6 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 */
 	public boolean isAutoCompletionSetted() {
 		return engine.isPropertySetted(Properties.AUTO_COMPLETION);
-	}
-
-	/**
-	 * Returns a string specifying the format to apply to the date value.
-	 * @return date format
-	 */
-	public String getDateFormat() {
-		return getDateFormat(null);
-	}
-
-	/**
-	 * Returns a string specifying the format to apply to the date value.
-	 * @return date format
-	 */
-	public String getDateFormat(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.DATE_FORMAT, facesContext);
-	}
-
-	/**
-	 * Sets a string specifying the format to apply to the date value.
-	 * @param dateFormat format
-	 */
-	public void setDateFormat(String dateFormat) {
-		engine.setProperty(Properties.DATE_FORMAT, dateFormat);
-	}
-
-	/**
-	 * Sets a string specifying the format to apply to the date value.
-	 * @param dateFormat format
-	 */
-	/**
-	 * Returns <code>true</code> if the attribute "dateFormat" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isDateFormatSetted() {
-		return engine.isPropertySetted(Properties.DATE_FORMAT);
 	}
 
 	/**

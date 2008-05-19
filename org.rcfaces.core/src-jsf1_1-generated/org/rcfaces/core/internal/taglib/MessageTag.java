@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.MessageComponent;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.component.UIViewRoot;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.apache.commons.logging.Log;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.MessageComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.Application;
 
 public class MessageTag extends AbstractMessageTag implements Tag {
 
@@ -30,7 +30,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 	private String infoImageURL;
 	private String warnImageURL;
 	private String imageURL;
-	private String setFocusIfMessage;
 	private String showIfMessage;
 	private String showActiveComponentMessage;
 	public String getComponentType() {
@@ -133,10 +132,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		this.imageURL = imageURL;
 	}
 
-	public final void setSetFocusIfMessage(String setFocusIfMessage) {
-		this.setFocusIfMessage = setFocusIfMessage;
-	}
-
 	public final void setShowIfMessage(String showIfMessage) {
 		this.showIfMessage = showIfMessage;
 	}
@@ -162,7 +157,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			LOG.debug("  infoImageURL='"+infoImageURL+"'");
 			LOG.debug("  warnImageURL='"+warnImageURL+"'");
 			LOG.debug("  imageURL='"+imageURL+"'");
-			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 		}
@@ -299,16 +293,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 			}
 		}
 
-		if (setFocusIfMessage != null) {
-			if (isValueReference(setFocusIfMessage)) {
-				ValueBinding vb = application.createValueBinding(setFocusIfMessage);
-				component.setValueBinding(Properties.SET_FOCUS_IF_MESSAGE, vb);
-
-			} else {
-				component.setSetFocusIfMessage(getBool(setFocusIfMessage));
-			}
-		}
-
 		if (showIfMessage != null) {
 			if (isValueReference(showIfMessage)) {
 				ValueBinding vb = application.createValueBinding(showIfMessage);
@@ -343,7 +327,6 @@ public class MessageTag extends AbstractMessageTag implements Tag {
 		infoImageURL = null;
 		warnImageURL = null;
 		imageURL = null;
-		setFocusIfMessage = null;
 		showIfMessage = null;
 		showActiveComponentMessage = null;
 

@@ -2,10 +2,10 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.HashSet;
 import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The focusManager Component is a non-visual component.</p>
@@ -17,7 +17,7 @@ public class FocusManagerComponent extends CameliaBaseComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusId","setFocusIfMessage"}));
 	}
 
 	public FocusManagerComponent() {
@@ -63,6 +63,26 @@ public class FocusManagerComponent extends CameliaBaseComponent {
 	 */
 	public boolean isFocusIdSetted() {
 		return engine.isPropertySetted(Properties.FOCUS_ID);
+	}
+
+	public boolean isSetFocusIfMessage() {
+		return isSetFocusIfMessage(null);
+	}
+
+	public boolean isSetFocusIfMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SET_FOCUS_IF_MESSAGE, true, facesContext);
+	}
+
+	public void setSetFocusIfMessage(boolean setFocusIfMessage) {
+		engine.setProperty(Properties.SET_FOCUS_IF_MESSAGE, setFocusIfMessage);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "setFocusIfMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSetFocusIfMessageSetted() {
+		return engine.isPropertySetted(Properties.SET_FOCUS_IF_MESSAGE);
 	}
 
 	protected Set getCameliaFields() {
