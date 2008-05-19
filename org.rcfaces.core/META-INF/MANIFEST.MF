@@ -14,7 +14,4 @@ Bundle-ClassPath: lib/commons-digester.jar,
  lib/jsp-api.jar,
  lib/jstl.jar,
  lib/servlet-api.jar,
- lib/jsf-facelets.jar,
- lib/log4j-1.2.9.jar,
- lib/el-api.jar,
  .
