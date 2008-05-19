@@ -87,14 +87,44 @@ var __members={
 	 */
 	f_documentComplete: function() {
 		this._documentComplete=true;
-		
+	
 		var focusId=this._initFocusId;
+		this._initFocusId=undefined;
+			
 		if (!focusId) {
 			return;
+		}		
+	
+		var activeElement=this._getActiveElement();
+		if (activeElement) {
+			var tagName=activeElement.tagName;
+			if (tagName && tagName.toUpperCase()!="BODY") {
+				// Le focus est déjà déplacé !
+				return;
+			}
+			if (activeElement.id==focusId) {
+				// Déjà positionné !
+				return;
+			}
 		}
-		this._initFocusId=undefined;
 		
-		this.f_setFocus(focusId);
+		his.f_setFocus(focusId, true);
+	},
+	/**
+	 * @method private
+	 * @return HTMLElement
+	 */
+	_getActiveElement: function() {
+		var activeElement;
+		
+		if (f_core.IsInternetExplorer()) {
+			activeElement=document.activeElement;
+
+		} else if (f_core.IsGecko()) {
+			activeElement=window.getSelection().focusNode;
+		}
+
+		return activeElement;
 	},
 	/**
 	 * @method public
@@ -105,14 +135,7 @@ var __members={
 			return this._initFocusId;
 		}
 
-		var activeElement;
-		
-		if (f_core.IsInternetExplorer()) {
-			activeElement=document.activeElement;
-
-		} else if (f_core.IsGecko()) {
-			activeElement=window.getSelection().focusNode;
-		}
+		var activeElement=this._getActiveElement();
 
 		if (activeElement) {
 			return activeElement.id;
