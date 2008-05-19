@@ -14,7 +14,6 @@ var __members = {
 
 	/*
 	fa_message1: function() {
-		this.f_super(arguments);
 	},
 	*/
 	
@@ -23,7 +22,6 @@ var __members = {
 		// this._forsTranslated=undefined; // String[]
 		
 		this._currentMessage=undefined; // f_messageObject
-		this.f_super(arguments);
  	},
 	f_update: {
 		after: function() {
