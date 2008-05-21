@@ -6,10 +6,13 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
@@ -106,6 +109,34 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
             text = text.trim();
 
             if (text.length() > 0) {
+                includeRawString(htmlWriter, javaScriptRenderContext, text);
+            }
+        }
+
+        List children = javaScriptComponent.getChildren();
+        if (children.isEmpty() == false) {
+            for (Iterator it = children.iterator(); it.hasNext();) {
+                UIComponent component = (UIComponent) it.next();
+                if ((component instanceof UIOutput) == false) {
+                    continue;
+                }
+
+                UIOutput output = (UIOutput) component;
+                Object value = output.getValue();
+                if (value == null) {
+                    continue;
+                }
+
+                text = convertValue(facesContext, output, value);
+                if (text == null) {
+                    continue;
+                }
+
+                text = text.trim();
+                if (text.length() == 0) {
+                    continue;
+                }
+
                 includeRawString(htmlWriter, javaScriptRenderContext, text);
             }
         }
@@ -273,7 +304,8 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
 
         IJavaScriptWriter jsWriter = InitRenderer.openScriptTag(writer);
 
-        JavaScriptRenderContext.initializeJavaScript(jsWriter, repository, true);
+        JavaScriptRenderContext
+                .initializeJavaScript(jsWriter, repository, true);
 
         String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
                 .convertSymbol("f_classLoader", "_rcfacesClassLoader");
@@ -293,5 +325,12 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
         jsWriter.writeln(");");
 
         jsWriter.end();
+    }
+
+    public boolean getRendersChildren() {
+        return true;
+    }
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component) {
     }
 }
