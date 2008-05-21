@@ -113,7 +113,7 @@ var __members = {
 
 		var groupKey=this.f_getClass().f_getName();
 		
-		var isNativeRadioElement=this.fa_isNativeRadioElement()
+		var isNativeRadioElement=this.fa_isNativeRadioElement && this.fa_isNativeRadioElement();
 		if (isNativeRadioElement) {
 			create=true;
 		}
