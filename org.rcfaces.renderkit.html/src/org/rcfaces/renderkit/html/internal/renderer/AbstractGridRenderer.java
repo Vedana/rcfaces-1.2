@@ -151,7 +151,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private static final int SORT_PADDING = 10;
 
-    private static final String[] GRID_STYLE_CLASSES = { "f_grid" };
+    private static final String GRID_MAIN_STYLE_CLASS = "f_grid";
+
+    private static final String[] GRID_STYLE_CLASSES = { GRID_MAIN_STYLE_CLASS };
 
     protected static final int GENERATE_CELL_STYLE_CLASS = 0x0001;
 
@@ -791,7 +793,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected String getDataBodyScrollClassName(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES + "_dataBody_scroll";
+        return GRID_MAIN_STYLE_CLASS + "_dataBody_scroll";
     }
 
     protected String getDataBodyScrollId(IHtmlWriter htmlWriter) {
@@ -806,7 +808,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected String getDataTableClassName(IHtmlWriter htmlWriter,
             boolean disabled) {
-        String className = GRID_STYLE_CLASSES + TABLE;
+        String className = GRID_MAIN_STYLE_CLASS + TABLE;
         if (disabled) {
             className += " " + className + "_disabled";
         }
@@ -815,7 +817,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected String getDataTitleScrollClassName(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES + "_dataTitle_scroll";
+        return GRID_MAIN_STYLE_CLASS + "_dataTitle_scroll";
     }
 
     protected String getDataTitleScrollId(IHtmlWriter htmlWriter) {
@@ -935,15 +937,15 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     private String getTitleTableBodyClassName(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES + TABLE_BODY;
+        return GRID_MAIN_STYLE_CLASS + TABLE_BODY;
     }
 
     protected String getTitleRowClassName(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES + TITLE_ROW;
+        return GRID_MAIN_STYLE_CLASS + TITLE_ROW;
     }
 
     protected String getFixedHeaderTableClassName(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES + "_fttitle";
+        return GRID_MAIN_STYLE_CLASS + "_fttitle";
     }
 
     protected String getFixedHeaderTableId(IHtmlWriter htmlWriter) {
@@ -989,7 +991,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected String getTitleCellClassName(IHtmlWriter htmlWriter,
             UIColumn column, boolean firstColumn, boolean disabled) {
-        String mainClassName = GRID_STYLE_CLASSES + TITLE_CELL;
+        String mainClassName = GRID_MAIN_STYLE_CLASS + TITLE_CELL;
 
         StringAppender sa = null;
 
@@ -1200,7 +1202,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected String getTitleDivTextClassName(IHtmlWriter htmlWriter,
             UIColumn column) {
-        return GRID_STYLE_CLASSES + TITLE_TTEXT;
+        return GRID_MAIN_STYLE_CLASS + TITLE_TTEXT;
     }
 
     protected String getTitleDivTextId(IHtmlWriter htmlWriter, UIColumn column) {
@@ -1210,11 +1212,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     protected String getTitleDivContainerClassName(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES + TITLE_STEXT;
+        return GRID_MAIN_STYLE_CLASS + TITLE_STEXT;
     }
 
     protected String getTitleImageClassName(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES + TITLE_IMAGE;
+        return GRID_MAIN_STYLE_CLASS + TITLE_IMAGE;
     }
 
     protected void encodeJavaScript(IJavaScriptWriter htmlWriter)
