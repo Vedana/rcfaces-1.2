@@ -4,6 +4,7 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
@@ -73,5 +74,12 @@ public class CssStyleRenderer extends AbstractHtmlRenderer {
             htmlWriter.endElement(IHtmlWriter.STYLE);
 
         }
+    }
+
+    public boolean getRendersChildren() {
+        return true;
+    }
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component) {
     }
 }

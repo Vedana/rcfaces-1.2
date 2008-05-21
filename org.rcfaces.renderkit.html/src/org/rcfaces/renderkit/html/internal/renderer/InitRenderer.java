@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletRequest;
@@ -770,6 +771,13 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         jsWriter.writeln("\");");
         jsWriter.end();
+    }
+
+    public boolean getRendersChildren() {
+        return true;
+    }
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component) {
     }
 
     /**
