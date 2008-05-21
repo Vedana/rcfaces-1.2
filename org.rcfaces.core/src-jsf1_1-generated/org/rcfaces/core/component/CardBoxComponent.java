@@ -1,21 +1,21 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.iterator.ICardIterator;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.tools.CardBoxTools;
+import java.lang.String;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.CardComponent;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IPreferencesSettings;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.iterator.ICardIterator;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import java.util.HashSet;
+import org.rcfaces.core.component.CardComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.internal.tools.CardBoxTools;
 
 /**
  * <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
@@ -39,7 +39,7 @@ public class CardBoxComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeValue","scopeVar","scopeSaveValue","asyncRenderMode","preferences"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeSaveValue","scopeVar","scopeValue","asyncRenderMode","preferences"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 

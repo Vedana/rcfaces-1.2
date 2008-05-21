@@ -20,8 +20,8 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Arrays;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
@@ -56,7 +56,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 
 	private static final Log LOG = LogFactory.getLog(CameliaOutputComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","converter"}));
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
 
 	protected transient IComponentEngine engine;
 

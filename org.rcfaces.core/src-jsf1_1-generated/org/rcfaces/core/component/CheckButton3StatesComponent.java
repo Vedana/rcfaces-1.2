@@ -1,21 +1,22 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import java.lang.String;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.ISelected3StatesCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The checkButton3States Component is a <a href="/comps/checkButtonComponent.html">CheckButton</a> with 3 states : Check, unchecked and undefined. It is often used to show the state of a group of checkButtons</p>
@@ -38,13 +39,14 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 	ISelectionEventCapability,
 	IReadOnlyCapability,
 	IAlternateTextCapability,
+	IFocusStyleClassCapability,
 	ISelected3StatesCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.checkButton3States";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","alternateText","text","selectedState","readOnly","textPosition","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","text","readOnly","alternateText","textPosition","selectedState","textDirection"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="selectedState";
 
@@ -210,6 +212,29 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 
 	public void setAlternateText(java.lang.String alternateText) {
 		engine.setProperty(Properties.ALTERNATE_TEXT, alternateText);
+	}
+
+	public java.lang.String getFocusStyleClass() {
+		return getFocusStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getFocusStyleClass() getFocusStyleClass()} for more details
+	 */
+	public java.lang.String getFocusStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FOCUS_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "focusStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFocusStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FOCUS_STYLE_CLASS);
+	}
+
+	public void setFocusStyleClass(java.lang.String focusStyleClass) {
+		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
 	}
 
 	public java.lang.String getSelectedState() {

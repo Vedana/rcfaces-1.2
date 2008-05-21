@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.AbstractMessageComponent;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ISeverityImagesCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.AbstractMessageComponent;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISeverityImagesCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 
 /**
  * <p>The message Component is a placeholder for error messages (only one is shown).</p>
@@ -40,7 +40,7 @@ public class MessageComponent extends AbstractMessageComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","imageHeight","fatalStyleClass","imageURL","errorImageURL","warnStyleClass","showActiveComponentMessage","showIfMessage","warnImageURL","styleClass","text","imageWidth","infoStyleClass","infoImageURL","fatalImageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","text","fatalStyleClass","showIfMessage","styleClass","fatalImageURL","showActiveComponentMessage","errorStyleClass","warnStyleClass","infoStyleClass","infoImageURL","warnImageURL","errorImageURL","imageWidth","imageURL"}));
 	}
 
 	public MessageComponent() {

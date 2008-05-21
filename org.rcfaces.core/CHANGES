@@ -1,0 +1,453 @@
+
+----------------------------------------------------------------------
+- @version I2533
+- @author Olivier Oeuillot
+- 21/5/2008
+
+fa_groupName.js:
+Correction d'un BUG concernant les imageCombo
+
+f_focusManager.js:
+Correction d'un BUG
+
+f_columnSortDialog.js:
+Correction de la gestion des boutons ascendant/descendant
+
+AbstractGridRenderer:
+Correction d'un probleme de generation de styleClass des sous composants
+
+InitRenderer/CssStyleRenderer/JavaScriptRenderer:
+Le composant traite lui-meme l'affichage de ses enfants. (Ignore la génération)
+
+JavaScriptRenderer:
+Generation des sous-composants qui hérite de UIOutput
+
+JavaScriptCollectorRenderContext:
+Genere le Javascript du projet avant les initialialisation de composants
+
+----------------------------------------------------------------------
+- @version I2532
+- @author Olivier Oeuillot
+- 19/5/2008
+
+f_focusManager.js:
+Positionne le focus sur le onLoad de la page si celui-ci n'a pas déjà été positionné !
+
+fa_message1.js:
+Correction d'une erreur dans le finalizer
+
+Button/CheckButton/RadioButton/ResetButton/SubmitButton/ImageButton/ImageCheckButton/ImageRadioButton/ImageSubmitButton/ImageResetButton:
+Support du "focusStyleClass" qui permet de spécifier une classe CSS quand le composant à le focus
+
+----------------------------------------------------------------------
+- @version I2531
+- @author Olivier Oeuillot
+- 19/5/2008
+
+f_tree.js:
+Correction de la recherche du noeud par appuies de touches
+
+f_dataGrid.js:
+Gestion de la recherche des lignes par touches du clavier (comme dans l'arbre)
+
+ComboComponent/ListComponent:
+Ajout de la gestion des styles si un message est associé au composant
+
+f_grid.js: (f_dataGrid, f_componentsGrid)
+Ajout de plusieurs fils d'ariane pour connaitre l'ordre de tri des colonnes:
+"v:sortBreadCrumbsIds" - Liste des ids des colonnes triées (si l'id est vide, il est spécifié à "-"). Les ids sont séparés par "|" , un "|" dans un ID est remplacé par " ".
+"v:sortBreadCrumbsIndexes" - Liste des indexes des colonnes triées. Les indexes sont individuelement suivis par un '+' ou '-' pour spécifier respectivement un tri ascendant ou descendant. 
+"v:sortBreadCrumbsTexts" - Liste des noms des colonnes triées. Les noms sont séparés par un "|", un "|" dans un nom est remplacé par " ".
+ 
+f_tabbedPane.js:
+Correction de la méthode javascript tabbedPane.f_setValue(value)
+
+CalendarTools/LocaleTools:
+Support des formats de dates autre que SHORT
+
+ISgmlWriter:
+Ajout de writeAttribute(key, values[], separator)
+
+AbstractCssRenderer/AbstractHtmlRenderer/ICssRenderer/AbstractImageButtonFamilyDecorator/AbstractSelectItemsDecorator/AbstractGridRenderer/ComboGridRenderer:
+Support de la possibilité d'avoir plusieurs styleClasses par composant
+
+IDateFormatCapability:
+Nouvelle interface pour généraliser la possibilité de formatter une date
+
+IKeySearchColumnIdCapability:
+Nouvelle interface pour généraliser la possibilité de rechercher dans une colonne par une touche
+
+DataGridRenderer/f_dataGrid.css:
+Support du mode WRAP pour le contenu des cellules
+
+TabbedPaneRenderer:
+Force la valeur du HIDDENMODE à serveur si l'onglet est caché.
+
+f_class.js:
+Retire la méthode _Call() non utilisée
+
+f_component.js:
+Améliore le log de l'erreur "f_completeComponent: Call of f_update throws exception "
+
+f_grid.css:
+Correction de la taille des bords de l'image dans le titre des colonnes
+
+f_radioButton.js:
+Support de la valeur null pour la méthode f_setValue(x): permet de deselectionner TOUS LES BOUTONS
+
+f_cardBox.js:
+Ajout de logs si la "card" recherchée n'est pas trouvée
+
+f_tabbedPane.js:
+Correction du f_setValue(x)
+Ajout d'Asserts()
+
+ComponentsGridRenderer:
+Correction d'un problème de tri du ComponentsGrid (Mauvaise évaluation du rowValue)
+
+MessageComponent/MessageRenderer/f_message.js/*.tld:
+Suppression de l'attribut "setFocusIfMessage"    (!!! ATTENTION POSSIBILITE D'INCOMPATIBILITES)
+
+f_clientValidator.js:
+Delagation de la gestion du focus en cas d'erreur au f_focusManager.
+
+f_messageContext.js:
+Delagation de la gestion du focus en cas d'erreur au f_focusManager.
+L'evenement qui décrit les modifications des messages pour une page est plus complet.
+
+f_focusManager.js/repository.xml/FocusManagerRenderer:
+Centralise la gestion du focus en cas de messages au niveau de cette classe.
+Le focusManager est desormais lié au f_messageContext
+Ajout de l'attribut "setFocusIfMessage" qui permet de spécifier si oui ou non le focus est positionné automatiquement en cas d'erreur. (valeur par defaut: TRUE)
+
+ 
+
+----------------------------------------------------------------------
+- @version I2530
+- @author Olivier Oeuillot
+- 18/4/2008
+
+f_grid.js:
+Supprime le changement de titre du document (aide au debuggage et qui a été oublié) lors de la sélection
+d'une ligne dans le tableau.
+
+f_accelerator.js:
+Dans le cas ou l'attribut "for" est spécifié:
+- Si le composant spécifié est "disabled" le processus est annulé
+- Le composant spécifié prend le focus
+- Correction de l'appel des listeners (de l'évenement SELECTION) du composant spécifié 
+
+f_tree.js:
+Correction des fils d'ariane lors du déplacement du focus
+Correction de la gestion du focus lors de l'appuie des touches
+Ajout d'un nouveau fil d'ariane : "v:breadCrumbsTexts"
+
+----------------------------------------------------------------------
+- @version I2529
+- @author Olivier Oeuillot
+- 17/4/2008
+
+ClientValidatorsRegistryImpl/IClientValidatorDescriptor/TextEntryRenderer:
+Ajout de la possibilité de spécifier des classes JAVSCRIPTs requises
+
+f_vb.js/rcfaces-html-config.xml:
+Le converter de 'hour' déclare la classe f_time requise
+
+f_waitingShell.js/SubmitWaitTag/SubmitWaitComponent/SubmitWaitRenderer:
+Ajout du parametre "backgroundMode"
+
+----------------------------------------------------------------------
+- @version I2528
+- @author Olivier Oeuillot
+- 01/4/2008
+
+f_comboGrid/LocalString*_properties:
+Ajout de la gestion du "requis"
+
+fa_clientValidatorParameters/f_comboGrid/f_compositeNumEntry/f_radioButton:
+Ajout de la configuration des messages d'erreurs par l'aspect fa_clientValidatorParameters
+
+ViewErrorListenerRenderer:
+Correction de la génération HTML hors JavaScriptCollector
+
+----------------------------------------------------------------------
+- @version I2527
+- @author Olivier Oeuillot
+- 27/3/2008
+
+content/contentAccessor/contentStorage:
+Généralisation des sources composites. (plusieurs sources pour un même traitement [merge])
+
+org.rcfaces.core.internal.script:
+Généralisation du package aux scripts et pas au seul JavaScript
+
+org.rcfaces.core.internal.style:
+Généralisation du package aux styles et pas au seul CSS
+
+AsyncRenderService:
+Correction de la configuration de l'activation/desactivation du GZIP
+
+HyperlinkComponent/HyperlinkRenderer/f_hyperLink:
+Ajout de la generation/traitement de l'attribut "value"
+Ajout d'un convertisseur
+
+f_dateChooser:
+Ajout des méthodes suivantes:  f_getFor() et f_getForComponent()
+
+fa_groupName/f_imageRadioButton/f_radioButton/fa_menuCore:
+Revision du systeme de "groupage" des composants
+
+f_core:
+Implementation du RemoveCheckListener
+
+
+
+----------------------------------------------------------------------
+- @version I2523
+- @author Olivier Oeuillot
+- 10/3/2008
+
+f_tabbedPane:
+Correction du finalizer pour IE
+
+----------------------------------------------------------------------
+- @version I2522
+- @author Olivier Oeuillot
+- 7/3/2008
+
+f_compositeNumEntry:
+Correction d'un problème si la date saisie est invalide (31/2/2007)
+
+f_input:
+Ajout d'un Assert concernant l'ajout de message
+
+f_tabbedPane:
+Sous Firefox une exception pouvait survenir lors de la fermeture de la page
+
+fa_message1:
+Ajout d'un Assert concernant l'ajout de message
+
+----------------------------------------------------------------------
+- @version I2521
+- @author Olivier Oeuillot
+- 7/3/2008 
+
+f_messageContext.AppendMessages:
+Correction si le composant est NULL  (message global)
+
+f_core:
+Gestion du tag de profiling "page.init"
+
+InitRenderer:
+Ajout de la génération du tag de profiling "page.init"
+
+JavaScriptCollectorRenderContext:
+L'inclusion des scripts applicatifs est générée par de simples <script></script> pour chaque inclusion
+
+----------------------------------------------------------------------
+- @version I2520
+- @author Olivier Oeuillot
+- 4/3/2008 - 7/3/2008
+
+IImageContentModel
+ImageContentInformation
+ImageContentModel
+ContentStorageAccessorHandler
+AbstractContentModel
+BasicContentModel
+IContentModel:
+Réorganisation des constantes liées à la taille d'une image
+
+IScriptContentModel
+ScriptContentInformation:
+Mise en place des classes sur les opérations sur SCRIPTs
+
+f_classLoader:
+Optimisation de la gestion des objets qui supportent f_documentComplete
+
+f_messageContext.AppendMessages:
+Correction de l'ajout de facesMesages.
+
+f_focusManager:
+Refonte du systeme de set/getFocus avant le documentComplete
+Support du mode de création de l'objet par JavaScript (et non plus seulement DOM)
+
+FocusManagerRenderer:
+Support du mode de création de l'objet par JavaScript (et non plus seulement DOM) en cas de JavaScriptCollector
+
+f_shellDecorator.GetShellFromIdentifier:
+Correction d'un problème si aucune shell n'est enregistrée
+
+f_shell.GetShell:
+Correction de la recherche de shell inter document
+
+f_waitingShell:
+Support du mode de création de l'objet par JavaScript (et non plus seulement DOM)
+
+SubmitWaitRenderer:
+Support du mode de création de l'objet par JavaScript (et non plus seulement DOM) en cas de JavaScriptCollector
+
+f_locale:
+Correction du destructeur
+
+f_viewErrorListener:
+Support du mode de création de l'objet par JavaScript (et non plus seulement DOM)
+
+ViewErrorListenerRenderer:
+Support du mode de création de l'objet par JavaScript (et non plus seulement DOM) en cas de JavaScriptCollector
+
+
+----------------------------------------------------------------------
+- @version I2516
+- @author Olivier Oeuillot
+- 25/2/2008
+
+IClientAdditionalInformationFullStateCapability
+MAJ de la javadoc
+
+IClientCheckFullStateCapability
+MAJ de la javadoc
+
+Constants:
+Documentation de la constante COMPACTED_PROPERTY_NAME
+
+AbstractJavaScriptRenderContext:
+Petite optimisation suite à un profiling
+
+
+----------------------------------------------------------------------
+- @version I2516
+- @author Olivier Oeuillot
+- 25/2/2008 -
+
+f_dataGrid:
+Correction d'un probleme de sortie du focus du composant grid
+
+f_grid:
+Correction d'un problème d'ordre de la tabulation des titres de colonnes/au body
+
+f_componentsGrid:
+Correction d'un problème de style ligne qui prend le focus
+
+fa_dataGridPopup:
+Correction du nom du log
+
+AbstractJavaScriptRenderContext:
+Split de méthodes pour corriger le bug du JavaScriptCollectorRenderContext
+
+JavaScriptCollectorRenderContext:
+Correction d'un bug de génération des facesMessages en Javascript
+
+InitRenderer:
+LoadBundleRenderer:
+JavScriptRenderer:
+Impacts apres changement d'API de AbstractJavaScriptRenderContext
+
+TextEntryRenderer:
+ClientValidatorsRegistryImpl:
+IServerConverter:
+IParametredConverter:
+Possibilité de configurer le converter serveur lors de l'utilisation d'un clientValidator.
+
+
+----------------------------------------------------------------------
+- @version I2515
+- @author Olivier Oeuillot
+- @date 24/2/2008
+
+ImageContentAccessorHandler:
+Ajout du test si les opérations sur les images sont supportées (writer gif)
+
+AbstractRepository:
+Optimisation du hashcode des repositories (javascript par exemple)
+
+OrderedSet:
+Optimisation de la taille de la liste quand celle-ci est commitée 
+
+CollectionIndexesModel:
+Optimisation de la taille de la liste quand celle-ci est commitée
+
+IComponentRefModel:
+Interface d'un DataModel: Spécification du composant traité par le dataModel.
+
+AbstractJavaScriptRenderContext:
+Nouveau parametre qui permet de spécifier l'activation/désactivation du "cleanOnSubmit"
+Optimisations du calcul des dépendances Javascript
+
+HtmlRenderContext:
+Correction d'un bug d'empilement des contexts
+
+LocalStrings_de:
+Version allemande des strings
+
+AbstarctImageButtonFamillyDecorator:
+Utilisation du test des opérations sur images
+
+JavaScriptRepository:
+Support du mode LEVEL3 compilé en mode debug
+
+JavaScriptRepositoryServlet:
+Ajout d'un parametre pour spécifier la racine des fichiers JavaScripts
+
+f_actionList:
+Ajout de la méthode toString()
+
+f_class:
+Ajout de la gestion de la finalisation des objets simples
+
+f_classLoader:
+Ajout de quelques asserts
+
+f_component:
+Ajout de quelques asserts
+
+f_core:
+Le delais du cleanOnSubmit est spécifié par une constante _CLEAN_UP_ON_SUBMIT_DELAY
+
+f_event:
+Support du finalizer
+
+f_calendarObject:
+Correction d'un bug concernant le focus des boutons des mois, si ceux-ci n'existent pas
+
+f_grid:
+Les titres des colonnes sont focusables
+
+f_imageCombo:
+Correction d'un BUG (sous IE uniquement) de l'ouverture de la popup par clavier
+
+f_popup:
+Ajout de l'evenement à la méthode f_popup.IsChildOfDocument()
+
+f_toolFolder:
+Utilisation de la mouvelle forme de déclaration des classes
+
+f_resourceBundle:
+Ajout de toString()
+
+AbstractGridRenderer:
+Support de IComponentRefModel
+
+ComboGridRenderer:
+Support de IComponentRefModel
+
+ComponentsGridRenderer:
+Support de IComponentRefModel
+
+ComponentsListRenderer:
+Support de IComponentRefModel
+
+DataGridRenderer:
+Support de IComponentRefModel
+
+InitRenderer:
+Support du test des opérations sur image
+
+TextEntryRenderer:
+Le TextEntry n'est validé sur un submit que si il est requis.
+
+
+
+
+
+ 

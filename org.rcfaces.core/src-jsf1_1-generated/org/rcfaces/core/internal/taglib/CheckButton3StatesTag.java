@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.component.CheckButton3StatesComponent;
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.component.CheckButton3StatesComponent;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
 import javax.servlet.jsp.tagext.Tag;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ListenersTools1_1;
-import org.apache.commons.logging.Log;
 import javax.faces.el.ValueBinding;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
+import org.rcfaces.core.internal.tools.ListenersTools1_1;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 
@@ -24,6 +24,7 @@ public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 	private String selectionListeners;
 	private String readOnly;
 	private String alternateText;
+	private String focusStyleClass;
 	private String selectedState;
 	public String getComponentType() {
 		return CheckButton3StatesComponent.COMPONENT_TYPE;
@@ -77,6 +78,14 @@ public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 		this.alternateText = alternateText;
 	}
 
+	public final String getFocusStyleClass() {
+		return focusStyleClass;
+	}
+
+	public final void setFocusStyleClass(String focusStyleClass) {
+		this.focusStyleClass = focusStyleClass;
+	}
+
 	public final String getSelectedState() {
 		return selectedState;
 	}
@@ -95,6 +104,7 @@ public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 			LOG.debug("  textPosition='"+textPosition+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
+			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
 			LOG.debug("  selectedState='"+selectedState+"'");
 		}
 		super.setProperties(uiComponent);
@@ -164,6 +174,16 @@ public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (focusStyleClass != null) {
+			if (isValueReference(focusStyleClass)) {
+				ValueBinding vb = application.createValueBinding(focusStyleClass);
+				component.setValueBinding(Properties.FOCUS_STYLE_CLASS, vb);
+
+			} else {
+				component.setFocusStyleClass(focusStyleClass);
+			}
+		}
+
 		if (selectedState != null) {
 			if (isValueReference(selectedState)) {
 				ValueBinding vb = application.createValueBinding(selectedState);
@@ -182,6 +202,7 @@ public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 		selectionListeners = null;
 		readOnly = null;
 		alternateText = null;
+		focusStyleClass = null;
 		selectedState = null;
 
 		super.release();

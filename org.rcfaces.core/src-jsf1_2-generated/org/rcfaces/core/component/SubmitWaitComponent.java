@@ -1,20 +1,20 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 public class SubmitWaitComponent extends CameliaBaseComponent implements 
 	IImageCapability,
@@ -28,7 +28,7 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","waiRole","backgroundMode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"text","height","width","styleClass","backgroundMode","waiRole","imageURL"}));
 	}
 
 	public SubmitWaitComponent() {
