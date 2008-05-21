@@ -85,11 +85,11 @@ var __statics = {
      * @context object:base
      */
     _SelectOnChange: function(evt) {
-    	var select=this;
-		var base=select._base;
+    	var selectedSelect=this;
+		var base=selectedSelect._base;
 		
-		var docBase = select.ownerDocument;
-		var number = select._number
+		var docBase = selectedSelect.ownerDocument;
+		var number = selectedSelect._number
 		
 		f_core.Debug(f_columnSortDialog, "_SelectOnChange: entering");
 
@@ -111,6 +111,7 @@ var __statics = {
 				select._sort=undefined;
 				// Plus de selection !
 				for(i++;i<selects.length;i++) {
+					// Deselectionne le reste ...
 					selects[i].selectedIndex=0;
 					selects[i]._sort=undefined;
 				}
@@ -136,6 +137,10 @@ var __statics = {
 				}
 				break;
 			}
+		}
+		
+		if (selectedSelect.selectedIndex>0 && !selectedSelect._sort) {
+			selectedSelect._sort=1;
 		}
 
 		f_columnSortDialog._UpdateRadioButtons(selects, 0, radios);
@@ -212,7 +217,7 @@ var __statics = {
 			cnt++;	
 		}
 		if (!select._sort) {
-			select._sort = 1;
+			//select._sort = 1;
 		}
 			
 		f_columnSortDialog._UpdateRadioButtons(selects, i, radios);			
@@ -226,21 +231,24 @@ var __statics = {
 	 * @return void
 	 */
 	_UpdateRadioButtons: function(selects, i, radios) {		
-		if (i>0 && selects[i-1].selectedIndex==0) {
-			radios[i*2].checked=false;
-			radios[i*2].disabled=true;
-			radios[i*2+1].checked=false;
-			radios[i*2+1].disabled=true;
+		if (i && selects[i-1].selectedIndex==0) {
+			// Le precedant n'est pas trié !
+			i*=2;
+			radios[i].checked=false;
+			radios[i+1].checked=false;
+			radios[i].disabled=true;
+			radios[i+1].disabled=true;
 			return;
 		}
 
-		radios[i*2].disabled=false;
-		radios[i*2+1].disabled=false;
 
 		var sort=selects[i]._sort;
 
-		radios[i*2].checked=(sort==1);
-		radios[i*2+1].checked=(sort==-1);;
+		i*=2;
+		radios[i].checked=(sort==1);
+		radios[i+1].checked=(sort==-1);
+		radios[i].disabled=false;
+		radios[i+1].disabled=false;
 	},
 
     /**
