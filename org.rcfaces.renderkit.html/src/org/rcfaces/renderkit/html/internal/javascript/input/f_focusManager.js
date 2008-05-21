@@ -108,7 +108,7 @@ var __members={
 			}
 		}
 		
-		his.f_setFocus(focusId, true);
+		this.f_setFocus(focusId, true);
 	},
 	/**
 	 * @method private
