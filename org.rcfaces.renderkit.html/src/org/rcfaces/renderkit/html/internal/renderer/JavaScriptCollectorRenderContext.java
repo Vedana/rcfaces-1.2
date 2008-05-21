@@ -516,70 +516,6 @@ public class JavaScriptCollectorRenderContext extends
             jsWriter.writeln("window._rcfacesDisableInitSearch=true");
         }
 
-        List initializeIds = new ArrayList(16);
-        List accessIds = new ArrayList(16);
-        List messageIds = new ArrayList(16);
-        List focusIds = new ArrayList();
-        List submitIds = new ArrayList(16);
-        List hoverIds = new ArrayList(16);
-
-        for (Iterator it = components.iterator(); it.hasNext();) {
-            Object object = it.next();
-
-            if (object instanceof ComponentId) {
-                initializeIds.add(object);
-
-                if (logIntermediateProfiling) {
-                    if (jsWriter == null) {
-                        jsWriter = InitRenderer.openScriptTag(htmlWriter);
-                    }
-
-                    writeInitIds(jsWriter, initializeIds, beginRender,
-                            focusIds, hoverIds, messageIds, accessIds,
-                            submitIds);
-
-                    jsWriter.writeCall("f_core", "Profile").writeln(
-                            "null,\"javascriptCollector.initIds(#"
-                                    + (profilerId++) + ")\");");
-                }
-
-                continue;
-            }
-
-            if (initializeIds.isEmpty() == false) {
-                if (jsWriter == null) {
-                    jsWriter = InitRenderer.openScriptTag(htmlWriter);
-                }
-
-                writeInitIds(jsWriter, initializeIds, beginRender, focusIds,
-                        hoverIds, messageIds, accessIds, submitIds);
-
-                if (logIntermediateProfiling) {
-                    jsWriter.writeCall("f_core", "Profile").writeln(
-                            "null,\"javascriptCollector.initIds(#"
-                                    + (profilerId++) + ")\");");
-                }
-            }
-
-            CharArrayWriter writer = (CharArrayWriter) object;
-            String buffer = writer.toString().trim();
-            if (buffer.length() < 1) {
-                continue;
-            }
-
-            if (jsWriter == null) {
-                jsWriter = InitRenderer.openScriptTag(htmlWriter);
-            }
-
-            jsWriter.writeln(buffer);
-
-            if (logIntermediateProfiling) {
-                jsWriter.writeCall("f_core", "Profile").writeln(
-                        "null,\"javascriptCollector.buffer(#" + (profilerId++)
-                                + ")\");");
-            }
-        }
-
         if (raws != null) {
             if (jsWriter == null) {
                 jsWriter = InitRenderer.openScriptTag(htmlWriter);
@@ -607,112 +543,188 @@ public class JavaScriptCollectorRenderContext extends
             }
         }
 
-        if (initializeIds.isEmpty() == false) {
-            if (jsWriter == null) {
-                jsWriter = InitRenderer.openScriptTag(htmlWriter);
-            }
-
-            writeInitIds(jsWriter, initializeIds, beginRender, focusIds,
-                    hoverIds, messageIds, accessIds, submitIds);
-        }
-
-        if (accessIds.isEmpty() == false || messageIds.isEmpty() == false
-                || focusIds.isEmpty() == false || submitIds.isEmpty() == false
-                || hoverIds.isEmpty() == false) {
-            if (jsWriter == null) {
-                jsWriter = InitRenderer.openScriptTag(htmlWriter);
-            }
-
-            String cameliaClassLoader = jsWriter.getJavaScriptRenderContext()
-                    .convertSymbol("f_classLoader", "_rcfacesClassLoader");
-
-            if (accessIds.isEmpty() == false) {
-                jsWriter.writeCall(cameliaClassLoader, "f_initOnAccessIds");
-
-                IObjectLiteralWriter objWriter = jsWriter
-                        .writeObjectLiteral(false);
-                for (Iterator it = accessIds.iterator(); it.hasNext();) {
-
-                    objWriter.writeProperty((String) it.next()).writeString(
-                            (String) it.next());
-                }
-                objWriter.end().writeln(");");
-            }
-
-            if (messageIds.isEmpty() == false) {
-                boolean first = true;
-                jsWriter.writeCall(cameliaClassLoader, "f_initOnMessage")
-                        .write('[');
-                for (Iterator it = messageIds.iterator(); it.hasNext();) {
-
-                    if (first) {
-                        first = false;
-
-                    } else {
-                        jsWriter.write(',');
-                    }
-
-                    jsWriter.writeString((String) it.next());
-                }
-                jsWriter.writeln("]);");
-            }
-
-            if (focusIds.isEmpty() == false) {
-                jsWriter.writeCall(cameliaClassLoader, "f_initOnFocusIds");
-
-                IObjectLiteralWriter objWriter = jsWriter
-                        .writeObjectLiteral(false);
-                for (Iterator it = focusIds.iterator(); it.hasNext();) {
-
-                    objWriter.writeProperty((String) it.next()).writeInt(1);
-                }
-                objWriter.end();
-                jsWriter.writeln(");");
-            }
-
-            if (submitIds.isEmpty() == false) {
-                jsWriter.writeCall(cameliaClassLoader, "f_initOnSubmitIds")
-                        .write('[');
-
-                boolean first = true;
-                for (Iterator it = submitIds.iterator(); it.hasNext();) {
-                    if (first) {
-                        first = false;
-                    } else {
-                        jsWriter.write(',');
-                    }
-
-                    jsWriter.writeString((String) it.next());
-                }
-                jsWriter.writeln("]);");
-            }
-
-            if (hoverIds.isEmpty() == false) {
-                jsWriter.writeCall(cameliaClassLoader, "f_initOnOverIds");
-
-                IObjectLiteralWriter objWriter = jsWriter
-                        .writeObjectLiteral(false);
-                for (Iterator it = hoverIds.iterator(); it.hasNext();) {
-                    objWriter.writeProperty((String) it.next()).writeInt(1);
-                }
-                objWriter.end();
-                jsWriter.writeln(");");
-            }
-
-        }
-
-        if (hasMessagesPending(htmlWriter.getHtmlComponentRenderContext()
-                .getHtmlRenderContext())) {
-            if (jsWriter == null) {
-                jsWriter = InitRenderer.openScriptTag(htmlWriter);
-            }
+        if (components.isEmpty() == false) {
 
             if (logProfiling) {
                 jsWriter.writeCall("f_core", "Profile").writeln(
-                        "null,\"javascriptCollector.messages\");");
+                        "null,\"javascriptCollector.components("
+                                + (components.size()) + ")\");");
             }
 
-            writeMessages(jsWriter);
+            List initializeIds = new ArrayList(16);
+            List accessIds = new ArrayList(16);
+            List messageIds = new ArrayList(16);
+            List focusIds = new ArrayList();
+            List submitIds = new ArrayList(16);
+            List hoverIds = new ArrayList(16);
+
+            for (Iterator it = components.iterator(); it.hasNext();) {
+                Object object = it.next();
+
+                if (object instanceof ComponentId) {
+                    initializeIds.add(object);
+
+                    if (logIntermediateProfiling) {
+                        if (jsWriter == null) {
+                            jsWriter = InitRenderer.openScriptTag(htmlWriter);
+                        }
+
+                        writeInitIds(jsWriter, initializeIds, beginRender,
+                                focusIds, hoverIds, messageIds, accessIds,
+                                submitIds);
+
+                        jsWriter.writeCall("f_core", "Profile").writeln(
+                                "null,\"javascriptCollector.initIds(#"
+                                        + (profilerId++) + ")\");");
+                    }
+
+                    continue;
+                }
+
+                if (initializeIds.isEmpty() == false) {
+                    if (jsWriter == null) {
+                        jsWriter = InitRenderer.openScriptTag(htmlWriter);
+                    }
+
+                    writeInitIds(jsWriter, initializeIds, beginRender,
+                            focusIds, hoverIds, messageIds, accessIds,
+                            submitIds);
+
+                    if (logIntermediateProfiling) {
+                        jsWriter.writeCall("f_core", "Profile").writeln(
+                                "null,\"javascriptCollector.initIds(#"
+                                        + (profilerId++) + ")\");");
+                    }
+                }
+
+                CharArrayWriter writer = (CharArrayWriter) object;
+                String buffer = writer.toString().trim();
+                if (buffer.length() < 1) {
+                    continue;
+                }
+
+                if (jsWriter == null) {
+                    jsWriter = InitRenderer.openScriptTag(htmlWriter);
+                }
+
+                jsWriter.writeln(buffer);
+
+                if (logIntermediateProfiling) {
+                    jsWriter.writeCall("f_core", "Profile").writeln(
+                            "null,\"javascriptCollector.buffer(#"
+                                    + (profilerId++) + ")\");");
+                }
+            }
+
+            if (initializeIds.isEmpty() == false) {
+                if (jsWriter == null) {
+                    jsWriter = InitRenderer.openScriptTag(htmlWriter);
+                }
+
+                writeInitIds(jsWriter, initializeIds, beginRender, focusIds,
+                        hoverIds, messageIds, accessIds, submitIds);
+            }
+
+            if (accessIds.isEmpty() == false || messageIds.isEmpty() == false
+                    || focusIds.isEmpty() == false
+                    || submitIds.isEmpty() == false
+                    || hoverIds.isEmpty() == false) {
+                if (jsWriter == null) {
+                    jsWriter = InitRenderer.openScriptTag(htmlWriter);
+                }
+
+                String cameliaClassLoader = jsWriter
+                        .getJavaScriptRenderContext().convertSymbol(
+                                "f_classLoader", "_rcfacesClassLoader");
+
+                if (accessIds.isEmpty() == false) {
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnAccessIds");
+
+                    IObjectLiteralWriter objWriter = jsWriter
+                            .writeObjectLiteral(false);
+                    for (Iterator it = accessIds.iterator(); it.hasNext();) {
+
+                        objWriter.writeProperty((String) it.next())
+                                .writeString((String) it.next());
+                    }
+                    objWriter.end().writeln(");");
+                }
+
+                if (messageIds.isEmpty() == false) {
+                    boolean first = true;
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnMessage")
+                            .write('[');
+                    for (Iterator it = messageIds.iterator(); it.hasNext();) {
+
+                        if (first) {
+                            first = false;
+
+                        } else {
+                            jsWriter.write(',');
+                        }
+
+                        jsWriter.writeString((String) it.next());
+                    }
+                    jsWriter.writeln("]);");
+                }
+
+                if (focusIds.isEmpty() == false) {
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnFocusIds");
+
+                    IObjectLiteralWriter objWriter = jsWriter
+                            .writeObjectLiteral(false);
+                    for (Iterator it = focusIds.iterator(); it.hasNext();) {
+
+                        objWriter.writeProperty((String) it.next()).writeInt(1);
+                    }
+                    objWriter.end();
+                    jsWriter.writeln(");");
+                }
+
+                if (submitIds.isEmpty() == false) {
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnSubmitIds")
+                            .write('[');
+
+                    boolean first = true;
+                    for (Iterator it = submitIds.iterator(); it.hasNext();) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            jsWriter.write(',');
+                        }
+
+                        jsWriter.writeString((String) it.next());
+                    }
+                    jsWriter.writeln("]);");
+                }
+
+                if (hoverIds.isEmpty() == false) {
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnOverIds");
+
+                    IObjectLiteralWriter objWriter = jsWriter
+                            .writeObjectLiteral(false);
+                    for (Iterator it = hoverIds.iterator(); it.hasNext();) {
+                        objWriter.writeProperty((String) it.next()).writeInt(1);
+                    }
+                    objWriter.end();
+                    jsWriter.writeln(");");
+                }
+
+            }
+
+            if (hasMessagesPending(htmlWriter.getHtmlComponentRenderContext()
+                    .getHtmlRenderContext())) {
+                if (jsWriter == null) {
+                    jsWriter = InitRenderer.openScriptTag(htmlWriter);
+                }
+
+                if (logProfiling) {
+                    jsWriter.writeCall("f_core", "Profile").writeln(
+                            "null,\"javascriptCollector.messages\");");
+                }
+
+                writeMessages(jsWriter);
+            }
         }
 
         if (logProfiling) {
