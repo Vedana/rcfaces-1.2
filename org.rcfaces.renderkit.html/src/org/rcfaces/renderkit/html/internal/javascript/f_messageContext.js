@@ -130,7 +130,7 @@ var __statics = {
 		
 //		f_core.Debug(f_messageContext, "ListMessages: messages of component '"+component+"': "+messages);
 
-		return messages;		
+		return messages;	
 	}
 }
 
