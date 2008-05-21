@@ -165,7 +165,7 @@ var __members = {
 	 * 
 	 * @method protected
 	 * @param f_event event
-	 * @return voolean
+	 * @return boolean
 	 */
 	f_imageButtonSelect: function(event) {
 		f_core.Debug(f_imageButton, "f_imageButtonSelect: focus="+this._focus);
