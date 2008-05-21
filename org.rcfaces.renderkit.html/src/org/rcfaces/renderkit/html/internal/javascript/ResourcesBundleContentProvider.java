@@ -44,6 +44,7 @@ public class ResourcesBundleContentProvider extends FilteredContentProvider {
             return super.updateBuffer(buffer, url, locale);
         }
 
+        // XXX ??? pourquoi ???
         ResourceBundle resourceBundle = ResourceBundle.getBundle(
                 resourceBundleBaseName, locale);
 
