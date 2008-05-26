@@ -261,7 +261,7 @@ var f_core = {
 					if (level===0) {
 						var msg="Error: ("+name+"): "+message;
 						if (exception) {
-							msg+="\nException:\n"+exception;
+							msg+="\nException:\n"+f_core._FormatException(exception);
 						}
 						
 						alert(msg);
@@ -275,7 +275,7 @@ var f_core = {
 				if (level<2) {
 					var msg="Error: ("+name+"): "+message;
 					if (exception) {
-						msg+="\nException:\n"+exception;
+						msg+="\nException:\n"+f_core._FormatException(exception);
 					}
 					
 					alert(msg);
@@ -345,7 +345,7 @@ var f_core = {
 				if (level<2) {
 					var msg="Error: ("+name+"): "+message;
 					if (exception) {
-						msg+="\nException:\n"+exception;
+						msg+="\nException:\n"+f_core._FormatException(exception);
 					}
 					
 					alert(msg);
@@ -364,6 +364,26 @@ var f_core = {
 		} finally {
 			f_core._Logging=undefined;
 		}
+	},
+	/**
+	 * @method private static
+	 * @param Error ex
+	 * @return String
+	 */
+	_FormatException: function(ex) {
+		if (ex.number) { // IE normalement ...
+			var msg="0x"+(ex.number & 0xffff).toString(16)+" name='"+ex.name+"'";
+			if (ex.message) {
+				msg+="\nmessage='"+ex.message+"'";
+			}
+			if (ex.description && ex.message!=ex.description) {
+				msg+="\ndescription='"+ex.description+"'";
+			}
+				
+			return msg;
+		}
+		
+		return ex.toString();
 	},
 	/**
 	 * @method private static
@@ -536,7 +556,7 @@ var f_core = {
 			if (window.dump) {
 				var msg=message;
 				if (exception) {
-					msg+="\n"+exception;
+					msg+="\nException:\n"+f_core._FormatException(exception);
 				}
 				
 				window.dump(msg);
@@ -5482,6 +5502,7 @@ var f_core = {
 		f_core.Assert(parent.ownerDocument==child.ownerDocument, "f_core.InsertBefore: Different owner document. (parent, child)");
 		f_core.Assert(parent.ownerDocument.location, "f_core.InsertBefore: Invalid parent. (invalid document)");
 		f_core.Assert(!childBefore || child.ownerDocument==childBefore.ownerDocument, "f_core.InsertBefore: Different owner document. (child, childBefore)");
+		f_core.Assert(!childBefore || childBefore.parentNode==parent, "f_core.InsertBefore: ChildBefore has not the same parent");
 		
 		parent.insertBefore(child, childBefore);
 	},
