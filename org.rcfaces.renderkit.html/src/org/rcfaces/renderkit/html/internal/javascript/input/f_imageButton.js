@@ -387,7 +387,7 @@ var __members = {
 		}
 
 		var image=this.f_getImageElement();
-		if (image&& url && image.src!=url) {
+		if (image && url && image.src!=url) {
 			image.src = url;
 		}		
 	},
