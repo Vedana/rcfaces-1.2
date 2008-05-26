@@ -394,6 +394,10 @@ var __members = {
 		if (f_core.IsInternetExplorer()) {
 			f_core.Debug(f_shell, "f_constructIFrame: IE use onreadystatechange ");
 			iframe.onreadystatechange=function() {
+				if (window._rcfacesExiting) {
+					return false;
+				}
+
 				f_core.Debug(f_shellDecorator, "f_createDecoration.readyStateChange: decoration created: "+this+" state="+this.readyState);
 
 				if (this.readyState != "interactive") {
@@ -410,6 +414,10 @@ var __members = {
 		} else {
 			f_core.Debug(f_shell, "f_constructIFrame: Firefox use onload ");
 			iframe.onload=function() {
+				if (window._rcfacesExiting) {
+					return false;
+				}
+
 				f_core.Debug(f_shellDecorator, "f_createDecoration.onLoad: decoration created: "+this);
 	
 				this.onload=null;
