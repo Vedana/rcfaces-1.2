@@ -1676,7 +1676,7 @@ var __members = {
 
 			}	
 			
-			if (this._scrollBody) {			
+			if (this._scrollBody && this._scrollBody!=this) {			
 				f_core.InsertBefore(this, focus, this._scrollBody);
 				
 			} else {
