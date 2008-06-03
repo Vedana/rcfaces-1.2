@@ -203,7 +203,7 @@ var __members= {
 	 * @return String
 	 */
 	toString: function() {
-		return "[f_event type='"+this._type+"' component='"+this._component+"' value='"+this._value+"' item='"+this._item+"' jsEvent='"+this._jsEvent+"']";
+		return "[f_event type='"+this._type+"' component='"+this._component+"' value='"+this._value+"' item='"+this._item+"' detail='"+this._detail+"' jsEvent='"+this._jsEvent+"']";
 	}
 }
  
