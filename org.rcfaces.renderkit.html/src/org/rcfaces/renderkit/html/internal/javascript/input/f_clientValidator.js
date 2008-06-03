@@ -598,7 +598,7 @@ var __members = {
 // 		this._keyPressInstalled = undefined; // boolean
 //		this._keyUpInstalled = undefined; // boolean
 //		this._hasFocus = undefined; // boolean
-//		this._firstApply = undefined; // boolean
+//		this._firstApplyed = undefined; // boolean
 //		this._checked=undefined; // boolean
 //		this._outputValue=undefined; // string
 //		this._initialValue=undefined; // string
@@ -642,9 +642,13 @@ var __members = {
 	 */
 	_onReset: function() {
 		f_core.Debug(f_clientValidator, "_onReset: Reset component '"+this._component.id+"' (initialValue='"+this._initialValue+"')");
+
+		this._verifyFirstFocus();
 	
 		var self=this;
 		window.setTimeout(function() {
+			// Il faut faire ca en asynchrone, apres le traitement du reset ...
+			
 			//var bRet = 
 			self._applyAutoCheck(self._initialValue, false);
 			
@@ -811,10 +815,10 @@ var __members = {
 	 * @return void
 	 */
 	_verifyFirstFocus: function() {
-		if (this._firstApply) {
+		if (this._firstApplyed) {
 			return;
 		}
-		this._firstApply=true;
+		this._firstApplyed=true;
 		
 		var componentValue=this._input.value;
 		if (componentValue==this._initialFormattedValue) {
