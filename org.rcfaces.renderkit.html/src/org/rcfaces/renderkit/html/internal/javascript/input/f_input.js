@@ -420,9 +420,12 @@ var __members = {
 		}
 		
 		f_core.Debug(f_input, "f_performMessageChanges: Change message to '"+msg+"' for component "+this.id+".");
-						
-		if (msg==this._currentMessage) {
-			return;
+		
+		var currentMessage=this._currentMessage;
+		if (currentMessage) {
+			if (msg==currentMessage || currentMessage.f_equals(msg)) {
+				return;
+			}
 		}
 		
 		f_core.Assert(typeof(msg)=="object" || msg===undefined, "f_input.f_performMessageChanges: Invalid message object ("+msg+").");
