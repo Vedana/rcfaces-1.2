@@ -28,7 +28,17 @@ public class NumFilter extends AbstractDynamicPatternTask {
             }
         }
 
-        if (getIntParameter(context, "num.decimal", -1) != 0) {
+        int showDecimal = 0;
+        String numDecimal = getParameter(context, "num.decimal");
+        if (numDecimal != null) {
+            if ("true".equalsIgnoreCase(numDecimal)) {
+                showDecimal = -1;
+            } else {
+                showDecimal = Integer.parseInt(numDecimal);
+            }
+        }
+
+        if (showDecimal != 0) {
             String sup = getParameter(context, "num.decSign");
             if (sup != null && sup.length() > 0) {
                 sa.append(buildEscaped(sup));

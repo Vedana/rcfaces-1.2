@@ -253,30 +253,32 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         IHtmlComponentRenderContext componentRenderContext = htmlWriter
                 .getHtmlComponentRenderContext();
-        if (componentRenderContext.getHtmlRenderContext()
-                .getJavaScriptRenderContext().isCollectorMode()) {
-            if (htmlWriter.getComponentRenderContext().getAttribute(
-                    VALIDATOR_COMMAND_PROPERTY) != null) {
-                if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
 
-                    String value = (String) componentRenderContext
-                            .getAttribute(VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
+        String value = (String) componentRenderContext
+                .getAttribute(VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
+        if (value != null
+                && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled()) {
+            value = null;
+        }
+        if (value != null
+                && htmlWriter.getHtmlComponentRenderContext()
+                        .getHtmlRenderContext().getJavaScriptRenderContext()
+                        .isCollectorMode() == false) {
+            // Le ::value  n'a de sens que lors du CollectorMode !
+            value = null;
+        }
 
-                    if (value != null) {
-                        htmlWriter.startElement(IHtmlWriter.INPUT);
-                        htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+        if (value != null) {
+            htmlWriter.startElement(IHtmlWriter.INPUT);
+            htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
 
-                        String name = componentRenderContext
-                                .getComponentClientId()
-                                + "::value";
-                        htmlWriter.writeName(name);
+            String name = componentRenderContext.getComponentClientId()
+                    + "::value";
+            htmlWriter.writeName(name);
 
-                        htmlWriter.writeValue(value);
+            htmlWriter.writeValue(value);
 
-                        htmlWriter.endElement(IHtmlWriter.INPUT);
-                    }
-                }
-            }
+            htmlWriter.endElement(IHtmlWriter.INPUT);
         }
     }
 
@@ -467,8 +469,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         // validateur !
         htmlWriter.writeAttribute("v:clientValidator", sb.toString());
 
+        boolean internalValue = true;
+
         if (validatorDescriptor != null) {
-            boolean internalValue = true;
 
             ITaskDescriptor filterTask = validatorDescriptor.getFilterTask();
             if (filterTask != null) {
@@ -548,29 +551,36 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             if (converter != null) {
                 htmlWriter.writeAttribute("v:converter", converter);
             }
-
-            if (internalValue) {
-                IParameter ps[] = new IParameter[params.size() / 2];
-                int cnt = 0;
-                for (Iterator it = params.iterator(); it.hasNext();) {
-                    final String name = (String) it.next();
-                    final String value = (String) it.next();
-
-                    ps[cnt++] = new IParameter() {
-
-                        public String getName() {
-                            return name;
-                        }
-
-                        public String getValue() {
-                            return value;
-                        }
-                    };
-                }
-
-                computeInternalValue(htmlWriter, validatorDescriptor, ps);
-            }
         }
+
+        if (internalValue) {
+            IParameter ps[] = new IParameter[params.size() / 2];
+            int cnt = 0;
+            for (Iterator it = params.iterator(); it.hasNext();) {
+                final String name = (String) it.next();
+                final String value = (String) it.next();
+
+                ps[cnt++] = new IParameter() {
+
+                    public String getName() {
+                        return name;
+                    }
+
+                    public String getValue() {
+                        return value;
+                    }
+                };
+            }
+
+            computeInternalValue(htmlWriter, validatorDescriptor, ps);
+
+        } else {
+            // Il faut formatter le validateur sur le submit
+            // Car il y a du JavaScript qui traine ...
+
+            htmlWriter.getJavaScriptEnableMode().enableOnInit();
+        }
+
     }
 
     private void computeInternalValue(IHtmlWriter htmlWriter,

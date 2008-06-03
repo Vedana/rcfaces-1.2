@@ -202,14 +202,14 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 */
-	Filter_num: function(validator, keyCode, keyChar) {
+	Filter_num: function(validator, keyCode, keyChar, cache) {
 		var exp = "[0-9";
 		if (validator.f_getBoolParameter("num.signed", false)) {
 			var sup = validator.f_getParameter("num.negSign", "-");
 			exp += f_vb._BuildEscaped(sup);
 		}
-		if (true /*validator.f_getIntParameter("num.decimal", -1) !== 0*/) {
-			// On laisse le signe de décimal ... car sinon surprise !
+		if (cache || validator.f_getIntParameter("num.decimal", -1)) {
+			// En autoCheck (cache!=null) On laisse le signe de décimal pour gerer le Copier/Coller.
 			var sup = validator.f_getParameter("num.decSign");
 			exp += f_vb._BuildEscaped(sup);
 		}
@@ -914,13 +914,14 @@ var __statics = {
 		var ip = (r[2])? r[2]:"0";
 		var d = (r[3])? dec.charAt(0):"";
 		var dp = (r[4])? r[4]:"";
-		if (decimal>0) {
-			dp = (dp.length > decimal)? dp.substring(0,decimal):dp;
+		if (decimal>0 && dp.length > decimal) {
+			dp = dp.substring(0,decimal);
 
 		} else if (decimal==0) {
 			d="";
 			dp="";
 		}
+		
 		if (ip.length>1) {
 			// Retire les 0 au debut !
 			r=ip.match(new RegExp("^(0+)(\\d*)$"));

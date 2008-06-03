@@ -31,7 +31,16 @@ public class NumFormatter extends AbstractClientValidatorTask implements
             return value;
         }
 
-        int decimal = getIntParameter(context, "num.decimal", -1);
+        // int cutDecimal = getIntParameter(context, "num.cutDecimal", -1);
+        int showDecimal = 0;
+        String numDecimal = getParameter(context, "num.decimal");
+        if (numDecimal != null) {
+            if ("true".equalsIgnoreCase(numDecimal)) {
+                showDecimal = -1;
+            } else {
+                showDecimal = Integer.parseInt(numDecimal);
+            }
+        }
         String dec = getParameter(context, "num.decSign");
         String neg = getParameter(context, "num.negSign", "-");
         String sep = getParameter(context, "num.sepSign");
@@ -73,25 +82,25 @@ public class NumFormatter extends AbstractClientValidatorTask implements
             // Nothing
         }
 
-        if (decimal == 0) { // Attention au false ou -1
+        if (showDecimal == 0) { // Attention au false ou -1
             d = "";
             dp = "";
 
-        } else if (decimal > 0) {
+        } else if (showDecimal > 0) {
             d = dec.substring(0, 1);
 
-            if (dp.length() > decimal) {
-                dp = dp.substring(0, decimal);
+            if (dp.length() > showDecimal) {
+                dp = dp.substring(0, showDecimal);
 
             } else {
-                for (; dp.length() < decimal;) {
+                for (; dp.length() < showDecimal;) {
                     dp += "0";
                 }
             }
 
-            if (n.length() == 0) {
-                n = "0";
-            }
+        } else if (dp.length() == 0) {
+            // Nombre décimal inconnu, mais pas de décimal
+            d = "";
         }
 
         // Check if no need
