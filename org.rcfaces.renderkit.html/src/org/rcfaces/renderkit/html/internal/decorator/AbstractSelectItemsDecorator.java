@@ -309,11 +309,72 @@ public abstract class AbstractSelectItemsDecorator extends
             return true;
         }
 
+        SelectItem selectItems[] = (SelectItem[]) adapt(value,
+                SelectItem[].class);
+        if (selectItems == null) {
+            ISelectItem selectItems2[] = (ISelectItem[]) adapt(value,
+                    ISelectItem[].class);
+
+            if (selectItems2 != null) {
+                selectItems = new SelectItem[selectItems2.length];
+                for (int i = 0; i < selectItems2.length; i++) {
+                    selectItems[i] = convertToSelectItem(selectItems2[i]);
+                }
+            }
+        }
+        if (selectItems != null) {
+            for (int i = 0; i < selectItems.length; i++) {
+                SelectItem si = selectItems[i];
+                if (si == null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("SelectItem #" + i + " is null");
+                    }
+
+                    continue;
+                }
+
+                if (mapSelectItem(mapper, si) == false) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        SelectItem selectItem = (SelectItem) adapt(value, SelectItem.class);
+        if (selectItem == null) {
+            ISelectItem selectItem2 = (ISelectItem) adapt(value,
+                    SelectItem.class);
+            if (selectItem2 != null) {
+                selectItem = convertToSelectItem(selectItem2);
+            }
+        }
+        if (selectItem != null) {
+            return mapSelectItem(mapper, selectItem);
+        }
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("Can not convert '" + value + "' to SelectItem !");
         }
 
         return true;
+    }
+
+    private Object adapt(Object adaptable, Class adapterClass) {
+
+        if (adaptable instanceof IAdaptable) {
+            Object adapted = ((IAdaptable) adaptable).getAdapter(adapterClass,
+                    null);
+            if (adapted != null) {
+                return adapted;
+            }
+        }
+
+        RcfacesContext rcfacesContext = getComponentRenderContext()
+                .getRenderContext().getProcessContext().getRcfacesContext();
+
+        return rcfacesContext.getAdapterManager().getAdapter(adaptable,
+                adapterClass, null);
     }
 
     protected SelectItem convertToSelectItem(Object value) {
@@ -698,7 +759,7 @@ public abstract class AbstractSelectItemsDecorator extends
                             + component.getId() + " depth=" + depth
                             + " visible=" + visible + ")");
         }
-        
+
         selectItemCount++;
 
         /*
