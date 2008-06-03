@@ -52,10 +52,8 @@ var __members={
 			
 			setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
 		}
-		
-		this._initFocusId =  focusId;
-		this._setFocusIfMessage=setFocusIfMessage;
 
+		this._setFocusIfMessage=setFocusIfMessage;
 		if (setFocusIfMessage!==false) {
 			var messageContext=f_messageContext.Get();
 			if (messageContext) {
@@ -63,6 +61,30 @@ var __members={
 			
 				messageContext.f_addMessageListener(this);
 			}		
+		}
+
+		if (this.f_getClass().f_getClassLoader().f_isDocumentCompleted()) {
+			this._documentCompleted=true;
+
+			if (focusId) {				
+				this.f_setFocus(focusId, true);
+			}
+
+		} else if (focusId) {
+			this._initFocusId =  focusId;
+		}
+		
+		if (f_core.IsGecko()) {
+			var self=this;
+
+			this._firefoxFocusListener=function(event) {
+				var element=event.target;
+				self._activeElement=element;
+				
+				return true;
+			};
+			
+			window.addEventListener("focus", this._firefoxFocusListener, true);
 		}
 	},
 	f_finalize: function() {
@@ -73,11 +95,19 @@ var __members={
 			
 			messageContext.f_removeMessageListener(this);
 		}
+		
+		var firefoxFocusListener=this._firefoxFocusListener;
+		if (firefoxFocusListener) {
+			this._firefoxFocusListener=undefined;
+			
+			window.removeEventListener("focus", firefoxFocusListener, true);
+		}
 
 		// this._setFocusIfMessage=undefined; // boolean
 		// this._initFocusId=undefined; // String
 		// this._focusId=undefined; // String
-		// this._documentComplete=undefined; // boolean
+		// this._documentCompleted=undefined; // boolean
+		// this._activeElement=undefined;
 
 		this.f_super(arguments);
 	},
@@ -86,10 +116,12 @@ var __members={
 	 * @return void
 	 */
 	f_documentComplete: function() {
-		this._documentComplete=true;
+		this._documentCompleted=true;
 	
-		var focusId=this._initFocusId;
+		var focusId=this._intFocusId;
 		this._initFocusId=undefined;
+
+		f_core.Debug(f_focusManager, "f_documentComplete: focus='"+focusId+"'.");
 			
 		if (!focusId) {
 			return;
@@ -121,8 +153,14 @@ var __members={
 			activeElement=document.activeElement;
 
 		} else if (f_core.IsGecko()) {
-			activeElement=window.getSelection().focusNode;
+			/*var selection=window.getSelection();
+			if (selection) {
+				activeElement=selection.focusNode;
+			}*/
+			activeElement=this._activeElement;
 		}
+
+		f_core.Debug(f_focusManager, "_getActiveElement: current active element="+activeElement+" id="+(activeElement?activeElement.id:"**null**"));
 
 		return activeElement;
 	},
@@ -131,7 +169,7 @@ var __members={
 	 * @return String
 	 */
 	f_getFocusId: function() {
-		if (!this._documentComplete) {
+		if (!this._documentCompleted) {
 			return this._initFocusId;
 		}
 
@@ -148,15 +186,8 @@ var __members={
 	 * @return HTMLElement
 	 */
 	f_getFocusComponent: function() {
-		var activeElement;
+		var activeElement=this._getActiveElement();
 		
-		if (f_core.IsInternetExplorer()) {
-			activeElement=document.activeElement;
-
-		} else if (f_core.IsGecko()) {
-			activeElement=window.getSelection().focusNode;
-		}
-
 		if (activeElement) {
 			return this.f_getClassLoader().f_init(activeElement, true);
 		}
@@ -176,8 +207,10 @@ var __members={
 		var component=focus;
 		
 		if (typeof(focus)=="string") {
-			if (!this._documentComplete) {
+			if (!this._documentCompleted) {
 				this._initFocusId=focus;
+
+				f_core.Debug(f_focusManager, "f_setFocus: documentComplete!=true, wait for focus (component="+focus+".)");
 				return undefined;
 			}
 			
@@ -191,7 +224,7 @@ var __members={
 				
 				component=document.getElementById(focus);
 			}
-		} else if (!this._documentComplete) {
+		} else if (!this._documentCompleted) {
 			// C'est déjà positionné !
 			this._initFocusId=undefined;
 		}
@@ -199,6 +232,11 @@ var __members={
 		if (!component) {
 			f_core.Info(f_focusManager, "f_setFocus: Can not find component '"+focus+"' to set focus !");
 			return false;
+		}
+
+		if (component==this._getActiveElement()) {
+			f_core.Debug(f_focusManager, "f_setFocus: Focus is already setted to the component "+component.id);
+			return true;
 		}
 
 		f_core.Debug(f_focusManager, "f_setFocus: Set focus to component '"+component.id+"'.");
@@ -269,6 +307,8 @@ var __members={
 				selectedSeverity=severity;
 			}
 		}
+		
+		f_core.Debug(f_focusManager, "f_performMessageChanges: focus component="+selectedComponentClientId+" severity="+severity);
 		
 		if (selectedComponentClientId) {
 			this.f_setFocus(selectedComponentClientId);
