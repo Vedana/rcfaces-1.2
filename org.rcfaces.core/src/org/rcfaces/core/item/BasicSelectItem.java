@@ -176,6 +176,14 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         this.accessKey = accessKey;
     }
 
+    public final void setAcceleratorKey(String acceleratorKey) {
+        this.acceleratorKey = acceleratorKey;
+    }
+
+    public final void setStyleClass(String styleClass) {
+        this.styleClass = styleClass;
+    }
+
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
