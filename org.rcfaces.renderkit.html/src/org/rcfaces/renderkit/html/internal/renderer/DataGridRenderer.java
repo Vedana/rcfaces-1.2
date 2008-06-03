@@ -63,6 +63,7 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
+import org.rcfaces.core.model.IRangeDataModel2;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.model.ITransactionalDataModel;
@@ -590,8 +591,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
         }
 
-        if (sortTranslations == null && rows > 0
-                && (dataModel instanceof IRangeDataModel)) {
+        if (sortTranslations == null
+                && rows > 0
+                && ((dataModel instanceof IRangeDataModel) || (dataModel instanceof IRangeDataModel2))) {
             // Specifie le range que si il n'y a pas de tri !
 
             int rangeLength = rows;
@@ -600,7 +602,15 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 rangeLength++;
             }
 
-            ((IRangeDataModel) dataModel).setRowRange(rowIndex, rangeLength);
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel)
+                        .setRowRange(rowIndex, rangeLength);
+            }
+
+            if (dataModel instanceof IRangeDataModel2) {
+                ((IRangeDataModel2) dataModel).setRowRange(rowIndex,
+                        rangeLength, searchEnd);
+            }
         }
 
         // On recherche la taille ?
