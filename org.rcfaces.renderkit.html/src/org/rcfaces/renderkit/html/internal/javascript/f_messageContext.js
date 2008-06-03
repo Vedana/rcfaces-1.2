@@ -216,12 +216,15 @@ var __members = {
 		// On initialize le focusManager pour qu'il réagisse aux messages !
 		f_focusManager.Get(); 
 		
+		f_core.Debug(f_messageContext, "f_performCheckPost: event="+event)
+		
 		this._fireMessageEvent({
 			type: f_messageContext.POST_CHECK_EVENT_TYPE
 		});
 		
 		if (event.f_getDetail()===false) {
 			// C'est déjà bloqué !
+			f_core.Debug(f_messageContext, "f_performCheckPost: detail===false: Stop, returns false");
 			return false;
 		}
 		
@@ -240,11 +243,13 @@ var __members = {
 						continue;
 					}
 					
-					// Positionne le focus ?
+					f_core.Debug(f_messageContext, "f_performCheckPost: Continue, returns true");
 					return false;
 				}
 			}
 		}
+
+		f_core.Debug(f_messageContext, "f_performCheckPost: Stop, returns true");
 			
 		// On bloque rien si on ne trouve pas le composant !
 		return true;
@@ -427,7 +432,7 @@ var __members = {
 			messages[id]=l2;
 		}
 	
-		f_core.Info(f_messageContext, "f_addMessageObject["+this.form+"] Add message object to component '"+id+"'.\nmessage="+message);
+		f_core.Info(f_messageContext, "f_addMessageObject["+this.form+"] Add message object to component '"+id+"' performEvent="+performEvent+"\nmessage="+message);
 	
 		l2.push(message);
 		
