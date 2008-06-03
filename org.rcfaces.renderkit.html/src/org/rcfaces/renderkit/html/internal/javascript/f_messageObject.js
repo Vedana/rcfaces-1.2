@@ -190,6 +190,25 @@ var __members = {
 	},
 	/**
 	 * @method public
+	 * @param f_messageObject message object
+	 * @return boolean
+	 */
+	f_equals: function(message) {
+		if (this==message) {
+			return true;
+		}
+		if (!message || 
+				message._severity!=this._severity || 
+				message._detail!=this._detail || 
+				message._summary!=this._summary || 
+				message._clientDatas!=this._clientDatas) {
+			return false;
+		}
+		
+		return true;
+	},
+	/**
+	 * @method public
 	 * @return String
 	 */
 	toString: function() {
