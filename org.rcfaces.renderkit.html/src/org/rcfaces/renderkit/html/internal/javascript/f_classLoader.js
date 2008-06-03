@@ -1473,7 +1473,13 @@ f_classLoader.prototype = {
 			}
 		}
 	},
-
+	/**
+	 * @method hidden
+	 * @return boolean
+	 */
+	f_isDocumentCompleted: function() {
+		return this._documentCompleted;
+	},
 	
 	toString: function() {
 		if (!this._window) {
