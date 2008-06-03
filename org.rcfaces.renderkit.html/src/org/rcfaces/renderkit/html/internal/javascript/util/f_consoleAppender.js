@@ -390,7 +390,7 @@ var __members = {
 		span.style.fontSize="small";
 		span.style.fontWeight="bold";
 		span.style.display="block";
-		span.appendChild(doc.createTextNode(title));
+		span.appendChild(doc.createTextNode(title+" ")); // L'espace est pour le copier/coller
 		
 		li.appendChild(span);
 		
