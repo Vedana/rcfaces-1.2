@@ -208,7 +208,7 @@ var __statics = {
 			var sup = validator.f_getParameter("num.negSign", "-");
 			exp += f_vb._BuildEscaped(sup);
 		}
-		if (cache || validator.f_getIntParameter("num.decimal", -1)) {
+		if (cache || validator.f_getIntParameter("num.decimal", -1)!==0) {
 			// En autoCheck (cache!=null) On laisse le signe de décimal pour gerer le Copier/Coller.
 			var sup = validator.f_getParameter("num.decSign");
 			exp += f_vb._BuildEscaped(sup);
@@ -1081,6 +1081,10 @@ var __statics = {
 					var padder = validator.f_getParameter("padder.value", " ");
 					var leftSide = validator.f_getBoolParameter("padder.leftSide", true);
 					var modifyInput = validator.f_getBoolParameter("padder.modifyInput", true);
+					
+					if (padder.length>1) {
+						padder=padder[0];
+					}
 					
 					var padd = "";					
 					for (; nbPad>0; nbPad--) {
