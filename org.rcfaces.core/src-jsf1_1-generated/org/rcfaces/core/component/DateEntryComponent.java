@@ -506,6 +506,34 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	}
 
 	/**
+	 * Returns the date selected by default.
+	 * @return default date
+	 */
+	public java.util.Date getDefaultDate() {
+		return getDefaultDate(null);
+	}
+
+	/**
+	 * Sets the date to select by default.
+	 * @param defaultDate default date
+	 */
+	public void setDefaultDate(java.util.Date defaultDate) {
+		engine.setProperty(Properties.DEFAULT_DATE, defaultDate);
+	}
+
+	/**
+	 * Sets the date to select by default.
+	 * @param defaultDate default date
+	 */
+	/**
+	 * Returns <code>true</code> if the attribute "defaultDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultDateSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_DATE);
+	}
+
+	/**
 	 * Returns a string specifying the format to apply to the date value.
 	 * @return date format
 	 */
@@ -539,34 +567,6 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	 */
 	public boolean isDateFormatSetted() {
 		return engine.isPropertySetted(Properties.DATE_FORMAT);
-	}
-
-	/**
-	 * Returns the date selected by default.
-	 * @return default date
-	 */
-	public java.util.Date getDefaultDate() {
-		return getDefaultDate(null);
-	}
-
-	/**
-	 * Sets the date to select by default.
-	 * @param defaultDate default date
-	 */
-	public void setDefaultDate(java.util.Date defaultDate) {
-		engine.setProperty(Properties.DEFAULT_DATE, defaultDate);
-	}
-
-	/**
-	 * Sets the date to select by default.
-	 * @param defaultDate default date
-	 */
-	/**
-	 * Returns <code>true</code> if the attribute "defaultDate" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isDefaultDateSetted() {
-		return engine.isPropertySetted(Properties.DEFAULT_DATE);
 	}
 
 	protected Set getCameliaFields() {

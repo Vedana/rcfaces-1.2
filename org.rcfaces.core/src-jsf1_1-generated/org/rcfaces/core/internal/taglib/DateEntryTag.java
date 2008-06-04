@@ -28,8 +28,8 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 	private String warnStyleClass;
 	private String showCalendarOnFocus;
 	private String autoCompletion;
-	private String dateFormat;
 	private String defaultDate;
+	private String dateFormat;
 	private String action;
 	private String actionListeners;
 	public String getComponentType() {
@@ -108,12 +108,12 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		this.autoCompletion = autoCompletion;
 	}
 
-	public final void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
-
 	public final void setDefaultDate(String defaultDate) {
 		this.defaultDate = defaultDate;
+	}
+
+	public final void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
 	}
 
 	public final void setAction(String action) {
@@ -142,8 +142,8 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  showCalendarOnFocus='"+showCalendarOnFocus+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
-			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  defaultDate='"+defaultDate+"'");
+			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -254,16 +254,6 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
-		if (dateFormat != null) {
-			if (isValueReference(dateFormat)) {
-				ValueBinding vb = application.createValueBinding(dateFormat);
-				component.setValueBinding(Properties.DATE_FORMAT, vb);
-
-			} else {
-				component.setDateFormat(dateFormat);
-			}
-		}
-
 		if (defaultDate != null) {
 			if (isValueReference(defaultDate)) {
 				ValueBinding vb = application.createValueBinding(defaultDate);
@@ -271,6 +261,16 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 
 			} else {
 				component.setDefaultDate(defaultDate);
+			}
+		}
+
+		if (dateFormat != null) {
+			if (isValueReference(dateFormat)) {
+				ValueBinding vb = application.createValueBinding(dateFormat);
+				component.setValueBinding(Properties.DATE_FORMAT, vb);
+
+			} else {
+				component.setDateFormat(dateFormat);
 			}
 		}
 
@@ -294,8 +294,8 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		warnStyleClass = null;
 		showCalendarOnFocus = null;
 		autoCompletion = null;
-		dateFormat = null;
 		defaultDate = null;
+		dateFormat = null;
 		action = null;
 		actionListeners = null;
 

@@ -48,6 +48,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private String headerVisible;
 	private String cursorValue;
 	private String rowValueColumnId;
+	private String keySearchColumnId;
 	private String rowCountVar;
 	private String rowIndexVar;
 	private String action;
@@ -292,6 +293,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.rowValueColumnId = rowValueColumnId;
 	}
 
+	public final void setKeySearchColumnId(String keySearchColumnId) {
+		this.keySearchColumnId = keySearchColumnId;
+	}
+
 	public final void setRowCountVar(String rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
@@ -342,6 +347,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
+			LOG.debug("  keySearchColumnId='"+keySearchColumnId+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  action='"+action+"'");
@@ -605,6 +611,16 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (keySearchColumnId != null) {
+			if (isValueReference(keySearchColumnId)) {
+				ValueBinding vb = application.createValueBinding(keySearchColumnId);
+				component.setValueBinding(Properties.KEY_SEARCH_COLUMN_ID, vb);
+
+			} else {
+				component.setKeySearchColumnId(keySearchColumnId);
+			}
+		}
+
 		if (rowCountVar != null) {
 			if (isValueReference(rowCountVar)) {
 				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
@@ -659,6 +675,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		headerVisible = null;
 		cursorValue = null;
 		rowValueColumnId = null;
+		keySearchColumnId = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		action = null;

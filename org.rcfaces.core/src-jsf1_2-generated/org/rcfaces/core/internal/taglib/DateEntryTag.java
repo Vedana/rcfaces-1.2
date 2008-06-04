@@ -28,8 +28,8 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 	private ValueExpression warnStyleClass;
 	private ValueExpression showCalendarOnFocus;
 	private ValueExpression autoCompletion;
-	private ValueExpression dateFormat;
 	private ValueExpression defaultDate;
+	private ValueExpression dateFormat;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
@@ -76,12 +76,12 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		this.autoCompletion = autoCompletion;
 	}
 
-	public final void setDateFormat(ValueExpression dateFormat) {
-		this.dateFormat = dateFormat;
-	}
-
 	public final void setDefaultDate(ValueExpression defaultDate) {
 		this.defaultDate = defaultDate;
+	}
+
+	public final void setDateFormat(ValueExpression dateFormat) {
+		this.dateFormat = dateFormat;
 	}
 
 	public final void setAction(ValueExpression action) {
@@ -106,8 +106,8 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  showCalendarOnFocus='"+showCalendarOnFocus+"'");
 			LOG.debug("  autoCompletion='"+autoCompletion+"'");
-			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  defaultDate='"+defaultDate+"'");
+			LOG.debug("  dateFormat='"+dateFormat+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -208,21 +208,21 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
-		if (dateFormat != null) {
-			if (dateFormat.isLiteralText()==false) {
-				component.setValueExpression(Properties.DATE_FORMAT, dateFormat);
-
-			} else {
-				component.setDateFormat(dateFormat.getExpressionString());
-			}
-		}
-
 		if (defaultDate != null) {
 			if (defaultDate.isLiteralText()==false) {
 				component.setValueExpression(Properties.DEFAULT_DATE, defaultDate);
 
 			} else {
 				component.setDefaultDate(defaultDate.getExpressionString());
+			}
+		}
+
+		if (dateFormat != null) {
+			if (dateFormat.isLiteralText()==false) {
+				component.setValueExpression(Properties.DATE_FORMAT, dateFormat);
+
+			} else {
+				component.setDateFormat(dateFormat.getExpressionString());
 			}
 		}
 
@@ -246,8 +246,8 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		warnStyleClass = null;
 		showCalendarOnFocus = null;
 		autoCompletion = null;
-		dateFormat = null;
 		defaultDate = null;
+		dateFormat = null;
 		action = null;
 		actionListeners = null;
 

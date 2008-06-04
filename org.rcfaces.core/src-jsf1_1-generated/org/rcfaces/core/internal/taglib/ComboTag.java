@@ -20,6 +20,11 @@ public class ComboTag extends AbstractInputTag implements Tag {
 
 	private String selectionListeners;
 	private String required;
+	private String focusStyleClass;
+	private String errorStyleClass;
+	private String fatalStyleClass;
+	private String infoStyleClass;
+	private String warnStyleClass;
 	private String filterProperties;
 	public String getComponentType() {
 		return ComboComponent.COMPONENT_TYPE;
@@ -41,6 +46,46 @@ public class ComboTag extends AbstractInputTag implements Tag {
 		this.required = required;
 	}
 
+	public final String getFocusStyleClass() {
+		return focusStyleClass;
+	}
+
+	public final void setFocusStyleClass(String focusStyleClass) {
+		this.focusStyleClass = focusStyleClass;
+	}
+
+	public final String getErrorStyleClass() {
+		return errorStyleClass;
+	}
+
+	public final void setErrorStyleClass(String errorStyleClass) {
+		this.errorStyleClass = errorStyleClass;
+	}
+
+	public final String getFatalStyleClass() {
+		return fatalStyleClass;
+	}
+
+	public final void setFatalStyleClass(String fatalStyleClass) {
+		this.fatalStyleClass = fatalStyleClass;
+	}
+
+	public final String getInfoStyleClass() {
+		return infoStyleClass;
+	}
+
+	public final void setInfoStyleClass(String infoStyleClass) {
+		this.infoStyleClass = infoStyleClass;
+	}
+
+	public final String getWarnStyleClass() {
+		return warnStyleClass;
+	}
+
+	public final void setWarnStyleClass(String warnStyleClass) {
+		this.warnStyleClass = warnStyleClass;
+	}
+
 	public final String getFilterProperties() {
 		return filterProperties;
 	}
@@ -55,6 +100,11 @@ public class ComboTag extends AbstractInputTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  required='"+required+"'");
+			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
+			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 		}
 		super.setProperties(uiComponent);
@@ -84,6 +134,56 @@ public class ComboTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (focusStyleClass != null) {
+			if (isValueReference(focusStyleClass)) {
+				ValueBinding vb = application.createValueBinding(focusStyleClass);
+				component.setValueBinding(Properties.FOCUS_STYLE_CLASS, vb);
+
+			} else {
+				component.setFocusStyleClass(focusStyleClass);
+			}
+		}
+
+		if (errorStyleClass != null) {
+			if (isValueReference(errorStyleClass)) {
+				ValueBinding vb = application.createValueBinding(errorStyleClass);
+				component.setValueBinding(Properties.ERROR_STYLE_CLASS, vb);
+
+			} else {
+				component.setErrorStyleClass(errorStyleClass);
+			}
+		}
+
+		if (fatalStyleClass != null) {
+			if (isValueReference(fatalStyleClass)) {
+				ValueBinding vb = application.createValueBinding(fatalStyleClass);
+				component.setValueBinding(Properties.FATAL_STYLE_CLASS, vb);
+
+			} else {
+				component.setFatalStyleClass(fatalStyleClass);
+			}
+		}
+
+		if (infoStyleClass != null) {
+			if (isValueReference(infoStyleClass)) {
+				ValueBinding vb = application.createValueBinding(infoStyleClass);
+				component.setValueBinding(Properties.INFO_STYLE_CLASS, vb);
+
+			} else {
+				component.setInfoStyleClass(infoStyleClass);
+			}
+		}
+
+		if (warnStyleClass != null) {
+			if (isValueReference(warnStyleClass)) {
+				ValueBinding vb = application.createValueBinding(warnStyleClass);
+				component.setValueBinding(Properties.WARN_STYLE_CLASS, vb);
+
+			} else {
+				component.setWarnStyleClass(warnStyleClass);
+			}
+		}
+
 		if (filterProperties != null) {
 				ValueBinding vb = application.createValueBinding(filterProperties);
 				component.setValueBinding(Properties.FILTER_PROPERTIES, vb);
@@ -93,6 +193,11 @@ public class ComboTag extends AbstractInputTag implements Tag {
 	public void release() {
 		selectionListeners = null;
 		required = null;
+		focusStyleClass = null;
+		errorStyleClass = null;
+		fatalStyleClass = null;
+		infoStyleClass = null;
+		warnStyleClass = null;
 		filterProperties = null;
 
 		super.release();

@@ -127,7 +127,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","checkListener","selectionCardinality","clientAdditionalInformationFullState","checkCardinality","checkable","loadListener","checkedValues","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","cursorValue","required","border","clientSelectionFullState","preferences","filterProperties","clientCheckFullState","doubleClickListener","selectedValues","horizontalScrollPosition","rowCountVar","rowStyleClass","rowValueColumnId","readOnly","selectable","additionalInformationCardinality","rowIndexVar","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","checkListener","selectionCardinality","clientAdditionalInformationFullState","checkCardinality","checkable","loadListener","checkedValues","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","cursorValue","required","border","clientSelectionFullState","preferences","filterProperties","clientCheckFullState","doubleClickListener","selectedValues","horizontalScrollPosition","rowCountVar","rowStyleClass","keySearchColumnId","rowValueColumnId","readOnly","selectable","additionalInformationCardinality","rowIndexVar","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -1280,6 +1280,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isRowValueColumnIdSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_COLUMN_ID);
+	}
+
+	public String getKeySearchColumnId() {
+		return getKeySearchColumnId(null);
+	}
+
+	public String getKeySearchColumnId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.KEY_SEARCH_COLUMN_ID, facesContext);
+	}
+
+	public void setKeySearchColumnId(String keySearchColumnId) {
+		engine.setProperty(Properties.KEY_SEARCH_COLUMN_ID, keySearchColumnId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "keySearchColumnId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isKeySearchColumnIdSetted() {
+		return engine.isPropertySetted(Properties.KEY_SEARCH_COLUMN_ID);
 	}
 
 	/**
