@@ -239,8 +239,9 @@ var __members = {
 
 		var documentComplete=this._performDocumentComplete;
 		if (documentComplete) {
-			f_core.RemoveEventListener(window, "load", this._documentComplete);
 			this._performDocumentComplete=undefined
+
+			f_core.RemoveEventListener(window, "load", documentComplete);
 		}
 		
 		var button=this._button;
@@ -390,7 +391,7 @@ var __members = {
 		span.style.fontSize="small";
 		span.style.fontWeight="bold";
 		span.style.display="block";
-		span.appendChild(doc.createTextNode(title));
+		span.appendChild(doc.createTextNode(title+" ")); // L'espace est pour le copier/coller
 		
 		li.appendChild(span);
 		
@@ -430,9 +431,21 @@ var __members = {
 
 				span.appendChild(doc.createTextNode(")"));
 				li.appendChild(span);
-			}			
+			}	
+					
 			
 			li.appendChild(doc.createElement("br"));
+					
+			if (ex.number) {
+				var span=doc.createElement("span");
+				span.style.fontSize="small";
+				span.style.color="#888";
+				span.appendChild(doc.createTextNode("Number: "));
+
+				var span=doc.createElement("span");
+				span.style.fontSize="small";
+				span.appendChild(doc.createTextNode((ex.number & 0xffff).toString(16)));
+			}
 					
 			if (ex.name) {
 				var span=doc.createElement("span");
@@ -460,6 +473,29 @@ var __members = {
 				span.appendChild(span2);
 				
 				var sp=m.split('\n');
+				for(var i=0;i<sp.length;i++) {
+					if (i>0) {
+						span.appendChild(doc.createElement("br"));
+					}
+					
+					//var s=sp[i];
+					span.appendChild(doc.createTextNode(sp[i]));
+				}
+				li.appendChild(span);
+			}
+
+			var m2=ex.description;
+			if (m2 && m!=m2) {
+				var span=doc.createElement("span");
+				span.style.fontSize="small";
+				span.style.display="block";
+				
+				var span2=doc.createElement("span");
+				span2.style.color="#666";
+				span2.appendChild(doc.createTextNode("Description: "));
+				span.appendChild(span2);
+				
+				var sp=m2.split('\n');
 				for(var i=0;i<sp.length;i++) {
 					if (i>0) {
 						span.appendChild(doc.createElement("br"));
