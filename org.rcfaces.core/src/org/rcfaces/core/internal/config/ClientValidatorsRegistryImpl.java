@@ -38,6 +38,7 @@ import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.validator.IServerConverter;
 import org.rcfaces.core.internal.validator.ITaskDescriptor;
+import org.rcfaces.core.internal.validator.impl.RegExpFilter;
 import org.rcfaces.core.lang.IParametredConverter;
 import org.rcfaces.core.validator.IClientValidatorTask;
 import org.rcfaces.core.validator.IParameter;
@@ -140,7 +141,36 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                                         .peek();
 
                                 clientValidator.setFilter(new TaskDescriptor(
-                                        attributes));
+                                        attributes) {
+
+                                    protected IClientValidatorTask computeClientValidatorTask(
+                                            String serverTaskClassName,
+                                            Attributes attributes) {
+                                        if (serverTaskClassName == null
+                                                && clientTaskExpression != null
+                                                && clientTaskExpression
+                                                        .length() > 1) {
+
+                                            if (clientTaskExpression
+                                                    .startsWith("/")
+                                                    && clientTaskExpression
+                                                            .endsWith("/")) {
+
+                                                return new RegExpFilter(
+                                                        clientTaskExpression
+                                                                .substring(
+                                                                        1,
+                                                                        clientTaskExpression
+                                                                                .length() - 1));
+                                            }
+                                        }
+                                        return super
+                                                .computeClientValidatorTask(
+                                                        serverTaskClassName,
+                                                        attributes);
+                                    }
+
+                                });
                             }
                         });
 
@@ -591,7 +621,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
     public static class TaskDescriptor implements ITaskDescriptor {
         private static final String REVISION = "$Revision$";
 
-        private final String clientTaskExpression;
+        protected final String clientTaskExpression;
 
         private final IClientValidatorTask clientValidatorTask;
 
@@ -599,6 +629,13 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
             clientTaskExpression = attributes.getValue("call");
 
             String serverTaskClassName = attributes.getValue("class");
+
+            clientValidatorTask = computeClientValidatorTask(
+                    serverTaskClassName, attributes);
+        }
+
+        protected IClientValidatorTask computeClientValidatorTask(
+                String serverTaskClassName, Attributes attributes) {
 
             if (serverTaskClassName != null) {
                 LOG.debug("Instanciate filter '" + serverTaskClassName + "'.");
@@ -617,8 +654,7 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                 }
 
                 try {
-                    clientValidatorTask = (IClientValidatorTask) clazz
-                            .newInstance();
+                    return (IClientValidatorTask) clazz.newInstance();
 
                 } catch (Throwable th) {
                     LOG.error("Can not instanciate client validator task '"
@@ -628,9 +664,9 @@ public class ClientValidatorsRegistryImpl extends AbstractRenderKitRegistryImpl
                             "Can not initialize server filter.", th);
                 }
 
-            } else {
-                clientValidatorTask = null;
             }
+
+            return null;
         }
 
         public String getClientTaskExpression() {
