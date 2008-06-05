@@ -1651,18 +1651,18 @@ var f_core = {
 			
 			var immediate;
 			if (win.f_event.GetType()==f_event.ERROR) {
-				f_core.Debug(f_core, "Event is an Error, bypass check validation !");
+				f_core.Debug(f_core, "_OnSubmit: Event is an Error, bypass check validation !");
 
 				immediate=true;
 				
 			} else if (component) {			
-				f_core.Debug(f_core, "Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
+				f_core.Debug(f_core, "_OnSubmit: Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
 		
 				var immediateFunction=component.f_isImmediate;
 				if (typeof(immediateFunction)=="function") {
 					immediate=immediateFunction.call(component);
 		
-					f_core.Debug(f_core, "Test immediate property of '"+component.id+"' = "+immediate);
+					f_core.Debug(f_core, "_OnSubmit: Test immediate property of '"+component.id+"' = "+immediate);
 				}
 			}
 			
@@ -1670,14 +1670,22 @@ var f_core = {
 			f_classLoader.Get(win).f_verifyOnSubmit();		
 			
 			if (immediate!==true && f_env.GetCheckValidation()) {
-				var valid=f_core._CallFormCheckListeners(form);
+				var valid;
+				try {
+					valid = f_core._CallFormCheckListeners(form);
+					
+				} catch (x) {
+					f_core.Error(f_core, "_OnSubmit: Error when checking listeners", x);
+				}
 				
 				f_core.Profile(null, "f_core.SubmitEvent.checkListeners");
 				
-				f_core.Debug(f_core, "Validation of checkers returns: "+valid);
+				f_core.Debug(f_core, "_OnSubmit: Validation of checkers returns: "+valid);
 				if (!valid) {
 					return f_core.CancelJsEvent(evt);
 				}
+			} else {
+				f_core.Debug(f_core, "_OnSubmit: Bypass validation immediate="+immediate+" or checkValidation="+f_env.GetCheckValidation());
 			}
 
 			if (classLoader) {
@@ -2293,7 +2301,7 @@ var f_core = {
 			});			
 		}
 
-		f_core.Debug(f_core, "_CallFormCheckListeners: PreCheck="+(cfp?cfp.length:0)+" Check="+(ces?ces.length:0)+" PostCheck="+(cfs?cfs.length:0)+".");
+		f_core.Debug(f_core, "_CallFormCheckListeners: "+checkListeners.length+" listeners"+" PreCheck="+(cfp?cfp.length:0)+" Check="+(ces?ces.length:0)+" PostCheck="+(cfs?cfs.length:0)+".");
 		
 		var event=new f_event(form, f_event.VALIDATION, null, form, true);
 		
@@ -3043,6 +3051,13 @@ var f_core = {
 	},
 	/**
 	 * @method private static
+	 * @return void
+	 */
+	_ReturnsAlwaysFalse: function () {
+		return false;
+	},
+	/**
+	 * @method private static
 	 * @return boolean
 	 */
 	_SearchBrowser: function() {
@@ -3075,6 +3090,7 @@ var f_core = {
 			var scriptEngineMinorVersion=ScriptEngineMinorVersion();
 			
 			f_core._ieScriptEngine57=(scriptEngineMajorVersion>5) || (scriptEngineMajorVersion==5 && scriptEngineMinorVersion>=7);
+			f_core.IsGecko=f_core._ReturnsAlwaysFalse;
 			
 			if (f_core._browser_major>=7) {
 				f_core._browser=f_core.INTERNET_EXPLORER_7;
@@ -3139,6 +3155,7 @@ var f_core = {
 			}
 
 			f_core.Debug(f_core, "_SearchBrowser: Firefox version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
+			f_core.IsInternetExplorer=f_core._ReturnsAlwaysFalse;
 
 			if (f_core._browser_major>=2) {			
 				f_core._browser=f_core.FIREFOX_2_0;
