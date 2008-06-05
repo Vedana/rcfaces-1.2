@@ -40,19 +40,23 @@ var __statics={
 
 var __members={
 
-	f_focusManager: function(focusId, setFocusIfMessage) {
+	f_focusManager: function(focusManagerId, focusId, setFocusIfMessage) {
 		this.f_super(arguments);
-		
-		if (!f_focusManager._Instance) {
-			f_focusManager._Instance=this;
+			
+		if (f_focusManager._Instance) {
+			throw new Error("FocusManager is already defined !");
 		}
+		f_focusManager._Instance=this;	
 	
 		if (this.nodeType==f_core.ELEMENT_NODE) {	
 			focusId=f_core.GetAttribute(this, "v:focusId");
 			
 			setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
+			
+		} else if (focusManagerId) {
+			this.id=focusManagerId;
 		}
-
+	
 		this._setFocusIfMessage=setFocusIfMessage;
 		if (setFocusIfMessage!==false) {
 			var messageContext=f_messageContext.Get();
@@ -118,7 +122,7 @@ var __members={
 	f_documentComplete: function() {
 		this._documentCompleted=true;
 	
-		var focusId=this._intFocusId;
+		var focusId=this._initFocusId;
 		this._initFocusId=undefined;
 
 		f_core.Debug(f_focusManager, "f_documentComplete: focus='"+focusId+"'.");

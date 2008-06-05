@@ -79,9 +79,12 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
 
         jsWriter.writeCall(getJavaScriptClassName(), "f_newInstance");
 
+        jsWriter.writeString(jsWriter.getComponentRenderContext()
+                .getComponentClientId());
+
         String focusId = getFocusId(jsWriter.getHtmlComponentRenderContext());
         if (focusId != null && focusId.length() > 0) {
-            jsWriter.writeString(focusId);
+            jsWriter.write(',').writeString(focusId);
         }
 
         jsWriter.writeln(");");
