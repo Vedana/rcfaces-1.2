@@ -661,6 +661,13 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>selectItemsIterator</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.selectItemsIterator</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>viewErrorListener</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.viewErrorListener</component-type>

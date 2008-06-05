@@ -109,6 +109,15 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		
 	}
 
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
@@ -127,6 +136,15 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -173,19 +191,19 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 			
 	}
 
-	public void setHiddenMode(String hiddenMode) {
-
-
-			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
-		
-	}
-
 	public void setServerData(String name, ValueBinding value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public void setHiddenMode(String hiddenMode) {
+
+
+			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
@@ -309,15 +327,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -683,15 +692,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 
 			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
 		
 	}
 

@@ -69,12 +69,30 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public void setServerData(String name, ValueExpression value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -213,15 +231,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public String getClientData(String name) {
 
 
@@ -240,15 +249,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 
 			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
 		
 	}
 

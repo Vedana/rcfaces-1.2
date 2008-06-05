@@ -51,10 +51,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private String initListeners;
 	private String propertyChangeListeners;
 	private String hiddenMode;
-	private String value;
 	private String margins;
 	private String rows;
 	private String var;
+	private String value;
 	private String first;
 	private String saveCompleteState;
 	public final String getMarginBottom() {
@@ -321,10 +321,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setValue(String value) {
-		this.value = value;
-	}
-
 	public final void setMargins(String margins) {
 		this.margins = margins;
 	}
@@ -335,6 +331,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 	public final void setVar(String var) {
 		this.var = var;
+	}
+
+	public final void setValue(String value) {
+		this.value = value;
 	}
 
 	public final void setFirst(String first) {
@@ -372,10 +372,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  value='"+value+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  var='"+var+"'");
+			LOG.debug("  value='"+value+"'");
 			LOG.debug("  first='"+first+"'");
 		}
 		super.setProperties(uiComponent);
@@ -649,16 +649,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (value != null) {
-			if (isValueReference(value)) {
-				ValueBinding vb = application.createValueBinding(value);
-				component.setValueBinding(Properties.VALUE, vb);
-
-			} else {
-				component.setValue(value);
-			}
-		}
-
 		if (margins != null) {
 			if (isValueReference(margins)) {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
@@ -683,6 +673,16 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setVar(var);
+			}
+		}
+
+		if (value != null) {
+			if (isValueReference(value)) {
+				ValueBinding vb = application.createValueBinding(value);
+				component.setValueBinding(Properties.VALUE, vb);
+
+			} else {
+				component.setValue(value);
 			}
 		}
 
@@ -741,10 +741,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		initListeners = null;
 		propertyChangeListeners = null;
 		hiddenMode = null;
-		value = null;
 		margins = null;
 		rows = null;
 		var = null;
+		value = null;
 		first = null;
 		saveCompleteState = null;
 

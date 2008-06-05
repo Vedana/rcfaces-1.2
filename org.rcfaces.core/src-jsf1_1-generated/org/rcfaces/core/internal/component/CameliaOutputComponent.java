@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
 import java.util.HashSet;
+import java.lang.String;
 import java.util.Arrays;
 
 

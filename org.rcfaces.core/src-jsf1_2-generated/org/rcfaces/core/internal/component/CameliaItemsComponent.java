@@ -18,11 +18,6 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import java.util.HashSet;
-import java.lang.String;
-import java.util.Arrays;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
@@ -51,20 +46,20 @@ import org.rcfaces.core.event.ValidationEvent;
 /**
  * @author Olivier Oeuillot
  */
-public abstract class CameliaOutputComponent extends javax.faces.component.UIOutput implements
-		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder {
+public abstract class CameliaItemsComponent extends javax.faces.component.UISelectItems implements
+		IRCFacesComponent, IContainerManager, ITransientAttributesManager {
 	private static final String REVISION = "$Revision$";
 
-	private static final Log LOG = LogFactory.getLog(CameliaOutputComponent.class);
+	private static final Log LOG = LogFactory.getLog(CameliaItemsComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
+	protected static final Set CAMELIA_ATTRIBUTES=Collections.EMPTY_SET;
 
 	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
 
-	protected CameliaOutputComponent() {
+	protected CameliaItemsComponent() {
 		IFactory factory = Constants.getCameliaFactory();
 
 		this.engine = factory.createComponentEngine();
@@ -510,23 +505,5 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return s+"]";
 	}
 	
-	public void setConverter(String converterId) {
-
-
-			 setConverter(null, converterId);
-		
-	}
-
-	public void setConverter(FacesContext facesContext, String converterId) {
-
-
-			if (facesContext==null) {
-				facesContext=FacesContext.getCurrentInstance();
-			}
-			Converter converter = facesContext.getApplication().createConverter(converterId);
-            this.setConverter(converter);
-		
-	}
-
 
 }

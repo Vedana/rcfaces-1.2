@@ -98,6 +98,15 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 	}
 
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
@@ -107,6 +116,15 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		}
             
 		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -171,13 +189,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 			
 	}
 
-	public void setHiddenMode(String hiddenMode) {
-
-
-			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
-		
-	}
-
 	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
@@ -187,6 +198,13 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		}
 		
 		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
+	public void setHiddenMode(String hiddenMode) {
+
+
+			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
@@ -504,15 +522,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -901,15 +910,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 
 			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
 		
 	}
 

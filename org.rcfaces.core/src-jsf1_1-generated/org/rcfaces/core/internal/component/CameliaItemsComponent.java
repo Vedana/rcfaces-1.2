@@ -7,9 +7,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.io.IOException;
 
-import javax.el.ValueExpression;
-
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
@@ -18,11 +17,6 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import java.util.HashSet;
-import java.lang.String;
-import java.util.Arrays;
 
 
 import org.rcfaces.core.component.capability.IImmediateCapability;
@@ -51,20 +45,20 @@ import org.rcfaces.core.event.ValidationEvent;
 /**
  * @author Olivier Oeuillot
  */
-public abstract class CameliaOutputComponent extends javax.faces.component.UIOutput implements
-		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder {
+public abstract class CameliaItemsComponent extends javax.faces.component.UISelectItems implements
+		IRCFacesComponent, IContainerManager, ITransientAttributesManager {
 	private static final String REVISION = "$Revision$";
 
-	private static final Log LOG = LogFactory.getLog(CameliaOutputComponent.class);
+	private static final Log LOG = LogFactory.getLog(CameliaItemsComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
+	protected static final Set CAMELIA_ATTRIBUTES=Collections.EMPTY_SET;
 
 	protected transient IComponentEngine engine;
 
 	private transient IStateChildrenList stateChildrenList;
 
 
-	protected CameliaOutputComponent() {
+	protected CameliaItemsComponent() {
 		IFactory factory = Constants.getCameliaFactory();
 
 		this.engine = factory.createComponentEngine();
@@ -131,18 +125,11 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 			LOG.trace("Restoring state of component '"+getId()+"'.");
 		}
 		
-		try {
-			Object states[] = (Object[]) state;
-	
-			super.restoreState(context, states[0]);
-	
-			engine.restoreState(context, states[1]);
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not restore state of component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+		Object states[] = (Object[]) state;
+
+		super.restoreState(context, states[0]);
+
+		engine.restoreState(context, states[1]);
 
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("State of component '"+getId()+"' restored.");
@@ -155,15 +142,9 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		}
 
 		Object states[] = new Object[2];
-		try {	
-			states[0] = super.saveState(context);
-			states[1] = engine.saveState(context);
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not save state of component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+
+		states[0] = super.saveState(context);
+		states[1] = engine.saveState(context);
 
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("State of component '"+getId()+"' saved.");
@@ -172,7 +153,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return states;
 	}
 
-	public void setValueExpression(String name, ValueExpression binding) {
+	public void setValueBinding(String name, ValueBinding binding) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
 				name=Properties.VALUE;
@@ -186,7 +167,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 
 		
 		
-		super.setValueExpression(name, binding);
+		super.setValueBinding(name, binding);
 	}
 
 	protected Set getCameliaFields() {
@@ -197,16 +178,16 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return null;
 	}
 
-	public final ValueExpression getValueExpression(String name) {
+	public final ValueBinding getValueBinding(String name) {
 		if (getCameliaFields().contains(name)) {
 			if (name.equals(getCameliaValueAlias())) {
 				name=Properties.VALUE;
 			}
 
-			return engine.getValueExpressionProperty(name);
+			return engine.getValueBindingProperty(name);
 		}
 
-		return super.getValueExpression(name);
+		return super.getValueBinding(name);
 	}
 
 /*
@@ -216,99 +197,83 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		}
 	}
 */
-
+/*
     public void encodeBegin(FacesContext context) throws IOException {
 		if (context == null) {
-			throw new NullPointerException("FacesContext is null");
+			throw new NullPointerException();
 		}
 
-		try {	
-	    	super.encodeBegin(context);
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not encode-begin component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+		if (isRendered()==false || isClientRendered()==false) {
+			return;
+		}
+
+    	super.encodeBegin(context);    	
 	}
 	
     public void encodeChildren(FacesContext context) throws IOException {
 		if (context == null) {
-			throw new NullPointerException("FacesContext is null");
+			throw new NullPointerException();
 		}
 
-		try {
-	    	super.encodeChildren(context);    	
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not encode children of component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+		if (isRendered()==false || isClientRendered()==false) {
+			return;
+		}
+
+    	super.encodeChildren(context);    	
 	}
 	
     public void encodeEnd(FacesContext context) throws IOException {
 		if (context == null) {
-			throw new NullPointerException("FacesContext is null");
+			throw new NullPointerException();
 		}
 
-		try  {	
-	    	super.encodeEnd(context);    	
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not encode-end component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+		if (isRendered()==false || isClientRendered()==false) {
+			return;
+		}
+
+    	super.encodeEnd(context);    	
 	}
+	*/
 	
 	public void processDecodes(FacesContext context) {
 		if (context == null) {
 			throw new NullPointerException();
 		}
+
+		if (isRendered()==false) {
+			return;
+		}
+
+        ComponentTools.IVarScope varScope = null;
+        if (this instanceof IVariableScopeCapability) {
+            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+        }
+
+		engine.startDecodes(context);
 		
-		try {
-	
-			if (isRendered()==false) {
-				return;
-			}
-	
-	        ComponentTools.IVarScope varScope = null;
-	        if (this instanceof IVariableScopeCapability) {
-	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
-	        }
-	
-			engine.startDecodes(context);
-			
-			Renderer renderer = getRenderer(context);
-	        if ((renderer instanceof IRendererExtension) == false) {
-	            super.processDecodes(context);
-	
-	        } else  {
-		        CameliaComponents.processDecodes(context, this, renderer);
-		    }
-			
-	  		if (this instanceof IValidationEventCapability) {
-	            boolean immediate=false;
-	            if (this instanceof IImmediateCapability) {
-	                immediate=((IImmediateCapability)this).isImmediate();
-	            }
-	 			if (immediate) {
-					if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
-						this.broadcast(new ValidationEvent(this));
-					}
+		Renderer renderer = getRenderer(context);
+        if ((renderer instanceof IRendererExtension) == false) {
+            super.processDecodes(context);
+
+        } else  {
+	        CameliaComponents.processDecodes(context, this, renderer);
+	    }
+		
+  		if (this instanceof IValidationEventCapability) {
+            boolean immediate=false;
+            if (this instanceof IImmediateCapability) {
+                immediate=((IImmediateCapability)this).isImmediate();
+            }
+ 			if (immediate) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
 				}
 			}
-	       
-	        if (varScope!=null) {
-	            varScope.popVar(context);
-	        }
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not decode component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+		}
+       
+        if (varScope!=null) {
+            varScope.popVar(context);
+        }
 	}
 
 	public void processValidators(FacesContext context) {
@@ -316,69 +281,54 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
             throw new NullPointerException("Context is NULL to processValidators");
         }
 
-		try {
-	        // Skip processing if our rendered flag is false
-			if (isRendered()==false) {
-	            return;
-	        }
-	
-	        ComponentTools.IVarScope varScope = null;
-	        if (this instanceof IVariableScopeCapability) {
-	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
-	        }
-	
-			super.processValidators(context);
-			
-	 		if (this instanceof IValidationEventCapability) {
-	            boolean immediate=false;
-	            if (this instanceof IImmediateCapability) {
-	                immediate=((IImmediateCapability)this).isImmediate();
-	            }
-	 			
-				if (immediate==false) {
-					if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
-						this.broadcast(new ValidationEvent(this));
-					}
+        // Skip processing if our rendered flag is false
+		if (isRendered()==false) {
+            return;
+        }
+
+        ComponentTools.IVarScope varScope = null;
+        if (this instanceof IVariableScopeCapability) {
+            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+        }
+
+		super.processValidators(context);
+		
+ 		if (this instanceof IValidationEventCapability) {
+            boolean immediate=false;
+            if (this instanceof IImmediateCapability) {
+                immediate=((IImmediateCapability)this).isImmediate();
+            }
+ 			
+			if (immediate==false) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
 				}
 			}
-			       
-	        if (varScope!=null) {
-	            varScope.popVar(context);
-	        }
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not valid component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+		}
+		       
+        if (varScope!=null) {
+            varScope.popVar(context);
+        }
 	}
 
     public void processUpdates(FacesContext context) {
 
-		try {
-	
-	 		if (isRendered()==false) {
-	            return;
-	        }        
-	
-			ComponentTools.IVarScope varScope = null;
-	        if (this instanceof IVariableScopeCapability) {
-	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
-	        }
-	
-	        engine.processUpdates(context);
-	
-	        super.processUpdates(context);
-	        
-	        if (varScope!=null) {
-	            varScope.popVar(context);
-	        }
-	    	
-	    } catch (RuntimeException ex) {
-	    	LOG.error("Can not update component '"+getId()+"'.", ex);
-	    	
-	    	throw ex;
-	    }
+ 		if (isRendered()==false) {
+            return;
+        }
+
+		ComponentTools.IVarScope varScope = null;
+        if (this instanceof IVariableScopeCapability) {
+            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+        }
+
+        engine.processUpdates(context);
+
+        super.processUpdates(context);
+        
+        if (varScope!=null) {
+            varScope.popVar(context);
+        }
     }
 
 	/*
@@ -456,8 +406,8 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return isClientRendered();
 	}
 	
-	public void setRendered(ValueExpression binding) {
-		setValueExpression("rendered", binding);
+	public void setRendered(ValueBinding binding) {
+		setValueBinding("rendered", binding);
 	}
 	
 	
@@ -510,23 +460,5 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 		return s+"]";
 	}
 	
-	public void setConverter(String converterId) {
-
-
-			 setConverter(null, converterId);
-		
-	}
-
-	public void setConverter(FacesContext facesContext, String converterId) {
-
-
-			if (facesContext==null) {
-				facesContext=FacesContext.getCurrentInstance();
-			}
-			Converter converter = facesContext.getApplication().createConverter(converterId);
-            this.setConverter(converter);
-		
-	}
-
 
 }

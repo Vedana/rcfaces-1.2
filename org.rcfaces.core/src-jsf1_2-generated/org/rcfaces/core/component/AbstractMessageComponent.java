@@ -65,7 +65,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","visible","for","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","height","mouseOverListener","hiddenMode","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","showDetail","initListener","marginBottom","toolTipText","y","x","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","showSummary","for","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","height","mouseOverListener","hiddenMode","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","showDetail","initListener","marginBottom","toolTipText","y","margins","x"}));
 	}
 
 
@@ -88,6 +88,15 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		
 	}
 
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
@@ -97,6 +106,15 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		}
             
 		return dataMapAccessor.getDataMap(facesContext);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -161,13 +179,6 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 			
 	}
 
-	public void setHiddenMode(String hiddenMode) {
-
-
-			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
-		
-	}
-
 	public String[] listServerDataKeys(FacesContext facesContext) {
 
 
@@ -177,6 +188,13 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		}
 		
 		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
+	public void setHiddenMode(String hiddenMode) {
+
+
+			setHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		
 	}
 
@@ -438,15 +456,6 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -742,15 +751,6 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 
 			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
 		
 	}
 

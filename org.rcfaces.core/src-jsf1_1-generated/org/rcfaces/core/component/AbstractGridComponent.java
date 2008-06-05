@@ -101,6 +101,15 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public void setRowIndex(int rowIndex) {
 
 
@@ -134,6 +143,15 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 
 			return rowIndex;
 			
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
 	}
 
 	public String[] listClientDataKeys(FacesContext facesContext) {
@@ -551,15 +569,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public String getClientData(String name) {
 
 
@@ -948,15 +957,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public Map getServerDataMap() {
 
 
@@ -1000,26 +1000,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
-	public int getFirst() {
-		return getFirst(null);
-	}
-
-	public int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
-	}
-
-	public void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "first" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
-	}
-
 	public int getRows() {
 		return getRows(null);
 	}
@@ -1038,6 +1018,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isRowsSetted() {
 		return engine.isPropertySetted(Properties.ROWS);
+	}
+
+	public int getFirst() {
+		return getFirst(null);
+	}
+
+	public int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	}
+
+	public void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "first" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	public String getVar() {

@@ -36,6 +36,24 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	}
 
 
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public void setDisabled(boolean disabled) {
 
 
@@ -162,15 +180,6 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 		
 	}
 
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public Map getServerDataMap() {
 
 
@@ -242,15 +251,6 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 

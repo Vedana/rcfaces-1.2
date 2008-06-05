@@ -104,6 +104,15 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		
 	}
 
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public Map getClientDataMap(FacesContext facesContext) {
 
 
@@ -122,6 +131,15 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -168,6 +186,18 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 			
 	}
 
+	public String[] listServerDataKeys(FacesContext facesContext) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		if (dataMapAccessor==null) {
+			return ComponentTools.STRING_EMPTY_ARRAY;
+		}
+		
+		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
 	public void setHiddenMode(String hiddenMode) {
 
 
@@ -181,18 +211,6 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public String[] listServerDataKeys(FacesContext facesContext) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		if (dataMapAccessor==null) {
-			return ComponentTools.STRING_EMPTY_ARRAY;
-		}
-		
-		return dataMapAccessor.listDataKeys(facesContext);
 		
 	}
 
@@ -304,15 +322,6 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -678,15 +687,6 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 
 
 			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
 		
 	}
 

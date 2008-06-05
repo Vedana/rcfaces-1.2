@@ -67,12 +67,30 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
+	public String setClientData(String name, String value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		return (String)dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public void setServerData(String name, ValueExpression value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public Object setServerData(String name, Object value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		return dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -186,15 +204,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public String setClientData(String name, String value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		return (String)dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public String getClientData(String name) {
 
 
@@ -213,15 +222,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 
 			return listServerDataKeys(null);
-		
-	}
-
-	public Object setServerData(String name, Object value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		return dataMapAccessor.setData(name, value, null);
 		
 	}
 

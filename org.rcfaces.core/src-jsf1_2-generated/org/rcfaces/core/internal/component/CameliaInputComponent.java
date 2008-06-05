@@ -23,7 +23,6 @@ import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
 import java.lang.Object;
 import java.util.HashSet;
-import java.lang.String;
 import java.util.Arrays;
 import javax.faces.event.ValueChangeEvent;
 import org.rcfaces.core.internal.capability.ISubmittedExternalValue;

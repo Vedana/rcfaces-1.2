@@ -1,11 +1,93 @@
 
 ----------------------------------------------------------------------
+- @version I2535
+- @author Olivier Oeuillot
+- 
+
+LogService:
+Change le prefix d'activation des logs clients:
+"client" devient: "org.rcfaces.client"
+
+BasicSelectItem:
+Support du setAcceleratorKey(key) et setStyleClass(styleClass)
+
+IClientDataManager:
+L'interface n'hérite plus de IClientDataCapability
+
+IServerDataManager:
+L'interface n'hérite plus de IServerDataCapabiblity
+
+SelectItemsIteratorTools:
+Permet de déclarer une boucle pour définir un tableau de SelectItems.
+
+IRangeDataModel2:
+Extension de l'interface IRangeDataModel, 
+avec un parametre en plus qui permet de savoir si RCFaces appelera une ligne supplémentaire pour tester la fin de la liste
+
+AbstractSelectItemsDecorator:
+Support de l'adaptation de la "value" retournée par un SelectItem ou SelectItems. 
+
+DataGridRenderer:
+Support de IRangeDataModel2
+
+f_messageObject:
+Ajout de la méthode f_equals()
+
+Constants:
+Le BuildId est tout ce qui se trouve après le troisième '.'.  
+Dans le cas suivant, A.B.C.D.E  le buildId est D.E
+Cela permet le support de numéro de branche.
+
+ClientValidatorRegistryImpl/RegExpFilter:
+Support des "filters" serveur des clients validators définis par expression régulière
+
+NumChecker/NumFilter/NumFormatter/NumTranslator/f_vb.js:
+Correction et mise à niveau par rapport à la version Javascript.
+
+PaddingFormatter:
+Support du padding formatter (client validator) par le serveur
+ 
+f_classLoader:
+Support des objets simples qui sont sérializables
+
+f_core:
+Optimisation dans la recherche du type de navigateur
+
+f_clientValidator.js:
+Correction quand un filter/translator/checker était une simple expression régulière
+Revision du onReset()
+
+f_focusManager.js/FocusManagerRenderer:
+Révision du moteur de positionnement du focus (surtout en cas d'erreur)
+Correction du problème que en mode JavaScriptCollector, l'objet n'était plus un composant
+
+f_consoleAppender.js:
+Correction d'un RemoveEventListener d'une fonction non définie
+
+TextEntryRenderer:
+Correction de problèmes suite au developpement de JavaScriptCollector
+
+----------------------------------------------------------------------
+- @version I2534
+- @author Olivier Oeuillot
+- 26/5/2008
+
+f_shellDecorator.js:
+Sous firefox lors de la sortie de page, des erreurs pouvaient survenir
+
+f_grid.js:
+Correction d'un problème sous IE7.  (Insertion d'un enfant par rapport à un composant non connu)
+
+f_core.js/f_consoleAppender.js:
+Amélioration des logs des exceptions
+
+----------------------------------------------------------------------
 - @version I2533
 - @author Olivier Oeuillot
 - 21/5/2008
 
 fa_groupName.js:
-Correction d'un BUG concernant les imageCombo
+Correction d'un BUG concernant les imageRadio
 
 f_focusManager.js:
 Correction d'un BUG

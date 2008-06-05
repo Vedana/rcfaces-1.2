@@ -338,6 +338,10 @@
 		<component-class>org.rcfaces.core.component.FocusManagerComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.selectItemsIterator</component-type>
+		<component-class>org.rcfaces.core.component.SelectItemsIteratorComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.viewErrorListener</component-type>
 		<component-class>org.rcfaces.core.component.ViewErrorListenerComponent</component-class>
 	</component>
