@@ -21,7 +21,7 @@ public class NumTranslator extends AbstractClientValidatorTask implements
 
     public char applyTranslator(IClientValidatorContext context, char keyChar) {
 
-        String separators = getParameter(context, "date.decSign");
+        String separators = getParameter(context, "num.decSign");
         if (separators == null || separators.length() < 1) {
             return keyChar;
         }

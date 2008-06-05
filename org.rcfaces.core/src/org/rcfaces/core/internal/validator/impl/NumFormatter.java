@@ -98,9 +98,9 @@ public class NumFormatter extends AbstractClientValidatorTask implements
                 }
             }
 
-            if (n.length() == 0) {
-                n = "0";
-            }
+        } else if (dp.length() == 0) {
+            // Nombre décimal inconnu, mais pas de décimal
+            d = "";
         }
 
         // Check if no need

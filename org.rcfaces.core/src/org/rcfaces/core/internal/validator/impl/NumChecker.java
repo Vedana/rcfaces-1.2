@@ -54,12 +54,20 @@ public class NumChecker extends AbstractClientValidatorTask implements
             return null;
         }
 
-        int numDecimal = getIntParameter(context, "num.decimal", 0);
+        int showDecimal = 0;
+        String numDecimalParameter = getParameter(context, "num.decimal");
+        if (numDecimalParameter != null) {
+            if ("true".equalsIgnoreCase(numDecimalParameter)) {
+                showDecimal = -1;
+            } else {
+                showDecimal = Integer.parseInt(numDecimalParameter);
+            }
+        }
 
         // Get parts
         String ip = "0";
         String d = "";
-        String dp = (numDecimal > 0) ? "0" : "";
+        String dp = (showDecimal > 0) ? "0" : "";
 
         int groupCount = matcher.groupCount();
         String n = matcher.group(1);
@@ -75,8 +83,8 @@ public class NumChecker extends AbstractClientValidatorTask implements
 
         int decimal = getIntParameter(context, "num.cutDecimal", -1);
 
-        if (decimal > 0) {
-            dp = (dp.length() > decimal) ? dp.substring(0, decimal) : dp;
+        if (decimal > 0 && dp.length() > decimal) {
+            dp = dp.substring(0, decimal);
 
         } else if (decimal == 0) {
             d = "";
@@ -93,7 +101,7 @@ public class NumChecker extends AbstractClientValidatorTask implements
             }
         }
 
-        int lenDp = numDecimal;
+        int lenDp = showDecimal;
         if (lenDp < 1) {
             lenDp = 1;
         }
@@ -115,7 +123,7 @@ public class NumChecker extends AbstractClientValidatorTask implements
         }
 
         if (d.length() > 0 && dp.length() == 0) {
-            if (numDecimal > 0) {
+            if (showDecimal > 0) {
                 dp = "0";
             } else {
                 d = "";
