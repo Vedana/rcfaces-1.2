@@ -111,7 +111,7 @@ var __statics = {
 			}
 		}
 	
-		if (resolveObject && expr.charAt(0)=='/') {
+		if (!resolveObject && expr.charAt(0)=='/') {
 			// Une regexp !
 			var flags=expr.lastIndexOf('/');
 			if (flags>0) {
