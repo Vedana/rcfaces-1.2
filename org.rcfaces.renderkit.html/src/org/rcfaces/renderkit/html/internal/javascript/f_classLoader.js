@@ -34,6 +34,7 @@ function f_classLoader(win) {
 	this._bundles=new Object;
 	this._serializedStates=new Object;
 	this._documentCompleteObjects=new Array;
+	this._serializableObjects=new Array;
 	this._kclass=f_classLoader;
 }
 
@@ -228,6 +229,7 @@ f_classLoader.prototype = {
 		
 		this._visibleListeners=undefined; // List<f_component>
 		this._documentCompleteObjects=undefined; // List<Object>
+		this._serializableObjects=undefined; // List<Object>
 	
 		// Vide le pool des objets AVANT !
 		var pool=this._componentPool;
@@ -482,7 +484,16 @@ f_classLoader.prototype = {
 		
 		var documentCompleteObjects=this._documentCompleteObjects;
 		if (documentCompleteObjects && typeof(object.f_documentComplete)=="function") {
+			
+			object._documentCompleteObjectsIndex=documentCompleteObjects.length;
 			documentCompleteObjects.push(object);
+		}
+		
+		if (typeof(object.f_serialize0)=="function") {
+			var serializableObjects=this._serializableObjects;
+
+			object._serializableObjectsIndex=serializableObjects.length;
+			serializableObjects.push(object);
 		}
 	},
 	
@@ -1141,7 +1152,7 @@ f_classLoader.prototype = {
 	 * @param HTMLElement[] components
 	 * @return void
 	 */
-	f_serializeComponents: function(components) {
+	_serializeComponents: function(components) {
 		var serializedStates=this._serializedStates;
 	
 		try {
@@ -1155,23 +1166,26 @@ f_classLoader.prototype = {
 					continue;
 				}
 				
+				
 				var f = component.f_serialize0;
+				/* Ca ne doit pas arriver !
 				if (!f) {
 					continue;
 				}
+				*/
 							
-				f_core.Assert(typeof(f)=="function", "f_classLoader.f_serializeComponents: Field f_serialize0 is not a method for object '"+componentId+"'.");
+				f_core.Assert(typeof(f)=="function", "f_classLoader._serializeComponents: Field f_serialize0 is not a method for object '"+componentId+"'.");
 				
 				var ser;
 				try {
 					ser = f.call(component);
 					
 				} catch (x) {
-					f_core.Error(f_classLoader, "f_serializeComponents: Serialization of object '"+componentId+"' throws exception.", x);
+					f_core.Error(f_classLoader, "_serializeComponents: Serialization of object '"+componentId+"' throws exception.", x);
 					continue;
 				}
 				
-				f_core.Assert(ser!==undefined, "f_classLoader.f_serializeComponents: Serialization of object '"+componentId+"' returns undefined !");
+				f_core.Assert(ser!==undefined, "f_classLoader._serializeComponents: Serialization of object '"+componentId+"' returns undefined !");
 				
 				if (!ser) {
 					delete serializedStates[componentId];
@@ -1211,7 +1225,13 @@ f_classLoader.prototype = {
 	 */
 	f_serialize: function(form) {
 		
-		this.f_serializeComponents(this._componentPool);
+		var serializableObjects=this._serializableObjects;
+		
+		f_core.Debug(f_classLoader, "f_serialize: Serialize "+serializableObjects.length+" objects ...");
+		
+		if (serializableObjects.length) {
+			this._serializeComponents(serializableObjects);
+		}
 		
 		var serial=this.f_getSerializedState();
 	
@@ -1292,12 +1312,13 @@ f_classLoader.prototype = {
 	 * @return String serialized state
 	 */
 	f_garbageObjects: function(serializeState) {
-		var componentPool=this._componentPool;
-		f_core.Assert(componentPool, "f_classLoader.f_garbageObjects: Invalid Objects pool !");
 	
 		if (this._exiting) {
 			throw "This classloader is exiting ... [garbageObjects]";
 		}
+
+		var componentPool=this._componentPool;
+		f_core.Assert(componentPool, "f_classLoader.f_garbageObjects: Invalid Objects pool !");
 		
 		var garbageMark=this._garbageMark;
 		if (garbageMark===undefined) {
@@ -1308,6 +1329,10 @@ f_classLoader.prototype = {
 		var clearGarbageMark=++garbageMark;
 		this._garbageMark=garbageMark;
 		
+		var documentCompleteObjects=this._documentCompleteObjects;
+		var serializableObjects=this._serializableObjects;
+		
+		var serializableComponentsGarbaged;
 		var list=new Array;
 		var toClean;
 		for (var i=0;i<componentPool.length;) {
@@ -1371,6 +1396,23 @@ f_classLoader.prototype = {
 			toClean.push(obj);
 			
 			componentPool.splice(i, 1);
+			
+			if (documentCompleteObjects) {
+				var documentCompleteObjectsIndex=obj._documentCompleteObjectsIndex;
+				if (documentCompleteObjectsIndex!==undefined) {
+					documentCompleteObjects[documentCompleteObjectsIndex]=undefined;
+				}
+			}
+						
+			var serializableObjectsIndex=obj._serializableObjectsIndex;
+			if (serializableObjectsIndex!==undefined) {
+				serializableObjects[serializableObjectsIndex]=undefined;
+				if (!serializableComponentsGarbaged) {
+					serializableComponentsGarbaged=new Array;
+				}
+				
+				serializableComponentsGarbaged.push(obj);
+			}
 		}
 	
 		if (!toClean) {						
@@ -1385,14 +1427,16 @@ f_classLoader.prototype = {
 		var serializedForm=null;
 		
 		if (serializeState) {
-			this.f_serializeComponents(toClean);
+			if (serializableComponentsGarbaged) {
+				this._serializeComponents(serializableComponentsGarbaged);
+			}
 
 			serializedForm=this.f_getSerializedState();
 		}
 		
 		f_class.Clean(toClean);
 		
-		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged.");
+		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged "+(serializableComponents?(") and "+serializableComponents+" objects serializes"):"")+".");
 		
 		return serializedForm;
 	},
