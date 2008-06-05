@@ -239,8 +239,9 @@ var __members = {
 
 		var documentComplete=this._performDocumentComplete;
 		if (documentComplete) {
-			f_core.RemoveEventListener(window, "load", this._documentComplete);
 			this._performDocumentComplete=undefined
+
+			f_core.RemoveEventListener(window, "load", documentComplete);
 		}
 		
 		var button=this._button;
