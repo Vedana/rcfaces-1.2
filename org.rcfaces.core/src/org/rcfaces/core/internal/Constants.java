@@ -373,6 +373,6 @@ public class Constants {
         st.nextToken();
         st.nextToken();
 
-        return st.nextToken();
+        return st.nextToken("\n\r\t ");
     }
 }
