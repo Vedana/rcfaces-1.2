@@ -180,7 +180,17 @@ var __members={
 		var activeElement=this._getActiveElement();
 
 		if (activeElement) {
-			return activeElement.id;
+			var id=activeElement.id;
+			if (!id) {
+				return id;
+			} 
+			
+			var idx=id.lastIndexOf("::");
+			if (idx>0) {
+				id=id.substring(0, idx);
+			}
+			
+			return id;
 		}
 		
 		return this._initFocusId;
@@ -250,21 +260,6 @@ var __members={
 		}
 		
 		return true;
-	},
-	/**
-	 * @method private
-	 * @return void
-	 */
-	_recordFocus: function(focusId) {
-		f_core.Assert(focusId===null || typeof(focusId)=="string", "f_focusManager._recordFocus: Invalid focusId parameter ! ("+typeof(focusId)+":"+focusId+")");
-		if (!focusId) {
-			focusId=null;
-		}
-		
-		f_core.Debug(f_focusManager, "_recordFocus: Focus changed to component '"+focusId+"'.");
-
-		this._focusId=focusId;
-		this.f_setProperty(f_prop.FOCUS_ID, focusId);
 	},
 	f_serialize: function() {
 		var focusId=this.f_getFocusId();
