@@ -1,8 +1,35 @@
 
 ----------------------------------------------------------------------
-- @version I2535
+- @version I2537
 - @author Olivier Oeuillot
 - 
+
+HourFilter/HourTranslator/HourChecker:
+Implementation des filtres serveur associés au client validator "heure" 
+
+
+----------------------------------------------------------------------
+- @version I2536
+- @author Olivier Oeuillot
+- 6/6/2008
+
+f_focusManager.js:
+f_getFocusId() retourne l'id du composant "rcfaces" qui à le focus, et pas un de ses enfants.
+
+JavaScriptObjectLiteralWriter:
+Correction d'un problème de génération JavaScript d'une liste de propriétés/valeurs
+
+f_vb.js:
+Révision du Checker_hour
+
+AbstractImageButtonFamilyDecorator:
+Correction d'un problème de génération du styleClass quand le bouton est disabled/selected
+
+
+----------------------------------------------------------------------
+- @version I2535
+- @author Olivier Oeuillot
+- 5/6/2008
 
 LogService:
 Change le prefix d'activation des logs clients:
