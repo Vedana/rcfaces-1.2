@@ -41,8 +41,27 @@ public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
             parent.write(',');
         }
 
-        if (propertyName.indexOf(':') >= 0 || propertyName.indexOf('-') >= 0) {
+        boolean directWriter = true;
+
+        if (propertyName.length() > 0) {
+            char chs[] = propertyName.toCharArray();
+            if (Character.isJavaIdentifierStart(chs[0]) == false) {
+                directWriter = false;
+
+            } else {
+                for (int i = 1; i < chs.length; i++) {
+                    if (Character.isJavaIdentifierPart(chs[i]) == false) {
+                        directWriter = false;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (directWriter == false) {
             parent.writeString(propertyName);
+
         } else {
             parent.write(propertyName);
         }
