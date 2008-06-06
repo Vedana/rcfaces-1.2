@@ -344,6 +344,12 @@ var __statics = {
 	 * @context object:validator
 	 */
 	Checker_dat: function(validator, inVal) {
+	
+		// Deal with empty string and required attribute
+		if (!inVal && !(validator.f_getComponent().f_isRequired())) {
+			return inVal;
+		}
+
 		var min = validator.f_getIntParameter("date.min", 1850);
 		var max = validator.f_getIntParameter("date.max", 2100);
 		var pivot = validator.f_getIntParameter("date.pivot", 0);
@@ -353,11 +359,6 @@ var __statics = {
 		var	sTmp = inVal;
 		var d,m,y; //,p;
 		//var res = "";
-	
-		// Deal with empty string and required attribute
-		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
-			return inVal;
-		}
 	
 		// Get the day date
 		var dd = new Date();
@@ -514,7 +515,9 @@ var __statics = {
 	 */
 	Checker_dat_nai: function(validator, inVal) {
 		// Handle empty string
-		if (inVal == "") return inVal;
+		if (!inVal) {
+			return inVal;
+		}
 	
 		var sep = validator.f_getParameter("date.sepSign");
 		var set = "["+f_vb._BuildEscaped(sep)+"]";
@@ -728,45 +731,52 @@ var __statics = {
 	 * @context object:validator
 	 */
 	Checker_hour: function(validator, inVal) {
-		var sep = validator.f_getParameter("hour.sepSign");
-		var set = "["+f_vb._BuildEscaped(sep)+"]";
-		var s = sep.charAt(0);
-		var	sTmp = inVal;
-		var h,m,l,r,sec;
 	
 		// Deal with empty string and required attribute
 		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
 			return inVal;
 		}
+
+		var sep = validator.f_getParameter("hour.sepSign");
+		var s = sep.charAt(0);
+
+		var set = "["+f_vb._BuildEscaped(sep)+"]";
 	
 		// Get the day date
-		h = m = sec=null;
+		var h,m,sec;
+
+		var	sTmp = inVal;
 	
 		// Check if digits only
-		if (r = sTmp.match(/^\d*$/)) {
-			switch (l = sTmp.length) {
-				case 6: 
-					sec = sTmp.substr(4,2);					
-				case 4: 
-					m = sTmp.substr(2,2);
-				case 2: 
-					h = sTmp.substr(0,2); 
-					break;
-				case 1: 
-					h = sTmp;
-				case 0: 
-					break;
-				default: 
-					sTmp = null;
+		var r = sTmp.match(/^\d*$/);
+		if (r) {
+			var l = sTmp.length;
+			switch (l) {
+			case 6: 
+				sec = sTmp.substr(4,2);					
+			case 4: 
+				m = sTmp.substr(2,2);
+			case 2: 
+				h = sTmp.substr(0,2); 
+				break;
+			case 1: 
+				h = sTmp;
+			case 0: 
+				break;
+			default: 
+				sTmp = null;
 			}
 		// Otherwise we have separators
 		} else {
 			var exp = "^(\\d{1,2})?"+set+"(\\d{1,2})?"+set+"(\\d{1,2})?$";
 			r = sTmp.match(new RegExp(exp));
-			if (r == null) {
+			if (!r) {
 				sTmp = null;
+				
 			} else {
-				h = r[1]; m = r[2]; sec=r[3];
+				h = r[1]; 
+				m = r[2]; 
+				sec=r[3];
 			}
 		}
 		// Check valid string
@@ -781,23 +791,26 @@ var __statics = {
 			);
 			return null;
 		}
+		
 		// Compute hour
 		h = (h)? parseInt(h, 10):0;
-		if (h > 23) {
+		if (h<0 || h > 23) {
 			validator.f_setObject(null);
 			validator.f_setLastError("VALIDATION HEURE","Heure invalide");
 			return null;
 		}
+		
 		// Compute minute
 		m = (m)? parseInt(m, 10):0;
-		if (m > 59) {
+		if (m<0 || m > 59) {
 			validator.f_setObject(null);
 			validator.f_setLastError("VALIDATION HEURE","Minute invalide");
 			return null;
 		}
+		
 		// Compute minute
 		sec = (sec)? parseInt(sec, 10):0;
-		if (sec > 59) {
+		if (sec<0 || sec > 59) {
 			validator.f_setObject(null);
 			validator.f_setLastError("VALIDATION HEURE","Seconde invalide");
 			return null;
@@ -810,6 +823,7 @@ var __statics = {
 		var object;
 		if (window.f_time) {
 			object=new f_time(h,m,sec);
+			
 		} else {
 			object=new Date(2000,0,1,h,m,sec,0);
 		}
