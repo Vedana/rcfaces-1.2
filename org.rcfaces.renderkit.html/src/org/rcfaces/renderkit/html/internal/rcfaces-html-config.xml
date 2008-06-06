@@ -586,9 +586,11 @@
 -->
 	<clientValidator id="hour">
 		<parameter name="hour.sepSign" value=":. " />
-		<filter call="f_vb.Filter_hour" />
-		<checker call="f_vb.Checker_hour" />
-		<converter object="f_vb.Converter_hour" />
+
+		<filter call="f_vb.Filter_hour" xxclass="org.rcfaces.core.internal.validator.impl.HourFilter" />
+		<checker call="f_vb.Checker_hour" xxclass="org.rcfaces.core.internal.validator.impl.HourTranslator" />
+		<converter object="f_vb.Converter_hour" xxclass="org.rcfaces.core.internal.validator.impl.HourChecker"/>
+		
 		<!--
 			<onerror call="f_clientValidator.Error_null" />
 			<oncheckerror call="f_clientValidator.Error_focus" />
