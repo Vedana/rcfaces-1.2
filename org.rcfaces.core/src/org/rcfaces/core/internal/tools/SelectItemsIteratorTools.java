@@ -59,7 +59,7 @@ public class SelectItemsIteratorTools {
 
         Iterator it = convertToIterator(items);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Convert to iterator (" + items + ") returns " + it);
+            LOG.debug("Convert to iterator (items=" + items + ",  size="+size+") returns " + it);
         }
         if (it == null) {
             return null;
