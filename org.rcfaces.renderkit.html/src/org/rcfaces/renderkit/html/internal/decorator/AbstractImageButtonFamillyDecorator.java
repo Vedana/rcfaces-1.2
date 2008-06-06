@@ -31,6 +31,7 @@ import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.DisableOperation;
 import org.rcfaces.core.internal.images.operation.HoverOperation;
 import org.rcfaces.core.internal.images.operation.SelectedOperation;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
@@ -254,10 +255,25 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             String classSuffix = null;
             if (disabled) {
-                classSuffix = getComponentClassNames() + "_disabled";
+                classSuffix = "_disabled";
 
             } else if (selected) {
-                classSuffix = getComponentClassNames() + "_selected";
+                classSuffix = "_selected";
+            }
+
+            if (classSuffix != null) {
+                String classNames[] = getComponentClassNames();
+                StringAppender sa = new StringAppender(classNames.length * 32);
+
+                for (int i = 0; i < classNames.length; i++) {
+                    if (sa.length() > 0) {
+                        sa.append(' ');
+                    }
+                    sa.append(classNames[i]);
+                    sa.append(classSuffix);
+                }
+
+                classSuffix = sa.toString();
             }
 
             writeAttributes(classSuffix);
