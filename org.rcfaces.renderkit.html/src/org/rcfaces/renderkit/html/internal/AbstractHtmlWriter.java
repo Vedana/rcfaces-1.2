@@ -378,6 +378,11 @@ public abstract class AbstractHtmlWriter extends
 
     public final IHtmlWriter writeClass(String className)
             throws WriterException {
+        /*
+        if (className.indexOf('@')>=0) {
+            throw new IllegalArgumentException("Invalid className='"+className+"'");
+        }
+*/      
         writeAttribute("class", className);
 
         return this;
