@@ -5,6 +5,7 @@
 package org.rcfaces.renderkit.html.internal.decorator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     private static final String CHECKED_ITEMS = "checkedItems";
 
     private static final String UNCHECKED_ITEMS = "uncheckedItems";
+
+    private final Set subClientIds = new HashSet();
 
     public MenuDecorator(UIComponent component) {
         super(component, null);
@@ -129,6 +132,10 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         menuContext.pushVarId(varId);
 
         String sid = menuContext.getComponentClientId(component);
+        if (subClientIds.add(sid) == false) {
+            sid += "::" + subClientIds.size();
+            subClientIds.add(sid);
+        }
 
         int style = IInputTypeCapability.AS_PUSH_BUTTON;
         if (selectItem instanceof IInputTypeItem) {
