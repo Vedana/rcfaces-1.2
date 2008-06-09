@@ -1487,7 +1487,7 @@ var __members = {
 			labelClassName+=" "+labelClassName+"_cursor";
 		}
 		
-		if (this._breadCrumbsCursor!=cursor) {
+		if (!constructMode && this._breadCrumbsCursor!=cursor) {
 			this.f_updateBreadCrumbs();						
 		}
 
