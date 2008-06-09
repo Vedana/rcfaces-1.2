@@ -398,7 +398,7 @@ var __members = {
 		if (typeof(msg)=="string") {
 			var sp=msg.split("\n");
 			for(var i=0;i<sp.length;i++) {
-				if (i>0) {
+				if (i) {
 					li.appendChild(doc.createElement("br"));
 				}
 				
@@ -474,7 +474,7 @@ var __members = {
 				
 				var sp=m.split('\n');
 				for(var i=0;i<sp.length;i++) {
-					if (i>0) {
+					if (i) {
 						span.appendChild(doc.createElement("br"));
 					}
 					
@@ -497,7 +497,7 @@ var __members = {
 				
 				var sp=m2.split('\n');
 				for(var i=0;i<sp.length;i++) {
-					if (i>0) {
+					if (i) {
 						span.appendChild(doc.createElement("br"));
 					}
 					
@@ -520,7 +520,7 @@ var __members = {
 
 				var sp=m.split('\n');
 				for(var i=0;i<sp.length;i++) {
-					if (i>0) {
+					if (i) {
 						span.appendChild(doc.createElement("br"));
 					}
 					
