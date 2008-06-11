@@ -4,8 +4,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -110,9 +108,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
         return JavaScriptClasses.DATA_GRID;
     }
 
-    public String[] getComponentStyleClassNames(IHtmlWriter htmlWriter) {
-
-        String ret[] = super.getComponentStyleClassNames(htmlWriter);
+    protected ICssStyleClasses createStyleClasses(IHtmlWriter htmlWriter) {
+        ICssStyleClasses cssStyleClasses = super.createStyleClasses(htmlWriter);
 
         IGridComponent dg = (IGridComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
@@ -120,15 +117,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
         if (dg instanceof DataGridComponent) {
             if (((DataGridComponent) dg).isCellTextWrap(htmlWriter
                     .getComponentRenderContext().getFacesContext())) {
-
-                List l = new ArrayList(Arrays.asList(ret));
-                l.add(DATA_GRID_WRAP_CLASSNAME);
-
-                ret = (String[]) l.toArray(new String[l.size()]);
             }
+
+            cssStyleClasses.addSpecificStyleClass(DATA_GRID_WRAP_CLASSNAME);
         }
 
-        return ret;
+        return cssStyleClasses;
     }
 
     protected boolean needAdditionalInformationContextState() {

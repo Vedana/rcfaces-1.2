@@ -138,12 +138,12 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             return ImageButtonRenderer.this.getMainStyleClassName();
         }
 
-        protected void writeAttributes(String classSuffix)
+        protected void writeAttributes(ICssStyleClasses cssStyleClasses)
                 throws WriterException {
 
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
-            writeCssAttributes(writer, classSuffix, ~CSS_FONT_MASK);
+            writeCssAttributes(writer, cssStyleClasses, ~CSS_FONT_MASK);
 
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();

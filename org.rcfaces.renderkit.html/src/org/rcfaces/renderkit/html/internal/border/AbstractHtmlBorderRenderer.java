@@ -12,6 +12,7 @@ import org.rcfaces.core.internal.renderkit.border.AbstractBorderRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
  * 
@@ -76,18 +77,19 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected boolean noTable = false;
 
-    protected String componentClassName;
+    protected ICssStyleClasses cssStyleClasses;
 
-    public void initialize(IHtmlWriter writer, String componentClassName,
-            String width, String height, int horizontalSpan, int verticalSpan,
-            boolean disabled, boolean selected) throws WriterException {
+    public void initialize(IHtmlWriter writer,
+            ICssStyleClasses cssStyleClasses, String width, String height,
+            int horizontalSpan, int verticalSpan, boolean disabled,
+            boolean selected) throws WriterException {
         this.width = width;
         this.height = height;
         this.horizontalSpan = horizontalSpan;
         this.verticalSpan = verticalSpan;
         this.selected = selected;
         this.disabled = disabled;
-        this.componentClassName = componentClassName;
+        this.cssStyleClasses = cssStyleClasses;
     }
 
     public IHtmlWriter startRow(IHtmlWriter writer) throws WriterException {
@@ -438,14 +440,14 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             }
         }
 
+        String componentClassName = cssStyleClasses
+                .getSuffixedMainStyleClass(classSuffix);
+
         if (componentClassName != null) {
             if (className.length() > 0) {
                 className.append(' ');
             }
             className.append(componentClassName);
-            if (classSuffix != null) {
-                className.append(classSuffix);
-            }
         }
 
         if (className.length() > 0) {

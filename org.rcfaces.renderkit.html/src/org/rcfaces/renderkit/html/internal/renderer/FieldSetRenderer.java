@@ -83,8 +83,9 @@ public class FieldSetRenderer extends AbstractCssRenderer {
             String width = fieldSetComponent.getWidth(facesContext);
             String height = fieldSetComponent.getHeight(facesContext);
 
-            borderRenderer.initialize(htmlWriter, getMainStyleClassName(),
-                    width, height, 1, 1, false, false);
+            borderRenderer.initialize(htmlWriter,
+                    getCssStyleClasses(htmlWriter), width, height, 1, 1, false,
+                    false);
 
             if (borderRenderer instanceof ITitledBorderRenderer) {
                 String text = fieldSetComponent.getText(facesContext);

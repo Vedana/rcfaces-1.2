@@ -24,6 +24,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
+import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -203,8 +204,8 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
         }
     }
 
-    protected IHtmlWriter writeStyleClass(IHtmlWriter writer, String classSuffix)
-            throws WriterException {
+    protected IHtmlWriter writeStyleClass(IHtmlWriter writer,
+            ICssStyleClasses cssStyleClasses) throws WriterException {
 
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
@@ -215,25 +216,17 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
             if (((IDisabledCapability) component).isDisabled()) {
                 disabled = true;
 
-                if (classSuffix == null) {
-                    classSuffix = getMainStyleClassName() + "_disabled";
-                } else {
-                    classSuffix += "_disabled";
-                }
+                cssStyleClasses.addSuffix("_disabled");
             }
         }
 
         if (disabled == false && (component instanceof IReadOnlyCapability)) {
             if (((IReadOnlyCapability) component).isReadOnly()) {
-                if (classSuffix == null) {
-                    classSuffix = getMainStyleClassName() + "_readOnly";
-                } else {
-                    classSuffix += "_readOnly";
-                }
+                cssStyleClasses.addSuffix("_readOnly");
             }
         }
 
-        return super.writeStyleClass(writer, classSuffix);
+        return super.writeStyleClass(writer, cssStyleClasses);
     }
 
     protected void writeValidatorParameters(IHtmlWriter htmlWriter,

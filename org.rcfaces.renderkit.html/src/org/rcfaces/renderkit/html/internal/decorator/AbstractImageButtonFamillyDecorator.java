@@ -31,7 +31,6 @@ import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.DisableOperation;
 import org.rcfaces.core.internal.images.operation.HoverOperation;
 import org.rcfaces.core.internal.images.operation.SelectedOperation;
-import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
@@ -48,6 +47,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.border.AbstractHtmlBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.NoneBorderRenderer;
+import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
  * 
@@ -90,9 +90,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     protected Renderer renderer;
 
-    private String styleClassNames[];
-
-    private String mainClassName;
+    private ICssStyleClasses cssStyleClasses;
 
     protected IJavaScriptWriter javaScriptWriter;
 
@@ -244,7 +242,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 writer.startElement(mainComponent);
 
-                htmlBorderWriter.initialize(writer, getMainStyleClassName(),
+                htmlBorderWriter.initialize(writer, getCssStyleClasses(),
                         width, height, tableHorizontalSpan, tableVerticalSpan,
                         disabled, selected);
             }
@@ -253,34 +251,19 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 writer.writeAttribute("v:borderType", borderType);
             }
 
-            String classSuffix = null;
+            ICssStyleClasses cssStyleClasses = getCssStyleClasses();
             if (disabled) {
-                classSuffix = "_disabled";
+                cssStyleClasses.addSuffix("_disabled");
 
             } else if (selected) {
-                classSuffix = "_selected";
+                cssStyleClasses.addSuffix("_selected");
             }
 
-            if (classSuffix != null) {
-                String classNames[] = getComponentClassNames();
-                StringAppender sa = new StringAppender(classNames.length * 32);
+            writeAttributes(cssStyleClasses);
 
-                for (int i = 0; i < classNames.length; i++) {
-                    if (sa.length() > 0) {
-                        sa.append(' ');
-                    }
-                    sa.append(classNames[i]);
-                    sa.append(classSuffix);
-                }
-
-                classSuffix = sa.toString();
-            }
-
-            writeAttributes(classSuffix);
-
-            if (classSuffix != null) {
-                writer.writeAttribute("v:className", getComponentClassNames(),
-                        " ");
+            if (cssStyleClasses != null) {
+                writer.writeAttribute("v:className", cssStyleClasses
+                        .listStyleClasses(), " ");
             }
 
             initializeJavaScript(writer);
@@ -580,41 +563,23 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     protected void initializeJavaScript(IHtmlWriter writer) {
     }
 
-    protected final String[] getComponentClassNames() {
+    protected final ICssStyleClasses getCssStyleClasses() {
         if ((renderer instanceof ICssRenderer) == false) {
             throw new FacesException("Can not compute className !");
         }
 
-        if (styleClassNames != null) {
-            return styleClassNames;
+        if (cssStyleClasses != null) {
+            return cssStyleClasses;
         }
 
-        styleClassNames = ((ICssRenderer) renderer)
-                .getComponentStyleClassNames(writer);
+        cssStyleClasses = ((ICssRenderer) renderer).getCssStyleClasses(writer);
 
-        if (styleClassNames == null) {
-            throw new NullPointerException("Component className is null !");
+        if (cssStyleClasses == null) {
+            throw new NullPointerException(
+                    "Component cssStyleClasses is null !");
         }
 
-        return styleClassNames;
-    }
-
-    protected final String getMainClassName() {
-        if ((renderer instanceof ICssRenderer) == false) {
-            throw new FacesException("Can not compute className !");
-        }
-
-        if (mainClassName != null) {
-            return mainClassName;
-        }
-
-        mainClassName = ((ICssRenderer) renderer).getMainStyleClassName();
-
-        if (mainClassName == null) {
-            throw new NullPointerException("Main className is null !");
-        }
-
-        return mainClassName;
+        return cssStyleClasses;
     }
 
     protected int computeVerticalSpan() {
@@ -642,7 +607,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return 1;
     }
 
-    protected abstract void writeAttributes(String classSuffix)
+    protected abstract void writeAttributes(ICssStyleClasses cssStyleClasses)
             throws WriterException;
 
     protected String getInputElement() {
@@ -738,7 +703,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     }
 
     protected String getImageClassName(IHtmlBorderRenderer htmlBorderWriter) {
-        return getMainClassName() + IMAGE_CLASSNAME_SUFFIX;
+        return getCssStyleClasses().getSuffixedMainStyleClass(
+                IMAGE_CLASSNAME_SUFFIX);
     }
 
     protected String getImageId(IHtmlWriter writer,
@@ -915,7 +881,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     }
 
     protected String getTextClassName(IHtmlBorderRenderer htmlBorderWriter) {
-        return getMainClassName() + TEXT_CLASSNAME_SUFFIX;
+        return getCssStyleClasses().getSuffixedMainStyleClass(
+                TEXT_CLASSNAME_SUFFIX);
     }
 
     protected void writeImage(String halign, String valign, String width,
@@ -968,11 +935,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     }
 
     protected void writeComboImage() throws WriterException {
+        String mainClassName = getCssStyleClasses().getMainStyleClass();
+
         if (htmlBorderWriter == null) {
-            NoneBorderRenderer.SINGLETON.writeComboImage(writer,
-                    getMainClassName());
+            NoneBorderRenderer.SINGLETON.writeComboImage(writer, mainClassName);
             return;
         }
-        htmlBorderWriter.writeComboImage(writer, getMainClassName());
+        htmlBorderWriter.writeComboImage(writer, mainClassName);
     }
 }

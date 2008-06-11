@@ -93,12 +93,13 @@ public class ComboGridRenderer extends DataGridRenderer implements
         boolean readOnly = comboGridComponent.isReadOnly(facesContext);
         boolean editable = comboGridComponent.isEditable(facesContext);
 
-        String classSuffix = null;
+        ICssStyleClasses cssStyleClasses = getCssStyleClasses(htmlWriter);
+
         if (disabled) {
-            classSuffix = getMainStyleClassName() + "_disabled";
+            cssStyleClasses.addSuffix("_disabled");
 
         } else if (readOnly) {
-            classSuffix = getMainStyleClassName() + "_readOnly";
+            cssStyleClasses.addSuffix("_readOnly");
         }
 
         String width = comboGridComponent.getWidth(facesContext);
@@ -116,7 +117,7 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter, classSuffix, CSS_ALL_MASK);
+        writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
 
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
@@ -651,13 +652,12 @@ public class ComboGridRenderer extends DataGridRenderer implements
         // On ferme pas les DIV
     }
 
-    public String[] getComponentStyleClassNames(IHtmlWriter htmlWriter) {
-
+    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         if (isDataGridRenderer(htmlWriter)) {
-            return super.getComponentStyleClassNames(htmlWriter);
+            return super.getComponentStyleClassName(htmlWriter);
         }
 
-        return new String[] { getJavaScriptClassName() };
+        return getJavaScriptClassName();
     }
 
     protected boolean isDataGridRenderer(IHtmlWriter htmlWriter) {

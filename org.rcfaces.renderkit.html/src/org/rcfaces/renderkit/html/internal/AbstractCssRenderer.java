@@ -22,8 +22,8 @@ import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -40,6 +40,8 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     private static final String DEFAULT_MARGIN_UNIT = "px";
 
+    private static final String CSS_STYLE_CLASSES_PROPERTY_NAME = "org.rcfaces.html.CSS_STYLE_CLASSES";
+
     public static final String BLANK_IMAGE_URL = "blank.gif";
 
     protected static final int CSS_ALL_MASK = 0xffff;
@@ -50,12 +52,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     protected static final int SEVERITY_CLASSES_MASK = 4;
 
-    public String[] getComponentStyleClassNames(IHtmlWriter htmlWriter) {
-        return new String[] { getComponentStyleClassName(htmlWriter) };
-    }
-
     /**
-     * @deprecated
      * @param htmlWriter
      * @return
      */
@@ -67,51 +64,47 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return getJavaScriptClassName();
     }
 
-    protected IHtmlWriter writeStyleClass(IHtmlWriter writer, String classSuffix)
-            throws WriterException {
+    public final ICssStyleClasses getCssStyleClasses(IHtmlWriter htmlWriter) {
+
+        ICssStyleClasses cssStyleClasses = (ICssStyleClasses) htmlWriter
+                .getComponentRenderContext().getAttribute(
+                        CSS_STYLE_CLASSES_PROPERTY_NAME);
+        if (cssStyleClasses != null) {
+            return cssStyleClasses;
+        }
+
+        cssStyleClasses = createStyleClasses(htmlWriter);
+
+        htmlWriter.getComponentRenderContext().setAttribute(
+                CSS_STYLE_CLASSES_PROPERTY_NAME, cssStyleClasses);
+
+        return cssStyleClasses;
+    }
+
+    protected ICssStyleClasses createStyleClasses(IHtmlWriter htmlWriter) {
+        return new CssStyleClasses(getMainStyleClassName(),
+                getComponentStyleClassName(htmlWriter));
+    }
+
+    protected IHtmlWriter writeStyleClass(IHtmlWriter writer,
+            ICssStyleClasses cssStyleClasses) throws WriterException {
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
-
-        StringAppender cssClass = new StringAppender(64);
-
-        String componentStyleClassNames[] = getComponentStyleClassNames(writer);
-
-        for (int i = 0; i < componentStyleClassNames.length; i++) {
-            if (cssClass.length() > 0) {
-                cssClass.append(' ');
-            }
-            cssClass.append(componentStyleClassNames[i]);
-        }
 
         if (component instanceof IStyleClassCapability) {
             IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
 
             String styleClass = styleClassCapability.getStyleClass();
             if (styleClass != null) {
-                if (cssClass.length() > 0) {
-                    cssClass.append(' ');
-                }
-                cssClass.append(styleClass);
+                cssStyleClasses.addStyleClass(styleClass);
 
                 writer.writeAttribute("v:styleClass", styleClass);
             }
         }
 
-        if (classSuffix == null || classSuffix.length() < 1) {
-            classSuffix = computeComponentStyleClass(component, "");
-
-            if (classSuffix != null && classSuffix.length() > 0
-                    && componentStyleClassNames.length > 0) {
-                classSuffix = componentStyleClassNames[0] + classSuffix;
-            }
-        }
-
-        if (classSuffix != null && classSuffix.length() > 0) {
-            cssClass.append(' ');
-            cssClass.append(classSuffix);
-        }
+        String cssClass = cssStyleClasses.constructClassName();
         if (cssClass.length() > 0) {
-            writer.writeClass(cssClass.toString());
+            writer.writeClass(cssClass);
         }
 
         return writer;
@@ -147,17 +140,19 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         return classSuffix;
     }
 
-    protected final IHtmlWriter writeCssAttributes(IHtmlWriter writer)
+    protected final IHtmlWriter writeCssAttributes(IHtmlWriter htmlWriter)
             throws WriterException {
-        return writeCssAttributes(writer, null, CSS_ALL_MASK);
+        return writeCssAttributes(htmlWriter, getCssStyleClasses(htmlWriter),
+                CSS_ALL_MASK);
     }
 
     protected final IHtmlWriter writeCssAttributes(IHtmlWriter writer,
-            String classSuffix, int attributesMask) throws WriterException {
+            ICssStyleClasses cssStyleClasses, int attributesMask)
+            throws WriterException {
         UIComponent component = writer.getComponentRenderContext()
                 .getComponent();
 
-        writeStyleClass(writer, classSuffix);
+        writeStyleClass(writer, cssStyleClasses);
 
         if ((attributesMask & SEVERITY_CLASSES_MASK) != 0) {
             if (component instanceof ISeverityStyleClassCapability) {

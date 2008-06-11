@@ -93,8 +93,9 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
         encodeAttributes(htmlWriter, component);
 
         if (borderRenderer != null) {
-            borderRenderer.initialize(htmlWriter, getMainStyleClassName(),
-                    width, height, 1, 1, disabled, selected);
+            borderRenderer.initialize(htmlWriter,
+                    getCssStyleClasses(htmlWriter), width, height, 1, 1,
+                    disabled, selected);
 
             borderRenderer.startComposite(htmlWriter);
 

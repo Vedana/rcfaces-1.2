@@ -153,8 +153,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private static final String GRID_MAIN_STYLE_CLASS = "f_grid";
 
-    private static final String[] GRID_STYLE_CLASSES = { GRID_MAIN_STYLE_CLASS };
-
     protected static final int GENERATE_CELL_STYLE_CLASS = 0x0001;
 
     protected static final int GENERATE_CELL_IMAGES = 0x0002;
@@ -195,8 +193,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
      * "fakeCell";
      */
 
-    public String[] getComponentStyleClassNames(IHtmlWriter htmlWriter) {
-        return GRID_STYLE_CLASSES;
+    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
+        return GRID_MAIN_STYLE_CLASS;
     }
 
     protected final AbstractGridRenderContext getGridRenderContext(
@@ -534,7 +532,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter, null, ~CSS_SIZE_MASK);
+        writeCssAttributes(htmlWriter, getCssStyleClasses(htmlWriter),
+                ~CSS_SIZE_MASK);
 
         if (gridRenderContext.hasAdditionalInformations()) {
             int cardinality = gridRenderContext

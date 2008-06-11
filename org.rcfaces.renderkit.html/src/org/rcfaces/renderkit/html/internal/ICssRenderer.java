@@ -3,14 +3,14 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public interface ICssRenderer {
-    String[] getComponentStyleClassNames(IHtmlWriter htmlWriter);
 
-    String getMainStyleClassName();
-
+    ICssStyleClasses getCssStyleClasses(IHtmlWriter htmlWriter);
 }

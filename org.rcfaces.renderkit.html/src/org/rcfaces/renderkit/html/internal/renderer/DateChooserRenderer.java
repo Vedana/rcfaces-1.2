@@ -139,11 +139,11 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
             return DateChooserRenderer.this.getMainStyleClassName();
         }
 
-        protected void writeAttributes(String classSuffix)
+        protected void writeAttributes(ICssStyleClasses cssStyleClasses)
                 throws WriterException {
             writeHtmlAttributes(writer);
             writeJavaScriptAttributes(writer);
-            writeCssAttributes(writer, classSuffix, CSS_ALL_MASK);
+            writeCssAttributes(writer, cssStyleClasses, CSS_ALL_MASK);
 
             FacesContext facesContext = writer.getComponentRenderContext()
                     .getFacesContext();

@@ -6,6 +6,7 @@ package org.rcfaces.renderkit.html.internal.border;
 
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
  * 
@@ -14,7 +15,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  */
 public interface IHtmlBorderRenderer {
 
-    void initialize(IHtmlWriter writer, String componentClassName,
+    void initialize(IHtmlWriter writer, ICssStyleClasses cssStyleClasses,
             String width, String height, int horizontalSpan, int verticalSpan,
             boolean disabled, boolean selected) throws WriterException;
 

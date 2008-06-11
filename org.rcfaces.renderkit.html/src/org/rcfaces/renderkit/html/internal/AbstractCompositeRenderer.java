@@ -41,7 +41,7 @@ public class AbstractCompositeRenderer extends AbstractCssRenderer {
     protected String getSubStyleClassName(IHtmlWriter htmlWriter, char ch,
             int length) {
 
-        String cls = getMainStyleClassName();
+        String cls = getCssStyleClasses(htmlWriter).getMainStyleClass();
         StringAppender sb = new StringAppender(cls.length() * 2 + 7 + 1
                 + length);
 
