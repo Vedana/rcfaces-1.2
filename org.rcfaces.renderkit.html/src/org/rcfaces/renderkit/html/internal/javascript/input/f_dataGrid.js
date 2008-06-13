@@ -23,6 +23,35 @@ var __statics = {
 	
 	/**
 	 * @method private static
+	 * @context object:dataGrid
+	 */
+	_Ie_CheckMouseDown: function(evt) {
+		var row=this._row;
+		var dataGrid=row._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
+
+		if (dataGrid.f_isReadOnly()) {
+			return false;
+		}
+		
+		if (row!=dataGrid._cursor) {
+			dataGrid.f_moveCursor(row, true, evt);
+		}
+
+		// Il faut bloquer le bubble !
+		evt.cancelBubble = true;
+		return false;
+	},
+	
+	/**
+	 * @method private static
 	 * @context event:evt
 	 */
 	_ReturnFalse: function(evt) {
@@ -356,7 +385,10 @@ var __members = {
 		var idx=0;
 		row._index=arguments[idx++];
 		row.id=this.id+"::row"+rowIdx;
-		row.tabIndex=-1;
+		
+		if (f_core.IsInternetExplorer()) {
+			row.tabIndex=-1; // Pas sous FF car le TR devient focusable
+		}
 		
 		if (this._selectable || this._checkable) {
 			row.onmousedown=f_grid.RowMouseDown;
@@ -538,11 +570,16 @@ var __members = {
 								input.value="CHECKED";
 								input.name=input.id;
 							}
-													
-							input.onmousedown=f_dataGrid._CheckMouseButtons;
+							
+							if (f_core.IsInternetExplorer()) {
+								input.onmousedown=f_dataGrid._Ie_CheckMouseDown;
+							} else {
+								input.onmousedown=f_dataGrid._CheckMouseButtons;
+							}
 							input.onmouseup=f_dataGrid._CheckMouseButtons;
-							input.onclick=f_dataGrid._CheckSelect;
-							input.onfocus=f_grid.GotFocus;
+							input.onclick=f_dataGrid._CheckSelect;							
+							input.onfocus=f_grid.GotFocus;								
+
 							input._row=row;
 							input._dontSerialize=true;
 							input.tabIndex=-1; // -1 car sinon pas de sortie du focus du grid
@@ -554,10 +591,10 @@ var __members = {
 							
 							f_core.AppendChild(ctrlContainer, input);
 							
+							checked = this.fa_updateElementCheck(row, checked);
 							if (checked) {
 								input.checked=true;
 								input.defaultChecked=true;
-								this.fa_updateElementCheck(row, checked);
 							}
 						}
 					}
@@ -1396,7 +1433,6 @@ var __members = {
 		if (!images || images.length<=cindex) {
 			return null;
 		}
-
 		var imageTag=images[cindex];
 		if (!imageTag) {
 			return null;
