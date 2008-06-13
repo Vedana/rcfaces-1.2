@@ -51,7 +51,7 @@ var __members = {
 		if (f_popup.Ie_enablePopup()) {
 			// On associe le POPUP 
 			
-			this._iePopup=fa_menuCore._Ie_getPopup(this);
+			this._iePopup=f_popup.Ie_GetPopup(this.ownerDocument);
 		}	
 		
 		this.fa_componentUpdated = (set===undefined)? true:set;		
