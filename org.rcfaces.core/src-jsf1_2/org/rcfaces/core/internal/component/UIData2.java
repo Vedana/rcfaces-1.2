@@ -59,9 +59,13 @@ import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 import javax.servlet.jsp.jstl.sql.Result;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
+import org.rcfaces.core.model.IRangeDataModel;
+import org.rcfaces.core.model.IRangeDataModel2;
 
 /**
  * <p>
@@ -88,6 +92,8 @@ import org.rcfaces.core.internal.capability.IRCFacesComponent;
 public class UIData2 extends UIComponentBase implements NamingContainer {
 
     // ------------------------------------------------------ Manifest Constants
+
+    private static final Log LOG = LogFactory.getLog(UIData2.class);
 
     /**
      * <p>
@@ -201,16 +207,30 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
     public int getFirst() {
 
         if (this.firstSet) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("getFirst: first setted=" + first);
+            }
             return (this.first);
         }
         ValueExpression vb = getValueExpression("first");
         if (vb != null) {
-            Integer value = (Integer) vb.getValue(getFacesContext().getELContext());
+            Integer value = (Integer) vb.getValue(getFacesContext()
+                    .getELContext());
             if (null == value) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("getFirst: expression : value is null, first="
+                            + first);
+                }
                 return first;
             }
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("getFirst: value=" + value);
+            }
             return (value.intValue());
-        } 
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getFirst: no expression : first=" + first);
+        }
         return (this.first);
     }
 
@@ -233,6 +253,9 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         this.first = first;
         this.firstSet = true;
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set first=" + first);
+        }
     }
 
     /**
@@ -322,8 +345,13 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
      */
     public int getRowCount() {
 
-        return (getDataModel().getRowCount());
+        int rowCount = (getDataModel().getRowCount());
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getRowCount = " + rowCount);
+        }
+
+        return rowCount;
     }
 
     /**
@@ -340,8 +368,13 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
      */
     public Object getRowData() {
 
-        return (getDataModel().getRowData());
+        Object rowData = (getDataModel().getRowData());
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("GetRowData(index=" + rowIndex + ") = " + rowData);
+        }
+
+        return rowData;
     }
 
     /**
@@ -438,6 +471,10 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
      */
     public void setRowIndex(int rowIndex) {
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set rowIndex=" + rowIndex);
+        }
+
         // Save current state for the previous row index
         saveDescendantState();
 
@@ -453,9 +490,24 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
                     .getRequestMap();
             if (rowIndex == -1) {
                 requestMap.remove(var);
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("rowIndex=-1: Remove var '" + var + "'");
+                }
+
             } else if (isRowAvailable()) {
-                requestMap.put(var, getRowData());
+                Object rowData = getRowData();
+                requestMap.put(var, rowData);
+
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("row available(" + rowIndex + "): set var='"
+                            + var + "' to rowData='" + rowData + "'");
+                }
+
             } else {
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Row not available(" + rowIndex
+                            + "): Remove var '" + var + "'");
+                }
                 requestMap.remove(var);
             }
         }
@@ -478,7 +530,8 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         }
         ValueExpression vb = getValueExpression("rows");
         if (vb != null) {
-            Integer value = (Integer) vb.getValue(getFacesContext().getELContext());
+            Integer value = (Integer) vb.getValue(getFacesContext()
+                    .getELContext());
             if (null == value) {
                 return rows;
             }
@@ -658,9 +711,9 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
      * <p>
      * Set the {@link ValueExpression} used to calculate the value for the
      * specified attribute or property name, if any. In addition, if a
-     * {@link ValueExpression} is set for the <code>value</code> property, remove
-     * any synthesized {@link DataModel} for the data previously bound to this
-     * component.
+     * {@link ValueExpression} is set for the <code>value</code> property,
+     * remove any synthesized {@link DataModel} for the data previously bound to
+     * this component.
      * </p>
      * 
      * @param name
@@ -1118,6 +1171,15 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         int processed = 0;
         rowIndex--;
 
+        DataModel dataModel = getDataModel();
+        if (dataModel instanceof IRangeDataModel) {
+            ((IRangeDataModel) dataModel).setRowRange(rowIndex + 1, rows);
+        }
+        if (dataModel instanceof IRangeDataModel2) {
+            ((IRangeDataModel2) dataModel).setRowRange(rowIndex + 1, rows,
+                    false);
+        }
+
         while (true) {
 
             // Have we processed the requested number of rows?
@@ -1511,7 +1573,7 @@ class SavedState implements StateHolder {
 // Private class to wrap an event with a row index
 class WrapperEvent extends FacesEvent {
 
-     private static final long serialVersionUID = -8001741843179328047L;
+    private static final long serialVersionUID = -8001741843179328047L;
 
     public WrapperEvent(UIComponent component, FacesEvent event, int rowIndex) {
         super(component);
