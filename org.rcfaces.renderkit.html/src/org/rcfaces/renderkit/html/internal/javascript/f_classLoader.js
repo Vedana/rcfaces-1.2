@@ -1067,6 +1067,9 @@ f_classLoader.prototype = {
 
 		var localClean;
 		/* var otherDocumentClean; */
+	
+		var documentCompleteObjects=this._documentCompleteObjects;
+		var serializableObjects=this._serializableObjects;
 		
 		for(var i=0;i<objs.length;i++) {
 			var obj=objs[i];
@@ -1098,6 +1101,19 @@ f_classLoader.prototype = {
 				/*
 				}
 				*/
+
+				if (documentCompleteObjects) {
+					var documentCompleteObjectsIndex=obj._documentCompleteObjectsIndex;
+					if (documentCompleteObjectsIndex!==undefined) {
+						documentCompleteObjects[documentCompleteObjectsIndex]=undefined;
+					}
+				}
+							
+				var serializableObjectsIndex=obj._serializableObjectsIndex;
+				if (serializableObjectsIndex!==undefined) {
+					serializableObjects[serializableObjectsIndex]=undefined;
+				}
+
 						
 				f_core.Debug(f_classLoader, "_destroy: Object '"+obj+"' "+obj.tagName+"#"+obj.id+"."+obj.className+"' has been removed from the pool !");
 
@@ -1160,9 +1176,12 @@ f_classLoader.prototype = {
 		
 			for (var i=0; i<components.length; i++) {
 				var component = components[i];
-				var componentId=component.id;
+				if (!component) {
+					continue;
+				}
 				
-				if (!component || !componentId) {
+				var componentId=component.id;				
+				if (!componentId) {
 					continue;
 				}
 				
