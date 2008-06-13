@@ -154,13 +154,14 @@ var __statics = {
 				return f_core.CancelJsEvent(evt);
 			}
 			
-			dataGrid.f_forceFocus();
-			
 			var sub=f_core.IsPopupButton(evt);
 	
 			var selection=fa_selectionManager.ComputeMouseSelection(evt);
 				
 			dataGrid.f_moveCursor(this, true, evt, selection);			
+			
+			// On deplace le cursor avant de donner le focus !
+			dataGrid.f_forceFocus();
 			
 			if (sub && this._selected) {
 				var menu=dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
@@ -1072,6 +1073,7 @@ var __statics = {
 	GotFocus: function(evt) {
 		var dataGrid=this._dataGrid;
 		var row=this._row;
+		
 		if (!dataGrid && row) {
 			dataGrid=row._dataGrid;
 		}
@@ -3305,10 +3307,10 @@ var __members = {
 		}
 		
 		var cfocus=this._cfocus;
-		if (cfocus) {
-			cfocus.style.top=this._table.scrollTop+"px";
-			
+		if (cfocus) {			
 			cfocus.focus();
+			
+			
 			return;
 		}
 
@@ -3820,6 +3822,10 @@ var __members = {
 
 		f_core.Debug(f_grid, "f_setColumnSort: Sort col="+col._index+" ascending="+ascending+" append="+append);
 
+		if (this._rows>0) { // Dans le cas d'un page par page, on revient en position 0
+			this._first=0; 
+		}
+
 		if (currentSorts.length) {
 			// Ajout Fred pour �viter le cas o� on appelle un tri sur plusieurs col dont la premi�re est d�j� tri�e
 			if ((append || currentSorts.length==1) && currentSorts[currentSorts.length-1]==col && !col2) {
@@ -4301,7 +4307,7 @@ var __members = {
 
 		var scrollBody=this._scrollBody;
 		f_core.Debug(f_grid, "fa_showElement: row.y="+row.offsetTop+" row.h="+row.offsetHeight+" scrollBody.y="+scrollBody.scrollTop+" scrollBody.h="+scrollBody.clientHeight);
-
+	
 		if (row.offsetTop-scrollBody.scrollTop<0) {
 			scrollBody.scrollTop=row.offsetTop;
 			
@@ -4312,7 +4318,7 @@ var __members = {
 			
 			f_core.Debug(f_grid, "fa_showElement: set scrollTop to "+(row.offsetTop+row.offsetHeight-scrollBody.clientHeight));			
 		}		
-
+		
 		f_core.ShowComponent(row);
 	},
 	
