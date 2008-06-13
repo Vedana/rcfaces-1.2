@@ -3790,7 +3790,21 @@ var f_core = {
 		if (asyncMode) {
 			f_core._FocusComponent=component;
 			
-			f_core._FocusTimeoutID=window.setTimeout(f_core._FocusTimeout, f_core._FOCUS_TIMEOUT_DELAY);
+			f_core._FocusTimeoutID=window.setTimeout(function() {
+				// On sait jamais !
+				if (window._rcfacesExiting) {
+					return;
+				}
+				f_core._FocusTimeoutID=undefined;
+				
+				var component=f_core._FocusComponent;
+				if (!component) {
+					return;
+				}
+				f_core._FocusComponent=undefined;
+				f_core.SetFocus(component, false);
+				
+			}, f_core._FOCUS_TIMEOUT_DELAY);
 			return true;
 		}
 
@@ -3842,25 +3856,6 @@ var f_core = {
 		
 		return false;
 	},
-	/**
-	 * @method private static
-	 * @return void
-	 * @context window:this
-	 */
-	_FocusTimeout: function() {
-		// On sait jamais !
-		if (window._rcfacesExiting) {
-			return;
-		}
-		f_core._FocusTimeoutID=undefined;
-		
-		var component=f_core._FocusComponent;
-		if (!component) {
-			return;
-		}
-		f_core._FocusComponent=undefined;
-		f_core.SetFocus(component, false);
-	},	
 	/**
 	 * @method hidden static
 	 */
