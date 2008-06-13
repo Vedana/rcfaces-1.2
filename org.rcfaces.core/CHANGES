@@ -2,7 +2,7 @@
 ----------------------------------------------------------------------
 - @version I2537
 - @author Olivier Oeuillot
-- 12/6/2008
+- 13/6/2008
 
 HourFilter/HourTranslator/HourChecker:
 Implementation des filtres serveur associés au client validator "heure" 
