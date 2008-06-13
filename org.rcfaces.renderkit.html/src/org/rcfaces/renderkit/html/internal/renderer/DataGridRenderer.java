@@ -411,6 +411,29 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         int rowIndex = tableContext.getFirst();
 
+        // Initializer le IRandgeDataModel avant la selection/check/additionnal informations !
+        if (sortTranslations == null
+                && rows > 0
+                && ((dataModel instanceof IRangeDataModel) || (dataModel instanceof IRangeDataModel2))) {
+            // Specifie le range que si il n'y a pas de tri !
+
+            int rangeLength = rows;
+            if (searchEnd) {
+                // On regardera si il y a bien une suite ...
+                rangeLength++;
+            }
+
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel)
+                        .setRowRange(rowIndex, rangeLength);
+            }
+
+            if (dataModel instanceof IRangeDataModel2) {
+                ((IRangeDataModel2) dataModel).setRowRange(rowIndex,
+                        rangeLength, searchEnd);
+            }
+        }
+
         int selectedIndexes[] = null;
         int selectedOffset = -1;
         Set selectedObjects = null;
@@ -582,28 +605,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (column instanceof ICellImageSettings) {
                 testImageUrls[i] = ((ICellImageSettings) column)
                         .isCellImageURLSetted();
-            }
-        }
-
-        if (sortTranslations == null
-                && rows > 0
-                && ((dataModel instanceof IRangeDataModel) || (dataModel instanceof IRangeDataModel2))) {
-            // Specifie le range que si il n'y a pas de tri !
-
-            int rangeLength = rows;
-            if (searchEnd) {
-                // On regardera si il y a bien une suite ...
-                rangeLength++;
-            }
-
-            if (dataModel instanceof IRangeDataModel) {
-                ((IRangeDataModel) dataModel)
-                        .setRowRange(rowIndex, rangeLength);
-            }
-
-            if (dataModel instanceof IRangeDataModel2) {
-                ((IRangeDataModel2) dataModel).setRowRange(rowIndex,
-                        rangeLength, searchEnd);
             }
         }
 
