@@ -2,11 +2,39 @@
 ----------------------------------------------------------------------
 - @version I2537
 - @author Olivier Oeuillot
-- 
+- 12/6/2008
 
 HourFilter/HourTranslator/HourChecker:
 Implementation des filtres serveur associés au client validator "heure" 
 
+f_tree:
+Correction d'un probleme de "f_update" sous firefox
+
+MenuDecorator:
+Détection et résolution de doublons d'ID pour éviter de mauvais comportements sous IE
+
+Bordures et composants... 
+Refonte du système de génération de CSS (qui était trop limité par rapport aux besoins)
+
+UIData2:
+Appel des setRowRange() si le DataModel implemente IRangeDataModel
+Ajout de logs de debug
+
+f_classLoader:
+Correction du garbage collecteur lors de l'appel explicite à la destruction d'un objet (principalement suppression de la phase de DocumentComplete et serialisation)
+
+f_core:
+Correction d'un problème dans le setFocus due à un bug IE6  (Le window du timer n'est pas le this appelé dans la fonction)
+
+f_menu:
+Correction d'un BUG d'appel d'une méthode (IE7 uniquement)
+
+f_grid/f_dataGrid:
+Correction de la gestion du focus, et du repostionnement automatique de la scrollbar
+Ajout du repositionnement en page 1 lors d'un tri dans le cas d'un tableau "page" 
+
+DataGridRenderer:
+Déplacement du setRowRange() avant l'appel à getSelection(), getCheckedValues() et getAdditionalInformations()
 
 ----------------------------------------------------------------------
 - @version I2536
