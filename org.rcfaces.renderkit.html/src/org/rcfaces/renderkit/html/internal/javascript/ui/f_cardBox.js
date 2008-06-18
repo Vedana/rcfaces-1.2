@@ -264,7 +264,28 @@ var __members={
 		}
 
 		this.f_super(arguments, type, target);
+	},
+	/**
+	 * @method public 
+	 * @return f_card[] Card array
+	 */
+	f_listCards: function() {
+		var ret=new Array;
+		
+		var cards=this._cards;
+		if (!cards) {
+			return ret;
+		}
+		
+		for(var i=0;i<cards.length;i++) {
+			ret.push(cards[i]._ccard);	
+		}
+		
+		return ret;
 	}
 }
  
-new f_class("f_cardBox", null, null, __members, f_component);
+new f_class("f_cardBox", {
+	extend: f_component,
+	members: __members
+});

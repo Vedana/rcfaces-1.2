@@ -74,4 +74,8 @@ var __members = {
 	}
 }
 
-new f_class("f_card", null, null, __members, f_component, fa_asyncRender);
+new f_class("f_card", {
+	extend: f_component,
+	aspects: [ fa_asyncRender ],
+	members: __members
+});
