@@ -67,9 +67,9 @@ var __members = {
 	},
 	
 	f_finalizer: function() {
-		var checkCallbacks=radioButton._checkCallbacks;
+		var checkCallbacks=this._checkCallbacks;
 		if (checkCallbacks) {
-			radioButton._checkCallbacks=undefined;
+			this._checkCallbacks=undefined;
 			
 			f_core.RemoveCheckListener(this, checkCallbacks);
 		} 
