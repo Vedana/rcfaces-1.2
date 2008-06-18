@@ -40,43 +40,35 @@ var __statics={
 
 var __members={
 
-	f_focusManager: function(focusManagerId, focusId, setFocusIfMessage) {
+	f_focusManager: function() {
 		this.f_super(arguments);
 			
+		if (this.nodeType==f_core.ELEMENT_NODE) {
+			var instance=f_focusManager._Instance;
+			if (!instance) {
+				instance=this;
+				f_focusManager._Instance=instance;
+			}
+			
+			var setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
+			if (setFocusIfMessage) {
+				instance.f_setFocusIfMessage(true);
+			}
+			
+			var focusId=f_core.GetAttribute(this, "v:focusId");
+			if (focusId) {
+				instance.f_setFocus(focusId, true);
+			}
+			
+			if (instance!=this)  {
+				return;
+			}
+		}
+				
 		if (f_focusManager._Instance) {
 			throw new Error("FocusManager is already defined !");
 		}
 		f_focusManager._Instance=this;	
-	
-		if (this.nodeType==f_core.ELEMENT_NODE) {	
-			focusId=f_core.GetAttribute(this, "v:focusId");
-			
-			setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
-			
-		} else if (focusManagerId) {
-			this.id=focusManagerId;
-		}
-	
-		this._setFocusIfMessage=setFocusIfMessage;
-		if (setFocusIfMessage!==false) {
-			var messageContext=f_messageContext.Get();
-			if (messageContext) {
-				this._messageContext=messageContext;
-			
-				messageContext.f_addMessageListener(this);
-			}		
-		}
-
-		if (this.f_getClass().f_getClassLoader().f_isDocumentCompleted()) {
-			this._documentCompleted=true;
-
-			if (focusId) {				
-				this.f_setFocus(focusId, true);
-			}
-
-		} else if (focusId) {
-			this._initFocusId =  focusId;
-		}
 		
 		if (f_core.IsGecko()) {
 			var self=this;
@@ -91,8 +83,7 @@ var __members={
 			window.addEventListener("focus", this._firefoxFocusListener, true);
 		}
 	},
-	f_finalize: function() {
-		
+	f_finalize: function() {		
 		var messageContext=this._messageContext;
 		if (messageContext) {
 			this._messageContext=undefined;
@@ -114,6 +105,31 @@ var __members={
 		// this._activeElement=undefined;
 
 		this.f_super(arguments);
+	},
+	/**
+	 * @method hidden
+	 * @param String id
+	 * @param optional String focusId
+	 * @param optional boolean setFocusIfMessage
+	 * @return void
+	 */
+	f_initialize: function(id, focusId, setFocusIfMessage) {
+		f_core.Assert(typeof(id)=="string", "f_focusManager.f_setId: Invalid id parameter '"+id+"'.");
+		this.id=id;
+
+		if (focusId) {
+			this.f_setFocus(focusId, true);
+		}
+
+		if (setFocusIfMessage!==false) {
+			this._setFocusIfMessage=true;		
+			
+			var messageContext=f_messageContext.Get();
+			if (messageContext) {
+				messageContext.f_addMessageListener(this);
+				this._messageContext=messageContext;
+			}
+		}		
 	},
 	/**
 	 * @method protected
@@ -262,9 +278,11 @@ var __members={
 		return true;
 	},
 	f_serialize: function() {
-		var focusId=this.f_getFocusId();
-		
-		this.f_setProperty(f_prop.FOCUS_ID, focusId);
+		if (this.id) {
+			var focusId=this.f_getFocusId();
+			
+			this.f_setProperty(f_prop.FOCUS_ID, focusId);
+		}
 	},
 	f_performMessageChanges: function(messageContext, messageEvent) {
 		f_core.Debug(f_focusManager, "f_performMessageChanges: MessageEvent.type="+messageEvent.type);
