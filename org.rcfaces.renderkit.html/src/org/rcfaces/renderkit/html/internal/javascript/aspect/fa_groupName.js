@@ -139,7 +139,23 @@ var __members = {
 		
 		var group=groups[groupName];		
 		if (group) {
-			return group;
+			// Il faut transformer les clientIds en composants !
+			
+			var components=new Array;
+			for(var i=0;i<group.length;) {
+				var component=this.ownerDocument.getElementById(group[i]);
+				
+				// He oui en ajax, le composant peut etre introuvable !
+				if (!component) {
+					group.splice(i,1);
+					continue;
+				}
+				
+				i++;
+				components.push(component);
+			}
+			
+			return components;
 		}
 		
 		group=new Array;
@@ -152,7 +168,11 @@ var __members = {
 
 		// Des radios natifs, on les recherche ...
 
-		f_core.Debug(fa_groupName, "ListGroup: Search elements by name '"+groupName+"' ...");
+		f_core.Debug(fa_groupName, "f_listGroup: Search elements by name '"+groupName+"' ...");
+
+		var classLoader=f_classLoader.Get(window);
+		
+		var components=new Array;
 
 		var elements=this.ownerDocument.getElementsByName(groupName);
 		for(var i=0;i<elements.length;i++) {
@@ -165,18 +185,22 @@ var __members = {
 				elementId=elementId.substring(0, inputSuffixPos);
 						
 				element=f_core.GetElementByClientId(elementId);
+
+			} else {
+				element = classLoader.f_init(element);			
 			}
 
-			f_core.Debug(fa_groupName, "ListGroup: Found element id='"+element.id+"' mainId='"+elementId+"' element='"+element+"'.");
+			f_core.Debug(fa_groupName, "f_listGroup: Found element id='"+element.id+"' mainId='"+elementId+"' element='"+element+"'.");
 
 			if (!element) {
 				continue;
 			}
 			
-			group.push(element);			
+			components.push(element);
+			group.push(element.id);			
 		}
 
-		return group;
+		return components;
 	},
 	
 	/**
