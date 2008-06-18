@@ -1823,8 +1823,8 @@ var f_core = {
 			f_core.SetInputHidden(form, f_core._VALUE, eventValue);
 		
 			var eventItem=(event)?event.f_getItem():null;
-			if (eventItem && typeof(eventItem)!="string") {
-				eventItem=String(eventItem);
+			if (eventItem) {
+				eventItem=f_core._ConvertItem(eventItem);
 			}
 			f_core.SetInputHidden(form, f_core._ITEM, eventItem);
 
@@ -1921,6 +1921,26 @@ var f_core = {
 		} finally {		
 			f_core.Profile(true, "f_core._submit("+url+")");
 		}
+	},
+	/**
+	 * @method private static
+	 * @param Object item
+	 * @return String
+	 */
+	_ConvertItem: function(item) {
+		if (!item || typeof(item)=="string") {
+			return item;
+		}
+		
+		if (item.value) {
+			return item.value;
+		}
+		
+		if (item._value) {
+			return item._value;
+		}
+		
+		return String(item);
 	},
 	/**
 	 * @method private static
