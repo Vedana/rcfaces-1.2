@@ -75,16 +75,34 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
             return;
         }
 
+        FocusManagerComponent focusManagerComponent = (FocusManagerComponent) jsWriter
+                .getComponentRenderContext().getComponent();
+
         jsWriter.setIgnoreComponentInitialization();
 
-        jsWriter.writeCall(getJavaScriptClassName(), "f_newInstance");
+        jsWriter.writeCall(getJavaScriptClassName(), "Get").write(").").write(
+                jsWriter.getJavaScriptRenderContext().convertSymbol(
+                        getJavaScriptClassName(), "f_initialize")).write('(')
+                .writeString(
+                        jsWriter.getComponentRenderContext()
+                                .getComponentClientId());
 
-        jsWriter.writeString(jsWriter.getComponentRenderContext()
-                .getComponentClientId());
-
+        int pred = 0;
         String focusId = getFocusId(jsWriter.getHtmlComponentRenderContext());
         if (focusId != null && focusId.length() > 0) {
             jsWriter.write(',').writeString(focusId);
+        } else {
+            pred++;
+        }
+
+        if (focusManagerComponent.isSetFocusIfMessageSetted()
+                && focusManagerComponent.isSetFocusIfMessage(jsWriter
+                        .getFacesContext()) == false) {
+            for (; pred > 0; pred--) {
+                jsWriter.write(',').writeNull();
+            }
+
+            jsWriter.writeBoolean(false);
         }
 
         jsWriter.writeln(");");
