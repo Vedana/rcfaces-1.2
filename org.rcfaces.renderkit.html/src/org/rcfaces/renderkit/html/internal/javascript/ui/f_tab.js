@@ -212,4 +212,7 @@ var __members = {
 	}
 }
 
-new f_class("f_tab", null, null, __members, f_card);
+new f_class("f_tab", {
+	extend: f_card,
+	members: __members
+});

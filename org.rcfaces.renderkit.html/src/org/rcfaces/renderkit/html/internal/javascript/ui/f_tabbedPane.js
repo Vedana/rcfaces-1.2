@@ -1153,7 +1153,19 @@ var __members = {
 		} catch (x) {
 			f_core.Error(f_tabbedPane, "f_setFocus: Error while setting focus to '"+component.id+"'.", x);
 		}
+	},
+	/**
+	 * @method public 
+	 * @return f_tab[] Card array
+	 */
+	f_listTabs: function() {
+		return this.f_listCards();
 	}
 }
  
-new f_class("f_tabbedPane", null, __statics, __members, f_cardBox);
+new f_class("f_tabbedPane", {
+	extend: f_cardBox,
+	members: __members,
+	statics: __statics
+});
+
