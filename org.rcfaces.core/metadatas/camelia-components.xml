@@ -2205,7 +2205,7 @@ Dans le cas d'un mode period !
 
 	</component>
 
-	<component id="dateItem" extends="abstractItem" render="false">
+	<component id="dateItem" extends="selectItem" render="false">
 		<capability id="ITextCapability" />
 		<capability id="IStyleClassCapability" />
 		<capability id="IMenuPopupIdCapability" />
@@ -2268,20 +2268,6 @@ Dans le cas d'un mode period !
 		<method id="getText" returnType="String">
 			<code>
 			return getItemLabel();
-			</code>
-		</method>
-
-
-		<binding-alias id="toolTipText" target="itemDescription" />
-		<method id="setToolTip" returnType="void">
-			<parameter type="java.lang.String" name="text" />
-			<code>
-			setItemDescription(text);
-			</code>
-		</method>
-		<method id="getToolTip" returnType="String">
-			<code>
-			return getItemDescription();
 			</code>
 		</method>
 
@@ -2402,16 +2388,8 @@ Dans le cas d'un mode period !
 		<attribute id="itemDisabled" type="boolean" writeComponent="false"/>
 	</component>
 
-	<component id="UIImageItem" extends="abstractItem" render="false" tagName="uiImageItem">
-		<capability id="IVisibilityCapability" />
+	<component id="selectItem" extends="abstractItem" render="false">
 		<capability id="IToolTipCapability" />
-		<capability id="IStatesImageCapability" />		
-		<capability id="IAlternateTextCapability" />
-		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
-
-		<attribute id="rendered" type="boolean" writeComponent="false"/>
-
-		<method id="getVisibleState(javax.faces.context.FacesContext)" />
 
 		<binding-alias id="toolTipText" target="itemDescription" />
 		<method id="setToolTip" returnType="void">
@@ -2425,6 +2403,18 @@ Dans le cas d'un mode period !
 			return getItemDescription();
 			</code>
 		</method>
+		
+	</component>
+
+	<component id="UIImageItem" extends="selectItem" render="false" tagName="uiImageItem">
+		<capability id="IVisibilityCapability" />
+		<capability id="IStatesImageCapability" />		
+		<capability id="IAlternateTextCapability" />
+		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
+
+		<attribute id="rendered" type="boolean" writeComponent="false"/>
+
+		<method id="getVisibleState(javax.faces.context.FacesContext)" />
 		
 	</component>
 	
