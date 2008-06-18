@@ -75,6 +75,8 @@ public class ComboGridRenderer extends DataGridRenderer implements
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "input";
 
+    private static final String INPUT_ERRORED_PROPERTY = "org.rcfaces.html.COMBO_GRID_ERRORED";
+
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMBO_GRID;
     }
@@ -254,6 +256,13 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
                 formattedValue = formatValue(facesContext, comboGridComponent,
                         convertedSelectedValue);
+
+                if (formattedValue == null) {
+                    // La clef est inconnue !
+                    htmlWriter.writeAttribute("v:invalidKey", true);
+                    componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,
+                            Boolean.TRUE);
+                }
             }
         }
 
@@ -339,7 +348,17 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
         htmlWriter.writeId(componentRenderContext.getComponentClientId()
                 + INPUT_ID_SUFFIX);
-        htmlWriter.writeClass(getMainStyleClassName() + "_input");
+
+        StringAppender sa = new StringAppender(128);
+        sa.append(getMainStyleClassName());
+        sa.append("_input");
+
+        if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
+            sa.append(' ').append(getMainStyleClassName()).append(
+                    "_input_errored");
+        }
+
+        htmlWriter.writeClass(sa.toString());
 
         writeInputAttributes(htmlWriter);
 
