@@ -264,7 +264,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 && htmlWriter.getHtmlComponentRenderContext()
                         .getHtmlRenderContext().getJavaScriptRenderContext()
                         .isCollectorMode() == false) {
-            // Le ::value  n'a de sens que lors du CollectorMode !
+            // Le ::value n'a de sens que lors du CollectorMode !
             value = null;
         }
 
@@ -553,7 +553,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             }
         }
 
-        if (internalValue) {
+        if (internalValue && validatorDescriptor != null) {
             IParameter ps[] = new IParameter[params.size() / 2];
             int cnt = 0;
             for (Iterator it = params.iterator(); it.hasNext();) {
