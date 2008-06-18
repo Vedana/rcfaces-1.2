@@ -178,6 +178,9 @@ var __members = {
 		this._formattedValue=this.f_getInput().value;
 		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
 		this._inputValue=this._selectedValue;
+		if (this._selectedValue) {
+			this._keyErrored=f_core.GetAttribute(this, "v:invalidKey", false);
+		}
 		
 		this.f_getInput().onbeforedeactivate=f_comboGrid._OnBeforeDeactivate;
 		

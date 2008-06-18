@@ -174,11 +174,11 @@ var __members = {
 		}
 		
 		if (tbody) {	
+			this.f_getClass().f_getClassLoader().f_garbageObjects(tbody);
+
 			while (tbody.hasChildNodes()) {
 				tbody.removeChild(tbody.lastChild);
-			}
-			
-			this.f_getClass().f_getClassLoader().f_garbageObjects();
+			}			
 		}
 
 		var url=f_env.GetViewURI();

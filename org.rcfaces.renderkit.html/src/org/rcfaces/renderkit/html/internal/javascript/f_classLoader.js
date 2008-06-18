@@ -858,6 +858,9 @@ f_classLoader.prototype = {
 		
 		var initFct=function(component) {
 			var componentId=component.id;
+			if (!componentId) { // Ca peut être l'objet document !
+				return;
+			}
 			
 			var idx=componentId.lastIndexOf('::');
 			var mainId=(idx>0)?componentId.substring(0, idx):componentId;
@@ -1328,9 +1331,10 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden
 	 * @param optional boolean serializeState
+	 * @param optional HTMLElement... garbagedComponents parent elements to garbage ...
 	 * @return String serialized state
 	 */
-	f_garbageObjects: function(serializeState) {
+	f_garbageObjects: function(serializeState, garbagedComponents) {
 	
 		if (this._exiting) {
 			throw "This classloader is exiting ... [garbageObjects]";
@@ -1348,6 +1352,11 @@ f_classLoader.prototype = {
 		var clearGarbageMark=++garbageMark;
 		this._garbageMark=garbageMark;
 		
+		document._rcfacesGarbageMark=keepGarbageMark;
+		for(var i=1;i<arguments.length;i++) {
+			arguments[i]._rcfacesGarbageMark=clearGarbageMark;
+		}
+		
 		var documentCompleteObjects=this._documentCompleteObjects;
 		var serializableObjects=this._serializableObjects;
 		
@@ -1357,24 +1366,29 @@ f_classLoader.prototype = {
 		for (var i=0;i<componentPool.length;) {
 			var obj=componentPool[i];
 			
+			if (f_core.IsDebugEnabled(f_classLoader)) {
+				var o=obj;
+				for(;o && o.nodeType!=f_core.DOCUMENT_NODE;o=o.parentNode);
+				f_core.Assert(o, "f_classLoader.f_garbageObjects: already DOM detached component ! ("+obj.id+")");
+			}
+			
 			var p=obj;
 			var gm;
 			var parentNode;
 			for(;;) {
-				if (p.nodeType==f_core.DOCUMENT_NODE) {
-					break;
-				}
-
 				gm=p._rcfacesGarbageMark;
 
 				if (gm==keepGarbageMark) {
-					// Cool !
+					// On tombe sur une marque, comme quoi il faut garder !
 					break;
 					
 				} else if (gm==clearGarbageMark) {
+					// On tombe sur une marque comme quoi il faut l'effacer
 					p=null;
 					break;
 				}
+
+				// Aucune marque ?!
 
 				list.push(p); // On marque
 
@@ -1392,7 +1406,7 @@ f_classLoader.prototype = {
 					continue;
 				}
 				
-				p=null;
+				p=null; // On arrive à la fin 
 				break;
 			}
 			
@@ -1402,6 +1416,7 @@ f_classLoader.prototype = {
 			}
 			
 			if (p) {
+				// On garde,  au suivant ...
 				i++;
 				continue;
 			}
@@ -1417,6 +1432,7 @@ f_classLoader.prototype = {
 			componentPool.splice(i, 1);
 			
 			if (documentCompleteObjects) {
+				// Ca devrait jamais arriver ... mais bon ...
 				var documentCompleteObjectsIndex=obj._documentCompleteObjectsIndex;
 				if (documentCompleteObjectsIndex!==undefined) {
 					documentCompleteObjects[documentCompleteObjectsIndex]=undefined;
@@ -1455,7 +1471,7 @@ f_classLoader.prototype = {
 		
 		f_class.Clean(toClean);
 		
-		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged "+(serializableComponents?(") and "+serializableComponents+" objects serializes"):"")+".");
+		f_core.Debug(f_classLoader, "f_garbageObjects: "+toClean.length+" object(s) garbaged "+(serializableComponentsGarbaged?(") and "+serializableComponentsGarbaged+" objects serializes"):"")+".");
 		
 		return serializedForm;
 	},

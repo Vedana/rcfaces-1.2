@@ -966,6 +966,30 @@ var __members = {
 			}
 						
 			if (tbody) {
+								
+				if (this._additionalInformations) { // Des AdditionalInformations à effacer ?
+					f_classLoader.SerializeInputsIntoParam(params, tbody, true);
+						
+					params.serializedFirst=this._first;
+					params.serializedRows=this._rows;
+					
+					var serializedIndexes=this.f_addSerializedIndexes(this._first, this._rows);
+					
+					params[f_prop.SERIALIZED_INDEXES]=serializedIndexes.join(',');
+//				}
+
+//				if (this._additionalInformations) { // Des AdditionalInformations à effacer ?
+					this._additionalInformationCount=0;
+			
+					var serializedState=this.f_getClass().f_getClassLoader().f_garbageObjects(true, tbody);
+					f_core.Debug(f_dataGrid, "f_callServer: serializedState="+serializedState);
+					if (serializedState) {
+						params[f_core.SERIALIZED_DATA]=serializedState;
+					}
+	
+					f_core.Debug(f_dataGrid, "f_callServer: garbage "+(this._additionalInformationCount)+" additional information ");
+				}
+
 				this.f_releaseRows();
 				this.f_releaseCells();
 			
@@ -982,32 +1006,10 @@ var __members = {
 				}
 				this._shadowRows=undefined;
 				this._endRowIndex=undefined;
-								
-				if (this._additionalInformations) { // Des AdditionalInformations à effacer ?
-					f_classLoader.SerializeInputsIntoParam(params, tbody, true);
-						
-					params.serializedFirst=this._first;
-					params.serializedRows=this._rows;
-					
-					var serializedIndexes=this.f_addSerializedIndexes(this._first, this._rows);
-					
-					params[f_prop.SERIALIZED_INDEXES]=serializedIndexes.join(',');
-				}
-				
+	
+				// Il faut dettacher les composants afin de retrouver ceux qui doivent être garbagés				
 				while (tbody.hasChildNodes()) {
 					tbody.removeChild(tbody.lastChild);
-				}
-
-				if (this._additionalInformations) { // Des AdditionalInformations à effacer ?
-					this._additionalInformationCount=0;
-			
-					var serializedState=this.f_getClass().f_getClassLoader().f_garbageObjects(true);
-					f_core.Debug(f_dataGrid, "f_callServer: serializedState="+serializedState);
-					if (serializedState) {
-						params[f_core.SERIALIZED_DATA]=serializedState;
-					}
-	
-					f_core.Debug(f_dataGrid, "f_callServer: garbage "+(this._additionalInformationCount)+" additional information ");
 				}
 			}
 		}

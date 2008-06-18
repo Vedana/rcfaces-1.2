@@ -75,15 +75,15 @@ var __members = {
 				this._endRowIndex=undefined;
 
 				f_classLoader.SerializeInputsIntoParam(params, tbody, true);
-
-				while (tbody.hasChildNodes()) {
-					tbody.removeChild(tbody.lastChild);
-				}
 			
-				var serializedForm=this.f_getClass().f_getClassLoader().f_garbageObjects(true);
+				var serializedForm=this.f_getClass().f_getClassLoader().f_garbageObjects(true, tbody);
 				f_core.Debug(f_componentsGrid, "f_callServer: serializedForm="+serializedForm);
 				if (serializedForm) {
 					params[f_core.SERIALIZED_DATA]=serializedForm;
+				}
+	
+				while (tbody.hasChildNodes()) {
+					tbody.removeChild(tbody.lastChild);
 				}
 				
 				params.serializedFirst=this._first;
