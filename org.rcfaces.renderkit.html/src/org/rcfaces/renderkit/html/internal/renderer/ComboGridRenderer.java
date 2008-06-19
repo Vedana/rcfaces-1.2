@@ -250,7 +250,8 @@ public class ComboGridRenderer extends DataGridRenderer implements
             String convertedSelectedValue = ValuesTools.convertValueToString(
                     selectedValue, converterComponent, facesContext);
 
-            if (convertedSelectedValue != null) {
+            if (convertedSelectedValue != null
+                    && convertedSelectedValue.length() > 0) {
                 htmlWriter.writeAttribute("v:selectedValue",
                         convertedSelectedValue);
 
