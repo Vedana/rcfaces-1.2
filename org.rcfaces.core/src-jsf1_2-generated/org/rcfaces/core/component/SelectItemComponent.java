@@ -1,0 +1,78 @@
+package org.rcfaces.core.component;
+
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import java.lang.String;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.AbstractItemComponent;
+
+public class SelectItemComponent extends AbstractItemComponent implements 
+	IToolTipCapability {
+
+	public static final String COMPONENT_TYPE="org.rcfaces.core.selectItem";
+
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
+	static {
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"toolTipText"}));
+	}
+
+	public SelectItemComponent() {
+		setRendererType(null);
+	}
+
+	public SelectItemComponent(String componentId) {
+		this();
+		setId(componentId);
+	}
+
+	public void setToolTip(String text) {
+
+
+			setItemDescription(text);
+			
+	}
+
+	public String getToolTip() {
+
+
+			return getItemDescription();
+			
+	}
+
+	public java.lang.String getToolTipText() {
+		return getToolTipText(null);
+	}
+
+	/**
+	 * See {@link #getToolTipText() getToolTipText()} for more details
+	 */
+	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "toolTipText" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isToolTipTextSetted() {
+		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
+	}
+
+	public void setToolTipText(java.lang.String toolTipText) {
+		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
+	}
+
+	protected Set getCameliaFields() {
+		return CAMELIA_ATTRIBUTES;
+	}
+
+	public void setValueExpression(String name, ValueExpression binding) {
+		if (Properties.TOOL_TIP_TEXT.equals(name)) {
+			name=Properties.ITEM_DESCRIPTION;
+		}
+		super.setValueExpression(name, binding);
+	}
+}

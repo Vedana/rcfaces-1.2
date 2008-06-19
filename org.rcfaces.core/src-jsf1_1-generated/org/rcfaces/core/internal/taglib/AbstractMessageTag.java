@@ -44,8 +44,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private String hiddenMode;
 	private String margins;
 	private String forVal;
-	private String showDetail;
 	private String showSummary;
+	private String showDetail;
 	public final String getMarginBottom() {
 		return marginBottom;
 	}
@@ -246,12 +246,12 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.forVal = forVal;
 	}
 
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	public final void setShowSummary(String showSummary) {
 		this.showSummary = showSummary;
+	}
+
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -276,8 +276,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  forVal='"+forVal+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -513,16 +513,6 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setValueBinding(Properties.SHOW_DETAIL, vb);
-
-			} else {
-				component.setShowDetail(getBool(showDetail));
-			}
-		}
-
 		if (showSummary != null) {
 			if (isValueReference(showSummary)) {
 				ValueBinding vb = application.createValueBinding(showSummary);
@@ -530,6 +520,16 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setShowSummary(getBool(showSummary));
+			}
+		}
+
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setValueBinding(Properties.SHOW_DETAIL, vb);
+
+			} else {
+				component.setShowDetail(getBool(showDetail));
 			}
 		}
 	}
@@ -561,8 +561,8 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		hiddenMode = null;
 		margins = null;
 		forVal = null;
-		showDetail = null;
 		showSummary = null;
+		showDetail = null;
 
 		super.release();
 	}

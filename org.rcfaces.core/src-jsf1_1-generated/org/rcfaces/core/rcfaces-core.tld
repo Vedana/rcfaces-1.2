@@ -1591,6 +1591,41 @@ A space-separated list of CSS style classes to be applied when this component ge
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>styleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
@@ -4609,6 +4644,13 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
@@ -4630,13 +4672,6 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5216,6 +5251,13 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
@@ -5237,13 +5279,6 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5739,20 +5774,20 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6370,6 +6405,13 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
@@ -6391,13 +6433,6 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6571,6 +6606,13 @@ A boolean value indicating whether the option created
         is false.
 ]]></description>
 			<name>itemDisabled</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
+]]></description>
+			<name>toolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -8944,6 +8986,108 @@ A boolean value indicating whether the option created
 		</attribute>
 	</tag>
 	<tag>
+		<name>selectItem</name>
+		<tag-class>org.rcfaces.core.internal.taglib.SelectItemTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the label to be displayed to the user
+        for this option.
+]]></description>
+			<name>itemLabel</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value to be returned to the server if this
+        option is selected by the user.
+]]></description>
+			<name>itemValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the option created
+        by this component is disabled.  Expressions
+        must evaluate to a boolean.  Default value
+        is false.
+]]></description>
+			<name>itemDisabled</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value describing the item.
+]]></description>
+			<name>itemDescription</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value that represents the disabled state of the component.
+]]></description>
+			<name>disabled</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value to be returned to the server if this
+        option is selected by the user.
+]]></description>
+			<name>itemValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the label to be displayed to the user
+        for this option.
+]]></description>
+			<name>itemLabel</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value describing the item.
+]]></description>
+			<name>itemDescription</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the option created
+        by this component is disabled.  Expressions
+        must evaluate to a boolean.  Default value
+        is false.
+]]></description>
+			<name>itemDisabled</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
+]]></description>
+			<name>toolTipText</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
 		<name>uiImageItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.UIImageItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
@@ -9042,16 +9186,16 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
-			<name>visible</name>
+			<name>toolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the tooltip for the component (shown when the pointe hover the component).
+A boolean value indicating wether the composant is visible.
 ]]></description>
-			<name>toolTipText</name>
+			<name>visible</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -12711,6 +12855,41 @@ A boolean value indicating that this component will prohibit
 A space-separated list of CSS style classes to be applied when this component get the focus. This value will be passed through as the "class" attribute on generated markup.
 ]]></description>
 			<name>focusStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>errorStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>infoStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>warnStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>styleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -16834,17 +17013,17 @@ A component's id that express the link between the two components.
 		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
+          should be included.  Default value is "false".
 ]]></description>
-			<name>showDetail</name>
+			<name>showSummary</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+          should be included.  Default value is "true".
 ]]></description>
-			<name>showSummary</name>
+			<name>showDetail</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17672,10 +17851,9 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
+A boolean value indicating if the component specific messages should be shown or not.
 ]]></description>
-			<name>showDetail</name>
+			<name>globalOnly</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17688,9 +17866,10 @@ A boolean value indicating whether the summary portion of displayed messages
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating if the component specific messages should be shown or not.
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
 ]]></description>
-			<name>globalOnly</name>
+			<name>showDetail</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -18376,16 +18555,16 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
-			<name>visible</name>
+			<name>toolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the tooltip for the component (shown when the pointe hover the component).
+A boolean value indicating wether the composant is visible.
 ]]></description>
-			<name>toolTipText</name>
+			<name>visible</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -18624,16 +18803,16 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
-			<name>visible</name>
+			<name>toolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the tooltip for the component (shown when the pointe hover the component).
+A boolean value indicating wether the composant is visible.
 ]]></description>
-			<name>toolTipText</name>
+			<name>visible</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -18928,16 +19107,16 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
-			<name>visible</name>
+			<name>toolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the tooltip for the component (shown when the pointe hover the component).
+A boolean value indicating wether the composant is visible.
 ]]></description>
-			<name>toolTipText</name>
+			<name>visible</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -30532,16 +30711,16 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
-			<name>visible</name>
+			<name>toolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the tooltip for the component (shown when the pointe hover the component).
+A boolean value indicating wether the composant is visible.
 ]]></description>
-			<name>toolTipText</name>
+			<name>visible</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -31991,16 +32170,16 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
-			<name>visible</name>
+			<name>toolTipText</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the tooltip for the component (shown when the pointe hover the component).
+A boolean value indicating wether the composant is visible.
 ]]></description>
-			<name>toolTipText</name>
+			<name>visible</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>

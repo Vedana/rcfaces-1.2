@@ -2105,6 +2105,56 @@ A space-separated list of CSS style classes to be applied when this component ge
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>errorStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>infoStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>warnStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>styleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
@@ -6073,11 +6123,9 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>var</name>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -6095,6 +6143,16 @@ A number identifying the row to be displayed at the top of the component.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
@@ -6107,22 +6165,14 @@ An int value specifying the number of rows to display, starting with the one ide
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
-			<name>margins</name>
+			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-			<name>value</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6894,11 +6944,9 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>var</name>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -6916,6 +6964,16 @@ A number identifying the row to be displayed at the top of the component.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
@@ -6928,22 +6986,14 @@ An int value specifying the number of rows to display, starting with the one ide
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
-			<name>margins</name>
+			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-			<name>value</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7589,21 +7639,21 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
@@ -7623,12 +7673,12 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
-			<name>margins</name>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -8438,11 +8488,9 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>var</name>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -8460,6 +8508,16 @@ A number identifying the row to be displayed at the top of the component.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value holding the current value of the component.
+]]></description>
+			<name>value</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 An int value specifying the number of rows to display, starting with the one identified by the
           "first" property.  If this value is set to zero, all available rows in
           the underlying data model will be displayed.
@@ -8472,22 +8530,14 @@ An int value specifying the number of rows to display, starting with the one ide
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
-			<name>margins</name>
+			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the current value of the component.
-]]></description>
-			<name>value</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.Object</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -8714,6 +8764,16 @@ A boolean value indicating whether the option created
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
+]]></description>
+			<name>toolTipText</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -11899,6 +11959,141 @@ A boolean value indicating whether the option created
 		</attribute>
 	</tag>
 	<tag>
+		<name>selectItem</name>
+		<tag-class>org.rcfaces.core.internal.taglib.SelectItemTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description><![CDATA[
+A string specifying the identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+]]></description>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+The value binding expression linking this component to a property in a backing bean.
+]]></description>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>javax.faces.component.UIComponent</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the label to be displayed to the user
+        for this option.
+]]></description>
+			<name>itemLabel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value to be returned to the server if this
+        option is selected by the user.
+]]></description>
+			<name>itemValue</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.Object</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the option created
+        by this component is disabled.  Expressions
+        must evaluate to a boolean.  Default value
+        is false.
+]]></description>
+			<name>itemDisabled</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value describing the item.
+]]></description>
+			<name>itemDescription</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value that represents the disabled state of the component.
+]]></description>
+			<name>disabled</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value to be returned to the server if this
+        option is selected by the user.
+]]></description>
+			<name>itemValue</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the label to be displayed to the user
+        for this option.
+]]></description>
+			<name>itemLabel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value describing the item.
+]]></description>
+			<name>itemDescription</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the option created
+        by this component is disabled.  Expressions
+        must evaluate to a boolean.  Default value
+        is false.
+]]></description>
+			<name>itemDisabled</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the tooltip for the component (shown when the pointe hover the component).
+]]></description>
+			<name>toolTipText</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+	</tag>
+	<tag>
 		<name>uiImageItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.UIImageItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
@@ -12027,22 +12222,22 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
-]]></description>
-			<name>visible</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
 			<name>toolTipText</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -16928,6 +17123,56 @@ A boolean value indicating that this component will prohibit
 A space-separated list of CSS style classes to be applied when this component get the focus. This value will be passed through as the "class" attribute on generated markup.
 ]]></description>
 			<name>focusStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for Error Messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>errorStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for fatal messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>fatalStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for info messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>infoStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied for warning messages. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>warnStyleClass</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A space-separated list of CSS style class(es) to be applied to the component. This value will be passed through as the "class" attribute on generated markup.
+]]></description>
+			<name>styleClass</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -22421,13 +22666,12 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>showDetail</name>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>boolean</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -22443,9 +22687,9 @@ A component's id that express the link between the two components.
 		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+          should be included.  Default value is "true".
 ]]></description>
-			<name>showSummary</name>
+			<name>showDetail</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
@@ -22453,12 +22697,13 @@ A boolean value indicating whether the summary portion of displayed messages
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
 ]]></description>
-			<name>margins</name>
+			<name>showSummary</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -23570,10 +23815,20 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>showDetail</name>
+			<name>margins</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+]]></description>
+			<name>showSummary</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
@@ -23592,22 +23847,12 @@ A boolean value indicating if the component specific messages should be shown or
 		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+          should be included.  Default value is "true".
 ]]></description>
-			<name>showSummary</name>
+			<name>showDetail</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -24513,22 +24758,22 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
-]]></description>
-			<name>visible</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
 			<name>toolTipText</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -24853,22 +25098,22 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
-]]></description>
-			<name>visible</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
 			<name>toolTipText</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -25261,22 +25506,22 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
-]]></description>
-			<name>visible</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
 			<name>toolTipText</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -40797,22 +41042,22 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
-]]></description>
-			<name>visible</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
 			<name>toolTipText</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -42748,22 +42993,22 @@ A boolean value indicating whether the option created
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating wether the composant is visible.
-]]></description>
-			<name>visible</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the tooltip for the component (shown when the pointe hover the component).
 ]]></description>
 			<name>toolTipText</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the composant is visible.
+]]></description>
+			<name>visible</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>

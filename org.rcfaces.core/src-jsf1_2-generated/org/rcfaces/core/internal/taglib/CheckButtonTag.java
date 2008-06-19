@@ -25,6 +25,10 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 	private ValueExpression readOnly;
 	private ValueExpression alternateText;
 	private ValueExpression focusStyleClass;
+	private ValueExpression errorStyleClass;
+	private ValueExpression fatalStyleClass;
+	private ValueExpression infoStyleClass;
+	private ValueExpression warnStyleClass;
 	private ValueExpression selected;
 	public String getComponentType() {
 		return CheckButtonComponent.COMPONENT_TYPE;
@@ -58,6 +62,22 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 		this.focusStyleClass = focusStyleClass;
 	}
 
+	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+		this.errorStyleClass = errorStyleClass;
+	}
+
+	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+		this.fatalStyleClass = fatalStyleClass;
+	}
+
+	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+		this.infoStyleClass = infoStyleClass;
+	}
+
+	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+		this.warnStyleClass = warnStyleClass;
+	}
+
 	public final void setSelected(ValueExpression selected) {
 		this.selected = selected;
 	}
@@ -73,6 +93,10 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
+			LOG.debug("  errorStyleClass='"+errorStyleClass+"'");
+			LOG.debug("  fatalStyleClass='"+fatalStyleClass+"'");
+			LOG.debug("  infoStyleClass='"+infoStyleClass+"'");
+			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  selected='"+selected+"'");
 		}
 		super.setProperties(uiComponent);
@@ -145,6 +169,42 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (errorStyleClass != null) {
+			if (errorStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+
+			} else {
+				component.setErrorStyleClass(errorStyleClass.getExpressionString());
+			}
+		}
+
+		if (fatalStyleClass != null) {
+			if (fatalStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+
+			} else {
+				component.setFatalStyleClass(fatalStyleClass.getExpressionString());
+			}
+		}
+
+		if (infoStyleClass != null) {
+			if (infoStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.INFO_STYLE_CLASS, infoStyleClass);
+
+			} else {
+				component.setInfoStyleClass(infoStyleClass.getExpressionString());
+			}
+		}
+
+		if (warnStyleClass != null) {
+			if (warnStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.WARN_STYLE_CLASS, warnStyleClass);
+
+			} else {
+				component.setWarnStyleClass(warnStyleClass.getExpressionString());
+			}
+		}
+
 		if (selected != null) {
 			if (selected.isLiteralText()==false) {
 				component.setValueExpression(Properties.SELECTED, selected);
@@ -163,6 +223,10 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 		readOnly = null;
 		alternateText = null;
 		focusStyleClass = null;
+		errorStyleClass = null;
+		fatalStyleClass = null;
+		infoStyleClass = null;
+		warnStyleClass = null;
 		selected = null;
 
 		super.release();

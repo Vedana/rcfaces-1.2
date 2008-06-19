@@ -13,13 +13,12 @@ import org.rcfaces.core.internal.tools.ListenersTools1_1;
 import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
 
-public class UIImageItemTag extends AbstractItemTag implements Tag {
+public class UIImageItemTag extends SelectItemTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(UIImageItemTag.class);
 
 	private String visible;
-	private String toolTipText;
 	private String disabledImageURL;
 	private String hoverImageURL;
 	private String selectedImageURL;
@@ -36,14 +35,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 
 	public final void setVisible(String visible) {
 		this.visible = visible;
-	}
-
-	public final String getToolTipText() {
-		return toolTipText;
-	}
-
-	public final void setToolTipText(String toolTipText) {
-		this.toolTipText = toolTipText;
 	}
 
 	public final String getDisabledImageURL() {
@@ -96,7 +87,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  visible='"+visible+"'");
-			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  disabledImageURL='"+disabledImageURL+"'");
 			LOG.debug("  hoverImageURL='"+hoverImageURL+"'");
 			LOG.debug("  selectedImageURL='"+selectedImageURL+"'");
@@ -124,16 +114,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 
 			} else {
 				component.setVisible(getBool(visible));
-			}
-		}
-
-		if (toolTipText != null) {
-			if (isValueReference(toolTipText)) {
-				ValueBinding vb = application.createValueBinding(toolTipText);
-				component.setValueBinding(Properties.TOOL_TIP_TEXT, vb);
-
-			} else {
-				component.setToolTipText(toolTipText);
 			}
 		}
 
@@ -200,7 +180,6 @@ public class UIImageItemTag extends AbstractItemTag implements Tag {
 
 	public void release() {
 		visible = null;
-		toolTipText = null;
 		disabledImageURL = null;
 		hoverImageURL = null;
 		selectedImageURL = null;

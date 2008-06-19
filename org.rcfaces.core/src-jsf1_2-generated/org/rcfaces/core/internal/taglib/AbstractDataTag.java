@@ -51,11 +51,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression initListeners;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression hiddenMode;
-	private ValueExpression var;
-	private ValueExpression first;
-	private ValueExpression rows;
 	private ValueExpression margins;
+	private ValueExpression first;
 	private ValueExpression value;
+	private ValueExpression rows;
+	private ValueExpression var;
 	private ValueExpression saveCompleteState;
 	public final void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
@@ -189,24 +189,24 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setVar(ValueExpression var) {
-		this.var = var;
+	public final void setMargins(ValueExpression margins) {
+		this.margins = margins;
 	}
 
 	public final void setFirst(ValueExpression first) {
 		this.first = first;
 	}
 
+	public final void setValue(ValueExpression value) {
+		this.value = value;
+	}
+
 	public final void setRows(ValueExpression rows) {
 		this.rows = rows;
 	}
 
-	public final void setMargins(ValueExpression margins) {
-		this.margins = margins;
-	}
-
-	public final void setValue(ValueExpression value) {
-		this.value = value;
+	public final void setVar(ValueExpression var) {
+		this.var = var;
 	}
 
 	public final void setSaveCompleteState(ValueExpression saveCompleteState) {
@@ -236,11 +236,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  var='"+var+"'");
-			LOG.debug("  first='"+first+"'");
-			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  first='"+first+"'");
 			LOG.debug("  value='"+value+"'");
+			LOG.debug("  rows='"+rows+"'");
+			LOG.debug("  var='"+var+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -491,13 +491,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (var != null) {
-			if (var.isLiteralText()==false) {
-				component.setValueExpression(Properties.VAR, var);
-
-			} else {
-				component.setVar(var.getExpressionString());
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
+				component.setMargins(margins.getExpressionString());
 		}
 
 		if (first != null) {
@@ -506,6 +504,15 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setFirst(getInt(first.getExpressionString()));
+			}
+		}
+
+		if (value != null) {
+			if (value.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE, value);
+
+			} else {
+				component.setValue(value.getExpressionString());
 			}
 		}
 
@@ -518,19 +525,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
-		}
-
-		if (value != null) {
-			if (value.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE, value);
+		if (var != null) {
+			if (var.isLiteralText()==false) {
+				component.setValueExpression(Properties.VAR, var);
 
 			} else {
-				component.setValue(value.getExpressionString());
+				component.setVar(var.getExpressionString());
 			}
 		}
 
@@ -578,11 +578,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		initListeners = null;
 		propertyChangeListeners = null;
 		hiddenMode = null;
-		var = null;
-		first = null;
-		rows = null;
 		margins = null;
+		first = null;
 		value = null;
+		rows = null;
+		var = null;
 		saveCompleteState = null;
 
 		super.release();

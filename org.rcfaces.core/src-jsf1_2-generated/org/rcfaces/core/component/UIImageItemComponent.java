@@ -4,12 +4,10 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
-import java.lang.String;
-import org.rcfaces.core.component.AbstractItemComponent;
-import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.SelectItemComponent;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.capability.IToolTipCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,18 +17,17 @@ import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 /**
  * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
  */
-public class UIImageItemComponent extends AbstractItemComponent implements 
+public class UIImageItemComponent extends SelectItemComponent implements 
 	IVisibilityCapability,
-	IToolTipCapability,
 	IStatesImageCapability,
 	IAlternateTextCapability,
 	IImageAccessorsCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(SelectItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectedImageURL","disabledImageURL","alternateText","visible","hoverImageURL","rendered","toolTipText","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectedImageURL","disabledImageURL","alternateText","visible","hoverImageURL","rendered","imageURL"}));
 	}
 
 	public UIImageItemComponent() {
@@ -58,20 +55,6 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 			
 			return Boolean.valueOf(isVisible(facesContext));
 		
-	}
-
-	public void setToolTip(String text) {
-
-
-			setItemDescription(text);
-			
-	}
-
-	public String getToolTip() {
-
-
-			return getItemDescription();
-			
 	}
 
 	public boolean isVisible() {
@@ -102,29 +85,6 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 			return getVisibleState(null);
 		
-	}
-
-	public java.lang.String getToolTipText() {
-		return getToolTipText(null);
-	}
-
-	/**
-	 * See {@link #getToolTipText() getToolTipText()} for more details
-	 */
-	public java.lang.String getToolTipText(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.TOOL_TIP_TEXT, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "toolTipText" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isToolTipTextSetted() {
-		return engine.isPropertySetted(Properties.TOOL_TIP_TEXT);
-	}
-
-	public void setToolTipText(java.lang.String toolTipText) {
-		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
 	}
 
 	public java.lang.String getDisabledImageURL() {
@@ -251,12 +211,5 @@ public class UIImageItemComponent extends AbstractItemComponent implements
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
-	}
-
-	public void setValueExpression(String name, ValueExpression binding) {
-		if (Properties.TOOL_TIP_TEXT.equals(name)) {
-			name=Properties.ITEM_DESCRIPTION;
-		}
-		super.setValueExpression(name, binding);
 	}
 }

@@ -90,6 +90,10 @@
 		<component-class>org.rcfaces.core.component.SelectImageItemComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.selectItem</component-type>
+		<component-class>org.rcfaces.core.component.SelectItemComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.UIImageItem</component-type>
 		<component-class>org.rcfaces.core.component.UIImageItemComponent</component-class>
 	</component>

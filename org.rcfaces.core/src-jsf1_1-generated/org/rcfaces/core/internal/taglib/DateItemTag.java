@@ -13,7 +13,7 @@ import org.rcfaces.core.internal.tools.ListenersTools1_1;
 import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.faces.context.FacesContext;
 
-public class DateItemTag extends AbstractItemTag implements Tag {
+public class DateItemTag extends SelectItemTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(DateItemTag.class);

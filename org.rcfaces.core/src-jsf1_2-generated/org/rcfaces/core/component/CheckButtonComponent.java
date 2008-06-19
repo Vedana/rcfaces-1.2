@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
@@ -38,13 +39,14 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 	IReadOnlyCapability,
 	IAlternateTextCapability,
 	IFocusStyleClassCapability,
+	ISeverityStyleClassCapability,
 	ISelectedCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.checkButton";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","selected","text","readOnly","alternateText","textPosition","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","text","fatalStyleClass","textPosition","styleClass","textDirection","selectionListener","selected","readOnly","errorStyleClass","warnStyleClass","alternateText","infoStyleClass"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="selected";
 
@@ -219,6 +221,98 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 
 	public void setFocusStyleClass(java.lang.String focusStyleClass) {
 		engine.setProperty(Properties.FOCUS_STYLE_CLASS, focusStyleClass);
+	}
+
+	public java.lang.String getErrorStyleClass() {
+		return getErrorStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getErrorStyleClass() getErrorStyleClass()} for more details
+	 */
+	public java.lang.String getErrorStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ERROR_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "errorStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isErrorStyleClassSetted() {
+		return engine.isPropertySetted(Properties.ERROR_STYLE_CLASS);
+	}
+
+	public void setErrorStyleClass(java.lang.String errorStyleClass) {
+		engine.setProperty(Properties.ERROR_STYLE_CLASS, errorStyleClass);
+	}
+
+	public java.lang.String getFatalStyleClass() {
+		return getFatalStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getFatalStyleClass() getFatalStyleClass()} for more details
+	 */
+	public java.lang.String getFatalStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FATAL_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "fatalStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFatalStyleClassSetted() {
+		return engine.isPropertySetted(Properties.FATAL_STYLE_CLASS);
+	}
+
+	public void setFatalStyleClass(java.lang.String fatalStyleClass) {
+		engine.setProperty(Properties.FATAL_STYLE_CLASS, fatalStyleClass);
+	}
+
+	public java.lang.String getInfoStyleClass() {
+		return getInfoStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getInfoStyleClass() getInfoStyleClass()} for more details
+	 */
+	public java.lang.String getInfoStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.INFO_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "infoStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isInfoStyleClassSetted() {
+		return engine.isPropertySetted(Properties.INFO_STYLE_CLASS);
+	}
+
+	public void setInfoStyleClass(java.lang.String infoStyleClass) {
+		engine.setProperty(Properties.INFO_STYLE_CLASS, infoStyleClass);
+	}
+
+	public java.lang.String getWarnStyleClass() {
+		return getWarnStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getWarnStyleClass() getWarnStyleClass()} for more details
+	 */
+	public java.lang.String getWarnStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.WARN_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "warnStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWarnStyleClassSetted() {
+		return engine.isPropertySetted(Properties.WARN_STYLE_CLASS);
+	}
+
+	public void setWarnStyleClass(java.lang.String warnStyleClass) {
+		engine.setProperty(Properties.WARN_STYLE_CLASS, warnStyleClass);
 	}
 
 	public boolean isSelected() {

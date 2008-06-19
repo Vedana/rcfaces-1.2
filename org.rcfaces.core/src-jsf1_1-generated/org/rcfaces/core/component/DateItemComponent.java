@@ -8,8 +8,8 @@ import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import java.util.Date;
+import org.rcfaces.core.component.SelectItemComponent;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.AbstractItemComponent;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import javax.faces.FacesException;
 import org.rcfaces.core.internal.converter.LocaleConverter;
@@ -24,7 +24,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
 /**
  * An item specialized for date values.
  */
-public class DateItemComponent extends AbstractItemComponent implements 
+public class DateItemComponent extends SelectItemComponent implements 
 	ITextCapability,
 	IStyleClassCapability,
 	IMenuPopupIdCapability,
@@ -33,7 +33,7 @@ public class DateItemComponent extends AbstractItemComponent implements
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateItem";
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractItemComponent.CAMELIA_ATTRIBUTES);
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(SelectItemComponent.CAMELIA_ATTRIBUTES);
 	static {
 		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"literalLocale","text","menuPopupId","literalTimeZone","styleClass","date"}));
 	}
@@ -100,20 +100,6 @@ public class DateItemComponent extends AbstractItemComponent implements
 
 
 			return getItemLabel();
-			
-	}
-
-	public void setToolTip(String text) {
-
-
-			setItemDescription(text);
-			
-	}
-
-	public String getToolTip() {
-
-
-			return getItemDescription();
 			
 	}
 
@@ -241,9 +227,6 @@ public class DateItemComponent extends AbstractItemComponent implements
 
 		} else if (Properties.DATE.equals(name)) {
 			name=Properties.ITEM_VALUE;
-
-		} else if (Properties.TOOL_TIP_TEXT.equals(name)) {
-			name=Properties.ITEM_DESCRIPTION;
 		}
 		super.setValueBinding(name, binding);
 	}

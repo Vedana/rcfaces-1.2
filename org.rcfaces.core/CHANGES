@@ -1,5 +1,66 @@
 
 ----------------------------------------------------------------------
+- @version I2539
+- @author Olivier Oeuillot
+- 
+
+SelectItemsTools (version BETA):
+Permet de calculer l'arbre des selectItems
+
+f_classLoader/f_dataGrid/f_componentsGrid/f_componentsList:
+Correction d'un problème de garbage collector
+
+fa_groupName:
+Correction d'un problème de persistance d'objets qui peuvent avoir été "garbagés"
+
+f_radioButton:
+Correction du finalizer qui faisait un accés à une propriété invalide
+
+f_focusManager/FocusManagerRenderer:
+Revision du code afin de pouvoir acceder au focusManager avant sa définition par la balise <f:focusManager>
+
+ComboGridRenderer/f_comboGrid:
+Gestion du cas ou la clef est inconnue (le champ passe en warning) 
+Une clef "" ou NULL est considérée comme indéfinie, et elle n'est pas testée
+
+f_core:
+Conversion améliorée de l'item en string
+
+CheckButtonComponent:
+Ajout des attributs: fatalStyleClass, errorStyleClass, warnStyleClass, infoStyleClass
+
+f_class/f_multiWindowClassLoader:
+Gestion de l'heritage des classes par "frame parent", pour les classes de type "prototype".
+
+----------------------------------------------------------------------
+- @version I2538
+- @author Olivier Oeuillot
+- 13/6/2008
+
+Nouveau composant: "v:selectItem"
+Il permet d'accepter les   <v:clientData> et <v:serverData> dans la déclaration du composant. (Plus possible en Jsf 1.2)
+
+FieldSetRenderer:
+Correction d'un problème de génération du nom de la classe CSS
+
+TextEntryRenderer:
+Correction d'un problème quand il n'y a pas de validateurs
+
+FocusManagerRenderer/f_focusManager:
+Revision du code de génération du focusManager.  (Permet de positionner des erreurs avant que le composant f_focusManager soit initialisé)
+
+f_classLoader/f_dataGrid:
+Optimisation du systeme de garbageCollection: collection des objets à finaliser avant le décrochage du DOM
+
+f_card/f_cardBox:
+Ajout de la méthode f_listCards()
+
+f_tab/f_tabbedPane:
+Ajout de la méthode f_listTabs()
+
+
+
+----------------------------------------------------------------------
 - @version I2537
 - @author Olivier Oeuillot
 - 13/6/2008
