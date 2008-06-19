@@ -678,6 +678,7 @@
 		<capability id="IReadOnlyCapability" />
 		<capability id="IAlternateTextCapability" />
 		<capability id="IFocusStyleClassCapability" />
+		<capability id="ISeverityStyleClassCapability" />	
 
 		<capability id="ISelectedCapability" />
 
