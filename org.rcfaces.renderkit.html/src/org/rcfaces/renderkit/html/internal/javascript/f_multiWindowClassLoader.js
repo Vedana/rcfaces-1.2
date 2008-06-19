@@ -153,9 +153,13 @@ if (window._RCFACES_LEVEL3) {
 			case "f_classLoader":
 			case "f_multiWindowClassLoader":
 			case "f_aspect":
-			case "f_class":			
+			case "f_class":
+			
+				var win=this._window;
+				
 				var parentClassLoader=this._parent._window[className];
 				var newClassLoader=function() {
+					this._window=win;
 					parentClassLoader.apply(this, arguments);		
 				}
 				
@@ -165,8 +169,8 @@ if (window._RCFACES_LEVEL3) {
 				}
 				
 				newClassLoader._multiWindowCore=true;
-				newClassLoader._window=this._window;
-				this._window[className]=newClassLoader;
+				newClassLoader._window=win;
+				win[className]=newClassLoader;
 				
 				if (className=="f_class" || className=="f_aspect") {
 					newClassLoader._classLoader=this;

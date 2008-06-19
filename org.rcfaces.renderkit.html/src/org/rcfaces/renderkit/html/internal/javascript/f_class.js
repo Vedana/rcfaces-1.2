@@ -819,7 +819,12 @@ var __members = {
 		}
 		
 		if (!classLoader) {
-			classLoader=(parentClass)?parentClass._classLoader:f_classLoader.Get(window);
+			var win=this._window;
+			if (!win) {
+				win=window;
+			}
+			
+			classLoader=(parentClass)?parentClass._classLoader:f_classLoader.Get(win);
 		}
 		
 		if (!parentClass && className!="f_object") {
