@@ -19,15 +19,26 @@ var __statics={
 	
 	/**
 	 * @method public static
+	 * @param hidden boolean create
 	 * @return f_focusManager
 	 */
-	Get: function() {
+	Get: function(create) {
 		var instance=f_focusManager._Instance;
-		if (!instance) {
+		if (!instance && create!==false) {
 			instance=f_focusManager.f_newInstance();
+			
+			f_focusManager.Set(instance);
 		}
 		
 		return instance;
+	},
+	/**
+	 * @method public hidden
+	 * @param f_focusManager focusManager
+	 * @return void
+	 */
+	Set: function(focusManager) {
+		f_focusManager._Instance=focusManager;
 	},
 	/**
 	 * @method protected static
@@ -42,14 +53,12 @@ var __members={
 
 	f_focusManager: function() {
 		this.f_super(arguments);
+	
+		if (f_focusManager._Instance) {
+			throw new Error("FocusManager is already defined !");
+		}
 			
-		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var instance=f_focusManager._Instance;
-			if (!instance) {
-				instance=this;
-				f_focusManager._Instance=instance;
-			}
-			
+		if (this.nodeType==f_core.ELEMENT_NODE) {			
 			var setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
 			if (setFocusIfMessage) {
 				instance.f_setFocusIfMessage(true);
@@ -64,11 +73,6 @@ var __members={
 				return;
 			}
 		}
-				
-		if (f_focusManager._Instance) {
-			throw new Error("FocusManager is already defined !");
-		}
-		f_focusManager._Instance=this;	
 		
 		if (f_core.IsGecko()) {
 			var self=this;
