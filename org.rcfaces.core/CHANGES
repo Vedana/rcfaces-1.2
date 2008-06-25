@@ -2,7 +2,7 @@
 ----------------------------------------------------------------------
 - @version I2539
 - @author Olivier Oeuillot
-- 
+- 25/6/2008
 
 SelectItemsTools (version BETA):
 Permet de calculer l'arbre des selectItems
@@ -31,6 +31,15 @@ Ajout des attributs: fatalStyleClass, errorStyleClass, warnStyleClass, infoStyle
 
 f_class/f_multiWindowClassLoader:
 Gestion de l'heritage des classes par "frame parent", pour les classes de type "prototype".
+
+f_core:
+Amélioration de l'utilisation des consoles du browser
+
+f_vb:
+Correction du converter-hour
+
+f_focusManager:
+Spécification de Get/Set statics pour le singleton du focusManager. 
 
 ----------------------------------------------------------------------
 - @version I2538
