@@ -552,15 +552,8 @@ var f_core = {
 			if (!exception) {
 				exception=new Error(message);	
 			}			
-                          
-			if (window.dump) {
-				var msg=message;
-				if (exception) {
-					msg+="\nException:\n"+f_core._FormatException(exception);
-				}
-				
-				window.dump(msg);
-			}
+            
+            f_core._CallDebugger(name, message, exception, win);
 		}
 
 		if (!f_core._AddLog(1, name, message, exception, win)) {
@@ -5605,6 +5598,35 @@ var f_core = {
 		}
 				
 		alert(msg);
+	},
+	/**
+	 * @method private static
+	 * @param optional String message
+	 * @param optional Error exception
+	 * @return void
+	 */
+	_CallDebugger: function(message, exception) {
+		if (!f_core._DebuggerEnabled) {
+			return;
+		}
+		
+		if (document.readyState) {
+			//debugger;
+			return;		
+		}
+		if (window.console) {
+			window.console.log(message, exception);
+			return;
+		}
+		if (window.dump) {
+			var msg=message;
+			if (exception) {
+				msg+="\nException:\n"+f_core._FormatException(exception);
+			}
+			
+			window.dump(msg);
+			return;			
+		}
 	},
 	/**
 	 * @method public static
