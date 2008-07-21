@@ -37,7 +37,7 @@ public class Constants {
 
     public static final boolean INTERACTIVE_RENDER_GZIP_DEFAULT_VALUE = true;
 
-    public static final boolean JAVASCRIPPT_APPEND_RCFACES_HEADER = true;
+    public static final boolean JAVASCRIPT_APPEND_RCFACES_HEADER = true;
 
     public static final boolean JAVASCRIPT_APPEND_PROFILER_DATE = true;
 
