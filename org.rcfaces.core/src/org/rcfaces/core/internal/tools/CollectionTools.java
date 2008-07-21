@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -26,7 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.util.StringList;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.core.model.ICommitableObject;
@@ -46,11 +45,6 @@ public class CollectionTools {
     protected static final Object[] EMPTY_VALUES = new Object[0];
 
     private static final Object[] EMPTY_STRING_ARRAY = new String[0];
-
-    private static final char STRING_DEFAULT_SEPARATOR = ',';
-
-    private static final String STRING_SEPARATORS = ""
-            + STRING_DEFAULT_SEPARATOR;
 
     private static final boolean SORT_INDICES = true;
 
@@ -104,20 +98,11 @@ public class CollectionTools {
         private static final String REVISION = "$Revision$";
 
         public int getCount(Object array) {
-            StringTokenizer st = new StringTokenizer((String) array,
-                    STRING_SEPARATORS);
-
-            return st.countTokens();
+            return StringList.countTokens((String) array);
         }
 
         public Object getFirst(Object array, Object refValues) {
-            StringTokenizer st = new StringTokenizer((String) array,
-                    STRING_SEPARATORS);
-            if (st.hasMoreTokens() == false) {
-                return null;
-            }
-
-            return st.nextToken();
+            return StringList.getFirstToken((String) array);
         }
 
         public Object[] listValues(Object array, Object refValues) {
@@ -544,7 +529,7 @@ public class CollectionTools {
 
             set.addAll(rowDatas);
 
-            String newValues = joinCollection(set, STRING_DEFAULT_SEPARATOR);
+            String newValues = StringList.joinTokens(set);
 
             if (newValues.equals(values)) {
                 return values;
@@ -579,22 +564,6 @@ public class CollectionTools {
 
         throw new FacesException("Select index is not implemented for values="
                 + values);
-    }
-
-    private static String joinCollection(Collection collection, char separator) {
-        StringAppender sa = new StringAppender(collection.size() * 16);
-
-        for (Iterator it = collection.iterator(); it.hasNext();) {
-            String token = (String) it.next();
-
-            if (sa.length() > 0) {
-                sa.append(separator);
-            }
-
-            sa.append(token);
-        }
-
-        return sa.toString();
     }
 
     private static Collection cloneCollection(UIComponent component,
@@ -873,7 +842,7 @@ public class CollectionTools {
 
             set.removeAll(rowDatas);
 
-            String newValues = joinCollection(set, STRING_DEFAULT_SEPARATOR);
+            String newValues = StringList.joinTokens(set);
 
             if (newValues.equals(values)) {
                 return values;
@@ -1373,24 +1342,16 @@ public class CollectionTools {
         }
 
         if (value instanceof String) {
-            StringTokenizer st = new StringTokenizer((String) value,
-                    STRING_SEPARATORS);
-            if (st.hasMoreTokens() == false) {
+            String ss[] = StringList.parseTokensList((String) value);
+
+            if (ss.length == 0) {
                 if (immutable == false) {
                     return new OrderedSet();
                 }
                 return Collections.EMPTY_SET;
             }
 
-            Set set = new OrderedSet(st.countTokens());
-            for (; st.hasMoreTokens();) {
-                String token = st.nextToken().trim();
-                if (token.length() < 1) {
-                    continue;
-                }
-
-                set.add(token);
-            }
+            Set set = new OrderedSet(Arrays.asList(ss));
 
             if (LOG.isDebugEnabled() && immutable) {
                 return Collections.unmodifiableSet(set);

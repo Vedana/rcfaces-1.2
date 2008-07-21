@@ -1511,6 +1511,19 @@
 			setClientAdditionalInformationFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
 		</code>
 	</method>
+	
+					
+	<method id="setFilterProperties" returnType="void">
+		<import>org.rcfaces.core.internal.converter.FilterPropertiesConverter</import>
+		<import>org.rcfaces.core.model.IFilterProperties</import>
+		<parameter type="java.lang.String" name="properties" />
+		
+		<code>
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
+		</code>
+	</method>
 			
 </camelia-components>
 	

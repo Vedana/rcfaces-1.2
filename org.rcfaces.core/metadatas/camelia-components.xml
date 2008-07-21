@@ -778,6 +778,8 @@
 			</code>
 		</method>
  ****************************************************************  -->
+		
+		<method id="setFilterProperties(String)" returnType="void" />
 	</component>
 
 <!--
@@ -1510,6 +1512,8 @@
 			<code/>
 		</method>
 		
+		<method id="setFilterProperties(String)" returnType="void" />
+		
 	</component>
 	
 	<component id="componentsGrid" extends="abstractData">
@@ -2088,6 +2092,8 @@
 			</code>
 		</method>
 		
+		<method id="setFilterProperties(String)" returnType="void" />
+		
 	</component>
 	
 	
@@ -2522,6 +2528,8 @@ Dans le cas d'un mode period !
 				return ImageAccessorTools.createImageAccessor(facesContext, value);
 			</code>
 		</method>
+		
+		<method id="setFilterProperties(String)" returnType="void" />
 		
 		<propertyValue>imageURL</propertyValue>
 	</component>	
@@ -3001,6 +3009,8 @@ Dans le cas d'un mode period !
 	
 		<method id="setSuggestionConverter(String)" />
 		<method id="setSuggestionConverter(String,javax.faces.context.FacesContext)" />
+		
+		<method id="setFilterProperties(String)" returnType="void" />
 		
 	</component>
 
@@ -4009,6 +4019,8 @@ Dans le cas d'un mode period !
 
 		<method id="listClientDataKeys(javax.faces.context.FacesContext)" />
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
+		
+		<method id="setFilterProperties(String)" returnType="void" />
 	</component>
 
 <!--
