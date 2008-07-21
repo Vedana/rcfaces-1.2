@@ -1348,6 +1348,8 @@ var __members = {
 	},
 	/**
 	 * @method hidden final
+	 * @param Object converter Converter
+	 * @return void
 	 */
 	f_setConverter: function(converter) {
 		f_core.Assert(typeof(converter)=="object", "f_clientValidator.f_setConverter: Converter must be an object. ("+converter+")");
@@ -1355,6 +1357,13 @@ var __members = {
 		f_core.Assert(typeof(converter.f_getAsString)=="function", "f_clientValidator.f_setConverter: f_getAsString of Converter must be a function. ("+converter.f_getAsString+")");		
 		
 		this._converter=converter;
+	},
+	/**
+	 * @method hidden final
+	 * @return Object converter
+	 */
+	f_getConverter: function() {
+		return this._converter;
 	},
 	/**
 	 * @method public final
