@@ -14,15 +14,11 @@ var __members = {
 	fa_filterProperties: function() {
 		// Au mieux on prend l'ancien !
 		this._filtred=f_core.GetBooleanAttribute(this, "v:filtred", this._filtred); 		
-		
-		var filterExpression=f_core.GetAttribute(this, "v:filterExpression");
-		if (filterExpression) {
-			this._filterProperties=f_core.DecodeObject(filterExpression);
-		}
 	},
 	/*
 	f_finalize:  function() {
 		// this._filtred=undefined; // boolean
+		// this._filterExpression=undefined; // String
 		// this._filterProperties=undefined; // Map<string, string>
 	},
 	*/
@@ -36,7 +32,7 @@ var __members = {
 	f_getFilterProperties: function() {
 		// On copie les propriétés !
 		var ret=new Object;
-		var properties=this._filterProperties;
+		var properties=this.fa_getFilterPropertiesObject();
 		if (!properties) {
 			return ret;
 		}
@@ -57,7 +53,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setFilterProperty: function(name1, value1, name2) {
-		var properties=this._filterProperties;
+		var properties=this.fa_getFilterPropertiesObject();
 		if (!properties) {
 			properties=new Object;
 		}
@@ -83,12 +79,12 @@ var __members = {
 
 		f_core.Assert(typeof(properties)=="object", "fa_filterProperties.f_setFilterProperties: Filter properties must be an Object or null !");
 	
-		var expression="";
+		var filterExpression="";
 		if (properties) {
-			expression=f_core.EncodeObject(properties);
+			filterExpression=f_core.EncodeObject(properties);
 		}
 	
-		f_core.Debug(fa_filterProperties, "f_setFilterProperties: Expression of properties='"+expression+"'.");
+		f_core.Debug(fa_filterProperties, "f_setFilterProperties: Expression of properties='"+filterExpression+"'.");
 	
 		//if (this._filterExpression==expression) {
 			// return;
@@ -103,11 +99,41 @@ var __members = {
 		}
 		
 		this._filterProperties=myProps;
-		this.f_setProperty(f_prop.FILTER_EXPRESSION, expression);
+		this._filterExpression=filterExpression;
+		this.f_setProperty(f_prop.FILTER_EXPRESSION, filterExpression);
 		
 		this.fa_updateFilterProperties(myProps);
 	},
+	/**
+	 * @method hidden
+	 * @return Object
+	 */
+	fa_getFilterPropertiesObject: function() {
+		var filterProperties=this._filterProperties;
+		if (filterProperties!==undefined) {
+			return filterProperties;
+		}
+				
+		var filterExpression=f_core.GetAttribute(this, "v:filterExpression");
+		filterProperties=null;
 	
+		if (filterExpression) {
+			filterProperties=f_core.DecodeObject(filterExpression);
+		}
+		
+		this._filterExpression=filterExpression;
+		this._filterProperties=filterProperties;
+		return filterProperties;		
+	},
+	/**
+	 * @method hidden
+	 * @return String
+	 */
+	fa_getSerializedPropertiesExpression: function() {
+		this.fa_getFilterPropertiesObject();
+		
+		return this._filterExpression;
+	},
 	/**
 	 * @method hidden abstract
 	 * @param String message
