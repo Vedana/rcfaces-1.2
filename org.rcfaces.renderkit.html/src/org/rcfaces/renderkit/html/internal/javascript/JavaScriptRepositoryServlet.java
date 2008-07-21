@@ -69,7 +69,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
             .getLog(JavaScriptRepositoryServlet.class);
 
     private static final String CLEAR_VARIABLES[] = { "__statics", "__members",
-            "__resources" };
+            "__resources", "__prototype" };
 
     private static final String MAIN_REPOSITORY_DIRECTORY_LOCATION = JavaScriptRepository.class
             .getPackage().getName().replace('.', '/');
@@ -618,7 +618,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         }
 
         protected void fillProlog(StringAppender sb) throws IOException {
-            if (Constants.JAVASCRIPPT_APPEND_RCFACES_HEADER) {
+            if (Constants.JAVASCRIPT_APPEND_RCFACES_HEADER) {
                 if (htmlRCFacesBuildId != null) {
                     sb.append("var rcfacesBuildId=\"");
                     sb.append(htmlRCFacesBuildId);
