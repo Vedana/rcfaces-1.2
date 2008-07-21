@@ -365,7 +365,7 @@ var __members = {
 		params.componentId=this.id;
 		
 		var text=null;
-		var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
+		var filterExpression=this.fa_getSerializedPropertiesExpression();
 		if (filterExpression) {
 			params.filterExpression=filterExpression;
 			

@@ -256,9 +256,10 @@ var __members={
 		}
 	
 		if (!type) {
-			var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
-
-			params.filterExpression=filterExpression;
+			var filterExpression=this.fa_getSerializedPropertiesExpression();
+			if (filterExpression) {
+				params.filterExpression=filterExpression;
+			}
 		}
 		
 		request.f_setRequestHeader("X-Camelia", "client.newService");

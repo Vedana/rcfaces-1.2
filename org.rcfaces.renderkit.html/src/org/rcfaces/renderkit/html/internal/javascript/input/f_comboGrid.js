@@ -693,7 +693,7 @@ var __members = {
 			key: key
 		}
 	
-		var filterExpression=this.f_getProperty(f_prop.FILTER_EXPRESSION);
+		var filterExpression=this.fa_getSerializedPropertiesExpression();
 		if (filterExpression) {
 			params.filterExpression=filterExpression;
 		}
