@@ -411,7 +411,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         int rowIndex = tableContext.getFirst();
 
-        // Initializer le IRandgeDataModel avant la selection/check/additionnal informations !
+        // Initializer le IRandgeDataModel avant la selection/check/additionnal
+        // informations !
         if (sortTranslations == null
                 && rows > 0
                 && ((dataModel instanceof IRangeDataModel) || (dataModel instanceof IRangeDataModel2))) {
