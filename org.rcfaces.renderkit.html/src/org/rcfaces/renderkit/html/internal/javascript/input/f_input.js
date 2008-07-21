@@ -299,7 +299,7 @@ var __members = {
 	 */
 	f_getValue: function() {
 		var validator=this._validator;
-		if (validator) {
+		if (validator && validator.f_getConverter()) {			
 			return validator.f_getConvertedValue();
 		}		
 		
@@ -309,11 +309,12 @@ var __members = {
 	 * Returns the value associated to the input component.
 	 *
 	 * @method public
+	 * @param Object value
 	 * @return boolean If value is recognized.
 	 */
 	f_setValue: function(value) {
 		var validator=this._validator;
-		if (validator) {
+		if (validator && validator.f_getConverter()) {
 			if (validator.f_setConvertedValue(value)) {
 				return true;
 			}
@@ -327,6 +328,8 @@ var __members = {
 			f_core.Debug(f_input, "f_setValue: Invalid value: "+value);
 			return false;
 		}
+
+		f_core.Debug(f_input, "f_setValue: Value="+value);
 		
 		this.f_getInput().value=value;
 		
