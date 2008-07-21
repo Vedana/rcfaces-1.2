@@ -53,6 +53,8 @@ import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IIndexesModel;
+import org.rcfaces.core.model.IRangeDataModel;
+import org.rcfaces.core.model.IRangeDataModel2;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -347,6 +349,30 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             // Reset des parametres de tri !
             ((ISortedDataModel) dataModel).setSortParameters(
                     componentsGridComponent, null);
+        }
+
+        // Initializer le IRandgeDataModel avant la selection/check/additionnal
+        // informations !
+        if (sortTranslations == null
+                && rows > 0
+                && ((dataModel instanceof IRangeDataModel) || (dataModel instanceof IRangeDataModel2))) {
+            // Specifie le range que si il n'y a pas de tri !
+
+            int rangeLength = rows;
+            if (searchEnd) {
+                // On regardera si il y a bien une suite ...
+                rangeLength++;
+            }
+
+            if (dataModel instanceof IRangeDataModel) {
+                ((IRangeDataModel) dataModel)
+                        .setRowRange(rowIndex, rangeLength);
+            }
+
+            if (dataModel instanceof IRangeDataModel2) {
+                ((IRangeDataModel2) dataModel).setRowRange(rowIndex,
+                        rangeLength, searchEnd);
+            }
         }
 
         int selectedIndexes[] = null;
