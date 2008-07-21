@@ -224,11 +224,6 @@ public abstract class AbstractGridRenderContext {
                     .getSortManager();
         }
 
-        if (gridComponent instanceof IFilterCapability) {
-            filtersMap = ((IFilterCapability) gridComponent)
-                    .getFilterProperties();
-        }
-
         initialize(checkTitleImages);
 
     }
@@ -742,6 +737,10 @@ public abstract class AbstractGridRenderContext {
 
         first = gridComponent.getFirst();
 
+        if (gridComponent instanceof IFilterCapability) {
+            filtersMap = ((IFilterCapability) gridComponent)
+                    .getFilterProperties();
+        }
     }
 
     private static ISortedComponent[] computeSortedComponents(
@@ -769,11 +768,8 @@ public abstract class AbstractGridRenderContext {
         this.forcedRows = forcedRows;
 
         if (filterExpression != null) {
-        	IFilterProperties filterProp = HtmlTools.decodeFilterExpression(null,
+            this.filtersMap = HtmlTools.decodeFilterExpression(null,
                     (UIComponent) gridComponent, filterExpression);
-        	if (this.filtersMap != null && filterProp != null) {
-        		this.filtersMap.putAll(filterProp.toMap());
-        	}
         }
 
         this.requestShowAdditionals = showAdditionals;
