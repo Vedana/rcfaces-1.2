@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -56,6 +58,7 @@ import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -71,6 +74,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
     private static final Log LOG = LogFactory
             .getLog(ComponentsGridRenderer.class);
+
+    private static final Map SORT_ALIASES = new HashMap(2);
+    static {
+        SORT_ALIASES.put(ISortEventCapability.SORT_SERVER, SORT_SERVER_COMMAND);
+    }
 
     private static final String DEFAULT_ROW_CLASSNAMES[] = { "f_grid_row_even",
             "f_grid_row_odd" };
@@ -946,6 +954,14 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         return values;
     }
 
+    protected void addAjaxRequiredClasses(
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        super.addAjaxRequiredClasses(javaScriptRenderContext);
+
+        javaScriptRenderContext.appendRequiredClass(
+                JavaScriptClasses.COMPONENTS_GRID, "asyncRender");
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -1006,7 +1022,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         protected String convertAliasCommand(String command) {
-            return null;
+            return (String) SORT_ALIASES.get(command);
         }
 
         public boolean isRowValueSetted() {

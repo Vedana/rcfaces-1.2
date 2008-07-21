@@ -1050,6 +1050,8 @@
 			<class name="f_componentsGrid">
 				<required-class name="f_grid" />
 
+				<required-class id="asyncRender" name="fa_asyncRender" />
+
 				<required-style name="f_componentsGrid.css" />
 			</class>
 		</file>

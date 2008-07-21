@@ -284,8 +284,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         if (ajax) {
-            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
-                    "ajax");
+            addAjaxRequiredClasses(javaScriptRenderContext);
         }
 
         if (dataGridComponent instanceof ISortManagerCapability) {
@@ -298,6 +297,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 }
             }
         }
+    }
+
+    protected void addAjaxRequiredClasses(
+            IJavaScriptRenderContext javaScriptRenderContext) {
+        javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+                "ajax");
     }
 
     protected boolean needAjaxJavaScriptClasses(IHtmlWriter writer,
