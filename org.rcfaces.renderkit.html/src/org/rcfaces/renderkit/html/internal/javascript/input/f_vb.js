@@ -1306,7 +1306,7 @@ var __statics = {
 				return object.f_getHours()+sep+object.f_getMinutes()+sep+object.f_getSeconds();
 			}
 			
-			if (object instanceof number) {
+			if (typeof(object)=="number") {
 				var hours=Math.floor(number/(60*60*1000));
 				var minutes=Math.floor(number/(60*1000)) % 60;
 				var seconds=Math.floor(number/1000)%60;
