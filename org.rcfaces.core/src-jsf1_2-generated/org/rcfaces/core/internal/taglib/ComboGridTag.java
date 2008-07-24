@@ -396,7 +396,12 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		}
 
 		if (filterProperties != null) {
+			if (filterProperties.isLiteralText()==false) {
 				component.setValueExpression(Properties.FILTER_PROPERTIES, filterProperties);
+
+			} else {
+				component.setFilterProperties(filterProperties.getExpressionString());
+			}
 		}
 
 		if (paged != null) {

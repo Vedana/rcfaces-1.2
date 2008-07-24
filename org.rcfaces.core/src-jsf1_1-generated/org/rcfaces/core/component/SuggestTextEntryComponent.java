@@ -2,13 +2,16 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
+import java.lang.String;
 import javax.faces.el.ValueBinding;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import javax.faces.convert.Converter;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.model.IFilterProperties;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
@@ -62,6 +65,15 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 			Converter converter=ComponentTools.createConverter(facesContext, converterId);
 
 			setSuggestionConverter(converter);
+		
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
 		
 	}
 

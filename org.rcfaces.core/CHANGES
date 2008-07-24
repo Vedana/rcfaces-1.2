@@ -1,5 +1,34 @@
 
 ----------------------------------------------------------------------
+- @version I2540
+- @author Olivier Oeuillot
+- 21/7/2008
+
+FilterPropertiesConverter/CollectionTools/StringList:
+Permet de spécifier les clefs/valeurs des attributs de type "filtre" (et non plus un simple binding)
+
+repository.xml/AbstractGridRenderer/ComponentsGridRenderer:
+Correction d'un problème de pagination AJAX du componentsGrid
+
+f_image.js/f_dataGrid.js/f_suggestTextEntry.js/f_componentsList.js/f_componentsGrid.js/f_comboGrid.js/f_combo.js/f_service.js:
+Renommage de la méthode this.f_getProperty(f_prop.FILTER_EXPRESSION) en this.fa_getSerializedPropertiesExpression()
+
+fa_filterProperties.js:
+Correction d'un problème d'accés aux couples key/values du filtre
+
+f_clientValidator.js:
+Ajout de this.f_getConverter()
+
+f_input.js:
+Correction du f_getValue()/f_setValue()
+
+f_vb.js:
+Correction du converteur hour->String
+
+ComponentsGridRenderer:
+Ajout de l'appel des méthodes associées à IRangeDataModel
+
+----------------------------------------------------------------------
 - @version I2539
 - @author Olivier Oeuillot
 - 25/6/2008

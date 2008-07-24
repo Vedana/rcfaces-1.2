@@ -128,8 +128,13 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		Application application = facesContext.getApplication();
 
 		if (filterProperties != null) {
+			if (isValueReference(filterProperties)) {
 				ValueBinding vb = application.createValueBinding(filterProperties);
 				component.setValueBinding(Properties.FILTER_PROPERTIES, vb);
+
+			} else {
+				component.setFilterProperties(filterProperties);
+			}
 		}
 
 		if (maxResultNumber != null) {

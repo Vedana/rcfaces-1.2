@@ -52,8 +52,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression first;
-	private ValueExpression margins;
 	private ValueExpression var;
+	private ValueExpression margins;
 	private ValueExpression rows;
 	private ValueExpression value;
 	public final void setMarginBottom(ValueExpression marginBottom) {
@@ -192,12 +192,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.first = first;
 	}
 
-	public final void setMargins(ValueExpression margins) {
-		this.margins = margins;
-	}
-
 	public final void setVar(ValueExpression var) {
 		this.var = var;
+	}
+
+	public final void setMargins(ValueExpression margins) {
+		this.margins = margins;
 	}
 
 	public final void setRows(ValueExpression rows) {
@@ -232,8 +232,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  first='"+first+"'");
-			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  var='"+var+"'");
+			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  rows='"+rows+"'");
 		}
 		super.setProperties(uiComponent);
@@ -494,13 +494,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
-		}
-
 		if (var != null) {
 			if (var.isLiteralText()==false) {
 				component.setValueExpression(Properties.VAR, var);
@@ -508,6 +501,13 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			} else {
 				component.setVar(var.getExpressionString());
 			}
+		}
+
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins.getExpressionString());
 		}
 
 		if (rows != null) {
@@ -564,8 +564,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		hiddenMode = null;
 		first = null;
-		margins = null;
 		var = null;
+		margins = null;
 		rows = null;
 		value = null;
 

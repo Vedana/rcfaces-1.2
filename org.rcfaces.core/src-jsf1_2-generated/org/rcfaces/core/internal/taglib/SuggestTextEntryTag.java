@@ -111,7 +111,12 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 
 		if (filterProperties != null) {
+			if (filterProperties.isLiteralText()==false) {
 				component.setValueExpression(Properties.FILTER_PROPERTIES, filterProperties);
+
+			} else {
+				component.setFilterProperties(filterProperties.getExpressionString());
+			}
 		}
 
 		if (maxResultNumber != null) {

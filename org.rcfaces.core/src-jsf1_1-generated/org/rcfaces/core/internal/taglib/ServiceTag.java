@@ -110,8 +110,13 @@ public class ServiceTag extends CameliaTag implements Tag {
 		}
 
 		if (filterProperties != null) {
+			if (isValueReference(filterProperties)) {
 				ValueBinding vb = application.createValueBinding(filterProperties);
 				component.setValueBinding(Properties.FILTER_PROPERTIES, vb);
+
+			} else {
+				component.setFilterProperties(filterProperties);
+			}
 		}
 
 		if (componentLocale != null) {

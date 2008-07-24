@@ -3,14 +3,17 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import java.lang.String;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.model.IFilterProperties;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
@@ -63,6 +66,15 @@ public class ImageComponent extends AbstractOutputComponent implements
 			
 				return ImageAccessorTools.createImageAccessor(facesContext, value);
 			
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
+		
 	}
 
 	public java.lang.String getImageURL() {

@@ -107,7 +107,12 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		}
 
 		if (filterProperties != null) {
+			if (filterProperties.isLiteralText()==false) {
 				component.setValueExpression(Properties.FILTER_PROPERTIES, filterProperties);
+
+			} else {
+				component.setFilterProperties(filterProperties.getExpressionString());
+			}
 		}
 	}
 

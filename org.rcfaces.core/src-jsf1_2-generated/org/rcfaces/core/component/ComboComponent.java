@@ -1,15 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.AbstractInputComponent;
+import java.lang.String;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.model.IFilterProperties;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 
 /**
@@ -47,6 +50,15 @@ public class ComboComponent extends AbstractInputComponent implements
 	public ComboComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
+		
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {

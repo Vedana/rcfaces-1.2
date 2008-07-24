@@ -12,6 +12,7 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.ComboColumnComponent;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.internal.tools.SortTools;
@@ -38,6 +39,7 @@ import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
+import org.rcfaces.core.model.IFilterProperties;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.internal.tools.CollectionTools;
@@ -263,6 +265,15 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 				AdditionalInformationTools.hideAll(null, this);
 			
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
+		
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {

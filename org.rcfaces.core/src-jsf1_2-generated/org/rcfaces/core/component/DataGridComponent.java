@@ -50,6 +50,7 @@ import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.internal.tools.SortTools;
@@ -67,6 +68,7 @@ import org.rcfaces.core.component.capability.ICheckEventCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
+import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.tools.CollectionTools;
 
 /**
@@ -608,6 +610,15 @@ public class DataGridComponent extends AbstractDataComponent implements
 	protected void saveDescendantState() {
 
 
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
+		
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {

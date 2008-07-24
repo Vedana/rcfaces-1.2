@@ -10,6 +10,7 @@ import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
 import org.rcfaces.core.component.capability.IServiceEventCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
@@ -26,6 +27,7 @@ import org.rcfaces.core.internal.manager.IServerDataManager;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.model.IFilterProperties;
 import java.util.Arrays;
 
 /**
@@ -190,6 +192,15 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		}
 		
 		return dataMapAccessor.listDataKeys(facesContext);
+		
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
 		
 	}
 
