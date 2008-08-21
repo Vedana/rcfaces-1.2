@@ -2943,6 +2943,7 @@ var __members = {
 				label.onfocus=null;
 				label.onblur=null;
 				label.onclick=null;
+				label.onkeydown=null;
 				
 				f_core.VerifyProperties(label);			
 			}
@@ -3017,14 +3018,14 @@ var __members = {
 		}
 		this._rowsPool=new Array;
 		
-		this._releaseRow.apply(this, list);
+		this.f_releaseRow.apply(this, list);
 	},
 	/**
-	 * @method private
+	 * @method protected
 	 * @param HtmlTRElement[] rows
 	 * @return void
 	 */
-	_releaseRow: function() {
+	f_releaseRow: function() {
 		for(var i=0;i<arguments.length;i++) {
 			var row=arguments[i];
 			
@@ -5141,6 +5142,33 @@ var __members = {
 		this.setAttribute("v:sortBreadCrumbsIndexes", indexes.join("|"));
 		this.setAttribute("v:sortBreadCrumbsTexts", texts.join("|"));
 	},
+	/**
+	 * 
+	 * @method public
+	 * @param any[] rowValues List of values whose specified rows.
+	 * @return number Number of removed rows.
+	 */
+	f_clearArray: function(rowValues) {
+		f_core.Assert(rowValues instanceof Array, "f_dataGrid.f_clearArray: Invalid values parameter '"+values+"'.");
+
+		return this.f_clear.apply(this, rowValues);
+	},
+	/**
+	 * 
+	 * @method public
+	 * @return number Number of removed rows.
+	 */
+	f_clearAll: function() {
+		return this.f_clear.apply(this, this.fa_listVisibleElements());
+	},
+	
+	/**
+	 * 
+	 * @method public
+	 * @param any... rowValue1 The value of the row to remove
+	 * @return number Number of removed rows.
+	 */
+	f_clear: f_class.ABSTRACT,
 	
 	/** 
 	 * @method protected abstract
