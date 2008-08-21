@@ -677,7 +677,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any... rowValue1 The value of the row to remove
-	 * @return number of removed rows.
+	 * @return number Number of removed rows.
 	 */
 	f_clear: function(rowValue1, rowValue2) {
 		f_core.Assert(this._rows==0, "f_dataGrid.f_clear: All rows of the DataGrid must be loaded (attribute rows=0)");
@@ -736,30 +736,11 @@ var __members = {
 		return ret;
 	},
 	/**
-	 * 
-	 * @method public
-	 * @param any[] rowValues List of values whose specified rows.
-	 * @return number of removed rows.
-	 */
-	f_clearArray: function(rowValues) {
-		f_core.Assert(rowValues instanceof Array, "f_dataGrid.f_clearArray: Invalid values parameter '"+values+"'.");
-
-		return this.f_clear.apply(this, rowValues);
-	},
-	/**
-	 * 
-	 * @method public
-	 * @return number of removed rows.
-	 */
-	f_clearAll: function() {
-		return this.f_clear.apply(this, this.fa_listVisibleElements());
-	},
-	/**
 	 * Returns an array of content of each cell of the specified row.
 	 *
 	 * @method public
 	 * @param any rowValue Row value, a row object, or the index of row into the table.
-	 * @param optional boolean onlyVisible Keey only visible columns.
+	 * @param optional boolean onlyVisible Key only visible columns.
 	 * @return String[] 
 	 */
 	f_getRowValues: function(rowValue, onlyVisible) {
