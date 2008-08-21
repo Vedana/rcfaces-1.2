@@ -22,8 +22,8 @@ var __members= {
 	 * @param optional any detail
 	 */
 	 f_event: function(component, type, jsEvent, item, value, selectionProvider, detail) {
-		f_core.Assert(typeof(type)=="string", "Bad type of event '"+type+"'");
-		f_core.Assert(component && (component.tagName || component._kclass), "Bad component '"+component+"'.");
+		f_core.Assert(typeof(type)=="string", "f_event.f_event: Bad type of event '"+type+"'");
+		f_core.Assert(component && (component.tagName || component._kclass), "f_event.f_event: Bad component '"+component+"'.");
 	
 		this._type = type;
 		this._component = component;
