@@ -870,7 +870,7 @@ var f_core = {
 	 * @method hidden static
 	 * @param boolean timeEnd
 	 * @param String name of profile point.
-	 * @param optional any Date of profile point. (Can be 'Date' or numer)
+	 * @param optional any date Date of profile point. (Can be 'Date' or numer)
 	 * @return void
 	 */
 	Profile: function(timeEnd, name, date, win) {
@@ -4403,7 +4403,7 @@ var f_core = {
 		}
 		
 		window._acceptedSelection=textRange.getBookmark();
-		document.title="Set bookmark ! "+window._acceptedSelection;	
+	//	document.title="Set bookmark ! "+window._acceptedSelection;	
 		return true;
 	},
 	/**
