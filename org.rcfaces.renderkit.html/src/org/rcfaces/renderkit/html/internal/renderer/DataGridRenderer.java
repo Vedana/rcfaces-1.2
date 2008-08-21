@@ -330,7 +330,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         DataModel dataModel = tableContext.getDataModel();
 
         boolean filtred = false;
-        int firstCount = tableContext.getRowCount();
+        int firstRowCount = tableContext.getRowCount();
 
         if (dataModel instanceof IComponentRefModel) {
             ((IComponentRefModel) dataModel)
@@ -371,7 +371,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
         int count = -1;
 
         if (searchEnd) {
-            count = firstCount;
+            count = firstRowCount;
         }
 
         int sortTranslations[] = null;
@@ -856,11 +856,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
         // * en mode liste, le dataModel ne pouvait pas encore donner le nombre
         // de rows
 
-        if (unknownRowCount && firstCount >= 0) {
+        if (unknownRowCount && firstRowCount >= 0) {
             encodeJsRowCount(jsWriter, tableContext, count);
 
         } else if (rows > 0) {
-            if (count > firstCount
+            if (count > firstRowCount
                     || (gridComponent.getFirst() == 0 && count == 0)) {
                 encodeJsRowCount(jsWriter, tableContext, count);
             }
