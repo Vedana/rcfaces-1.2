@@ -461,10 +461,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         try {
-            int i = 0;
+//            int i = 0;
             boolean selected = false;
 
-            for (; rows <= 0 || i < rows; i++, rowIndex++) {
+            for (int i=0; ; i++) {
                 if (searchEnd == false) {
                     // Pas de recherche de la fin !
                     // On peut sortir tout de suite ...
@@ -619,6 +619,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                         selected = false;
                     }
                 }
+                
+                rowIndex++;
             }
 
             if (unknownRowCount && firstRowCount >= 0) {
