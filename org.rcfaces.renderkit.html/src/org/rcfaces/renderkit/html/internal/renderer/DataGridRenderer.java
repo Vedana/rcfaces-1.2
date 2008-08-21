@@ -920,10 +920,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
         return indexesModel;
     }
 
-    protected void encodeJsRowCount(IJavaScriptWriter htmlWriter,
+    protected void encodeJsRowCount(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext tableContext, int count)
             throws WriterException {
-        htmlWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(
+        jsWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(
                 ");");
     }
 
