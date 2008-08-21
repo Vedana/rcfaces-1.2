@@ -195,7 +195,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             return;
         }
 
-        encodeChildren(htmlWriter, tableContext, false);
+        encodeChildren(htmlWriter, tableContext, false, false);
     }
 
     protected void encodeJsColumns(IJavaScriptWriter jsWriter,
@@ -278,7 +278,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     }
 
     public int encodeChildren(IComponentWriter writer,
-            ComponentsGridRenderContext gridRenderContext, boolean encodeJs)
+            ComponentsGridRenderContext gridRenderContext, boolean encodeJs, boolean unknownRowCount)
             throws WriterException {
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
@@ -294,14 +294,14 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         // Nombre de ligne a lire !
         int rows = gridRenderContext.getRows();
 
-        int firstCount = gridRenderContext.getRowCount();
+        int firstRowCount = gridRenderContext.getRowCount();
 
         boolean searchEnd = (rows > 0);
         // int firstCount = -1;
         int count = -1;
 
         if (searchEnd) {
-            count = firstCount;
+            count = firstRowCount;
         }
 
         int sortTranslations[] = null;
@@ -578,7 +578,21 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 }
             }
 
-            return i;
+            if (unknownRowCount && firstRowCount >= 0) {
+                return count;
+
+            } else if (rows > 0) {
+                if (count > firstRowCount
+                        || (componentsGridComponent.getFirst() == 0 && count == 0)) {
+                    return count;
+                }
+
+            } else if (gridRenderContext.getRowCount() < 0) {
+                return rowIndex;
+
+            }
+
+            return -1;
 
         } finally {
             componentsGridComponent.setRowIndex(-1);

@@ -125,6 +125,9 @@ public class ComponentsGridService extends AbstractHtmlService {
         String showAdditional = (String) parameters.get("showAdditional");
         String hideAdditional = (String) parameters.get("hideAdditional");
 
+        boolean unknownRowCount = "true".equals(parameters
+                .get("unknownRowCount"));
+
         ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
                 facesContext, componentsGridId);
         if (localizedComponent == null) {
@@ -218,7 +221,8 @@ public class ComponentsGridService extends AbstractHtmlService {
 
                 writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
                         rowIndex, forcedRows, sortedComponents,
-                        filterExpression, showAdditional, hideAdditional);
+                        filterExpression, showAdditional, hideAdditional,
+                        unknownRowCount);
 
             } catch (IOException ex) {
                 throw new FacesException(
@@ -284,7 +288,8 @@ public class ComponentsGridService extends AbstractHtmlService {
             ComponentsGridComponent dgc, String componentClientId,
             ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
-            String showAdditional, String hideAdditional) throws IOException {
+            String showAdditional, String hideAdditional,
+            boolean unknownRowCount) throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
                 .getHtmlProcessContext(facesContext);
@@ -332,7 +337,8 @@ public class ComponentsGridService extends AbstractHtmlService {
             jsWriter.setRenderContext(renderContext);
 
             // IComponentTreeRenderProcessor
-            // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.get(facesContext)
+            // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.
+            // get(facesContext)
 
             ComponentsGridRenderer.ComponentsGridRenderContext listContext = dgr
                     .createComponentsGridContext(processContext, jsWriter
@@ -340,10 +346,15 @@ public class ComponentsGridService extends AbstractHtmlService {
                             forcedRows, sortedComponents, filterExpression,
                             showAdditional, hideAdditional);
 
-            int rowCount = dgr.encodeChildren(jsWriter, listContext, true);
+            int rowCount = dgr.encodeChildren(jsWriter, listContext, true,
+                    unknownRowCount);
 
-            jsWriter.writeMethodCall("f_updateNewPage").writeInt(rowCount)
-                    .writeln(");");
+            if (rowCount >= 0) {
+                jsWriter.writeMethodCall("f_setRowCount").writeInt(rowCount)
+                        .writeln(");");
+            }
+
+            jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
         } finally {
             if (oldResponseWriter != null) {
