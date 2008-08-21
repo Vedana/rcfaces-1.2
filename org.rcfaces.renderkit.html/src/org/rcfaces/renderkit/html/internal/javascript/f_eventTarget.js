@@ -84,7 +84,7 @@ var __statics = {
 var __members = {
 	
 	f_eventTarget: function() {
-		this.f_super(arguments); // On appelle pas le super à cause d'un problème de profondeur de pile IE
+		this.f_super(arguments);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			var events=f_core.GetAttribute(this, "v:events");
