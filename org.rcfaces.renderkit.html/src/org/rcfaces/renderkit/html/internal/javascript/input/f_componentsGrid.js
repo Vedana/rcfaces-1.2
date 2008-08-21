@@ -35,6 +35,9 @@ var __members = {
 		if (length>0) {
 			params.rows=length;
 		}
+		if (this._rowCount<0) { /* && this._rows */			
+	        params.unknownRowCount=true;			
+		}
 
 		var orderColumnIndex=this.f_getProperty(f_prop.SORT_INDEX);
 		if (orderColumnIndex) {
@@ -677,6 +680,115 @@ var __members = {
 		var row=this.f_getRowByValue(rowValue, true);
 		
 		return fa_namingContainer.FindComponents(row, args);
+	},
+	/**
+	 * 
+	 * @method public
+	 * @return number Number of removed rows.
+	 */
+	f_clearAll: function() {
+	
+		var rows=this.fa_listVisibleElements();
+		if (!rows.length) {
+			return 0;
+		}
+		
+		this._cursor=undefined;
+		this._rowCount=0;
+		this._first=0;
+
+		var tbody=this._tbody;
+		var rowsPool=this._rowsPool;
+		var ret=0;
+		
+		for(var i=0;i<rows.length;i++) {
+			var row=rows[i];
+			
+			if (this._deselectElement(row)) {
+				selectionChanged=true;
+			}
+			
+			this.f_releaseRow(row);	
+			
+			f_core.VerifyProperties(row);
+			
+			ret++;
+		}
+
+		this.f_getClass().f_getClassLoader().f_garbageObjects(false, tbody);
+		
+		while (tbody.hasChildNodes()) {
+			var row=tbody.lastChild;
+			
+			rowsPool.f_removeElement(row);
+			tbody.removeChild(row);
+		}
+
+		this.f_performPagedComponentInitialized();
+
+		if (selectionChanged) {
+			this.fa_fireSelectionChangedEvent();
+		}
+		
+		return ret;
+	},
+	
+	/**
+	 * 
+	 * @method public
+	 * @param any... rowValue1 The value of the row to remove
+	 * @return number Number of removed rows.
+	 */
+	f_clear: function(rowValue1, rowValue2) {
+		f_core.Assert(this._rows==0 && this._rowCount, "f_componentsGrid.f_clear: All rows of the ComponentsGrid must be loaded (attribute rows=0)");
+		
+		var ret=0;
+		var tbody=this._tbody;
+		var rowsPool=this._rowsPool;
+		
+		var selectionChanged=false;
+		for(var i=0;i<arguments.length;i++) {
+			var rowValue=arguments[i];
+			
+			var row=this.f_getRowByValue(rowValue, false);
+			if (!row) {
+				continue;
+			}
+			
+			if (this._deselectElement(row)) {
+				selectionChanged=true;
+			}
+			
+			if (row==this._cursor) {
+				this._cursor=undefined;
+			}
+			
+			tbody.removeChild(row);
+			rowsPool.f_removeElement(row);
+		
+			this.f_releaseRow(row);	
+			
+			f_core.VerifyProperties(row);
+			
+			ret++;
+			if (this._rowCount>=0) {
+				this._rowCount--;
+			}
+		}
+
+		if (ret<1) {
+			return 0;
+		}
+
+		this.f_getClass().f_getClassLoader().f_garbageObjects(false, tbody);
+
+		this.f_performPagedComponentInitialized();
+
+		if (selectionChanged) {
+			this.fa_fireSelectionChangedEvent();
+		}
+					
+		return ret;
 	}
 }
  
