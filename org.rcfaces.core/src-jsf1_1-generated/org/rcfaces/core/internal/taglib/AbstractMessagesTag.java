@@ -44,8 +44,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private String hiddenMode;
 	private String globalOnly;
 	private String showSummary;
-	private String showDetail;
 	private String margins;
+	private String showDetail;
 	public final String getMarginBottom() {
 		return marginBottom;
 	}
@@ -246,12 +246,12 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.showSummary = showSummary;
 	}
 
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	public final void setMargins(String margins) {
 		this.margins = margins;
+	}
+
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -276,8 +276,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -516,6 +516,13 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins);
+		}
+
 		if (showDetail != null) {
 			if (isValueReference(showDetail)) {
 				ValueBinding vb = application.createValueBinding(showDetail);
@@ -524,13 +531,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			} else {
 				component.setShowDetail(getBool(showDetail));
 			}
-		}
-
-		if (margins != null) {
-			if (isValueReference(margins)) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins);
 		}
 	}
 
@@ -561,8 +561,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		hiddenMode = null;
 		globalOnly = null;
 		showSummary = null;
-		showDetail = null;
 		margins = null;
+		showDetail = null;
 
 		super.release();
 	}

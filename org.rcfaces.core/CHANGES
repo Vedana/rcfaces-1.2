@@ -1,5 +1,37 @@
 
 ----------------------------------------------------------------------
+- @version I2542
+- @author Olivier Oeuillot
+-
+
+ComponentsGridRenderer/ComponentsGridService:
+Correction de la gestion des tables dont la taille n'est pas connue au début, mais découverte par la suite
+
+f_grid.js:
+Correction d'une fuite mémoire
+
+f_grid.js/f_dataGrid.js/f_componentsGrid.js:
+Généralisation de l'API  f_clear, f_clearAll, f_clearArray  vers f_grid.js
+
+f_dataGrid.js:
+Correction de la fonction f_clear()
+
+f_componentsGrid.js:
+Correction lors ce que la taille du tableau est découverte lors du rendu
+
+f_core.js/f_pager.js:
+Optimisation du code de FormatMessage()
+
+f_classLoader.js:
+Ajout du mécanisme "onInitComponentListeners" qui permet d'avoir des callbacks quand un objet est initializé
+
+fa_namingContainer.js:
+Ajout du parametre "doNotInitialize" à la méthode FindComponent, qui permet de ne pas forcer l'initialisation du composant. 
+
+rcfaces.xsd:
+Correction du schema (types de parametre invalides)
+
+----------------------------------------------------------------------
 - @version I2541
 - @author Olivier Oeuillot
 - 24/7/2008
