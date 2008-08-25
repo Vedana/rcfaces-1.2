@@ -501,6 +501,9 @@ var __members = {
 					continue;
 				}
 				
+				if (!span) {
+					span=new Array;
+				}
 				span.push(c);
 			}
 			
