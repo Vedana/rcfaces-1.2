@@ -5001,14 +5001,14 @@ var f_core = {
 		f_core.Assert(typeof(message)=="string", "f_core.FormatMessage: Message parameter is invalid '"+message+"'.");
 //		f_core.Assert(parameters instanceof Array, "f_core.FormatMessage: parameters parameter is invalid '"+parameters+"'.");
 		
-		var ret="";
-		var pos=0;
-		for(;pos<message.length;) {
+		var ret=new Array;		
+		for(var pos=0;pos<message.length;) {
 			var idx=message.indexOf('{', pos);
 			var idx2=message.indexOf('\'', pos);
 			
-			if (idx2<0 && idx<0) {
-				return ret+message.substring(pos);
+			if (idx2<0 && idx<0) { // La fin du message
+				ret.push(message.substring(pos));
+				break;
 			}
 			
 			if (idx2<0 || (idx>=0 && idx<idx2)) {	
@@ -5017,17 +5017,17 @@ var f_core = {
 					throw new Error("Invalid expression \""+message+"\".");
 				}
 				
-				ret+=message.substring(pos, idx);
+				ret.push(message.substring(pos, idx));
 				
 				if (parameters) {
 					var p=message.substring(idx+1, idx2);
 					var num=parseInt(p, 10);
-					if (!isNaN(num)) {
+					if (!isNaN(num)) { // C'est un nombre
 						if (num>=0 && num<parameters.length) {
-							ret+=parameters[num];
+							ret.push(parameters[num]);
 						}
-					} else if (parameters[p]) {
-						ret+=parameters[p];
+					} else if (parameters[p]) { // C'est une clef
+						ret.push(parameters[p]);
 					}
 				}
 								
@@ -5035,27 +5035,34 @@ var f_core = {
 				continue;
 			}
 			
-			ret+=message.substring(pos, idx2);
+			ret.push(message.substring(pos, idx2));
+			idx2++;
 			
-			idx=message.indexOf('\'', idx2+1);
-			if (idx<0) {
-				throw new Error("Invalid expression \""+message+"\".");
-			}
-			pos=idx+1;
-
-			if (idx==idx2+1) {
-				ret+='\'';
-				
-			} else {
-				ret+=message.substring(idx2+1, idx);
-
-				if (message.charAt(pos)=='\'') {
-					ret+='\'';
+			for(;;) {
+				idx=message.indexOf('\'', idx2);
+				if (idx<0) {
+					throw new Error("Invalid expression \""+message+"\".");
 				}
+				if (idx==idx2+1) {
+					ret.push('\'');
+					idx2=idx+1;
+					continue;
+				}
+				break;
 			}
+			
+			pos=idx+1; // On continue apres le '
+			
+			if (idx>idx2) {
+				ret.push(message.substring(idx2, idx));
+			}
+
+			//if (message.charAt(pos)=='\'') {
+			//	ret.push('\'');
+			//}
 		}
 		
-		return ret;
+		return ret.join("");
 	},
 	/**
 	 * @method hidden static 

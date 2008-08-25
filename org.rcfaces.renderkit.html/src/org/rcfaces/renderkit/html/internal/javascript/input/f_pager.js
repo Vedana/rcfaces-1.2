@@ -391,7 +391,7 @@ var __members = {
 			
 			f_core.Debug(f_pager, "fa_pagedComponentInitialized: Format message '"+message+"' rows="+rows+" rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
 			
-			var span="";
+			var span=null;
 			for(var i=0;i<message.length;) {
 				var c=message.charAt(i++);
 				if (c=="{") {
@@ -399,9 +399,9 @@ var __members = {
 					var varName=message.substring(i, end).toLowerCase();		
 					i=end+1;
 					
-					if (span) {
-						this._appendSpan(this, span);
-						span="";
+					if (span && span.length) {
+						this._appendSpan(this, span.join(""));
+						span=null;
 					}
 					
 					if (!resourceBundle) {
@@ -477,32 +477,35 @@ var __members = {
 					
 					continue;	
 				} else if (c=="\'") {
+					if (!span) {
+						span=new Array;
+					}
 					for(var j=i;;) {
 						var end=message.indexOf("'", j);
 						if (end<0) {
-							span+=message.substring(j);
+							span.push(message.substring(j));
 							i=message.length;
 							break;
 						}
 								
-						if (message[end+1]=="\'") {
-							span+=message.substring(j, end)+"'";
+						if (message.charAt(end+1)=="\'") {
+							span.push(message.substring(j, end), "'");
 							j=end+2;
 							continue;
 						}
 						
-						span+=message.substring(j, end);
+						span.push(message.substring(j, end));
 						i=end+1;
 						break;
 					}
 					continue;
 				}
 				
-				span+=c;
+				span.push(c);
 			}
 			
-			if (span) {
-				this._appendSpan(component, span);
+			if (span && span.length) {
+				this._appendSpan(component, span.join(""));
 			}
 			
 		} finally {
