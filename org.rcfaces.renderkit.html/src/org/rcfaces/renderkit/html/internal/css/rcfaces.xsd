@@ -1,6 +1,5 @@
-<xd:?xml version="1.0" encoding="UTF-8"?>
-<xd:schema 
-		xd:xmlns="http://www.w3.org/2001/XMLSchema" 
+<?xml version="1.0" encoding="UTF-8" ?>
+<xd:schema xmlns:xd="http://www.w3.org/2001/XMLSchema" 
 		targetNamespace="http://rcfaces.org/rcfaces-1" 
 		xmlns="http://rcfaces.org/rcfaces-1">
 	<xd:annotation>
@@ -56,124 +55,124 @@
 	<xd:element name="ns" type="ns.type"/>
 	<xd:element name="init" type="init.type"/>
 	
-	<xd:attribute name="auto" type="number" />
-	<xd:attribute name="autoTab" type="boolean" />
+	<xd:attribute name="auto" type="xd:integer" />
+	<xd:attribute name="autoTab" type="xd:boolean" />
 	<xd:attribute name="accessKey" type="character" />
-	<xd:attribute name="asyncRender" type="boolean" />
-	<xd:attribute name="auto" type="boolean" />
-	<xd:attribute name="blank" type="boolean" />
+	<xd:attribute name="asyncRender" type="xd:boolean" />
+	<xd:attribute name="auto" type="xd:boolean" />
+	<xd:attribute name="blank" type="xd:boolean" />
 	<xd:attribute name="borderType" type="borderType" />
-	<xd:attribute name="caseSensitive" type="boolean" />
+	<xd:attribute name="caseSensitive" type="xd:boolean" />
 	<xd:attribute name="character" type="character" />
 	<xd:attribute name="checkCardinality" type="cardinality" />
-	<xd:attribute name="checkedCount" type="number" />
-	<xd:attribute name="class" type="string" />
+	<xd:attribute name="checkedCount" type="xd:integer" />
+	<xd:attribute name="class" type="xd:string" />
 	<xd:attribute name="className" type="className" />
-	<xd:attribute name="clientDatesStrategy" type="number" />
-	<xd:attribute name="clientSelectionFullState" type="boolean" />
-	<xd:attribute name="clientValidator" type="boolean" />
-	<xd:attribute name="clientValidatorParams" type="string" />
-	<xd:attribute name="collapsed" type="boolean" />
-	<xd:attribute name="collapsedText" type="string" />
+	<xd:attribute name="clientDatesStrategy" type="xd:integer" />
+	<xd:attribute name="clientSelectionFullState" type="xd:boolean" />
+	<xd:attribute name="clientValidator" type="xd:boolean" />
+	<xd:attribute name="clientValidatorParams" type="xd:string" />
+	<xd:attribute name="collapsed" type="xd:boolean" />
+	<xd:attribute name="collapsedText" type="xd:string" />
 	<xd:attribute name="container" type="IDREF" />
-	<xd:attribute name="converter" type="string" />
-	<xd:attribute name="cursorValue" type="string" />
-	<xd:attribute name="cycle" type="boolean" />
-	<xd:attribute name="data" type="string" />
-	<xd:attribute name="defaultNumber" type="number" />
-	<xd:attribute name="defaultValue" type="string" />
-	<xd:attribute name="disabled" type="boolean" />
+	<xd:attribute name="converter" type="xd:string" />
+	<xd:attribute name="cursorValue" type="xd:string" />
+	<xd:attribute name="cycle" type="xd:boolean" />
+	<xd:attribute name="data" type="xd:string" />
+	<xd:attribute name="defaultNumber" type="xd:double" />
+	<xd:attribute name="defaultValue" type="xd:string" />
+	<xd:attribute name="disabled" type="xd:boolean" />
 	<xd:attribute name="disabledImageURL" type="imageURL" />
-	<xd:attribute name="disabledWeekDays" type="number" />
-	<xd:attribute name="effect" type="string" />
-	<xd:attribute name="emptyMessage" type="string" />
-	<xd:attribute name="errorStyleClass" type="boolean" />
-	<xd:attribute name="events" type="string" />
-	<xd:attribute name="fatalStyleClass" type="string" />
-	<xd:attribute name="filterExpression" type="string" />
-	<xd:attribute name="filtred" type="boolean" />
-	<xd:attribute name="first" type="integer" />
-	<xd:attribute name="flatMode" type="boolean" />
-	<xd:attribute name="focusId" type="string" />
-	<xd:attribute name="focusStyleClass" type="string" />
+	<xd:attribute name="disabledWeekDays" type="xd:integer" />
+	<xd:attribute name="effect" type="xd:string" />
+	<xd:attribute name="emptyMessage" type="xd:string" />
+	<xd:attribute name="errorStyleClass" type="xd:boolean" />
+	<xd:attribute name="events" type="xd:string" />
+	<xd:attribute name="fatalStyleClass" type="xd:string" />
+	<xd:attribute name="filterExpression" type="xd:string" />
+	<xd:attribute name="filtred" type="xd:boolean" />
+	<xd:attribute name="first" type="xd:integer" />
+	<xd:attribute name="flatMode" type="xd:boolean" />
+	<xd:attribute name="focusId" type="xd:string" />
+	<xd:attribute name="focusStyleClass" type="xd:string" />
 	<xd:attribute name="for" type="IDREF" />
-	<xd:attribute name="forceProposal" type="boolean" />
-	<xd:attribute name="forItemValue" type="string" />
-	<xd:attribute name="forValueFormat" type="string" />
-	<xd:attribute name="globalOnly" type="boolean" />
-	<xd:attribute name="groupName" type="string" />
-	<xd:attribute name="helpMessage" type="string" />
-	<xd:attribute name="helpURL" type="string" />
-	<xd:attribute name="hiddenMode" type="number" />
-	<xd:attribute name="hideIfDisabled" type="boolean" />
-	<xd:attribute name="hideRootExpandSign" type="boolean" />
+	<xd:attribute name="forceProposal" type="xd:boolean" />
+	<xd:attribute name="forItemValue" type="xd:string" />
+	<xd:attribute name="forValueFormat" type="xd:string" />
+	<xd:attribute name="globalOnly" type="xd:boolean" />
+	<xd:attribute name="groupName" type="xd:string" />
+	<xd:attribute name="helpMessage" type="xd:string" />
+	<xd:attribute name="helpURL" type="xd:string" />
+	<xd:attribute name="hiddenMode" type="xd:integer" />
+	<xd:attribute name="hideIfDisabled" type="xd:boolean" />
+	<xd:attribute name="hideRootExpandSign" type="xd:boolean" />
 	<xd:attribute name="homeDate" type="date" />
-	<xd:attribute name="homeDateLabel" type="string" />
+	<xd:attribute name="homeDateLabel" type="xd:string" />
 	<xd:attribute name="hoverImageURL" type="imageURL" />
-	<xd:attribute name="hsp" type="number" />
+	<xd:attribute name="hsp" type="xd:integer" />
 	<xd:attribute name="imageURL" type="imageURL" />
-	<xd:attribute name="immediate" type="boolean" />
-	<xd:attribute name="index" type="number" />
-	<xd:attribute name="infoStyleClass" type="boolean" />
+	<xd:attribute name="immediate" type="xd:boolean" />
+	<xd:attribute name="index" type="xd:integer" />
+	<xd:attribute name="infoStyleClass" type="xd:boolean" />
 	<xd:attribute name="interactiveShow" type="IDREF" />
-	<xd:attribute name="keyFlags" type="number" />
-	<xd:attribute name="lookid" type="string" />
-	<xd:attribute name="manyResultMessage" type="string" />
+	<xd:attribute name="keyFlags" type="xd:integer" />
+	<xd:attribute name="lookid" type="xd:string" />
+	<xd:attribute name="manyResultMessage" type="xd:string" />
 	<xd:attribute name="max" type="number" />
 	<xd:attribute name="maxDate" type="date" />
 	<xd:attribute name="maximum" type="number" />
 	<xd:attribute name="maxResultNumber" type="number" />
 	<xd:attribute name="maxTime" type="number" />
-	<xd:attribute name="message" type="string" />
+	<xd:attribute name="message" type="xd:string" />
 	<xd:attribute name="min" type="number" />
 	<xd:attribute name="minDate" type="date" />
 	<xd:attribute name="minTime" type="number" />
 	<xd:attribute name="minimum" type="number" />
 	<xd:attribute name="mode" type="number" />
-	<xd:attribute name="moreResultsMessage" type="string" />
-	<xd:attribute name="nc" type="boolean" />
-	<xd:attribute name="noPagedMessage" type="string" />
-	<xd:attribute name="oneResultMessage" type="string" />
-	<xd:attribute name="paged" type="boolean" />
+	<xd:attribute name="moreResultsMessage" type="xd:string" />
+	<xd:attribute name="nc" type="xd:boolean" />
+	<xd:attribute name="noPagedMessage" type="xd:string" />
+	<xd:attribute name="oneResultMessage" type="xd:string" />
+	<xd:attribute name="paged" type="xd:boolean" />
 	<xd:attribute name="preloadedLevelDepth" type="number" />
-	<xd:attribute name="readOnly" type="boolean" />
-	<xd:attribute name="required" type="boolean" />
-	<xd:attribute name="resizable" type="boolean" />
-	<xd:attribute name="rowCount" type="number" />
-	<xd:attribute name="rows" type="number" />
-	<xd:attribute name="selected" type="boolean" />
+	<xd:attribute name="readOnly" type="xd:boolean" />
+	<xd:attribute name="required" type="xd:boolean" />
+	<xd:attribute name="resizable" type="xd:boolean" />
+	<xd:attribute name="rowCount" type="xd:integer" />
+	<xd:attribute name="rows" type="xd:integer" />
+	<xd:attribute name="selected" type="xd:boolean" />
 	<xd:attribute name="selectedCard" type="IDREF" />
 	<xd:attribute name="selectedImageURL" type="imageURL" />
 	<xd:attribute name="selectionCardinality" type="cardinality" />
-	<xd:attribute name="separators" type="string" />
-	<xd:attribute name="serviceId" type="string" />
-	<xd:attribute name="setFocusIfMessage" type="boolean" />
-	<xd:attribute name="showDetail" type="boolean" />
-	<xd:attribute name="showIfMessage" type="boolean" />
-	<xd:attribute name="showOnFocus" type="boolean" />
-	<xd:attribute name="showSummary" type="boolean" />
-	<xd:attribute name="step" type="boolean" />
-	<xd:attribute name="styleClass" type="string" />
-	<xd:attribute name="suggestionDelayMs" type="number" />
-	<xd:attribute name="suggestionMinChars" type="number" />
-	<xd:attribute name="suggestionValue" type="string" />
-	<xd:attribute name="userExpandable" type="boolean" />
-	<xd:attribute name="validators" type="string" />
-	<xd:attribute name="value" type="string" />
-	<xd:attribute name="vBehavior" type="string" />
-	<xd:attribute name="vChecker" type="string" />
-	<xd:attribute name="vCheckError" type="string" />
-	<xd:attribute name="vError" type="string" />
-	<xd:attribute name="vFormatter" type="string" />
-	<xd:attribute name="vFilter" type="string" />
-	<xd:attribute name="virtualKey" type="number" />
-	<xd:attribute name="vsp" type="number" />
-	<xd:attribute name="vTranslator" type="string" />
-	<xd:attribute name="text" type="string" />
-	<xd:attribute name="twoDigitYearStart" type="number" />
-	<xd:attribute name="type" type="string" />
-	<xd:attribute name="setFocusIfMessage" type="boolean" />
-	<xd:attribute name="warnStyleClass" type="string" />
-	<xd:attribute name="zeroResultMessage" type="string" />
+	<xd:attribute name="separators" type="xd:string" />
+	<xd:attribute name="serviceId" type="xd:string" />
+	<xd:attribute name="setFocusIfMessage" type="xd:boolean" />
+	<xd:attribute name="showDetail" type="xd:boolean" />
+	<xd:attribute name="showIfMessage" type="xd:boolean" />
+	<xd:attribute name="showOnFocus" type="xd:boolean" />
+	<xd:attribute name="showSummary" type="xd:boolean" />
+	<xd:attribute name="step" type="xd:boolean" />
+	<xd:attribute name="styleClass" type="xd:string" />
+	<xd:attribute name="suggestionDelayMs" type="xd:integer" />
+	<xd:attribute name="suggestionMinChars" type="xd:integer" />
+	<xd:attribute name="suggestionValue" type="xd:string" />
+	<xd:attribute name="userExpandable" type="xd:boolean" />
+	<xd:attribute name="validators" type="xd:string" />
+	<xd:attribute name="value" type="xd:string" />
+	<xd:attribute name="vBehavior" type="xd:string" />
+	<xd:attribute name="vChecker" type="xd:string" />
+	<xd:attribute name="vCheckError" type="xd:string" />
+	<xd:attribute name="vError" type="xd:string" />
+	<xd:attribute name="vFormatter" type="xd:string" />
+	<xd:attribute name="vFilter" type="xd:string" />
+	<xd:attribute name="virtualKey" type="xd:integer" />
+	<xd:attribute name="vsp" type="xd:integer" />
+	<xd:attribute name="vTranslator" type="xd:string" />
+	<xd:attribute name="text" type="xd:string" />
+	<xd:attribute name="twoDigitYearStart" type="xd:integer" />
+	<xd:attribute name="type" type="xd:string" />
+	<xd:attribute name="setFocusIfMessage" type="xd:boolean" />
+	<xd:attribute name="warnStyleClass" type="xd:string" />
+	<xd:attribute name="zeroResultMessage" type="xd:string" />
 	
 </xd:schema>
