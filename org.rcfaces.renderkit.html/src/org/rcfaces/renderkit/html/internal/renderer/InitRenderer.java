@@ -164,7 +164,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         boolean lockedClientAttributesSetted = false;
         if (lockedClientAttributesSetted) {
-            // AbstractRequestContext.setLockedAttributes(facesContext,lockedClientAttributes);
+            // AbstractRequestContext.setLockedAttributes(facesContext,
+            // lockedClientAttributes);
         }
 
         // Pour optimiser ....
@@ -512,6 +513,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 .getFacesContext();
 
         ImageContentInformation favoriteImageOperation = new ImageContentInformation();
+        favoriteImageOperation.setComponent(writer.getComponentRenderContext());
 
         IContentAccessor favoriteContentAccessor = ContentAccessorFactory
                 .createFromWebResource(facesContext, favoriteImageURL,

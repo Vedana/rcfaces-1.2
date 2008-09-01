@@ -13,6 +13,10 @@ import org.rcfaces.core.internal.contentAccessor.BasicContentInformation;
 public class ImageContentInformation extends BasicContentInformation {
     private static final String REVISION = "$Revision$";
 
+    public ImageContentInformation() {
+        super();
+    }
+
     public final int getImageHeight() {
         Integer i = (Integer) getAttribute(IImageContentModel.HEIGHT_PROPERTY);
         if (i == null) {

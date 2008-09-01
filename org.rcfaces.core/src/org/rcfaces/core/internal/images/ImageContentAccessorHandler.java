@@ -4,6 +4,7 @@
 package org.rcfaces.core.internal.images;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
@@ -15,6 +16,7 @@ import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IComponentContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentInformation;
@@ -89,6 +91,21 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         } else {
             imageInformation = new ImageContentInformation();
+            
+            if (contentInformation instanceof IComponentContentInformation) {
+                IComponentContentInformation componentContentInformation = (IComponentContentInformation) contentInformation;
+
+                UIComponent component = componentContentInformation
+                        .getComponent();
+                String componentClientId = componentContentInformation
+                        .getComponentClientId();
+                if (component != null) {
+                    imageInformation.setComponent(component, componentClientId);
+
+                } else if (componentClientId != null) {
+                    imageInformation.setComponentClientId(componentClientId);
+                }
+            }
 
             contentInformationRef[0] = imageInformation;
         }

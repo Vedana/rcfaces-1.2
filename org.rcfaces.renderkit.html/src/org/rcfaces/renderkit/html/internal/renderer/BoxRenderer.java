@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.BoxComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
@@ -67,6 +68,11 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", true);
+
+                    if (box.getAsyncDecodeMode(componentRenderContext
+                            .getFacesContext()) == IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
+                        htmlWriter.writeAttribute("v:asyncDecode", true);
+                    }
 
                     htmlRenderContext.pushInteractiveRenderComponent(
                             htmlWriter, null);
@@ -145,8 +151,8 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         IMenuIterator menuIterator = boxComponent.listMenus();
 
         if (menuIterator.hasNext()) {
-            javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.BOX, "menu");
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.BOX,
+                    "menu");
         }
     }
 }

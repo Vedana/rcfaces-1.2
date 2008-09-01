@@ -52,6 +52,7 @@ public class ImageRenderer extends AbstractCssRenderer {
         IContentAccessor contentAccessor = imageAccessors.getImageAccessor();
         if (contentAccessor != null) {
             imageContentInformation = new ImageContentInformation();
+            imageContentInformation.setComponent(componentRenderContext);
 
             url = contentAccessor.resolveURL(facesContext,
                     imageContentInformation, null);

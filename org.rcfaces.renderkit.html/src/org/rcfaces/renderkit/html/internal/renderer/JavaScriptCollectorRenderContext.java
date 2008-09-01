@@ -118,7 +118,8 @@ public class JavaScriptCollectorRenderContext extends
     public void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
         // Ce sont des lazys mais ils n'ont pas besoin d'être initialisés
 
-        // components.add(writer.getComponentRenderContext().getComponentClientId());
+        //components.add(writer.getComponentRenderContext().getComponentClientId
+        // ());
     }
 
     public boolean isJavaScriptRendererDeclaredLazy(IHtmlWriter writer) {
@@ -783,6 +784,8 @@ public class JavaScriptCollectorRenderContext extends
 
                 if (contentAccessor != null) {
                     ScriptContentInformation contentInformation = new ScriptContentInformation();
+                    contentInformation.setComponent(htmlWriter
+                            .getComponentRenderContext());
 
                     String collectedURL = contentAccessor.resolveURL(
                             facesContext, contentInformation, null);

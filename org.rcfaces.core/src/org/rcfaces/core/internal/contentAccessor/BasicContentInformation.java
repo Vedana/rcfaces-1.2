@@ -6,6 +6,10 @@ package org.rcfaces.core.internal.contentAccessor;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.model.IContentModel;
 
 /**
@@ -13,14 +17,19 @@ import org.rcfaces.core.model.IContentModel;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class BasicContentInformation implements IContentInformation {
+public class BasicContentInformation implements IContentInformation,
+        IComponentContentInformation {
     private static final String REVISION = "$Revision$";
 
     private static final String FILTRED_MODEL_PROPERTY = "org.rcfaces.org.FILTRED_MODEL";
 
     private static final String TRANSIENT_PROPERTY = "org.rcfaces.org.TRANSIENT_PROPERTY";
 
+    private static final String COMPONENT_CLIENT_ID_PROPERTY = "org.rcfaces.org.COMPONENT_CLIENT_ID_PROPERTY";
+
     private Map attributes;
+
+    private UIComponent component;
 
     public final String getContentType() {
         return (String) getAttribute(IContentModel.CONTENT_TYPE_PROPERTY);
@@ -70,6 +79,45 @@ public class BasicContentInformation implements IContentInformation {
 
     public void setTransient(boolean transientState) {
         setAttribute(TRANSIENT_PROPERTY, Boolean.valueOf(transientState));
+    }
+
+    public UIComponent getComponent() {
+        return component;
+    }
+
+    public void setComponent(IComponentRenderContext componentRenderContext) {
+        setComponent(componentRenderContext.getComponent(),
+                componentRenderContext.getComponentClientId());
+    }
+
+    public void setComponent(UIComponent component) {
+        setComponent(component, (FacesContext) null);
+    }
+
+    public void setComponent(UIComponent component, FacesContext facesContext) {
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        String clientId = null;
+        if (facesContext != null) {
+            clientId = component.getClientId(facesContext);
+        }
+
+        setComponent(component, clientId);
+    }
+
+    public void setComponent(UIComponent component, String clientId) {
+        this.component = component;
+        setComponentClientId(clientId);
+    }
+
+    public String getComponentClientId() {
+        return (String) getAttribute(COMPONENT_CLIENT_ID_PROPERTY);
+    }
+
+    public void setComponentClientId(String componentClientId) {
+        setAttribute(COMPONENT_CLIENT_ID_PROPERTY, componentClientId);
     }
 
     public int hashCode() {

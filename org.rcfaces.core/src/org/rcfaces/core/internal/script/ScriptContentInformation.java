@@ -13,6 +13,10 @@ import org.rcfaces.core.internal.contentAccessor.BasicContentInformation;
 public class ScriptContentInformation extends BasicContentInformation {
     private static final String REVISION = "$Revision$";
 
+    public ScriptContentInformation() {
+        super();
+    }
+
     public String getCharSet() {
         return (String) getAttribute(IScriptContentModel.CHARSET_PROPERTY);
     }

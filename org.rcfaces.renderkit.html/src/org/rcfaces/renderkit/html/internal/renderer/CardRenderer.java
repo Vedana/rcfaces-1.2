@@ -8,9 +8,11 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.CardComponent;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.iterator.ICardIterator;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -64,8 +66,10 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
 
-        CardComponent cardComponent = (CardComponent) writer
-                .getComponentRenderContext().getComponent();
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
+        CardComponent cardComponent = (CardComponent) componentRenderContext
+                .getComponent();
         CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
 
         String cardClassName = getCardStyleClass(facesContext, cardComponent);
@@ -131,6 +135,11 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 
         if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
             htmlWriter.writeAttribute("v:asyncRender", true);
+
+            if (cardComponent.getAsyncDecodeMode(componentRenderContext
+                    .getFacesContext()) == IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
+                htmlWriter.writeAttribute("v:asyncDecode", true);
+            }
         }
 
         writeHtmlAttributes(htmlWriter);

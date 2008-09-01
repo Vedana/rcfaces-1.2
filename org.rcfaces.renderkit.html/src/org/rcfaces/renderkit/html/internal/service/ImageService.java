@@ -165,6 +165,7 @@ public class ImageService extends AbstractHtmlService {
                         .getImageAccessor();
 
                 ImageContentInformation contentInformation = new ImageContentInformation();
+                contentInformation.setComponent(imageComponent, componentId);
 
                 String url = null;
                 if (imageAccessor != null) {
