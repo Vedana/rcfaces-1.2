@@ -43,10 +43,11 @@ var __statics = {
 	 * @method public static final 
 	 * @param HTMLElement component
 	 * @param String id
-	 * @param hidden boolean sibling
+	 * @param hidden optional boolean sibling
+	 * @param hidden optional boolean doNotInitialize
 	 * @return HTMLElement
 	 */
-	FindComponent: function(component, id, sibling) {
+	FindComponent: function(component, id, sibling, doNotInitialize) {
 		f_core.Assert(component && component.tagName, "fa_namingContainer.FindComponent: Bad component parameter ! ("+component+")");
 		f_core.Assert(typeof(id)=="string", "Bad id parameter !");
 
@@ -65,6 +66,10 @@ var __statics = {
 				
 		var cid=fa_namingContainer.ComputeComponentId(component, id, sibling);
 		f_core.Debug(fa_namingContainer, "Compute component from "+component.id+" id='"+id+"' (pageId='"+pageId+"') returns '"+cid+"'.");
+
+		if (doNotInitialize) {
+			return component.ownerDocument.getElementById(cid); 
+		}
 
 		return f_core.GetElementByClientId(cid, component.ownerDocument);
 	},
