@@ -17,6 +17,7 @@ var __members = {
 //		this._interactive=undefined; // boolean
 //		this._intLoading=undefined; // boolean
 		this._intWaiting=undefined; // f_waiting
+//		this._asyncDecoded=undefined; // boolean
 	},
 	f_updateVisibility: {
 		after: function(visible) {
@@ -132,6 +133,8 @@ var __members = {
 						} catch (x) {
 				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
 						}
+						
+						component.fa_contentLoaded(ret, responseContentType, parent);
 						return;
 					}
 					
@@ -145,6 +148,7 @@ var __members = {
 						try {
 							component.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+ret);
 							
+							component.fa_contentLoaded(ret, responseContentType, parent);
 						} catch (x) {
 				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
 						}
@@ -178,6 +182,29 @@ var __members = {
 	 */
 	f_performAsyncErrorEvent: function(param, messageCode, message) {
 		return f_error.PerformErrorEvent(this, messageCode, message, param);
+	},
+		
+	/**
+	 * @method protected
+	 * @param String content
+	 * @param String mimeType
+	 * @param HTMLElement
+	 * @return void
+	 */
+	fa_contentLoaded: function() {
+		if (f_core.GetBooleanAttribute(this, "v:asyncDecode") && !this._asyncDecoded) {
+			// On ajoute un tag comme quoi le composant est a décoder !
+			
+			this._asyncDecoded=true;
+			
+			var form=f_core.GetParentForm(this);
+			
+			f_core.CreateElement(form, "INPUT", {
+				type: "hidden",
+				name: "org.rcfaces.async.partial."+this.id,
+				value: "true"
+			});
+		}
 	},
 	
 	/**

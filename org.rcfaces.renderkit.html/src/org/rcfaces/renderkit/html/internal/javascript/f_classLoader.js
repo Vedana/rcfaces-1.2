@@ -227,6 +227,7 @@ f_classLoader.prototype = {
 			document.body.onfocusin=null;
 		}		
 		
+		this._onInitComponentListeners=undefined; // List<function>
 		this._visibleListeners=undefined; // List<f_component>
 		this._documentCompleteObjects=undefined; // List<Object>
 		this._serializableObjects=undefined; // List<Object>
@@ -666,6 +667,8 @@ f_classLoader.prototype = {
 			f_core.Error(f_classLoader, "f_initializeObjects: Unknown lazy component path='"+path+"'.");
 		}
 		
+		var onInitComponentListeners=this._onInitComponentListeners;
+		
 		for(var i=0;i<components.length;) {
 			var obj=components[i++];
 			var node=components[i++];
@@ -708,7 +711,41 @@ f_classLoader.prototype = {
 					f_core.Error(f_classLoader, "f_initializeObjects: f_completeComponent throws exception for component '"+o.id+"'.", x);
 				}
 			}
+			
+			if (onInitComponentListeners) {
+				this._callOnInitComponentListeners(onInitComponentListeners, o);
+			}
 		}
+	},
+	/**
+	 * 
+	 * @param function[] listeners 
+	 * @param f_object component
+	 * @return boolean
+	 */
+	_callOnInitComponentListeners: function(listeners, component) {
+		
+		if (!listeners) {
+			return undefined;
+		}
+		
+		var ret;
+		
+		// On passe pas par un object Event pour des raisons de performances
+		for(var i=0;i<listeners.length;i++) {
+			var fct=listeners[i];
+			
+			try {
+				if (fct.call(this, component)===false) {
+					ret=false;
+				}
+				
+			} catch (x) {
+				f_core.Error(f_classLoader, "_callOnInitComponentListeners: Call of onInitComponentListeners ("+fct+") throws exception", x);
+			}
+		}
+		
+		return ret;
 	},
 	/**
 	 * @method hidden
@@ -716,6 +753,9 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_initIds: function(ids) {
+		 
+		// var onInitComponentListeners=this._onInitComponentListeners;    // A voir ....
+		
 		for(var i=0;i<arguments.length;i++) {
 			var obj=this.f_init(arguments[i]);
 			if (!obj) {
@@ -732,6 +772,11 @@ f_classLoader.prototype = {
 				}
 			}
 			
+			/* Pas sure !
+			if (onInitComponentListeners) {
+				this._callOnInitComponentListeners(onInitComponentListeners, obj);
+			}
+			*/			
 		}
 	},
 	/**
@@ -795,6 +840,11 @@ f_classLoader.prototype = {
 			} catch (ex) {
 				f_core.Error(f_classLoader, "f_verifyOnMessage: Can not initialize component '"+componentId+"'.", ex);
 			}			
+						
+			var onInitComponentListeners=this._onInitComponentListeners;
+			if (onInitComponentListeners) {
+				this._callOnInitComponentListeners(onInitComponentListeners, component);
+			}
 		}
 	},
 	/**
@@ -878,16 +928,23 @@ f_classLoader.prototype = {
 				return true;
 			}
 			
+			f_core.Debug(f_classLoader, "f_initOnFocusIds: Lazy onFocus initialization for "+component.id);
+			
 			try {
 				self.f_init(component);
 				
 				if (typeof(component.f_completeComponent)=="function") {
 					component.f_completeComponent();
 				}
-				
+
 			} catch (ex) {
 				f_core.Error(f_classLoader, "f_initOnFocusIds: Can not initialize component '"+componentId+"'.", ex);
 			}	
+			
+			var onInitComponentListeners=self._onInitComponentListeners;
+			if (onInitComponentListeners) {
+				self._callOnInitComponentListeners(onInitComponentListeners, component);
+			}
 		}
 		
 		if (f_core.IsInternetExplorer()) {
@@ -932,9 +989,6 @@ f_classLoader.prototype = {
 				}				
 				delete onOverIds[mainId];
 				
-					window.title="OVER "+mainId;
-					document.title="OVER "+mainId;
-				
 				if (componentId!=mainId) {
 					component=component.ownerDocument.getElementById(mainId)
 				}
@@ -942,6 +996,8 @@ f_classLoader.prototype = {
 				if (f_class.IsObjectInitialized(component)) {
 					return true;
 				}
+				
+				f_core.Debug(f_classLoader, "f_initOnOverIds: Lazy onMouseOver initialization for "+component.id);
 				
 				try {
 					self.f_init(component);
@@ -953,6 +1009,11 @@ f_classLoader.prototype = {
 				} catch (ex) {
 					f_core.Error(f_classLoader, "f_initOnOverIds: Can not initialize component '"+componentId+"'.", ex);
 				}	
+				
+				var onInitComponentListeners=self._onInitComponentListeners;
+				if (onInitComponentListeners) {
+					self._callOnInitComponentListeners(onInitComponentListeners, component);
+				}
 				
 				if (retargetIE) {						
 					var newEvt = component.ownerDocument.createEventObject(window.event)
@@ -1558,6 +1619,37 @@ f_classLoader.prototype = {
 	 */
 	f_isDocumentCompleted: function() {
 		return this._documentCompleted;
+	},
+	
+	/**
+	 * @method hidden
+	 * @param function listener
+	 * @return void
+	 */
+	f_addOnInitComponentListener: function(listener) {
+		f_core.Assert(typeof(listener)=="function", "f_classLoader.f_addOnInitComponentListener: Invalid listener paramter '"+listener+"'.");
+
+		var onInitComponentListeners=this._onInitComponentListeners;
+		if (!onInitComponentListeners) {
+			onInitComponentListeners=new Array;
+			this._onInitComponentListeners=onInitComponentListeners;
+		}
+		
+		onInitComponentListeners.f_addElement(listener);
+	},
+	/**
+	 * @method hidden
+	 * @param function listener
+	 * @return void
+	 */
+	f_removeOnInitComponentListener: function(listener) {
+		f_core.Assert(typeof(listener)=="function", "f_classLoader.f_addOnInitComponentListener: Invalid listener paramter '"+listener+"'.");
+
+		var onInitComponentListeners=this._onInitComponentListeners;
+		if (!onInitComponentListeners) {
+			return;
+		}
+		onInitComponentListeners.f_removeElement(listener);
 	},
 	
 	toString: function() {

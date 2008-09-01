@@ -25,9 +25,11 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
+import javax.faces.event.PhaseId;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.capability.IComponentEngine;
@@ -56,6 +58,8 @@ public final class ComponentTools {
             + System.currentTimeMillis();
 
     private static final UIComponent[] COMPONENT_EMPTY_ARRAY = new UIComponent[0];
+
+    public static final String PARTIAL_ASYNC_DECODE_PROPERTY = "org.rcfaces.async.partial";
 
     public static final boolean isAnonymousComponentId(String componentId) {
         if (componentId == null) {
@@ -638,6 +642,40 @@ public final class ComponentTools {
             return true;
         }
 
+        return false;
+    }
+
+    public static boolean verifyAsyncDecode(FacesContext facesContext,
+            IAsyncDecodeModeCapability asyncDecodeModeCapability,
+            PhaseId phaseId) {
+
+        if (asyncDecodeModeCapability.getAsyncDecodeMode() != IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
+            return true;
+        }
+
+        Map parameters = facesContext.getExternalContext()
+                .getRequestParameterMap();
+
+        UIComponent component = (UIComponent) asyncDecodeModeCapability;
+
+        String clientId = component.getClientId(facesContext);
+
+        String value = (String) parameters.get(PARTIAL_ASYNC_DECODE_PROPERTY
+                + "." + clientId);
+
+        if (value != null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Partial async decode enabled for component '"
+                        + clientId + "' phase='" + phaseId + "'.");
+            }
+            
+            return true;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Partial async decode DISABLED for component '"
+                    + clientId + "' phase='" + phaseId + "'.");
+        }
         return false;
     }
 }
