@@ -635,9 +635,11 @@
 
 		<capability id="IMenuCapability" />
 		<capability id="IAsyncRenderModeCapability" />
+		<capability id="IAsyncDecodeModeCapability" />
 		<capability id="IVariableScopeCapability" />	
 
 		<method id="setAsyncRenderMode(String)" />		
+		<method id="setAsyncDecodeMode(String)" />	
 		
 		<attribute id="horizontalScroll" type="boolean" />
 		<attribute id="verticalScroll" type="boolean" />
@@ -1036,6 +1038,7 @@
 		<capability id="IRequiredCapability" />
 		<capability id="IBorderCapability" />
 		<capability id="IRowStyleClassCapability" />
+		<capability id="IEmptyDataMessageCapability" />
 
 		<capability id="IReadOnlyCapability" />
 		<capability id="IDisabledCapability" />
@@ -1542,6 +1545,7 @@
 		<capability id="IBorderCapability" />
 		<capability id="IRowStyleClassCapability" />
 		<capability id="IShowValueCapability"/>
+		<capability id="IEmptyDataMessageCapability" />
 
 		<capability id="IMenuCapability" />
 
@@ -1879,6 +1883,8 @@
 		<capability id="IAdditionalInformationValuesCapability" onlyValueBinding="true" />
 		<capability id="IClientAdditionalInformationFullStateCapability"/>
 		<capability id="IAdditionalInformationCardinalityCapability" />
+		<capability id="IEmptyMessageCapability" />
+		<capability id="IEmptyDataMessageCapability" />
 
 		<capability id="IDisabledCapability" />
 		<capability id="IRequiredCapability" />
@@ -3120,6 +3126,7 @@ Dans le cas d'un mode period !
 		<capability id="IAsyncRenderModeCapability" />
 		<capability id="IPreferencesSettings" />
 		<capability id="IVariableScopeCapability" />	
+		<capability id="IAsyncDecodeModeCapability" />
 
 		<propertyValue>value</propertyValue>
 
@@ -3134,12 +3141,23 @@ Dans le cas d'un mode period !
 			</code>
 		</method>
 		<method id="setAsyncRenderMode(String)" />	
+		<method id="setAsyncDecodeMode(String)" />	
+		
+		<method id="verifyAsyncDecode"  modifier="protected" returnType="boolean">
+			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+			<parameter type="javax.faces.event.PhaseId" name="phaseId" />
+			<code>
+				return true;
+			</code>
+		</method>
 	</component>
+	
 	<component id="card" extends="abstractOutput">
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
 		<capability id="ITextAlignmentCapability" />
 		<capability id="IVerticalAlignmentCapability" />
 		<capability id="IVariableScopeCapability" />	
+		<capability id="IAsyncDecodeModeCapability" />
 
 		<capability id="ILoadEventCapability" />
 
@@ -3149,6 +3167,25 @@ Dans le cas d'un mode period !
 				return CardBoxTools.getCardBox(this);
 			</code>
 		</method>
+		
+		<method id="getAsyncDecodeMode" returnType="int">
+			<import>org.rcfaces.core.component.capability.IAsyncDecodeModeCapability</import>
+			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+			<code>
+				if (engine.isPropertySetted(Properties.ASYNC_DECODE_MODE)) {			
+					return engine.getIntProperty(Properties.ASYNC_DECODE_MODE,0, facesContext);
+				}
+				
+				CardBoxComponent cardBox=getCardBox();
+				if (cardBox==null) {
+					return IAsyncDecodeModeCapability.DEFAULT_ASYNC_DECODE_MODE;
+				}
+				
+				return cardBox.getAsyncDecodeMode(facesContext);
+			</code>
+		</method>
+		
+		<method id="setAsyncDecodeMode(String)" />	
 	</component>
 
 	<component id="tabbedPane" extends="cardBox">
@@ -3489,6 +3526,7 @@ Dans le cas d'un mode period !
 		<capability id="IAccessKeyCapability" />		
 		<capability id="IWidthCapability" />		
 		<capability id="IStyleClassCapability" />
+		<capability id="IImmediateCapability" forceComponent="true"/>
 
 		<method id="setInputType(String)" />
 
@@ -4032,80 +4070,6 @@ Dans le cas d'un mode period !
 		<capability id="IValidationEventCapability" />		
 	</component>
 -->
-<!-- ****************************************** HTML ************************************************ -->
-
-	<component id="init" extends="cameliaBase" renderKit="html">
-	
-		<implements id="org.rcfaces.core.internal.capability.IPageConfigurator" />
-		
-		<attribute id="base" type="java.lang.String" />
-		<attribute id="title" type="java.lang.String" />
-		<attribute id="favoriteImageURL" type="java.lang.String" />
-		<attribute id="disabledScriptPageURL" type="java.lang.String" />
-		<attribute id="disabledCookiesPageURL" type="java.lang.String" />
-		<attribute id="invalidBrowserPageURL" type="java.lang.String" />
-		<attribute id="literalLocale" type="java.util.Locale" />
-		<attribute id="literalTimeZone" type="java.util.TimeZone" />
-		<attribute id="disabledIEImageBar" type="boolean" />
-		<attribute id="disableCache" type="boolean" />
-		<attribute id="disableContextMenu" type="boolean" />
-		<attribute id="renderBaseTag" type="boolean" default="true" />
-		<attribute id="clientMessageIdFilter" type="java.lang.String" />
-		<attribute id="waiRolesNS" type="java.lang.String" />
-		<attribute id="clientValidation" type="boolean" default="true" />
-		
-		<method id="setLiteralLocale(String)" />
-		<method id="setLiteralTimeZone(String)" />
-		
-		<method id="getPageScriptType" returnType="String">
-			<import>org.rcfaces.renderkit.html.internal.IHtmlRenderContext</import>
-			<code>
-			return IHtmlRenderContext.JAVASCRIPT_TYPE;
-			</code>			
-		</method>
-		
-	</component>
-	
-	<component id="javaScript" extends="cameliaBase" renderKit="html" textBodyContent="true">
-		<capability id="ITextCapability" />
-
-		<attribute id="src" type="java.lang.String" />
-		<attribute id="srcCharSet" type="java.lang.String" />
-		<attribute id="requiredFiles" type="java.lang.String" />
-		<attribute id="requiredClasses" type="java.lang.String" />
-		<attribute id="requiredModules" type="java.lang.String" />
-		<attribute id="requiredSets" type="java.lang.String" />
-	</component>
-
-	<component id="cssStyle" extends="cameliaBase" renderKit="html" textBodyContent="true">
-		<capability id="ITextCapability" />
-
-		<attribute id="src" type="java.lang.String" />
-		<attribute id="srcCharSet" type="java.lang.String" />
-	</component>
-	
-	<component id="loadBundle" extends="cameliaBase" renderKit="html">
-		<attribute id="bundleName" type="java.lang.String" />
-		<attribute id="baseName" type="java.lang.String" />
-		<attribute id="side" type="java.lang.String" />
-		<attribute id="serverScope" type="java.lang.String" />
-		<attribute id="override" type="boolean" />
-	</component>
-	
-	<component id="nameSpace" extends="cameliaBase" renderKit="html">
-		<attribute id="uri" type="java.lang.String" />
-		<attribute id="prefix" type="java.lang.String" />
-	</component>
-	
-	<component id="javaScriptCollector" extends="cameliaBase" renderKit="html">
-		<attribute id="mergeScripts" type="boolean" />
-	</component>
-	
-	<component id="javaScriptItem" extends="fileItem" renderKit="html" render="false">
-	</component>
-	
-	<component id="cssStyleItem" extends="fileItem" renderKit="html" render="false">
-	</component>
 	
 	<tag>
 		<name>clientData</name>
