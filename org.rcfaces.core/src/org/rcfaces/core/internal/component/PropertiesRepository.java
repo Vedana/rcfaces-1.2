@@ -28,10 +28,23 @@ public class PropertiesRepository extends Properties {
         for (int i = 0; i < properties.length; i++) {
             String property = properties[i];
 
+            Integer previousKey = (Integer) propertyToKey.get(property);
+
             Integer key = (Integer) computeKey(property);
 
+            if (previousKey != null) {
+                if (previousKey.equals(key)) {
+                    continue;
+                }
+
+                throw new IllegalStateException(
+                        "Same property, different key '" + property + "'='"
+                                + previousKey + "'/'" + key + "'");
+            }
+
             for (;;) {
-                if (keyToProperty.put(key, property) == null) {
+                Integer old = (Integer) keyToProperty.put(key, property);
+                if (old == null || old.equals(key)) {
                     break;
                 }
 
