@@ -677,6 +677,13 @@
 			setAsyncRenderMode(((Integer)AsyncRenderModeConverter.SINGLETON.getAsObject(null, this, asyncRenderMode)).intValue());
 		</code>
 	</method>
+	<method id="setAsyncDecodeMode">
+		<import>org.rcfaces.core.internal.converter.AsyncDecodeModeConverter</import>
+		<parameter type="String" name="asyncDecodeMode" />
+		<code>
+			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
+		</code>
+	</method>
 	<method id="setCheckCardinality">
 		<import>org.rcfaces.core.internal.converter.CheckCardinalityConverter</import>
 		<parameter type="String" name="cardinality" />
