@@ -43,6 +43,7 @@ import org.rcfaces.core.component.capability.IExpandImageCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
@@ -70,6 +71,7 @@ import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IGroupSelectItem;
 import org.rcfaces.core.item.IImageSizeItem;
 import org.rcfaces.core.item.IImagesItem;
+import org.rcfaces.core.item.IImmediateItem;
 import org.rcfaces.core.item.IInputTypeItem;
 import org.rcfaces.core.item.ILookAndFeelItem;
 import org.rcfaces.core.item.IStyleClassItem;
@@ -329,8 +331,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
             /*
              * if (selectItem instanceof IStyleClassItem) { String styleClass =
-             * ((IStyleClassItem) selectItem) .getStyleClass(); if (styleClass !=
-             * null) { javaScriptWriter.write(',').writeSymbol("_styleClass")
+             * ((IStyleClassItem) selectItem) .getStyleClass(); if (styleClass
+             * != null) { javaScriptWriter.write(',').writeSymbol("_styleClass")
              * .write(':').writeString(styleClass); } }
              */
 
@@ -647,6 +649,15 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        if (selectItem instanceof IImmediateItem) {
+            IImmediateItem immediateItem = (IImmediateItem) selectItem;
+
+            boolean immediate = immediateItem.isImmediate();
+            if (immediate && (itemComponent instanceof IImmediateCapability)) {
+                ((IImmediateCapability) itemComponent).setImmediate(true);
+            }
+        }
+
         if (selectItem instanceof IBorderTypeItem) {
             IBorderTypeItem borderTypeItem = (IBorderTypeItem) selectItem;
 
@@ -905,7 +916,9 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.IWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.IWriter)
      */
     protected SelectItemsContext createHtmlContext() {
         IComponentRenderContext componentRenderContext = htmlWriter
@@ -921,7 +934,9 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
      */
     protected SelectItemsContext createJavaScriptContext() {
 
@@ -938,8 +953,10 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(javax.faces.component.UIComponent,
-     *      org.rcfaces.core.internal.renderkit.IComponentData)
+     * @see
+     * org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(javax
+     * .faces.component.UIComponent,
+     * org.rcfaces.core.internal.renderkit.IComponentData)
      */
     public void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {

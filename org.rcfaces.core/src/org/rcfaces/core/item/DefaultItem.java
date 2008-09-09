@@ -18,6 +18,7 @@ import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
@@ -70,6 +71,8 @@ class DefaultItem extends SelectItemGroup {
     private int imageHeight;
 
     private boolean visible = true;
+
+    private boolean immediate = true;
 
     private String borderType;
 
@@ -154,6 +157,12 @@ class DefaultItem extends SelectItemGroup {
         if (selectItem instanceof IVisibleItem) {
             if (((IVisibleItem) selectItem).isVisible() == false) {
                 setVisible(false);
+            }
+        }
+
+        if (selectItem instanceof IImmediateItem) {
+            if (((IImmediateItem) selectItem).isImmediate() == false) {
+                setImmediate(false);
             }
         }
 
@@ -313,6 +322,11 @@ class DefaultItem extends SelectItemGroup {
                     .getAlternateText());
         }
 
+        if (selectItemComponent instanceof IImmediateCapability) {
+            setImmediate(((IImmediateCapability) selectItemComponent)
+                    .isImmediate());
+        }
+
     }
 
     public String getImageURL() {
@@ -461,6 +475,14 @@ class DefaultItem extends SelectItemGroup {
 
     public final void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public final boolean isImmediate() {
+        return immediate;
+    }
+
+    public final void setImmediate(boolean immediate) {
+        this.immediate = immediate;
     }
 
     public final String getBorderType() {

@@ -11,6 +11,13 @@
  */
  
 var __statics = {
+		
+		
+	/**
+	 * @field private static final boolean
+	 */
+	_LAZY_INITIALIZATIONS: false,
+	
 	/** 
 	 * @method private static
 	 * @return String
@@ -23,6 +30,11 @@ var __statics = {
 
 var __members = {
 
+	/**
+	 * @field private f_classLoader
+	 */
+	_lazyClassLoader: undefined,
+
 	f_itemsToolFolder: function() {
 		this.f_super(arguments);
 		
@@ -33,6 +45,15 @@ var __members = {
 	f_finalize: function() {
 		this._uiItems=undefined; // Map<String, Object>
 //		this._sepId=undefined; // number
+		
+		var lazyClassLoader=this._lazyClassLoader;
+		if (lazyClassLoader) {
+			this._lazyClassLoader=undefined;
+			this._lazyComponents=undefined;
+			
+			lazyClassLoader.f_removeOnInitComponentListener(this._onInitComponentListenerCB);
+			this._onInitComponentListenerCB=undefined;
+		}
 		
 		this.f_super(arguments);
 	},
@@ -114,8 +135,26 @@ var __members = {
 		
 		item._inputType=inputType;
 		
-		var component=this.f_findComponent(id);
+		var component=fa_namingContainer.FindComponent(this, id, false, f_itemsToolFolder._LAZY_INITIALIZATIONS);
 		f_core.Assert(component, "f_itemsToolFolder.f_appendToolItem2: Can not find component associated to id '"+id+"'.");
+		
+		var lazyMode=!f_class.IsObjectInitialized(component);
+		if (lazyMode ) {
+			var lazyClassLoader=this._lazyClassLoader;
+			if (!lazyClassLoader) {
+				lazyClassLoader=this.f_getClass().f_getClassLoader();
+				this._lazyClassLoader=lazyClassLoader;
+				this._lazyComponents=new Object();
+				
+				var toolBar=this;
+				var onInitComponentListenerCB=function(component) {
+					return toolBar._onInitComponentListener.call(toolBar, component);
+				}
+				this._onInitComponentListenerCB=onInitComponentListenerCB;
+				
+				lazyClassLoader.f_addOnInitComponentListener(onInitComponentListenerCB);
+			}
+		}
 		
 		var item=new Object();
 		item._id=component.id;
@@ -149,23 +188,39 @@ var __members = {
 		case fa_items.AS_PUSH_BUTTON:
 		case fa_items.AS_CHECK_BUTTON:
 		case fa_items.AS_RADIO_BUTTON:
-			var toolFolder=this;
 		
-			var selectionCallback=function(event) {
-				return toolFolder._itemOnSelect(event);
+			if (lazyMode) {
+				this._lazyComponents[component.id]=inputType;
+
+				f_core.Debug(f_itemsToolFolder, "f_appendToolItem2: Append lazy initialization for "+component.id);
+
+			} else {
+				var toolFolder=this;
+			
+				var selectionCallback=function(event) {
+					return toolFolder._itemOnSelect(event);
+				}
+
+				component.f_addEventListener(f_event.SELECTION, selectionCallback);
 			}
-		
-			component.f_addEventListener(f_event.SELECTION, selectionCallback);
 			break;
 			
 		case fa_items.AS_DROP_DOWN_MENU:
-			var toolFolder=this;
 		
-			var selectionCallback=function(event) {
-				return toolFolder._itemMenuOnSelect(event);
+			if (lazyMode) {
+				this._lazyComponents[component.id]=inputType;
+
+				f_core.Debug(f_itemsToolFolder, "f_appendToolItem2: Append lazy initialization for "+component.id);
+					
+			} else {
+				var toolFolder=this;
+			
+				var selectionCallback=function(event) {
+					return toolFolder._itemMenuOnSelect(event);
+				}
+			
+				component.f_addEventListener(f_event.SELECTION, selectionCallback);
 			}
-		
-			component.f_addEventListener(f_event.SELECTION, selectionCallback);
 			break;
 
 		case fa_items.AS_SUBMIT_BUTTON: // trop tard !?
@@ -177,6 +232,53 @@ var __members = {
 		}
 		
 		return item;
+	},
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return boolean
+	 */
+	_onInitComponentListener: function(component) {
+		var lazyComponents=this._lazyComponents;
+		if (!lazyComponents) {
+			// Objet detruit !
+			return;
+		}
+		
+		var inputType=lazyComponents[component.id];
+		if (!inputType) {
+			return;
+		}
+		
+		f_core.Debug(f_itemsToolFolder, "_onInitComponentListener: Lazy initialization of "+component.id);
+		
+		delete lazyComponents[component.id];
+	
+		switch(inputType) {
+		case fa_items.AS_PUSH_BUTTON:
+		case fa_items.AS_CHECK_BUTTON:
+		case fa_items.AS_RADIO_BUTTON:
+		
+			var toolFolder=this;
+		
+			var selectionCallback=function(event) {
+				return toolFolder._itemOnSelect(event);
+			}
+
+			component.f_addEventListener(f_event.SELECTION, selectionCallback);
+			break;
+			
+		case fa_items.AS_DROP_DOWN_MENU:
+		
+			var toolFolder=this;
+		
+			var selectionCallback=function(event) {
+				return toolFolder._itemMenuOnSelect(event);
+			}
+		
+			component.f_addEventListener(f_event.SELECTION, selectionCallback);
+			break;
+		}
 	},
 	/**
 	 * @method private
