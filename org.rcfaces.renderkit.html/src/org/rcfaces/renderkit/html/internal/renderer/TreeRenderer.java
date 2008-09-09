@@ -47,6 +47,8 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     private static final String FOCUS_ID_SUFFIX = "::focus";
 
+    private static final String BODY_ID_SUFFIX = "::body";
+
     protected void encodeBeforeDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeBeforeDecorator(htmlWriter, componentDecorator);
@@ -58,7 +60,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
                 .getComponent();
         FacesContext facesContext = componentContext.getFacesContext();
 
-        htmlWriter.startElement(IHtmlWriter.UL);
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
@@ -134,6 +136,10 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
         htmlWriter.endElement(IHtmlWriter.A);
 
+        htmlWriter.startElement(IHtmlWriter.UL);
+        htmlWriter.writeId(componentContext.getComponentClientId()
+                + BODY_ID_SUFFIX);
+        htmlWriter.writeClass("f_tree_body");
     }
 
     protected String getWAIRole() {
@@ -174,6 +180,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
 
         htmlWriter.endElement(IHtmlWriter.UL);
+        htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
@@ -202,7 +209,8 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.TREE;
@@ -211,8 +219,10 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractCssRenderer#writeCustomCss(org.rcfaces.core.internal.renderkit.IWriter,
-     *      org.rcfaces.core.internal.renderkit.html.AbstractCssRenderer.CssWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.AbstractCssRenderer#writeCustomCss
+     * (org.rcfaces.core.internal.renderkit.IWriter,
+     * org.rcfaces.core.internal.renderkit.html.AbstractCssRenderer.CssWriter)
      */
     protected void writeCustomCss(IHtmlWriter htmlWriter, ICssWriter cssWriter) {
         super.writeCustomCss(htmlWriter, cssWriter);

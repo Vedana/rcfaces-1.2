@@ -516,8 +516,15 @@ var __members = {
 		this._showValue=f_core.GetAttribute(this, "v:showValue");
 		
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
-		
-		
+	
+		this._body=this;
+		if (this.tagName.toUpperCase()!="UL") {
+			var container=this.ownerDocument.getElementById(this.id+"::body");
+			if (container) {
+				this._body=container;
+			}
+		}
+			
 		var focus=this.ownerDocument.getElementById(this.id+"::focus");
 		this._cfocus=focus;
 
@@ -587,6 +594,7 @@ var __members = {
 //		this._images=undefined;  // boolean 
 		this._tree=undefined;
 //		this._hideRootExpandSign=undefined; // boolean
+		this._body=undefined; // HTMLElement
 		
 		this._cursor=undefined; // HtmlLIElement
 		this._breadCrumbsCursor=undefined; // HtmlLIElement
@@ -785,8 +793,10 @@ var __members = {
 
 		var nodes=this._nodes;
 		if (nodes) {
-			this._constructTree(this, nodes, 0);
-			this.f_updateBreadCrumbs();						
+			this._constructTree(this._body, nodes, 0);
+			this.f_updateBreadCrumbs();		
+			
+			this._updateBodyWidth();
 		}
 		
 		this.f_super(arguments);		
@@ -797,6 +807,24 @@ var __members = {
 		}	
 		*/	
 	},	
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_updateBodyWidth: function() {
+		
+		if (!this.style.width) {
+			return;
+		}
+		
+		//alert("Scroll="+this.scrollWidth);
+		var width=this.scrollWidth;
+		if (true || f_core.IsInternetExplorer()) {
+			width-=2;
+		}
+		
+		this._body.style.width=width+"px";
+	},
 	/**
 	 * @method protected
 	 * @return void
@@ -958,7 +986,7 @@ var __members = {
 				f_core.AppendChild(divNode, input);
 			}
 
-			var span=f_core.CreateElement(divNode, "span", {
+			var span=f_core.CreateElement(divNode, "label", {
 				_node: li,
 				onmouseover: f_tree._NodeLabel_mouseOver,
 				onmouseout: f_tree._NodeLabel_mouseOut				
@@ -1146,6 +1174,8 @@ var __members = {
 			// Il faut créer les composants ...
 			
 			this._constructTree(ul, node._nodes, li._depth+1);
+			
+			this._updateBodyWidth();
 		}		
 		
 		ul.style.display="list-item";
@@ -1386,18 +1416,25 @@ var __members = {
 		return true;
 	},
 	fa_showElement: function(item) {
-		f_core.Assert(item && item.tagName, "Item parameter must be a LI tag ! ("+item+")");
+		f_core.Assert(item && item.tagName, "f_tree.fa_showElement: Item parameter must be a LI tag ! ("+item+")");
 		
-		//f_core.Debug(f_tree, "Show="+item._label.innerHTML);
 		if (item.offsetTop-this.scrollTop<0) {
 			this.scrollTop=item.offsetTop;
-			//	f_core.Debug(f_tree, "Show=UP");
 
 		} else if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
 			this.scrollTop=item.offsetTop+item.offsetHeight-this.clientHeight;
-
-			// f_core.Debug(f_tree, "Show=DOWN itemO="+item.offsetTop+" laH="+item._label.offsetHeight+", stop="+this.scrollTop+", ch="+this.clientHeight);
 		}
+		
+		var itemNode=item.firstChild; // Div du noeud
+		var firstChild=itemNode.firstChild;
+		var lastChild=itemNode.lastChild;
+		
+		if (firstChild.offsetLeft-this.scrollLeft<0) {
+			this.scrollLeft=firstChild.offsetLeft;
+
+		} else if (lastChild.offsetLeft+lastChild.offsetWidth-this.scrollLeft>this.clientWidth) {			
+			this.scrollLeft=firstChild.offsetLeft;
+		}		
 		
 		f_core.ShowComponent(item._span);
 	},
@@ -2157,7 +2194,7 @@ var __members = {
 	},
 	fa_listVisibleElements: function(container, list) {
 		if (container===undefined) {
-			container=this;
+			container=this._body;
 			list=new Array;
 		}
 		
@@ -2909,6 +2946,8 @@ var __members = {
 			var nodes=this._nodes;
 			if (nodes) {
 				this._constructTree(this, nodes, 0);
+				
+				this._updateBodyWidth();
 			}
 			
 			return;
@@ -2925,7 +2964,8 @@ var __members = {
 			ul.style.display="list-item";
 	
 			this.fa_updateElementStyle(li);
-			this._updateCommandStyle(li);			
+			this._updateCommandStyle(li);	
+			this._updateBodyWidth();
 		}
 	},
 	/**
@@ -2939,7 +2979,7 @@ var __members = {
 		if (value===undefined) {		
 			var children=this._nodes;
 			
-			var ul=this;
+			var ul=this._body;
 
 			var lis=ul.childNodes;
 			for(var i=0;i<lis.length;) {
