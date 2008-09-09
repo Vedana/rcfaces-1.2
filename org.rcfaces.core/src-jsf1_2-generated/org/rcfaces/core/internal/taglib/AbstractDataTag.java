@@ -52,10 +52,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression margins;
-	private ValueExpression value;
-	private ValueExpression var;
-	private ValueExpression rows;
 	private ValueExpression first;
+	private ValueExpression value;
+	private ValueExpression rows;
+	private ValueExpression var;
 	private ValueExpression saveCompleteState;
 	public final void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
@@ -193,20 +193,20 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.margins = margins;
 	}
 
-	public final void setValue(ValueExpression value) {
-		this.value = value;
+	public final void setFirst(ValueExpression first) {
+		this.first = first;
 	}
 
-	public final void setVar(ValueExpression var) {
-		this.var = var;
+	public final void setValue(ValueExpression value) {
+		this.value = value;
 	}
 
 	public final void setRows(ValueExpression rows) {
 		this.rows = rows;
 	}
 
-	public final void setFirst(ValueExpression first) {
-		this.first = first;
+	public final void setVar(ValueExpression var) {
+		this.var = var;
 	}
 
 	public final void setSaveCompleteState(ValueExpression saveCompleteState) {
@@ -237,10 +237,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  value='"+value+"'");
-			LOG.debug("  var='"+var+"'");
-			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  first='"+first+"'");
+			LOG.debug("  value='"+value+"'");
+			LOG.debug("  rows='"+rows+"'");
+			LOG.debug("  var='"+var+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -498,21 +498,21 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 				component.setMargins(margins.getExpressionString());
 		}
 
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
+
+			} else {
+				component.setFirst(getInt(first.getExpressionString()));
+			}
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
 
 			} else {
 				component.setValue(value.getExpressionString());
-			}
-		}
-
-		if (var != null) {
-			if (var.isLiteralText()==false) {
-				component.setValueExpression(Properties.VAR, var);
-
-			} else {
-				component.setVar(var.getExpressionString());
 			}
 		}
 
@@ -525,12 +525,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (first != null) {
-			if (first.isLiteralText()==false) {
-				component.setValueExpression(Properties.FIRST, first);
+		if (var != null) {
+			if (var.isLiteralText()==false) {
+				component.setValueExpression(Properties.VAR, var);
 
 			} else {
-				component.setFirst(getInt(first.getExpressionString()));
+				component.setVar(var.getExpressionString());
 			}
 		}
 
@@ -579,10 +579,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		hiddenMode = null;
 		margins = null;
-		value = null;
-		var = null;
-		rows = null;
 		first = null;
+		value = null;
+		rows = null;
+		var = null;
 		saveCompleteState = null;
 
 		super.release();

@@ -33,6 +33,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression border;
 	private ValueExpression rowStyleClass;
 	private ValueExpression showValue;
+	private ValueExpression emptyDataMessage;
 	private ValueExpression horizontalScrollPosition;
 	private ValueExpression verticalScrollPosition;
 	private ValueExpression preferences;
@@ -106,6 +107,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.showValue = showValue;
 	}
 
+	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
+		this.emptyDataMessage = emptyDataMessage;
+	}
+
 	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
 	}
@@ -158,6 +163,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  showValue='"+showValue+"'");
+			LOG.debug("  emptyDataMessage='"+emptyDataMessage+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  preferences='"+preferences+"'");
@@ -285,6 +291,15 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (emptyDataMessage != null) {
+			if (emptyDataMessage.isLiteralText()==false) {
+				component.setValueExpression(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
+
+			} else {
+				component.setEmptyDataMessage(emptyDataMessage.getExpressionString());
+			}
+		}
+
 		if (horizontalScrollPosition != null) {
 			if (horizontalScrollPosition.isLiteralText()==false) {
 				component.setValueExpression(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
@@ -374,6 +389,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		border = null;
 		rowStyleClass = null;
 		showValue = null;
+		emptyDataMessage = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		preferences = null;

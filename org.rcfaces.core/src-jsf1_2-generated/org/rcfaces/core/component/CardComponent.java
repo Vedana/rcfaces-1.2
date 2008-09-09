@@ -3,15 +3,19 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.lang.String;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
+import javax.faces.context.FacesContext;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import java.util.HashSet;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 /**
@@ -21,6 +25,7 @@ public class CardComponent extends AbstractOutputComponent implements
 	ITextAlignmentCapability,
 	IVerticalAlignmentCapability,
 	IVariableScopeCapability,
+	IAsyncDecodeModeCapability,
 	ILoadEventCapability,
 	IAsyncRenderComponent {
 
@@ -28,7 +33,7 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeSaveValue","verticalAlignment","scopeVar","textAlignment","scopeValue","loadListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeSaveValue","verticalAlignment","scopeVar","textAlignment","scopeValue","asyncDecodeMode","loadListener"}));
 	}
 
 	public CardComponent() {
@@ -45,6 +50,29 @@ public class CardComponent extends AbstractOutputComponent implements
 
 				return CardBoxTools.getCardBox(this);
 			
+	}
+
+	public int getAsyncDecodeMode(FacesContext facesContext) {
+
+
+				if (engine.isPropertySetted(Properties.ASYNC_DECODE_MODE)) {			
+					return engine.getIntProperty(Properties.ASYNC_DECODE_MODE,0, facesContext);
+				}
+				
+				CardBoxComponent cardBox=getCardBox();
+				if (cardBox==null) {
+					return IAsyncDecodeModeCapability.DEFAULT_ASYNC_DECODE_MODE;
+				}
+				
+				return cardBox.getAsyncDecodeMode(facesContext);
+			
+	}
+
+	public void setAsyncDecodeMode(String asyncDecodeMode) {
+
+
+			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
+		
 	}
 
 	public java.lang.String getTextAlignment() {
@@ -160,6 +188,22 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public int getAsyncDecodeMode() {
+		return getAsyncDecodeMode(null);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "asyncDecodeMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAsyncDecodeModeSetted() {
+		return engine.isPropertySetted(Properties.ASYNC_DECODE_MODE);
+	}
+
+	public void setAsyncDecodeMode(int asyncDecodeMode) {
+		engine.setProperty(Properties.ASYNC_DECODE_MODE, asyncDecodeMode);
 	}
 
 	public final void addLoadListener(org.rcfaces.core.event.ILoadListener listener) {

@@ -27,8 +27,9 @@ import javax.faces.event.ValueChangeEvent;
 import org.rcfaces.core.internal.capability.ISubmittedExternalValue;
 
 
-import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
@@ -244,7 +245,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
     	super.encodeEnd(context);    	
 	}
 	*/
-	
+
+	protected boolean verifyAsyncDecode(FacesContext context, PhaseId phaseId) {
+		return ComponentTools.verifyAsyncDecode(context, (IAsyncDecodeModeCapability) this, phaseId);
+	}
+		
 	public void processDecodes(FacesContext context) {
 		if (context == null) {
 			throw new NullPointerException();
@@ -253,10 +258,16 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		if (isRendered()==false) {
 			return;
 		}
+		
+		if (this instanceof IAsyncDecodeModeCapability) {
+			    if (verifyAsyncDecode(context, PhaseId.APPLY_REQUEST_VALUES)==false) {
+			        return;
+			    }
+		}			
 
         ComponentTools.IVarScope varScope = null;
         if (this instanceof IVariableScopeCapability) {
-            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this, PhaseId.APPLY_REQUEST_VALUES);
         }
 
 		engine.startDecodes(context);
@@ -295,10 +306,16 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		if (isRendered()==false) {
             return;
         }
+		
+		if (this instanceof IAsyncDecodeModeCapability) {
+		    if (verifyAsyncDecode(context, PhaseId.PROCESS_VALIDATIONS)==false) {
+		        return;
+		    }
+		}			
 
         ComponentTools.IVarScope varScope = null;
         if (this instanceof IVariableScopeCapability) {
-            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this, PhaseId.PROCESS_VALIDATIONS);
         }
 
 		super.processValidators(context);
@@ -326,10 +343,16 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
  		if (isRendered()==false) {
             return;
         }
+		
+		if (this instanceof IAsyncDecodeModeCapability) {
+		    if (verifyAsyncDecode(context, PhaseId.UPDATE_MODEL_VALUES)==false) {
+		        return;
+		    }
+		}			
 
 		ComponentTools.IVarScope varScope = null;
         if (this instanceof IVariableScopeCapability) {
-            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this);
+            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this, PhaseId.UPDATE_MODEL_VALUES);
         }
 
         engine.processUpdates(context);

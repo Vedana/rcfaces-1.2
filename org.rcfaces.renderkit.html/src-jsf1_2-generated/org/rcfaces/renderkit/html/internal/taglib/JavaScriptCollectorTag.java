@@ -1,7 +1,6 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.internal.taglib.CameliaTag;
@@ -13,6 +12,7 @@ import org.rcfaces.renderkit.html.component.JavaScriptCollectorComponent;
 import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class JavaScriptCollectorTag extends CameliaTag implements Tag {
 

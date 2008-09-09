@@ -29,6 +29,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private ValueExpression initListeners;
 	private ValueExpression loadListeners;
 	private ValueExpression asyncRenderMode;
+	private ValueExpression asyncDecodeMode;
 	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
@@ -82,6 +83,10 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
+	public final void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
+		this.asyncDecodeMode = asyncDecodeMode;
+	}
+
 	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
@@ -114,6 +119,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
@@ -211,6 +217,15 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
+		if (asyncDecodeMode != null) {
+			if (asyncDecodeMode.isLiteralText()==false) {
+				component.setValueExpression(Properties.ASYNC_DECODE_MODE, asyncDecodeMode);
+
+			} else {
+				component.setAsyncDecodeMode(asyncDecodeMode.getExpressionString());
+			}
+		}
+
 		if (scopeSaveValue != null) {
 			if (scopeSaveValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SCOPE_SAVE_VALUE, scopeSaveValue);
@@ -269,6 +284,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		initListeners = null;
 		loadListeners = null;
 		asyncRenderMode = null;
+		asyncDecodeMode = null;
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;

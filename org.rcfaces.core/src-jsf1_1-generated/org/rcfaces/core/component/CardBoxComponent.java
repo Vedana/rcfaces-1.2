@@ -8,14 +8,17 @@ import java.lang.String;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import java.util.HashSet;
 import org.rcfaces.core.component.CardComponent;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 
 /**
  * <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
@@ -33,13 +36,14 @@ public class CardBoxComponent extends AbstractInputComponent implements
 	ISelectionEventCapability,
 	IAsyncRenderModeCapability,
 	IPreferencesSettings,
-	IVariableScopeCapability {
+	IVariableScopeCapability,
+	IAsyncDecodeModeCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.cardBox";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeSaveValue","scopeVar","scopeValue","asyncRenderMode","preferences"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeSaveValue","scopeVar","scopeValue","asyncDecodeMode","asyncRenderMode","preferences"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -85,6 +89,20 @@ public class CardBoxComponent extends AbstractInputComponent implements
 
 			setAsyncRenderMode(((Integer)AsyncRenderModeConverter.SINGLETON.getAsObject(null, this, asyncRenderMode)).intValue());
 		
+	}
+
+	public void setAsyncDecodeMode(String asyncDecodeMode) {
+
+
+			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
+		
+	}
+
+	protected boolean verifyAsyncDecode(FacesContext facesContext, PhaseId phaseId) {
+
+
+				return true;
+			
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
@@ -212,6 +230,29 @@ public class CardBoxComponent extends AbstractInputComponent implements
 
 	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public int getAsyncDecodeMode() {
+		return getAsyncDecodeMode(null);
+	}
+
+	/**
+	 * See {@link #getAsyncDecodeMode() getAsyncDecodeMode()} for more details
+	 */
+	public int getAsyncDecodeMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ASYNC_DECODE_MODE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "asyncDecodeMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAsyncDecodeModeSetted() {
+		return engine.isPropertySetted(Properties.ASYNC_DECODE_MODE);
+	}
+
+	public void setAsyncDecodeMode(int asyncDecodeMode) {
+		engine.setProperty(Properties.ASYNC_DECODE_MODE, asyncDecodeMode);
 	}
 
 	protected Set getCameliaFields() {

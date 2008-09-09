@@ -31,7 +31,9 @@ import org.rcfaces.core.component.capability.IEditableCapability;
 import java.lang.String;
 import org.rcfaces.core.component.AbstractGridComponent;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import javax.el.ValueExpression;
@@ -51,6 +53,8 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	IAdditionalInformationValuesCapability,
 	IClientAdditionalInformationFullStateCapability,
 	IAdditionalInformationCardinalityCapability,
+	IEmptyMessageCapability,
+	IEmptyDataMessageCapability,
 	IDisabledCapability,
 	IRequiredCapability,
 	IReadOnlyCapability,
@@ -73,7 +77,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","clientAdditionalInformationFullState","suggestionMinChars","valueFormat","gridLookId","selectionListener","paged","additionalInformationValues","additionalInformationListener","verticalScrollPosition","popupHeight","labelColumnId","suggestionDelayMs","selectedValue","border","required","popupWidth","filterProperties","manyResultsMessage","pagerStyleClass","horizontalScrollPosition","rowStyleClass","rowCountVar","zeroResultMessage","gridStyleClass","pagerLookId","editable","message","maxTextLength","readOnly","oneResultMessage","additionalInformationCardinality","valueColumnId","rowIndexVar","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","clientAdditionalInformationFullState","suggestionMinChars","valueFormat","emptyDataMessage","gridLookId","selectionListener","paged","additionalInformationValues","additionalInformationListener","verticalScrollPosition","popupHeight","labelColumnId","suggestionDelayMs","selectedValue","border","required","popupWidth","filterProperties","manyResultsMessage","pagerStyleClass","horizontalScrollPosition","rowCountVar","rowStyleClass","zeroResultMessage","gridStyleClass","pagerLookId","editable","emptyMessage","message","maxTextLength","readOnly","oneResultMessage","additionalInformationCardinality","valueColumnId","rowIndexVar","disabled"}));
 	}
 
 	public ComboGridComponent() {
@@ -374,6 +378,52 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	public void setAdditionalInformationCardinality(int additionalInformationCardinality) {
 		engine.setProperty(Properties.ADDITIONAL_INFORMATION_CARDINALITY, additionalInformationCardinality);
+	}
+
+	public java.lang.String getEmptyMessage() {
+		return getEmptyMessage(null);
+	}
+
+	/**
+	 * See {@link #getEmptyMessage() getEmptyMessage()} for more details
+	 */
+	public java.lang.String getEmptyMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.EMPTY_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "emptyMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isEmptyMessageSetted() {
+		return engine.isPropertySetted(Properties.EMPTY_MESSAGE);
+	}
+
+	public void setEmptyMessage(java.lang.String emptyMessage) {
+		engine.setProperty(Properties.EMPTY_MESSAGE, emptyMessage);
+	}
+
+	public java.lang.String getEmptyDataMessage() {
+		return getEmptyDataMessage(null);
+	}
+
+	/**
+	 * See {@link #getEmptyDataMessage() getEmptyDataMessage()} for more details
+	 */
+	public java.lang.String getEmptyDataMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.EMPTY_DATA_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "emptyDataMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isEmptyDataMessageSetted() {
+		return engine.isPropertySetted(Properties.EMPTY_DATA_MESSAGE);
+	}
+
+	public void setEmptyDataMessage(java.lang.String emptyDataMessage) {
+		engine.setProperty(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
 	}
 
 	public boolean isDisabled() {

@@ -8,6 +8,7 @@ import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import javax.faces.convert.Converter;
@@ -34,13 +35,14 @@ public class ToolItemComponent extends UIImageItemComponent implements
 	ITextPositionCapability,
 	IAccessKeyCapability,
 	IWidthCapability,
-	IStyleClassCapability {
+	IStyleClassCapability,
+	IImmediateCapability {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolItem";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","imageHeight","accessKey","groupName","textPosition","borderType","styleClass","width","inputType","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","lookId","imageHeight","accessKey","groupName","textPosition","borderType","styleClass","width","inputType","imageWidth"}));
 	}
 
 	public ToolItemComponent() {
@@ -308,6 +310,29 @@ public class ToolItemComponent extends UIImageItemComponent implements
 
 	public void setStyleClass(java.lang.String styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	public boolean isImmediate() {
+		return isImmediate(null);
+	}
+
+	/**
+	 * See {@link #isImmediate() isImmediate()} for more details
+	 */
+	public boolean isImmediate(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.IMMEDIATE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "immediate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImmediateSetted() {
+		return engine.isPropertySetted(Properties.IMMEDIATE);
+	}
+
+	public void setImmediate(boolean immediate) {
+		engine.setProperty(Properties.IMMEDIATE, immediate);
 	}
 
 	protected Set getCameliaFields() {

@@ -33,6 +33,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private String border;
 	private String rowStyleClass;
 	private String showValue;
+	private String emptyDataMessage;
 	private String horizontalScrollPosition;
 	private String verticalScrollPosition;
 	private String preferences;
@@ -166,6 +167,14 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.showValue = showValue;
 	}
 
+	public final String getEmptyDataMessage() {
+		return emptyDataMessage;
+	}
+
+	public final void setEmptyDataMessage(String emptyDataMessage) {
+		this.emptyDataMessage = emptyDataMessage;
+	}
+
 	public final String getHorizontalScrollPosition() {
 		return horizontalScrollPosition;
 	}
@@ -238,6 +247,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  showValue='"+showValue+"'");
+			LOG.debug("  emptyDataMessage='"+emptyDataMessage+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
 			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
 			LOG.debug("  preferences='"+preferences+"'");
@@ -377,6 +387,16 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (emptyDataMessage != null) {
+			if (isValueReference(emptyDataMessage)) {
+				ValueBinding vb = application.createValueBinding(emptyDataMessage);
+				component.setValueBinding(Properties.EMPTY_DATA_MESSAGE, vb);
+
+			} else {
+				component.setEmptyDataMessage(emptyDataMessage);
+			}
+		}
+
 		if (horizontalScrollPosition != null) {
 			if (isValueReference(horizontalScrollPosition)) {
 				ValueBinding vb = application.createValueBinding(horizontalScrollPosition);
@@ -473,6 +493,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		border = null;
 		rowStyleClass = null;
 		showValue = null;
+		emptyDataMessage = null;
 		horizontalScrollPosition = null;
 		verticalScrollPosition = null;
 		preferences = null;

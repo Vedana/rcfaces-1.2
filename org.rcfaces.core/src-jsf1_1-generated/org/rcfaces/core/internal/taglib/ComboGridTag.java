@@ -23,6 +23,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private String additionalInformationValues;
 	private String clientAdditionalInformationFullState;
 	private String additionalInformationCardinality;
+	private String emptyMessage;
+	private String emptyDataMessage;
 	private String disabled;
 	private String required;
 	private String readOnly;
@@ -95,6 +97,22 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 	public final void setAdditionalInformationCardinality(String additionalInformationCardinality) {
 		this.additionalInformationCardinality = additionalInformationCardinality;
+	}
+
+	public final String getEmptyMessage() {
+		return emptyMessage;
+	}
+
+	public final void setEmptyMessage(String emptyMessage) {
+		this.emptyMessage = emptyMessage;
+	}
+
+	public final String getEmptyDataMessage() {
+		return emptyDataMessage;
+	}
+
+	public final void setEmptyDataMessage(String emptyDataMessage) {
+		this.emptyDataMessage = emptyDataMessage;
 	}
 
 	public final String getDisabled() {
@@ -289,6 +307,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  additionalInformationValues='"+additionalInformationValues+"'");
 			LOG.debug("  clientAdditionalInformationFullState='"+clientAdditionalInformationFullState+"'");
 			LOG.debug("  additionalInformationCardinality='"+additionalInformationCardinality+"'");
+			LOG.debug("  emptyMessage='"+emptyMessage+"'");
+			LOG.debug("  emptyDataMessage='"+emptyDataMessage+"'");
 			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
@@ -363,6 +383,26 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 			} else {
 				component.setAdditionalInformationCardinality(getInt(additionalInformationCardinality));
+			}
+		}
+
+		if (emptyMessage != null) {
+			if (isValueReference(emptyMessage)) {
+				ValueBinding vb = application.createValueBinding(emptyMessage);
+				component.setValueBinding(Properties.EMPTY_MESSAGE, vb);
+
+			} else {
+				component.setEmptyMessage(emptyMessage);
+			}
+		}
+
+		if (emptyDataMessage != null) {
+			if (isValueReference(emptyDataMessage)) {
+				ValueBinding vb = application.createValueBinding(emptyDataMessage);
+				component.setValueBinding(Properties.EMPTY_DATA_MESSAGE, vb);
+
+			} else {
+				component.setEmptyDataMessage(emptyDataMessage);
 			}
 		}
 
@@ -667,6 +707,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		additionalInformationValues = null;
 		clientAdditionalInformationFullState = null;
 		additionalInformationCardinality = null;
+		emptyMessage = null;
+		emptyDataMessage = null;
 		disabled = null;
 		required = null;
 		readOnly = null;

@@ -7,8 +7,8 @@ import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
@@ -28,6 +28,7 @@ import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
@@ -105,6 +106,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IRequiredCapability,
 	IBorderCapability,
 	IRowStyleClassCapability,
+	IEmptyDataMessageCapability,
 	IReadOnlyCapability,
 	IDisabledCapability,
 	IMenuCapability,
@@ -131,7 +133,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","checkListener","selectionCardinality","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","loadListener","checkedValues","paged","selectionListener","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","cursorValue","required","border","clientSelectionFullState","preferences","filterProperties","clientCheckFullState","doubleClickListener","selectedValues","horizontalScrollPosition","rowCountVar","rowStyleClass","keySearchColumnId","rowValueColumnId","readOnly","selectable","additionalInformationCardinality","rowIndexVar","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","checkListener","selectionCardinality","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","emptyDataMessage","loadListener","checkedValues","paged","selectionListener","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","cursorValue","required","border","clientSelectionFullState","preferences","filterProperties","clientCheckFullState","doubleClickListener","selectedValues","horizontalScrollPosition","rowCountVar","rowStyleClass","keySearchColumnId","rowValueColumnId","readOnly","selectable","additionalInformationCardinality","rowIndexVar","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -968,6 +970,29 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setRowStyleClass(java.lang.String rowStyleClass) {
 		engine.setProperty(Properties.ROW_STYLE_CLASS, rowStyleClass);
+	}
+
+	public java.lang.String getEmptyDataMessage() {
+		return getEmptyDataMessage(null);
+	}
+
+	/**
+	 * See {@link #getEmptyDataMessage() getEmptyDataMessage()} for more details
+	 */
+	public java.lang.String getEmptyDataMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.EMPTY_DATA_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "emptyDataMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isEmptyDataMessageSetted() {
+		return engine.isPropertySetted(Properties.EMPTY_DATA_MESSAGE);
+	}
+
+	public void setEmptyDataMessage(java.lang.String emptyDataMessage) {
+		engine.setProperty(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
 	}
 
 	public boolean isReadOnly() {

@@ -35,6 +35,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression required;
 	private ValueExpression border;
 	private ValueExpression rowStyleClass;
+	private ValueExpression emptyDataMessage;
 	private ValueExpression readOnly;
 	private ValueExpression disabled;
 	private ValueExpression horizontalScrollPosition;
@@ -124,6 +125,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 	public final void setRowStyleClass(ValueExpression rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
+	}
+
+	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
+		this.emptyDataMessage = emptyDataMessage;
 	}
 
 	public final void setReadOnly(ValueExpression readOnly) {
@@ -219,6 +224,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
+			LOG.debug("  emptyDataMessage='"+emptyDataMessage+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
@@ -361,6 +367,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 			} else {
 				component.setRowStyleClass(rowStyleClass.getExpressionString());
+			}
+		}
+
+		if (emptyDataMessage != null) {
+			if (emptyDataMessage.isLiteralText()==false) {
+				component.setValueExpression(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
+
+			} else {
+				component.setEmptyDataMessage(emptyDataMessage.getExpressionString());
 			}
 		}
 
@@ -535,6 +550,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		required = null;
 		border = null;
 		rowStyleClass = null;
+		emptyDataMessage = null;
 		readOnly = null;
 		disabled = null;
 		horizontalScrollPosition = null;

@@ -23,6 +23,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
+	private String asyncDecodeMode;
 	private String loadListeners;
 	public String getComponentType() {
 		return CardComponent.COMPONENT_TYPE;
@@ -68,6 +69,14 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
+	public final String getAsyncDecodeMode() {
+		return asyncDecodeMode;
+	}
+
+	public final void setAsyncDecodeMode(String asyncDecodeMode) {
+		this.asyncDecodeMode = asyncDecodeMode;
+	}
+
 	public final String getLoadListener() {
 		return loadListeners;
 	}
@@ -86,6 +95,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
+			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -150,6 +160,16 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (asyncDecodeMode != null) {
+			if (isValueReference(asyncDecodeMode)) {
+				ValueBinding vb = application.createValueBinding(asyncDecodeMode);
+				component.setValueBinding(Properties.ASYNC_DECODE_MODE, vb);
+
+			} else {
+				component.setAsyncDecodeMode(asyncDecodeMode);
+			}
+		}
+
 		if (loadListeners != null) {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
@@ -161,6 +181,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
+		asyncDecodeMode = null;
 		loadListeners = null;
 
 		super.release();

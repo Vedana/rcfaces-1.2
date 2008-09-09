@@ -28,6 +28,7 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 	private String accessKey;
 	private String width;
 	private String styleClass;
+	private String immediate;
 	public String getComponentType() {
 		return ToolItemComponent.COMPONENT_TYPE;
 	}
@@ -112,6 +113,14 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		this.styleClass = styleClass;
 	}
 
+	public final String getImmediate() {
+		return immediate;
+	}
+
+	public final void setImmediate(String immediate) {
+		this.immediate = immediate;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ToolItemComponent.COMPONENT_TYPE==getComponentType()) {
@@ -127,6 +136,7 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  immediate='"+immediate+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -240,6 +250,16 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 				component.setStyleClass(styleClass);
 			}
 		}
+
+		if (immediate != null) {
+			if (isValueReference(immediate)) {
+				ValueBinding vb = application.createValueBinding(immediate);
+				component.setValueBinding(Properties.IMMEDIATE, vb);
+
+			} else {
+				component.setImmediate(getBool(immediate));
+			}
+		}
 	}
 
 	public void release() {
@@ -253,6 +273,7 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 		accessKey = null;
 		width = null;
 		styleClass = null;
+		immediate = null;
 
 		super.release();
 	}

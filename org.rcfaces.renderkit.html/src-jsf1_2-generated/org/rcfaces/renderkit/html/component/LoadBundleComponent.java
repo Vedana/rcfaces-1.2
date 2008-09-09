@@ -1,11 +1,11 @@
 package org.rcfaces.renderkit.html.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class LoadBundleComponent extends CameliaBaseComponent {
 

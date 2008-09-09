@@ -1,7 +1,6 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.renderkit.html.component.LoadBundleComponent;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.jsp.tagext.Tag;
@@ -13,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.Application;
 import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class LoadBundleTag extends CameliaTag implements Tag {
 

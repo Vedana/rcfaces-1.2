@@ -22,6 +22,7 @@ import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IShowValueCapability;
@@ -73,6 +74,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IBorderCapability,
 	IRowStyleClassCapability,
 	IShowValueCapability,
+	IEmptyDataMessageCapability,
 	IMenuCapability,
 	IScrollableCapability,
 	IPreferencesSettings,
@@ -89,7 +91,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","doubleClickListener","horizontalScrollPosition","selectedValues","rowCountVar","rowStyleClass","loadListener","paged","selectionListener","showValue","additionalInformationValues","additionalInformationListener","verticalScrollPosition","selectable","additionalInformationCardinality","rowValueConverter","required","border","rowIndexVar","rowValue","clientSelectionFullState","preferences"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -744,6 +746,29 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	public void setShowValue(java.lang.Object showValue) {
 		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	public java.lang.String getEmptyDataMessage() {
+		return getEmptyDataMessage(null);
+	}
+
+	/**
+	 * See {@link #getEmptyDataMessage() getEmptyDataMessage()} for more details
+	 */
+	public java.lang.String getEmptyDataMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.EMPTY_DATA_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "emptyDataMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isEmptyDataMessageSetted() {
+		return engine.isPropertySetted(Properties.EMPTY_DATA_MESSAGE);
+	}
+
+	public void setEmptyDataMessage(java.lang.String emptyDataMessage) {
+		engine.setProperty(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
 	}
 
 	public IMenuComponent getMenu() {

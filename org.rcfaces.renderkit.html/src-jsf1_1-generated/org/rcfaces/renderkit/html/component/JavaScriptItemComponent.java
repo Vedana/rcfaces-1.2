@@ -1,10 +1,10 @@
 package org.rcfaces.renderkit.html.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
 import org.rcfaces.core.component.FileItemComponent;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class JavaScriptItemComponent extends FileItemComponent {
 

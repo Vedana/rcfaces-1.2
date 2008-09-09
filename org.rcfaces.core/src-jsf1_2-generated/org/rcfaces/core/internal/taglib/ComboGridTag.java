@@ -23,6 +23,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private ValueExpression additionalInformationValues;
 	private ValueExpression clientAdditionalInformationFullState;
 	private ValueExpression additionalInformationCardinality;
+	private ValueExpression emptyMessage;
+	private ValueExpression emptyDataMessage;
 	private ValueExpression disabled;
 	private ValueExpression required;
 	private ValueExpression readOnly;
@@ -75,6 +77,14 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 	public final void setAdditionalInformationCardinality(ValueExpression additionalInformationCardinality) {
 		this.additionalInformationCardinality = additionalInformationCardinality;
+	}
+
+	public final void setEmptyMessage(ValueExpression emptyMessage) {
+		this.emptyMessage = emptyMessage;
+	}
+
+	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
+		this.emptyDataMessage = emptyDataMessage;
 	}
 
 	public final void setDisabled(ValueExpression disabled) {
@@ -205,6 +215,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  additionalInformationValues='"+additionalInformationValues+"'");
 			LOG.debug("  clientAdditionalInformationFullState='"+clientAdditionalInformationFullState+"'");
 			LOG.debug("  additionalInformationCardinality='"+additionalInformationCardinality+"'");
+			LOG.debug("  emptyMessage='"+emptyMessage+"'");
+			LOG.debug("  emptyDataMessage='"+emptyDataMessage+"'");
 			LOG.debug("  disabled='"+disabled+"'");
 			LOG.debug("  required='"+required+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
@@ -275,6 +287,24 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 			} else {
 				component.setAdditionalInformationCardinality(getInt(additionalInformationCardinality.getExpressionString()));
+			}
+		}
+
+		if (emptyMessage != null) {
+			if (emptyMessage.isLiteralText()==false) {
+				component.setValueExpression(Properties.EMPTY_MESSAGE, emptyMessage);
+
+			} else {
+				component.setEmptyMessage(emptyMessage.getExpressionString());
+			}
+		}
+
+		if (emptyDataMessage != null) {
+			if (emptyDataMessage.isLiteralText()==false) {
+				component.setValueExpression(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
+
+			} else {
+				component.setEmptyDataMessage(emptyDataMessage.getExpressionString());
 			}
 		}
 
@@ -551,6 +581,8 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		additionalInformationValues = null;
 		clientAdditionalInformationFullState = null;
 		additionalInformationCardinality = null;
+		emptyMessage = null;
+		emptyDataMessage = null;
 		disabled = null;
 		required = null;
 		readOnly = null;

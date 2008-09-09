@@ -5,20 +5,16 @@
 	<jsp-version>1.2</jsp-version>
 	<short-name>vh</short-name>
 	<uri>http://rcfaces.org/html</uri>
-	<display-name>RCFaces HTML components</display-name>
-	<description><![CDATA[
-A set of components specific to the html render-kit.
-]]></description>
 	<tag>
-		<name>init</name>
-		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 <description><![CDATA[
 <p><b>Mandatory</b>.</p>
 		<p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
 		<p>It <b>must</b> be the first tag for a page.</p>
 ]]></description>
+		<name>init</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
 		<attribute>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
@@ -136,13 +132,13 @@ A boolean value specifying if the HTML BASE tag must be generated.
 		</attribute>
 	</tag>
 	<tag>
+<description><![CDATA[
+Specifies includes and required javascript classes.
+]]></description>
 		<name>javaScript</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
-Specifies includes and required javascript classes.
-]]></description>
 		<attribute>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
@@ -213,13 +209,13 @@ A string value specifying a list of javascript classes to include.
 		</attribute>
 	</tag>
 	<tag>
+<description><![CDATA[
+Css style
+]]></description>
 		<name>cssStyle</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.CssStyleTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
-Css style
-]]></description>
 		<attribute>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be

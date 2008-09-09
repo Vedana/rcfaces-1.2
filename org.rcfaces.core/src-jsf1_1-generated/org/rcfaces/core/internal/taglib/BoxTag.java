@@ -29,6 +29,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private String initListeners;
 	private String loadListeners;
 	private String asyncRenderMode;
+	private String asyncDecodeMode;
 	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
@@ -126,6 +127,14 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
+	public final String getAsyncDecodeMode() {
+		return asyncDecodeMode;
+	}
+
+	public final void setAsyncDecodeMode(String asyncDecodeMode) {
+		this.asyncDecodeMode = asyncDecodeMode;
+	}
+
 	public final String getScopeSaveValue() {
 		return scopeSaveValue;
 	}
@@ -170,6 +179,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
+			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
@@ -275,6 +285,16 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
+		if (asyncDecodeMode != null) {
+			if (isValueReference(asyncDecodeMode)) {
+				ValueBinding vb = application.createValueBinding(asyncDecodeMode);
+				component.setValueBinding(Properties.ASYNC_DECODE_MODE, vb);
+
+			} else {
+				component.setAsyncDecodeMode(asyncDecodeMode);
+			}
+		}
+
 		if (scopeSaveValue != null) {
 			if (isValueReference(scopeSaveValue)) {
 				ValueBinding vb = application.createValueBinding(scopeSaveValue);
@@ -338,6 +358,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		initListeners = null;
 		loadListeners = null;
 		asyncRenderMode = null;
+		asyncDecodeMode = null;
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;

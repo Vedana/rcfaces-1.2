@@ -65,7 +65,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","visible","for","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","height","mouseOverListener","hiddenMode","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","showDetail","initListener","marginBottom","toolTipText","y","x","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","visible","marginLeft","backgroundColor","for","errorListener","propertyChangeListener","helpURL","height","mouseOverListener","hiddenMode","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","showDetail","initListener","marginBottom","toolTipText","y","margins","x"}));
 	}
 
 

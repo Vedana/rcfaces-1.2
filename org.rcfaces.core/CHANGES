@@ -1,8 +1,45 @@
 
 ----------------------------------------------------------------------
+- @version I2543
+- @author Olivier Oeuillot
+- 
+
+f_classLoader.js:
+Ajout du mécanisme "onInitComponentListeners" qui permet d'avoir des callbacks quand un objet est initializé
+
+fa_namingContainer.js:
+Ajout du parametre "doNotInitialize" à la méthode FindComponent, qui permet de ne pas forcer l'initialisation du composant. 
+
+IAsyncDecodeModeCapability/f_classLoader/fa_asyncRender/CardRenderer/BoxRenderer:
+Mise en place partielle d'un non-décodage partiel de composants en AJAX
+
+ImageContentInformation/BasicContentInformation/ImageContentAccessorHandler/ScriptContentInformation/IComponentContentInformation:
+ImageRenderer/InitRenderer/JavaScriptCollectorRenderContext/ImageService:
+Ajout de la référence du composant dans les objets de type ContentInformation. 
+
+IImmediateItemCapability/DefaultItem/IToolItem/f_itemsToolFolder.js/ItemsToolFolderDecorator/ComboGridRenderer:
+Support de la propriété "immediate" pour les items et plus particulièrement pour les items de toolbars. 
+
+TextEntryRenderer/f_textArea.js/f_textArea.css/f_textEntry.css/f_comboGrid.js/f_comboGrid.css:
+Implementation de IEmptyMessageCapability : Affichage d'un message quand le champ de saisi est vide !
+
+f_tree.css/f_tree.js/TreeRender:
+Nouvelle génération de l'arbre avec un <DIV> englobant
+
+IEmptyDataMessageCapability/f_grid.js/f_dataGrid.js/f_dataGridPopup.js/f_componentsGrid.js/f_comboGrid.js/fa_dataGridPopup.js/AbstractGridRenderer/ComboGridRenderer/f_comboGrid.css:
+Support de l'affichage d'un message quand le tableau est vide.
+
+f_focusManager.js:
+Correction d'un problème d'initialization
+
+PropertiesRepository:
+Correction du référencement des propriétés suite à des modifications du generateur (Properties.class différent par renderKit)
+
+
+----------------------------------------------------------------------
 - @version I2542
 - @author Olivier Oeuillot
--
+- 25/8/2008
 
 ComponentsGridRenderer/ComponentsGridService:
 Correction de la gestion des tables dont la taille n'est pas connue au début, mais découverte par la suite
@@ -21,12 +58,6 @@ Correction lors ce que la taille du tableau est découverte lors du rendu
 
 f_core.js/f_pager.js:
 Optimisation du code de FormatMessage()
-
-f_classLoader.js:
-Ajout du mécanisme "onInitComponentListeners" qui permet d'avoir des callbacks quand un objet est initializé
-
-fa_namingContainer.js:
-Ajout du parametre "doNotInitialize" à la méthode FindComponent, qui permet de ne pas forcer l'initialisation du composant. 
 
 rcfaces.xsd:
 Correction du schema (types de parametre invalides)

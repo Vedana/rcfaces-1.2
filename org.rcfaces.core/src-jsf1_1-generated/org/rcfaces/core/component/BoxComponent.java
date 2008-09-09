@@ -14,11 +14,13 @@ import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 
 /**
@@ -47,6 +49,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	ILoadEventCapability,
 	IMenuCapability,
 	IAsyncRenderModeCapability,
+	IAsyncDecodeModeCapability,
 	IVariableScopeCapability,
 	IAsyncRenderComponent {
 
@@ -54,7 +57,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","asyncDecodeMode","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener"}));
 	}
 
 	public BoxComponent() {
@@ -70,6 +73,13 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 
 			setAsyncRenderMode(((Integer)AsyncRenderModeConverter.SINGLETON.getAsObject(null, this, asyncRenderMode)).intValue());
+		
+	}
+
+	public void setAsyncDecodeMode(String asyncDecodeMode) {
+
+
+			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
 		
 	}
 
@@ -301,6 +311,29 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	public void setAsyncRenderMode(int asyncRenderMode) {
 		engine.setProperty(Properties.ASYNC_RENDER_MODE, asyncRenderMode);
+	}
+
+	public int getAsyncDecodeMode() {
+		return getAsyncDecodeMode(null);
+	}
+
+	/**
+	 * See {@link #getAsyncDecodeMode() getAsyncDecodeMode()} for more details
+	 */
+	public int getAsyncDecodeMode(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ASYNC_DECODE_MODE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "asyncDecodeMode" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAsyncDecodeModeSetted() {
+		return engine.isPropertySetted(Properties.ASYNC_DECODE_MODE);
+	}
+
+	public void setAsyncDecodeMode(int asyncDecodeMode) {
+		engine.setProperty(Properties.ASYNC_DECODE_MODE, asyncDecodeMode);
 	}
 
 	public boolean isScopeSaveValue() {

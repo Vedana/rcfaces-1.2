@@ -1,11 +1,11 @@
 package org.rcfaces.renderkit.html.component;
 
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Set;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.renderkit.html.component.Properties;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 /**

@@ -43,8 +43,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private String propertyChangeListeners;
 	private String hiddenMode;
 	private String globalOnly;
-	private String showSummary;
 	private String margins;
+	private String showSummary;
 	private String showDetail;
 	public final String getMarginBottom() {
 		return marginBottom;
@@ -242,12 +242,12 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.globalOnly = globalOnly;
 	}
 
-	public final void setShowSummary(String showSummary) {
-		this.showSummary = showSummary;
-	}
-
 	public final void setMargins(String margins) {
 		this.margins = margins;
+	}
+
+	public final void setShowSummary(String showSummary) {
+		this.showSummary = showSummary;
 	}
 
 	public final void setShowDetail(String showDetail) {
@@ -275,8 +275,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
 		}
 		super.setProperties(uiComponent);
@@ -506,6 +506,13 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (margins != null) {
+			if (isValueReference(margins)) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins);
+		}
+
 		if (showSummary != null) {
 			if (isValueReference(showSummary)) {
 				ValueBinding vb = application.createValueBinding(showSummary);
@@ -514,13 +521,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			} else {
 				component.setShowSummary(getBool(showSummary));
 			}
-		}
-
-		if (margins != null) {
-			if (isValueReference(margins)) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins);
 		}
 
 		if (showDetail != null) {
@@ -560,8 +560,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		hiddenMode = null;
 		globalOnly = null;
-		showSummary = null;
 		margins = null;
+		showSummary = null;
 		showDetail = null;
 
 		super.release();

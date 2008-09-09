@@ -24,6 +24,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
+	private String asyncDecodeMode;
 	public String getComponentType() {
 		return CardBoxComponent.COMPONENT_TYPE;
 	}
@@ -76,6 +77,14 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
+	public final String getAsyncDecodeMode() {
+		return asyncDecodeMode;
+	}
+
+	public final void setAsyncDecodeMode(String asyncDecodeMode) {
+		this.asyncDecodeMode = asyncDecodeMode;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (CardBoxComponent.COMPONENT_TYPE==getComponentType()) {
@@ -86,6 +95,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
+			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -148,6 +158,16 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 				component.setScopeVar(scopeVar);
 			}
 		}
+
+		if (asyncDecodeMode != null) {
+			if (isValueReference(asyncDecodeMode)) {
+				ValueBinding vb = application.createValueBinding(asyncDecodeMode);
+				component.setValueBinding(Properties.ASYNC_DECODE_MODE, vb);
+
+			} else {
+				component.setAsyncDecodeMode(asyncDecodeMode);
+			}
+		}
 	}
 
 	public void release() {
@@ -157,6 +177,7 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
+		asyncDecodeMode = null;
 
 		super.release();
 	}
