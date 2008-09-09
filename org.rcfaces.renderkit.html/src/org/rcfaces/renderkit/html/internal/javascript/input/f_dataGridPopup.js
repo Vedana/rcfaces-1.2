@@ -67,7 +67,7 @@ var __statics = {
 			properties.className+=" "+styleClass;
 		}
 		
-		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged", "v:headerVisible");
+		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged", "v:headerVisible", "v:emptyDataMessage");
 		
 		var divDataGrid=f_core.CreateElement(parent, "div", properties);
 		
@@ -86,6 +86,15 @@ var __statics = {
 					
 			totalSize=-1;
 			break;
+		}
+		
+		var emptyDataMessage=properties["v:emptyDataMessage"];
+		if (emptyDataMessage) {
+			f_core.CreateElement(divDataGrid, "div", {
+				id: dataGridPopupId + f_grid._EMPTY_DATA_MESSAGE_ID_SUFFIX,
+				className: "f_grid_empty_data_message",
+				textNode: emptyDataMessage
+			});
 		}
 		
 		if (!headerVisible) {

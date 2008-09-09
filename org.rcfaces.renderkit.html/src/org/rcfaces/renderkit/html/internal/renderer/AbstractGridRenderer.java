@@ -33,6 +33,7 @@ import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
@@ -170,6 +171,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     private static final String DATA_TITLE_SCROLL_ID_SUFFIX = ""
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "dataTitle_scroll";
+
+    private static final String EMPTY_DATA_MESSAGE_ID_SUFFIX = ""
+            + UINamingContainer.SEPARATOR_CHAR
+            + UINamingContainer.SEPARATOR_CHAR + "emptyDataMessage";
 
     private static final String DATA_TABLE_ID_SUFFIX = ""
             + UINamingContainer.SEPARATOR_CHAR
@@ -590,6 +595,20 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
 
+        String emptyDataMessage = null;
+
+        if (gridComponent instanceof IEmptyDataMessageCapability) {
+            emptyDataMessage = ((IEmptyDataMessageCapability) gridComponent)
+                    .getEmptyDataMessage();
+            if (emptyDataMessage != null) {
+                emptyDataMessage = ParamUtils.formatMessage(
+                        (UIComponent) gridComponent, emptyDataMessage);
+
+                htmlWriter.writeAttribute("v:emptyDataMessage",
+                        emptyDataMessage);
+            }
+        }
+
         if (gridRenderContext.isDisabled()) {
             htmlWriter.writeAttribute("v:disabled", true);
         }
@@ -691,6 +710,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter
                     .writeAttribute("v:sb", gridRenderContext.hasScrollBars());
             return;
+        }
+
+        if (emptyDataMessage != null) {
+            htmlWriter.startElement(IHtmlWriter.DIV);
+            htmlWriter.writeId(getEmptyDataMessageId(htmlWriter));
+            htmlWriter.writeClass(getEmptyDataMessageClassName(htmlWriter));
+
+            htmlWriter.writeText(emptyDataMessage);
+
+            htmlWriter.endElement(IHtmlWriter.DIV);
         }
 
         int tableWidth = 0;
@@ -818,6 +847,15 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         return className;
+    }
+
+    protected String getEmptyDataMessageClassName(IHtmlWriter htmlWriter) {
+        return GRID_MAIN_STYLE_CLASS + "_empty_data_message";
+    }
+
+    protected String getEmptyDataMessageId(IHtmlWriter htmlWriter) {
+        return htmlWriter.getComponentRenderContext().getComponentClientId()
+                + EMPTY_DATA_MESSAGE_ID_SUFFIX;
     }
 
     protected String getDataTitleScrollClassName(IHtmlWriter htmlWriter) {

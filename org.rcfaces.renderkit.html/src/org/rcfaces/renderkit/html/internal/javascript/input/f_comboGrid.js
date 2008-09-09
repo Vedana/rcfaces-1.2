@@ -13,6 +13,11 @@
 var __statics = {
 
 	/**
+	 * @field private static final number
+	 */
+	_UNLIMITED_TEXT_SIZE: 999999,
+	
+	/**
 	 * @field private static final String
 	 */
 	_BUTTON_ID_SUFFIX: "::button",
@@ -175,12 +180,24 @@ var __members = {
 		button.onmouseover=f_comboGrid._OnButtonMouseOver;
 		button.onmouseout=f_comboGrid._OnButtonMouseOut;
 		
-		this._formattedValue=this.f_getInput().value;
+		var input=this.f_getInput();
+		
+		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
+		if (this._emptyMessage && f_core.GetAttribute(input, "v:emptyMessage")) {
+			this._formattedValue="";
+			this._emptyMessageShown=true;
+			
+		} else {		
+			this._formattedValue=input.value;
+		}
+			
 		this._selectedValue=f_core.GetAttribute(this, "v:selectedValue", "");
 		this._inputValue=this._selectedValue;
 		if (this._selectedValue) {
 			this._keyErrored=f_core.GetAttribute(this, "v:invalidKey", false);
 		}
+		
+		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
 		
 		this.f_getInput().onbeforedeactivate=f_comboGrid._OnBeforeDeactivate;
 		
@@ -213,6 +230,8 @@ var __members = {
 		// this._verifyingKey=undefined; // boolean
 		// this._editable=undefined; // boolean
 		// this._readOnly=undefined; // boolean 
+		// this._maxTextLength=undefined; // number
+		// this._emptyMessageShown=undefined; boolean
 	
 		var button=this._button;
 		if (button) {
@@ -239,6 +258,12 @@ var __members = {
 	},
 	f_serialize: function() {
 		this.f_setProperty(f_prop.SELECTED, this._selectedValue);
+		
+		if (this._emptyMessageShown) {	
+			input=this.f_getInput();
+			
+			input.value="";
+		}
 		
 		this.f_super(arguments);	
 	},
@@ -329,14 +354,19 @@ var __members = {
 	 * @return void
 	 */
 	f_updateInputStyle: function() {
-		var className="f_comboGrid_input";
+		var mainClassName="f_comboGrid_input";
+		var className=mainClassName;
 		
 		if (this._verifyingKey) {
-			className+= " "+className+"_verifying";	
+			className+= " "+mainClassName+"_verifying";	
 
 		} else if (this._keyErrored) {
-			className+= " "+className+"_errored";
+			className+= " "+mainClassName+"_errored";
 		}
+		
+		if (this._emptyMessageShown) {
+			className+=" "+mainClassName+"_empty_message";
+		}	
 		
 		var input=this.f_getInput();
 		if (!input) {
@@ -615,9 +645,20 @@ var __members = {
 
 		this._focus=true;
 		
-		// On affiche la clef, ou la valeur saisie
 		var input=this.f_getInput();
 		
+		if (this._emptyMessageShown) {	
+			this._emptyMessageShown=undefined;
+			
+			input.value="";
+			this.f_updateInputStyle();
+		}
+		
+		if (this._maxTextLength) {
+			input.maxLength=this._maxTextLength;
+		}
+		
+		// On affiche la clef, ou la valeur saisie
 		if (this.f_isEditable() && !this.f_isReadOnly()) {
 			
 			this.setAttribute("v:notFocusedValue", input.value);
@@ -639,25 +680,39 @@ var __members = {
 		if (!this._focus) {
 			return;
 		}
-		
-		this._focus=undefined;
 
 		var menuOpened=this.f_isDataGridPopupOpened();
 		if (menuOpened) {
 			return;
 		}
 
-		// On affiche la zone formatée
-
+		this._focus=undefined;
+	
 		var input=this.f_getInput();
+	
+		if (this._maxTextLength) {
+			input.maxLength=f_comboGrid._UNLIMITED_TEXT_SIZE;
+		}	
+	
+		// On affiche la zone formatée
 		
-		this._inputValue=input.value;
+		var inputValue=input.value;
 		
-		if (this._inputValue && !this._selectedValue && this.f_isEditable()) {
-			this._verifyKey(this._inputValue);
+		this._inputValue=inputValue;
+		if (inputValue && !this._selectedValue && this.f_isEditable() && !this.f_isReadOnly()) {
+			this._verifyKey(inputValue);
 		}
 		
-		input.value=this._formattedValue;
+		if (!inputValue && this._emptyMessage) {
+			input.value=""; // Evite les effets non estetiques
+			this._emptyMessageShown=true;
+			this.f_updateInputStyle();
+			input.value=this._emptyMessage;
+			
+		} else {
+			input.value=this._formattedValue;
+			this._emptyMessageShown=undefined;
+		}
 	},
 	/**
 	 * @method private
@@ -673,6 +728,12 @@ var __members = {
 			}
 		
 			this._cancelVerification(false);
+		}
+		
+		if (!value) {
+			this._keyErrored=false; // On ne vérifie pas une clef vide !
+			this.f_updateInputStyle();
+			return;
 		}
 		
 		var inputValue=this._inputValue;

@@ -936,6 +936,8 @@ var __members = {
 		
 		f_core.Debug(f_dataGrid, "f_callServer: Call server  firstIndex="+firstIndex+" cursorIndex="+cursorIndex+" selection="+selection);
 
+		this.f_hideEmptyDataMessage();
+		
 		if (!partialWaiting) {
 			var tbody=this._tbody;
 			
@@ -1150,6 +1152,8 @@ var __members = {
 	f_startNewPage: function(rowIndex) {
 		// Appeler par la génération du serveur !
 
+		this.f_hideEmptyDataMessage();
+		
 		var tbody=this._tbody;
 		
 		var scrollBody=this._scrollBody;
@@ -1328,6 +1332,10 @@ var __members = {
 		}
 
 		this.f_performPagedComponentInitialized();
+		
+		if (!this._rowsPool.length) {
+			this.f_showEmptyDataMessage();
+		}
 	},
 	/**
 	 * Specify the image of a cell.

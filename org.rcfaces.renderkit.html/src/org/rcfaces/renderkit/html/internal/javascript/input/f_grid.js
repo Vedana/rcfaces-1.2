@@ -14,6 +14,11 @@ var __statics = {
 	/**
 	 * @field hidden static final String
 	 */
+	_EMPTY_DATA_MESSAGE_ID_SUFFIX: "::emptyDataMessage",
+
+	/**
+	 * @field hidden static final String
+	 */
 	_DATA_BODY_SCROLL_ID_SUFFIX: "::dataBody_scroll",
 
 	/**
@@ -1548,6 +1553,12 @@ var __members = {
 		this._headerVisible=f_core.GetBooleanAttribute(this, "v:headerVisible", true);
 
 		this._sortManager=f_core.GetAttribute(this, "v:sortManager");
+		
+		this._emptyDataMessage=f_core.GetAttribute(this, "v:emptyDataMessage");
+		if (this._emptyDataMessage) {
+			this._emptyDataMessageLabel=this.ownerDocument.getElementById(this.id+f_grid._EMPTY_DATA_MESSAGE_ID_SUFFIX);
+			f_core.Assert(this._emptyDataMessageLabel, "f_grid.f_grid: Label not found");
+		}
 	
 		var rowStyleClass=f_core.GetAttribute(this, "v:rowStyleClass");
 		if (rowStyleClass) {
@@ -1729,6 +1740,7 @@ var __members = {
 //		this._sb=undefined; // boolean
 //		this._cellStyleClass=undefined; // String
 //		this._rowStyleClass=undefined; // String
+//		this._emptyDataMessageShown=undefined; // boolean
 	
 //		this._showCursor=undefined; // boolean
 //		this._sortManager=undefined; // String
@@ -1747,6 +1759,8 @@ var __members = {
 
 //		this._partialWaiting=undefined; // boolean
 // 		this._loading=undefined; // boolean
+//		this._emptyDataMessage=undefined; // String
+		this._emptyDataMessageLabel=undefined; // HTMLElement
 
 		var waiting=this._waiting;
 		if (waiting) {		
@@ -2034,7 +2048,7 @@ var __members = {
 		f_core.Debug(f_grid, "f_update: Set waiting mode to '"+this._waitingMode+"' (rows="+this._rows+" paged="+this._paged+" rowCount="+this._rowCount+")");
 
 		if (this._tbody && !f_core.GetParentNode(this._tbody)) {
-//			f_core.Assert(this._tbody.parentNode!=this._table, "Tbody has not been detached !");
+//			f_core.Assert(this._tbody.parentNode!=this._table, "f_grid.f_update: Tbody has not been detached !");
 // C'est normal dans un componentsGrid
 
 			f_core.AppendChild(this._table, this._tbody);
@@ -3555,7 +3569,7 @@ var __members = {
 		if (pos>=trs.length) {
 			pos=trs.length-1;
 		}		
-//		f_core.Assert(pos>=trs.length, "Invalid position !");
+//		f_core.Assert(pos>=trs.length, "f_grid._nextPageRow: Invalid position !");
 		
 		// On se positionne sur le row recherché !
 		tr=this._tbody.childNodes[pos];
@@ -3777,7 +3791,7 @@ var __members = {
 			var sortColumnIndex=arguments[i++];
 			var ascending=!!arguments[i++];
 			
-			f_core.Assert(sortColumnIndex>=0 && sortColumnIndex<cols.length, "Bad sortColumnIndex !");
+			f_core.Assert(sortColumnIndex>=0 && sortColumnIndex<cols.length, "f_grid.f_enableSorters: Bad sortColumnIndex !");
 	
 			var col=cols[sortColumnIndex];
 			col._ascendingOrder=ascending;
@@ -4792,7 +4806,7 @@ var __members = {
 	 * @return boolean
 	 */
 	fa_isAdditionalElementVisible:  function(row) {
-		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.fa_isAdditionalElementVisible: Invalid element parameter ! ("+row+")");
+		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_grid.fa_isAdditionalElementVisible: Invalid element parameter ! ("+row+")");
 
 		return !!row._additional;
 	},
@@ -4804,7 +4818,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_setAdditionalElementVisible:  function(row, additional, animated) {
-		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.fa_setAdditionalElementVisible: Invalid element parameter ! ("+row+")");
+		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_grid.fa_setAdditionalElementVisible: Invalid element parameter ! ("+row+")");
 
 		if (row._additional==additional) {
 			return;
@@ -4825,7 +4839,7 @@ var __members = {
 	 * @return boolean
 	 */
 	f_hasAdditionalElement: function(row) {
-		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.f_hasAdditionalElement: Invalid element parameter ! ("+row+")");
+		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_grid.f_hasAdditionalElement: Invalid element parameter ! ("+row+")");
 
 		return row._additionalContent!==false;
 	},
@@ -4876,7 +4890,7 @@ var __members = {
 				additionalCell.removeChild(additionalCell.lastChild);
 			}
 			
-			f_core.Assert(additionalRow.tagName.toLowerCase()=="tr", "f_dataGrid.f_addRow2: Invalid row ! "+additionalRow);
+			f_core.Assert(additionalRow.tagName.toLowerCase()=="tr", "f_grid.f_addRow2: Invalid row ! "+additionalRow);
 
 			additionalRow.parentNode.removeChild(additionalRow);
 			
@@ -5143,13 +5157,162 @@ var __members = {
 		this.setAttribute("v:sortBreadCrumbsTexts", texts.join("|"));
 	},
 	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_showEmptyDataMessage: function() {
+		var label=this._emptyDataMessageLabel;
+		if (!label) {
+			return;
+		}
+		
+		var scrollBody=this._scrollBody;
+		if (!scrollBody.offsetHeight) { // Le tableau s'est tassé, on affiche pas le message !
+			return;
+		}		
+
+		var parent=f_core.GetParentNode(label);
+				
+		this._emptyDataMessageShown=true;
+	
+		label.style.width=parent.offsetWidth+"px";
+		
+		var top=parent.scrollTop+Math.floor(parent.offsetHeight/2);
+		
+		label.style.top=top+"px";
+		
+		label.style.display="block";
+
+		if (label.offsetHeight>0) {
+			top-=Math.floor(label.offsetHeight/2);
+			label.style.top=top+"px";
+		}
+	},
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_hideEmptyDataMessage: function() {
+		if (!this._emptyDataMessageShown) {
+			return;
+		}
+		this._emptyDataMessageShown=undefined;		
+		
+		var label=this._emptyDataMessageLabel;
+		if (!label) {
+			return;
+		}
+		
+		label.style.display="none";
+	},
+	/**
+	 * @method public
+	 * @param String message
+	 * @return void
+	 */
+	f_setEmptyDataMessage: function(message) {
+		var label=this._emptyDataMessageLabel;
+		if (!label) {
+			return;
+		}
+		
+		f_core.SetTextNode(label, message);
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getEmptyDataMessage: function() {
+		var label=this._emptyDataMessageLabel;
+		if (!label) {
+			return null;
+		}
+	
+		return f_core.GetTextNode(label, true);
+	},
+	
+	/**
+	 * @method public
+	 * @param f_event event
+	 * @return String Identifier of column or <code>null</code> if not found.
+	 */
+	f_computeEventColumnId: function(event) {
+		f_core.Assert(event instanceof f_event, "f_grid.f_getEventColumnIndex: Invalid event parameter '"+event+"'.");
+		
+		var jsEvent=event.f_getJsEvent();
+		var target=jsEvent.target?jsEvent.target:jsEvent.srcElement;
+		
+		var lastCell;
+		
+		for(;target;target=target.parentNode) {
+			if (target==this || target==this._scrollBody) {
+				// On tombe sur le BODY ... on laisse tomber
+				return null;
+			}
+
+			switch(target.tagName.toUpperCase()) {
+			case "TD":
+			case "TH":
+				lastCell=target;
+				break;
+			
+			case "TR":
+				if (target._dataGrid!=this) {
+					break;
+				}
+				
+				if (!lastCell) {
+					return undefined;
+				}
+				
+				var tds=target.childNodes;				
+				var index=0;
+				for(var i=0;i<tds.length;i++) {
+					var td=tds[i];
+					if (td.nodeType!=f_core.ELEMENT_NODE) {
+						continue;
+					}
+					var tagName=td.tagName.toUpperCase();
+					if (tagName!="TD" && tagName!="TH") {
+						continue;
+					}
+					
+					if (td!=lastCell) {
+						index++;
+						continue;
+					}
+					
+					var columns=this._columns
+					for(var i=0;i<columns.length;i++) {
+						var cl=columns[i];
+						
+						if (!cl._visibility) {
+							continue;
+						}
+						
+						if (!index) {
+							return cl._id;
+						}
+						
+						index--;
+					}
+					
+					break;
+				}					
+				return null;
+			}
+		}
+		
+		return null;
+	},
+	/**
 	 * 
 	 * @method public
 	 * @param any[] rowValues List of values whose specified rows.
 	 * @return number Number of removed rows.
 	 */
 	f_clearArray: function(rowValues) {
-		f_core.Assert(rowValues instanceof Array, "f_dataGrid.f_clearArray: Invalid values parameter '"+values+"'.");
+		f_core.Assert(rowValues instanceof Array, "f_grid.f_clearArray: Invalid values parameter '"+values+"'.");
 
 		return this.f_clear.apply(this, rowValues);
 	},

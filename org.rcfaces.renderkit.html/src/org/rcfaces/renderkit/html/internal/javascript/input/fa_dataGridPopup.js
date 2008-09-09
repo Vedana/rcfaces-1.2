@@ -538,8 +538,7 @@ var __members = {
 				this, 
 				":"+dataGrid.id,
 				f_core.GetAttribute(this, "v:pagerStyleClass", "fa_dataGridPopup_pager"));
-			this._pager=pager;
-			
+			this._pager=pager;			
 		}
 				
 		var self=this;
