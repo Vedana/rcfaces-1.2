@@ -200,23 +200,31 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         return true;
     }
 
+    protected String computeValueAttribute(IHtmlWriter htmlWriter) {
+
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        String text = (String) componentRenderContext
+                .getAttribute(VALIDATOR_VALUE_PROPERTY);
+        if (text == null) {
+            FacesContext facesContext = componentRenderContext
+                    .getFacesContext();
+
+            TextEntryComponent textEntryComponent = (TextEntryComponent) componentRenderContext
+                    .getComponent();
+
+            text = convertValue(facesContext, textEntryComponent);
+        }
+
+        return text;
+    }
+
     protected void writeValueAttributes(IHtmlWriter htmlWriter)
             throws WriterException {
 
-        String text = (String) htmlWriter.getComponentRenderContext()
-                .getAttribute(VALIDATOR_VALUE_PROPERTY);
-        if (text != null) {
-            htmlWriter.writeValue(text);
-            return;
-        }
+        String text = computeValueAttribute(htmlWriter);
 
-        TextEntryComponent textEntryComponent = (TextEntryComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
-
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
-
-        text = convertValue(facesContext, textEntryComponent);
         if (text != null) {
             htmlWriter.writeValue(text);
         }
@@ -235,6 +243,19 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
+        String text = computeValueAttribute(htmlWriter);
+        String emptyMessage = null;
+        if (text == null || text.length() == 0) {
+            emptyMessage = textEntryComponent.getEmptyMessage(htmlWriter
+                    .getComponentRenderContext().getFacesContext());
+
+            if (emptyMessage != null) {
+                htmlWriter.writeAttribute("v:emptyMessageShown", true);
+
+                getCssStyleClasses(htmlWriter).addSuffix("_empty_message");
+            }
+        }
+
         writeValidatorAttributes(htmlWriter); // Le validateur peut influencer
         // sur le CSS !
 
@@ -242,7 +263,13 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         writeInputAttributes(htmlWriter);
         writeTextEntryAttributes(htmlWriter);
-        writeValueAttributes(htmlWriter);
+
+        if (text != null) {
+            htmlWriter.writeValue(text);
+        } else if (emptyMessage != null) {
+            htmlWriter.writeValue(emptyMessage);
+        }
+
         writeTextDirection(htmlWriter, textEntryComponent);
         writeAlternateText(htmlWriter, textEntryComponent);
 
@@ -790,7 +817,9 @@ public class TextEntryRenderer extends AbstractInputRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractInputRenderer#getInputType()
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.AbstractInputRenderer#getInputType
+     * ()
      */
     protected String getInputType(UIComponent component) {
         return IHtmlWriter.TEXT_INPUT_TYPE;

@@ -21,6 +21,8 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboGridComponent;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
@@ -37,6 +39,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
@@ -140,6 +143,11 @@ public class ComboGridRenderer extends DataGridRenderer implements
             htmlWriter.writeAttribute("v:disabled", true);
         }
 
+        int maxTextLength = comboGridComponent.getMaxTextLength(facesContext);
+        if (maxTextLength > 0) {
+            htmlWriter.writeAttribute("v:maxTextLength", maxTextLength);
+        }
+
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
 
         if (rowStyleClasses != null) {
@@ -239,6 +247,27 @@ public class ComboGridRenderer extends DataGridRenderer implements
             htmlWriter.writeAttribute("v:popupHeight", popupHeight);
         }
 
+        // if (comboGridComponent instanceof IEmptyMessageCapability) {
+        String emptyMessage = ((IEmptyMessageCapability) comboGridComponent)
+                .getEmptyMessage();
+        if (emptyMessage != null) {
+            emptyMessage = ParamUtils.formatMessage(comboGridComponent,
+                    emptyMessage);
+            htmlWriter.writeAttribute("v:emptyMessage", emptyMessage);
+        }
+        // }
+
+        // if (comboGridComponent instanceof IEmptyDataMessageCapability) {
+        String emptyDataMessage = ((IEmptyDataMessageCapability) comboGridComponent)
+                .getEmptyDataMessage();
+        if (emptyDataMessage != null) {
+            emptyDataMessage = ParamUtils.formatMessage(comboGridComponent,
+                    emptyDataMessage);
+
+            htmlWriter.writeAttribute("v:emptyDataMessage", emptyDataMessage);
+        }
+        // }
+
         String formattedValue = null;
 
         Object selectedValue = comboGridComponent
@@ -263,6 +292,8 @@ public class ComboGridRenderer extends DataGridRenderer implements
                     htmlWriter.writeAttribute("v:invalidKey", true);
                     componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,
                             Boolean.TRUE);
+
+                    formattedValue = convertedSelectedValue;
                 }
             }
         }
@@ -354,9 +385,23 @@ public class ComboGridRenderer extends DataGridRenderer implements
         sa.append(getMainStyleClassName());
         sa.append("_input");
 
+        String emptyMessage = null;
+
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
         if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
             sa.append(' ').append(getMainStyleClassName()).append(
                     "_input_errored");
+
+        } else if ((formattedValue == null || formattedValue.length() == 0)) {
+            emptyMessage = comboGridComponent.getEmptyMessage(facesContext);
+
+            if (emptyMessage != null) {
+                sa.append(' ').append(getMainStyleClassName()).append(
+                        "_input_empty_message");
+
+                htmlWriter.writeAttribute("v:emptyMessage", true);
+            }
         }
 
         htmlWriter.writeClass(sa.toString());
@@ -371,6 +416,9 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
         if (formattedValue != null) {
             htmlWriter.writeValue(formattedValue);
+
+        } else if (emptyMessage != null) {
+            htmlWriter.writeValue(emptyMessage);
         }
 
         htmlWriter.endElement(IHtmlWriter.INPUT);

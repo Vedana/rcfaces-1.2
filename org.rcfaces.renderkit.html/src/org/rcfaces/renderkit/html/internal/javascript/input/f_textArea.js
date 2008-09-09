@@ -54,7 +54,7 @@ var __statics = {
 var __members = {
 	f_textArea: function() {
 		this.f_super(arguments);
-		
+
 		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
 		if (this._maxTextLength>0) {
 			this.f_addEventListener(f_event.VALIDATION, f_textArea._VerifyMaxTextLength);
@@ -64,8 +64,10 @@ var __members = {
 	f_finalize: function() {
 		// this._maxTextLength=undefined; // number
 		// this._emptyMessage=undefined; // string
-		// this._showEmptyMessage=undefined; // string
 		// this._requiredInstalled=undefined; // boolean
+		// this._emptyMessageInstalled=undefined; // boolean
+		
+		// this._emptyMessageShown=undefined; // boolean
 		
 		this.f_super(arguments);
 	},
@@ -78,14 +80,29 @@ var __members = {
 		this.f_super(arguments);
 				
 		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
+		if (this._emptyMessage) {
+			this._emptyMessageShown=f_core.GetBooleanAttribute(this.f_getInput(), "v:emptyMessageShown");
+		}
 		
 		if (this._emptyMessage) {
-			this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
-			this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
+			this.f_installEmptyMessageCallbacks();
 		}
 
 		// On peut pas le mettre dans le f_setDomEvent, la profondeur de la pile ne le permet pas !
 		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);		
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_installEmptyMessageCallbacks: function() {
+		if (this._emptyMessageInstalled) {
+			return;
+		}
+		this._emptyMessageInstalled=true;
+		
+		this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
+		this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
 	},
 	f_update: function() {
 
@@ -131,10 +148,7 @@ var __members = {
 			this.f_setProperty(f_prop.TEXT);
 		}		
 		
-		if (this._showEmptyMessage) {
-			// On ne sérialise pas le message !
-			this._showEmptyMessage=undefined;
-			
+		if (this._emptyMessageShown) {
 			// On remet la zone à vide
 			this.f_getInput().value="";
 		}
@@ -216,11 +230,40 @@ var __members = {
 	 * @method private
 	 */
 	_messageFocusEvent: function() {
+		if (this._emptyMessageShown) {
+			this._emptyMessageShown=undefined;
+		
+			this.f_getInput().value="";
+			
+			this.f_updateStyleClass();
+		}
 	},
 	/**
 	 * @method private
 	 */
 	_messageBlurEvent: function() {
+		if (this._emptyMessage && this.f_getText()=="") {
+			this._emptyMessageShown=true;
+			
+			this.value=""; // Evite des effets desagreables
+			
+			this.f_updateStyleClass();
+			
+			this.value=this._emptyMessage;
+		}
+	},
+	/**
+	 * @protected
+	 * @overrided
+	 */
+	f_computeStyleClass: function(postSuffix) {
+		var clz=this.f_super(arguments, postSuffix);
+		
+		if (this._emptyMessageShown) {
+			clz+=" "+this.f_getMainStyleClass()+"_empty_message";
+		}
+		
+		return clz;
 	},
 	/**
 	 * @method public
@@ -293,6 +336,23 @@ var __members = {
 	fa_updateRequired: function() {
 		// XXXXXX @TODO this._installRequiredValidator();
 		this.f_updateStyleClass();
+	},
+	/**
+	 * @method public
+	 * @return String
+	f_getEmptyMessage: function() {
+		return this._emptyMessage;
+	},	
+	/**
+	 * @method public
+	 * @param String message
+	 * @return void
+	 */
+	f_setEmptyMessage: function(message) {
+		this._emptyMessage=message;
+		if (message) {
+			this.f_installEmptyMessageCallbacks();
+		}		
 	}
 }
 

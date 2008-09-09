@@ -25,6 +25,11 @@
 	margin: 1px;
 }
 
+.f_textEntry_empty_message {
+	color: #888;
+	font-style: italic;
+}
+
 /*
 .f_textEntry_error {
 	color: red;
