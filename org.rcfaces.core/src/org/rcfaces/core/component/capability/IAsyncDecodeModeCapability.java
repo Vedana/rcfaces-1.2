@@ -38,7 +38,7 @@ public interface IAsyncDecodeModeCapability {
      * Sets a int value that indicates the decoding mode for asynchronous
      * capable component.
      * 
-     * @param renderMode
+     * @param decodeMode
      *            0:complete|1:partial
      */
     void setAsyncDecodeMode(int decodeMode);
