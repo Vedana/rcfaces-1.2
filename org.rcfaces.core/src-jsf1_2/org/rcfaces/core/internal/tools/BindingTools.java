@@ -10,9 +10,11 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.PhaseId;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,7 +47,7 @@ public class BindingTools {
 
             return object;
         }
-        
+
         if (object instanceof ValueExpression) {
             if (facesContext == null) {
                 facesContext = FacesContext.getCurrentInstance();
@@ -68,7 +70,7 @@ public class BindingTools {
 
         int pos = value.indexOf("#{");
 
-        if (pos >= 0 && pos < value.indexOf('}')) {
+        if (pos >= 0 && pos < value.indexOf('}', pos + 2)) {
             return true;
         }
 
@@ -89,7 +91,7 @@ public class BindingTools {
     }
 
     public static IVarScope processVariableScope(FacesContext facesContext,
-            IVariableScopeCapability variableScopeCapability) {
+            IVariableScopeCapability variableScopeCapability, PhaseId phaseId) {
         String var = variableScopeCapability.getScopeVar();
         if (var == null || var.length() < 1) {
             return null;
@@ -139,6 +141,14 @@ public class BindingTools {
         }
 
         Object old = requestMap.put(var, ret);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Process variable scope '" + var + "' for component '"
+                    + ((UIComponent) variableScopeCapability).getId()
+                    + "' phase='" + phaseId + "' oldValue='" + old
+                    + "' newValue='" + ret + "'");
+        }
+
         return new ComponentTools.VarScope(var, old);
     }
 

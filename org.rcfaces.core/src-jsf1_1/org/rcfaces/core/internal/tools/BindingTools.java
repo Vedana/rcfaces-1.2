@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.webapp.UIComponentTag;
 
 import org.apache.commons.logging.Log;
@@ -61,7 +62,7 @@ public class BindingTools {
     }
 
     public static IVarScope processVariableScope(FacesContext facesContext,
-            IVariableScopeCapability variableScopeCapability) {
+            IVariableScopeCapability variableScopeCapability, PhaseId phaseId) {
         String var = variableScopeCapability.getScopeVar();
         if (var == null || var.length() < 1) {
             return null;
@@ -91,7 +92,7 @@ public class BindingTools {
 
         Map requestMap = facesContext.getExternalContext().getRequestMap();
 
-        Object ret =  variableScopeCapability.getScopeValue();
+        Object ret = variableScopeCapability.getScopeValue();
         if (false) {
             /**
              * On peut pas mettre la valeur en cache !
