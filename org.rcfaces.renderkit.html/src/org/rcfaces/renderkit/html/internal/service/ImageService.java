@@ -25,9 +25,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ImageComponent;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.image.ImageContentInformation;
+import org.rcfaces.core.image.GeneratedImageInformation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
@@ -164,17 +165,21 @@ public class ImageService extends AbstractHtmlService {
                 IContentAccessor imageAccessor = contentAccessors
                         .getImageAccessor();
 
-                ImageContentInformation contentInformation = new ImageContentInformation();
-                contentInformation.setComponent(imageComponent, componentId);
+                GeneratedImageInformation generatedImageInformation = new GeneratedImageInformation();
+
+                BasicGenerationResourceInformation generationInformation = new BasicGenerationResourceInformation(
+                        imageComponent, componentId);
+
+                generationInformation.setFilterProperties(filterProperties);
 
                 String url = null;
                 if (imageAccessor != null) {
                     url = imageAccessor.resolveURL(facesContext,
-                            contentInformation, filterProperties);
+                            generatedImageInformation, generationInformation);
                 }
 
                 writeJs(facesContext, printWriter, imageComponent, componentId,
-                        url, contentInformation);
+                        url, generatedImageInformation);
 
             } catch (IOException ex) {
 
@@ -201,7 +206,8 @@ public class ImageService extends AbstractHtmlService {
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             IFilterCapability component, String componentId, String imageURL,
-            ImageContentInformation imageContentInformation) throws IOException {
+            GeneratedImageInformation imageContentInformation)
+            throws IOException {
 
         CharArrayWriter cw = null;
         PrintWriter pw = printWriter;

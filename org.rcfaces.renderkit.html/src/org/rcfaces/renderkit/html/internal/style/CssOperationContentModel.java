@@ -18,10 +18,13 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
 import org.rcfaces.core.internal.style.IStyleOperation;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IParserContext;
 
@@ -48,16 +51,22 @@ public class CssOperationContentModel extends
 
     private final ICssParser cssParser;
 
-    public CssOperationContentModel(String resourceURL, String contentType,
-            String versionId, String operationId,
-            String filterParametersToParse, Map attributes,
+    public CssOperationContentModel(String resourceURL, String versionId,
+            String operationId, String filterParametersToParse,
             IStyleOperation styleOperation, ICssParser cssParser) {
-        super(resourceURL, contentType, versionId, operationId,
-                filterParametersToParse, attributes, styleOperation);
-
-        setURLSuffix(STYLE_SUFFIX);
+        super(resourceURL, versionId, operationId, filterParametersToParse,
+                styleOperation);
 
         this.cssParser = cssParser;
+    }
+
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation) {
+        super.setInformations(generationInformation, generatedInformation);
+
+        generatedInformation.setResponseSuffix(STYLE_SUFFIX);
+        generatedInformation.setResponseMimeType(IHtmlRenderContext.CSS_TYPE);
     }
 
     protected IFileBuffer createFileBuffer() {

@@ -17,13 +17,14 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractCompositeContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentInformation;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
@@ -31,8 +32,9 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.style.Constants;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
 import org.rcfaces.core.internal.style.IStyleOperation;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
-import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 
 /**
@@ -81,7 +83,8 @@ public class StyleContentAccessorHandler extends
             if (cssParser != null) {
                 ((ContentAccessorsRegistryImpl) rcfacesContext
                         .getContentAccessorRegistry())
-                        .declareContentAccessorHandler(IContentType.STYLE, this);
+                        .declareContentAccessorHandler(IContentFamily.STYLE,
+                                this);
             }
         }
 
@@ -103,8 +106,8 @@ public class StyleContentAccessorHandler extends
 
     public IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IContentInformation[] contentInformation,
-            IFilterProperties filterProperties) {
+            IGeneratedResourceInformation[] generatedInformation,
+            IGenerationResourceInformation generationInformation) {
 
         if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
             return null;
@@ -240,12 +243,15 @@ public class StyleContentAccessorHandler extends
         }
 
         IContentModel contentModel = new CssOperationContentModel(resourceURL,
-                contentType, versionId, operationId, parameters,
-                contentAccessor.getAttributes(), styleOperation, cssParser);
+                versionId, operationId, parameters, styleOperation, cssParser);
+
+        BasicGeneratedResourceInformation generatedResourceInformation = new BasicGeneratedResourceInformation();
+        generatedResourceInformation
+                .setResponseMimeType(IHtmlRenderContext.CSS_TYPE);
 
         IContentAccessor newContentAccessor = contentStorageEngine
-                .registerContentModel(facesContext, contentModel, null,
-                        contentAccessor.getType());
+                .registerContentModel(facesContext, contentModel,
+                        generatedResourceInformation, null);
 
         // pas de versionning dans ce content Accessor !
 

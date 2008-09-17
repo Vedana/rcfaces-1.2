@@ -23,10 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.image.ImageContentInformation;
+import org.rcfaces.core.image.GeneratedImageInformation;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -38,6 +39,7 @@ import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IRepository.IContext;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.InitComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
@@ -392,7 +394,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             htmlWriter.startElement(IHtmlWriter.LINK);
             htmlWriter.writeRel("stylesheet");
             if (htmlProcessContext.useMetaContentStyleType() == false) {
-                htmlWriter.writeType("text/css");
+                htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
             }
 
             String styleSheetURI = htmlProcessContext.getStyleSheetURI(
@@ -512,15 +514,17 @@ public class InitRenderer extends AbstractHtmlRenderer {
         FacesContext facesContext = writer.getComponentRenderContext()
                 .getFacesContext();
 
-        ImageContentInformation favoriteImageOperation = new ImageContentInformation();
-        favoriteImageOperation.setComponent(writer.getComponentRenderContext());
+        GeneratedImageInformation generatedFavoriteImageInformation = new GeneratedImageInformation();
+
+        IGenerationResourceInformation generationInformation = new BasicGenerationResourceInformation(
+                writer.getComponentRenderContext());
 
         IContentAccessor favoriteContentAccessor = ContentAccessorFactory
                 .createFromWebResource(facesContext, favoriteImageURL,
-                        IContentType.IMAGE);
+                        IContentFamily.IMAGE);
 
         favoriteImageURL = favoriteContentAccessor.resolveURL(facesContext,
-                favoriteImageOperation, null);
+                generatedFavoriteImageInformation, generationInformation);
 
         if (favoriteImageURL == null || favoriteImageURL.endsWith(".ico")) {
             return;
@@ -531,7 +535,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
             return;
         }
 
-        ImageContentInformation favoriteIcoImageInformation = new ImageContentInformation();
+        GeneratedImageInformation generatedFavoriteIcoInformation = new GeneratedImageInformation();
 
         IContentAccessor favoriteIcoContentAccessor = ContentAccessorFactory
                 .createFromWebResource(null, IEFavoriteIconOperation.ID
@@ -539,15 +543,16 @@ public class InitRenderer extends AbstractHtmlRenderer {
                         favoriteContentAccessor);
 
         String favoriteIcoImageURL = favoriteIcoContentAccessor.resolveURL(
-                facesContext, favoriteIcoImageInformation, null);
+                facesContext, generatedFavoriteIcoInformation,
+                generationInformation);
 
         if (favoriteIcoImageURL != null) {
             writer.startElement(IHtmlWriter.LINK);
             writer.writeRel("SHORTCUT ICON");
 
-            if (favoriteIcoImageInformation != null) {
-                String favoriteIcoMimeType = favoriteIcoImageInformation
-                        .getContentType();
+            if (generatedFavoriteIcoInformation != null) {
+                String favoriteIcoMimeType = generatedFavoriteIcoInformation
+                        .getResponseMimeType();
                 if (favoriteIcoMimeType != null) {
                     writer.writeType(favoriteIcoMimeType);
                 }
@@ -561,9 +566,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
         if (favoriteImageURL != null) {
             writer.startElement(IHtmlWriter.LINK);
             writer.writeRel("ICON");
-            if (favoriteImageOperation != null) {
-                String favoriteMimeType = favoriteImageOperation
-                        .getContentType();
+            if (generatedFavoriteImageInformation != null) {
+                String favoriteMimeType = generatedFavoriteImageInformation
+                        .getResponseMimeType();
                 if (favoriteMimeType != null) {
                     writer.writeType(favoriteMimeType);
                 }

@@ -16,13 +16,14 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentInformation;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
@@ -31,8 +32,9 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.script.AbstractScriptContentAccessorHandler;
 import org.rcfaces.core.internal.script.IScriptOperation;
 import org.rcfaces.core.internal.style.Constants;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
-import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
  * 
@@ -75,7 +77,7 @@ public class ScriptContentAccessorHandler extends
 
             ((ContentAccessorsRegistryImpl) rcfacesContext
                     .getContentAccessorRegistry())
-                    .declareContentAccessorHandler(IContentType.SCRIPT, this);
+                    .declareContentAccessorHandler(IContentFamily.SCRIPT, this);
         }
 
         contentAccessorAvailable = ContentStorageServlet
@@ -96,8 +98,8 @@ public class ScriptContentAccessorHandler extends
 
     public IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IContentInformation[] contentInformation,
-            IFilterProperties filterProperties) {
+            IGeneratedResourceInformation[] generatedInformation,
+            IGenerationResourceInformation generationInformation) {
 
         if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
             return null;
@@ -135,7 +137,7 @@ public class ScriptContentAccessorHandler extends
                 new BasicContentAccessor(facesContext, newURL, contentAccessor,
                         IContentAccessor.UNDEFINED_PATH_TYPE));
 
-        IContentAccessor formattedContentAccessor = formatStyleURL(
+        IContentAccessor formattedContentAccessor = formatScriptURL(
                 facesContext, modifiedContentAccessor);
 
         if (LOG.isDebugEnabled()) {
@@ -145,7 +147,7 @@ public class ScriptContentAccessorHandler extends
         return formattedContentAccessor;
     }
 
-    public IContentAccessor formatStyleURL(FacesContext facesContext,
+    public IContentAccessor formatScriptURL(FacesContext facesContext,
             IFiltredContentAccessor contentAccessor) {
 
         String filter = contentAccessor.getFilter();
@@ -233,12 +235,17 @@ public class ScriptContentAccessorHandler extends
         }
 
         IContentModel contentModel = new ScriptOperationContentModel(
-                resourceURL, contentType, versionId, operationId, parameters,
-                contentAccessor.getAttributes(), scriptOperation);
+                resourceURL, versionId, operationId, parameters,
+                scriptOperation);
+
+        /*
+         * BasicGeneratedResourceInformation generatedResourceInformation = new
+         * BasicGeneratedResourceInformation(); generatedResourceInformation
+         * .setResponseMimeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
+         */
 
         IContentAccessor newContentAccessor = contentStorageEngine
-                .registerContentModel(facesContext, contentModel, null,
-                        contentAccessor.getType());
+                .registerContentModel(facesContext, contentModel, null, null);
 
         // pas de versionning dans ce content Accessor !
 
@@ -257,7 +264,7 @@ public class ScriptContentAccessorHandler extends
         }
 
         if (url.toLowerCase().endsWith(".js")) {
-            return "text/javascript";
+            return IHtmlRenderContext.JAVASCRIPT_TYPE;
         }
 
         return null;
@@ -271,7 +278,7 @@ public class ScriptContentAccessorHandler extends
         if (contentType == null) {
             return false;
         }
-        return contentType.startsWith("text/javascript");
+        return contentType.startsWith(IHtmlRenderContext.JAVASCRIPT_TYPE);
     }
 
     public IScriptOperation getScriptOperation(String operationId) {

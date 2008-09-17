@@ -6,8 +6,9 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ImageComponent;
-import org.rcfaces.core.image.ImageContentInformation;
+import org.rcfaces.core.image.GeneratedImageInformation;
 import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -45,26 +46,29 @@ public class ImageRenderer extends AbstractCssRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        ImageContentInformation imageContentInformation = null;
+        GeneratedImageInformation generatedImageInformation = null;
         IImageAccessors imageAccessors = (IImageAccessors) image
                 .getImageAccessors(facesContext);
         String url = null;
         IContentAccessor contentAccessor = imageAccessors.getImageAccessor();
         if (contentAccessor != null) {
-            imageContentInformation = new ImageContentInformation();
-            imageContentInformation.setComponent(componentRenderContext);
+            generatedImageInformation = new GeneratedImageInformation();
+
+            BasicGenerationResourceInformation generationInformation = new BasicGenerationResourceInformation(
+                    componentRenderContext);
+
+            IFilterProperties filterProperties = image.getFilterProperties();
+            generationInformation.setFilterProperties(filterProperties);
 
             url = contentAccessor.resolveURL(facesContext,
-                    imageContentInformation, null);
+                    generatedImageInformation, generationInformation);
 
-            if (imageContentInformation.isFiltredModel()) {
+            if (generatedImageInformation.isFiltredModel()) {
                 componentRenderContext.setAttribute(FILTRED_CONTENT_PROPERTY,
                         Boolean.TRUE);
 
                 htmlWriter.writeAttribute("v:filtred", true);
 
-                IFilterProperties filterProperties = image
-                        .getFilterProperties();
                 if (filterProperties != null
                         && filterProperties.isEmpty() == false) {
                     String filterExpression = HtmlTools.encodeFilterExpression(
@@ -90,8 +94,8 @@ public class ImageRenderer extends AbstractCssRenderer {
         int imageHeight = image.getImageHeight(facesContext);
 
         if (imageWidth < 0 && imageHeight < 0) {
-            imageWidth = imageContentInformation.getImageWidth();
-            imageHeight = imageContentInformation.getImageHeight();
+            imageWidth = generatedImageInformation.getImageWidth();
+            imageHeight = generatedImageInformation.getImageHeight();
         }
 
         if (imageWidth > 0) {

@@ -15,11 +15,14 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.script.IScriptContentAccessorHandler;
 import org.rcfaces.core.internal.script.IScriptOperation;
 import org.rcfaces.core.internal.script.IScriptOperationContext;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
  * 
@@ -35,20 +38,25 @@ public class ScriptOperationContentModel extends
 
     private static final long serialVersionUID = 8725269579955892798L;
 
-    private static final String SCRIPT_CONTENT_TYPE = "text/javascript";
-
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     private static final String JAVASCRIPT_SUFFIX = "js";
 
-    public ScriptOperationContentModel(String resourceURL, String contentType,
-            String versionId, String operationId,
-            String filterParametersToParse, Map attributes,
+    public ScriptOperationContentModel(String resourceURL, String versionId,
+            String operationId, String filterParametersToParse,
             IScriptOperation scriptOperation) {
-        super(resourceURL, contentType, versionId, operationId,
-                filterParametersToParse, attributes, scriptOperation);
+        super(resourceURL, versionId, operationId, filterParametersToParse,
+                scriptOperation);
+    }
 
-        setURLSuffix(JAVASCRIPT_SUFFIX);
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation) {
+        super.setInformations(generationInformation, generatedInformation);
+
+        generatedInformation.setResponseSuffix(JAVASCRIPT_SUFFIX);
+        generatedInformation
+                .setResponseMimeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
     }
 
     protected IFileBuffer createFileBuffer() {
@@ -159,11 +167,11 @@ public class ScriptOperationContentModel extends
     }
 
     protected String getDefaultMimeType() {
-        return SCRIPT_CONTENT_TYPE;
+        return IHtmlRenderContext.JAVASCRIPT_TYPE;
     }
 
     protected boolean isMimeTypeValid(String contentType) {
-        return SCRIPT_CONTENT_TYPE.equalsIgnoreCase(contentType);
+        return IHtmlRenderContext.JAVASCRIPT_TYPE.equalsIgnoreCase(contentType);
     }
 
     private IScriptFile createNewScriptFile(String resourceURL) {
