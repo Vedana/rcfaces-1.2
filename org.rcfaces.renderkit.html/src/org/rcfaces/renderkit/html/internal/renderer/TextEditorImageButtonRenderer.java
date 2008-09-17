@@ -14,10 +14,10 @@ import org.rcfaces.core.component.TextEditorImageButtonComponent;
 import org.rcfaces.core.component.capability.ITextEditorButtonType;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -143,7 +143,7 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
 
         IContentAccessor contentAccessor = htmlRenderContext
                 .getHtmlProcessContext().getStyleSheetContentAccessor(imageURL,
-                        IContentType.IMAGE);
+                        IContentFamily.IMAGE);
 
         return contentAccessor;
     }

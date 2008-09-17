@@ -8,10 +8,10 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.ViewDialogComponent;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -62,7 +62,8 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         String src = component.getViewURL(facesContext);
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
-                    .createFromWebResource(facesContext, src, IContentType.USER);
+                    .createFromWebResource(facesContext, src,
+                            IContentFamily.USER);
 
             src = contentAccessor.resolveURL(facesContext, null, null);
             if (src != null) {
