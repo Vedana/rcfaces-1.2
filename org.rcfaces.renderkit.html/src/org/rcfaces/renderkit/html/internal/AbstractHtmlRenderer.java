@@ -62,7 +62,6 @@ import org.rcfaces.core.internal.component.ISeverityImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -72,6 +71,7 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 
@@ -612,7 +612,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
 
             IContentAccessor contentAccessor = ContentAccessorFactory
                     .createFromWebResource(facesContext, helpURL,
-                            IContentType.HELP);
+                            IContentFamily.HELP);
 
             String resolvedHelpURL = contentAccessor.resolveURL(facesContext,
                     null, null);

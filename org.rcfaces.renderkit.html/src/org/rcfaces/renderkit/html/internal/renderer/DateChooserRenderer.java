@@ -12,13 +12,13 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.DateChooserComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -86,7 +86,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
 
         return htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetContentAccessor(DATE_CHOOSER_IMAGEURL,
-                        IContentType.IMAGE);
+                        IContentFamily.IMAGE);
     }
 
     public IContentAccessor getDateChooserDisabledImageAccessor(
@@ -97,7 +97,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
 
         return htmlRenderContext.getHtmlProcessContext()
                 .getStyleSheetContentAccessor(DATE_CHOOSER_DISABLED_IMAGEURL,
-                        IContentType.IMAGE);
+                        IContentFamily.IMAGE);
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -109,7 +109,8 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
         Date dateValue = (Date) componentData.getProperty("value");
         Date date = null;
         if (dateValue != null
-                && dateChooserComponent.isValueLocked(context.getFacesContext()) == false) {
+                && dateChooserComponent
+                        .isValueLocked(context.getFacesContext()) == false) {
             date = dateValue;
         }
 

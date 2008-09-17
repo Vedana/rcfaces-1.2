@@ -7,11 +7,13 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.CssStyleComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
@@ -46,7 +48,7 @@ public class CssStyleRenderer extends AbstractHtmlRenderer {
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
                     .createFromWebResource(facesContext, src,
-                            IContentType.STYLE);
+                            IContentFamily.STYLE);
 
             src = contentAccessor.resolveURL(facesContext, null, null);
             if (src != null) {

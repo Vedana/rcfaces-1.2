@@ -30,7 +30,6 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.decorator.ISelectItemMapper;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -43,6 +42,7 @@ import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.ISelectItem;
 import org.rcfaces.core.item.ISelectItemGroup;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
 import org.rcfaces.core.model.IFiltredCollection2;
@@ -1041,7 +1041,7 @@ public abstract class AbstractSelectItemsDecorator extends
         IContentAccessor imageAccessor = null;
         if (imageURL != null) {
             imageAccessor = ContentAccessorFactory.createFromWebResource(
-                    facesContext, imageURL, IContentType.IMAGE);
+                    facesContext, imageURL, IContentFamily.IMAGE);
         }
 
         IContentAccessor disabledImageAccessor = null;
@@ -1049,7 +1049,7 @@ public abstract class AbstractSelectItemsDecorator extends
             if (imageAccessor == null) {
                 disabledImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, disabledImageURL,
-                                IContentType.IMAGE);
+                                IContentFamily.IMAGE);
             } else {
                 disabledImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, disabledImageURL,
@@ -1062,7 +1062,7 @@ public abstract class AbstractSelectItemsDecorator extends
             if (imageAccessor == null) {
                 hoverImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, hoverImageURL,
-                                IContentType.IMAGE);
+                                IContentFamily.IMAGE);
             } else {
                 hoverImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, hoverImageURL,
@@ -1075,7 +1075,7 @@ public abstract class AbstractSelectItemsDecorator extends
             if (imageAccessor == null) {
                 selectedImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, selectedImageURL,
-                                IContentType.IMAGE);
+                                IContentFamily.IMAGE);
             } else {
                 selectedImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, selectedImageURL,
@@ -1088,7 +1088,7 @@ public abstract class AbstractSelectItemsDecorator extends
             if (imageAccessor == null) {
                 expandedImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, expandedImageURL,
-                                IContentType.IMAGE);
+                                IContentFamily.IMAGE);
             } else {
                 expandedImageAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, expandedImageURL,

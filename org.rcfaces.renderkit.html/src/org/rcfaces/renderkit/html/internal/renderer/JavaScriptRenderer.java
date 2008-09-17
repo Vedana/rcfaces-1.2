@@ -19,7 +19,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ContextTools;
@@ -28,6 +27,7 @@ import org.rcfaces.core.internal.webapp.IRepository;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IModule;
 import org.rcfaces.core.internal.webapp.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.webapp.IRepository.IFile;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
@@ -78,7 +78,7 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
                     .createFromWebResource(facesContext, src,
-                            IContentType.SCRIPT);
+                            IContentFamily.SCRIPT);
 
             src = contentAccessor.resolveURL(facesContext, null, null);
 
@@ -94,7 +94,7 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
 
                 IContentAccessor contentAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, source,
-                                IContentType.SCRIPT);
+                                IContentFamily.SCRIPT);
 
                 source = contentAccessor.resolveURL(facesContext, null, null);
 

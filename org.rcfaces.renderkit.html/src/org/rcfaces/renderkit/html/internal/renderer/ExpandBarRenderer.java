@@ -13,13 +13,13 @@ import org.rcfaces.core.component.capability.ICollapsableCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -186,7 +186,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             // On masque le LI le Javascript masquera le DIV !
         }
 
-        htmlWriter.getJavaScriptEnableMode().enableOnInit(); 
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
         // Il faut positionner les hovers en javascript
     }
 
@@ -353,7 +353,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         return htmlWriter.getHtmlComponentRenderContext()
                 .getHtmlRenderContext().getHtmlProcessContext()
                 .getStyleSheetContentAccessor(BLANK_IMAGE_URL,
-                        IContentType.IMAGE);
+                        IContentFamily.IMAGE);
         /*
          * String imageURL; if (collapsed) { imageURL =
          * COLLAPSED_BUTTON_IMAGE_URL; } else { imageURL =
