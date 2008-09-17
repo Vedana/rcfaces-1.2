@@ -875,9 +875,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext tableContext, int dataGridWidth)
             throws WriterException {
 
-        htmlWriter.startElement(IHtmlWriter.TABLE);
+        htmlWriter.startElement(IHtmlWriter.UL);
         htmlWriter.writeId(getFixedHeaderTableId(htmlWriter));
         htmlWriter.writeClass(getFixedHeaderTableClassName(htmlWriter));
+
+        UIColumn columns[] = tableContext.listColumns();
+       
+        /*
         htmlWriter.writeCellPadding(0);
         htmlWriter.writeCellSpacing(0);
         if (tableContext.isResizable()) {
@@ -886,8 +890,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeStyle().writeWidth(
                     tableContext.getTotalSize() + "px");
         }
-
-        UIColumn columns[] = tableContext.listColumns();
 
         for (int i = 0; i < columns.length; i++) {
             if (tableContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
@@ -915,7 +917,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.THEAD);
         htmlWriter.startElement(IHtmlWriter.TR);
         htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
-
+*/
         int tableWidth = 0;
         boolean first = true;
         for (int i = 0; i < columns.length; i++) {
@@ -946,6 +948,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             tableWidth += wp;
         }
 
+        htmlWriter.startElement(IHtmlWriter.LI); // Fake TD
+        // htmlWriter.writeId(getFakeHeadCellClientId(htmlWriter));
+        htmlWriter.writeClass("f_grid_tcell");
+        htmlWriter.write("&nbsp;");
+        htmlWriter.endElement(IHtmlWriter.LI);
+        
+        /*
         htmlWriter.startElement(IHtmlWriter.TH); // Fake TD
         // htmlWriter.writeId(getFakeHeadCellClientId(htmlWriter));
         htmlWriter.writeClass("f_grid_tcell");
@@ -959,7 +968,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.TBODY);
         htmlWriter.endElement(IHtmlWriter.TABLE);
-
+*/
+        
+        htmlWriter.endElement(IHtmlWriter.UL);
         if (tableWidth < 0) {
             return -1;
         }
@@ -999,7 +1010,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext tableContext, UIColumn column,
             boolean first, int columnIndex) throws WriterException {
 
-        htmlWriter.startElement(IHtmlWriter.TH);
+        htmlWriter.startElement(IHtmlWriter.LI);
 
         htmlWriter.writeId(column.getClientId(htmlWriter
                 .getComponentRenderContext().getFacesContext()));
@@ -1028,7 +1039,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
         encodeTitleText(htmlWriter, tableContext, column, width, columnIndex);
 
-        htmlWriter.endElement(IHtmlWriter.TH);
+        htmlWriter.endElement(IHtmlWriter.LI);
     }
 
     protected String getTitleCellClassName(IHtmlWriter htmlWriter,

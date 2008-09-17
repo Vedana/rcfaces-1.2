@@ -1245,7 +1245,6 @@ var __statics = {
 			
 		var tcol=column._tcol;
 		var col=column._col;
-		var col2=column._col2;
 		var head=column._head;
 		var tableOffsetWidth=dataGrid._table.offsetWidth;
 		
@@ -1259,14 +1258,8 @@ var __statics = {
 			if (tableOffsetWidth) {
 				dataGrid._table.style.width=(tableOffsetWidth+dw)+"px";
 			}
-			
-			dataGrid._title.style.width=(dataGrid._title.offsetWidth+dw)+"px";
 
-			if (tcol) {
-				tcol.style.width=w+"px";
-			}
 			col.style.width=w+"px";
-			col2.style.width=w+"px";
 			head.style.width=w+"px";
 			
 			var bw=w-f_grid._TEXT_RIGHT_PADDING;
@@ -1285,9 +1278,15 @@ var __statics = {
 			if (tcol) {
 				//tcol.style.width=w+"px";
 			}
-			col.style.width=w+"px";			
-			col2.style.width=w+"px";
-			head.style.width=w+"px";
+
+		
+			var cellMargin=8;
+			if (f_core.IsInternetExplorer()) {
+				cellMargin=0;
+			}
+	
+			col.style.width=w+"px";
+			head.style.width=(w-cellMargin)+"px";
 			column._box.style.width=(w-f_grid._TEXT_RIGHT_PADDING)+"px";
 			column._label.style.width=(w-f_grid._TEXT_RIGHT_PADDING+twidth)+"px";
 		
@@ -1305,11 +1304,6 @@ var __statics = {
 				totalCols+=parseInt(cl._col.style.width, 10);
 			}
 
-			var fakeCol=dataGrid._fakeColWidth;
-			if (!fakeCol) {
-				fakeCol=0;
-			}
-			dataGrid._title.style.width=(totalCols+fakeCol)+"px";
 			dataGrid._table.style.width=(totalCols)+"px";
 		}
 		
@@ -2417,7 +2411,7 @@ var __members = {
 
 		this._visibleColumnsCount=v;
 		
-		this.f_updateColumnsLayout(columns);
+		this.f_updateColumnsLayout();
 
 		for(var i=0;i<columns.length;) {
 			var column=columns[i++];			
@@ -4407,22 +4401,28 @@ var __members = {
 	/**
 	 * @method hidden
 	 */
-	f_updateColumnsLayout: function(columns) {
+	f_updateColumnsLayout: function() {
+		if (this._columnsLayoutPerformed) {
+			return;
+		}
+		this._columnsLayoutPerformed=true;
+		
 		var heads;
 		var cols;
-		var cols2;
 		
+		var columns=this._columns;
+				
 		if (this._title) {
-			heads=this._title.getElementsByTagName("th");
-			cols=this._title.getElementsByTagName("col");
-			cols2=this._table.getElementsByTagName("col");			
+			heads=this._title.getElementsByTagName("li");
 			
-		} else {
+		} else {	
+			// Ancien mode, ou le tableau ne faisait qu'un seul TABLE
+			
 			if (this._visibleHeader) {
 				heads=this._table.getElementsByTagName("th");
-			}
-			cols=this._table.getElementsByTagName("col");			
+			}			
 		}
+		cols=this._table.getElementsByTagName("col");
 				
 		/* on part du f_grid_disabled
 		if (this.f_isDisabled()) {
@@ -4448,9 +4448,6 @@ var __members = {
 			}
 				
 			column._col=cols[v];
-			if (cols2) {
-				column._col2=cols2[v];
-			}
 
 			if (!heads) {
 				continue;
@@ -4513,26 +4510,16 @@ var __members = {
 		if (!this._title) {
 			return;
 		}
-
-		var doc=this.ownerDocument;
-	
-		var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr");
-		if (!tr) {
-			// Le tableau est vide ?
-//			dataGrid._title.style.width=dataGrid.offsetWidth+"px";
-			
-			f_core.Debug(f_grid, "f_updateTitle: No rows !");
-			return;
+		
+		if (!this._columnsLayoutPerformed) {
+			this.f_updateColumnsLayout();
 		}
+			
+		var doc=this.ownerDocument;
 		
 		var t0=new Date().getTime();
 		
 		this._titleLayout=true;		
-
-		var ttr=f_grid.GetFirstRow(this._title); //f_core.GetFirstElementByTagName(dataGrid._title, "tr");
-		var tths=ttr.childNodes; // +rapide ?getElementsByTagName("th");
-		
-		var ths=tr.childNodes; // +rapide ?getElementsByTagName("td");
 
 		var body=this._scrollBody;
 		var clientWidth=body.clientWidth;
@@ -4547,70 +4534,39 @@ var __members = {
 			}
 		}
 
-		var cols=f_grid._ListCols(this._title); //.getElementsByTagName("col");
-		//var cols=this._title.getElementsByTagName("col");
-		
-		var tcols=null;
-		var tds=null;
 		var columns=this._columns;
-		if (!columns[0]._tcol) {
-			tcols=f_grid._ListCols(this._table); 
-			//tcols=this._table.getElementsByTagName("col");
-			// C'est déjà tr   var tr=f_grid.GetFirstRow(this._table); //f_core.GetFirstElementByTagName(dataGrid._table, "tr", false);
-			
-			if (tr) {
-				// Quid ?
-				tds=ths; // déjà fait !   tr.childNodes; // + rapide ?  tr.getElementsByTagName("td");
-			}
-		}
 	
 		var t1=new Date().getTime();
-	
-		var fakeCol=null;
-		var fakeCell=null;
-		if (!this._createFakeTH && (this._resizable || offsetWidth>clientWidth)) {
-			this._createFakeTH=true;
-			
-			fakeCol=doc.getElementById(this.id+"::fakeCol");
+		
+		var cellMargin=8;
+		if (f_core.IsInternetExplorer()) {
+			cellMargin=0;
 		}
-				
+		
 		var total=0;
 		var ci=0;
-		for(var i=0;i<ths.length;i++) {
-			var col=cols[i];
-			if (!col) {
-				break;
-			}
-			tths[i].width="";
-			
-			var w=ths[i].offsetWidth;
-			col.style.width=w+"px";
-			total+=w;
-			
-			var cs;
-			for(;;) {
-				cs=columns[ci++];
-				if (cs._head) {
-					break;
-				}
-			}
-
-			if (!cs) {
+		for(var i=0;i<columns.length;i++) {
+			var column=columns[i];									
+			if (!column._visibility) {
 				continue;
 			}
 
-			if (tcols) {
-				cs._tcol=tcols[i];
+			var col=column._col;
+			if (!col) {
+				break;
 			}
-			if (tds) {
-				cs._tcell=tds[i];
-			}			
+			
+			
+			var w=col.offsetWidth;
+			total+=w;
+			
+			column._head.style.width=(w-cellMargin)+"px";
 		}
 		
 		var t2=new Date().getTime();
 		
 		
-		if (fakeCol) {
+/*		if (fakeCol) {
 			fakeCol.style.width=scrollBarWidth+"px";
 			
 			total+=scrollBarWidth;
@@ -4628,16 +4584,19 @@ var __members = {
 				}
 			}
 		}
-		
+		*/
+
+/*		
 		if (total>clientWidth || this._resizable) {
 			this._title.style.width=total+"px";
 			
 		} else {
 			this._title.style.width=offsetWidth+"px";
 		}
+	*/
 		
 		if (scrollBarWidth>0) {
-			var h=this.offsetHeight-this._title.offsetHeight-2;
+			var h=this.offsetHeight-this._title.parentNode.offsetHeight-2;
 			if (h<0) {
 				h=0;
 			}
