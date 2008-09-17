@@ -3,17 +3,17 @@
  */
 package org.rcfaces.core.internal.script;
 
-import org.rcfaces.core.internal.contentAccessor.BasicContentInformation;
+import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ScriptContentInformation extends BasicContentInformation {
+public class GeneratedScriptInformation extends BasicGeneratedResourceInformation {
     private static final String REVISION = "$Revision$";
 
-    public ScriptContentInformation() {
+    public GeneratedScriptInformation() {
         super();
     }
 
