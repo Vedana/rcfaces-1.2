@@ -105,6 +105,8 @@ var __members = {
 	f_messageObject: function(severity, summary, detail, clientDatas) {
 	//	f_core.Assert(typeof(severity)=="number", "Bad type of severity");
 	//	f_core.Assert(summary, "Bad summary"); // Summary can be null
+		f_core.Assert(summary===undefined || summary===null || typeof(summary)=="string", "f_messageObject.f_messageObject: Invalid summary parameter '"+summary+"'");
+		f_core.Assert(detail===undefined || detail===null || typeof(detail)=="string", "f_messageObject.f_messageObject: Invalid detail parameter '"+summary+"'");
 	
 		if (typeof(severity)=="object" && severity) {
 			var properties=severity;
