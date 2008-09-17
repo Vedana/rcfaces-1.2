@@ -12,6 +12,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.component.JavaScriptCollectorComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
+import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
@@ -43,8 +44,12 @@ public class JavaScriptCollectorRenderer extends AbstractHtmlRenderer {
         boolean mergeScripts = javaScriptCollectorComponent
                 .isMergeScripts(facesContext);
 
+        // Pas joli ... joli ...
+        AbstractJavaScriptRenderContext oldJavaScriptRenderContext = (AbstractJavaScriptRenderContext) htmlRenderContext
+                .getJavaScriptRenderContext();
+
         IJavaScriptRenderContext newJavaScriptRenderContext = new JavaScriptCollectorRenderContext(
-                htmlRenderContext.getFacesContext(), mergeScripts);
+                oldJavaScriptRenderContext, mergeScripts);
 
         htmlRenderContext.pushInteractiveRenderComponent(htmlWriter,
                 newJavaScriptRenderContext);
