@@ -22,17 +22,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ICompositeContentAccessorHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ICompositeContentAccessorHandler.ICompositeURLDescriptor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.script.AbstractScriptContentAccessorHandler;
+import org.rcfaces.core.internal.script.GeneratedScriptInformation;
 import org.rcfaces.core.internal.script.IScriptContentAccessorHandler;
-import org.rcfaces.core.internal.script.ScriptContentInformation;
 import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlWriter;
@@ -105,14 +107,14 @@ public class JavaScriptCollectorRenderContext extends
     }
 
     protected JavaScriptCollectorRenderContext(
-            JavaScriptCollectorRenderContext parent) {
+            AbstractJavaScriptRenderContext parent, boolean mergeScripts) {
         super(parent);
 
-        this.mergeScripts = parent.mergeScripts;
+        this.mergeScripts = mergeScripts;
     }
 
     public IJavaScriptRenderContext createChild() {
-        return new JavaScriptCollectorRenderContext(this);
+        return new JavaScriptCollectorRenderContext(this, mergeScripts);
     }
 
     public void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
@@ -164,7 +166,8 @@ public class JavaScriptCollectorRenderContext extends
             LOG.debug("Pop child " + javaScriptRenderContext);
         }
 
-        if (parent != null && RcfacesContext.isJSF1_2()) {
+        if (parent != null && RcfacesContext.isJSF1_2()
+                && (parent instanceof JavaScriptCollectorRenderContext)) {
             // Nous sommes en asyncRenderMode= tree
 
             ((JavaScriptCollectorRenderContext) parent).components
@@ -780,17 +783,21 @@ public class JavaScriptCollectorRenderContext extends
 
                 IContentAccessor contentAccessor = ContentAccessorFactory
                         .createFromWebResource(facesContext, mergeURL,
-                                IContentType.SCRIPT);
+                                IContentFamily.SCRIPT);
 
                 if (contentAccessor != null) {
-                    ScriptContentInformation contentInformation = new ScriptContentInformation();
-                    contentInformation.setComponent(htmlWriter
-                            .getComponentRenderContext());
+
+                    IGenerationResourceInformation generationInformation = new BasicGenerationResourceInformation(
+                            htmlWriter.getComponentRenderContext());
+
+                    GeneratedScriptInformation generatedScriptInformation = new GeneratedScriptInformation();
 
                     String collectedURL = contentAccessor.resolveURL(
-                            facesContext, contentInformation, null);
+                            facesContext, generatedScriptInformation,
+                            generationInformation);
                     if (collectedURL != null) {
-                        String charSet = contentInformation.getCharSet();
+                        String charSet = generatedScriptInformation
+                                .getCharSet();
                         if (charSet == null) {
                             charSet = MERGE_DEFAULT_CHARSET;
                         }
