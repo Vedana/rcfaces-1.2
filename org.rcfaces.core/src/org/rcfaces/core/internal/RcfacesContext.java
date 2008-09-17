@@ -101,6 +101,10 @@ public abstract class RcfacesContext {
     public static final RcfacesContext getInstance(FacesContext facesContext) {
         if (facesContext == null) {
             facesContext = FacesContext.getCurrentInstance();
+
+            if (facesContext == null) {
+                throw new FacesException("No faces context !");
+            }
         }
 
         Map applicationMap = facesContext.getExternalContext()
