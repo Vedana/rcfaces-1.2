@@ -5,8 +5,8 @@
 package org.rcfaces.renderkit.html.internal;
 
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -32,6 +32,9 @@ public interface IHtmlProcessContext extends IProcessContext {
     String USE_SCRIPT_CDATA_PARAMETER = Constants.getPackagePrefix()
             + ".USE_SCRIPT_CDATA";
 
+    String KEEP_DISABLED_STATE_PARAMETER = Constants.getPackagePrefix()
+            + ".KEEP_DISABLED_STATE";
+
     String DEBUG_MODE_APPLICATION_PARAMETER = Constants.getPackagePrefix()
             + ".client.DEBUG_MODE";
 
@@ -47,7 +50,7 @@ public interface IHtmlProcessContext extends IProcessContext {
     String getStyleSheetURI(String uri, boolean containsContextPath);
 
     IContentAccessor getStyleSheetContentAccessor(String uri,
-            IContentType contentType);
+            IContentFamily contentType);
 
     String getNameSpaceURI();
 
@@ -56,4 +59,6 @@ public interface IHtmlProcessContext extends IProcessContext {
     boolean useMetaContentStyleType();
 
     boolean useScriptCData();
+
+    boolean keepDisabledState();
 }

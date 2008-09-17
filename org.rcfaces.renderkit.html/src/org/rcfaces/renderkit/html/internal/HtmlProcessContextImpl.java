@@ -13,9 +13,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.css.ICssConfig;
 import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
 
@@ -50,6 +50,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private final boolean useMetaContentStyleType;
 
+    private final boolean keepDisabledState;
+
     private Boolean multiWindowMode;
 
     private Boolean debugMode;
@@ -76,6 +78,9 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
         useFlatIdentifier = "true".equalsIgnoreCase((String) applicationMap
                 .get(HTML_FLAT_IDENTIFIER_PARAMETER));
+
+        keepDisabledState = "true".equalsIgnoreCase((String) applicationMap
+                .get(KEEP_DISABLED_STATE_PARAMETER));
 
         String debugModeParam = (String) applicationMap
                 .get(DEBUG_MODE_APPLICATION_PARAMETER);
@@ -120,7 +125,7 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     }
 
     public IContentAccessor getStyleSheetContentAccessor(String uri,
-            IContentType contentType) {
+            IContentFamily contentType) {
         String url = getStyleSheetURI(uri, false);
         if (url == null) {
             return null;
@@ -240,6 +245,10 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     public Boolean getMultiWindowMode() {
         return multiWindowMode;
+    }
+
+    public boolean keepDisabledState() {
+        return keepDisabledState;
     }
 
 }
