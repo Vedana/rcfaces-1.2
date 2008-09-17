@@ -73,8 +73,6 @@ public class Constants {
 
     private static final String buildId;
 
-    public static final boolean KEEP_DISABLED_STATE = false;
-
     public static final boolean GENERATE_RCFACES_INIT_TIMER = true;
 
     static {
