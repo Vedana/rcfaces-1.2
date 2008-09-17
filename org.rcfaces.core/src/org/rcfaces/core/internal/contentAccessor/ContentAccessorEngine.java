@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.model.IFilterProperties;
 
 /**
  * 
@@ -23,8 +22,8 @@ public class ContentAccessorEngine {
 
     public static IContentAccessor resolveURL(FacesContext facesContext,
             final IContentAccessor contentAccessor,
-            final IContentInformation contentInformation,
-            final IFilterProperties filterProperties) {
+            final IGeneratedResourceInformation generatedInformation,
+            final IGenerationResourceInformation generationInformation) {
 
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
@@ -33,7 +32,7 @@ public class ContentAccessorEngine {
                 .getContentAccessorRegistry();
 
         IContentAccessorHandler handlers[] = registry
-                .listContentAccessorHandlers(contentAccessor.getType());
+                .listContentAccessorHandlers(contentAccessor.getContentFamily());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Try to resolve URL '" + contentAccessor + "'");
@@ -41,13 +40,13 @@ public class ContentAccessorEngine {
 
         IContentAccessor returnContentAccessor = contentAccessor;
 
-        IContentInformation contentInformationRef[] = new IContentInformation[] { contentInformation };
+        IGeneratedResourceInformation contentInformationRef[] = new IGeneratedResourceInformation[] { generatedInformation };
         for (int i = 0; i < handlers.length; i++) {
             IContentAccessorHandler handler = handlers[i];
 
             IContentAccessor newContentAccessor = handler.handleContent(
                     facesContext, returnContentAccessor, contentInformationRef,
-                    filterProperties);
+                    generationInformation);
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("ContentAccessorHandler(" + handler.getId()

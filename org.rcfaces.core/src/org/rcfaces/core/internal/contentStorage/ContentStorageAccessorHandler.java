@@ -10,9 +10,9 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
-import org.rcfaces.core.internal.contentAccessor.IContentInformation;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.model.IContentModel;
-import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.provider.AbstractProvider;
 
@@ -46,8 +46,8 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
 
     public IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IContentInformation[] contentInformationRef,
-            IFilterProperties filterProperties) {
+            IGeneratedResourceInformation[] generatedInformationRef,
+            IGenerationResourceInformation generationInformation) {
 
         if (contentAccessor.getPathType() != IContentAccessor.UNDEFINED_PATH_TYPE) {
             return null;
@@ -63,17 +63,19 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
 
         if (ref instanceof IContentModel) {
             IContentModel contentModel = (IContentModel) ref;
-            IContentInformation contentInformation = contentInformationRef[0];
+            IGeneratedResourceInformation generatedInformation = generatedInformationRef[0];
 
             if (contentModel instanceof IFiltredModel) {
-                ((IFiltredModel) contentModel).setFilter(filterProperties);
+                ((IFiltredModel) contentModel).setFilter(generationInformation
+                        .getFilterProperties());
 
                 if (contentAccessor != null) {
-                    contentInformation.setFiltredModel(true);
+                    generatedInformation.setFiltredModel(true);
                 }
             }
 
-            if (contentInformation != null) {
+            /*
+            if (generationInformation != null) {
                 for (int i = 0; i < COPY_ATTRIBUTES.length; i++) {
                     String attributeName = COPY_ATTRIBUTES[i];
 
@@ -82,19 +84,19 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
                         continue;
                     }
 
-                    contentInformation.setAttribute(attributeName, value);
+                    generatedInformation.setAttribute(attributeName, value);
                 }
             }
+            */
 
-            return rcfacesContext
-                    .getContentStorageEngine()
+            return rcfacesContext.getContentStorageEngine()
                     .registerContentModel(facesContext, contentModel,
-                            contentInformationRef[0], contentAccessor.getType());
+                            generatedInformationRef[0],
+                            generationInformation);
         }
 
         return rcfacesContext.getContentStorageEngine().registerRaw(
-                facesContext, ref, contentInformationRef[0],
-                contentAccessor.getType());
+                facesContext, ref, generatedInformationRef[0]);
     }
 
 }

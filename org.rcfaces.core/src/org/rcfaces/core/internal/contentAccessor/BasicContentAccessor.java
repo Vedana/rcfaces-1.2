@@ -1,14 +1,11 @@
 package org.rcfaces.core.internal.contentAccessor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.BindingTools;
-import org.rcfaces.core.model.IContentModel;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -24,8 +21,9 @@ public class BasicContentAccessor extends AbstractContentAccessor {
     private final Object value;
 
     public BasicContentAccessor(FacesContext facesContext, Object url,
-            IContentType type, IContentVersionHandler contentVersionHandler) {
-        super(type, contentVersionHandler);
+            IContentFamily contentFamily,
+            IContentVersionHandler contentVersionHandler) {
+        super(contentFamily, contentVersionHandler);
 
         this.value = convertURL(facesContext, url);
     }
@@ -46,36 +44,6 @@ public class BasicContentAccessor extends AbstractContentAccessor {
         return value;
     }
 
-    public Object getAttribute(String attributeName) {
-        if (value instanceof IContentModel) {
-            IContentModel contentModel = (IContentModel) value;
-
-            Object value = contentModel.getAttribute(attributeName);
-            if (value != null) {
-                return value;
-            }
-        }
-
-        return super.getAttribute(attributeName);
-    }
-
-    public Map getAttributes() {
-        Map attributes = super.getAttributes();
-
-        if (value instanceof IContentModel) {
-            IContentModel contentModel = (IContentModel) value;
-
-            Map value = contentModel.getAttributes();
-            if (value != null && value.size() > 0) {
-                attributes = new HashMap(attributes);
-
-                attributes.putAll(value);
-            }
-        }
-
-        return attributes;
-    }
-
     protected Object convertURL(FacesContext facesContext, Object url) {
         if (url == null) {
             setPathType(IContentAccessor.UNDEFINED_PATH_TYPE);
@@ -94,7 +62,7 @@ public class BasicContentAccessor extends AbstractContentAccessor {
     }
 
     public String toString() {
-        return "[AbstractContentAccessor contentType=" + getType()
+        return "[AbstractContentAccessor contentType=" + getContentFamily()
                 + " pathType=" + getPathTypeName(getPathType())
                 + " versionHandler=" + getContentVersionHandler()
                 + " content='" + value + "' root=" + getParentAccessor() + "]";

@@ -6,7 +6,6 @@ package org.rcfaces.core.internal.content;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -34,17 +33,18 @@ public abstract class AbstractBufferOperationContentModel extends
 
     private static final String REVISION = "$Revision$";
 
+    private static final long serialVersionUID = -7085466442454979874L;
+
     private static final Log LOG = LogFactory
             .getLog(AbstractBufferOperationContentModel.class);
 
     private static final int INITIAL_BUFFER_SIZE = 8 * 1024;
 
     public AbstractBufferOperationContentModel(String resourceURL,
-            String contentType, String versionId, String operationId,
-            String filterParametersToParse, Map attributes,
-            IBufferOperation styleOperation) {
-        super(resourceURL, contentType, versionId, operationId,
-                filterParametersToParse, attributes, styleOperation);
+            String versionId, String operationId,
+            String filterParametersToParse, IBufferOperation styleOperation) {
+        super(resourceURL, versionId, operationId, filterParametersToParse,
+                styleOperation);
     }
 
     protected IResourceLoaderFactory getResourceLoaderFactory(

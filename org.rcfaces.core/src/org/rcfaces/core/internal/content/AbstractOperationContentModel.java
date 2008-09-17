@@ -3,6 +3,8 @@ package org.rcfaces.core.internal.content;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
+import org.rcfaces.core.internal.images.ImageAdapterFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
@@ -31,11 +36,15 @@ import org.rcfaces.core.model.BasicContentModel;
  */
 public abstract class AbstractOperationContentModel extends BasicContentModel
         implements Serializable, IResolvedContent, IAdaptable {
-
     private static final String REVISION = "$Revision$";
+
+    private static final long serialVersionUID = 4218209439999498360L;
 
     private static final Log LOG = LogFactory
             .getLog(AbstractOperationContentModel.class);
+
+    private static final FileNameMap fileNameMap = URLConnection
+            .getFileNameMap();
 
     /**
      * 
@@ -113,9 +122,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     private long sourceLength;
 
-    public AbstractOperationContentModel(String resourceURL,
-            String contentType, String versionId, String operationId,
-            String filterParametersToParse, Map attributes,
+    public AbstractOperationContentModel(String resourceURL, String versionId,
+            String operationId, String filterParametersToParse,
             IBufferOperation bufferOperation) {
         this.resourceURL = resourceURL;
         this.operationId = operationId;
@@ -139,17 +147,26 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
         this.resourceKey = sa.toString();
 
-        setProcessDataAtRequest(true);
-
-        if (contentType != null) {
-            setContentType(contentType);
-        }
-
-        if (attributes != null && attributes.isEmpty() == false) {
-            putAllAttributes(attributes);
-        }
-
         setWrappedData(this);
+    }
+
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation) {
+        super.setInformations(generationInformation, generatedInformation);
+
+        String contentType = generatedInformation.getResponseMimeType();
+        if (contentType == null) {
+            contentType = generatedInformation.getSourceMimeType();
+        }
+
+        String suffix = generatedInformation.getResponseSuffix();
+
+        if (suffix == null && contentType != null) {
+            suffix = ImageAdapterFactory.getSuffixByContentType(contentType);
+
+            generatedInformation.setResponseSuffix(suffix);
+        }
     }
 
     public final synchronized Map getFilterParameters() {
@@ -218,7 +235,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
         fileBuffer = createFileBuffer();
 
-        setContentType(fileBuffer.getContentType());
+        generatedInformation.setResponseMimeType(fileBuffer.getContentType());
 
         return fileBuffer;
     }
@@ -359,6 +376,14 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         } else if (!resourceURL.equals(other.resourceURL))
             return false;
         return true;
+    }
+
+    public String getContentType() {
+        return generatedInformation.getResponseMimeType();
+    }
+
+    public String getURLSuffix() {
+        return generatedInformation.getResponseSuffix();
     }
 
 }

@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.Map;
 
 import org.rcfaces.core.internal.content.IBufferOperation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 
 /**
  * 
@@ -16,17 +17,16 @@ import org.rcfaces.core.internal.content.IBufferOperation;
  */
 public interface IImageOperation extends IBufferOperation {
 
-    String getForceSuffix();
-
     void setForceSuffix(String suffix);
 
-    String getExternalContentType();
+    void setResponseMimeType(String responseMimeType);
 
-    void setExternalContentType(String contentType);
+    void setSourceMimeType(String sourceMimeType);
 
-    String getInternalContentType();
+    void setEncoderMimeType(String encoderMimeType);
 
-    void setInternalContentType(String contentType);
+    void prepare(IGenerationResourceInformation generationInformation,
+            IGeneratedImageInformation generatedInformation);
 
     BufferedImage filter(Map requestParameter, BufferedImage source,
             BufferedImage destination);

@@ -87,12 +87,14 @@
 				org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation
 			</operation-class>
 			<operation-force-suffix>ico</operation-force-suffix>
-			<operation-external-contentType>
+			<operation-response-mimeType>
 				image/x-icon
-			</operation-external-contentType>
-			<operation-internal-contentType>
+			</operation-response-mimeType>
+			<!-- Pas besoin 
+			<operation-encoder-mimeType>
 				image/x-icon
-			</operation-internal-contentType>
+			</operation-encoder-mimeType>
+			-->
 		</operation>
 	</image-operations>
 	

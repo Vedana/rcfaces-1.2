@@ -17,6 +17,10 @@ public class ImageFiltredContentModel extends ImageContentModel implements
 
     private IFilterProperties filter;
 
+    public ImageFiltredContentModel() {
+
+    }
+
     public void setFilter(IFilterProperties filter) {
         this.filter = filter;
     }

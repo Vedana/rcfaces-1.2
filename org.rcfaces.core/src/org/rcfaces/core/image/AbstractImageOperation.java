@@ -5,6 +5,7 @@
 package org.rcfaces.core.image;
 
 import org.rcfaces.core.internal.content.AbstractBufferOperation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 
 /**
  * 
@@ -17,32 +18,45 @@ public abstract class AbstractImageOperation extends AbstractBufferOperation
 
     private String forceSuffix;
 
-    private String externalContentType;
+    private String responseMimeType;
 
-    private String internalContentType;
+    private String sourceMimeType;
 
-    public final String getExternalContentType() {
-        return externalContentType;
+    private String encoderMimeType;
+
+    public final void setResponseMimeType(String responseMimeType) {
+        this.responseMimeType = responseMimeType;
     }
 
-    public final void setExternalContentType(String forceContentType) {
-        this.externalContentType = forceContentType;
+    public final void setSourceMimeType(String sourceMimeType) {
+        this.sourceMimeType = sourceMimeType;
     }
 
-    public final String getInternalContentType() {
-        return internalContentType;
-    }
-
-    public final void setInternalContentType(String internalContentType) {
-        this.internalContentType = internalContentType;
-    }
-
-    public final String getForceSuffix() {
-        return forceSuffix;
+    public final void setEncoderMimeType(String encoderMimeType) {
+        this.encoderMimeType = encoderMimeType;
     }
 
     public final void setForceSuffix(String forceSuffix) {
         this.forceSuffix = forceSuffix;
+    }
+
+    public void prepare(IGenerationResourceInformation generationInformation,
+            IGeneratedImageInformation generatedInformation) {
+        if (sourceMimeType != null) {
+            generatedInformation.setSourceMimeType(sourceMimeType);
+        }
+
+        if (responseMimeType != null) {
+            generatedInformation.setResponseMimeType(responseMimeType);
+        }
+
+        if (encoderMimeType != null) {
+            generatedInformation.setEncoderMimeType(encoderMimeType);
+        }
+
+        if (forceSuffix != null) {
+            generatedInformation.setResponseSuffix(forceSuffix);
+        }
     }
 
 }

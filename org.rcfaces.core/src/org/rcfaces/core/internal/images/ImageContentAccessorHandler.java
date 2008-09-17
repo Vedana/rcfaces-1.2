@@ -4,25 +4,25 @@
 package org.rcfaces.core.internal.images;
 
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.image.GeneratedImageInformation;
+import org.rcfaces.core.image.IGeneratedImageInformation;
 import org.rcfaces.core.image.IImageOperation;
-import org.rcfaces.core.image.ImageContentInformation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IComponentContentInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
-import org.rcfaces.core.internal.contentAccessor.IContentInformation;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
-import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.provider.AbstractProvider;
 
 /**
@@ -41,6 +41,9 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
     public abstract IImageOperation getImageOperation(String operationId);
 
+    public abstract IImageResourceAdapter[] listImageResourceAdapters(
+            String contentType, String suffix);
+
     public ImageContentAccessorHandler() {
     }
 
@@ -52,17 +55,18 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         ((ContentAccessorsRegistryImpl) rcfacesContext
                 .getContentAccessorRegistry()).declareContentAccessorHandler(
-                IContentType.IMAGE, this);
+                IContentFamily.IMAGE, this);
     }
 
     protected abstract IContentAccessor formatImageURL(
             FacesContext facesContext, IFiltredContentAccessor contentAccessor,
-            ImageContentInformation imageInformation);
+            IGeneratedImageInformation generatedImageInformation,
+            IGenerationResourceInformation generationInformation);
 
     public IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IContentInformation[] contentInformationRef,
-            IFilterProperties filterProperties) {
+            IGeneratedResourceInformation[] contentInformationRef,
+            IGenerationResourceInformation generationInformation) {
 
         if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
             return null;
@@ -84,30 +88,19 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         String url = (String) content;
 
-        ImageContentInformation imageInformation = null;
-        IContentInformation contentInformation = contentInformationRef[0];
-        if (contentInformation instanceof ImageContentInformation) {
-            imageInformation = (ImageContentInformation) contentInformation;
+        GeneratedImageInformation imageGeneratedInformation = null;
+        IGeneratedResourceInformation generatedInformation = contentInformationRef[0];
+        if (generatedInformation instanceof GeneratedImageInformation) {
+            imageGeneratedInformation = (GeneratedImageInformation) generatedInformation;
 
         } else {
-            imageInformation = new ImageContentInformation();
-            
-            if (contentInformation instanceof IComponentContentInformation) {
-                IComponentContentInformation componentContentInformation = (IComponentContentInformation) contentInformation;
+            imageGeneratedInformation = new GeneratedImageInformation();
 
-                UIComponent component = componentContentInformation
-                        .getComponent();
-                String componentClientId = componentContentInformation
-                        .getComponentClientId();
-                if (component != null) {
-                    imageInformation.setComponent(component, componentClientId);
+            contentInformationRef[0] = imageGeneratedInformation;
+        }
 
-                } else if (componentClientId != null) {
-                    imageInformation.setComponentClientId(componentClientId);
-                }
-            }
-
-            contentInformationRef[0] = imageInformation;
+        if (generationInformation == null) {
+            generationInformation = new BasicGenerationResourceInformation();
         }
 
         IFiltredContentAccessor modifiedContentAccessor = null;
@@ -138,7 +131,8 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
         }
 
         IContentAccessor formattedContentAccessor = formatImageURL(
-                facesContext, modifiedContentAccessor, imageInformation);
+                facesContext, modifiedContentAccessor,
+                imageGeneratedInformation, generationInformation);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("formattedContentAccessor=" + formattedContentAccessor);

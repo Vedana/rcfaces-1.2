@@ -19,6 +19,6 @@ import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader
 
 public interface IBufferedImage extends IFileBuffer {
     void initialize(IResourceLoader imageDownloader, String contentType,
-            RenderedImage renderedImage, ImageWriter imageWriter, int imageType, long lastModified)
-            throws IOException;
+            RenderedImage renderedImage, ImageWriter imageWriter,
+            int imageType, long lastModified) throws IOException;
 }

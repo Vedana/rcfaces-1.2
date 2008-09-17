@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -32,7 +32,7 @@ public interface IContentAccessor {
 
     String CONTEXT_KEYWORD = "$context";
 
-    IContentType getType();
+    IContentFamily getContentFamily();
 
     int getPathType();
 
@@ -45,8 +45,8 @@ public interface IContentAccessor {
     Object getContentRef();
 
     String resolveURL(FacesContext facesContext,
-            IContentInformation contentInformation,
-            IFilterProperties filterProperties);
+            IGeneratedResourceInformation contentInformation,
+            IGenerationResourceInformation generationInformation);
 
     IContentAccessor getParentAccessor();
 

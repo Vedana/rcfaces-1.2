@@ -111,11 +111,11 @@ public class ImageAdapterFactory implements IAdapterFactory {
         }
 
         String contentType = (String) parameters
-                .get(IContentModel.CONTENT_TYPE_PROPERTY);
+                .get(IContentModel.RESPONSE_MIME_TYPE_PROPERTY);
 
         if (contentType == null) {
             String suffix = (String) parameters
-                    .get(IContentModel.URL_SUFFIX_PROPERTY);
+                    .get(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
 
             if (suffix != null) {
                 contentType = fileNameMap.getContentTypeFor("x." + suffix);
@@ -182,7 +182,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
             throws IOException {
 
         String suffix = (String) parameters
-                .get(IContentModel.URL_SUFFIX_PROPERTY);
+                .get(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
         if (suffix == null) {
             suffix = getSuffixByContentType(contentType);
         }

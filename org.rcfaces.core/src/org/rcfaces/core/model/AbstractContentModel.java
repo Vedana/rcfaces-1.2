@@ -7,7 +7,9 @@ import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -28,6 +30,10 @@ public abstract class AbstractContentModel implements IContentModel {
         this.wrappedData = wrappedData;
     }
 
+    public void setInformations(IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation) {
+    }
+
     public Object getWrappedData() {
         return wrappedData;
     }
@@ -40,20 +46,12 @@ public abstract class AbstractContentModel implements IContentModel {
         return computeURL(this);
     }
 
-    public String getContentType() {
-        return (String) getAttribute(CONTENT_TYPE_PROPERTY);
-    }
-
-    public String getURLSuffix() {
-        return (String) getAttribute(URL_SUFFIX_PROPERTY);
-    }
-
     public static String computeURL(IContentModel contentModel) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         IContentAccessor contentAccessor = ContentAccessorFactory
                 .createFromWebResource(facesContext, contentModel,
-                        IContentType.USER);
+                        IContentFamily.USER);
 
         if (contentAccessor == null) {
             return null;
@@ -68,21 +66,6 @@ public abstract class AbstractContentModel implements IContentModel {
 
     public void setContentEngineId(String contentEngineId) {
         this.contentEngineId = contentEngineId;
-    }
-
-    public boolean isProcessDataAtRequest() {
-        Object processDataAtRequest = getAttribute(PROCESS_DATA_AT_REQUEST);
-
-        if (processDataAtRequest == null) {
-            return false;
-        }
-
-        if (processDataAtRequest instanceof Boolean) {
-            return ((Boolean) processDataAtRequest).booleanValue();
-        }
-
-        return Boolean.valueOf(String.valueOf(processDataAtRequest))
-                .booleanValue();
     }
 
     public boolean checkNotModified() {

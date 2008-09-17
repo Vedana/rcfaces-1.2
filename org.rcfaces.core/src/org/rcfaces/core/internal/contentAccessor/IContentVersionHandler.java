@@ -18,10 +18,10 @@ public interface IContentVersionHandler {
 
     IContentAccessor getVersionedContentAccessor(RcfacesContext rcfacesContext,
             FacesContext facesContext, IContentAccessor contentAccessor,
-            IContentInformation[] contentInformation);
+            IGeneratedResourceInformation[] contentInformation);
 
     String getVersionTag(RcfacesContext rcfacesContext,
             FacesContext facesContext, String relativeUrl,
             IContentAccessor contentAccessor,
-            IContentInformation contentInformation);
+            IGeneratedResourceInformation contentInformation);
 }

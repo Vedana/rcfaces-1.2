@@ -22,12 +22,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.image.IGeneratedImageInformation;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.IIndexedImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.content.AbstractOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
 
@@ -45,36 +48,43 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
     private static final Log LOG = LogFactory
             .getLog(ImageOperationContentModel.class);
 
-    public ImageOperationContentModel(String resourceURL, String contentType,
-            String urlSuffix, String versionId, String operationId,
-            String filterParametersToParse, Map attributes,
+    private transient ImageContentAccessorHandler imageContentAccessorHandler;
+
+    public ImageOperationContentModel(String resourceURL, String versionId,
+            String operationId, String filterParametersToParse,
             IBufferOperation bufferOperation) {
-        super(resourceURL, contentType, versionId, operationId,
-                filterParametersToParse, attributes, bufferOperation);
-
-        if (contentType != null) {
-            if (urlSuffix == null) {
-                urlSuffix = ImageAdapterFactory
-                        .getSuffixByContentType(contentType);
-            }
-        }
-
-        if (urlSuffix != null) {
-            setURLSuffix(urlSuffix);
-        }
+        super(resourceURL, versionId, operationId, filterParametersToParse,
+                bufferOperation);
     }
 
-    protected IBufferOperation createBufferOperation(FacesContext facesContext) {
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation) {
+        super.setInformations(generationInformation, generatedInformation);
+
+        generatedInformation.setProcessingAtRequest(true);
+    }
+
+    protected ImageContentAccessorHandler getImageContentAccessorHandler(
+            FacesContext facesContext) {
+        if (imageContentAccessorHandler != null) {
+            return imageContentAccessorHandler;
+        }
 
         RcfacesContext rcfacesContext = RcfacesContext
                 .getInstance(facesContext);
 
-        ImageContentAccessorHandler imageOperationRepository = (ImageContentAccessorHandler) rcfacesContext
+        imageContentAccessorHandler = (ImageContentAccessorHandler) rcfacesContext
                 .getProvidersRegistry().getProvider(
                         ImageContentAccessorHandler.IMAGE_CONTENT_PROVIDER_ID);
 
-        IImageOperation imageOperation = imageOperationRepository
-                .getImageOperation(getOperationId());
+        return imageContentAccessorHandler;
+    }
+
+    protected IBufferOperation createBufferOperation(FacesContext facesContext) {
+
+        IImageOperation imageOperation = getImageContentAccessorHandler(
+                facesContext).getImageOperation(getOperationId());
 
         return imageOperation;
     }
@@ -98,19 +108,28 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
         ServletContext servletContext = (ServletContext) externalContext
                 .getContext();
 
+        IGeneratedImageInformation generatedImageInformation = (IGeneratedImageInformation) generatedInformation;
+
+        imageOperation
+                .prepare(generationInformation, generatedImageInformation);
+
+        String sourceContentType = generatedImageInformation
+                .getSourceMimeType();
+
         IResourceLoaderFactory resourceLoaderFactory = getResourceLoaderFactory(facesContext);
 
         IResourceLoader resourceLoader = resourceLoaderFactory.loadResource(
                 servletContext, request, response, getResourceURL());
 
-        String downloadedContentType = resourceLoader.getContentType();
-        if (downloadedContentType == null
-                || downloadedContentType.equals(getContentType()) == false) {
+        String resourceLoaderContentType = resourceLoader.getContentType();
+        if (resourceLoaderContentType == null
+                || resourceLoaderContentType.equals(sourceContentType) == false) {
             LOG.error("Different content types request='" + getContentType()
-                    + "' loaded='" + downloadedContentType + "' for path '"
+                    + "' loaded='" + sourceContentType + "' for path '"
                     + getResourceURL() + "'.");
 
-            return INVALID_BUFFERED_FILE;
+            // return INVALID_BUFFERED_FILE;
+            // C'est peut etre normal (ex: svg => jpeg)
         }
 
         InputStream inputStream = resourceLoader.openStream();
@@ -122,23 +141,34 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
             return INVALID_BUFFERED_FILE;
         }
 
-        String internalContentType = getContentType();
-        if (imageOperation.getInternalContentType() != null) {
-            internalContentType = imageOperation.getInternalContentType();
+        String responseMimeType = generatedImageInformation
+                .getResponseMimeType();
+
+        String encoderMimeType = generatedImageInformation.getEncoderMimeType();
+        if (encoderMimeType == null) {
+            encoderMimeType = responseMimeType;
+
+            if (encoderMimeType == null) {
+                encoderMimeType = sourceContentType;
+            }
         }
 
-        String externalContentType = getContentType();
-        if (imageOperation.getExternalContentType() != null) {
-            externalContentType = imageOperation.getExternalContentType();
+        if (responseMimeType == null) {
+            responseMimeType = encoderMimeType;
+            generatedImageInformation.setResponseMimeType(responseMimeType);
         }
 
-        if (externalContentType == null) {
-            externalContentType = internalContentType;
+        if (generatedImageInformation.getResponseSuffix() == null) {
+            String suffix = ImageAdapterFactory
+                    .getSuffixByContentType(responseMimeType);
+            if (suffix != null) {
+                generatedImageInformation.setResponseSuffix(suffix);
+            }
         }
 
-        Iterator it = ImageIO.getImageWritersByMIMEType(internalContentType);
+        Iterator it = ImageIO.getImageWritersByMIMEType(encoderMimeType);
         if (it.hasNext() == false) {
-            LOG.error("Can not write image format '" + internalContentType
+            LOG.error("Can not write image for mime type '" + encoderMimeType
                     + "'.");
 
             return INVALID_BUFFERED_FILE;
@@ -146,46 +176,15 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
 
         ImageWriter imageWriter = (ImageWriter) it.next();
 
-        BufferedImage image;
-        try {
-            it = ImageIO.getImageReadersByMIMEType(getContentType());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Use imageWriter='" + imageWriter + "' for mimeType='"
+                    + encoderMimeType + "'");
+        }
 
-            if (it.hasNext() == false) {
-                throw new IOException("Can not get codec to read image '"
-                        + getResourceURL() + "'.");
-            }
-
-            ImageReader imageReader = (ImageReader) it.next();
-
-            try {
-                ImageInputStream imageInputStream = ImageIO
-                        .createImageInputStream(inputStream);
-
-                try {
-                    ImageReadParam param = imageReader.getDefaultReadParam();
-                    imageReader.setInput(imageInputStream, true, true);
-                    image = imageReader.read(0, param);
-
-                } finally {
-                    imageInputStream.close();
-                }
-
-            } finally {
-                imageReader.dispose();
-            }
-
-        } catch (IOException e) {
-            LOG.error("Can not load image '" + getResourceURL() + "'.", e);
-
+        BufferedImage image = readImage(facesContext, inputStream,
+                sourceContentType);
+        if (image == null) {
             return INVALID_BUFFERED_FILE;
-
-        } finally {
-            try {
-                inputStream.close();
-
-            } catch (IOException e) {
-                LOG.error(e);
-            }
         }
 
         int sourceImageType = image.getType();
@@ -193,7 +192,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
             sourceImageType = BufferedImage.TYPE_BYTE_INDEXED;
         }
 
-        if ("image/bmp".equals(internalContentType)) {
+        if ("image/bmp".equals(sourceContentType)) {
             // sourceImageType = BufferedImage.TYPE_4BYTE_ABGR;
         }
 
@@ -205,7 +204,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
                     new Map[] { getFilterParameters() });
 
             try {
-                bufferedImage.initialize(resourceLoader, externalContentType,
+                bufferedImage.initialize(resourceLoader, responseMimeType,
                         renderedImage, imageWriter, sourceImageType,
                         resourceLoader.getLastModified());
 
@@ -221,6 +220,74 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
         }
 
         return bufferedImage;
+    }
+
+    private BufferedImage readImage(FacesContext facesContext,
+            InputStream inputStream, String sourceContentType) {
+
+        String suffix = getURLSuffix();
+
+        IImageResourceAdapter imageResourceAdapters[] = getImageContentAccessorHandler(
+                facesContext).listImageResourceAdapters(sourceContentType,
+                suffix);
+
+        if (imageResourceAdapters != null && imageResourceAdapters.length > 0) {
+
+            for (int i = 0; i < imageResourceAdapters.length; i++) {
+                IImageResourceAdapter imageResourceAdapter = imageResourceAdapters[i];
+
+                BufferedImage image = imageResourceAdapter.adaptContent(
+                        facesContext, inputStream, generationInformation,
+                        generatedInformation);
+
+                if (image != null) {
+                    return image;
+                }
+            }
+        }
+
+        try {
+            Iterator it = ImageIO.getImageReadersByMIMEType(sourceContentType);
+
+            if (it.hasNext() == false) {
+                throw new IOException("Can not get codec to read image '"
+                        + getResourceURL() + "'. (type '" + sourceContentType
+                        + "')");
+            }
+
+            ImageReader imageReader = (ImageReader) it.next();
+
+            try {
+                ImageInputStream imageInputStream = ImageIO
+                        .createImageInputStream(inputStream);
+
+                try {
+                    ImageReadParam param = imageReader.getDefaultReadParam();
+                    imageReader.setInput(imageInputStream, true, true);
+
+                    return imageReader.read(0, param);
+
+                } finally {
+                    imageInputStream.close();
+                }
+
+            } finally {
+                imageReader.dispose();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Can not load image '" + getResourceURL() + "'.", e);
+
+            return null;
+
+        } finally {
+            try {
+                inputStream.close();
+
+            } catch (IOException e) {
+                LOG.error(e);
+            }
+        }
     }
 
     protected IBufferedImage createNewBufferedImage(String imageName) {

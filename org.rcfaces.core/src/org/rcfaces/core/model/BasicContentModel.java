@@ -3,9 +3,11 @@
  */
 package org.rcfaces.core.model;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 
 /**
  * 
@@ -17,6 +19,10 @@ public class BasicContentModel extends AbstractContentModel {
 
     private Map attributes;
 
+    protected transient IGeneratedResourceInformation generatedInformation;
+
+    protected transient IGenerationResourceInformation generationInformation;
+
     public BasicContentModel() {
     }
 
@@ -27,7 +33,16 @@ public class BasicContentModel extends AbstractContentModel {
     public BasicContentModel(Object value, Map attributes) {
         super(value);
 
-        putAllAttributes(attributes);
+        this.attributes = new HashMap(attributes);
+    }
+
+    public void setInformations(
+            IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation) {
+        super.setInformations(generationInformation, generatedInformation);
+
+        this.generationInformation = generationInformation;
+        this.generatedInformation = generatedInformation;
     }
 
     protected Map getAttributeMap(boolean create) {
@@ -63,47 +78,6 @@ public class BasicContentModel extends AbstractContentModel {
             return null;
         }
         return attributes.remove(attributeName);
-    }
-
-    public void putAllAttributes(Map newAttributes) {
-        if (newAttributes.isEmpty()) {
-            return;
-        }
-
-        Map attributes = getAttributeMap(true);
-
-        attributes.putAll(newAttributes);
-    }
-
-    public void clearAttributes() {
-        Map attributes = getAttributeMap(false);
-
-        if (attributes == null) {
-            return;
-        }
-        attributes.clear();
-    }
-
-    public Map getAttributes() {
-        Map attributes = getAttributeMap(false);
-
-        if (attributes == null || attributes.isEmpty()) {
-            return Collections.EMPTY_MAP;
-        }
-
-        return new HashMap(attributes);
-    }
-
-    public void setContentType(String contentType) {
-        setAttribute(CONTENT_TYPE_PROPERTY, contentType);
-    }
-
-    public void setURLSuffix(String suffix) {
-        setAttribute(URL_SUFFIX_PROPERTY, suffix);
-    }
-
-    public void setProcessDataAtRequest(boolean state) {
-        setAttribute(PROCESS_DATA_AT_REQUEST, (state) ? Boolean.TRUE : null);
     }
 
     public int hashCode() {

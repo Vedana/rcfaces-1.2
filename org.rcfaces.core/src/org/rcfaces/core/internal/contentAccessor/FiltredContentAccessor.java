@@ -29,7 +29,7 @@ public class FiltredContentAccessor extends AbstractContentAccessor implements
 
     public String toString() {
         return "[FiltredContentAccessor filter='" + filter + "' contentType="
-                + getType() + " pathType=" + getPathTypeName(getPathType())
+                + getContentFamily() + " pathType=" + getPathTypeName(getPathType())
                 + " versionHandler=" + getContentVersionHandler() + " root="
                 + getParentAccessor() + "]";
     }

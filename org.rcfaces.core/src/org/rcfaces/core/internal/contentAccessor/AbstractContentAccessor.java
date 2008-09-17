@@ -11,7 +11,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -26,27 +26,27 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
 
     private final IContentAccessor parentContentAccessor;
 
-    private final IContentType type;
+    private final IContentFamily contentFamily;
 
     private IContentVersionHandler contentVersionHandler;
 
     private int pathType;
 
-    protected AbstractContentAccessor(IContentType type,
+    protected AbstractContentAccessor(IContentFamily type,
             IContentVersionHandler contentVersionHandler) {
         this(type, null, contentVersionHandler);
     }
 
     protected AbstractContentAccessor(IContentAccessor contentAccessor) {
-        this(contentAccessor.getType(), contentAccessor, contentAccessor
+        this(contentAccessor.getContentFamily(), contentAccessor, contentAccessor
                 .getContentVersionHandler());
     }
 
-    protected AbstractContentAccessor(IContentType type,
+    protected AbstractContentAccessor(IContentFamily type,
             IContentAccessor contentAccessor,
             IContentVersionHandler contentVersionHandler) {
         this.parentContentAccessor = contentAccessor;
-        this.type = type;
+        this.contentFamily = type;
         this.contentVersionHandler = contentVersionHandler;
     }
 
@@ -54,8 +54,8 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
         return parentContentAccessor;
     }
 
-    public final IContentType getType() {
-        return type;
+    public final IContentFamily getContentFamily() {
+        return contentFamily;
     }
 
     public IContentVersionHandler getContentVersionHandler() {
@@ -68,11 +68,11 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     }
 
     public final String resolveURL(FacesContext facesContext,
-            IContentInformation contentInformation,
-            IFilterProperties filterProperties) {
+            IGeneratedResourceInformation contentInformation,
+            IGenerationResourceInformation generationInformation) {
 
         IContentAccessor contentAccessor = ContentAccessorEngine.resolveURL(
-                facesContext, this, contentInformation, filterProperties);
+                facesContext, this, contentInformation, generationInformation);
         if (contentAccessor == null) {
             return null;
         }
@@ -260,7 +260,7 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     }
 
     public String toString() {
-        return "[AbstractContentAccessor contentType=" + type + " pathType="
+        return "[AbstractContentAccessor contentType=" + contentFamily + " pathType="
                 + getPathTypeName(pathType) + " versionHandler="
                 + contentVersionHandler + " root=" + parentContentAccessor
                 + "]";

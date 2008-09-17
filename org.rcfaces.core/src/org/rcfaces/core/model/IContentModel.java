@@ -3,7 +3,8 @@
  */
 package org.rcfaces.core.model;
 
-import java.util.Map;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 
 /**
  * 
@@ -12,25 +13,22 @@ import java.util.Map;
  */
 public interface IContentModel {
 
-    String PROCESS_DATA_AT_REQUEST = "org.rfcaces.core.model.PROCESS_DATA_AT_REQUEST";
+    String RESPONSE_EXPIRATION_PROPERTY = "org.rfcaces.response.EXPIRATION";
 
-    String EXPIRATION_PROPERTY = "org.rfcaces.core.model.EXPIRATION";
+    String SOURCE_MIME_TYPE_PROPERTY = "org.rcfaces.source.MIME_TYPE";
 
-    String CONTENT_TYPE_PROPERTY = "org.rcfaces.ContentType";
+    String RESPONSE_MIME_TYPE_PROPERTY = "org.rcfaces.response.MIME_TYPE";
 
-    String URL_SUFFIX_PROPERTY = "org.rcfaces.url.Suffix";
+    String RESPONSE_URL_SUFFIX_PROPERTY = "org.rcfaces.response.SUFFIX";
 
-    Object getAttribute(String attributeName);
-
-    Map getAttributes();
+    void setInformations(IGenerationResourceInformation generationInformation,
+            IGeneratedResourceInformation generatedInformation);
 
     Object getWrappedData();
 
     String getContentEngineId();
 
     void setContentEngineId(String contentEngineId);
-
-    boolean isProcessDataAtRequest();
 
     boolean checkNotModified();
 }

@@ -135,17 +135,12 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
             return;
         }
 
-        boolean processAtRequest = resolvedContent.isProcessAtRequest();
+        final boolean processAtRequest = resolvedContent.isProcessAtRequest();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("doGet: contentKey '" + contentKey + "' => '"
                     + resolvedContent + "' process at request '"
                     + processAtRequest + "'.");
-        }
-
-        if (processAtRequest == false) {
-            sendContent(request, response, resolvedContent);
-            return;
         }
 
         final IOException exceptionRef[] = new IOException[1];
@@ -156,6 +151,10 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
                     public void run() {
                         try {
                             sendContent(request, response, resolvedContent);
+
+                            if (processAtRequest == false) {
+                                return;
+                            }
 
                             if (resolvedContent instanceof IResolvedContentWrapper) {
                                 IResolvedContent wrapped = ((IResolvedContentWrapper) resolvedContent)
@@ -321,7 +320,8 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
 
         /*
          * if (hasGZipSupport() && hasGzipSupport(request)) { if (bufferSize >
-         * 128) { inputStream = new GZIPInputStream(inputStream, bufferSize); } }
+         * 128) { inputStream = new GZIPInputStream(inputStream, bufferSize); }
+         * }
          */
 
         if (inputStream == null) {

@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.image;
 
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -22,13 +23,16 @@ public class ImageContentModel extends BasicContentModel implements
 
     public static final String IMAGE_WRITE_PARAM_PROPERTY = "javax.imageio.ImageWriteParam";
 
+    public ImageContentModel() {
+    }
+
     public ImageWriteParam getImageWriteParam() {
         ImageWriteParam imageWriteParam = (ImageWriteParam) getAttribute(IMAGE_WRITE_PARAM_PROPERTY);
         if (imageWriteParam != null) {
             return imageWriteParam;
         }
 
-        String contentType = getContentType();
+        String contentType = generatedInformation.getResponseMimeType();
         if (contentType != null) {
             Iterator it = ImageIO.getImageWritersByMIMEType(contentType);
             if (it.hasNext()) {
@@ -47,7 +51,7 @@ public class ImageContentModel extends BasicContentModel implements
             }
         }
 
-        String suffix = getURLSuffix();
+        String suffix = generatedInformation.getResponseSuffix();
         if (suffix != null) {
             Iterator it = ImageIO.getImageWritersBySuffix(suffix);
             if (it.hasNext()) {
@@ -130,4 +134,13 @@ public class ImageContentModel extends BasicContentModel implements
 
         return true;
     }
+
+    public Object getWrappedData() {
+        return getBufferedImage();
+    }
+
+    protected BufferedImage getBufferedImage() {
+        return null;
+    }
+
 }

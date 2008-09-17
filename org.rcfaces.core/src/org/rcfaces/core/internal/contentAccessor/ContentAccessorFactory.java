@@ -13,7 +13,7 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.component.IImageAccessors;
-import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -53,13 +53,13 @@ public class ContentAccessorFactory {
             return null;
         }
 
-        public IContentType getType() {
+        public IContentFamily getContentFamily() {
             return null;
         }
 
         public String resolveURL(FacesContext facesContext,
-                IContentInformation contentInformation,
-                IFilterProperties filterProperties) {
+                IGeneratedResourceInformation contentInformation,
+                IGenerationResourceInformation generationInformation) {
             return null;
         }
 
@@ -90,7 +90,7 @@ public class ContentAccessorFactory {
         public IContentAccessor getVersionedContentAccessor(
                 RcfacesContext rcfacesContext, FacesContext facesContext,
                 IContentAccessor contentAccessor,
-                IContentInformation[] contentInformation) {
+                IGeneratedResourceInformation[] contentInformation) {
 
             if (Constants.RESOURCE_CONTENT_VERSION_SUPPORT == false) {
                 return null;
@@ -110,7 +110,7 @@ public class ContentAccessorFactory {
         public String getVersionTag(RcfacesContext rcfacesContext,
                 FacesContext facesContext, String relativeUrl,
                 IContentAccessor contentAccessor,
-                IContentInformation contentInformation) {
+                IGeneratedResourceInformation contentInformation) {
 
             if (Constants.RESOURCE_CONTENT_VERSION_SUPPORT == false) {
                 return null;
@@ -130,7 +130,7 @@ public class ContentAccessorFactory {
     };
 
     public static IContentAccessor createFromWebResource(
-            FacesContext facesContext, Object value, IContentType type) {
+            FacesContext facesContext, Object value, IContentFamily type) {
 
         return new BasicContentAccessor(facesContext, value, type,
                 RESOURCE_CONTENT_VERSION_HANDLER);
@@ -144,7 +144,7 @@ public class ContentAccessorFactory {
     }
 
     public static IContentAccessors createSingleImageWebResource(
-            FacesContext facesContext, Object value, IContentType image) {
+            FacesContext facesContext, Object value, IContentFamily image) {
         return new SimpleImageAccessor(facesContext, value, image,
                 RESOURCE_CONTENT_VERSION_HANDLER);
     }
@@ -159,7 +159,7 @@ public class ContentAccessorFactory {
         private static final String REVISION = "$Revision$";
 
         public SimpleImageAccessor(FacesContext facesContext, Object url,
-                IContentType contentType, IContentVersionHandler versionHandler) {
+                IContentFamily contentType, IContentVersionHandler versionHandler) {
             super(facesContext, url, contentType, versionHandler);
         }
 

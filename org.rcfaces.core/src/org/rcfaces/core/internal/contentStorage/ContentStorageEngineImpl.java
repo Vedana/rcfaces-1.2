@@ -6,11 +6,10 @@ package org.rcfaces.core.internal.contentStorage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.FileNameMap;
-import java.net.URLConnection;
-import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
@@ -19,14 +18,16 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentInformation;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
-import org.rcfaces.core.internal.images.ImageAdapterFactory;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.lang.LimitedMap;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.core.provider.AbstractProvider;
 
@@ -41,9 +42,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
     private static final Log LOG = LogFactory
             .getLog(ContentStorageEngineImpl.class);
-
-    private static final FileNameMap fileNameMap = URLConnection
-            .getFileNameMap();
 
     private static final String DISABLE_CACHE_PARAMETER = "org.rcfaces.core.contentStorage.DISABLE_CACHE";
 
@@ -101,14 +99,30 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     }
 
     public IContentAccessor registerContentModel(FacesContext facesContext,
-            IContentModel contentModel, IContentInformation contentInformation,
-            IContentType contentType) {
+            IContentModel contentModel,
+            IGeneratedResourceInformation generatedInformation,
+            IGenerationResourceInformation generationInformation) {
+
+        if (generatedInformation == null) {
+            generatedInformation = new BasicGeneratedResourceInformation();
+        }
+
+        if (generationInformation == null) {
+            generationInformation = new BasicGenerationResourceInformation();
+
+            ((BasicGenerationResourceInformation) generationInformation)
+                    .setProcessAtRequest(true);
+        }
 
         if (contentStorageServletURL == null) {
             LOG
                     .info("ContentStorage is not initialized. (Servlet path is invalid)");
 
             return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+        }
+
+        if (generatedInformation.getContentFamily() == null) {
+            generatedInformation.setContentFamily(IContentFamily.USER);
         }
 
         Content content = null;
@@ -122,10 +136,10 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         if (disableCache == false) {
             contentEngineId = contentModel.getContentEngineId();
             if (contentEngineId == null
-                    && (contentInformation == null || contentInformation
+                    && (generatedInformation == null || generatedInformation
                             .isTransient() == false)) {
-                content = new Content(contentModel, contentInformation,
-                        contentType);
+                content = new Content(contentModel, generatedInformation,
+                        generationInformation);
 
                 contentEngineId = (String) registredContents.get(content);
 
@@ -153,23 +167,29 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         if (resolvedContent == null) {
-            Map parameters = contentModel.getAttributes();
+            generatedInformation.setProcessingAtRequest(generationInformation
+                    .isProcessAtRequest());
 
-            if (contentModel.isProcessDataAtRequest()) {
-                resolvedContent = new ResolvedContentAtRequest(contentModel);
+            contentModel.setInformations(generationInformation,
+                    generatedInformation);
+
+            if (generatedInformation.isProcessingAtRequest()) {
+                resolvedContent = new ResolvedContentAtRequest(contentModel,
+                        generatedInformation);
 
             } else {
+
                 Object wrappedData = contentModel.getWrappedData();
 
                 if (wrappedData instanceof IAdaptable) {
                     resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
-                            .getAdapter(IResolvedContent.class, parameters);
+                            .getAdapter(IResolvedContent.class, contentModel);
                 }
 
                 if (resolvedContent == null) {
                     resolvedContent = (IResolvedContent) adapterManager
                             .getAdapter(wrappedData, IResolvedContent.class,
-                                    parameters);
+                                    contentModel);
                 }
 
                 if (resolvedContent == null) {
@@ -177,7 +197,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                             + contentModel.getClass()
                             + "' to IResolvedContentModel !");
                 }
-
             }
         }
 
@@ -190,12 +209,9 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             }
         }
 
-        if (contentType == null) {
-            contentType = IContentType.USER;
-        }
-
         IContentAccessor contentAccessor = new BasicContentAccessor(null,
-                contentStorageServletURL + '/' + url, contentType, null);
+                contentStorageServletURL + '/' + url, generatedInformation
+                        .getContentFamily(), null);
 
         contentAccessor.setPathType(contentStorageServletPathType);
 
@@ -203,7 +219,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     }
 
     public IContentAccessor registerRaw(FacesContext facesContext, Object ref,
-            IContentInformation information, IContentType contentType) {
+            IGeneratedResourceInformation generatedInformation) {
 
         if (contentStorageServletURL == null) {
             LOG
@@ -230,13 +246,13 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         String url = getRepository().save(resolvedContent, null);
 
-        if (contentType == null) {
-            contentType = IContentType.USER;
+        if (generatedInformation.getContentFamily() == null) {
+            generatedInformation.setContentFamily(IContentFamily.USER);
         }
 
         IContentAccessor contentAccessor = new BasicContentAccessor(
                 facesContext, contentStorageServletURL + '/' + url,
-                contentType, null);
+                generatedInformation.getContentFamily(), null);
 
         contentAccessor.setPathType(contentStorageServletPathType);
 
@@ -257,33 +273,13 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         private final IContentModel contentModel;
 
-        private final String suffix;
-
-        // private final Map parameters;
-
         private transient IResolvedContent resolvedContent;
 
         private transient boolean errorState;
 
-        public ResolvedContentAtRequest(IContentModel contentModel) {
+        public ResolvedContentAtRequest(IContentModel contentModel,
+                IGeneratedResourceInformation generatedInformation) {
             this.contentModel = contentModel;
-
-            String contentType = (String) contentModel
-                    .getAttribute(IContentModel.CONTENT_TYPE_PROPERTY);
-
-            String suffix = (String) contentModel
-                    .getAttribute(IContentModel.URL_SUFFIX_PROPERTY);
-
-            if (suffix == null && contentType != null) {
-                suffix = ImageAdapterFactory
-                        .getSuffixByContentType(contentType);
-
-            } else if (contentType == null && suffix != null) {
-                contentType = fileNameMap.getContentTypeFor("x." + suffix);
-            }
-
-            this.suffix = suffix;
-            // this.parameters = contentModel.getAttributes();
         }
 
         public String getContentType() {
@@ -292,7 +288,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         public String getURLSuffix() {
-            return suffix;
+            return getResolvedContent().getURLSuffix();
         }
 
         public InputStream getInputStream() throws IOException {
@@ -325,11 +321,9 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             try {
                 Object wrappedData = contentModel.getWrappedData();
 
-                Map parameters = contentModel.getAttributes();
-
                 if (wrappedData instanceof IAdaptable) {
                     resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
-                            .getAdapter(IResolvedContent.class, parameters);
+                            .getAdapter(IResolvedContent.class, contentModel);
 
                     if (resolvedContent != null) {
                         return resolvedContent;
@@ -341,7 +335,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
                 resolvedContent = (IResolvedContent) rcfacesContext
                         .getAdapterManager().getAdapter(wrappedData,
-                                IResolvedContent.class, parameters);
+                                IResolvedContent.class, contentModel);
 
                 if (resolvedContent != null) {
                     return resolvedContent;
@@ -397,59 +391,59 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class Content {
+    public static class Content implements StateHolder {
         private static final String REVISION = "$Revision$";
 
-        private final IContentModel contentModel;
+        private IContentModel contentModel;
 
-        private final IContentInformation information;
+        private IGeneratedResourceInformation generatedInformation;
 
-        private final IContentType contentType;
+        private IGenerationResourceInformation generationInformation;
+
+        private boolean transientFlag;
 
         public Content(IContentModel contentModel,
-                IContentInformation information, IContentType contentType) {
+                IGeneratedResourceInformation generatedInformation,
+                IGenerationResourceInformation generationInformation) {
             this.contentModel = contentModel;
-            this.information = information;
-            this.contentType = contentType;
+            this.generatedInformation = generatedInformation;
+            this.generationInformation = generationInformation;
         }
 
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result
-                    + ((contentModel == null) ? 0 : contentModel.hashCode());
-            result = prime * result
-                    + ((contentType == null) ? 0 : contentType.hashCode());
-            result = prime * result
-                    + ((information == null) ? 0 : information.hashCode());
-            return result;
+        public boolean isTransient() {
+            return transientFlag;
         }
 
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            final Content other = (Content) obj;
-            if (contentModel == null) {
-                if (other.contentModel != null)
-                    return false;
-            } else if (!contentModel.equals(other.contentModel))
-                return false;
-            if (contentType == null) {
-                if (other.contentType != null)
-                    return false;
-            } else if (!contentType.equals(other.contentType))
-                return false;
-            if (information == null) {
-                if (other.information != null)
-                    return false;
-            } else if (!information.equals(other.information))
-                return false;
-            return true;
+        public void setTransient(boolean transientFlag) {
+            this.transientFlag = transientFlag;
         }
 
+        public void restoreState(FacesContext context, Object state) {
+            Object states[] = (Object[]) state;
+
+            contentModel = (IContentModel) UIComponentBase
+                    .restoreAttachedState(context, states[0]);
+
+            generationInformation = (IGenerationResourceInformation) UIComponentBase
+                    .restoreAttachedState(context, states[1]);
+
+            generatedInformation = (IGeneratedResourceInformation) UIComponentBase
+                    .restoreAttachedState(context, states[2]);
+        }
+
+        public Object saveState(FacesContext context) {
+            Object states[] = new Object[3];
+
+            states[0] = UIComponentBase
+                    .saveAttachedState(context, contentModel);
+
+            states[1] = UIComponentBase.saveAttachedState(context,
+                    generationInformation);
+
+            states[2] = UIComponentBase.saveAttachedState(context,
+                    generatedInformation);
+
+            return states;
+        }
     }
 }

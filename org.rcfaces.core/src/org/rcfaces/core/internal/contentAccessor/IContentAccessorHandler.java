@@ -5,7 +5,6 @@ package org.rcfaces.core.internal.contentAccessor;
 
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.model.IFilterProperties;
 
 /**
  * 
@@ -18,6 +17,6 @@ public interface IContentAccessorHandler {
 
     IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IContentInformation contentInformation[],
-            IFilterProperties filterProperties);
+            IGeneratedResourceInformation generatedInformation[],
+            IGenerationResourceInformation generationInformation);
 }

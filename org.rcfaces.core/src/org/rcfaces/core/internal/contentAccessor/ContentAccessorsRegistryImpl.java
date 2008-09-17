@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.digester.Digester;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.provider.AbstractProvider;
 
 /**
@@ -43,7 +44,7 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
     }
 
     public IContentAccessorHandler[] listContentAccessorHandlers(
-            IContentType type) {
+            IContentFamily type) {
         IContentAccessorHandler contentAccessorHandlers[] = (IContentAccessorHandler[]) contentAccessorsByType
                 .get(type);
         if (contentAccessorHandlers == null) {
@@ -53,17 +54,17 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
         return contentAccessorHandlers;
     }
 
-    public void declareContentAccessorHandler(IContentType contentType,
+    public void declareContentAccessorHandler(IContentFamily contentFamily,
             IContentAccessorHandler contentAccessorHandler) {
 
-        if (contentType == null) {
+        if (contentFamily == null) {
             // On fait l'ajout
             for (Iterator it = contentAccessorsByType.keySet().iterator(); it
                     .hasNext();) {
 
-                contentType = (IContentType) it.next();
+                contentFamily = (IContentFamily) it.next();
 
-                declareContentAccessorHandler(contentType,
+                declareContentAccessorHandler(contentFamily,
                         contentAccessorHandler);
             }
 
@@ -78,7 +79,7 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
         }
 
         List l = new ArrayList();
-        IContentAccessorHandler cah[] = listContentAccessorHandlers(contentType);
+        IContentAccessorHandler cah[] = listContentAccessorHandlers(contentFamily);
         if (cah.length > 0) {
             l.addAll(Arrays.asList(cah));
 
@@ -87,7 +88,7 @@ public class ContentAccessorsRegistryImpl extends AbstractProvider implements
         }
         l.add(contentAccessorHandler);
 
-        contentAccessorsByType.put(contentType, l
+        contentAccessorsByType.put(contentFamily, l
                 .toArray(new IContentAccessorHandler[l.size()]));
 
     }
