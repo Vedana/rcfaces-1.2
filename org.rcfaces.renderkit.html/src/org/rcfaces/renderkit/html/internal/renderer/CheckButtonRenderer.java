@@ -19,7 +19,6 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
-import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
@@ -139,23 +138,24 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
-        if (Constants.KEEP_DISABLED_STATE) {
-            if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
-                if (button.isDisabled(facesContext) && button.isSelected()) {
-                    htmlWriter.startElement(IHtmlWriter.INPUT);
-                    htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+        // if (Constants.KEEP_DISABLED_STATE) {
+        if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+            if (button.isDisabled(facesContext)
+                    && button.isSelected(facesContext)) {
+                htmlWriter.startElement(IHtmlWriter.INPUT);
+                htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
 
-                    String name = htmlWriter.getComponentRenderContext()
-                            .getComponentClientId()
-                            + "::value";
-                    htmlWriter.writeName(name);
+                String name = htmlWriter.getComponentRenderContext()
+                        .getComponentClientId()
+                        + "::value";
+                htmlWriter.writeName(name);
 
-                    htmlWriter.writeValue("CHECKED");
+                htmlWriter.writeValue("CHECKED");
 
-                    htmlWriter.endElement(IHtmlWriter.INPUT);
-                }
+                htmlWriter.endElement(IHtmlWriter.INPUT);
             }
         }
+        // }
     }
 
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,
@@ -235,7 +235,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
                 String name = button.getClientId(facesContext) + "::value";
                 if (clientData.getParameter(name) != null) {
-                    selected = false;
+                    selected = true;
                 }
             }
         }

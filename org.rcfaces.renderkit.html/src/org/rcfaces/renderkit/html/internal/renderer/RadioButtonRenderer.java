@@ -21,7 +21,6 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
-import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
@@ -146,23 +145,23 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
 
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
-        if (Constants.KEEP_DISABLED_STATE) {
-            if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
-                if (radioButtonComponent.isDisabled(facesContext)
-                        && isChecked(htmlWriter, radioButtonComponent)) {
-                    htmlWriter.startElement(IHtmlWriter.INPUT);
-                    htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+        // if (Constants.KEEP_DISABLED_STATE) {
+        if (htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+            if (radioButtonComponent.isDisabled(facesContext)
+                    && isChecked(htmlWriter, radioButtonComponent)) {
+                htmlWriter.startElement(IHtmlWriter.INPUT);
+                htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
 
-                    String name = htmlWriter.getComponentRenderContext()
-                            .getComponentClientId()
-                            + "::value";
-                    htmlWriter.writeName(name);
+                String name = htmlWriter.getComponentRenderContext()
+                        .getComponentClientId()
+                        + "::value";
+                htmlWriter.writeName(name);
 
-                    htmlWriter.writeValue(svalue);
+                htmlWriter.writeValue(svalue);
 
-                    htmlWriter.endElement(IHtmlWriter.INPUT);
-                }
+                htmlWriter.endElement(IHtmlWriter.INPUT);
             }
+            // }
         }
 
         return htmlWriter;
