@@ -241,14 +241,14 @@ public abstract class AbstractJavaScriptRenderContext implements
             }
 
             waitingRequiredClassesNames.add(requiredClasses[i].getFile());
-//            addWaitingRequiredClassName(requiredClasses[i]);
+            // addWaitingRequiredClassName(requiredClasses[i]);
         }
     }
-/*
-    public void addWaitingRequiredClassName(IClass clazz) {
-  waitingRequiredClassesNames.add(clazz.getFile());      
-    }
-*/
+
+    /*
+     * public void addWaitingRequiredClassName(IClass clazz) {
+     * waitingRequiredClassesNames.add(clazz.getFile()); }
+     */
     public void appendRequiredFiles(IFile[] files) {
         if (LOG.isTraceEnabled()) {
             for (int i = 0; i < files.length; i++) {
@@ -603,7 +603,8 @@ public abstract class AbstractJavaScriptRenderContext implements
          * Boolean debugMode = processContext.getDebugMode(); if (debugMode !=
          * null) { writer.writeCall("f_core", "SetDebugMode");
          * 
-         * if (debugMode.booleanValue() == false) { writer.writeBoolean(false); }
+         * if (debugMode.booleanValue() == false) { writer.writeBoolean(false);
+         * }
          * 
          * writer.writeln(");"); }
          */
