@@ -329,6 +329,13 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                 objectLiteralWriter.writeSymbol("_disabled").writeBoolean(true);
             }
 
+            if (selectItem instanceof IImmediateItem) {
+                if (((IImmediateItem) selectItem).isImmediate()) {
+                    objectLiteralWriter.writeSymbol("_immediate").writeBoolean(
+                            true);
+                }
+            }
+
             /*
              * if (selectItem instanceof IStyleClassItem) { String styleClass =
              * ((IStyleClassItem) selectItem) .getStyleClass(); if (styleClass

@@ -45,6 +45,7 @@ var __members = {
 	f_finalize: function() {
 		this._uiItems=undefined; // Map<String, Object>
 //		this._sepId=undefined; // number
+// 		this._immediateItemPerformed= undefined; // boolean
 		
 		var lazyClassLoader=this._lazyClassLoader;
 		if (lazyClassLoader) {
@@ -160,6 +161,7 @@ var __members = {
 		item._id=component.id;
 		item._value=properties._value;
 		item._disabled=properties._disabled;
+		item._immediate=properties._immediate;
 
 		if (properties._visible===false) {
 			this.f_setItemVisible(item, false);
@@ -300,6 +302,8 @@ var __members = {
 
 		f_core.Debug(f_itemsToolFolder, "_itemOnSelect: Call SELECTION on item='"+item+"' value='"+itemValue+"'.");
 		
+		this._immediateItemPerformed=(item && item._immediate);
+		
 		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue);
 		
 		return false;
@@ -339,6 +343,8 @@ var __members = {
 		var item=this.f_getItemByValue(componentValue, true);
 
 		f_core.Debug(f_itemsToolFolder, "_itemMenuOnSelect: Call SELECTION on item='"+item+"' value='"+itemValue+"'.");
+		
+		this._immediateItemPerformed=(item && item._immediate);
 		
 		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue);
 		
@@ -403,7 +409,7 @@ var __members = {
 		}
 		
 		return this._uiItems[itemValue];		
-	}
+	},
 	/*,
 	/ **
 	 * @method public
@@ -444,6 +450,10 @@ var __members = {
 		return component.f_getText();
 	}
 	*/
+	f_isImmediate: function() {
+	// On n'implemente pas directement f_immediate , car pour le composant, ce n'est pas necessaire !
+		return this._immediateItemPerformed;
+	}
 }
  
 new f_class("f_itemsToolFolder", {
