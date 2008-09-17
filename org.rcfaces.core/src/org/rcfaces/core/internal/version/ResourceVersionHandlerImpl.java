@@ -16,7 +16,7 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentInformation;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
@@ -122,7 +122,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
     public String getVersionTag(RcfacesContext rcfacesContext,
             FacesContext facesContext, String relativeUrl,
             IContentAccessor contentAccessor,
-            IContentInformation contentInformation) {
+            IGeneratedResourceInformation contentInformation) {
 
         if (prefixURI == null) {
             return null;
@@ -140,7 +140,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
     public IContentAccessor getVersionedContentAccessor(
             RcfacesContext rcfacesContext, FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IContentInformation[] contentInformation) {
+            IGeneratedResourceInformation[] contentInformation) {
 
         if (prefixURI == null) {
             return null;

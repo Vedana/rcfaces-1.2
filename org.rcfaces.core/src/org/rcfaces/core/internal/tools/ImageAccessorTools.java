@@ -18,7 +18,7 @@ import org.rcfaces.core.internal.component.IToolBarImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IContentType;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -92,7 +92,7 @@ public class ImageAccessorTools {
         }
 
         return ContentAccessorFactory.createSingleImageWebResource(
-                facesContext, value, IContentType.IMAGE);
+                facesContext, value, IContentFamily.IMAGE);
     }
 
     public static IContentAccessors createImageAccessors(
@@ -243,7 +243,7 @@ public class ImageAccessorTools {
         }
 
         return ContentAccessorFactory.createFromWebResource(facesContext,
-                imageContent, IContentType.IMAGE);
+                imageContent, IContentFamily.IMAGE);
     }
 
     public static IToolBarImageAccessors createImageAccessors(
