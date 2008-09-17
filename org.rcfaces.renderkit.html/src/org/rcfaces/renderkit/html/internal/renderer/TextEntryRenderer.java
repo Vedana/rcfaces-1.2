@@ -50,7 +50,7 @@ import org.rcfaces.core.validator.IParameter;
 import org.rcfaces.core.validator.ITranslatorTask;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
-import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -232,8 +232,14 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
-        TextEntryComponent textEntryComponent = (TextEntryComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
+
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        FacesContext facesContext = componentRenderContext.getFacesContext();
+
+        TextEntryComponent textEntryComponent = (TextEntryComponent) componentRenderContext
+                .getComponent();
 
         // FacesContext facesContext =
         // htmlWriter.getComponentRenderContext().getFacesContext();
@@ -243,11 +249,13 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
+        // Le validateur peut positionner un CONVERTISSEUR donc il faut l'appeler avant un getValue() 
+        writeValidatorAttributes(htmlWriter); // Le validateur peut influencer sur le CSS !
+
         String text = computeValueAttribute(htmlWriter);
         String emptyMessage = null;
         if (text == null || text.length() == 0) {
-            emptyMessage = textEntryComponent.getEmptyMessage(htmlWriter
-                    .getComponentRenderContext().getFacesContext());
+            emptyMessage = textEntryComponent.getEmptyMessage(facesContext);
 
             if (emptyMessage != null) {
                 htmlWriter.writeAttribute("v:emptyMessageShown", true);
@@ -255,9 +263,6 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                 getCssStyleClasses(htmlWriter).addSuffix("_empty_message");
             }
         }
-
-        writeValidatorAttributes(htmlWriter); // Le validateur peut influencer
-        // sur le CSS !
 
         writeCssAttributes(htmlWriter);
 
@@ -278,34 +283,25 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         htmlWriter.addSubFocusableComponent(htmlWriter
                 .getComponentRenderContext().getComponentClientId());
 
-        IHtmlComponentRenderContext componentRenderContext = htmlWriter
-                .getHtmlComponentRenderContext();
+        if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getHtmlProcessContext().keepDisabledState()) {
+            String value = (String) componentRenderContext
+                    .getAttribute(VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
 
-        String value = (String) componentRenderContext
-                .getAttribute(VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
-        if (value != null
-                && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled()) {
-            value = null;
-        }
-        if (value != null
-                && htmlWriter.getHtmlComponentRenderContext()
-                        .getHtmlRenderContext().getJavaScriptRenderContext()
-                        .isCollectorMode() == false) {
-            // Le ::value n'a de sens que lors du CollectorMode !
-            value = null;
-        }
+            if (value != null && textEntryComponent.isDisabled(facesContext)
+                    && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled()) {
 
-        if (value != null) {
-            htmlWriter.startElement(IHtmlWriter.INPUT);
-            htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+                htmlWriter.startElement(IHtmlWriter.INPUT);
+                htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
 
-            String name = componentRenderContext.getComponentClientId()
-                    + "::value";
-            htmlWriter.writeName(name);
+                String name = componentRenderContext.getComponentClientId()
+                        + "::value";
+                htmlWriter.writeName(name);
 
-            htmlWriter.writeValue(value);
+                htmlWriter.writeValue(value);
 
-            htmlWriter.endElement(IHtmlWriter.INPUT);
+                htmlWriter.endElement(IHtmlWriter.INPUT);
+            }
         }
     }
 
@@ -838,12 +834,16 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             // Ce cas peut subvenir quand le TEXT-ENTRY est disabled ...
             newValue = componentData.getStringProperty("text");
 
-            if (newValue == null) {
-                // On est peut-etre en mode Collector ... on recherche le
-                // ::value (La valeur n'est pas forcement celle dans le form !)
-                String name = textEntryComponent.getClientId(facesContext)
-                        + "::value";
-                newValue = componentData.getParameter(name);
+            if (((IHtmlProcessContext) context.getProcessContext())
+                    .keepDisabledState()) {
+                if (newValue == null) {
+                    // On est peut-etre en mode Collector ... on recherche le
+                    // ::value (La valeur n'est pas forcement celle dans le form
+                    // !)
+                    String name = textEntryComponent.getClientId(facesContext)
+                            + "::value";
+                    newValue = componentData.getParameter(name);
+                }
             }
 
             if (newValue == null) {

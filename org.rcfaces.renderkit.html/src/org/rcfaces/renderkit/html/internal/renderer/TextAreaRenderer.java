@@ -9,9 +9,11 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TextAreaComponent;
 import org.rcfaces.core.component.TextEntryComponent;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -25,11 +27,14 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
-        TextAreaComponent textAreaComponent = (TextAreaComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
 
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        TextAreaComponent textAreaComponent = (TextAreaComponent) componentRenderContext
+                .getComponent();
+
+        FacesContext facesContext = componentRenderContext.getFacesContext();
 
         htmlWriter.startElement(IHtmlWriter.TEXTAREA);
         writeHtmlAttributes(htmlWriter);
@@ -39,9 +44,9 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         writeTextDirection(htmlWriter, textAreaComponent);
         writeTextAreaAttributes(htmlWriter);
 
-        String txt = textAreaComponent.getText(facesContext);
-        if (txt != null) {
-            htmlWriter.writeText(txt);
+        String value = textAreaComponent.getText(facesContext);
+        if (value != null) {
+            htmlWriter.writeText(value);
         }
 
         htmlWriter.endElement(IHtmlWriter.TEXTAREA);
@@ -52,6 +57,24 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         if (textAreaComponent.isRequired()) {
             // Il nous faut le javascript, car c'est un traitement javascript !
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+        }
+
+        if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getHtmlProcessContext().keepDisabledState()) {
+            if (value != null && textAreaComponent.isDisabled(facesContext)
+                    && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled()) {
+
+                htmlWriter.startElement(IHtmlWriter.INPUT);
+                htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+
+                String name = componentRenderContext.getComponentClientId()
+                        + "::value";
+                htmlWriter.writeName(name);
+
+                htmlWriter.writeValue(value);
+
+                htmlWriter.endElement(IHtmlWriter.INPUT);
+            }
         }
     }
 
@@ -116,17 +139,31 @@ public class TextAreaRenderer extends AbstractInputRenderer {
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
+        FacesContext facesContext = context.getFacesContext();
+
         TextAreaComponent textAreaComponent = (TextAreaComponent) component;
 
         String newValue = componentData.getStringProperty("text");
 
         if (newValue == null) {
-            // Toujours rien ... on essaye les données du form !
-            newValue = componentData.getComponentParameter();
+
+            if (((IHtmlProcessContext) context.getProcessContext())
+                    .keepDisabledState()) {
+                // Le TextArea est disabled ... et on essaye de conserver les
+                // données
+                String name = textAreaComponent.getClientId(facesContext)
+                        + "::value";
+                newValue = componentData.getParameter(name);
+            }
+
+            if (newValue == null) {
+                // Toujours rien ... on essaye les données du form !
+                newValue = componentData.getComponentParameter();
+            }
         }
 
         if (newValue != null
-                && textAreaComponent.isValueLocked(context.getFacesContext()) == false) {
+                && textAreaComponent.isValueLocked(facesContext) == false) {
             textAreaComponent.setSubmittedExternalValue(newValue);
         }
     }
