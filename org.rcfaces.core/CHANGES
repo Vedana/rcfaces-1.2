@@ -2,7 +2,7 @@
 ----------------------------------------------------------------------
 - @version I2543
 - @author Olivier Oeuillot
-- 
+- 18/9/2008
 
 f_classLoader.js:
 Ajout du mécanisme "onInitComponentListeners" qui permet d'avoir des callbacks quand un objet est initializé
