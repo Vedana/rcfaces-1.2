@@ -15,7 +15,7 @@ Mise en place partielle d'un non-décodage partiel de composants en AJAX
 
 ImageContentInformation/BasicContentInformation/ImageContentAccessorHandler/ScriptContentInformation/IComponentContentInformation:
 ImageRenderer/InitRenderer/JavaScriptCollectorRenderContext/ImageService:
-Ajout de la référence du composant dans les objets de type ContentInformation. 
+Ajout de la référence du composant dans les objets de type GenerationInformation. 
 
 IImmediateItemCapability/DefaultItem/IToolItem/f_itemsToolFolder.js/ItemsToolFolderDecorator/ComboGridRenderer:
 Support de la propriété "immediate" pour les items et plus particulièrement pour les items de toolbars. 
@@ -35,6 +35,42 @@ Correction d'un problème d'initialization
 PropertiesRepository:
 Correction du référencement des propriétés suite à des modifications du generateur (Properties.class différent par renderKit)
 
+f_grid.css/f_grid.js/AbstractGridRenderer:
+Refonte du système d'alignement des titres des colonnes
+
+StateHolderTools:
+Ajout de méthodes utilitaires pour la Serialization
+
+ItemTools:
+Réecriture du systeme de serialization pour les objets qui héritent de xxxxItem
+
+AbstractSelectItemsDecorator/CssStyleRenderer/DateChooseRenderer/ExpandBarRenderer/JavaScriptRenderer/AbstractHtmlRenderer/TextEditorImageButtonRenderer/JavaScriptCollectorRenderContext/ImageAccessorTools/ResourceVersionHandlerImpl:
+Renommage de IContentType en IContentFamily
+
+HtmlProcessContext/IHtmlProcessContext/renderkit.hmtl.Constants:
+Renommage de IContentType en IContentFamily
+Ajout du parametrage de la conservation de l'état d'un champ même s'il est disabled  (Principalement dans le cas de Beans bindés en request)
+
+CheckButtonRenderer/RadioButtonRenderer:
+Correction d'un probleme de persistance de l'état de selection même si le composant est disabled.
+
+TextEntryRenderer/TextAreaRenderer:
+Support du parametrage de la conversation de l'état même s'il est disabled  (Principalement dans le cas de Beans bindés en request) 
+
+f_messageObject:
+Ajout de plusieurs Asserts pour les parametres du constructeur  
+
+JavaScriptCollectorRenderer/JavaScriptCollectorRenderContext:
+Correction de l'utilisation du JavaScriptCollector et plus particulierement le compteur de variables javascript.
+
+ScriptContentAccessorHandler/ScriptOperationContentModel/CssOperationContentModel/StyleContentAccessorHandler/JavaScriptCollectorRenderContext/ImageRenderer/InitRenderer/ImageService:
+Modifications suite à la refonte des contentAccessors
+
+ScriptContentInformation/GeneratedScriptInformation:
+Renommé en GeneratedScriptInformation
+
+org.rcfaces.core.image.*/org.rcfaces.core.internal.content.*/org.rcfaces.core.internal.contentAccessor.*/org.rcfaces.core.internal.contentStorage.*:
+Réécriture du système de génération à la volée d'images/scripts/styles/...
 
 ----------------------------------------------------------------------
 - @version I2542
