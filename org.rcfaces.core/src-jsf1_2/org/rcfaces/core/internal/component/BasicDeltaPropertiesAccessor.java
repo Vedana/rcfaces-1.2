@@ -17,6 +17,8 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.util.StateHolderTools;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -200,7 +202,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
                 continue;
             }
 
-            if (BasicPropertiesAccessor.isPrimitive(value) == false) {
+            if (StateHolderTools.isPrimitive(value) == false) {
                 rets[i++] = UIComponentBase.saveAttachedState(context, value);
 
                 continue;
@@ -240,7 +242,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             String key = (String) datas[i++];
             Object value = datas[i++];
 
-            if (BasicPropertiesAccessor.isPrimitive(value) == false) {
+            if (StateHolderTools.isPrimitive(value) == false) {
                 value = UIComponentBase.restoreAttachedState(context, value);
             }
 

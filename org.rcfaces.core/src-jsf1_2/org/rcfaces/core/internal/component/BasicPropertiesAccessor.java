@@ -3,10 +3,7 @@
  */
 package org.rcfaces.core.internal.component;
 
-import java.sql.Time;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +16,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.util.StateHolderTools;
 import org.rcfaces.core.model.ICommitableObject;
 
 /**
@@ -32,21 +30,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
             .getLog(BasicPropertiesAccessor.class);
 
     private static final boolean debugEnabled = LOG.isDebugEnabled();
-
-    private static final Set PRIMITIVE_CLASSES = new HashSet(12);
-    static {
-        PRIMITIVE_CLASSES.add(String.class.getName());
-        PRIMITIVE_CLASSES.add(Long.class.getName());
-        PRIMITIVE_CLASSES.add(Integer.class.getName());
-        PRIMITIVE_CLASSES.add(Short.class.getName());
-        PRIMITIVE_CLASSES.add(Byte.class.getName());
-        PRIMITIVE_CLASSES.add(Boolean.class.getName());
-        PRIMITIVE_CLASSES.add(Double.class.getName());
-        PRIMITIVE_CLASSES.add(Float.class.getName());
-        PRIMITIVE_CLASSES.add(Character.class.getName());
-        PRIMITIVE_CLASSES.add(Date.class.getName());
-        PRIMITIVE_CLASSES.add(Time.class.getName());
-    }
 
     private Map properties;
 
@@ -212,7 +195,9 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.components.IPropertiesAccessor#saveState(javax.faces.context.FacesContext)
+     * @see
+     * org.rcfaces.core.internal.components.IPropertiesAccessor#saveState(javax
+     * .faces.context.FacesContext)
      */
     public Object saveState(FacesContext context) {
         if (properties == null || properties.isEmpty()) {
@@ -241,7 +226,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
             rets[i++] = key;
 
-            if (isPrimitive(value)) {
+            if (StateHolderTools.isPrimitive(value)) {
                 rets[i++] = value;
                 continue;
             }
@@ -250,14 +235,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         }
 
         return rets;
-    }
-
-    static final boolean isPrimitive(Object value) {
-        if (value == null) {
-            return true;
-        }
-
-        return PRIMITIVE_CLASSES.contains(value.getClass().getName());
     }
 
     public void release() {
@@ -305,7 +282,7 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
                 continue;
             }
 
-            if (isPrimitive(value) == false) {
+            if (StateHolderTools.isPrimitive(value) == false) {
                 value = UIComponentBase.restoreAttachedState(context, value);
             }
 
