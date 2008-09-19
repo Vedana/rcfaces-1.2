@@ -71,11 +71,15 @@ var __statics = {
 		
 		var divDataGrid=f_core.CreateElement(parent, "div", properties);
 		
-		var headerVisible=f_core.GetBooleanAttribute(dataGridPopup, "v:headerVisible", true);
+		var headerVisible=f_core.GetBooleanAttribute(dataGridPopup, "v:headerVisible", false);
 		
-		var totalSize=0;						
+		var totalSize=0;
 		for(var i=0;i<columns.length;i++) {
 			var column=columns[i];
+
+			if (column._visibility===false) {
+				continue;
+			}
 			
 			var w=column._width;
 			var wi=parseInt(w);
@@ -97,56 +101,42 @@ var __statics = {
 			});
 		}
 		
-		if (!headerVisible) {
-			var divDataTitle=f_core.CreateElement(divDataGrid, "div", { 
+		if (headerVisible) {
+			properties = { 
 				id: dataGridPopupId + f_grid._DATA_TITLE_SCROLL_ID_SUFFIX,
 				className: "f_grid_dataTitle_scroll",
-				cssWidth: width+"px",
 				cssHeight: f_dataGridPopup._TITLE_HEIGHT+"px"
-			});
+			};
+			
+			var divDataTitle=f_core.CreateElement(divDataGrid, "div", properties);
 			
 			height-=f_dataGridPopup._TITLE_HEIGHT;
+			if (f_core.IsInternetExplorer()) {
+				height-=2; // ??? de l'huile ...
+			}
 			
 			properties={ 
 				id: dataGridPopupId + f_grid._FIXED_HEADER_ID_SUFFIX,
-				className: "f_grid_fttitle",
-				cellPadding: 0,
-				cellSpacing: 0
+				className: "f_grid_fttitle"
 			};
-			if (totalSize>=0) {
-				properties.cssWidth=totalSize+"px";
-			}
 			
-			var tableTTitle=f_core.CreateElement(divDataTitle, "table", properties);
-
-			var colGroup=f_core.CreateElement(tableTTitle, "colgroup");
-		
+			var tableTTitle=f_core.CreateElement(divDataTitle, "ul", properties);
+			
 			for(var i=0;i<columns.length;i++) {
 				var column=columns[i];
 
-				properties={};
-				var cw=column._width;
-				if (cw) {
-					if (cw==parseInt(cw)) {
-						cw+="px";
-					}
-					properties.cssWidth=cw;
+				if (column._visibility===false) {
+					continue;
 				}
 				
-				f_core.CreateElement(colGroup, "col", properties);
-			}
-	
-			var thead=f_core.CreateElement(tableTTitle, "thead");
-			
-			var tr=f_core.CreateElement(thead, "tr", { 
-				className: "f_grid_title"
-			});
-			
-			for(var i=0;i<columns.length;i++) {
-				var column=columns[i];
-				var th=f_core.CreateElement(tr, "th", { 
+				properties = {
 					className: "f_grid_tcell"
-				});
+				};
+				if (column._width) {
+					properties.cssWidth=column._width;
+				}
+				
+				var th=f_core.CreateElement(tableTTitle, "li", properties);
 				
 				var align=column._align;
 				if (!align) {
@@ -167,8 +157,6 @@ var __statics = {
 					f_core.SetTextNode(divTtext, column._text)
 				}
 			}
-			
-			f_core.CreateElement(tableTTitle, "tbody");
 		}
 				
 		var divDataBody=f_core.CreateElement(divDataGrid, "div", {

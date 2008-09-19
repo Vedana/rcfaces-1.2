@@ -218,8 +218,8 @@ public class ComboGridRenderer extends DataGridRenderer implements
         }
 
         boolean headerVisible = gridRenderContext.isHeaderVisible();
-        if (headerVisible == false) {
-            htmlWriter.writeAttribute("v:headerVisible", false);
+        if (headerVisible == true && comboGridComponent.isHeaderVisibleSetted()) {
+            htmlWriter.writeAttribute("v:headerVisible", true);
         }
 
         Object dataModel = gridRenderContext.getDataModel();
