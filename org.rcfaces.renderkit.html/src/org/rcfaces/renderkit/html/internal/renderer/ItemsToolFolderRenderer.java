@@ -5,10 +5,12 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.FacesEvent;
 
 import org.rcfaces.core.component.ItemsToolFolderComponent;
-import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.event.ItemSelectionEvent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
@@ -24,6 +26,21 @@ import org.rcfaces.renderkit.html.internal.decorator.ItemsToolFolderDecorator;
  */
 public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
     private static final String REVISION = "$Revision$";
+
+    private static final int IMMEDIATE_DETAIL = 0x400;
+
+    protected static IEventDecoder ITEM_SELECTION_DECODER = new AbstractEventDecoder() {
+        private static final String REVISION = "$Revision$";
+
+        public void decodeEvent(UIComponent component, IEventData eventData) {
+            FacesEvent event = new ItemSelectionEvent(component, eventData
+                    .getEventValue(), null, eventData.getEventItem(), eventData
+                    .getEventDetail(),
+                    (eventData.getEventDetail() & IMMEDIATE_DETAIL) > 0);
+
+            queueEvent(component, event);
+        }
+    };
 
     protected void encodeBeforeDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
@@ -87,7 +104,8 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.ITEMS_TOOL_FOLDER;
@@ -96,19 +114,26 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#getDecodesChildren()
+     * @seeorg.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#
+     * getDecodesChildren()
      */
     public boolean getDecodesChildren() {
         return true;
     }
 
-    protected void decode(IRequestContext context, UIComponent component,
-            IComponentData componentData) {
-        super.decode(context, component, componentData);
+    protected IEventDecoder getEventDecoder(IRequestContext context,
+            UIComponent component, IEventData eventData) {
+        if (eventData.getEventName().equals(JavaScriptClasses.EVENT_SELECTION)
+                && eventData.getEventItem() != null) {
+            return ITEM_SELECTION_DECODER;
+        }
+
+        return super.getEventDecoder(context, component, eventData);
     }
 
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
         return new ItemsToolFolderDecorator(component);
     }
+
 }
