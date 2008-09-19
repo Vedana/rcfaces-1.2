@@ -108,7 +108,8 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
          * IFilterProperties filterMap = listContext.getFiltersMap(); if
          * (filterMap != null && filterMap.isEmpty() == false) { String
          * filterExpression = HtmlTools .encodeFilterExpression(filterMap);
-         * htmlWriter.writeAttribute("v:filterExpression", filterExpression); } }
+         * htmlWriter.writeAttribute("v:filterExpression", filterExpression); }
+         * }
          */
 
         int rows = listContext.getRows();
@@ -130,7 +131,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         String w = componentsListComponent.getWidth(facesContext);
         if (w != null) {
-            htmlWriter.writeAttribute("width", "100%");
+            htmlWriter.writeWidth("100%");
         }
 
         String ccls = componentsListComponent.getColumnStyleClass(facesContext);
@@ -158,7 +159,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.startElement(IHtmlWriter.TBODY);
-        htmlWriter.writeAttribute("class", getTBodyClassName(htmlWriter));
+        htmlWriter.writeClass(getTBodyClassName(htmlWriter));
     }
 
     protected String getTBodyClassName(IHtmlWriter htmlWriter) {
@@ -400,7 +401,8 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMPONENTS_LIST;
