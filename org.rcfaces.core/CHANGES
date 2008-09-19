@@ -72,6 +72,30 @@ Renommé en GeneratedScriptInformation
 org.rcfaces.core.image.*/org.rcfaces.core.internal.content.*/org.rcfaces.core.internal.contentAccessor.*/org.rcfaces.core.internal.contentStorage.*:
 Réécriture du système de génération à la volée d'images/scripts/styles/...
 
+ComboGridRenderer/f_dataGridPopup.js
+Correction d'un problème d'affichage des titres de colonnes.
+
+f_dataGrid.js/f_componentsGrid.js:
+Alignement des colonnes titre/corps apres un tri AJAX
+
+f_tree.js:
+Correction de la taille des noeuds lors de l'affichage de nouveaux noeuds en Ajax
+
+f_card.js:
+Correction d'un problème d'envoi de l'état d'invisibilité sur le serveur
+
+f_event.js:
+Ajout du détail IMMEDIATE_DETAIL pour les items qui ont l'attribut "immediate"
+
+IHtmlWriter:
+Ajout de writeStyle(String)
+
+AbstractHtmlRenderer:
+Revision de la gestion des IEventDecoder
+
+ItemsToolFolderRenderer:
+Correction de la gestion des items "immediate"
+
 ----------------------------------------------------------------------
 - @version I2542
 - @author Olivier Oeuillot
