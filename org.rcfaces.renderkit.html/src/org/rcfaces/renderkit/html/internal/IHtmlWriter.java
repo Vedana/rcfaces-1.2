@@ -17,7 +17,7 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
     void enableJavaScript();
 
     IJavaScriptEnableMode getJavaScriptEnableMode();
-    
+
     void addSubFocusableComponent(String subComponentClientId);
 
     IHtmlComponentRenderContext getHtmlComponentRenderContext();
@@ -55,6 +55,8 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
     ICssWriter writeStyle();
 
     ICssWriter writeStyle(int size);
+
+    IHtmlWriter writeStyle(String style) throws WriterException;
 
     IHtmlWriter writeTitle(String title) throws WriterException;
 
