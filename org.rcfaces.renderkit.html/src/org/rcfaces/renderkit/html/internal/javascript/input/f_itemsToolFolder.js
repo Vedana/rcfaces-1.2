@@ -11,8 +11,7 @@
  */
  
 var __statics = {
-		
-		
+				
 	/**
 	 * @field private static final boolean
 	 */
@@ -302,9 +301,10 @@ var __members = {
 
 		f_core.Debug(f_itemsToolFolder, "_itemOnSelect: Call SELECTION on item='"+item+"' value='"+itemValue+"'.");
 		
-		this._immediateItemPerformed=(item && item._immediate);
+		this._immediateItemPerformed=(item && item._immediate);		
+		var detail=(item && item._immediate)?f_event.IMMEDIATE_DETAIL:0;
 		
-		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue);
+		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue, null, detail);
 		
 		return false;
 	},
@@ -346,7 +346,9 @@ var __members = {
 		
 		this._immediateItemPerformed=(item && item._immediate);
 		
-		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue);
+		var detail=(item && item._immediate)?f_event.IMMEDIATE_DETAIL:0;
+		
+		this.f_fireEvent(f_event.SELECTION, event.f_getJsEvent(), item, itemValue, null, detail);
 		
 		return false;
 	},
