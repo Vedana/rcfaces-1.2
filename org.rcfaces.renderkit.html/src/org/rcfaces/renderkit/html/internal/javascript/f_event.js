@@ -439,6 +439,11 @@ var __statics = {
 	 * @field public static final number
 	 */
 	RESET_DETAIL: 0x200,
+
+	/**
+	 * @field public static final number
+	 */
+	IMMEDIATE_DETAIL: 0x400,
 	
 	/**
 	 * @method public static
