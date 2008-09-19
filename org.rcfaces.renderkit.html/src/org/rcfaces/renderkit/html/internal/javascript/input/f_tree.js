@@ -817,13 +817,21 @@ var __members = {
 			return;
 		}
 		
-		//alert("Scroll="+this.scrollWidth);
-		var width=this.scrollWidth;
-		if (true || f_core.IsInternetExplorer()) {
-			width-=2;
-		}
-		
-		this._body.style.width=width+"px";
+		var tree=this;
+		window.setTimeout(function() {
+			
+			//alert("Scroll="+this.scrollWidth);
+			var width=tree.scrollWidth;
+			if (true || f_core.IsInternetExplorer()) {
+				width-=2;
+			}
+			
+			if (!tree._body) {
+				return;
+			}
+			
+			tree._body.style.width=width+"px";
+		}, 50);
 	},
 	/**
 	 * @method protected
