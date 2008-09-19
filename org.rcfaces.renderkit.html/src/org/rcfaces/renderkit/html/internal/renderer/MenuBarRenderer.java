@@ -53,7 +53,7 @@ public class MenuBarRenderer extends AbstractSelectItemsRenderer {
 
         // Un dummy pour eviter des sauts de pages
         writer.startElement(IHtmlWriter.A);
-        writer.writeAttribute("class", getBarItemClassName(writer));
+        writer.writeClass(getBarItemClassName(writer));
         writer.endElement(IHtmlWriter.A);
     }
 

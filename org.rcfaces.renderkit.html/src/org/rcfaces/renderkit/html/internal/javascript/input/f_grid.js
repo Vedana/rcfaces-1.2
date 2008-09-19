@@ -4423,17 +4423,7 @@ var __members = {
 			}			
 		}
 		cols=this._table.getElementsByTagName("col");
-				
-		/* on part du f_grid_disabled
-		if (this.f_isDisabled()) {
-			var className="f_grid_tcell f_grid_tcell_disabled";
-		
-			for(var i=0;i<heads.length;i++) {
-				heads[i].className=className;
-			}
-		}
-		*/
-
+	
 		var resourceBundle=f_resourceBundle.Get(f_grid);
 		var headCursorTitle=resourceBundle.f_get("COLUMN_RESIZE");
 
@@ -4454,6 +4444,9 @@ var __members = {
 			}
 
 			var head=heads[v];
+			if (!head) {
+				continue;
+			}
 			
 			head.onmouseover=f_grid._Title_onMouseOver;
 			head.onmouseout=f_grid._Title_onMouseOut;
@@ -4469,7 +4462,11 @@ var __members = {
 			var box=f_core.GetFirstElementByTagName(head, "div");
 			column._box=box;
 	
-			var label=f_core.GetFirstElementByTagName(box, (column._sorter!==undefined)?"a":"div");	
+			var label=f_core.GetFirstElementByTagName(box, (column._sorter!==undefined)?"a":"div");
+			if (!label && column._sorter) {
+				// C'est triable mais pas (encore) focusable !
+				label=f_core.GetFirstElementByTagName(box, "div");
+			}	
 			column._label=label
 			
 			if (column._sorter) {
@@ -4482,13 +4479,16 @@ var __members = {
 				label._column=column;
 			}
 				
-			var image=f_core.GetFirstElementByTagName(column._label, "img");
+			var image=f_core.GetFirstElementByTagName(label, "img");
 			if (image) {
 				column._image=image;
 			}
 
 			if (column._resizable) {
-				var cursor=f_core.CreateElement(box, "div", { title: headCursorTitle, className:  "f_grid_colCursor" });
+				var cursor=f_core.CreateElement(box, "div", {
+					 title: headCursorTitle, 
+					 className: "f_grid_colCursor" 
+				});
 				column._cursor=cursor;
 				cursor._column=column;
 				cursor.onmousedown=f_grid._TitleCursorMouseDown;
@@ -4547,7 +4547,7 @@ var __members = {
 		var ci=0;
 		for(var i=0;i<columns.length;i++) {
 			var column=columns[i];									
-			if (!column._visibility) {
+			if (column._visibility===false) {
 				continue;
 			}
 
@@ -4564,36 +4564,6 @@ var __members = {
 		}
 		
 		var t2=new Date().getTime();
-		
-		
-/*		if (fakeCol) {
-			fakeCol.style.width=scrollBarWidth+"px";
-			
-			total+=scrollBarWidth;
-			
-			// On verifie que la scrollbar V reste bien visible
-			
-			if (f_core.IsInternetExplorer()) {
-				body.style.overflowY="scroll";
-
-			} else if (f_core.IsGecko()) {
-				var overflow=f_core.GetCurrentStyleProperty(body, "overflow");
-
-				if (overflow=="auto" && !this._resizable) {
-					body.style.overflow="-moz-scrollbars-vertical";
-				}
-			}
-		}
-		*/
-
-/*		
-		if (total>clientWidth || this._resizable) {
-			this._title.style.width=total+"px";
-			
-		} else {
-			this._title.style.width=offsetWidth+"px";
-		}
-	*/
 		
 		if (scrollBarWidth>0) {
 			var h=this.offsetHeight-this._title.parentNode.offsetHeight-2;

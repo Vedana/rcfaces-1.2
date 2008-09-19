@@ -304,14 +304,19 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
         CardBoxComponent cardBoxComponent = cardComponent.getCardBox();
 
         CardComponent selectedCard = cardBoxComponent.getSelectedCard();
+        
         if (selectedCard == null && cardBoxComponent.getValue() == null) {
-            // On prend le premier visible
+            // Aucun selectionné par défaut, on prend le premier visible
+
+            FacesContext facesContext = FacesContext.getCurrentInstance();
 
             ICardIterator cardIterator = cardBoxComponent.listCards();
             for (; cardIterator.hasNext();) {
                 CardComponent cc = cardIterator.next();
 
-                if (Boolean.FALSE.equals(cc.getVisibleState())) {
+                Boolean visibleState = cc.getVisibleState(facesContext);
+
+                if (Boolean.FALSE.equals(visibleState)) {
                     continue;
                 }
 

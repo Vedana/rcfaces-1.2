@@ -103,8 +103,9 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
                     .setAttribute(BORDER_RENDERER, borderRenderer);
         }
         /*
-         * Le javascript s'occupe de ca ! if (button == false && imageJavascript ==
-         * false) { htmlWriter.writeAttribute("href", "javascript:void(0)"); }
+         * Le javascript s'occupe de ca ! if (button == false && imageJavascript
+         * == false) { htmlWriter.writeAttribute("href", "javascript:void(0)");
+         * }
          */
 
         htmlWriter.enableJavaScript();
@@ -148,8 +149,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
             try {
                 htmlWriter.startElement(IHtmlWriter.A);
 
-                htmlWriter
-                        .writeAttribute("class", getLinkClassName(htmlWriter));
+                htmlWriter.writeClass(getLinkClassName(htmlWriter));
 
                 encodeChildren(htmlWriter);
 
@@ -203,7 +203,9 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#encodeJavaScript(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
+     * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * encodeJavaScript
+     * (org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
      * 
      * protected void encodeJavaScript(IJavaScriptWriter htmlWriter) throws
      * WriterException { super.encodeJavaScript(htmlWriter);

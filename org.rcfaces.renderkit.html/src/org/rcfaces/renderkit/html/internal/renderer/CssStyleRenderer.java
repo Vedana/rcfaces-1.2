@@ -7,15 +7,14 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.CssStyleComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -32,14 +31,16 @@ public class CssStyleRenderer extends AbstractHtmlRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        CssStyleComponent cssStyleComponent = (CssStyleComponent) htmlWriter
-                .getComponentRenderContext().getComponent();
+        IHtmlComponentRenderContext componentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        IHtmlProcessContext htmlProcessContext = htmlWriter
-                .getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getHtmlProcessContext();
+        IHtmlProcessContext htmlProcessContext = componentRenderContext
+                .getHtmlRenderContext().getHtmlProcessContext();
+
+        CssStyleComponent cssStyleComponent = (CssStyleComponent) componentRenderContext
+                .getComponent();
 
         boolean useMetaContentStyleType = htmlProcessContext
                 .useMetaContentStyleType();
