@@ -71,6 +71,19 @@ var __members = {
 	 */
 	f_getValue: function() {
 		return this._value;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_serialize: function() {
+		if (!this.f_isVisible()) {
+			// Pour eviter que l'info soit transmis au serveur !
+		
+			this.f_setProperty(f_prop.VISIBLE, undefined);
+		}	
+		
+		this.f_super(arguments);
 	}
 }
 
