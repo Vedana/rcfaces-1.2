@@ -868,8 +868,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
             return;
         }
 
-        IEventDecoder eventDecoder = (IEventDecoder) EVENT_DECODERS
-                .get(eventData.getEventName());
+        IEventDecoder eventDecoder = getEventDecoder(context, component,
+                eventData);
 
         if (eventDecoder == null) {
             LOG.error("Unknown decoder for event name '"
@@ -883,6 +883,11 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         }
 
         eventDecoder.decodeEvent(component, eventData);
+    }
+
+    protected IEventDecoder getEventDecoder(IRequestContext context,
+            UIComponent component, IEventData eventData) {
+        return (IEventDecoder) EVENT_DECODERS.get(eventData.getEventName());
     }
 
     protected IRenderContext getRenderContext(FacesContext context) {
@@ -902,7 +907,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private interface IEventDecoder {
+    protected interface IEventDecoder {
         void decodeEvent(UIComponent component, IEventData eventData);
     }
 
@@ -911,7 +916,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static abstract class AbstractEventDecoder implements IEventDecoder {
+    protected static abstract class AbstractEventDecoder implements
+            IEventDecoder {
         private static final String REVISION = "$Revision$";
 
         protected final void queueEvent(UIComponent component, FacesEvent event) {
