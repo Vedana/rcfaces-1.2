@@ -312,6 +312,10 @@ var __members = {
 			}
 			this._table.style.display=newDisplay;
 			
+			if (this._scrollTitle && this._scrollBody) {
+				this._scrollBody.scrollLeft=this._scrollTitle.scrollLeft;
+			}
+			
 			var rows=tbody.childNodes;				
 			for(var i=0;i<rows.length;i++) {
 				var row=rows[i];

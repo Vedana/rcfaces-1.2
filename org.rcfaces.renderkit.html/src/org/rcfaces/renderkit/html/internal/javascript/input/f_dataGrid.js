@@ -1239,6 +1239,10 @@ var __members = {
 			
 			f_core.AppendChild(this._table, tbody);
 			
+			if (this._scrollTitle && this._scrollBody) {
+				this._scrollBody.scrollLeft=this._scrollTitle.scrollLeft;
+			}
+			
 			var rows=f_grid.ListRows(this._table);
 			for(var i=0;i<rows.length;i++) {
 				var row=rows[i];
