@@ -100,7 +100,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
             return;
         }
 
-        htmlWriter.writeAttribute("style", getBuffer());
+        htmlWriter.writeStyle(getBuffer());
     }
 
     public ICssWriter writePropertyName(String name) {
