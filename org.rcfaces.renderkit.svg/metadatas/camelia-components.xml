@@ -1,0 +1,109 @@
+<camelia-components>	
+
+	<component id="image" extends="abstractOutput" renderKit="svg">
+		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
+		<capability id="IImageCapability" />
+		<capability id="IImageSizeCapability" />
+		<capability id="IAlternateTextCapability" />
+		<capability id="IFontCapability" />
+	
+		<capability id="IFilterCapability"/>
+		
+		<method id="setFilterProperties(String)" returnType="void" />
+						
+		<method id="getImageAccessors" returnType="org.rcfaces.core.component.familly.IContentAccessors">
+			<import>org.rcfaces.core.internal.tools.ImageAccessorTools</import>
+			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+			<code>
+				Object value=getLocalValue();
+				if (value==null) {
+					value=getValueBinding(Properties.VALUE);
+				}
+			
+				return ImageAccessorTools.createImageAccessor(facesContext, value);
+			</code>
+		</method>
+		<attribute id="pixelUnitToMillimeter" type="double"/>		
+		
+		<propertyValue>imageURL</propertyValue>
+		<property>value</property>
+	</component>
+
+
+	<component id="node" abstract="true" extends="cameliaItem" renderKit="svg">
+		<tagAttribute id="targetId" type="java.lang.String" generate="true" required="true"/>
+
+		<binding-alias id="targetId" target="itemValue" />
+		<method id="setTargetId" returnType="void">
+			<parameter type="java.lang.String" name="src" />
+			<code>
+			setItemValue(src);
+			</code>
+		</method>
+		<method id="getTargetId" returnType="String">
+			<code>
+			return (String)getItemValue();
+			</code>
+		</method>
+
+		<attribute id="rendered" type="boolean" default="true"/>		
+		
+		<property>itemDisabled</property>
+		<property>itemValue</property>
+		
+	</component>
+	
+	<component id="group" extends="node" renderKit="svg" render="false">
+	</component>
+	
+	<component id="path" extends="node" renderKit="svg" render="false">
+		<attribute id="clip" type="java.lang.String"/>		
+		<attribute id="clipPath" type="java.lang.String"/>		
+		<attribute id="clipRule" type="java.lang.String"/>		
+
+		<attribute id="color" type="java.lang.String"/>		
+
+		<attribute id="display" type="java.lang.String"/>		
+
+		<attribute id="fill" type="java.lang.String"/>		
+		<attribute id="fillRule" type="java.lang.String"/>		
+		<attribute id="fillOpacity" type="java.lang.String"/>		
+
+		<attribute id="fontFamily" type="java.lang.String"/>		
+		<attribute id="fontSize" type="java.lang.String"/>		
+		<attribute id="fontSizeAdjust" type="java.lang.String"/>		
+		<attribute id="fontStretch" type="java.lang.String"/>		
+		<attribute id="fontStyle" type="java.lang.String"/>		
+		<attribute id="fontVariant" type="java.lang.String"/>		
+		<attribute id="fontWeight" type="java.lang.String"/>		
+
+		<attribute id="opacity" type="java.lang.String"/>		
+		<attribute id="overflow" type="java.lang.String"/>		
+
+		<attribute id="stopColor" type="java.lang.String"/>		
+		<attribute id="stopOpacity" type="java.lang.String"/>		
+
+		<attribute id="stroke" type="java.lang.String"/>		
+		<attribute id="strokeDashArray" type="java.lang.String"/>		
+		<attribute id="strokeDashOffset" type="java.lang.String"/>		
+		<attribute id="strokeLineCap" type="java.lang.String"/>		
+		<attribute id="strokeLineJoin" type="java.lang.String"/>		
+		<attribute id="strokeMiterLimit" type="java.lang.String"/>		
+		<attribute id="strokeOpacity" type="java.lang.String"/>		
+		<attribute id="strokeWidth" type="java.lang.String"/>		
+
+		<attribute id="textAlign" type="java.lang.String"/>		
+
+		<attribute id="textAnchor" type="java.lang.String"/>		
+		<attribute id="textDecoration" type="java.lang.String"/>		
+		<attribute id="textRendering" type="java.lang.String"/>		
+
+		<attribute id="visibility" type="java.lang.String"/>		
+		<attribute id="wordSpacing" type="java.lang.String"/>		
+
+		<attribute id="writingMode" type="java.lang.String"/>		
+	
+	</component>
+
+
+</camelia-components>
