@@ -3,6 +3,7 @@
  */
 package org.rcfaces.renderkit.svg.internal.image;
 
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -11,6 +12,8 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,14 +24,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
 import org.apache.batik.bridge.DocumentLoader;
-import org.apache.batik.bridge.UserAgent;
 import org.apache.batik.css.parser.DefaultDocumentHandler;
 import org.apache.batik.css.parser.Parser;
-import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
@@ -36,7 +35,6 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.images.AbstractImageResourceAdapter;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.item.ISelectItemGroup;
-import org.rcfaces.renderkit.svg.image.SVGImageGenerationInformation;
 import org.rcfaces.renderkit.svg.item.IGroupItem;
 import org.rcfaces.renderkit.svg.item.INodeItem;
 import org.rcfaces.renderkit.svg.item.IPathItem;
@@ -92,41 +90,38 @@ public class SVGImageResourceAdapter extends AbstractImageResourceAdapter {
 
         SVGImageGenerationInformation svgImageGenerationInformation = (SVGImageGenerationInformation) generationInformation;
 
-        int imageWidth = svgImageGenerationInformation.getImageWidth();
-        int imageHeight = svgImageGenerationInformation.getImageHeight();
-
         INodeItem items[] = svgImageGenerationInformation.getNodes();
 
-        if (imageWidth > 0 || imageHeight > 0
-                || (items != null && items.length > 0)) {
+        if (items != null && items.length > 0) {
             document = (Document) document.cloneNode(true);
 
-            if (items != null && items.length > 0) {
-                applyItems(document, generationInformation, items);
-            }
+            Map selectables = new HashMap();
+            applyItems(document, generationInformation, items, selectables);
 
-            if (imageWidth > 0) {
-                transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH,
-                        new Float(imageWidth));
-            }
-
-            if (imageHeight > 0) {
-                transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT,
-                        new Float(imageHeight));
+            if (selectables.isEmpty() == false) {
+                transcoder.setSelectables(selectables);
             }
         }
 
-        float pixelUnit = svgImageGenerationInformation.getPixelUnitToMillimeter();
+        int imageWidth = svgImageGenerationInformation.getImageWidth();
+        if (imageWidth > 0) {
+            transcoder.setImageWidth(imageWidth);
+        }
+
+        int imageHeight = svgImageGenerationInformation.getImageHeight();
+        if (imageHeight > 0) {
+            transcoder.setImageHeight(imageHeight);
+        }
+
+        float pixelUnit = svgImageGenerationInformation
+                .getPixelUnitToMillimeter();
         if (pixelUnit > 0) {
-            transcoder.addTranscodingHint(
-                    SVGAbstractTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER,
-                    new Float(pixelUnit));
+            transcoder.setPixelUnitToMillimeter(pixelUnit);
         }
 
         String fontName = svgImageGenerationInformation.getDefaultFontFamily();
         if (fontName != null) {
-            transcoder.addTranscodingHint(
-                    SVGAbstractTranscoder.KEY_DEFAULT_FONT_FAMILY, fontName);
+            transcoder.setDefaultFontFamily(fontName);
         }
 
         TranscoderInput input = new TranscoderInput(document);
@@ -138,11 +133,30 @@ public class SVGImageResourceAdapter extends AbstractImageResourceAdapter {
             throw new FacesException(e);
         }
 
+        Map shapes = transcoder.getSelectableShapes();
+        if (shapes.isEmpty() == false
+                && (generatedInformation instanceof SVGImageGeneratedInformation)) {
+            SVGImageGeneratedInformation svgImageGeneratedInformation = (SVGImageGeneratedInformation) generatedInformation;
+
+            Collection c = shapes.values();
+
+            ShapeValue shapeValues[] = (ShapeValue[]) c
+                    .toArray(new ShapeValue[c.size()]);
+
+            svgImageGeneratedInformation.setShapeValues(shapeValues);
+
+            AffineTransform f = transcoder.getGlobalTransform();
+            if (f.isIdentity() == false) {
+                svgImageGeneratedInformation.setGlobalTransform(f);
+            }
+        }
+
         return output.getBufferedImage();
     }
 
     private void applyItems(Document document,
-            IGenerationResourceInformation generationInformation, Object[] items) {
+            IGenerationResourceInformation generationInformation,
+            Object[] items, Map selectables) {
 
         for (int i = 0; i < items.length; i++) {
             Object item = items[i];
@@ -155,6 +169,11 @@ public class SVGImageResourceAdapter extends AbstractImageResourceAdapter {
                 if (targetId == null) {
                     LOG.error("TargetId is null !");
                     continue;
+                }
+
+                if (nodeItem.isSelectable()
+                        && selectables.containsKey(targetId) == false) {
+                    selectables.put(targetId, nodeItem);
                 }
 
                 Element element = document.getElementById(targetId);
@@ -180,13 +199,15 @@ public class SVGImageResourceAdapter extends AbstractImageResourceAdapter {
                 SelectItem selectItems[] = ((SelectItemGroup) item)
                         .getSelectItems();
 
-                applyItems(document, generationInformation, selectItems);
+                applyItems(document, generationInformation, selectItems,
+                        selectables);
 
             } else if (item instanceof ISelectItemGroup) {
                 SelectItem selectItems[] = ((ISelectItemGroup) item)
                         .getSelectItems();
 
-                applyItems(document, generationInformation, selectItems);
+                applyItems(document, generationInformation, selectItems,
+                        selectables);
 
             }
         }
@@ -374,55 +395,6 @@ public class SVGImageResourceAdapter extends AbstractImageResourceAdapter {
                 sa.append(' ');
                 sa.append(IMPORTANT_LABEL);
             }
-        }
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static class AdapterTranscoderOuput extends TranscoderOutput {
-        private static final String REVISION = "$Revision$";
-
-        private BufferedImage bufferedImage;
-
-        public AdapterTranscoderOuput() {
-        }
-
-        public final BufferedImage getBufferedImage() {
-            return bufferedImage;
-        }
-
-        public final void setBufferedImage(BufferedImage bufferedImage) {
-            this.bufferedImage = bufferedImage;
-        }
-
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static class AdapterImageTranscoder extends ImageTranscoder {
-        private static final String REVISION = "$Revision$";
-
-        public BufferedImage createImage(int width, int height) {
-            BufferedImage img = new BufferedImage(width, height,
-                    BufferedImage.TYPE_INT_RGB);
-
-            return img;
-        }
-
-        public void writeImage(BufferedImage img, TranscoderOutput output)
-                throws TranscoderException {
-
-            ((AdapterTranscoderOuput) output).setBufferedImage(img);
-        }
-
-        public UserAgent getUserAgent() {
-            return userAgent;
         }
     }
 }

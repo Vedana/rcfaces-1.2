@@ -31,6 +31,10 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
 
     private boolean rendered;
 
+    private boolean selectable;
+
+    private String alternateText;
+
     public NodeItem() {
     }
 
@@ -81,6 +85,22 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
         this.rendered = rendered;
     }
 
+    public final boolean isSelectable() {
+        return selectable;
+    }
+
+    public final void setSelectable(boolean selectable) {
+        this.selectable = selectable;
+    }
+
+    public final String getAlternateText() {
+        return alternateText;
+    }
+
+    public final void setAlternateText(String alternateText) {
+        this.alternateText = alternateText;
+    }
+
     public void addNodeItem(INodeItem nodeItem) {
         SelectItem items[] = getSelectItems();
         if (items == null || items.length == 0) {
@@ -114,15 +134,21 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
 
         setRendered(states[4] != null);
 
-        if (states.length < 6) {
+        setSelectable(states[5] != null);
+
+        setAlternateText((String) states[6]);
+
+        int idx = 7;
+
+        if (states.length <= idx) {
             setSelectItems(SELECT_ITEM_EMPTY_ARRAY);
             return;
         }
 
-        SelectItem selectItems[] = new SelectItem[states.length - 5];
+        SelectItem selectItems[] = new SelectItem[states.length - idx];
         for (int i = 0; i < selectItems.length; i++) {
             selectItems[i] = (SelectItem) UIComponentBase.restoreAttachedState(
-                    context, states[i + 5]);
+                    context, states[i + idx]);
         }
 
         setSelectItems(selectItems);
@@ -134,17 +160,21 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
             children = SELECT_ITEM_EMPTY_ARRAY;
         }
 
-        Object ret[] = new Object[5 + children.length];
+        Object ret[] = new Object[6 + children.length];
 
         ret[0] = getValue();
         ret[1] = getLabel();
         ret[2] = getDescription();
         ret[3] = isDisabled() ? Boolean.TRUE : null;
         ret[4] = isRendered() ? Boolean.TRUE : null;
+        ret[5] = isSelectable() ? Boolean.TRUE : null;
+        ret[6] = getAlternateText();
+
+        int idx = 7;
 
         for (int i = 0; i < children.length; i++) {
-            ret[i + 5] = UIComponentBase
-                    .saveAttachedState(context, children[i]);
+            ret[i + idx] = UIComponentBase.saveAttachedState(context,
+                    children[i]);
         }
 
         return ret;

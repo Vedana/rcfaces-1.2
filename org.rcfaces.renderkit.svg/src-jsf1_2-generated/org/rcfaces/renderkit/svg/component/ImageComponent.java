@@ -45,7 +45,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","alternateText","imageHeight","imageURL","pixelUnitToMillimeter","filterProperties","imageWidth","fontSize","fontName","fontItalic"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","alternateText","imageHeight","imageURL","pixelUnitToMillimeter","filterProperties","imageWidth","curveFlatness","fontSize","fontName","fontItalic"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="imageURL";
 
@@ -334,6 +334,26 @@ public class ImageComponent extends AbstractOutputComponent implements
 	 */
 	public boolean isPixelUnitToMillimeterSetted() {
 		return engine.isPropertySetted(Properties.PIXEL_UNIT_TO_MILLIMETER);
+	}
+
+	public double getCurveFlatness() {
+		return getCurveFlatness(null);
+	}
+
+	public double getCurveFlatness(javax.faces.context.FacesContext facesContext) {
+		return engine.getDoubleProperty(Properties.CURVE_FLATNESS, 0.0, facesContext);
+	}
+
+	public void setCurveFlatness(double curveFlatness) {
+		engine.setProperty(Properties.CURVE_FLATNESS, curveFlatness);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "curveFlatness" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isCurveFlatnessSetted() {
+		return engine.isPropertySetted(Properties.CURVE_FLATNESS);
 	}
 
 	protected Set getCameliaFields() {

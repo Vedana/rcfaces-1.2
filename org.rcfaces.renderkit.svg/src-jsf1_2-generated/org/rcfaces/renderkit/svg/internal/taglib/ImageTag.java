@@ -31,6 +31,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 	private ValueExpression fontUnderline;
 	private ValueExpression filterProperties;
 	private ValueExpression pixelUnitToMillimeter;
+	private ValueExpression curveFlatness;
 	public String getComponentType() {
 		return ImageComponent.COMPONENT_TYPE;
 	}
@@ -79,6 +80,10 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		this.pixelUnitToMillimeter = pixelUnitToMillimeter;
 	}
 
+	public final void setCurveFlatness(ValueExpression curveFlatness) {
+		this.curveFlatness = curveFlatness;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ImageComponent.COMPONENT_TYPE==getComponentType()) {
@@ -95,6 +100,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  pixelUnitToMillimeter='"+pixelUnitToMillimeter+"'");
+			LOG.debug("  curveFlatness='"+curveFlatness+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -206,6 +212,15 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 				component.setPixelUnitToMillimeter(getDouble(pixelUnitToMillimeter.getExpressionString()));
 			}
 		}
+
+		if (curveFlatness != null) {
+			if (curveFlatness.isLiteralText()==false) {
+				component.setValueExpression(Properties.CURVE_FLATNESS, curveFlatness);
+
+			} else {
+				component.setCurveFlatness(getDouble(curveFlatness.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -220,6 +235,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		fontUnderline = null;
 		filterProperties = null;
 		pixelUnitToMillimeter = null;
+		curveFlatness = null;
 
 		super.release();
 	}

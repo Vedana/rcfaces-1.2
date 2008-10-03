@@ -3,13 +3,13 @@
  */
 package org.rcfaces.renderkit.svg.internal.renderer;
 
+import java.awt.geom.AffineTransform;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.image.GeneratedImageInformation;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.model.IFilterProperties;
@@ -19,10 +19,11 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
-import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.svg.component.ImageComponent;
-import org.rcfaces.renderkit.svg.image.SVGImageGenerationInformation;
+import org.rcfaces.renderkit.svg.internal.image.SVGImageGeneratedInformation;
+import org.rcfaces.renderkit.svg.internal.image.SVGImageGenerationInformation;
+import org.rcfaces.renderkit.svg.internal.image.ShapeValue;
 import org.rcfaces.renderkit.svg.item.INodeItem;
 
 /**
@@ -55,15 +56,14 @@ public class ImageRenderer extends AbstractCssRenderer {
         int imageHeight = image.getImageHeight(facesContext);
 
         SVGImageGenerationInformation imageGenerationInformation = null;
-        GeneratedImageInformation generatedImageInformation = null;
+        SVGImageGeneratedInformation generatedImageInformation = null;
 
         IImageAccessors imageAccessors = (IImageAccessors) image
                 .getImageAccessors(facesContext);
         String url = null;
         IContentAccessor contentAccessor = imageAccessors.getImageAccessor();
         if (contentAccessor != null) {
-            imageGenerationInformation = new SVGImageGenerationInformation(
-                    listNodes(componentRenderContext));
+            imageGenerationInformation = new SVGImageGenerationInformation();
 
             imageGenerationInformation.setComponent(componentRenderContext);
 
@@ -90,13 +90,17 @@ public class ImageRenderer extends AbstractCssRenderer {
                         .setDefaultFontFamily(defaultFontName);
             }
 
-            generatedImageInformation = new GeneratedImageInformation();
+            generatedImageInformation = new SVGImageGeneratedInformation();
 
             NodesCollectorDecorator nodesCollectorDecorator = ((NodesCollectorDecorator) getComponentDecorator(componentRenderContext));
 
             INodeItem nodeItems[] = nodesCollectorDecorator.listNodes();
             if (nodeItems != null && nodeItems.length > 0) {
                 imageGenerationInformation.setNodes(nodeItems);
+            }
+
+            if (nodesCollectorDecorator.isItemSelectable()) {
+                imageGenerationInformation.setProcessAtRequest(false);
             }
 
             url = contentAccessor.resolveURL(facesContext,
@@ -129,6 +133,8 @@ public class ImageRenderer extends AbstractCssRenderer {
         }
         htmlWriter.writeSrc(url);
 
+        ShapeValue values[] = null;
+
         if (generatedImageInformation != null) {
             int w = generatedImageInformation.getImageWidth();
             if (w > 0) {
@@ -137,6 +143,12 @@ public class ImageRenderer extends AbstractCssRenderer {
             int h = generatedImageInformation.getImageHeight();
             if (h > 0) {
                 imageHeight = h;
+            }
+
+            values = generatedImageInformation.getShapeValues();
+
+            if (values != null && values.length == 0) {
+                values = null;
             }
         }
 
@@ -147,13 +159,68 @@ public class ImageRenderer extends AbstractCssRenderer {
             htmlWriter.writeHeight(imageHeight);
         }
 
+        String mapName = null;
+
+        if (values != null) {
+            mapName = htmlWriter.getComponentRenderContext()
+                    .getComponentClientId()
+                    + "::map";
+
+            htmlWriter.writeAttribute("usemap", "#" + mapName);
+        }
+
         htmlWriter.endElement(IHtmlElements.IMG);
 
-        super.encodeEnd(htmlWriter);
-    }
+        if (values != null) {
+            htmlWriter.startElement(IHtmlElements.MAP);
+            htmlWriter.writeName(mapName);
+            htmlWriter.writeln();
 
-    protected String getJavaScriptClassName() {
-        return JavaScriptClasses.IMAGE;
+            AffineTransform transform = generatedImageInformation
+                    .getGlobalTransform();
+
+            for (int i = 0; i < values.length; i++) {
+                ShapeValue value = values[i];
+
+                String coords[] = value.computeOutline(transform, 1);
+                for (int j = 0; j < coords.length; j++) {
+                    String c = coords[j];
+                    if (c.length() < 1) {
+                        continue;
+                    }
+
+                    htmlWriter.startElement(IHtmlElements.AREA);
+                    htmlWriter.writeId(htmlWriter.getComponentRenderContext()
+                            .getComponentClientId()
+                            + "::map" + i);
+
+                    htmlWriter.writeAttribute("href", "#");
+                    htmlWriter.writeBorder(0);
+
+                    String description = value.getDescription();
+                    if (description != null) {
+                        htmlWriter.writeTitle(description);
+                    }
+
+                    String alternateText = value.getAlternateText();
+                    if (alternateText != null) {
+                        htmlWriter.writeAlt(alternateText);
+                    }
+
+                    htmlWriter.writeAttribute("shape", "poly");
+
+                    htmlWriter.writeAttribute("coords", c);
+
+                    htmlWriter.endElement(IHtmlElements.AREA);
+
+                    htmlWriter.writeln();
+                }
+            }
+
+            htmlWriter.endElement(IHtmlElements.MAP);
+        }
+
+        super.encodeEnd(htmlWriter);
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
@@ -177,18 +244,15 @@ public class ImageRenderer extends AbstractCssRenderer {
         return new NodesCollectorDecorator(component);
     }
 
-    protected INodeItem[] listNodes(
-            IComponentRenderContext componentRenderContext) {
-        NodesCollectorDecorator decorator = (NodesCollectorDecorator) getComponentDecorator(componentRenderContext);
-
-        return decorator.listNodes();
-    }
-
     protected final boolean hasComponenDecoratorSupport() {
         return true;
     }
 
     public final boolean getRendersChildren() {
         return true;
+    }
+
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.IMAGE;
     }
 }

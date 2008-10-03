@@ -5,17 +5,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.renderkit.html"/>
-	<classpathentry kind="lib" path="lib/batik-svg-dom.jar" sourcepath="C:/Users/oeuillot/Documents/Mes librairies JAVA/batik-1.7"/>
-	<classpathentry kind="lib" path="lib/batik-transcoder.jar" sourcepath="C:/Users/oeuillot/Documents/Mes librairies JAVA/batik-1.7"/>
-	<classpathentry kind="lib" path="lib/batik-parser.jar"/>
-	<classpathentry kind="lib" path="lib/batik-bridge.jar" sourcepath="C:/Users/oeuillot/Documents/Mes librairies JAVA/batik-1.7"/>
-	<classpathentry kind="lib" path="lib/batik-util.jar"/>
-	<classpathentry kind="lib" path="lib/batik-xml.jar"/>
-	<classpathentry kind="lib" path="lib/batik-codec.jar"/>
+	<classpathentry kind="lib" path="lib/batik-bridge.jar"/>
 	<classpathentry kind="lib" path="lib/batik-gvt.jar"/>
-	<classpathentry kind="lib" path="lib/batik-dom.jar" sourcepath="C:/Users/oeuillot/Documents/Mes librairies JAVA/batik-1.7"/>
-	<classpathentry kind="lib" path="lib/xml-apis-ext.jar" sourcepath="C:/Users/oeuillot/Documents/Mes librairies JAVA/batik-1.7"/>
-	<classpathentry kind="lib" path="lib/batik-css.jar" sourcepath="C:/Users/oeuillot/Documents/Mes librairies JAVA/batik-1.7"/>
-	<classpathentry kind="lib" path="lib/batik-ext.jar"/>
+	<classpathentry kind="lib" path="lib/batik-transcoder.jar"/>
+	<classpathentry kind="lib" path="lib/batik-svg-dom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

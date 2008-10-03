@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.renderkit.svg.image;
+package org.rcfaces.renderkit.svg.internal.image;
 
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
@@ -31,10 +31,6 @@ public class SVGImageGenerationInformation extends GenerationImageInformation {
     private INodeItem[] nodes;
 
     public SVGImageGenerationInformation() {
-    }
-
-    public SVGImageGenerationInformation(INodeItem[] nodes) {
-        this.nodes = nodes;
     }
 
     public INodeItem[] getNodes() {

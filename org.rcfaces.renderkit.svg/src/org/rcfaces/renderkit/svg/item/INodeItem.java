@@ -14,4 +14,8 @@ public interface INodeItem extends ISelectItemGroup {
     String getTargetId();
 
     boolean isRendered();
+
+    boolean isSelectable();
+
+    String getAlternateText();
 }

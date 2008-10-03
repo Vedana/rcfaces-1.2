@@ -463,6 +463,13 @@ A binded object that hold the filters to use on the server side. This property i
 				<type>double</type>
 			</deferred-value>
 		</attribute>
+		<attribute>
+			<name>curveFlatness</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>double</type>
+			</deferred-value>
+		</attribute>
 	</tag>
 	<tag>
 		<name>group</name>
@@ -534,12 +541,74 @@ A string value describing the item.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>alternateText</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
 			<name>rendered</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the component can receive a user's selection
+]]></description>
+			<name>selectable</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value to be returned to the server if this
+        option is selected by the user.
+]]></description>
+			<name>itemValue</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the label to be displayed to the user
+        for this option.
+]]></description>
+			<name>itemLabel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value describing the item.
+]]></description>
+			<name>itemDescription</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the option created
+        by this component is disabled.  Expressions
+        must evaluate to a boolean.  Default value
+        is false.
+]]></description>
+			<name>itemDisabled</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
@@ -624,12 +693,74 @@ A string value describing the item.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>alternateText</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.
 ]]></description>
 			<name>rendered</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the component can receive a user's selection
+]]></description>
+			<name>selectable</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value to be returned to the server if this
+        option is selected by the user.
+]]></description>
+			<name>itemValue</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the label to be displayed to the user
+        for this option.
+]]></description>
+			<name>itemLabel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value describing the item.
+]]></description>
+			<name>itemDescription</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the option created
+        by this component is disabled.  Expressions
+        must evaluate to a boolean.  Default value
+        is false.
+]]></description>
+			<name>itemDisabled</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>

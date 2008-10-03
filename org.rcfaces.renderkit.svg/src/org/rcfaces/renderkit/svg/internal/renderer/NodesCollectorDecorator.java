@@ -38,6 +38,8 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
 
     private List nodesStack = new ArrayList();
 
+    private boolean selectable;
+
     public NodesCollectorDecorator(UIComponent component) {
         super(component, null);
     }
@@ -71,6 +73,10 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
             if (hasChild) {
                 nodesStack.add(nodes);
                 nodes = null;
+            }
+
+            if (((INodeItem) selectItem).isSelectable()) {
+                selectable = true;
             }
         }
 
@@ -112,6 +118,10 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
         }
 
         return (INodeItem[]) nodes.toArray(new INodeItem[nodes.size()]);
+    }
+
+    public boolean isItemSelectable() {
+        return selectable;
     }
 
 }
