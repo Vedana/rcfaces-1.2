@@ -198,7 +198,7 @@ public class ItemTools {
             Object value;
             try {
                 value = sourcePd.getReadMethod()
-                        .invoke(target, (Object[]) null);
+                        .invoke(source, (Object[]) null);
 
             } catch (Exception ex) {
                 LOG.error("Can not get property '" + propertyName + "' from '"
@@ -209,6 +209,10 @@ public class ItemTools {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Get property '" + propertyName + "' from '" + target
                         + "' => " + value);
+            }
+
+            if (value == null) {
+                continue;
             }
 
             try {
