@@ -18,10 +18,10 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.event.ValueChangeEvent;
+import java.util.Arrays;
 import javax.faces.event.FacesListener;
 import java.util.HashSet;
-import java.util.Arrays;
-import javax.faces.event.ValueChangeEvent;
 
 
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
@@ -57,7 +57,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 
 	private static final Log LOG = LogFactory.getLog(CameliaCommandComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"immediate","value"}));
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","immediate"}));
 
 	protected transient IComponentEngine engine;
 
@@ -493,7 +493,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
-// Oui mais le code d'appel ne fait référence qu'a des ActionEvent
+// Oui mais le code d'appel ne fait r�f�rence qu'a des ActionEvent
 		if (e instanceof ActionEvent) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;

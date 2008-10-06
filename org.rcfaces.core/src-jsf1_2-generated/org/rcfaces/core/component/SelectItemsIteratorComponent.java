@@ -1,29 +1,29 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.CameliaItemsComponent;
-import org.rcfaces.core.internal.component.Properties;
-import java.lang.Object;
 import java.lang.String;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import java.lang.Object;
+import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
-import org.rcfaces.core.internal.tools.SelectItemsIteratorTools;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.tools.SelectItemsIteratorTools;
+import org.rcfaces.core.internal.component.CameliaItemsComponent;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.internal.manager.IServerDataManager;
 
 public class SelectItemsIteratorComponent extends CameliaItemsComponent implements 
-	IClientDataManager,
-	IServerDataManager {
+	IServerDataManager,
+	IClientDataManager {
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.selectItemsIterator";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemsComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemImageURL","itemAcceleratorKey","var","itemHoverImageURL","itemVisibility","itemGroupName","itemExpandedImageURL","itemSelectedImageURL","itemDescription","itemIndexVar","items","itemLabel","itemValue","itemInputType","itemDisabledImageURL","itemAccessKey","itemStyleClass","itemDisabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"var","itemSelectedImageURL","itemVisibility","itemDescription","itemAcceleratorKey","itemLabel","itemDisabledImageURL","itemValue","itemInputType","itemHoverImageURL","items","itemExpandedImageURL","itemIndexVar","itemImageURL","itemAccessKey","itemDisabled","itemStyleClass","itemGroupName"}));
 	}
 
 	public SelectItemsIteratorComponent() {
@@ -35,15 +35,6 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 		setId(componentId);
 	}
 
-	public void setClientData(String name, ValueExpression value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public String setClientData(String name, String value) {
 
 
@@ -53,10 +44,10 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 		
 	}
 
-	public void setServerData(String name, ValueExpression value) {
+	public void setClientData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -68,6 +59,15 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public void setServerData(String name, ValueExpression value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		dataMapAccessor.setData(name, value, null);
 		
 	}
 

@@ -1,36 +1,36 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.RadioButtonComponent;
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
-import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.RadioButtonComponent;
+import java.lang.Object;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
 import java.util.Collections;
-import org.rcfaces.core.component.iterator.IRadioButtonIterator;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.util.HashMap;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.RadioButtonTools;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.lang.Object;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.el.ValueExpression;
-import java.util.HashSet;
 import java.util.Arrays;
-import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.tools.RadioButtonTools;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.lang.String;
+import javax.el.ValueExpression;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.ISelectedCapability;
+import javax.faces.context.FacesContext;
+import java.util.Map;
+import java.util.HashMap;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.iterator.IRadioButtonIterator;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The radioButton Component is based on the standard HTML tag &lt;INPUT TYPE="radio"&gt;. It can interoperate automatically with other radioButtons from the same group.</p>
@@ -63,7 +63,7 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","groupName","text","fatalStyleClass","textPosition","styleClass","radioValue","textDirection","selectionListener","selected","readOnly","errorStyleClass","warnStyleClass","alternateText","infoStyleClass","required"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","errorStyleClass","fatalStyleClass","required","radioValue","groupName","warnStyleClass","textDirection","alternateText","styleClass","text","selected","infoStyleClass","readOnly","focusStyleClass","textPosition"}));
 	}
 
 	public RadioButtonComponent() {
@@ -73,13 +73,6 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 	public RadioButtonComponent(String componentId) {
 		this();
 		setId(componentId);
-	}
-
-	public int getValidationParametersCount() {
-
-		 
-		 return getValidationParametersCount(null);
-		
 	}
 
 	public boolean isClientSideValidationParameter(String name) {
@@ -96,10 +89,10 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		
 	}
 
-	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		setValidationParameterData(name, value, client);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
@@ -107,13 +100,6 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 
 
 		 return getValidationParameter(name, null);
-		
-	}
-
-	public Map getClientValidationParametersMap() {
-
-
-		return getClientValidationParametersMap(null);
 		
 	}
 
@@ -136,10 +122,24 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
+	public Map getClientValidationParametersMap() {
 
 
-		return (String)setValidationParameterData(name, value, client);
+		return getClientValidationParametersMap(null);
+		
+	}
+
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
+		
+	}
+
+	public int getValidationParametersCount() {
+
+		 
+		 return getValidationParametersCount(null);
 		
 	}
 

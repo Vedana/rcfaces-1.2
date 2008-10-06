@@ -1,27 +1,27 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import java.lang.String;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IBackgroundImageCapability;
+import javax.el.ValueExpression;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
 
 /**
  * <p>The Box Component is a container.</p>
@@ -57,7 +57,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","asyncDecodeMode","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","asyncRenderMode","scopeSaveValue","asyncDecodeMode","mouseOverListener","backgroundImageVerticalPosition","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
 	}
 
 	public BoxComponent() {
@@ -269,17 +269,17 @@ public class BoxComponent extends AbstractBasicComponent implements
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public IMenuComponent getMenu() {
-
-
-		return MenuTools.getMenu(this);
-		
-	}
-
 	public IMenuComponent getMenu(String menuId) {
 
 
 		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
 		
 	}
 
