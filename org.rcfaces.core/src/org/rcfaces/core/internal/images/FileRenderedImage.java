@@ -16,7 +16,9 @@ import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
@@ -44,7 +46,8 @@ class FileRenderedImage extends FileBuffer implements IBufferedImage {
 
     public void initialize(IResourceLoader imageDownloader, String contentType,
             RenderedImage renderedImage, ImageWriter imageWriter,
-            int destImageType, long lastModified) throws IOException {
+            ImageWriteParam imageWriteParam, int destImageType,
+            long lastModified) throws IOException {
 
         int size = INITIAL_BUFFER_SIZE;
         long originalSize = imageDownloader.getContentLength();
@@ -91,7 +94,8 @@ class FileRenderedImage extends FileBuffer implements IBufferedImage {
         }
 
         try {
-            imageWriter.write(image);
+            imageWriter.write(null, new IIOImage(image, null, null),
+                    imageWriteParam);
 
         } catch (IOException ex) {
             LOG.error("Can not encode image into temp file ! (imageName="

@@ -6,6 +6,7 @@ package org.rcfaces.core.image;
 
 import org.rcfaces.core.internal.content.AbstractBufferOperation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.internal.images.ImageOperationContentModel;
 
 /**
  * 
@@ -16,7 +17,7 @@ public abstract class AbstractImageOperation extends AbstractBufferOperation
         implements IImageOperation {
     private static final String REVISION = "$Revision$";
 
-    private String forceSuffix;
+    private String responseSuffix;
 
     private String responseMimeType;
 
@@ -36,11 +37,12 @@ public abstract class AbstractImageOperation extends AbstractBufferOperation
         this.encoderMimeType = encoderMimeType;
     }
 
-    public final void setForceSuffix(String forceSuffix) {
-        this.forceSuffix = forceSuffix;
+    public final void setResponseSuffix(String responseSuffix) {
+        this.responseSuffix = responseSuffix;
     }
 
-    public void prepare(IGenerationResourceInformation generationInformation,
+    public void prepare(ImageOperationContentModel imageOperationContentModel,
+            IGenerationResourceInformation generationInformation,
             IGeneratedImageInformation generatedInformation) {
         if (sourceMimeType != null) {
             generatedInformation.setSourceMimeType(sourceMimeType);
@@ -54,9 +56,8 @@ public abstract class AbstractImageOperation extends AbstractBufferOperation
             generatedInformation.setEncoderMimeType(encoderMimeType);
         }
 
-        if (forceSuffix != null) {
-            generatedInformation.setResponseSuffix(forceSuffix);
+        if (responseSuffix != null) {
+            generatedInformation.setResponseSuffix(responseSuffix);
         }
     }
-
 }

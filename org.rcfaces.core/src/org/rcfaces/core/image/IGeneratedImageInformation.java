@@ -13,8 +13,6 @@ import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 public interface IGeneratedImageInformation extends
         IGeneratedResourceInformation {
 
-    String ENCODER_MIME_TYPE_PROPERTY = "org.rcfaces.encoder.MIME_TYPE";
-
     void setImageHeight(int imageHeight);
 
     void setImageWidth(int imageWidth);

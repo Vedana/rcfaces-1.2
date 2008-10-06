@@ -3,18 +3,19 @@
  */
 package org.rcfaces.core.image;
 
-import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class GeneratedImageInformation extends
-        BasicGeneratedResourceInformation implements IGeneratedImageInformation {
+public class GenerationImageInformation extends
+        BasicGenerationResourceInformation implements
+        IGenerationImageInformation {
     private static final String REVISION = "$Revision$";
 
-    public GeneratedImageInformation() {
+    public GenerationImageInformation() {
         super();
     }
 
@@ -44,13 +45,4 @@ public class GeneratedImageInformation extends
     public final void setImageWidth(int imageWidth) {
         setAttribute(IImageContentModel.WIDTH_PROPERTY, new Integer(imageWidth));
     }
-
-    public final String getEncoderMimeType() {
-        return (String) getAttribute(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY);
-    }
-
-    public final void setEncoderMimeType(String contentType) {
-        setAttribute(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY, contentType);
-    }
-
 }

@@ -84,7 +84,7 @@
 		<operation>
 			<operation-id>iefavicon</operation-id>
 			<operation-class>
-				org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation
+				org.rcfaces.core.internal.images.operation.ICOConversionImageOperation
 			</operation-class>
 			<operation-force-suffix>ico</operation-force-suffix>
 			<operation-response-mimeType>
@@ -95,6 +95,34 @@
 				image/x-icon
 			</operation-encoder-mimeType>
 			-->
+		</operation>
+		<operation>
+			<operation-id>jpeg</operation-id>
+			<operation-name>JPEG conversion</operation-name>
+			<operation-class>
+				org.rcfaces.core.internal.images.operation.JPEGConversionImageOperation
+			</operation-class>
+		</operation>
+		<operation>
+			<operation-id>gif</operation-id>
+			<operation-name>GIF conversion</operation-name>
+			<operation-class>
+				org.rcfaces.core.internal.images.operation.GIFConversionImageOperation
+			</operation-class>
+		</operation>
+		<operation>
+			<operation-id>png</operation-id>
+			<operation-name>PNG conversion</operation-name>
+			<operation-class>
+				org.rcfaces.core.internal.images.operation.PNGConversionImageOperation
+			</operation-class>
+		</operation>
+		<operation>
+			<operation-id>ico</operation-id>
+			<operation-name>ICON conversion</operation-name>
+			<operation-class>
+				org.rcfaces.core.internal.images.operation.ICOConversionImageOperation
+			</operation-class>
 		</operation>
 	</image-operations>
 	

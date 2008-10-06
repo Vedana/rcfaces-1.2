@@ -37,6 +37,8 @@ public interface IGeneratedResourceInformation extends StateHolder {
 
     boolean isProcessingAtRequest();
 
+    boolean isProcessingAtRequestSetted();
+
     String getResponseSuffix();
 
     void setResponseSuffix(String suffix);

@@ -32,10 +32,15 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.image.ImageContentModel;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.contentStorage.AbstractResolvedContent;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
+import org.rcfaces.core.internal.images.operation.GIFConversionImageOperation;
+import org.rcfaces.core.internal.images.operation.ICOConversionImageOperation;
+import org.rcfaces.core.internal.images.operation.JPEGConversionImageOperation;
+import org.rcfaces.core.internal.images.operation.PNGConversionImageOperation;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
 import org.rcfaces.core.lang.IAdapterFactory;
@@ -51,19 +56,22 @@ public class ImageAdapterFactory implements IAdapterFactory {
 
     private static final Log LOG = LogFactory.getLog(ImageAdapterFactory.class);
 
-    private static final String RGB_DEFAULT_CONTENT_TYPE = "image/jpeg";
+    private static final String RGB_DEFAULT_MIME_TYPE = JPEGConversionImageOperation.MIME_TYPES[0];
 
-    private static final String INDEX_DEFAULT_CONTENT_TYPE = "image/gif";
+    private static final String INDEX_DEFAULT_MIME_TYPE = GIFConversionImageOperation.MIME_TYPE;
 
     private static final String TEMP_PREFIX = "imageAdapter_";
 
-    private static final Map suffixByContentType = new HashMap(8);
+    private static final Map suffixByMimeType = new HashMap(8);
 
     static {
-        suffixByContentType.put("image/gif", "gif");
-        suffixByContentType.put("image/jpg", "jpeg");
-        suffixByContentType.put("image/jpeg", "jpeg");
-        suffixByContentType.put("image/png", "png");
+        GIFConversionImageOperation.fillSuffixByMimeType(suffixByMimeType);
+
+        JPEGConversionImageOperation.fillSuffixByMimeType(suffixByMimeType);
+
+        PNGConversionImageOperation.fillSuffixByMimeType(suffixByMimeType);
+
+        ICOConversionImageOperation.fillSuffixByMimeType(suffixByMimeType);
     }
 
     private static final FileNameMap fileNameMap = URLConnection
@@ -88,8 +96,8 @@ public class ImageAdapterFactory implements IAdapterFactory {
         return null;
     }
 
-    public static String getSuffixByContentType(String contentType) {
-        return (String) suffixByContentType.get(contentType.toLowerCase());
+    public static String getSuffixByMimeType(String contentType) {
+        return (String) suffixByMimeType.get(contentType.toLowerCase());
     }
 
     public Class[] getAdapterList() {
@@ -102,39 +110,39 @@ public class ImageAdapterFactory implements IAdapterFactory {
             parameters = (Map) parameter;
         }
 
-        String defaultContentType = RGB_DEFAULT_CONTENT_TYPE;
+        String defaultMimeType = RGB_DEFAULT_MIME_TYPE;
         if (image instanceof RenderedImage) {
-            defaultContentType = getDefaultContentType((RenderedImage) image);
+            defaultMimeType = getDefaultContentType((RenderedImage) image);
 
         } else if (image instanceof RenderedImage[]) {
-            defaultContentType = getDefaultContentType(((RenderedImage[]) image)[0]);
+            defaultMimeType = getDefaultContentType(((RenderedImage[]) image)[0]);
         }
 
-        String contentType = (String) parameters
-                .get(IContentModel.RESPONSE_MIME_TYPE_PROPERTY);
+        String mimeType = (String) parameters
+                .get(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY);
 
-        if (contentType == null) {
+        if (mimeType == null) {
             String suffix = (String) parameters
-                    .get(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
+                    .get(IImageContentModel.ENCODER_SUFFIX_PROPERTY);
 
             if (suffix != null) {
-                contentType = fileNameMap.getContentTypeFor("x." + suffix);
+                mimeType = fileNameMap.getContentTypeFor("x." + suffix);
             }
         }
 
-        if (contentType == null) {
-            contentType = defaultContentType;
+        if (mimeType == null) {
+            mimeType = defaultMimeType;
         }
 
         IOException ex = null;
 
-        Iterator it = ImageIO.getImageWritersByMIMEType(contentType);
+        Iterator it = ImageIO.getImageWritersByMIMEType(mimeType);
         if (it.hasNext()) {
             ImageWriter imageWriter = (ImageWriter) it.next();
 
             try {
                 return writeBufferedImage(imageWriter, image, parameters,
-                        contentType);
+                        mimeType);
 
             } catch (IOException e) {
                 ex = e;
@@ -144,14 +152,14 @@ public class ImageAdapterFactory implements IAdapterFactory {
             }
         }
 
-        if (contentType.equals(defaultContentType) == false) {
-            it = ImageIO.getImageWritersByMIMEType(defaultContentType);
+        if (mimeType.equals(defaultMimeType) == false) {
+            it = ImageIO.getImageWritersByMIMEType(defaultMimeType);
             if (it.hasNext()) {
                 ImageWriter imageWriter = (ImageWriter) it.next();
 
                 try {
                     return writeBufferedImage(imageWriter, image, parameters,
-                            contentType);
+                            mimeType);
 
                 } catch (IOException e) {
                     if (ex == null) {
@@ -164,17 +172,17 @@ public class ImageAdapterFactory implements IAdapterFactory {
             }
         }
 
-        throw new FacesException("Unsupported image content type '"
-                + contentType + "'.", ex);
+        throw new FacesException("Unsupported image mime type '" + mimeType
+                + "'.", ex);
     }
 
     private String getDefaultContentType(RenderedImage image) {
         ColorModel colorModel = image.getColorModel();
         if (colorModel instanceof IndexColorModel) {
-            return INDEX_DEFAULT_CONTENT_TYPE;
+            return INDEX_DEFAULT_MIME_TYPE;
         }
 
-        return RGB_DEFAULT_CONTENT_TYPE;
+        return RGB_DEFAULT_MIME_TYPE;
     }
 
     private IResolvedContent writeBufferedImage(ImageWriter imageWriter,
@@ -184,7 +192,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
         String suffix = (String) parameters
                 .get(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
         if (suffix == null) {
-            suffix = getSuffixByContentType(contentType);
+            suffix = getSuffixByMimeType(contentType);
         }
 
         File file = createTempFile(contentType, (suffix != null) ? suffix
@@ -199,6 +207,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
 
             ImageWriteParam imageWriteParam = null;
 
+            
             Object imageMetaData = parameters
                     .get(ImageContentModel.IMAGE_WRITE_PARAM_PROPERTY);
             if (imageMetaData instanceof ImageWriteParam) {

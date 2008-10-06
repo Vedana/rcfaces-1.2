@@ -14,7 +14,11 @@ import org.rcfaces.core.model.IFilterProperties;
  * @version $Revision$ $Date$
  */
 public interface IGenerationResourceInformation extends StateHolder {
+    String SOURCE_URL = "org.rcfaces.generation.SOURCE_URL";
+
     Object getAttribute(String attributeName);
+
+    Object setAttribute(String attributeName, Object value);
 
     UIComponent getComponent();
 

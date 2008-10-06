@@ -58,6 +58,10 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
                 .valueOf(processedAtRequest));
     }
 
+    public boolean isProcessingAtRequestSetted() {
+        return getAttribute(PROCESSED_AT_REQUEST_PROPERTY) != null;
+    }
+
     public boolean isProcessingAtRequest() {
         Boolean val = (Boolean) getAttribute(PROCESSED_AT_REQUEST_PROPERTY);
         if (val == null) {

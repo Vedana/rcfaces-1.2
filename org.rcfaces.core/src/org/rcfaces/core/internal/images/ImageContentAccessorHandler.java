@@ -19,7 +19,6 @@ import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
-import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.lang.IContentFamily;
@@ -59,7 +58,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
     }
 
     protected abstract IContentAccessor formatImageURL(
-            FacesContext facesContext, IFiltredContentAccessor contentAccessor,
+            FacesContext facesContext, IContentAccessor contentAccessor,
             IGeneratedImageInformation generatedImageInformation,
             IGenerationResourceInformation generationInformation);
 
@@ -68,9 +67,10 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             IGeneratedResourceInformation[] contentInformationRef,
             IGenerationResourceInformation generationInformation) {
 
-        if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
-            return null;
-        }
+        // if (contentAccessor.getPathType() !=
+        // IContentAccessor.FILTER_PATH_TYPE) {
+        // return null;
+        // }
 
         Object content = contentAccessor.getContentRef();
         if ((content instanceof String) == false) {
@@ -103,31 +103,34 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             generationInformation = new BasicGenerationResourceInformation();
         }
 
-        IFiltredContentAccessor modifiedContentAccessor = null;
+        IContentAccessor modifiedContentAccessor = contentAccessor;
 
-        int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
-        String filter = url.substring(0, idx);
+        if (contentAccessor.getPathType() == IContentAccessor.FILTER_PATH_TYPE) {
 
-        if (idx == url.length() - 2) { // Filtre tout seul !
-            IContentAccessor parentAccessor = contentAccessor
-                    .getParentAccessor();
+            int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
+            String filter = url.substring(0, idx);
 
-            if (parentAccessor == null) {
-                throw new FacesException("Can not get main image of '" + url
-                        + "'.");
+            if (idx == url.length() - 2) { // Filtre tout seul !
+                IContentAccessor parentAccessor = contentAccessor
+                        .getParentAccessor();
+
+                if (parentAccessor == null) {
+                    throw new FacesException("Can not get main image of '"
+                            + url + "'.");
+                }
+
+                modifiedContentAccessor = new FiltredContentAccessor(filter,
+                        parentAccessor);
+
+            } else {
+                String newURL = url.substring(idx
+                        + IContentAccessor.FILTER_SEPARATOR.length());
+
+                modifiedContentAccessor = new FiltredContentAccessor(filter,
+                        new BasicContentAccessor(facesContext, newURL,
+                                contentAccessor,
+                                IContentAccessor.UNDEFINED_PATH_TYPE));
             }
-
-            modifiedContentAccessor = new FiltredContentAccessor(filter,
-                    parentAccessor);
-
-        } else {
-            String newURL = url.substring(idx
-                    + IContentAccessor.FILTER_SEPARATOR.length());
-
-            modifiedContentAccessor = new FiltredContentAccessor(filter,
-                    new BasicContentAccessor(facesContext, newURL,
-                            contentAccessor,
-                            IContentAccessor.UNDEFINED_PATH_TYPE));
         }
 
         IContentAccessor formattedContentAccessor = formatImageURL(
@@ -143,9 +146,9 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
     public abstract boolean isProviderEnabled();
 
-    public abstract String getContentType(String url);
+    public abstract String getMimeType(String url);
 
-    public abstract boolean isValidContenType(String contentType);
+    public abstract int getValidContenType(String contentType);
 
     public static boolean isOperationSupported(FacesContext facesContext,
             String operationId, IContentAccessor imageContentAccessor) {

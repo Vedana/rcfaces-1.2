@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 package org.rcfaces.core.internal.images;
 
 import java.awt.Graphics2D;
@@ -14,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
+import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageInputStream;
 import javax.servlet.ServletContext;
@@ -23,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IGeneratedImageInformation;
+import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.image.IIndexedImageOperation;
 import org.rcfaces.core.internal.RcfacesContext;
@@ -62,7 +67,9 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
             IGeneratedResourceInformation generatedInformation) {
         super.setInformations(generationInformation, generatedInformation);
 
-        generatedInformation.setProcessingAtRequest(true);
+        if (generatedInformation.isProcessingAtRequestSetted() == false) {
+            generatedInformation.setProcessingAtRequest(true);
+        }
     }
 
     protected ImageContentAccessorHandler getImageContentAccessorHandler(
@@ -110,8 +117,8 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
 
         IGeneratedImageInformation generatedImageInformation = (IGeneratedImageInformation) generatedInformation;
 
-        imageOperation
-                .prepare(generationInformation, generatedImageInformation);
+        imageOperation.prepare(this, generationInformation,
+                generatedImageInformation);
 
         String sourceContentType = generatedImageInformation
                 .getSourceMimeType();
@@ -131,6 +138,10 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
             // return INVALID_BUFFERED_FILE;
             // C'est peut etre normal (ex: svg => jpeg)
         }
+
+        generationInformation.setAttribute(
+                IGenerationResourceInformation.SOURCE_URL, "file:///"
+                        + getResourceURL());
 
         InputStream inputStream = resourceLoader.openStream();
 
@@ -160,7 +171,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
 
         if (generatedImageInformation.getResponseSuffix() == null) {
             String suffix = ImageAdapterFactory
-                    .getSuffixByContentType(responseMimeType);
+                    .getSuffixByMimeType(responseMimeType);
             if (suffix != null) {
                 generatedImageInformation.setResponseSuffix(suffix);
             }
@@ -175,6 +186,9 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
         }
 
         ImageWriter imageWriter = (ImageWriter) it.next();
+
+        ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
+        setupWriteParam(generationInformation, imageWriteParam);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Use imageWriter='" + imageWriter + "' for mimeType='"
@@ -198,15 +212,16 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
 
         IBufferedImage bufferedImage = createNewBufferedImage(getResourceURL());
 
+        RenderedImage renderedImage;
         try {
-            RenderedImage renderedImage = filter(image,
+            renderedImage = filter(image,
                     new IImageOperation[] { imageOperation },
                     new Map[] { getFilterParameters() });
 
             try {
                 bufferedImage.initialize(resourceLoader, responseMimeType,
-                        renderedImage, imageWriter, sourceImageType,
-                        resourceLoader.getLastModified());
+                        renderedImage, imageWriter, imageWriteParam,
+                        sourceImageType, resourceLoader.getLastModified());
 
             } catch (IOException e) {
                 LOG.error("Can not create filtred image '" + getResourceURL()
@@ -219,7 +234,45 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
             imageWriter.dispose();
         }
 
+        if (renderedImage != null) {
+            generatedImageInformation.setImageWidth(renderedImage.getWidth());
+            generatedImageInformation.setImageHeight(renderedImage.getHeight());
+        }
+
         return bufferedImage;
+    }
+
+    private void setupWriteParam(
+            IGenerationResourceInformation generationInformation,
+            ImageWriteParam imageWriteParam) {
+
+        Integer compressionMode = (Integer) generationInformation
+                .getAttribute(IImageContentModel.COMPRESSION_MODE);
+        if (compressionMode != null) {
+            imageWriteParam.setCompressionMode(compressionMode.intValue());
+        }
+
+        Float quality = (Float) generationInformation
+                .getAttribute(IImageContentModel.COMPRESSION_QUALITY);
+        if (quality != null) {
+            imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            imageWriteParam.setCompressionQuality(quality.floatValue());
+        }
+
+        String compressionType = (String) generationInformation
+                .getAttribute(IImageContentModel.COMPRESSION_TYPE);
+        if (compressionType != null) {
+            imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            imageWriteParam.setCompressionType(compressionType);
+        }
+
+        Boolean progressiveMode = (Boolean) generationInformation
+                .getAttribute(IImageContentModel.COMPRESSION_PROGRESSIVE_MODE);
+        if (progressiveMode != null) {
+            imageWriteParam
+                    .setProgressiveMode((progressiveMode.booleanValue()) ? ImageWriteParam.MODE_COPY_FROM_METADATA
+                            : ImageWriteParam.MODE_DISABLED);
+        }
     }
 
     private BufferedImage readImage(FacesContext facesContext,

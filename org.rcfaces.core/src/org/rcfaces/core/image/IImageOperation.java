@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.internal.images.ImageOperationContentModel;
 
 /**
  * 
@@ -17,7 +18,7 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  */
 public interface IImageOperation extends IBufferOperation {
 
-    void setForceSuffix(String suffix);
+    void setResponseSuffix(String suffix);
 
     void setResponseMimeType(String responseMimeType);
 
@@ -25,9 +26,10 @@ public interface IImageOperation extends IBufferOperation {
 
     void setEncoderMimeType(String encoderMimeType);
 
-    void prepare(IGenerationResourceInformation generationInformation,
+    void prepare(ImageOperationContentModel imageOperationContentModel,
+            IGenerationResourceInformation generationInformation,
             IGeneratedImageInformation generatedInformation);
 
-    BufferedImage filter(Map requestParameter, BufferedImage source,
+    BufferedImage filter(Map filterParameters, BufferedImage source,
             BufferedImage destination);
 }

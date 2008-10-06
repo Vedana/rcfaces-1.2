@@ -33,10 +33,10 @@ import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
+import org.rcfaces.core.internal.images.operation.GIFConversionImageOperation;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.util.ClassLocator;
-import org.rcfaces.core.model.IContentModel;
 import org.xml.sax.Attributes;
 
 /**
@@ -53,9 +53,15 @@ public class ImageContentAccessorHandlerImpl extends
 
     private static final String GIF_WRITER_PARAMETER = "org.rcfaces.core.images.GIF_WRITER";
 
-    private static final String GIF_MIME_TYPE = "image/gif";
-
     private static final IImageResourceAdapter[] IMAGE_RESOURCE_ADAPTER_EMPTY_ARRAY = new IImageResourceAdapter[0];
+
+    public static final int NO_VALIDATION = 0;
+
+    public static final int WRITER_VALIDATION = 1;
+
+    public static final int RESOURCE_ADAPTER_VALIDATION = 2;
+
+    private static final String NO_OPERATION_ID = "noOperation";
 
     private final Map operationsById = new HashMap(32);
 
@@ -119,7 +125,8 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         if (gifWriterEnabled == null) {
-            Iterator it = ImageIO.getImageWritersByMIMEType(GIF_MIME_TYPE);
+            Iterator it = ImageIO
+                    .getImageWritersByMIMEType(GIFConversionImageOperation.MIME_TYPE);
 
             gifWriterEnabled = Boolean.valueOf(it.hasNext());
             LOG.info("ImageContentAccessorImpl gif writer auto detection: "
@@ -263,23 +270,28 @@ public class ImageContentAccessorHandlerImpl extends
                     FacesContext.getCurrentInstance());
 
         } catch (ClassNotFoundException ex) {
-            throw new FacesException("Can not load class '"
-                    + operationBean.getClassName()
+            LOG.error("Can not load class '" + operationBean.getClassName()
                     + "' specified by imageOperation id='"
                     + operationBean.getId() + "'.", ex);
+
+            return;
         }
 
         if (IImageOperation.class.isAssignableFrom(clazz) == false) {
-            throw new FacesException("Class '" + operationBean.getClassName()
+            LOG.error(new FacesException("Class '"
+                    + operationBean.getClassName()
                     + "' specified by imageOperation id='"
                     + operationBean.getId()
-                    + "' must implement interface 'IImageOperation'.");
+                    + "' must implement interface 'IImageOperation'."));
+            return;
         }
 
         if ((clazz.getModifiers() & Modifier.ABSTRACT) > 0) {
-            throw new FacesException("Class '" + operationBean.getClassName()
+            LOG.error(new FacesException("Class '"
+                    + operationBean.getClassName()
                     + "' specified by imageOperation id='"
-                    + operationBean.getId() + "' is abstract !");
+                    + operationBean.getId() + "' is abstract !"));
+            return;
         }
 
         Constructor constructor;
@@ -288,10 +300,10 @@ public class ImageContentAccessorHandlerImpl extends
             constructor = clazz.getConstructor((Class[]) null);
 
         } catch (NoSuchMethodException ex) {
-            throw new FacesException(
-                    "Can not get constructor for imageOperation id='"
-                            + operationBean.getId() + "' class='"
-                            + operationBean.getClassName() + "'.", ex);
+            LOG.error("Can not get constructor for imageOperation id='"
+                    + operationBean.getId() + "' class='"
+                    + operationBean.getClassName() + "'.", ex);
+            return;
         }
 
         IImageOperation operation;
@@ -300,11 +312,12 @@ public class ImageContentAccessorHandlerImpl extends
                     .newInstance((Object[]) null);
 
         } catch (Throwable ex) {
-            throw new FacesException("Can not instanciate class '"
+            LOG.error("Can not instanciate class '"
                     + operationBean.getClassName()
                     + "' specified by imageOperation id='"
                     + operationBean.getId() + "' using constructor '"
                     + constructor + "'.", ex);
+            return;
         }
 
         if (operationBean.getName() != null) {
@@ -324,7 +337,7 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         if (operationBean.getForceSuffix() != null) {
-            operation.setForceSuffix(operationBean.getForceSuffix());
+            operation.setResponseSuffix(operationBean.getForceSuffix());
         }
 
         LOG.trace("addImageOperation(" + operationBean.getId() + ","
@@ -349,29 +362,36 @@ public class ImageContentAccessorHandlerImpl extends
     }
 
     public IContentAccessor formatImageURL(FacesContext facesContext,
-            IFiltredContentAccessor contentAccessor,
+            IContentAccessor contentAccessor,
             IGeneratedImageInformation generatedImageInformation,
             IGenerationResourceInformation generationInformation) {
 
-        String filter = contentAccessor.getFilter();
-        String operationId = filter;
+        String operationId = null;
+        IImageOperation imageOperation = null;
         String parameters = null;
-        int pf = operationId.indexOf('(');
-        if (pf >= 0) {
-            int pfe = operationId.lastIndexOf(')');
-            if (pfe < 0) {
-                parameters = operationId.substring(pf + 1);
-            } else {
-                parameters = operationId.substring(pf + 1, pfe);
+
+        if (contentAccessor instanceof IFiltredContentAccessor) {
+            IFiltredContentAccessor filtredContentAccessor = (IFiltredContentAccessor) contentAccessor;
+            operationId = filtredContentAccessor.getFilter();
+
+            int pf = operationId.indexOf('(');
+            if (pf >= 0) {
+                int pfe = operationId.lastIndexOf(')');
+                if (pfe < 0) {
+                    parameters = operationId.substring(pf + 1);
+                } else {
+                    parameters = operationId.substring(pf + 1, pfe);
+                }
+
+                operationId = operationId.substring(0, pf);
             }
 
-            operationId = operationId.substring(0, pf);
-        }
-
-        IImageOperation imageOperation = getImageOperation(operationId);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Image operation id='" + operationId + "' filter='"
-                    + contentAccessor.getFilter() + "' => " + imageOperation);
+            imageOperation = getImageOperation(operationId);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Image operation id='" + operationId + "' filter='"
+                        + filtredContentAccessor.getFilter() + "' => "
+                        + imageOperation);
+            }
         }
 
         String resourceURL = (String) contentAccessor.getContentRef();
@@ -383,24 +403,36 @@ public class ImageContentAccessorHandlerImpl extends
             resourcePathType = rootAccessor.getPathType();
         }
 
-        String sourceContentType = getContentType(resourceURL);
-
-        if (sourceContentType == null
-                || isValidContenType(sourceContentType) == false) {
+        String sourceContentType = getMimeType(resourceURL);
+        if (sourceContentType == null) {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Not supported content type '" + sourceContentType
                         + "' for url '" + contentAccessor + "'.");
             }
+            return null;
+        }
 
-            if (contentAccessor.getParentAccessor() == null) {
-                return null;
+        int validation = getValidContenType(sourceContentType);
+
+        if (validation == NO_VALIDATION) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Not supported content type '" + sourceContentType
+                        + "' for url '" + contentAccessor + "'.");
+            }
+            return null;
+        }
+
+        if (validation == RESOURCE_ADAPTER_VALIDATION) {
+            if (operationId == null) {
+                operationId = NO_OPERATION_ID;
             }
         }
 
-        generatedImageInformation.setSourceMimeType(sourceContentType);
+        if (operationId == null) {
+            return null;
+        }
 
-        imageOperation
-                .prepare(generationInformation, generatedImageInformation);
+        generatedImageInformation.setSourceMimeType(sourceContentType);
 
         IContentStorageEngine contentStorageEngine = rcfacesContext
                 .getContentStorageEngine();
@@ -443,11 +475,16 @@ public class ImageContentAccessorHandlerImpl extends
                     .getResourceVersion(facesContext, resourceURL, null);
         }
 
-        IContentModel contentModel = new ImageOperationContentModel(
+        ImageOperationContentModel imageOperationContentModel = new ImageOperationContentModel(
                 resourceURL, versionId, operationId, parameters, imageOperation);
 
+        if (imageOperation != null) {
+            imageOperation.prepare(imageOperationContentModel,
+                    generationInformation, generatedImageInformation);
+        }
+
         IContentAccessor newContentAccessor = contentStorageEngine
-                .registerContentModel(facesContext, contentModel,
+                .registerContentModel(facesContext, imageOperationContentModel,
                         generatedImageInformation, generationInformation);
 
         // pas de versionning dans ce content Accessor !
@@ -455,24 +492,52 @@ public class ImageContentAccessorHandlerImpl extends
         return newContentAccessor;
     }
 
-    public String getContentType(String url) {
+    public String getMimeType(String url) {
         int idx = url.lastIndexOf('/');
         if (idx >= 0) {
             url = url.substring(idx + 1);
         }
 
-        return fileNameMap.getContentTypeFor(url);
+        String mimeType = fileNameMap.getContentTypeFor(url);
+        if (mimeType != null) {
+            return mimeType;
+        }
+
+        if (imageResourceAdapters == null) {
+            return null;
+        }
+
+        idx = url.lastIndexOf('.');
+        if (idx < 0) {
+            return null;
+        }
+
+        url = url.substring(idx + 1).toLowerCase();
+
+        for (int i = 0; i < imageResourceAdapters.length; i++) {
+            ImageResourceAdapterBean imageResourceAdapterBean = imageResourceAdapters[i];
+
+            if (imageResourceAdapterBean.suffixes.contains(url) == false) {
+                continue;
+            }
+
+            if (imageResourceAdapterBean.mainMimeType != null) {
+                return imageResourceAdapterBean.mainMimeType;
+            }
+        }
+
+        return null;
     }
 
     public boolean isProviderEnabled() {
         return contentAccessorAvailable;
     }
 
-    public boolean isValidContenType(String contentType) {
+    public int getValidContenType(String contentType) {
         IImageResourceAdapter imageResourceAdapters[] = listImageResourceAdapters(
                 contentType, null);
         if (imageResourceAdapters != null && imageResourceAdapters.length > 0) {
-            return true;
+            return RESOURCE_ADAPTER_VALIDATION;
         }
 
         Boolean valid;
@@ -487,7 +552,11 @@ public class ImageContentAccessorHandlerImpl extends
             }
         }
 
-        return valid.booleanValue();
+        if (valid.booleanValue()) {
+            return WRITER_VALIDATION;
+        }
+
+        return NO_VALIDATION;
     }
 
     protected boolean isOperationSupported(String operationId,
@@ -495,9 +564,9 @@ public class ImageContentAccessorHandlerImpl extends
 
         Object ref = imageContentAccessor.getContentRef();
         if (ref instanceof String) {
-            String contentType = getContentType((String) ref);
+            String mimeType = getMimeType((String) ref);
 
-            if (GIF_MIME_TYPE.equals(contentType)) {
+            if (GIFConversionImageOperation.MIME_TYPE.equals(mimeType)) {
                 if (gifWriterEnabled != null) {
                     return gifWriterEnabled.booleanValue();
                 }
@@ -657,6 +726,8 @@ public class ImageContentAccessorHandlerImpl extends
 
         private boolean allResource;
 
+        private String mainMimeType;
+
         public final String getId() {
             return id;
         }
@@ -741,11 +812,17 @@ public class ImageContentAccessorHandlerImpl extends
                 return;
             }
 
+            contentType = contentType.toLowerCase().trim();
+
+            if (mainMimeType == null) {
+                mainMimeType = contentType;
+            }
+
             if (contentTypes == null) {
                 contentTypes = new HashSet();
             }
 
-            contentTypes.add(contentType.toLowerCase().trim());
+            contentTypes.add(contentType);
         }
 
         public boolean isSupported(String contentType, String suffix) {
