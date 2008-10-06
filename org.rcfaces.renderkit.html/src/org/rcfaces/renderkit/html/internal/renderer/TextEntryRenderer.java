@@ -50,7 +50,6 @@ import org.rcfaces.core.validator.IParameter;
 import org.rcfaces.core.validator.ITranslatorTask;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
-import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -249,8 +248,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
-        // Le validateur peut positionner un CONVERTISSEUR donc il faut l'appeler avant un getValue() 
-        writeValidatorAttributes(htmlWriter); // Le validateur peut influencer sur le CSS !
+        // Le validateur peut positionner un CONVERTISSEUR donc il faut
+        // l'appeler avant un getValue()
+        writeValidatorAttributes(htmlWriter); // Le validateur peut influencer
+        // sur le CSS !
 
         String text = computeValueAttribute(htmlWriter);
         String emptyMessage = null;
@@ -283,25 +284,23 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         htmlWriter.addSubFocusableComponent(htmlWriter
                 .getComponentRenderContext().getComponentClientId());
 
-        if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getHtmlProcessContext().keepDisabledState()) {
-            String value = (String) componentRenderContext
-                    .getAttribute(VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
+        String value = (String) componentRenderContext
+                .getAttribute(VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
 
-            if (value != null && textEntryComponent.isDisabled(facesContext)
-                    && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled()) {
+        if (value != null
+                && value.equals(text) == false
+                && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
 
-                htmlWriter.startElement(IHtmlWriter.INPUT);
-                htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+            htmlWriter.startElement(IHtmlWriter.INPUT);
+            htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
 
-                String name = componentRenderContext.getComponentClientId()
-                        + "::value";
-                htmlWriter.writeName(name);
+            String name = componentRenderContext.getComponentClientId()
+                    + "::value";
+            htmlWriter.writeName(name);
 
-                htmlWriter.writeValue(value);
+            htmlWriter.writeValue(value);
 
-                htmlWriter.endElement(IHtmlWriter.INPUT);
-            }
+            htmlWriter.endElement(IHtmlWriter.INPUT);
         }
     }
 
@@ -834,16 +833,11 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             // Ce cas peut subvenir quand le TEXT-ENTRY est disabled ...
             newValue = componentData.getStringProperty("text");
 
-            if (((IHtmlProcessContext) context.getProcessContext())
-                    .keepDisabledState()) {
-                if (newValue == null) {
-                    // On est peut-etre en mode Collector ... on recherche le
-                    // ::value (La valeur n'est pas forcement celle dans le form
-                    // !)
-                    String name = textEntryComponent.getClientId(facesContext)
-                            + "::value";
-                    newValue = componentData.getParameter(name);
-                }
+            if (newValue == null) {
+                // Le TextEntry est disabled ou en lazy-init inchangé
+                String name = textEntryComponent.getClientId(facesContext)
+                        + "::value";
+                newValue = componentData.getParameter(name);
             }
 
             if (newValue == null) {

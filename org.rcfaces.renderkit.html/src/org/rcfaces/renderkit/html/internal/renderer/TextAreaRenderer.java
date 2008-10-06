@@ -13,7 +13,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
-import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -44,9 +43,9 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         writeTextDirection(htmlWriter, textAreaComponent);
         writeTextAreaAttributes(htmlWriter);
 
-        String value = textAreaComponent.getText(facesContext);
-        if (value != null) {
-            htmlWriter.writeText(value);
+        String text = textAreaComponent.getText(facesContext);
+        if (text != null) {
+            htmlWriter.writeText(text);
         }
 
         htmlWriter.endElement(IHtmlWriter.TEXTAREA);
@@ -59,22 +58,23 @@ public class TextAreaRenderer extends AbstractInputRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
 
-        if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getHtmlProcessContext().keepDisabledState()) {
-            if (value != null && textAreaComponent.isDisabled(facesContext)
-                    && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled()) {
+        String value = null; // (String) componentRenderContext.getAttribute(
+        // VALIDATOR_INTERNAL_VALUE_ATTRIBUTE);
 
-                htmlWriter.startElement(IHtmlWriter.INPUT);
-                htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+        if (value != null
+                && value.equals(text) == false
+                && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
 
-                String name = componentRenderContext.getComponentClientId()
-                        + "::value";
-                htmlWriter.writeName(name);
+            htmlWriter.startElement(IHtmlWriter.INPUT);
+            htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
 
-                htmlWriter.writeValue(value);
+            String name = componentRenderContext.getComponentClientId()
+                    + "::value";
+            htmlWriter.writeName(name);
 
-                htmlWriter.endElement(IHtmlWriter.INPUT);
-            }
+            htmlWriter.writeValue(value);
+
+            htmlWriter.endElement(IHtmlWriter.INPUT);
         }
     }
 
@@ -147,14 +147,10 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
         if (newValue == null) {
 
-            if (((IHtmlProcessContext) context.getProcessContext())
-                    .keepDisabledState()) {
-                // Le TextArea est disabled ... et on essaye de conserver les
-                // données
-                String name = textAreaComponent.getClientId(facesContext)
-                        + "::value";
-                newValue = componentData.getParameter(name);
-            }
+            // Le TextArea est disabled ou en lazy-init inchangé
+            String name = textAreaComponent.getClientId(facesContext)
+                    + "::value";
+            newValue = componentData.getParameter(name);
 
             if (newValue == null) {
                 // Toujours rien ... on essaye les données du form !
