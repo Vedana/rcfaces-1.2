@@ -340,6 +340,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @return String
+	 */
 	f_getEmptyMessage: function() {
 		return this._emptyMessage;
 	},	
