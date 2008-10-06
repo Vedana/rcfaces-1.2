@@ -102,7 +102,7 @@ var __members={
 		// this._initFocusId=undefined; // String
 		// this._focusId=undefined; // String
 		// this._documentCompleted=undefined; // boolean
-		// this._activeElement=undefined;
+		this._activeElement=undefined; // HtmlElement
 
 		this.f_super(arguments);
 	},
