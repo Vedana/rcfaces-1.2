@@ -276,7 +276,9 @@ var __members = {
 		cmp.focus();
 	},
 	/**
-	 * 
+	 * @method protected
+	 * @param f_event evt
+	 * @return void
 	 */
 	f_performAccessKey: function(evt) {
 		if (this.f_isReadOnly() || this.f_isDisabled()) {
