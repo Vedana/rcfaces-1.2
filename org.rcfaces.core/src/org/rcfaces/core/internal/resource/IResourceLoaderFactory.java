@@ -18,8 +18,8 @@ public interface IResourceLoaderFactory {
 
     String getName();
 
-    IResourceLoader loadResource(ServletContext context, HttpServletRequest request,
-            HttpServletResponse response, String uri);
+    IResourceLoader loadResource(ServletContext context,
+            HttpServletRequest request, HttpServletResponse response, String uri);
 
     public interface IResourceLoader {
 
