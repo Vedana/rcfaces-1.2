@@ -197,6 +197,14 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                             + contentModel.getClass()
                             + "' to IResolvedContentModel !");
                 }
+
+                try {
+                    // On provoque le calcul du buffer !
+                    resolvedContent.getLength();
+
+                } catch (Exception e) {
+                    LOG.error(e);
+                }
             }
         }
 
