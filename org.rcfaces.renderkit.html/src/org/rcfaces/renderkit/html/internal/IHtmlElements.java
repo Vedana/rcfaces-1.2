@@ -12,6 +12,8 @@ public interface IHtmlElements {
 
     String A = "a";
 
+    String AREA = "area";
+
     String BASE = "base";
 
     String BR = "br";
@@ -33,6 +35,8 @@ public interface IHtmlElements {
     String LI = "li";
 
     String LINK = "link";
+
+    String MAP = "map";
 
     String META = "meta";
 
