@@ -163,7 +163,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         String suffix = generatedInformation.getResponseSuffix();
 
         if (suffix == null && contentType != null) {
-            suffix = ImageAdapterFactory.getSuffixByContentType(contentType);
+            suffix = ImageAdapterFactory.getSuffixByMimeType(contentType);
 
             generatedInformation.setResponseSuffix(suffix);
         }
