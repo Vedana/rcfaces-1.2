@@ -361,7 +361,7 @@ var __members = {
 		var doc=this.ownerDocument;
 		
 		var row;
-		var firstCell;
+		var firstCell=true;
 		var shadowRows=this._shadowRows;
 		if (shadowRows && shadowRows.length) {
 			row=shadowRows.shift();
@@ -475,27 +475,36 @@ var __members = {
 				}
 		
 				if (col._visibility) {
-					var cClassName=cellClassName;					
+					var cClassName=[cellClassName];					
 					
-					if (!selected) {
-						var colStyleClasses=col._cellStyleClasses;		
-						if (colStyleClasses) {
-							var csc=colStyleClasses[row._index % colStyleClasses.length];
-							if (csc) {
-								cClassName+=" "+csc;
+					var colStyleClasses=col._cellStyleClasses;		
+					if (colStyleClasses) {
+						var csc=colStyleClasses[rowIdx % colStyleClasses.length];
+						if (csc) {
+							var cs=csc.split(" ");
+							for(var j=0;j<cs.length;j++) {
+								cClassName.push(" ", cs[j]);
+								if (selected) {
+									cClassName.push("_selected");
+								}
 							}
-						}						
+						}
 					}
 					
 					if (firstCell) {
-						td=firstCell;
-						td.colSpan=1; // pour le shadow
-						td.className="";
+						if (firstCell===true) {
+							td=doc.createElement("td");
+							f_core.AppendChild(row, td);
+						} else {
+							td=firstCell;
+							td.colSpan=1; // pour le shadow
+							td.className="";
+						}
 						firstCell=undefined;
 						
-						cClassName+=" f_grid_cell_left";
+						cClassName.push(" f_grid_cell_left");
 						if (row._hasCursor && this._focus && this._showCursor) {
-							cClassName+=" f_grid_cell_cursor";
+							cClassName.push(" f_grid_cell_cursor");
 						}
 						
 					} else {
@@ -509,7 +518,7 @@ var __members = {
 					if (!cellWrap) {
 						td.noWrap=true;
 					}
-					td.className=cClassName;
+					td.className=cClassName.join("");
 					td._text=cellText;
 					td.onbeforeactivate=f_core.CancelJsEventHandler;
 					
@@ -1447,6 +1456,8 @@ var __members = {
 
 		var images=row._cellImages;
 
+		var callUpdate=false;
+		
 		var argIdx=0;
 		for(var i=0;i<cols.length;i++) {
 			var col=cols[i];
@@ -1464,9 +1475,10 @@ var __members = {
 			var cls=properties._styleClass;
 			if (cls) {
 				td._cellStyleClass=cls;
-				td.className="f_grid_cell "+cls;
+				//td.className=this._cellStyleClass+" "+cls;
 
-				row._cellsStyleClass=true;
+				// row._cellsStyleClass=true;
+				callUpdate=true;
 			}
 			
 			var toolTipText=properties._toolTipText;
@@ -1499,9 +1511,15 @@ var __members = {
 				
 					imageTag.src=imageURL;			
 				}
+				
+				callUpdate=true;
 			}
 				
 			argIdx++;
+		}
+		
+		if (callUpdate) {
+			this.f_updateCellsStyle(row);
 		}
 	},
 	/**

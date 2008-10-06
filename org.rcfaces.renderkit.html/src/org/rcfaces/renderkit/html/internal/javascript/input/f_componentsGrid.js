@@ -647,7 +647,7 @@ var __members = {
 			var align=col._align;
 			if (properties) {
 				if (properties._styleClass) {
-					row._cellsStyleClass=true;
+				//	row._cellsStyleClass=true;
 					td._cellStyleClass=properties._styleClass;
 				}
 				if (properties._toolTipText) {

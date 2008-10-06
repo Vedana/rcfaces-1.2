@@ -2513,7 +2513,7 @@ var __members = {
 		}
 		
 		if (updateCells!==false) {
-			this._updateCellsStyle(row, updateFirstOnly);
+			this.f_updateCellsStyle(row, updateFirstOnly);
 		}
 
 		var button=row._additionalButton;
@@ -2552,13 +2552,13 @@ var __members = {
 		}		
 	},
 	/**
-	 * @method private
+	 * @method protected
 	 */
-	_updateCellsStyle: function(row, firstOnly) {
+	f_updateCellsStyle: function(row, firstOnly) {
 		var td=row.firstChild;
 		for(;td && td.tagName.toLowerCase()!="td";td=td.nextSibling);
 
-		if (row._selected) {
+		if (false && row._selected) { // On généralise le traitement !
 			var className=this._cellStyleClass+" f_grid_cell_selected";
 			
 			var firstClassName=className+" f_grid_cell_left";
@@ -2585,11 +2585,17 @@ var __members = {
 		
 		var cols=this._columns;
 		var idx=0;
+		var selected=row._selected;
 		
 		for(var i=0;i<cols.length && td;i++) {
 			var col=cols[i];
 			if (!col._visibility) {
 				continue;
+			}
+				
+			var className=[this._cellStyleClass];
+			if (selected) {
+				className.push(" f_grid_cell_selected");
 			}
 			
 			var cclassName=td._cellStyleClass;
@@ -2598,24 +2604,31 @@ var __members = {
 				var cellStyleClasses=col._cellStyleClasses;
 				
 				if (cellStyleClasses) {
-					cclassName=cellStyleClasses[row._index % cellStyleClasses.length];
+					cclassName=cellStyleClasses[row._rowIndex % cellStyleClasses.length];
 				}
 			}
 			
-			className=this._cellStyleClass;
 			if (cclassName) {
-				className+=" "+cclassName;
+				var cs=cclassName.split(" ");
+				for(var j=0;j<cs.length;j++) {					
+					className.push(" ", cs[j]);
+					if (selected) {
+						className.push("_selected");
+					}
+				}
 			}
 
 			if (!idx) {
-				className+=" f_grid_cell_left";
+				className.push(" f_grid_cell_left");
 				if (this._cursor==row && this._focus && this._showCursor) {
-					className+=" f_grid_cell_cursor";
+					className.push(" f_grid_cell_cursor");
 				}
 			}
 			
-			if (td.className!=className) {
-				td.className=className;
+			var sclassName=className.join("");
+			
+			if (td.className!=sclassName) {
+				td.className=sclassName;
 			}
 			
 			if (firstOnly) {
@@ -2985,7 +2998,7 @@ var __members = {
 			
 //			column._align=undefined; // String
 			column._tcol=undefined; // HTMLThElement
-			column._tcell=undefined; // HTMLTdElement 
+////			column._tcell=undefined; // HTMLTdElement 
 			column._box=undefined; // HTMLDivElement
 			column._image=undefined; // HTMLImageElement
 			
@@ -3088,7 +3101,7 @@ var __members = {
 			row._label=undefined;  // HtmlLabelElement
 			row._dataGrid=undefined;  // f_grid
 //			row._index=undefined; // string
-//			row._cellsStyleClass=undefined; // string
+////			row._cellsStyleClass=undefined; // string
 //			row._selected=undefined; // boolean
 			row._cellImages=undefined; // HTMLImageELement[]
 //			row._hasCursor=undefined; // boolean
@@ -4008,48 +4021,11 @@ var __members = {
 			sortAlt=f_resourceBundle.Get(f_grid).f_get("NO_SORT");		
 		}
 		
-		var cw=column._col.style.width;
-		if (!cw) {
-			cw=column._head.width;
-			
-			if (!cw) {
-				cw=column._width;
-				
-				if (!cw) {
-					cw=column._head.offsetWidth;
-				}
-			}
-		}
-					
-		var swidth=parseInt(cw, 10);
-		
-		swidth-=f_grid._TEXT_RIGHT_PADDING;
-		if (swidth<0) {
-			swidth=0;
-		}
-		
-//		document.title="swidth='"+swidth+"' cur='"+column._label.style.width+"' col="+column._col.style.width;
-		
+		this._updateTitleCellBody(column);
+	
 		var box=column._box;
 		var label=column._label;
-
-		var sw=swidth+"px";
-		if (box.style.width!=sw) {
-			box.style.width=sw;
-		}			
-	
-		if (suffix) {
-			swidth-=f_grid._SORT_PADDING;
-			if (swidth<0) {
-				swidth=0;
-			}
-		}
-		
-		var sw=swidth+"px";
-		if (label.style.width!=sw) {
-			label.style.width=sw;
-		}			
-			
+				
 		if (column._restoreClass) {
 			column._restoreClass=className;
 			className=wc;
@@ -4087,6 +4063,48 @@ var __members = {
 				image.src=imageURL;
 			}
 		}
+	},
+	/**
+	 * @method private
+	 * @param Object column
+	 * @param optional number size
+	 * @return void
+	 */ 
+	_updateTitleCellBody: function(column, swidth) {
+	
+		if (swidth===undefined) {
+			var cw=column._head.style.width;
+			if (!cw) {
+				cw=column._head.offsetWidth;
+			}
+						
+			swidth=parseInt(cw, 10);
+		}
+				
+		swidth-=f_grid._TEXT_RIGHT_PADDING;
+		if (swidth<0) {
+			swidth=0;
+		}
+		
+		var box=column._box;
+		var label=column._label;
+
+		var sw=swidth+"px";
+		if (box.style.width!=sw) {
+			box.style.width=sw;
+		}			
+	
+		if (column._ascendingOrder!==undefined) {
+			swidth-=f_grid._SORT_PADDING;
+			if (swidth<0) {
+				swidth=0;
+			}
+		}
+		
+		var sw=swidth+"px";
+		if (label.style.width!=sw) {
+			label.style.width=sw;
+		}			
 	},
 	fa_updateFilterProperties: function(filterProperties) {
 		if (!this._interactive) {
@@ -4460,6 +4478,7 @@ var __members = {
 			column._head=head;
 
 			var box=f_core.GetFirstElementByTagName(head, "div");
+			f_core.Assert(box && box.nodeType==f_core.ELEMENT_NODE, "f_grid.f_updateColumnsLayout: Invalid structure of header (no DIV)");
 			column._box=box;
 	
 			var label=f_core.GetFirstElementByTagName(box, (column._sorter!==undefined)?"a":"div");
@@ -4467,6 +4486,7 @@ var __members = {
 				// C'est triable mais pas (encore) focusable !
 				label=f_core.GetFirstElementByTagName(box, "div");
 			}	
+			f_core.Assert(label && label.nodeType==f_core.ELEMENT_NODE, "f_grid.f_updateColumnsLayout: Invalid structure of header (no Label)");
 			column._label=label
 			
 			if (column._sorter) {
@@ -4525,6 +4545,7 @@ var __members = {
 		var clientWidth=body.clientWidth;
 		var offsetWidth=body.offsetWidth;
 		var scrollBarWidth=offsetWidth-clientWidth;
+		
 		if (scrollBarWidth<=0) {
 			// Ben si y a pas de scrollbar a droite, on cherche en bas !
 			scrollBarWidth=body.offsetHeight-body.clientHeight;
@@ -4560,7 +4581,13 @@ var __members = {
 			var w=col.offsetWidth;
 			total+=w;
 			
-			column._head.style.width=(w-cellMargin)+"px";
+			//alert("W="+w+" total="+total+"  tw="+(w-cellMargin));
+			
+			w-=cellMargin;
+			
+			column._head.style.width=w+"px";
+			
+			this._updateTitleCellBody(column, w);
 		}
 		
 		var t2=new Date().getTime();
@@ -4570,7 +4597,20 @@ var __members = {
 			if (h<0) {
 				h=0;
 			}
-			body.style.height=h+"px";
+			//body.style.height=h+"px";
+		}
+		
+		if (f_core.IsInternetExplorer() && !f_core.GetBooleanAttribute(this, "v:sb", true)) {
+//			this._title.style.width=total+"px";
+			
+			
+			if (!body.style.width) {
+				body.style.width=(total+2)+"px";
+				this._title.parentNode.style.width=total+"px";
+				
+			} else {
+				this._title.parentNode.style.width=(parseInt(body.style.width, 10)-2)+"px";
+			}
 		}
 		
 		this._title.scrollLeft=this._scrollBody.scrollLeft;

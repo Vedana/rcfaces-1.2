@@ -44,6 +44,7 @@ import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
+import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
@@ -143,6 +144,10 @@ public abstract class AbstractGridRenderContext {
 
     private boolean sortClientSide[];
 
+    private String columnWidths[];
+
+    private int columnWidthsInPixel[];
+
     private Object sortCommand[];
 
     private String columnIds[];
@@ -153,7 +158,7 @@ public abstract class AbstractGridRenderContext {
 
     protected UIColumn columns[];
 
-    private int totalSize;
+    private int columnWidthTotalSize;
 
     private boolean designerMode;
 
@@ -231,12 +236,12 @@ public abstract class AbstractGridRenderContext {
     protected void computeGridSize(ISizeCapability sizeCapability) {
         String width = sizeCapability.getWidth();
         if (width != null) {
-            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
+            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); //9);
         }
 
         String height = sizeCapability.getHeight();
         if (height != null) {
-            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); // 9);
+            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); //9)
         }
     }
 
@@ -375,10 +380,20 @@ public abstract class AbstractGridRenderContext {
         cellStyleClasses = new boolean[columns.length];
         cellToolTipText = new boolean[columns.length];
         columnIds = new String[columns.length];
+        columnWidths = new String[columns.length];
+        columnWidthsInPixel = new int[columns.length];
 
         FacesContext facesContext = processContext.getFacesContext();
 
         boolean widthNotSpecified = false;
+
+        int tableWidth = -1;
+        if (gridComponent instanceof IWidthCapability) {
+            String width = ((IWidthCapability) gridComponent).getWidth();
+            if (width != null) {
+                tableWidth = AbstractCssRenderer.computeSize(width, 0, 0); //9);
+            }
+        }
 
         for (int i = 0; i < columns.length; i++) {
             UIColumn column = columns[i];
@@ -418,22 +433,42 @@ public abstract class AbstractGridRenderContext {
             }
 
             String dw = null;
+            int idw = -1;
 
             if (column instanceof IWidthCapability) {
                 dw = ((IWidthCapability) column).getWidth();
             }
 
-            if (dw == null) {
+            if (dw == null && (column instanceof IWidthRangeCapability)) {
+                IWidthRangeCapability widthRangeCapability = (IWidthRangeCapability) column;
+
+                idw = widthRangeCapability.getMinWidth();
+                if (idw <= 0) {
+                    idw = widthRangeCapability.getMaxWidth();
+                }
+            }
+
+            if (idw <= 0 && dw == null && gridWidth <= 0) {
+                // On prend la taille par defaut
+
+                // idw = getDefaultColumnSize();
+            }
+
+            if (idw <= 0 && dw != null) {
+                idw = AbstractCssRenderer.computeSize(dw, tableWidth, 0);
+
+            } else if (idw > 0 && dw == null) {
+                dw = idw + "px";
+            }
+
+            columnWidths[i] = dw;
+            columnWidthsInPixel[i] = idw;
+
+            if (idw <= 0) {
                 widthNotSpecified = true;
 
             } else {
-                int idw = AbstractCssRenderer.computeSize(dw, -1, 0);
-                if (idw < 0) {
-                    throw new FacesException(
-                            "Width of column can not be negative (" + idw + ")");
-                }
-
-                totalSize += idw;
+                columnWidthTotalSize += idw;
             }
 
             if (column instanceof IResizableCapability) {
@@ -441,7 +476,7 @@ public abstract class AbstractGridRenderContext {
 
                     resizable |= true;
 
-                    if (dw == null) {
+                    if (idw <= 0) {
                         throw new FacesException(
                                 "You must specify a width for a resizable column !");
                     }
@@ -675,7 +710,15 @@ public abstract class AbstractGridRenderContext {
             }
         }
 
-        if (getGridHeight() > 0 || getGridWidth() > 0) {
+        if (widthNotSpecified) {
+            columnWidthTotalSize = -1;
+        }
+
+        if (getGridHeight() > 0 || resizable == true) {
+            hasScrollBars = true;
+        }
+        if (getGridWidth() > 0
+                && (getColumnWidthTotalSize() < 1 || getColumnWidthTotalSize() > getGridWidth())) {
             hasScrollBars = true;
         }
 
@@ -696,6 +739,10 @@ public abstract class AbstractGridRenderContext {
         // Le dataModel peut etre NULL, car dans des cas de structures
         // simples,
         // elles n'ont pas besoin de publier un model !
+    }
+
+    protected int getDefaultColumnSize() {
+        return 64;
     }
 
     protected abstract String convertAliasCommand(String command);
@@ -999,8 +1046,8 @@ public abstract class AbstractGridRenderContext {
         return gridWidth;
     }
 
-    public int getTotalSize() {
-        return totalSize;
+    public int getColumnWidthTotalSize() {
+        return columnWidthTotalSize;
     }
 
     public boolean isHeaderVisible() {
@@ -1034,6 +1081,17 @@ public abstract class AbstractGridRenderContext {
 
     public String getSortManager() {
         return sortManager;
+    }
+
+    public String getColumnWidth(int columnIndex) {
+        return columnWidths[columnIndex];
+    }
+
+    public int getColumnWidthInPixel(int columnIndex) {
+        if (columnWidthsInPixel == null) {
+            return -1;
+        }
+        return columnWidthsInPixel[columnIndex];
     }
 
 }

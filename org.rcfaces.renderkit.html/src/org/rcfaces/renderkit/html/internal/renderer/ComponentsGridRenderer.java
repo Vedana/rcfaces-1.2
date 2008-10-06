@@ -461,10 +461,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         try {
-//            int i = 0;
+            // int i = 0;
             boolean selected = false;
 
-            for (int i=0; ; i++) {
+            for (int i = 0;; i++) {
                 if (searchEnd == false) {
                     // Pas de recherche de la fin !
                     // On peut sortir tout de suite ...
@@ -619,7 +619,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                         selected = false;
                     }
                 }
-                
+
                 rowIndex++;
             }
 
@@ -727,8 +727,18 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             StringAppender sa = new StringAppender(defaultCellStyleClass, 32);
             if (selected) {
                 sa.append(' ').append("f_grid_cell_selected");
-            }
-            if (styleClass != null) {
+
+                if (styleClass != null) {
+                    StringTokenizer st = new StringTokenizer(styleClass, " ");
+                    for (; st.hasMoreTokens();) {
+                        String cellStyleClass = st.nextToken();
+
+                        sa.append(' ').append(cellStyleClass).append(
+                                "_selected");
+                    }
+                }
+
+            } else if (styleClass != null) {
                 sa.append(' ').append(styleClass);
             }
 
