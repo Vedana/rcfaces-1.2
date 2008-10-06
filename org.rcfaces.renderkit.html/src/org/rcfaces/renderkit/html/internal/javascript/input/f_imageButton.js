@@ -414,7 +414,8 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.BLUR, this._onBlur);
 	},
 	/**
-	 * 
+	 * @method
+	 * @return void
 	 */
 	f_setDomEvent: function(type, target) {
 		switch(type) {
