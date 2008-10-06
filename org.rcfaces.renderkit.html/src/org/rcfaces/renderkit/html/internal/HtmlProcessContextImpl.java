@@ -50,7 +50,7 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     private final boolean useMetaContentStyleType;
 
-    private final boolean keepDisabledState;
+    // private final boolean keepDisabledState;
 
     private Boolean multiWindowMode;
 
@@ -79,8 +79,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         useFlatIdentifier = "true".equalsIgnoreCase((String) applicationMap
                 .get(HTML_FLAT_IDENTIFIER_PARAMETER));
 
-        keepDisabledState = "true".equalsIgnoreCase((String) applicationMap
-                .get(KEEP_DISABLED_STATE_PARAMETER));
+        // keepDisabledState = "true".equalsIgnoreCase((String)
+        // applicationMap.get(KEEP_DISABLED_STATE_PARAMETER));
 
         String debugModeParam = (String) applicationMap
                 .get(DEBUG_MODE_APPLICATION_PARAMETER);
@@ -247,8 +247,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         return multiWindowMode;
     }
 
-    public boolean keepDisabledState() {
-        return keepDisabledState;
-    }
+    // public boolean keepDisabledState() {
+    // return keepDisabledState;
+    // }
 
 }

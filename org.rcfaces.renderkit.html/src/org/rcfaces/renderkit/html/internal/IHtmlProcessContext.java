@@ -32,8 +32,7 @@ public interface IHtmlProcessContext extends IProcessContext {
     String USE_SCRIPT_CDATA_PARAMETER = Constants.getPackagePrefix()
             + ".USE_SCRIPT_CDATA";
 
-    String KEEP_DISABLED_STATE_PARAMETER = Constants.getPackagePrefix()
-            + ".KEEP_DISABLED_STATE";
+    //String KEEP_DISABLED_STATE_PARAMETER = Constants.getPackagePrefix()+ ".KEEP_DISABLED_STATE";
 
     String DEBUG_MODE_APPLICATION_PARAMETER = Constants.getPackagePrefix()
             + ".client.DEBUG_MODE";
@@ -60,5 +59,5 @@ public interface IHtmlProcessContext extends IProcessContext {
 
     boolean useScriptCData();
 
-    boolean keepDisabledState();
+   // boolean keepDisabledState();
 }
