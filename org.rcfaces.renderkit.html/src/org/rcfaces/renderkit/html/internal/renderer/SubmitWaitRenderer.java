@@ -226,7 +226,7 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
                         ");");
             }
             if (backgroundMode != null) {
-                jsWriter.writeMethodCall("f_setBackgroundMode").write(
+                jsWriter.writeMethodCall("f_setBackgroundMode").writeString(
                         backgroundMode).writeln(");");
             }
 
