@@ -1,22 +1,22 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.CardBoxTools;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.lang.String;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
-import java.util.HashSet;
-import org.rcfaces.core.component.CardBoxComponent;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import java.util.Set;
+import javax.faces.el.ValueBinding;
 import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.CardBoxComponent;
+import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
+import org.rcfaces.core.internal.tools.CardBoxTools;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 
 /**
  * An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
@@ -33,7 +33,7 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeSaveValue","verticalAlignment","scopeVar","textAlignment","scopeValue","asyncDecodeMode","loadListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment","scopeSaveValue","asyncDecodeMode"}));
 	}
 
 	public CardComponent() {

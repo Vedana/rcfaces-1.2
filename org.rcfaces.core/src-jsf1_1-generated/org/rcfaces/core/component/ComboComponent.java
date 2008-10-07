@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.component.Properties;
 import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.model.IFilterProperties;
-import java.util.Set;
-import java.util.Arrays;
 import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.capability.IRequiredCapability;
 
 /**
  * <p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
@@ -39,7 +39,7 @@ public class ComboComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","filterProperties","fatalStyleClass","warnStyleClass","errorStyleClass","infoStyleClass","styleClass","required"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","styleClass","fatalStyleClass","filterProperties","infoStyleClass","required","focusStyleClass","warnStyleClass"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 

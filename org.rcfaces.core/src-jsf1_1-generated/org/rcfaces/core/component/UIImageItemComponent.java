@@ -2,17 +2,17 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.SelectItemComponent;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
  * A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
@@ -27,7 +27,7 @@ public class UIImageItemComponent extends SelectItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(SelectItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectedImageURL","disabledImageURL","alternateText","visible","hoverImageURL","rendered","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"alternateText","hoverImageURL","imageURL","disabledImageURL","selectedImageURL","visible","rendered"}));
 	}
 
 	public UIImageItemComponent() {

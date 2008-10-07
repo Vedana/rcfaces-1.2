@@ -1,11 +1,11 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
 import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>The focusManager Component is a non-visual component.</p>

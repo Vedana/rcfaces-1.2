@@ -1,13 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.rcfaces.core.internal.component.Properties;
-import java.util.HashSet;
 import java.lang.String;
-import java.util.Arrays;
-import java.util.Set;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.AbstractItemComponent;
+import javax.faces.el.ValueBinding;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IToolTipCapability;
+import java.util.Set;
+import java.util.HashSet;
 
 public class SelectItemComponent extends AbstractItemComponent implements 
 	IToolTipCapability {

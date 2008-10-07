@@ -1,40 +1,40 @@
 package org.rcfaces.core.component;
 
-import java.util.TimeZone;
-import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
-import org.rcfaces.core.lang.IAdaptable;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import java.util.Collections;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.util.HashMap;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import javax.faces.FacesException;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import java.util.Locale;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.lang.Object;
-import java.lang.String;
-import javax.faces.el.ValueBinding;
-import org.rcfaces.core.lang.Time;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
 import org.rcfaces.core.internal.converter.LiteralTimeConverter;
+import org.rcfaces.core.internal.component.Properties;
+import java.lang.Object;
+import java.util.TimeZone;
+import org.rcfaces.core.lang.Time;
+import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.manager.IValidationParameters;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import java.util.HashMap;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
+import javax.faces.FacesException;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.HashSet;
+import org.rcfaces.core.internal.manager.IValidationParameters;
+import java.util.Locale;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The timeEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a time.</p>
@@ -70,7 +70,7 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","minTime","fatalStyleClass","timeFormat","maxTime","selectionListener","literalLocale","valueChangeListener","time","errorStyleClass","autoCompletion","alternateText","literalTimeZone","hourStep","required","autoTab","millisStep","styleClass","defaultTime","minuteStep","secondStep","readOnly","warnStyleClass","infoStyleClass","componentTimeZone","componentLocale"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","minTime","time","warnStyleClass","defaultTime","hourStep","styleClass","alternateText","infoStyleClass","componentTimeZone","secondStep","millisStep","minuteStep","errorStyleClass","fatalStyleClass","autoCompletion","componentLocale","required","timeFormat","valueChangeListener","literalTimeZone","literalLocale","readOnly","focusStyleClass","autoTab","maxTime"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="time";
 
@@ -81,13 +81,6 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	public TimeEntryComponent(String componentId) {
 		this();
 		setId(componentId);
-	}
-
-	public int getValidationParametersCount() {
-
-		 
-		 return getValidationParametersCount(null);
-		
 	}
 
 	public boolean isClientSideValidationParameter(String name) {
@@ -104,17 +97,17 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
+	public String setValidationParameter(String name, String value, boolean client) {
+
+
+		return (String)setValidationParameterData(name, value, client);
+		
+	}
+
 	public String getValidationParameter(String name) {
 
 
 		 return getValidationParameter(name, null);
-		
-	}
-
-	public Map getClientValidationParametersMap() {
-
-
-		return getClientValidationParametersMap(null);
 		
 	}
 
@@ -137,10 +130,24 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
+	public void setValidationParameter(String name, ValueBinding value, boolean client) {
 
 
-		return (String)setValidationParameterData(name, value, client);
+		setValidationParameterData(name, value, client);
+		
+	}
+
+	public Map getClientValidationParametersMap() {
+
+
+		return getClientValidationParametersMap(null);
+		
+	}
+
+	public int getValidationParametersCount() {
+
+		 
+		 return getValidationParametersCount(null);
 		
 	}
 
@@ -272,13 +279,6 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 		}
 		 
 		return dataMapAccessor.getDataCount();
-		
-	}
-
-	public void setValidationParameter(String name, ValueBinding value, boolean client) {
-
-
-		setValidationParameterData(name, value, client);
 		
 	}
 
