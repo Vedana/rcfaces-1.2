@@ -1,194 +1,249 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Package Camelia" default="main" basedir=".">
-	<property name="dist"  value="${basedir}/dist"/>
-	<property name="build"  value="${basedir}/build"/>
-	<property name="build-core"  value="${basedir}/../org.rcfaces.core"/>
-	<property name="build-html"  value="${basedir}/../org.rcfaces.renderkit.html"/>
-	<property name="java.target"  value="1.5"/>
-	
-	<property name="generator.xml" value="lib-generator" />
-	<property name="optimizer.classpath.dir" value="lib-optimizer/optimizer.jar" />
+<project name="Packager Camelia" default="main" basedir=".">
+	<property name="dist" value="${basedir}/dist" />
+	<property name="build" value="${basedir}/build" />
+	<property name="java.target" value="1.5" />
+	<property name="integration.type" value="I" />
+
 	<property name="generator.classpath.dir" value="lib-generator/generator.jar" />
+
+	<path id="commons.classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 
 	<path id="generator.classpath">
 		<pathelement location="${generator.classpath.dir}" />
 		<fileset dir="lib-generator">
-			<include name="*.jar"/>
-			<exclude name="generator.jar"/>
+			<include name="*.jar" />
+			<exclude name="generator.jar" />
 		</fileset>
+		<path refid="commons.classpath"/>
 	</path>
-	
-	<path id="optimizer.classpath">
-		<pathelement location="${optimizer.classpath.dir}" />
-	</path>
-	
-	<path id="commons.classpath">
-		<pathelement location="lib/commons-logging.jar" />
-		<pathelement location="lib/commons-digester.jar" />
-		<pathelement location="lib/commons-collections.jar" />
-	</path>
-	
-	<target name="clean">
-		<delete dir="${build}" failonerror="false" />		
-		<delete file="${dist}/rcfaces*.jar" failonerror="false" />		
-		 <delete failonerror="false">
-		    <fileset dir="${build-html}/src-generated/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols"/>
-		    <fileset dir="${build-html}/bin/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols"/>
-		  </delete>
+
+	<target name="buildNewIntegration" unless="branch.version">
+		<tstamp>
+			<format property="build.number" pattern="yyyyMMddHHmm" locale="fr" />
+		</tstamp>
 	</target>
 
-	<target name="compileJS" >
+	<target name="buildNewVersion" unless="branch.version">
+		<buildnumber file="${dist}/build-number" />
+	</target>
+
+	<target name="buildHead" unless="branch.version">
+		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
+		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
+
+		<property name="metadas.xml.core" location="${build-core}/metadatas" />
+		<property name="metadas.xml.html" location="${build-html}/metadatas" />
+
+		<echo message="Build new version dir ${dist}" />
+		<echo message="Set version to ${integration.type}${build.number}" />
+		<property name="integrationVersion" value="${build.number}" />
+		<tstamp>
+			<format property="TODAY" pattern="dd/MM/yyyy HH:mm " locale="fr" />
+		</tstamp>
+
+	</target>
+
+	<target name="buildBranchVersion" if="branch.version">
+		<echo message="Build branch version dist=${dist}" />
+
+		<buildnumber file="${dist}/build-number_b${branch.version}" />
+		<property name="integrationVersion" value="${branch.version}.${build.number}" />
+
+		<property name="build-core" location="${basedir}/../org.rcfaces.core_${branch.version}" />
+		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html_${branch.version}" />
+
+		<property name="metadas.xml.core" location="${build-core}/metadatas" />
+
+		<tstamp>
+			<format property="TODAY" pattern="dd/MM/yyyy HH:mm " locale="fr" />
+		</tstamp>
+
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}" failonerror="false" />
+		<delete file="${dist}/rcfaces*.jar" failonerror="false" />
+		<delete failonerror="false">
+			<fileset dir="${build-html}/src-generated/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols" />
+			<fileset dir="${build-html}/bin/org/rcfaces/renderkit/html/internal/javascript" includes="**/*.jsc,symbolsc,symbols" />
+		</delete>
+	</target>
+
+	<target name="compileJS">
 		<delete failonerror="false" dir="${build}/js_optimizer1" />
 		<mkdir dir="${build}/js_optimizer1" />
 
 		<java classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
 			<classpath refid="generator.classpath" />
-			<classpath refid="optimizer.classpath" />
 			<classpath refid="commons.classpath" />
 
-			<arg value="-source"/>
-            <arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
+			<arg value="-source" />
+			<arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
 
-			<arg value="-dest"/>
+			<arg value="-dest" />
 			<arg path="${build}/js_optimizer1/org/rcfaces/renderkit/html/internal/javascript" />
 
-			<arg value="-extension"/>
+			<arg value="-extension" />
 			<arg value="js" />
 
-			<arg value="-label"/>
+			<arg value="-label" />
 			<arg value="LEVEL1" />
 
-			<arg value="-version"/>
-			<arg value="I${build.number}" />
-
+			<arg value="-version" />
+			<arg value="${integration.type}${integrationVersion}" />
 		</java>
-		
+
 		<delete failonerror="false" dir="${build}/js_optimizer2" />
 		<mkdir dir="${build}/js_optimizer2" />
 
 		<java classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
 			<classpath refid="generator.classpath" />
-			<classpath refid="optimizer.classpath" />
 			<classpath refid="commons.classpath" />
 
-			<arg value="-source"/>
-            <arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
+			<arg value="-source" />
+			<arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
 
-			<arg value="-dest"/>
+			<arg value="-dest" />
 			<arg path="${build}/js_optimizer2/org/rcfaces/renderkit/html/internal/javascript" />
 
-			<arg value="-label"/>
+			<arg value="-label" />
 			<arg value="LEVEL2" />
 
-			<arg value="-extension"/>
+			<arg value="-extension" />
 			<arg value="js" />
 
-			<arg value="-version"/>
-			<arg value="I${build.number}" />
-			
+			<arg value="-version" />
+			<arg value="${integration.type}${integrationVersion}" />
+
 			<arg value="+mergeVariables" />
 			<arg value="+resolveSuper" />
 			<arg value="+inlineAspects" />
 
 		</java>
-		
+
 		<delete failonerror="false" dir="${build}/js_optimizer3" />
 		<mkdir dir="${build}/js_optimizer3" />
 
 		<java classname="com.vedana.camelia.generator.js.parser.JsOptimizer">
 			<classpath refid="generator.classpath" />
-			<classpath refid="optimizer.classpath" />
 			<classpath refid="commons.classpath" />
 
-			<arg value="-source"/>
-            <arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
+			<arg value="-source" />
+			<arg path="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript/" />
 
-			<arg value="-dest"/>
+			<arg value="-dest" />
 			<arg path="${build}/js_optimizer3/org/rcfaces/renderkit/html/internal/javascript" />
 
-			<arg value="-label"/>
+			<arg value="-label" />
 			<arg value="LEVEL3" />
 
-			<arg value="-extension"/>
+			<arg value="-extension" />
 			<arg value="js" />
 
-			<arg value="-version"/>
-			<arg value="I${build.number}" />
-			
+			<arg value="-version" />
+			<arg value="${integration.type}${integrationVersion}" />
+
 			<arg value="+mergeVariables" />
 			<arg value="+resolveSuper" />
 			<arg value="+inlineAspects" />
 			<arg value="+multiWindow" />
 
 		</java>
- 	</target>
+	</target>
 
 	<target name="main" unless="builtMain">
-		<property name="builtMain" value="true"/>
+		<property name="builtMain" value="true" />
 
 		<antcall target="clean" />
 
-		<delete dir="${dist}/last" failonerror="false" />		
-		
-		<echo message="dir ${dist}" />
-		<buildnumber file="${dist}/build-number"/>
-		<tstamp>
-			<format property="TODAY" pattern="dd/MM/yyyy HH:mm " locale="fr"/>
-		</tstamp>
+		<delete dir="${dist}/last" failonerror="false" />
 
 		<antcall target="compileJS" />
 
 		<property name="rcfaces-tlddoc.zip" value="${dist}/last/rcfaces-tlddoc.zip" />
 		<property name="rcfaces-jsdoc.zip" value="${dist}/last/rcfaces-jsdoc.zip" />
 	</target>
-	
-	<target name="integration">
-		<property name="integration.version" value="-I${build.number}" />
-		<property name="buildNumber.path" value="${dist}/rcfaces${integration.version}" />
 
-		<mkdir dir="${buildNumber.path}"/>
+	<target name="integration">
+		<property name="integration.suffix" value="-${integration.type}${integrationVersion}" />
+		<property name="buildNumber.path" value="${dist}/rcfaces${integration.suffix}" />
+
+		<mkdir dir="${buildNumber.path}" />
 		<copy todir="${buildNumber.path}">
 			<fileset dir="${dist}/last">
-				<include name="*.jar"/>
+				<include name="*.jar" />
 			</fileset>
-			<mapper type="glob" from="*.jar" to="*${integration.version}.jar"/>
+			<mapper type="glob" from="*.jar" to="*${integration.suffix}.jar" />
 		</copy>
 		<copy todir="${buildNumber.path}">
 			<fileset dir="${dist}/last">
-				<include name="*.zip"/>
+				<include name="*.zip" />
 			</fileset>
-			<mapper type="glob" from="*.zip" to="*${integration.version}.zip"/>
+			<mapper type="glob" from="*.zip" to="*${integration.suffix}.zip" />
 		</copy>
 	</target>
-	
+
+	<target name="last-link">
+		<property name="integration.suffix" value="-${integration.type}${integrationVersion}" />
+		<property name="buildIntegration.path" value="${dist}/last-versioned" />
+
+		<exec executable="/bin/rm">
+			<arg path="${buildIntegration.path}" />
+		</exec>
+
+		<exec executable="/bin/ln">
+			<arg value="-s" />
+			<arg path="${dist}/rcfaces${integration.suffix}" />
+			<arg path="${buildIntegration.path}" />
+		</exec>
+	</target>
+
 	<target name="tlddoc">
 		<delete failonerror="false" dir="${build}/camelia-tlddoc" />
 		<mkdir dir="${build}/camelia-tlddoc" />
-		<java classname="com.sun.tlddoc.TLDDoc">
-			<classpath location="lib/tlddoc-1.3.jar" />
-			<arg value="-d"/>
-			<arg path="${build}/camelia-tlddoc"/>
-			<arg path="${build-core}/src-jsf1_1-generated/org/rcfaces/core/rcfaces-core.tld"/>
-			<arg path="${build-html}/src-jsf1_1-generated/org/rcfaces/renderkit/html/rcfaces-html.tld"/>
-		 </java>
+		<java fork="true" failonerror="true" jar="lib-doc/tlddoc-1.3.jar">
+			<arg value="-d" />
+			<arg path="${build}/camelia-tlddoc" />
+			<arg path="${build}/1_1/bin-core/META-INF/rcfaces-core.tld" />
+			<arg path="${build}/1_1/bin-html/META-INF/rcfaces-html.tld" />
+		</java>
 		<zip destfile="${rcfaces-tlddoc.zip}">
 			<fileset dir="${build}/camelia-tlddoc">
 			</fileset>
 		</zip>
 	</target>
-	
+
 	<target name="jsdoc">
 		<taskdef name="jsDoc" classname="com.vedana.js.doc.ant.JsDoc">
-			<classpath location="lib/jsdoc.jar" />
+			<classpath location="lib-doc/jsdoc.jar" />
+			<classpath location="lib-doc/jsdoc-ant.jar" />
+			<classpath refid="commons.classpath" />
 		</taskdef>
+		
+		<delete failonerror="false" dir="${build}/jsdoc-bootstap" />
+		<mkdir dir="${build}/jsdoc-bootstap" />
+		
+		<unzip dest="${build}/jsdoc-bootstap" src="lib-doc/jsdoc.jar">
+			<patternset>
+				<include name="com/vedana/js/doc/camelia/*.js"/>
+			</patternset>
+		</unzip>
+		
 		<delete failonerror="false" dir="${build}/camelia-jsdoc" />
 		<mkdir dir="${build}/camelia-jsdoc" />
+
 		<jsDoc 
-		  	product="camelia" 
-		  	format="html"
-			scope="public"
-		  	input="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript"
-		  	outputDirectory="${build}/camelia-jsdoc/">
+				product="camelia" 
+				format="html" 
+				scope="public" 
+				input="${build-html}/src/org/rcfaces/renderkit/html/internal/javascript"
+				coreFiles="${build}/jsdoc-bootstap/com/vedana/js/doc/camelia"
+				outputDirectory="${build}/camelia-jsdoc/">
 		</jsDoc>
 		<zip destfile="${rcfaces-jsdoc.zip}">
 			<fileset dir="${build}/camelia-jsdoc">
@@ -198,9 +253,9 @@
 
 	<target name="build1_1" depends="main">
 		<ant antfile="build-package.xml" target="buildVersion">
-			<property name="jsf.version" value="1_1"  />
-			<property name="jsf.version.manifest" value="1.1"/>
-			<property name="generator.classname" value="com.vedana.camelia.generator.components_1_1.CameliaGenerator"/>
+			<property name="jsf.version" value="1_1" />
+			<property name="jsf.version.manifest" value="1.1" />
+			<property name="generator.classname" value="com.vedana.camelia.generator.components_1_1.CameliaGenerator" />
 			<property name="version" value="1.1" />
 			<property name="minorRelease" value="0" />
 		</ant>
@@ -208,21 +263,21 @@
 
 	<target name="build1_2" depends="main">
 		<ant antfile="build-package.xml" target="buildVersion">
-			<property name="jsf.version" value="1_2"  />
-			<property name="jsf.version.manifest" value="1.2"/>
-			<property name="generator.classname" value="com.vedana.camelia.generator.components_1_2.CameliaGenerator1_2"/>
+			<property name="jsf.version" value="1_2" />
+			<property name="jsf.version.manifest" value="1.2" />
+			<property name="generator.classname" value="com.vedana.camelia.generator.components_1_2.CameliaGenerator1_2" />
 			<property name="version" value="1.2" />
 			<property name="minorRelease" value="0" />
 		</ant>
 	</target>
 
-	<target name="buildVersion" >
+	<target name="buildVersion">
 		<property name="build.path" value="${dist}/last" />
 
 		<property name="build.version.path" value="${build}/${jsf.version}" />
-		
+
 		<property name="rcfaces-core.jar" value="${build.path}/rcfaces-core-jsf${jsf.version}.jar" />
-		<property name="rcfaces-core-src.jar" value="${build.path}/rcfaces-core-src-jsf${jsf.version}.jar" />		
+		<property name="rcfaces-core-src.jar" value="${build.path}/rcfaces-core-src-jsf${jsf.version}.jar" />
 		<property name="rcfaces-html.jar" value="${build.path}/rcfaces-html-jsf${jsf.version}.jar" />
 		<property name="rcfaces-htmlc1.jar" value="${build.path}/rcfaces-htmlc-jsf${jsf.version}.jar" />
 		<property name="rcfaces-htmlc2.jar" value="${build.path}/rcfaces-htmlc2-jsf${jsf.version}.jar" />
@@ -235,10 +290,13 @@
 		<delete failonerror="false" dir="${build.version.path}" />
 
 		<mkdir dir="${build.version.path}" />
-		
+
 		<mkdir dir="${build.version.path}/src-core" />
 		<mkdir dir="${build.version.path}/bin-core" />
-		
+
+		<mkdir dir="${build.version.path}/src-html" />
+		<mkdir dir="${build.version.path}/bin-html" />
+
 		<copy todir="${build.version.path}/src-core">
 			<fileset dir="${build-core}/src">
 				<include name="**/*.java" />
@@ -248,33 +306,142 @@
 			<fileset dir="${build-core}/src-jsf${jsf.version}">
 				<include name="**/*.java" />
 			</fileset>
-			<fileset dir="${build-core}/src-jsf${jsf.version}-generated">
-				<include name="**/*.java" />
-			</fileset>
 		</copy>
 
-		<copy file="${build-core}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-core/META-INF" overwrite="true"/>
+		<copy todir="${build.version.path}/src-html">
+			<fileset dir="${build-html}/src">
+				<exclude name="**/*.db" />
+				<exclude name="**/*_" />
+			</fileset>
+			<fileset dir="${build-html}/src-jsf${jsf.version}">
+			</fileset>
+			<!--
+			<fileset dir="${build-html}/src-generated">
+				<exclude name="**/*.jsc"/>
+				<exclude name="**/symbols"/>
+				<exclude name="**/*.java"/>
+			</fileset>
+			<fileset dir="${build-html}/src-jsf${jsf.version}-generated">
+				<exclude name="org/rcfaces/renderkit/html/*.tld"/>
+				<exclude name="org/rcfaces/renderkit/html/*.xml"/>
+				<exclude name="**/*.java"/>
+			</fileset>
+			-->
+		</copy>
+
+		<mkdir dir="${build.version.path}/bin-bootstrap" />
+
+		<path id="generated.classpath">
+			<path location="${build.version.path}/bin-bootstrap" />
+			<fileset dir="${build-core}/lib">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build-core}/lib/jsf${jsf.version}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<java taskname="Prepare bootStrap" classname="${generator.classname}">
+			<classpath refid="generator.classpath" />
+			<classpath refid="generated.classpath" />
+
+			<arg value="+template" />
+			<arg path="${metadas.xml.core}" />
+
+			<arg value="+repository" />
+			<arg path="${metadas.xml.core}" />
+
+			<arg value="+repository" />
+			<arg path="${metadas.xml.html}" />
+
+			<arg value="+classPath" />
+			<arg pathref="generated.classpath" />
+
+			<arg value="+bootStrap" />
+
+			<arg value="+renderKit:core" />
+			<arg path="${build.version.path}/src-core-bootstrap" />
+
+			<arg value="+renderKit:html" />
+			<arg path="${build.version.path}/src-html-bootstrap" />
+		</java>
+
+		<javac taskname="Build bootstrap" debug="true" destdir="${build.version.path}/bin-bootstrap" optimize="no" nowarn="true" failonerror="true" target="${java.target}" encoding="utf-8">
+
+			<classpath>
+				<fileset dir="${build-core}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${build-core}/lib/jsf${jsf.version}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<src path="${build.version.path}/src-core" />
+			<src path="${build.version.path}/src-core-bootstrap" />
+			<src path="${build.version.path}/src-html" />
+			<src path="${build.version.path}/src-html-bootstrap" />
+
+			<include name="org/rcfaces/**/component/**" />
+			<include name="org/rcfaces/**/capability/**" />
+			<include name="org/rcfaces/**/manager/**" />
+			<include name="org/rcfaces/**/event/**" />
+			<include name="org/rcfaces/**/model/**" />
+		</javac>
+
+		<echo message="Call generator ${generator.classname}" />
+		<echo message="  core-model=${metadas.xml.core}" />
+		<echo message="  html-model=${metadas.xml.html}" />
+
+		<java taskname="Build template" classname="${generator.classname}">
+			<classpath refid="generator.classpath" />
+			<classpath refid="generated.classpath" />
+
+			<arg value="+template" />
+			<arg path="${metadas.xml.core}" />
+
+			<arg value="+repository" />
+			<arg path="${metadas.xml.core}" />
+
+			<arg value="+repository" />
+			<arg path="${metadas.xml.html}" />
+
+			<arg value="+classPath" />
+			<arg pathref="generated.classpath" />
+
+			<arg value="+renderKit:core" />
+			<arg path="${build.version.path}/src-core" />
+
+			<arg value="+renderKit:html" />
+			<arg path="${build.version.path}/src-html" />
+		</java>
+
+		<!-- ############# Le CORE ################# -->
+
+		<javac taskname="Build core" srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" encoding="utf-8">
+			<classpath>
+				<fileset dir="${build-core}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${build-core}/lib/jsf${jsf.version}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<copy file="${build-core}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-core/META-INF" overwrite="true" />
 		<manifest file="${build.version.path}/src-core/META-INF/MANIFEST.MF" mode="update">
-			<attribute name="Specification-Version" value="${version}"/> 
-			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${build.number}"/> 
-	    	<attribute name="Build-Date" value="${TODAY}"/>
-	    	<attribute name="Jsf-version" value="${jsf.version.manifest}"/>
+			<attribute name="Specification-Version" value="${version}" />
+			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
+			<attribute name="Build-Date" value="${TODAY}" />
+			<attribute name="Jsf-version" value="${jsf.version.manifest}" />
 			<section name="org.rcfaces.core">
 			</section>
 		</manifest>
 
-		<copy 
-			file="${build-core}/src-jsf${jsf.version}-generated/org/rcfaces/core/rcfaces-core-facesconfig.xml" 
-			tofile="${build.version.path}/src-core/META-INF/faces-config.xml"/>
-		<copy 
-			file="${build-core}/src-jsf${jsf.version}-generated/org/rcfaces/core/rcfaces-core.taglib.xml" 
-			tofile="${build.version.path}/src-core/META-INF/rcfaces-core.taglib.xml"/>
-		<copy 
-			file="${build-core}/src-jsf${jsf.version}-generated/org/rcfaces/core/rcfaces-core.tld" 
-			tofile="${build.version.path}/src-core/META-INF/rcfaces-core.tld"/>
-		<copy 
-			file="${build-core}/src/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" 
-			tofile="${build.version.path}/src-core/META-INF/services/javax.imageio.spi.ImageWriterSpi"/>
+		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core-facesconfig.xml" tofile="${build.version.path}/src-core/META-INF/faces-config.xml" />
+		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.taglib.xml" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.taglib.xml" />
+		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.tld" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.tld" />
+		<copy file="${build-core}/src/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" tofile="${build.version.path}/src-core/META-INF/services/javax.imageio.spi.ImageWriterSpi" />
 
 		<copy todir="${build.version.path}/bin-core">
 			<fileset dir="${build.version.path}/src-core">
@@ -282,46 +449,12 @@
 			</fileset>
 		</copy>
 
-		<path id="generated.classpath">
-			<!-- Nous sommes obligés d'avoir une base compilée !!! -->
-			<pathelement location="${build-core}/bin"/>
-			
-			<fileset dir="${build-core}/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${build-core}/lib/jsf${jsf.version}">
-				<include name="*.jar"/>
-			</fileset>
-		</path>
-
-		<echo message="Call generator ${generator.classname}   xml-path=${generator.xml}" />
-		<java classname="${generator.classname}">
-			<classpath refid="generator.classpath" />
-			<classpath refid="generated.classpath" />
-						
-			<arg path="${generator.xml}"/>
-			<arg pathref="generated.classpath"/>
-			<arg path="${build-core}/src-jsf${jsf.version}-generated"/>
-			<arg path="${build-html}/src-jsf${jsf.version}-generated"/>
-		</java>
-		
-		<javac srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" encoding="utf-8">
-			<classpath>
-				<fileset dir="${build-core}/lib">
-					<include name="*.jar"/>
-				</fileset>
-				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<include name="*.jar"/>
-				</fileset>
-			</classpath>
-		</javac>
-
 		<delete file="${rcfaces-core.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-core.jar}" index="true" manifest="${build.version.path}/bin-core/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/bin-core">
 			</fileset>
 		</jar>
-		
+
 		<delete file="${rcfaces-core-src.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-core-src.jar}" index="true" manifest="${build.version.path}/src-core/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/src-core">
@@ -329,50 +462,21 @@
 		</jar>
 
 		<!-- ############################ LE HTML   ################################## -->
-		
-		<mkdir dir="${build.version.path}/src-html" />
 
-		<mkdir dir="${build.version.path}/bin-html" />
-		
 		<mkdir dir="${build.version.path}/bin-htmlc" />
-		
-		<copy todir="${build.version.path}/src-html">
-			<fileset dir="${build-html}/src">
-				<exclude name="**/*.db"/>
-				<exclude name="**/*_"/>
-			</fileset>
-			<fileset dir="${build-html}/src-jsf${jsf.version}">
-			</fileset>
-			<fileset dir="${build-html}/src-generated">
-				<exclude name="**/*.jsc"/>
-				<exclude name="**/symbols"/>
-			</fileset>
-			<fileset dir="${build-html}/src-jsf${jsf.version}-generated">
-				<exclude name="org/rcfaces/renderkit/html/*.tld"/>
-				<exclude name="org/rcfaces/renderkit/html/*.xml"/>
-			</fileset>
-		</copy>
 
 
-		<copy 
-			file="${build-html}/src-jsf${jsf.version}-generated/org/rcfaces/renderkit/html/rcfaces-html-facesconfig.xml" 
-			tofile="${build.version.path}/src-html/META-INF/faces-config.xml"/>
-		<copy 
-			file="${build-html}/src-jsf${jsf.version}-generated/org/rcfaces/renderkit/html/rcfaces-html.taglib.xml" 
-			tofile="${build.version.path}/src-html/META-INF/rcfaces-html.taglib.xml"/>
-		<copy 
-			file="${build-html}/src-jsf${jsf.version}-generated/org/rcfaces/renderkit/html/rcfaces-html.tld" 
-			tofile="${build.version.path}/src-html/META-INF/rcfaces-html.tld"/>
-		<copy 
-			file="${build-html}/src/org/rcfaces/renderkit/html/internal/rcfaces-html-config.xml" 
-			tofile="${build.version.path}/src-html/META-INF/rcfaces-config.xml"/>
+		<move file="${build.version.path}/src-html/org/rcfaces/renderkit/html/rcfaces-html-facesconfig.xml" tofile="${build.version.path}/src-html/META-INF/faces-config.xml" />
+		<move file="${build.version.path}/src-html/org/rcfaces/renderkit/html/rcfaces-html.taglib.xml" tofile="${build.version.path}/src-html/META-INF/rcfaces-html.taglib.xml" />
+		<move file="${build.version.path}/src-html/org/rcfaces/renderkit/html/rcfaces-html.tld" tofile="${build.version.path}/src-html/META-INF/rcfaces-html.tld" />
+		<copy file="${build-html}/src/org/rcfaces/renderkit/html/internal/rcfaces-html-config.xml" tofile="${build.version.path}/src-html/META-INF/rcfaces-config.xml" />
 
-		<copy file="${build-html}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-html/META-INF" overwrite="true"/>
+		<copy file="${build-html}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-html/META-INF" overwrite="true" />
 		<manifest file="${build.version.path}/src-html/META-INF/MANIFEST.MF" mode="update">
-			<attribute name="Specification-Version" value="${version}"/> 
-			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${build.number}"/> 
-	    	<attribute name="Build-Date" value="${TODAY}"/>
-	    	<attribute name="Jsf-version" value="${jsf.version.manifest}"/>
+			<attribute name="Specification-Version" value="${version}" />
+			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
+			<attribute name="Build-Date" value="${TODAY}" />
+			<attribute name="Jsf-version" value="${jsf.version.manifest}" />
 			<section name="org.rcfaces.renderkit.html">
 			</section>
 		</manifest>
@@ -380,21 +484,21 @@
 		<javac srcdir="${build.version.path}/src-html" debug="true" destdir="${build.version.path}/bin-html" optimize="no" target="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<include name="*.jar"/>
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<include name="*.jar"/>
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-html}/lib">
-					<include name="*.jar"/>
+					<include name="*.jar" />
 				</fileset>
 				<path path="${build.version.path}/bin-core" />
 			</classpath>
 		</javac>
-		
+
 		<copy todir="${build.version.path}/bin-html">
 			<fileset dir="${build.version.path}/src-html">
-				<exclude name="**/*.java"/>
+				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
 
@@ -403,27 +507,27 @@
 			<fileset dir="${build.version.path}/bin-html">
 			</fileset>
 		</jar>
-		
+
 		<delete file="${rcfaces-html-src.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-html-src.jar}" index="true" manifest="${build.version.path}/src-html/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/src-html">
 			</fileset>
 		</jar>
-		
+
 		<delete file="{build.version.path}/bin-htmlc1" failonerror="false" />
 		<copy todir="${build.version.path}/bin-htmlc1" includeemptydirs="no">
 			<fileset dir="${build.version.path}/bin-html">
-				<exclude name="**/*.js"/>
+				<exclude name="**/*.js" />
 				<exclude name="**/symbols" />
-				<exclude name="**/*old"/>
+				<exclude name="**/*old" />
 			</fileset>
-			
+
 			<fileset dir="${build}/js_optimizer1">
-			</fileset>			
+			</fileset>
 		</copy>
 		<manifest file="${build.version.path}/bin-htmlc1/META-INF/MANIFEST.MF" mode="update">
 			<section name="org.rcfaces.renderkit.html">
-				<attribute name="Rcfaces-Javascript-Level" value="1"/> 
+				<attribute name="Rcfaces-Javascript-Level" value="1" />
 			</section>
 		</manifest>
 
@@ -432,21 +536,21 @@
 			<fileset dir="${build.version.path}/bin-htmlc1">
 			</fileset>
 		</jar>
-		
+
 		<delete file="{build.version.path}/bin-htmlc2" failonerror="false" />
 		<copy todir="${build.version.path}/bin-htmlc2" includeemptydirs="no">
 			<fileset dir="${build.version.path}/bin-html">
-				<exclude name="**/*.js"/>
+				<exclude name="**/*.js" />
 				<exclude name="**/symbols" />
-				<exclude name="**/*old"/>
+				<exclude name="**/*old" />
 			</fileset>
-			
+
 			<fileset dir="${build}/js_optimizer2">
-			</fileset>			
+			</fileset>
 		</copy>
 		<manifest file="${build.version.path}/bin-htmlc2/META-INF/MANIFEST.MF" mode="update">
 			<section name="org.rcfaces.renderkit.html">
-				<attribute name="Rcfaces-Javascript-Level" value="2"/> 
+				<attribute name="Rcfaces-Javascript-Level" value="2" />
 			</section>
 		</manifest>
 
@@ -455,21 +559,21 @@
 			<fileset dir="${build.version.path}/bin-htmlc2">
 			</fileset>
 		</jar>
-		
+
 		<delete file="{build.version.path}/bin-htmlc3" failonerror="false" />
 		<copy todir="${build.version.path}/bin-htmlc3" includeemptydirs="no">
 			<fileset dir="${build.version.path}/bin-html">
-				<exclude name="**/*.js"/>
+				<exclude name="**/*.js" />
 				<exclude name="**/symbols" />
-				<exclude name="**/*old"/>
+				<exclude name="**/*old" />
 			</fileset>
-			
+
 			<fileset dir="${build}/js_optimizer3">
-			</fileset>			
+			</fileset>
 		</copy>
 		<manifest file="${build.version.path}/bin-htmlc3/META-INF/MANIFEST.MF" mode="update">
 			<section name="org.rcfaces.renderkit.html">
-				<attribute name="Rcfaces-Javascript-Level" value="3"/> 
+				<attribute name="Rcfaces-Javascript-Level" value="3" />
 			</section>
 		</manifest>
 
@@ -479,32 +583,19 @@
 			</fileset>
 		</jar>
 
-		<!-- ############################ JAVADOC ################################## -->
-
-
+		<antcall target="javadoc" />
+	</target>
+	
+	<!-- ############################ JAVADOC ################################## -->
+	<target name="javadoc" unless="no.javadoc">
 		<mkdir dir="${build.version.path}/javadoc" />
-		<javadoc access="public" 
-			 	encoding="utf-8"
-				author="false" 
-				destdir="${build.version.path}/javadoc" 
-				doctitle="Rich Client Faces Components" 
-				nodeprecated="true" 
-				nodeprecatedlist="true" 
-				noindex="false" 
-				nonavbar="false" 
-				notree="false" 
-				packagenames="org.rcfaces.core.component.capability,org.rcfaces.core.converter,org.rcfaces.core.component.familly,org.rcfaces.core.component,org.rcfaces.core.component.iterator,org.rcfaces.core.event,org.rcfaces.core.util,org.rcfaces.core.model,org.rcfaces.core.preference,org.rcfaces.core.provider,org.rcfaces.core.progressMonitor,org.rcfaces.core.image,org.rcfaces.core.item,org.rcfaces.core.lang,org.rcfaces.core.lang.provider" 
-				source="${java.target}" 
-				sourcepath="${build.version.path}/src-core" 
-				splitindex="true" 
-				use="false" 
-				version="false">
+		<javadoc access="public" encoding="utf-8" author="false" destdir="${build.version.path}/javadoc" doctitle="Rich Client Faces Components" nodeprecated="true" nodeprecatedlist="true" noindex="false" nonavbar="false" notree="false" packagenames="org.rcfaces.core.component.capability,org.rcfaces.core.converter,org.rcfaces.core.component.familly,org.rcfaces.core.component,org.rcfaces.core.component.iterator,org.rcfaces.core.event,org.rcfaces.core.util,org.rcfaces.core.model,org.rcfaces.core.preference,org.rcfaces.core.provider,org.rcfaces.core.progressMonitor,org.rcfaces.core.image,org.rcfaces.core.item,org.rcfaces.core.lang,org.rcfaces.core.lang.provider" source="${java.target}" sourcepath="${build.version.path}/src-core" splitindex="true" use="false" version="false">
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<include name="*.jar"/>
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<include name="*.jar"/>
+					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</javadoc>
@@ -512,17 +603,75 @@
 			<fileset dir="${build.version.path}/javadoc">
 			</fileset>
 		</zip>
-
 	</target>
-	
-	<target name="setup1_1">
+
+	<target name="setupInit">
+		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
+		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
+	</target>
+
+	<target name="setup1_1" depends="setupInit">
 		<copy file="${build-core}/.classpath-1_1" tofile="${build-core}/.classpath" overwrite="true" />
 		<copy file="${build-html}/.classpath-1_1" tofile="${build-html}/.classpath" overwrite="true" />
 	</target>
-	
-	<target name="setup1_2">
+
+	<target name="setup1_2" depends="setupInit">
 		<copy file="${build-core}/.classpath-1_2" tofile="${build-core}/.classpath" overwrite="true" />
 		<copy file="${build-html}/.classpath-1_2" tofile="${build-html}/.classpath" overwrite="true" />
+	</target>
+
+	<target name="copyUnedic">
+		<property name="fw3" value="W:/Workspace Unedic/frameworkv3" />
+		<property name="css" value="${dist}/../../com.steadystate.css/dist" />
+		<property name="js" value="${dist}/../../com.vedana.rhino/dist" />
+
+		<property name="camelia.version" value="I2515" />
+		<property name="css.version" value="I3" />
+		<property name="js.version" value="I1" />
+
+		<copy file="${dist}/last/rcfaces-core-jsf1_2.jar" tofile="${fw3}/WebContent/WEB-INF/lib/rcfaces-core-jsf1_2.jar" overwrite="true" />
+		<copy file="${dist}/last/rcfaces-htmlc3-jsf1_2.jar" tofile="${fw3}/WebContent/WEB-INF/lib/rcfaces-html-jsf1_2.jar" overwrite="true" />
+		<copy file="${css}/last/rcfaces-css.jar" tofile="${fw3}/WebContent/WEB-INF/lib/rcfaces-css.jar" overwrite="true" />
+		<copy file="${js}/last/rcfaces-js-symbols.jar" tofile="${fw3}/WebContent/WEB-INF/lib/rcfaces-js-symbols.jar" overwrite="true" />
+
+		<copy file="${dist}/rcfaces-${camelia.version}/rcfaces-core-jsf1_2-${camelia.version}.jar" tofile="${fw3}/lib/rcfaces-core-jsf1_2-${camelia.version}.jar" />
+		<copy file="${dist}/rcfaces-${camelia.version}/rcfaces-html-jsf1_2-${camelia.version}.jar" tofile="${fw3}/lib/rcfaces-html-jsf1_2-${camelia.version}.jar" />
+		<copy file="${dist}/rcfaces-${camelia.version}/rcfaces-htmlc3-jsf1_2-${camelia.version}.jar" tofile="${fw3}/lib/rcfaces-htmlc3-jsf1_2-${camelia.version}.jar" />
+		<copy file="${css}/rcfaces-css-${css.version}/rcfaces-css-${css.version}.jar" tofile="${fw3}/lib/rcfaces-css-${css.version}.jar" />
+		<copy file="${js}/rcfaces-js-symbols-${js.version}/rcfaces-js-symbols-${js.version}.jar" tofile="${fw3}/lib/rcfaces-js-symbols-${js.version}.jar" />
+	</target>
+
+	<target name="sloop">
+		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
+		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
+		<property name="spool.workspace" location="s:/camelia/workspace" />
+
+		<!--
+		<delete dir="${spool.path}" failonerror="false" />		
+		<mkdir dir="${spool.path}"/> 
+-->
+
+		<copy todir="${spool.workspace}" verbose="true">
+			<fileset dir="${build-core}/..">
+				<include name="org.rcfaces.core/src/**" />
+				<include name="org.rcfaces.core/src-jsf1_1/**" />
+				<include name="org.rcfaces.core/src-jsf1_2/**" />
+				<include name="org.rcfaces.core/metadatas/**" />
+				<include name="org.rcfaces.core/META-INF/**" />
+				<include name="org.rcfaces.core/lib/**" />
+
+				<include name="org.rcfaces.renderkit.html/src/**" />
+				<include name="org.rcfaces.renderkit.html/src-jsf1_1/**" />
+				<include name="org.rcfaces.renderkit.html/src-jsf1_2/**" />
+				<include name="org.rcfaces.renderkit.html/META-INF/**" />
+				<include name="org.rcfaces.renderkit.html/lib/**" />
+				<include name="org.rcfaces.renderkit.html/metadatas/**" />
+
+				<include name="org.rcfaces.packager/lib*/**" />
+				<include name="org.rcfaces.packager/*.xml" />
+			</fileset>
+		</copy>
+
 	</target>
 
 </project>

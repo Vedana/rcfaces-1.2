@@ -1,5 +1,46 @@
 
 ----------------------------------------------------------------------
+- @version I2544
+- @author Olivier Oeuillot
+- 7/10/2008
+
+AbstractOperationContentModel:
+Remplace getXXXContentType par getXXXMimeType
+
+ContentStorageEngineImpl:
+En mode "processAtRequest"=false, provoque le calcul
+
+org.rcfaces.core.image.*/
+org.rcfaces.core.internal.contentAccessor.*/
+org.rcfaces.core.internal.images.*:
+Amélioration du systeme de filtres/opérations pour le rendre plus générique.
+
+GIFConversionImageOperation/JPEGConversionImageOperation/PNGConversionImageOperation/ICOConversionImageOperation:
+Nouvelle opération de transformation de format.
+
+IHtmlProcessContext/HtmlProcessContextImpl:
+Retire le parametre "keepDisabledState" qui n'a plus aucun sens.
+
+f_grid.css:
+Simplifie le CSS
+
+f_componentsGrid.js/f_dataGrid.js/f_grid.js/AbstractGridRenderer/AbstractGridRenderContext/ComponentsGridRenderer:
+Correction d'un problème de style des cellules
+Correction d'un problème de taille des colonnes
+
+TextAreaRenderer/TextEntryRenderer:
+Correction d'un problème de conservation de la valeur interne dans le cas ou le composant est "disabled"
+
+f_focusManager.js:
+Correction d'une fuite mémoire
+
+UIData2 (component):
+Ajout du setValue() sur un binding pour l'attribut "first"
+
+Repositories (en général):
+Début de la refonte (permet la prise en compte de modules RCFaces annexes [pdf,...])
+
+----------------------------------------------------------------------
 - @version I2543
 - @author Olivier Oeuillot
 - 18/9/2008
