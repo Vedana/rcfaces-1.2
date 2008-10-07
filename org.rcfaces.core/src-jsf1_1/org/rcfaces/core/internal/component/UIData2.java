@@ -961,6 +961,14 @@ public class UIData2 extends UIComponentBase implements NamingContainer {
         if (context == null) {
             throw new NullPointerException();
         }
+        
+        if (firstSet) {
+            ValueBinding vb = getValueBinding("first");
+            if (vb != null) {
+                vb.setValue(getFacesContext(), new Integer(first));
+            }
+        }
+ 
         if (!isRendered()) {
             return;
         }
