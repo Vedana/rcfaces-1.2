@@ -40,6 +40,10 @@ Ajout du setValue() sur un binding pour l'attribut "first"
 Repositories (en général):
 Début de la refonte (permet la prise en compte de modules RCFaces annexes [pdf,...])
 
+f_waitingShell.js:
+Correction de la génération JavaScript du backgroundMode 
+
+
 ----------------------------------------------------------------------
 - @version I2543
 - @author Olivier Oeuillot
