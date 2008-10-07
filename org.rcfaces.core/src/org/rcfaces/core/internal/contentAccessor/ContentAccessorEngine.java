@@ -53,7 +53,8 @@ public class ContentAccessorEngine {
                         + ") returns " + newContentAccessor);
             }
 
-            if (newContentAccessor != null) {
+            if (newContentAccessor != null
+                    && newContentAccessor != ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR) {
                 returnContentAccessor = newContentAccessor;
                 break;
             }
