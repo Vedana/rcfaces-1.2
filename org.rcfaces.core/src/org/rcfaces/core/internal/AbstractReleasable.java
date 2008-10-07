@@ -9,6 +9,8 @@ package org.rcfaces.core.internal;
  * @version $Revision$ $Date$
  */
 public class AbstractReleasable implements IReleasable {
+    private static final String REVISION = "$Revision$";
+
     public void release() {
     }
 }
