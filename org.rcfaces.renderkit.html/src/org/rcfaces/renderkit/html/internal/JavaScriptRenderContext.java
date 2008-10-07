@@ -17,7 +17,7 @@ import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.repository.IRepository;
 import org.rcfaces.renderkit.html.internal.renderer.InitRenderer;
 
 /**

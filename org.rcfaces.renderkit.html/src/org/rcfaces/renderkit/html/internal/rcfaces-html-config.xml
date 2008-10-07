@@ -8,6 +8,13 @@
   			<required>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</required>
   		</provider>
   	</providers>
+  	
+  	<repositories>
+  		<repository>
+  			<type>javascript</type>
+  			<location>org/rcfaces/renderkit/html/internal/javascript/repository.xml</location>
+  		</repository>
+  	</repositories>
 
 	<!-- Services AJAX -->
 	<services>

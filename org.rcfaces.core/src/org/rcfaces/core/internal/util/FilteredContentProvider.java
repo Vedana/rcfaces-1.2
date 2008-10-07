@@ -13,7 +13,7 @@ import java.util.Locale;
 
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.webapp.IRepository.IContent;
+import org.rcfaces.core.internal.repository.IRepository.IContent;
 
 /**
  * 

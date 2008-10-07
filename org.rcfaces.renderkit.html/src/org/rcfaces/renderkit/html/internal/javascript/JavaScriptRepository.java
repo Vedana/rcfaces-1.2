@@ -26,8 +26,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Services;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
+import org.rcfaces.core.internal.repository.AbstractHierarchicalRepository;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
-import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
 import org.xml.sax.Attributes;
 
 /**

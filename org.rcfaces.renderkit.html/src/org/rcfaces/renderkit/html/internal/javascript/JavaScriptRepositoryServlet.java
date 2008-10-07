@@ -33,23 +33,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.repository.AbstractHierarchicalRepository;
+import org.rcfaces.core.internal.repository.HierarchicalRepositoryServlet;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository;
+import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchicalFile;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
+import org.rcfaces.core.internal.repository.IRepository.IContent;
+import org.rcfaces.core.internal.repository.IRepository.IContext;
+import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.internal.util.ApplicationParametersMap;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.ServletTools;
-import org.rcfaces.core.internal.webapp.AbstractHierarchicalRepository;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
-import org.rcfaces.core.internal.webapp.HierarchicalRepositoryServlet;
-import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
-import org.rcfaces.core.internal.webapp.IRepository;
-import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IHierarchicalFile;
-import org.rcfaces.core.internal.webapp.IHierarchicalRepository.IModule;
-import org.rcfaces.core.internal.webapp.IHierarchicalRepository.ISet;
-import org.rcfaces.core.internal.webapp.IRepository.IContent;
-import org.rcfaces.core.internal.webapp.IRepository.IContext;
-import org.rcfaces.core.internal.webapp.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -74,7 +75,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String MAIN_REPOSITORY_DIRECTORY_LOCATION = JavaScriptRepository.class
             .getPackage().getName().replace('.', '/');
 
-    private static final String MAIN_REPOSITORY_LOCATION = "/repository.xml";
+    //private static final String MAIN_REPOSITORY_LOCATION = "/repository.xml";
 
     private static final String PARAMETER_PREFIX = Constants.getPackagePrefix()
             + ".javascript";
@@ -121,6 +122,8 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
     private static final String JAVASCRIPT_VERSION_PROPERTY = "javascript.version";
 
     private static final Set SYMBOLS_FILENAMES = new HashSet(2);
+
+    private static final String JAVASCRIPT_REPOSITORY_TYPE = "javascript";
 
     static {
         SYMBOLS_FILENAMES.add(SYMBOLS_FILENAME);
@@ -253,8 +256,24 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
         List repositoriesLocation = new ArrayList(32);
-        repositoriesLocation.add(getMainRepositoryDirectoryLocation()
-                + MAIN_REPOSITORY_LOCATION);
+        //String location = getMainRepositoryDirectoryLocation()+ MAIN_REPOSITORY_LOCATION;
+        //repositoriesLocation.add(location);
+        //LOG.debug("Add repository location '" + location + "'. [main]");
+
+        RcfacesContext rcfacesContext = RcfacesContext.getInstance(
+                servletContext, null, null);
+        String managerRepositories[] = rcfacesContext.getRepositoryManager()
+                .listRepositoryLocations(JAVASCRIPT_REPOSITORY_TYPE);
+        if (managerRepositories != null && managerRepositories.length > 0) {
+            for (int i = 0; i < managerRepositories.length; i++) {
+                String repositoryLocation = managerRepositories[i];
+
+                repositoriesLocation.add(repositoryLocation);
+
+                LOG.debug("Add repository location '" + repositoryLocation
+                        + "'. [repository]");
+            }
+        }
 
         String repositoryParameter = config
                 .getInitParameter(REPOSITORIES_PARAMETER);
@@ -270,7 +289,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                 repositoriesLocation.add(repositoryLocation);
 
                 LOG.debug("Add repository location '" + repositoryLocation
-                        + "'.");
+                        + "'. [config]");
             }
         }
 

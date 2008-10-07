@@ -13,9 +13,9 @@ import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.webapp.AbstractRepository.AbstractContent;
-import org.rcfaces.core.internal.webapp.IRepository.IContent;
-import org.rcfaces.core.internal.webapp.IRepository.IContentProvider;
+import org.rcfaces.core.internal.repository.AbstractRepository.AbstractContent;
+import org.rcfaces.core.internal.repository.IRepository.IContent;
+import org.rcfaces.core.internal.repository.IRepository.IContentProvider;
 
 /**
  * 

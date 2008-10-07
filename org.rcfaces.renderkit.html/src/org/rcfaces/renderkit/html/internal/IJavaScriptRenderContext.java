@@ -6,8 +6,8 @@ package org.rcfaces.renderkit.html.internal;
 
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.webapp.IRepository;
-import org.rcfaces.core.internal.webapp.IRepository.IFile;
+import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 
 /**

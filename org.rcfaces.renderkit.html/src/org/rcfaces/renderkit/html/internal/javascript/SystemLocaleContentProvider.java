@@ -21,8 +21,8 @@ import javax.faces.application.FacesMessage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
-import org.rcfaces.core.internal.webapp.IRepository.IContent;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.codec.JavascriptCodec;
 

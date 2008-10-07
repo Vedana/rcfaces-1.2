@@ -43,6 +43,8 @@ import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
+import org.rcfaces.core.internal.repository.IRepositoryManager;
+import org.rcfaces.core.internal.repository.RepositoryManagerImpl;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
@@ -77,7 +79,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
             ContentAccessorsRegistryImpl.class.getPackage(),
             ImageContentAccessorHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
-            ContentStorageAccessorHandler.class.getPackage() };
+            ContentStorageAccessorHandler.class.getPackage(),
+            RepositoryManagerImpl.class.getPackage() };
 
     private static final String DESIGNER_MODE_PROPERTY = "com.vedana.nodus3.designer";
 
@@ -106,6 +109,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
     private transient IContentStorageEngine indirectContentRepository;
 
     private transient IDocumentBuilderProvider documentBuilderProvider;
+
+    private transient IRepositoryManager repositoryManager;
 
     private boolean designerMode;
 
@@ -511,5 +516,13 @@ public class RcfacesContextImpl extends RcfacesContext implements
     public void setDocumentBuilderProvider(
             IDocumentBuilderProvider documentBuilderProvider) {
         this.documentBuilderProvider = documentBuilderProvider;
+    }
+
+    public IRepositoryManager getRepositoryManager() {
+        return repositoryManager;
+    }
+
+    public void setRepositoryManager(IRepositoryManager repositoryManager) {
+        this.repositoryManager = repositoryManager;
     }
 }

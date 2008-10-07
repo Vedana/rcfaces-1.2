@@ -12,7 +12,7 @@ import javax.servlet.ServletException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.webapp.SourceRepository;
+import org.rcfaces.core.internal.repository.SourceRepository;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)

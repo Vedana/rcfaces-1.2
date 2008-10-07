@@ -26,7 +26,10 @@ import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
+import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.util.FakeHttpServletRequest;
+import org.rcfaces.core.internal.util.FakeHttpServletResponse;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 
@@ -132,6 +135,7 @@ public abstract class RcfacesContext {
     public static final RcfacesContext getInstance(
             ServletContext servletContext, ServletRequest request,
             ServletResponse response) {
+
         synchronized (CAMELIA_CONTEXT_PROPERTY) {
             RcfacesContext cameliaContext = (RcfacesContext) servletContext
                     .getAttribute(CAMELIA_CONTEXT_PROPERTY);
@@ -176,6 +180,14 @@ public abstract class RcfacesContext {
             ServletResponse response) {
 
         final RcfacesContext rcfacesContextRef[] = new RcfacesContext[1];
+
+        if (request == null) {
+            request = FakeHttpServletRequest.SINGLETON;
+        }
+
+        if (response == null) {
+            response = FakeHttpServletResponse.SINGLETON;
+        }
 
         runIntoFacesContext(context, request, response, new Runnable() {
 
@@ -248,12 +260,12 @@ public abstract class RcfacesContext {
     public abstract void setDocumentBuilderProvider(
             IDocumentBuilderProvider documentBuilderProvider);
 
+    public abstract IRepositoryManager getRepositoryManager();
+
+    public abstract void setRepositoryManager(
+            IRepositoryManager repositoryManager);
+
     public static boolean isJSF1_2() {
         return isJSF1_2;
-    }
-
-    public static Object getService(String providerId) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

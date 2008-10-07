@@ -2,7 +2,7 @@
  * $Id$
  * 
  */
-package org.rcfaces.core.internal.webapp;
+package org.rcfaces.core.internal.repository;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

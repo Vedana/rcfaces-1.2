@@ -7,7 +7,7 @@ package org.rcfaces.renderkit.html.internal.javascript;
 import java.util.Map;
 
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.webapp.IHierarchicalRepository;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository;
 
 /**
  * 

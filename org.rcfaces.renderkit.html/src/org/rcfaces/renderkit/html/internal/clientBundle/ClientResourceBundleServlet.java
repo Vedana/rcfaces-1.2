@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.RepositoryServlet;
 import org.rcfaces.core.internal.util.ServletTools;
-import org.rcfaces.core.internal.webapp.IRepository;
-import org.rcfaces.core.internal.webapp.RepositoryServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 

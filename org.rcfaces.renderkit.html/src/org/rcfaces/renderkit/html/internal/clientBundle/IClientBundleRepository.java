@@ -3,7 +3,7 @@
  */
 package org.rcfaces.renderkit.html.internal.clientBundle;
 
-import org.rcfaces.core.internal.webapp.IRepository;
+import org.rcfaces.core.internal.repository.IRepository;
 
 /**
  * 

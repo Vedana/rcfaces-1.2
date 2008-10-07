@@ -16,7 +16,7 @@ import javax.servlet.ServletContext;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.webapp.IRepository.IFile;
+import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
