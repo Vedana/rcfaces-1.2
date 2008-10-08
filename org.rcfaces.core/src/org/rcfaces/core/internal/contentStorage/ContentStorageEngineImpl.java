@@ -49,7 +49,9 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
     private int contentStorageServletPathType;
 
-    private String contentStorageServletURL;
+    private final Object contentStorageServletURL_LOCK = new Object();
+
+    private volatile String contentStorageServletURL;
 
     private IAdapterManager adapterManager;
 
@@ -66,15 +68,6 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         if (rcfacesContext.getContentStorageEngine() == null) {
             rcfacesContext.setContentStorageEngine(this);
-        }
-
-        contentStorageServletURL = ContentStorageServlet
-                .getContentStorageBaseURI(facesContext.getExternalContext()
-                        .getApplicationMap());
-
-        if (contentStorageServletURL == null) {
-            LOG
-                    .info("Content storage engine is disabled. (No started Content Storage Servlet)");
         }
 
         disableCache = "true"
@@ -115,10 +108,21 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         if (contentStorageServletURL == null) {
-            LOG
-                    .info("ContentStorage is not initialized. (Servlet path is invalid)");
+            synchronized (contentStorageServletURL_LOCK) {
+                // Il faut desynchroniser le startup des servlets !
+                if (contentStorageServletURL == null) {
+                    contentStorageServletURL = ContentStorageServlet
+                            .getContentStorageBaseURI(facesContext
+                                    .getExternalContext().getApplicationMap());
 
-            return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+                    if (contentStorageServletURL == null) {
+                        LOG
+                                .info("Content storage engine is disabled. (No started Content Storage Servlet)");
+
+                        return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+                    }
+                }
+            }
         }
 
         if (generatedInformation.getContentFamily() == null) {

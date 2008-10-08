@@ -5,9 +5,9 @@ package org.rcfaces.core.internal.config;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -32,7 +32,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
     private static final Class[] PARENT_PROVIDER_PARAMETER_TYPES = new Class[] { IProvider.class };
 
-    private final Map providersById = new HashMap(64);
+    private final Map providersById = new TreeMap();
 
     private Digester digester;
 
@@ -102,7 +102,7 @@ public class ProvidersRegistry implements IProvidersRegistry {
                             + "'), TRY with no parameter !", ex);
 
             try {
-                constructor = clazz.getConstructor((Class[])null);
+                constructor = clazz.getConstructor((Class[]) null);
                 parameters = null;
 
             } catch (NoSuchMethodException ex2) {

@@ -83,7 +83,11 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
                         .debug("Provider is disabled, return an unsupported content accessor flag");
             }
 
-            return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+            if (contentAccessor.getPathType() == IContentAccessor.FILTER_PATH_TYPE) {
+                return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
+            }
+            
+            return null;
         }
 
         String url = (String) content;

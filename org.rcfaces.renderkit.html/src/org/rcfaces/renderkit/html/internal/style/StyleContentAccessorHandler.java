@@ -60,7 +60,9 @@ public class StyleContentAccessorHandler extends
 
     private ICssParser cssParser = null;
 
-    private boolean contentAccessorAvailable;
+    private final Object contentAccessorAvailable_LOCK = new Object();
+
+    private volatile Boolean contentAccessorAvailable;
 
     private RcfacesContext rcfacesContext;
 
@@ -86,17 +88,7 @@ public class StyleContentAccessorHandler extends
                         .declareContentAccessorHandler(IContentFamily.STYLE,
                                 this);
             }
-        }
 
-        contentAccessorAvailable = ContentStorageServlet
-                .getContentStorageBaseURI(facesContext.getExternalContext()
-                        .getApplicationMap()) != null;
-
-        if (contentAccessorAvailable == false) {
-            LOG.info("StyleContentAccessor is not available");
-
-        } else {
-            LOG.debug("StyleContentAccessor available");
         }
     }
 
@@ -118,7 +110,7 @@ public class StyleContentAccessorHandler extends
             return null;
         }
 
-        if (isProviderEnabled() == false) {
+        if (isProviderEnabled(facesContext) == false) {
             if (LOG.isDebugEnabled()) {
                 LOG
                         .debug("Provider is disabled, return an unsupported content accessor flag");
@@ -276,8 +268,25 @@ public class StyleContentAccessorHandler extends
         return null;
     }
 
-    public boolean isProviderEnabled() {
-        return contentAccessorAvailable;
+    public boolean isProviderEnabled(FacesContext facesContext) {
+        if (contentAccessorAvailable != null) {
+            return contentAccessorAvailable.booleanValue();
+        }
+
+        synchronized (contentAccessorAvailable_LOCK) {
+            contentAccessorAvailable = Boolean.valueOf(ContentStorageServlet
+                    .getContentStorageBaseURI(facesContext.getExternalContext()
+                            .getApplicationMap()) != null);
+        }
+
+        if (contentAccessorAvailable.booleanValue() == false) {
+            LOG.info("StyleContentAccessor is not available");
+
+        } else {
+            LOG.debug("StyleContentAccessor available");
+        }
+
+        return contentAccessorAvailable.booleanValue();
     }
 
     public boolean isValidContenType(String contentType) {
