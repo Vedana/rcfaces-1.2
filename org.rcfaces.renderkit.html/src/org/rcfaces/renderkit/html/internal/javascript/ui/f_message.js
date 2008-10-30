@@ -21,7 +21,7 @@ var __statics = {
 			detail=message.f_getDetail();
 
 			if (styleMessage) {
-				className=" "+styleMessage;
+				className+=" "+styleMessage;
 			}
 		}
 		
