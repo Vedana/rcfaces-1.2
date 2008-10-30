@@ -26,6 +26,10 @@ public class SortEvent extends ActionEvent {
 
     private ISortConverter sortConverter;
 
+    public SortEvent(UIComponent component) {
+        this(component, null);
+    }
+
     public SortEvent(UIComponent component, Object dataModel) {
         super(component);
         this.dataModel = dataModel;
