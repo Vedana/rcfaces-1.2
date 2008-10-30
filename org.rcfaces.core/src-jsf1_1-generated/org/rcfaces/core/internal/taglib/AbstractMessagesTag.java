@@ -42,8 +42,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private String waiRole;
 	private String propertyChangeListeners;
 	private String initListeners;
-	private String showDetail;
 	private String globalOnly;
+	private String showDetail;
 	private String margins;
 	private String showSummary;
 	public final String getVisible() {
@@ -238,12 +238,12 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final void setShowDetail(String showDetail) {
-		this.showDetail = showDetail;
-	}
-
 	public final void setGlobalOnly(String globalOnly) {
 		this.globalOnly = globalOnly;
+	}
+
+	public final void setShowDetail(String showDetail) {
+		this.showDetail = showDetail;
 	}
 
 	public final void setMargins(String margins) {
@@ -274,8 +274,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  globalOnly='"+globalOnly+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 		}
@@ -496,16 +496,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (showDetail != null) {
-			if (isValueReference(showDetail)) {
-				ValueBinding vb = application.createValueBinding(showDetail);
-				component.setValueBinding(Properties.SHOW_DETAIL, vb);
-
-			} else {
-				component.setShowDetail(getBool(showDetail));
-			}
-		}
-
 		if (globalOnly != null) {
 			if (isValueReference(globalOnly)) {
 				ValueBinding vb = application.createValueBinding(globalOnly);
@@ -513,6 +503,16 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setGlobalOnly(getBool(globalOnly));
+			}
+		}
+
+		if (showDetail != null) {
+			if (isValueReference(showDetail)) {
+				ValueBinding vb = application.createValueBinding(showDetail);
+				component.setValueBinding(Properties.SHOW_DETAIL, vb);
+
+			} else {
+				component.setShowDetail(getBool(showDetail));
 			}
 		}
 
@@ -559,8 +559,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		showDetail = null;
 		globalOnly = null;
+		showDetail = null;
 		margins = null;
 		showSummary = null;
 

@@ -193,17 +193,6 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 		
 	}
 
-	public Boolean getVisibleState(FacesContext facesContext) {
-
-
-			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
-				return null;
-			}
-			
-			return Boolean.valueOf(isVisible(facesContext));
-		
-	}
-
 	public Map getServerDataMap(FacesContext facesContext) {
 
 
@@ -220,6 +209,17 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 			map=Collections.unmodifiableMap(map);
 		}
 		return map;
+		
+	}
+
+	public Boolean getVisibleState(FacesContext facesContext) {
+
+
+			if (engine.isPropertySetted(Properties.VISIBLE)==false) {
+				return null;
+			}
+			
+			return Boolean.valueOf(isVisible(facesContext));
 		
 	}
 

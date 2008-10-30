@@ -44,30 +44,12 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 		
 	}
 
-	public void setClientData(String name, ValueBinding value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
-            
-		dataMapAccessor.setData(name, value, null);
-		
-	}
-
 	public Object setServerData(String name, Object value) {
 
 
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public void setServerData(String name, ValueBinding value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -104,6 +86,24 @@ public class SelectItemsIteratorComponent extends CameliaItemsComponent implemen
 
 			return engine.getDataMapAccessor(context, "serverData", false);
 			
+	}
+
+	public void setServerData(String name, ValueBinding value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
+
+	public void setClientData(String name, ValueBinding value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
 	}
 
 	public Object getItems() {

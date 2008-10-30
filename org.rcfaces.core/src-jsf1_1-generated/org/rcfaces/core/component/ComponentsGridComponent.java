@@ -21,6 +21,7 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
@@ -82,6 +83,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IHeaderVisibilityCapability,
 	IOrderedChildrenCapability,
 	ISelectionRangeComponent,
+	ISortedComponentsCapability,
 	IAdditionalInformationRangeComponent,
 	IGridComponent,
 	IComponentValueTypeCapability,

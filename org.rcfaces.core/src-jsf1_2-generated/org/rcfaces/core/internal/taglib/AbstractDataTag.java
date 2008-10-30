@@ -45,6 +45,7 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression keyDownListeners;
 	private ValueExpression keyUpListeners;
 	private ValueExpression resetListeners;
+	private ValueExpression sortListeners;
 	private ValueExpression styleClass;
 	private ValueExpression userEventListeners;
 	private ValueExpression hiddenMode;
@@ -163,6 +164,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 
 	public final void setResetListener(ValueExpression resetListeners) {
 		this.resetListeners = resetListeners;
+	}
+
+	public final void setSortListener(ValueExpression sortListeners) {
+		this.sortListeners = sortListeners;
 	}
 
 	public final void setStyleClass(ValueExpression styleClass) {
@@ -452,6 +457,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.RESET_LISTENER_TYPE, resetListeners);
 		}
 
+		if (sortListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SORT_LISTENER_TYPE, sortListeners);
+		}
+
 		if (styleClass != null) {
 			if (styleClass.isLiteralText()==false) {
 				component.setValueExpression(Properties.STYLE_CLASS, styleClass);
@@ -572,6 +581,7 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		keyDownListeners = null;
 		keyUpListeners = null;
 		resetListeners = null;
+		sortListeners = null;
 		styleClass = null;
 		userEventListeners = null;
 		hiddenMode = null;

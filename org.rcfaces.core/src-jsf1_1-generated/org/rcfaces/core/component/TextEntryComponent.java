@@ -127,13 +127,6 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public void setValidationParameter(String name, ValueBinding value, boolean client) {
-
-
-		setValidationParameterData(name, value, client);
-		
-	}
-
 	public Map getClientValidationParametersMap() {
 
 
@@ -176,6 +169,13 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		}
 		 
 		return dataMapAccessor.getDataCount();
+		
+	}
+
+	public void setValidationParameter(String name, ValueBinding value, boolean client) {
+
+
+		setValidationParameterData(name, value, client);
 		
 	}
 
