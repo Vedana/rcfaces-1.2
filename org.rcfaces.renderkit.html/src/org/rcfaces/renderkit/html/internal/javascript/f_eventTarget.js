@@ -33,8 +33,9 @@ var __statics = {
 			mouseOut: f_event.MOUSEOUT,
 			mouseUp: f_event.MOUSEUP,
 			propertyChange: f_event.PROPERTY_CHANGE,
-			suggestion: f_event.SUGGESTION,
 			selection: f_event.SELECTION,
+			sort: f_event.SORT,
+			suggestion: f_event.SUGGESTION,
 			user: f_event.USER,
 			validation: f_event.VALIDATION
 	},
@@ -75,6 +76,7 @@ var __statics = {
 		cb[f_event.PROPERTY_CHANGE]=noLock;
 		cb[f_event.RESET]="reset";
 		cb[f_event.SELECTION]={_dom: "onclick" };
+		cb[f_event.SORT]=null;
 		cb[f_event.SUBMIT]=null;
 		cb[f_event.SUGGESTION]=null;
 		cb[f_event.USER]=noLock;
