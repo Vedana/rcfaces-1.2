@@ -41,9 +41,13 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
             writeHtmlAttributes(htmlWriter);
             writeJavaScriptAttributes(htmlWriter);
 
+            boolean lazy = true;
+
             String focusId = getFocusId(htmlComponentRenderContext);
             if (focusId != null) {
                 htmlWriter.writeAttribute("v:focusId", focusId);
+
+                lazy = false;
             }
 
             FocusManagerComponent focusManagerComponent = (FocusManagerComponent) htmlComponentRenderContext
@@ -54,11 +58,15 @@ public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
                             .isSetFocusIfMessage(htmlComponentRenderContext
                                     .getFacesContext()) == false) {
                 htmlWriter.writeAttribute("v:setFocusIfMessage", false);
+
+                lazy = false;
             }
 
             htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
-            declareLazyJavaScriptRenderer(htmlWriter);
+            if (true) {
+                declareLazyJavaScriptRenderer(htmlWriter);
+            }
 
         } else {
             htmlWriter.enableJavaScript();
