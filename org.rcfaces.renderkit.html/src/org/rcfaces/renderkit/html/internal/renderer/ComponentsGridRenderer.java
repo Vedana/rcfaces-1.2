@@ -46,12 +46,15 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.tools.GridServerSort;
+import org.rcfaces.core.internal.tools.FilterExpressionTools;
+import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IComponentRefModel;
+import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.IRangeDataModel2;
@@ -330,6 +333,32 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     .setComponent(componentsGridComponent);
         }
 
+        boolean filtred = false;
+
+        IFilterProperties filtersMap = gridRenderContext.getFiltersMap();
+        if (filtersMap != null) {
+            if (dataModel instanceof IFiltredModel) {
+                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+
+                filtredDataModel.setFilter(filtersMap);
+                gridRenderContext.updateRowCount();
+
+                filtred = true;
+
+            } else {
+                dataModel = FilteredDataModel.filter(dataModel, filtersMap);
+                gridRenderContext.updateRowCount();
+            }
+
+        } else if (dataModel instanceof IFiltredModel) {
+            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+
+            filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
+            gridRenderContext.updateRowCount();
+
+            filtred = true;
+        }
+
         if (sortedComponents != null && sortedComponents.length > 0) {
 
             if (NOT_SUPPORTED_SERVER_SORT) {
@@ -349,11 +378,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 ((ISortedDataModel) dataModel).setSortParameters(
                         componentsGridComponent, sortedComponents);
             } else {
-                // Il faut faire le tri à la main !
-
-                sortTranslations = GridServerSort.computeSortedTranslation(
-                        facesContext, componentsGridComponent, dataModel,
-                        sortedComponents);
+                throw new FacesException(
+                        "ComponentsGrid can not be sorted automatically ! (the dataModel must implement ISortedDataModel)");
             }
 
             // Apres le tri, on connait peu etre la taille
@@ -635,6 +661,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             } else if (gridRenderContext.getRowCount() < 0) {
                 return rowIndex;
 
+            } else if (filtred) {
+                if (searchEnd && count == 0) {
+                    return count;
+                }
             }
 
             return -1;
