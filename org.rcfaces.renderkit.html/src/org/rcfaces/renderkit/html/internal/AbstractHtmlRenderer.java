@@ -56,6 +56,7 @@ import org.rcfaces.core.event.MouseOverEvent;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.event.ResetEvent;
 import org.rcfaces.core.event.SelectionEvent;
+import org.rcfaces.core.event.SortEvent;
 import org.rcfaces.core.event.SuggestionEvent;
 import org.rcfaces.core.event.UserEvent;
 import org.rcfaces.core.internal.component.ISeverityImageAccessors;
@@ -255,6 +256,18 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
                     public void decodeEvent(UIComponent component,
                             IEventData eventData) {
                         FacesEvent event = new ResetEvent(component);
+                        queueEvent(component, event);
+                    }
+                });
+
+        EVENT_DECODERS.put(JavaScriptClasses.EVENT_SORT,
+                new AbstractEventDecoder() {
+                    private static final String REVISION = "$Revision$";
+
+                    public void decodeEvent(UIComponent component,
+                            IEventData eventData) {
+
+                        FacesEvent event = new SortEvent(component);
                         queueEvent(component, event);
                     }
                 });
