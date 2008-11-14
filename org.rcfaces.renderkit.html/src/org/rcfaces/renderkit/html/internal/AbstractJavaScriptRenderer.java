@@ -56,8 +56,8 @@ public abstract class AbstractJavaScriptRenderer extends
     private static final boolean ENCODE_EVENT_ATTRIBUTE_ON_COLLECTOR_MODE = true;
 
     /*
-     * protected void setInitializeByName(IComponentRenderContext renderContext) {
-     * renderContext.setAttribute(INIT_BY_NAME, Boolean.TRUE); }
+     * protected void setInitializeByName(IComponentRenderContext renderContext)
+     * { renderContext.setAttribute(INIT_BY_NAME, Boolean.TRUE); }
      */
     public final void initializeJavaScript(IJavaScriptWriter writer)
             throws WriterException {
@@ -121,6 +121,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
     /**
      * Generation of 'f_completeComponent' javascript call.
+     * 
      * @param htmlComponentContext
      * @return If the 'f_completeComponent' javascript call might be generated.
      */
@@ -216,6 +217,7 @@ public abstract class AbstractJavaScriptRenderer extends
             Map.Entry entry = (Map.Entry) it.next();
 
             String listenerType = (String) entry.getKey();
+
             FacesListener listeners[] = (FacesListener[]) entry.getValue();
 
             boolean submitSupport = true;
