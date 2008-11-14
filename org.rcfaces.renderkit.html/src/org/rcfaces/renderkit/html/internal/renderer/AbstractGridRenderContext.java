@@ -476,9 +476,10 @@ public abstract class AbstractGridRenderContext {
 
                     resizable |= true;
 
-                    if (idw <= 0) {
+                    if (idw < 0) {
                         throw new FacesException(
-                                "You must specify a width for a resizable column !");
+                                "You must specify a width for a resizable column ! (columnId="
+                                        + column.getId() + ")");
                     }
                 }
             }
