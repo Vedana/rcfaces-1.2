@@ -368,6 +368,7 @@
 		<capability id="IKeyEventCapability" />
 		<capability id="IInitEventCapability" />
 		<capability id="ISortManagerCapability" />
+		<capability id="ISortEventCapability" />
 		<capability id="ITabIndexCapability" />
 
 		<attribute id="rows" type="int" writeComponent="false" />
@@ -1526,6 +1527,9 @@
 		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
+
+		<implements id="org.rcfaces.core.internal.capability.ISortedComponentsCapability" importMethods="false" />
+
 
 		<capability id="ISelectionEventCapability" />
 		<capability id="ISelectableCapability" />

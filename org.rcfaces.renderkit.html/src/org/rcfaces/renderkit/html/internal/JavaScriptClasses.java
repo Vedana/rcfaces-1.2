@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -217,6 +216,10 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_SUGGESTION = "suggestion";
 
+    public static final String EVENT_SORT_CST = "f_event.SORT";
+
+    public static final String EVENT_SORT = "sort";
+
     public static final String EVENT_SUGGESTION_CST = "f_event.SUGGESTION";
 
     public static final String EVENT_PROPERTY_CHANGE = "propertyChange";
@@ -268,6 +271,8 @@ public final class JavaScriptClasses {
     public static final String EVENT_MOUSEOUT_ATTRIBUTE = "mouseOut";
 
     public static final String EVENT_MOUSEOVER_ATTRIBUTE = "mouseOver";
+
+    public static final String EVENT_SORT_ATTRIBUTE = "sort";
 
     public static final String EVENT_SUGGESTION_ATTRIBUTE = "suggestion";
 

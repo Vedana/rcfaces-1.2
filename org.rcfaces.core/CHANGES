@@ -1,4 +1,17 @@
 
+
+
+----------------------------------------------------------------------
+- @version I2544_Bunedic_1
+- @author Olivier Oeuillot
+- 
+
+Ajout du support de l'evenement SORT au niveau du composant "grid"
+
+
+
+********************************** BRANCHE UNEDIC *******************************************
+
 ----------------------------------------------------------------------
 - @version I2544
 - @author Olivier Oeuillot

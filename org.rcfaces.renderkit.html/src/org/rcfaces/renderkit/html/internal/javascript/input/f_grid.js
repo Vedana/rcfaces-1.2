@@ -2055,7 +2055,7 @@ var __members = {
 		if (this._initSort) {
 			this._initSort=undefined;
 			
-			this._sortTable();
+			this._sortTable(false);
 		}				
 
 		var scrollBody=this._scrollBody;					
@@ -3849,13 +3849,13 @@ var __members = {
 		}
 
 		if (currentSorts.length) {
-			// Ajout Fred pour �viter le cas o� on appelle un tri sur plusieurs col dont la premi�re est d�j� tri�e
+			// Ajout Fred pour éviter le cas où on appelle un tri sur plusieurs col dont la première est déjà triée
 			if ((append || currentSorts.length==1) && currentSorts[currentSorts.length-1]==col && !col2) {
 				// f_core.Debug(f_grid, "f_setColumnSort: Just inverse");
 				col._ascendingOrder=ascending;
 		
 				this._updateTitleStyle(col);
-				this._sortTable();
+				this._sortTable(true);
 				return;				
 			}
 		}
@@ -3907,7 +3907,7 @@ var __members = {
 			}
 		}
 		
-		this._sortTable();
+		this._sortTable(true);
 	},
 
 	/**
@@ -4186,16 +4186,17 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param optional boolean userSort
 	 * @return void
 	 */
-	_sortTable: function() {
+	_sortTable: function(userSort) {
 		this.f_updateSortBreadCrumbs();
 		
 		var currentSorts=this._currentSorts;
 		if (!currentSorts || !currentSorts.length) {
 			return;
 		}
-
+	
 		var methods=new Array;
 		var tdIndexes=new Array;
 		var ascendings=new Array;
@@ -4203,8 +4204,8 @@ var __members = {
 		var serverSort=false;
 		var columns=this._columns;
 		
-		var serial="";	
-				
+		var serial=new Array;
+
 		for(var i=0;i<currentSorts.length;i++) {
 			var col=currentSorts[i];
 			
@@ -4232,14 +4233,16 @@ var __members = {
 			}
 			tdIndexes.push(tdIndex);
 			
-			if (serial) {
-				serial+=",";
-			}
-			serial+=col._index+","+col._ascendingOrder;
-		}
+			serial.push(col._index, col._ascendingOrder);
+		} 
 		
-	
+		serial=serial.join(",");
+
 		this.f_setProperty(f_prop.SORT_INDEX, serial);
+
+		if (userSort && this.f_fireEvent(f_event.SORT, null, currentSorts)===false) {
+			return;
+		}							
 			
 		if (this._rowCount<0 || (this._rows && this._rows<this._rowCount) || serverSort) {
 			// Plusieurs pages !
@@ -4576,9 +4579,12 @@ var __members = {
 			if (!col) {
 				break;
 			}
-			
-			
+						
 			var w=col.offsetWidth;
+			if (!w && !col.offsetHeight) {
+				w=parseInt(col.style.width);
+			}
+			
 			total+=w;
 			
 			//alert("W="+w+" total="+total+"  tw="+(w-cellMargin));
@@ -4934,7 +4940,7 @@ var __members = {
 	 				waiting.f_close();
 	 			}
 				
-				f_tree.Info(f_tree, "f_showAdditionalContent.onError: Bad status: "+status);
+				f_grid.Info(f_grid, "f_showAdditionalContent.onError: Bad status: "+status);
 
 				try {
 					additionalRow._additionalContent=false;
@@ -5291,7 +5297,12 @@ var __members = {
 	 * @return number Number of removed rows.
 	 */
 	f_clearAll: function() {
-		return this.f_clear.apply(this, this.fa_listVisibleElements());
+		var visibleElements=this.fa_listVisibleElements();
+		if (!visibleElements) {
+			return 0;
+		}
+	
+		return this.f_clear.apply(this, visibleElements);
 	},
 	
 	/**

@@ -5,6 +5,7 @@
 package org.rcfaces.core.internal.lang;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import org.apache.commons.logging.Log;
@@ -312,5 +313,10 @@ public final class StringAppender implements CharSequence {
         sa.append(value, start, end - start);
 
         return sa;
+    }
+
+    public byte[] getBytes(String charsetName)
+            throws UnsupportedEncodingException {
+        return toString().getBytes(charsetName);
     }
 }

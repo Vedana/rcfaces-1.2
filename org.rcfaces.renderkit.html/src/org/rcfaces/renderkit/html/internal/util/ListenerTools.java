@@ -26,6 +26,7 @@ import org.rcfaces.core.component.capability.IMouseEventCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IResetEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
@@ -97,6 +98,10 @@ public final class ListenerTools {
 
         public String getKeyPressEventName() {
             return JavaScriptClasses.EVENT_KEYPRESS_CST;
+        }
+
+        public String getSortEventName() {
+            return JavaScriptClasses.EVENT_SORT_CST;
         }
 
         public String getSuggestionEventName() {
@@ -186,6 +191,10 @@ public final class ListenerTools {
 
         public String getKeyPressEventName() {
             return JavaScriptClasses.EVENT_KEYPRESS_ATTRIBUTE;
+        }
+
+        public String getSortEventName() {
+            return JavaScriptClasses.EVENT_SORT_ATTRIBUTE;
         }
 
         public String getSuggestionEventName() {
@@ -464,6 +473,19 @@ public final class ListenerTools {
             }
         }
 
+        if (component instanceof ISortEventCapability) {
+            ISortEventCapability sortListenerCapability = (ISortEventCapability) component;
+
+            FacesListener fls[] = sortListenerCapability.listSortListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getSortEventName(), fls);
+            }
+        }
+
         if (component instanceof IClientValidationCapability) {
             IValidationEventCapability clientValidationListenerCapability = (IValidationEventCapability) component;
 
@@ -525,6 +547,8 @@ public final class ListenerTools {
         String getResetEventName();
 
         String getSelectionEventName();
+
+        String getSortEventName();
 
         String getUserEventName();
 

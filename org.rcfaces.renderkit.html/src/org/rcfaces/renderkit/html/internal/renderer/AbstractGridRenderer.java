@@ -1740,6 +1740,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         if (listenersByType.isEmpty() == false) {
             StringAppender sa = new StringAppender(128);
 
+            listenersByType.remove(ListenerTools.ATTRIBUTE_NAME_SPACE
+                    .getSortEventName());
+
             appendAttributeEventForm(sa, objectWriter.getParent().getWriter(),
                     listenersByType);
 
