@@ -539,6 +539,9 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 					
 					FacesListener listeners[]=getFacesListeners(FacesListener.class);
 					ComponentTools.broadcastCommand(this, (ActionEvent)event, listeners);
+					
+					
+					
 					return;
 				}
 				

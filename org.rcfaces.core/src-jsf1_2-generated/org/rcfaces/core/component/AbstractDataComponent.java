@@ -29,6 +29,7 @@ import org.rcfaces.core.component.capability.IResetEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
 import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ISortEventCapability;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import org.rcfaces.core.component.capability.IInitEventCapability;
@@ -63,6 +64,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	IForegroundBackgroundColorCapability,
 	IKeyEventCapability,
 	IResetEventCapability,
+	ISortEventCapability,
 	IStyleClassCapability,
 	IUserEventCapability,
 	IServerDataCapability,
@@ -75,7 +77,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","value","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","visible","y","lookId","marginLeft","marginTop","tabIndex","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","sortListener","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","value","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","visible","y","lookId","marginLeft","marginTop","tabIndex","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -799,6 +801,18 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public final javax.faces.event.FacesListener [] listResetListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
+	}
+
+	public final void addSortListener(org.rcfaces.core.event.ISortListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeSortListener(org.rcfaces.core.event.ISortListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSortListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISortListener.class);
 	}
 
 	public java.lang.String getStyleClass() {

@@ -51,13 +51,14 @@
 	<target name="buildBranchVersion" if="branch.version">
 		<echo message="Build branch version dist=${dist}" />
 
-		<buildnumber file="${dist}/build-number_b${branch.version}" />
+<!--		<buildnumber file="${dist}/build-number_b${branch.version}" /> -->
 		<property name="integrationVersion" value="${branch.version}.${build.number}" />
 
-		<property name="build-core" location="${basedir}/../org.rcfaces.core_${branch.version}" />
-		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html_${branch.version}" />
+		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
+		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
 
 		<property name="metadas.xml.core" location="${build-core}/metadatas" />
+		<property name="metadas.xml.html" location="${build-html}/metadatas" />
 
 		<tstamp>
 			<format property="TODAY" pattern="dd/MM/yyyy HH:mm " locale="fr" />
@@ -489,9 +490,6 @@
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${build-html}/lib">
-					<include name="*.jar" />
-				</fileset>
 				<path path="${build.version.path}/bin-core" />
 			</classpath>
 		</javac>
@@ -642,33 +640,45 @@
 	</target>
 
 	<target name="sloop">
-		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
-		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
-		<property name="spool.workspace" location="s:/camelia/workspace" />
+		<property name="build-core" location="${basedir}/../org.rcfaces.core_${branch}" />
+		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html_${branch}" />
+		<property name="spool.workspace" location="s:/camelia/workspace_${branch}" />
 
 		<!--
-		<delete dir="${spool.path}" failonerror="false" />		
-		<mkdir dir="${spool.path}"/> 
+		<delete dir="${spool.workspace}" failonerror="false" />		
+		
 -->
 
-		<copy todir="${spool.workspace}" verbose="true">
-			<fileset dir="${build-core}/..">
-				<include name="org.rcfaces.core/src/**" />
-				<include name="org.rcfaces.core/src-jsf1_1/**" />
-				<include name="org.rcfaces.core/src-jsf1_2/**" />
-				<include name="org.rcfaces.core/metadatas/**" />
-				<include name="org.rcfaces.core/META-INF/**" />
-				<include name="org.rcfaces.core/lib/**" />
-
-				<include name="org.rcfaces.renderkit.html/src/**" />
-				<include name="org.rcfaces.renderkit.html/src-jsf1_1/**" />
-				<include name="org.rcfaces.renderkit.html/src-jsf1_2/**" />
-				<include name="org.rcfaces.renderkit.html/META-INF/**" />
-				<include name="org.rcfaces.renderkit.html/lib/**" />
-				<include name="org.rcfaces.renderkit.html/metadatas/**" />
-
-				<include name="org.rcfaces.packager/lib*/**" />
-				<include name="org.rcfaces.packager/*.xml" />
+		<mkdir dir="${spool.workspace}" /> 
+		<mkdir dir="${spool.workspace}/org.rcfaces.core" /> 
+		<copy todir="${spool.workspace}/org.rcfaces.core" verbose="true">
+			<fileset dir="../org.rcfaces.core_${branch}">
+				<include name="src/**" />
+				<include name="src-jsf1_1/**" />
+				<include name="src-jsf1_2/**" />
+				<include name="metadatas/**" />
+				<include name="META-INF/**" />
+				<include name="lib/**" />
+			</fileset>
+		</copy>
+		
+		<mkdir dir="${spool.workspace}/org.rcfaces.renderkit.html" /> 
+		<copy todir="${spool.workspace}/org.rcfaces.renderkit.html" verbose="true">
+			<fileset dir="../org.rcfaces.renderkit.html_${branch}">
+				<include name="src/**" />
+				<include name="src-jsf1_1/**" />
+				<include name="src-jsf1_2/**" />
+				<include name="META-INF/**" />
+				<include name="lib/**" />
+				<include name="metadatas/**" />
+			</fileset>
+		</copy>
+			
+		<mkdir dir="${spool.workspace}/org.rcfaces.packager" /> 
+		<copy todir="${spool.workspace}/org.rcfaces.packager" verbose="true">
+			<fileset dir="../org.rcfaces.packager_${branch}">
+				<include name="lib*/**" />
+				<include name="*.xml" />
 			</fileset>
 		</copy>
 
