@@ -231,7 +231,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
                 }
 
             } else {
-                // Pas d'état du composant ! (A cause du lazy mode)
+                // Pas d'état du composant ! (A cause du DISABLED)
 
                 String name = button.getClientId(facesContext) + "::value";
                 if (clientData.getParameter(name) != null) {
