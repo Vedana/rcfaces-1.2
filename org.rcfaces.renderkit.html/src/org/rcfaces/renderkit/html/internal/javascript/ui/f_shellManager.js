@@ -179,6 +179,30 @@ var __statics = {
 
 		return null;
 	},
+	/**
+	 * @method public static
+	 * @param Object object A f_event object or a component (rcfaces or html)
+	 * @param any returnValue
+	 * @return boolean Returns <code>true</code> if the shell is found.
+	 */
+	CloseShell: function(object, returnValue) {
+		if (object instanceof f_event) {
+			object=object.f_getComponent();
+		}
+		
+		if (object.nodeType!=f_core.ELEMENT_NODE) {
+			return false;
+		}
+		
+		var shell=f_shellManager.GetShell(object);
+		if (!shell) {
+			return false;
+		}
+		
+		shell.f_close(returnValue);
+		
+		return true;
+	},
 	Finalizer: function() {
 		var shellManager=f_shellManager._singleton;
 		if (shellManager) {
