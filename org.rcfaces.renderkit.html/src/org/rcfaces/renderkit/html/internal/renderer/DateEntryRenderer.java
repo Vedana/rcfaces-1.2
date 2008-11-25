@@ -8,12 +8,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.DateEntryComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -22,7 +24,10 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
+import org.rcfaces.renderkit.html.internal.ICalendarDecoderRenderer;
+import org.rcfaces.renderkit.html.internal.IDecoderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -33,7 +38,8 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DateEntryRenderer extends AbstractCalendarRenderer {
+public class DateEntryRenderer extends AbstractCalendarRenderer implements
+        ICalendarDecoderRenderer {
     private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
@@ -109,6 +115,10 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
                 dateFormat);
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
+
+        if (dateEntryComponent.isRequired()) {
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+        }
     }
 
     protected String getWAIRole() {
@@ -118,8 +128,34 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
     protected void encodeAfterDecorator(IHtmlWriter htmlWriter,
             IComponentDecorator componentDecorator) throws WriterException {
         super.encodeAfterDecorator(htmlWriter, componentDecorator);
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        DateEntryComponent dateEntryComponent = (DateEntryComponent) componentRenderContext
+                .getComponent();
 
         htmlWriter.endElement(IHtmlWriter.DIV);
+
+        Date value = dateEntryComponent.getDate();
+
+        if (value != null
+                && htmlWriter.getJavaScriptEnableMode().isOnInitEnabled() == false) {
+
+            htmlWriter.startElement(IHtmlWriter.INPUT);
+            htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+
+            String name = componentRenderContext.getComponentClientId()
+                    + "::value";
+            htmlWriter.writeName(name);
+
+            Calendar componentCalendar = CalendarTools.getCalendar(
+                    componentRenderContext.getRenderContext()
+                            .getProcessContext(), dateEntryComponent, false);
+
+            htmlWriter.writeValue(convertDate(componentCalendar, value, true));
+
+            htmlWriter.endElement(IHtmlWriter.INPUT);
+        }
     }
 
     protected void encodeSubComponents(IHtmlWriter htmlWriter,
@@ -436,19 +472,53 @@ public class DateEntryRenderer extends AbstractCalendarRenderer {
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
+        FacesContext facesContext = context.getFacesContext();
+
         DateEntryComponent dateEntryComponent = (DateEntryComponent) component;
 
-        Date dateValue = (Date) componentData.getProperty("value");
+        Date dateValue = null;
+        if (componentData.containsKey(Properties.VALUE) == false) {
+            // Le DateEntry est disabled ou en lazy-init inchangé
+            String name = dateEntryComponent.getClientId(facesContext)
+                    + "::value";
+
+            String newValue = componentData.getParameter(name);
+            if (newValue != null) {
+                dateValue = HtmlTools.parseDate(newValue, context
+                        .getProcessContext(), dateEntryComponent, this,
+                        "internalValue");
+            }
+
+        } else {
+            dateValue = (Date) componentData.getProperty(Properties.VALUE);
+        }
+
         Date date = null;
         if (dateValue != null
-                && dateEntryComponent.isValueLocked(context.getFacesContext()) == false) {
+                && dateEntryComponent.isValueLocked(facesContext) == false) {
             date = dateValue;
         }
 
         dateEntryComponent.setSubmittedExternalValue(date);
     }
 
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add(Properties.VALUE);
+    }
+
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
     }
+
+    public Calendar getCalendar(IDecoderContext decoderContext,
+            String attributeName) {
+        if (Properties.VALUE.equals(attributeName)) {
+            return decoderContext.getProcessContext().getForcedDateCalendar();
+        }
+
+        return null;
+    }
+
 }
