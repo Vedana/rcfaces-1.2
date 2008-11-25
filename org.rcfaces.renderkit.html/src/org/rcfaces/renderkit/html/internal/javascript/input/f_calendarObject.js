@@ -1581,7 +1581,7 @@ var __members = {
 			return;
 		}
 
-		var extShowDate=this._cursorDate;
+		var nextShowDate=this._cursorDate;
 		if (selection && selection.length) {
 			var ds=selection[0];
 			if (ds && ds.length) {
