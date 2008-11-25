@@ -6,12 +6,14 @@ package org.rcfaces.renderkit.html.internal.renderer;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TimeEntryComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -96,6 +98,10 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
         htmlWriter.endElement(IHtmlWriter.DIV);
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
+
+        if (timeEntryComponent.isRequired()) {
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+        }
     }
 
     protected String getWAIRole() {
@@ -401,7 +407,7 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
         TimeEntryComponent timeEntryComponent = (TimeEntryComponent) component;
 
-        Time timeValue = (Time) componentData.getProperty("value");
+        Time timeValue = (Time) componentData.getProperty(Properties.VALUE);
         Time time = null;
         if (timeValue != null
                 && timeEntryComponent.isValueLocked(context.getFacesContext()) == false) {
@@ -410,6 +416,12 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
         }
 
         timeEntryComponent.setSubmittedExternalValue(time);
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add(Properties.VALUE);
     }
 
     protected String getActionEventName(INameSpace nameSpace) {
