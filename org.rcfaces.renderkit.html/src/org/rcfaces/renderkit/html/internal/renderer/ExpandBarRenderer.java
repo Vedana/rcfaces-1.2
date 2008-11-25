@@ -3,13 +3,14 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Set;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ExpandBarComponent;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.capability.ICollapsableCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -86,6 +87,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
+        boolean collapsed = expandBarComponent.isCollapsed(facesContext);
+
+        if (collapsed) {
+            getCssStyleClasses(htmlWriter).addSuffix("_collapsed");
+        }
+
         htmlWriter.startElement(IHtmlWriter.UL);
         writeCoreAttributes(htmlWriter);
         writeTitle(htmlWriter, expandBarComponent);
@@ -94,7 +101,6 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         writeJavaScriptAttributes(htmlWriter);
 
-        boolean collapsed = expandBarComponent.isCollapsed(facesContext);
         writeCssAttributes(htmlWriter);
 
         String normalText = expandBarComponent.getText(facesContext);
@@ -208,19 +214,6 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
     protected String getLabelId(IHtmlWriter htmlWriter) {
         return htmlWriter.getComponentRenderContext().getComponentClientId()
                 + LABEL_ID_SUFFIX;
-    }
-
-    protected String computeComponentStyleClass(UIComponent component,
-            String classSuffix) {
-        classSuffix = super.computeComponentStyleClass(component, classSuffix);
-
-        if (component instanceof ICollapsableCapability) {
-            if (((ICollapsableCapability) component).isCollapsed()) {
-                classSuffix += "_collapsed";
-            }
-        }
-
-        return classSuffix;
     }
 
     protected String getContentClassName(IHtmlWriter writer, boolean collapsed) {
@@ -408,7 +401,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             }
         }
 
-        Boolean collapsed = componentData.getBooleanProperty("collapsed");
+        Boolean collapsed = componentData
+                .getBooleanProperty(Properties.COLLAPSED);
         if (collapsed != null) {
             Boolean old = Boolean.valueOf(expandBarComponent
                     .isCollapsed(context.getFacesContext()));
@@ -420,6 +414,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                         Properties.COLLAPSED, old, text));
             }
         }
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add(Properties.COLLAPSED);
     }
 
     protected String getJavaScriptClassName() {
