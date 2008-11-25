@@ -7,7 +7,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.rcfaces.core.component.TextComponent;
+import javax.faces.component.UIComponent;
+
+import org.rcfaces.core.component.capability.ITypedComponentCapability;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 
@@ -19,43 +22,41 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 public class TextTypeTools {
     private static final String REVISION = "$Revision$";
 
-    private static final Map TYPES = new HashMap(32);
+    private static final Map HTML_TYPES = new HashMap(32);
     static {
-        TYPES.put("label", IHtmlWriter.LABEL);
-        TYPES.put("emphasis", "em");
-        TYPES.put("cite", "cite");
-        TYPES.put("definition", "dfn");
-        TYPES.put("code", "code");
-        TYPES.put("sample", "samp");
-        TYPES.put("keyboard", "kbd");
-        TYPES.put("variable", "var");
-        TYPES.put("abbreviated", "abbr");
-        TYPES.put("acronym", "acronym");
-        TYPES.put("quote", "blockquote");
-        TYPES.put("q", "q");
-        TYPES.put("paragraph", "p");
-        TYPES.put("preformatted", "pre");
-        TYPES.put("ins", "ins");
-        TYPES.put("del", "del");
-        TYPES.put("header", "h1");
-        TYPES.put("header1", "h1");
-        TYPES.put("header 1", "h1");
-        TYPES.put("header2", "h2");
-        TYPES.put("header 2", "h2");
-        TYPES.put("header3", "h3");
-        TYPES.put("header 3", "h3");
-        TYPES.put("header4", "h4");
-        TYPES.put("header 4", "h4");
-        TYPES.put("header5", "h5");
-        TYPES.put("header 5", "h5");
-        TYPES.put("header6", "h6");
-        TYPES.put("header 6", "h6");
+        HTML_TYPES.put("label", IHtmlWriter.LABEL);
+        HTML_TYPES.put("emphasis", "em");
+        HTML_TYPES.put("cite", "cite");
+        HTML_TYPES.put("definition", "dfn");
+        HTML_TYPES.put("code", "code");
+        HTML_TYPES.put("sample", "samp");
+        HTML_TYPES.put("keyboard", "kbd");
+        HTML_TYPES.put("variable", "var");
+        HTML_TYPES.put("abbreviated", "abbr");
+        HTML_TYPES.put("acronym", "acronym");
+        HTML_TYPES.put("quote", "blockquote");
+        HTML_TYPES.put("q", "q");
+        HTML_TYPES.put("paragraph", "p");
+        HTML_TYPES.put("preformatted", "pre");
+        HTML_TYPES.put("ins", "ins");
+        HTML_TYPES.put("del", "del");
+        HTML_TYPES.put("header", "h1");
+        HTML_TYPES.put("header1", "h1");
+        HTML_TYPES.put("header2", "h2");
+        HTML_TYPES.put("header3", "h3");
+        HTML_TYPES.put("header4", "h4");
+        HTML_TYPES.put("header5", "h5");
+        HTML_TYPES.put("header6", "h6");
 
-        Collection c = TYPES.values();
+        HTML_TYPES.put("ul", "unorderedlist");
+        HTML_TYPES.put("li", "listitem");
+        HTML_TYPES.put("ol", "orderedlist");
+
+        Collection c = HTML_TYPES.values();
         String values[] = (String[]) c.toArray(new String[c.size()]);
 
         for (int i = 0; i < values.length; i++) {
-            TYPES.put(values[i].toLowerCase(), values[i]);
+            HTML_TYPES.put(values[i].toLowerCase(), values[i]);
         }
     }
 
@@ -63,15 +64,44 @@ public class TextTypeTools {
         IHtmlComponentRenderContext renderContext = htmlWriter
                 .getHtmlComponentRenderContext();
 
-        TextComponent textComponent = (TextComponent) renderContext
-                .getComponent();
-        String type = textComponent.getType(renderContext.getFacesContext());
+        UIComponent component = renderContext.getComponent();
+        if ((component instanceof ITypedComponentCapability) == false) {
+            return null;
+        }
+
+        ITypedComponentCapability textComponent = (ITypedComponentCapability) component;
+
+        String type = textComponent.getType();
 
         if (type == null) {
             return null;
         }
 
-        String element = (String) TYPES.get(type.toLowerCase());
+        String element = (String) HTML_TYPES.get(type);
+        if (element != null) {
+            return element;
+        }
+
+        // On retire les espaces, et on passe tout en minuscule !
+
+        char chs[] = type.toCharArray();
+
+        StringAppender sa = new StringAppender(chs.length);
+        for (int i = 0; i < chs.length; i++) {
+            char ch = chs[i];
+
+            if (Character.isWhitespace(ch)) {
+                continue;
+            }
+
+            ch = Character.toLowerCase(ch);
+
+            sa.append(ch);
+        }
+
+        type = sa.toString();
+
+        element = (String) HTML_TYPES.get(type);
 
         return element;
     }
