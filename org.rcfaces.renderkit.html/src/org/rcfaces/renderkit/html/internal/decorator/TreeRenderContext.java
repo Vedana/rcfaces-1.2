@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
+import java.util.Collection;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -67,11 +69,14 @@ public class TreeRenderContext extends SelectItemsJsContext {
         Object value = treeComponent.getValue();
         Object values[] = null;
         if (value != null) {
-            if (value.getClass().isArray() == false) {
-                values = new Object[] { value };
+            if (value.getClass().isArray()) {
+                values = (Object[]) value;
+
+            } else if (value instanceof Collection) {
+                values = ((Collection) value).toArray();
 
             } else {
-                values = (Object[]) value;
+                values = new Object[] { value };
             }
         }
 
