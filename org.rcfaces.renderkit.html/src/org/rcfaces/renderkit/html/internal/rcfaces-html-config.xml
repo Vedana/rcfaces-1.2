@@ -14,6 +14,10 @@
   			<type>javascript</type>
   			<location>org/rcfaces/renderkit/html/internal/javascript/repository.xml</location>
   		</repository>
+  		<repository>
+  			<type>css</type>
+  			<location>org/rcfaces/renderkit/html/internal/css/repository.xml</location>
+  		</repository>
   	</repositories>
 
 	<!-- Services AJAX -->
