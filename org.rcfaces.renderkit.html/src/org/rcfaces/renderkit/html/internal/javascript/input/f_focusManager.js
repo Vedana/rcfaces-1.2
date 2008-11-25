@@ -26,8 +26,6 @@ var __statics={
 		var instance=f_focusManager._Instance;
 		if (!instance && create!==false) {
 			instance=f_focusManager.f_newInstance();
-			
-			f_focusManager.Set(instance);
 		}
 		
 		return instance;
@@ -54,21 +52,34 @@ var __members={
 	f_focusManager: function() {
 		this.f_super(arguments);
 	
-		if (f_focusManager._Instance) {
-			throw new Error("FocusManager is already defined !");
-		}
+		var instance=f_focusManager._Instance;
 			
 		if (this.nodeType==f_core.ELEMENT_NODE) {			
 			var setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
-			if (setFocusIfMessage) {
-			//	this.f_setFocusIfMessage(true);
+			var focusId=f_core.GetAttribute(this, "v:focusId");
+			
+			if (instance) {
+				if (setFocusIfMessage===false) {
+					instance.f_setFocusIfMessage(false);
+				}
+				if (focusId) {
+					instance.f_setFocus(focusId);
+				}
+				
+				return;
 			}
 			
-			var focusId=f_core.GetAttribute(this, "v:focusId");
-			if (focusId) {
-				this.f_setFocus(focusId, true);
+			this.f_initialize(null, focusId, setFocusIfMessage);
+
+		} else {
+			// Mode JavaScript ou collecteur
+			
+			if (instance) {
+				throw new Error("FocusManager is already installed !");
 			}
 		}
+
+		f_focusManager.Set(this);
 		
 		if (f_core.IsGecko()) {
 			var self=this;
@@ -114,8 +125,11 @@ var __members={
 	 * @return void
 	 */
 	f_initialize: function(id, focusId, setFocusIfMessage) {
-		f_core.Assert(typeof(id)=="string", "f_focusManager.f_setId: Invalid id parameter '"+id+"'.");
-		this.id=id;
+		f_core.Assert(id===null || typeof(id)=="string", "f_focusManager.f_setId: Invalid id parameter '"+id+"'.");
+		
+		if (id) {
+			this.id=id;
+		}
 
 		if (focusId) {
 			this.f_setFocus(focusId, true);
