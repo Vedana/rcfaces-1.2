@@ -39,6 +39,7 @@ var __statics={
 				}
 				
 				uri=link.href.substring(0, idx);
+				break;
 			}
 			
 			if (!uri || window.top!=window) {
