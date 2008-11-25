@@ -222,6 +222,15 @@ var __members = {
 		
 		this._mimeType=mimeType;		
 		
+		if (!this._loadInitialized) { // Gestion du Javascript Collector
+			if (this._loaded) { // Déjà chargé !
+				this._onLoad();
+				
+			} else { // On attend !
+				this.onload=f_textEditor._OnLoad;
+			}		
+		}
+				
 		f_core.Assert(mimeType==f_textEditor.TEXT_HTML_MIME_TYPE || 
 						mimeType==f_textEditor.TEXT_PLAIN_MIME_TYPE, "f_textEditor: Unsupported text editor mime type ("+this._mimeType+")");
 	},
@@ -259,6 +268,11 @@ var __members = {
 	 * @return void
 	 */
 	_onLoad: function() {
+		if (this._loadInitialized) {
+			return;
+		}
+		this._loadInitialized=true;
+	
 		f_core.Debug(f_textEditor, "_onLoad: Initialize textEditor");
 		this.onload=null;
 		
@@ -390,7 +404,7 @@ var __members = {
 	f_serialize: function() {
 		var contentDocument=this._contentDocument;	
 		if (contentDocument) {
-			this.f_setProperty(f_prop.TEXT, this.f_getText());
+			this.f_setProperty(f_prop.VALUE, this.f_getText());
 		}
 		
 		this.f_super(arguments);
