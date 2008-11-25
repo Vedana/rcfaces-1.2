@@ -278,8 +278,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                         writer.writeAttribute("v:imageURL", imageSrc);
                     }
 
-                    imageSrc = disabledImageAccessor.resolveURL(facesContext,
-                            null, null);
+                    String disabledImageSrc = disabledImageAccessor.resolveURL(
+                            facesContext, null, null);
+                    if (disabledImageSrc != null) {
+                        imageSrc = disabledImageSrc;
+                    }
                 }
 
                 if (selectedImageAccessor != null) {
@@ -503,7 +506,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         IContentAccessor imageContentAccessor = getImageAccessor(htmlWriter);
 
         // RcfacesContext rcfacesContext =
-        // RcfacesContext.getInstance(htmlWriter.getHtmlComponentRenderContext().getFacesContext()).getImage();
+        //RcfacesContext.getInstance(htmlWriter.getHtmlComponentRenderContext().
+        // getFacesContext()).getImage();
 
         if (ImageContentAccessorHandler.isOperationSupported(htmlWriter
                 .getComponentRenderContext().getFacesContext(),
