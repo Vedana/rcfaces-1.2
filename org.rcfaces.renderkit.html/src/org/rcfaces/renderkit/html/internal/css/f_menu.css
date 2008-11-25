@@ -102,7 +102,9 @@
 	padding: 0;
 	border: 0;
 	vertical-align: top;
-	background: transparent no-repeat scroll 0 0
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center center;
 
 //	width: 18px;
 //	height: 18px;	
