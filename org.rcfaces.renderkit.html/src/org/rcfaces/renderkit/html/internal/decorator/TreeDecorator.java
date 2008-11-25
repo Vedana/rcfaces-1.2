@@ -21,6 +21,7 @@ import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.internal.tools.ExpansionTools;
 import org.rcfaces.core.internal.tools.SelectItemMappers;
@@ -51,6 +52,8 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
     private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];
 
+    private static final boolean USE_VALUE = false;
+
     private final Converter converter;
 
     public TreeDecorator(TreeComponent component) {
@@ -78,7 +81,10 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractSelectItemsRenderer#encodeComponentsBegin(org.rcfaces.core.internal.renderkit.html.SelectItemsContext)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.AbstractSelectItemsRenderer#
+     * encodeComponentsBegin
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsContext)
      */
     protected void encodeComponentsBegin() throws WriterException {
         super.encodeComponentsBegin();
@@ -233,8 +239,11 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeTreeNodeBegin(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.TreeContext,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem)
+     * @seeorg.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#
+     * encodeTreeNodeBegin
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer
+     * .TreeContext, javax.faces.component.UIComponent,
+     * javax.faces.model.SelectItem)
      */
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
@@ -357,8 +366,11 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeTreeNodeEnd(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.TreeContext,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem)
+     * @seeorg.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#
+     * encodeTreeNodeEnd
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer
+     * .TreeContext, javax.faces.component.UIComponent,
+     * javax.faces.model.SelectItem)
      */
     public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) {
@@ -378,7 +390,9 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
      */
     protected SelectItemsContext createJavaScriptContext() {
         IComponentRenderContext componentRenderContext = javaScriptWriter
@@ -440,7 +454,9 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.IWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.IWriter)
      */
 
     protected IHtmlRenderContext getHtmlRenderContext(IHtmlWriter writer) {
@@ -450,6 +466,17 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
     protected SelectItemsContext createHtmlContext() {
         return null;
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add("checkedItems");
+        unlockedProperties.add("uncheckedItems");
+        unlockedProperties.add("selectedItems");
+        unlockedProperties.add("unselectedItems");
+        unlockedProperties.add("expandedItems");
+        unlockedProperties.add("collapsedItems");
     }
 
     public void decode(IRequestContext context, UIComponent component,
@@ -469,14 +496,16 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             // C'est checkable , le check est forcement sur la VALUE !
 
             Object v = tree.getCheckedValues(facesContext);
-            if (v == null) {
-                // Le CHECK est sur la value !
-                v = HtmlValuesTools.convertValuesToSet(facesContext, tree, tree
-                        .getValue());
+            if (USE_VALUE) {
+                if (v == null) {
+                    // Le CHECK est sur la value !
+                    v = HtmlValuesTools.convertValuesToSet(facesContext, tree,
+                            tree.getValue());
 
-            } else {
-                // On retire la checkValue pour n'utiliser que la value !
-                tree.setCheckedValues(null);
+                } else {
+                    // On retire la checkValue pour n'utiliser que la value !
+                    tree.setCheckedValues(null);
+                }
             }
 
             Set values = CollectionTools.valuesToSet(v, false);
@@ -484,7 +513,12 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             if (HtmlValuesTools.updateValues(facesContext, tree, false, values,
                     checkedValues, uncheckedValues)) {
 
-                ValuesTools.setValues(facesContext, tree, values);
+                if (USE_VALUE) {
+                    ValuesTools.setValues(facesContext, tree, values);
+                    
+                } else {
+                    CheckTools.setCheckValues(facesContext, tree, values);
+                }
             }
         }
 
@@ -493,7 +527,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String deselectedValues = componentData
                 .getStringProperty("deselectedItems");
         if (selectedValues != null || deselectedValues != null) {
-            if (checkable == false) {
+            if (USE_VALUE && checkable == false) {
                 // La selection est FORCEMENT sur la value !
                 Object v = tree.getSelectedValues(facesContext);
                 if (v != null) {
