@@ -3,6 +3,8 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
@@ -14,8 +16,11 @@ import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
+import org.rcfaces.renderkit.html.internal.EventDecoders;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ItemsToolFolderDecorator;
 
@@ -29,10 +34,12 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
 
     private static final int IMMEDIATE_DETAIL = 0x400;
 
-    protected static IEventDecoder ITEM_SELECTION_DECODER = new AbstractEventDecoder() {
+    protected static EventDecoders.IEventDecoder ITEM_SELECTION_DECODER = new EventDecoders.AbstractEventDecoder() {
         private static final String REVISION = "$Revision$";
 
-        public void decodeEvent(UIComponent component, IEventData eventData) {
+        public void decodeEvent(IRequestContext requestContext,
+                UIComponent component, IEventData eventData,
+                IEventObjectDecoder eventObjectDecoder) {
             FacesEvent event = new ItemSelectionEvent(component, eventData
                     .getEventValue(), null, eventData.getEventItem(), eventData
                     .getEventDetail(),
@@ -41,6 +48,10 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
             queueEvent(component, event);
         }
     };
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component)
+            throws IOException {
+    }
 
     protected void encodeBeforeDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
