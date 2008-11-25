@@ -1896,6 +1896,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         return true;
     }
 
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add("serializedIndexes");
+        unlockedProperties.add("first");
+        unlockedProperties.add("sortIndex");
+        unlockedProperties.add("columnWidths");
+        unlockedProperties.add("filterExpression");
+    }
+
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
