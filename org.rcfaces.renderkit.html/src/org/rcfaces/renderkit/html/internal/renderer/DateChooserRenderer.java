@@ -5,12 +5,14 @@ package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.DateChooserComponent;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -20,6 +22,8 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCalendarRenderer;
+import org.rcfaces.renderkit.html.internal.ICalendarDecoderRenderer;
+import org.rcfaces.renderkit.html.internal.IDecoderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
@@ -32,7 +36,8 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class DateChooserRenderer extends AbstractCalendarRenderer {
+public class DateChooserRenderer extends AbstractCalendarRenderer implements
+        ICalendarDecoderRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final String DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
@@ -106,7 +111,8 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
 
         DateChooserComponent dateChooserComponent = (DateChooserComponent) component;
 
-        Date dateValue = (Date) componentData.getProperty("value");
+        Date dateValue = (Date) componentData.getProperty(Properties.VALUE);
+
         Date date = null;
         if (dateValue != null
                 && dateChooserComponent
@@ -115,6 +121,21 @@ public class DateChooserRenderer extends AbstractCalendarRenderer {
         }
 
         dateChooserComponent.setSubmittedExternalValue(date);
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add(Properties.VALUE);
+    }
+
+    public Calendar getCalendar(IDecoderContext decoderContext,
+            String attributeName) {
+        if (Properties.VALUE.equals(attributeName)) {
+            return decoderContext.getProcessContext().getForcedDateCalendar();
+        }
+
+        return null;
     }
 
     /**
