@@ -103,6 +103,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         if (textEntryComponent.isAutoCompletion(facesContext) == false) {
             htmlWriter.writeAttribute("autocomplete", "off");
         }
+
+        if (textEntryComponent.isRequired()) {
+            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
+        }
     }
 
     protected void writeValidatorAttributes(IHtmlWriter htmlWriter)
@@ -137,10 +141,6 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         // boolean useValidator = false;
-
-        if (textEntryComponent.isRequired()) {
-            htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
-        }
 
         if (textEntryComponent.isAutoTab(facesContext)) {
             htmlWriter.writeAttribute("v:autoTab", true);
