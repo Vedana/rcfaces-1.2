@@ -98,7 +98,7 @@ var __members = {
     	
 		this._viewURL = f_env.ResolveContentUrl(viewURL);
 		
-		if (this._iframe) {
+		if (this._iframe && this.f_getStatus()==f_shell.OPENED_STATUS) { 
 			this._iframe.src=this.f_getIFrameUrl();
 		}
 	},
@@ -158,6 +158,11 @@ var __members = {
 		this.f_super(arguments);
 	},
 	*/
+	f_postDestruction: function() {
+		this._iframe=undefined; // HtmlIFrame
+		
+		this.f_super(arguments);
+	},
 
 	/**
 	 * @method public
