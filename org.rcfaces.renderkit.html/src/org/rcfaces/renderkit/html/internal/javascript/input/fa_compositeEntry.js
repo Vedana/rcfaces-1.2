@@ -410,6 +410,26 @@ var __members={
 		
 			input.disabled=disabled;
 		}
+	},
+	
+	f_setFocus: function() {
+		var inputs=this._inputs;
+		if (!inputs) {
+			return false;
+		}
+		for(var i=0;i<inputs.length;i++) {
+			var input=inputs[i];
+			
+			try {
+				input.focus();
+				return true;
+				
+			} catch (ex) {
+				f_core.Error(fa_compositeEntry, "f_setFocus: Exception while calling focus() of '"+input.id+"' component='"+this.id+"'.", ex);
+			}			
+		}
+		
+		return false;
 	}
 }
  
