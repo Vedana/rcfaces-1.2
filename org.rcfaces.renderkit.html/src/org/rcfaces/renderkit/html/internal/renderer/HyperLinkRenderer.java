@@ -37,12 +37,17 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
+        boolean disabled = component.isDisabled(facesContext);
+        if (disabled) {
+            getCssStyleClasses(htmlWriter).addSuffix("_disabled");
+        }
+
         htmlWriter.startElement(IHtmlWriter.A);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
 
-        if (component.isDisabled(facesContext)) {
+        if (disabled) {
             htmlWriter.writeDisabled();
         }
 
@@ -79,7 +84,8 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.HYPER_LINK;
