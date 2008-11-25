@@ -109,7 +109,7 @@ var __statics={
 				if (initialDateSelection) {
 					this._initialDateSelection=undefined;
 					
-					calendar.f_setSelection(initialDateSelection);
+					calendar.f_setSelection(initialDateSelection, this._initialShowSelection);
 				}
 				
 			} else {
@@ -382,6 +382,7 @@ var __members={
 		after: function() {
 			// this._iePopup=undefined; // boolean
 			// this._initialDateSelection=undefined; // Date
+			// this._initialShowSelection=undefined; // boolean
 			// this._layout=undefined; // boolean
 		
 			var calendar=this._calendar;
@@ -430,7 +431,7 @@ var __members={
 				}
 				
 				try {
-					this.f_setSelection(date);
+					this.f_setSelection(date, true);
 					
 				} catch (x) {
 					f_core.Error(fa_calendarPopup, "f_openCalendarPopup: set Selection '"+component.id+"' with date '"+date+"' throws exception.", x);
@@ -493,16 +494,18 @@ var __members={
 	/**
 	 * @method public
 	 * @param Date selection
+	 * @param optional boolean showSelection
 	 * @return void
 	 */
-	f_setSelection: function(selection) {
+	f_setSelection: function(selection, showSelection) {
 		var calendar=this._calendar;
 		if (!calendar) {
 			this._initialDateSelection=selection;
+			this._initialShowSelection=showSelection;
 			return;
 		}
 		
-		calendar.f_setSelection(selection);
+		calendar.f_setSelection(selection, showSelection);
 	}
 }
  
