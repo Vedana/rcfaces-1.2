@@ -56,6 +56,7 @@ import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.IScriptListener;
@@ -64,6 +65,7 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -624,7 +626,8 @@ public abstract class AbstractGridRenderContext {
                     if (defaultCellImageURLs == null) {
                         defaultCellImageURLs = new String[columns.length];
                     }
-                    defaultCellImageURLs[i] = dci;
+
+                    defaultCellImageURLs[i] = resolveImageURL(dci);
                 }
             }
 
@@ -739,6 +742,16 @@ public abstract class AbstractGridRenderContext {
         // Le dataModel peut etre NULL, car dans des cas de structures
         // simples,
         // elles n'ont pas besoin de publier un model !
+    }
+
+    public String resolveImageURL(String imageURL) {
+
+        FacesContext facesContext = processContext.getFacesContext();
+
+        return ((IImageAccessors) ContentAccessorFactory
+                .createSingleImageWebResource(facesContext, imageURL,
+                        IContentFamily.IMAGE)).getImageAccessor().resolveURL(
+                facesContext, null, null);
     }
 
     protected int getDefaultColumnSize() {
