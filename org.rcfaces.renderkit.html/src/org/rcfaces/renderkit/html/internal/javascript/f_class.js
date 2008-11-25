@@ -668,7 +668,7 @@ var __statics = {
 		
 		if (requiredClassErrorMessage) {
 			if (requiredClassErrorMessage===true) {
-				throw new Error("Panic: Required class '"+requiredClass+"' is not loaded !");
+				throw new Error("Panic: Required class '"+className+"' is not loaded !");
 			}
 			throw new Error(requiredClassErrorMessage);
 		}
