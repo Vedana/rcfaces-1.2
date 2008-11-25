@@ -24,7 +24,7 @@ var __members = {
 			}
 		}
 		
-		var d=f_core.GetAttribute(this, "DISABLED");
+		var d=f_core.GetAttribute(this, "disabled");
 		if (d) {
 			this.f_setDisabled(true);
 		}
