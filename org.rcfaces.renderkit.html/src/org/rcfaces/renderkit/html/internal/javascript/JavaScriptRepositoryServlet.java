@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.lang.ByteBufferInputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.repository.AbstractHierarchicalRepository;
+import org.rcfaces.core.internal.repository.BasicHierarchicalRepository;
 import org.rcfaces.core.internal.repository.HierarchicalRepositoryServlet;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
 import org.rcfaces.core.internal.repository.IRepository;
@@ -251,7 +251,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         Map applicationParamaters = new ApplicationParametersMap(servletContext);
 
-        AbstractHierarchicalRepository repository = new JavaScriptRepository(
+        BasicHierarchicalRepository repository = new JavaScriptRepository(
                 mainRepositoryURI, repositoryVersion, applicationParamaters);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 

@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Services;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
-import org.rcfaces.core.internal.repository.AbstractHierarchicalRepository;
+import org.rcfaces.core.internal.repository.BasicHierarchicalRepository;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
 import org.xml.sax.Attributes;
 
@@ -35,7 +35,7 @@ import org.xml.sax.Attributes;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class JavaScriptRepository extends AbstractHierarchicalRepository
+public class JavaScriptRepository extends BasicHierarchicalRepository
         implements IJavaScriptRepository {
     private static final String REVISION = "$Revision$";
 
