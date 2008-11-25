@@ -116,7 +116,9 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
                     + "' for an ImageTextEditorButton.");
         }
 
-        super.encodeEnd(writer);
+        ((IHtmlWriter)writer).getJavaScriptEnableMode().enableOnInit();
+
+        super.encodeEnd(writer);        
     }
 
     protected int getTextEditorImageWidth(IHtmlWriter htmlWriter) {
