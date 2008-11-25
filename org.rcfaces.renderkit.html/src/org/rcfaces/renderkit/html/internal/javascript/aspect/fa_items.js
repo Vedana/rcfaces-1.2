@@ -50,8 +50,6 @@ var __statics = {
 var __members = {
 
 	fa_items: function() {
-		this._items=new Array;
-		this._itemByValues=new Object;
 	},
 
 	f_finalize: function() {
@@ -96,7 +94,13 @@ var __members = {
 		var value=item._value;
 		f_core.Debug(fa_items, "Add item '"+value+"' to parent '"+parent+"'.");
 		if (value) {
-			this._itemByValues[value]=item;
+			var itemByValues=this._itemByValues;
+			if (!itemByValues) {
+				itemByValues=new Object;
+				this._itemByValues=itemByValues;
+			}
+		
+			itemByValues[value]=item;
 		}
 	},
 	
