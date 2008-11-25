@@ -5298,7 +5298,7 @@ var __members = {
 	 */
 	f_clearAll: function() {
 		var visibleElements=this.fa_listVisibleElements();
-		if (!visibleElements) {
+		if (!visibleElements.length) {
 			return 0;
 		}
 	
