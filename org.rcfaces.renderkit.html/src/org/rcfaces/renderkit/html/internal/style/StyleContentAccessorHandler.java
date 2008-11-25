@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.contentAccessor.AbstractCompositeContentAccesso
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
@@ -98,7 +99,7 @@ public class StyleContentAccessorHandler extends
 
     public IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IGeneratedResourceInformation[] generatedInformation,
+            IGeneratedResourceInformation[] generatedInformationRef,
             IGenerationResourceInformation generationInformation) {
 
         if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
@@ -137,8 +138,16 @@ public class StyleContentAccessorHandler extends
                 new BasicContentAccessor(facesContext, newURL, contentAccessor,
                         IContentAccessor.UNDEFINED_PATH_TYPE));
 
+        if (generationInformation == null) {
+            generationInformation = new BasicGenerationResourceInformation();
+        }
+
+        generationInformation.setAttribute(
+                IGenerationResourceInformation.SOURCE_KEY, url);
+
         IContentAccessor formattedContentAccessor = formatStyleURL(
-                facesContext, modifiedContentAccessor);
+                facesContext, modifiedContentAccessor, generatedInformationRef,
+                generationInformation);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("formattedContentAccessor=" + formattedContentAccessor);
@@ -148,7 +157,9 @@ public class StyleContentAccessorHandler extends
     }
 
     public IContentAccessor formatStyleURL(FacesContext facesContext,
-            IFiltredContentAccessor contentAccessor) {
+            IFiltredContentAccessor contentAccessor,
+            IGeneratedResourceInformation generatedResourceInformationRef[],
+            IGenerationResourceInformation generationResourceInformation) {
 
         String filter = contentAccessor.getFilter();
         String operationId = filter;
@@ -237,13 +248,16 @@ public class StyleContentAccessorHandler extends
         IContentModel contentModel = new CssOperationContentModel(resourceURL,
                 versionId, operationId, parameters, styleOperation, cssParser);
 
-        BasicGeneratedResourceInformation generatedResourceInformation = new BasicGeneratedResourceInformation();
-        generatedResourceInformation
+        if (generatedResourceInformationRef[0] == null) {
+            generatedResourceInformationRef[0] = new BasicGeneratedResourceInformation();
+        }
+        generatedResourceInformationRef[0]
                 .setResponseMimeType(IHtmlRenderContext.CSS_TYPE);
 
         IContentAccessor newContentAccessor = contentStorageEngine
                 .registerContentModel(facesContext, contentModel,
-                        generatedResourceInformation, null);
+                        generatedResourceInformationRef[0],
+                        generationResourceInformation);
 
         // pas de versionning dans ce content Accessor !
 

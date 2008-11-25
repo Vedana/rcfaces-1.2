@@ -17,6 +17,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
@@ -98,7 +99,7 @@ public class ScriptContentAccessorHandler extends
 
     public IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IGeneratedResourceInformation[] generatedInformation,
+            IGeneratedResourceInformation[] generatedInformationRef,
             IGenerationResourceInformation generationInformation) {
 
         if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
@@ -137,8 +138,15 @@ public class ScriptContentAccessorHandler extends
                 new BasicContentAccessor(facesContext, newURL, contentAccessor,
                         IContentAccessor.UNDEFINED_PATH_TYPE));
 
+        if (generationInformation == null) {
+            generationInformation = new BasicGenerationResourceInformation();
+        }
+        generationInformation.setAttribute(
+                IGenerationResourceInformation.SOURCE_KEY, url);
+
         IContentAccessor formattedContentAccessor = formatScriptURL(
-                facesContext, modifiedContentAccessor);
+                facesContext, modifiedContentAccessor, generatedInformationRef,
+                generationInformation);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("formattedContentAccessor=" + formattedContentAccessor);
@@ -148,7 +156,9 @@ public class ScriptContentAccessorHandler extends
     }
 
     public IContentAccessor formatScriptURL(FacesContext facesContext,
-            IFiltredContentAccessor contentAccessor) {
+            IFiltredContentAccessor contentAccessor,
+            IGeneratedResourceInformation[] generatedResourceInformationRef,
+            IGenerationResourceInformation generationResourceInformation) {
 
         String filter = contentAccessor.getFilter();
         String operationId = filter;
@@ -238,14 +248,16 @@ public class ScriptContentAccessorHandler extends
                 resourceURL, versionId, operationId, parameters,
                 scriptOperation);
 
-        /*
-         * BasicGeneratedResourceInformation generatedResourceInformation = new
-         * BasicGeneratedResourceInformation(); generatedResourceInformation
-         * .setResponseMimeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
-         */
+        if (generatedResourceInformationRef[0] == null) {
+            generatedResourceInformationRef[0] = new BasicGeneratedResourceInformation();
+        }
+        generatedResourceInformationRef[0]
+                .setResponseMimeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
 
         IContentAccessor newContentAccessor = contentStorageEngine
-                .registerContentModel(facesContext, contentModel, null, null);
+                .registerContentModel(facesContext, contentModel,
+                        generatedResourceInformationRef[0],
+                        generationResourceInformation);
 
         // pas de versionning dans ce content Accessor !
 
