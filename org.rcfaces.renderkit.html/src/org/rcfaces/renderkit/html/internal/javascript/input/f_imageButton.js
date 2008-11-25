@@ -44,6 +44,7 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.SELECTION, this.f_imageButtonSelect);
 		this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
+		this.f_addEventListener(f_event.SELECTION, this.f_imageButtonSelectEnd);
 		
 		this._tabIndex=this.tabIndex;
 		
@@ -194,6 +195,16 @@ var __members = {
 	 * @return boolean
 	 */
 	f_performImageSelection: function(event) {
+		return true;
+	},
+	/**
+	 * 
+	 * 
+	 * @method protected
+	 * @param f_event event
+	 * @return boolean
+	 */
+	f_imageButtonSelectEnd: function(event) {
 		return true;
 	},
 	/**
