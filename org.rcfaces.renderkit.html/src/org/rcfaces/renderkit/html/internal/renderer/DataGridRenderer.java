@@ -42,6 +42,7 @@ import org.rcfaces.core.internal.capability.ISelectionComponent;
 import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
@@ -382,7 +383,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (dataModel instanceof ISortedDataModel) {
                 // On delegue au modele, le tri !
 
-                // Nous devons �tre OBLIGATOIREMENT en mode rowValueColumnId
+                // Nous devons être OBLIGATOIREMENT en mode rowValueColumnId
                 if (tableContext.getRowValueColumn() == null) {
                     throw new FacesException(
                             "Can not sort dataModel without attribute rowValueColumnId specified !");
@@ -923,8 +924,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
     protected void encodeJsRowCount(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext tableContext, int count)
             throws WriterException {
-        jsWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(
-                ");");
+        jsWriter.writeMethodCall("f_setRowCount").writeInt(count).writeln(");");
     }
 
     protected void encodeJsRow(IJavaScriptWriter jsWriter,
@@ -1053,7 +1053,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     if (images == null) {
                         images = new String[columnNumber];
                     }
-                    images[i] = imageURL;
+
+                    images[i] = tableContext.resolveImageURL(imageURL);
                 }
             }
 
@@ -1403,6 +1404,18 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
     }
 
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add("selectedItems");
+        unlockedProperties.add("deselectedItems");
+        unlockedProperties.add("checkedItems");
+        unlockedProperties.add("uncheckedItems");
+        unlockedProperties.add("showAdditional");
+        unlockedProperties.add("hideAdditional");
+        unlockedProperties.add("cursor");
+    }
+
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
 
@@ -1614,4 +1627,46 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         return values;
     }
+
+    public Object decodeEventObject(IRequestContext requestContext,
+            UIComponent component, IEventData eventData) {
+
+        String value = eventData.getEventValue();
+        if (value != null) {
+            IGridComponent gridComponent = (IGridComponent) component;
+
+            UIColumn rowValueColumn = getRowValueColumn(gridComponent);
+            if (rowValueColumn != null) {
+                List select = HtmlValuesTools.parseValues(requestContext
+                        .getFacesContext(), rowValueColumn, true, false, value);
+
+                if (select.size() == 1) {
+                    return select.get(0);
+                }
+
+            } else {
+                int indexes[] = parseIndexes(value);
+
+                if (indexes.length == 1) {
+                    DataModel dataModel = gridComponent.getDataModelValue();
+
+                    if (dataModel != null) {
+                        dataModel.setRowIndex(indexes[0]);
+                        try {
+
+                            if (dataModel.isRowAvailable()) {
+                                return dataModel.getRowData();
+                            }
+
+                        } finally {
+                            dataModel.setRowIndex(-1);
+                        }
+                    }
+                }
+            }
+        }
+
+        return super.decodeEventObject(requestContext, component, eventData);
+    }
+
 }
