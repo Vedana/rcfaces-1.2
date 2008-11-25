@@ -91,7 +91,10 @@ var __members = {
 		this._dayLongNames=resourceBundle.f_get("DAY_LONG_NAMES");
 		
 		this._firstDayOfWeek=resourceBundle.f_get("FIRST_DAY_OF_WEEK");
-		this._twoDigitYearStart=resourceBundle.f_get("TWO_DIGIT_YEAR_START");
+		var twoDigitYearStart=resourceBundle.f_get("TWO_DIGIT_YEAR_START");
+		if (twoDigitYearStart) {
+			this._twoDigitYearStart=f_core.DeserializeDate(twoDigitYearStart);
+		}
 	
 		this._dateFormats=resourceBundle.f_get("DATE_FORMATS");
 	},
@@ -190,7 +193,7 @@ var __members = {
 	 * @return number
 	 */
 	f_getTwoDigitYearStart: function() {
-		f_core.Assert(typeof(this._twoDigitYearStart)=="number", "f_locale.f_getFirstDayOfWeek: Invalid two digit year start ! ("+this._twoDigitYearStart+")")
+		f_core.Assert(this._twoDigitYearStart instanceof Date, "f_locale.f_getTwoDigitYearStart: Invalid two digit year start ! ("+this._twoDigitYearStart+")")
 		return this._twoDigitYearStart;
 	},
 	/**
