@@ -3,11 +3,13 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.TextEditorComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -97,12 +99,21 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         htmlWriter.writeName(htmlWriter.getComponentRenderContext()
                 .getComponentClientId());
 
-        String onLoad = "f_textEditor."
-                + htmlWriter.getHtmlComponentRenderContext().getRenderContext()
-                        .getScriptRenderContext().convertSymbol("f_textEditor",
-                                "_OnLoad") + "(this)";
-
-        htmlWriter.writeAttribute("onload", onLoad);
+        if (htmlRenderContext.getJavaScriptRenderContext().isCollectorMode() == false) {
+            String onLoad = "f_textEditor."
+                    + htmlWriter.getHtmlComponentRenderContext()
+                            .getRenderContext().getScriptRenderContext()
+                            .convertSymbol("f_textEditor", "_OnLoad")
+                    + "(this)";
+            htmlWriter.writeAttribute("onload", onLoad);
+        } else {
+            String onLoad = "this."
+                    + htmlWriter.getHtmlComponentRenderContext()
+                            .getRenderContext().getScriptRenderContext()
+                            .convertSymbol("f_textEditor", "_loaded") + "=true";
+            htmlWriter.writeAttribute("onload", onLoad);
+            htmlWriter.getJavaScriptEnableMode().enableOnInit();
+        }
 
         Object value = textEditorComponent.getValue();
 
@@ -141,14 +152,18 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
     }
 
-    private void formatTextHtml(IHtmlWriter htmlWriter, Object value) {
-        // TODO Auto-generated method stub
-
+    protected void formatTextHtml(IHtmlWriter htmlWriter, Object value)
+            throws WriterException {
+        if (value != null) {
+            htmlWriter.writeAttribute("v:text", String.valueOf(value));
+        }
     }
 
-    private void formatTextPlain(IHtmlWriter htmlWriter, Object value)
+    protected void formatTextPlain(IHtmlWriter htmlWriter, Object value)
             throws WriterException {
-        htmlWriter.writeAttribute("v:text", String.valueOf(value));
+        if (value != null) {
+            htmlWriter.writeAttribute("v:text", String.valueOf(value));
+        }
     }
 
     protected boolean useHtmlAccessKeyAttribute() {
@@ -173,11 +188,18 @@ public class TextEditorRenderer extends AbstractInputRenderer {
 
         TextEditorComponent textAreaComponent = (TextEditorComponent) component;
 
-        String newValue = componentData.getStringProperty("text");
+        String newValue = componentData.getStringProperty(Properties.VALUE);
 
         if (newValue != null
                 && textAreaComponent.isValueLocked(context.getFacesContext()) == false) {
             textAreaComponent.setSubmittedExternalValue(newValue);
         }
     }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add(Properties.VALUE);
+    }
+
 }
