@@ -238,6 +238,11 @@ var __members = {
 	 * @field hidden boolean
 	 */
 	_showNextShell: true,
+
+	/**
+	 * @field private 
+	 */
+	_returnValue: undefined,
 	
 	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
@@ -298,6 +303,7 @@ var __members = {
 		
 		this._drawingFunction=undefined; // function
 		this._returnValueFunction=undefined; // function
+		this._returnValue=undefined; // any
 
 		this._shellManager=undefined; // f_shellManager
 
@@ -560,6 +566,8 @@ var __members = {
 		if (this.f_getStatus()!=f_shell.OPENED_STATUS) {
 			return;
 		}
+		
+		this._returnValue=returnValue;
 
 		this.f_setStatus(f_shell.CLOSING_STATUS);
 		
@@ -584,7 +592,9 @@ var __members = {
 		if (typeof(returnValueFunction)!="function") {
 			return;
 		}
-			
+		
+		var returnValue=this._returnValue;
+		
 		try {
 			this._showNextShell=returnValueFunction.call(this, returnValue);
 
