@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -132,14 +133,33 @@ public class TextRenderer extends AbstractCssRenderer {
         TextComponent textComponent = (TextComponent) component;
 
         String newValue = componentData.getStringProperty("text");
+
         if (newValue != null) {
-            String old = textComponent.getText(facesContext);
+            if (textComponent.getConverter() == null) {
+                // On considere le TEXT
+                String old = textComponent.getText();
 
-            if (newValue.equals(old) == false) {
-                textComponent.setText(newValue);
+                if (old != newValue
+                        && (old == null || old.equals(newValue) == false)) {
+                    textComponent.setText(newValue);
 
-                component.queueEvent(new PropertyChangeEvent(component,
-                        Properties.TEXT, old, newValue));
+                    component.queueEvent(new PropertyChangeEvent(component,
+                            Properties.TEXT, old, newValue));
+                }
+
+            } else {
+                // On considere la VALUE
+                Object old = textComponent.getValue();
+
+                Object value = ValuesTools.convertStringToValue(facesContext,
+                        component, newValue, true);
+
+                if (old != value && (old == null || old.equals(value) == false)) {
+                    textComponent.setValue(value);
+
+                    component.queueEvent(new PropertyChangeEvent(component,
+                            Properties.VALUE, old, value));
+                }
             }
         }
     }
