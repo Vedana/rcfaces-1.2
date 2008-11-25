@@ -134,7 +134,7 @@ var __members = {
 				this._changeImageURL(image, this._imageURL);
 			}
 							
-			if (this._showIfMessage) {
+			if (this._showIfMessage) { // Pas de message, on le cache !
 				this.f_setVisible(false);
 			}
 			
@@ -202,10 +202,10 @@ var __members = {
 			}
 			
 			this._changeImageURL(image, imageURL);
-							
-			if (this._showIfMessage) {
-				this.f_setVisible(true);
-			}
+		}
+		
+		if (this._showIfMessage) {
+			this.f_setVisible(true);
 		}
 	},
 	/**
