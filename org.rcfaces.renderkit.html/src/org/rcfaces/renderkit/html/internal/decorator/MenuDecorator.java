@@ -47,6 +47,7 @@ import org.rcfaces.core.item.SeparatorSelectItem;
 import org.rcfaces.renderkit.html.internal.EventsRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 
 /**
@@ -92,8 +93,11 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeTreeNodeBegin(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.TreeContext,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem)
+     * @seeorg.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#
+     * encodeTreeNodeBegin
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer
+     * .TreeContext, javax.faces.component.UIComponent,
+     * javax.faces.model.SelectItem)
      */
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
@@ -178,7 +182,8 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         /*
          * Finalement en laisse en String !
          * 
-         * if (value != null) { value = javaScriptWriter.allocateString(value); }
+         * if (value != null) { value = javaScriptWriter.allocateString(value);
+         * }
          */
 
         javaScriptWriter.write("var ").write(varId).write('=');
@@ -357,8 +362,11 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#encodeTreeNodeEnd(org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer.TreeContext,
-     *      javax.faces.component.UIComponent, javax.faces.model.SelectItem)
+     * @seeorg.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#
+     * encodeTreeNodeEnd
+     * (org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer
+     * .TreeContext, javax.faces.component.UIComponent,
+     * javax.faces.model.SelectItem)
      */
     public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
@@ -399,7 +407,9 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.IWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.IWriter)
      */
     protected SelectItemsContext createHtmlContext() {
         return null;
@@ -451,19 +461,19 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         return true;
     }
 
-    public void decode(IRequestContext context, UIComponent decodedComponent,
-            IComponentData componentData) {
+    public void decode(IRequestContext requestContext,
+            UIComponent decodedComponent, IComponentData componentData) {
 
-        super.decode(context, decodedComponent, componentData);
+        super.decode(requestContext, decodedComponent, componentData);
 
-        FacesContext facesContext = context.getFacesContext();
+        FacesContext facesContext = requestContext.getFacesContext();
 
         Map childrenClientIds = null;
 
         String disabledItems = componentData.getStringProperty(DISABLED_ITEMS);
         if (disabledItems != null && disabledItems.length() > 0) {
             if (childrenClientIds == null) {
-                childrenClientIds = mapChildrenClientId(null, context,
+                childrenClientIds = mapChildrenClientId(null, requestContext,
                         component);
             }
 
@@ -481,7 +491,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
         String enabledItems = componentData.getStringProperty(ENABLED_ITEMS);
         if (enabledItems != null && enabledItems.length() > 0) {
             if (childrenClientIds == null) {
-                childrenClientIds = mapChildrenClientId(null, context,
+                childrenClientIds = mapChildrenClientId(null, requestContext,
                         component);
             }
 
