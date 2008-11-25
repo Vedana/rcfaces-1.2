@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import java.lang.reflect.Array;
+import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -144,6 +145,12 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
     protected String getWAIRole() {
         return IAccessibilityRoles.TREE;
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add("cursor");
     }
 
     protected void decode(IRequestContext context, UIComponent component,
