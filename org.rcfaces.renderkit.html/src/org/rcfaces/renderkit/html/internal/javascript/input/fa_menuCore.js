@@ -527,10 +527,22 @@ var __members = {
 		for(var i=0;i<items.length;i++) {
 			var item=items[i];
 			
-			if (sep && item._inputType==fa_items.AS_SEPARATOR) {
-				continue;
+			if (item._inputType==fa_items.AS_SEPARATOR) {
+				if (sep) {
+					continue;
+				}
+				
+				// D'autres items apres ?
+				for(var j=i+1;j<items.length;j++) {
+					if (items[j]._inputType!=fa_items.AS_SEPARATOR) {
+						break;
+					}
+				}
+				if (j==items.length) {
+					break;
+				}			
 			}
-			
+						
 			var uiItem=doc.createElement("li");
 			var itemId=item._id;
 			if (itemId) {
