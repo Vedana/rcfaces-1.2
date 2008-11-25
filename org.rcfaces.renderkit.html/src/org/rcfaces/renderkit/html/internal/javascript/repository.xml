@@ -690,6 +690,29 @@
 		</file>
 	</module>
 
+	<module id="effects">
+		<file name="ui/f_effect.js">
+			<class name="f_effect">
+				<required-class name="f_object" />
+			</class>
+		</file>
+		<file name="ui/f_timerEffect.js">
+			<class name="f_timerEffect">
+				<required-class name="f_effect" />
+			</class>
+		</file>
+		<file name="ui/f_slideUpEffect.js">
+			<class name="f_slideUpEffect">
+				<required-class name="f_timerEffect" />
+			</class>
+		</file>
+		<file name="ui/f_slideUpTransEffect.js">
+			<class name="f_slideUpTransEffect">
+				<required-class name="f_slideUpEffect" />
+			</class>
+		</file>
+	</module>
+
 	<module id="asyncRender">
 		<file name="ajax/f_asyncClassLoader.js" depends="f_classLoader.js">
 		</file> 
@@ -712,6 +735,7 @@
 				<required-class name="fa_asyncRender" />
 				<required-class name="fa_subMenu" />
 				<required-class id="menu" name="f_menu" />
+				<required-class id="effect" name="f_effect" />
 
 				<required-style name="f_box.css" />
 			</class>
@@ -1222,6 +1246,7 @@
 		<file name="input/fa_calendarPopup.js">
 			<class name="fa_calendarPopup">
 				<required-class name="f_aspect" />
+				<required-class name="f_calendar" />
 				<required-class name="f_calendarObject" />
 				<required-class name="f_popup" />
 				<required-class name="fa_itemsWrapper" />
@@ -1254,29 +1279,6 @@
 		<file name="input/f_numberEntry.js">
 			<class name="f_numberEntry">
 				<required-class name="f_compositeNumEntry" />
-			</class>
-		</file>
-	</module>
-
-	<module id="effects">
-		<file name="ui/f_effect.js">
-			<class name="f_effect">
-				<required-class name="f_object" />
-			</class>
-		</file>
-		<file name="ui/f_timerEffect.js">
-			<class name="f_timerEffect">
-				<required-class name="f_effect" />
-			</class>
-		</file>
-		<file name="ui/f_slideUpEffect.js">
-			<class name="f_slideUpEffect">
-				<required-class name="f_timerEffect" />
-			</class>
-		</file>
-		<file name="ui/f_slideUpTransEffect.js">
-			<class name="f_slideUpTransEffect">
-				<required-class name="f_slideUpEffect" />
 			</class>
 		</file>
 	</module>
