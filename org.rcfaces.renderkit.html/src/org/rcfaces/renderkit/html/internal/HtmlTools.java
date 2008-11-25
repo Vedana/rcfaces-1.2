@@ -97,6 +97,19 @@ public class HtmlTools {
     public static Map decodeParametersToMap(IProcessContext processContext,
             UIComponent component, String values, String separators,
             Object noValue) {
+        return decodeParametersToMap(new BasicDecoderContext(processContext,
+                component), values, separators, noValue);
+    }
+
+    public static Map decodeParametersToMap(IProcessContext processContext,
+            UIComponent component, Renderer renderer, String values,
+            String separators, Object noValue) {
+        return decodeParametersToMap(new BasicDecoderContext(processContext,
+                component, renderer), values, separators, noValue);
+    }
+
+    public static Map decodeParametersToMap(IDecoderContext decoderContext,
+            String values, String separators, Object noValue) {
         if (values == null || values.length() < 1) {
             return Collections.EMPTY_MAP;
         }
@@ -131,8 +144,8 @@ public class HtmlTools {
                 return properties;
             }
 
-            Object vs = decodeObject(cs, position, processContext, component,
-                    separators);
+            Object vs = decodeObject(cs, position, decoderContext, separators,
+                    name);
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Decode '" + name + "'=>" + vs);
@@ -149,8 +162,8 @@ public class HtmlTools {
     }
 
     private static Object decodeObject(char cs[], Position position,
-            IProcessContext processContext, UIComponent component,
-            String separators) {
+            IDecoderContext decoderContext, String separators,
+            String attributeName) {
 
         if (position.start >= cs.length) {
             return "";
@@ -179,8 +192,8 @@ public class HtmlTools {
 
             for (; position.start < cs.length;) {
 
-                Object v = decodeObject(cs, position, processContext,
-                        component, ",]");
+                Object v = decodeObject(cs, position, decoderContext, ",]",
+                        attributeName);
 
                 l.add(v);
 
@@ -247,7 +260,7 @@ public class HtmlTools {
         case DATE_TYPE:
             String date = URLFormCodec.decodeURL(cs, start, end);
 
-            return parseDate(date, processContext, component);
+            return parseDate(date, decoderContext, attributeName);
 
         case TIME_TYPE:
             String time = URLFormCodec.decodeURL(cs, start, end);
@@ -262,14 +275,14 @@ public class HtmlTools {
 
             int idx = period.indexOf(PERIOD_SEPARATOR);
             if (idx < 0) {
-                startDate = parseDate(period, processContext, component);
+                startDate = parseDate(period, decoderContext, attributeName);
                 endDate = startDate;
 
             } else {
-                startDate = parseDate(period.substring(0, idx), processContext,
-                        component);
-                endDate = parseDate(period.substring(idx + 1), processContext,
-                        component);
+                startDate = parseDate(period.substring(0, idx), decoderContext,
+                        attributeName);
+                endDate = parseDate(period.substring(idx + 1), decoderContext,
+                        attributeName);
             }
 
             return new Period(startDate, endDate);
@@ -278,8 +291,9 @@ public class HtmlTools {
             String xml = URLFormCodec.decodeURL(cs, start, end);
 
             FacesContext facesContext = null;
-            if (processContext != null) {
-                facesContext = processContext.getFacesContext();
+            if (decoderContext != null) {
+                facesContext = decoderContext.getProcessContext()
+                        .getFacesContext();
             }
 
             if (facesContext == null) {
@@ -345,8 +359,8 @@ public class HtmlTools {
             IProcessContext processContext, UIComponent component,
             String filterExpression) {
 
-        Map filter = HtmlTools.decodeParametersToMap(processContext, component,
-                filterExpression, "&", "");
+        Map filter = HtmlTools.decodeParametersToMap(new BasicDecoderContext(
+                processContext, component), filterExpression, "&", "");
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Decode filter expression to " + filter);
@@ -792,7 +806,13 @@ public class HtmlTools {
     }
 
     public static Date parseDate(String time, IProcessContext processContext,
-            UIComponent component) {
+            UIComponent component, Renderer renderer, String attributeName) {
+        return parseDate(time, new BasicDecoderContext(processContext,
+                component, renderer), attributeName);
+    }
+
+    public static Date parseDate(String time, IDecoderContext decoderContext,
+            String attributeName) {
 
         int year = 0;
         int month = 0;
@@ -879,14 +899,29 @@ public class HtmlTools {
             throw new FacesException("Invalid time format '" + time + "'.");
         }
 
-        Calendar calendar = CalendarTools.getCalendar(processContext,
-                component, false);
+        Calendar calendar = decodeCalendar(decoderContext, attributeName);
         synchronized (calendar) {
             calendar.set(year, month, date + 1, hours, minutes, seconds);
             calendar.set(Calendar.MILLISECOND, millis);
 
             return calendar.getTime();
         }
+    }
+
+    private static Calendar decodeCalendar(IDecoderContext decoderContext,
+            String attributeName) {
+        Renderer renderer = decoderContext.getRenderer();
+        if (renderer instanceof ICalendarDecoderRenderer) {
+            Calendar calendar = ((ICalendarDecoderRenderer) renderer)
+                    .getCalendar(decoderContext, attributeName);
+
+            if (calendar != null) {
+                return calendar;
+            }
+        }
+
+        return CalendarTools.getCalendar(decoderContext.getProcessContext(),
+                decoderContext.getComponent(), false);
     }
 
     public static void formatField(FacesContext facesContext, Object value,
@@ -1277,23 +1312,60 @@ public class HtmlTools {
 
     public static void includeScript(IHtmlWriter writer, String src,
             String javascriptCharset) throws WriterException {
-    
+
         IHtmlProcessContext htmlProcessContext = writer
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getHtmlProcessContext();
-    
+
         writer.startElement(IHtmlWriter.SCRIPT);
-    
+
         if (htmlProcessContext.useMetaContentScriptType() == false) {
             writer.writeType(IHtmlRenderContext.JAVASCRIPT_TYPE);
         }
-    
+
         writer.writeSrc(src);
-    
+
         if (javascriptCharset != null) {
             writer.writeCharset(javascriptCharset);
         }
-    
+
         writer.endElement(IHtmlWriter.SCRIPT);
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    public static final class BasicDecoderContext implements IDecoderContext {
+        private final IProcessContext processContext;
+
+        private final UIComponent component;
+
+        private final Renderer renderer;
+
+        protected BasicDecoderContext(IProcessContext processContext,
+                UIComponent component, Renderer renderer) {
+            this.processContext = processContext;
+            this.component = component;
+            this.renderer = renderer;
+        }
+
+        protected BasicDecoderContext(IProcessContext processContext,
+                UIComponent component) {
+            this(processContext, component, null);
+        }
+
+        public final IProcessContext getProcessContext() {
+            return processContext;
+        }
+
+        public final UIComponent getComponent() {
+            return component;
+        }
+
+        public final Renderer getRenderer() {
+            return renderer;
+        }
     }
 }
