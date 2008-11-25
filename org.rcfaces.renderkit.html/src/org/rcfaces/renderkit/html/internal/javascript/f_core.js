@@ -5144,7 +5144,7 @@ var f_core = {
 		f_core.Debug(f_core, "UpdateAjaxParameters: Use default faces hidden input search !");
 		
 		return f_core.AddFacesHiddenInputParameters(form, function(input) {
-			return !f_core.GetAttribute(input, "v:class");
+			return true; // Ca peut servir !!!! !f_core.GetAttribute(input, "v:class");
 		}, data);
 	},
 	/**
@@ -5658,6 +5658,75 @@ var f_core = {
 		
 		win.document.forms[0].submit();
 		f_core._OnExit.call(win);		
+	},
+	/**
+	 * @method public static
+	 * @param String url
+	 * @param String parameterName
+	 * @param String... parameterValue
+	 * @return String
+	 */
+	AddParameter: function(url, parameterName, parameterValue) {
+		var params={};
+		
+		var r=url.indexOf('?');
+		if (r>=0) {
+			var ps=url.substring(r+1);			
+			url=url.substring(0, r);
+			
+			var ps=ps.split("&");
+			for(var i=0;i<ps.length;i++) {
+				var p=ps[i];
+				if (!p) {
+					continue;
+				}
+				
+				var p2=p.split("=");
+				
+				var paramName=decodeURIComponent(p2[0]);
+				
+				if (p2.length==1) {
+					params[paramName]="";
+					
+				} else if (p2.length>1) {				
+					params[paramName]=decodeURIComponent(p2[1]);
+				} 
+			}
+		}
+		
+		for(var i=1;i<arguments.length;) {
+			var key=arguments[i++];
+			var value=arguments[i++];
+			
+			params[key]=value;
+		}
+		
+		var ret=[url];
+				
+		var first=true;
+		for(var key in params) {
+			var value=params[key];
+			
+			if (value===undefined) {
+				continue;
+			}
+			
+			if (first) {
+				first=false;
+				ret.push("?");
+				
+			} else {
+				ret.push("&");
+			}
+			
+			ret.push(encodeURIComponent(key), "=");
+			
+			if (value!==null) {
+				ret.push(encodeURIComponent(value));
+			}
+		}
+		
+		return ret.join("");
 	},
 	/**
 	 * @method public static
