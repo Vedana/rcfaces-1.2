@@ -31,7 +31,9 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.decorator.ISelectItemMapper;
+import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -47,10 +49,14 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredCollection;
 import org.rcfaces.core.model.IFiltredCollection2;
 import org.rcfaces.core.model.IFiltredCollection.IFiltredIterator;
+import org.rcfaces.renderkit.html.internal.EventDecoders;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 
 /**
  * 
@@ -58,7 +64,8 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractSelectItemsDecorator extends
-        AbstractComponentDecorator implements ISelectItemNodeWriter {
+        AbstractComponentDecorator implements ISelectItemNodeWriter,
+        IEventObjectDecoder {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
@@ -70,6 +77,8 @@ public abstract class AbstractSelectItemsDecorator extends
     protected static final SelectItem[] EMPTY_SELECT_ITEM_ARRAY = new SelectItem[0];
 
     protected final UIComponent component;
+
+    private String componentClientId;
 
     protected final IFilterProperties filterProperties;
 
@@ -84,6 +93,8 @@ public abstract class AbstractSelectItemsDecorator extends
     protected IJavaScriptWriter javaScriptWriter;
 
     protected SelectItemsContext selectItemsContext;
+
+    private IComponentData decoratorComponentData;
 
     protected AbstractSelectItemsDecorator(UIComponent component,
             IFilterProperties filterProperties) {
@@ -118,6 +129,89 @@ public abstract class AbstractSelectItemsDecorator extends
         }
 
         super.encodeContainer(writer, renderer);
+    }
+
+    public void decode(IRequestContext requestContext, UIComponent component,
+            IComponentData componentData) {
+        super.decode(requestContext, component, componentData);
+
+        if (component != getComponent()) {
+            // Un sous-composant ... il peut avoir déclanché un evenement !
+
+            String componentClientId = getComponentClientId(requestContext
+                    .getFacesContext());
+            if (componentClientId != null) {
+                IHtmlRequestContext htmlRequestContext = (IHtmlRequestContext) requestContext;
+                if (componentClientId.equals(htmlRequestContext
+                        .getEventComponentId())) {
+
+                    decodeDecoratorEvent(requestContext, component,
+                            getDecoratorComponentData(requestContext));
+                }
+            }
+        }
+    }
+
+    protected void decodeDecoratorEvent(IRequestContext requestContext,
+            UIComponent masterComponent, IEventData eventData) {
+
+        IEventDecoder eventDecoder = getEventDecoder(requestContext,
+                getComponent(), eventData);
+
+        if (eventDecoder == null) {
+            LOG.error("Unknown decoder for event name '"
+                    + eventData.getEventName() + "'.");
+            return;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Decode event type='" + eventData.getEventName()
+                    + "' for component='" + component.getId() + "'.");
+        }
+
+        eventDecoder.decodeEvent(requestContext, component, eventData, this);
+    }
+
+    public Object decodeEventObject(IRequestContext requestContext, UIComponent component, IEventData eventData) {
+        return null;
+    }
+
+    protected IEventDecoder getEventDecoder(IRequestContext requestContext,
+            UIComponent decoratorComponent, IEventData eventData) {
+
+        return EventDecoders.get(eventData.getEventName());
+    }
+
+    protected IComponentData getDecoratorComponentData(
+            IRequestContext requestContext) {
+        if (decoratorComponentData != null) {
+            return decoratorComponentData;
+        }
+
+        decoratorComponentData = requestContext.getComponentData(
+                getComponent(), getComponentClientId(requestContext
+                        .getFacesContext()), null);
+
+        return decoratorComponentData;
+    }
+
+    protected String getComponentClientId(FacesContext facesContext) {
+        if (componentClientId != null) {
+            return componentClientId;
+        }
+
+        UIComponent component = getComponent();
+        if (component == null) {
+            return null;
+        }
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        componentClientId = component.getClientId(facesContext);
+
+        return componentClientId;
     }
 
     public final void encodeContainerEnd(IHtmlWriter writer, Renderer renderer)
