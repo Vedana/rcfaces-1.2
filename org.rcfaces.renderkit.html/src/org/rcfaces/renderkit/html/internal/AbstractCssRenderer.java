@@ -115,6 +115,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
      * getComponentStyleClassName(); }
      */
 
+    /*
     protected String computeComponentStyleClass(UIComponent component,
             String classSuffix) {
         if (component instanceof IDisabledCapability) {
@@ -139,6 +140,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         return classSuffix;
     }
+    */
 
     protected final IHtmlWriter writeCssAttributes(IHtmlWriter htmlWriter)
             throws WriterException {
