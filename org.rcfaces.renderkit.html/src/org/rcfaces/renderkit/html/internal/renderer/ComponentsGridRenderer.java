@@ -958,6 +958,17 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.encodeEnd(writer);
     }
 
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add("selectedItems");
+        unlockedProperties.add("deselectedItems");
+//        unlockedProperties.add("showAdditional");
+//        unlockedProperties.add("hideAdditional");
+//        unlockedProperties.add("cursor");
+    }
+
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
 

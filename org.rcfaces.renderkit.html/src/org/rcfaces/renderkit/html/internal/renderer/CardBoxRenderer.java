@@ -3,12 +3,15 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Set;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.iterator.ICardIterator;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -113,7 +116,8 @@ public class CardBoxRenderer extends AbstractCssRenderer {
 
         CardBoxComponent cardBoxComponent = (CardBoxComponent) component;
 
-        String selectedId = componentData.getStringProperty("selected");
+        String selectedId = componentData
+                .getStringProperty(Properties.SELECTED);
         if (selectedId != null) {
             ICardIterator it = cardBoxComponent.listCards();
             for (; it.hasNext();) {
@@ -142,6 +146,12 @@ public class CardBoxRenderer extends AbstractCssRenderer {
         if (preferences != null) {
             preferences.savePreferences(facesContext, cardBoxComponent);
         }
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add(Properties.SELECTED);
     }
 
     protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {

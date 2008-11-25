@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.component.UIColumn;
@@ -433,6 +434,12 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
         }
 
         cssWriter.writeMargin(componentsListComponent);
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add("first");
     }
 
     protected void decode(IRequestContext context, UIComponent component,
