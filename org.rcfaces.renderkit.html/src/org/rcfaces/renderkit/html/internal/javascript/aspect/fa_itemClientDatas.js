@@ -18,6 +18,10 @@ var __members = {
 	 * @return String Value associated to the specified property.
 	 */
 	f_getItemClientData: function(item, key) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+	
 		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_getItemClientData: Invalid item object. ("+item+")");
 		f_core.Assert(typeof(key)=="string", "fa_itemClientDatas.f_getItemClientData: Invalid key parameter ! ("+key+")");
 		
@@ -34,6 +38,10 @@ var __members = {
 	 * @return Object
 	 */
 	f_getItemClientDatas: function(item) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+	
 		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_getItemClientDatas: Invalid item object. ("+item+")");
 		
 		var clientDatas=item._clientDatas;
@@ -51,6 +59,10 @@ var __members = {
 	 * @return String old value
 	 */
 	f_setItemClientData: function(item, key, value) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+	
 		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_setItemClientData: Invalid item object. ("+item+")");
 		f_core.Assert(typeof(key)=="string", "fa_itemClientDatas.f_setItemClientData: Invalid key parameter ! ("+key+")");
 		f_core.Assert(value===undefined || value===null || typeof(value)=="string", "fa_itemClientDatas.f_setItemClientData: Invalid value parameter ! ("+value+")");
@@ -74,11 +86,24 @@ var __members = {
 	 * @method hidden
 	 */
 	f_setItemClientDatas: function(item, clientDatas) {
+		if (typeof(item)!="object") {
+			item=this.f_getItemByValue(item, true);
+		}
+	
 		f_core.Assert(typeof(item)=="object", "fa_itemClientDatas.f_setItemClientDatas: Invalid item object. ("+item+")");
 		f_core.Assert(typeof(clientDatas)=="object", "fa_itemClientDatas.f_setItemClientDatas: Invalid clientDatas parameter ! ("+clientDatas+")");
 		
 		item._clientDatas=clientDatas;
-	}
+	},
+	/**
+	 * Returns the item associated to the specified value.
+	 * 
+	 * @method public
+	 * @param String value Value of an item.
+	 * @param hidden boolean assertIfNotFound 
+	 * @return Object Item associated with the value.
+	 */
+	f_getItemByValue: f_class.ABSTRACT
 }
 
 new f_aspect("fa_itemClientDatas", {
