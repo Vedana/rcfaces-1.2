@@ -27,7 +27,16 @@ var __statics = {
 	/**
 	 * @method private static
 	 */
-	_AddButton: function(dataPager, container, buttonClass, text, tooltip, index) {
+	_AddButton: function(dataPager, container, buttonClass, text, tooltip, index, parameters) {
+		if (parameters) {
+			if (parameters["label"]) {
+				text=parameters["label"];
+			}
+			if (parameters["tooltip"]) {
+				tooltip=parameters["tooltip"];
+			}
+		}
+
 		var button;
 		
 		var doc=dataPager.ownerDocument;
@@ -344,6 +353,7 @@ var __members = {
 		if (!oldVisibility) {
 			oldVisibility="inherit";
 		}
+		
 		try {
 			this.style.visibility="hidden";
 			
@@ -408,11 +418,26 @@ var __members = {
 						resourceBundle=f_resourceBundle.Get(f_pager);
 					}
 					
-					var parameter=undefined;
+					var parameters=undefined;
 					var pvar=varName.indexOf(':');
 					if (pvar>=0) {
-						parameter=varName.substring(pvar+1);
+						var parameter=varName.substring(pvar+1);
 						varName=varName.substring(0, pvar);
+						
+						parameters=new Object();
+						
+						var ss=parameter.split(';');
+						for(var j=0;j<ss.length;j++) {
+							var s=ss[j];
+							var p="";
+							var ep=s.indexOf('=');
+							if (ep>=0) {
+								p=s.substring(ep+1);
+								s=s.substring(0, ep);
+							}
+							
+							parameters[s]=p;
+						}
 					}
 					
 					switch(varName) {
@@ -441,34 +466,34 @@ var __members = {
 						
 					case "rowcount":
 						if (rowCount>=0) {
-							this.f_appendRowCountValue(component, rowCount, "rowCount");
+							this.f_appendRowCountValue(component, rowCount, "rowCount", parameters);
 						}
 						break;
 						
 					case "pagecount":
 						if (rowCount>=0 && rows>0) {
-							this.f_appendRowCountValue(component, Math.floor(((rowCount-1)/rows)+1), "pageCount");
+							this.f_appendRowCountValue(component, Math.floor(((rowCount-1)/rows)+1), "pageCount", parameters);
 						}
 						break;
 						
 					case "bfirst":
-						this.f_appendFirstButton(component, first, "first", resourceBundle);
+						this.f_appendFirstButton(component, first, "first", resourceBundle, parameters);
 						break;
 	
 					case "bprev":
-						this.f_appendPrevButton(component, first, rows, "prev", resourceBundle);
+						this.f_appendPrevButton(component, first, rows, "prev", resourceBundle, parameters);
 						break;
 						
 					case "bnext":		
-						this.f_appendNextButton(component, first, rows, rowCount, maxRows, "next", resourceBundle);
+						this.f_appendNextButton(component, first, rows, rowCount, maxRows, "next", resourceBundle, parameters);
 						break;
 					
 					case "blast":
-						this.f_appendLastButton(component, first, rows, rowCount, maxRows, "last", resourceBundle);
+						this.f_appendLastButton(component, first, rows, rowCount, maxRows, "last", resourceBundle, parameters);
 						break;
 					
 					case "bpages":
-						this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,"goto", resourceBundle, parameter);
+						this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,"goto", resourceBundle, parameters);
 						break;
 						
 					default:
@@ -544,36 +569,37 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_appendRowCountValue: function(component, rowCount, cls) {
+	f_appendRowCountValue: function(component, rowCount, cls, parameters) {
 		f_pager._AddSpan(component, cls, rowCount);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendFirstValue: function(component, first, cls) {
+	f_appendFirstValue: function(component, first, cls, parameters) {
 		f_pager._AddSpan(component, cls, first);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendLastValue: function(component, last, cls) {
+	f_appendLastValue: function(component, last, cls, parameters) {
 		f_pager._AddSpan(component, cls, last);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendFirstButton: function(component, first, cls, resourceBundle) {
+	f_appendFirstButton: function(component, first, cls, resourceBundle, parameters) {
 		f_pager._AddButton(this, 
 			component, 
 			cls,
 			resourceBundle.f_get("FIRST"), 
 			resourceBundle.f_get("FIRST_TOOLTIP"), 
-			(first>0)?0:-1);
+			(first>0)?0:-1, 
+			parameters);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendPrevButton: function(component, first, rows, cls, resourceBundle) {
+	f_appendPrevButton: function(component, first, rows, cls, resourceBundle, parameters) {
 		var idx = first - rows;
 		if (idx < 0) {
 			idx = 0;
@@ -584,12 +610,13 @@ var __members = {
 			cls, 
 			resourceBundle.f_get("PREVIOUS"), 
 			resourceBundle.f_get("PREVIOUS_TOOLTIP"), 
-			(first>0)?idx:-1);
+			(first>0)?idx:-1, 
+			parameters);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendNextButton: function(component, first, rows, rowCount, maxRows, cls, resourceBundle) {			
+	f_appendNextButton: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, parameters) {			
 		var idx = first + rows;
 
 		var nextIndex=-1;
@@ -614,12 +641,12 @@ var __members = {
 			cls,
 			resourceBundle.f_get("NEXT"), 
 			resourceBundle.f_get("NEXT_TOOLTIP"), 
-			nextIndex);
+			nextIndex, parameters);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendLastButton: function(component, first, rows, rowCount, maxRows, cls, resourceBundle) {
+	f_appendLastButton: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, parameters) {
 		var idx = first + rows;
 
 		var lastIndex=-1;
@@ -647,13 +674,27 @@ var __members = {
 			cls,
 			resourceBundle.f_get("LAST"), 
 			resourceBundle.f_get("LAST_TOOLTIP"), 
-			lastIndex);
+			lastIndex, 
+			parameters);
 	},
 	
 	/**
 	 * @method protected
 	 */
-	f_appendPagesButtons: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, separator) {
+	f_appendPagesButtons: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, parameters) {
+		
+		var maxPage=3 * 2 + 1;		
+		var sep=null;
+		
+		if (parameters) {
+			if (parameters["separator"]) {
+				sep=parameters["separator"];
+			}
+			if (parameters["pages"]) {
+				maxPage=parseInt(parameters["pages"], 10);
+			}
+		}
+
 		var selectedPage = Math.floor(first / rows);
 		var nbPage;
 		if (rowCount<0) {				
@@ -663,8 +704,8 @@ var __members = {
 		}
 		
 		var showPage = nbPage;
-		if (showPage > 3 * 2 + 1) {
-			showPage = 3 * 2 + 1;
+		if (showPage > maxPage) {
+			showPage = maxPage;
 		}
 		
 		var pageOffset = 0;
@@ -676,27 +717,6 @@ var __members = {
 			
 			if (pageOffset < 0) {
 				pageOffset = 0;
-			}
-		}
-		
-		var sep=null;
-		
-		if (separator) {
-			var ss=separator.split(';');
-			for(var i=0;i<ss.length;i++) {
-				var s=ss[i];
-				var p="";
-				var ep=s.indexOf('=');
-				if (ep>=0) {
-					p=s.substring(ep+1);
-					s=s.substring(0, ep);
-				}
-				
-				switch(s) {
-				case "separator":
-					sep=p;
-					break;
-				}
 			}
 		}
 		
