@@ -5,6 +5,7 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,12 +18,14 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.renderkit.AbstractRequestContext;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IDefaultUnlockedPropertiesRenderer;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 
@@ -128,7 +131,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
     }
 
     protected IComponentData getComponentData(UIComponent component,
-            String componentId, Object data) {
+            String componentId, Object data, Renderer renderer) {
 
         Map properties = Collections.EMPTY_MAP;
         Map parameters = this.parameters;
@@ -137,7 +140,7 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         if (values != null) {
             // Il faut transformer la valeur serialisée en Map
             properties = HtmlTools.decodeParametersToMap(getProcessContext(),
-                    component, values, PROPERTY_SEPARATORS, "");
+                    component, renderer, values, PROPERTY_SEPARATORS, "");
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Decode component data of '" + componentId + "' to "
@@ -185,57 +188,67 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             return emptyComponentData();
         }
 
+        Set unlockedProperties = null;
+
         if (isLockedClientAttributes()) {
+
             if (component instanceof IUnlockedClientAttributesCapability) {
-                properties = filterProperties(
-                        (IUnlockedClientAttributesCapability) component,
-                        properties);
+                unlockedProperties = filterProperties((IUnlockedClientAttributesCapability) component);
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Filtred properties => '" + properties + "'.");
                 }
 
             } else {
-                properties = Collections.EMPTY_MAP;
+                unlockedProperties = Collections.EMPTY_SET;
+            }
+
+            if (unlockedProperties != null
+                    && (renderer instanceof IDefaultUnlockedPropertiesRenderer)) {
+                String defaultUnlockedProperties[] = ((IDefaultUnlockedPropertiesRenderer) renderer)
+                        .getDefaultUnlockedProperties(getFacesContext(),
+                                component);
+                if (defaultUnlockedProperties != null
+                        && defaultUnlockedProperties.length > 0) {
+                    unlockedProperties = new HashSet(unlockedProperties);
+                    unlockedProperties.addAll(Arrays
+                            .asList(defaultUnlockedProperties));
+                }
             }
         }
 
         HtmlComponentData hcd = new HtmlComponentData();
-        hcd.set(parameters, component, componentId, eventComponent, properties);
+        hcd.set(parameters, component, componentId, eventComponent, properties,
+                unlockedProperties);
 
         return hcd;
     }
 
-    private Map filterProperties(IUnlockedClientAttributesCapability component,
-            Map properties) {
+    private Set filterProperties(IUnlockedClientAttributesCapability component) {
         String unlockedAttributes = component.getUnlockedClientAttributeNames();
         if (unlockedAttributes == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.EMPTY_SET;
         }
         unlockedAttributes = unlockedAttributes.trim();
         if ("*".equals(unlockedAttributes)) {
-            return properties;
+            return null;
         }
 
-        Map ret = null;
+        Set ret = null;
 
-        StringTokenizer st = new StringTokenizer(unlockedAttributes, ", ");
+        StringTokenizer st = new StringTokenizer(unlockedAttributes,
+                ",; \t\r\n");
         for (; st.hasMoreTokens();) {
             String attributeName = st.nextToken();
 
-            Object value = properties.get(attributeName);
-            if (value == null) {
-                continue;
-            }
-
             if (ret == null) {
-                ret = new HashMap(properties.size());
+                ret = new HashSet(unlockedAttributes.length() / 8);
             }
-            ret.put(attributeName, value);
+            ret.add(attributeName);
         }
 
         if (ret == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.EMPTY_SET;
         }
 
         return ret;
@@ -413,7 +426,9 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         /*
          * (non-Javadoc)
          * 
-         * @see org.rcfaces.core.internal.renderkit.IComponentData#getParameter(java.lang.String)
+         * @see
+         * org.rcfaces.core.internal.renderkit.IComponentData#getParameter(java
+         * .lang.String)
          */
         public final String getParameter(String parameterName) {
             return getStringParameter(parameters, parameterName);
@@ -422,7 +437,9 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         /*
          * (non-Javadoc)
          * 
-         * @see org.rcfaces.core.internal.renderkit.IComponentData#getParameters(java.lang.String)
+         * @see
+         * org.rcfaces.core.internal.renderkit.IComponentData#getParameters(
+         * java.lang.String)
          */
         public final String[] getParameters(String parameterName) {
             Object value = parameters.get(parameterName);
@@ -489,27 +506,43 @@ public class HtmlRequestContext extends AbstractRequestContext implements
 
         private boolean eventComponent;
 
+        private Set unlockedProperties;
+
         public void set(Map parameters, UIComponent component,
-                String componentId, boolean eventComponent, Map properties) {
+                String componentId, boolean eventComponent, Map properties,
+                Set unlockedProperties) {
             super.set(parameters);
 
             this.component = component;
             this.componentId = componentId;
             this.properties = properties;
             this.eventComponent = eventComponent;
+            this.unlockedProperties = unlockedProperties;
         }
 
         /*
          * (non-Javadoc)
          * 
-         * @see org.rcfaces.core.internal.renderkit.IComponentData#getProperty(java.lang.String)
+         * @see
+         * org.rcfaces.core.internal.renderkit.IComponentData#getProperty(java
+         * .lang.String)
          */
         public Object getProperty(String name) {
+            if (unlockedProperties != null
+                    && unlockedProperties.contains(name) == false) {
+                return null;
+            }
+
             return properties.get(name);
         }
 
         public boolean containsKey(String name) {
-            return false;
+            if (unlockedProperties != null
+                    && unlockedProperties.contains(name) == false) {
+                return false;
+            }
+
+            return properties.containsKey(name);
         }
 
         /*
@@ -542,7 +575,8 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         /*
          * (non-Javadoc)
          * 
-         * @see org.rcfaces.core.internal.renderkit.IComponentData#isEventComponent()
+         * @see
+         * org.rcfaces.core.internal.renderkit.IComponentData#isEventComponent()
          */
         public boolean isEventComponent() {
             return eventComponent;
