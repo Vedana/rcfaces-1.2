@@ -104,7 +104,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private boolean noCache = false;
 
-    private StyleSheetRepository repository;
+    private StyleSheetSourceContainer repository;
 
     private Object useMetaContentStyleType;
 
@@ -172,7 +172,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     new CssConfig(fileName, uri));
         }
 
-        StyleSheetRepository r = getRepository();
+        StyleSheetSourceContainer r = getRepository();
         if (noCache == false) {
             r.getRawBuffer();
         }
@@ -195,13 +195,13 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         return cssConfig;
     }
 
-    private StyleSheetRepository getRepository() throws ServletException {
+    private StyleSheetSourceContainer getRepository() throws ServletException {
         synchronized (this) {
             if (repository != null) {
                 return repository;
             }
 
-            StyleSheetRepository r = createStyleSheetRepository();
+            StyleSheetSourceContainer r = createStyleSheetRepository();
             if (r == null) {
                 throw new ServletException("Can not load Stylesheet files ...");
             }
@@ -217,7 +217,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
     }
 
-    private StyleSheetRepository createStyleSheetRepository()
+    private StyleSheetSourceContainer createStyleSheetRepository()
             throws ServletException {
 
         String repositoryVersionSupport = getParameter(REPOSITORY_VERSION_SUPPORT_PARAMETER);
@@ -240,7 +240,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     + "' for servlet '" + getServletName() + "'.");
         }
 
-        return new StyleSheetRepository(getServletConfig(), getModules(),
+        return new StyleSheetSourceContainer(getServletConfig(), getModules(),
                 getCharset(), hasGZipSupport(), hasEtagSupport(),
                 hasHashSupport(), repositoryVersion);
     }
@@ -763,10 +763,10 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     private class StyleSheetRepositoryResponse extends AbstractResponse {
         private static final String REVISION = "$Revision$";
 
-        private final StyleSheetRepository styleSheetRepository;
+        private final StyleSheetSourceContainer styleSheetRepository;
 
         public StyleSheetRepositoryResponse(String mimeType,
-                StyleSheetRepository styleSheetRepository) {
+                StyleSheetSourceContainer styleSheetRepository) {
             super(mimeType);
 
             this.styleSheetRepository = styleSheetRepository;
