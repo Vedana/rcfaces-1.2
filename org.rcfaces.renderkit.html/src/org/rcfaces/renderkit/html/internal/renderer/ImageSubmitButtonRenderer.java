@@ -8,6 +8,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -22,6 +24,14 @@ public class ImageSubmitButtonRenderer extends ImageButtonRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_SUBMIT_BUTTON;
+    }
+
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+   
+        // Il faut l'activer sur le INIT pour récuperer la touche SUBMIT
+        ((IHtmlWriter) writer).getJavaScriptEnableMode().enableOnInit();
+
+        super.encodeEnd(writer);
     }
 
     protected IComponentDecorator createComponentDecorator(
