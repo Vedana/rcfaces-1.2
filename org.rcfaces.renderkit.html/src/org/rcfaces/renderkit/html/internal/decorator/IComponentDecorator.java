@@ -5,6 +5,7 @@
 package org.rcfaces.renderkit.html.internal.decorator;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -44,5 +45,8 @@ public interface IComponentDecorator {
 
     void decode(IRequestContext context, UIComponent component,
             IComponentData componentData);
+
+    String[] getDefaultUnlockedProperties(FacesContext facesContext,
+            UIComponent component);
 
 }
