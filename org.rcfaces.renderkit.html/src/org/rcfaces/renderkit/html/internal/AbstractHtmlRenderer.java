@@ -6,17 +6,16 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.lang.reflect.Array;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.ValueChangeEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,23 +41,7 @@ import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
-import org.rcfaces.core.event.BlurEvent;
-import org.rcfaces.core.event.CheckEvent;
-import org.rcfaces.core.event.CloseEvent;
-import org.rcfaces.core.event.DoubleClickEvent;
-import org.rcfaces.core.event.FocusEvent;
-import org.rcfaces.core.event.KeyDownEvent;
-import org.rcfaces.core.event.KeyPressEvent;
-import org.rcfaces.core.event.KeyUpEvent;
-import org.rcfaces.core.event.LoadEvent;
-import org.rcfaces.core.event.MouseOutEvent;
-import org.rcfaces.core.event.MouseOverEvent;
 import org.rcfaces.core.event.PropertyChangeEvent;
-import org.rcfaces.core.event.ResetEvent;
-import org.rcfaces.core.event.SelectionEvent;
-import org.rcfaces.core.event.SortEvent;
-import org.rcfaces.core.event.SuggestionEvent;
-import org.rcfaces.core.event.UserEvent;
 import org.rcfaces.core.internal.component.ISeverityImageAccessors;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
@@ -73,6 +56,8 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.IContentFamily;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
+import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 
@@ -80,7 +65,8 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
+public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
+        implements IEventObjectDecoder {
 
     private static final String REVISION = "$Revision$";
 
@@ -91,240 +77,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
 
     private static final String COMPONENT_DECORATOR = "camelia.component.decorator";
 
-    private static final Map EVENT_DECODERS;
-
     private static final String RIGHT_TO_LEFT = "RTL";
-
-    static {
-        EVENT_DECODERS = new HashMap(32);
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_SELECTION,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new SelectionEvent(component,
-                                eventData.getEventValue(), null, eventData
-                                        .getEventItem(), eventData
-                                        .getEventDetail());
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_VALUE_CHANGE,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new ValueChangeEvent(component,
-                                null, eventData.getEventValue());
-
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_DBLCLICK,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new DoubleClickEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_CHECK,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new CheckEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_BLUR,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new BlurEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_FOCUS,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new FocusEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_KEYDOWN,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new KeyDownEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_KEYUP,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new KeyUpEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_KEYPRESS,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-
-                        int charCode = -1;
-                        try {
-                            charCode = Integer.parseInt(eventData
-                                    .getEventValue());
-
-                        } catch (NumberFormatException ex) {
-                            LOG.debug("Invalid charCode from eventValue '"
-                                    + eventData.getEventValue() + "'", ex);
-                        }
-
-                        int modifiers = eventData.getEventDetail();
-
-                        FacesEvent event = new KeyPressEvent(component,
-                                charCode, modifiers);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_MOUSEOUT,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new MouseOutEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_MOUSEOVER,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new MouseOverEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_CLOSE,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new CloseEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_RESET,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new ResetEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_SORT,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-
-                        FacesEvent event = new SortEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_SUGGESTION,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        // @XXX A Completer avec les noms des propri�t�s ...
-
-                        FacesEvent event = new SuggestionEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_PROPERTY_CHANGE,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        // @XXX A Completer avec les noms des propri�t�s ...
-
-                        FacesEvent event = new PropertyChangeEvent(component,
-                                null, null, eventData.getEventValue());
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_USER,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        FacesEvent event = new UserEvent(component, eventData
-                                .getEventValue(), eventData.getEventItem(),
-                                eventData.getEventDetail());
-                        queueEvent(component, event);
-                    }
-                });
-
-        EVENT_DECODERS.put(JavaScriptClasses.EVENT_LOAD,
-                new AbstractEventDecoder() {
-                    private static final String REVISION = "$Revision$";
-
-                    public void decodeEvent(UIComponent component,
-                            IEventData eventData) {
-                        // @XXX A Completer avec les noms des propri�t�s ...
-
-                        FacesEvent event = new LoadEvent(component);
-                        queueEvent(component, event);
-                    }
-                });
-    }
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
@@ -656,6 +409,36 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         return HtmlTools.writeClientData(writer, values);
     }
 
+    public String[] getDefaultUnlockedProperties(FacesContext facesContext,
+            UIComponent component) {
+
+        String unlockedProperties[] = super.getDefaultUnlockedProperties(
+                facesContext, component);
+
+        if (hasComponenDecoratorSupport()) {
+            IComponentDecorator componentDecorator = getComponentDecorator(
+                    facesContext, component);
+            if (componentDecorator != null) {
+                String ups[] = componentDecorator.getDefaultUnlockedProperties(
+                        facesContext, component);
+
+                if (unlockedProperties == null) {
+                    unlockedProperties = ups;
+
+                } else if (ups != null && ups.length > 0) {
+                    Set s = new HashSet(Arrays.asList(unlockedProperties));
+
+                    s.addAll(Arrays.asList(ups));
+
+                    unlockedProperties = (String[]) s.toArray(new String[s
+                            .size()]);
+                }
+            }
+        }
+
+        return unlockedProperties;
+    }
+
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
 
@@ -873,15 +656,15 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
         }
     }
 
-    protected void decodeEvent(IRequestContext context, UIComponent component,
-            IEventData eventData) {
-        super.decodeEvent(context, component, eventData);
+    protected void decodeEvent(IRequestContext requestContext,
+            UIComponent component, IEventData eventData) {
+        super.decodeEvent(requestContext, component, eventData);
 
         if (eventData == null) {
             return;
         }
 
-        IEventDecoder eventDecoder = getEventDecoder(context, component,
+        IEventDecoder eventDecoder = getEventDecoder(requestContext, component,
                 eventData);
 
         if (eventDecoder == null) {
@@ -895,12 +678,12 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
                     + "' for component='" + component.getId() + "'.");
         }
 
-        eventDecoder.decodeEvent(component, eventData);
+        eventDecoder.decodeEvent(requestContext, component, eventData, this);
     }
 
     protected IEventDecoder getEventDecoder(IRequestContext context,
             UIComponent component, IEventData eventData) {
-        return (IEventDecoder) EVENT_DECODERS.get(eventData.getEventName());
+        return EventDecoders.get(eventData.getEventName());
     }
 
     protected IRenderContext getRenderContext(FacesContext context) {
@@ -913,32 +696,6 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
 
     protected IRequestContext getRequestContext(FacesContext context) {
         return HtmlRequestContext.getRequestContext(context);
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    protected interface IEventDecoder {
-        void decodeEvent(UIComponent component, IEventData eventData);
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    protected static abstract class AbstractEventDecoder implements
-            IEventDecoder {
-        private static final String REVISION = "$Revision$";
-
-        protected final void queueEvent(UIComponent component, FacesEvent event) {
-            PhaseId phaseId = PhaseId.INVOKE_APPLICATION;
-
-            event.setPhaseId(phaseId);
-            component.queueEvent(event);
-        }
     }
 
     protected final void setAsyncRenderer(IHtmlWriter writer,
@@ -1177,4 +934,9 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer {
     protected String getWAIRole() {
         return null;
     }
+
+    public Object decodeEventObject(IRequestContext requestContext, UIComponent component, IEventData eventData) {
+        return null;
+    }
+
 }
