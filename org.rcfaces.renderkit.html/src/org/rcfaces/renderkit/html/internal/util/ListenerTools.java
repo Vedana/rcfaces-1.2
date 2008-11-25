@@ -12,7 +12,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.capability.IClientValidationCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
@@ -486,7 +485,7 @@ public final class ListenerTools {
             }
         }
 
-        if (component instanceof IClientValidationCapability) {
+        if (component instanceof IValidationEventCapability) {
             IValidationEventCapability clientValidationListenerCapability = (IValidationEventCapability) component;
 
             FacesListener fls[] = clientValidationListenerCapability
