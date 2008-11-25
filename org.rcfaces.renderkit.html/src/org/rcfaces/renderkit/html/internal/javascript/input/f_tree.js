@@ -3145,6 +3145,15 @@ var __members = {
 		}
 
 		this.fa_updateElementStyle(li);
+	},
+	f_getItemByValue: function(value) {
+		var item=this._searchComponentByNodeOrValue(value);
+		
+		if (!item) {
+			return item;
+		}
+		
+		return item._node;
 	}
 }
 
