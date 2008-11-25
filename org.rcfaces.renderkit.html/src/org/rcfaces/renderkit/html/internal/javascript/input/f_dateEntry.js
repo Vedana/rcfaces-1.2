@@ -218,7 +218,7 @@ var __members={
 	},
 	f_serialize: function() {
 		var date=this.f_getDate();
-		
+
 		this.f_setProperty(f_prop.VALUE, date);
 
 		this.f_super(arguments);
@@ -234,75 +234,105 @@ var __members={
 			return true;
 		}
 
-		var errorMessage=null;
-			
-		var date=this.f_getDate();
-		
-		f_core.Debug(f_dateEntry, "Date: "+date);
-		if (!date) {
-			if (!this.f_isRequired()) {
-				// Si c'est pas requis, on ne rale que si un des champs est rempli
-				var empty=true;
-				var inputs=this._inputs;
-				for(var i=0;i<inputs.length;i++) {
-					if (inputs[i].value.length<1) {
-						continue;
-					}
-					
-					empty=false;
-					break;
-				}
-				
-				if (empty) {
-					// Tous les champs sont vides
-					return true;
-				}
+		var year=2000;
+		var month=1;
+		var date=1;
+		var required=this.f_isRequired();
+		var empty=0;
+		var errorMessage;
 
-				errorMessage="invalidDate.error";
+		var inputs=this._inputs;
+		for(var i=0;i<inputs.length;i++) {
+			var input=inputs[i];
+			
+			var errorMessageType;
+			var maxValue=0;
+
+			var type=input._type;
+			switch(type) {
+			case "d":
+				errorMessageType="invalidDate.error";
+				maxValue=31;
+				break;
 				
-			} else {
-				errorMessage="required.error";
+			case "M":
+				errorMessageType="invalidMonth.error";
+				maxValue=12;
+				break;
+				
+			case "y":
+				errorMessageType="invalidYear.error";
+				break;
+			}
+
+			var value=input.value;
+			if (!value) {
+				if (!required) {
+					empty++;
+					continue;				
+				}
+			
+				errorMessage=errorMessageType;
+				break;
 			}
 			
-			// Le champ n'est pas requis, mais un des champs n'est pas vide !
-			// ou le champ est requis et la date est invalide 
-
-		} else {
-			// La date est valide !?
-			var t=date.getTime();
+			value=parseInt(value, 10);
 			
-			var d2=new Date(t);
-		
-			if (d2.getDate()!=date.getDate()) {
-				errorMessage="invalidDate.error";
-		
-			} else if (d2.getMonth()!=date.getMonth()) {
-				errorMessage="invalidMonth.error";
-		
-			} else if (d2.getFullYear()!=date.getFullYear()) {
-				errorMessage="invalidYear.error";
+			if (isNaN(value) || value<1 || (maxValue && parseInt(value, 10)>maxValue)) {
+				errorMessage=errorMessageType;
+				break;
+			}
+						
+			switch(type) {
+			case "d":
+				date=value
+				break;
 				
-			} else {			
-				var minDate=this.f_getMinDate();
-				var maxDate=this.f_getMaxDate();
+			case "M":
+				month=value;
+				break;
 				
-				if (minDate && t<minDate.getTime()) {
-					errorMessage="minDate.error";
-	
-				} else if (maxDate && t>maxDate.getTime()) {
-					errorMessage="maxDate.error";
-				}
-
-				f_core.Debug(f_dateEntry, "Text Min/max : Error Message: "+errorMessage+" date="+date+" dateMin="+minDate+" dateMax="+maxDate);
+			case "y":
+				year=value;
+				break;
 			}
 		}
 		
+		if (!errorMessage) {
+			if (empty && empty!=inputs.length) {
+				errorMessage="required.error";
+				
+			} else {
+				if (year<100) {
+					year=f_dateFormat.ResolveYear(year, month, date, this._twoDigitYearStart);
+				}
+				
+				var d=new Date(year, month-1, date);
+				
+				if (d.getDate()!=date || d.getMonth()!=month-1  || d.getFullYear()!=year) {
+					errorMessage="invalidDate.error";
+		
+				} else {		
+					var t=d.getTime();
+			
+					var minDate=this.f_getMinDate();
+					var maxDate=this.f_getMaxDate();
+					
+					if (minDate && t<minDate.getTime()) {
+						errorMessage="minDate.error";
+			
+					} else if (maxDate && t>maxDate.getTime()) {
+						errorMessage="maxDate.error";
+					}
+				}
+			}
+		}
+								
 		f_core.Debug(f_dateEntry, "Error Message: "+errorMessage+" date="+date);
 		
 		if (!errorMessage) {
 			return true;
-		}
-		
+		}		
 		
 		this.f_addErrorMessage(f_dateEntry, errorMessage);
 		
