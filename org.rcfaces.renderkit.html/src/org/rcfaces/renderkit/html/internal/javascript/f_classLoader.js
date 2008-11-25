@@ -822,14 +822,16 @@ f_classLoader.prototype = {
 						
 			var component=document.getElementById(componentId);
 			if (!component) {
-				f_core.Error(f_classLoader,"f_verifyOnMessage: Can not find component '"+componentId+"'.");
+				f_core.Error(f_classLoader,"f_verifyOnMessage["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
 				continue;
 			}
-				
+			
 			if (f_class.IsObjectInitialized(component)) {
-				return true;
+				f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Already initialized '"+componentId+"'.");
+				continue;
 			}
 			
+			f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Initialize component '"+componentId+"'.");
 			try {
 				this.f_init(component);
 				
