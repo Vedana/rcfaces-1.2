@@ -3,6 +3,11 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
+import java.io.IOException;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -17,5 +22,11 @@ public abstract class AbstractSelectItemsRenderer extends AbstractCssRenderer {
 
     public final boolean getRendersChildren() {
         return true;
+    }
+
+    public void encodeChildren(FacesContext facesContext, UIComponent component)
+            throws IOException {
+        
+        // Les enfants ne doivent pas être rendus
     }
 }
