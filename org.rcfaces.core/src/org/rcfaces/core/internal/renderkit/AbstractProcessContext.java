@@ -57,6 +57,12 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
     private Calendar calendar;
 
+    private TimeZone forcedDateTimeZone;
+
+    private TimeZone defaultTimeZone;
+
+    private Calendar forcedDateCalendar;
+
     protected AbstractProcessContext(FacesContext facesContext) {
         this.facesContext = facesContext;
 
@@ -74,6 +80,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
         rcfacesContext = RcfacesContext.getInstance(facesContext);
 
         this.designerMode = rcfacesContext.isDesignerMode();
+
     }
 
     public final FacesContext getFacesContext() {
@@ -126,6 +133,10 @@ public abstract class AbstractProcessContext implements IProcessContext {
         }
 
         timeZone = ContextTools.getUserTimeZone(null);
+
+        if (timeZone == null) {
+
+        }
 
         return timeZone;
     }
@@ -196,8 +207,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
             }
             // base HREF relatif !
 
-            String p = PathUtil.normalizePath(contextPath + servletPath + "/" + baseHREF
-                    + uri);
+            String p = PathUtil.normalizePath(contextPath + servletPath + "/"
+                    + baseHREF + uri);
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Returns path='" + p
@@ -208,7 +219,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
             return p;
         }
 
-        String p = PathUtil.normalizePath(contextPath + servletPath + "/" + uri);
+        String p = PathUtil
+                .normalizePath(contextPath + servletPath + "/" + uri);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Returns path='" + p
@@ -226,7 +238,7 @@ public abstract class AbstractProcessContext implements IProcessContext {
      * public final String computeFromContextPath(String uri, boolean
      * canBeRelative) { String baseURI = getAbsolutePath(canBeRelative);
      * 
-     * String ret; if (uri == null) { ret = baseURI; } / * else if
+     * String ret; if (uri == null) { ret = baseURI; } / else if
      * (baseURI.length() == 0) { if (uri.length() > 0) { } } /else {
      * StringAppender u = new StringAppender(baseURI, uri.length() + 2);
      * 
@@ -239,7 +251,8 @@ public abstract class AbstractProcessContext implements IProcessContext {
      * 
      * ret = u.toString(); }
      * 
-     * if (Constants.ENCODE_URI) { ret = externalContext.encodeResourceURL(ret); }
+     * if (Constants.ENCODE_URI) { ret = externalContext.encodeResourceURL(ret);
+     * }
      * 
      * if (LOG.isDebugEnabled()) { LOG.debug("Compute uri '" + uri + "' => '" +
      * ret + "'."); }
@@ -322,6 +335,33 @@ public abstract class AbstractProcessContext implements IProcessContext {
         return defaultAttributesLocale;
     }
 
+    public TimeZone getDefaultTimeZone() {
+        initializePageConfigurator();
+
+        return defaultTimeZone;
+    }
+
+    public TimeZone getForcedDateTimeZone() {
+        initializePageConfigurator();
+
+        return forcedDateTimeZone;
+    }
+
+    public Calendar getForcedDateCalendar() {
+        if (forcedDateCalendar != null) {
+            return forcedDateCalendar;
+        }
+
+        TimeZone timeZone = getForcedDateTimeZone();
+        if (timeZone == null) {
+            return null;
+        }
+
+        forcedDateCalendar = Calendar.getInstance(forcedDateTimeZone);
+
+        return forcedDateCalendar;
+    }
+
     private void initializePageConfigurator() {
         if (pageConfiguratorInitialized) {
             return;
@@ -329,9 +369,20 @@ public abstract class AbstractProcessContext implements IProcessContext {
 
         pageConfiguratorInitialized = true;
 
-        scriptType = PageConfiguration.getScriptType(getFacesContext());
+        FacesContext facesContext = getFacesContext();
+
+        scriptType = PageConfiguration.getScriptType(facesContext);
         defaultAttributesLocale = PageConfiguration
-                .getDefaultLiteralLocale(getFacesContext());
+                .getDefaultLiteralLocale(facesContext);
+
+        Map applicationMap = facesContext.getExternalContext()
+                .getApplicationMap();
+
+        defaultTimeZone = getTimeZone(applicationMap,
+                DEFAULT_TIMEZONE_PARAMETER);
+
+        forcedDateTimeZone = getTimeZone(applicationMap,
+                FORCED_DATE_TIMEZONE_PARAMETER);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Page configurator of view "
@@ -340,6 +391,27 @@ public abstract class AbstractProcessContext implements IProcessContext {
                     + defaultAttributesLocale);
 
         }
+    }
+
+    private TimeZone getTimeZone(Map applicationMap,
+            String defaultTimezoneParameter) {
+
+        Object defaultTimeZone = applicationMap.get(defaultTimezoneParameter);
+        if ((defaultTimeZone instanceof String)
+                && ((String) defaultTimeZone).length() > 0) {
+            TimeZone timeZone = TimeZone.getTimeZone((String) defaultTimeZone);
+
+            if (timeZone == null) {
+                throw new FacesException("Can not get timeZone associated to '"
+                        + defaultTimeZone + "'");
+            }
+
+            applicationMap.put(defaultTimezoneParameter, timeZone);
+
+            return timeZone;
+        }
+
+        return (TimeZone) defaultTimeZone;
     }
 
     public RcfacesContext getRcfacesContext() {

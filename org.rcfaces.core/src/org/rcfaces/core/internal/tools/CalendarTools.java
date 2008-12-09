@@ -49,6 +49,7 @@ public class CalendarTools {
     private static final int DEFAULT_CENTURY = 1900;
 
     private static final Map DATE_KEYWORDS = new HashMap(4);
+
     static {
         DATE_KEYWORDS.put("now", new IDateKeyword() {
             private static final String REVISION = "$Revision$";
@@ -110,6 +111,19 @@ public class CalendarTools {
                 DateFormat.LONG));
         DATE_NORMALIZERS.put("FULL", new LocaleDateTimeFormatNormalizer(
                 DateFormat.FULL));
+    }
+
+    private static Map TIME_ZONE_BY_COUNTRY = new HashMap();
+    static {
+        addTimeZone("de", "Europe/Berlin");
+        addTimeZone("fr", "Europe/Paris");
+        addTimeZone("gb", "Europe/London");
+        addTimeZone("es", "Europe/Madrid");
+    }
+
+    private static void addTimeZone(String countryName, String timeZoneId) {
+        TIME_ZONE_BY_COUNTRY.put(countryName.toLowerCase(), TimeZone
+                .getTimeZone(timeZoneId));
     }
 
     /*
@@ -348,7 +362,22 @@ public class CalendarTools {
             if (dateFormatString != null) {
                 Locale locale = LocaleTools.getLocale(component, literalValue);
 
-                dateFormat = new SimpleDateFormat(dateFormatString, locale);
+                LocaleDateTimeFormatNormalizer formatNormalizer = (LocaleDateTimeFormatNormalizer) DATE_NORMALIZERS
+                        .get(dateFormatString.toUpperCase());
+
+                if (formatNormalizer != null) {
+                    return formatNormalizer.getDateFormat(locale);
+                }
+
+                try {
+                    dateFormat = new SimpleDateFormat(dateFormatString, locale);
+
+                } catch (IllegalArgumentException ex) {
+                    throw new FacesException(
+                            "Illegal simple date format pattern '"
+                                    + dateFormatString + "' for component '"
+                                    + component.getId() + "'", ex);
+                }
             }
         }
 
@@ -465,6 +494,18 @@ public class CalendarTools {
             }
         }
 
+        if (locale != null && timeZone == null) {
+            // Il faut trouver la timeZone associée au locale
+            String country = locale.getCountry();
+            if (country != null) {
+                timeZone = getTimeZoneFromCountry(country);
+            }
+
+            if (timeZone == null) {
+                timeZone = processContext.getDefaultTimeZone();
+            }
+        }
+
         if (locale != null && timeZone != null) {
             return Calendar.getInstance(timeZone, locale);
         }
@@ -478,5 +519,11 @@ public class CalendarTools {
         }
 
         return Calendar.getInstance();
+    }
+
+    private static TimeZone getTimeZoneFromCountry(String country) {
+        country = country.toLowerCase();
+
+        return (TimeZone) TIME_ZONE_BY_COUNTRY.get(country);
     }
 }

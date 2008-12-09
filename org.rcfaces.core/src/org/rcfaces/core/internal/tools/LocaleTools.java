@@ -86,6 +86,8 @@ public class LocaleTools {
 
         private final int style;
 
+        private final Map dateFormatByLocale = new HashMap();
+
         LocaleDateTimeFormatNormalizer(int style) {
             this.style = style;
         }
@@ -119,6 +121,19 @@ public class LocaleTools {
 
             return locale;
         }
+
+        public DateFormat getDateFormat(Locale locale) {
+            DateFormat dateFormat;
+            synchronized (dateFormatByLocale) {
+                dateFormat = (DateFormat) dateFormatByLocale.get(locale);
+                if (dateFormat == null) {
+                    dateFormat = DateFormat.getDateInstance(style, locale);
+                    dateFormatByLocale.put(locale, dateFormat);
+                }
+            }
+            return dateFormat;
+        }
+
     }
 
     public static String normalizeFormat(
