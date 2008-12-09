@@ -63,7 +63,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
                     .createFromWebResource(facesContext, src,
-                            IContentFamily.USER);
+                            IContentFamily.JSP);
 
             src = contentAccessor.resolveURL(facesContext, null, null);
             if (src != null) {
