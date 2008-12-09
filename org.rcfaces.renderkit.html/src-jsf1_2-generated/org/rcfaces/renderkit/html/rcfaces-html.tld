@@ -4,7 +4,7 @@
 	<short-name>vh</short-name>
 	<uri>http://rcfaces.org/html</uri>
 	<tag>
-<description><![CDATA[
+		<description><![CDATA[
 <p><b>Mandatory</b>.</p>
 		<p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
 		<p>It <b>must</b> be the first tag for a page.</p>
@@ -181,7 +181,7 @@ A boolean value specifying if the HTML BASE tag must be generated.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<description><![CDATA[
 Specifies includes and required javascript classes.
 ]]></description>
 		<name>javaScript</name>
@@ -285,7 +285,7 @@ A string value specifying a list of javascript classes to include.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<description><![CDATA[
 Css style
 ]]></description>
 		<name>cssStyle</name>

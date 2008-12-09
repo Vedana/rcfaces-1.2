@@ -1,7 +1,9 @@
 package org.rcfaces.renderkit.html.component;
 
-import org.rcfaces.renderkit.html.component.Properties;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
@@ -14,7 +16,9 @@ import java.util.HashSet;
 public class CssStyleComponent extends CameliaBaseComponent implements 
 	ITextCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html.cssStyle";
+	private static final Log LOG = LogFactory.getLog(CssStyleComponent.class);
+
+	public static final String COMPONENT_TYPE="org.rcfaces.html:cssStyle";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

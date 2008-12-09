@@ -1,7 +1,9 @@
 package org.rcfaces.renderkit.html.component;
 
+import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.rcfaces.renderkit.html.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
@@ -9,7 +11,9 @@ import java.util.HashSet;
 
 public class NameSpaceComponent extends CameliaBaseComponent {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html.nameSpace";
+	private static final Log LOG = LogFactory.getLog(NameSpaceComponent.class);
+
+	public static final String COMPONENT_TYPE="org.rcfaces.html:nameSpace";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

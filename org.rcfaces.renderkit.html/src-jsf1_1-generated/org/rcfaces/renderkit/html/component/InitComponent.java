@@ -1,6 +1,8 @@
 package org.rcfaces.renderkit.html.component;
 
 import java.lang.String;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import java.util.TimeZone;
 import java.util.Arrays;
@@ -9,10 +11,10 @@ import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IPageConfigurator;
 import java.util.Locale;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.renderkit.html.component.Properties;
 import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 
 /**
  * <p><b>Mandatory</b>.</p>
@@ -22,7 +24,9 @@ import org.rcfaces.core.internal.converter.TimeZoneConverter;
 public class InitComponent extends CameliaBaseComponent implements 
 	IPageConfigurator {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html.init";
+	private static final Log LOG = LogFactory.getLog(InitComponent.class);
+
+	public static final String COMPONENT_TYPE="org.rcfaces.html:init";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

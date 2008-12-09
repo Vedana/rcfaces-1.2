@@ -6,30 +6,30 @@
 	<short-name>vh</short-name>
 	<uri>http://rcfaces.org/html</uri>
 	<tag>
+		<name>init</name>
+		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
 <description><![CDATA[
 <p><b>Mandatory</b>.</p>
 		<p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
 		<p>It <b>must</b> be the first tag for a page.</p>
 ]]></description>
-		<name>init</name>
-		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -132,28 +132,28 @@ A boolean value specifying if the HTML BASE tag must be generated.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-Specifies includes and required javascript classes.
-]]></description>
 		<name>javaScript</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+<description><![CDATA[
+Specifies includes and required javascript classes.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -209,28 +209,28 @@ A string value specifying a list of javascript classes to include.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-Css style
-]]></description>
 		<name>cssStyle</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.CssStyleTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+<description><![CDATA[
+Css style
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -269,20 +269,20 @@ A string value sprecifying the charset associated to the "src" files.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -327,20 +327,20 @@ Base name of the resource bundle to be loaded.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -366,20 +366,20 @@ A boolean value indicating whether or not this component should be rendered
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -401,20 +401,20 @@ A boolean value indicating whether or not this component should be rendered
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -463,20 +463,20 @@ An url value pointing to the file to be included.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
