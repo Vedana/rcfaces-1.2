@@ -5,8 +5,12 @@ package org.rcfaces.core.internal.config;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.faces.FacesException;
@@ -40,7 +44,13 @@ public class ProvidersRegistry implements IProvidersRegistry {
     }
 
     public IProvider getProvider(String providerId) {
-        return (IProvider) providersById.get(providerId);
+        ProviderBean providerBean = (ProviderBean) providersById
+                .get(providerId);
+        if (providerBean == null) {
+            return null;
+        }
+
+        return providerBean.getProvider();
     }
 
     public void addProvider(ProviderBean providerBean) {
@@ -118,9 +128,11 @@ public class ProvidersRegistry implements IProvidersRegistry {
                 + "' to instanciate provider '" + id + "'.  (providerId='"
                 + providerId + "', classname='" + className + "'");
 
-        if (parameters != null) {
-            parameters[0] = providersById.get(providerId);
-        }
+        /*
+         * Ca n'a pas de sens ! if (parameters != null) { ProviderBean pb =
+         * (ProviderBean) providersById.get(providerId); if (bp != null) {
+         * parameters[0] = pb.getProvider(); } }
+         */
 
         IProvider provider;
         try {
@@ -135,7 +147,9 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
         LOG.trace("addProvider(" + providerId + "," + provider + ")");
 
-        providersById.put(providerId, provider);
+        providerBean.setProvider(provider);
+
+        providersById.put(providerId, providerBean);
     }
 
     public void configureRules(Digester digester) {
@@ -163,6 +177,21 @@ public class ProvidersRegistry implements IProvidersRegistry {
         digester.addBeanPropertySetter(
                 "rcfaces-config/providers/provider/provider-class",
                 "providerClassName");
+
+        digester.addRule("rcfaces-config/providers/provider/requires",
+                new Rule() {
+
+                    public void body(String namespace, String name, String text)
+                            throws Exception {
+
+                        ProviderBean providerBean = (ProviderBean) super.digester
+                                .peek();
+
+                        providerBean.addRequired(text);
+                    }
+
+                });
+
         digester.addSetNext("rcfaces-config/providers/provider", "addProvider");
     }
 
@@ -180,8 +209,28 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
         private String providerId;
 
+        private List requirements;
+
+        private IProvider provider;
+
         public String getProviderId() {
             return providerId;
+        }
+
+        public void addRequired(String required) {
+            if (requirements == null) {
+                requirements = new ArrayList();
+            }
+
+            requirements.add(required);
+        }
+
+        public String[] listRequirements() {
+            if (requirements == null) {
+                return new String[0]; // Quel est le mieux ?
+            }
+            return (String[]) requirements.toArray(new String[requirements
+                    .size()]);
         }
 
         public void setProviderId(String providerId) {
@@ -203,6 +252,15 @@ public class ProvidersRegistry implements IProvidersRegistry {
         public final void setId(String id) {
             this.id = id;
         }
+
+        public IProvider getProvider() {
+            return provider;
+        }
+
+        public void setProvider(IProvider provider) {
+            this.provider = provider;
+        }
+
     }
 
     public Digester getConfigDigester() {
@@ -215,7 +273,8 @@ public class ProvidersRegistry implements IProvidersRegistry {
         for (Iterator it = providersById.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
-            IProvider provider = (IProvider) entry.getValue();
+            ProviderBean providerBean = (ProviderBean) entry.getValue();
+            IProvider provider = providerBean.getProvider();
 
             provider.configureRules(digester);
         }
@@ -228,28 +287,66 @@ public class ProvidersRegistry implements IProvidersRegistry {
     }
 
     public void startupProviders(FacesContext facesContext) {
-        for (Iterator it = providersById.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
 
-            String providerId = (String) entry.getKey();
-            IProvider provider = (IProvider) entry.getValue();
+        Set started = new HashSet();
 
-            try {
-                LOG.debug("Start provider '" + providerId + "' ...");
+        boolean startedProcess = true;
 
-                provider.startup(facesContext);
+        for (; startedProcess;) {
+            startedProcess = false;
 
-                LOG.debug("Start provider '" + providerId + "' done");
+            next_provider: for (Iterator it = providersById.entrySet()
+                    .iterator(); it.hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
 
-            } catch (RuntimeException ex) {
-                it.remove();
+                String providerId = (String) entry.getKey();
+                if (started.contains(providerId)) {
+                    continue;
+                }
 
-                LOG.error("Exception when starting up provider '" + providerId
-                        + "'", ex);
+                ProviderBean providerBean = (ProviderBean) entry.getValue();
 
-                throw ex;
+                String requirements[] = providerBean.listRequirements();
+                for (int i = 0; i < requirements.length; i++) {
+                    String requirement = requirements[i];
+
+                    if (providersById.containsKey(requirement) == false) {
+                        LOG.error("Invalid dependency provider='" + providerId
+                                + "' requires unknown provider '" + requirement
+                                + "'.");
+                    } else if (started.contains(requirement) == false) {
+                        continue next_provider;
+                    }
+                }
+
+                startedProcess = true;
+                started.add(providerId);
+
+                IProvider provider = providerBean.getProvider();
+
+                try {
+                    LOG.debug("Start provider '" + providerId + "' ...");
+
+                    provider.startup(facesContext);
+
+                    LOG.debug("Start provider '" + providerId + "' done");
+
+                } catch (RuntimeException ex) {
+                    it.remove();
+
+                    LOG.error("Exception when starting up provider '"
+                            + providerId + "'", ex);
+
+                    throw ex;
+                }
             }
         }
 
+        if (started.size() != providersById.size()) {
+            List l = new ArrayList(providersById.keySet());
+            l.removeAll(started);
+
+            LOG.error("Providers are failed to startup: " + l);
+        }
     }
 }

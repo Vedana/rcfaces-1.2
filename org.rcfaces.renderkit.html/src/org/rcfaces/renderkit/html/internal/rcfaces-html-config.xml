@@ -5,7 +5,8 @@
   		<provider>
   			<provider-id>org.rcfaces.core.STYLE_CONTENT_PROVIDER</provider-id>
   			<provider-class>org.rcfaces.renderkit.html.internal.style.StyleContentAccessorHandler</provider-class>
-  			<required>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</required>
+  			<requires>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</requires>
+  			<requires>org.rcfaces.core.URL_REWRITING_PROVIDER</requires>
   		</provider>
   	</providers>
   	
