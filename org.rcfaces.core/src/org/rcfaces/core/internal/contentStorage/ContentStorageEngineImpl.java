@@ -57,7 +57,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
     private boolean disableCache = false;
 
-    private final LimitedMap registredContents = new LimitedMap(
+    private final LimitedMap registredContentsByGenerationInformation = new LimitedMap(
             Constants.CONTENT_STORAGE_CACHE_SIZE);
 
     public void startup(FacesContext facesContext) {
@@ -129,71 +129,122 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             generatedInformation.setContentFamily(IContentFamily.USER);
         }
 
-        Content content = null;
-        boolean contentEngineMustBeRegistred = false;
+        // Content content = null;
+        boolean contentEngineMustBeRegistred = true;
 
         IContentStorageRepository repository = getRepository();
-
-        IResolvedContent resolvedContent = null;
 
         String contentEngineId = null;
         if (disableCache == false) {
             contentEngineId = contentModel.getContentEngineId();
-            if (contentEngineId == null
-                    && (generatedInformation == null || generatedInformation
-                            .isTransient() == false)) {
-                content = new Content(contentModel, generatedInformation,
-                        generationInformation);
+            if (contentEngineId == null) {
+                Content content = (Content) registredContentsByGenerationInformation
+                        .get(generationInformation);
+                if (content != null) {
+                    contentEngineId = content.getContentEngineId();
+                    contentEngineMustBeRegistred = false;
 
-                contentEngineId = (String) registredContents.get(content);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Content is already in cache ! information='"
+                                + generationInformation + "'");
+                    }
 
-                contentEngineMustBeRegistred = (contentEngineId == null);
+                    IGeneratedResourceInformation contentGeneratedResourceInformation = content
+                            .getGeneratedInformation();
+
+                    if (contentGeneratedResourceInformation != null) {
+                        contentGeneratedResourceInformation
+                                .copyTo(generatedInformation);
+                    }
+                } else {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Cache does not contain information='"
+                                + generationInformation + "'");
+                    }
+
+                }
+            }
+        } else {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Cache is disabled for information='"
+                        + generationInformation + "'");
             }
         }
 
+        generatedInformation.setProcessingAtRequest(generationInformation
+                .isProcessAtRequest());
+        contentModel.setInformations(generationInformation, // On met les
+                // informations pour
+                // le
+                // checkNotModified
+                // ()
+                generatedInformation);
+
+        IResolvedContent resolvedContent = null;
+
         if (contentEngineId != null) {
-            if (contentModel.checkNotModified()) {
+            contentModel.setContentEngineId(contentEngineId);
+
+            if (contentModel.checkNotModified()) { // Le modele doit verifier la
+                // synchro entre le contentEngineId et le generationInformation
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("ContentModel '" + contentModel
                             + "' is not modified !");
                 }
                 resolvedContent = repository.load(contentEngineId);
-            }
 
-            if (resolvedContent == null) {
-                contentEngineId = null;
-                contentModel.setContentEngineId(null);
+                if (resolvedContent == null) {
+                    // Le cache ne contient plus la ressource ... trop tard !
+                    contentEngineId = null;
+                    contentEngineMustBeRegistred = true;
 
-                if (content != null) {
-                    registredContents.remove(content);
+                    registredContentsByGenerationInformation
+                            .remove(generationInformation);
                 }
+            } else {
+                // Modifié !
+
+                contentEngineId = null;
+                contentEngineMustBeRegistred = true;
+
+                registredContentsByGenerationInformation
+                        .remove(generationInformation);
             }
         }
 
         if (resolvedContent == null) {
-            generatedInformation.setProcessingAtRequest(generationInformation
-                    .isProcessAtRequest());
-
-            contentModel.setInformations(generationInformation,
-                    generatedInformation);
 
             if (generatedInformation.isProcessingAtRequest()) {
-                resolvedContent = new ResolvedContentAtRequest(contentModel,
-                        generatedInformation);
+                // On verra plus tard (dans la servlet)
+                resolvedContent = new ResolvedContentAtRequest(contentModel);
 
             } else {
-
                 Object wrappedData = contentModel.getWrappedData();
 
-                if (wrappedData instanceof IAdaptable) {
-                    resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
-                            .getAdapter(IResolvedContent.class, contentModel);
-                }
+                // Il nous faut un IResolvedContent !
 
-                if (resolvedContent == null) {
-                    resolvedContent = (IResolvedContent) adapterManager
-                            .getAdapter(wrappedData, IResolvedContent.class,
-                                    contentModel);
+                if (wrappedData instanceof IResolvedContent) {
+                    resolvedContent = (IResolvedContent) wrappedData;
+
+                } else {
+                    try {
+                        if (wrappedData instanceof IAdaptable) {
+                            resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
+                                    .getAdapter(IResolvedContent.class,
+                                            contentModel);
+                        }
+
+                        if (resolvedContent == null) {
+                            resolvedContent = (IResolvedContent) adapterManager
+                                    .getAdapter(wrappedData,
+                                            IResolvedContent.class,
+                                            contentModel);
+                        }
+                    } catch (Exception ex) {
+                        LOG.error(
+                                "Can not adapt content while render phase. (information='"
+                                        + generationInformation + "')", ex);
+                    }
                 }
 
                 if (resolvedContent == null) {
@@ -203,21 +254,30 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                 }
 
                 try {
-                    // On provoque le calcul du buffer !
+                    // On provoque le calcul du buffer, car c'est du processing
+                    // sur le rendu !
                     resolvedContent.getLength();
 
                 } catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(
+                            "Can not resolve content while render phase. (information='"
+                                    + generationInformation + "')", e);
+
+                    return null;
                 }
             }
         }
 
-        String url = repository.save(resolvedContent, contentModel);
+        // Permet de remettre la ressource dans le cache
+        String url = repository.save(resolvedContent, contentModel); 
 
         if (contentEngineMustBeRegistred) {
             contentEngineId = contentModel.getContentEngineId();
             if (contentEngineId != null) {
-                registredContents.put(content, contentEngineId);
+                registredContentsByGenerationInformation.put(
+                        generationInformation, new Content(
+                        // generationInformation,
+                                generatedInformation, contentEngineId));
             }
         }
 
@@ -289,8 +349,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         private transient boolean errorState;
 
-        public ResolvedContentAtRequest(IContentModel contentModel,
-                IGeneratedResourceInformation generatedInformation) {
+        public ResolvedContentAtRequest(IContentModel contentModel) {
             this.contentModel = contentModel;
         }
 
@@ -406,20 +465,21 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
     public static class Content implements StateHolder {
         private static final String REVISION = "$Revision$";
 
-        private IContentModel contentModel;
+        // private IGenerationResourceInformation generationInformation;
 
         private IGeneratedResourceInformation generatedInformation;
 
-        private IGenerationResourceInformation generationInformation;
+        private String contentEngineId;
 
         private boolean transientFlag;
 
-        public Content(IContentModel contentModel,
+        public Content(
+                // IGenerationResourceInformation generationInformation,
                 IGeneratedResourceInformation generatedInformation,
-                IGenerationResourceInformation generationInformation) {
-            this.contentModel = contentModel;
+                String contentEngineId) {
+            this.contentEngineId = contentEngineId;
+            // this.generationInformation = generationInformation;
             this.generatedInformation = generatedInformation;
-            this.generationInformation = generationInformation;
         }
 
         public boolean isTransient() {
@@ -433,11 +493,10 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         public void restoreState(FacesContext context, Object state) {
             Object states[] = (Object[]) state;
 
-            contentModel = (IContentModel) UIComponentBase
-                    .restoreAttachedState(context, states[0]);
+            contentEngineId = (String) states[0];
 
-            generationInformation = (IGenerationResourceInformation) UIComponentBase
-                    .restoreAttachedState(context, states[1]);
+            // generationInformation = (IGenerationResourceInformation)
+            // UIComponentBase.restoreAttachedState(context, states[1]);
 
             generatedInformation = (IGeneratedResourceInformation) UIComponentBase
                     .restoreAttachedState(context, states[2]);
@@ -446,16 +505,23 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         public Object saveState(FacesContext context) {
             Object states[] = new Object[3];
 
-            states[0] = UIComponentBase
-                    .saveAttachedState(context, contentModel);
+            states[0] = contentEngineId;
 
-            states[1] = UIComponentBase.saveAttachedState(context,
-                    generationInformation);
+            // states[1] =
+            // UIComponentBase.saveAttachedState(context,generationInformation);
 
             states[2] = UIComponentBase.saveAttachedState(context,
                     generatedInformation);
 
             return states;
+        }
+
+        public final IGeneratedResourceInformation getGeneratedInformation() {
+            return generatedInformation;
+        }
+
+        public final String getContentEngineId() {
+            return contentEngineId;
         }
     }
 }

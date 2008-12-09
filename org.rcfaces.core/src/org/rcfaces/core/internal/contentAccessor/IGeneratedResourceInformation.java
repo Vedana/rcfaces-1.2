@@ -42,4 +42,6 @@ public interface IGeneratedResourceInformation extends StateHolder {
     String getResponseSuffix();
 
     void setResponseSuffix(String suffix);
+
+    void copyTo(IGeneratedResourceInformation generatedInformation);
 }

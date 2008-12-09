@@ -63,6 +63,13 @@ public class ContentAccessorFactory {
             return null;
         }
 
+        public String resolveURL(FacesContext facesContext,
+                IGeneratedResourceInformation contentInformation,
+                IGenerationResourceInformation generationInformation,
+                int pathTypeMask) {
+            return null;
+        }
+
         public void setContentVersionHandler(
                 IContentVersionHandler contentVersionHandler) {
         }
@@ -132,8 +139,13 @@ public class ContentAccessorFactory {
     public static IContentAccessor createFromWebResource(
             FacesContext facesContext, Object value, IContentFamily type) {
 
+        IContentVersionHandler contentVersionHandler = RESOURCE_CONTENT_VERSION_HANDLER;
+        if (IContentFamily.HELP.equals(type) || IContentFamily.JSP.equals(type)) {
+            contentVersionHandler = null;
+        }
+
         return new BasicContentAccessor(facesContext, value, type,
-                RESOURCE_CONTENT_VERSION_HANDLER);
+                contentVersionHandler);
     }
 
     public static IContentAccessor createFromWebResource(
@@ -159,7 +171,8 @@ public class ContentAccessorFactory {
         private static final String REVISION = "$Revision$";
 
         public SimpleImageAccessor(FacesContext facesContext, Object url,
-                IContentFamily contentType, IContentVersionHandler versionHandler) {
+                IContentFamily contentType,
+                IContentVersionHandler versionHandler) {
             super(facesContext, url, contentType, versionHandler);
         }
 

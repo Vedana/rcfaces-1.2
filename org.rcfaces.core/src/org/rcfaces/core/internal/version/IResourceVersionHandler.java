@@ -13,6 +13,11 @@ import javax.faces.context.FacesContext;
  * @version $Revision$ $Date$
  */
 public interface IResourceVersionHandler {
+
+    String ID = "org.rcfaces.core.URL_REWRITING_PROVIDER";
+
+    boolean isEnabled();
+
     String getResourceVersion(FacesContext facesContext, String absolutePath,
             URL contentURLIfKnown);
 }

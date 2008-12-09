@@ -38,8 +38,8 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     }
 
     protected AbstractContentAccessor(IContentAccessor contentAccessor) {
-        this(contentAccessor.getContentFamily(), contentAccessor, contentAccessor
-                .getContentVersionHandler());
+        this(contentAccessor.getContentFamily(), contentAccessor,
+                contentAccessor.getContentVersionHandler());
     }
 
     protected AbstractContentAccessor(IContentFamily type,
@@ -71,6 +71,15 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             IGeneratedResourceInformation contentInformation,
             IGenerationResourceInformation generationInformation) {
 
+        return resolveURL(facesContext, contentInformation,
+                generationInformation, ABSOLUTE_PATH_TYPE | RELATIVE_PATH_TYPE);
+    }
+
+    public final String resolveURL(FacesContext facesContext,
+            IGeneratedResourceInformation contentInformation,
+            IGenerationResourceInformation generationInformation,
+            int pathTypeMask) {
+
         IContentAccessor contentAccessor = ContentAccessorEngine.resolveURL(
                 facesContext, this, contentInformation, generationInformation);
         if (contentAccessor == null) {
@@ -94,29 +103,76 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
                     + getPathTypeName(contentAccessor.getPathType()) + ")");
         }
 
-        if (contentAccessor.getPathType() == IContentAccessor.CONTEXT_PATH_TYPE) {
-            if (facesContext == null) {
-                facesContext = FacesContext.getCurrentInstance();
+        int currentPathType = contentAccessor.getPathType();
+
+        if ((pathTypeMask & IContentAccessor.RELATIVE_PATH_TYPE) > 0) {
+            if (currentPathType == IContentAccessor.RELATIVE_PATH_TYPE) {
+                return resolvedURLs;
             }
-
-            String contextPath = facesContext.getExternalContext()
-                    .getRequestContextPath();
-            if (contextPath.endsWith("/")) {
-                if (resolvedURLs.startsWith("/")) {
-                    return contextPath + resolvedURLs.substring(1);
-                }
-
-                return contextPath + resolvedURLs;
-            }
-
-            if (resolvedURLs.startsWith("/")) {
-                return contextPath + resolvedURLs;
-            }
-
-            return contextPath + "/" + resolvedURLs;
         }
 
-        return (String) resolvedURL;
+        if ((pathTypeMask & IContentAccessor.ABSOLUTE_PATH_TYPE) > 0) {
+            if (currentPathType == IContentAccessor.ABSOLUTE_PATH_TYPE) {
+                return resolvedURLs;
+            }
+
+            if (currentPathType == IContentAccessor.CONTEXT_PATH_TYPE) {
+                if (facesContext == null) {
+                    facesContext = FacesContext.getCurrentInstance();
+                }
+
+                String contextPath = facesContext.getExternalContext()
+                        .getRequestContextPath();
+                if (contextPath.endsWith("/")) {
+                    if (resolvedURLs.startsWith("/")) {
+                        return contextPath + resolvedURLs.substring(1);
+                    }
+
+                    return contextPath + resolvedURLs;
+                }
+
+                if (resolvedURLs.startsWith("/")) {
+                    return contextPath + resolvedURLs;
+                }
+
+                return contextPath + "/" + resolvedURLs;
+            }
+        }
+
+        if ((pathTypeMask & IContentAccessor.CONTEXT_PATH_TYPE) > 0) {
+            if (currentPathType == IContentAccessor.CONTEXT_PATH_TYPE) {
+                return resolvedURLs;
+            }
+
+            if (currentPathType == IContentAccessor.ABSOLUTE_PATH_TYPE) {
+                // On peut peut-etre retirer le contextPath !
+
+                if (facesContext == null) {
+                    facesContext = FacesContext.getCurrentInstance();
+                }
+
+                String contextPath = facesContext.getExternalContext()
+                        .getRequestContextPath();
+
+                if (resolvedURLs.startsWith(contextPath)) {
+                    resolvedURL = resolvedURLs.substring(contextPath.length());
+                    if (resolvedURLs.startsWith("/") == false) {
+                        resolvedURLs = "/" + resolvedURLs;
+                    }
+
+                    return resolvedURLs;
+                }
+
+                throw new FacesException(
+                        "Absolute path type is not into the context '"
+                                + resolvedURLs + "'.");
+            }
+        }
+
+        throw new FacesException("Incompatible path type (requested=0x"
+                + Integer.toHexString(pathTypeMask) + ", pathType=0x"
+                + Integer.toHexString(currentPathType) + ", url='"
+                + resolvedURL + "')");
     }
 
     public Object getAttribute(String attributeName) {
@@ -260,8 +316,8 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
     }
 
     public String toString() {
-        return "[AbstractContentAccessor contentType=" + contentFamily + " pathType="
-                + getPathTypeName(pathType) + " versionHandler="
+        return "[AbstractContentAccessor contentType=" + contentFamily
+                + " pathType=" + getPathTypeName(pathType) + " versionHandler="
                 + contentVersionHandler + " root=" + parentContentAccessor
                 + "]";
     }

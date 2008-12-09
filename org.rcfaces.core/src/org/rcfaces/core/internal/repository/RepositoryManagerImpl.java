@@ -30,6 +30,8 @@ public class RepositoryManagerImpl extends AbstractProvider implements
 
     private static final String ID = "org.rcfaces.core.REPOSITORY_MANAGER";
 
+    private static final String[] STRING_EMPTY_ARRAY = new String[0];
+
     private final Map repositories = new HashMap(16);
 
     public String getId() {
@@ -63,7 +65,12 @@ public class RepositoryManagerImpl extends AbstractProvider implements
     }
 
     public String[] listRepositoryLocations(String family) {
-        return (String[]) repositories.get(family);
+        String rls[] = (String[]) repositories.get(family);
+        if (rls == null) {
+            return STRING_EMPTY_ARRAY;
+        }
+
+        return rls;
     }
 
     public void configureRules(Digester digester) {

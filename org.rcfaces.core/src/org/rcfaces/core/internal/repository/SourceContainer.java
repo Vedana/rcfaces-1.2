@@ -5,7 +5,7 @@
 package org.rcfaces.core.internal.repository;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
+import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,38 +23,37 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class SourceRepository {
+public abstract class SourceContainer {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(SourceRepository.class);
+    private static final Log LOG = LogFactory.getLog(SourceContainer.class);
 
     protected static final String EXTERNAL_REPOSITORIES_CONFIG_NAME = "external.repositories";
+
+    private static final int BUFFER_INITIAL_SIZE = 16000;
 
     private final ServletConfig servletConfig;
 
     private final String charSet;
-
-    private final String allSourcesURI;
 
     private final boolean canUseGzip;
 
@@ -70,15 +69,13 @@ public abstract class SourceRepository {
 
     private final String repositoryVersion;
 
-    private StringAppender buffers;
-
-    private List urls = new ArrayList(32);
+    private final String repositoryType;
 
     private byte[] sourceBuffer = null;
 
     private byte[] sourceBufferGZip = null;
 
-    private byte[] sourceBufferExternalGZip = null;
+    // private byte[] sourceBufferExternalGZip = null;
 
     private long lastModified = -1;
 
@@ -86,31 +83,58 @@ public abstract class SourceRepository {
 
     private String hash = null;
 
-    public SourceRepository(ServletConfig config, String allSourcesURI,
+    public SourceContainer(ServletConfig config, String repositoryType,
             Set modules, String charSet, boolean canUseGzip,
             boolean canUseETag, boolean canUseHash,
             String externalRepositoriesPropertyName, String repositoryVersion)
             throws ServletException {
         this.servletConfig = config;
-        this.allSourcesURI = allSourcesURI;
+        this.repositoryType = repositoryType;
         this.canUseGzip = canUseGzip;
         this.canUseETag = canUseETag;
         this.canUseHash = canUseHash;
         this.charSet = charSet;
-        this.buffers = new StringAppender(16000);
         this.modules = modules;
         this.repositoryVersion = repositoryVersion;
         this.externalRepositoriesPropertyName = externalRepositoriesPropertyName;
 
         this.localizedSuffixes = getLocalizedSuffixes(config);
 
-        URL url = getURL(allSourcesURI + ".gz");
-        if (url != null) {
-            loadExternalGZip(url);
+        flush();
+    }
+
+    public final String getCharSet() {
+        return charSet;
+    }
+
+    public final boolean isCanUseGzip() {
+        return canUseGzip;
+    }
+
+    public final boolean isCanUseETag() {
+        return canUseETag;
+    }
+
+    public final boolean isCanUseHash() {
+        return canUseHash;
+    }
+
+    protected StringAppender postConstructBuffer(StringAppender buffer) {
+
+        if (canSkipSpace()) {
+            return new StringAppender(SourceFilter.filterSkipSpaces(buffer
+                    .toString()));
         }
 
-        addCameliaFiles();
-        addExternalRepositories(externalRepositoriesPropertyName);
+        if (canRemoveComments()) {
+            return new StringAppender(SourceFilter.filter(buffer.toString()));
+        }
+
+        return buffer;
+    }
+
+    protected StringAppender preConstructBuffer(StringAppender buffer) {
+        return buffer;
     }
 
     public String getVersion() {
@@ -118,24 +142,12 @@ public abstract class SourceRepository {
     }
 
     public byte[] getRawBuffer() throws ServletException {
-        if (sourceBuffer == null) {
-            initializeBuffers();
-        }
         return sourceBuffer;
     }
 
     public byte[] getGZipedBuffer() throws ServletException {
-        if (sourceBufferExternalGZip != null) {
-            return sourceBufferExternalGZip;
-        }
-
-        if (sourceBuffer == null) {
-            initializeBuffers();
-        }
         return sourceBufferGZip;
     }
-
-    protected abstract String getSourceType();
 
     protected void updateLastModification(URLConnection urlConnection) {
         long lm = urlConnection.getLastModified();
@@ -155,7 +167,12 @@ public abstract class SourceRepository {
             String p = path + localizedSuffixes[i];
 
             try {
-                URL url = servletConfig.getServletContext().getResource(p);
+                String pr = p;
+                if (pr.charAt(0) != '/') {
+                    pr = "/" + pr;
+                }
+
+                URL url = servletConfig.getServletContext().getResource(pr);
                 if (url != null) {
                     try {
                         InputStream in = url.openStream();
@@ -177,7 +194,11 @@ public abstract class SourceRepository {
                 // Rien ...
             }
 
-            URL url = getClass().getClassLoader().getResource(p);
+            String pr = p;
+            if (pr.charAt(0) == '/') {
+                pr = pr.substring(1);
+            }
+            URL url = getClass().getClassLoader().getResource(pr);
             if (url != null) {
                 try {
                     InputStream in = url.openStream();
@@ -225,11 +246,8 @@ public abstract class SourceRepository {
         return (String[]) l.toArray(new String[l.size()]);
     }
 
-    protected void registerURL(URL url) {
-        urls.add(url);
-    }
-
-    protected void addURLContent(URL url) throws IOException {
+    protected void addURLContent(StringAppender buffer, URL url)
+            throws IOException {
 
         URLConnection urlConnection = url.openConnection();
 
@@ -240,102 +258,128 @@ public abstract class SourceRepository {
         InputStream inputStream = urlConnection.getInputStream();
 
         try {
-            char buffer[] = new char[4096];
+            char buf[] = new char[4096];
 
             InputStreamReader inr = new InputStreamReader(
-                    new BufferedInputStream(inputStream, buffer.length),
-                    charSet);
+                    new BufferedInputStream(inputStream, buf.length), charSet);
 
             for (;;) {
-                int len = inr.read(buffer, 0, buffer.length);
+                int len = inr.read(buf, 0, buf.length);
                 if (len < 1) {
                     break;
                 }
 
-                buffers.append(buffer, 0, len);
+                buffer.append(buf, 0, len);
             }
         } finally {
             inputStream.close();
         }
     }
 
-    private List listExternalFiles(InputStream inputStream, String source) {
+    private List listExternalFiles(InputStream inputStream, String source,
+            boolean nameAttribute) {
 
-        DocumentBuilder parser;
+        Digester digester = new Digester();
+        digester.setUseContextClassLoader(true);
 
-        // Create and return a new parser
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(false);
-        factory.setValidating(false);
-        try {
-            parser = factory.newDocumentBuilder();
+        digester.setEntityResolver(new EntityResolver() {
+            private static final String REVISION = "$Revision$";
 
-        } catch (ParserConfigurationException e) {
-            error("Can not create XML document builder.", e);
-            return null;
-        }
-
-        Document document;
-        try {
-            document = parser.parse(inputStream);
-
-        } catch (SAXException e) {
-            error("Syntax error into XML document " + source + "'", e);
-            return null;
-
-        } catch (IOException e) {
-            error("Can not parse XML document '" + source + "'", e);
-            return null;
-        }
-
-        NodeList nl = document.getElementsByTagName("file");
-        List list = new ArrayList(nl.getLength());
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Element node = (Element) nl.item(i);
-
-            String value = node.getFirstChild().getNodeValue();
-
-            if (value.startsWith("/") == false) {
-                value = "/" + value;
+            public InputSource resolveEntity(String string, String string1) {
+                return new InputSource(new CharArrayReader(new char[0]));
             }
 
-            list.add(value);
+        });
+
+        final List list = new ArrayList();
+
+        if (nameAttribute) {
+            final String[] baseDirectoryRef = new String[1];
+
+            digester.addRule("repository", new Rule() {
+
+                public void begin(String namespace, String name,
+                        Attributes attributes) throws Exception {
+
+                    String baseDirectory = attributes.getValue("baseDirectory");
+
+                    if (baseDirectory != null && baseDirectory.length() > 0) {
+                        baseDirectoryRef[0] = baseDirectory;
+                    }
+                }
+            });
+
+            digester.addRule("repository/module/file", new Rule() {
+
+                public void begin(String namespace, String name,
+                        Attributes attributes) throws Exception {
+
+                    String fileName = attributes.getValue("name");
+
+                    if (fileName != null && fileName.length() > 0) {
+                        if (baseDirectoryRef[0] != null) {
+                            fileName = baseDirectoryRef[0] + "/" + fileName;
+                        }
+                        list.add(fileName);
+                    }
+                }
+
+            });
+
+        } else {
+            digester.addRule("repository/file", new Rule() {
+
+                public void body(String namespace, String name, String text)
+                        throws Exception {
+                    if (text != null && text.length() > 0) {
+                        list.add(text);
+                    }
+                }
+            });
+        }
+
+        try {
+            digester.parse(inputStream);
+
+        } catch (Exception e) {
+            LOG.error("Can not parse '" + source + "'", e);
         }
 
         return list;
     }
 
-    protected abstract boolean canSkipSpace();
+    protected boolean canSkipSpace() {
+        return false;
+    }
+
+    protected boolean canRemoveComments() {
+        return false;
+    }
 
     public synchronized void flush() throws ServletException {
-        this.buffers = new StringAppender(16000);
         sourceBuffer = null;
         sourceBufferGZip = null;
         lastModified = -1;
         etag = null;
         hash = null;
 
-        addCameliaFiles();
-        addExternalRepositories(externalRepositoriesPropertyName);
+        StringAppender buffer = preConstructBuffer(new StringAppender(
+                BUFFER_INITIAL_SIZE));
+        buffer = addRepositoryFiles(buffer);
+        buffer = addExternalRepositories(buffer,
+                externalRepositoriesPropertyName);
+        buffer = postConstructBuffer(buffer);
+        initializeBuffers(buffer);
     }
 
-    protected void initializeBuffers() throws ServletException {
-
-        StringAppender sb = this.buffers;
-        this.buffers = null;
+    protected void initializeBuffers(StringAppender sb) throws ServletException {
 
         try {
-            if (canSkipSpace()) {
-                sourceBuffer = SourceFilter.filterSkipSpaces(sb.toString())
-                        .getBytes(charSet);
+            sourceBuffer = sb.getBytes(getCharSet());
 
-            } else {
-                sourceBuffer = SourceFilter.filter(sb.toString()).getBytes(
-                        charSet);
-            }
-        } catch (UnsupportedEncodingException ex) {
-            throw new ServletException(ex);
+        } catch (UnsupportedEncodingException e) {
+            LOG.error(e);
+            throw new ServletException(e);
         }
 
         if (lastModified <= 0) {
@@ -365,29 +409,29 @@ public abstract class SourceRepository {
 
             } catch (IOException ex) {
                 throw new ServletException("Can not create GZIP buffer for "
-                        + getSourceType() + " files.", ex);
+                        + repositoryType + " files.", ex);
             }
         }
 
-        String message = getSourceType() + ": buffers loaded into "
-                + sourceBuffer.length + " bytes";
-        if (sourceBufferGZip != null) {
-            message += " (GZiped: " + sourceBufferGZip.length + " ["
-                    + (sourceBufferGZip.length * 100 / sourceBuffer.length)
-                    + "%])";
-        }
+        if (LOG.isInfoEnabled()) {
+            String message = repositoryType + ": buffers loaded into "
+                    + sourceBuffer.length + " bytes";
+            if (sourceBufferGZip != null) {
+                message += " (GZiped: " + sourceBufferGZip.length + " ["
+                        + (sourceBufferGZip.length * 100 / sourceBuffer.length)
+                        + "%])";
+            }
 
-        LOG.info(message, null);
+            LOG.info(message, null);
+        }
     }
 
-    protected final void addExternalRepository(String path) {
-        if (path.startsWith("/") == false) {
-            path = "/" + path;
-        }
+    protected final StringAppender parseXMLRepository(StringAppender buffer,
+            String path, boolean repositoryFormal) {
         URL url = getURL(path);
         if (url == null) {
             error("Can not get URL for path '" + path + "'.", null);
-            return;
+            return buffer;
         }
 
         URLConnection urlConnection;
@@ -397,11 +441,11 @@ public abstract class SourceRepository {
         } catch (IOException ex) {
             error("Can not get content of '" + url + "'.", ex);
 
-            return;
+            return buffer;
         }
 
         if (urlConnection == null) {
-            return;
+            return buffer;
         }
 
         updateLastModification(urlConnection);
@@ -413,16 +457,16 @@ public abstract class SourceRepository {
         } catch (IOException ex) {
             error("Can not open '" + url + "'.", ex);
 
-            return;
+            return buffer;
         }
 
         if (inputStream == null) {
-            return;
+            return buffer;
         }
 
         List files;
         try {
-            files = listExternalFiles(inputStream, path);
+            files = listExternalFiles(inputStream, path, repositoryFormal);
 
         } finally {
             try {
@@ -431,8 +475,8 @@ public abstract class SourceRepository {
             }
         }
 
-        if (files == null) {
-            return;
+        if (files == null || files.isEmpty() == true) {
+            return buffer;
         }
 
         for (Iterator it = files.iterator(); it.hasNext();) {
@@ -445,106 +489,55 @@ public abstract class SourceRepository {
             }
 
             try {
-                addURLContent(fileURL);
+                addURLContent(buffer, fileURL);
 
             } catch (IOException e) {
                 error("Can not append external file '" + fileURL + "'.", e);
             }
         }
+
+        return buffer;
     }
 
-    protected final void addExternalRepositories(String propertName) {
+    protected final StringAppender addExternalRepositories(
+            StringAppender buffer, String propertName) {
         if (propertName == null) {
-            return;
+            return buffer;
         }
+
         String path = servletConfig.getInitParameter(propertName);
         if (path == null) {
-            return;
+            return buffer;
         }
 
         StringTokenizer st = new StringTokenizer(path, ";,");
         for (; st.hasMoreTokens();) {
             String repositoryPath = st.nextToken();
 
-            addExternalRepository(repositoryPath);
+            parseXMLRepository(buffer, repositoryPath, false);
         }
+
+        return buffer;
     }
 
-    protected void addCameliaFiles() throws ServletException {
+    protected StringAppender addRepositoryFiles(StringAppender buffer)
+            throws ServletException {
 
-        URL url = getURL(allSourcesURI);
-        if (url == null) {
-            throw new ServletException("Can not load URI '" + allSourcesURI
-                    + "' !");
+        RcfacesContext rcfacesContext = RcfacesContext.getInstance(
+                servletConfig.getServletContext(), null, null);
+
+        String repositoriesPaths[] = rcfacesContext.getRepositoryManager()
+                .listRepositoryLocations(repositoryType);
+
+        for (int j = 0; j < repositoriesPaths.length; j++) {
+
+            String repositoryPath = repositoriesPaths[j];
+
+            parseXMLRepository(buffer, repositoryPath, true);
         }
 
-        InputStream ins;
-        try {
-            URLConnection urlConnection = url.openConnection();
-
-            updateLastModification(urlConnection);
-
-            ins = url.openStream();
-
-        } catch (IOException ex) {
-            throw new ServletException(ex);
-        }
-
-        buffers.append("@charset \"").append(charSet).append("\";");
-        
-        try {
-            BufferedReader br;
-
-            try {
-                br = new BufferedReader(new InputStreamReader(ins, charSet));
-
-            } catch (UnsupportedEncodingException e) {
-                throw new ServletException("Unsupported encoding '" + charSet
-                        + "'", e);
-            }
-
-            try {
-                for (;;) {
-                    String s = br.readLine();
-                    if (s == null) {
-                        break;
-                    }
-                    s = s.trim();
-
-                    URL urls[] = getSourceURI(s, modules);
-
-                    if (urls == null || urls.length < 1) {
-                        continue;
-                    }
-
-                    for (int i = 0; i < urls.length; i++) {
-                        try {
-                            addURLContent(urls[i]);
-
-                        } catch (IOException ex) {
-                            throw new ServletException(
-                                    "Can not read content of url '" + urls[i]
-                                            + ". (repository='" + allSourcesURI
-                                            + "')", ex);
-                        }
-                    }
-                }
-            } catch (IOException ex) {
-                throw new ServletException(
-                        "Reading files of repository (location='"
-                                + allSourcesURI + "') performs exception ...",
-                        ex);
-            }
-
-        } finally {
-            try {
-                ins.close();
-            } catch (IOException ex) {
-            }
-        }
+        return buffer;
     }
-
-    protected abstract URL[] getSourceURI(String line, Set modules);
 
     protected void error(String message, Throwable th) {
         message = "RCFaces.SourceRepository: " + message;
@@ -560,62 +553,14 @@ public abstract class SourceRepository {
     }
 
     public long getLastModified() throws ServletException {
-        if (sourceBuffer == null) {
-            initializeBuffers();
-        }
         return lastModified;
     }
 
     public String getETag() throws ServletException {
-        if (sourceBuffer == null) {
-            initializeBuffers();
-        }
         return etag;
     }
 
     public String getHash() throws ServletException {
-        if (sourceBuffer == null) {
-            initializeBuffers();
-        }
         return hash;
-    }
-
-    private void loadExternalGZip(URL url) {
-        InputStream ins;
-        try {
-            ins = url.openStream();
-
-        } catch (IOException ex) {
-            LOG.error("Can not open url '" + url + "'.", ex);
-            return;
-        }
-
-        if (ins == null) {
-            return;
-        }
-
-        ByteBufferOutputStream bos = new ByteBufferOutputStream(64000);
-        try {
-            byte buf[] = new byte[4096];
-            for (;;) {
-                int ret = ins.read(buf, 0, buf.length);
-                if (ret < 0) {
-                    break;
-                }
-                bos.write(buf, 0, ret);
-            }
-
-            bos.close();
-
-            sourceBufferExternalGZip = bos.toByteArray();
-        } catch (IOException ex) {
-            LOG.error("Can not load content of url '" + url + "'.", ex);
-
-        } finally {
-            try {
-                ins.close();
-            } catch (IOException e) {
-            }
-        }
     }
 }

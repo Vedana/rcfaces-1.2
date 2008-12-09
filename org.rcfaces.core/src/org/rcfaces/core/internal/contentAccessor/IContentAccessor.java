@@ -18,17 +18,17 @@ public interface IContentAccessor {
 
     String FILTER_SEPARATOR = "::";
 
-    int UNDEFINED_PATH_TYPE = 0;
+    int UNDEFINED_PATH_TYPE = 0x00;
 
-    int RELATIVE_PATH_TYPE = 1;
+    int RELATIVE_PATH_TYPE = 0x01;
 
-    int CONTEXT_PATH_TYPE = 2;
+    int CONTEXT_PATH_TYPE = 0x02;
 
-    int ABSOLUTE_PATH_TYPE = 3;
+    int ABSOLUTE_PATH_TYPE = 0x04;
 
-    int EXTERNAL_PATH_TYPE = 4;
+    int EXTERNAL_PATH_TYPE = 0x08;
 
-    int FILTER_PATH_TYPE = 5;
+    int FILTER_PATH_TYPE = 0x10;
 
     String CONTEXT_KEYWORD = "$context";
 
@@ -47,6 +47,11 @@ public interface IContentAccessor {
     String resolveURL(FacesContext facesContext,
             IGeneratedResourceInformation contentInformation,
             IGenerationResourceInformation generationInformation);
+
+    String resolveURL(FacesContext facesContext,
+            IGeneratedResourceInformation contentInformation,
+            IGenerationResourceInformation generationInformation,
+            int pathTypeMask);
 
     IContentAccessor getParentAccessor();
 

@@ -4,7 +4,7 @@
   		<provider>
   			<provider-id>org.rcfaces.core.IMAGE_CONTENT_PROVIDER</provider-id>
   			<provider-class>org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl</provider-class>
-  			<required>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</required>
+  			<requires>org.rcfaces.core.CONTENT_ACCESSOR_REGISTRY</requires>
   		</provider>
   	</providers>
 

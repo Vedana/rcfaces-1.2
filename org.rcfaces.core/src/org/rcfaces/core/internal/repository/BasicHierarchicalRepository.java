@@ -32,7 +32,7 @@ import org.xml.sax.Attributes;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractHierarchicalRepository extends AbstractRepository
+public class BasicHierarchicalRepository extends AbstractRepository
         implements IHierarchicalRepository {
 
     private static final String REVISION = "$Revision$";
@@ -40,7 +40,7 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
     private static final long serialVersionUID = -6882051141540673466L;
 
     private static final Log LOG = LogFactory
-            .getLog(AbstractHierarchicalRepository.class);
+            .getLog(BasicHierarchicalRepository.class);
 
     protected static final IHierarchicalFile[] HIERARCHICAL_FILE_EMPTY_ARRAY = new IHierarchicalFile[0];
 
@@ -60,7 +60,7 @@ public abstract class AbstractHierarchicalRepository extends AbstractRepository
 
     private ISet bootSet;
 
-    public AbstractHierarchicalRepository(String servletURI,
+    public BasicHierarchicalRepository(String servletURI,
             String repositoryVersion) {
         super(servletURI, repositoryVersion);
     }

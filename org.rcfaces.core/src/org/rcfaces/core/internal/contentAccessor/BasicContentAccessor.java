@@ -20,6 +20,15 @@ public class BasicContentAccessor extends AbstractContentAccessor {
 
     private final Object value;
 
+    public BasicContentAccessor(FacesContext facesContext, String url,
+            int pathType, IContentFamily contentFamily,
+            IContentVersionHandler contentVersionHandler) {
+        super(contentFamily, contentVersionHandler);
+
+        this.value = url;
+        setPathType(pathType);
+    }
+
     public BasicContentAccessor(FacesContext facesContext, Object url,
             IContentFamily contentFamily,
             IContentVersionHandler contentVersionHandler) {

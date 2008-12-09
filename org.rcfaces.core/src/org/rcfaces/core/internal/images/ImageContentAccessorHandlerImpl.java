@@ -433,6 +433,8 @@ public class ImageContentAccessorHandlerImpl extends
         }
 
         generatedImageInformation.setSourceMimeType(sourceContentType);
+        generationInformation.setAttribute(
+                IGenerationResourceInformation.SOURCE_URL, resourceURL);
 
         IContentStorageEngine contentStorageEngine = rcfacesContext
                 .getContentStorageEngine();

@@ -4,12 +4,8 @@
 package org.rcfaces.core.image;
 
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-
+import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.model.BasicContentModel;
 
 /**
@@ -26,113 +22,35 @@ public class ImageContentModel extends BasicContentModel implements
     public ImageContentModel() {
     }
 
-    public ImageWriteParam getImageWriteParam() {
-        ImageWriteParam imageWriteParam = (ImageWriteParam) getAttribute(IMAGE_WRITE_PARAM_PROPERTY);
-        if (imageWriteParam != null) {
-            return imageWriteParam;
-        }
+    public void setCompressionQuality(
+            IGenerationResourceInformation imageInformation, float quality) {
 
-        String contentType = generatedInformation.getResponseMimeType();
-        if (contentType != null) {
-            Iterator it = ImageIO.getImageWritersByMIMEType(contentType);
-            if (it.hasNext()) {
-                ImageWriter imageWriter = (ImageWriter) it.next();
-                try {
-                    imageWriteParam = imageWriter.getDefaultWriteParam();
-                    if (imageWriteParam != null) {
-                        setAttribute(IMAGE_WRITE_PARAM_PROPERTY,
-                                imageWriteParam);
-
-                        return imageWriteParam;
-                    }
-                } finally {
-                    imageWriter.dispose();
-                }
-            }
-        }
-
-        String suffix = generatedInformation.getResponseSuffix();
-        if (suffix != null) {
-            Iterator it = ImageIO.getImageWritersBySuffix(suffix);
-            if (it.hasNext()) {
-                ImageWriter imageWriter = (ImageWriter) it.next();
-                try {
-                    imageWriteParam = imageWriter.getDefaultWriteParam();
-                    if (imageWriteParam != null) {
-                        setAttribute(IMAGE_WRITE_PARAM_PROPERTY,
-                                imageWriteParam);
-
-                        return imageWriteParam;
-                    }
-                } finally {
-                    imageWriter.dispose();
-                }
-            }
-        }
-
-        return null;
+        generationInformation.setAttribute(
+                IImageContentModel.COMPRESSION_QUALITY, new Float(quality));
     }
 
-    public boolean setCompressionQuality(float quality) {
-        ImageWriteParam imageWriteParam = getImageWriteParam();
-        if (imageWriteParam == null) {
-            return false;
-        }
+    public void setCompressionMode(
+            IGenerationResourceInformation imageInformation, int mode) {
 
-        if (imageWriteParam.canWriteCompressed() == false) {
-            return false;
-        }
-
-        imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        imageWriteParam.setCompressionQuality(quality);
-
-        return true;
+        generationInformation.setAttribute(IImageContentModel.COMPRESSION_MODE,
+                new Integer(mode));
     }
 
-    public boolean setCompressionMode(int mode) {
-        ImageWriteParam imageWriteParam = getImageWriteParam();
-        if (imageWriteParam == null) {
-            return false;
-        }
+    public void setCompressionType(
+            IGenerationResourceInformation imageInformation,
+            String compressionType) {
 
-        if (imageWriteParam.canWriteCompressed() == false) {
-            return false;
-        }
-
-        imageWriteParam.setCompressionMode(mode);
-
-        return true;
+        generationInformation.setAttribute(IImageContentModel.COMPRESSION_TYPE,
+                compressionType);
     }
 
-    public boolean setCompressionType(String compressionType) {
-        ImageWriteParam imageWriteParam = getImageWriteParam();
-        if (imageWriteParam == null) {
-            return false;
-        }
+    public void setProgressiveMode(
+            IGenerationResourceInformation imageInformation,
+            boolean progressiveMode) {
 
-        if (imageWriteParam.canWriteCompressed() == false) {
-            return false;
-        }
-
-        imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        imageWriteParam.setCompressionType(compressionType);
-        return true;
-    }
-
-    public boolean setProgressiveMode(boolean progressiveMode) {
-        ImageWriteParam imageWriteParam = getImageWriteParam();
-        if (imageWriteParam == null) {
-            return false;
-        }
-        if (imageWriteParam.canWriteProgressive() == false) {
-            return false;
-        }
-
-        imageWriteParam
-                .setProgressiveMode((progressiveMode) ? ImageWriteParam.MODE_COPY_FROM_METADATA
-                        : ImageWriteParam.MODE_DISABLED);
-
-        return true;
+        generationInformation.setAttribute(
+                IImageContentModel.COMPRESSION_PROGRESSIVE_MODE, Boolean
+                        .valueOf(progressiveMode));
     }
 
     public Object getWrappedData() {

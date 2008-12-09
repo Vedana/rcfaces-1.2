@@ -7,14 +7,19 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.contentAccessor.IResourceKeyParticipant;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.StateHolderTools;
 
 /**
@@ -224,6 +229,121 @@ public class ItemTools {
                         + value + "' to '" + target + "'.", ex);
             }
         }
+    }
+
+    public static void participeKey(StringAppender sa, Map map) {
+        if (map.isEmpty()) {
+            return;
+        }
+
+        for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Entry) it.next();
+
+            String propertyName = (String) entry.getKey();
+            Object value = entry.getValue();
+
+            participeKey(sa, propertyName, value, map);
+        }
+    }
+
+    public static void participeKey(StringAppender sa, Collection collection) {
+        if (collection.isEmpty()) {
+            return;
+        }
+
+        int i = 1;
+        for (Iterator it = collection.iterator(); it.hasNext();) {
+            String propertyName = "#" + (i++);
+            Object value = it.next();
+
+            participeKey(sa, propertyName, value, collection);
+        }
+    }
+
+    public static void participeKey(StringAppender sa, Object object,
+            Class stopClass) {
+        Class cls = object.getClass();
+
+        if (stopClass != null) {
+            // On prend le parent !
+            stopClass = stopClass.getSuperclass();
+        }
+
+        BeanInfo beanInfo;
+        try {
+            beanInfo = Introspector.getBeanInfo(cls, stopClass);
+
+        } catch (IntrospectionException e) {
+            LOG.error("Can not inspect '" + object + "'.", e);
+
+            throw new FacesException("Can not inspect '" + object + "'.", e);
+        }
+
+        PropertyDescriptor pds[] = beanInfo.getPropertyDescriptors();
+
+        for (int i = 0; i < pds.length; i++) {
+            PropertyDescriptor pd = pds[i];
+
+            if (pd.getReadMethod() == null) {
+                continue;
+            }
+
+            String propertyName = pd.getName();
+
+            Object value;
+            try {
+                value = pd.getReadMethod().invoke(object, (Object[]) null);
+
+            } catch (Exception ex) {
+                LOG.error("Can not get property '" + propertyName + "' from '"
+                        + object + "'.", ex);
+                continue;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Get property '" + propertyName + "' from '" + object
+                        + "' => " + value);
+            }
+
+            participeKey(sa, propertyName, value, object);
+        }
+    }
+
+    private static void participeKey(StringAppender sa, String propertyName,
+            Object value, Object source) {
+
+        sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR).append(
+                propertyName);
+
+        if (value == null) {
+            return;
+        }
+
+        if (IResourceKeyParticipant.class.isInstance(value)) {
+            participeKey(sa, value, null);
+            return;
+        }
+
+        if ((value instanceof Number) || (value instanceof String)) {
+            sa.append(String.valueOf(value));
+            return;
+        }
+
+        if (value instanceof Map) {
+            participeKey(sa, (Map) value);
+            return;
+        }
+
+        if (value instanceof Collection) {
+            participeKey(sa, (Collection) value);
+            return;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Unsupported type of value. property '" + propertyName
+                    + "' from '" + source + "' => " + value);
+        }
+
     }
 
 }

@@ -15,8 +15,8 @@ import org.rcfaces.core.model.IFilterProperties;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class BasicGenerationResourceInformation extends AbstractInformation implements
-        IGenerationResourceInformation {
+public class BasicGenerationResourceInformation extends AbstractInformation
+        implements IGenerationResourceInformation {
 
     private static final String COMPONENT_CLIENT_ID_PROPERTY = "org.rcfaces.org.COMPONENT_CLIENT_ID_PROPERTY";
 
@@ -35,7 +35,8 @@ public class BasicGenerationResourceInformation extends AbstractInformation impl
                 .getComponentClientId());
     }
 
-    public BasicGenerationResourceInformation(UIComponent component, String clientId) {
+    public BasicGenerationResourceInformation(UIComponent component,
+            String clientId) {
         setComponent(component, clientId);
     }
 

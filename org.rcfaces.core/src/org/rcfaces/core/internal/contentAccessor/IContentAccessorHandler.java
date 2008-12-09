@@ -17,6 +17,6 @@ public interface IContentAccessorHandler {
 
     IContentAccessor handleContent(FacesContext facesContext,
             IContentAccessor contentAccessor,
-            IGeneratedResourceInformation generatedInformation[],
+            IGeneratedResourceInformation generatedInformationRef[],
             IGenerationResourceInformation generationInformation);
 }

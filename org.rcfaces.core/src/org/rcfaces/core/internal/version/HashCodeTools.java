@@ -137,6 +137,8 @@ public class HashCodeTools {
                         + "'.");
             }
 
+            etag += ":" + buffer.length;
+
             return etag;
 
         } catch (NoSuchAlgorithmException ex) {

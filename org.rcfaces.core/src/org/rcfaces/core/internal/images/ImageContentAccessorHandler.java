@@ -86,7 +86,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
             if (contentAccessor.getPathType() == IContentAccessor.FILTER_PATH_TYPE) {
                 return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
             }
-            
+
             return null;
         }
 
@@ -106,6 +106,8 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
         if (generationInformation == null) {
             generationInformation = new BasicGenerationResourceInformation();
         }
+        generationInformation.setAttribute(
+                IGenerationResourceInformation.SOURCE_KEY, url);
 
         IContentAccessor modifiedContentAccessor = contentAccessor;
 

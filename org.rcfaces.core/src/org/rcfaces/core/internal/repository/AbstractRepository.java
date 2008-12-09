@@ -116,7 +116,7 @@ public abstract class AbstractRepository implements IRepository {
 
             Object fs[] = (Object[]) state;
             for (int i = 0; i < fs.length; i++) {
-                IFile file = ((AbstractHierarchicalRepository) repository)
+                IFile file = ((BasicHierarchicalRepository) repository)
                         .getFileById((String) fs[i]);
 
                 if (file == null) {

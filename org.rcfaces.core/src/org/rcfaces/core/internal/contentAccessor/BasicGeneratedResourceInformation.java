@@ -3,6 +3,9 @@
  */
 package org.rcfaces.core.internal.contentAccessor;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.lang.IContentFamily;
@@ -112,6 +115,17 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
         }
 
         return states;
+    }
+
+    public void copyTo(IGeneratedResourceInformation generatedInformation) {
+        Map attributes = getAttributes();
+
+        for (Iterator it = attributes.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            generatedInformation.setAttribute((String) entry.getKey(), entry
+                    .getValue());
+        }
     }
 
 }

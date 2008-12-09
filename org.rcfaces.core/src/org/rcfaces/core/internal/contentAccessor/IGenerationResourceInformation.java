@@ -16,6 +16,8 @@ import org.rcfaces.core.model.IFilterProperties;
 public interface IGenerationResourceInformation extends StateHolder {
     String SOURCE_URL = "org.rcfaces.generation.SOURCE_URL";
 
+    String SOURCE_KEY = "org.rcfaces.generation.SOURCE_KEY";
+
     Object getAttribute(String attributeName);
 
     Object setAttribute(String attributeName, Object value);

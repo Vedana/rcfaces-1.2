@@ -22,5 +22,7 @@ public interface IContentFamily {
 
     public static final IContentFamily USER = new ContentTypeImpl("user");
 
+    public static final IContentFamily JSP = new ContentTypeImpl("jsp");
+
     int getOrdinal();
 }

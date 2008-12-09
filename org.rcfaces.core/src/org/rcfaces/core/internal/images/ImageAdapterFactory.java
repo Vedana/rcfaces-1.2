@@ -104,10 +104,10 @@ public class ImageAdapterFactory implements IAdapterFactory {
         return new Class[] { IResolvedContent.class };
     }
 
-    private IResolvedContent adaptBufferedImage(Object image, Object parameter) {
-        Map parameters = Collections.EMPTY_MAP;
-        if (parameter instanceof Map) {
-            parameters = (Map) parameter;
+    private IResolvedContent adaptBufferedImage(Object image, Object adapterParameters) {
+        Map adapterParametersMap = Collections.EMPTY_MAP;
+        if (adapterParameters instanceof Map) {
+            adapterParametersMap = (Map) adapterParameters;
         }
 
         String defaultMimeType = RGB_DEFAULT_MIME_TYPE;
@@ -118,11 +118,11 @@ public class ImageAdapterFactory implements IAdapterFactory {
             defaultMimeType = getDefaultContentType(((RenderedImage[]) image)[0]);
         }
 
-        String mimeType = (String) parameters
+        String mimeType = (String) adapterParametersMap
                 .get(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY);
 
         if (mimeType == null) {
-            String suffix = (String) parameters
+            String suffix = (String) adapterParametersMap
                     .get(IImageContentModel.ENCODER_SUFFIX_PROPERTY);
 
             if (suffix != null) {
@@ -141,7 +141,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
             ImageWriter imageWriter = (ImageWriter) it.next();
 
             try {
-                return writeBufferedImage(imageWriter, image, parameters,
+                return writeBufferedImage(imageWriter, image, adapterParametersMap,
                         mimeType);
 
             } catch (IOException e) {
@@ -158,7 +158,7 @@ public class ImageAdapterFactory implements IAdapterFactory {
                 ImageWriter imageWriter = (ImageWriter) it.next();
 
                 try {
-                    return writeBufferedImage(imageWriter, image, parameters,
+                    return writeBufferedImage(imageWriter, image, adapterParametersMap,
                             mimeType);
 
                 } catch (IOException e) {
@@ -186,10 +186,10 @@ public class ImageAdapterFactory implements IAdapterFactory {
     }
 
     private IResolvedContent writeBufferedImage(ImageWriter imageWriter,
-            Object image, Map parameters, String contentType)
+            Object image, Map adapterParameters, String contentType)
             throws IOException {
 
-        String suffix = (String) parameters
+        String suffix = (String) adapterParameters
                 .get(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
         if (suffix == null) {
             suffix = getSuffixByMimeType(contentType);
@@ -206,9 +206,8 @@ public class ImageAdapterFactory implements IAdapterFactory {
             imageWriter.setOutput(imageOutputStream);
 
             ImageWriteParam imageWriteParam = null;
-
             
-            Object imageMetaData = parameters
+            Object imageMetaData = adapterParameters
                     .get(ImageContentModel.IMAGE_WRITE_PARAM_PROPERTY);
             if (imageMetaData instanceof ImageWriteParam) {
                 imageWriteParam = (ImageWriteParam) imageMetaData;

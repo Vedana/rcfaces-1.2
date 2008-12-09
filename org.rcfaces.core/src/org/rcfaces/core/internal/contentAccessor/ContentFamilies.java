@@ -74,7 +74,7 @@ public class ContentFamilies {
 
             final ContentTypeImpl other = (ContentTypeImpl) obj;
 
-            return this.ordinal != other.ordinal;
+            return this.ordinal == other.ordinal;
         }
 
     }

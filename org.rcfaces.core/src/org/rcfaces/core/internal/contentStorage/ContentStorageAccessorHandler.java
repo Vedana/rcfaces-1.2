@@ -5,7 +5,6 @@ package org.rcfaces.core.internal.contentStorage;
 
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -24,10 +23,6 @@ import org.rcfaces.core.provider.AbstractProvider;
 public class ContentStorageAccessorHandler extends AbstractProvider implements
         IContentAccessorHandler {
     private static final String REVISION = "$Revision$";
-
-    private static final String COPY_ATTRIBUTES[] = {
-            IImageContentModel.WIDTH_PROPERTY,
-            IImageContentModel.HEIGHT_PROPERTY };
 
     public void startup(FacesContext facesContext) {
         super.startup(facesContext);
@@ -74,25 +69,9 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
                 }
             }
 
-            /*
-            if (generationInformation != null) {
-                for (int i = 0; i < COPY_ATTRIBUTES.length; i++) {
-                    String attributeName = COPY_ATTRIBUTES[i];
-
-                    Object value = contentModel.getAttribute(attributeName);
-                    if (value == null) {
-                        continue;
-                    }
-
-                    generatedInformation.setAttribute(attributeName, value);
-                }
-            }
-            */
-
             return rcfacesContext.getContentStorageEngine()
                     .registerContentModel(facesContext, contentModel,
-                            generatedInformationRef[0],
-                            generationInformation);
+                            generatedInformationRef[0], generationInformation);
         }
 
         return rcfacesContext.getContentStorageEngine().registerRaw(

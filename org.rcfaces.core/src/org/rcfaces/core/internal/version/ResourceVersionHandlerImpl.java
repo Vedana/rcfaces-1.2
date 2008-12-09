@@ -16,8 +16,8 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
-import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
@@ -88,7 +88,12 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         if (version == null || "none".equalsIgnoreCase(version)) {
             this.prefixURI = null;
             this.version = null;
-            LOG.info("Disable application version rewriting engine.");
+            LOG
+                    .info("Disable application version rewriting engine. (context parameter '"
+                            + APPLICATION_VERSION_URI_PARAMETER
+                            + "="
+                            + version
+                            + "')");
             return;
         }
 
@@ -117,6 +122,10 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         }
 
         this.version = version;
+    }
+
+    public boolean isEnabled() {
+        return prefixURI != null;
     }
 
     public String getVersionTag(RcfacesContext rcfacesContext,
@@ -177,7 +186,9 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         }
 
         StringAppender sa = new StringAppender(prefixURI, 1
-                + Constants.VERSIONED_URI_HASHCODE_MAX_SIZE + url.length() + 4); // 4=sécurité
+                + Constants.VERSIONED_URI_HASHCODE_MAX_SIZE + url.length() + 4); // 4
+        // =
+        // sécurité
         // !
 
         String etag = getResourceVersion(facesContext, url, null);

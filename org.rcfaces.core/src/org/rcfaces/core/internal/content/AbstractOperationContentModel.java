@@ -18,14 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IResourceKeyParticipant;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.images.ImageAdapterFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
+import org.rcfaces.core.internal.version.HashCodeTools;
 import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.model.BasicContentModel;
 
@@ -122,6 +123,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     private long sourceLength;
 
+    private final String versionId;
+
     public AbstractOperationContentModel(String resourceURL, String versionId,
             String operationId, String filterParametersToParse,
             IBufferOperation bufferOperation) {
@@ -129,23 +132,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         this.operationId = operationId;
         this.filterParametersToParse = filterParametersToParse;
         this.bufferOperation = bufferOperation;
-
-        StringAppender sa = new StringAppender(operationId, 128);
-
-        if (filterParametersToParse != null) {
-            sa.append(filterParametersToParse);
-        }
-
-        sa.append(IContentAccessor.FILTER_SEPARATOR);
-
-        sa.append(resourceURL);
-
-        if (versionId != null) {
-            sa.append(":$:");
-            sa.append(versionId);
-        }
-
-        this.resourceKey = sa.toString();
+        this.versionId = versionId;
 
         setWrappedData(this);
     }
@@ -284,6 +271,38 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     }
 
     public String getResourceKey() {
+        synchronized (this) {
+            if (resourceKey == null) {
+                StringAppender sa = new StringAppender(operationId, 128);
+
+                if (filterParametersToParse != null) {
+                    sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
+                    sa.append(filterParametersToParse);
+                }
+
+                sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
+
+                sa.append(resourceURL);
+
+                if (versionId != null) {
+                    sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
+                    sa.append(versionId);
+                }
+
+                if (generationInformation instanceof IResourceKeyParticipant) {
+                    ((IResourceKeyParticipant) generationInformation)
+                            .participeKey(sa);
+                }
+
+                if (generatedInformation instanceof IResourceKeyParticipant) {
+                    ((IResourceKeyParticipant) generatedInformation)
+                            .participeKey(sa);
+                }
+
+                resourceKey = sa.toString();
+            }
+
+        }
         return resourceKey;
     }
 
@@ -298,13 +317,28 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     public void appendHashInformations(StringAppender sa) {
         loadSourceInfos(null);
 
+        StringAppender sa2 = new StringAppender(64);
+
+        String url = getResourceURL();
+        if (url != null) {
+            sa2.append(url);
+        }
+
         if (sourceLastModified > 0) {
-            sa.append(sourceLastModified);
+            sa2.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
+            sa2.append(sourceLastModified);
         }
 
         if (sourceLength > 0) {
-            sa.append(sourceLength);
+            sa2.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
+            sa2.append(sourceLength);
         }
+
+        String key = sa2.toString();
+
+        String result = HashCodeTools.computeURLFormat(null, key, key, -1);
+
+        sa.append(result);
     }
 
     private synchronized void loadSourceInfos(FacesContext facesContext) {

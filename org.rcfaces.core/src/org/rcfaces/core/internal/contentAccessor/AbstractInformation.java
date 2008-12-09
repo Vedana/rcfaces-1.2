@@ -13,6 +13,9 @@ import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.StateHolderTools;
 
 /**
@@ -20,11 +23,19 @@ import org.rcfaces.core.internal.util.StateHolderTools;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class AbstractInformation implements StateHolder {
+public class AbstractInformation implements StateHolder,
+        IResourceKeyParticipant {
+    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(AbstractInformation.class);
 
     private Map attributes;
 
     private boolean transientState;
+
+    private String cachedParticipeKey = null;
+
+    private long hashCode = 0;
 
     public final Object getAttribute(String attributeName) {
         if (attributes == null) {
@@ -35,6 +46,8 @@ public class AbstractInformation implements StateHolder {
     }
 
     public final Object setAttribute(String attributeName, Object attributeValue) {
+        cachedParticipeKey = null;
+
         if (attributes == null) {
             attributes = new HashMap();
         }
@@ -50,11 +63,20 @@ public class AbstractInformation implements StateHolder {
     }
 
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((attributes == null) ? 0 : attributes.hashCode());
-        return result;
+        return computeCachedParticipeKey().hashCode();
+    }
+
+    private String computeCachedParticipeKey() {
+        if (cachedParticipeKey != null) {
+            return cachedParticipeKey;
+        }
+
+        StringAppender sa = new StringAppender(1024);
+        participeKey(sa);
+
+        cachedParticipeKey = sa.toString();
+
+        return cachedParticipeKey;
     }
 
     public boolean equals(Object obj) {
@@ -65,23 +87,22 @@ public class AbstractInformation implements StateHolder {
         if (getClass() != obj.getClass())
             return false;
         final AbstractInformation other = (AbstractInformation) obj;
-        if (attributes == null) {
-            if (other.attributes != null)
-                return false;
-        } else if (!attributes.equals(other.attributes))
-            return false;
-        return true;
+
+        return computeCachedParticipeKey().equals(
+                other.computeCachedParticipeKey());
     }
 
     public void restoreState(FacesContext context, Object state) {
+        cachedParticipeKey = null;
+
         Object states[] = (Object[]) state;
 
         attributes = new HashMap(states.length / 2);
 
         for (int i = 0; i < states.length;) {
-            Object key = states[i];
+            String key = (String) states[i++];
 
-            Object value = states[i];
+            Object value = states[i++];
             if (StateHolderTools.isPrimitive(value) == false) {
                 value = UIComponentBase.restoreAttachedState(context, value);
             }
@@ -119,4 +140,34 @@ public class AbstractInformation implements StateHolder {
     public void setTransient(boolean transientState) {
         this.transientState = transientState;
     }
+
+    protected void appendToKey(StringAppender sa, String propertyName,
+            Object value) {
+    }
+
+    public void participeKey(StringAppender sa) {
+        for (Iterator it = attributes.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Entry) it.next();
+
+            String key = (String) entry.getKey();
+
+            sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR).append(
+                    key);
+
+            Object value = entry.getValue();
+            if (value == null) {
+                continue;
+            }
+
+            if ((value instanceof String) || (value instanceof Number)
+                    || (value instanceof Boolean)) {
+                sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR)
+                        .append(String.valueOf(value));
+                continue;
+            }
+
+            appendToKey(sa, key, value);
+        }
+    }
+
 }

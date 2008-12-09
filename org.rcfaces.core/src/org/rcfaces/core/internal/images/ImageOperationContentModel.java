@@ -139,10 +139,6 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
             // C'est peut etre normal (ex: svg => jpeg)
         }
 
-        generationInformation.setAttribute(
-                IGenerationResourceInformation.SOURCE_URL, "file:///"
-                        + getResourceURL());
-
         InputStream inputStream = resourceLoader.openStream();
 
         if (inputStream == null) {
@@ -242,7 +238,7 @@ public class ImageOperationContentModel extends AbstractOperationContentModel {
         return bufferedImage;
     }
 
-    private void setupWriteParam(
+    public static void setupWriteParam(
             IGenerationResourceInformation generationInformation,
             ImageWriteParam imageWriteParam) {
 
