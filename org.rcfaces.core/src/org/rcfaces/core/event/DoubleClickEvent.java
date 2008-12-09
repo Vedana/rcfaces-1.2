@@ -17,14 +17,39 @@ public class DoubleClickEvent extends ActionEvent {
 
     private static final long serialVersionUID = 6193772389813084255L;
 
-    public DoubleClickEvent(UIComponent component) {
+    private final String value;
+
+    private final Object valueObject;
+
+    private final Object item;
+
+    public DoubleClickEvent(UIComponent component, String value,
+            Object valueObject, Object item, int detail) {
         super(component);
+
+        this.value = value;
+        this.valueObject = valueObject;
+        this.item = item;
+    }
+
+    public final String getValue() {
+        return value;
+    }
+
+    public final Object getValueObject() {
+        return valueObject;
+    }
+
+    public final Object getItem() {
+        return item;
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.
+     * FacesListener)
      */
     public boolean isAppropriateListener(FacesListener listener) {
         return (listener instanceof IDoubleClickListener);
@@ -33,7 +58,9 @@ public class DoubleClickEvent extends ActionEvent {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
+     * @see
+     * javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener
+     * )
      */
     public void processListener(FacesListener listener) {
         ((IDoubleClickListener) listener).processDoubleClick(this);
