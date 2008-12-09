@@ -33,6 +33,7 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.style.Constants;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
 import org.rcfaces.core.internal.style.IStyleOperation;
+import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -55,6 +56,10 @@ public class StyleContentAccessorHandler extends
             .getPackagePrefix()
             + ".MERGE_STYLE_FILES";
 
+    private static final String VERSION_FILTER_NAME = "version";
+
+    private static final String MERGE_FILTER_NAME = "merge";
+
     private final Map operationsById = new HashMap(32);
 
     private final FileNameMap fileNameMap;
@@ -67,10 +72,14 @@ public class StyleContentAccessorHandler extends
 
     private RcfacesContext rcfacesContext;
 
+    private IResourceVersionHandler resourceVersionHandler = null;
+
     public StyleContentAccessorHandler() {
         fileNameMap = URLConnection.getFileNameMap();
 
-        operationsById.put("merge", new MergeLinkedStylesOperation());
+        operationsById.put(MERGE_FILTER_NAME, new MergeLinkedStylesOperation());
+        operationsById.put(VERSION_FILTER_NAME,
+                new VersionLinkedStylesOperation());
     }
 
     public void startup(FacesContext facesContext) {
@@ -91,6 +100,14 @@ public class StyleContentAccessorHandler extends
             }
 
         }
+
+        IResourceVersionHandler resourceVersionHandler = (IResourceVersionHandler) rcfacesContext
+                .getProvidersRegistry().getProvider(IResourceVersionHandler.ID);
+        if (resourceVersionHandler != null
+                && resourceVersionHandler.isEnabled()) {
+            this.resourceVersionHandler = resourceVersionHandler;
+        }
+
     }
 
     public String getId() {
@@ -102,12 +119,29 @@ public class StyleContentAccessorHandler extends
             IGeneratedResourceInformation[] generatedInformationRef,
             IGenerationResourceInformation generationInformation) {
 
-        if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
-            return null;
+        int pathType = contentAccessor.getPathType();
+
+        if (pathType != IContentAccessor.FILTER_PATH_TYPE) {
+
+            // On verifie si la "versionalisation" n'est pas activée
+
+            if (resourceVersionHandler == null
+                    || (pathType != IContentAccessor.CONTEXT_PATH_TYPE && pathType != IContentAccessor.RELATIVE_PATH_TYPE)) {
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Path type not supported '" + pathType + "' ("
+                            + contentAccessor.getContentRef() + ")");
+                }
+
+                return null;
+            }
         }
 
         Object content = contentAccessor.getContentRef();
         if ((content instanceof String) == false) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("ContentRef is not a String (" + content + ")");
+            }
             return null;
         }
 
@@ -125,18 +159,29 @@ public class StyleContentAccessorHandler extends
         IFiltredContentAccessor modifiedContentAccessor = null;
 
         int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
-        String filter = url.substring(0, idx);
 
-        if (idx == url.length() - 2) { // Filtre tout seul !
-            throw new FacesException("You can not specify a filter only.");
+        String filter;
+        String newURL;
+        int newUrlPathType;
+        if (idx < 0) {
+            filter = VERSION_FILTER_NAME;
+            newURL = url;
+            newUrlPathType = pathType;
+
+        } else {
+            if (idx == url.length() - 2) { // Filtre tout seul !
+                throw new FacesException("You can not specify a filter only.");
+            }
+
+            filter = url.substring(0, idx);
+            newURL = url.substring(idx
+                    + IContentAccessor.FILTER_SEPARATOR.length());
+            newUrlPathType = IContentAccessor.UNDEFINED_PATH_TYPE;
         }
-
-        String newURL = url.substring(idx
-                + IContentAccessor.FILTER_SEPARATOR.length());
 
         modifiedContentAccessor = new FiltredContentAccessor(filter,
                 new BasicContentAccessor(facesContext, newURL, contentAccessor,
-                        IContentAccessor.UNDEFINED_PATH_TYPE));
+                        newUrlPathType));
 
         if (generationInformation == null) {
             generationInformation = new BasicGenerationResourceInformation();
@@ -246,7 +291,8 @@ public class StyleContentAccessorHandler extends
         }
 
         IContentModel contentModel = new CssOperationContentModel(resourceURL,
-                versionId, operationId, parameters, styleOperation, cssParser);
+                versionId, operationId, parameters, styleOperation, cssParser,
+                resourceVersionHandler);
 
         if (generatedResourceInformationRef[0] == null) {
             generatedResourceInformationRef[0] = new BasicGeneratedResourceInformation();

@@ -17,12 +17,12 @@ import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IPa
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class MergeLinkedStylesOperation extends AbstractStyleOperation
+public class VersionLinkedStylesOperation extends AbstractStyleOperation
         implements ICssOperation {
     private static final String REVISION = "$Revision$";
 
-    public MergeLinkedStylesOperation() {
-        setName("Merge linked styles");
+    public VersionLinkedStylesOperation() {
+        setName("Versioning linked styles");
     }
 
     public String filter(Map applicationParameters,
@@ -32,6 +32,6 @@ public class MergeLinkedStylesOperation extends AbstractStyleOperation
             IOperationContentLoader operationContentLoader) throws IOException {
         return cssParser.normalizeBuffer(applicationParameters,
                 resourceLoaderFactory, styleSheetURL, styleSheetContent,
-                mergeContext, operationContentLoader, true);
+                mergeContext, operationContentLoader, false);
     }
 }

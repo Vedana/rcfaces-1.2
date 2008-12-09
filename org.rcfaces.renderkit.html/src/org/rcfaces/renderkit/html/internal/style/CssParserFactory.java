@@ -6,11 +6,15 @@ package org.rcfaces.renderkit.html.internal.style;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Services;
 import org.rcfaces.core.internal.content.IOperationContentLoader;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
+import org.rcfaces.core.internal.util.IPath;
+import org.rcfaces.core.lang.IContentFamily;
 
 /**
  * 
@@ -73,12 +77,12 @@ public class CssParserFactory {
     public interface ICssParser {
         String getParserName();
 
-        String mergesBuffer(Map applicationParameters,
+        String normalizeBuffer(Map applicationParameters,
                 IResourceLoaderFactory resourceLoaderFactory,
                 String styleSheetURL, String styleSheetBuffer,
                 IParserContext mergeContext,
-                IOperationContentLoader operationContentLoader)
-                throws IOException;
+                IOperationContentLoader operationContentLoader,
+                boolean mergeLinks) throws IOException;
 
         /**
          * 
@@ -86,6 +90,8 @@ public class CssParserFactory {
          * @version $Revision$ $Date$
          */
         public interface IParserContext {
+            FacesContext getFacesContext();
+
             String getCharset();
 
             void setCharset(String charset);
@@ -93,6 +99,11 @@ public class CssParserFactory {
             long getLastModifiedDate();
 
             void setLastModifiedDate(long lastModifiedDate);
+
+            IPath processVersioning(IPath base, IPath path,
+                    IContentFamily contentFamily);
+
+            boolean isVersioningEnabled();
         }
     }
 
