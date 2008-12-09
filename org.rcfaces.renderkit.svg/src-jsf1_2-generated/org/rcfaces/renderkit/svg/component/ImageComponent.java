@@ -2,18 +2,20 @@ package org.rcfaces.renderkit.svg.component;
 
 import java.lang.String;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
-import org.rcfaces.renderkit.svg.component.Properties;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
@@ -41,11 +43,13 @@ public class ImageComponent extends AbstractOutputComponent implements
 	IFilterCapability,
 	IImageAccessorsCapability {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.svg.image";
+	private static final Log LOG = LogFactory.getLog(ImageComponent.class);
+
+	public static final String COMPONENT_TYPE="org.rcfaces.svg:image";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","alternateText","imageHeight","imageURL","pixelUnitToMillimeter","filterProperties","imageWidth","curveFlatness","fontSize","fontName","fontItalic"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","fontUnderline","imageURL","fontSize","fontItalic","fontBold","alternateText","filterProperties","pixelUnitToMillimeter","imageWidth","curveFlatness","distanceTolerance","fontName"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="imageURL";
 
@@ -354,6 +358,26 @@ public class ImageComponent extends AbstractOutputComponent implements
 	 */
 	public boolean isCurveFlatnessSetted() {
 		return engine.isPropertySetted(Properties.CURVE_FLATNESS);
+	}
+
+	public double getDistanceTolerance() {
+		return getDistanceTolerance(null);
+	}
+
+	public double getDistanceTolerance(javax.faces.context.FacesContext facesContext) {
+		return engine.getDoubleProperty(Properties.DISTANCE_TOLERANCE, 0.0, facesContext);
+	}
+
+	public void setDistanceTolerance(double distanceTolerance) {
+		engine.setProperty(Properties.DISTANCE_TOLERANCE, distanceTolerance);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "distanceTolerance" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDistanceToleranceSetted() {
+		return engine.isPropertySetted(Properties.DISTANCE_TOLERANCE);
 	}
 
 	protected Set getCameliaFields() {

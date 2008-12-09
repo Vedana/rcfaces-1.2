@@ -7,7 +7,13 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,22 +25,26 @@ import org.rcfaces.renderkit.svg.item.INodeItem;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ShapeValue {
+public class ShapeValue implements StateHolder {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ShapeValue.class);
 
-    private final Shape shape;
+    private Shape shape;
 
-    private final Object value;
+    private Object value;
 
-    private final String label;
+    private String label;
 
-    private final String description;
+    private String description;
 
-    private final boolean disabled;
+    private boolean disabled;
 
-    private final String alternateText;
+    private String alternateText;
+
+    private boolean transientState;
+
+    private Map clientDatas;
 
     public ShapeValue(Shape shape, INodeItem nodeItem) {
         this.shape = shape;
@@ -45,6 +55,10 @@ public class ShapeValue {
         this.disabled = nodeItem.isDisabled();
 
         this.alternateText = nodeItem.getAlternateText();
+
+        if (nodeItem.isClientDataEmpty() == false) {
+            this.clientDatas = nodeItem.getClientDataMap();
+        }
     }
 
     public final Shape getShape() {
@@ -69,6 +83,13 @@ public class ShapeValue {
 
     public final String getAlternateText() {
         return alternateText;
+    }
+
+    public final Map getClientDatas() {
+        if (clientDatas == null) {
+            return Collections.EMPTY_MAP;
+        }
+        return clientDatas;
     }
 
     public String[] computeOutline(AffineTransform transform, double flatness) {
@@ -126,6 +147,55 @@ public class ShapeValue {
         }
 
         return (String[]) l.toArray(new String[l.size()]);
+    }
+
+    public boolean isTransient() {
+        return transientState;
+    }
+
+    public void setTransient(boolean transientState) {
+        this.transientState = transientState;
+    }
+
+    public void restoreState(FacesContext facesContext, Object state) {
+        Object states[] = (Object[]) state;
+
+        shape = (Shape) UIComponentBase.restoreAttachedState(facesContext,
+                states[0]);
+
+        value = UIComponentBase.restoreAttachedState(facesContext, states[1]);
+
+        label = (String) states[2];
+
+        description = (String) states[3];
+
+        disabled = (states[4] != null);
+
+        alternateText = (String) states[5];
+
+        if (states[6] != null) {
+            clientDatas = (Map) UIComponentBase.restoreAttachedState(
+                    facesContext, states[6]);
+        }
+
+    }
+
+    public Object saveState(FacesContext facesContext) {
+        Object states[] = new Object[7];
+
+        states[0] = UIComponentBase.saveAttachedState(facesContext, shape);
+        states[1] = UIComponentBase.saveAttachedState(facesContext, value);
+        states[2] = label;
+        states[3] = description;
+        states[4] = disabled ? Boolean.TRUE : null;
+        states[5] = alternateText;
+
+        if (clientDatas != null) {
+            states[6] = UIComponentBase.saveAttachedState(facesContext,
+                    clientDatas);
+        }
+
+        return states;
     }
 
 }

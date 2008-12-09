@@ -5,6 +5,7 @@ package org.rcfaces.renderkit.svg.item;
 
 import javax.faces.context.FacesContext;
 
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ItemTools;
 import org.rcfaces.renderkit.svg.component.PathComponent;
 
@@ -393,4 +394,9 @@ public class PathItem extends NodeItem implements IPathItem {
         return state;
     }
 
+    public void participeKey(StringAppender sa) {
+        super.participeKey(sa);
+
+        ItemTools.participeKey(sa, this, PathItem.class);
+    }
 }

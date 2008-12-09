@@ -2,11 +2,11 @@ package org.rcfaces.renderkit.svg.internal.taglib;
 
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.renderkit.svg.component.NodeComponent;
-import org.rcfaces.renderkit.svg.component.Properties;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 import org.rcfaces.core.internal.tools.ListenersTools1_2;
@@ -20,6 +20,8 @@ public abstract class NodeTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(NodeTag.class);
 
 	private ValueExpression alternateText;
+	private ValueExpression accessKey;
+	private ValueExpression tabIndex;
 	private ValueExpression rendered;
 	private ValueExpression selectable;
 	private ValueExpression itemValue;
@@ -29,6 +31,14 @@ public abstract class NodeTag extends CameliaTag implements Tag {
 	private ValueExpression targetId;
 	public final void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
+	}
+
+	public final void setAccessKey(ValueExpression accessKey) {
+		this.accessKey = accessKey;
+	}
+
+	public final void setTabIndex(ValueExpression tabIndex) {
+		this.tabIndex = tabIndex;
 	}
 
 	public final void setRendered(ValueExpression rendered) {
@@ -62,6 +72,8 @@ public abstract class NodeTag extends CameliaTag implements Tag {
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  alternateText='"+alternateText+"'");
+			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  tabIndex='"+tabIndex+"'");
 			LOG.debug("  rendered='"+rendered+"'");
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  itemValue='"+itemValue+"'");
@@ -88,6 +100,24 @@ public abstract class NodeTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setAlternateText(alternateText.getExpressionString());
+			}
+		}
+
+		if (accessKey != null) {
+			if (accessKey.isLiteralText()==false) {
+				component.setValueExpression(Properties.ACCESS_KEY, accessKey);
+
+			} else {
+				component.setAccessKey(accessKey.getExpressionString());
+			}
+		}
+
+		if (tabIndex != null) {
+			if (tabIndex.isLiteralText()==false) {
+				component.setValueExpression(Properties.TAB_INDEX, tabIndex);
+
+			} else {
+				component.setTabIndex(getInteger(tabIndex.getExpressionString()));
 			}
 		}
 
@@ -157,6 +187,8 @@ public abstract class NodeTag extends CameliaTag implements Tag {
 
 	public void release() {
 		alternateText = null;
+		accessKey = null;
+		tabIndex = null;
 		rendered = null;
 		selectable = null;
 		itemValue = null;

@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.GenerationImageInformation;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.renderkit.svg.item.INodeItem;
 
 /**
@@ -28,17 +29,21 @@ public class SVGImageGenerationInformation extends GenerationImageInformation {
 
     private static final String DEFAULT_FONT_FAMILY_PROPERTY = "org.rfcaces.svg.DEFAULT_FONT_FAMILY";
 
-    private INodeItem[] nodes;
+    private static final String CURVE_FLATNESS_PROPERTY = "org.rfcaces.svg.CURVE_FLATNESS";
+
+    private static final String DISTANCE_TOLERANCE_PROPERTY = "org.rfcaces.svg.DISTANCE_TOLERANCE";
+
+    private static final String NODES_PROPERTY = "org.rfcaces.svg.NODES";
 
     public SVGImageGenerationInformation() {
     }
 
     public INodeItem[] getNodes() {
-        return nodes;
+        return (INodeItem[]) getAttribute(NODES_PROPERTY);
     }
 
     public final void setNodes(INodeItem[] nodes) {
-        this.nodes = nodes;
+        setAttribute(NODES_PROPERTY, nodes);
     }
 
     public void restoreState(FacesContext facesContext, Object state) {
@@ -100,4 +105,42 @@ public class SVGImageGenerationInformation extends GenerationImageInformation {
     public void setDefaultFontFamily(String fontFamily) {
         setAttribute(DEFAULT_FONT_FAMILY_PROPERTY, fontFamily);
     }
+
+    public void participeKey(StringAppender sa) {
+        super.participeKey(sa);
+
+        INodeItem nodes[] = getNodes();
+
+        if (nodes != null) {
+            for (int i = 0; i < nodes.length; i++) {
+                nodes[i].participeKey(sa);
+            }
+        }
+    }
+
+    public void setCurveFlatness(double curveFlatness) {
+        setAttribute(CURVE_FLATNESS_PROPERTY, new Double(curveFlatness));
+    }
+
+    public double getCurveFlatness() {
+        Double d = (Double) getAttribute(CURVE_FLATNESS_PROPERTY);
+        if (d == null) {
+            return 0.0;
+        }
+        return d.doubleValue();
+    }
+
+    public void setDistanceTolerance(double distanceTolerance) {
+        setAttribute(DISTANCE_TOLERANCE_PROPERTY, new Double(distanceTolerance));
+    }
+
+    public double getDistanceTolerance() {
+        Double d = (Double) getAttribute(DISTANCE_TOLERANCE_PROPERTY);
+        if (d == null) {
+            return 0.0;
+        }
+
+        return d.doubleValue();
+    }
+
 }

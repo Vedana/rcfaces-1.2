@@ -1,15 +1,19 @@
 package org.rcfaces.renderkit.svg.component;
 
+import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.renderkit.svg.component.NodeComponent;
 import java.util.Arrays;
-import org.rcfaces.renderkit.svg.component.Properties;
 import java.util.Set;
 import java.util.HashSet;
 
 public class PathComponent extends NodeComponent {
 
-	public static final String COMPONENT_TYPE="org.rcfaces.svg.path";
+	private static final Log LOG = LogFactory.getLog(PathComponent.class);
+
+	public static final String COMPONENT_TYPE="org.rcfaces.svg:path";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(NodeComponent.CAMELIA_ATTRIBUTES);
 	static {

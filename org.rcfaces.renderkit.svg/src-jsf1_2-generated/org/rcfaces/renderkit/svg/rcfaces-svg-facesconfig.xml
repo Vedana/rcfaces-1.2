@@ -2,22 +2,81 @@
 <!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 <faces-config>
 	<component>
-		<component-type>org.rcfaces.svg.image</component-type>
+		<description><![CDATA[
+<p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
+      <p>The image Component has the following capabilities :
+      <ul>
+        <li>Position &amp; Size</li>
+        <li>Foreground &amp; Background Color</li>
+        <li>Image</li>
+        <li>Margin</li>
+        <li>Help</li>
+        <li>Visibility</li>
+      	<li>Events Handling</li>
+      </ul>
+      </p>
+]]></description>
+		<component-type>org.rcfaces.svg:image</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.ImageComponent</component-class>
+		<attribute>
+			<attribute-name>pixelUnitToMillimeter</attribute-name>
+			<attribute-class>double</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>curveFlatness</attribute-name>
+			<attribute-class>double</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>distanceTolerance</attribute-name>
+			<attribute-class>double</attribute-class>
+		</attribute>
 	</component>
 	<component>
-		<component-type>org.rcfaces.svg.group</component-type>
+		<description><![CDATA[
+<p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
+      <p>The imageButton Component has the following capabilities :
+      <ul>
+        <li>Position &amp; Size</li>
+        <li>Foreground &amp; Background Color</li>
+        <li>Text, font &amp; image</li>
+        <li>Margin &amp; border</li>
+        <li>Help</li>
+        <li>Visibility, Read-Only, Disabled</li>
+      	<li>Events Handling</li>
+      </ul>
+      </p>
+]]></description>
+		<component-type>org.rcfaces.svg:imageButton</component-type>
+		<component-class>org.rcfaces.renderkit.svg.component.ImageButtonComponent</component-class>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating that this component's value must be
+          converted and validated immediately (that is, during
+          Apply Request Values phase), rather than waiting
+          until Process Validations phase.
+]]></description>
+			<attribute-name>immediate</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+	</component>
+	<component>
+		<component-type>org.rcfaces.svg:group</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.GroupComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.svg.path</component-type>
+		<component-type>org.rcfaces.svg:path</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.PathComponent</component-class>
 	</component>
 	<render-kit>
 		<renderer>
 			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.svg.image</renderer-type>
+			<renderer-type>org.rcfaces.svg:image</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.svg.internal.renderer.ImageRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.svg:imageButton</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.svg.internal.renderer.ImageButtonRenderer</renderer-class>
 		</renderer>
 	</render-kit>
 </faces-config>

@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.svg.internal.renderer;
 
 import java.awt.geom.AffineTransform;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -51,6 +52,7 @@ public class ImageRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+        writeImageAttributes(htmlWriter);
 
         int imageWidth = image.getImageWidth(facesContext);
         int imageHeight = image.getImageHeight(facesContext);
@@ -64,6 +66,17 @@ public class ImageRenderer extends AbstractCssRenderer {
         IContentAccessor contentAccessor = imageAccessors.getImageAccessor();
         if (contentAccessor != null) {
             imageGenerationInformation = new SVGImageGenerationInformation();
+
+            double curveFlatness = image.getCurveFlatness(facesContext);
+            if (curveFlatness > 0.0) {
+                imageGenerationInformation.setCurveFlatness(curveFlatness);
+            }
+
+            double distanceTolerance = image.getDistanceTolerance(facesContext);
+            if (distanceTolerance > 0.0) {
+                imageGenerationInformation
+                        .setDistanceTolerance(distanceTolerance);
+            }
 
             imageGenerationInformation.setComponent(componentRenderContext);
 
@@ -145,10 +158,12 @@ public class ImageRenderer extends AbstractCssRenderer {
                 imageHeight = h;
             }
 
-            values = generatedImageInformation.getShapeValues();
+            if (isItemSelectable()) {
+                values = generatedImageInformation.getShapeValues();
 
-            if (values != null && values.length == 0) {
-                values = null;
+                if (values != null && values.length == 0) {
+                    values = null;
+                }
             }
         }
 
@@ -182,6 +197,14 @@ public class ImageRenderer extends AbstractCssRenderer {
             for (int i = 0; i < values.length; i++) {
                 ShapeValue value = values[i];
 
+                String itemConvertedValue = null;
+
+                Object itemValue = value.getValue();
+                if (itemValue != null) {
+                    itemConvertedValue = convertValue(facesContext, image,
+                            itemValue);
+                }
+
                 String coords[] = value.computeOutline(transform, 1);
                 for (int j = 0; j < coords.length; j++) {
                     String c = coords[j];
@@ -195,7 +218,6 @@ public class ImageRenderer extends AbstractCssRenderer {
                             + "::map" + i);
 
                     htmlWriter.writeAttribute("href", "#");
-                    htmlWriter.writeBorder(0);
 
                     String description = value.getDescription();
                     if (description != null) {
@@ -205,6 +227,24 @@ public class ImageRenderer extends AbstractCssRenderer {
                     String alternateText = value.getAlternateText();
                     if (alternateText != null) {
                         htmlWriter.writeAlt(alternateText);
+                    }
+
+                    if (j == 0) {
+                        if (itemConvertedValue != null) {
+                            htmlWriter.writeAttribute("v:value",
+                                    itemConvertedValue);
+                        }
+
+                        String label = value.getLabel();
+                        if (label != null) {
+                            htmlWriter.writeAttribute("v:label", label);
+                        }
+
+                        Map clientDatas = value.getClientDatas();
+                        if (clientDatas != null
+                                && clientDatas.isEmpty() == false) {
+                            HtmlTools.writeClientData(htmlWriter, clientDatas);
+                        }
                     }
 
                     htmlWriter.writeAttribute("shape", "poly");
@@ -221,6 +261,9 @@ public class ImageRenderer extends AbstractCssRenderer {
         }
 
         super.encodeEnd(htmlWriter);
+    }
+
+    protected void writeImageAttributes(IHtmlWriter htmlWriter) {
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter htmlWriter,
@@ -241,7 +284,11 @@ public class ImageRenderer extends AbstractCssRenderer {
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
 
-        return new NodesCollectorDecorator(component);
+        return new NodesCollectorDecorator(component, isItemSelectable());
+    }
+
+    protected boolean isItemSelectable() {
+        return false;
     }
 
     protected final boolean hasComponenDecoratorSupport() {

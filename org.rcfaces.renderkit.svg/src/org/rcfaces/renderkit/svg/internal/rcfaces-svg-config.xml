@@ -14,5 +14,16 @@
   			</adapter-class>
   		</resource-adapter>
   	</image-resource-adapters>
+  	
+  	<repositories>
+  		<repository>
+  			<type>javascript</type>
+  			<location>org/rcfaces/renderkit/svg/internal/javascript/repository.xml</location>
+  		</repository>
+  		<repository>
+  			<type>css</type>
+  			<location>org/rcfaces/renderkit/svg/internal/css/repository.xml</location>
+  		</repository>
+  	</repositories>
 
 </rcfaces-config>

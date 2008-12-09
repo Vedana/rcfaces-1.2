@@ -103,6 +103,17 @@ public class SVGImageResourceAdapter extends AbstractImageResourceAdapter {
             }
         }
 
+        double curveFlatness = svgImageGenerationInformation.getCurveFlatness();
+        if (curveFlatness > 0.0) {
+            transcoder.setCurveFlatness(curveFlatness);
+        }
+
+        double distanceTolerance = svgImageGenerationInformation
+                .getDistanceTolerance();
+        if (distanceTolerance > 0.0) {
+            transcoder.setDistanceTolerance(distanceTolerance);
+        }
+
         int imageWidth = svgImageGenerationInformation.getImageWidth();
         if (imageWidth > 0) {
             transcoder.setImageWidth(imageWidth);
@@ -262,7 +273,7 @@ public class SVGImageResourceAdapter extends AbstractImageResourceAdapter {
 
             Object value;
             try {
-                value = m.invoke(item, null);
+                value = m.invoke(item, (Object[]) null);
 
             } catch (Exception ex) {
                 LOG.error("Can not read property '" + pd.getName()

@@ -34,14 +34,19 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
 
     private static final INodeItem NODE_ITEM_EMPTY_ARRAY[] = new INodeItem[0];
 
+    private final boolean selectableSupport;
+
     private List nodes;
 
     private List nodesStack = new ArrayList();
 
     private boolean selectable;
 
-    public NodesCollectorDecorator(UIComponent component) {
+    public NodesCollectorDecorator(UIComponent component,
+            boolean selectableSupport) {
         super(component, null);
+
+        this.selectableSupport = selectableSupport;
     }
 
     protected SelectItemsContext createHtmlContext() {
@@ -75,7 +80,7 @@ public class NodesCollectorDecorator extends AbstractSelectItemsDecorator {
                 nodes = null;
             }
 
-            if (((INodeItem) selectItem).isSelectable()) {
+            if (selectableSupport && ((INodeItem) selectItem).isSelectable()) {
                 selectable = true;
             }
         }

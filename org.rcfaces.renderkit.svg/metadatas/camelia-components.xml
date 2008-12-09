@@ -25,11 +25,27 @@
 		</method>
 		<attribute id="pixelUnitToMillimeter" type="double"/>		
 		<attribute id="curveFlatness" type="double"/>		
+		<attribute id="distanceTolerance" type="double"/>		
 		
 		<propertyValue>imageURL</propertyValue>
 		<property>value</property>
 	</component>
 
+	<component id="imageButton" extends="image" renderKit="svg">
+		<capability id="IDisabledCapability" />
+		<capability id="IAccessKeyCapability" />
+		<capability id="ITabIndexCapability" />
+		<capability id="IFocusBlurEventCapability" />
+		<capability id="IKeyEventCapability" />
+		<capability id="IUnlockedClientAttributesCapability" />
+		<capability id="IImmediateCapability" />			
+		<capability id="IValidationEventCapability" />		
+		<capability id="ISelectionEventCapability" />
+		<capability id="IFocusStyleClassCapability" />
+		
+		<attribute id="immediate" type="boolean" writeTag="false" />	
+				
+	</component>
 
 	<component id="node" abstract="true" extends="cameliaItem" renderKit="svg">
 		<tagAttribute id="targetId" type="java.lang.String" generate="true" required="true"/>
@@ -37,6 +53,11 @@
 		<capability id="IAlternateTextCapability" />
 		<capability id="IAccessKeyCapability" />
 		<capability id="ITabIndexCapability" />
+		<capability id="IServerDataCapability" />
+		<capability id="IClientDataCapability" />
+
+		<implements id="org.rcfaces.core.internal.manager.IServerDataManager" />
+		<implements id="org.rcfaces.core.internal.manager.IClientDataManager" />
 
 		<binding-alias id="targetId" target="itemValue" />
 		<method id="setTargetId" returnType="void">
@@ -53,16 +74,29 @@
 
 		<attribute id="rendered" type="boolean" default="true"/>		
 		<attribute id="selectable" type="boolean" default="false"/>		
-		
-		<property>itemDisabled</property>
-		<property>itemValue</property>
-		<property>itemLabel</property>
-		<property>itemDescription</property>
 	
 		<attribute id="itemValue" type="java.lang.String" writeComponent="false"/>
 		<attribute id="itemLabel" type="java.lang.String" writeComponent="false"/>
 		<attribute id="itemDescription" type="java.lang.String" writeComponent="false"/>
 		<attribute id="itemDisabled" type="boolean" writeComponent="false"/>
+	
+		<method id="getClientData(String,javax.faces.context.FacesContext)" />
+		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
+
+		<method id="getServerData(String,javax.faces.context.FacesContext)" />
+		<method id="setServerData(String,javax.faces.el.ValueBinding)" />
+
+		<method id="getClientDataMap(javax.faces.context.FacesContext)" />
+		<method id="getServerDataMap(javax.faces.context.FacesContext)" />
+
+		<method id="listClientDataKeys(javax.faces.context.FacesContext)" />
+		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
+		
+		<property>itemDisabled</property>
+		<property>itemValue</property>
+		<property>itemLabel</property>
+		<property>itemDescription</property>
+
 		
 	</component>
 	

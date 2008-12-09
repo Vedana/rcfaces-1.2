@@ -5,7 +5,9 @@ package org.rcfaces.renderkit.svg.item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
@@ -13,6 +15,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
+import org.rcfaces.core.internal.contentAccessor.IResourceKeyParticipant;
+import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.tools.ItemTools;
 import org.rcfaces.renderkit.svg.component.NodeComponent;
 
 /**
@@ -26,6 +31,10 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
     private static final long serialVersionUID = 8556900994943378471L;
 
     private static final SelectItem[] SELECT_ITEM_EMPTY_ARRAY = new SelectItem[0];
+
+    private Map serverDatas;
+
+    private Map clientDatas;
 
     private boolean transientValue;
 
@@ -67,6 +76,18 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
         setValue(component.getItemValue());
 
         setRendered(component.isRendered());
+
+        if (component.getServerDataCount() > 0) {
+            Map map = component.getServerDataMap();
+
+            getServerDataMap().putAll(map);
+        }
+
+        if (component.getClientDataCount() > 0) {
+            Map map = component.getClientDataMap();
+
+            getClientDataMap().putAll(map);
+        }
     }
 
     public String getTargetId() {
@@ -138,7 +159,17 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
 
         setAlternateText((String) states[6]);
 
-        int idx = 7;
+        if (states[7] != null) {
+            clientDatas = (Map) UIComponentBase.restoreAttachedState(context,
+                    states[7]);
+        }
+
+        if (states[8] != null) {
+            serverDatas = (Map) UIComponentBase.restoreAttachedState(context,
+                    states[8]);
+        }
+
+        int idx = 9;
 
         if (states.length <= idx) {
             setSelectItems(SELECT_ITEM_EMPTY_ARRAY);
@@ -170,7 +201,15 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
         ret[5] = isSelectable() ? Boolean.TRUE : null;
         ret[6] = getAlternateText();
 
-        int idx = 7;
+        if (isClientDataEmpty() == false) {
+            ret[7] = UIComponentBase.saveAttachedState(context, clientDatas);
+        }
+
+        if (isServerDataEmpty() == false) {
+            ret[8] = UIComponentBase.saveAttachedState(context, serverDatas);
+        }
+
+        int idx = 9;
 
         for (int i = 0; i < children.length; i++) {
             ret[i + idx] = UIComponentBase.saveAttachedState(context,
@@ -179,4 +218,55 @@ public class NodeItem extends SelectItemGroup implements INodeItem, StateHolder 
 
         return ret;
     }
+
+    public void participeKey(StringAppender sa) {
+        SelectItem nodes[] = getSelectItems();
+
+        ItemTools.participeKey(sa, this, NodeItem.class);
+
+        if (isClientDataEmpty() == false) {
+            ItemTools.participeKey(sa, clientDatas);
+        }
+
+        for (int i = 0; i < nodes.length; i++) {
+            SelectItem node = nodes[i];
+            if (node instanceof IResourceKeyParticipant) {
+                ((IResourceKeyParticipant) node).participeKey(sa);
+            }
+        }
+
+    }
+
+    public boolean isServerDataEmpty() {
+        if (serverDatas == null) {
+            return true;
+        }
+
+        return serverDatas.isEmpty();
+    }
+
+    public Map getServerDataMap() {
+        if (serverDatas == null) {
+            serverDatas = new HashMap();
+        }
+
+        return serverDatas;
+    }
+
+    public boolean isClientDataEmpty() {
+        if (clientDatas == null) {
+            return true;
+        }
+
+        return clientDatas.isEmpty();
+    }
+
+    public Map getClientDataMap() {
+        if (clientDatas == null) {
+            clientDatas = new HashMap();
+        }
+
+        return clientDatas;
+    }
+
 }

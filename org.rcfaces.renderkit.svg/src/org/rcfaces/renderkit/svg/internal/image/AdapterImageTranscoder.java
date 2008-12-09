@@ -2,6 +2,8 @@ package org.rcfaces.renderkit.svg.internal.image;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +21,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.rcfaces.renderkit.svg.internal.util.Symplifier;
 import org.rcfaces.renderkit.svg.item.INodeItem;
 import org.w3c.dom.Element;
 
@@ -29,6 +32,10 @@ import org.w3c.dom.Element;
  */
 class AdapterImageTranscoder extends ImageTranscoder {
     private static final String REVISION = "$Revision$";
+
+    private static final double DEFAULT_FLATNESS = 0.0;
+
+    private static final double DEFAULT_DISTANCE_TOLERANCE = 0.0;
 
     private Map selectables;
 
@@ -41,6 +48,10 @@ class AdapterImageTranscoder extends ImageTranscoder {
     private CanvasGraphicsNode canvasGraphicsNode;
 
     private AffineTransform globalTransform;
+
+    private double curveFlatness = DEFAULT_FLATNESS;
+
+    private double distanceTolerance = DEFAULT_DISTANCE_TOLERANCE;
 
     public BufferedImage createImage(int width, int height) {
         BufferedImage img = new BufferedImage(width, height,
@@ -57,6 +68,14 @@ class AdapterImageTranscoder extends ImageTranscoder {
     public void setPixelUnitToMillimeter(float pixelUnit) {
         addTranscodingHint(SVGAbstractTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER,
                 new Float(pixelUnit));
+    }
+
+    public void setCurveFlatness(double flatness) {
+        this.curveFlatness = flatness;
+    }
+
+    public void setDistanceTolerance(double distanceTolerance) {
+        this.distanceTolerance = distanceTolerance;
     }
 
     public void setImageHeight(int imageHeight) {
@@ -134,6 +153,23 @@ class AdapterImageTranscoder extends ImageTranscoder {
                     if (item != null) {
                         Shape shape = node.getOutline();
                         if (shape != null) {
+                            if (distanceTolerance > 0.0) {
+                                shape = Symplifier
+                                        .simplifyShape(distanceTolerance,
+                                                curveFlatness, shape);
+
+                            } else if (curveFlatness > 0.0) {
+
+                                GeneralPath generalPath = new GeneralPath();
+                                PathIterator pathIterator = shape
+                                        .getPathIterator(null, curveFlatness);
+                                generalPath.setWindingRule(pathIterator
+                                        .getWindingRule());
+                                generalPath.append(pathIterator, false);
+
+                                shape = generalPath;
+                            }
+
                             selectableShapes.put(item, new ShapeValue(shape,
                                     item));
                         }

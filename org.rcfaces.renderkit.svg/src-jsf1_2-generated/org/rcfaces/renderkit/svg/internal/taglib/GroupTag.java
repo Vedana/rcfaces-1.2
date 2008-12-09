@@ -1,5 +1,6 @@
 package org.rcfaces.renderkit.svg.internal.taglib;
 
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.internal.taglib.CameliaTag;
@@ -7,7 +8,6 @@ import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 import org.rcfaces.renderkit.svg.component.GroupComponent;
-import org.rcfaces.renderkit.svg.component.Properties;
 import javax.faces.component.UIViewRoot;
 
 public class GroupTag extends NodeTag implements Tag {

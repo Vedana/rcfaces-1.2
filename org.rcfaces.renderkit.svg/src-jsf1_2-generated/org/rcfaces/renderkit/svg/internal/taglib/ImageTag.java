@@ -2,11 +2,11 @@ package org.rcfaces.renderkit.svg.internal.taglib;
 
 import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.internal.tools.ListenersTools;
+import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.renderkit.svg.component.ImageComponent;
-import org.rcfaces.renderkit.svg.component.Properties;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 import org.rcfaces.core.internal.taglib.CameliaTag;
@@ -32,6 +32,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 	private ValueExpression filterProperties;
 	private ValueExpression pixelUnitToMillimeter;
 	private ValueExpression curveFlatness;
+	private ValueExpression distanceTolerance;
 	public String getComponentType() {
 		return ImageComponent.COMPONENT_TYPE;
 	}
@@ -84,6 +85,10 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		this.curveFlatness = curveFlatness;
 	}
 
+	public final void setDistanceTolerance(ValueExpression distanceTolerance) {
+		this.distanceTolerance = distanceTolerance;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ImageComponent.COMPONENT_TYPE==getComponentType()) {
@@ -101,6 +106,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  pixelUnitToMillimeter='"+pixelUnitToMillimeter+"'");
 			LOG.debug("  curveFlatness='"+curveFlatness+"'");
+			LOG.debug("  distanceTolerance='"+distanceTolerance+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -221,6 +227,15 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 				component.setCurveFlatness(getDouble(curveFlatness.getExpressionString()));
 			}
 		}
+
+		if (distanceTolerance != null) {
+			if (distanceTolerance.isLiteralText()==false) {
+				component.setValueExpression(Properties.DISTANCE_TOLERANCE, distanceTolerance);
+
+			} else {
+				component.setDistanceTolerance(getDouble(distanceTolerance.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -236,6 +251,7 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		filterProperties = null;
 		pixelUnitToMillimeter = null;
 		curveFlatness = null;
+		distanceTolerance = null;
 
 		super.release();
 	}
