@@ -935,7 +935,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         return null;
     }
 
-    public Object decodeEventObject(IRequestContext requestContext, UIComponent component, IEventData eventData) {
+    public Object decodeEventObject(IRequestContext requestContext,
+            UIComponent component, IEventData eventData) {
         return null;
     }
 
