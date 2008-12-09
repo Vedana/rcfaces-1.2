@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.render.Renderer;
 
 import org.rcfaces.core.internal.AbstractReleasable;
 import org.rcfaces.core.internal.Constants;
@@ -65,7 +66,8 @@ public abstract class AbstractRequestContext extends AbstractReleasable
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.IRequestContext#getFacesContext()
+     * @see
+     * org.rcfaces.core.internal.renderkit.IRequestContext#getFacesContext()
      */
     public final FacesContext getFacesContext() {
         return facesContext;
@@ -89,10 +91,12 @@ public abstract class AbstractRequestContext extends AbstractReleasable
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.IRequestContext#getComponentData(javax.faces.component.UIComponent)
+     * @see
+     * org.rcfaces.core.internal.renderkit.IRequestContext#getComponentData(
+     * javax.faces.component.UIComponent)
      */
     public final IComponentData getComponentData(UIComponent component,
-            String componentId) {
+            String componentId, Renderer renderer) {
         Object data = componentDatas.get(componentId);
 
         if (data == null) {
@@ -103,7 +107,7 @@ public abstract class AbstractRequestContext extends AbstractReleasable
             return (IComponentData) data;
         }
 
-        data = getComponentData(component, componentId, data);
+        data = getComponentData(component, componentId, data, renderer);
         if (data == null) {
             return emptyComponentData();
         }
@@ -114,7 +118,7 @@ public abstract class AbstractRequestContext extends AbstractReleasable
     }
 
     protected IComponentData getComponentData(UIComponent component,
-            String key, Object data) {
+            String key, Object data, Renderer renderer) {
         return emptyComponentData();
     }
 
@@ -155,8 +159,8 @@ public abstract class AbstractRequestContext extends AbstractReleasable
     }
 
     /*
-     * public void pushScopeVar(String var, ValueExpression valueBinding) { Object
-     * value = valueBinding.getValue(getFacesContext());
+     * public void pushScopeVar(String var, ValueExpression valueBinding) {
+     * Object value = valueBinding.getValue(getFacesContext());
      * 
      * facesContext.getExternalContext().getRequestMap().put(var, value); }
      */

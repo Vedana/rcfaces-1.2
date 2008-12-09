@@ -5,6 +5,7 @@ package org.rcfaces.core.internal.renderkit;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.render.Renderer;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -18,7 +19,8 @@ public interface IRequestContext /* extends IReleasable */{
 
     boolean isLockedClientAttributes();
 
-    IComponentData getComponentData(UIComponent component, String componentId);
+    IComponentData getComponentData(UIComponent component, String componentId,
+            Renderer renderer);
 
     String getComponentId(UIComponent component);
 }

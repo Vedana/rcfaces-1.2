@@ -4,7 +4,9 @@
 package org.rcfaces.core.internal.renderkit;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
@@ -15,7 +17,6 @@ import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -24,7 +25,8 @@ import org.rcfaces.core.internal.tools.ValuesTools;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public abstract class AbstractCameliaRenderer0 extends Renderer {
+public abstract class AbstractCameliaRenderer0 extends Renderer implements
+        IDefaultUnlockedPropertiesRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
@@ -33,6 +35,31 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
     private static final String HIDE_CHILDREN_PROPERTY = "camelia.ASYNC_TREE_MODE";
 
     private static final String COMPONENT_HIDDEN = "camelia.COMPONENT_HIDDEN";
+
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    private final String defaultUnlockedProperties[];
+
+    protected AbstractCameliaRenderer0() {
+        Set unlockedProperties = new HashSet();
+        addUnlockProperties(unlockedProperties);
+
+        if (unlockedProperties.isEmpty() == false) {
+            defaultUnlockedProperties = (String[]) unlockedProperties
+                    .toArray(new String[unlockedProperties.size()]);
+
+        } else {
+            defaultUnlockedProperties = EMPTY_STRING_ARRAY;
+        }
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+    }
+
+    public String[] getDefaultUnlockedProperties(
+            FacesContext facesContext, UIComponent component) {
+        return defaultUnlockedProperties;
+    }
 
     public final void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
@@ -48,22 +75,19 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
         IComponentWriter writer = renderContext.getComponentWriter();
 
         /*
-        if (component instanceof IVisibilityCapability) {
-            IComponentRenderContext componentRenderContext = writer
-                    .getComponentRenderContext();
-
-            if (componentRenderContext.containsAttribute(COMPONENT_HIDDEN) == false) {
-                if (Boolean.FALSE.equals(((IVisibilityCapability) component)
-                        .getVisibleState())) {
-
-                    // Visibilité PHANTOM
-
-                    componentRenderContext.setAttribute(COMPONENT_HIDDEN,
-                            component);
-                }
-            }
-        }
-        */
+         * if (component instanceof IVisibilityCapability) {
+         * IComponentRenderContext componentRenderContext = writer
+         * .getComponentRenderContext();
+         * 
+         * if (componentRenderContext.containsAttribute(COMPONENT_HIDDEN) ==
+         * false) { if (Boolean.FALSE.equals(((IVisibilityCapability) component)
+         * .getVisibleState())) {
+         * 
+         * // Visibilité PHANTOM
+         * 
+         * componentRenderContext.setAttribute(COMPONENT_HIDDEN, component); } }
+         * }
+         */
 
         try {
             encodeBegin(writer);
@@ -167,15 +191,14 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
         }
 
         /*
-        if (component instanceof IVisibilityCapability) {
-            IComponentRenderContext componentRenderContext = writer
-                    .getComponentRenderContext();
-
-            if (componentRenderContext.getAttribute(COMPONENT_HIDDEN) == component) {
-                componentRenderContext.removeAttribute(COMPONENT_HIDDEN);
-            }
-        }
-        */
+         * if (component instanceof IVisibilityCapability) {
+         * IComponentRenderContext componentRenderContext = writer
+         * .getComponentRenderContext();
+         * 
+         * if (componentRenderContext.getAttribute(COMPONENT_HIDDEN) ==
+         * component) {
+         * componentRenderContext.removeAttribute(COMPONENT_HIDDEN); } }
+         */
 
         renderContext.popComponent(component);
     }
@@ -193,7 +216,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer {
                 component);
 
         IComponentData componentData = requestContext.getComponentData(
-                component, requestComponentId);
+                component, requestComponentId, this);
 
         decode(requestContext, component, componentData);
     }
