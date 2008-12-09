@@ -83,7 +83,7 @@ var __members = {
 	/**
 	 * @method public 
 	 * @param hidden boolean byIndex Returns the index of the item if setted to <code>true</code>.
-	 * @return String Value, or index of the item.
+	 * @return Object Value of the selected item. (or <code>null</code>)
 	 */
 	f_getValue: function(byIndex) {
 		var items = this.options;

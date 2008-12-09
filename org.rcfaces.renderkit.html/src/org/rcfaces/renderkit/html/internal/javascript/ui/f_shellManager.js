@@ -129,6 +129,7 @@ var __statics = {
 	 
 	/**
      * @method public static
+     * @param optional Document doc
      * @return Object size (width, height)
      */
     GetScreenSize: function(doc) {

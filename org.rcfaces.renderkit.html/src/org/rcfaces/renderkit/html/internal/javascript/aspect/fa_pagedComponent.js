@@ -163,6 +163,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @return number
+	 * @javaReturnType int
 	 */
 	f_getFirst: function() {
 		return this._first;
@@ -172,6 +173,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @return number
+	 * @javaReturnType int
 	 */
 	f_getMaxRows: function() {
 		return this._maxRows;
@@ -190,6 +192,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @return number
+	 * @javaReturnType int
 	 */
 	f_getRowCount: function() {
 		return this._rowCount;

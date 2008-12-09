@@ -2428,7 +2428,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param function callback
-	 * @param optional any The value of a node or an element object (Use cursor value if not specified)
+	 * @param optional any value The value of a node or an element object (Use cursor value if not specified)
 	 * @return boolean
 	 */
 	f_mapHierarchicalValues: function(callback, value) {
@@ -2467,8 +2467,8 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional any The value of a node or an element object (Use cursor value if not specified)
-	 * @return String[]
+	 * @param optional any value The value of a node or an element object (Use cursor value if not specified)
+	 * @return String[] Returns Hierarchical values which are opened.
 	 */
 	f_getHierachicalValues: function(value) {
 		var values=new Array;		

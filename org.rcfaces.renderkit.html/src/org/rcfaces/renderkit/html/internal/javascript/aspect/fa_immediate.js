@@ -28,7 +28,7 @@ var __members = {
 		return this._immediate;
 	},
 	/**
-	 * @method public
+	 * @method hidden
 	 * @param optional boolean set
 	 * @return void
 	 */

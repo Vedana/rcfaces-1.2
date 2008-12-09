@@ -265,7 +265,7 @@ var __statics = {
     },
     */
     /**
-     * @method public static
+     * @method hidden static
      * @param HTMLDocument docBase document
      * @param HTMLElement selectComp Select
      * @param object column

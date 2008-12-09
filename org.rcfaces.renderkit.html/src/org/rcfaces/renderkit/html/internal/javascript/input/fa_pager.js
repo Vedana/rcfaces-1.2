@@ -12,7 +12,7 @@
 var __members = {
 	
 	/**
-	 * @method public abstract
+	 * @method protected abstract
 	 * @return void
 	 */
 	fa_pagedComponentInitialized: f_class.ABSTRACT

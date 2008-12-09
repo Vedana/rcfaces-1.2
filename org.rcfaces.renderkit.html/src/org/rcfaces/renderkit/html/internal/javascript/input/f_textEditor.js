@@ -558,7 +558,7 @@ var __members = {
 		return ret;
 	},
 	/**
-	 * @method public
+	 * @method protected
 	 * @return Object
 	 */
 	f_computeStyle0: function(position) {
@@ -606,7 +606,7 @@ var __members = {
 		return style;
 	},
 	/**
-	 * @method public
+	 * @method protected
 	 * @return Object
 	 */
 	f_computeStyle: function(position) {

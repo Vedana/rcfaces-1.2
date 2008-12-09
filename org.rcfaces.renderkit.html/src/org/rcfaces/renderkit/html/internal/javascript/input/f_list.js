@@ -16,7 +16,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param hidden boolean byIndex Returns index 
-	 * @return Object[]
+	 * @return Object Array of values of selected items.
 	 */
 	f_getValue: function(byIndex) {
 		var items = this.options;

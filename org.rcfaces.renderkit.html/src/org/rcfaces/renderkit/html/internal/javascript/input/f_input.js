@@ -295,7 +295,7 @@ var __members = {
 	 * Returns the value associated to the input component.
 	 *
 	 * @method public
-	 * @return String The value associated.
+	 * @return Object The value associated.
 	 */
 	f_getValue: function() {
 		var validator=this._validator;

@@ -751,7 +751,7 @@ var __members = {
 	 * @param any... rowValue1 The value of the row to remove
 	 * @return number Number of removed rows.
 	 */
-	f_clear: function(rowValue1, rowValue2) {
+	f_clear: function(rowValue1) {
 		f_core.Assert(this._rows==0 && this._rowCount, "f_componentsGrid.f_clear: All rows of the ComponentsGrid must be loaded (attribute rows=0)");
 		
 		var ret=0;

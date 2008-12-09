@@ -324,11 +324,10 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any value The value of the new row
-	 * @param String columnValue1 A parameter for each column 
-	 * @param String columnValue2 A parameter for each column 
+	 * @param String... columnValue1 A parameter for each column 
 	 * @return Object
 	 */
-	f_addRow: function(value, columnValue1, columnValue2) {
+	f_addRow: function(value, columnValue1) {
 		f_core.Assert(this._rows==0, "All rows of the DataGrid must be loaded (attribute rows=0)");
 		
 		var properties=new Object;
@@ -688,7 +687,7 @@ var __members = {
 	 * @param any... rowValue1 The value of the row to remove
 	 * @return number Number of removed rows.
 	 */
-	f_clear: function(rowValue1, rowValue2) {
+	f_clear: function(rowValue1) {
 		f_core.Assert(this._rows==0, "f_dataGrid.f_clear: All rows of the DataGrid must be loaded (attribute rows=0)");
 		
 		var ret=0;
