@@ -45,7 +45,7 @@ import org.rcfaces.core.lang.provider.ICursorProvider;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public final class ComponentTools {
+public final class ComponentTools extends ComponentTools0 {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComponentTools.class);
@@ -480,18 +480,23 @@ public final class ComponentTools {
             }
         }
 
-        if (found) {
+        if (found == false) {
+            BindingTools.invokeActionListener(facesContext, component,
+                    facesEvent);
+
+            // Invoke the default ActionListener
+            ActionListener listener = facesContext.getApplication()
+                    .getActionListener();
+            if (listener != null) {
+                listener.processAction(facesEvent);
+            }
+        }
+
+        if (facesContext.getRenderResponse()) {
             return;
         }
 
-        BindingTools.invokeActionListener(facesContext, component, facesEvent);
-
-        // Invoke the default ActionListener
-        ActionListener listener = facesContext.getApplication()
-                .getActionListener();
-        if (listener != null) {
-            listener.processAction(facesEvent);
-        }
+        broadcastActionCommand(facesContext, component);
     }
 
     public static UIComponent[] listChildren(FacesContext facesContext,
@@ -668,7 +673,7 @@ public final class ComponentTools {
                 LOG.debug("Partial async decode enabled for component '"
                         + clientId + "' phase='" + phaseId + "'.");
             }
-            
+
             return true;
         }
 
