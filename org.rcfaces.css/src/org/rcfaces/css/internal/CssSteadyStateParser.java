@@ -7,15 +7,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.faces.context.FacesContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.content.IOperationContentLoader;
 import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel.ContentInformation;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.util.IPath;
 import org.rcfaces.core.internal.util.Path;
+import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 import org.w3c.css.sac.ConditionalSelector;
 import org.w3c.css.sac.DescendantSelector;
@@ -35,6 +35,7 @@ import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 import org.w3c.dom.css.CSSValue;
 import org.w3c.dom.css.CSSValueList;
+import org.w3c.dom.stylesheets.MediaList;
 
 import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.parser.selectors.SelectorsRule;
@@ -77,10 +78,11 @@ public class CssSteadyStateParser implements ICssParser {
         return "Steady State Css parser";
     }
 
-    public String mergesBuffer(Map applicationParameters,
+    public String normalizeBuffer(Map applicationParameters,
             IResourceLoaderFactory resourceLoaderFactory, String baseURL,
             String styleSheetContent, IParserContext parserContext,
-            IOperationContentLoader operationContentLoader) throws IOException {
+            IOperationContentLoader operationContentLoader, boolean mergeLinks)
+            throws IOException {
 
         CSSOMParser parser = new CSSOMParser();
 
@@ -97,19 +99,22 @@ public class CssSteadyStateParser implements ICssParser {
                     + "'");
         }
 
-        computeStyleSheet(styleSheet, base, relative, new ParserContext(
-                resourceLoaderFactory, parserContext), operationContentLoader);
+        computeStyleSheet(styleSheet, base, relative, new CSSParserContext(
+                resourceLoaderFactory, parserContext, mergeLinks),
+                operationContentLoader);
 
         return styleSheet.toString();
     }
 
-    private void computeStyleSheet(CSSStyleSheet styleSheet, IPath base,
-            IPath relativePath, ParserContext parserContext,
+    private void computeStyleSheet(CSSStyleSheet styleSheet, IPath basePath,
+            IPath relativePath, CSSParserContext cssParserContext,
             IOperationContentLoader operationContentLoader) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Refactor stylesheet: '" + base + "'.");
+            LOG.debug("Refactor stylesheet: '" + basePath + "'.");
         }
+
+        IParserContext parserContext = cssParserContext.parserContext;
 
         CSSRuleList ruleList = styleSheet.getCssRules();
         for (int i = 0; i < ruleList.getLength(); i++) {
@@ -131,7 +136,7 @@ public class CssSteadyStateParser implements ICssParser {
 
                 if (styleRule instanceof SelectorsRule) {
                     verifySelectors(((SelectorsRule) styleRule)
-                            .getSelectorList(), base.toString());
+                            .getSelectorList(), basePath.toString());
                 }
 
                 for (int j = 0; j < declaration.getLength(); j++) {
@@ -139,18 +144,8 @@ public class CssSteadyStateParser implements ICssParser {
 
                     CSSValue value = declaration.getPropertyCSSValue(property);
 
-                    if (value instanceof CSSPrimitiveValue) {
-                        alterCssValue((CSSPrimitiveValue) value, relativePath);
-                    }
-
-                    if (value instanceof CSSValueList) {
-                        CSSValueList list = (CSSValueList) value;
-
-                        for (int k = 0; k < list.getLength(); k++) {
-                            alterCssValue((CSSPrimitiveValue) list.item(k),
-                                    relativePath);
-                        }
-                    }
+                    alterCssValue(cssParserContext, basePath, value,
+                            relativePath);
                 }
 
                 continue;
@@ -197,14 +192,15 @@ public class CssSteadyStateParser implements ICssParser {
 
             // @TODO on doit verifier les medias ...
 
-            IPath newPath = new Path(href);
+            IPath contextRelativePath = new Path(href);
 
-            IPath newRelativePath = relativePath.append(newPath
+            IPath newRelativePath = relativePath.append(contextRelativePath
                     .removeLastSegments(1));
 
-            newPath = base.removeLastSegments(1).append(newPath);
+            contextRelativePath = basePath.removeLastSegments(1).append(
+                    contextRelativePath);
 
-            String importedPath = newPath.toString();
+            String importedPath = contextRelativePath.toString();
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Import rule detected: '" + href + "' realPath='"
@@ -212,14 +208,40 @@ public class CssSteadyStateParser implements ICssParser {
                         + "'.");
             }
 
+            if (cssParserContext.mergeLinks == false) {
+                // Il faut obtenir une URL versionnée ! (avec le contenu
+                // versionné !)
+
+                if (parserContext.isVersioningEnabled()) { // Forcement
+                    IPath newVersionedPath = parserContext
+                            .processVersioning(basePath, contextRelativePath,
+                                    IContentFamily.STYLE);
+
+                    if (newVersionedPath.equals(contextRelativePath) == false) {
+                        StringAppender sa = new StringAppender("@import url(",
+                                256).append(newVersionedPath.toString())
+                                .append(')');
+
+                        MediaList mediaList = importRule.getMedia();
+                        if (mediaList != null) {
+                            sa.append(' ').append(mediaList.toString());
+                        }
+                        sa.append(';');
+
+                        importRule.setCssText(sa.toString());
+                    }
+                }
+
+                continue;
+            }
+
             try {
                 ContentInformation contentInformationRef[] = new ContentInformation[1];
 
                 String childContent = operationContentLoader.loadContent(
-                        parserContext.facesContext,
-                        parserContext.resourceLoaderFactory, importedPath,
-                        parserContext.parserContext.getCharset(),
-                        contentInformationRef);
+                        parserContext.getFacesContext(),
+                        cssParserContext.resourceLoaderFactory, importedPath,
+                        parserContext.getCharset(), contentInformationRef);
 
                 if (childContent == null) {
                     LOG.error("Can not load css resource '" + importedPath
@@ -230,12 +252,11 @@ public class CssSteadyStateParser implements ICssParser {
                 if (contentInformationRef[0] != null) {
                     ContentInformation contentInformation = contentInformationRef[0];
 
-                    IParserContext pc = parserContext.parserContext;
-
                     long lastModified = contentInformation.getLastModified();
-                    if (pc.getLastModifiedDate() < 0
-                            || lastModified > pc.getLastModifiedDate()) {
-                        pc.setLastModifiedDate(lastModified);
+                    if (parserContext.getLastModifiedDate() < 0
+                            || lastModified > parserContext
+                                    .getLastModifiedDate()) {
+                        parserContext.setLastModifiedDate(lastModified);
                     }
                 }
 
@@ -248,8 +269,9 @@ public class CssSteadyStateParser implements ICssParser {
                 CSSStyleSheet importedStyleSheet = parser
                         .parseStyleSheet(inputSource);
 
-                computeStyleSheet(importedStyleSheet, newPath, newRelativePath,
-                        parserContext, operationContentLoader);
+                computeStyleSheet(importedStyleSheet, contextRelativePath,
+                        newRelativePath, cssParserContext,
+                        operationContentLoader);
 
                 styleSheet.deleteRule(i);
 
@@ -282,7 +304,25 @@ public class CssSteadyStateParser implements ICssParser {
         }
 
         if (LOG.isTraceEnabled()) {
-            LOG.debug("Css content of '" + base + "': " + styleSheet);
+            LOG.debug("Css content of '" + basePath + "': " + styleSheet);
+        }
+    }
+
+    private void alterCssValue(CSSParserContext cssParserContext,
+            IPath basePath, CSSValue value, IPath relativePath) {
+
+        if (value instanceof CSSPrimitiveValue) {
+            alterCssPrimitiveValue(cssParserContext, basePath,
+                    (CSSPrimitiveValue) value, relativePath);
+        }
+
+        if (value instanceof CSSValueList) {
+            CSSValueList list = (CSSValueList) value;
+
+            for (int k = 0; k < list.getLength(); k++) {
+                alterCssPrimitiveValue(cssParserContext, basePath,
+                        (CSSPrimitiveValue) list.item(k), relativePath);
+            }
         }
     }
 
@@ -337,7 +377,8 @@ public class CssSteadyStateParser implements ICssParser {
         }
     }
 
-    private void alterCssValue(CSSPrimitiveValue value, IPath relativePath) {
+    private void alterCssPrimitiveValue(CSSParserContext cssParserContext,
+            IPath basePath, CSSPrimitiveValue value, IPath relativePath) {
         if (value.getPrimitiveType() != CSSPrimitiveValue.CSS_URI) {
             return;
         }
@@ -365,13 +406,23 @@ public class CssSteadyStateParser implements ICssParser {
             return;
         }
 
-        IPath newPath = relativePath.append(path);
+        IPath contextRelativePath = basePath.removeLastSegments(1).append(path);
 
-        value.setStringValue(CSSPrimitiveValue.CSS_URI, newPath.toString());
+        if (cssParserContext.parserContext.isVersioningEnabled()) {
+            contextRelativePath = cssParserContext.parserContext
+                    .processVersioning(basePath, contextRelativePath,
+                            IContentFamily.IMAGE);
+        } else if (cssParserContext.mergeLinks) {
+            // La servlet de merge
+            contextRelativePath = new Path("..").append(contextRelativePath);
+        }
+
+        value.setStringValue(CSSPrimitiveValue.CSS_URI, contextRelativePath
+                .toString());
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Path relocation: change path '" + href + "' to '"
-                    + newPath + "'.");
+                    + contextRelativePath + "'.");
         }
     }
 
@@ -391,21 +442,20 @@ public class CssSteadyStateParser implements ICssParser {
      * @author Olivier Oeuillot (latest modification by $Author$)
      * @version $Revision$ $Date$
      */
-    private static class ParserContext {
+    private static class CSSParserContext {
         private static final String REVISION = "$Revision$";
-
-        FacesContext facesContext;
 
         IResourceLoaderFactory resourceLoaderFactory;
 
         IParserContext parserContext;
 
-        public ParserContext(IResourceLoaderFactory resourceLoaderFactory,
-                IParserContext parserContext) {
-            this.facesContext = FacesContext.getCurrentInstance();
+        boolean mergeLinks;
+
+        public CSSParserContext(IResourceLoaderFactory resourceLoaderFactory,
+                IParserContext parserContext, boolean mergeLinks) {
             this.resourceLoaderFactory = resourceLoaderFactory;
             this.parserContext = parserContext;
+            this.mergeLinks = mergeLinks;
         }
-
     }
 }
