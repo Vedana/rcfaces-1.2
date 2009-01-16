@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -159,6 +160,22 @@ public class BindingTools {
         MethodExpression me = component.getActionExpression();
         if (me != null) {
             me.invoke(facesContext.getELContext(), new Object[] { facesEvent });
+        }
+    }
+
+    public static void setBoundValue(FacesContext context,
+            UIComponent component, String attribute, Object value) {
+
+        ValueExpression ve = component.getValueExpression(attribute);
+        if (ve == null) {
+            return;
+        }
+        
+        try {
+            ve.setValue(context.getELContext(), value);
+
+        } catch (Exception ex) {
+            throw new FacesException("Can not set value", ex);
         }
     }
 }

@@ -5,8 +5,10 @@ package org.rcfaces.core.internal.tools;
 
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
@@ -122,6 +124,22 @@ public class BindingTools {
             mb.invoke(facesContext, new Object[] { facesEvent });
         }
 
+    }
+
+    public static void setBoundValue(FacesContext context,
+            UIComponent component, String attributeName, Object localValue) {
+
+        ValueBinding ve = component.getValueBinding(attributeName);
+        if (ve == null) {
+            return;
+        }
+
+        try {
+            ve.setValue(context, localValue);
+
+        } catch (Exception ex) {
+            throw new FacesException("Can not set value", ex);
+        }
     }
 
 }
