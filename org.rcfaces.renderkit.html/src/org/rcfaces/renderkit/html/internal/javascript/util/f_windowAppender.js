@@ -5,7 +5,7 @@
 /**
  * f_windowAppender
  *
- * @class hidden f_windowAppender extends f_object
+ * @class hidden f_windowAppender extends f_object, fa_abstractAppender
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -86,13 +86,14 @@ var __members = {
 			
 		} catch (x)  {
 			alert(x);
-			callback=null;
+			f_windowAppender._callback=null;
 		}
 	}
 }
 
 new f_class("f_windowAppender", {
 	extend: f_object,
+	aspects: [ fa_abstractAppender ],
 	statics: __statics,
 	members: __members
 });

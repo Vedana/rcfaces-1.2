@@ -5,7 +5,7 @@
 /**
  * f_frameSetAppender
  *
- * @class hidden f_frameSetAppender extends f_object
+ * @class hidden f_frameSetAppender extends f_object, fa_abstractAppender
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -62,5 +62,6 @@ var __statics={
 
 new f_class("f_frameSetAppender", {
 	extend: f_object,
+	aspects: [ fa_abstractAppender ],
 	statics: __statics
 });

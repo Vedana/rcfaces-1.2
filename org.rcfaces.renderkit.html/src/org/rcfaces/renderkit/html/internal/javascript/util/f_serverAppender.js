@@ -5,7 +5,7 @@
 /**
  * f_serverAppender
  *
- * @class hidden f_serverAppender extends f_object
+ * @class hidden f_serverAppender extends f_object, fa_abstractAppender
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -161,4 +161,9 @@ var __members = {
 	}
 }
 
-new f_class("f_serverAppender", null, __statics, __members, f_object);
+new f_class("f_serverAppender", {
+	extend: f_object,
+	aspects: [ fa_abstractAppender ],
+	statics: __statics,
+	members: __members
+});

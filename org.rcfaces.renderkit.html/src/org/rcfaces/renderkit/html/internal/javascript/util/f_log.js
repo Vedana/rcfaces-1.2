@@ -203,9 +203,10 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static
+	 * @param fa_abstractAppender... appender
 	 * @return void
 	 */
-	AddAppenders: function() {
+	AddAppenders: function(appender) {
 		var appenders=f_log._Appenders;
 		if (!appenders) {
 			appenders=new Array;
@@ -217,6 +218,11 @@ var __statics = {
 }
 
 var __members = {
+	/**
+	 * @method hidden
+	 * @param String name
+	 * @param optional number level
+	 */
 	f_log: function(name, level) {
 		this.f_super(arguments);
 	

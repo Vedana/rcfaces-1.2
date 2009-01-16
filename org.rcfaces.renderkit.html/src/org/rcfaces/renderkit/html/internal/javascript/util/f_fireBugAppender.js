@@ -5,7 +5,7 @@
 /**
  * f_fireBug appender
  *
- * @class hidden f_fireBugAppender extends f_object
+ * @class hidden f_fireBugAppender extends f_object, fa_abstractAppender
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -127,4 +127,9 @@ var __members = {
 	}
 }
 
-new f_class("f_fireBugAppender", null, __statics, __members, f_object);
+new f_class("f_fireBugAppender", {
+	extend: f_object,
+	aspects: [ fa_abstractAppender ],
+	statics: __statics,
+	members: __members
+});
