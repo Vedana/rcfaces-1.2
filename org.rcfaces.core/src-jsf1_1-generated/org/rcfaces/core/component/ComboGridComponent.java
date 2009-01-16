@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.SortTools;
 import java.util.Arrays;
 import org.rcfaces.core.internal.tools.GridTools;
@@ -22,16 +23,16 @@ import org.rcfaces.core.component.capability.IEditableCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.lang.String;
-import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.AbstractGridComponent;
+import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
@@ -41,6 +42,7 @@ import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
@@ -72,6 +74,8 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	IGridComponent,
 	IComponentValueTypeCapability,
 	ISortedChildrenCapability {
+
+	private static final Log LOG = LogFactory.getLog(ComboGridComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.comboGrid";
 

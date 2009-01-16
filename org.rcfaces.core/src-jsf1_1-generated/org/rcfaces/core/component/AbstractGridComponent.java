@@ -7,6 +7,7 @@ import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.internal.component.CameliaGridComponent;
 import java.lang.Object;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -41,6 +42,7 @@ import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
@@ -73,6 +75,8 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	IInitEventCapability,
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(AbstractGridComponent.class);
 
 	 private transient int rowIndex;
 	 private transient String var;
@@ -1000,24 +1004,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public int getFirst() {
-		return getFirst(null);
+	public int getRows() {
+		return getRows(null);
 	}
 
-	public int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	public int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
 	}
 
-	public void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
+	public void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "first" is set.
+	 * Returns <code>true</code> if the attribute "rows" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
+	public boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	public String getVar() {
@@ -1041,24 +1045,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.VAR);
 	}
 
-	public int getRows() {
-		return getRows(null);
+	public int getFirst() {
+		return getFirst(null);
 	}
 
-	public int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	public int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
 	}
 
-	public void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * Returns <code>true</code> if the attribute "first" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
+	public boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	protected Set getCameliaFields() {

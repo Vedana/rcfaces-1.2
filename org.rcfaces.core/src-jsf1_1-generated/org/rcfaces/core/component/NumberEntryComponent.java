@@ -4,6 +4,7 @@ import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.INumberFormatTypeCapability;
 import java.lang.Object;
+import org.apache.commons.logging.LogFactory;
 import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
@@ -18,8 +19,8 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import org.rcfaces.core.internal.manager.IValidationParameters;
 import java.util.Locale;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.LiteralNumberConverter;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
@@ -47,6 +49,8 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 	ISeverityStyleClassCapability,
 	IAlternateTextCapability,
 	IValidationParameters {
+
+	private static final Log LOG = LogFactory.getLog(NumberEntryComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.numberEntry";
 

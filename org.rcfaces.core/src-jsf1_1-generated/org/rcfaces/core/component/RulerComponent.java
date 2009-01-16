@@ -6,6 +6,7 @@ import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
@@ -42,6 +44,8 @@ public class RulerComponent extends CameliaBaseComponent implements
 	IOrientationCapability,
 	IForegroundBackgroundColorCapability,
 	IAlignmentCapability {
+
+	private static final Log LOG = LogFactory.getLog(RulerComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.ruler";
 

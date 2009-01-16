@@ -1,16 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IForCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 
 /**
@@ -29,6 +31,8 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 	IInitEventCapability,
 	IForCapability,
 	ISeverityStyleClassCapability {
+
+	private static final Log LOG = LogFactory.getLog(StyledMessageComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.styledMessage";
 

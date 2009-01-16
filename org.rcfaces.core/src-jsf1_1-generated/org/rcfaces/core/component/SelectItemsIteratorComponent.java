@@ -2,10 +2,11 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import java.lang.Object;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.LogFactory;
+import java.lang.Object;
 import javax.faces.FacesException;
+import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
@@ -13,11 +14,14 @@ import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.tools.SelectItemsIteratorTools;
 import org.rcfaces.core.internal.component.CameliaItemsComponent;
 import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 
 public class SelectItemsIteratorComponent extends CameliaItemsComponent implements 
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(SelectItemsIteratorComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.selectItemsIterator";
 

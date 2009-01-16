@@ -3,12 +3,14 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -23,6 +25,8 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 	ISizeCapability,
 	IWAIRoleCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(SubmitWaitComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.submitWait";
 

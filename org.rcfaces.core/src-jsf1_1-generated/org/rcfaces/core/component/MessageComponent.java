@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.AbstractMessageComponent;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
@@ -35,6 +37,8 @@ public class MessageComponent extends AbstractMessageComponent implements
 	ISeverityStyleClassCapability,
 	ISeverityImagesCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(MessageComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.message";
 

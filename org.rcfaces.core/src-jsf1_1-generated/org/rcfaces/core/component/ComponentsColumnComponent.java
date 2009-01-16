@@ -7,6 +7,7 @@ import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
@@ -14,8 +15,8 @@ import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
@@ -36,6 +37,7 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 
@@ -66,6 +68,8 @@ public class ComponentsColumnComponent extends CameliaColumnComponent implements
 	ICellToolTipTextSettings,
 	IImageAccessorsCapability,
 	ICellStyleClassSettings {
+
+	private static final Log LOG = LogFactory.getLog(ComponentsColumnComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.componentsColumn";
 

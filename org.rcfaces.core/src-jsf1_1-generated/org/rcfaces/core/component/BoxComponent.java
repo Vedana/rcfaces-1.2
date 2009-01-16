@@ -1,27 +1,30 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
-import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import java.lang.String;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 
 /**
  * <p>The Box Component is a container.</p>
@@ -51,13 +54,16 @@ public class BoxComponent extends AbstractBasicComponent implements
 	IAsyncRenderModeCapability,
 	IAsyncDecodeModeCapability,
 	IVariableScopeCapability,
+	ITypedComponentCapability,
 	IAsyncRenderComponent {
+
+	private static final Log LOG = LogFactory.getLog(BoxComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.box";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","asyncRenderMode","scopeSaveValue","asyncDecodeMode","mouseOverListener","backgroundImageVerticalPosition","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","mouseEnterEffect","type","asyncRenderMode","scopeSaveValue","asyncDecodeMode","mouseOverListener","backgroundImageVerticalPosition","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","mouseExitEffect","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
 	}
 
 	public BoxComponent() {
@@ -405,6 +411,29 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
 	}
 
+	public java.lang.String getType() {
+		return getType(null);
+	}
+
+	/**
+	 * See {@link #getType() getType()} for more details
+	 */
+	public java.lang.String getType(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TYPE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "type" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTypeSetted() {
+		return engine.isPropertySetted(Properties.TYPE);
+	}
+
+	public void setType(java.lang.String type) {
+		engine.setProperty(Properties.TYPE, type);
+	}
+
 	/**
 	 * Returns a boolean value indicating wether the horizontal scroll is shown.
 	 * @return true if the horizontal scrollbar is shown
@@ -475,6 +504,46 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 */
 	public boolean isVerticalScrollSetted() {
 		return engine.isPropertySetted(Properties.VERTICAL_SCROLL);
+	}
+
+	public String getMouseEnterEffect() {
+		return getMouseEnterEffect(null);
+	}
+
+	public String getMouseEnterEffect(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MOUSE_ENTER_EFFECT, facesContext);
+	}
+
+	public void setMouseEnterEffect(String mouseEnterEffect) {
+		engine.setProperty(Properties.MOUSE_ENTER_EFFECT, mouseEnterEffect);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "mouseEnterEffect" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isMouseEnterEffectSetted() {
+		return engine.isPropertySetted(Properties.MOUSE_ENTER_EFFECT);
+	}
+
+	public String getMouseExitEffect() {
+		return getMouseExitEffect(null);
+	}
+
+	public String getMouseExitEffect(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.MOUSE_EXIT_EFFECT, facesContext);
+	}
+
+	public void setMouseExitEffect(String mouseExitEffect) {
+		engine.setProperty(Properties.MOUSE_EXIT_EFFECT, mouseExitEffect);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "mouseExitEffect" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isMouseExitEffectSetted() {
+		return engine.isPropertySetted(Properties.MOUSE_EXIT_EFFECT);
 	}
 
 	protected Set getCameliaFields() {

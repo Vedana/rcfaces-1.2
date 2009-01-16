@@ -1,7 +1,9 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
@@ -10,6 +12,8 @@ import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 
 public class ScopeComponent extends CameliaBaseComponent implements 
 	IVariableScopeCapability {
+
+	private static final Log LOG = LogFactory.getLog(ScopeComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.scope";
 

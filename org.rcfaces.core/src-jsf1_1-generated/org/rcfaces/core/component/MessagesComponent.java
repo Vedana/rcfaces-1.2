@@ -2,7 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import org.rcfaces.core.component.AbstractMessagesComponent;
 import java.util.Set;
@@ -24,6 +26,8 @@ import java.util.HashSet;
  */
 public class MessagesComponent extends AbstractMessagesComponent implements 
 	ISeverityStyleClassCapability {
+
+	private static final Log LOG = LogFactory.getLog(MessagesComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messages";
 

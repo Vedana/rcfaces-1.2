@@ -7,6 +7,7 @@ import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IDialogPriorityCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.component.CameliaOutputComponent;
@@ -35,6 +37,8 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	ILookAndFeelCapability,
 	IWAIRoleCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(ViewDialogComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.viewDialog";
 

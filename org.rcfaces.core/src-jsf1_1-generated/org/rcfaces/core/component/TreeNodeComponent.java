@@ -6,15 +6,17 @@ import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.ExpandableItemComponent;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
 import org.rcfaces.core.component.TreeComponent;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import org.apache.commons.logging.Log;
 
 /**
  * A node belonging to a tree.
@@ -24,6 +26,8 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	IStyleClassCapability,
 	IMenuPopupIdCapability,
 	IInputTypeCapability {
+
+	private static final Log LOG = LogFactory.getLog(TreeNodeComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.treeNode";
 

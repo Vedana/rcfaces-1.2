@@ -1,7 +1,9 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ImageButtonComponent;
 import java.util.Arrays;
 import java.util.Set;
@@ -35,6 +37,8 @@ import org.rcfaces.core.component.capability.IForCapability;
  */
 public class ImagePagerButtonComponent extends ImageButtonComponent implements 
 	IForCapability {
+
+	private static final Log LOG = LogFactory.getLog(ImagePagerButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imagePagerButton";
 

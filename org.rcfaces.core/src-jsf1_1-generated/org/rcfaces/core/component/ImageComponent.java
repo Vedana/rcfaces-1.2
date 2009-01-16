@@ -4,6 +4,7 @@ import java.lang.String;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
@@ -38,6 +40,8 @@ public class ImageComponent extends AbstractOutputComponent implements
 	IAlternateTextCapability,
 	IFilterCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(ImageComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.image";
 

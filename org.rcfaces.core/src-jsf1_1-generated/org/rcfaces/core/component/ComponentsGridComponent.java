@@ -21,13 +21,15 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
@@ -88,6 +90,8 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IGridComponent,
 	IComponentValueTypeCapability,
 	ISortedChildrenCapability {
+
+	private static final Log LOG = LogFactory.getLog(ComponentsGridComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.componentsGrid";
 

@@ -1,17 +1,19 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
-import org.rcfaces.core.component.ISeparatorComponent;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.ISeparatorComponent;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -20,6 +22,8 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 	IVisibilityCapability,
 	IHiddenModeCapability,
 	ISeparatorComponent {
+
+	private static final Log LOG = LogFactory.getLog(AbstractSeparatorComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

@@ -4,6 +4,7 @@ import java.lang.String;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
 import javax.faces.el.ValueBinding;
@@ -16,6 +17,7 @@ import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
@@ -41,6 +43,8 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	IValueChangeEventCapability,
 	IForCapability,
 	ICalendarLayoutCapability {
+
+	private static final Log LOG = LogFactory.getLog(DateChooserComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateChooser";
 

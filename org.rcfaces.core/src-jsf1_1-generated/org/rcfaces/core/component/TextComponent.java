@@ -1,16 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import java.util.Set;
 import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IForCapability;
 
 /**
@@ -34,7 +37,10 @@ public class TextComponent extends AbstractOutputComponent implements
 	IFontCapability,
 	ITextAlignmentCapability,
 	IAccessKeyCapability,
-	IForCapability {
+	IForCapability,
+	ITypedComponentCapability {
+
+	private static final Log LOG = LogFactory.getLog(TextComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.text";
 
@@ -283,40 +289,27 @@ public class TextComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.FOR, forValue);
 	}
 
-	/**
-	 * Returns a string value specifying the type of data (Java) to convert to or from.
-	 * @return type of data
-	 */
-	public String getType() {
+	public java.lang.String getType() {
 		return getType(null);
 	}
 
 	/**
-	 * Returns a string value specifying the type of data (Java) to convert to or from.
-	 * @return type of data
+	 * See {@link #getType() getType()} for more details
 	 */
-	public String getType(javax.faces.context.FacesContext facesContext) {
+	public java.lang.String getType(javax.faces.context.FacesContext facesContext) {
 		return engine.getStringProperty(Properties.TYPE, facesContext);
 	}
 
 	/**
-	 * Sets a string value specifying the type of data (Java) to convert to or from.
-	 * @param type type of data
-	 */
-	public void setType(String type) {
-		engine.setProperty(Properties.TYPE, type);
-	}
-
-	/**
-	 * Sets a string value specifying the type of data (Java) to convert to or from.
-	 * @param type type of data
-	 */
-	/**
 	 * Returns <code>true</code> if the attribute "type" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isTypeSetted() {
+	public final boolean isTypeSetted() {
 		return engine.isPropertySetted(Properties.TYPE);
+	}
+
+	public void setType(java.lang.String type) {
+		engine.setProperty(Properties.TYPE, type);
 	}
 
 	protected Set getCameliaFields() {

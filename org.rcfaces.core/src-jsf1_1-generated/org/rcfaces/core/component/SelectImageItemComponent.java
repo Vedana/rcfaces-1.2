@@ -1,16 +1,18 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.component.CameliaItemComponent;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import java.util.Arrays;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
 
 /**
  * A select item (member of a selectable list) that shows an image.
@@ -18,6 +20,8 @@ import java.util.HashSet;
 public class SelectImageItemComponent extends CameliaItemComponent implements 
 	IImageCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(SelectImageItemComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.selectImageItem";
 

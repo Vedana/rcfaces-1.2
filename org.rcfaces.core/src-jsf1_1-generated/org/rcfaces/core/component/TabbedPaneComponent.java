@@ -4,14 +4,16 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.tools.TabbedPaneTools;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
+import org.rcfaces.core.component.TabComponent;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
-import org.rcfaces.core.component.TabComponent;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.capability.IClosableCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.iterator.ITabIterator;
 
 /**
@@ -31,6 +33,8 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 	ICloseEventCapability,
 	IClosableCapability,
 	IShowValueCapability {
+
+	private static final Log LOG = LogFactory.getLog(TabbedPaneComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tabbedPane";
 

@@ -1,11 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import java.lang.String;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.el.ValueBinding;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
@@ -49,6 +51,8 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	ISelectionEventCapability,
 	IAlternateTextCapability,
 	IMaxTextLengthCapability {
+
+	private static final Log LOG = LogFactory.getLog(TextAreaComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.textArea";
 

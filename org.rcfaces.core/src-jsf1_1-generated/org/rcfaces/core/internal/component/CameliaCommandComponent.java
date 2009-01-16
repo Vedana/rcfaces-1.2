@@ -112,6 +112,12 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 
 	public final String getRendererType() {
 		String rendererType = super.getRendererType();
+		if (rendererType == null) {
+        	if (LOG.isTraceEnabled()) {
+        		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
+        	}
+			return null;
+		}
 
 		if ((this instanceof ILookAndFeelCapability) == false) {
 			return rendererType;
@@ -349,7 +355,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
             varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this, PhaseId.UPDATE_MODEL_VALUES);
         }
 
-        engine.processUpdates(context);
+        processEngineUpdates(context);
 
         super.processUpdates(context);
         
@@ -357,6 +363,10 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
             varScope.popVar(context);
         }
     }
+   
+	protected void processEngineUpdates(FacesContext context) {
+		engine.processUpdates(context);			
+	}
 
 	/*
 	 * (non-Javadoc)

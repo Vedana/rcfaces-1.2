@@ -1,6 +1,8 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.TextEntryComponent;
 import java.util.Arrays;
 import java.util.Set;
@@ -20,6 +22,8 @@ import java.util.HashSet;
  * </p>
  */
 public class PasswordEntryComponent extends TextEntryComponent {
+
+	private static final Log LOG = LogFactory.getLog(PasswordEntryComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.passwordEntry";
 

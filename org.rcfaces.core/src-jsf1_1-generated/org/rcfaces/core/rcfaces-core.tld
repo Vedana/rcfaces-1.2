@@ -6,7 +6,11 @@
 	<short-name>v</short-name>
 	<uri>http://rcfaces.org/core</uri>
 	<tag>
-<description><![CDATA[
+		<name>accelerator</name>
+		<tag-class>org.rcfaces.core.internal.taglib.AcceleratorTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The accelerator Component is a non-visual component.</p>
       <p>It allows to associate an accelerator key to an action or another component.</p>
       <p>The accelerator Component has the following capabilities :
@@ -16,25 +20,21 @@
       </ul>
       </p>
 ]]></description>
-		<name>accelerator</name>
-		<tag-class>org.rcfaces.core.internal.taglib.AcceleratorTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -133,20 +133,20 @@ Executed when the the component is activated by the user.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -352,7 +352,11 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>box</name>
+		<tag-class>org.rcfaces.core.internal.taglib.BoxTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The Box Component is a container.</p>
       <p>It can have a graphical representation or not; But it is mainly used to apply a collective treatment to a set of component, for example show or hide a group of component.</p>
       <p>The Box Component has the following capabilities :
@@ -370,25 +374,21 @@ A string value specifying the margins for the component (compliant to CSS margin
       </ul>
       </p>
 ]]></description>
-		<name>box</name>
-		<tag-class>org.rcfaces.core.internal.taglib.BoxTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -687,6 +687,13 @@ A string value specifying the name of a variable representing a shortcut to a bi
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value specifying the type of data (Java) to convert to or from.
+]]></description>
+			<name>type</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A boolean value indicating wether the horizontal scroll is shown.
 ]]></description>
 			<name>horizontalScroll</name>
@@ -699,9 +706,21 @@ A boolean value indicating wether the vertical scroll is shown.
 			<name>verticalScroll</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>mouseEnterEffect</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mouseExitEffect</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>button</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
       <p>The button Component has the following capabilities :
       <ul>
@@ -714,25 +733,21 @@ A boolean value indicating wether the vertical scroll is shown.
       </ul>
       </p>
 ]]></description>
-		<name>button</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -1130,7 +1145,11 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>checkButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.CheckButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>
       <p>The checkButton Component has the following capabilities :
       <ul>
@@ -1143,25 +1162,21 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
 ]]></description>
-		<name>checkButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.CheckButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -1640,7 +1655,11 @@ A boolean value indicating wether the component is selected.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>checkButton3States</name>
+		<tag-class>org.rcfaces.core.internal.taglib.CheckButton3StatesTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The checkButton3States Component is a <a href="/comps/checkButtonComponent.html">CheckButton</a> with 3 states : Check, unchecked and undefined. It is often used to show the state of a group of checkButtons</p>
       <p>This component is <b>experimental</b>.</p>
       <p>The checkButton3States Component has the following capabilities :
@@ -1654,25 +1673,21 @@ A boolean value indicating wether the component is selected.
       </ul>
       </p>
 ]]></description>
-		<name>checkButton3States</name>
-		<tag-class>org.rcfaces.core.internal.taglib.CheckButton3StatesTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -2116,7 +2131,11 @@ A boolean value indicating wether the selected component is undefined.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>combo</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ComboTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
       <p>The combo Component has the following capabilities :
       <ul>
@@ -2129,25 +2148,21 @@ A boolean value indicating wether the selected component is undefined.
       </ul>
       </p>
 ]]></description>
-		<name>combo</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ComboTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -2587,28 +2602,28 @@ A binded object that hold the filters to use on the server side. This property i
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A button Component highly customizable through its API.
-]]></description>
 		<name>customButton</name>
 		<tag-class>org.rcfaces.core.internal.taglib.CustomButtonTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A button Component highly customizable through its API.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -3015,20 +3030,20 @@ Executed when the the component is activated by the user.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -3310,28 +3325,28 @@ Executed when the component is intialized.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-Specify a column.
-]]></description>
 		<name>dataColumn</name>
 		<tag-class>org.rcfaces.core.internal.taglib.DataColumnTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+Specify a column.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -3654,20 +3669,20 @@ A string value holding the current value of the component.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -3981,7 +3996,11 @@ A string value holding the current value of the component.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>pager</name>
+		<tag-class>org.rcfaces.core.internal.taglib.PagerTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The pager Component is linked to the <a href="/comps/dataGridComponent.html">dataGrid Component</a>.
       It shows informations about the result set (ex: number of available pages) 
       and can give direct access to a specific page ("a la Google").</p>
@@ -3997,25 +4016,21 @@ A string value holding the current value of the component.
       </ul>
       </p>
 ]]></description>
-		<name>pager</name>
-		<tag-class>org.rcfaces.core.internal.taglib.PagerTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -4323,7 +4338,11 @@ A string specifying the message to display when there is no row to display.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>dataGrid</name>
+		<tag-class>org.rcfaces.core.internal.taglib.DataGridTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
       <p>The dataGrid Component has the following capabilities :
       <ul>
@@ -4339,25 +4358,21 @@ A string specifying the message to display when there is no row to display.
       </ul>
       </p>
 ]]></description>
-		<name>dataGrid</name>
-		<tag-class>org.rcfaces.core.internal.taglib.DataGridTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -4655,6 +4670,20 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
@@ -4667,20 +4696,6 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -4958,28 +4973,28 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-Reserved for future use
-]]></description>
 		<name>componentsGrid</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ComponentsGridTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+Reserved for future use
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -5277,6 +5292,20 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
@@ -5289,20 +5318,6 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5494,20 +5509,20 @@ A string value specifying the name of the variable receiving the index of the cu
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -5797,16 +5812,18 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>first</name>
+			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
-			<name>margins</name>
+			<name>rows</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5820,11 +5837,9 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
-			<name>rows</name>
+			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6138,28 +6153,28 @@ A string value specifying the name of the variable receiving the index of the cu
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-Shows the components for each data with pagination.
-]]></description>
 		<name>componentsList</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ComponentsListTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+Shows the components for each data with pagination.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -6457,6 +6472,20 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value holding the current value of the component.
 ]]></description>
 			<name>value</name>
@@ -6469,20 +6498,6 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6564,28 +6579,28 @@ A space-separated list of CSS style class(es) to be applied when this column is 
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-An item specialized for date values.
-]]></description>
 		<name>dateItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.DateItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+An item specialized for date values.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -6702,7 +6717,11 @@ The date value. (format : according the the declared locale)
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>calendar</name>
+		<tag-class>org.rcfaces.core.internal.taglib.CalendarTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The calendar Component shows a calendar. It can be customized in differents ways (days off, holidays, tool tips ...).</p>
       <p>The calendar Component has the following capabilities :
       <ul>
@@ -6717,25 +6736,21 @@ The date value. (format : according the the declared locale)
       </ul>
       </p>
 ]]></description>
-		<name>calendar</name>
-		<tag-class>org.rcfaces.core.internal.taglib.CalendarTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -7219,7 +7234,11 @@ A string specifying the selection mode :
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>dateEntry</name>
+		<tag-class>org.rcfaces.core.internal.taglib.DateEntryTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>
       <p>The dateEntry Component has the following capabilities :
       <ul>
@@ -7234,25 +7253,21 @@ A string specifying the selection mode :
       </ul>
       </p>
 ]]></description>
-		<name>dateEntry</name>
-		<tag-class>org.rcfaces.core.internal.taglib.DateEntryTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -7814,7 +7829,11 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>dateChooser</name>
+		<tag-class>org.rcfaces.core.internal.taglib.DateChooserTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The dateChooser Component is a button that shows a calendar and help the user to choose a date. It can be associated to a entry field, the choosen date is then automatically entered in the field. It works like an <a href="/comps/imageButtonComponent.html">Image Button Component</a>. The dateChooser Component does <b>not</b> provide an Entry field.</p>
       <p>The dateChooser Component has the following capabilities :
       <ul>
@@ -7829,25 +7848,21 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
 ]]></description>
-		<name>dateChooser</name>
-		<tag-class>org.rcfaces.core.internal.taglib.DateChooserTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -8457,7 +8472,11 @@ A string specifying the label associated with the home button.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>expandBar</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ExpandBarTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The expandBar Component is a container that can be collapsed to show only a title bar. Expand Bars can be managed by group : only one element of the group is expanded.</p>
       <p>The expandBar Component has the following capabilities :
       <ul>
@@ -8474,25 +8493,21 @@ A string specifying the label associated with the home button.
       </ul>
       </p>
 ]]></description>
-		<name>expandBar</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ExpandBarTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -8940,28 +8955,28 @@ A string value specifying the text to show when the component is collapsed.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A select item (member of a selectable list) that shows an image.
-]]></description>
 		<name>selectImageItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.SelectImageItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A select item (member of a selectable list) that shows an image.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -9043,20 +9058,20 @@ A boolean value indicating whether the option created
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -9140,28 +9155,28 @@ A string value specifying the tooltip for the component (shown when the pointe h
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
-]]></description>
 		<name>uiImageItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.UIImageItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A select item (member of a selectable list) that shows an image. Ricer than a selectImageItem.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -9293,7 +9308,11 @@ A boolean value indicating whether or not this component should be rendered
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>fieldSet</name>
+		<tag-class>org.rcfaces.core.internal.taglib.FieldSetTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The fieldSet Component is a container with a title (text and/or picture).</p>
       <p>The fieldSet Component has the following capabilities :
       <ul>
@@ -9310,25 +9329,21 @@ A boolean value indicating whether or not this component should be rendered
       </ul>
       </p>
 ]]></description>
-		<name>fieldSet</name>
-		<tag-class>org.rcfaces.core.internal.taglib.FieldSetTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -9689,7 +9704,11 @@ A string value specifying the name of a variable representing a shortcut to a bi
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>helpButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.HelpButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The helpButton Component is an <A href="/comps/imageButtonComponent.html">ImageButton</A>. It opens a new page showing the url specified in the "helpUrl" property of a component linked by the "for" property.</p>
       <p>The helpButton Component has the following capabilities :
       <ul>
@@ -9704,25 +9723,21 @@ A string value specifying the name of a variable representing a shortcut to a bi
       </ul>
       </p>
 ]]></description>
-		<name>helpButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.HelpButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -10234,7 +10249,11 @@ A component's id that express the link between the two components.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>imageSubmitButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImageSubmitButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The ImageSubmitButton Component is a <a href="/comps/submitButtonComponent.html">submitButton Component</a> that can show an image.</p>
       <p>The ImageSubmitButton Component has the following capabilities :
       <ul>
@@ -10248,25 +10267,21 @@ A component's id that express the link between the two components.
       </ul>
       </p>
 ]]></description>
-		<name>imageSubmitButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImageSubmitButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -10771,7 +10786,11 @@ Executed when the component is selected.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>helpMessageZone</name>
+		<tag-class>org.rcfaces.core.internal.taglib.HelpMessageZoneTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The helpMessageZone Component is a placeholder for help messages. The messages are shown when the pointer hover a component and this component has a "helpMessage" property.</p>
       <p>The helpMessageZone Component has the following capabilities :
       <ul>
@@ -10785,25 +10804,21 @@ Executed when the component is selected.
       </ul>
       </p>
 ]]></description>
-		<name>helpMessageZone</name>
-		<tag-class>org.rcfaces.core.internal.taglib.HelpMessageZoneTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -11094,7 +11109,11 @@ A string value specifying the alignement for the text in the component :
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>hyperLink</name>
+		<tag-class>org.rcfaces.core.internal.taglib.HyperLinkTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The hyperLink Component translates into a classic hyperlink and is a <A href="/comps/buttonComponent.html">button</A>.</p>
       <p>The hyperLink Component has the following capabilities :
       <ul>
@@ -11107,25 +11126,21 @@ A string value specifying the alignement for the text in the component :
       </ul>
       </p>
 ]]></description>
-		<name>hyperLink</name>
-		<tag-class>org.rcfaces.core.internal.taglib.HyperLinkTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -11530,7 +11545,11 @@ The converter id to use. as specified in faces-config.xml.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>image</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImageTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
       <p>The image Component has the following capabilities :
       <ul>
@@ -11544,25 +11563,21 @@ The converter id to use. as specified in faces-config.xml.
       </ul>
       </p>
 ]]></description>
-		<name>image</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImageTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -11830,7 +11845,11 @@ A binded object that hold the filters to use on the server side. This property i
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>imageButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImageButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
       <p>The imageButton Component has the following capabilities :
       <ul>
@@ -11844,25 +11863,21 @@ A binded object that hold the filters to use on the server side. This property i
       </ul>
       </p>
 ]]></description>
-		<name>imageButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImageButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -12367,7 +12382,11 @@ Executed when the component is selected.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>hiddenValue</name>
+		<tag-class>org.rcfaces.core.internal.taglib.HiddenValueTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The hiddenValue Component is a non-visual component. It is equivalent to and Input hidden type HTML tag.</p>
       <p>It allows to access and store value on the client and on the server while keeping it concealed. The clientData Component can also be used.</p>
       <p>The hiddenValue Component has the following capability :
@@ -12376,25 +12395,21 @@ Executed when the component is selected.
       </ul>
       </p>
 ]]></description>
-		<name>hiddenValue</name>
-		<tag-class>org.rcfaces.core.internal.taglib.HiddenValueTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -12450,7 +12465,11 @@ A boolean value indicating that this component's value must be
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>imageCheckButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImageCheckButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The imageCheckButton Component is a <a href="/comps/checkButtonComponent.html">checkButton Component</a> with an image instead of the checkBox.</p>
       <p>The imageCheckButton Component has the following capabilities :
       <ul>
@@ -12463,25 +12482,21 @@ A boolean value indicating that this component's value must be
       </ul>
       </p>
 ]]></description>
-		<name>imageCheckButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImageCheckButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -13067,7 +13082,11 @@ Executed when the component is selected.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>imageCombo</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImageComboTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The imageCombo Component is a <a href="/comps/comboComponent.html">combo Component</a> with an image added to the text.</p>
       <p>The imageCombo Component has the following capabilities :
       <ul>
@@ -13080,25 +13099,21 @@ Executed when the component is selected.
       </ul>
       </p>
 ]]></description>
-		<name>imageCombo</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImageComboTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -13606,7 +13621,11 @@ Experimental : do not use!
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>imagePagerButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImagePagerButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The imagePagerButton Component is an <a href="/comps/imageButtonComponent.html">imageButton Component</a> that works like the keyword in the <a href="/comps/pagerComponent.html">pager Component</a> and is linked to the <a href="/comps/dataGridComponent.html">dataGrid Component</a>.
       It shows informations about the result set (ex: number of available pages) 
       and can give direct access to a specific page ("a la Google").</p>
@@ -13631,25 +13650,21 @@ Experimental : do not use!
       </ul>
       </p>
 ]]></description>
-		<name>imagePagerButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImagePagerButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -14181,20 +14196,20 @@ A boolean value indicating wether the component should be hide when it is not av
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -14722,7 +14737,11 @@ A string value specifying the type of data (Java) to convert to or from.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>imageRadioButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImageRadioButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The imageRadioButton Component is a <a href="/comps/radioButtonComponent.html">radioButton Component</a> with an image instead of the rounded box.</p>
       <p>The imageRadioButton Component has the following capabilities :
         <ul>
@@ -14735,25 +14754,21 @@ A string value specifying the type of data (Java) to convert to or from.
       </ul>
       </p>
 ]]></description>
-		<name>imageRadioButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImageRadioButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -15354,7 +15369,11 @@ Executed when the component is selected.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>imageResetButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ImageResetButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The imageResetButton Component is a <a href="/comps/resetButtonComponent.html">resetButton Component</a> that can show an image.</p>
       <p>The imageResetButton Component has the following capabilities :
       <ul>
@@ -15368,25 +15387,21 @@ Executed when the component is selected.
       </ul>
       </p>
 ]]></description>
-		<name>imageResetButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ImageResetButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -15891,7 +15906,11 @@ Executed when the component is selected.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>lineBreak</name>
+		<tag-class>org.rcfaces.core.internal.taglib.LineBreakTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The lineBreak Component is the &lt;BR&gt; HTML equivalent.</p>
       <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
       <p>The lineBreak Component has the following capability :
@@ -15900,25 +15919,21 @@ Executed when the component is selected.
       </ul>
       </p>
 ]]></description>
-		<name>lineBreak</name>
-		<tag-class>org.rcfaces.core.internal.taglib.LineBreakTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -15969,7 +15984,11 @@ A boolean value indicating whether or not this component should be rendered
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>list</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ListTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The list Component is based on the standard HTML tag &lt;SELECT&gt;.</p>
       <p>The list Component has the following capabilities :
       <ul>
@@ -15982,25 +16001,21 @@ A boolean value indicating whether or not this component should be rendered
       </ul>
       </p>
 ]]></description>
-		<name>list</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ListTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -16470,20 +16485,20 @@ An int value specifying the number of rows to be displayed.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -16627,20 +16642,20 @@ A string value specifying the title for the document.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -16752,20 +16767,20 @@ A string value specifying the choosen look of the component.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -16821,7 +16836,11 @@ A string value (as specified by CSS) for the height of the component.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>message</name>
+		<tag-class>org.rcfaces.core.internal.taglib.MessageTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The message Component is a placeholder for error messages (only one is shown).</p>
       <p>The message Component has the following capabilities :
       <ul>
@@ -16835,25 +16854,21 @@ A string value (as specified by CSS) for the height of the component.
       </ul>
       </p>
 ]]></description>
-		<name>message</name>
-		<tag-class>org.rcfaces.core.internal.taglib.MessageTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -17050,10 +17065,9 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>showSummary</name>
+			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17066,16 +17080,17 @@ A boolean value indicating whether the summary portion of displayed messages
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A component's id that express the link between the two components.
 ]]></description>
-			<name>margins</name>
+			<name>for</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A component's id that express the link between the two components.
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
 ]]></description>
-			<name>for</name>
+			<name>showSummary</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17182,7 +17197,11 @@ A boolean value indicating wether the component should be shown when a message i
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>messageFieldSet</name>
+		<tag-class>org.rcfaces.core.internal.taglib.MessageFieldSetTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The messageFieldSet Component is a <a href="/comps/fieldSetComponent.html">fieldSet Component</a> combined with a <a href="/comps/messageComponent.html">message COmponent</a> in the title part.</p>
       <p>The messageFieldSet Component has the following capabilities :
       <ul>
@@ -17199,25 +17218,21 @@ A boolean value indicating wether the component should be shown when a message i
       </ul>
       </p>
 ]]></description>
-		<name>messageFieldSet</name>
-		<tag-class>org.rcfaces.core.internal.taglib.MessageFieldSetTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -17667,7 +17682,11 @@ A boolean value indicating wether the component should be get the focus when a m
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>messages</name>
+		<tag-class>org.rcfaces.core.internal.taglib.MessagesTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The messages Component is a placeholder for error messages (several messages can be shown simultaneously).</p>
       <p>The messages Component has the following capabilities :
       <ul>
@@ -17681,25 +17700,21 @@ A boolean value indicating wether the component should be get the focus when a m
       </ul>
       </p>
 ]]></description>
-		<name>messages</name>
-		<tag-class>org.rcfaces.core.internal.taglib.MessagesTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -17896,13 +17911,6 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating if the component specific messages should be shown or not.
-]]></description>
-			<name>globalOnly</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "true".
 ]]></description>
@@ -17914,6 +17922,13 @@ A boolean value indicating whether the summary portion of displayed messages
 A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating if the component specific messages should be shown or not.
+]]></description>
+			<name>globalOnly</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17972,7 +17987,11 @@ A boolean value indicating wether the component should be shown when a message i
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>menu</name>
+		<tag-class>org.rcfaces.core.internal.taglib.MenuTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The menu Component provides a way of creating desktop style menus on web pages. It allows sub-menus, check and radio menu items and image menus. It also provides pop-up menus.</p>
       <p>The menu Component has the following capabilities :
       <ul>
@@ -17985,25 +18004,21 @@ A boolean value indicating wether the component should be shown when a message i
       </ul>
       </p>
 ]]></description>
-		<name>menu</name>
-		<tag-class>org.rcfaces.core.internal.taglib.MenuTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -18098,28 +18113,28 @@ The converter id to use. as specified in faces-config.xml.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-Describes a top-level menu bar.
-]]></description>
 		<name>menuBar</name>
 		<tag-class>org.rcfaces.core.internal.taglib.MenuBarTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+Describes a top-level menu bar.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -18509,28 +18524,28 @@ A boolean value specifying wether the content of the component must be remove be
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A menu item with a check.
-]]></description>
 		<name>menuCheckItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.MenuCheckItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A menu item with a check.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -18757,28 +18772,28 @@ A boolean value specifying wether the content of the component must be remove be
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A menu item
-]]></description>
 		<name>menuItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.MenuItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A menu item
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -19005,28 +19020,28 @@ A boolean value specifying wether the content of the component must be remove be
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A separator Menu item
-]]></description>
 		<name>menuSeparator</name>
 		<tag-class>org.rcfaces.core.internal.taglib.MenuSeparatorTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A separator Menu item
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -19061,28 +19076,28 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A menu item with a radiobutton (see attribute GroupName)
-]]></description>
 		<name>menuRadioItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.MenuRadioItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A menu item with a radiobutton (see attribute GroupName)
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -19323,28 +19338,28 @@ A string specifying the name of the virtual entity that links different componen
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-<b>NOT COMPLETE</b>
-]]></description>
 		<name>numberEntry</name>
 		<tag-class>org.rcfaces.core.internal.taglib.NumberEntryTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+<b>NOT COMPLETE</b>
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -19902,7 +19917,11 @@ An int value specifying the upper limit for the value of the component.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>passwordEntry</name>
+		<tag-class>org.rcfaces.core.internal.taglib.PasswordEntryTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The passwordEntry Component is based on the standard HTML tag &lt;INPUT TYPE="password"&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
       <p>The passwordEntry Component has the following capabilities :
       <ul>
@@ -19915,25 +19934,21 @@ An int value specifying the upper limit for the value of the component.
       </ul>
       </p>
 ]]></description>
-		<name>passwordEntry</name>
-		<tag-class>org.rcfaces.core.internal.taglib.PasswordEntryTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -20468,7 +20483,11 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>progressBar</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ProgressBarTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The progressBar Component indicates the evolution of a task.</p>
       <p>The progressBar Component has the following capabilities :
       <ul>
@@ -20481,25 +20500,21 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
 ]]></description>
-		<name>progressBar</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ProgressBarTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -20892,7 +20907,11 @@ A boolean value indicating wether the value is not determinated.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>progressIndicator</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ProgressIndicatorTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The progressIndicator Component indicates the evolution of a task. It uses the <a href="/comps/progressBarComponent.html">porgressBar Component</a> and add text information to it.</p>
       <p>The progressIndicator Component has the following capabilities :
       <ul>
@@ -20905,25 +20924,21 @@ A boolean value indicating wether the value is not determinated.
       </ul>
       </p>
 ]]></description>
-		<name>progressIndicator</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ProgressIndicatorTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -21107,7 +21122,11 @@ A boolean value indicating wether the value is not determinated.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>suggestTextEntry</name>
+		<tag-class>org.rcfaces.core.internal.taglib.SuggestTextEntryTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The suggestTextEntry is a <a href="/comps/textEntryCOmponent.html">textEntry Component</a> with an autosuggestion feature that shows in the form of a dropdown list.</p>
       <p>The suggestTextEntry Component has the following capabilities :
       <ul>
@@ -21120,25 +21139,21 @@ A boolean value indicating wether the value is not determinated.
       </ul>
       </p>
 ]]></description>
-		<name>suggestTextEntry</name>
-		<tag-class>org.rcfaces.core.internal.taglib.SuggestTextEntryTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -21759,7 +21774,11 @@ A string specifying a converter id or a binding to a converter object. This conv
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>radioButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.RadioButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The radioButton Component is based on the standard HTML tag &lt;INPUT TYPE="radio"&gt;. It can interoperate automatically with other radioButtons from the same group.</p>
       <p>The radioButton Component has the following capabilities :
       <ul>
@@ -21772,25 +21791,21 @@ A string specifying a converter id or a binding to a converter object. This conv
       </ul>
       </p>
 ]]></description>
-		<name>radioButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.RadioButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -22284,7 +22299,11 @@ A boolean value indicating that the user is required to provide a submitted
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>resetButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ResetButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The resetButton Component is based on the standard HTML tag &lt;INPUT TYPE="reset"&gt;. It is a <a href="/comps/buttonComponent.html">button Component</a>.</p>
       <p>The resetButton Component has the following capabilities :
       <ul>
@@ -22297,25 +22316,21 @@ A boolean value indicating that the user is required to provide a submitted
       </ul>
       </p>
 ]]></description>
-		<name>resetButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ResetButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -22713,7 +22728,11 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>ruler</name>
+		<tag-class>org.rcfaces.core.internal.taglib.RulerTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The ruler Component is the &lt;HR&gt; HTML equivalent.</p>
       <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
       <p>The ruler Component has the following capability :
@@ -22725,25 +22744,21 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
 ]]></description>
-		<name>ruler</name>
-		<tag-class>org.rcfaces.core.internal.taglib.RulerTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -22902,20 +22917,20 @@ A string value specifying the margins for the component (compliant to CSS margin
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -22948,7 +22963,11 @@ A string value specifying the name of a variable representing a shortcut to a bi
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>submitButton</name>
+		<tag-class>org.rcfaces.core.internal.taglib.SubmitButtonTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The submitButton Component is based on the standard HTML tag &lt;INPUT TYPE="submit"&gt;. It is a <a href="/comps/buttonComponent.html">button Component</a>.</p>
       <p>The submitButton Component has the following capabilities :
       <ul>
@@ -22961,25 +22980,21 @@ A string value specifying the name of a variable representing a shortcut to a bi
       </ul>
       </p>
 ]]></description>
-		<name>submitButton</name>
-		<tag-class>org.rcfaces.core.internal.taglib.SubmitButtonTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -23377,7 +23392,11 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>spinner</name>
+		<tag-class>org.rcfaces.core.internal.taglib.SpinnerTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The spinner Component is a <a href="/comps/textEntryComponent.html">textEntry Component</a> that accepts numbers and whose value can be incremented or decremented (by a parametrable step) with buttons or the keyboard arrows.</p>
       <p>The spinner Component has the following capabilities :
       <ul>
@@ -23391,25 +23410,21 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
 ]]></description>
-		<name>spinner</name>
-		<tag-class>org.rcfaces.core.internal.taglib.SpinnerTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -23972,7 +23987,11 @@ An int value specifying the step used when increasing/decreasing the value with 
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>styledMessage</name>
+		<tag-class>org.rcfaces.core.internal.taglib.StyledMessageTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 An englobing tag that changes the style class surronuding a component when a particular message is emitted for a component.
 		ex : 
 		&lt;v:styledMessage errorStyleClass="formErreur" for="ef1"&gt;
@@ -23981,25 +24000,21 @@ An englobing tag that changes the style class surronuding a component when a par
 				... /&gt;
 		&lt;/v:styledMessage&gt;
 ]]></description>
-		<name>styledMessage</name>
-		<tag-class>org.rcfaces.core.internal.taglib.StyledMessageTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -24302,7 +24317,11 @@ A boolean value indicating wether the component should be get the focus when a m
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>styledText</name>
+		<tag-class>org.rcfaces.core.internal.taglib.StyledTextTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The styledText Component is a placeholder for displaying "enhanced" text. It accepts any HTML tags. it's a <A href="/comps/textComponent.html">text Component</A></p>
       <p>The styledText Component has the following capabilities :
       <ul>
@@ -24317,25 +24336,21 @@ A boolean value indicating wether the component should be get the focus when a m
       </ul>
       </p>
 ]]></description>
-		<name>styledText</name>
-		<tag-class>org.rcfaces.core.internal.taglib.StyledTextTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -24654,7 +24669,11 @@ A string value specifying the type of data (Java) to convert to or from.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>cardBox</name>
+		<tag-class>org.rcfaces.core.internal.taglib.CardBoxTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The cardBox Component is similar to the <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> without title and borders. It is usefull for showing alternatively different contents on the same page.</p>
       <p>The cardBox Component has the following capabilities :
       <ul>
@@ -24666,25 +24685,21 @@ A string value specifying the type of data (Java) to convert to or from.
       </ul>
       </p>
 ]]></description>
-		<name>cardBox</name>
-		<tag-class>org.rcfaces.core.internal.taglib.CardBoxTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -25113,28 +25128,28 @@ A string value specifying the name of a variable representing a shortcut to a bi
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
-]]></description>
 		<name>card</name>
 		<tag-class>org.rcfaces.core.internal.taglib.CardTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Component</a> and holding the components.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -25426,7 +25441,11 @@ Executed when the component is fully loaded (similar to init for AJAX).
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>tabbedPane</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TabbedPaneTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The tabbedPane Component provides a way to show more information on a single page. It can download the data asynchronously via AJAX.</p>
       <p>The tabbedPane Component has the following capabilities :
       <ul>
@@ -25439,25 +25458,21 @@ Executed when the component is fully loaded (similar to init for AJAX).
       </ul>
       </p>
 ]]></description>
-		<name>tabbedPane</name>
-		<tag-class>org.rcfaces.core.internal.taglib.TabbedPaneTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -25908,28 +25923,28 @@ Experimental : Do not use !
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> and holding the components.
-]]></description>
 		<name>tab</name>
 		<tag-class>org.rcfaces.core.internal.taglib.TabTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane Component</a> and holding the components.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -26311,7 +26326,11 @@ A string that indicates the alphanumeric key used to execute an action from the 
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>text</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TextTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The text Component is a placeholder for displaying text.</p>
       <p>The text Component has the following capabilities :
       <ul>
@@ -26326,25 +26345,21 @@ A string that indicates the alphanumeric key used to execute an action from the 
       </ul>
       </p>
 ]]></description>
-		<name>text</name>
-		<tag-class>org.rcfaces.core.internal.taglib.TextTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -26663,7 +26678,11 @@ A string value specifying the type of data (Java) to convert to or from.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>textArea</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TextAreaTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The textAreaEntry Component is based on the standard HTML tag &lt;TEXTAREA&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
       <p>The textAreaEntry Component has the following capabilities :
       <ul>
@@ -26676,25 +26695,21 @@ A string value specifying the type of data (Java) to convert to or from.
       </ul>
       </p>
 ]]></description>
-		<name>textArea</name>
-		<tag-class>org.rcfaces.core.internal.taglib.TextAreaTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -27220,20 +27235,20 @@ Executed when the the component is activated by the user.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -27737,7 +27752,11 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>textEntry</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TextEntryTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The textEntry Component is based on the standard HTML tag &lt;INPUT TYPE="text"&gt;.</p>
       <p>The textEntry Component has the following capabilities :
       <ul>
@@ -27750,25 +27769,21 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
 ]]></description>
-		<name>textEntry</name>
-		<tag-class>org.rcfaces.core.internal.taglib.TextEntryTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -28303,7 +28318,11 @@ Executed when the the component is activated by the user.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>timeEntry</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TimeEntryTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The timeEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a time.</p>
       <p>The timeEntry Component has the following capabilities :
       <ul>
@@ -28318,25 +28337,21 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
 ]]></description>
-		<name>timeEntry</name>
-		<tag-class>org.rcfaces.core.internal.taglib.TimeEntryTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -28886,28 +28901,28 @@ An int value specifying the step used for the millisecond field when increasing/
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-<b>EXPERIMENTAL</b>
-]]></description>
 		<name>toolBar</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ToolBarTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+<b>EXPERIMENTAL</b>
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -29157,28 +29172,28 @@ A string that indicates the type of border the component should show.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-<b>EXPERIMENTAL</b>
-]]></description>
 		<name>toolFolder</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ToolFolderTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+<b>EXPERIMENTAL</b>
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -29420,20 +29435,20 @@ A string that indicates the type of border the component should show.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -29694,20 +29709,20 @@ A component's id that express the link between the two components.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -30167,20 +30182,20 @@ A string value specifying the type of data (Java) to convert to or from.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -30681,28 +30696,28 @@ A string that represent the vertical alignement of the data in the component.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-<b>EXPERIMENTAL</b>
-]]></description>
 		<name>toolItem</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ToolItemTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+<b>EXPERIMENTAL</b>
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -30924,28 +30939,28 @@ A boolean value indicating that this component's value must be
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-<b>EXPERIMENTAL</b>
-]]></description>
 		<name>toolItemSeparator</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ToolItemSeparatorTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+<b>EXPERIMENTAL</b>
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -30984,7 +30999,11 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>tree</name>
+		<tag-class>org.rcfaces.core.internal.taglib.TreeTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The tree Component shows informations in an arborescent view. 
       It can be compared to the tree found in most modern file explorer. 
       It allows contextual menus ...</p>
@@ -31001,25 +31020,21 @@ A string value specifying the management of invisible state on the client.
       </ul>
       </p>
 ]]></description>
-		<name>tree</name>
-		<tag-class>org.rcfaces.core.internal.taglib.TreeTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -31625,20 +31640,20 @@ A boolean value that indicates wether a node is identified by it's value or by a
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -32150,28 +32165,28 @@ An url string pointing to the default image for the disabled state.
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-A node belonging to a tree.
-]]></description>
 		<name>treeNode</name>
 		<tag-class>org.rcfaces.core.internal.taglib.TreeNodeTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+A node belonging to a tree.
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -32384,29 +32399,29 @@ Experimental:		A string value specifying the type of input to show radio button 
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
-<p>The focusManager Component is a non-visual component.</p>
-      <p>It allows to deal with the focus on the current page.</p>
-]]></description>
 		<name>focusManager</name>
 		<tag-class>org.rcfaces.core.internal.taglib.FocusManagerTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
+		<description><![CDATA[
+<p>The focusManager Component is a non-visual component.</p>
+      <p>It allows to deal with the focus on the current page.</p>
+]]></description>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -32438,20 +32453,20 @@ A boolean value indicating wether the component should be get the focus when a m
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -32561,20 +32576,20 @@ A string value describing the item.
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -32602,7 +32617,11 @@ Executed when a component's property is changed (by javascript).
 		</attribute>
 	</tag>
 	<tag>
-<description><![CDATA[
+		<name>service</name>
+		<tag-class>org.rcfaces.core.internal.taglib.ServiceTag</tag-class>
+		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[
 <p>The service Component is a non-visual component.</p>
       <p>It allows to (synchronously or asynchronously) call AJAX services from the client.</p>
       <p>The service Component has the following capability :
@@ -32611,25 +32630,21 @@ Executed when a component's property is changed (by javascript).
       </ul>
       </p>
 ]]></description>
-		<name>service</name>
-		<tag-class>org.rcfaces.core.internal.taglib.ServiceTag</tag-class>
-		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
-		<body-content>JSP</body-content>
 		<attribute>
+			<name>id</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 A string specifying the identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
 ]]></description>
-			<name>id</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>binding</name>
+			<rtexprvalue>false</rtexprvalue>
 			<description><![CDATA[
 The value binding expression linking this component to a property in a backing bean.
 ]]></description>
-			<name>binding</name>
-			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[

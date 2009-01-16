@@ -115,6 +115,10 @@ public class TextTag extends AbstractOutputTag implements Tag {
 		this.forValue = forValue;
 	}
 
+	public final String getType() {
+		return type;
+	}
+
 	public final void setType(String type) {
 		this.type = type;
 	}

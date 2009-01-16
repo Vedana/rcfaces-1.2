@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
@@ -18,11 +19,12 @@ import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
 import org.rcfaces.core.component.ToolBarComponent;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.apache.commons.logging.Log;
 import javax.faces.component.NamingContainer;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
@@ -38,6 +40,8 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	IDisabledCapability,
 	IReadOnlyCapability,
 	NamingContainer {
+
+	private static final Log LOG = LogFactory.getLog(ItemsListComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.itemsList";
 

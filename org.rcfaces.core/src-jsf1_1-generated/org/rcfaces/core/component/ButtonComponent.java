@@ -2,15 +2,17 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractCommandComponent;
+import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
@@ -33,6 +35,8 @@ public class ButtonComponent extends AbstractCommandComponent implements
 	IReadOnlyCapability,
 	IAlternateTextCapability,
 	IFocusStyleClassCapability {
+
+	private static final Log LOG = LogFactory.getLog(ButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.button";
 

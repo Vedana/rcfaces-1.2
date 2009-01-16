@@ -1,6 +1,8 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ButtonComponent;
 import java.util.Arrays;
 import java.util.Set;
@@ -20,6 +22,8 @@ import java.util.HashSet;
  * </p>
  */
 public class ResetButtonComponent extends ButtonComponent {
+
+	private static final Log LOG = LogFactory.getLog(ResetButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.resetButton";
 

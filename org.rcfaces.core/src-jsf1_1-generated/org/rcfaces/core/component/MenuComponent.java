@@ -3,8 +3,9 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
@@ -16,6 +17,7 @@ import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.internal.tools.CheckTools;
 
@@ -41,6 +43,8 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	ICheckComponent,
 	IComponentValueTypeCapability,
 	IMenuComponent {
+
+	private static final Log LOG = LogFactory.getLog(MenuComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menu";
 

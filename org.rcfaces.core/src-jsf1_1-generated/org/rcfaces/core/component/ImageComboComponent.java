@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import org.rcfaces.core.component.AbstractMenuComponent;
 import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
@@ -32,6 +34,8 @@ import org.rcfaces.core.component.familly.IContentAccessors;
 public class ImageComboComponent extends AbstractMenuComponent implements 
 	IImageButtonFamilly,
 	IShowDropDownMarkCapability {
+
+	private static final Log LOG = LogFactory.getLog(ImageComboComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageCombo";
 

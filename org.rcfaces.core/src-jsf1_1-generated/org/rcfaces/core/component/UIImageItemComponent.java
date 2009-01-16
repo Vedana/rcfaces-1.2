@@ -4,13 +4,15 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.SelectItemComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import javax.faces.el.ValueBinding;
 import java.util.Arrays;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
@@ -22,6 +24,8 @@ public class UIImageItemComponent extends SelectItemComponent implements
 	IStatesImageCapability,
 	IAlternateTextCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(UIImageItemComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.UIImageItem";
 

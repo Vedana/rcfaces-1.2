@@ -5,6 +5,7 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -23,6 +24,7 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 
@@ -41,6 +43,8 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	IWAIRoleCapability,
 	ISelectionEventCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(MessageDialogComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messageDialog";
 

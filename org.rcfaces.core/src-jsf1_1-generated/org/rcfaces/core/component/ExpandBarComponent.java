@@ -5,13 +5,14 @@ import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICollapsableCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
@@ -24,6 +25,7 @@ import java.util.Set;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
@@ -61,6 +63,8 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	ILoadEventCapability,
 	IVariableScopeCapability,
 	IAsyncRenderComponent {
+
+	private static final Log LOG = LogFactory.getLog(ExpandBarComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.expandBar";
 

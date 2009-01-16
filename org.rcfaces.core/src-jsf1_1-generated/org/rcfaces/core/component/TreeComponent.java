@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
@@ -26,8 +27,8 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
@@ -41,6 +42,7 @@ import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.util.ComponentIterators;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
 import org.rcfaces.core.internal.capability.ISelectionComponent;
@@ -87,6 +89,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	ISelectionComponent,
 	ICheckComponent,
 	IComponentValueTypeCapability {
+
+	private static final Log LOG = LogFactory.getLog(TreeComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tree";
 

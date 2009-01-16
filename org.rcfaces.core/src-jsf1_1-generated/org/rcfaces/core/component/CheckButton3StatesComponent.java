@@ -4,16 +4,18 @@ import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
 import org.rcfaces.core.component.capability.ISelected3StatesCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
@@ -41,6 +43,8 @@ public class CheckButton3StatesComponent extends AbstractInputComponent implemen
 	IAlternateTextCapability,
 	IFocusStyleClassCapability,
 	ISelected3StatesCapability {
+
+	private static final Log LOG = LogFactory.getLog(CheckButton3StatesComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.checkButton3States";
 

@@ -3,7 +3,9 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.CameliaCommandComponent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IKeyPressEventCapability;
 import java.util.Arrays;
 import java.util.Set;
@@ -26,6 +28,8 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	IImmediateCapability,
 	IValidationEventCapability,
 	IForCapability {
+
+	private static final Log LOG = LogFactory.getLog(AcceleratorComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.accelerator";
 

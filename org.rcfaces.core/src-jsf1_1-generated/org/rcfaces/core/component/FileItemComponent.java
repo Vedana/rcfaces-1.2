@@ -2,13 +2,17 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.component.CameliaItemComponent;
 import javax.faces.el.ValueBinding;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 
 public abstract class FileItemComponent extends CameliaItemComponent {
+
+	private static final Log LOG = LogFactory.getLog(FileItemComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemComponent.CAMELIA_ATTRIBUTES);
 	static {

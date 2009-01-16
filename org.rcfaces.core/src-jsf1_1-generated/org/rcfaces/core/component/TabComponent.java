@@ -7,6 +7,7 @@ import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
@@ -18,6 +19,7 @@ import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.TabbedPaneComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
@@ -35,6 +37,8 @@ public class TabComponent extends CardComponent implements
 	IAccessKeyCapability,
 	IMenuCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(TabComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tab";
 

@@ -1,8 +1,9 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.capability.ICheckComponent;
@@ -14,6 +15,7 @@ import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractConverterCommandComponent;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
@@ -29,6 +31,8 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 	ICheckComponent,
 	IComponentValueTypeCapability,
 	IMenuComponent {
+
+	private static final Log LOG = LogFactory.getLog(AbstractMenuComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractConverterCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
