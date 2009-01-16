@@ -29,6 +29,8 @@ public class AbstractInformation implements StateHolder,
 
     private static final Log LOG = LogFactory.getLog(AbstractInformation.class);
 
+    private static final int INITIAL_KEY_SIZE = 4096;
+
     private Map attributes;
 
     private boolean transientState;
@@ -71,7 +73,7 @@ public class AbstractInformation implements StateHolder,
             return cachedParticipeKey;
         }
 
-        StringAppender sa = new StringAppender(1024);
+        StringAppender sa = new StringAppender(INITIAL_KEY_SIZE);
         participeKey(sa);
 
         cachedParticipeKey = sa.toString();

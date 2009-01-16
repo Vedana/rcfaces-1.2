@@ -66,7 +66,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
             resourceKey = HashCodeTools.computeURLFormat(null, resourceKey,
                     resourceKey, -1);
 
-            StringAppender sa = new StringAppender(resourceKey, 64);
+            StringAppender sa = new StringAppender(resourceKey, 256);
 
             content.appendHashInformations(sa);
 
@@ -90,6 +90,8 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
             return url;
         }
 
+        // Il faut creer une clef artificielle ...
+        
         int id;
         synchronized (BasicContentStorageRepository.class) {
             id = BasicContentStorageRepository.id++;
@@ -109,7 +111,7 @@ public class BasicContentStorageRepository implements IContentStorageRepository 
         }
 
         String url = sa.toString();
-        content.setVersioned(false);
+        content.setVersioned(false); // ha ???
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Generated url='" + url + "' for " + content);

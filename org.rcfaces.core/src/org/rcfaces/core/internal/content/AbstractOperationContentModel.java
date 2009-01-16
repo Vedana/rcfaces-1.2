@@ -44,6 +44,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     private static final Log LOG = LogFactory
             .getLog(AbstractOperationContentModel.class);
 
+    private static final int RESOURCE_KEY_INITIAL_SIZE = 4096;
+
     private static final FileNameMap fileNameMap = URLConnection
             .getFileNameMap();
 
@@ -273,7 +275,8 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     public String getResourceKey() {
         synchronized (this) {
             if (resourceKey == null) {
-                StringAppender sa = new StringAppender(operationId, 128);
+                StringAppender sa = new StringAppender(operationId,
+                        RESOURCE_KEY_INITIAL_SIZE);
 
                 if (filterParametersToParse != null) {
                     sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
@@ -317,7 +320,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     public void appendHashInformations(StringAppender sa) {
         loadSourceInfos(null);
 
-        StringAppender sa2 = new StringAppender(64);
+        StringAppender sa2 = new StringAppender(512);
 
         String url = getResourceURL();
         if (url != null) {
