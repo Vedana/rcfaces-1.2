@@ -35,8 +35,8 @@ import org.xml.sax.Attributes;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class JavaScriptRepository extends BasicHierarchicalRepository
-        implements IJavaScriptRepository {
+public class JavaScriptRepository extends BasicHierarchicalRepository implements
+        IJavaScriptRepository {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 7359720004642078904L;
@@ -216,7 +216,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository
                 super.begin(namespace, name, attributes);
 
                 String convertSymbolsValue = attributes
-                        .getValue("convertSymbols");
+                        .getValue("remapSymbols");
 
                 convertSymbols = (convertSymbolsValue == null)
                         || ("true".equalsIgnoreCase(convertSymbolsValue));
@@ -520,8 +520,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository
                     if (first) {
                         first = false;
 
-                        sa.append("f_resourceBundle.Define(").append(className)
-                                .append(",{\n");
+                        sa.append("f_resourceBundle.Define2(\"").append(
+                                className).append("\",{\n");
                     } else {
                         sa.append(",\n");
                     }

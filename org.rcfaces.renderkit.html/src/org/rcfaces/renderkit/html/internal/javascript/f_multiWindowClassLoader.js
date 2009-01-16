@@ -97,6 +97,11 @@ if (window._RCFACES_LEVEL3) {
 				
 				for(var j=0;j<classes.length;j++) {
 					var clazz=classes[j];
+					
+					if (this._classes[clazz.f_getName()]) { 
+						// Ne pas recharger des classes déjà connues !!!
+						continue;
+					}
 		
 					this._cloneClass(clazz);
 				}
@@ -281,7 +286,7 @@ if (window._RCFACES_LEVEL3) {
 		if (className=="f_resourceBundle") {
 			// On recopie les bundles !
 
-			this._window.f_resourceBundle.SetResources(this._parent._window.f_resourceBundle.CopyResources());
+			this._parent._window.f_resourceBundle.CopyResourcesToChild(this._window.f_resourceBundle.PrepareParentCopy());
 		}
 
 		return newClass;
