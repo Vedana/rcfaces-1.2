@@ -5,7 +5,7 @@
 /**
  * f_textArea class
  *
- * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_immediate
+ * @class public f_textArea extends f_input, fa_required, fa_selectionProvider<f_textSelection>, fa_subMenu, fa_immediate
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -267,7 +267,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return Object  An object which defines fields 'text', 'start' and 'end'
+	 * @return f_textSelection An object which defines fields 'text', 'start' and 'end'
 	 */
 	f_getSelection: function() {
 		// Retourne deux entiers qui positionnent le debut et la fin de la selection
@@ -275,35 +275,27 @@ var __members = {
 		
 		var value=this.f_getText();
 		if (!pos) {
-			return {
-				text: value,
-				start: 0,
-				end: value.length
-			};
+			return new f_textSelection(0, value.length, value);
 		}
 		
-		return {
-			start: pos[0],
-			end: pos[1],
-			text: value.substring(pos[0], pos[1])
-		};
+		return f_textSelection.Create(pos[0], pos[1]-pos[0], value.substring(pos[0], pos[1]));
 	},
 	/**
 	 * @method public
-	 * @param Object selection An object which defines fields 'start' and 'end'
+	 * @param f_textSelection selection An object which defines fields 'start' and 'end'
 	 * @param optional boolean show If possible, show the selection.
 	 * @return void
 	 */
 	f_setSelection: function(selection, show) {
 		// C'est un object avec un champ "start" et eventuellement un champ "end" >= "start"
-		f_core.Assert(typeof(selection)=="object"
-			&& typeof(selection.start)=="number"
-			&& selection.start>=0, "Selection must be an object which defines 'start' and 'end' field with positive numbers.");
+		f_core.Assert(selection instanceof f_textSelection, "f_textArea.f_setSelection: Selection must be an object which defines 'start' and 'end' field with positive numbers.");
 		
-		var start=selection.start;
-		var end=selection.end;
-		if (!end || end<start) {
+		var start=selection.f_getStart();
+		var end=selection.f_getLength();
+		if (!end || end<0) {
 			end=start;
+		} else {
+			end+=start;
 		}
 		
 		f_core.Debug(f_textArea, "f_setSelection: Set selection start="+start+" end="+end+".");
