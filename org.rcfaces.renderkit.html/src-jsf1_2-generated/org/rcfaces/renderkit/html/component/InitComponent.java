@@ -26,7 +26,7 @@ public class InitComponent extends CameliaBaseComponent implements
 
 	private static final Log LOG = LogFactory.getLog(InitComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:init";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.init";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

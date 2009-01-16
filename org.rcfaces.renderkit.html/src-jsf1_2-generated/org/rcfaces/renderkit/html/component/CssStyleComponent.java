@@ -18,7 +18,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	private static final Log LOG = LogFactory.getLog(CssStyleComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:cssStyle";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.cssStyle";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

@@ -18,7 +18,7 @@ public class JavaScriptComponent extends CameliaBaseComponent implements
 
 	private static final Log LOG = LogFactory.getLog(JavaScriptComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:javaScript";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.javaScript";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

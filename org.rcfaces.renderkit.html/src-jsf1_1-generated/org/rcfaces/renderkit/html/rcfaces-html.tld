@@ -3,14 +3,14 @@
 <taglib>
 	<tlib-version>1.0</tlib-version>
 	<jsp-version>1.2</jsp-version>
-	<short-name>vh</short-name>
+	<short-name>html</short-name>
 	<uri>http://rcfaces.org/html</uri>
 	<tag>
 		<name>init</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
+		<description><![CDATA[
 <p><b>Mandatory</b>.</p>
 		<p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
 		<p>It <b>must</b> be the first tag for a page.</p>
@@ -136,7 +136,7 @@ A boolean value specifying if the HTML BASE tag must be generated.
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
+		<description><![CDATA[
 Specifies includes and required javascript classes.
 ]]></description>
 		<attribute>
@@ -213,7 +213,7 @@ A string value specifying a list of javascript classes to include.
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.CssStyleTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
+		<description><![CDATA[
 Css style
 ]]></description>
 		<attribute>

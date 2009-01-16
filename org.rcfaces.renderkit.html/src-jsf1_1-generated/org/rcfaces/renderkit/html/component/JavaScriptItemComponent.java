@@ -12,7 +12,7 @@ public class JavaScriptItemComponent extends FileItemComponent {
 
 	private static final Log LOG = LogFactory.getLog(JavaScriptItemComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:javaScriptItem";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.javaScriptItem";
 
 
 	public JavaScriptItemComponent() {

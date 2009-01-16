@@ -13,7 +13,7 @@ public class LoadBundleComponent extends CameliaBaseComponent {
 
 	private static final Log LOG = LogFactory.getLog(LoadBundleComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:loadBundle";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.loadBundle";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

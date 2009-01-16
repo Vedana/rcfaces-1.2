@@ -13,7 +13,7 @@ public class NameSpaceComponent extends CameliaBaseComponent {
 
 	private static final Log LOG = LogFactory.getLog(NameSpaceComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:nameSpace";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.nameSpace";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {

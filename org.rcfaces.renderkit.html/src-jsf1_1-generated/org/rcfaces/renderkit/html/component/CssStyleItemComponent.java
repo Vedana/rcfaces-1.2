@@ -12,7 +12,7 @@ public class CssStyleItemComponent extends FileItemComponent {
 
 	private static final Log LOG = LogFactory.getLog(CssStyleItemComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:cssStyleItem";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.cssStyleItem";
 
 
 	public CssStyleItemComponent() {

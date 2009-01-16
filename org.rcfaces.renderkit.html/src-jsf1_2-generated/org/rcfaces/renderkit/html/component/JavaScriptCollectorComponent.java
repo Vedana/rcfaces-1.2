@@ -13,7 +13,7 @@ public class JavaScriptCollectorComponent extends CameliaBaseComponent {
 
 	private static final Log LOG = LogFactory.getLog(JavaScriptCollectorComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.html:javaScriptCollector";
+	public static final String COMPONENT_TYPE="org.rcfaces.html.javaScriptCollector";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
