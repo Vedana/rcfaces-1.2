@@ -18,6 +18,11 @@ var __statics = {
 	 * @field private static 
 	 */
 	_Loading: undefined,
+	
+	/**
+	 * @field private static 
+	 */
+	_Preloaded: undefined,
 
 	/**
 	 * @method public static final
@@ -49,9 +54,24 @@ var __statics = {
 			return resource;
 		}
 		
+		var preloadedValues=f_resourceBundle._Preloaded;
+		if (preloadedValues) {
+			var pv=preloadedValues[name];
+			if (pv) {
+				delete preloadedValues[name];
+			
+				resource=new f_resourceBundle(name);
+				resources[name]=resource;
+				
+				resource._setAll(pv);
+				
+				return resource;
+			}
+		}
+		
 		if (!create) {
 			f_core.Debug(f_resourceBundle, "Can not find resourceBundle '"+name+"'.");
-			return null;
+			return resource;
 		}
 		
 		resource=new f_resourceBundle(name);
@@ -60,7 +80,7 @@ var __statics = {
 	},
 	
 	/**
-	 * @method static final public
+	 * @method public static final 
 	 * @param String name Name of resourceBundle. (can be a f_class !)
 	 * @param Object values
 	 * @return void
@@ -71,6 +91,22 @@ var __statics = {
 		f_core.Debug(f_resourceBundle, "Define resourceBundle for '"+resourceBundle._name+"' with values '"+values+"'.");
 		
 		resourceBundle._putAll(values);
+	},
+	
+	/**
+	 * @method public static final
+	 * @param String name Name of resourceBundle. (can be a f_class !)
+	 * @param Object values
+	 * @return void
+	 */
+	Define2: function(name, values) {
+		var p=f_resourceBundle._Preloaded;
+		if (!p) {
+			p=new Object;
+			f_resourceBundle._Preloaded=p;
+		}		
+	
+		p[name]=values;
 	},
 	
 	/**
@@ -120,42 +156,48 @@ var __statics = {
 	 * INTERNAL USE: Methodes pour le multiWindow
 	 * 
 	 * @method hidden static
-	 * @return Object
-	 */
-	CopyResources: function() {
-		var newResources=new Object();
-		
-		var resources=f_resourceBundle._Resources;
-		
-		for(var i in resources) {
-			newResources[i]=resources[i];
-		}
-		
-		return newResources;
-	},
-	/**
-	 * INTERNAL USE: Methodes pour le multiWindow
-	 * 
-	 * @method hidden static
-	 * @param Object newResourceBundle
 	 * @return void
 	 */
-	SetResources: function(newResourceBundle) {
-		f_resourceBundle._Resources=newResourceBundle;
+	CopyResourcesToChild: function(newResources) {
+	
+		// On force l'initialisation des resources ...
+		for(var name in f_resourceBundle._Preloaded) {
+			f_resourceBundle.Get(name);
+		}
+
+		var resources=f_resourceBundle._Resources;
+		for(var name in resources) {
+			newResources[name]=resources[name];
+		}
 	},
+	/**
+	 * @method hidden static
+	 * @return Object
+	 */
+	PrepareParentCopy: function() {
+		var newResources=new Object();
+		f_resourceBundle._Resources=newResources;		
+		
+		return newResources;
+	},	
 	
 	/**
 	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
-		f_resourceBundle._Resources=undefined;
+		f_resourceBundle._Resources=undefined; // Map<String, f_resourceBundle>
+//		f_resourceBundle._Preloaded=undefined; // Map<String, Map<String, String>>
 //		f_resourceBundle._Loading=undefined; // Map<String, String>
 	}
 }
 
 
 var __members = {	
+	/**
+	 * @method hidden
+	 * @param String name
+	 */
 	f_resourceBundle: function(name) {
 		this._name=name;
 	},
@@ -269,6 +311,13 @@ var __members = {
 		for(var name in values) {
 			properties[name]=values[name];
 		}
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_setAll: function(values) {
+		this._properties=values;
 	},
 	/**
 	 * @method public
