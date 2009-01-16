@@ -23,6 +23,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository;
 import org.rcfaces.core.internal.repository.IRepository;
+import org.rcfaces.core.internal.repository.IHierarchicalRepository.IHierarchicalFile;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.IModule;
 import org.rcfaces.core.internal.repository.IHierarchicalRepository.ISet;
 import org.rcfaces.core.internal.repository.IRepository.IFile;
@@ -207,6 +208,17 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
             StringTokenizer st = new StringTokenizer(requiredClasses, ",");
             for (; st.hasMoreTokens();) {
                 String className = st.nextToken().trim();
+
+                if ("all".equals(className)) {
+                    IModule mds[] = repository.listModules();
+                    for (int i = 0; i < mds.length; i++) {
+                        IHierarchicalFile rfs[] = mds[i].listDependencies();
+
+                        files.addAll(Arrays.asList(rfs));
+                    }
+
+                    continue;
+                }
 
                 IJavaScriptRepository.IClass clazz = repository
                         .getClassByName(className);
