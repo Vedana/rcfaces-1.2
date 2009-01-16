@@ -72,7 +72,8 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             IGenerationResourceInformation generationInformation) {
 
         return resolveURL(facesContext, contentInformation,
-                generationInformation, ABSOLUTE_PATH_TYPE | RELATIVE_PATH_TYPE);
+                generationInformation, ABSOLUTE_PATH_TYPE | RELATIVE_PATH_TYPE
+                        | EXTERNAL_PATH_TYPE);
     }
 
     public final String resolveURL(FacesContext facesContext,
@@ -166,6 +167,12 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
                 throw new FacesException(
                         "Absolute path type is not into the context '"
                                 + resolvedURLs + "'.");
+            }
+        }
+
+        if ((pathTypeMask & IContentAccessor.EXTERNAL_PATH_TYPE) > 0) {
+            if (currentPathType == IContentAccessor.EXTERNAL_PATH_TYPE) {
+                return resolvedURLs;
             }
         }
 
