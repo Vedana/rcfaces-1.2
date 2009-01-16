@@ -119,6 +119,10 @@
 	cursor: default;
 }
 
+.f_grid_sortManager {
+	background: url('grid/titleNormal.gif') repeat-x bottom #EBEADB;
+}
+
 .f_grid_tcell_over,
 .f_grid_sortManager_over {
 	background: url('grid/titleOver.gif') repeat-x bottom white;
@@ -196,7 +200,7 @@
 }
 
 .f_grid_row {
-//	height: 20px;
+//	xxxheight: 20px;
 }
 
 .f_grid_row_even, 
@@ -283,14 +287,13 @@
 }
 
 .f_grid_colCursor {
-	//background-color: red;
 	position: absolute;
 	top: -2px;
 	right: -8px;
 	width: 16px;
 	height: 18px;
 	cursor: e-resize;
-//	background: url('grid/blank.gif') repeat;
+//	xxxxbackground: url('grid/blank.gif') repeat;
 	z-index:100;
 }
 
@@ -330,7 +333,7 @@
 }
 
 .f_grid_additionalRow {
-//	vertical-align: top;
+//	xxxvertical-align: top;
 }
 
 .f_grid_additional_button_no_content {
@@ -343,8 +346,9 @@
 	right: 0;
 	top: 0;
 	width: 16px;
-	height: 20px;	
+	height: 20px;
 	z-index: 1;
+	cursor: pointer;
 }
 
 .f_grid_sortManager_image {
