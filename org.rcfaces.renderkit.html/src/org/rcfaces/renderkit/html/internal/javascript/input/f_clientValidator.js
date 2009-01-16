@@ -261,7 +261,7 @@ var __statics = {
 		var shift = jsEvent.shiftKey;
 		var ctrl = jsEvent.ctrlKey;
 		var alt = jsEvent.altKey;
-				
+
 		f_core.Debug(f_clientValidator, "_OnKeyUp: keyCode="+keyCode+" shift="+shift+" ctrl="+ctrl+" alt="+alt);
 		
 		validator.f_setInputValue(this._input.value);
@@ -377,6 +377,11 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator val 
+	 * @param RegExp expr
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 */
 	Filter_generic: function(val,expr,keyCode,keyChar) {
 		f_core.Assert(expr instanceof RegExp, "f_clientValidator.Filter_generic: Not a regular expression. '"+expr+"'.");
@@ -387,6 +392,11 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator val 
+	 * @param RegExp expr
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return number
 	 */
 	Translator_generic: function(validator, expr, keyCode, keyChar) {
 		return keyCode;
@@ -398,6 +408,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_msg: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, false);
@@ -405,6 +419,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_msg_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, false);
@@ -412,6 +430,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_msg_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
@@ -419,6 +441,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_msg_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, true);
@@ -426,6 +452,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, false);
@@ -433,6 +463,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, true);
@@ -440,6 +474,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, true);
@@ -447,6 +485,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_null: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, false);
@@ -454,6 +496,10 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
+	 * @param f_clientValidator validator
+	 * @param number type
+	 * @param f_messageObject error
+	 * @return boolean
 	 */
 	Error_default: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
@@ -1367,6 +1413,9 @@ var __members = {
 	},
 	/**
 	 * @method public final
+	 * @param String summary
+	 * @param String detail
+	 * @param number severity
 	 */
 	f_setLastError: function(summary, detail, severity) {
 		f_core.Debug(f_clientValidator, "f_setLastError: summary='"+summary+"' detail='"+detail+"' severity='"+severity+"'.");
@@ -1388,12 +1437,16 @@ var __members = {
 	},
 	/**
 	 * @method public final
+	 * @return Object
 	 */
 	f_getLastError: function() {
 		return this._lastErrorObject;
 	},
 	/**
 	 * @method public final
+	 * @param String name
+	 * @param optional String def Returned value if parameter is not found
+	 * @return String Value associated to the parameter.
 	 */
 	f_getParameter: function(name, def) {
 		if (!this._parameters) {

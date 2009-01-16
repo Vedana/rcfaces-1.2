@@ -64,6 +64,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_alpha: function(validator, keyCode, keyChar) {
@@ -75,6 +79,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_alpha_fr: function(validator, keyCode, keyChar) {
@@ -86,6 +94,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_alphanum: function(validator, keyCode, keyChar) {
@@ -97,6 +109,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_card: function(validator, keyCode, keyChar) {
@@ -105,6 +121,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_code: function(validator, keyCode, keyChar) {
@@ -113,6 +133,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_dat: function(validator, keyCode, keyChar) {
@@ -124,6 +148,10 @@ var __statics = {
 
 	/*
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 *
 	Filter_date: function(validator, keyCode, keyChar) {
@@ -133,6 +161,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_digit: function(validator, keyCode, keyChar) {
@@ -141,6 +173,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_dps: function(validator, keyCode, keyChar) {
@@ -149,6 +185,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_hour: function(validator, keyCode, keyChar) {
@@ -160,6 +200,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_insee: function(validator, keyCode, keyChar) {
@@ -168,6 +212,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_integer: function(validator, keyCode, keyChar) {
@@ -176,6 +224,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_money: function(validator, keyCode, keyChar) {
@@ -184,6 +236,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_name: function(validator, keyCode, keyChar) {
@@ -192,6 +248,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_noblank: function(validator, keyCode, keyChar) {
@@ -200,6 +260,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_num: function(validator, keyCode, keyChar, cache) {
@@ -221,6 +285,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_number: function(validator, keyCode, keyChar) {
@@ -229,6 +297,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_signed: function(validator, keyCode, keyChar) {
@@ -237,6 +309,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_scientific: function(validator, keyCode, keyChar) {
@@ -245,6 +321,10 @@ var __statics = {
 
 	/**
 	 * @method public static
+	 * @param f_clientValidator validator
+	 * @param number keyCode
+	 * @param String keyChar
+	 * @return boolean
 	 * @context object:validator
 	 */
 	Filter_time: function(validator, keyCode, keyChar) {
@@ -1244,7 +1324,7 @@ var __statics = {
 	},
 	
 	/**
-	 * @method public static
+	 * @field public static fa_converter
 	 * @context object:validator
 	 */
 	Converter_dat: {
@@ -1275,7 +1355,7 @@ var __statics = {
 	},
 
 	/**
-	 * @method public static
+	 * @field public static fa_converter
 	 * @context object:validator
 	 */
 	Converter_hour: {
@@ -1319,7 +1399,7 @@ var __statics = {
 	},
 
 	/**
-	 * @method public static
+	 * @field public static fa_converter
 	 * @context object:validator
 	 */
 	Converter_num: {
