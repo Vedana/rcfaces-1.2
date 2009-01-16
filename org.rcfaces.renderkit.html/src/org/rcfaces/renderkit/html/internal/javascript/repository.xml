@@ -38,9 +38,14 @@
 				<required-class name="f_aspect" />
 			</class>
 		</file>
+		<file name="util/fa_abstractAppender.js">
+			<class name="fa_abstractAppender">
+				<required-class name="f_core" />
+			</class>
+		</file>
 		<file name="util/f_log.js">
 			<class name="f_log">
-				<required-class name="f_core" />
+				<required-class name="fa_abstractAppender" />
 			</class>
 		</file>
 		<file name="f_prop.js">
@@ -629,10 +634,15 @@
 
 	<!-- VALIDATOR Components -->
 	<module id="validator">
+		<file name="input/fa_converter.js">
+			<class name="fa_converter">
+			</class>
+		</file>
 		<file name="input/f_clientValidator.js">
 			<class name="f_clientValidator">
 				<required-class name="f_component" />
 				<required-class name="f_messageObject" />
+				<required-class name="fa_converter" />
 			</class>
 		</file>
 		<file name="input/f_vb.js">
@@ -643,6 +653,10 @@
 	</module>
 
 	<module id="popupComponent">
+		<file name="input/f_textSelection.js">
+			<class name="f_textSelection">
+			</class>
+		</file>
 		<file name="input/f_textArea.js">
 			<class name="f_textArea">
 				<required-class name="f_input" />
@@ -650,7 +664,11 @@
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_selectionProvider" />
 				<required-class name="fa_immediate" />
+
+				<required-class name="f_textSelection" />
 				<required-class id="menu" name="f_menu" />
+
+				<required-style name="f_textArea.css" />
 			</class>
 		</file>
 		<file name="input/f_textEntry.js">
@@ -661,6 +679,8 @@
 				<required-class id="features" name="f_vb" />
 				<required-class id="menu" name="f_menu" />
 				
+				<required-class name="f_textSelection" />
+
 				<required-style name="f_textEntry.css" />
 			</class>
 		</file>
@@ -757,23 +777,32 @@
 	</module>
 
 	<module id="items">
-		<file name="input/f_combo.js">
-			<class name="f_combo">
+		<file name="input/f_abstractList.js">
+			<class name="f_abstractList">
 				<required-class name="f_input"/>
 				<required-class name="fa_commands" />
 				<required-class name="fa_filterProperties"/>
-				<required-class name="fa_selectionProvider"/>
 				<required-class name="fa_required"/>
 				<required-class name="fa_immediate"/>
+				
 				<required-class id="filter" name="f_httpRequest" />
 				<required-class id="filter" name="f_waiting" />
+			</class>
+		</file>
+		<file name="input/f_combo.js">
+			<class name="f_combo">
+				<required-class name="f_abstractList"/>
+				<required-class name="fa_selectionProvider"/>
 
 				<required-style name="f_combo.css" />
 			</class>
 		</file>
 		<file name="input/f_list.js">
 			<class name="f_list">
-				<required-class name="f_combo" />
+				<required-class name="f_abstractList" />
+				<required-class name="fa_selectionProvider"/>
+
+				<required-style name="f_list.css" />
 			</class>
 		</file>
 	</module>
