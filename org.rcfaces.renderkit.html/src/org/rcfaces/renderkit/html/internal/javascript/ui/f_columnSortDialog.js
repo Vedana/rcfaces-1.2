@@ -268,7 +268,7 @@ var __statics = {
      * @method hidden static
      * @param HTMLDocument docBase document
      * @param HTMLElement selectComp Select
-     * @param object column
+     * @param Object column
      * @return HTMLOptionElement
      */
     AddOption: function(selectComp, column, columnIndex) {
@@ -296,8 +296,8 @@ var __statics = {
 	/**
 	 *  <p>get the columns.</p>
      * @method public static
-     * @param Object grid
-     * @return Array array of visible columns
+     * @param f_grid grid
+     * @return Object[] array of visible columns
 	 */
 	GetColumns: function(grid) {
 		if (!grid) {
@@ -341,7 +341,7 @@ var __members = {
      * initial values.</p>
 	 *
 	 * @method public
-	 * @param grid
+	 * @param f_grid grid
 	 */
 	f_columnSortDialog: function(grid) {
 		this.f_super(arguments, 

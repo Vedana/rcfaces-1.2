@@ -78,6 +78,9 @@ var __members = {
 	 */
 	 _resourceBundle: undefined,
 	
+	/**
+	 * @method hidden
+	 */
 	f_locale: function() {
 		var resourceBundle=f_resourceBundle.Get(f_locale);
 		this._resourceBundle=resourceBundle;

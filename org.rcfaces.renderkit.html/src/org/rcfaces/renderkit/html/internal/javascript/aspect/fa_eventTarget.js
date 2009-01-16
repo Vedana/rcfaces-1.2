@@ -124,7 +124,7 @@ var __members = {
 	 * @param optional Event jsEvt
 	 * @param optional Object item
 	 * @param optional any value
-	 * @param optional fa_selectionProvider selectionProvider
+	 * @param optional fa_selectionProvider<? extends Object> selectionProvider
 	 * @param optional any detail
 	 * @return boolean
 	 */

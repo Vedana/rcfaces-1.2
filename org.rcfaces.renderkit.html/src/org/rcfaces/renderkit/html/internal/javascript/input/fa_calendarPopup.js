@@ -4,12 +4,12 @@
 
 /**
  * 
- * @aspect public fa_calendarPopup extends fa_itemsWrapper, fa_selectionProvider
+ * @aspect public fa_calendarPopup extends fa_itemsWrapper, fa_selectionProvider<Date>
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 
-var __statics={
+var __statics = {
 	/** 
 	 * @field private static final String 
 	 */
@@ -473,6 +473,11 @@ var __members={
 	f_getCalendarObject: function() {
 		return this._calendar;
 	},
+	/**
+	 * @method private
+	 * @param Event jsEvt
+	 * @return boolean
+	 */
 	_clickOutside: function(jsEvt) {
 		f_core.Debug(fa_calendarPopup, "_clickOutside: popup click outside");
 		
@@ -482,6 +487,7 @@ var __members={
 	/**
 	 * @method public
 	 * @return Date
+	 * @override
 	 */
 	f_getSelection: function() {
 		var calendar=this._calendar;
@@ -496,6 +502,7 @@ var __members={
 	 * @param Date selection
 	 * @param optional boolean showSelection
 	 * @return void
+	 * @override
 	 */
 	f_setSelection: function(selection, showSelection) {
 		var calendar=this._calendar;

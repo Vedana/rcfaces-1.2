@@ -6,7 +6,7 @@
 /**
  * f_classLoader
  *
- * @class public final f_classLoader
+ * @class public f_classLoader
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -24,8 +24,13 @@ function f_classLoader(win) {
 
 	//this._tagId=new Date().getTime() % 100000;	
 	this._window=win;
-	//f_classLoader._window=win;
-
+	if (window._RCFACES_LEVEL3) {
+		// Utilisation en LEVEL3 sans frame 0 !
+		if (win.f_classLoader) { 
+			win.f_classLoader._window=win; // Pour l'acces a Window des methodes statiques
+		}
+	}
+		
 	this._objectPool=new Array;
 	this._componentPool=new Array;
 	this._systemComponentPool=new Array;
@@ -110,7 +115,7 @@ f_classLoader.prototype = {
 		return null;
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param f_class claz
 	 * @return void
 	 * @context object:this
@@ -166,7 +171,7 @@ f_classLoader.prototype = {
 	},
 	
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param f_aspect aspect
 	 * @return void
 	 */
@@ -209,7 +214,7 @@ f_classLoader.prototype = {
 	},
 	
 	/**
-	 * @method hidden
+	 * @method hidden final 
 	 * @return void
 	 */
 	f_onExit: function() {
@@ -398,7 +403,7 @@ f_classLoader.prototype = {
 	},
 	
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @return void
 	 */
 	f_onDocumentComplete: function() {
@@ -437,6 +442,8 @@ f_classLoader.prototype = {
 		nb=0;
 	
 		var documentCompleteObjects = this._documentCompleteObjects;
+		f_core.Assert(documentCompleteObjects, "f_classLoader.f_onDocumentComplete: Document complete objects array is null !");
+		
 		this._documentCompleteObjects=undefined;
 		
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: Calling f_documentComplete methods ... ("+documentCompleteObjects.length+" objects)");
@@ -459,6 +466,12 @@ f_classLoader.prototype = {
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" f_documentComplete method(s) called.");
 	},
 	
+	/**
+	 * @method hidden final
+	 * @param Object object
+	 * @param boolean systemClass
+	 * @return void
+	 */
 	_newInstance: function(object, systemClass) {
 		f_core.Assert(typeof(object)=="object", "f_classLoader._newInstance: Object parameter must be an object ! ("+typeof(object)+")");
 	
@@ -718,7 +731,7 @@ f_classLoader.prototype = {
 		}
 	},
 	/**
-	 * 
+	 * @method private
 	 * @param function[] listeners 
 	 * @param f_object component
 	 * @return boolean
@@ -748,7 +761,7 @@ f_classLoader.prototype = {
 		return ret;
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param String... ids
 	 * @return void
 	 */
@@ -780,7 +793,7 @@ f_classLoader.prototype = {
 		}
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param String... ids
 	 * @return void
 	 */
@@ -796,7 +809,7 @@ f_classLoader.prototype = {
 		onMessageIds.push.apply(onMessageIds, ids);		
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param HTMLFormElement form
 	 * @return void
 	 */
@@ -850,7 +863,7 @@ f_classLoader.prototype = {
 		}
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param String... ids
 	 * @return void
 	 */
@@ -858,7 +871,7 @@ f_classLoader.prototype = {
 		f_key.AddAccessKeyByClientIds(keys);
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param String[] ids
 	 * @return void
 	 */
@@ -874,7 +887,7 @@ f_classLoader.prototype = {
 		onSubmitIds.push.apply(onSubmitIds, ids);
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param HTMLFormElement form
 	 * @return void
 	 */
@@ -890,7 +903,7 @@ f_classLoader.prototype = {
 		this._initializeIds(onSubmitIds);
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param Object ids
 	 * @return void
 	 */
@@ -968,7 +981,7 @@ f_classLoader.prototype = {
 		}
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param Object ids
 	 * @return void
 	 */
@@ -1049,7 +1062,7 @@ f_classLoader.prototype = {
 		}
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param Object obj Object or String
 	 * @param boolean ignoreNotFound
 	 * @return Object
@@ -1285,7 +1298,7 @@ f_classLoader.prototype = {
 		}
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @return String
 	 */
 	f_getSerializedState: function() {
@@ -1304,7 +1317,7 @@ f_classLoader.prototype = {
 		return serial.join(",");		
 	},
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 * @param HTMLFormElement form
 	 * @return void
 	 */
@@ -1326,7 +1339,7 @@ f_classLoader.prototype = {
 	},
 	
 	/**
-	 * @method hidden
+	 * @method hidden final
 	 */
 	f_addVisibleComponentListener: function(component) {
 		f_core.Assert(component.f_performComponentVisible, "Callback 'f_performComponentVisible' not found !");

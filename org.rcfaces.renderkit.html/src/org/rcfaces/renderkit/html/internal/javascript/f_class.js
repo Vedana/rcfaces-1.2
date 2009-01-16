@@ -761,6 +761,11 @@ var __members = {
 	
 	/**
 	 * @context window:window
+	 * @param String className
+	 * @param optional String lookId
+	 * @param optional Object staticMembers
+	 * @param optional Object members
+	 * @param optional f_class parentClass
 	 * @dontInline f_classLoader
 	 */
 	f_class: function(className, lookId, staticMembers, members, parentClass) {
@@ -843,7 +848,7 @@ var __members = {
 			staticMembers.f_getName=f_class.f_getName;
 		}
 		
-		if (!staticMembers.toString) {	
+		if (!staticMembers.toString) {
 			staticMembers.toString=f_class.toString;
 		}			
 		
@@ -854,7 +859,7 @@ var __members = {
 		this._parent = parentClass;
 
 		if (!aspects) {
-			aspects=new Array
+			aspects=new Array;
 		}
 		this._aspects=aspects;
 	

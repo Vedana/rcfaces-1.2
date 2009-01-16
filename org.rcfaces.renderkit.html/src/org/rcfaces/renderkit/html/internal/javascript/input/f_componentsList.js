@@ -102,7 +102,7 @@ var __members = {
 	 * @method public
 	 * @param number index
 	 * @param optional number cursorIndex The cursor index. (can be undefined)
-	 * @param hidden jsEvent
+	 * @param optional hidden Event jsEvent
 	 * @return boolean Returns <code>false</code>.
 	 */
 	f_setFirst: function(index, cursorIndex, jsEvent) {

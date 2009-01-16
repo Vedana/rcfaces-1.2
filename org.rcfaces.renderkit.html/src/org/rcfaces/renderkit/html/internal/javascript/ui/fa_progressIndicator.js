@@ -189,7 +189,7 @@ var __members = {
 	f_updateProgressLabel: f_class.ABSTRACT,
 	
 	/**
-	 * @method protected
+	 * @method protected abstract
 	 */
 	f_progressDone: f_class.ABSTRACT
 }

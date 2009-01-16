@@ -40,6 +40,9 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @param HTMLElement parent
+	 * @param number width
+	 * @param number height
+	 * @param optional String styleClass
 	 * @return f_progressBar
 	 */
 	Create: function(parent, width, height, styleClass) {

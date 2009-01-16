@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public abstract f_grid extends f_component, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager, fa_scrollPositions, fa_additionalInformationManager
+ * @class public abstract f_grid extends f_component, fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>, fa_scrollPositions, fa_additionalInformationManager
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -1278,12 +1278,8 @@ var __statics = {
 			if (tcol) {
 				//tcol.style.width=w+"px";
 			}
-
 		
 			var cellMargin=8;
-			if (f_core.IsInternetExplorer()) {
-				cellMargin=0;
-			}
 	
 			col.style.width=w+"px";
 			head.style.width=(w-cellMargin)+"px";
@@ -1489,7 +1485,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param HTMLTableElement table
-	 * @return HTMLColElement[]
+	 * @return HTMLTableColElement[]
 	 */
 	_ListCols: function(table) {
 		var l=new Array;
@@ -1773,7 +1769,7 @@ var __members = {
 			f_classLoader.Destroy(pagedWaiting);
 		}				
 
-		this._currentSorts=undefined; // HTMLColElement
+		this._currentSorts=undefined; // HTMLTableColElement
 //		this._columnCanBeSorted=undefined; // boolean
 		
 //		this._createFakeTH=undefined; //  boolean
@@ -1806,8 +1802,8 @@ var __members = {
 			this._releaseColumns();
 			this._columns=undefined;
 		}
-		this._columnOver=undefined; // HTMLColElement
-		this._columnSelected=undefined;  // HTMLColElement
+		this._columnOver=undefined; // HTMLTableColElement
+		this._columnSelected=undefined;  // HTMLTableColElement
 //		this._rowValueColumnIndex=undefined; // string
 		
 		var cfocus=this._cfocus;
@@ -2984,14 +2980,14 @@ var __members = {
 			
 			var col=column._col;
 			if (col) {
-				column._col=undefined; // HTMLColElement
+				column._col=undefined; // HTMLTableColElement
 
 				f_core.VerifyProperties(col);
 			}
 			
 			var col=column._col2;
 			if (col) {
-				column._col2=undefined; // HTMLColElement
+				column._col2=undefined; // HTMLTableColElement
 
 				f_core.VerifyProperties(col);
 			}
@@ -4081,7 +4077,7 @@ var __members = {
 			swidth=parseInt(cw, 10);
 		}
 				
-		swidth-=f_grid._TEXT_RIGHT_PADDING;
+		//swidth-=1; //f_grid._TEXT_RIGHT_PADDING;
 		if (swidth<0) {
 			swidth=0;
 		}
@@ -4092,19 +4088,26 @@ var __members = {
 		var sw=swidth+"px";
 		if (box.style.width!=sw) {
 			box.style.width=sw;
-		}			
+		}
+
+		
+		var cursor=column._cursor;
+		if (cursor) {
+		//	cursor.style.left=(swidth-4)+"px";
+		}
 	
 		if (column._ascendingOrder!==undefined) {
 			swidth-=f_grid._SORT_PADDING;
 			if (swidth<0) {
 				swidth=0;
 			}
+			
+			sw=swidth+"px";
 		}
-		
-		var sw=swidth+"px";
+
 		if (label.style.width!=sw) {
 			label.style.width=sw;
-		}			
+		}
 	},
 	fa_updateFilterProperties: function(filterProperties) {
 		if (!this._interactive) {
@@ -5307,7 +5310,7 @@ var __members = {
 	
 	/**
 	 * 
-	 * @method public
+	 * @method public abstract
 	 * @param any... rowValue1 The value of the row to remove
 	 * @return number Number of removed rows.
 	 */

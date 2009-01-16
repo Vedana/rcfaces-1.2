@@ -83,6 +83,7 @@ var __statics = {
 	
 	/**
 	 * @method hidden static
+	 * @context object:this
 	 */
 	_OnLoad: function(textEditor) {
 		try {

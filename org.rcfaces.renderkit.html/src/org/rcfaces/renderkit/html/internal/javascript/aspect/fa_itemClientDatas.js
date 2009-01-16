@@ -5,7 +5,7 @@
 /**
  * 
  *
- * @aspect public fa_itemClientDatas
+ * @aspect public abstract fa_itemClientDatas
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -98,7 +98,7 @@ var __members = {
 	/**
 	 * Returns the item associated to the specified value.
 	 * 
-	 * @method public
+	 * @method public abstract
 	 * @param String value Value of an item.
 	 * @param hidden boolean assertIfNotFound 
 	 * @return Object Item associated with the value.

@@ -5,7 +5,7 @@
 /**
  * Hidden value component.
  *
- * @class public f_hiddenValue extends f_eventTarget, HTMLElement, fa_serializable, fa_clientData
+ * @class public f_hiddenValue extends f_eventTarget, fa_serializable, fa_clientData
  */
  
  var __members = {

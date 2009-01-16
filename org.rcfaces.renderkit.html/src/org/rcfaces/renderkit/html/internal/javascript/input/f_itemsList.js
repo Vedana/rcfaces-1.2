@@ -45,16 +45,14 @@ var __members = {
 		this.f_super(arguments);
 	},
 
-	/**
+	/*
 	 * @method hidden 
 	 * @return void
-	 */
-	f_update: function() {
-		if (this._items) {
-		}
-		
+	 *
+	f_update: function() {		
 		return this.f_super(arguments);
 	},
+	*/
 	/**
 	 * @method hidden 
 	 * @return void
@@ -299,7 +297,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param item
+	 * @param Object item Item object or the item's value
 	 * @return void
 	 */
 	fa_updateItemStyle: function(item) {
@@ -325,6 +323,7 @@ var __members = {
 	*/
 	/**
 	 * @method hidden
+	 * @param Object item Item object or the item's value
 	 * @return f_component
 	 */
 	f_getItemComponent: function(item) {

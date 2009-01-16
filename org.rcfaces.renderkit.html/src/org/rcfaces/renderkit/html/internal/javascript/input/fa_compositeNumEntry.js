@@ -374,4 +374,8 @@ var __members={
 	
 }
  
-new f_aspect("fa_compositeNumEntry", __statics, __members, fa_compositeEntry);
+new f_aspect("fa_compositeNumEntry", {
+	extend: [ fa_compositeEntry ],
+	members: __members,
+	statics: __statics 
+});

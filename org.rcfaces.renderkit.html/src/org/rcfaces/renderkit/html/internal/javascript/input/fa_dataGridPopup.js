@@ -592,7 +592,7 @@ var __members = {
 	 * @param optional Event jsEvent
 	 * @param optional String text
 	 * @param optional number autoSelect
-	 * @return void
+	 * @return boolean Returns <code>true</code> if success.
 	 */
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
 		f_core.Debug(fa_dataGridPopup, "f_openDataGridPopup: jsEvent="+jsEvent+" text='"+text+"' autoSelect="+autoSelect);
@@ -614,6 +614,8 @@ var __members = {
 		} else {
 			this._updateDataGridPopup(text);
 		}
+		
+		return false;
 	},
 	/**
 	 * @method private

@@ -35,16 +35,17 @@ var __members= {
 	},
 	
 	/**
-	 * @method protected
+	 * @method hidden
+	 * @return void
 	 */
 	f_finalize: function() {
-		//this._type = undefined;
-		this._component = undefined;
-		this._jsEvent = undefined;
-		this._item = undefined;
-		this._value = undefined;
-		this._selectionProvider = undefined;
-		this._detail = undefined;		
+	//	this._type = undefined;  // string
+		this._component = undefined; // component 
+		this._jsEvent = undefined; // jsEvent
+		this._item = undefined; // any
+		this._value = undefined; // any
+		this._detail = undefined; // any
+		this._selectionProvider = undefined; // fa_selectionProvider
 	},
 	
 	/**
@@ -110,7 +111,7 @@ var __members= {
 	 * Returns the selectionProvider wich contains the item associated to the event.
 	 *
 	 * @method public
-	 * @return fa_selectionProvider Returns the selectionProvider associated to the item.
+	 * @return fa_selectionProvider<? extends Object> Returns the selectionProvider associated to the item.
 	 */
 	f_getSelectionProvider: function() {
 		f_core.Assert(arguments.length==0, "f_event.f_getSelectionProvider: Invalid number of parameter");
@@ -182,20 +183,6 @@ var __members= {
 		f_core.CancelJsEvent(evt);
 		
 		return false;
-	},
-	
-	/**
-	 * @method hidden
-	 * @return void
-	 */
-	f_finalize: function() {
-	//	this._type = undefined;  // string
-		this._component = undefined; // component 
-		this._jsEvent = undefined; // jsEvent
-		this._item = undefined; // any
-		this._value = undefined; // any
-		this._detail = undefined; // any
-		this._selectionProvider = undefined; // fa_selectionProvider
 	},
 	 
 	/**
@@ -491,7 +478,7 @@ var __statics = {
 	},
 	/**
 	 * @method public static
-	 * @return any
+	 * @return fa_selectionProvider<? extends Object>
 	 */
 	GetSelectionProvider: function() { 
 		f_core.Assert(arguments.length==0, "f_event.GetSelectionProvider: Invalid number of parameter");

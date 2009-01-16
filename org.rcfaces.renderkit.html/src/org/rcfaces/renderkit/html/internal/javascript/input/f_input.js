@@ -322,14 +322,17 @@ var __members = {
 
 		if (typeof(value)=="number") {
 			value=String(value);
-		}
 
-		if (typeof(value)!="string") {
-			f_core.Debug(f_input, "f_setValue: Invalid value: "+value);
+		} else if (typeof(value)!="string") {
+			f_core.Error(f_input, "f_setValue: Invalid value: "+value);
 			return false;
 		}
 
 		f_core.Debug(f_input, "f_setValue: Value="+value);
+		
+		if (validator) {
+			return validator.f_updateValue(value);
+		}
 		
 		this.f_getInput().value=value;
 		

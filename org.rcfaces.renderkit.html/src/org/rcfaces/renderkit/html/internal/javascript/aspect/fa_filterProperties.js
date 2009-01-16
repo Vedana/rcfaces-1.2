@@ -11,6 +11,9 @@
  */
  
 var __members = {
+	/**
+	 * @method public
+	 */
 	fa_filterProperties: function() {
 		// Au mieux on prend l'ancien !
 		this._filtred=f_core.GetBooleanAttribute(this, "v:filtred", this._filtred); 		

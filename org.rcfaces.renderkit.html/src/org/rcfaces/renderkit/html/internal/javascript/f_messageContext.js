@@ -117,6 +117,8 @@ var __statics = {
 	},
 	/**
 	 * @method public static
+	 * @param optional HTMLElement component A component or an event object.
+	 * @return f_messageObject[]
 	 */
 	ListMessages: function(component) {
 		var messageContext=f_messageContext.Get(component);

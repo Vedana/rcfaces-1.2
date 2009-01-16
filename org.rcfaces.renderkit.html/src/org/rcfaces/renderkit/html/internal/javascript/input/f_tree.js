@@ -5,7 +5,7 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
@@ -1731,6 +1731,12 @@ var __members = {
 	},
 	/** 
 	 * @method public
+	 * @param Object parent Parent node. (or the tree object itself if the node is the root)
+	 * @param String label
+	 * @param String value
+	 * @param optional String tooltip
+	 * @param optional boolean disabled
+	 * @return Object The created node.
 	 */
 	f_appendNode: function(parent, label, value, tooltip, disabled) {
 //		f_core.Assert(!parent || !parent.tagName, "Bad type of parent ! "+parent);

@@ -5,7 +5,7 @@
 /**
  * Aspect SelectionProvider
  *
- * @aspect public abstract fa_selectionProvider
+ * @aspect public abstract fa_selectionProvider<T>
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -15,7 +15,7 @@ var __members = {
 	 * Returns selected objects.
 	 *
 	 * @method public abstract
-	 * @return any An Object, an array of Object, it depends of the type of component.
+	 * @return T An Object, an array of Object, it depends of the type of component.
 	 */
 	f_getSelection: f_class.ABSTRACT,
 	
@@ -23,7 +23,7 @@ var __members = {
 	 * Set selected objects.
 	 *
 	 * @method public abstract
-	 * @param any selection An Object, an array of Object, it depends of the type of component.
+	 * @param T selection An Object, an array of Object, it depends of the type of component.
 	 * @param optional boolean show
 	 * @return void
 	 */

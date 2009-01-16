@@ -223,7 +223,7 @@ var f_core = {
 	 * @param String message
 	 * @param optional Error exception
 	 * @param optional Window win
-	 * @return void
+	 * @return boolean
 	 */
 	_AddLog: function(level, name, message, exception, win) {
 		if (!win) {
@@ -232,7 +232,7 @@ var f_core = {
 
 		if (window.rcfacesLogCB) {
 			window.rcfacesLogCB.apply(window, arguments);
-			return;
+			return false;
 		}
 		
 		if (f_core._Logging) {
@@ -242,7 +242,7 @@ var f_core = {
 			if (level<2) {
 				window.status="Exception: "+message;
 			}
-			return;
+			return false;
 		}
 			
 		try {
@@ -953,6 +953,12 @@ var f_core = {
 				}
 			}
 		}
+		
+		// Un BUG IE appelle le onload 2 fois !!!
+		if (win._rcfacesWindowInitialized) {
+			return;
+		}
+		win._rcfacesWindowInitialized=true;
 		
 		f_core.Profile(false, "f_core.onInit", now);
 		try {		
@@ -3064,7 +3070,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @return void
+	 * @return boolean
 	 */
 	_ReturnsAlwaysFalse: function () {
 		return false;
@@ -3926,12 +3932,12 @@ var f_core = {
 	 * @method hidden static
 	 * @param HTMLElement component
 	 * @param Function listener
-	 * @return void
+	 * @return boolean Returns <code>true</code> if success.
 	 */
 	RemoveResizeEventListener: function(component, listener) {
 		if (f_core.IsInternetExplorer()) {
 			component.onresize=null;
-			return;
+			return true;
 		}
 
 		if (f_core.IsGecko()) {
@@ -3941,7 +3947,7 @@ var f_core = {
 			return true;
 		}
 		
-		return;
+		return false;
 	},
 	/**
 	 * @method hidden static
@@ -4934,8 +4940,8 @@ var f_core = {
 	 * Compute the popup position. (centred horizontaly and verticaly)
 	 *
 	 * @method public static
-	 * @param Object parameters
-	 * @return void Fill fields "x" and "y" into the "parameters" object.
+	 * @param Object parameters Fill fields "x" and "y" into the "parameters" object.
+	 * @return void 
 	 */
 	ComputeDialogPosition: function(parameters) {
 		var x=0;

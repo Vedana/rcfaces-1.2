@@ -86,6 +86,11 @@ var __statics= {
 }
 
 var __members= {
+	/**
+	 * @method hidden
+	 * @param HTMLElement component
+	 * @param String type
+	 */
 	f_actionList: function(component,type) {
 		f_core.Assert(typeof(type)=="string", "f_actionList.f_actionList: Type of actionList is invalid '"+type+"'.");
 		

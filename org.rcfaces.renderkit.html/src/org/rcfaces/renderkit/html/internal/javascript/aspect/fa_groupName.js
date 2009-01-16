@@ -11,15 +11,16 @@
  */
 var __statics = {
 
-	/**
+	/*
 	 * @method private static 
 	 * @param f_component component
 	 * @param String groupName
 	 * @param optional boolean create
-	 * @return f_component[]
-	 */
+	 * @return f_component[]	 
 	ListGroupFromComponent: function(component, groupName, create) {
+		return null;
 	},
+	*/
 	
 	/**
 	 * @method protected static

@@ -5,7 +5,7 @@
 /**
  * Aspect SelectionManager
  *
- * @aspect public abstract fa_selectionManager extends fa_itemsManager, fa_selectionProvider, fa_clientFullState
+ * @aspect public abstract fa_selectionManager<T> extends fa_itemsManager, fa_selectionProvider<T>, fa_clientFullState
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -619,7 +619,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return Object[] An array of selected values.
+	 * @return T An array of selected values.
 	 */
 	f_getSelection: function() {
 		var ret=new Array;
@@ -688,7 +688,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Object[] selection The new selection.
+	 * @param T selection The new selection.
 	 * @param optional boolean show Show the first new selected element.
 	 * @return void
 	 */
@@ -719,11 +719,16 @@ var __members = {
 
 	/**
 	 * @method protected abstract
+	 * @param any element
+	 * @return boolean
 	 */
 	fa_isElementSelected: f_class.ABSTRACT,
 	
 	/**
 	 * @method protected abstract
+	 * @param any element
+	 * @param boolean selected
+	 * @return void 
 	 */
 	fa_setElementSelected: f_class.ABSTRACT
 }
