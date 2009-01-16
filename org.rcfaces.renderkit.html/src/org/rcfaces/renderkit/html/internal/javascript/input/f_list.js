@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class f_list extends f_combo
+ * @class public f_list extends f_abstractList, fa_selectionProvider<String[]>
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -70,6 +70,12 @@ var __members = {
 			}
 		}
 	},
+	f_getSelection: function() {
+		return this.f_getValue();
+	},
+	f_setSelection: function(selection) {
+		this.f_setValue(selection, false, true);
+	},
 	/**
 	 * @method public
 	 * @return number[] Returns indexes of the selected values.
@@ -107,6 +113,7 @@ var __members = {
 }
 
 new f_class("f_list", {
-	extend: f_combo,
+	extend: f_abstractList,
+	aspects: [ fa_selectionProvider ],
 	members: __members
 });
