@@ -366,6 +366,8 @@ var __members = {
 				}
 			}
 		
+			var fragment=component.ownerDocument.createDocumentFragment();
+		
 			var resourceBundle;
 			var message;
 	
@@ -410,7 +412,7 @@ var __members = {
 					i=end+1;
 					
 					if (span && span.length) {
-						this._appendSpan(this, span.join(""));
+						this._appendSpan(fragment, span.join(""));
 						span=null;
 					}
 					
@@ -443,13 +445,13 @@ var __members = {
 					switch(varName) {
 					case "first":
 					case "position":
-						this.f_appendFirstValue(component, first+1, "first");
+						this.f_appendFirstValue(fragment, first+1, "first");
 						
 						break;
 						
 					case "pageposition":
 						if (rows>0) {
-							this.f_appendFirstValue(component, Math.floor(first/rows)+1, "pagePosition");
+							this.f_appendFirstValue(fragment, Math.floor(first/rows)+1, "pagePosition");
 						}
 						
 						break;
@@ -461,39 +463,39 @@ var __members = {
 						} else if (maxRows>0 && last>=maxRows) {
 							last=maxRows;
 						}
-						this.f_appendLastValue(component, last, "last");
+						this.f_appendLastValue(fragment, last, "last");
 						break;
 						
 					case "rowcount":
 						if (rowCount>=0) {
-							this.f_appendRowCountValue(component, rowCount, "rowCount", parameters);
+							this.f_appendRowCountValue(fragment, rowCount, "rowCount", parameters);
 						}
 						break;
 						
 					case "pagecount":
 						if (rowCount>=0 && rows>0) {
-							this.f_appendRowCountValue(component, Math.floor(((rowCount-1)/rows)+1), "pageCount", parameters);
+							this.f_appendRowCountValue(fragment, Math.floor(((rowCount-1)/rows)+1), "pageCount", parameters);
 						}
 						break;
 						
 					case "bfirst":
-						this.f_appendFirstButton(component, first, "first", resourceBundle, parameters);
+						this.f_appendFirstButton(fragment, first, "first", resourceBundle, parameters);
 						break;
 	
 					case "bprev":
-						this.f_appendPrevButton(component, first, rows, "prev", resourceBundle, parameters);
+						this.f_appendPrevButton(fragment, first, rows, "prev", resourceBundle, parameters);
 						break;
 						
 					case "bnext":		
-						this.f_appendNextButton(component, first, rows, rowCount, maxRows, "next", resourceBundle, parameters);
+						this.f_appendNextButton(fragment, first, rows, rowCount, maxRows, "next", resourceBundle, parameters);
 						break;
 					
 					case "blast":
-						this.f_appendLastButton(component, first, rows, rowCount, maxRows, "last", resourceBundle, parameters);
+						this.f_appendLastButton(fragment, first, rows, rowCount, maxRows, "last", resourceBundle, parameters);
 						break;
 					
 					case "bpages":
-						this.f_appendPagesButtons(component, first, rows, rowCount, maxRows,"goto", resourceBundle, parameters);
+						this.f_appendPagesButtons(fragment, first, rows, rowCount, maxRows,"goto", resourceBundle, parameters);
 						break;
 						
 					default:
@@ -533,10 +535,17 @@ var __members = {
 			}
 			
 			if (span && span.length) {
-				this._appendSpan(component, span.join(""));
+				this._appendSpan(fragment, span.join(""));
 			}
 			
+			
+			
 		} finally {
+		
+			if (fragment) {
+				f_core.AppendChild(component, fragment);
+			}
+
 			if (oldVisibility) {
 				this.style.visibility=oldVisibility;
 			}
