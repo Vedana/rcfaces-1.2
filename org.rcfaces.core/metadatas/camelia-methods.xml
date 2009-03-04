@@ -1532,5 +1532,14 @@
 		</code>
 	</method>
 			
+		   
+ 	<method id="processEngineUpdates" returnType="void" modifier="protected">
+		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+ 		<code>
+	    	engine.processUpdates(facesContext);
+    	</code>
+    </method>
+			
+			
 </camelia-components>
 	
