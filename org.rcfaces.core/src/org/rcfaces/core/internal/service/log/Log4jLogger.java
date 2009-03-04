@@ -83,19 +83,19 @@ class Log4jLogger implements LogService.ILogger {
 
     private static final int convertLevelToInt(Level level) {
         int l = level.toInt();
-        if (l >= Level.FATAL_INT) {
+        if (l >= Level.FATAL.toInt()) {
             return 0;
         }
-        if (l >= Level.ERROR_INT) {
+        if (l >= Level.ERROR.toInt()) {
             return 1;
         }
-        if (l >= Level.WARN_INT) {
+        if (l >= Level.WARN.toInt()) {
             return 2;
         }
-        if (l >= Level.INFO_INT) {
+        if (l >= Level.INFO.toInt()) {
             return 3;
         }
-        if (l >= Level.DEBUG_INT) {
+        if (l >= Level.DEBUG.toInt()) {
             return 4;
         }
 
