@@ -720,7 +720,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             if (gzip != null) {
                 if (hasGzipSupport(request)) {
 
-                    setGzipContentEncoding(response);
+                    setGzipContentEncoding(response, true);
 
                     buf = gzip;
                 }
