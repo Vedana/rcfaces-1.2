@@ -70,18 +70,24 @@ var __statics = {
 			return null;
 		}
 		
+		var fragment=parent.ownerDocument.createDocumentFragment();
+		
 		if (idx) {
-			f_core.AppendChild(parent, doc.createTextNode(label.substring(0, idx)));
+			f_core.AppendChild(fragment, doc.createTextNode(label.substring(0, idx)));
 		}
 
-		var sub=doc.createElement("u");
-		sub.className="f_accessKey";
-		f_core.AppendChild(parent, sub);
-		f_core.AppendChild(sub, doc.createTextNode(label.substring(idx, idx+1)));				
+		f_core.CreateElement(fragment, "u", {
+			className: "f_accessKey",
+			textnode: label.substring(idx, idx+1)
+		});
 		
 		if (idx+1<lab.length) {
-			f_core.AppendChild(parent, doc.createTextNode(label.substring(idx+1, lab.length)));
+			var l=label.substring(idx+1, lab.length);
+
+			f_core.AppendChild(fragment, doc.createTextNode(l));
 		}
+		
+		f_core.Append(parent, fragment);
 		
 		return sub;
 	},
