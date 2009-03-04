@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import javax.faces.FacesException;
-import javax.faces.application.StateManager;
-import javax.faces.application.StateManager.SerializedView;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
