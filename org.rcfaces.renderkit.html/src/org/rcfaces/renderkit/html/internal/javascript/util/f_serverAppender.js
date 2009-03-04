@@ -154,9 +154,10 @@ var __members = {
 		}
 		
 		var self=this;
-		
 		this._timerId=window.setTimeout(function() {
 			self._sendEvents.call(self);
+			
+			self=null;
 		}, f_serverAppender._TIMER);
 	}
 }

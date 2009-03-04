@@ -150,6 +150,9 @@ var __members = {
 				var callee=arguments.callee;
 				window.setTimeout(function() {
 					self.f_super({callee: callee, length: 0 });
+					
+					self=null;
+					callee=null;
 				}, 10);
 				
 				return;
