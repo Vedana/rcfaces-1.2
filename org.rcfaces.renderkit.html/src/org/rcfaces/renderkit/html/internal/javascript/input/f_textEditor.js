@@ -311,6 +311,8 @@ var __members = {
 				// Le Log peut etre en vrac ....
 				//f_core.Error(f_textEditor, "_OnUnLoad: load exception on textEditor "+textEditor.id, x);
 			}
+			
+			self=null;
 		}		
 		
 		f_core.AddEventListener(contentWindow, "unload", this._unloadFrame);
