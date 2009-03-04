@@ -23,6 +23,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
+import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 
 /**
  * 
@@ -32,12 +33,22 @@ import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
     private static final String REVISION = "$Revision$";
 
+    private static final String HTML_TYPE_PROPERTY = "org.rcfaces.renderkit.html.box.COMPONENT_TYPE";
+
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement(IHtmlWriter.DIV);
+        String type = TextTypeTools.getType(htmlWriter);
+        if (type == null) {
+            type = IHtmlWriter.DIV;
+        }
+
+        htmlWriter.getComponentRenderContext().setAttribute(HTML_TYPE_PROPERTY,
+                type);
+
+        htmlWriter.startElement(type);
 
         writeComponentAttributes(htmlWriter);
     }
@@ -54,22 +65,31 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         IHtmlRenderContext htmlRenderContext = componentRenderContext
                 .getHtmlRenderContext();
 
-        // FacesContext facesContext = componentRenderContext.getFacesContext();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        BoxComponent box = (BoxComponent) componentRenderContext.getComponent();
+        BoxComponent boxComponent = (BoxComponent) componentRenderContext
+                .getComponent();
+
+        String overStyleClass = boxComponent.getOverStyleClass(facesContext);
+        if (overStyleClass != null) {
+            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+
+            htmlWriter.getJavaScriptEnableMode().enableOnOver();
+        }
 
         int asyncRender = IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE;
 
-        boolean hidden = Boolean.FALSE.equals(box.getVisibleState());
+        boolean hidden = Boolean.FALSE.equals(boxComponent.getVisibleState());
 
         if (hidden) {
             if (htmlRenderContext.isAsyncRenderEnable()) {
-                asyncRender = htmlRenderContext.getAsyncRenderMode(box);
+                asyncRender = htmlRenderContext
+                        .getAsyncRenderMode(boxComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
                     htmlWriter.writeAttribute("v:asyncRender", true);
 
-                    if (box.getAsyncDecodeMode(componentRenderContext
+                    if (boxComponent.getAsyncDecodeMode(componentRenderContext
                             .getFacesContext()) == IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
                         htmlWriter.writeAttribute("v:asyncDecode", true);
                     }
@@ -80,7 +100,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
             }
         }
 
-        setAsyncRenderer(htmlWriter, box, asyncRender);
+        setAsyncRenderer(htmlWriter, boxComponent, asyncRender);
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
@@ -88,7 +108,10 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         BoxComponent boxComponent = (BoxComponent) htmlWriter
                 .getComponentRenderContext().getComponent();
 
-        htmlWriter.endElement(IHtmlWriter.DIV);
+        String type = (String) htmlWriter.getComponentRenderContext()
+                .getAttribute(HTML_TYPE_PROPERTY);
+
+        htmlWriter.endElement(type);
 
         IMenuIterator menuIterator = boxComponent.listMenus();
         if (menuIterator.hasNext()) {
@@ -145,6 +168,9 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
     public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
             IJavaScriptRenderContext javaScriptRenderContext) {
         super.addRequiredJavaScriptClassNames(writer, javaScriptRenderContext);
+
+        // FacesContext facesContext =
+        // writer.getComponentRenderContext().getFacesContext();
 
         BoxComponent boxComponent = (BoxComponent) writer
                 .getComponentRenderContext().getComponent();
