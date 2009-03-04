@@ -76,7 +76,10 @@ f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, p
 		// le innerHTML peut être asynchrone !
 		
 		window.setTimeout(function() {
-			self.f_processScripts(component, htmlNode, scripts);
+			var asyncClassLoader=self;
+			self=null;
+		
+			asyncClassLoader.f_processScripts(component, htmlNode, scripts);
 		}, 10);
 	}
 }
@@ -123,7 +126,7 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 
 		_commands: new Array,		
 		
-		run: function() {			 	
+		run: function() {
 		 	// var win=f_core.GetWindow(this._component); // Non utilisé
 			try {
 			 	var commands=this._commands;
@@ -515,15 +518,20 @@ f_classLoader.prototype._asyncSystemLoadBundle=function(bundleName) {
 	script.charset="UTF-8";
 	script._bundleName=bundleName;
 	
-	var self=this;
-	
 	if (f_core.IsInternetExplorer()) {
+
+		var self=this;
 		script.onreadystatechange=function() {
 		
+			var asyncClassLoader=self;
+		
 			switch(script.readyState) {
+			case "complete":
+				script.onreadystatechange=null;
+				self=null;
+
 			case "loaded":
 			case "interactive":
-			case "complete":
 				break;
 
 			default:
@@ -532,11 +540,11 @@ f_classLoader.prototype._asyncSystemLoadBundle=function(bundleName) {
 				return;
 			}
 			
-			script.onreadystatechange=null;
-			self._asyncBundleLoaded(script._bundleName);
+			asyncClassLoader._asyncBundleLoaded(script._bundleName);
 		};
 
-	} else {
+	} else { // Firefox et autres ...
+		var self=this;
 		script.onload=function() {
 			script.onload=null; 
 			self._asyncBundleLoaded(script._bundleName);

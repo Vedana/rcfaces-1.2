@@ -84,7 +84,7 @@ var __members = {
 		// this._requestHeaders=undefined; // Map<String,String>
 		// this._ready = undefined; // boolean
 		//this._noLog=noLog; // boolean
-		
+		this._listener= undefined; // Function
 		this._component = undefined; // any ?
 	},
 
@@ -248,12 +248,13 @@ var __members = {
 				f_core.Error(f_httpRequest, "f_cancelRequest: Cancel request has failed !", x);
 			}
 
-			/* Ca marche pas !
+			/* Ca marche pas ! ????*/
 			try {
 				request.onreadystatechange=null;
 			} catch (x) {
-				alert(x);
+				//alert(x);
 			}
+			/*
 			if (f_core.IsGecko()) {
 				request.onerror=null;
 			}
@@ -401,9 +402,11 @@ var __members = {
 				
 				// Ben oui, c'est la joie du context de création des fonctions.
 				req.onreadystatechange =  function() {
+					
 					if (window._rcfacesExiting) {
 						// Nous ne sommes pas dans un contexte sain ....
 						// Par exemple, échanges HTTP aprés un onExit de f_core !
+						self=null;
 						return false;
 					}
 				
@@ -571,7 +574,7 @@ var __members = {
 	 * listener enregistré pour la gestion des évènements de la requête
 	 *
 	 * @method private
-	 * @return void
+	 * @return boolean
 	 */
 	_onReadyStateChange: function() {
 		var req = this._request;

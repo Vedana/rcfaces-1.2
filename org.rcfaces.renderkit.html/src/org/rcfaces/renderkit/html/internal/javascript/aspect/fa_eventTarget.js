@@ -371,6 +371,11 @@ var __members = {
 				name: name,
 				value: value, 
 				oldValue: oldValue });
+				
+			self=null;
+			name=null;
+			value=null;
+			oldValue=null;
 		}, 10);
 	},
 	/**
