@@ -123,6 +123,13 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
+        String overStyleClass = treeComponent.getOverStyleClass(facesContext);
+        if (overStyleClass != null) {
+            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+
+            // htmlWriter.getJavaScriptEnableMode().enableOnOver();
+        }
+
         htmlWriter.startElement(IHtmlWriter.A);
         htmlWriter.writeId(componentContext.getComponentClientId()
                 + FOCUS_ID_SUFFIX);
