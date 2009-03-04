@@ -5,7 +5,7 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
@@ -53,7 +53,8 @@ var __statics = {
 		}
 
 		if (tree.f_getEventLocked(evt, false) || li._labelOver) {
-			return false;
+			// On bloque pas !!!
+			return true;
 		}
 			
 		li._labelOver=true;
@@ -99,7 +100,8 @@ var __statics = {
 		}
 
 		if (!tree || tree.f_getEventLocked(evt, false) || li._over) {
-			return false;
+			// On bloque pas !
+			return true;
 		}
 			
 		li._over=true;
@@ -817,8 +819,10 @@ var __members = {
 			return;
 		}
 		
-		var tree=this;
+		var self=this;
 		window.setTimeout(function() {
+			var tree=self;
+			self=null;
 			
 			//alert("Scroll="+this.scrollWidth);
 			var width=tree.scrollWidth;
@@ -902,9 +906,14 @@ var __members = {
 	 * @method private
 	 * @return void
 	 */
-	_constructTree: function(container, nodes, depth) {
+	_constructTree: function(container, nodes, depth, domFragment) {
 		
 		var doc=this.ownerDocument;
+		
+		var fragment=domFragment;
+		if (!fragment) {
+			fragment = doc.createDocumentFragment();
+		}
 		
 		if (!this._nodeIdx) {
 			this._nodeIdx=1;
@@ -914,6 +923,7 @@ var __members = {
 			var node=nodes[i];
 			
 			var li=doc.createElement("li");
+			f_core.AppendChild(fragment, li); // Evite les fuites memoires
 
 			li._node=node;
 			li._depth=depth;
@@ -1048,14 +1058,15 @@ var __members = {
 				// f_core.Debug(f_tree, "constructTree: children: opened="+node._opened+" userExp="+this._userExpandable+" depth="+depth);
 				
 				if (node._opened || !this._userExpandable) {
-					this._constructTree(li._nodes, node._nodes, depth+1);
+					this._constructTree(li._nodes, node._nodes, depth+1, fragment);
 					
 					li._nodes.style.display="list-item";
 				}
 			}
-
-			// On prefere la performance aux fuites mémoires !
-			f_core.AppendChild(container, li); // Evite les fuites memoires
+		}
+		
+		if (!domFragment) {
+			container.appendChild(fragment);
 		}
 	},
 	/**
@@ -1162,8 +1173,7 @@ var __members = {
 				ul.style.display="list-item";
 			}
 							
-			var waitingNode=this._newWaitingNode(li._depth);
-			f_core.AppendChild(ul, waitingNode);
+			var waitingNode=this._newWaitingNode(li._depth, ul);
 	
 			if (!this._waitingNodes) {
 				this._waitingNodes=new Array;
@@ -1200,8 +1210,7 @@ var __members = {
 	_reloadTree: function() {
 		var ul=this;
 	
-		var waitingNode=this._newWaitingNode(0);
-		f_core.AppendChild(ul, waitingNode);
+		var waitingNode=this._newWaitingNode(0, ul);
 
 		if (!this._waitingNodes) {
 			this._waitingNodes=new Array;
@@ -1286,7 +1295,7 @@ var __members = {
 					image.src=f_waiting.GetWaitingErrorImageURL();
 				}
 				
-				f_tree.Info(f_tree, "_callServer.onError: Bad status: "+status);
+				f_core.Info(f_tree, "_callServer.onError: Bad status: "+status);
 				
 		 		tree.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
 	 		},
@@ -1361,13 +1370,18 @@ var __members = {
 	/**
 	 * @method private
 	 * @param number parentDepth
-	 * @return HTMLLIElement
+	 * @param HTMLElement container
+	 * @return void
 	 */
-	_newWaitingNode: function(parentDepth) {
+	_newWaitingNode: function(parentDepth, container) {
 		var doc=this.ownerDocument;
+		
+		var fragment= doc.createDocumentFragment();
+				
 		var li=doc.createElement("li");
-
 		li.className="f_tree_parent";
+		f_core.AppendChild(fragment, li);
+
 		
 		var divNode=doc.createElement("div");
 		f_core.AppendChild(li, divNode);
@@ -1404,7 +1418,9 @@ var __members = {
 		var txt=f_waiting.GetLoadingMessage();
 		f_core.AppendChild(label, doc.createTextNode(txt));
 
-		return li;		
+		f_core.AppendChild(container, fragment);
+		
+		return li;
 	},
 	/**
 	 * Show a node.
@@ -1674,6 +1690,7 @@ var __members = {
 	 * @return Object New node
 	 */
 	f_appendNode2: function(parent, node) {
+		
 		node._tooltip=node._description;
 		node._opened=node._expanded;
 
@@ -2824,7 +2841,7 @@ var __members = {
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
 		
-			var ret=callBack.call(this, node);
+			var ret=callBack.call(this, node, node._value);
 			if (ret) {
 				return ret;
 			}
@@ -2850,8 +2867,8 @@ var __members = {
 	 * @return Object found node.
 	 */
 	f_getNodeByValue: function(value, throwException) {
-		var ret=this.f_forEachNode(function(node) {
-			if (node._value==value) {
+		var ret=this.f_forEachNode(function(node, nodeValue) {
+			if (nodeValue==value) {
 				return node;
 			}
 			
@@ -2871,7 +2888,38 @@ var __members = {
 		if (!this.fa_componentUpdated) {
 			return;
 		}
+		
+		this.f_updateStyleClass();
 	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_updateStyleClass: function() {
+		var over=this.f_isMouseOver();
+		
+		var suffix=null;
+		if (this.f_isDisabled()) {
+			suffix="_disabled";
+			
+		} else if (over) {
+			suffix="_over";
+		}
+	
+		var className=this.f_computeStyleClass(suffix);
+		
+		if (over) {
+			var overStyleClass=this.f_getOverStyleClass();
+			if (overStyleClass) {
+				className+=" "+overStyleClass;
+			}
+		}
+				
+		if (this.className!=className) {
+			this.className=className;
+		}
+	},
+	
 	fa_updateReadOnly: function() {
 	},
 	/** 
@@ -2959,7 +3007,7 @@ var __members = {
 
 			var nodes=this._nodes;
 			if (nodes) {
-				this._constructTree(this, nodes, 0);
+				this._constructTree(this._body, nodes, 0);
 				
 				this._updateBodyWidth();
 			}
@@ -3165,7 +3213,7 @@ var __members = {
 
 new f_class("f_tree", {
 	extend: f_component,
-	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions ],
+	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass ],
 	members: __members,
 	statics: __statics
 });
