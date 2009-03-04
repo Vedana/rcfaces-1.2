@@ -31,7 +31,7 @@ var __statics={
 		return instance;
 	},
 	/**
-	 * @method hidden static
+	 * @method public static
 	 * @param f_focusManager focusManager
 	 * @return void
 	 */
