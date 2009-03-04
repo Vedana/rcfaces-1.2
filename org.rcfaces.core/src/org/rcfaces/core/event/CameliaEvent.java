@@ -17,6 +17,8 @@ import org.rcfaces.core.internal.listener.IScriptListener;
 abstract class CameliaEvent extends FacesEvent implements ITypedEvent {
     private static final String REVISION = "$Revision$";
 
+    private static final long serialVersionUID = -2844437297380361681L;
+
     protected final int type;
 
     public CameliaEvent(UIComponent component) {
