@@ -271,7 +271,8 @@ var __members = {
 	f_tabbedPane: function() {
 		this.f_super(arguments);
 		
-		f_tabbedPane._PrepareImages();
+		// On laisse tomber, les images sont maintenant directement réferencées dans le HTML ...
+		// f_tabbedPane._PrepareImages();
 		
 		this._tabIndex=f_core.GetAttribute(this, "v:tabIndex");
 	},
@@ -487,7 +488,7 @@ var __members = {
 	 */
 	f_selectCard: function(tab, setFocus) {
 		f_core.Assert(typeof(tab)=="object" && tab, "f_tabbedPane.f_selectCard: Invalid parameter 'tab' ("+tab+")");
-		f_core.Assert(typeof(setFocus)=="boolean" || setFocus===undefined, "f_tabbedPane.f_selectCard: Invalid parameter 'setFocus' ("+setFocus+")");
+		f_core.Assert(typeof(setFocus)=="boolean" || setFocus===undefined, "f_tabbedPane.f_selectCard: Invalid parameter 'setFocus' ("+setFocus+" / typeof='"+typeof(setFocus)+"')");
 
 		var _tab=tab._vcard;
 		f_core.Assert(_tab, "f_tabbedPane.f_selectCard: L'objet n'est pas un onglet ! ("+tab+")");
