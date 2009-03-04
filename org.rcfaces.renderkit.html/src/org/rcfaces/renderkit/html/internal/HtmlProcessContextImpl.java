@@ -11,8 +11,10 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.lang.IContentFamily;
@@ -57,6 +59,8 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
     private Boolean debugMode;
 
     private Boolean profilerMode;
+
+    private IClientBrowser clientBrowser;
 
     public HtmlProcessContextImpl(FacesContext facesContext) {
         super(facesContext);
@@ -108,8 +112,21 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
         ICssConfig cssConfig = StylesheetsServlet.getConfig(this);
 
         styleSheetURI = cssConfig.getDefaultStyleSheetURI();
-        styleSheetURIWithContextPath = externalContext.getRequestContextPath()
-                + styleSheetURI;
+
+        IResourceProxyHandler resourceProxyHandler = RcfacesContext
+                .getInstance(facesContext).getResourceProxyHandler();
+        if (resourceProxyHandler != null && resourceProxyHandler.isEnabled()
+                && resourceProxyHandler.isFrameworkResourcesEnabled()) {
+
+            styleSheetURIWithContextPath = resourceProxyHandler
+                    .computeProxyedURL(facesContext, null, null, styleSheetURI);
+        }
+
+        if (styleSheetURIWithContextPath == null) {
+            styleSheetURIWithContextPath = externalContext
+                    .getRequestContextPath()
+                    + styleSheetURI;
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG
@@ -131,9 +148,11 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
             return null;
         }
 
-        IContentAccessor contentAccessor = new BasicContentAccessor(
-                getFacesContext(), url, contentType, null);
+        IContentAccessor contentAccessor = ContentAccessorFactory
+                .createFromWebResource(getFacesContext(), url, contentType);
 
+        contentAccessor.setContentVersionHandler(null); // Pas besoin de version
+        // !
         contentAccessor.setPathType(IContentAccessor.CONTEXT_PATH_TYPE);
 
         return contentAccessor;
@@ -245,6 +264,16 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
     public Boolean getMultiWindowMode() {
         return multiWindowMode;
+    }
+
+    public IClientBrowser getClientBrowser() {
+        if (clientBrowser != null) {
+            return clientBrowser;
+        }
+
+        clientBrowser = ClientBrowserImpl.get(getFacesContext());
+
+        return clientBrowser;
     }
 
     // public boolean keepDisabledState() {

@@ -63,5 +63,7 @@ public interface IHtmlProcessContext extends IProcessContext {
 
     boolean useScriptCData();
 
+    IClientBrowser getClientBrowser();
+
     // boolean keepDisabledState();
 }
