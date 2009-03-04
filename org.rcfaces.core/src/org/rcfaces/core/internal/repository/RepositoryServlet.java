@@ -260,7 +260,7 @@ public abstract class RepositoryServlet extends ConfiguredHttpServlet {
             if (hasGZipSupport() && hasGzipSupport(request)) {
                 byte jsGZip[] = record.getGZipedBuffer();
                 if (jsGZip != null) {
-                    setGzipContentEncoding(response);
+                    setGzipContentEncoding(response, true);
 
                     buf = jsGZip;
                     noHeader = true;

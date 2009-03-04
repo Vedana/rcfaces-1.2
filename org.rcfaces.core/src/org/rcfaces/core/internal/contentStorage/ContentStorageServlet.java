@@ -278,7 +278,7 @@ public class ContentStorageServlet extends ConfiguredHttpServlet {
         }
 
         if (resolvedContent instanceof IGzippedResolvedContent) {
-            setGzipContentEncoding(response);
+            setGzipContentEncoding(response, true);
         }
 
         String contentType = resolvedContent.getContentType();
