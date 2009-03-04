@@ -584,7 +584,10 @@ var __members = {
 		
 		var self=this;
 		window.setTimeout(function() {
-			self.f_setFocus();
+			var popup=self;
+			self=null;
+		
+			popup.f_setFocus();
 		}, 10);
 	},
 	/**
@@ -730,7 +733,10 @@ var __members = {
 		// A cause de IE !!!! ARG !
 		var self=this;
 		window.setTimeout(function() {
-			self.fa_valueSelected(value, message, values, self._focusNext);
+			popup=self;
+			self=null;
+			
+			popup.fa_valueSelected(value, message, values, popup._focusNext);
 		}, 0);
 	},
 	/**
@@ -807,12 +813,15 @@ var __members = {
 
 		var self=this;
 		this._timerId=window.setTimeout(function() {
+			var popup=self;
+			self=null;
+		
 			if (window._rcfacesExiting) {
 				return;
 			}
 						
 			try {
-				self._onSuggestTimeOut();
+				popup._onSuggestTimeOut();
 				
 			} catch (x) {
 				f_core.Error(fa_dataGridPopup, "_onSearchSuggest.timer: Timeout processing error !", x);
