@@ -3,6 +3,8 @@
  */
 package org.rcfaces.renderkit.html.internal.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
@@ -13,6 +15,10 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
  * @version $Revision$ $Date$
  */
 public class JavaScriptObjectLiteralWriter implements IObjectLiteralWriter {
+    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(JavaScriptObjectLiteralWriter.class);
 
     private final IJavaScriptWriter parent;
 

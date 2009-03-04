@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.faces.component.UIComponent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
@@ -21,6 +23,8 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  */
 public class TextTypeTools {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(TextTypeTools.class);
 
     private static final Map HTML_TYPES = new HashMap(32);
     static {
