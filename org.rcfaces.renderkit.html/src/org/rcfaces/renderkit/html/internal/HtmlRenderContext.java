@@ -70,6 +70,8 @@ public class HtmlRenderContext extends AbstractRenderContext implements
 
     private boolean clientMessageIdFilterReadOnly;
 
+    private boolean userAgentVary;
+
     private String waiRolesNS = null;
 
     private boolean clientValidation = true;
@@ -481,6 +483,14 @@ public class HtmlRenderContext extends AbstractRenderContext implements
     public static void setMetaDataInitialized(FacesContext facesContext) {
         facesContext.getExternalContext().getRequestMap().put(
                 META_DATA_INITIALIZED_PROPERTY, Boolean.TRUE);
+    }
+
+    public void setUserAgentVary(boolean userAgentVary) {
+        this.userAgentVary = userAgentVary;
+    }
+
+    public boolean isUserAgentVary() {
+        return userAgentVary;
     }
 
 }

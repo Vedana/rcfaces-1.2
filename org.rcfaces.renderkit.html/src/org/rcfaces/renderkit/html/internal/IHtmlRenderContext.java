@@ -25,6 +25,8 @@ public interface IHtmlRenderContext extends IRenderContext {
 
     String JAVASCRIPT_CDATA_END = "//]]>";
 
+    String STYLESHEET_REL = "stylesheet";
+
     String CSS_TYPE = "text/css";
 
     String HTML_TYPE = "text/html";
@@ -67,4 +69,6 @@ public interface IHtmlRenderContext extends IRenderContext {
     boolean isClientValidation();
 
     int getAsyncRenderMode(IAsyncRenderModeCapability asyncRenderModeCapability);
+
+    boolean isUserAgentVary();
 }

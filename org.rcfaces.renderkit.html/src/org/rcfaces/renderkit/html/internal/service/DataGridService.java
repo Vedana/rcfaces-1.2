@@ -195,7 +195,7 @@ public class DataGridService extends AbstractHtmlService {
 
                 } else {
                     ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response);
+                            .setGzipContentEncoding((HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
