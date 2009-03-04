@@ -61,7 +61,13 @@ public class ExtendedHttpServlet extends HttpServlet {
 
     public static final String HTTP_IF_NOT_HASH = "If-Not-Hash";
 
+    public static final String HTTP_VARY = "Vary";
+
     public static final String HTTP_PRAGMA = "Pragma";
+
+    public static final String ACCEPT_ENCODING = "Accept-Encoding";
+
+    public static final String USER_AGENT = "User-Agent";
 
     public static final String GZIP_CONTENT_ENCODING = "gzip";
 
@@ -241,8 +247,28 @@ public class ExtendedHttpServlet extends HttpServlet {
         response.setDateHeader(HTTP_LAST_MODIFIED, System.currentTimeMillis());
     }
 
-    public static void setGzipContentEncoding(HttpServletResponse response) {
+    public static void setVaryAcceptEncoding(HttpServletResponse response) {
+        response.setHeader(HTTP_VARY, ACCEPT_ENCODING);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set Vary accept encoding.");
+        }
+    }
+
+    public static void setVaryUserAgent(HttpServletResponse response) {
+        response.setHeader(HTTP_VARY, USER_AGENT);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Set Vary user agent.");
+        }
+    }
+
+    public static void setGzipContentEncoding(HttpServletResponse response,
+            boolean declareVaryAcceptEncoding) {
         response.setHeader(HTTP_CONTENT_ENCODING, GZIP_CONTENT_ENCODING);
+        if (declareVaryAcceptEncoding) {
+            response.setHeader(HTTP_VARY, ACCEPT_ENCODING);
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Set GZIP content encoding.");
