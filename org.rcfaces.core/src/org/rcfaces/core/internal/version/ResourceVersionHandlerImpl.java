@@ -61,16 +61,6 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
 
     public void startup(FacesContext facesContext) {
 
-        RcfacesContext rcfacesContext = RcfacesContext
-                .getInstance(facesContext);
-        if (rcfacesContext.getResourceVersionHandler() == null) {
-            rcfacesContext.setResourceVersionHandler(this);
-        }
-
-        if (rcfacesContext.getDefaultContentVersionHandler() == null) {
-            rcfacesContext.setDefaultContentVersionHandler(this);
-        }
-
         ExternalContext externalContext = facesContext.getExternalContext();
 
         String applicationVersionURI = ApplicationVersionServlet
@@ -122,6 +112,16 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         }
 
         this.version = version;
+
+        RcfacesContext rcfacesContext = RcfacesContext
+                .getInstance(facesContext);
+        if (rcfacesContext.getResourceVersionHandler() == null) {
+            rcfacesContext.setResourceVersionHandler(this);
+        }
+
+        if (rcfacesContext.getDefaultContentVersionHandler() == null) {
+            rcfacesContext.setDefaultContentVersionHandler(this);
+        }
     }
 
     public boolean isEnabled() {
