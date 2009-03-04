@@ -7,21 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.IClientValidator;
 import org.rcfaces.core.component.TextEntryComponent;
+import org.rcfaces.core.component.capability.IClientValidationCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.config.ClientValidatorsRegistryImpl.ClientValidator;
@@ -29,16 +25,15 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
-import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ClientValidatorTools;
+import org.rcfaces.core.internal.tools.ClientValidatorTools.IClientValidationContext;
 import org.rcfaces.core.internal.util.CommandParserIterator;
 import org.rcfaces.core.internal.util.ParamUtils;
-import org.rcfaces.core.internal.util.CommandParserIterator.ICommand;
 import org.rcfaces.core.internal.validator.IClientValidatorDescriptor;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
-import org.rcfaces.core.internal.validator.IServerConverter;
 import org.rcfaces.core.internal.validator.ITaskDescriptor;
 import org.rcfaces.core.validator.IBehaviorTask;
 import org.rcfaces.core.validator.ICheckerTask;
@@ -66,9 +61,11 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
     private static final IClientValidatorDescriptor AUTO_TAB_VALIDATOR_DESCRIPTOR = new ClientValidator();
 
-    private static final String VALIDATOR_COMMAND_PROPERTY = "camelia.validator.command";
+    // private static final String VALIDATOR_COMMAND_PROPERTY =
+    // "camelia.validator.command";
 
-    private static final String VALIDATOR_DESCRIPTOR_PROPERTY = "camelia.validator.descriptor";
+    // private static final String VALIDATOR_DESCRIPTOR_PROPERTY =
+    // "camelia.validator.descriptor";
 
     private static final String DEFAULT_VALIDATOR_REQUIRED_CLASSES[] = { "f_vb" };
 
@@ -140,7 +137,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
-        // boolean useValidator = false;
+//        boolean useValidator = false;
 
         if (textEntryComponent.isAutoTab(facesContext)) {
             htmlWriter.writeAttribute("v:autoTab", true);
@@ -150,13 +147,23 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         boolean renderValidator = false;
 
-        String validator = textEntryComponent.getClientValidator(facesContext);
-        if (validator != null) {
-            renderValidator = installValidator(componentRenderContext,
-                    validator);
+        /*
+         * String validator =
+         * textEntryComponent.getClientValidator(facesContext); if (validator !=
+         * null) { renderValidator = installValidator(componentRenderContext,
+         * validator);
+         * 
+         * // C'est un validateur, il faut forcer le stub pour le RESET //
+         * useValidator = true; }
+         */
 
-            // C'est un validateur, il faut forcer le stub pour le RESET
-            // useValidator = true;
+        IClientValidationContext clientValidationContext = ClientValidatorTools
+                .getClientValidationContext(htmlWriter
+                        .getHtmlComponentRenderContext().getFacesContext(),
+                        textEntryComponent);
+        if (clientValidationContext != null) {
+            renderValidator = true;
+//            useValidator = true;
         }
 
         if (renderValidator == false) {
@@ -189,10 +196,10 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
-        // if (useValidator) {
-        // htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
-        // .getJavaScriptRenderContext().forceJavaScriptStub();
-        // }
+/*        if (useValidator) {
+            htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+                    .getJavaScriptRenderContext().forceJavaScriptStub();
+        } */
     }
 
     protected boolean useHtmlAccessKeyAttribute() {
@@ -308,87 +315,66 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         return true;
     }
 
-    protected boolean installValidator(IComponentRenderContext renderContext,
-            String validator) {
-        Iterator it = new CommandParserIterator(validator);
-        if (it.hasNext() == false) {
-            return false;
-        }
-
-        CommandParserIterator.ICommand command = (ICommand) it.next();
-
-        if (it.hasNext()) {
-            throw new FacesException(
-                    "Validator does not support multiple expression.");
-        }
-
-        FacesContext facesContext = renderContext.getFacesContext();
-
-        IClientValidatorsRegistry clientValidatorManager = renderContext
-                .getRenderContext().getProcessContext().getRcfacesContext()
-                .getClientValidatorsRegistry();
-        if (clientValidatorManager == null) {
-            // throw new FacesException("Can not get descriptorManager from
-            // faces context !");
-
-            // Designer mode
-            return false;
-        }
-
-        IProcessContext processContext = renderContext.getRenderContext()
-                .getProcessContext();
-        Locale locale = processContext.getUserLocale();
-        TimeZone timeZone = processContext.getUserTimeZone();
-
-        IClientValidatorDescriptor validatorDescriptor = clientValidatorManager
-                .getClientValidatorById(facesContext, command.getName(),
-                        locale, timeZone);
-        if (validatorDescriptor == null) {
-            throw new FacesException("Can not find validator '"
-                    + command.getName() + "' for component '"
-                    + renderContext.getComponentClientId() + "' !");
-        }
-
-        renderContext.setAttribute(VALIDATOR_COMMAND_PROPERTY, command);
-        renderContext.setAttribute(VALIDATOR_DESCRIPTOR_PROPERTY,
-                validatorDescriptor);
-
-        UIComponent component = renderContext.getComponent();
-        if (component instanceof ValueHolder) {
-            ValueHolder valueHolder = (ValueHolder) component;
-
-            if (valueHolder.getConverter() == null) {
-                IServerConverter serverConverter = validatorDescriptor
-                        .getServerConverter();
-
-                if (serverConverter != null) {
-                    Converter converter = computeConverter(facesContext,
-                            component, serverConverter, command.getName());
-
-                    if (converter != null) {
-                        valueHolder.setConverter(converter);
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    private Converter computeConverter(FacesContext facesContext,
-            UIComponent component, IServerConverter serverConverter,
-            String validatorId) {
-        Converter converter = serverConverter.getInstance(facesContext,
-                component);
-
-        if (converter == null) {
-            throw new FacesException(
-                    "Invalid server converter for validatorId='" + validatorId
-                            + "'.");
-        }
-
-        return converter;
-    }
+    /*
+     * protected boolean installValidator(IComponentRenderContext renderContext,
+     * String validator) { Iterator it = new CommandParserIterator(validator);
+     * if (it.hasNext() == false) { return false; }
+     * 
+     * CommandParserIterator.ICommand command = (ICommand) it.next();
+     * 
+     * if (it.hasNext()) { throw new FacesException(
+     * "Validator does not support multiple expression."); }
+     * 
+     * FacesContext facesContext = renderContext.getFacesContext();
+     * 
+     * IClientValidatorsRegistry clientValidatorManager = renderContext
+     * .getRenderContext().getProcessContext().getRcfacesContext()
+     * .getClientValidatorsRegistry(); if (clientValidatorManager == null) { //
+     * throw new FacesException("Can not get descriptorManager from // faces
+     * context !");
+     * 
+     * // Designer mode return false; }
+     * 
+     * IProcessContext processContext = renderContext.getRenderContext()
+     * .getProcessContext(); Locale locale = processContext.getUserLocale();
+     * TimeZone timeZone = processContext.getUserTimeZone();
+     * 
+     * IClientValidatorDescriptor validatorDescriptor = clientValidatorManager
+     * .getClientValidatorById(facesContext, command.getName(), locale,
+     * timeZone); if (validatorDescriptor == null) { throw new
+     * FacesException("Can not find validator '" + command.getName() +
+     * "' for component '" + renderContext.getComponentClientId() + "' !"); }
+     * 
+     * renderContext.setAttribute(VALIDATOR_COMMAND_PROPERTY, command);
+     * renderContext.setAttribute(VALIDATOR_DESCRIPTOR_PROPERTY,
+     * validatorDescriptor);
+     * 
+     * UIComponent component = renderContext.getComponent(); if (component
+     * instanceof ValueHolder) { ValueHolder valueHolder = (ValueHolder)
+     * component;
+     * 
+     * if (valueHolder.getConverter() == null) { IServerConverter
+     * serverConverter = validatorDescriptor .getServerConverter();
+     * 
+     * if (serverConverter != null) { Converter converter =
+     * computeConverter(facesContext, component, serverConverter,
+     * command.getName());
+     * 
+     * if (converter != null) { valueHolder.setConverter(converter); } } } }
+     * 
+     * return true; }
+     */
+    /*
+     * private Converter computeConverter(FacesContext facesContext, UIComponent
+     * component, IServerConverter serverConverter, String validatorId) {
+     * Converter converter = serverConverter.getInstance(facesContext,
+     * component);
+     * 
+     * if (converter == null) { throw new FacesException(
+     * "Invalid server converter for validatorId='" + validatorId + "'."); }
+     * 
+     * return converter; }
+     */
 
     protected void renderAttributeValidator(IHtmlWriter htmlWriter)
             throws WriterException {
@@ -408,15 +394,24 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
         List params = new ArrayList(8);
 
-        IClientValidatorDescriptor validatorDescriptor = (IClientValidatorDescriptor) componentRenderContext
-                .getAttribute(VALIDATOR_DESCRIPTOR_PROPERTY);
-        if (validatorDescriptor != null) {
-            CommandParserIterator.ICommand command = (ICommand) componentRenderContext
-                    .getAttribute(VALIDATOR_COMMAND_PROPERTY);
+        IClientValidationContext clientValidationContext = ClientValidatorTools
+                .getClientValidationContext(htmlWriter
+                        .getHtmlComponentRenderContext().getFacesContext(),
+                        (IClientValidationCapability) validationCapability);
+
+        IClientValidatorDescriptor validatorDescriptor = null;
+
+        if (clientValidationContext != null) {
+            validatorDescriptor = clientValidationContext
+                    .getClientValidatorDescriptor();
+
+            CommandParserIterator.ICommand command = clientValidationContext
+                    .getClientValidatorCommand();
 
             IParameter expressionParameters[] = command.listParameters();
-            IParameter defaultParameters[] = validatorDescriptor
-                    .listParameters();
+            IParameter defaultParameters[] = clientValidationContext
+                    .getClientValidatorDescriptor().listParameters();
+
             if ((expressionParameters != null && expressionParameters.length > 0)
                     || (defaultParameters != null && defaultParameters.length > 0)) {
 
@@ -874,10 +869,16 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         IComponentRenderContext componentRenderContext = jsWriter
                 .getHtmlComponentRenderContext();
 
-        CommandParserIterator.ICommand command = (ICommand) componentRenderContext
-                .getAttribute(VALIDATOR_COMMAND_PROPERTY);
-        IClientValidatorDescriptor validatorDescriptor = (IClientValidatorDescriptor) componentRenderContext
-                .getAttribute(VALIDATOR_DESCRIPTOR_PROPERTY);
+        IClientValidationContext clientValidationContext = ClientValidatorTools
+                .getClientValidationContext(componentRenderContext
+                        .getFacesContext(),
+                        (IClientValidationCapability) componentRenderContext
+                                .getComponent());
+
+        CommandParserIterator.ICommand command = clientValidationContext
+                .getClientValidatorCommand();
+        IClientValidatorDescriptor validatorDescriptor = clientValidationContext
+                .getClientValidatorDescriptor();
 
         List params = new ArrayList();
         IParameter cParameters[] = command.listParameters();
@@ -1017,25 +1018,30 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         TextEntryComponent component = (TextEntryComponent) componentRenderContext
                 .getComponent();
 
-        IClientValidatorDescriptor validatorDescriptor = (IClientValidatorDescriptor) componentRenderContext
-                .getAttribute(VALIDATOR_DESCRIPTOR_PROPERTY);
-        if (validatorDescriptor != null) {
-            javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.TEXT_ENTRY, "validator");
+        IClientValidationContext clientValidationContext = ClientValidatorTools
+                .getClientValidationContext(facesContext, component);
 
-            String requiredClasses[] = DEFAULT_VALIDATOR_REQUIRED_CLASSES;
-            if (requiredClasses != null && requiredClasses.length > 0) {
-                for (int i = 0; i < requiredClasses.length; i++) {
-                    javaScriptRenderContext.appendRequiredClass(
-                            requiredClasses[i], null);
+        if (clientValidationContext != null) {
+            IClientValidatorDescriptor validatorDescriptor = clientValidationContext
+                    .getClientValidatorDescriptor();
+            if (validatorDescriptor != null) {
+                javaScriptRenderContext.appendRequiredClass(
+                        JavaScriptClasses.TEXT_ENTRY, "validator");
+
+                String requiredClasses[] = DEFAULT_VALIDATOR_REQUIRED_CLASSES;
+                if (requiredClasses != null && requiredClasses.length > 0) {
+                    for (int i = 0; i < requiredClasses.length; i++) {
+                        javaScriptRenderContext.appendRequiredClass(
+                                requiredClasses[i], null);
+                    }
                 }
-            }
 
-            requiredClasses = validatorDescriptor.listRequiredClasses();
-            if (requiredClasses != null && requiredClasses.length > 0) {
-                for (int i = 0; i < requiredClasses.length; i++) {
-                    javaScriptRenderContext.appendRequiredClass(
-                            requiredClasses[i], null);
+                requiredClasses = validatorDescriptor.listRequiredClasses();
+                if (requiredClasses != null && requiredClasses.length > 0) {
+                    for (int i = 0; i < requiredClasses.length; i++) {
+                        javaScriptRenderContext.appendRequiredClass(
+                                requiredClasses[i], null);
+                    }
                 }
             }
         }
