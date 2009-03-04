@@ -425,6 +425,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 rangeLength++;
             }
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Encode set range rowIndex='" + rowIndex
+                        + "' rangeLength='" + rangeLength + "'.");
+            }
+
             if (dataModel instanceof IRangeDataModel) {
                 ((IRangeDataModel) dataModel)
                         .setRowRange(rowIndex, rangeLength);
@@ -445,6 +450,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             Object selectionModel = ((ISelectedValuesCapability) gridComponent)
                     .getSelectedValues();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Encode selectionModel='" + selectionModel + "'.");
+            }
 
             if (selectionModel != null) {
                 if (selectionModel instanceof IIndexesModel) {
@@ -495,6 +504,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             Object checkModel = ((ICheckedValuesCapability) gridComponent)
                     .getCheckedValues();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Encode checkModel='" + checkModel + "'.");
+            }
+
             if (checkModel != null) {
                 if (checkModel instanceof IIndexesModel) {
                     checkedIndexes = ((IIndexesModel) checkModel)
@@ -556,6 +570,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 additionalModel = updateAdditionalValues(facesContext,
                         gridComponent, rowValueColumn, additionalModel,
                         showAdditionalValues, hideAdditionalValues);
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Encode additionalModel='" + additionalModel + "'.");
             }
 
             if (additionalModel != null) {
@@ -634,11 +652,22 @@ public class DataGridRenderer extends AbstractGridRenderer {
         String rowIndexVar = tableContext.getRowIndexVar();
 
         boolean designerMode = tableContext.isDesignerMode();
+
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Encode grid componentId='"
+                    + ((UIComponent) gridComponent).getId() + "' rowIndexVar='"
+                    + rowIndexVar + "' designerMode='" + designerMode
+                    + "' rowCountVar='" + rowCountVar + "' searchEnd="
+                    + searchEnd + " count=" + count + " rows='" + rows + "'.");
+        }
+
         try {
             boolean selected = false;
             boolean checked = false;
             boolean additional = false;
             String rowId = null;
+
+            jsWriter.writeMethodCall("f_preAddRow2").writeln(");");
 
             int rowValueColumnIndex = -1;
             if (designerMode && rowValueColumn != null) {
@@ -849,6 +878,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (rowIndexVar != null) {
                 varContext.remove(rowIndexVar);
             }
+
+            jsWriter.writeMethodCall("f_postAddRow2").writeln(");");
         }
 
         // Le count a évolué ?
@@ -1478,11 +1509,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getStringProperty("uncheckedItems");
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("checkedItems=" + checkedRows + "  uncheckedItems="
-                        + uncheckedRows);
+                LOG.debug("Decode checkedItems=" + checkedRows
+                        + "  uncheckedItems=" + uncheckedRows);
             }
 
             if (checkedRows != null || uncheckedRows != null) {
+
                 if (rowValueColumn != null) {
 
                     Set checkedValues = CheckTools.checkValuesToSet(
@@ -1525,7 +1557,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getStringProperty("hideAdditional");
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("showAdditional=" + showAdditionalRows
+                LOG.debug("Decode showAdditional=" + showAdditionalRows
                         + "  hideAdditional=" + hideAdditionalRows);
             }
 
@@ -1580,9 +1612,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getCursorValue();
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("cursorValue=" + cursorValue + "  cursorValueObject="
-                        + cursorValueObject + " oldCursorValueObject="
-                        + oldCursorValueObject);
+                LOG.debug("Decode cursorValue=" + cursorValue
+                        + "  cursorValueObject=" + cursorValueObject
+                        + " oldCursorValueObject=" + oldCursorValueObject);
             }
 
             if (isEquals(oldCursorValueObject, cursorValueObject) == false) {

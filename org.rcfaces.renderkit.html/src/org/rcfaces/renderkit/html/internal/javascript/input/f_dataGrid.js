@@ -289,9 +289,10 @@ var __members = {
 			this.className+=" f_dataGrid_noWrap";
 		}
 	},
-	/*	
 	f_finalize: function() {
 	 
+		this._addRowFragment=undefined; // HtmlDocumentFragment
+		
 		// this._gridUpdadeServiceId=undefined; // String
 		// this._serviceGridId=undefined; // String
 		
@@ -300,7 +301,6 @@ var __members = {
 
 		this.f_super(arguments);
 	},
-	*/
 	/**
 	 * @method protected
 	 */
@@ -352,12 +352,36 @@ var __members = {
 		return ret;
 	},
 	/**
+	 *  @method hidden
+	 *  @return void
+	 */
+	f_preAddRow2: function() {
+		var doc=this.ownerDocument;
+		
+		this._addRowFragment= doc.createDocumentFragment();
+	},
+	/**
+	 *  @method hidden
+	 *  @return void
+	 */
+	f_postAddRow2: function() {
+		var fragment=this._addRowFragment;
+		if (!fragment) {
+			return;
+		}
+		
+		this._addRowFragment=undefined;
+		
+		f_core.AppendChild(this._tbody, fragment);
+	},
+	/**
 	 * @method hidden
 	 */
 	f_addRow2: function() {
 		f_core.Assert(this._tbody, "f_dataGrid.f_addRow2: No table body !");
 		
 		var doc=this.ownerDocument;
+		var fragment=this._addRowFragment;
 		
 		var row;
 		var firstCell=true;
@@ -372,9 +396,20 @@ var __members = {
 			
 			f_core.Assert(row.tagName.toLowerCase()=="tr", "f_dataGrid.f_addRow2: Invalid row ! "+row);
 			
+			if (fragment) {
+				row.parentNode.removeChild(row);
+				
+				f_core.AppendChild(fragment, row);
+			}	
+			
+			
 		} else {
 			row=doc.createElement("tr");
-			f_core.AppendChild(this._tbody, row);
+			if (fragment) {
+				f_core.AppendChild(fragment, row);
+			} else {
+				f_core.AppendChild(this._tbody, row);
+			}
 		}
 		this._rowsPool.push(row);
 		row._dataGrid=this;
@@ -800,7 +835,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any rowValue Row value, a row object, or the index of the row into the table.
-	 * @param boolean onlyVisible Keey only visible columns.
+	 * @param optional boolean onlyVisible Keey only visible columns.
 	 * @return Object
 	 */
 	f_getRowValuesSet: function(rowValue, onlyVisible) {
@@ -1596,7 +1631,7 @@ var __members = {
 	f_sortClientSide: function(methods, ascendings,tdIndexes) {
 		
 		var self=this;
-		function internalSort(obj1, obj2) {	
+		function internalSort(obj1, obj2) {				
 			for(var i=0;i<methods.length;i++) {
 				var tdIndex=tdIndexes[i];
 				
