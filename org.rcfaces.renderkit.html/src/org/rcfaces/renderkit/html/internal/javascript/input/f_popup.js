@@ -101,19 +101,23 @@ var __statics = {
 	 * @return void
 	 */
 	Initializer: function() {
-		if (f_core.IsInternetExplorer()) {
+		if (f_popup.Ie_enablePopup()) {
 			var popup=f_popup._Ie_PreparePopup(document);
 			popup.document._rootPopup=true;
 		}
 	},
 	DocumentComplete: function() {
-		if (f_core.IsInternetExplorer()) {
+		if (f_popup.Ie_enablePopup()) {
+			var _doc=document;
+		
 			window.setTimeout(function() {
-				if (!document._rcfacesIEPopup) {
+				if (!_doc._rcfacesIEPopup) {
 					return;
 				}
 				
-				f_popup._Ie_InitializePopup(document._rcfacesIEPopup, document);			
+				f_popup._Ie_InitializePopup(_doc._rcfacesIEPopup, _doc);
+				
+				_doc=null;
 			},10);
 		}
 	},
@@ -151,6 +155,10 @@ var __statics = {
 	 * @method hidden static
 	 */
 	Ie_enablePopup: function() {
+		if (window._rcfacesIePopupEnable===false) {
+			return false;
+		}
+		
 		return f_core.IsInternetExplorer();
 	},
 	/**
