@@ -13,7 +13,7 @@ var __members = {
 
 
 /*	
-	f_finalizer: function() {
+	f_finalize: function() {
 		// this._clientValidatorParameters=undefined; // Map<String,String>
 	},
 	*/
