@@ -9,14 +9,11 @@ import javax.faces.component.UIComponent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
@@ -54,7 +51,6 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
     /**
      * @param htmlWriter
-     * @return
      */
     public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         return getMainStyleClassName();
