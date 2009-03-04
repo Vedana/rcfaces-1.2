@@ -5,7 +5,7 @@
 /**
  * class f_fieldSet
  *
- * @class public f_fieldSet extends f_component
+ * @class public f_fieldSet extends f_component, fa_overStyleClass
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -85,10 +85,36 @@ var __members = {
 		}
 
 		this.f_setProperty(f_prop.TEXT, text);
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	f_updateStyleClass: function() {
+		var over=this.f_isMouseOver();
+	
+		var suffix=null;
+		if (over) {
+			suffix="_over";
+		}
+	
+		var className=this.f_computeStyleClass(suffix);
+		
+		if (over) {
+			var overStyleClass=this.f_getOverStyleClass();
+			if (overStyleClass) {
+				className+=" "+overStyleClass;
+			}
+		}
+				
+		if (this.className!=className) {
+			this.className=className;
+		}
 	}
 }
 new f_class("f_fieldSet", {
 	extend: f_component,
+	aspects: [ fa_overStyleClass ],
 	members: __members,
 	statics: __statics
 });

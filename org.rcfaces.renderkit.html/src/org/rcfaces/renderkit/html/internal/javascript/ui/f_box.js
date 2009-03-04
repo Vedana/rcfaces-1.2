@@ -16,9 +16,14 @@ var __statics = {
 }
 
 var __members = {
+	/**
+	 * @field private String
+	 */
+	_defaultMenuId: undefined,
+	
 /*
 	f_finalize: function() {
-		this._defaultMenuId=undefined; // string
+		this._defaultMenuId=undefined; // String
 		
 		this.f_super(arguments);
 	},
@@ -86,12 +91,37 @@ var __members = {
 	 */
 	fa_componentCaptureMenuEvent: function() {
 		return null;
+	},
+	/**
+	 * @method private
+	 * @return void
+	 */
+	f_updateStyleClass: function() {
+		var over=this.f_isMouseOver();
+	
+		var suffix=null;
+		if (over) {
+			suffix="_over";
+		}
+	
+		var className=this.f_computeStyleClass(suffix);
+		
+		if (over) {
+			var overStyleClass=this.f_getOverStyleClass();
+			if (overStyleClass) {
+				className+=" "+overStyleClass;
+			}
+		}
+				
+		if (this.className!=className) {
+			this.className=className;
+		}
 	}
 }
  
 new f_class("f_box", {
 	extend: f_component,
-	aspects: [ fa_asyncRender, fa_subMenu ],
+	aspects: [ fa_asyncRender, fa_subMenu, fa_overStyleClass ],
 	statics: __statics,
 	members: __members
 });

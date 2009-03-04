@@ -5,7 +5,7 @@
 /**
  * class f_expandBar
  *
- * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName
+ * @class public f_expandBar extends f_component, fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -291,6 +291,33 @@ var __members = {
 		
 		return ret;
 	},
+	/**
+	 * @method protected
+	 */
+	f_updateStyleClass: function() {
+		var over=this.f_isMouseOver();
+	
+		var suffix="";
+		if (this.f_isCollapsed()) {
+			suffix+="_collapsed";
+
+		} else if (over) {
+			suffix="_over";
+		}
+	
+		var className=this.f_computeStyleClass(suffix);
+		
+		if (over) {
+			var overStyleClass=this.f_getOverStyleClass();
+			if (overStyleClass) {
+				className+=" "+overStyleClass;
+			}
+		}	
+		
+		if (className!=this.className) {
+			this.className=className;
+		}
+	},
 	fa_updateCollapsed: function(set) {
 		var body=this._body;
 		
@@ -298,11 +325,6 @@ var __members = {
 			return;
 		}
 		var content=this._content;
-
-		var suffix="";
-		if (set) {
-			suffix+="_collapsed";
-		}	
 
 		var alt;
 		if (set) {
@@ -316,10 +338,7 @@ var __members = {
 			button.alt=alt;
 		}
 		
-		var cls=this.f_computeStyleClass(suffix);
-		if (cls!=this.className) {
-			this.className=cls;
-		}
+		this.f_updateStyleClass();
 		
 		var effect=this.f_getEffect();
 		
@@ -507,7 +526,7 @@ var __members = {
 }
 new f_class("f_expandBar", {
 	extend: f_component,
-	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName ],
+	aspects: [ fa_disabled, fa_readOnly, fa_collapsed, fa_groupName, fa_overStyleClass ],
 	statics: __statics,
 	members: __members
 });
