@@ -2,6 +2,8 @@
 
 	<facesComponent id="cameliaBase" extends="javax.faces.component.UIComponentBase">
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
+
+				
 	</facesComponent>
 	<facesComponent id="cameliaCommand" 
 			extends="javax.faces.component.UICommand">
@@ -10,7 +12,9 @@
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
 
 		<tagAttribute id="value" type="java.lang.Object" generate="true"/>
-				
+			
+		
+		
 		<method id="broadcast" >
 			<parameter type="javax.faces.event.FacesEvent" name="event" />
 			<import>javax.faces.event.ValueChangeEvent</import>
@@ -53,6 +57,7 @@
  
 		<method id="setConverter(String)"/>
 		<method id="setConverter(javax.faces.context.FacesContext, String)"/>	
+				
 
 		<tagAttribute id="value" type="java.lang.Object" generate="true"/>
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
@@ -161,6 +166,7 @@
 
 		<field id="cachedValue" type="Object" value="null"/>
 		-->
+				
 		<method id="getDataModelValue" returnType="javax.faces.model.DataModel">
 			<code>
 				return getDataModel();
@@ -179,6 +185,8 @@
 	</facesComponent>
 	<facesComponent id="cameliaGrid" extends="javax.faces.component.UIComponentBase" implements="javax.faces.component.NamingContainer" >
 		<field id="dataModel" type="javax.faces.model.DataModel" value="null" modifiers="transient"/>
+
+				
 
 		<method id="isRowAvailable" />
 		<method id="isRowAvailable(javax.faces.context.FacesContext)" />
@@ -217,9 +225,11 @@
 	</facesComponent>
 	<facesComponent id="cameliaMessage" extends="javax.faces.component.UIMessage">
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
+				
 	</facesComponent>
 	<facesComponent id="cameliaMessages" extends="javax.faces.component.UIMessages">
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
+				
 	</facesComponent>
 
 	<facesComponent id="cameliaItem"
@@ -228,16 +238,19 @@
 		<tagAttribute id="itemValue" type="java.lang.Object" />
 		<tagAttribute id="itemDisabled" type="boolean" />
 		<tagAttribute id="itemDescription" type="java.lang.String" />
+				
 	</facesComponent>
 
 	<facesComponent id="cameliaItems"
 			extends="javax.faces.component.UISelectItems">
 		<tagAttribute id="value" type="java.lang.Object" />
+				
 	</facesComponent>
 
 	<facesComponent id="cameliaColumn" 
 			extends="javax.faces.component.UIColumn">
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
+				
 	</facesComponent>
 
 	<facesComponent id="cameliaValueColumn" 
@@ -246,6 +259,7 @@
 		<method id="getConverter(javax.faces.context.FacesContext)"/>
 		<tagAttribute id="converter" type="java.lang.String" generate="false"/>
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
+				
 	</facesComponent>
 
 	<facesComponent id="cameliaSelectMany" 
@@ -253,6 +267,7 @@
 			implements="org.rcfaces.core.internal.capability.IConvertValueHolder"
 			ignoreRequired="true">
 
+				
 		<method id="setConverter(String)"/>
 		<method id="setConverter(javax.faces.context.FacesContext, String)"/>
 
@@ -380,7 +395,6 @@
 			<parameter type="javax.faces.el.ValueBinding" name="value" />
 			<code>
 				setValueBinding(Properties.VALUE, value);
-//				clearCachedValue();
 			</code>
 		</method>
 	</component>
@@ -638,6 +652,9 @@
 		<capability id="IAsyncRenderModeCapability" />
 		<capability id="IAsyncDecodeModeCapability" />
 		<capability id="IVariableScopeCapability" />	
+		<capability id="ITypedComponentCapability" />	
+
+		<capability id="IOverStyleClassCapability" />	
 
 		<method id="setAsyncRenderMode(String)" />		
 		<method id="setAsyncDecodeMode(String)" />	
@@ -1508,13 +1525,15 @@
 				return ComponentTools.getCursorValue(getValue(), this, facesContext);
 			</code>
 		</method>
-		
+
+<!-- 		Pas bon pour les additionalInformations
 		<method id="restoreDescendantState" modifier="protected">
 			<code/>
 		</method>
 		<method id="saveDescendantState" modifier="protected">
 			<code/>
 		</method>
+		-->
 		
 		<method id="setFilterProperties(String)" returnType="void" />
 		
@@ -2387,6 +2406,8 @@ Dans le cas d'un mode period !
 		<capability id="ILoadEventCapability" />
 		<capability id="IVariableScopeCapability" />	
 
+		<capability id="IOverStyleClassCapability" />	
+
 		<attribute id="collapseEffect" type="java.lang.String" />
 		<attribute id="collapsedText" type="java.lang.String" />
 		
@@ -2467,13 +2488,16 @@ Dans le cas d'un mode period !
 		<capability id="IImageCapability" />	
 		<capability id="IImageSizeCapability" />
 		<capability id="IVariableScopeCapability" />	
-		
+
+		<capability id="IOverStyleClassCapability" />			
 		
 		<propertyValue>text</propertyValue>
 	</component>	
 
 	<component id="fileItem" abstract="true" extends="cameliaItem">
 		<tagAttribute id="src" type="java.lang.String" generate="true"/>
+
+		<attribute id="charSet" type="java.lang.String" />
 
 		<binding-alias id="src" target="itemValue" />
 		<method id="setSrc" returnType="void">
@@ -3250,7 +3274,7 @@ Dans le cas d'un mode period !
 		<capability id="IForCapability" />
 <!--		<capability id="IValueAdapterCapability" /> -->
 		
-		<attribute id="type" type="java.lang.String" />
+		<capability id="ITypedComponentCapability" />	
 
 		<propertyValue>text</propertyValue>
 	</component>
@@ -3273,6 +3297,8 @@ Dans le cas d'un mode period !
 		
 		<attribute id="columnNumber" type="int" />
 		<attribute id="rowNumber" type="int" />
+
+		<attribute id="ignoreWhenFull" type="boolean" />
 
 		<propertyValue>text</propertyValue>
 
@@ -3334,6 +3360,16 @@ Dans le cas d'un mode period !
 		<method id="getClientValidationParametersMap(javax.faces.context.FacesContext)" />
 		<method id="setValidationParameterData(String, Object, boolean)" />
 		<method id="isClientSideValidationParameter(String,javax.faces.context.FacesContext)" />
+
+		<method id="setClientValidator" returnType="void">
+			<import>org.rcfaces.core.internal.tools.ClientValidatorTools</import>
+			<parameter type="String" name="clientValidator" />
+			<code>
+				engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
+				
+				ClientValidatorTools.setClientValidator(null, this);
+			</code>
+		</method>
 
 	</component>
 
@@ -3564,6 +3600,7 @@ Dans le cas d'un mode period !
 		<capability id="IReadOnlyCapability" />
 		<capability id="IMenuCapability" />
 		<capability id="IShowValueCapability"/>
+		<capability id="IOverStyleClassCapability"/>
 
 		<capability id="ICheckableCapability" />
 		<capability id="ICheckCardinalityCapability" />
