@@ -52,6 +52,8 @@ public class Constants {
 
     public static final boolean RESOURCE_CONTENT_VERSION_SUPPORT = true;
 
+    public static final boolean RESOURCE_CONTENT_PROXY_SUPPORT = true;
+
     public static final boolean CACHED_COMPONENT_ITERATOR = false;
 
     public static final boolean STATED_COMPONENT_CHILDREN_LIST = false;
@@ -114,8 +116,7 @@ public class Constants {
     public static final boolean CACHED_LOCALE_FORMATS = true;
 
     /**
-     * <code>false</code> Optimize for CPU
-     * <code>true</code>Optimize for Memory
+     * <code>false</code> Optimize for CPU <code>true</code>Optimize for Memory
      */
     public static final boolean COMPACTED_PROPERTY_NAME = false;
 
