@@ -71,6 +71,11 @@ var f_core = {
 	 * @field hidden static final number
 	 */
 	DOCUMENT_NODE: 9,
+		
+	/**
+	 * @field hidden static final number
+	 */
+	DOCUMENT_FRAGMENT: 11,
 	
 	/**
 	 * @field private static final number
@@ -679,7 +684,6 @@ var f_core = {
 			kmethods.prototype=methods;
 		}
 
-
 		try {
 			for(var w=win;w && w.parent!=w;w=w.parent) {
 				var f=w.parent.rcfacesProfilerCB
@@ -729,7 +733,7 @@ var f_core = {
 		f_core.AddEventListener(win, "unload", f_core._OnExit);
 
 		if (f_core.IsInternetExplorer()) {
-			f_core.AddEventListener(win.document, "selectstart", f_core._IeOnSelectStart);
+		//	f_core.AddEventListener(win.document, "selectstart", f_core._IeOnSelectStart);
 		}
 	},
 	/**
@@ -794,8 +798,6 @@ var f_core = {
 	RemoveEventListeners: function(components, name, fct) {
 		
 	 	if (f_core.IsInternetExplorer()) {
-	 		name="on"+name;
-	 		
 			for(var i=0;i<components.length;i++) {
 				components[i].detachEvent(name, fct);	
 			}
@@ -1124,6 +1126,13 @@ var f_core = {
 		
 		win._rcfacesExiting=f_core._RCFACES_EXITING;
 		
+		var rcfacesCleanUpTimeout=win._rcfacesCleanUpTimeout;
+		if (rcfacesCleanUpTimeout) {
+			win._rcfacesCleanUpTimeout=undefined;
+
+			win.clearTimeout(rcfacesCleanUpTimeout);
+		}
+		
 		var exitedState=f_core._RCFACES_EXITED;
 		try {		
 			var doc=win.document;
@@ -1135,7 +1144,7 @@ var f_core = {
 				f_core._DesinstallModalWindow();
 				
 				if (f_core.IsInternetExplorer()) {
-					f_core.RemoveEventListener(doc, "selectstart", f_core._IeOnSelectStart);
+					//f_core.RemoveEventListener(doc, "selectstart", f_core._IeOnSelectStart);
 				}
 				
 				var timeoutID=f_core._FocusTimeoutID;
@@ -1194,7 +1203,11 @@ var f_core = {
 		} finally {
 			win._rcfacesExiting=exitedState;
 		}
-		
+
+		if (document.body) {
+			document.body.oncontextmenu=null;
+		}		
+
 		// Ultime finalize
 		f_core._window=undefined;
 	},
@@ -1226,9 +1239,15 @@ var f_core = {
 			case "number":
 				val=String(val);
 				break;
+				
+			case "object":
+				if (val instanceof Date) {
+					val=String(val);
+					break;
+				}
 			
 			default:
-				f_core.Error(f_core, "SetInputHidden: Can not set a input hidden '"+name+"' with value '"+val+"'.");
+				f_core.Error(f_core, "SetInputHidden: Can not set an input hidden '"+name+"' with value '"+val+"'.");
 			}
 		}
 		
@@ -1340,7 +1359,7 @@ var f_core = {
 	 * @return HTMLElement
 	 */
 	CreateElement: function(parent, tagName, properties) {
-		f_core.Assert(parent && parent.nodeType==f_core.ELEMENT_NODE, "f_core.CreateElement: Invalid component ! ("+parent+")");		
+		f_core.Assert(parent && (parent.nodeType==f_core.ELEMENT_NODE || parent.nodeType==f_core.DOCUMENT_FRAGMENT), "f_core.CreateElement: Invalid component ! ("+parent+")");		
 		
 		var doc=parent.ownerDocument;
 		
@@ -1698,11 +1717,18 @@ var f_core = {
 				f_core._PostSubmit(form);
 
 				if (win._rcfacesCleanUpOnSubmit!==false) {
-					win.setTimeout(function () {
-						if (win.f_core && win.f_core.ExitWindow) {
-							win.f_core.ExitWindow(win, true);
+					var _win=win;
+					win._rcfacesCleanUpTimeout=win.setTimeout(function () {
+						var w=_win;
+						_win=null;
+						
+						if (w.f_core && w.f_core.ExitWindow) {
+							w.f_core.ExitWindow(w, true);
 						}
+						
 					}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
+					
+					f_core.Profile(null, "f_core.SubmitEvent.setTimer("+f_core._CLEAN_UP_ON_SUBMIT_DELAY+")");
 				}
 			}
 				
@@ -1889,10 +1915,15 @@ var f_core = {
 					f_core._PostSubmit(form);
 								
 					if (win._rcfacesCleanUpOnSubmit!==false) {
-						win.setTimeout(function () {
-							if (win.f_core && win.f_core.ExitWindow) {
-								win.f_core.ExitWindow(win, true);
+						var _win=win;
+						win._rcfacesCleanUpTimeout=win.setTimeout(function () {
+							var w=_win;
+							_win=null;
+							
+							if (w.f_core && w.f_core.ExitWindow) {
+								w.f_core.ExitWindow(w, true);
 							}
+							
 						}, f_core._CLEAN_UP_ON_SUBMIT_DELAY);
 					}
 				}
@@ -4601,12 +4632,20 @@ var f_core = {
 			
 			var i=0;
 			for(;caret.parentElement() == component;) {
-				if (caret.move("character", -1)!=-1) {
+				var move=caret.move("character", -1);
+				f_core.Debug(f_core, "GetTextSelection: move="+move);
+				
+				if (move!=-1) {
 					break;
-				}
+				}				
 				
 				i++;
 			}
+			
+			if (i) {
+				i--; // On a un compte +1
+			}
+			
 			
 			f_core.Debug(f_core, "GetTextSelection: Caret position: "+i+" collapse="+isCollapsed);
 			
@@ -4675,7 +4714,9 @@ var f_core = {
 	
 		if (f_core.IsInternetExplorer()) {
 			var tr=component.createTextRange();
-			tr.moveStart("character", start, end-start);
+			tr.collapse(true);
+			tr.moveEnd("character", end);
+			tr.moveStart("character", start);
 			tr.select();
 			return;
 		}
