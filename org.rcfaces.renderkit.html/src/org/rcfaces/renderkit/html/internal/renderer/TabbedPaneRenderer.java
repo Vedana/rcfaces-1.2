@@ -13,8 +13,12 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TabComponent;
 import org.rcfaces.core.component.TabbedPaneComponent;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.iterator.ITabIterator;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.component.IImageAccessors;
+import org.rcfaces.core.internal.component.IStatesImageAccessors;
+import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -301,31 +305,56 @@ public class TabbedPaneRenderer extends CardBoxRenderer {
             htmlWriter.writeTabIndex(tabIndex.intValue());
         }
 
-        String imageURL = tabComponent.getImageURL(facesContext);
-        if (imageURL != null) {
-            if (disabled) {
-                String disabledImageURL = tabComponent
-                        .getDisabledImageURL(facesContext);
-                if (disabledImageURL != null) {
-                    imageURL = disabledImageURL;
-                }
+        IContentAccessors contentAccessors = tabComponent
+                .getImageAccessors(facesContext);
 
-            } else if (selected) {
-                String selectedImageURL = tabComponent
-                        .getSelectedImageURL(facesContext);
-                if (selectedImageURL != null) {
-                    imageURL = selectedImageURL;
+        if (contentAccessors instanceof IImageAccessors) {
+            IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+
+            String imageURL = null;
+
+            if (disabled || selected) {
+                if (imageAccessors instanceof IStatesImageAccessors) {
+                    IStatesImageAccessors statesImageAccessors = (IStatesImageAccessors) imageAccessors;
+
+                    if (disabled) {
+                        IContentAccessor contentAccessor = statesImageAccessors
+                                .getDisabledImageAccessor();
+                        if (contentAccessor != null) {
+                            imageURL = contentAccessor.resolveURL(facesContext,
+                                    null, null);
+                        }
+                    } else if (selected) {
+                        IContentAccessor contentAccessor = statesImageAccessors
+                                .getSelectedImageAccessor();
+                        if (contentAccessor != null) {
+                            imageURL = contentAccessor.resolveURL(facesContext,
+                                    null, null);
+                        }
+                    }
                 }
             }
 
-            htmlWriter.startElement(IHtmlWriter.IMG);
+            if (imageURL == null) {
+                IContentAccessor contentAccessor = imageAccessors
+                        .getImageAccessor();
 
-            htmlWriter.writeSrc(imageURL);
-            htmlWriter.writeAlign("center");
-            htmlWriter.writeBorder(0);
-            htmlWriter.writeClass("f_tabbedPane_titleIcon");
+                if (contentAccessor != null) {
+                    imageURL = contentAccessor.resolveURL(facesContext, null,
+                            null);
+                }
+            }
 
-            htmlWriter.endElement(IHtmlWriter.IMG);
+            if (imageURL != null) {
+                htmlWriter.startElement(IHtmlWriter.IMG);
+
+                htmlWriter.writeSrc(imageURL);
+                htmlWriter.writeAlign("center");
+                htmlWriter.writeBorder(0);
+                htmlWriter.writeClass("f_tabbedPane_titleIcon");
+
+                htmlWriter.endElement(IHtmlWriter.IMG);
+            }
         }
 
         String text = tabComponent.getText(facesContext);
