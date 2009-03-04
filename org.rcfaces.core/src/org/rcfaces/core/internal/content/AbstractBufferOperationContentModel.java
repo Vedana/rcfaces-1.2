@@ -97,6 +97,14 @@ public abstract class AbstractBufferOperationContentModel extends
         public final long getLength() {
             return length;
         }
+
+        public void merge(ContentInformation newContentInformation) {
+            if (newContentInformation.lastModified > lastModified) {
+                lastModified = newContentInformation.lastModified;
+            }
+
+            length += newContentInformation.getLength();
+        }
     }
 
     public String loadContent(FacesContext facesContext,
