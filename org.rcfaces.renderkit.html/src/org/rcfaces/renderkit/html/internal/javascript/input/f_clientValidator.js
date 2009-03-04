@@ -693,16 +693,19 @@ var __members = {
 	
 		var self=this;
 		window.setTimeout(function() {
+			var clientValidator=self;
+			self=null;
+			
 			// Il faut faire ca en asynchrone, apres le traitement du reset ...
 			
 			//var bRet = 
-			self._applyAutoCheck(self._initialValue, false);
+			clientValidator._applyAutoCheck(clientValidator._initialValue, false);
 			
-			if (self._hasFocus) {
-				self._applyInputValue();
+			if (clientValidator._hasFocus) {
+				clientValidator._applyInputValue();
 				
 			} else {
-				self._applyOutputValue();
+				clientValidator._applyOutputValue();
 			}
 		}, 100);
 	},

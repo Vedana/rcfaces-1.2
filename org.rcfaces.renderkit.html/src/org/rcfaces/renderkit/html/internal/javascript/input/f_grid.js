@@ -908,14 +908,19 @@ var __statics = {
 
 		// S'il y a un scroll, il faut l'aligner ...
 		if (dataGrid._scrollTitle) {
+		
+			var _dataGrid=dataGrid;
+		
 			window.setTimeout(function () {
-				var scrollTitleLeft=dataGrid._scrollTitle.scrollLeft;
+				var scrollTitleLeft=_dataGrid._scrollTitle.scrollLeft;
 				
-				var scrollBodyLeft=dataGrid._scrollBody.scrollLeft;
+				var scrollBodyLeft=_dataGrid._scrollBody.scrollLeft;
 				
 				if (scrollTitleLeft!=scrollBodyLeft) {
-					dataGrid._scrollBody.scrollLeft=scrollTitleLeft;
+					_dataGrid._scrollBody.scrollLeft=scrollTitleLeft;
 				}
+				
+				_dataGrid=null;
 			}, 50);
 		}
 		
@@ -2182,6 +2187,7 @@ var __members = {
 		var self=this;
 		f_core.GetWindow(doc).setTimeout(function() {
 			self._verifyWaitingPosition();
+			self=null;
 		}, 100);
 	},
 	/**
@@ -2228,6 +2234,7 @@ var __members = {
 		var self=this;
 		f_core.GetWindow(doc).setTimeout(function() {
 			self._verifyWaitingPosition();
+			self=null;
 		}, 100);
 	},
 	
@@ -4175,9 +4182,11 @@ var __members = {
 						
 						i+=Math.floor(this._rows/2); // On prend une petite marge ...
 						
-						var dataGrid=this;
+						var self=this;
 						f_core.GetWindow(dataGrid.ownerDocument).setTimeout(function() {
-							dataGrid._performRowsLoading(evt, i);
+							self._performRowsLoading(evt, i);
+							
+							self=null;
 						}, 100);
 					}
 				}
