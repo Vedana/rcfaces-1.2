@@ -4,7 +4,6 @@
 package org.rcfaces.core.validator;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
