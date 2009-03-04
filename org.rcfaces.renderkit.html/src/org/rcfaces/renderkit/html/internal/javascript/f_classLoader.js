@@ -230,7 +230,14 @@ f_classLoader.prototype = {
 			this._onFocusIds=undefined;
 			
 			document.body.onfocusin=null;
-		}		
+		}
+		
+		var onOverIds=this._onOverIds;
+		if (onOverIds) {
+			this._onOverIds=undefined;
+			
+			document.body.onmouseover=null;
+		}
 		
 		this._onInitComponentListeners=undefined; // List<function>
 		this._visibleListeners=undefined; // List<f_component>
@@ -987,79 +994,79 @@ f_classLoader.prototype = {
 	 */
 	f_initOnOverIds: function(ids) {
 		var onOverIds=this._onOverIds;
-		if (!onOverIds) {
-			onOverIds=ids;
-			this._onOverIds=onOverIds;
-			
-			var self=this;
-			
-			var initFct=function(component, retargetIE) {
-				var componentId=component.id;
-				
-				var idx=componentId.lastIndexOf('::');
-				var mainId=(idx>0)?componentId.substring(0, idx):componentId;
-				
-				if (!(mainId in onOverIds)) {
-					return;
-				}				
-				delete onOverIds[mainId];
-				
-				if (componentId!=mainId) {
-					component=component.ownerDocument.getElementById(mainId)
-				}
-				
-				if (f_class.IsObjectInitialized(component)) {
-					return true;
-				}
-				
-				f_core.Debug(f_classLoader, "f_initOnOverIds: Lazy onMouseOver initialization for "+component.id);
-				
-				try {
-					self.f_init(component);
-					
-					if (typeof(component.f_completeComponent)=="function") {
-						component.f_completeComponent();
-					}
-					
-				} catch (ex) {
-					f_core.Error(f_classLoader, "f_initOnOverIds: Can not initialize component '"+componentId+"'.", ex);
-				}	
-				
-				var onInitComponentListeners=self._onInitComponentListeners;
-				if (onInitComponentListeners) {
-					self._callOnInitComponentListeners(onInitComponentListeners, component);
-				}
-				
-				if (retargetIE) {						
-					var newEvt = component.ownerDocument.createEventObject(window.event)
-			   		return component.fireEvent("onmouseover", newEvt);
-				}
-			}
-			
-			if (f_core.IsInternetExplorer()) {
-				document.body.onmouseover=function() {
-					if (self._exiting) {
-						return;
-					}
-	
-					initFct(window.event.srcElement, true);
-				};
-			} else {
-				f_core.AddEventListener(document.body, "mouseover", function(evt) {
-					if (self._exiting) {
-						return;
-					}
-
-					initFct(evt.target);
-				}, document.body)
+		if (onOverIds) {		
+			for(var i in ids) {
+				onOverIds[i]=true;
 			}
 			
 			return;
-		}		
-
-		for(var i in ids) {
-			onOverIds[i]=true;
 		}
+				
+		onOverIds=ids;
+		this._onOverIds=onOverIds;
+		
+		var self=this;
+		
+		var initFct=function(component, retargetIE) {
+			var componentId=component.id;
+			
+			var idx=componentId.lastIndexOf('::');
+			var mainId=(idx>0)?componentId.substring(0, idx):componentId;
+			
+			if (!(mainId in onOverIds)) {
+				return;
+			}				
+			delete onOverIds[mainId];
+			
+			if (componentId!=mainId) {
+				component=component.ownerDocument.getElementById(mainId)
+			}
+			
+			if (f_class.IsObjectInitialized(component)) {
+				return true;
+			}
+			
+			f_core.Debug(f_classLoader, "f_initOnOverIds: Lazy onMouseOver initialization for "+component.id);
+			
+			try {
+				self.f_init(component);
+				
+				if (typeof(component.f_completeComponent)=="function") {
+					component.f_completeComponent();
+				}
+				
+			} catch (ex) {
+				f_core.Error(f_classLoader, "f_initOnOverIds: Can not initialize component '"+componentId+"'.", ex);
+			}	
+			
+			var onInitComponentListeners=self._onInitComponentListeners;
+			if (onInitComponentListeners) {
+				self._callOnInitComponentListeners(onInitComponentListeners, component);
+			}
+			
+			if (retargetIE) {						
+				var newEvt = component.ownerDocument.createEventObject(window.event)
+		   		return component.fireEvent("onmouseover", newEvt);
+			}
+		}
+		
+		if (f_core.IsInternetExplorer()) {
+			document.body.onmouseover=function() {
+				if (self._exiting) {
+					return;
+				}
+
+				initFct(window.event.srcElement, true);
+			};
+		} else {
+			f_core.AddEventListener(document.body, "mouseover", function(evt) {
+				if (self._exiting) {
+					return;
+				}
+
+				initFct(evt.target);
+			}, document.body)
+		}		
 	},
 	/**
 	 * @method hidden final
