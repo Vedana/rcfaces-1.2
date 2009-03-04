@@ -18,7 +18,7 @@ var __members= {
 	 * @param optional Event jsEvent
 	 * @param optional Object item
 	 * @param optional any value
-	 * @param optional fa_selectionProvider selectionProvider
+	 * @param optional fa_selectionProvider<? extends Object> selectionProvider
 	 * @param optional any detail
 	 */
 	 f_event: function(component, type, jsEvent, item, value, selectionProvider, detail) {
@@ -183,6 +183,20 @@ var __members= {
 		f_core.CancelJsEvent(evt);
 		
 		return false;
+	},
+	
+	/**
+	 * @method hidden
+	 * @return void
+	 */
+	f_finalize: function() {
+	//	this._type = undefined;  // string
+		this._component = undefined; // component 
+		this._jsEvent = undefined; // jsEvent
+		this._item = undefined; // any
+		this._value = undefined; // any
+		this._detail = undefined; // any
+		this._selectionProvider = undefined; // fa_selectionProvider
 	},
 	 
 	/**
