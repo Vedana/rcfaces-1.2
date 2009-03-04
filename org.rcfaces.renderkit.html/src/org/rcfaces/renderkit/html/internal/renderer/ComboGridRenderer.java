@@ -466,9 +466,11 @@ public class ComboGridRenderer extends DataGridRenderer implements
                 return null;
             }
 
-            LOG
-                    .info("Search a row value in a not filtred DataModel ! (comboGridComponent="
-                            + comboGridComponent.getId() + ")");
+            if (LOG.isInfoEnabled()) {
+                LOG
+                        .info("Search a row value in a not filtred DataModel ! (comboGridComponent="
+                                + comboGridComponent.getId() + ")");
+            }
 
             String var = comboGridComponent.getVar(facesContext);
             if (var == null) {
@@ -522,13 +524,25 @@ public class ComboGridRenderer extends DataGridRenderer implements
         try {
             dataModel.setRowIndex(0);
 
-            if (dataModel.isRowAvailable() == false) {
+            boolean available = dataModel.isRowAvailable();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("formatValue index=0 available=" + available);
+            }
+
+            if (available == false) {
                 return null;
             }
 
             Object rowData = dataModel.getRowData();
 
             String var = comboGridComponent.getVar(facesContext);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("formatValue rowData='" + rowData + "' var='" + var
+                        + "'");
+            }
+
             if (var == null) {
                 throw new FacesException("Var attribute is null !");
             }
