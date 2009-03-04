@@ -242,6 +242,12 @@
 				<required-class name="f_aspect" />
 			</class>
 		</file>
+			
+		<file name="aspect/fa_overStyleClass.js">
+			<class name="fa_overStyleClass">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
 		
 		
 	</module>
@@ -377,6 +383,7 @@
 		<file name="ui/f_fieldSet.js">
 			<class name="f_fieldSet">
 				<required-class name="f_component" />
+				<required-class name="fa_overStyleClass" />
 
 				<required-style name="f_fieldSet.css" />
 			</class>
@@ -657,8 +664,8 @@
 			<class name="f_textSelection">
 			</class>
 		</file>
-		<file name="input/f_textArea.js">
-			<class name="f_textArea">
+		<file name="input/f_abstractEntry.js">
+			<class name="f_abstractEntry">
 				<required-class name="f_input" />
 				<required-class name="fa_required" />
 				<required-class name="fa_subMenu" />
@@ -667,19 +674,26 @@
 
 				<required-class name="f_textSelection" />
 				<required-class id="menu" name="f_menu" />
+			</class>
+		</file>
+		<file name="input/f_textArea.js">
+			<class name="f_textArea">
+				<required-class name="f_abstractEntry" />
+
+				<required-class id="menu" name="f_menu" />
 
 				<required-style name="f_textArea.css" />
 			</class>
 		</file>
 		<file name="input/f_textEntry.js">
 			<class name="f_textEntry">
-				<required-class name="f_textArea" />
+				<required-class name="f_abstractEntry" />
+				
 				<required-class id="validator" name="f_clientValidator" />
 				<required-class id="features" name="f_clientValidator" />
 				<required-class id="features" name="f_vb" />
+
 				<required-class id="menu" name="f_menu" />
-				
-				<required-class name="f_textSelection" />
 
 				<required-style name="f_textEntry.css" />
 			</class>
@@ -754,6 +768,8 @@
 				<required-class name="f_component" />
 				<required-class name="fa_asyncRender" />
 				<required-class name="fa_subMenu" />
+				<required-class name="fa_overStyleClass" />
+
 				<required-class id="menu" name="f_menu" />
 				<required-class id="effect" name="f_effect" />
 
@@ -1161,6 +1177,7 @@
 				<required-class name="fa_checkManager" />
 				<required-class name="fa_itemClientDatas" />
 				<required-class name="fa_scrollPositions" />
+				<required-class name="fa_overStyleClass" />
 				<required-class name="f_imageRepository" />
 				<required-class name="f_error" />
 				<required-class id="menu" name="f_menu" />
@@ -1322,6 +1339,7 @@
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_collapsed" />
 				<required-class name="fa_groupName" />
+				<required-class name="fa_overStyleClass" />
 
 				<required-class id="effect" name="f_effect" />
 
