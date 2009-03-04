@@ -24,12 +24,12 @@ var __statics = {
 	 _ASYNC_IMAGE_OBJECT_TIMER: 100,	
 
 	/**
-	 * @field private static
+	 * @field private static Map<String, Object>
 	 */
 	 _Images: undefined,
 
 	/**
-	 * @field private static
+	 * @field private static Image[]
 	 */
 	 _ImagesObjectPool: undefined,
 
@@ -39,7 +39,7 @@ var __statics = {
 	 _ImagesObjectCount: 0,
 
 	/**
-	 * @field private static
+	 * @field private static String[]
 	 */
 	 _ImagesWaiting: undefined,
 	 
@@ -54,7 +54,7 @@ var __statics = {
 	PrepareImage: function(url) {
 		f_core.Assert(url, "f_imageRepository.PrepareImage: URL must be not NULL !");
 		
-		if (window._rcfacesPrepareImages===false) {
+		if (window._rcfacesPrepareImages!==true) {
 			return;
 		}
 		
@@ -108,10 +108,15 @@ var __statics = {
 		images[url]=imageObject;
 		
 		if (f_imageRepository._ASYNC_IMAGE_OBJECT_TIMER>0) {
+		
+			var _imageObject=imageObject;
+			var _url=url;
 			window.setTimeout(function() {
-				f_core.Debug(f_imageRepository, "PrepareImage: Async setting of url '"+url+"' to image object '"+imageObject.id+"'.");
+				f_core.Debug(f_imageRepository, "PrepareImage: Async setting of url '"+_url+"' to image object '"+_imageObject.id+"'.");
 	
-				imageObject.src=url;		
+				_imageObject.src=_url;		
+				_imageObject=null;
+				_url=null;
 			}, f_imageRepository._ASYNC_IMAGE_OBJECT_TIMER);
 			
 		} else {
@@ -129,6 +134,7 @@ var __statics = {
 		var win=this._window;
 
 		if (win._rcfacesExiting) {
+			f_imageRepository._FinalizeImage(this);
 			return;
 		}
 
@@ -147,6 +153,7 @@ var __statics = {
 	_OnLoadHandler: function() {
 		var win=this._window;
 		if (win._rcfacesExiting) {
+			f_imageRepository._FinalizeImage(this);
 			return;
 		}
 
@@ -166,11 +173,12 @@ var __statics = {
 	_NextImage: function(imageObject, status) {
 		var src=imageObject.src;
 
-		if (!f_imageRepository._Images) {
+		var images=f_imageRepository._Images;
+		if (!images) {
 			return; // Nous sommes en cours de desinstallation !
 		}
 	
-		f_imageRepository._Images[src]=status;
+		images[src]=status;
 		
 		var waiting=f_imageRepository._ImagesWaiting;
 		if (waiting && waiting.length) {
@@ -185,29 +193,47 @@ var __statics = {
 		f_imageRepository._ImagesObjectPool.push(imageObject);
 	},
 	/**
+	 * @method private static
+	 * @param Image image
+	 * @return void
+	 */
+	_FinalizeImage: function(image) {
+//		image.id=undefined;
+		image.onload=null;
+		image.onerror=null;
+		image._window=undefined; // Window
+	},
+	/**
 	 * @method protected static
 	 * @return void
 	 */
 	Finalizer: function() {
 		var images=f_imageRepository._Images;
-		if (!images) {
-			return;
-		}		
-		f_imageRepository._Images=undefined;
-		f_imageRepository._ImagesPool=undefined;
-		f_imageRepository._ImagesWaiting=undefined;
-		
-		for(var url in images) {
-			var image=images[url];
-			if (!image) {
-				continue;
-			}
+		if (images) {
+			f_imageRepository._Images=undefined;
 			
-//			image.id=undefined;
-			image.onload=null;
-			image.onerror=null;
-			image._window=undefined; // Window
+			for(var url in images) {
+				var image=images[url];
+				if (!image._window) {
+					continue;
+				}
+			
+				f_imageRepository._FinalizeImage(image);	
+			}
 		}
+				
+		var imagesPool=f_imageRepository._ImagesPool;
+		if (imagesPool) {
+			f_imageRepository._ImagesPool=undefined;
+		
+			for(var i=0;i<imagesPool.length;i++) {
+				var image=imagesPool[i];
+			
+				f_imageRepository._FinalizeImage(image);	
+			}
+		}
+
+		f_imageRepository._ImagesWaiting=undefined;
 	}
 }
 
