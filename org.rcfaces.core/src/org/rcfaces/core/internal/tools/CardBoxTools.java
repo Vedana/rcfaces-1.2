@@ -11,6 +11,8 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.model.SelectItem;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.iterator.ICardIterator;
@@ -23,6 +25,8 @@ import org.rcfaces.core.internal.util.ComponentIterators;
  */
 public class CardBoxTools {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(CardBoxTools.class);
 
     private static final ICardIterator EMPTY_COMPONENT_ITERATOR = new CardListIterator(
             Collections.EMPTY_LIST);

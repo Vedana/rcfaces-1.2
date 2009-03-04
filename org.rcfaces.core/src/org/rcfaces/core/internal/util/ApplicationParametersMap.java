@@ -11,12 +11,19 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 public final class ApplicationParametersMap implements Map {
+    private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(ApplicationParametersMap.class);
 
     private static final Object REMOVED = new Object();
 
@@ -146,8 +153,8 @@ public final class ApplicationParametersMap implements Map {
             return;
         }
 
+        // Ne compile pas sans le cast !!!
         externalContext.getApplicationMap().put((String)key, value);
-
     }
 
 }

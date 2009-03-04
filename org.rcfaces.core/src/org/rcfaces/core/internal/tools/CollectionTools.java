@@ -40,7 +40,7 @@ import org.rcfaces.core.model.IRangeDataModel;
 public class CollectionTools {
     private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(CheckTools.class);
+    private static final Log LOG = LogFactory.getLog(CollectionTools.class);
 
     protected static final Object[] EMPTY_VALUES = new Object[0];
 

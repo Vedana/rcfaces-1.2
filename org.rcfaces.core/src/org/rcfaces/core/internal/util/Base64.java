@@ -51,6 +51,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class Base64 {
+    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(Base64.class);
 
