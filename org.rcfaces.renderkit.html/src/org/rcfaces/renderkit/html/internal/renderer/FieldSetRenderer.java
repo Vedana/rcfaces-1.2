@@ -160,6 +160,15 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
         ICssWriter cssWriter = htmlWriter.writeStyle(32);
         writeFieldSetCss(cssWriter, fieldSetComponent);
+
+        String overStyleClass = fieldSetComponent.getOverStyleClass(htmlWriter
+                .getComponentRenderContext().getFacesContext());
+        if (overStyleClass != null) {
+            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+
+            htmlWriter.getJavaScriptEnableMode().enableOnOver();
+        }
+
     }
 
     protected void writeFieldSetCss(ICssWriter cssWriter,

@@ -148,6 +148,14 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:groupName", groupName);
         }
 
+        String overStyleClass = expandBarComponent
+                .getOverStyleClass(facesContext);
+        if (overStyleClass != null) {
+            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+
+            htmlWriter.getJavaScriptEnableMode().enableOnOver();
+        }
+
         htmlWriter.startElement(IHtmlWriter.LI);
         htmlWriter.writeId(getHeadId(htmlWriter));
         htmlWriter.writeClass(getHeadClassName(htmlWriter, collapsed));
