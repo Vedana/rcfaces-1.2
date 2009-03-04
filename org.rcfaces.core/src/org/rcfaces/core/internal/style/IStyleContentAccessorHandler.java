@@ -15,5 +15,7 @@ public interface IStyleContentAccessorHandler extends
 
     String STYLE_CONTENT_PROVIDER_ID = "org.rcfaces.core.STYLE_CONTENT_PROVIDER";
 
+    String MERGE_FILTER_NAME = "merge";
+
     IStyleOperation getStyleOperation(String operationId);
 }
