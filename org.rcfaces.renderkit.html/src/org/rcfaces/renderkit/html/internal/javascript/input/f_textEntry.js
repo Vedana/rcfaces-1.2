@@ -5,7 +5,7 @@
 /**
  * f_textEntry class
  *
- * @class public f_textEntry extends f_textArea
+ * @class public f_textEntry extends f_abstractEntry
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -180,6 +180,6 @@ var __members = {
 }
 
 new f_class("f_textEntry", {
-	extend: f_textArea,
+	extend: f_abstractEntry,
 	members: __members
 });
