@@ -122,22 +122,21 @@ var __members = {
 			var styleMessage=this.f_getStyleClassFromSeverity(message.f_getSeverity());
 			
 			var tr=document.createElement("tr");
+			f_core.AppendChild(tbody, tr);
 			
-			var summaryLabel;
+			var summaryLabel=null;
 			if (this.f_isShowSummary()) {
 				summaryLabel=document.createElement("td");
 				f_core.AppendChild(tr, summaryLabel);
 			}
 			
-			var detailLabel;
+			var detailLabel=null;
 			if (this.f_isShowDetail()) {		
 				detailLabel=document.createElement("td");
 				f_core.AppendChild(tr, detailLabel);
 			}
 			
-			f_message.FillComponent(this.f_computeStyleClass(), tr, null, summaryLabel, detailLabel, message, styleMessage);
-			
-			f_core.AppendChild(tbody, tr);
+			f_message.FillComponent(this.f_computeStyleClass(), tr, null, summaryLabel, detailLabel, message, styleMessage);			
 		}
 		
 		if (!this._tbody) {
