@@ -283,14 +283,13 @@
 }
 
 .f_grid_colCursor {
-	//background-color: red;
 	position: absolute;
 	top: -2px;
 	right: -8px;
 	width: 16px;
 	height: 18px;
 	cursor: e-resize;
-//	background: url('grid/blank.gif') repeat;
+	background: transparent url('grid/blank.gif') repeat;
 	z-index:100;
 }
 

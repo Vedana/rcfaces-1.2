@@ -4073,12 +4073,13 @@ var __members = {
 	_updateTitleCellBody: function(column, swidth) {
 	
 		if (swidth===undefined) {
-			var cw=column._head.style.width;
-			if (!cw) {
-				cw=column._head.offsetWidth;
+			
+			var col=column._col;
+			
+			swidth=col.offsetWidth;
+			if (!swidth && !col.offsetHeight) {
+				swidth=parseInt(col.style.width, 10);
 			}
-						
-			swidth=parseInt(cw, 10);
 		}
 				
 		swidth-=f_grid._TEXT_RIGHT_PADDING;
@@ -4582,16 +4583,16 @@ var __members = {
 						
 			var w=col.offsetWidth;
 			if (!w && !col.offsetHeight) {
-				w=parseInt(col.style.width);
+				w=parseInt(col.style.width, 10);
 			}
 			
 			total+=w;
 			
-			//alert("W="+w+" total="+total+"  tw="+(w-cellMargin));
-			
-			w-=cellMargin;
-			
-			column._head.style.width=w+"px";
+			var cw=w-cellMargin;
+			if (cw<0) {
+				cw=0;
+			}
+			column._head.style.width=cw+"px";
 			
 			this._updateTitleCellBody(column, w);
 		}
