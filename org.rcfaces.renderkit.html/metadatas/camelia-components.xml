@@ -48,6 +48,8 @@
 
 		<attribute id="src" type="java.lang.String" />
 		<attribute id="srcCharSet" type="java.lang.String" />
+
+		<attribute id="userAgent" type="java.lang.String" />
 	</component>
 	
 	<component id="loadBundle" extends="cameliaBase" renderKit="html">

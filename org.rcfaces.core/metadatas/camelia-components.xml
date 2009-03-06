@@ -3335,6 +3335,16 @@ Dans le cas d'un mode period !
 		<method id="setValidationParameterData(String, Object, boolean)" />
 		<method id="isClientSideValidationParameter(String,javax.faces.context.FacesContext)" />
 
+		<method id="setClientValidator" returnType="void">
+			<import>org.rcfaces.core.internal.tools.ClientValidatorTools</import>
+			<parameter type="String" name="clientValidator" />
+			<code>
+				engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
+				
+				ClientValidatorTools.setClientValidator(null, this);
+			</code>
+		</method>
+
 	</component>
 
 	<component id="timeEntry" extends="abstractInput">
