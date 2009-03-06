@@ -643,24 +643,41 @@
 	</module>
 
 	<module id="popupComponent">
-		<file name="input/f_textArea.js">
-			<class name="f_textArea">
+		<file name="input/f_textSelection.js">
+			<class name="f_textSelection">
+			</class>
+		</file>
+		<file name="input/f_abstractEntry.js">
+			<class name="f_abstractEntry">
 				<required-class name="f_input" />
 				<required-class name="fa_required" />
 				<required-class name="fa_subMenu" />
 				<required-class name="fa_selectionProvider" />
 				<required-class name="fa_immediate" />
+
+				<required-class name="f_textSelection" />
 				<required-class id="menu" name="f_menu" />
+			</class>
+		</file>
+		<file name="input/f_textArea.js">
+			<class name="f_textArea">
+				<required-class name="f_abstractEntry" />
+
+				<required-class id="menu" name="f_menu" />
+
+				<required-style name="f_textArea.css" />
 			</class>
 		</file>
 		<file name="input/f_textEntry.js">
 			<class name="f_textEntry">
-				<required-class name="f_textArea" />
+				<required-class name="f_abstractEntry" />
+				
 				<required-class id="validator" name="f_clientValidator" />
 				<required-class id="features" name="f_clientValidator" />
 				<required-class id="features" name="f_vb" />
+
 				<required-class id="menu" name="f_menu" />
-				
+
 				<required-style name="f_textEntry.css" />
 			</class>
 		</file>

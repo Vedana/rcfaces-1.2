@@ -5,16 +5,12 @@
 /**
  * f_textArea class
  *
- * @class public f_textArea extends f_input, fa_required, fa_selectionProvider, fa_subMenu, fa_immediate
+ * @class public f_textArea extends f_abstractEntry
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
  
 var __statics = {
-	/**
-	 * @field private static final String
-	 */
-	_TEXT_MENU_ID: "#text",
 	
 	/**
 	 * @method private static
@@ -48,6 +44,166 @@ var __statics = {
 		messageContext.f_addMessage(textArea, f_messageObject.SEVERITY_ERROR, message, null);
 		
 		return false;
+	},
+	/**
+	 * @method private static
+	 * @param f_event evt
+	 * @return boolean
+	 * @context object:this
+	 */
+	_MaxTextLengthKeyPress: function(event) {
+		var jsEvent = event.f_getJsEvent();
+		var keyCode = jsEvent.keyCode;
+		var charCode = jsEvent.charCode;
+		
+		var textArea=this; // A VOIR car si l'INPUT est dettaché !?
+		
+		if (textArea.f_isReadOnly() || textArea.f_isDisabled()) {
+			// On laisse la possibilité de traiter des callbacks fonctionnelles
+			return true;
+		}
+		
+		var keyChar;
+		
+		if (!charCode) {
+			keyChar = String.fromCharCode(keyCode);
+
+		} else {
+			keyChar = String.fromCharCode(charCode);
+		}
+				
+		// f_core.Debug(f_textArea, "_MaxTextLengthKeyDown: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
+	
+		// Il faut compter les CRs !!!
+		if (f_core.IsInternetExplorer()) {
+			if (keyCode < 32 && keyCode!=13) {
+				return true;
+			}
+		} else if (f_core.IsGecko()) {
+			if (keyCode>0 && keyCode!=13) {
+				return true;
+			}
+			//keyCode=charCode;
+		}
+
+		return f_textArea._ChangeText(textArea, keyChar);
+	},
+	/**
+	 * @method private static
+	 * @context event:jsEvent
+	 */
+	_MaxTextLengthPaste: function(jsEvent) {		
+		if (!jsEvent) {
+			jsEvent = f_core.GetJsEvent(this);
+		}
+
+		var textArea=this;
+		
+		if (textArea.f_isReadOnly() || textArea.f_isDisabled()) {
+			// On laisse la possibilité de traiter des callbacks fonctionnelles
+			return false;
+		}
+
+		var input=textArea.f_getInput();
+		var maxTextLength=textArea._maxTextLength;
+		
+		var value=input.value;
+		if (value.length>=maxTextLength) {
+			return false;
+		}
+		
+		var _input=input;
+		var _maxTextLength=maxTextLength;
+		window.setTimeout(function() {
+		
+			var value=_input.value;
+			if (value.length<=_maxTextLength) {
+				_input=null;
+				_maxTextLength=null;
+				return;
+			}
+		
+			var selection=f_core.GetTextSelection(_input);
+			var selectionStart=selection[0];
+			var selectionEnd=selection[1];
+			
+			if (selectionStart>=_maxTextLength) {
+				selectionStart=_maxTextLength
+			}
+			if (selectionEnd>=_maxTextLength) {
+				selectionEnd=_maxTextLength
+			}
+			
+			_input.value=value.substring(0, _maxTextLength);
+	
+			f_core.SelectText(_input, selectionStart, selectionEnd);
+			
+			_input=null;
+			_maxTextLength=null;
+			
+		}, 10);
+	},
+	/**
+	 * @method private static
+	 * @param f_textArea textArea
+	 * @param String insertedText
+	 * @return boolean
+	 */
+	_ChangeText: function(textArea, insertedText) {
+		var input=textArea.f_getInput();
+		
+		var maxTextLength=textArea._maxTextLength;
+		
+		var value=input.value;
+		if (value.length+insertedText.length<=maxTextLength) {
+			return true;
+		}
+		
+		var selection=f_core.GetTextSelection(input);
+		var selectionStart=selection[0];
+		var selectionEnd=selection[1];
+		
+		// f_core.Debug(f_textArea, "_ChangeText: selectionStart="+selectionStart+" selectionEnd="+selectionEnd+" insertedText["+insertedText.length+"]='"+insertedText+"'"); 
+		
+		if (selectionEnd-selectionStart+1>insertedText.length) {
+			// Il y a une selection de +1 caractere !  donc 
+			return true; 
+		}
+		
+		if (textArea._ignoreWhenFull || selectionStart==maxTextLength) {
+			// On est au bout de la zone de texte, on refuse
+			return false;
+		}		
+		
+		value=value.substring(0, maxTextLength-insertedText.length);
+		
+		// f_core.Debug(f_textArea,"_ChangeText: Set value to '"+value+"'");
+		input.value=value;
+
+		// On le remet comme il etait !		
+		f_core.SelectText(input, selectionStart, selectionEnd);
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 */
+	_InstallMaxTextLength: function(textArea) {
+		textArea.f_addEventListener(f_event.KEYPRESS, f_textArea._MaxTextLengthKeyPress);
+		
+		var input=textArea.f_getInput();
+		if (input) {
+			input.onpaste=f_textArea._MaxTextLengthPaste;
+		}
+	},
+	/**
+	 * @method private static
+	 */
+	_UninstallMaxTextLength: function(textArea) {
+		var input=textArea.f_getInput();
+		if (input) {
+			input.onpaste=null;
+		}
 	}
 }
 
@@ -57,63 +213,21 @@ var __members = {
 
 		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
 		if (this._maxTextLength>0) {
+			this._ignoreWhenFull=f_core.GetBooleanAttribute(this, "v:ignoreWhenFull", false);
+
+			f_textArea._InstallMaxTextLength(this);
+			
 			this.f_addEventListener(f_event.VALIDATION, f_textArea._VerifyMaxTextLength);
 		}
 	},
-	/*
 	f_finalize: function() {
+		if (this._maxTextLength>0) {
+			f_textArea._UninstallMaxTextLength(this);
+		}
+
+		// this._ignoreWhenFull=undefined;
 		// this._maxTextLength=undefined; // number
-		// this._emptyMessage=undefined; // string
-		// this._requiredInstalled=undefined; // boolean
-		// this._emptyMessageInstalled=undefined; // boolean
-		
-		// this._emptyMessageShown=undefined; // boolean
-		
-		this.f_super(arguments);
-	},
-	*/
-	/**
-	 * @method protected
-	 * @return void
-	 */
-	f_initializeOnFocus: function() {
-		this.f_super(arguments);
-				
-		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
-		if (this._emptyMessage) {
-			this._emptyMessageShown=f_core.GetBooleanAttribute(this.f_getInput(), "v:emptyMessageShown");
-		}
-		
-		if (this._emptyMessage) {
-			this.f_installEmptyMessageCallbacks();
-		}
-
-		// On peut pas le mettre dans le f_setDomEvent, la profondeur de la pile ne le permet pas !
-		this.f_insertEventListenerFirst(f_event.KEYPRESS, this.f_performSelectionEvent);		
-	},
-	/**
-	 * @method protected
-	 * @return void
-	 */
-	f_installEmptyMessageCallbacks: function() {
-		if (this._emptyMessageInstalled) {
-			return;
-		}
-		this._emptyMessageInstalled=true;
-		
-		this.f_insertEventListenerFirst(f_event.FOCUS, this._messageFocusEvent);
-		this.f_insertEventListenerFirst(f_event.BLUR, this._messageBlurEvent);
-	},
-	f_update: function() {
-
-		var menu=this.f_getSubMenuById(f_textArea._TEXT_MENU_ID);
-		if (menu) {
-			this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._performMenuMouseDown);
-		}
-		
-		if (this.f_isRequired()) {
-			this.fa_updateRequired();
-		}
+	
 		
 		this.f_super(arguments);
 	},
@@ -123,243 +237,11 @@ var __members = {
 	 */
 	f_getMaxTextLength: function() {
 		return this._maxTextLength;
-	},
-	/**
-	 * @method protected
-	 * @return void
-	 */
-	f_serialize: function() {
-		
-		this.f_serializeValue();
-		
-		this.f_super(arguments);
-	},
-	/**
-	 * @method protected
-	 * @return void
-	 */
-	f_serializeValue: function() {
-		if (this.f_isDisabled()) {
-			this.f_setProperty(f_prop.TEXT, this.f_getText());
-
-		} else {
-			// Le probleme est que le TEXT peut persister ... 
-			// et que la valeur soit modifiée par l'utilisateur ...
-			this.f_setProperty(f_prop.TEXT);
-		}		
-		
-		if (this._emptyMessageShown) {
-			// On remet la zone à vide
-			this.f_getInput().value="";
-		}
-	},
-	f_setDomEvent: function(type, target) {
-		switch(type) {
-		case f_event.SELECTION: 
-			return;
-		}
-		
-		this.f_super(arguments, type, target);
-	},
-	f_clearDomEvent: function(type, target) {
-		switch(type) {
-		case f_event.SELECTION: 
-			return;
-		}
-		
-		this.f_super(arguments, type, target);
-	},
-	/**
-	 * @method protected
-	 */
-	f_performSelectionEvent: function(evt) {
-		if (this.f_isDisabled()) {
-			return;
-		}
-		
-		if (this.f_isActionListEmpty(f_event.SELECTION)) {
-			return;
-		}
-		
-		var jsEvent=evt.f_getJsEvent();
-		if (!jsEvent) {
-			return;
-		}
-		
-		if (!jsEvent.ctrlKey) {
-			return;
-		}
-			
-		var code=jsEvent.keyCode;
-	
-		if (code!=f_key.VK_RETURN && code!=f_key.VK_ENTER) { // RETURN ou ENTER
-			return;
-		}
-
-		evt.f_preventDefault();
-
-		this.f_fireEvent(f_event.SELECTION, jsEvent);
-		
-		return false;
-	},
-	/**
-	 * @method private
-	 * @param f_event event
-	 * @return boolean
-	 */
-	_performMenuMouseDown: function(event) {		
-		var evt=event.f_getJsEvent();
-		
-		var sub=f_core.IsPopupButton(evt);
-		if (!sub) {
-			return true;
-		}
-		
-		var menu=this.f_getSubMenuById(f_textArea._TEXT_MENU_ID);
-		if (menu) {
-			menu.f_open(this, {
-				position: f_menu.MOUSE_POSITION
-				}, this, evt);
-		
-			return event.f_preventDefault();
-		}
-		
-		return true;
-	},
-	/**
-	 * @method private
-	 */
-	_messageFocusEvent: function() {
-		if (this._emptyMessageShown) {
-			this._emptyMessageShown=undefined;
-		
-			this.f_getInput().value="";
-			
-			this.f_updateStyleClass();
-		}
-	},
-	/**
-	 * @method private
-	 */
-	_messageBlurEvent: function() {
-		if (this._emptyMessage && this.f_getText()=="") {
-			this._emptyMessageShown=true;
-			
-			this.value=""; // Evite des effets desagreables
-			
-			this.f_updateStyleClass();
-			
-			this.value=this._emptyMessage;
-		}
-	},
-	/**
-	 * @protected
-	 * @overrided
-	 */
-	f_computeStyleClass: function(postSuffix) {
-		var clz=this.f_super(arguments, postSuffix);
-		
-		if (this._emptyMessageShown) {
-			clz+=" "+this.f_getMainStyleClass()+"_empty_message";
-		}
-		
-		return clz;
-	},
-	/**
-	 * @method public
-	 * @return Object  An object which defines fields 'text', 'start' and 'end'
-	 */
-	f_getSelection: function() {
-		// Retourne deux entiers qui positionnent le debut et la fin de la selection
-		var pos=f_core.GetTextSelection(this);
-		
-		var value=this.f_getText();
-		if (!pos) {
-			return {
-				text: value,
-				start: 0,
-				end: value.length
-			};
-		}
-		
-		return {
-			start: pos[0],
-			end: pos[1],
-			text: value.substring(pos[0], pos[1])
-		};
-	},
-	/**
-	 * @method public
-	 * @param Object selection An object which defines fields 'start' and 'end'
-	 * @param optional boolean show If possible, show the selection.
-	 * @return void
-	 */
-	f_setSelection: function(selection, show) {
-		// C'est un object avec un champ "start" et eventuellement un champ "end" >= "start"
-		f_core.Assert(typeof(selection)=="object"
-			&& typeof(selection.start)=="number"
-			&& selection.start>=0, "Selection must be an object which defines 'start' and 'end' field with positive numbers.");
-		
-		var start=selection.start;
-		var end=selection.end;
-		if (!end || end<start) {
-			end=start;
-		}
-		
-		f_core.Debug(f_textArea, "f_setSelection: Set selection start="+start+" end="+end+".");
-		
-		f_core.SelectText(this.f_getInput(), start, end);
-		
-		if (show) {
-			this.scrollIntoView();
-		}
-	},
-	/**
-	 * @method public
-	 * @param boolean show If possible, show the selection.
-	 * @return void
-	 */
-	f_selectAll: function(show) {
-		this.f_getInput().select();
-	},
-	/**
-	 * @method protected
-	 * @return HTMLElement
-	 */
-	fa_componentCaptureMenuEvent: function() {
-		return null;
-	},
-	/**
-	 * @method protected
-	 * @return void
-	 */
-	fa_updateRequired: function() {
-		// XXXXXX @TODO this._installRequiredValidator();
-		this.f_updateStyleClass();
-	},
-	/**
-	 * @method public
-	 * @return String
-	 */
-	f_getEmptyMessage: function() {
-		return this._emptyMessage;
-	},	
-	/**
-	 * @method public
-	 * @param String message
-	 * @return void
-	 */
-	f_setEmptyMessage: function(message) {
-		this._emptyMessage=message;
-		if (message) {
-			this.f_installEmptyMessageCallbacks();
-		}		
 	}
 }
 
 new f_class("f_textArea", {
-	extend: f_input,
-	aspects: [ fa_required, fa_selectionProvider, fa_subMenu, fa_immediate ],
+	extend: f_abstractEntry,
 	members: __members,
 	statics: __statics
 });

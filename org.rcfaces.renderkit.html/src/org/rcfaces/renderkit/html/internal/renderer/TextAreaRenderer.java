@@ -45,6 +45,12 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
         String text = textAreaComponent.getText(facesContext);
         if (text != null) {
+            int maxTextLength = textAreaComponent
+                    .getMaxTextLength(facesContext);
+            if (maxTextLength > 0 && text.length() > maxTextLength) {
+                text = text.substring(0, maxTextLength);
+            }
+
             htmlWriter.writeText(text);
         }
 
@@ -101,8 +107,9 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
             // htmlWriter.enableJavaScript(); Bof bof ... on peut le faire à la
             // génération ?
+            
+            htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
-
     }
 
     protected boolean useHtmlAccessKeyAttribute() {
