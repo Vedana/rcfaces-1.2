@@ -640,8 +640,9 @@
 	</target>
 
 	<target name="sloop">
-		<property name="build-core" location="${basedir}/../org.rcfaces.core_${branch}" />
-		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html_${branch}" />
+		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
+		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
+		<property name="build-packager" location="${basedir}/../org.rcfaces.packager" />
 		<property name="spool.workspace" location="s:/camelia/workspace_${branch}" />
 
 		<!--
@@ -652,7 +653,7 @@
 		<mkdir dir="${spool.workspace}" /> 
 		<mkdir dir="${spool.workspace}/org.rcfaces.core" /> 
 		<copy todir="${spool.workspace}/org.rcfaces.core" verbose="true">
-			<fileset dir="../org.rcfaces.core_${branch}">
+			<fileset dir="${build-core}">
 				<include name="src/**" />
 				<include name="src-jsf1_1/**" />
 				<include name="src-jsf1_2/**" />
@@ -664,7 +665,7 @@
 		
 		<mkdir dir="${spool.workspace}/org.rcfaces.renderkit.html" /> 
 		<copy todir="${spool.workspace}/org.rcfaces.renderkit.html" verbose="true">
-			<fileset dir="../org.rcfaces.renderkit.html_${branch}">
+			<fileset dir="${build-html}">
 				<include name="src/**" />
 				<include name="src-jsf1_1/**" />
 				<include name="src-jsf1_2/**" />
@@ -676,7 +677,7 @@
 			
 		<mkdir dir="${spool.workspace}/org.rcfaces.packager" /> 
 		<copy todir="${spool.workspace}/org.rcfaces.packager" verbose="true">
-			<fileset dir="../org.rcfaces.packager_${branch}">
+			<fileset dir="${build-packager}">
 				<include name="lib*/**" />
 				<include name="*.xml" />
 			</fileset>
