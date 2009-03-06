@@ -1,20 +1,18 @@
 package org.rcfaces.renderkit.html.internal.taglib;
 
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.tools.ListenersTools;
 import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
 import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
-import org.rcfaces.core.internal.taglib.CameliaTag;
-import javax.servlet.jsp.JspException;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
-import org.rcfaces.renderkit.html.component.Properties;
-import org.rcfaces.renderkit.html.component.CssStyleComponent;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.ITextCapability;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.internal.taglib.CameliaTag;
+import org.rcfaces.renderkit.html.component.CssStyleComponent;
+import org.rcfaces.renderkit.html.component.Properties;
 
 public class CssStyleTag extends CameliaTag implements Tag {
 
@@ -22,6 +20,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(CssStyleTag.class);
 
 	private ValueExpression text;
+	private ValueExpression userAgent;
 	private ValueExpression src;
 	private ValueExpression srcCharSet;
 	public String getComponentType() {
@@ -30,6 +29,10 @@ public class CssStyleTag extends CameliaTag implements Tag {
 
 	public final void setText(ValueExpression text) {
 		this.text = text;
+	}
+
+	public final void setUserAgent(ValueExpression userAgent) {
+		this.userAgent = userAgent;
 	}
 
 	public final void setSrc(ValueExpression src) {
@@ -46,6 +49,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  userAgent='"+userAgent+"'");
 			LOG.debug("  src='"+src+"'");
 			LOG.debug("  srcCharSet='"+srcCharSet+"'");
 		}
@@ -70,6 +74,15 @@ public class CssStyleTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (userAgent != null) {
+			if (userAgent.isLiteralText()==false) {
+				component.setValueExpression(Properties.USER_AGENT, userAgent);
+
+			} else {
+				component.setUserAgent(userAgent.getExpressionString());
+			}
+		}
+
 		if (src != null) {
 			if (src.isLiteralText()==false) {
 				component.setValueExpression(Properties.SRC, src);
@@ -91,6 +104,7 @@ public class CssStyleTag extends CameliaTag implements Tag {
 
 	public void release() {
 		text = null;
+		userAgent = null;
 		src = null;
 		srcCharSet = null;
 

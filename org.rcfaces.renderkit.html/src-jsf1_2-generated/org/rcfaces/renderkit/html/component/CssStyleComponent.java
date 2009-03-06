@@ -128,4 +128,29 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;
 	}
+
+
+	/**
+	 * Returns an url value pointing to the file to be included.
+	 * @return url
+	 */
+	public String getUserAgent() {
+		return getUserAgent(null);
+	}
+
+	/**
+	 * Returns an url value pointing to the file to be included.
+	 * @return url
+	 */
+	public String getUserAgent(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.USER_AGENT, facesContext);
+	}
+
+	/**
+	 * Sets an url value pointing to the file to be included.
+	 * @param src url
+	 */
+	public void setUserAgent(String src) {
+		engine.setProperty(Properties.USER_AGENT, src);
+	}
 }
