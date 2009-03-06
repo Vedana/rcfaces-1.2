@@ -59,7 +59,7 @@ var __members = {
 		
 		this.f_super(arguments);
 
-		// On efface l'INPUT aprés car le _input peut être reinitialisé par les classes parentes !
+		// On efface l'INPUT aprÃ©s car le _input peut Ãªtre reinitialisÃ© par les classes parentes !
 		var input=this._input;
 		if (input) {
 			this._input=undefined;
@@ -284,7 +284,7 @@ var __members = {
 	},	
 	/*
 	f_update: function() {
-		/ * C'est déjà dans le constructeur de fa_messages ...
+		/ * C'est dÃ©jÃ  dans le constructeur de fa_messages ...
 			this.f_performMessageChanges();
 		* /
 				
@@ -295,7 +295,7 @@ var __members = {
 	 * Returns the value associated to the input component.
 	 *
 	 * @method public
-	 * @return String The value associated.
+	 * @return Object The value associated.
 	 */
 	f_getValue: function() {
 		var validator=this._validator;
@@ -322,14 +322,17 @@ var __members = {
 
 		if (typeof(value)=="number") {
 			value=String(value);
-		}
 
-		if (typeof(value)!="string") {
-			f_core.Debug(f_input, "f_setValue: Invalid value: "+value);
+		} else if (typeof(value)!="string") {
+			f_core.Error(f_input, "f_setValue: Invalid value: "+value);
 			return false;
 		}
 
 		f_core.Debug(f_input, "f_setValue: Value="+value);
+		
+		if (validator) {
+			return validator.f_updateValue(value);
+		}
 		
 		this.f_getInput().value=value;
 		
