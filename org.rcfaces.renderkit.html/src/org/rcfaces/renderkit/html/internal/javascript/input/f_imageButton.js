@@ -44,11 +44,12 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.SELECTION, this.f_imageButtonSelect);
 		this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
+		this.f_addEventListener(f_event.SELECTION, this.f_imageButtonSelectEnd);
 		
 		this._tabIndex=this.tabIndex;
 		
 		if (this.f_isDisabled()) {
-			this.fa_updateDisabled(true); // Pas d'update de l'image car le composant n'a pas enocre été updaté
+			this.fa_updateDisabled(true); // Pas d'update de l'image car le composant n'a pas enocre Ã©tÃ© updatÃ©
 		}
 	},
 	f_finalize: function() {
@@ -72,13 +73,13 @@ var __members = {
 			this._text=undefined;
 		}
 		
-		// Le border est traité par le borderFinalizer !
+		// Le border est traitÃ© par le borderFinalizer !
 
 		this.f_super(arguments);
 
 		// Ce n'est plus qu'un indicateur,
 		// car c'est soit NULL ou _image !
-		// On efface le link aprés car on en a besoin lors du clearDomEvent !
+		// On efface le link aprÃ©s car on en a besoin lors du clearDomEvent !
 		var eventComponent=this._eventComponent;
 		if (eventComponent) {
 			this._eventComponent=undefined;
@@ -194,6 +195,16 @@ var __members = {
 	 * @return boolean
 	 */
 	f_performImageSelection: function(event) {
+		return true;
+	},
+	/**
+	 * 
+	 * 
+	 * @method protected
+	 * @param f_event event
+	 * @return boolean
+	 */
+	f_imageButtonSelectEnd: function(event) {
 		return true;
 	},
 	/**

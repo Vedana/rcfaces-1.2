@@ -15,7 +15,7 @@ var __members = {
 	 * @param f_event event
 	 * @return boolean
 	 */
-	f_performImageSelection: function(event) {	
+	f_imageButtonSelectEnd: function(event) {	
 		/*	
 		var form = f_core.GetParentForm(this);
 		if (form) {
