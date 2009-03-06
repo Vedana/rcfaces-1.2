@@ -1,13 +1,36 @@
-
-
-
 ----------------------------------------------------------------------
-- @version I2544_Bunedic_1
+- @version I2544_Bunedic_9
 - @author Olivier Oeuillot
-- 
+- 06/03/2009
 
-Ajout du support de l'evenement SORT au niveau du composant "grid"
+ClientValidatorTools/TextEntryRenderer:
+Correction du problème des validateurs dans les onglets AJAX [3918]
 
+CssStyleRenderer:
+Gestion du UserAgent si spécifié
+
+TextAreaRenderer/f_textArea/f_abstractEntry/f_textEntry/f_textSelection/repository.xml:
+Support du maxTextLength:  nécessité de séparer certaines fonctionnalité de textArea et de textEntry en créant abstractEntry. [3645]
+
+f_calendarObject/fa_calendarPopup/fa_dataGridPopup:
+Correction de l'affichage de la date sélectionnée lors de l'ouverture du calendrier. [3676]
+
+f_imageButton/f_imageResetButton/f_imageSubmitButton/f_hyperLink:
+Correction d'un problème de click même si le composant est "disabled"  [3834]
+
+f_radioButton:
+Correction d'un problème d'héritage du destructeur.
+
+f_input:
+Correction du f_setValue(xxx) avec un clientValidator. [3821]
+
+f_grid/f_grid.css:
+Correction du problème de marge des titres des colonnes [3934]
+
+f_core/f_multiWindowClassLoader:
+Correction d'un problème si la "value" de l'évènement est un objet. [3932]
+Correction de grosses fuites mémoires.
+Appel multiple possible du onload()
 
 
 ********************************** BRANCHE UNEDIC *******************************************
