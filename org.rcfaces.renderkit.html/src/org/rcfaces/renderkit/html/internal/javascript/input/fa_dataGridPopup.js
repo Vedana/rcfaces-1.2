@@ -585,6 +585,8 @@ var __members = {
 		var self=this;
 		window.setTimeout(function() {
 			self.f_setFocus();
+			
+			self=null;
 		}, 10);
 	},
 	/**
@@ -592,7 +594,7 @@ var __members = {
 	 * @param optional Event jsEvent
 	 * @param optional String text
 	 * @param optional number autoSelect
-	 * @return void
+	 * @return boolean Returns <code>true</code> if success.
 	 */
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
 		f_core.Debug(fa_dataGridPopup, "f_openDataGridPopup: jsEvent="+jsEvent+" text='"+text+"' autoSelect="+autoSelect);
@@ -614,6 +616,8 @@ var __members = {
 		} else {
 			this._updateDataGridPopup(text);
 		}
+		
+		return false;
 	},
 	/**
 	 * @method private
@@ -815,6 +819,8 @@ var __members = {
 			} catch (x) {
 				f_core.Error(fa_dataGridPopup, "_onSearchSuggest.timer: Timeout processing error !", x);
 			}
+			
+			self=null;
 		}, delay);
 		
 		if (cancel) {

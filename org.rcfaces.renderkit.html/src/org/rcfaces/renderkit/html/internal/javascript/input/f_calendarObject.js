@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_calendarObject extends f_object, fa_eventTarget, fa_items, fa_selectionProvider, fa_commands
+ * @class public f_calendarObject extends f_object, fa_eventTarget, fa_items, fa_selectionProvider<any>, fa_commands
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -1471,7 +1471,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return Object selection, type can be Date, Date[], f_period, f_period[]
+	 * @return any Selection, type can be Date, Date[], f_period, f_period[]
 	 */
 	f_getSelection: function() {
 		var dates=this._dates;
@@ -1524,7 +1524,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param any selection
-	 * @param boolean showSelection
+	 * @param optional boolean showSelection
 	 * @return void
 	 */
 	f_setSelection: function(selection, showSelection) {
@@ -1581,7 +1581,7 @@ var __members = {
 			return;
 		}
 
-		var extShowDate=this._cursorDate;
+		var nextShowDate=this._cursorDate;
 		if (selection && selection.length) {
 			var ds=selection[0];
 			if (ds && ds.length) {
