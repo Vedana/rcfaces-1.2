@@ -66,13 +66,15 @@ var __members = {
 		}
 	},
 	
-	f_finalizer: function() {
+	f_finalize: function() {
 		var checkCallbacks=this._checkCallbacks;
 		if (checkCallbacks) {
 			this._checkCallbacks=undefined;
 			
 			f_core.RemoveCheckListener(this, checkCallbacks);
 		} 
+
+		this.f_super(arguments);
 	},
 	
 	/**
