@@ -321,6 +321,13 @@ var __members = {
 	},
 
 	/**
+	 * @method public abstract
+	 * @param any[] An array of values
+	 * @return void
+	 */
+	f_setCheckedValues: f_class.ABSTRACT,
+
+	/**
 	 * @method protected abstract
 	 * @param Object element
 	 * @return boolean
