@@ -223,7 +223,7 @@ var f_core = {
 	 * @param String message
 	 * @param optional Error exception
 	 * @param optional Window win
-	 * @return void
+	 * @return boolean
 	 */
 	_AddLog: function(level, name, message, exception, win) {
 		if (!win) {
@@ -232,7 +232,7 @@ var f_core = {
 
 		if (window.rcfacesLogCB) {
 			window.rcfacesLogCB.apply(window, arguments);
-			return;
+			return false;
 		}
 		
 		if (f_core._Logging) {
@@ -242,7 +242,7 @@ var f_core = {
 			if (level<2) {
 				window.status="Exception: "+message;
 			}
-			return;
+			return false;
 		}
 			
 		try {
@@ -679,7 +679,6 @@ var f_core = {
 			kmethods.prototype=methods;
 		}
 
-
 		try {
 			for(var w=win;w && w.parent!=w;w=w.parent) {
 				var f=w.parent.rcfacesProfilerCB
@@ -729,7 +728,7 @@ var f_core = {
 		f_core.AddEventListener(win, "unload", f_core._OnExit);
 
 		if (f_core.IsInternetExplorer()) {
-			f_core.AddEventListener(win.document, "selectstart", f_core._IeOnSelectStart);
+		//	f_core.AddEventListener(win.document, "selectstart", f_core._IeOnSelectStart);
 		}
 	},
 	/**
@@ -954,6 +953,12 @@ var f_core = {
 			}
 		}
 		
+		// Un BUG IE appelle le onload 2 fois !!!
+		if (win._rcfacesWindowInitialized) {
+			return;
+		}
+		win._rcfacesWindowInitialized=true;
+
 		f_core.Profile(false, "f_core.onInit", now);
 		try {		
 			f_core._FlushLogs();	
@@ -1189,6 +1194,10 @@ var f_core = {
 			win._rcfacesExiting=exitedState;
 		}
 		
+		if (document.body) {
+			document.body.oncontextmenu=null;
+		}		
+
 		// Ultime finalize
 		f_core._window=undefined;
 	},
@@ -1221,8 +1230,14 @@ var f_core = {
 				val=String(val);
 				break;
 			
+			case "object":
+				if (val instanceof Date) {
+					val=String(val);
+					break;
+				}
+			
 			default:
-				f_core.Error(f_core, "SetInputHidden: Can not set a input hidden '"+name+"' with value '"+val+"'.");
+				f_core.Error(f_core, "SetInputHidden: Can not set an input hidden '"+name+"' with value '"+val+"'.");
 			}
 		}
 		
@@ -3064,7 +3079,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @return void
+	 * @return boolean
 	 */
 	_ReturnsAlwaysFalse: function () {
 		return false;
@@ -3926,12 +3941,12 @@ var f_core = {
 	 * @method hidden static
 	 * @param HTMLElement component
 	 * @param Function listener
-	 * @return void
+	 * @return boolean Returns <code>true</code> if success.
 	 */
 	RemoveResizeEventListener: function(component, listener) {
 		if (f_core.IsInternetExplorer()) {
 			component.onresize=null;
-			return;
+			return true;
 		}
 
 		if (f_core.IsGecko()) {
@@ -3941,7 +3956,7 @@ var f_core = {
 			return true;
 		}
 		
-		return;
+		return false;
 	},
 	/**
 	 * @method hidden static
@@ -4934,8 +4949,8 @@ var f_core = {
 	 * Compute the popup position. (centred horizontaly and verticaly)
 	 *
 	 * @method public static
-	 * @param Object parameters
-	 * @return void Fill fields "x" and "y" into the "parameters" object.
+	 * @param Object parameters Fill fields "x" and "y" into the "parameters" object.
+	 * @return void 
 	 */
 	ComputeDialogPosition: function(parameters) {
 		var x=0;
