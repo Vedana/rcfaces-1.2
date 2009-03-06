@@ -25,64 +25,75 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
  * @version $Revision$ $Date$
  */
 public class CssStyleRenderer extends AbstractHtmlRenderer {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
+	protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        IHtmlComponentRenderContext componentRenderContext = htmlWriter
-                .getHtmlComponentRenderContext();
+		IHtmlComponentRenderContext componentRenderContext = htmlWriter
+				.getHtmlComponentRenderContext();
 
-        FacesContext facesContext = componentRenderContext.getFacesContext();
+		FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        IHtmlProcessContext htmlProcessContext = componentRenderContext
-                .getHtmlRenderContext().getHtmlProcessContext();
+		IHtmlProcessContext htmlProcessContext = componentRenderContext
+				.getHtmlRenderContext().getHtmlProcessContext();
 
-        CssStyleComponent cssStyleComponent = (CssStyleComponent) componentRenderContext
-                .getComponent();
+		CssStyleComponent cssStyleComponent = (CssStyleComponent) componentRenderContext
+				.getComponent();
 
-        boolean useMetaContentStyleType = htmlProcessContext
-                .useMetaContentStyleType();
+		String userAgent = cssStyleComponent.getUserAgent(facesContext);
+		if (userAgent != null && userAgent.length() > 0) {
+			String ua = (String) facesContext.getExternalContext()
+					.getRequestHeaderMap().get("User-Agent");
+			if (ua != null) {
+				if ("firefox".equals(userAgent) && ua.indexOf("Firefox") < 0) {
+					return; // C'est autre chose que firefox !!!
+				}
+			}
+		}
 
-        String src = cssStyleComponent.getSrc(facesContext);
-        if (src != null) {
-            IContentAccessor contentAccessor = ContentAccessorFactory
-                    .createFromWebResource(facesContext, src,
-                            IContentFamily.STYLE);
+		boolean useMetaContentStyleType = htmlProcessContext
+				.useMetaContentStyleType();
 
-            src = contentAccessor.resolveURL(facesContext, null, null);
-            if (src != null) {
-                htmlWriter.startElement(IHtmlWriter.LINK);
-                htmlWriter.writeRel("stylesheet");
-                if (useMetaContentStyleType == false) {
-                    htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
-                }
+		String src = cssStyleComponent.getSrc(facesContext);
+		if (src != null) {
+			IContentAccessor contentAccessor = ContentAccessorFactory
+					.createFromWebResource(facesContext, src,
+							IContentFamily.STYLE);
 
-                htmlWriter.writeHRef(src);
+			src = contentAccessor.resolveURL(facesContext, null, null);
+			if (src != null) {
+				htmlWriter.startElement(IHtmlWriter.LINK);
+				htmlWriter.writeRel("stylesheet");
+				if (useMetaContentStyleType == false) {
+					htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
+				}
 
-                htmlWriter.endElement(IHtmlWriter.LINK);
-            }
-        }
+				htmlWriter.writeHRef(src);
 
-        String text = cssStyleComponent.getText(facesContext);
-        if (text != null && text.trim().length() > 0) {
-            htmlWriter.startElement(IHtmlWriter.STYLE);
-            if (useMetaContentStyleType == false) {
-                htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
-            }
+				htmlWriter.endElement(IHtmlWriter.LINK);
+			}
+		}
 
-            htmlWriter.write(text);
+		String text = cssStyleComponent.getText(facesContext);
+		if (text != null && text.trim().length() > 0) {
+			htmlWriter.startElement(IHtmlWriter.STYLE);
+			if (useMetaContentStyleType == false) {
+				htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
+			}
 
-            htmlWriter.endElement(IHtmlWriter.STYLE);
+			htmlWriter.write(text);
 
-        }
-    }
+			htmlWriter.endElement(IHtmlWriter.STYLE);
 
-    public boolean getRendersChildren() {
-        return true;
-    }
+		}
+	}
 
-    public void encodeChildren(FacesContext facesContext, UIComponent component) {
-    }
+	public boolean getRendersChildren() {
+		return true;
+	}
+
+	public void encodeChildren(FacesContext facesContext, UIComponent component) {
+	}
 }
