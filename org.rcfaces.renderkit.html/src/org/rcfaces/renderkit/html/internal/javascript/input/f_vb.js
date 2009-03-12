@@ -427,6 +427,7 @@ var __statics = {
 	
 		// Deal with empty string and required attribute
 		if (!inVal && !(validator.f_getComponent().f_isRequired())) {
+			validator.f_setObject(null);
 			return inVal;
 		}
 
@@ -536,7 +537,8 @@ var __statics = {
 		var l; //,p
 	
 		// Deal with empty string and required attribute
-		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
+		if (!inVal && !(validator.f_getComponent().f_isRequired())) {
+			validator.f_setObject(null);
 			return inVal;
 		}
 	
@@ -596,6 +598,7 @@ var __statics = {
 	Checker_dat_nai: function(validator, inVal) {
 		// Handle empty string
 		if (!inVal) {
+			validator.f_setObject(null);
 			return inVal;
 		}
 	
@@ -813,7 +816,8 @@ var __statics = {
 	Checker_hour: function(validator, inVal) {
 	
 		// Deal with empty string and required attribute
-		if (inVal == "" && !(validator.f_getComponent().f_isRequired())) {
+		if (!inVal && !(validator.f_getComponent().f_isRequired())) {
+			validator.f_setObject(null);
 			return inVal;
 		}
 
@@ -924,6 +928,7 @@ var __statics = {
 	Checker_insee: function(validator, inVal) {
 		// Handle empty string
 		if (!inVal) {
+			validator.f_setObject(null);
 			return inVal;
 		}
 		
@@ -966,6 +971,7 @@ var __statics = {
 	Checker_num: function(validator, inVal) {
 		// Handle empty string
 		if (!inVal) {
+			validator.f_setObject(null);
 			return inVal;
 		}
 	
@@ -1057,7 +1063,8 @@ var __statics = {
 	 */
 	Checker_trim: function(validator, inVal) {
 		// Handle empty string
-		if (inVal == "") {
+		if (!inVal) {
+			validator.f_setObject(null);
 			return inVal;
 		}
 	
