@@ -1,4 +1,20 @@
 ----------------------------------------------------------------------
+- @version I2544_Bunedic_11
+- @author Olivier Oeuillot
+- 26/03/2009
+
+fa_dataGridPopup.js/fa_dataGridPopup.css:
+Correction d'un problème d'affichage sous FIREFOX du contenu de la popup quand la largeur de celle-ci est réduite (<180px)
+
+----------------------------------------------------------------------
+- @version I2544_Bunedic_10
+- @author Olivier Oeuillot
+- 12/03/2009
+
+f_vb.js:
+Correction d'un problème du traitement de la chaine "vide" qui convervait l'objet de la précédente saisie
+
+----------------------------------------------------------------------
 - @version I2544_Bunedic_9
 - @author Olivier Oeuillot
 - 06/03/2009
