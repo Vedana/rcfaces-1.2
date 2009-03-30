@@ -666,8 +666,9 @@ var __members = {
 	 * @method hidden
 	 */
 	f_updateValue: function(value) {
-		if (value===undefined) {
-			value=this._input.value;
+		
+		if (value===null || value===undefined) {
+			value="";
 		}
 		
 		f_core.Debug(f_clientValidator, "f_updateValue: Update value '"+value+"' (hasFocus="+this._hasFocus+").");
