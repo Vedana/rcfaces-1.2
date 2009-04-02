@@ -723,6 +723,12 @@ var f_core = {
 		if (win.rcfacesBuildId) {
 			f_core.Info(f_core, "_InitLibrary: RCFaces buildId: "+rcfacesBuildId);
 		}
+		
+		var domainEx=win._rcfacesDomainEx;
+		if (domainEx) {
+			// pas f_core.Error pour l'instant !
+			f_core.Info(f_core, "_InitLibrary: domain change exception", domainEx);
+		}
 	
 		// Bug sous IE en LEVEL3 ... on ne peut pas compter sur le this !
 		f_core._OnExit=function() {
@@ -5604,6 +5610,46 @@ var f_core = {
 		
 			document.write("<SCRIPT type=\"text/javascript\" charset=\""+charSet+"\" src=\""+url+"\"></SCRIPT>");
 		}		
+	},
+	/**
+	 * @method hidden static
+	 * @param HTMLElement component
+	 * @return boolean
+	 */
+	IsComponentEditable: function(component) {
+		var tagName=component.tagName;
+		f_core.Assert(tagName, "f_core.IsComponentEditable: Invalid component parameter  ("+component+")");
+		
+		tagName=tagName.toUpperCase();
+		
+		switch (tagName) {
+		case "INPUT":
+			var type=component.type.toUpperCase();			
+			return (type=="TEXT");
+		
+		case "TEXTAREA":
+			return true;
+		
+		case "FRAME":
+			try {
+				var contentDocument;
+				if (f_core.IsInternetExplorer()) {
+					contentDocument=component.contentWindow.document;
+					
+				} else {
+					contentDocument=component.contentDocument;
+				}
+
+				return contentDocument.designMode=="on";
+				
+			} catch (ex) {
+				f_core.Info("IsComponentEditable: security exception ?", ex)
+			}
+			return false;			
+		}
+		
+		
+		return false;		
 	},
 	/**
 	 * @method public static
