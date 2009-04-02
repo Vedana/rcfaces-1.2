@@ -13,6 +13,7 @@ import org.rcfaces.core.internal.util.KeyTools;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
@@ -40,47 +41,145 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
+        IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
+        if (htmlComponentRenderContext.getHtmlRenderContext()
+                .getJavaScriptRenderContext().isCollectorMode() == false) {
+
+            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            writeHtmlAttributes(htmlWriter);
+            writeJavaScriptAttributes(htmlWriter);
+
+            String forComponent = acceleratorComponent.getFor(facesContext);
+            if (forComponent != null) {
+                htmlWriter.writeAttribute("v:for", forComponent);
+            }
+
+            String forItemValue = acceleratorComponent
+                    .getForItemValue(facesContext);
+            if (forItemValue != null) {
+                htmlWriter.writeAttribute("v:forItemValue", forItemValue);
+            }
+
+            KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
+
+            if (state.character > 0) {
+                htmlWriter.writeAttribute("v:character", String
+                        .valueOf(state.character));
+            }
+
+            if (state.virtualKey != null) {
+                htmlWriter.writeAttribute("v:virtualKey", state.virtualKey
+                        .intValue());
+            }
+
+            if (state.keyFlags > 0) {
+                htmlWriter.writeAttribute("v:keyFlags", state.keyFlags);
+            }
+
+            if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
+                htmlWriter.writeAttribute("v:ignoreEditableComponent", true);
+            }
+
+            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+
+            declareLazyJavaScriptRenderer(htmlWriter);
+            htmlWriter.getJavaScriptEnableMode().enableOnInit();
+
+        } else {
+            htmlWriter.enableJavaScript();
+        }
+
+        super.encodeEnd(htmlWriter);
+    }
+
+    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+            throws WriterException {
+        super.encodeJavaScript(jsWriter);
+
+        if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
+            return;
+        }
+
+        FacesContext facesContext = jsWriter.getFacesContext();
+
+        AcceleratorComponent acceleratorComponent = (AcceleratorComponent) jsWriter
+                .getComponentRenderContext().getComponent();
+
+        String keyBinding = acceleratorComponent.getKeyBinding(facesContext);
+
+        jsWriter.setIgnoreComponentInitialization();
+
+        String varName = jsWriter.getJavaScriptRenderContext()
+                .allocateVarName();
+        jsWriter.setComponentVarName(varName);
+
+        jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
+                "f_newInstance");
+
+        int param = 0;
+
+        KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
+        if (state.character > 0) {
+            jsWriter.writeString(String.valueOf(state.character));
+        } else {
+            jsWriter.writeNull();
+        }
+
+        if (state.virtualKey != null) {
+            for (; param > 0; param--) {
+                jsWriter.write(',').writeNull();
+            }
+            jsWriter.write(',').writeInt(state.virtualKey.intValue());
+
+        } else {
+            param++;
+        }
+
+        if (state.keyFlags > 0) {
+            for (; param > 0; param--) {
+                jsWriter.write(',').writeNull();
+            }
+            jsWriter.write(',').writeInt(state.keyFlags);
+
+        } else {
+            param++;
+        }
 
         String forComponent = acceleratorComponent.getFor(facesContext);
         if (forComponent != null) {
-            htmlWriter.writeAttribute("v:for", forComponent);
+            for (; param > 0; param--) {
+                jsWriter.write(',').writeNull();
+            }
+            jsWriter.write(',').writeString(forComponent);
+
+        } else {
+            param++;
         }
 
         String forItemValue = acceleratorComponent
                 .getForItemValue(facesContext);
         if (forItemValue != null) {
-            htmlWriter.writeAttribute("v:forItemValue", forItemValue);
-        }
+            for (; param > 0; param--) {
+                jsWriter.write(',').writeNull();
+            }
+            jsWriter.write(',').writeString(forItemValue);
 
-        KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
-
-        if (state.character > 0) {
-            htmlWriter.writeAttribute("v:character", String
-                    .valueOf(state.character));
-        }
-
-        if (state.virtualKey != null) {
-            htmlWriter.writeAttribute("v:virtualKey", state.virtualKey
-                    .intValue());
-        }
-
-        if (state.keyFlags > 0) {
-            htmlWriter.writeAttribute("v:keyFlags", state.keyFlags);
+        } else {
+            param++;
         }
 
         if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
-            htmlWriter.writeAttribute("v:ignoreEditableComponent", true);
+            for (; param > 0; param--) {
+                jsWriter.write(',').writeNull();
+            }
+            jsWriter.write(',').writeBoolean(true);
+
+        } else {
+            param++;
         }
 
-        htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-
-        declareLazyJavaScriptRenderer(htmlWriter);
-        htmlWriter.getJavaScriptEnableMode().enableOnInit();
-
-        super.encodeEnd(htmlWriter);
+        jsWriter.writeln(");");
     }
 
     /*
