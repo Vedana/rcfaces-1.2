@@ -27,16 +27,16 @@ import org.rcfaces.core.image.IGeneratedImageInformation;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.images.operation.GIFConversionImageOperation;
-import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
-import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.util.ClassLocator;
+import org.rcfaces.core.internal.util.PathTypeTools;
+import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.xml.sax.Attributes;
 
 /**
@@ -449,8 +449,8 @@ public class ImageContentAccessorHandlerImpl extends
             break;
 
         case IContentAccessor.ABSOLUTE_PATH_TYPE:
-            String relativeURL = AbstractContentAccessor.removeContextPath(
-                    facesContext, resourceURL);
+            String relativeURL = PathTypeTools
+                    .convertAbsolutePathToContextType(facesContext, resourceURL);
 
             if (relativeURL == null) {
                 throw new FacesException(
@@ -461,10 +461,8 @@ public class ImageContentAccessorHandlerImpl extends
             break;
 
         case IContentAccessor.RELATIVE_PATH_TYPE:
-            IProcessContext processContext = AbstractProcessContext
-                    .getProcessContext(facesContext);
-
-            resourceURL = processContext.getAbsolutePath(resourceURL, false);
+            resourceURL = PathTypeTools.convertRelativePathToContextPath(
+                    facesContext, resourceURL);
             break;
 
         default:
@@ -473,8 +471,12 @@ public class ImageContentAccessorHandlerImpl extends
 
         String versionId = null;
         if (Constants.RESOURCE_CONTENT_VERSION_SUPPORT) {
-            versionId = rcfacesContext.getResourceVersionHandler()
-                    .getResourceVersion(facesContext, resourceURL, null);
+            IResourceVersionHandler resourceVersionHandler = rcfacesContext
+                    .getResourceVersionHandler();
+            if (resourceVersionHandler != null) {
+                versionId = resourceVersionHandler.getResourceVersion(
+                        facesContext, resourceURL, null);
+            }
         }
 
         ImageOperationContentModel imageOperationContentModel = new ImageOperationContentModel(
@@ -490,6 +492,14 @@ public class ImageContentAccessorHandlerImpl extends
                         generatedImageInformation, generationInformation);
 
         // pas de versionning dans ce content Accessor !
+        IResourceProxyHandler resourceProxyHandler = rcfacesContext
+                .getResourceProxyHandler();
+        if (resourceProxyHandler != null && resourceProxyHandler.isEnabled()
+                && resourceProxyHandler.isFiltredResourcesEnabled()) {
+
+            newContentAccessor.setContentProxyHandler(contentAccessor
+                    .getContentProxyHandler());
+        }
 
         return newContentAccessor;
     }
