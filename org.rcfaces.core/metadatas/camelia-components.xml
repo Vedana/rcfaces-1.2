@@ -606,6 +606,8 @@
 	
 		<attribute id="keyBinding" type="java.lang.String" />
 	
+		<attribute id="ignoreEditableComponent" type="boolean" />
+	
 		<action id="action" type="keyPress" default="true" />
 	</component>
 	
