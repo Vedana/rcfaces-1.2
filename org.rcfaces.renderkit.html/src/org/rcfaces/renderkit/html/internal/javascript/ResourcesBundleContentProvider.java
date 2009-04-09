@@ -4,7 +4,6 @@
  */
 package org.rcfaces.renderkit.html.internal.javascript;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -12,7 +11,6 @@ import java.util.ResourceBundle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.repository.IRepository.IContent;
 import org.rcfaces.core.internal.util.FilteredContentProvider;
 
 /**
