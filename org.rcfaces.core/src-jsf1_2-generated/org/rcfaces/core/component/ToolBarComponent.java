@@ -2,6 +2,7 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.tools.ToolBarTools;
 import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.familly.IContentAccessors;
 
 /**
@@ -24,6 +26,8 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 	IVerticalAlignmentCapability,
 	IBorderTypeCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(ToolBarComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolBar";
 

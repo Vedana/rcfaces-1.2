@@ -23,6 +23,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 	private String forValue;
 	private String forItemValue;
 	private String keyBinding;
+	private String ignoreEditableComponent;
 	private String action;
 	private String actionListeners;
 	private String immediate;
@@ -63,6 +64,10 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		this.keyBinding = keyBinding;
 	}
 
+	public final void setIgnoreEditableComponent(String ignoreEditableComponent) {
+		this.ignoreEditableComponent = ignoreEditableComponent;
+	}
+
 	public final void setAction(String action) {
 		this.action=action;
 	}
@@ -99,6 +104,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 			LOG.debug("  forValue='"+forValue+"'");
 			LOG.debug("  forItemValue='"+forItemValue+"'");
 			LOG.debug("  keyBinding='"+keyBinding+"'");
+			LOG.debug("  ignoreEditableComponent='"+ignoreEditableComponent+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -153,6 +159,16 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (ignoreEditableComponent != null) {
+			if (isValueReference(ignoreEditableComponent)) {
+				ValueBinding vb = application.createValueBinding(ignoreEditableComponent);
+				component.setValueBinding(Properties.IGNORE_EDITABLE_COMPONENT, vb);
+
+			} else {
+				component.setIgnoreEditableComponent(getBool(ignoreEditableComponent));
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_1.parseAction(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, action);
 		}
@@ -188,6 +204,7 @@ public class AcceleratorTag extends CameliaTag implements Tag {
 		forValue = null;
 		forItemValue = null;
 		keyBinding = null;
+		ignoreEditableComponent = null;
 		action = null;
 		actionListeners = null;
 		immediate = null;

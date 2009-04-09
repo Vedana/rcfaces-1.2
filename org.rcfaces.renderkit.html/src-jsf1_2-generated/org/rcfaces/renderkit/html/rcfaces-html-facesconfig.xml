@@ -17,6 +17,10 @@ A string value indicating the base HRef. If the key word "context" is used the b
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 		<attribute>
+			<attribute-name>domain</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A string value specifying the title for the document.
 ]]></description>
@@ -97,6 +101,10 @@ A boolean value specifying if the HTML BASE tag must be generated.
 		</attribute>
 		<attribute>
 			<attribute-name>clientValidation</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>userAgentVary</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
 	</component>

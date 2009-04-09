@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IInitEventCapability;
@@ -14,6 +15,7 @@ import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.internal.tools.ToolBarTools;
 import org.rcfaces.core.component.IMenuComponent;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
@@ -29,6 +31,8 @@ public class ToolFolderComponent extends AbstractBasicComponent implements
 	IDoubleClickEventCapability,
 	IVerticalAlignmentCapability,
 	IBorderTypeCapability {
+
+	private static final Log LOG = LogFactory.getLog(ToolFolderComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolFolder";
 

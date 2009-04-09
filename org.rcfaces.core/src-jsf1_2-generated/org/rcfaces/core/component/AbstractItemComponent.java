@@ -5,17 +5,19 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.component.CameliaItemComponent;
-import java.lang.Object;
 import java.util.Map;
+import org.rcfaces.core.internal.component.CameliaItemComponent;
+import org.apache.commons.logging.LogFactory;
+import java.lang.Object;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
+import java.util.HashSet;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
@@ -29,6 +31,8 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	IClientDataCapability,
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(AbstractItemComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemComponent.CAMELIA_ATTRIBUTES);
 	static {

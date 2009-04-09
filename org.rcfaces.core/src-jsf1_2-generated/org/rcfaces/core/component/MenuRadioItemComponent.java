@@ -2,7 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import org.rcfaces.core.component.MenuCheckItemComponent;
 import java.util.Set;
@@ -13,6 +15,8 @@ import java.util.HashSet;
  */
 public class MenuRadioItemComponent extends MenuCheckItemComponent implements 
 	IRadioValueCapability {
+
+	private static final Log LOG = LogFactory.getLog(MenuRadioItemComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuRadioItem";
 

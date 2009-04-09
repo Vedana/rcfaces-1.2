@@ -6,6 +6,7 @@ import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import javax.faces.context.FacesContext;
 import java.util.Map;
+import org.apache.commons.logging.LogFactory;
 import java.util.HashMap;
 import java.util.Date;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.Constants;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IDateFormatCapability;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
@@ -45,6 +47,8 @@ public class DateEntryComponent extends AbstractCalendarComponent implements
 	ISeverityStyleClassCapability,
 	IDateFormatCapability,
 	IValidationParameters {
+
+	private static final Log LOG = LogFactory.getLog(DateEntryComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateEntry";
 

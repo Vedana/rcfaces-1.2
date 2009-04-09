@@ -20,6 +20,7 @@ public class InitTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(InitTag.class);
 
 	private ValueExpression base;
+	private ValueExpression domain;
 	private ValueExpression title;
 	private ValueExpression favoriteImageURL;
 	private ValueExpression disabledScriptPageURL;
@@ -34,12 +35,17 @@ public class InitTag extends CameliaTag implements Tag {
 	private ValueExpression clientMessageIdFilter;
 	private ValueExpression waiRolesNS;
 	private ValueExpression clientValidation;
+	private ValueExpression userAgentVary;
 	public String getComponentType() {
 		return InitComponent.COMPONENT_TYPE;
 	}
 
 	public final void setBase(ValueExpression base) {
 		this.base = base;
+	}
+
+	public final void setDomain(ValueExpression domain) {
+		this.domain = domain;
 	}
 
 	public final void setTitle(ValueExpression title) {
@@ -98,12 +104,17 @@ public class InitTag extends CameliaTag implements Tag {
 		this.clientValidation = clientValidation;
 	}
 
+	public final void setUserAgentVary(ValueExpression userAgentVary) {
+		this.userAgentVary = userAgentVary;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (InitComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  base='"+base+"'");
+			LOG.debug("  domain='"+domain+"'");
 			LOG.debug("  title='"+title+"'");
 			LOG.debug("  favoriteImageURL='"+favoriteImageURL+"'");
 			LOG.debug("  disabledScriptPageURL='"+disabledScriptPageURL+"'");
@@ -118,6 +129,7 @@ public class InitTag extends CameliaTag implements Tag {
 			LOG.debug("  clientMessageIdFilter='"+clientMessageIdFilter+"'");
 			LOG.debug("  waiRolesNS='"+waiRolesNS+"'");
 			LOG.debug("  clientValidation='"+clientValidation+"'");
+			LOG.debug("  userAgentVary='"+userAgentVary+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -137,6 +149,15 @@ public class InitTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setBase(base.getExpressionString());
+			}
+		}
+
+		if (domain != null) {
+			if (domain.isLiteralText()==false) {
+				component.setValueExpression(Properties.DOMAIN, domain);
+
+			} else {
+				component.setDomain(domain.getExpressionString());
 			}
 		}
 
@@ -265,10 +286,20 @@ public class InitTag extends CameliaTag implements Tag {
 				component.setClientValidation(getBool(clientValidation.getExpressionString()));
 			}
 		}
+
+		if (userAgentVary != null) {
+			if (userAgentVary.isLiteralText()==false) {
+				component.setValueExpression(Properties.USER_AGENT_VARY, userAgentVary);
+
+			} else {
+				component.setUserAgentVary(getBool(userAgentVary.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
 		base = null;
+		domain = null;
 		title = null;
 		favoriteImageURL = null;
 		disabledScriptPageURL = null;
@@ -283,6 +314,7 @@ public class InitTag extends CameliaTag implements Tag {
 		clientMessageIdFilter = null;
 		waiRolesNS = null;
 		clientValidation = null;
+		userAgentVary = null;
 
 		super.release();
 	}

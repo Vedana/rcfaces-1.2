@@ -1,17 +1,19 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.rcfaces.core.internal.Constants;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.component.IInitializationState;
 import javax.faces.FacesException;
-import org.rcfaces.core.component.ProgressBarComponent;
 import java.util.Arrays;
-import javax.faces.component.NamingContainer;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.component.TextComponent;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.ProgressBarComponent;
+import org.apache.commons.logging.Log;
+import javax.faces.component.NamingContainer;
 
 /**
  * <p>The progressIndicator Component indicates the evolution of a task. It uses the <a href="/comps/progressBarComponent.html">porgressBar Component</a> and add text information to it.</p>
@@ -28,6 +30,8 @@ import org.rcfaces.core.component.AbstractBasicComponent;
  */
 public class ProgressIndicatorComponent extends AbstractBasicComponent implements 
 	NamingContainer {
+
+	private static final Log LOG = LogFactory.getLog(ProgressIndicatorComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.progressIndicator";
 

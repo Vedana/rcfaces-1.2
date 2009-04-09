@@ -4,16 +4,19 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
@@ -47,13 +50,16 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 	IImageCapability,
 	IImageSizeCapability,
 	IVariableScopeCapability,
+	IOverStyleClassCapability,
 	IImageAccessorsCapability {
+
+	private static final Log LOG = LogFactory.getLog(FieldSetComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.fieldSet";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","imageHeight","scopeValue","imageURL","verticalAlignment","scopeSaveValue","fontSize","fontItalic","textDirection","fontBold","text","scopeVar","textAlignment","imageWidth","borderType","fontName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","imageHeight","scopeValue","imageURL","verticalAlignment","scopeSaveValue","fontSize","overStyleClass","fontItalic","textDirection","fontBold","text","scopeVar","textAlignment","imageWidth","borderType","fontName"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -446,6 +452,29 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public java.lang.String getOverStyleClass() {
+		return getOverStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getOverStyleClass() getOverStyleClass()} for more details
+	 */
+	public java.lang.String getOverStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OVER_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "overStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOverStyleClassSetted() {
+		return engine.isPropertySetted(Properties.OVER_STYLE_CLASS);
+	}
+
+	public void setOverStyleClass(java.lang.String overStyleClass) {
+		engine.setProperty(Properties.OVER_STYLE_CLASS, overStyleClass);
 	}
 
 	protected Set getCameliaFields() {

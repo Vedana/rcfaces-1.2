@@ -1,7 +1,9 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractSeparatorComponent;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
@@ -10,6 +12,8 @@ import java.util.HashSet;
  * A separator Menu item
  */
 public class MenuSeparatorComponent extends AbstractSeparatorComponent {
+
+	private static final Log LOG = LogFactory.getLog(MenuSeparatorComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuSeparator";
 

@@ -4,7 +4,9 @@ import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import java.lang.Object;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.internal.tools.ClientValidatorTools;
 import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
@@ -15,8 +17,8 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IClientValidationCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.lang.String;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
@@ -26,10 +28,11 @@ import java.util.HashMap;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.Constants;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
@@ -62,6 +65,8 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	IClientValidationCapability,
 	ISelectionEventCapability,
 	IValidationParameters {
+
+	private static final Log LOG = LogFactory.getLog(TextEntryComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.textEntry";
 
@@ -282,6 +287,15 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		}
 		return (clientMapAccessor.getData(name, facesContext)==null);
 		
+	}
+
+	public void setClientValidator(String clientValidator) {
+
+
+				engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
+				
+				ClientValidatorTools.setClientValidator(null, this);
+			
 	}
 
 	public boolean isAutoTab() {
@@ -614,10 +628,6 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 */
 	public final boolean isClientValidatorSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_VALIDATOR);
-	}
-
-	public void setClientValidator(java.lang.String clientValidator) {
-		engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {

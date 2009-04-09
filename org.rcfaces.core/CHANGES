@@ -1,5 +1,433 @@
 
 ----------------------------------------------------------------------
+- @version I2550
+- @author Olivier Oeuillot
+- 9/4/2009
+
+f_textEntry.js:
+Support du maxTextLength pour le setValue()
+
+f_vb.js:
+Correction d'un problème du traitement de la chaine "vide" qui convervait l'objet de la précédente saisie
+
+InitRenderer:
+Ajout de l'attribut "domain" qui permet de spécifier un domaine Javascript (sécurité)
+
+IUserAgentVaryCapability/InitRenderer/AbstractUserAgentVaryFileItem/IUserAgentVaryFileItem/CssStyleItem
+JavaScriptRenderer/CssStyleRenderer
+Gestion d'un filtre dependant du navigateur
+
+FilesCollectorDecorator/AbstractFilesCollectorRenderer/CssStyleRenderer/FilesCollectorGeneration:
+Gestion de la fusion des styles
+
+f_shellManager:
+Gestion d'une exception de sécurité qui peut subvenir dans le GetShell()
+
+fa_eventTarget:
+Bloque tous les evenements tant que RCFaces n'est pas completement initialisé (onload)
+
+fa_getValue:
+Gestion d'une valeur interne/externe
+
+f_comboGrid:
+Support de la zone de saisie qui n'est pas sur la meme ligne que le label "Rechercher" (Largeur de la popup réduite)
+
+f_imageCheckButton/f_imageRadioButton/f_checkButton:
+Revision de la gestion de la "value"
+
+ResourcesProxy...:
+Support d'une réecriture des URLs des ressources statiques
+
+f_accelerator.js/AcceleratorRenderer:
+Ajout de la possibilité de desactivation des accelerateurs si la zone qui à le focus est une zone de saisie
+
+----------------------------------------------------------------------
+- @version I2549
+- @author Olivier Oeuillot
+- 
+
+RepositoryServlet, ExtendedHttpServlet, RepositoryServlet, ContentStorageServlet:
+Support du parametre Vary du HTTP
+
+Log4jLogger:
+Correction de warnings
+
+FileItem, ICharSetItem, IFileItem:
+Ajout d'un parametre: charSet
+
+Generation des composants/camelia-methods.xml:
+Ajout de la méthode "processEngineUpdates" qui permet de "hooker" la phase d'update
+
+StylesheetsServlet/AdditionalInformationService/AsyncRenderService/ComboGridKeyService/ComponentsGridService/
+ComponentsListService/DataGridService/ImageService/ItemsService/PopupGridService/PopupGridService/TreeService/
+HtmlRenderContext/IHtmlRenderContext:
+Support de l'entete HTTP "Vary" (pour User-Agent et Content-Encoding)
+
+TreeDecorator:
+Support des filtres pour les images utilisées par les noeuds
+
+IHtmlProcessContext/HtmlProcessContextImpl/IClientBrowser/ClientBrowserImpl/UserAgentTools:
+Support de la gestion du type de browser
+
+BoxRenderer/camelia-components.xml:
+Support de la spécification du type de composant (Le composant Box peut generer autre chose d'un DIV)
+
+DataGridRenderer/f_dataGrid.js/f_pager.js/f_tree.js/f_core.js/f_component.js:
+Support de l'optimisation d'affichage avec le DocumentFragment
+
+f_grid.js/f_clientValidator.js/fa_dataGridPopup.js/f_core.js/f_asyncClassLoader.js/f_httpRequest.js/fa_eventTarget.js/f_viewDialog.js/f_serverAppender.js:
+Correction d'eventuelles (???) fuites mémoires sur les timeouts sous IE.
+
+f_textArea.js/TextAreaRenderer:
+Support du maxTextLength
+
+f_textArea.js/f_textEntry.js/f_abstractEntry.js/repository.xml:
+La classe f_textArea n'hérite plus directement de f_textEntry mais de f_abstractEntry.
+
+f_textEditor.js:
+Correction d'une éventuelle (?) fuite mémoire sur le onunload de la frame d'édition sous IE
+
+f_radioButton.js:
+Correction du f_finalizer qui était mal écrit ! (et pouvait générer des fuites mémoires)
+
+f_popup.js:
+Correction d'une éventuelle (?) fuite mémoire sur le documentComplete sous IE
+
+f_core.js:
+Correction d'un problème de sérialisation d'un objet lorsque celui-ci était la value de l'évènement.  
+
+f_core.js:
+Correction de fuites mémoires potentielles (?) sur le onunload sous IE
+
+f_classLoader.js:
+Correction de fuites mémoires potentielles sur les composants LAZY activés par OVER
+
+f_event.js:
+Ajout d'un finalizer afin de corriger des fuites mémoires potentielles sous IE.
+
+repository.xml/f_box.js/f_fieldSet.js/f_expandBar.js/fa_overStyle.js/ExpanderBarRenderer/FieldSetRenderer/IOverStyleClassCapability/camelia-components.xml:
+Support du OVER avec ajout d'un nouvel aspect
+
+f_messages.js:
+Réordonne l'ajout de composants pour éviter des fuites mémoires sous IE
+
+f_tabbedPane.js:
+Suppression de la préparation des images (qui semblait générer des fuites mémoires sous IE)
+
+f_imageRepository.js:
+Réécriture de la classe pour éviter les fuites mémoire sous IE.
+
+TabbedPaneRenderer:
+Support des filtres pour les images utilisées dans les titres des onglets.
+
+TextEntryRenderer/ClientValidatorTools:
+Correction d'un problème d'initialisation des validateurs dans des onglets en AJAX
+
+TreeRenderer:
+Début d'implémentation du OVER
+
+camelia-components.xml:
+Correction d'un problème d'enregistrement des états des additionalInformations des dataGrid/componentsGrid lors d'un AR serveur.
+
+
+----------------------------------------------------------------------
+- @version I2548
+- @author Olivier Oeuillot
+- 16/1/2009
+
+AbstractContentAccessor:
+Correction regression: Support des URLs externes pour les URLs de ressources (images)
+
+BindingTools/ComponentTools0:
+Ajout et support de la méthode setBoundValue()
+
+reset.css:
+Ajout d'un CSS qui permet de remettre tous les navigateurs au meme niveau
+
+*.css:
+Sous IE un simple commentaire // xxx  ne suffit pas à desactiver la regle xxx
+
+f_combo.js/f_abstractList.js/f_list.js/repository.xml:
+Creation d'une classe mere commune à f_combo et f_list afin de resoudre les probleme d'heritage de f_getSelection/f_setSelection
+
+f_textArea.js/f_textSelection.js/repository.xml:
+Creation de f_textSelection qui permet de récuperer/spécifier la selection d'un textArea/textEntry 
+
+fa_converter.js/f_clientValidator.js/f_vb.js/repository.xml:
+Creation de fa_converter qui permet d'implementer la conversion Object->String  String->Object
+
+fa_abstractAppender.js/f_fireBugAppender.js/f_frameSetAppender.js/f_serverAppender.js/f_windowAppender.js/f_log.js/repository.xml:
+Creation de l'interface fa_abstractAppender qui généralise les "appenders" de logs.
+
+f_resourceBundle.js/JavaScriptRepository.java/f_locale_xx.js/f_multiWindowClassLoader.js:
+Optimisation de la déclaration des resources.
+
+*.js:
+Refonte des déclarations de l'héritage et des types en utilisant les templates jdk 1.5 .  (ex :  fa_selectionProvider<String> plutôt que fa_selectionProvider)
+
+JavaScriptRenderer:
+Support de "all" pour requiredClasses.
+
+f_input.js:
+Correction d'un problème lors d'un f_setValue() avec un validateur.
+
+----------------------------------------------------------------------
+- @version I2547
+- @author Olivier Oeuillot
+- 09/12/2008
+
+DoubleClickEvent:
+Ajout de parametre à l'évènement (value, item, details ...)
+
+IScopeValue:
+Supprime l'interface inutilisée
+
+ITypedComponentCapability:
+Permet de spécifier le type de composant (par exemple une v:box peut générer un <H1> plutot que <DIV>
+
+AbstractCameliaRender0, AbstractRequestContext, IDefaultUnlockedPropertiesRenderer, IRequestContext
+Révision des attributs vérouillés.
+
+IProcessContext, AbstractProcessContext, CalendarTools, LocaleTools, DateTools:
+Gestion plus fine du calendrier   (permet de gérer les composants qui ne traitent que de date (et pas d'heures))
+
+IContentFamily:
+Ajout du type JSP
+
+org.rcfaces.core.internal.version.*
+org.rcfaces.core.internal.repository.*
+org.rcfaces.core.internal.images.*
+org.rcfaces.core.internal.contentStorage.*
+org.rcfaces.core.internal.contentAccessor.*
+org.rcfaces.core.internal.content.*
+org.rcfaces.core.lang.*
+org.rcfaces.core.model.*
+org.rcfaces.core.image.*
+ItemTools,:
+Gestion du cache d'URL en prenant en compte les parametres en plus de l'URL
+Integration d'autes RenderKit (SVG)
+
+ProvidersRegistry, rcfaces-html-config.xml:
+Ajout d'un moteur de dépendance afin d'initialiser les modules dans le bon ordre
+
+ComponentTools:
+Correction d'un probleme d'appel à la navigation ACTION meme si un ActionListener était spécifié
+
+AbstractSelectItemsRenderer:
+Bug: Ne genere plus les enfants
+
+Divers *.js:
+Amélioration de la documentation
+
+org.rcfaces.renderkit.html.internal.style:
+Gestion du versioning des ressources à l'intérieur d'un CSS 
+
+ViewDialogRenderer:
+Utilisation du Content-family JSP au lieu de USER pour l'URL de la dialogue
+
+org.rcfaces.renderkit.svg:
+Premiere version
+
+----------------------------------------------------------------------
+- @version I2546
+- @author Olivier Oeuillot
+- 25/11/2008
+
+f_grid.js:
+Correction de f_clearAll() quand la liste était déjà vide
+
+f_hyperlink.js:
+Correction du support du disabled
+
+f_pager.js:
+Support du parametrage des libellés:
+{bfirst}, {bprev}, {bnext}, {blast} supportent 'label' et 'tooltip' comme parametre
+{bpages} supporte 'separator' (texte entre les numero de page) et 'pages' (nombre de pages affiché)
+
+f_textEditor.js:
+Correction du systeme d'initialisation lors du javascriptCollector
+Utilise la propriété VALUE pour le contenu
+
+f_tree.js:
+Ajout de f_getItemByValue()
+
+fa_compositeEntry.js:
+Support de la fonction f_setFocus()
+
+f_dateEntry.js:
+Amélioration de la phase de validation (Précision de l'erreur plus fine)
+
+f_focusManager.js:
+Support de plusieurs focusManager par page. (Cas d'une erreur positionné avant d'avoir atteint le tag focusManager)
+
+f_calendarObject.js:
+Correction d'un nom de variable
+
+fa_items.js:
+Change l'ordre d'initialisation des champs  "_items" et "_itemByValues" (initialisés dans le constructeur, plus en LAZY)
+
+f_locale.js:
+Correction du calcul de la variable "twoDigitYearStart"
+
+f_viewDialog.js:
+Correction d'un problème de sécurité
+
+f_shellManager.js:
+Ajout de la méthode statique  f_shellManager.CloseShell(f_event or f_component)
+
+f_shell.js:
+Ajout de la déclaration de la variable privée _returnValue
+
+f_frameSetAppender.js:
+Correction de la recherche de rcfaces.css pour localiser le chemin des resources rcfaces
+
+f_imageButton.js/f_imageResetButton.js/f_imageSubmitButton.js:
+Support de la gestion de l'evenement f_event.SELECTION par API  (surtout, permet le bloquage du traitement de l'évenement)
+
+fa_calendarPopup.js:
+Positionne le calendrier sur la date selectionnée lors de l'ouverture de la popup.
+
+fa_itemClientDatas.js:
+Ajout de "f_getItemByValue" qui permet de transformer la value en l'item associé.
+
+fa_menuCore.js:
+Support de la suppression d'un séparateur si celui-ci est le dernier item du menu.
+
+f_class.js:
+Correction d'un nom de variable
+
+f_classLoader.js:
+Ajout de logs lors de l'initialisation LAZY
+
+f_core.js:
+Ajout de f_core.AddParameter() qui permet d'ajouter des parametres à une URL (URL d'une f_viewDialog par exemple)
+Recopie de tous les INPUT HIDDEN mais RCFaces lors des requetes AJAX
+
+ComponentsGridRenderer/ComponentsListRenderer/CardBoxRenderer/AbstractGridRenderer/TreeRenderer/AbstractComponentDecorator/IComponentDecorator
+Support des attributs déverouillés lors d'un A/R client/server 
+
+DataGridRenderer:
+Support des attributs déverouillés lors d'un A/R client/server
+Conversion de l'objet VALUE des evenements SELECTION et DOUBLECLICK
+Correction du calcul de l'URL des images de cellules 
+
+HyperLinkRenderer:
+Correction de la génération du style dans le cas d'un DISABLED
+
+ImageSubmitButtonRenderer/SubmitButtonRenderer:
+Ajout de l'activation sur l'init de la page 
+
+ItemsToolFolderRenderer:
+Desactive le rendu des enfants (parfaitement inutile)
+
+TextRenderer:
+Correction du decodage de la réponse en fonction de quel attribut est bindé. (TEXT ou VALUE)
+
+TextEntryRenderer:
+Correction: ajout de l'activation sur le onSubmit
+
+AbstractHtmlRenderer/EventDecoders
+Nouvelle gestion des evenements qui permet de transformer la value passée en parametre en véritable objet (en fonction du convertisseur spécifié)
+
+HtmlRequestContext:
+Gestion des propriétés dévérouillées
+
+HtmlTools/ICalendarDecoderRenderer/IDecoderContext/IHtmlProcessContext/DateEntryRenderer/DateChooserRenderer/IHtmlProcessContext:
+Ajout de la possibilité au Renderer de controler le calendar
+
+ListenerTools:
+Correction de la gestion de la validation coté client
+
+TextTypeTools:
+Gestion de la nouvelle interface ITypedComponentCapability
+
+DateEntryRenderer:
+Correction de la valeur interne en cas de non initialisation 
+Ajout de la possibilité au Renderer de controler le calendar
+Support des attributs déverouillés lors d'un A/R client/server 
+Correction de l'initialisation su le onSubmit si le composant est requis
+
+ExpandBarRenderer:
+Correction de la generation CSS si la zone est ouverte
+Support des attributs déverouillés lors d'un A/R client/server 
+
+AbstractGridRenderContext:
+Correction de la résolution de l'URL des images des cellules 
+
+DateChooserRenderer:
+Ajout de la possibilité au Renderer de controler le calendar
+Support des attributs déverouillés lors d'un A/R client/server 
+
+TimeEntryRenderer:
+Correction de l'initialisation su le onSubmit si le composant est requis
+Support des attributs déverouillés lors d'un A/R client/server 
+
+TextEditorImageButtonRenderer:
+Ajout de l'initialisation du composant lors de l'initialisation de la page
+
+TextEditorRenderer:
+Correction du support du HTML
+Correction de l'initialisation du composant lors du JavaScriptCollector
+Support des attributs déverouillés lors d'un A/R client/server 
+
+TreeRenderContext:
+Correction du traitement de la selection si le container est déjà une collection
+
+TreeDecorator:
+Support des attributs déverouillés lors d'un A/R client/server 
+La VALUE de tri ne contient plus la selection/check/expandValues en fonction de ce qui était activé
+
+AbstractImageButtonFamillyDecorator:
+Correction d'un probleme quand l'image Disabled n'était pas spécifiée et que le composant était disabled.
+
+AbstractSelectItemsDecorator:
+Support des événements pour les decorateurs (par exemple les menus popup des tables/arbres)
+
+JavaScriptRepository/JavaScriptRepositoryServlet:
+Renommage de  AbstractHierarchicalRepository en BasicHierarchicalRepository
+
+f_menu.css:
+Correction d'une erreur de syntaxe concernant les icones à gauche des items de menu
+
+rcfaces-html-config.xml
+Ajout de la déclaration du repository CSS
+
+StyleSheetSourceContainer/StyleSheetRepository/StylesheetsServlet:
+Renomage de StyleSheetRepository en StyleSheetSourceContainer
+
+ScriptContentAccessorHandler/StyleContentAccessorHandler:
+Ajout de la spécification de la source et du type mime
+
+repository.xml
+Correction de l'oubli de f_calendar dans f_calendarPopup
+Reposition de f_effect pour le f_box
+
+----------------------------------------------------------------------
+- @version I2545
+- @author Olivier Oeuillot
+- 
+
+SortEvent:
+Ajout d'un constructeur sans un DataModel en parametre
+
+ListenerTools/JavaScriptClasses/AbstractHtmlRenderer/f_eventTarget:
+Ajout de la gestion du listener  "SortListener" en standart 
+
+FocusManagerRenderer:
+Gestion de plusieurs focusManager dans la même page (principalement a cause de l'ajout de messages d'erreur dés le début de la page)
+
+f_message:
+Correction d'un problème de calcul du styleClass si le composant est en erreur.
+
+f_grid.js/AbstractGridRenderer:
+Correction d'un problème de colonne de taille 0
+Correction de f_clearAll() quand le tableau est déjà vide
+Ajout du support de l'evenement "SORT"
+
+ComponentsGridRenderer:
+Activation du setFilter(filters) si le DataModel hérite de IFilterModel
+
+----------------------------------------------------------------------
 - @version I2544
 - @author Olivier Oeuillot
 - 7/10/2008
@@ -43,6 +471,13 @@ Début de la refonte (permet la prise en compte de modules RCFaces annexes [pdf,.
 f_waitingShell.js:
 Correction de la génération JavaScript du backgroundMode 
 
+
+----------------------------------------------------------------------
+- @version I2544
+- @author Olivier Oeuillot
+- 
+
+Pour raison technique le même packaging que I2543
 
 ----------------------------------------------------------------------
 - @version I2543

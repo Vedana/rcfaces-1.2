@@ -34,6 +34,7 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 	private String maxTextLength;
 	private String columnNumber;
 	private String rowNumber;
+	private String ignoreWhenFull;
 	private String action;
 	private String actionListeners;
 	public String getComponentType() {
@@ -160,6 +161,10 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 		this.rowNumber = rowNumber;
 	}
 
+	public final void setIgnoreWhenFull(String ignoreWhenFull) {
+		this.ignoreWhenFull = ignoreWhenFull;
+	}
+
 	public final void setAction(String action) {
 		this.action=action;
 	}
@@ -191,6 +196,7 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 			LOG.debug("  maxTextLength='"+maxTextLength+"'");
 			LOG.debug("  columnNumber='"+columnNumber+"'");
 			LOG.debug("  rowNumber='"+rowNumber+"'");
+			LOG.debug("  ignoreWhenFull='"+ignoreWhenFull+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -355,6 +361,16 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (ignoreWhenFull != null) {
+			if (isValueReference(ignoreWhenFull)) {
+				ValueBinding vb = application.createValueBinding(ignoreWhenFull);
+				component.setValueBinding(Properties.IGNORE_WHEN_FULL, vb);
+
+			} else {
+				component.setIgnoreWhenFull(getBool(ignoreWhenFull));
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_1.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -381,6 +397,7 @@ public class TextAreaTag extends AbstractInputTag implements Tag {
 		maxTextLength = null;
 		columnNumber = null;
 		rowNumber = null;
+		ignoreWhenFull = null;
 		action = null;
 		actionListeners = null;
 

@@ -4,6 +4,7 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
@@ -12,8 +13,8 @@ import org.rcfaces.core.component.capability.IHeightCapability;
 import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
 import javax.el.ValueExpression;
@@ -22,9 +23,10 @@ import java.util.Set;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 
@@ -45,6 +47,8 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 	IMenuCapability,
 	IVariableScopeCapability,
 	IAsyncRenderComponent {
+
+	private static final Log LOG = LogFactory.getLog(AdditionalInformationComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.additionalInformation";
 

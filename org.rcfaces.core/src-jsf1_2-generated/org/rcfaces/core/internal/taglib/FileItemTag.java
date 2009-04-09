@@ -18,13 +18,19 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(FileItemTag.class);
 
+	private ValueExpression charSet;
 	private ValueExpression src;
+	public final void setCharSet(ValueExpression charSet) {
+		this.charSet = charSet;
+	}
+
 	public final void setSrc(ValueExpression src) {
 		this.src = src;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
+			LOG.debug("  charSet='"+charSet+"'");
 			LOG.debug("  src='"+src+"'");
 		}
 		super.setProperties(uiComponent);
@@ -39,6 +45,15 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 		FileItemComponent component = (FileItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
+		if (charSet != null) {
+			if (charSet.isLiteralText()==false) {
+				component.setValueExpression(Properties.CHAR_SET, charSet);
+
+			} else {
+				component.setCharSet(charSet.getExpressionString());
+			}
+		}
+
 		if (src != null) {
 			if (src.isLiteralText()==false) {
 				component.setValueExpression(Properties.SRC, src);
@@ -50,6 +65,7 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
+		charSet = null;
 		src = null;
 
 		super.release();

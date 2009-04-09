@@ -48,6 +48,10 @@ A string value indicating the base HRef. If the key word "context" is used the b
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>domain</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A string value specifying the title for the document.
 ]]></description>
@@ -130,6 +134,10 @@ A boolean value specifying if the HTML BASE tag must be generated.
 			<name>clientValidation</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>userAgentVary</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>javaScript</name>
@@ -169,6 +177,10 @@ A boolean value indicating whether or not this component should be rendered
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
 			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -246,6 +258,10 @@ A boolean value indicating whether or not this component should be rendered
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
 			<name>text</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -450,10 +466,18 @@ A string value describing the item.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>charSet</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
 			<name>src</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -512,10 +536,18 @@ A string value describing the item.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>charSet</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
 			<name>src</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

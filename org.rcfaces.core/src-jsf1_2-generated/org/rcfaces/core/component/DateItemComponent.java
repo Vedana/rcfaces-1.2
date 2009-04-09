@@ -6,6 +6,7 @@ import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
 import org.rcfaces.core.component.SelectItemComponent;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import javax.faces.FacesException;
 import java.util.TimeZone;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.internal.converter.LocaleConverter;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
@@ -30,6 +32,8 @@ public class DateItemComponent extends SelectItemComponent implements
 	IMenuPopupIdCapability,
 	ILiteralLocaleCapability,
 	ILiteralTimeZoneCapability {
+
+	private static final Log LOG = LogFactory.getLog(DateItemComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.dateItem";
 

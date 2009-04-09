@@ -3,6 +3,8 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ImageButtonComponent;
 import java.util.Arrays;
 import java.util.Set;
@@ -12,6 +14,8 @@ import org.rcfaces.core.component.capability.IForCapability;
 public class TextEditorImageButtonComponent extends ImageButtonComponent implements 
 	IForCapability,
 	IRadioGroupCapability {
+
+	private static final Log LOG = LogFactory.getLog(TextEditorImageButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.textEditorImageButton";
 

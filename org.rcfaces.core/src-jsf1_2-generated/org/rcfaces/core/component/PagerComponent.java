@@ -3,6 +3,8 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IPagerMessageCapability;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
@@ -28,6 +30,8 @@ import org.rcfaces.core.component.AbstractBasicComponent;
 public class PagerComponent extends AbstractBasicComponent implements 
 	IForCapability,
 	IPagerMessageCapability {
+
+	private static final Log LOG = LogFactory.getLog(PagerComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.pager";
 

@@ -18,6 +18,7 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.lang.String;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
 import java.util.Arrays;
@@ -113,6 +114,12 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 
 	public final String getRendererType() {
 		String rendererType = super.getRendererType();
+		if (rendererType == null) {
+        	if (LOG.isTraceEnabled()) {
+        		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
+        	}
+			return null;
+		}
 
 		if ((this instanceof ILookAndFeelCapability) == false) {
 			return rendererType;
@@ -387,7 +394,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this, PhaseId.UPDATE_MODEL_VALUES);
 	        }
 	
-	        engine.processUpdates(context);
+			processEngineUpdates(context);
 	
 	        super.processUpdates(context);
 	        
@@ -401,7 +408,11 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 	    	throw ex;
 	    }
     }
-
+    
+	protected void processEngineUpdates(FacesContext context) {
+		engine.processUpdates(context);			
+	}
+    
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -22,6 +22,7 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(JavaScriptTag.class);
 
 	private String text;
+	private String userAgent;
 	private String src;
 	private String srcCharSet;
 	private String requiredFiles;
@@ -38,6 +39,14 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 
 	public final void setText(String text) {
 		this.text = text;
+	}
+
+	public final String getUserAgent() {
+		return userAgent;
+	}
+
+	public final void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
 	}
 
 	public final void setSrc(String src) {
@@ -70,6 +79,7 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  userAgent='"+userAgent+"'");
 			LOG.debug("  src='"+src+"'");
 			LOG.debug("  srcCharSet='"+srcCharSet+"'");
 			LOG.debug("  requiredFiles='"+requiredFiles+"'");
@@ -97,6 +107,16 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setText(text);
+			}
+		}
+
+		if (userAgent != null) {
+			if (isValueReference(userAgent)) {
+				ValueBinding vb = application.createValueBinding(userAgent);
+				component.setValueBinding(Properties.USER_AGENT, vb);
+
+			} else {
+				component.setUserAgent(userAgent);
 			}
 		}
 
@@ -163,6 +183,7 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 
 	public void release() {
 		text = null;
+		userAgent = null;
 		src = null;
 		srcCharSet = null;
 		requiredFiles = null;

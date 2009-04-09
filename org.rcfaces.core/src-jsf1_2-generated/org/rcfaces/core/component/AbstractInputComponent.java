@@ -1,53 +1,55 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Collections;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IKeyEventCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
-import java.lang.String;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import javax.faces.context.FacesContext;
-import java.util.Map;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import java.util.Collections;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.lang.String;
+import java.util.Map;
+import javax.faces.context.FacesContext;
 import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
 import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.CameliaOutputComponent;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
-import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -83,6 +85,8 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	IAccessKeyCapability,
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(AbstractInputComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {

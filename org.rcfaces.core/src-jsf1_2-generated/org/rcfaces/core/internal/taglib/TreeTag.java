@@ -25,6 +25,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression border;
 	private ValueExpression readOnly;
 	private ValueExpression showValue;
+	private ValueExpression overStyleClass;
 	private ValueExpression checkable;
 	private ValueExpression checkCardinality;
 	private ValueExpression checkListeners;
@@ -79,6 +80,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
+	}
+
+	public final void setOverStyleClass(ValueExpression overStyleClass) {
+		this.overStyleClass = overStyleClass;
 	}
 
 	public final void setCheckable(ValueExpression checkable) {
@@ -188,6 +193,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  showValue='"+showValue+"'");
+			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -278,6 +284,15 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 			} else {
 				component.setShowValue(showValue.getExpressionString());
+			}
+		}
+
+		if (overStyleClass != null) {
+			if (overStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.OVER_STYLE_CLASS, overStyleClass);
+
+			} else {
+				component.setOverStyleClass(overStyleClass.getExpressionString());
 			}
 		}
 
@@ -481,6 +496,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		border = null;
 		readOnly = null;
 		showValue = null;
+		overStyleClass = null;
 		checkable = null;
 		checkCardinality = null;
 		checkListeners = null;

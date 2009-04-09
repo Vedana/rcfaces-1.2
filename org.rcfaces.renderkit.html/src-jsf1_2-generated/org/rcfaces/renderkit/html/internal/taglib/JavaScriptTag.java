@@ -22,6 +22,7 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(JavaScriptTag.class);
 
 	private ValueExpression text;
+	private ValueExpression userAgent;
 	private ValueExpression src;
 	private ValueExpression srcCharSet;
 	private ValueExpression requiredFiles;
@@ -34,6 +35,10 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 
 	public final void setText(ValueExpression text) {
 		this.text = text;
+	}
+
+	public final void setUserAgent(ValueExpression userAgent) {
+		this.userAgent = userAgent;
 	}
 
 	public final void setSrc(ValueExpression src) {
@@ -66,6 +71,7 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  text='"+text+"'");
+			LOG.debug("  userAgent='"+userAgent+"'");
 			LOG.debug("  src='"+src+"'");
 			LOG.debug("  srcCharSet='"+srcCharSet+"'");
 			LOG.debug("  requiredFiles='"+requiredFiles+"'");
@@ -91,6 +97,15 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setText(text.getExpressionString());
+			}
+		}
+
+		if (userAgent != null) {
+			if (userAgent.isLiteralText()==false) {
+				component.setValueExpression(Properties.USER_AGENT, userAgent);
+
+			} else {
+				component.setUserAgent(userAgent.getExpressionString());
 			}
 		}
 
@@ -151,6 +166,7 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 
 	public void release() {
 		text = null;
+		userAgent = null;
 		src = null;
 		srcCharSet = null;
 		requiredFiles = null;

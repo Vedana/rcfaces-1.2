@@ -2,6 +2,8 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
@@ -22,6 +24,8 @@ import java.util.HashSet;
  * </p>
  */
 public class StyledTextComponent extends TextComponent {
+
+	private static final Log LOG = LogFactory.getLog(StyledTextComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.styledText";
 

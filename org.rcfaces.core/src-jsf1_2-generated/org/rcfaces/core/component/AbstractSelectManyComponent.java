@@ -6,8 +6,8 @@ import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IKeyEventCapability;
 import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
@@ -20,11 +20,13 @@ import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import java.util.Collections;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
@@ -84,6 +86,8 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 	IAccessKeyCapability,
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(AbstractSelectManyComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {

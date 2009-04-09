@@ -5,13 +5,15 @@ import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.ExpandableItemComponent;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 
 /**
@@ -22,6 +24,8 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 	IAcceleratorKeyCapability,
 	IStyleClassCapability,
 	IMenuEventCapability {
+
+	private static final Log LOG = LogFactory.getLog(MenuItemComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.menuItem";
 

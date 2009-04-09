@@ -7,6 +7,7 @@ import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.internal.component.CameliaGridComponent;
 import java.lang.Object;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -41,6 +42,7 @@ import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
@@ -73,6 +75,8 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	IInitEventCapability,
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(AbstractGridComponent.class);
 
 	 private transient int rowIndex;
 	 private transient String var;

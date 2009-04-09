@@ -4,14 +4,16 @@ import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IMultipleSelectCapability;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.CalendarLayoutConverter;
-import java.util.Arrays;
 import org.rcfaces.core.internal.converter.CalendarModeConverter;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICalendarLayoutCapability;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractCalendarComponent;
 import org.rcfaces.core.component.capability.ICalendarModeCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IBorderCapability;
 
 /**
@@ -34,6 +36,8 @@ public class CalendarComponent extends AbstractCalendarComponent implements
 	ICalendarLayoutCapability,
 	IMultipleSelectCapability,
 	ICalendarModeCapability {
+
+	private static final Log LOG = LogFactory.getLog(CalendarComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.calendar";
 

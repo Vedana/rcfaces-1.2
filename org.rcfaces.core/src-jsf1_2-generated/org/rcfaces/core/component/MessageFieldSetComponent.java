@@ -3,6 +3,8 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.FieldSetComponent;
 import org.rcfaces.core.component.capability.ISeverityImagesCapability;
 import java.util.Arrays;
@@ -32,6 +34,8 @@ public class MessageFieldSetComponent extends FieldSetComponent implements
 	IForCapability,
 	ISeverityStyleClassCapability,
 	ISeverityImagesCapability {
+
+	private static final Log LOG = LogFactory.getLog(MessageFieldSetComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.messageFieldSet";
 

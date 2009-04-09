@@ -34,6 +34,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
+	private ValueExpression overStyleClass;
 	public String getComponentType() {
 		return FieldSetComponent.COMPONENT_TYPE;
 	}
@@ -102,6 +103,10 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
+	public final void setOverStyleClass(ValueExpression overStyleClass) {
+		this.overStyleClass = overStyleClass;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (FieldSetComponent.COMPONENT_TYPE==getComponentType()) {
@@ -123,6 +128,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
+			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -279,6 +285,15 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 				component.setScopeVar(scopeVar.getExpressionString());
 			}
 		}
+
+		if (overStyleClass != null) {
+			if (overStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.OVER_STYLE_CLASS, overStyleClass);
+
+			} else {
+				component.setOverStyleClass(overStyleClass.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -298,6 +313,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
+		overStyleClass = null;
 
 		super.release();
 	}

@@ -6,6 +6,7 @@ import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import java.lang.Object;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.internal.tools.ClientValidatorTools;
 import java.util.Collections;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
@@ -286,6 +287,15 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		}
 		return (clientMapAccessor.getData(name, facesContext)==null);
 		
+	}
+
+	public void setClientValidator(String clientValidator) {
+
+
+				engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
+				
+				ClientValidatorTools.setClientValidator(null, this);
+			
 	}
 
 	public boolean isAutoTab() {
@@ -618,10 +628,6 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	 */
 	public final boolean isClientValidatorSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_VALIDATOR);
-	}
-
-	public void setClientValidator(java.lang.String clientValidator) {
-		engine.setProperty(Properties.CLIENT_VALIDATOR, clientValidator);
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {

@@ -5,6 +5,8 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ButtonComponent;
 import java.util.Arrays;
 import java.util.Set;
@@ -25,6 +27,8 @@ import java.util.HashSet;
  */
 public class HyperLinkComponent extends ButtonComponent implements 
 	IConvertValueHolder {
+
+	private static final Log LOG = LogFactory.getLog(HyperLinkComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.hyperLink";
 

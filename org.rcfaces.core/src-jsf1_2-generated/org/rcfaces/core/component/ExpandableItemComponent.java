@@ -4,18 +4,22 @@ import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IExpandImageCapability;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import java.util.Set;
 import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.ITextCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.UIImageItemComponent;
 
 public abstract class ExpandableItemComponent extends UIImageItemComponent implements 
 	IForegroundBackgroundColorCapability,
 	ITextCapability,
 	IExpandImageCapability {
+
+	private static final Log LOG = LogFactory.getLog(ExpandableItemComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {

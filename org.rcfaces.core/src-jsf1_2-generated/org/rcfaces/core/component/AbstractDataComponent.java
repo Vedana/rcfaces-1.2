@@ -6,6 +6,7 @@ import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.lang.Object;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -41,6 +42,7 @@ import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
@@ -74,6 +76,8 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	IInitEventCapability,
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(AbstractDataComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
@@ -218,7 +222,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 
 				setValueExpression(Properties.VALUE, value);
-//				clearCachedValue();
 			
 	}
 

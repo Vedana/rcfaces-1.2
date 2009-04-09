@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
@@ -11,8 +12,8 @@ import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.component.capability.IExpandableCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.internal.tools.ExpansionTools;
 import org.rcfaces.core.component.AbstractInputComponent;
@@ -27,12 +28,13 @@ import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
 import javax.el.ValueExpression;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
+import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.component.capability.IExpandedValuesCapability;
 import java.util.Set;
@@ -41,6 +43,7 @@ import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.util.ComponentIterators;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
 import org.rcfaces.core.internal.capability.ISelectionComponent;
@@ -71,6 +74,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	IReadOnlyCapability,
 	IMenuCapability,
 	IShowValueCapability,
+	IOverStyleClassCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
 	ICheckEventCapability,
@@ -88,11 +92,13 @@ public class TreeComponent extends AbstractInputComponent implements
 	ICheckComponent,
 	IComponentValueTypeCapability {
 
+	private static final Log LOG = LogFactory.getLog(TreeComponent.class);
+
 	public static final String COMPONENT_TYPE="org.rcfaces.core.tree";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","selectable","defaultExpandedLeafImageURL","showValue","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","expandable","clientSelectionFullState","checkListener","preloadedLevelDepth","readOnly","selectionCardinality","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","selectable","defaultExpandedLeafImageURL","showValue","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","overStyleClass","expandable","clientSelectionFullState","checkListener","preloadedLevelDepth","readOnly","selectionCardinality","selectedValues"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -521,6 +527,29 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public void setShowValue(java.lang.Object showValue) {
 		engine.setProperty(Properties.SHOW_VALUE, showValue);
+	}
+
+	public java.lang.String getOverStyleClass() {
+		return getOverStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getOverStyleClass() getOverStyleClass()} for more details
+	 */
+	public java.lang.String getOverStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OVER_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "overStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOverStyleClassSetted() {
+		return engine.isPropertySetted(Properties.OVER_STYLE_CLASS);
+	}
+
+	public void setOverStyleClass(java.lang.String overStyleClass) {
+		engine.setProperty(Properties.OVER_STYLE_CLASS, overStyleClass);
 	}
 
 	public boolean isCheckable() {

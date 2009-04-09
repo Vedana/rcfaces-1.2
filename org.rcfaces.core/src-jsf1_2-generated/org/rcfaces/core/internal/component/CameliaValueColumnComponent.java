@@ -111,6 +111,12 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
 
 	public final String getRendererType() {
 		String rendererType = super.getRendererType();
+		if (rendererType == null) {
+        	if (LOG.isTraceEnabled()) {
+        		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
+        	}
+			return null;
+		}
 
 		if ((this instanceof ILookAndFeelCapability) == false) {
 			return rendererType;
@@ -385,7 +391,7 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
 	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this, PhaseId.UPDATE_MODEL_VALUES);
 	        }
 	
-	        engine.processUpdates(context);
+			processEngineUpdates(context);
 	
 	        super.processUpdates(context);
 	        
@@ -399,7 +405,11 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
 	    	throw ex;
 	    }
     }
-
+    
+	protected void processEngineUpdates(FacesContext context) {
+		engine.processUpdates(context);			
+	}
+    
 	/*
 	 * (non-Javadoc)
 	 * 

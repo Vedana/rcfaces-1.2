@@ -3,6 +3,8 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IFontCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
@@ -30,6 +32,8 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 	ITextDirectionCapability,
 	IFontCapability,
 	ITextAlignmentCapability {
+
+	private static final Log LOG = LogFactory.getLog(HelpMessageZoneComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.helpMessageZone";
 

@@ -34,10 +34,9 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private String scopeValue;
 	private String scopeVar;
 	private String type;
+	private String overStyleClass;
 	private String horizontalScroll;
 	private String verticalScroll;
-	private String mouseEnterEffect;
-	private String mouseExitEffect;
 	public String getComponentType() {
 		return BoxComponent.COMPONENT_TYPE;
 	}
@@ -170,20 +169,20 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.type = type;
 	}
 
+	public final String getOverStyleClass() {
+		return overStyleClass;
+	}
+
+	public final void setOverStyleClass(String overStyleClass) {
+		this.overStyleClass = overStyleClass;
+	}
+
 	public final void setHorizontalScroll(String horizontalScroll) {
 		this.horizontalScroll = horizontalScroll;
 	}
 
 	public final void setVerticalScroll(String verticalScroll) {
 		this.verticalScroll = verticalScroll;
-	}
-
-	public final void setMouseEnterEffect(String mouseEnterEffect) {
-		this.mouseEnterEffect = mouseEnterEffect;
-	}
-
-	public final void setMouseExitEffect(String mouseExitEffect) {
-		this.mouseExitEffect = mouseExitEffect;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -203,10 +202,9 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  type='"+type+"'");
+			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
 			LOG.debug("  verticalScroll='"+verticalScroll+"'");
-			LOG.debug("  mouseEnterEffect='"+mouseEnterEffect+"'");
-			LOG.debug("  mouseExitEffect='"+mouseExitEffect+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -357,6 +355,16 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
+		if (overStyleClass != null) {
+			if (isValueReference(overStyleClass)) {
+				ValueBinding vb = application.createValueBinding(overStyleClass);
+				component.setValueBinding(Properties.OVER_STYLE_CLASS, vb);
+
+			} else {
+				component.setOverStyleClass(overStyleClass);
+			}
+		}
+
 		if (horizontalScroll != null) {
 			if (isValueReference(horizontalScroll)) {
 				ValueBinding vb = application.createValueBinding(horizontalScroll);
@@ -374,26 +382,6 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 
 			} else {
 				component.setVerticalScroll(getBool(verticalScroll));
-			}
-		}
-
-		if (mouseEnterEffect != null) {
-			if (isValueReference(mouseEnterEffect)) {
-				ValueBinding vb = application.createValueBinding(mouseEnterEffect);
-				component.setValueBinding(Properties.MOUSE_ENTER_EFFECT, vb);
-
-			} else {
-				component.setMouseEnterEffect(mouseEnterEffect);
-			}
-		}
-
-		if (mouseExitEffect != null) {
-			if (isValueReference(mouseExitEffect)) {
-				ValueBinding vb = application.createValueBinding(mouseExitEffect);
-				component.setValueBinding(Properties.MOUSE_EXIT_EFFECT, vb);
-
-			} else {
-				component.setMouseExitEffect(mouseExitEffect);
 			}
 		}
 	}
@@ -415,10 +403,9 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		scopeValue = null;
 		scopeVar = null;
 		type = null;
+		overStyleClass = null;
 		horizontalScroll = null;
 		verticalScroll = null;
-		mouseEnterEffect = null;
-		mouseExitEffect = null;
 
 		super.release();
 	}

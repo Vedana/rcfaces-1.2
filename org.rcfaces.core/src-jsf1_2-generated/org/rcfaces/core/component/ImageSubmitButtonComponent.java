@@ -1,6 +1,8 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ImageButtonComponent;
 import java.util.Arrays;
 import java.util.Set;
@@ -21,6 +23,8 @@ import java.util.HashSet;
  * </p>
  */
 public class ImageSubmitButtonComponent extends ImageButtonComponent {
+
+	private static final Log LOG = LogFactory.getLog(ImageSubmitButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.imageSubmitButton";
 

@@ -2,6 +2,7 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.converter.WeekDaysConverter;
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import java.util.TimeZone;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
@@ -20,6 +21,7 @@ import java.util.HashSet;
 import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
 import java.util.Locale;
 import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
@@ -37,6 +39,8 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 	IComponentLocaleCapability,
 	IComponentTimeZoneCapability,
 	IClientDatesStrategyCapability {
+
+	private static final Log LOG = LogFactory.getLog(AbstractCalendarComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {

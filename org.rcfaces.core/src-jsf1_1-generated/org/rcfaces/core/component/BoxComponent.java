@@ -17,6 +17,7 @@ import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
 import javax.faces.el.ValueBinding;
+import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import java.util.Set;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
@@ -55,6 +56,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	IAsyncDecodeModeCapability,
 	IVariableScopeCapability,
 	ITypedComponentCapability,
+	IOverStyleClassCapability,
 	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(BoxComponent.class);
@@ -63,7 +65,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","mouseEnterEffect","type","asyncRenderMode","scopeSaveValue","asyncDecodeMode","mouseOverListener","backgroundImageVerticalPosition","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","mouseExitEffect","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","type","asyncRenderMode","scopeSaveValue","asyncDecodeMode","mouseOverListener","backgroundImageVerticalPosition","overStyleClass","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
 	}
 
 	public BoxComponent() {
@@ -434,6 +436,29 @@ public class BoxComponent extends AbstractBasicComponent implements
 		engine.setProperty(Properties.TYPE, type);
 	}
 
+	public java.lang.String getOverStyleClass() {
+		return getOverStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getOverStyleClass() getOverStyleClass()} for more details
+	 */
+	public java.lang.String getOverStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OVER_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "overStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOverStyleClassSetted() {
+		return engine.isPropertySetted(Properties.OVER_STYLE_CLASS);
+	}
+
+	public void setOverStyleClass(java.lang.String overStyleClass) {
+		engine.setProperty(Properties.OVER_STYLE_CLASS, overStyleClass);
+	}
+
 	/**
 	 * Returns a boolean value indicating wether the horizontal scroll is shown.
 	 * @return true if the horizontal scrollbar is shown
@@ -504,46 +529,6 @@ public class BoxComponent extends AbstractBasicComponent implements
 	 */
 	public boolean isVerticalScrollSetted() {
 		return engine.isPropertySetted(Properties.VERTICAL_SCROLL);
-	}
-
-	public String getMouseEnterEffect() {
-		return getMouseEnterEffect(null);
-	}
-
-	public String getMouseEnterEffect(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MOUSE_ENTER_EFFECT, facesContext);
-	}
-
-	public void setMouseEnterEffect(String mouseEnterEffect) {
-		engine.setProperty(Properties.MOUSE_ENTER_EFFECT, mouseEnterEffect);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "mouseEnterEffect" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isMouseEnterEffectSetted() {
-		return engine.isPropertySetted(Properties.MOUSE_ENTER_EFFECT);
-	}
-
-	public String getMouseExitEffect() {
-		return getMouseExitEffect(null);
-	}
-
-	public String getMouseExitEffect(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.MOUSE_EXIT_EFFECT, facesContext);
-	}
-
-	public void setMouseExitEffect(String mouseExitEffect) {
-		engine.setProperty(Properties.MOUSE_EXIT_EFFECT, mouseExitEffect);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "mouseExitEffect" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isMouseExitEffectSetted() {
-		return engine.isPropertySetted(Properties.MOUSE_EXIT_EFFECT);
 	}
 
 	protected Set getCameliaFields() {

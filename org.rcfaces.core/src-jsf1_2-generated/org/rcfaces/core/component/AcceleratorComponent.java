@@ -4,6 +4,8 @@ import org.rcfaces.core.internal.component.CameliaCommandComponent;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IKeyPressEventCapability;
 import java.util.Arrays;
 import java.util.Set;
@@ -27,11 +29,13 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	IValidationEventCapability,
 	IForCapability {
 
+	private static final Log LOG = LogFactory.getLog(AcceleratorComponent.class);
+
 	public static final String COMPONENT_TYPE="org.rcfaces.core.accelerator";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"forItemValue","keyBinding","validationListener","immediate","keyPressListener","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"forItemValue","keyBinding","validationListener","immediate","keyPressListener","ignoreEditableComponent","for"}));
 	}
 
 	public AcceleratorComponent() {
@@ -160,6 +164,26 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	 */
 	public boolean isKeyBindingSetted() {
 		return engine.isPropertySetted(Properties.KEY_BINDING);
+	}
+
+	public boolean isIgnoreEditableComponent() {
+		return isIgnoreEditableComponent(null);
+	}
+
+	public boolean isIgnoreEditableComponent(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.IGNORE_EDITABLE_COMPONENT, false, facesContext);
+	}
+
+	public void setIgnoreEditableComponent(boolean ignoreEditableComponent) {
+		engine.setProperty(Properties.IGNORE_EDITABLE_COMPONENT, ignoreEditableComponent);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ignoreEditableComponent" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isIgnoreEditableComponentSetted() {
+		return engine.isPropertySetted(Properties.IGNORE_EDITABLE_COMPONENT);
 	}
 
 	protected Set getCameliaFields() {

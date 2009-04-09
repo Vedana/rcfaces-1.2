@@ -2,13 +2,15 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractCommandComponent;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import java.util.Set;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
@@ -21,6 +23,8 @@ public class CustomButtonComponent extends AbstractCommandComponent implements
 	ISelectionEventCapability,
 	IDoubleClickEventCapability,
 	IReadOnlyCapability {
+
+	private static final Log LOG = LogFactory.getLog(CustomButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.customButton";
 

@@ -6,6 +6,7 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.TextEntryComponent;
 import java.util.Arrays;
 import java.util.Set;
@@ -13,6 +14,7 @@ import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
@@ -35,6 +37,8 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 	IMaxResultNumberCapability,
 	ISuggestionEventCapability,
 	IMenuEventCapability {
+
+	private static final Log LOG = LogFactory.getLog(SuggestTextEntryComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.suggestTextEntry";
 

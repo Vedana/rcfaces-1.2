@@ -28,6 +28,10 @@ A string value specifying the key associated to the component. for example "Alt+
 			<attribute-name>keyBinding</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>ignoreEditableComponent</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.additionalInformation</component-type>
@@ -67,14 +71,6 @@ A boolean value indicating wether the vertical scroll is shown.
 ]]></description>
 			<attribute-name>verticalScroll</attribute-name>
 			<attribute-class>boolean</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>mouseEnterEffect</attribute-name>
-			<attribute-class>java.lang.String</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>mouseExitEffect</attribute-name>
-			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 	</component>
 	<component>
@@ -1523,6 +1519,10 @@ An int value specifying the number of rows to be displayed.
 ]]></description>
 			<attribute-name>rowNumber</attribute-name>
 			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>ignoreWhenFull</attribute-name>
+			<attribute-class>boolean</attribute-class>
 		</attribute>
 	</component>
 	<component>

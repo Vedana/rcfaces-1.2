@@ -55,6 +55,13 @@ A string value indicating the base HRef. If the key word "context" is used the b
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>domain</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A string value specifying the title for the document.
 ]]></description>
@@ -179,6 +186,13 @@ A boolean value specifying if the HTML BASE tag must be generated.
 				<type>boolean</type>
 			</deferred-value>
 		</attribute>
+		<attribute>
+			<name>userAgentVary</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
 	</tag>
 	<tag>
 		<description><![CDATA[
@@ -224,6 +238,13 @@ A boolean value indicating whether or not this component should be rendered
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
 			<name>text</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -328,6 +349,13 @@ A boolean value indicating whether or not this component should be rendered
 A string value specifying the text (literal or binding) to be shown.
 ]]></description>
 			<name>text</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -598,10 +626,24 @@ A string value describing the item.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>charSet</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
 			<name>src</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -678,10 +720,24 @@ A string value describing the item.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>charSet</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 An url value pointing to the file to be included.
 ]]></description>
 			<name>src</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>userAgent</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>

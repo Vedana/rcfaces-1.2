@@ -34,6 +34,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
+	private String overStyleClass;
 	public String getComponentType() {
 		return FieldSetComponent.COMPONENT_TYPE;
 	}
@@ -166,6 +167,14 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
+	public final String getOverStyleClass() {
+		return overStyleClass;
+	}
+
+	public final void setOverStyleClass(String overStyleClass) {
+		this.overStyleClass = overStyleClass;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (FieldSetComponent.COMPONENT_TYPE==getComponentType()) {
@@ -187,6 +196,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
+			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -360,6 +370,16 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 				component.setScopeVar(scopeVar);
 			}
 		}
+
+		if (overStyleClass != null) {
+			if (isValueReference(overStyleClass)) {
+				ValueBinding vb = application.createValueBinding(overStyleClass);
+				component.setValueBinding(Properties.OVER_STYLE_CLASS, vb);
+
+			} else {
+				component.setOverStyleClass(overStyleClass);
+			}
+		}
 	}
 
 	public void release() {
@@ -379,6 +399,7 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
+		overStyleClass = null;
 
 		super.release();
 	}

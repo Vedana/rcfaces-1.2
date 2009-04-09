@@ -2,7 +2,9 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
@@ -21,6 +23,8 @@ import java.util.HashSet;
  * </p>
  */
 public class ProgressBarComponent extends AbstractInputComponent {
+
+	private static final Log LOG = LogFactory.getLog(ProgressBarComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.progressBar";
 

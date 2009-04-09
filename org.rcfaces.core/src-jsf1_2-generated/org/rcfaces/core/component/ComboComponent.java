@@ -1,16 +1,18 @@
 package org.rcfaces.core.component;
 
 import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IRequiredCapability;
@@ -34,6 +36,8 @@ public class ComboComponent extends AbstractInputComponent implements
 	IFocusStyleClassCapability,
 	ISeverityStyleClassCapability,
 	IFilterCapability {
+
+	private static final Log LOG = LogFactory.getLog(ComboComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.combo";
 

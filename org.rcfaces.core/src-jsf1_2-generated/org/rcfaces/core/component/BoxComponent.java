@@ -1,27 +1,31 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.component.capability.ITypedComponentCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.AbstractBasicComponent;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import java.lang.String;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IOverStyleClassCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import java.util.Set;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import java.util.HashSet;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 
 /**
  * <p>The Box Component is a container.</p>
@@ -51,13 +55,17 @@ public class BoxComponent extends AbstractBasicComponent implements
 	IAsyncRenderModeCapability,
 	IAsyncDecodeModeCapability,
 	IVariableScopeCapability,
+	ITypedComponentCapability,
+	IOverStyleClassCapability,
 	IAsyncRenderComponent {
+
+	private static final Log LOG = LogFactory.getLog(BoxComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.box";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","asyncRenderMode","scopeSaveValue","asyncDecodeMode","mouseOverListener","backgroundImageVerticalPosition","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","type","asyncRenderMode","scopeSaveValue","asyncDecodeMode","mouseOverListener","backgroundImageVerticalPosition","overStyleClass","loadListener","scopeVar","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","backgroundImageHorizontalRepeat","initListener","verticalScroll","horizontalScroll","backgroundImageURL","border","mouseOutListener"}));
 	}
 
 	public BoxComponent() {
@@ -403,6 +411,52 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public java.lang.String getType() {
+		return getType(null);
+	}
+
+	/**
+	 * See {@link #getType() getType()} for more details
+	 */
+	public java.lang.String getType(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.TYPE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "type" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTypeSetted() {
+		return engine.isPropertySetted(Properties.TYPE);
+	}
+
+	public void setType(java.lang.String type) {
+		engine.setProperty(Properties.TYPE, type);
+	}
+
+	public java.lang.String getOverStyleClass() {
+		return getOverStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getOverStyleClass() getOverStyleClass()} for more details
+	 */
+	public java.lang.String getOverStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OVER_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "overStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOverStyleClassSetted() {
+		return engine.isPropertySetted(Properties.OVER_STYLE_CLASS);
+	}
+
+	public void setOverStyleClass(java.lang.String overStyleClass) {
+		engine.setProperty(Properties.OVER_STYLE_CLASS, overStyleClass);
 	}
 
 	/**

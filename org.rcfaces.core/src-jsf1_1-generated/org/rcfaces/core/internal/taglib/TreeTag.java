@@ -25,6 +25,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private String border;
 	private String readOnly;
 	private String showValue;
+	private String overStyleClass;
 	private String checkable;
 	private String checkCardinality;
 	private String checkListeners;
@@ -107,6 +108,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setShowValue(String showValue) {
 		this.showValue = showValue;
+	}
+
+	public final String getOverStyleClass() {
+		return overStyleClass;
+	}
+
+	public final void setOverStyleClass(String overStyleClass) {
+		this.overStyleClass = overStyleClass;
 	}
 
 	public final String getCheckable() {
@@ -268,6 +277,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  border='"+border+"'");
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  showValue='"+showValue+"'");
+			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -365,6 +375,16 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 			} else {
 				component.setShowValue(showValue);
+			}
+		}
+
+		if (overStyleClass != null) {
+			if (isValueReference(overStyleClass)) {
+				ValueBinding vb = application.createValueBinding(overStyleClass);
+				component.setValueBinding(Properties.OVER_STYLE_CLASS, vb);
+
+			} else {
+				component.setOverStyleClass(overStyleClass);
 			}
 		}
 
@@ -590,6 +610,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		border = null;
 		readOnly = null;
 		showValue = null;
+		overStyleClass = null;
 		checkable = null;
 		checkCardinality = null;
 		checkListeners = null;

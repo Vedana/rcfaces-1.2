@@ -2,6 +2,7 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IMenuCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
@@ -28,6 +29,7 @@ import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
 import javax.faces.component.NamingContainer;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
@@ -47,6 +49,8 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 	IVerticalAlignmentCapability,
 	IShowDropDownMarkCapability,
 	NamingContainer {
+
+	private static final Log LOG = LogFactory.getLog(ItemsToolFolderComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.itemsToolFolder";
 

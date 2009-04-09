@@ -58,7 +58,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","maxTextLength","valueChangeListener","columnNumber","warnStyleClass","textDirection","alternateText","styleClass","text","rowNumber","infoStyleClass","readOnly","focusStyleClass","emptyMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","maxTextLength","valueChangeListener","columnNumber","warnStyleClass","textDirection","alternateText","styleClass","text","rowNumber","infoStyleClass","readOnly","focusStyleClass","ignoreWhenFull","emptyMessage"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -443,6 +443,26 @@ public class TextAreaComponent extends AbstractInputComponent implements
 	 */
 	public boolean isRowNumberSetted() {
 		return engine.isPropertySetted(Properties.ROW_NUMBER);
+	}
+
+	public boolean isIgnoreWhenFull() {
+		return isIgnoreWhenFull(null);
+	}
+
+	public boolean isIgnoreWhenFull(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.IGNORE_WHEN_FULL, false, facesContext);
+	}
+
+	public void setIgnoreWhenFull(boolean ignoreWhenFull) {
+		engine.setProperty(Properties.IGNORE_WHEN_FULL, ignoreWhenFull);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ignoreWhenFull" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isIgnoreWhenFullSetted() {
+		return engine.isPropertySetted(Properties.IGNORE_WHEN_FULL);
 	}
 
 	protected Set getCameliaFields() {

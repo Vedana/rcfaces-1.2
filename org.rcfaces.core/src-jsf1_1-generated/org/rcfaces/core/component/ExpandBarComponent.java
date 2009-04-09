@@ -21,6 +21,7 @@ import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import javax.faces.el.ValueBinding;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import java.util.Set;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.util.HashSet;
@@ -62,6 +63,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	ISelectionEventCapability,
 	ILoadEventCapability,
 	IVariableScopeCapability,
+	IOverStyleClassCapability,
 	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(ExpandBarComponent.class);
@@ -70,7 +72,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","border","blurListener","fontName","focusListener","asyncRenderMode","collapseEffect","disabled","accessKey","groupName","fontItalic","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","readOnly","tabIndex"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","border","blurListener","fontName","focusListener","asyncRenderMode","collapseEffect","disabled","accessKey","groupName","fontItalic","overStyleClass","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","readOnly","tabIndex"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -573,6 +575,29 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	public void setScopeVar(java.lang.String scopeVar) {
 		engine.setProperty(Properties.SCOPE_VAR, scopeVar);
+	}
+
+	public java.lang.String getOverStyleClass() {
+		return getOverStyleClass(null);
+	}
+
+	/**
+	 * See {@link #getOverStyleClass() getOverStyleClass()} for more details
+	 */
+	public java.lang.String getOverStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.OVER_STYLE_CLASS, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "overStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isOverStyleClassSetted() {
+		return engine.isPropertySetted(Properties.OVER_STYLE_CLASS);
+	}
+
+	public void setOverStyleClass(java.lang.String overStyleClass) {
+		engine.setProperty(Properties.OVER_STYLE_CLASS, overStyleClass);
 	}
 
 	/**

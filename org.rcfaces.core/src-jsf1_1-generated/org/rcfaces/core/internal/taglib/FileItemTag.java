@@ -18,7 +18,12 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(FileItemTag.class);
 
+	private String charSet;
 	private String src;
+	public final void setCharSet(String charSet) {
+		this.charSet = charSet;
+	}
+
 	public final String getSrc() {
 		return src;
 	}
@@ -29,6 +34,7 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
+			LOG.debug("  charSet='"+charSet+"'");
 			LOG.debug("  src='"+src+"'");
 		}
 		super.setProperties(uiComponent);
@@ -44,6 +50,16 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 		FacesContext facesContext = getFacesContext();
 		Application application = facesContext.getApplication();
 
+		if (charSet != null) {
+			if (isValueReference(charSet)) {
+				ValueBinding vb = application.createValueBinding(charSet);
+				component.setValueBinding(Properties.CHAR_SET, vb);
+
+			} else {
+				component.setCharSet(charSet);
+			}
+		}
+
 		if (src != null) {
 			if (isValueReference(src)) {
 				ValueBinding vb = application.createValueBinding(src);
@@ -56,6 +72,7 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
+		charSet = null;
 		src = null;
 
 		super.release();

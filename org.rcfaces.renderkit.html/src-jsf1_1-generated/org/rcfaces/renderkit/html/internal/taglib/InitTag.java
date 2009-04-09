@@ -20,6 +20,7 @@ public class InitTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(InitTag.class);
 
 	private String base;
+	private String domain;
 	private String title;
 	private String favoriteImageURL;
 	private String disabledScriptPageURL;
@@ -34,12 +35,17 @@ public class InitTag extends CameliaTag implements Tag {
 	private String clientMessageIdFilter;
 	private String waiRolesNS;
 	private String clientValidation;
+	private String userAgentVary;
 	public String getComponentType() {
 		return InitComponent.COMPONENT_TYPE;
 	}
 
 	public final void setBase(String base) {
 		this.base = base;
+	}
+
+	public final void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	public final void setTitle(String title) {
@@ -98,12 +104,17 @@ public class InitTag extends CameliaTag implements Tag {
 		this.clientValidation = clientValidation;
 	}
 
+	public final void setUserAgentVary(String userAgentVary) {
+		this.userAgentVary = userAgentVary;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (InitComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 			LOG.debug("  base='"+base+"'");
+			LOG.debug("  domain='"+domain+"'");
 			LOG.debug("  title='"+title+"'");
 			LOG.debug("  favoriteImageURL='"+favoriteImageURL+"'");
 			LOG.debug("  disabledScriptPageURL='"+disabledScriptPageURL+"'");
@@ -118,6 +129,7 @@ public class InitTag extends CameliaTag implements Tag {
 			LOG.debug("  clientMessageIdFilter='"+clientMessageIdFilter+"'");
 			LOG.debug("  waiRolesNS='"+waiRolesNS+"'");
 			LOG.debug("  clientValidation='"+clientValidation+"'");
+			LOG.debug("  userAgentVary='"+userAgentVary+"'");
 		}
 		super.setProperties(uiComponent);
 
@@ -139,6 +151,16 @@ public class InitTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setBase(base);
+			}
+		}
+
+		if (domain != null) {
+			if (isValueReference(domain)) {
+				ValueBinding vb = application.createValueBinding(domain);
+				component.setValueBinding(Properties.DOMAIN, vb);
+
+			} else {
+				component.setDomain(domain);
 			}
 		}
 
@@ -281,10 +303,21 @@ public class InitTag extends CameliaTag implements Tag {
 				component.setClientValidation(getBool(clientValidation));
 			}
 		}
+
+		if (userAgentVary != null) {
+			if (isValueReference(userAgentVary)) {
+				ValueBinding vb = application.createValueBinding(userAgentVary);
+				component.setValueBinding(Properties.USER_AGENT_VARY, vb);
+
+			} else {
+				component.setUserAgentVary(getBool(userAgentVary));
+			}
+		}
 	}
 
 	public void release() {
 		base = null;
+		domain = null;
 		title = null;
 		favoriteImageURL = null;
 		disabledScriptPageURL = null;
@@ -299,6 +332,7 @@ public class InitTag extends CameliaTag implements Tag {
 		clientMessageIdFilter = null;
 		waiRolesNS = null;
 		clientValidation = null;
+		userAgentVary = null;
 
 		super.release();
 	}

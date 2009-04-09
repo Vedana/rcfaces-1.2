@@ -2,6 +2,8 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import java.util.Set;
@@ -12,6 +14,8 @@ import java.util.HashSet;
  * <p>It allows to deal with the focus on the current page.</p>
  */
 public class FocusManagerComponent extends CameliaBaseComponent {
+
+	private static final Log LOG = LogFactory.getLog(FocusManagerComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.focusManager";
 

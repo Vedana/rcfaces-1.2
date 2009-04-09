@@ -4,6 +4,7 @@ import org.rcfaces.core.component.capability.IValueChangeEventCapability;
 import org.rcfaces.core.internal.converter.LiteralTimeConverter;
 import org.rcfaces.core.internal.component.Properties;
 import java.lang.Object;
+import org.apache.commons.logging.LogFactory;
 import java.util.TimeZone;
 import org.rcfaces.core.lang.Time;
 import java.util.Collections;
@@ -19,11 +20,11 @@ import java.lang.String;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import java.util.Map;
 import javax.faces.context.FacesContext;
+import java.util.Map;
 import java.util.HashMap;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import javax.faces.FacesException;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ import org.rcfaces.core.internal.manager.IValidationParameters;
 import java.util.Locale;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import org.rcfaces.core.lang.IAdaptable;
@@ -65,6 +67,8 @@ public class TimeEntryComponent extends AbstractInputComponent implements
 	ISeverityStyleClassCapability,
 	IAlternateTextCapability,
 	IValidationParameters {
+
+	private static final Log LOG = LogFactory.getLog(TimeEntryComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.timeEntry";
 

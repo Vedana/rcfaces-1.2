@@ -1,13 +1,14 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.RadioButtonComponent;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import java.lang.Object;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IRadioValueCapability;
 import java.util.Collections;
-import java.util.Arrays;
 import org.rcfaces.core.internal.tools.RadioButtonTools;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.AbstractInputComponent;
@@ -25,11 +26,12 @@ import java.util.Map;
 import java.util.HashMap;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.iterator.IRadioButtonIterator;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.Set;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.HashSet;
 import org.rcfaces.core.internal.manager.IValidationParameters;
 import org.rcfaces.core.internal.Constants;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
@@ -58,6 +60,8 @@ public class RadioButtonComponent extends AbstractInputComponent implements
 	IRadioValueCapability,
 	IRequiredCapability,
 	IValidationParameters {
+
+	private static final Log LOG = LogFactory.getLog(RadioButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.radioButton";
 

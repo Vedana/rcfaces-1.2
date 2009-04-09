@@ -4,6 +4,7 @@ import org.rcfaces.core.internal.component.Properties;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.el.ValueBinding;
 import org.apache.commons.logging.Log;
+import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
@@ -14,7 +15,8 @@ import java.util.HashSet;
  * Css style
  */
 public class CssStyleComponent extends CameliaBaseComponent implements 
-	ITextCapability {
+	ITextCapability,
+	IUserAgentVaryCapability {
 
 	private static final Log LOG = LogFactory.getLog(CssStyleComponent.class);
 
@@ -22,7 +24,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"text","srcCharSet","src"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"userAgent","text","srcCharSet","src"}));
 	}
 
 	public CssStyleComponent() {
@@ -55,6 +57,29 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	public void setText(java.lang.String text) {
 		engine.setProperty(Properties.TEXT, text);
+	}
+
+	public java.lang.String getUserAgent() {
+		return getUserAgent(null);
+	}
+
+	/**
+	 * See {@link #getUserAgent() getUserAgent()} for more details
+	 */
+	public java.lang.String getUserAgent(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.USER_AGENT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "userAgent" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isUserAgentSetted() {
+		return engine.isPropertySetted(Properties.USER_AGENT);
+	}
+
+	public void setUserAgent(java.lang.String userAgent) {
+		engine.setProperty(Properties.USER_AGENT, userAgent);
 	}
 
 	/**

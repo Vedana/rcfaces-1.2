@@ -7,11 +7,12 @@ import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import javax.faces.convert.Converter;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import java.util.Arrays;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
@@ -20,6 +21,7 @@ import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.internal.converter.TextPositionConverter;
 import org.rcfaces.core.component.ToolFolderComponent;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.UIImageItemComponent;
 
@@ -37,6 +39,8 @@ public class ToolItemComponent extends UIImageItemComponent implements
 	IWidthCapability,
 	IStyleClassCapability,
 	IImmediateCapability {
+
+	private static final Log LOG = LogFactory.getLog(ToolItemComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.toolItem";
 

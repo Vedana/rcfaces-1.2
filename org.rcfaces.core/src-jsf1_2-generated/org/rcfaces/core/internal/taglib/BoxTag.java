@@ -33,6 +33,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private ValueExpression scopeSaveValue;
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
+	private ValueExpression type;
+	private ValueExpression overStyleClass;
 	private ValueExpression horizontalScroll;
 	private ValueExpression verticalScroll;
 	public String getComponentType() {
@@ -99,6 +101,14 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
+	public final void setType(ValueExpression type) {
+		this.type = type;
+	}
+
+	public final void setOverStyleClass(ValueExpression overStyleClass) {
+		this.overStyleClass = overStyleClass;
+	}
+
 	public final void setHorizontalScroll(ValueExpression horizontalScroll) {
 		this.horizontalScroll = horizontalScroll;
 	}
@@ -123,6 +133,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
+			LOG.debug("  type='"+type+"'");
+			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
 			LOG.debug("  verticalScroll='"+verticalScroll+"'");
 		}
@@ -253,6 +265,24 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			}
 		}
 
+		if (type != null) {
+			if (type.isLiteralText()==false) {
+				component.setValueExpression(Properties.TYPE, type);
+
+			} else {
+				component.setType(type.getExpressionString());
+			}
+		}
+
+		if (overStyleClass != null) {
+			if (overStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.OVER_STYLE_CLASS, overStyleClass);
+
+			} else {
+				component.setOverStyleClass(overStyleClass.getExpressionString());
+			}
+		}
+
 		if (horizontalScroll != null) {
 			if (horizontalScroll.isLiteralText()==false) {
 				component.setValueExpression(Properties.HORIZONTAL_SCROLL, horizontalScroll);
@@ -288,6 +318,8 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
+		type = null;
+		overStyleClass = null;
 		horizontalScroll = null;
 		verticalScroll = null;
 

@@ -41,6 +41,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private String scopeSaveValue;
 	private String scopeValue;
 	private String scopeVar;
+	private String overStyleClass;
 	private String collapseEffect;
 	private String collapsedText;
 	public String getComponentType() {
@@ -231,6 +232,14 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.scopeVar = scopeVar;
 	}
 
+	public final String getOverStyleClass() {
+		return overStyleClass;
+	}
+
+	public final void setOverStyleClass(String overStyleClass) {
+		this.overStyleClass = overStyleClass;
+	}
+
 	public final void setCollapseEffect(String collapseEffect) {
 		this.collapseEffect = collapseEffect;
 	}
@@ -263,6 +272,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
+			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
 			LOG.debug("  collapsedText='"+collapsedText+"'");
 		}
@@ -485,6 +495,16 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
+		if (overStyleClass != null) {
+			if (isValueReference(overStyleClass)) {
+				ValueBinding vb = application.createValueBinding(overStyleClass);
+				component.setValueBinding(Properties.OVER_STYLE_CLASS, vb);
+
+			} else {
+				component.setOverStyleClass(overStyleClass);
+			}
+		}
+
 		if (collapseEffect != null) {
 			if (isValueReference(collapseEffect)) {
 				ValueBinding vb = application.createValueBinding(collapseEffect);
@@ -530,6 +550,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		scopeSaveValue = null;
 		scopeValue = null;
 		scopeVar = null;
+		overStyleClass = null;
 		collapseEffect = null;
 		collapsedText = null;
 

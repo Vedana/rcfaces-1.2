@@ -30,7 +30,7 @@ public class InitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disableContextMenu","waiRolesNS","title","clientMessageIdFilter","clientValidation","base","literalTimeZone","renderBaseTag","disabledCookiesPageURL","literalLocale","disabledScriptPageURL","invalidBrowserPageURL","favoriteImageURL","disabledIEImageBar","disableCache"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disableContextMenu","waiRolesNS","title","clientMessageIdFilter","clientValidation","userAgentVary","base","literalTimeZone","renderBaseTag","disabledCookiesPageURL","literalLocale","domain","disabledScriptPageURL","invalidBrowserPageURL","favoriteImageURL","disabledIEImageBar","disableCache"}));
 	}
 
 	public InitComponent() {
@@ -97,6 +97,26 @@ public class InitComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isBaseSetted() {
 		return engine.isPropertySetted(Properties.BASE);
+	}
+
+	public String getDomain() {
+		return getDomain(null);
+	}
+
+	public String getDomain(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DOMAIN, facesContext);
+	}
+
+	public void setDomain(String domain) {
+		engine.setProperty(Properties.DOMAIN, domain);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "domain" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDomainSetted() {
+		return engine.isPropertySetted(Properties.DOMAIN);
 	}
 
 	/**
@@ -521,6 +541,26 @@ public class InitComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isClientValidationSetted() {
 		return engine.isPropertySetted(Properties.CLIENT_VALIDATION);
+	}
+
+	public boolean isUserAgentVary() {
+		return isUserAgentVary(null);
+	}
+
+	public boolean isUserAgentVary(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.USER_AGENT_VARY, false, facesContext);
+	}
+
+	public void setUserAgentVary(boolean userAgentVary) {
+		engine.setProperty(Properties.USER_AGENT_VARY, userAgentVary);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "userAgentVary" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isUserAgentVarySetted() {
+		return engine.isPropertySetted(Properties.USER_AGENT_VARY);
 	}
 
 	protected Set getCameliaFields() {

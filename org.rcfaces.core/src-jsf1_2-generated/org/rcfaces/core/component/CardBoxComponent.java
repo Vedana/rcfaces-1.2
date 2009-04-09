@@ -5,6 +5,7 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.CardComponent;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.rcfaces.core.component.iterator.ICardIterator;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
+import org.apache.commons.logging.Log;
 import javax.faces.event.PhaseId;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
@@ -38,6 +40,8 @@ public class CardBoxComponent extends AbstractInputComponent implements
 	IPreferencesSettings,
 	IVariableScopeCapability,
 	IAsyncDecodeModeCapability {
+
+	private static final Log LOG = LogFactory.getLog(CardBoxComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.cardBox";
 

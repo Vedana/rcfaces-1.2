@@ -2,11 +2,12 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IServiceEventCapability;
 import java.util.TimeZone;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Arrays;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
@@ -17,14 +18,15 @@ import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
 import java.lang.String;
 import javax.el.ValueExpression;
-import java.util.Map;
 import javax.faces.context.FacesContext;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Locale;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.converter.LocaleConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
@@ -49,6 +51,8 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	IComponentTimeZoneCapability,
 	IServerDataManager,
 	IClientDataManager {
+
+	private static final Log LOG = LogFactory.getLog(ServiceComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.service";
 

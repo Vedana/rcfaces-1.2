@@ -6,14 +6,16 @@ import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import java.util.HashSet;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
@@ -41,6 +43,8 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 	IFocusStyleClassCapability,
 	ISeverityStyleClassCapability,
 	ISelectedCapability {
+
+	private static final Log LOG = LogFactory.getLog(CheckButtonComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.checkButton";
 

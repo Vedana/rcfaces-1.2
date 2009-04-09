@@ -12,6 +12,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/el-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsp-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/servlet-api.jar" sourcepath="/jsf-1_2_03/Tomcat 6.0 src"/>
-	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsf-api.jar" sourcepath="/jsf-1_2_07"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsf1_2/jsf-api.jar" sourcepath="/jsf-1_2_09"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,15 +4,17 @@ import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
@@ -28,6 +30,8 @@ public class CardComponent extends AbstractOutputComponent implements
 	IAsyncDecodeModeCapability,
 	ILoadEventCapability,
 	IAsyncRenderComponent {
+
+	private static final Log LOG = LogFactory.getLog(CardComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.card";
 

@@ -109,6 +109,12 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 
 	public final String getRendererType() {
 		String rendererType = super.getRendererType();
+		if (rendererType == null) {
+        	if (LOG.isTraceEnabled()) {
+        		LOG.trace("RendererType is null for component id='"+getId()+"' class='"+getClass()+"'");
+        	}
+			return null;
+		}
 
 		if ((this instanceof ILookAndFeelCapability) == false) {
 			return rendererType;
@@ -383,7 +389,7 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 	            varScope=BindingTools.processVariableScope(context, (IVariableScopeCapability)this, PhaseId.UPDATE_MODEL_VALUES);
 	        }
 	
-	        engine.processUpdates(context);
+			processEngineUpdates(context);
 	
 	        super.processUpdates(context);
 	        
@@ -397,7 +403,11 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 	    	throw ex;
 	    }
     }
-
+    
+	protected void processEngineUpdates(FacesContext context) {
+		engine.processUpdates(context);			
+	}
+    
 	/*
 	 * (non-Javadoc)
 	 * 

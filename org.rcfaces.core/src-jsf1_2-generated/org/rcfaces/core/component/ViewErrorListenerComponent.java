@@ -5,6 +5,7 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.LogFactory;
 import java.util.Map;
 import java.lang.Object;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
@@ -24,6 +26,8 @@ public class ViewErrorListenerComponent extends CameliaBaseComponent implements
 	IServerDataCapability,
 	IPropertyChangeEventCapability,
 	IErrorEventCapability {
+
+	private static final Log LOG = LogFactory.getLog(ViewErrorListenerComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.viewErrorListener";
 

@@ -4,13 +4,15 @@ import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import javax.el.ValueExpression;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import java.util.HashSet;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.IMenuComponent;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.AbstractDataComponent;
@@ -25,6 +27,8 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 	IBorderTypeCapability,
 	IScrollableCapability,
 	IShowValueCapability {
+
+	private static final Log LOG = LogFactory.getLog(ComponentsListComponent.class);
 
 	public static final String COMPONENT_TYPE="org.rcfaces.core.componentsList";
 
