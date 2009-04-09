@@ -525,7 +525,6 @@ var __members = {
 			return null;
 		}
 		
-			
 		switch(this._mimeType) {
 		case f_textEditor.TEXT_PLAIN_MIME_TYPE:
 			if (!f_textEditor._PLAIN_TEXT_ENABLED[command]) {
@@ -589,7 +588,7 @@ var __members = {
 				var element=range.startContainer;
 				for(;element.nodeType==3;element=element.parentNode);
 				
-				alert("Element= "+element.tagName+" "+element.offsetWidth);
+			//	alert("Element= "+element.tagName+" "+element.offsetWidth);
 				
 				var computedStyle=contentDocument.defaultView.getComputedStyle(element, '');
 
