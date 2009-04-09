@@ -451,8 +451,7 @@ var __members = {
 		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");		
 		
 		var tr=f_core.CreateElement(tBodyContainer, "tr", {
-		 	className: "fa_dataGridPopup_search",
-		 	height: inputHeight+4
+		 	className: "fa_dataGridPopup_search"
 		});								
 		
 		var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
@@ -553,6 +552,10 @@ var __members = {
 
 			return self._rowSelection(event.f_getSelectionProvider(), event.f_getJsEvent());			
 		});
+		
+		if (f_core.IsGecko()) {
+			parent.style.height=(parent.scrollHeight+2)+"px";
+		}
 		
 		return dataGrid;
 	},
