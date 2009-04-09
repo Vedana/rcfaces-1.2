@@ -18,12 +18,14 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Services;
+import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.repository.BasicHierarchicalRepository;
@@ -445,8 +447,9 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
     }
 
     public String getBaseURI(IProcessContext processContext) {
-        ExternalContext ext = processContext.getFacesContext()
-                .getExternalContext();
+        FacesContext facesContext = processContext.getFacesContext();
+
+        ExternalContext ext = facesContext.getExternalContext();
 
         Map request = ext.getRequestMap();
         String uri = (String) request.get(JAVASCRIPT_BASE_URI_PROPERTY);
@@ -454,16 +457,38 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             return uri;
         }
 
-        StringAppender sa = new StringAppender(256);
-        sa.append(ext.getRequestContextPath());
-        sa.append(servletURI);
+        IResourceProxyHandler resourceProxyHandler = processContext
+                .getRcfacesContext().getResourceProxyHandler();
+        if (resourceProxyHandler != null && resourceProxyHandler.isEnabled()
+                && resourceProxyHandler.isFrameworkResourcesEnabled()) {
 
-        if (repositoryVersion != null && repositoryVersion.length() > 0) {
-            sa.append('/');
-            sa.append(repositoryVersion);
+            StringAppender sa = new StringAppender(256);
+
+            // Il nous faut une URL en context path type
+            sa.append(servletURI);
+
+            if (repositoryVersion != null && repositoryVersion.length() > 0) {
+                sa.append('/');
+                sa.append(repositoryVersion);
+            }
+
+            uri = resourceProxyHandler.computeProxyedURL(facesContext, null,
+                    null, sa.toString());
         }
 
-        uri = sa.toString();
+        if (uri == null) {
+            StringAppender sa = new StringAppender(256);
+
+            sa.append(ext.getRequestContextPath());
+            sa.append(servletURI);
+
+            if (repositoryVersion != null && repositoryVersion.length() > 0) {
+                sa.append('/');
+                sa.append(repositoryVersion);
+            }
+
+            uri = sa.toString();
+        }
 
         request.put(JAVASCRIPT_BASE_URI_PROPERTY, uri);
 
