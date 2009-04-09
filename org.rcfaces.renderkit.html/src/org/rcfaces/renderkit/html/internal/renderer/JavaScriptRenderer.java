@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
@@ -30,12 +31,15 @@ import org.rcfaces.core.internal.repository.IRepository.IFile;
 import org.rcfaces.core.internal.tools.ContextTools;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.JavaScriptComponent;
+import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
+import org.rcfaces.renderkit.html.internal.util.FileItemSource;
+import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
 
 /**
  * 
@@ -51,11 +55,27 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        JavaScriptComponent javaScriptComponent = (JavaScriptComponent) writer
-                .getComponentRenderContext().getComponent();
+        IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
+                .getHtmlComponentRenderContext();
 
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+        FacesContext facesContext = htmlComponentRenderContext
                 .getFacesContext();
+
+        JavaScriptComponent javaScriptComponent = (JavaScriptComponent) htmlComponentRenderContext
+                .getComponent();
+
+        String userAgent = javaScriptComponent.getUserAgent(facesContext);
+        if (userAgent != null && userAgent.length() > 0) {
+            if (htmlWriter.getHtmlComponentRenderContext()
+                    .getHtmlRenderContext().isUserAgentVary() == false) {
+                throw new FacesException(
+                        "In order to use userAgentVary property, you must declare <v:init userAgentVary=\"true\" ...>");
+            }
+
+            if (UserAgentTools.accept(facesContext, javaScriptComponent) == false) {
+                return;
+            }
+        }
 
         IJavaScriptRenderContext javaScriptRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
@@ -88,16 +108,18 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
             }
         }
 
-        String sources[] = listSources(writer.getComponentRenderContext());
-        if (sources.length > 0) {
+        FileItemSource sources[] = listSources(writer
+                .getComponentRenderContext());
+        if (sources != null && sources.length > 0) {
             for (int i = 0; i < sources.length; i++) {
-                String source = sources[i];
+                FileItemSource fileItemSource = sources[i];
 
                 IContentAccessor contentAccessor = ContentAccessorFactory
-                        .createFromWebResource(facesContext, source,
-                                IContentFamily.SCRIPT);
+                        .createFromWebResource(facesContext, fileItemSource
+                                .getSource(), IContentFamily.SCRIPT);
 
-                source = contentAccessor.resolveURL(facesContext, null, null);
+                String source = contentAccessor.resolveURL(facesContext, null,
+                        null);
 
                 if (source != null) {
                     includeScript(htmlWriter, javaScriptRenderContext, source);
