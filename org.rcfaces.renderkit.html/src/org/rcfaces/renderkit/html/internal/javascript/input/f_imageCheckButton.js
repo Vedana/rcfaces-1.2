@@ -22,7 +22,7 @@ var __members = {
 	},
 	fa_updateSelected: function() {
 		this._updateImage();
-	},²
+	},
 	/**
 	 * @method protected
 	 */
