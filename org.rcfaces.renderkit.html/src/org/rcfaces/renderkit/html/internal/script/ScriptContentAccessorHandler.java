@@ -14,7 +14,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
@@ -28,11 +27,11 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
-import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
-import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.script.AbstractScriptContentAccessorHandler;
 import org.rcfaces.core.internal.script.IScriptOperation;
 import org.rcfaces.core.internal.style.Constants;
+import org.rcfaces.core.internal.util.PathTypeTools;
+import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -216,8 +215,8 @@ public class ScriptContentAccessorHandler extends
             break;
 
         case IContentAccessor.ABSOLUTE_PATH_TYPE:
-            String relativeURL = AbstractContentAccessor.removeContextPath(
-                    facesContext, resourceURL);
+            String relativeURL = PathTypeTools
+                    .convertAbsolutePathToContextType(facesContext, resourceURL);
 
             if (relativeURL == null) {
                 throw new FacesException(
@@ -228,10 +227,8 @@ public class ScriptContentAccessorHandler extends
             break;
 
         case IContentAccessor.RELATIVE_PATH_TYPE:
-            IProcessContext processContext = AbstractProcessContext
-                    .getProcessContext(facesContext);
-
-            resourceURL = processContext.getAbsolutePath(resourceURL, false);
+            resourceURL = PathTypeTools.convertRelativePathToContextPath(
+                    facesContext, resourceURL);
             break;
 
         default:
@@ -240,8 +237,12 @@ public class ScriptContentAccessorHandler extends
 
         String versionId = null;
         if (org.rcfaces.core.internal.Constants.RESOURCE_CONTENT_VERSION_SUPPORT) {
-            versionId = rcfacesContext.getResourceVersionHandler()
-                    .getResourceVersion(facesContext, resourceURL, null);
+            IResourceVersionHandler resourceVersionHandler = rcfacesContext
+                    .getResourceVersionHandler();
+            if (resourceVersionHandler != null) {
+                versionId = resourceVersionHandler.getResourceVersion(
+                        facesContext, resourceURL, null);
+            }
         }
 
         IContentModel contentModel = new ScriptOperationContentModel(
