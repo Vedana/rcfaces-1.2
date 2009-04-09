@@ -5,6 +5,7 @@
 		<implements id="org.rcfaces.core.internal.capability.IPageConfigurator" />
 		
 		<attribute id="base" type="java.lang.String" />
+		<attribute id="domain" type="java.lang.String" />
 		<attribute id="title" type="java.lang.String" />
 		<attribute id="favoriteImageURL" type="java.lang.String" />
 		<attribute id="disabledScriptPageURL" type="java.lang.String" />
@@ -19,6 +20,8 @@
 		<attribute id="clientMessageIdFilter" type="java.lang.String" />
 		<attribute id="waiRolesNS" type="java.lang.String" />
 		<attribute id="clientValidation" type="boolean" default="true" />
+
+		<attribute id="userAgentVary" type="boolean" default="false" />
 		
 		<method id="setLiteralLocale(String)" />
 		<method id="setLiteralTimeZone(String)" />
@@ -34,6 +37,7 @@
 	
 	<component id="javaScript" extends="cameliaBase" renderKit="html" textBodyContent="true">
 		<capability id="ITextCapability" />
+		<capability id="IUserAgentVaryCapability" />
 
 		<attribute id="src" type="java.lang.String" />
 		<attribute id="srcCharSet" type="java.lang.String" />
@@ -45,6 +49,7 @@
 
 	<component id="cssStyle" extends="cameliaBase" renderKit="html" textBodyContent="true">
 		<capability id="ITextCapability" />
+		<capability id="IUserAgentVaryCapability" />
 
 		<attribute id="src" type="java.lang.String" />
 		<attribute id="srcCharSet" type="java.lang.String" />
@@ -68,9 +73,11 @@
 	</component>
 	
 	<component id="javaScriptItem" extends="fileItem" renderKit="html" render="false">
+		<capability id="IUserAgentVaryCapability" />
 	</component>
 	
 	<component id="cssStyleItem" extends="fileItem" renderKit="html" render="false">
+		<capability id="IUserAgentVaryCapability" />
 	</component>
 	
 
