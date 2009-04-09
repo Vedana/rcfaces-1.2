@@ -16,12 +16,21 @@ var __members = {
 	},
 	*/
 	/**
-	 * Returns <code>true</code> if the component is value
+	 * Returns the component's value
 	 *
 	 * @method public
 	 * @return String or <code>null</code> if not defined !
 	 */
 	f_getValue: function() {
+		return this.f_getInternalValue();
+	},
+	/**
+	 * Returns <code>true</code> if the component is value
+	 *
+	 * @method protected
+	 * @return String or <code>null</code> if not defined !
+	 */
+	f_getInternalValue: function() {	
 		var value=this._value;
 		if (value!==undefined) {
 			return value;
