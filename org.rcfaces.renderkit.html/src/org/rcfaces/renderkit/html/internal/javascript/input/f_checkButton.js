@@ -64,7 +64,7 @@ var __members = {
 		
 		f_core.Assert(input, "f_checkButton.f_isSelected: Input is not found for selected property !");
 
-		return (input.checked);
+		return (!!input.checked);
 	},
 
 	/**
@@ -73,6 +73,8 @@ var __members = {
 	 * @return void
 	 */
 	f_setSelected: function(set) {
+		set=(set!==false);
+	
 		var input=this.f_getInput();
 
 		f_core.Assert(input, "f_checkButton.f_setSelected: Input is not found for selected property !");
@@ -134,6 +136,25 @@ var __members = {
 		var input=this.f_getInput();
 		
 		this.f_setProperty(f_prop.SELECTED, (input.checked)?input.value:"");
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @return Object The value associated.
+	 */
+	f_getValue: function() {
+		return this.f_isSelected();
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @param Object value
+	 * @return boolean If value is recognized.
+	 */
+	f_setValue: function(value) {
+		this.f_setSelected(!!value);
 	}
 }
 

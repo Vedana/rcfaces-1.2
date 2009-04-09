@@ -22,7 +22,7 @@ var __members = {
 	},
 	fa_updateSelected: function() {
 		this._updateImage();
-	},
+	},²
 	/**
 	 * @method protected
 	 */
@@ -32,6 +32,25 @@ var __members = {
 		this.f_setProperty(f_prop.SELECTED,this.f_isSelected());
 
 		this.f_super(arguments);
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @return Object The value associated.
+	 */
+	f_getValue: function() {
+		return this.f_isSelected();
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @param Object value
+	 * @return boolean If value is recognized.
+	 */
+	f_setValue: function(value) {
+		this.f_setSelected(!!value);
 	}
 }
 new f_class("f_imageCheckButton", {

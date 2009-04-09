@@ -114,6 +114,30 @@ var __members = {
 		return this.f_listGroup(this.f_getGroupName());
 	},
 	fa_updateRequired: function() {
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @return Object The value associated.
+	 */
+	f_getValue: function() {
+		var selected=this.f_getSelectedInGroup();
+		if (!selected) {
+			return null;
+		}
+		
+		return selected.f_getInternalValue();
+	},
+	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @param Object value
+	 * @return boolean If value is recognized.
+	 */
+	f_setValue: function(value) {
+		this.f_setSelected(value!==false);
 	}
 }
 
