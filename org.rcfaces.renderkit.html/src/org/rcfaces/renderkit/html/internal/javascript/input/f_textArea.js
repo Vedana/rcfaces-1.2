@@ -113,7 +113,7 @@ var __statics = {
 		}
 		
 		var _input=input;
-		var _maxTextLength=maxtTextLength;
+		var _maxTextLength=maxTextLength;
 		window.setTimeout(function() {
 		
 			var value=_input.value;
