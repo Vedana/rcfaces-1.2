@@ -93,13 +93,13 @@ public class PathItem extends NodeItem implements IPathItem {
     public PathItem(IPathItem pathItem) {
         super(pathItem, null);
 
-        ItemTools.copyProperties(this, pathItem);
+        ItemTools.copyProperties(this, IPathItem.class, pathItem);
     }
 
     public PathItem(PathComponent pathComponent) {
         super(pathComponent);
 
-        ItemTools.copyProperties(this, pathComponent);
+        ItemTools.copyProperties(this, PathComponent.class, pathComponent);
     }
 
     public final String getClip() {
