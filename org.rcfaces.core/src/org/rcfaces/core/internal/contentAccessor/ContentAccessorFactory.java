@@ -45,6 +45,18 @@ public class ContentAccessorFactory {
             return null;
         }
 
+        public IContentProxyHandler getContentProxyHandler() {
+            return null;
+        }
+
+        public void setContentProxyHandler(
+                IContentProxyHandler contentProxyHandler) {
+        }
+
+        public void setContentVersionHandler(
+                IContentVersionHandler contentVersionHandler) {
+        }
+
         public int getPathType() {
             return 0;
         }
@@ -70,10 +82,6 @@ public class ContentAccessorFactory {
             return null;
         }
 
-        public void setContentVersionHandler(
-                IContentVersionHandler contentVersionHandler) {
-        }
-
         public void setPathType(int pathType) {
         }
 
@@ -87,11 +95,40 @@ public class ContentAccessorFactory {
 
     };
 
+    private static final IContentProxyHandler RESOURCE_CONTENT_PROXY_HANDLER = new AbstractContentProxyHandler() {
+        private static final String REVISION = "$Revision$";
+
+        public String getId() {
+            return "ResourceProxyHandler(proxy)";
+        }
+
+        public IContentAccessor getProxyedContentAccessor(
+                RcfacesContext rcfacesContext, FacesContext facesContext,
+                IContentAccessor contentAccessor,
+                IGeneratedResourceInformation[] contentInformationRef) {
+
+            if (Constants.RESOURCE_CONTENT_PROXY_SUPPORT == false) {
+                return null;
+            }
+
+            IContentProxyHandler contentProxyHandler = rcfacesContext
+                    .getDefaultContentProxyHandler();
+            if (contentProxyHandler == null) {
+                return null;
+            }
+
+            return contentProxyHandler.getProxyedContentAccessor(
+                    rcfacesContext, facesContext, contentAccessor,
+                    contentInformationRef);
+        }
+
+    };
+
     private static final IContentVersionHandler RESOURCE_CONTENT_VERSION_HANDLER = new AbstractContentVersionHandler() {
         private static final String REVISION = "$Revision$";
 
         public String getId() {
-            return "ResourceVersionHandler(pre)";
+            return "ResourceVersionHandler(proxy)";
         }
 
         public IContentAccessor getVersionedContentAccessor(
@@ -140,12 +177,14 @@ public class ContentAccessorFactory {
             FacesContext facesContext, Object value, IContentFamily type) {
 
         IContentVersionHandler contentVersionHandler = RESOURCE_CONTENT_VERSION_HANDLER;
+        IContentProxyHandler contentProxyHandler = RESOURCE_CONTENT_PROXY_HANDLER;
         if (IContentFamily.HELP.equals(type) || IContentFamily.JSP.equals(type)) {
             contentVersionHandler = null;
+            contentProxyHandler = null;
         }
 
         return new BasicContentAccessor(facesContext, value, type,
-                contentVersionHandler);
+                contentVersionHandler, contentProxyHandler);
     }
 
     public static IContentAccessor createFromWebResource(
@@ -158,7 +197,8 @@ public class ContentAccessorFactory {
     public static IContentAccessors createSingleImageWebResource(
             FacesContext facesContext, Object value, IContentFamily image) {
         return new SimpleImageAccessor(facesContext, value, image,
-                RESOURCE_CONTENT_VERSION_HANDLER);
+                RESOURCE_CONTENT_VERSION_HANDLER,
+                RESOURCE_CONTENT_PROXY_HANDLER);
     }
 
     /**
@@ -172,8 +212,10 @@ public class ContentAccessorFactory {
 
         public SimpleImageAccessor(FacesContext facesContext, Object url,
                 IContentFamily contentType,
-                IContentVersionHandler versionHandler) {
-            super(facesContext, url, contentType, versionHandler);
+                IContentVersionHandler versionHandler,
+                IContentProxyHandler contentProxyHandler) {
+            super(facesContext, url, contentType, versionHandler,
+                    contentProxyHandler);
         }
 
         public IContentAccessor getImageAccessor() {

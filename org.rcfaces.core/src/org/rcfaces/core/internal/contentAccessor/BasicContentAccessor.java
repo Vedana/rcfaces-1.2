@@ -21,9 +21,15 @@ public class BasicContentAccessor extends AbstractContentAccessor {
     private final Object value;
 
     public BasicContentAccessor(FacesContext facesContext, String url,
+            int pathType, IContentFamily contentFamily) {
+        this(facesContext, url, pathType, contentFamily, null, null);
+    }
+
+    public BasicContentAccessor(FacesContext facesContext, String url,
             int pathType, IContentFamily contentFamily,
-            IContentVersionHandler contentVersionHandler) {
-        super(contentFamily, contentVersionHandler);
+            IContentVersionHandler contentVersionHandler,
+            IContentProxyHandler contentProxyHandler) {
+        super(contentFamily, contentVersionHandler, contentProxyHandler);
 
         this.value = url;
         setPathType(pathType);
@@ -31,10 +37,16 @@ public class BasicContentAccessor extends AbstractContentAccessor {
 
     public BasicContentAccessor(FacesContext facesContext, Object url,
             IContentFamily contentFamily,
-            IContentVersionHandler contentVersionHandler) {
-        super(contentFamily, contentVersionHandler);
+            IContentVersionHandler contentVersionHandler,
+            IContentProxyHandler contentProxyHandler) {
+        super(contentFamily, contentVersionHandler, contentProxyHandler);
 
         this.value = convertURL(facesContext, url);
+    }
+
+    public BasicContentAccessor(FacesContext facesContext, Object url,
+            IContentFamily contentFamily) {
+        this(facesContext, url, contentFamily, null, null);
     }
 
     public BasicContentAccessor(FacesContext facesContext, Object url,

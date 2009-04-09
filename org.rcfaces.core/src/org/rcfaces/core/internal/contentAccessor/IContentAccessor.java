@@ -58,4 +58,8 @@ public interface IContentAccessor {
     IContentVersionHandler getContentVersionHandler();
 
     void setContentVersionHandler(IContentVersionHandler contentVersionHandler);
+
+    IContentProxyHandler getContentProxyHandler();
+
+    void setContentProxyHandler(IContentProxyHandler contentProxyHandler);
 }

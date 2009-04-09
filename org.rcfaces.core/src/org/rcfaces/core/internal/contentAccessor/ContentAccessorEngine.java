@@ -69,7 +69,6 @@ public class ContentAccessorEngine {
         IContentVersionHandler contentVersionHandler = returnContentAccessor
                 .getContentVersionHandler();
         if (contentVersionHandler != null) {
-
             IContentAccessor versionedContentAccessor = contentVersionHandler
                     .getVersionedContentAccessor(rcfacesContext, facesContext,
                             returnContentAccessor, contentInformationRef);
@@ -82,6 +81,23 @@ public class ContentAccessorEngine {
 
             if (versionedContentAccessor != null) {
                 returnContentAccessor = versionedContentAccessor;
+            }
+        }
+
+        IContentProxyHandler contentProxyHandler = returnContentAccessor
+                .getContentProxyHandler();
+        if (contentProxyHandler != null) {
+            IContentAccessor proxyedContentAccessor = contentProxyHandler
+                    .getProxyedContentAccessor(rcfacesContext, facesContext,
+                            returnContentAccessor, contentInformationRef);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("contentProxyHandler(" + contentProxyHandler.getId()
+                        + ") returns " + proxyedContentAccessor);
+            }
+
+            if (proxyedContentAccessor != null) {
+                returnContentAccessor = proxyedContentAccessor;
             }
         }
 

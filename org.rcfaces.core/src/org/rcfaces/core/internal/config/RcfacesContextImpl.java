@@ -37,7 +37,10 @@ import org.rcfaces.core.internal.adapter.AdapterManagerImpl;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorRegistry;
+import org.rcfaces.core.internal.contentAccessor.IContentProxyHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
+import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
+import org.rcfaces.core.internal.contentProxy.ResourceProxyHandlerImpl;
 import org.rcfaces.core.internal.contentStorage.ContentStorageAccessorHandler;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
@@ -76,6 +79,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
             RcfacesContextImpl.class.getPackage(),
             AdapterManagerImpl.class.getPackage(),
             ResourceVersionHandlerImpl.class.getPackage(),
+            ResourceProxyHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
             ImageContentAccessorHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
@@ -98,9 +102,13 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     private transient IContentVersionHandler contentVersionHandler;
 
+    private transient IContentProxyHandler contentProxyHandler;
+
     private transient IContentAccessorRegistry contentAccessorRegistry;
 
     private transient IResourceVersionHandler resourceVersionHandler;
+
+    private transient IResourceProxyHandler resourceProxyHandler;
 
     private transient String applicationVersion;
 
@@ -462,6 +470,15 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return contentVersionHandler;
     }
 
+    public IContentProxyHandler getDefaultContentProxyHandler() {
+        return contentProxyHandler;
+    }
+
+    public void setDefaultContentProxyHandler(
+            IContentProxyHandler contentProxyHandler) {
+        this.contentProxyHandler = contentProxyHandler;
+    }
+
     public void readExternal(ObjectInput in) {
         // On ne serialize rien !
     }
@@ -486,13 +503,13 @@ public class RcfacesContextImpl extends RcfacesContext implements
         return contentAccessorRegistry;
     }
 
-    public IResourceVersionHandler getResourceVersionHandler() {
-        return resourceVersionHandler;
-    }
-
     public void setContentAccessorRegistry(
             IContentAccessorRegistry contentAccessorRegistry) {
         this.contentAccessorRegistry = contentAccessorRegistry;
+    }
+
+    public IResourceVersionHandler getResourceVersionHandler() {
+        return resourceVersionHandler;
     }
 
     public void setResourceVersionHandler(
@@ -507,6 +524,15 @@ public class RcfacesContextImpl extends RcfacesContext implements
     public void setContentStorageEngine(
             IContentStorageEngine indirectContentRepository) {
         this.indirectContentRepository = indirectContentRepository;
+    }
+
+    public IResourceProxyHandler getResourceProxyHandler() {
+        return resourceProxyHandler;
+    }
+
+    public void setResourceProxyHandler(
+            IResourceProxyHandler resourceProxyHandler) {
+        this.resourceProxyHandler = resourceProxyHandler;
     }
 
     public IDocumentBuilderProvider getDocumentBuilderProvider() {

@@ -22,7 +22,9 @@ import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.config.IProvidersRegistry;
 import org.rcfaces.core.internal.config.RcfacesContextImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorRegistry;
+import org.rcfaces.core.internal.contentAccessor.IContentProxyHandler;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
+import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
@@ -240,6 +242,11 @@ public abstract class RcfacesContext {
     public abstract void setDefaultContentVersionHandler(
             IContentVersionHandler handler);
 
+    public abstract IContentProxyHandler getDefaultContentProxyHandler();
+
+    public abstract void setDefaultContentProxyHandler(
+            IContentProxyHandler handler);
+
     public abstract IContentAccessorRegistry getContentAccessorRegistry();
 
     public abstract void setContentAccessorRegistry(
@@ -249,6 +256,11 @@ public abstract class RcfacesContext {
 
     public abstract void setResourceVersionHandler(
             IResourceVersionHandler resourceVersionHandler);
+
+    public abstract IResourceProxyHandler getResourceProxyHandler();
+
+    public abstract void setResourceProxyHandler(
+            IResourceProxyHandler resourceProxyHandler);
 
     public abstract IContentStorageEngine getContentStorageEngine();
 
@@ -268,4 +280,5 @@ public abstract class RcfacesContext {
     public static boolean isJSF1_2() {
         return isJSF1_2;
     }
+
 }

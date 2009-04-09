@@ -318,11 +318,13 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
     }
 
     public void appendHashInformations(StringAppender sa) {
-        loadSourceInfos(null);
+        String url = getResourceURL();
+        if (url != null) {
+            loadSourceInfos(null);
+        }
 
         StringAppender sa2 = new StringAppender(512);
 
-        String url = getResourceURL();
         if (url != null) {
             sa2.append(url);
         }

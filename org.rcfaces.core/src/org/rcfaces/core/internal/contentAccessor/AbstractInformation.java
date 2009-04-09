@@ -168,6 +168,12 @@ public class AbstractInformation implements StateHolder,
                 continue;
             }
 
+            if (value instanceof IResourceKeyParticipant) {
+                sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
+                ((IResourceKeyParticipant) value).participeKey(sa);
+                continue;
+            }
+
             appendToKey(sa, key, value);
         }
     }

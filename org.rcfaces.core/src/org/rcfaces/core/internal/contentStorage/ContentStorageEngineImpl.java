@@ -269,7 +269,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         // Permet de remettre la ressource dans le cache
-        String url = repository.save(resolvedContent, contentModel); 
+        String url = repository.save(resolvedContent, contentModel);
 
         if (contentEngineMustBeRegistred) {
             contentEngineId = contentModel.getContentEngineId();
@@ -283,7 +283,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         IContentAccessor contentAccessor = new BasicContentAccessor(null,
                 contentStorageServletURL + '/' + url, generatedInformation
-                        .getContentFamily(), null);
+                        .getContentFamily());
 
         contentAccessor.setPathType(contentStorageServletPathType);
 
@@ -324,7 +324,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         IContentAccessor contentAccessor = new BasicContentAccessor(
                 facesContext, contentStorageServletURL + '/' + url,
-                generatedInformation.getContentFamily(), null);
+                generatedInformation.getContentFamily());
 
         contentAccessor.setPathType(contentStorageServletPathType);
 
