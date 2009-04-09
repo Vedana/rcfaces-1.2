@@ -10,6 +10,7 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.decorator.FilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.util.FileItemSource;
 
 /**
  * 
@@ -28,7 +29,7 @@ public class AbstractFilesCollectorRenderer extends AbstractHtmlRenderer {
         return new FilesCollectorDecorator(component);
     }
 
-    protected String[] listSources(
+    protected FileItemSource[] listSources(
             IComponentRenderContext componentRenderContext) {
         FilesCollectorDecorator decorator = (FilesCollectorDecorator) getComponentDecorator(componentRenderContext);
 

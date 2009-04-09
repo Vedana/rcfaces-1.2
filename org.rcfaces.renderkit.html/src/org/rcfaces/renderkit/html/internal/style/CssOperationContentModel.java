@@ -33,8 +33,10 @@ import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.internal.version.ResourceVersionHandlerImpl;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.renderer.FilesCollectorGenerationInformation;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IParserContext;
+import org.rcfaces.renderkit.html.internal.util.FileItemSource;
 
 /**
  * 
@@ -56,6 +58,8 @@ public class CssOperationContentModel extends
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     private static final String STYLE_SUFFIX = "css";
+
+    private static final int STYLESHEET_BUFFER_INITIAL_SIZE = 8000;
 
     private final ICssParser cssParser;
 
@@ -94,45 +98,105 @@ public class CssOperationContentModel extends
 
         IResourceLoaderFactory resourceLoaderFactory = getResourceLoaderFactory(facesContext);
 
+        Map applicationParameters = new ApplicationParametersMap(facesContext);
+
+        String resourceURL = getResourceURL();
+        IStyleSheetFile styleSheetFile = createNewStyleSheetFile(resourceURL);
+
         ContentInformation contentInfo[] = new ContentInformation[1];
 
         String styleSheetContent = null;
-        String resourceURL = getResourceURL();
-        styleSheetContent = loadContent(facesContext, resourceLoaderFactory,
-                resourceURL, getDefaultCharset(), contentInfo);
 
-        if (styleSheetContent == null) {
-            return INVALID_BUFFERED_FILE;
+        if (resourceURL != null) {
+            styleSheetContent = loadContent(facesContext,
+                    resourceLoaderFactory, resourceURL, getDefaultCharset(),
+                    contentInfo);
         }
 
-        Map applicationParameters = new ApplicationParametersMap(facesContext);
+        if (generationInformation instanceof FilesCollectorGenerationInformation) {
+            FileItemSource sources[] = ((FilesCollectorGenerationInformation) generationInformation)
+                    .listSources();
 
-        IStyleSheetFile styleSheetFile = createNewStyleSheetFile(resourceURL);
-        try {
-            IParserContext parserContext = new ParserContext(facesContext,
-                    contentInfo[0].getCharSet(), contentInfo[0]
-                            .getLastModified(), resourceVersionHandler);
+            if (sources != null && sources.length > 0) {
+                StringAppender sa = null;
 
-            String newStyleSheetContent = filter(applicationParameters,
-                    resourceLoaderFactory, cssParser, resourceURL,
-                    styleSheetContent,
-                    new IStyleOperation[] { styleOperation },
-                    new Map[] { getFilterParameters() }, parserContext);
+                for (int i = 0; i < sources.length; i++) {
+                    FileItemSource source = sources[i];
 
-            newStyleSheetContent = "@charset \"" + parserContext.getCharset()
-                    + "\";\n" + newStyleSheetContent;
+                    ContentInformation contentInfo2[] = new ContentInformation[1];
 
-            String contentType = getContentType() + "; charset="
-                    + parserContext.getCharset();
+                    String cs = source.getCharSet();
+                    if (cs == null) {
+                        cs = getDefaultCharset();
+                    }
 
-            styleSheetFile.initialize(contentType, newStyleSheetContent
-                    .getBytes(parserContext.getCharset()), parserContext
-                    .getLastModifiedDate());
+                    String styleSheet2 = loadContent(facesContext,
+                            resourceLoaderFactory, source.getSource(), cs,
+                            contentInfo2);
+                    if (styleSheet2 == null) {
+                        continue;
+                    }
 
-        } catch (IOException e) {
-            LOG.error("Can not create filtred image '" + getResourceURL()
-                    + "'.", e);
+                    if (sa == null) {
+                        if (styleSheetContent != null) {
+                            sa = new StringAppender(styleSheetContent,
+                                    styleSheet2.length()
+                                            + STYLESHEET_BUFFER_INITIAL_SIZE);
+                        } else {
+                            sa = new StringAppender(styleSheet2.length()
+                                    + STYLESHEET_BUFFER_INITIAL_SIZE);
+                        }
+                    }
 
+                    sa.append(styleSheet2);
+
+                    if (contentInfo2[0] != null) {
+                        if (contentInfo[0] == null) {
+                            contentInfo[0] = contentInfo2[0];
+
+                        } else {
+                            contentInfo[0].merge(contentInfo2[0]);
+                        }
+                    }
+                }
+
+                if (sa != null) {
+                    styleSheetContent = sa.toString();
+                }
+            }
+        }
+
+        if (styleSheetContent != null) {
+            try {
+                IParserContext parserContext = new ParserContext(facesContext,
+                        contentInfo[0].getCharSet(), contentInfo[0]
+                                .getLastModified(), resourceVersionHandler);
+
+                String newStyleSheetContent = filter(applicationParameters,
+                        resourceLoaderFactory, cssParser, resourceURL,
+                        styleSheetContent,
+                        new IStyleOperation[] { styleOperation },
+                        new Map[] { getFilterParameters() }, parserContext);
+
+                newStyleSheetContent = "@charset \""
+                        + parserContext.getCharset() + "\";\n"
+                        + newStyleSheetContent;
+
+                String contentType = getContentType() + "; charset="
+                        + parserContext.getCharset();
+
+                styleSheetFile.initialize(contentType, newStyleSheetContent
+                        .getBytes(parserContext.getCharset()), parserContext
+                        .getLastModifiedDate());
+
+            } catch (IOException e) {
+                LOG.error("Can not create filtred image '" + getResourceURL()
+                        + "'.", e);
+
+                return INVALID_BUFFERED_FILE;
+            }
+
+        } else {
             return INVALID_BUFFERED_FILE;
         }
 
@@ -217,7 +281,8 @@ public class CssOperationContentModel extends
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("Process " + styleOperations.length + " style operation"
-                    + ((styleOperations.length > 1) ? "s" : ""));
+                    + ((styleOperations.length > 1) ? "s" : "") + " for url='"
+                    + styleSheetURL + "'");
         }
 
         for (int i = 0; i < styleOperations.length; i++) {
@@ -304,7 +369,7 @@ public class CssOperationContentModel extends
 
             IContentAccessor contentAccessor = new BasicContentAccessor(
                     facesContext, contextPath.toString(),
-                    IContentAccessor.CONTEXT_PATH_TYPE, contentFamily, null);
+                    IContentAccessor.CONTEXT_PATH_TYPE, contentFamily);
 
             if (IContentFamily.STYLE.equals(contentFamily) == false) {
                 // Le style se versionne tout seul !
@@ -320,10 +385,11 @@ public class CssOperationContentModel extends
                 versionedURL = versionedURL.substring(1);
             }
 
-            if (base.segmentCount() <= 1) {
-                return new Path(versionedURL);
-            }
+            /*
+             * if (base.segmentCount() <= 1) { return new Path(versionedURL); }
+             */
 
+            // On vient d'une URL versionnée, et on repart sur du versionné
             // La servlet de versioning repostionne l'url à un seul dossier !
             StringAppender sa = new StringAppender("../", 256)
                     .append(versionedURL);

@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.AbstractCompositeContentAccessorHandler;
-import org.rcfaces.core.internal.contentAccessor.AbstractContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
@@ -26,6 +25,7 @@ import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
+import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.contentStorage.ContentStorageServlet;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
@@ -33,7 +33,9 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.style.Constants;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
 import org.rcfaces.core.internal.style.IStyleOperation;
+import org.rcfaces.core.internal.util.PathTypeTools;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
+import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -57,8 +59,6 @@ public class StyleContentAccessorHandler extends
             + ".MERGE_STYLE_FILES";
 
     private static final String VERSION_FILTER_NAME = "version";
-
-    private static final String MERGE_FILTER_NAME = "merge";
 
     private final Map operationsById = new HashMap(32);
 
@@ -168,11 +168,13 @@ public class StyleContentAccessorHandler extends
             newURL = url;
             newUrlPathType = pathType;
 
-        } else {
-            if (idx == url.length() - 2) { // Filtre tout seul !
-                throw new FacesException("You can not specify a filter only.");
-            }
+        } else if (idx == url.length() - 2) { // Filtre tout seul !
+            filter = url.substring(0, idx);
+            newUrlPathType = IContentAccessor.FILTER_PATH_TYPE;
+            // throw new FacesException("You can not specify a filter only.");
+            newURL = null;
 
+        } else {
             filter = url.substring(0, idx);
             newURL = url.substring(idx
                     + IContentAccessor.FILTER_SEPARATOR.length());
@@ -262,8 +264,8 @@ public class StyleContentAccessorHandler extends
             break;
 
         case IContentAccessor.ABSOLUTE_PATH_TYPE:
-            String relativeURL = AbstractContentAccessor.removeContextPath(
-                    facesContext, resourceURL);
+            String relativeURL = PathTypeTools
+                    .convertAbsolutePathToContextType(facesContext, resourceURL);
 
             if (relativeURL == null) {
                 throw new FacesException(
@@ -281,13 +283,21 @@ public class StyleContentAccessorHandler extends
             break;
 
         default:
-            throw new FacesException("Invalid state !");
+            if (resourceURL != null) {
+                throw new FacesException("Invalid state !");
+            }
         }
 
         String versionId = null;
-        if (org.rcfaces.core.internal.Constants.RESOURCE_CONTENT_VERSION_SUPPORT) {
-            versionId = rcfacesContext.getResourceVersionHandler()
-                    .getResourceVersion(facesContext, resourceURL, null);
+        if (resourceURL != null
+                && org.rcfaces.core.internal.Constants.RESOURCE_CONTENT_VERSION_SUPPORT) {
+            IResourceVersionHandler resourceVersionHandler = rcfacesContext
+                    .getResourceVersionHandler();
+
+            if (resourceVersionHandler != null) {
+                versionId = resourceVersionHandler.getResourceVersion(
+                        facesContext, resourceURL, null);
+            }
         }
 
         IContentModel contentModel = new CssOperationContentModel(resourceURL,
@@ -307,10 +317,22 @@ public class StyleContentAccessorHandler extends
 
         // pas de versionning dans ce content Accessor !
 
+        IResourceProxyHandler resourceProxyHandler = rcfacesContext
+                .getResourceProxyHandler();
+        if (resourceProxyHandler != null && resourceProxyHandler.isEnabled()
+                && resourceProxyHandler.isFiltredResourcesEnabled()) {
+            newContentAccessor.setContentProxyHandler(contentAccessor
+                    .getContentProxyHandler());
+        }
+
         return newContentAccessor;
     }
 
     public String getContentType(String url) {
+        if (url == null) {
+            return ExtendedHttpServlet.CSS_MIME_TYPE;
+        }
+
         int idx = url.lastIndexOf('/');
         if (idx >= 0) {
             url = url.substring(idx + 1);
@@ -322,7 +344,7 @@ public class StyleContentAccessorHandler extends
         }
 
         if (url.toLowerCase().endsWith(".css")) {
-            return "text/css";
+            return ExtendedHttpServlet.CSS_MIME_TYPE;
         }
 
         return null;

@@ -15,6 +15,9 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.item.BasicSelectItem;
 import org.rcfaces.core.item.FileItem;
+import org.rcfaces.renderkit.html.internal.util.FileItemSource;
+import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
+import org.rcfaces.renderkit.html.item.IUserAgentVaryFileItem;
 
 /**
  * 
@@ -25,7 +28,7 @@ public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
 
     private static final String REVISION = "$Revision$";
 
-    private static final String STRING_EMPTY_ARRAY[] = new String[0];
+    private static final FileItemSource SOURCE_EMPTY_ARRAY[] = new FileItemSource[0];
 
     private List sources;
 
@@ -58,11 +61,26 @@ public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
             String src = ((String) value).trim();
 
             if (src.length() > 0) {
-                if (sources == null) {
-                    sources = new ArrayList(8);
+                boolean rendered = true;
+
+                if (selectItem instanceof IUserAgentVaryFileItem) {
+                    IUserAgentVaryFileItem userAgentVaryFileItem = (IUserAgentVaryFileItem) selectItem;
+
+                    if (UserAgentTools.accept(getComponentRenderContext()
+                            .getFacesContext(), userAgentVaryFileItem) == false) {
+                        rendered = false;
+                    }
                 }
-                if (sources.indexOf(src) < 0) {
-                    sources.add(src);
+
+                if (rendered) {
+                    FileItemSource source = new FileItemSource(selectItem);
+
+                    if (sources == null) {
+                        sources = new ArrayList(8);
+                    }
+                    if (sources.indexOf(source) < 0) {
+                        sources.add(source);
+                    }
                 }
             }
         }
@@ -82,12 +100,12 @@ public class FilesCollectorDecorator extends AbstractSelectItemsDecorator {
         return new BasicSelectItem(component);
     }
 
-    public String[] listSources() {
+    public FileItemSource[] listSources() {
         if (sources == null || sources.isEmpty()) {
-            return STRING_EMPTY_ARRAY;
+            return SOURCE_EMPTY_ARRAY;
         }
 
-        return (String[]) sources.toArray(new String[sources.size()]);
+        return (FileItemSource[]) sources.toArray(new FileItemSource[sources
+                .size()]);
     }
-
 }
