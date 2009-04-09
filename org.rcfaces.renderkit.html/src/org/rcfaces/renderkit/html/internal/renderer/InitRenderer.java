@@ -19,6 +19,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
@@ -64,10 +65,13 @@ import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServle
  * @version $Revision$ $Date$
  */
 public class InitRenderer extends AbstractHtmlRenderer {
+    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(InitRenderer.class);
 
     private static final String TITLE_PROPERTY = "org.rcfaces.html.PAGE_TITLE";
+
+    private static final String REQUEST_DOMAIN_VALUE = "$requestDomain";
 
     private static final String DISABLE_IE_IMAGE_BAR_PARAMETER = Constants
             .getPackagePrefix()
@@ -80,6 +84,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static final String JSP_DISABLE_CACHE_PARAMETER = Constants
             .getPackagePrefix()
             + ".JSP_DISABLE_CACHE";
+
+    private static final String USER_AGENT_VARY_PARAMETER = Constants
+            .getPackagePrefix()
+            + ".USER_AGENT_VARY";
 
     private static final String CLIENT_VALIDATION_PARAMETER = Constants
             .getPackagePrefix()
@@ -100,6 +108,12 @@ public class InitRenderer extends AbstractHtmlRenderer {
     private static final String WAI_ROLES_NS_PARAMETER = Constants
             .getPackagePrefix()
             + ".WAI_ROLES_NS";
+
+    private static final String BASE_PARAMETER = Constants.getPackagePrefix()
+            + ".BASE";
+
+    private static final String DOMAIN_PARAMETER = Constants.getPackagePrefix()
+            + ".DOMAIN";
 
     private static final String MULTI_WINDOW_CLASSLOADER_FILENAME = "f_multiWindowClassLoader.js";
 
@@ -164,6 +178,15 @@ public class InitRenderer extends AbstractHtmlRenderer {
             disableCache = appParams.disableCache;
         }
 
+        boolean userAgentVary = initComponent.isUserAgentVary(facesContext);
+        if (userAgentVary == false) {
+            userAgentVary = appParams.userAgentVary;
+        }
+
+        if (userAgentVary) {
+            disableCache = true;
+        }
+
         boolean lockedClientAttributesSetted = false;
         if (lockedClientAttributesSetted) {
             // AbstractRequestContext.setLockedAttributes(facesContext,
@@ -173,8 +196,17 @@ public class InitRenderer extends AbstractHtmlRenderer {
         // Pour optimiser ....
         PageConfiguration.setPageConfigurator(facesContext, initComponent);
 
+        HtmlRenderContext htmlRenderContext = (HtmlRenderContext) htmlWriter
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+
         if (disableCache) {
             disableCache(htmlWriter);
+        }
+
+        if (userAgentVary) {
+            userAgentVary(htmlWriter);
+
+            htmlRenderContext.setUserAgentVary(true);
         }
 
         if (appParams.metaContentType) {
@@ -215,8 +247,6 @@ public class InitRenderer extends AbstractHtmlRenderer {
             htmlWriter.endElement(IHtmlWriter.META);
         }
 
-        HtmlRenderContext htmlRenderContext = (HtmlRenderContext) htmlWriter
-                .getHtmlComponentRenderContext().getHtmlRenderContext();
         if (disableContextMenu) {
             htmlRenderContext.setDisabledContextMenu(true);
         }
@@ -253,7 +283,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
 
         String base = initComponent.getBase(facesContext);
-        if (base != null) {
+        if (base == null) {
+            base = appParams.base;
+        }
+        if (base != null && base.length() > 0) {
             boolean renderBaseTag = initComponent.isRenderBaseTag(facesContext);
             if (renderBaseTag) {
                 htmlWriter.startElement(IHtmlWriter.BASE); // ("<BASE
@@ -315,6 +348,11 @@ public class InitRenderer extends AbstractHtmlRenderer {
             }
         }
 
+        String domain = initComponent.getDomain(facesContext);
+        if (domain == null) {
+            domain = appParams.domain;
+        }
+
         String disabledScriptPageURL = initComponent
                 .getDisabledScriptPageURL(facesContext);
         if ("false".equals(disabledScriptPageURL)) {
@@ -362,12 +400,13 @@ public class InitRenderer extends AbstractHtmlRenderer {
                     && Boolean.FALSE.equals(muliWindowMode) == false) {
                 writeScriptTag_multiWindow(htmlWriter, cameliaScriptURI,
                         jsBaseURI, repository, repositoryContext,
-                        disabledCookiesPageURL, debugMode);
+                        disabledCookiesPageURL, debugMode, domain);
 
             } else {
 
                 writeScriptTag(htmlWriter, cameliaScriptURI, jsBaseURI,
-                        disabledCookiesPageURL, debugMode, muliWindowMode);
+                        disabledCookiesPageURL, debugMode, muliWindowMode,
+                        domain);
             }
         }
 
@@ -392,7 +431,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
         ICssConfig cssConfig = StylesheetsServlet.getConfig(htmlProcessContext);
         if (cssConfig != null) {
             htmlWriter.startElement(IHtmlWriter.LINK);
-            htmlWriter.writeRel("stylesheet");
+            htmlWriter.writeRel(IHtmlRenderContext.STYLESHEET_REL);
             if (htmlProcessContext.useMetaContentStyleType() == false) {
                 htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
             }
@@ -420,6 +459,78 @@ public class InitRenderer extends AbstractHtmlRenderer {
         HtmlRenderContext.setMetaDataInitialized(facesContext);
 
         super.encodeEnd(writer);
+    }
+
+    private IJavaScriptWriter writeDomain(IJavaScriptWriter jsWriter,
+            IHtmlWriter htmlWriter, String domain) throws WriterException {
+
+        if (domain == null || domain.length() == 0) {
+            return jsWriter;
+        }
+
+        if (domain.equals(REQUEST_DOMAIN_VALUE)) {
+            domain = null;
+
+            ExternalContext externalContext = htmlWriter
+                    .getComponentRenderContext().getFacesContext()
+                    .getExternalContext();
+
+            Object request = externalContext.getRequest();
+            if (request instanceof HttpServletRequest) {
+                HttpServletRequest servletRequest = (HttpServletRequest) request;
+
+                String requestURI = servletRequest.getRequestURL().toString();
+
+                int idx = requestURI.indexOf("//");
+                if (idx > 0) {
+                    idx += 2;
+                    int idx2 = requestURI.indexOf(':', idx);
+                    int idx3 = requestURI.indexOf('/', idx);
+
+                    String host;
+                    if (idx3 < 0) {
+                        if (idx2 > 0) { // http://toto:90
+                            host = requestURI.substring(idx, idx2);
+                        } else { // http://toto
+                            host = requestURI.substring(idx);
+                        }
+                    } else if (idx2 >= 0) {
+                        if (idx2 < idx3) { // Ex: http://toto:30/titi
+                            host = requestURI.substring(idx, idx2);
+
+                        } else { // Ex: http://toto/titi:80
+                            host = requestURI.substring(idx, idx3);
+                        }
+                    } else {
+                        // Ex: http://toto/titi
+                        host = requestURI.substring(idx, idx3);
+                    }
+
+                    int idx4 = host.lastIndexOf('.');
+                    if (idx4 > 0) {
+                        int idx5 = host.lastIndexOf('.', idx4 - 1);
+                        if (idx5 > 0) {
+                            domain = host.substring(idx5 + 1);
+                        } else {
+                            domain = host;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (domain == null || domain.length() == 0) {
+            return jsWriter;
+        }
+
+        if (jsWriter == null) {
+            jsWriter = openScriptTag(htmlWriter);
+        }
+
+        jsWriter.write("try{document.domain=").writeString(domain).writeln(
+                "}catch(x){window._rcfacesDomainEx=x}");
+
+        return jsWriter;
     }
 
     private void initializeJavaScript(IHtmlWriter writer,
@@ -497,6 +608,31 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         writer.startElement(IHtmlWriter.META);
         writer.writeHttpEquiv("expires", "0");
+        writer.endElement(IHtmlWriter.META);
+    }
+
+    private void userAgentVary(IHtmlWriter writer) throws WriterException {
+
+        try {
+            ServletResponse servletResponse = (ServletResponse) writer
+                    .getComponentRenderContext().getFacesContext()
+                    .getExternalContext().getResponse();
+
+            if (servletResponse instanceof HttpServletResponse) {
+                ConfiguredHttpServlet
+                        .setVaryUserAgent((HttpServletResponse) servletResponse);
+            }
+
+        } catch (Throwable th) {
+            LOG
+                    .debug(
+                            "Too late to specify Vary (User-Agent) into HttpResponse !",
+                            th);
+        }
+
+        writer.startElement(IHtmlWriter.META);
+        writer.writeHttpEquiv(ConfiguredHttpServlet.HTTP_VARY,
+                ConfiguredHttpServlet.USER_AGENT);
         writer.endElement(IHtmlWriter.META);
     }
 
@@ -674,30 +810,38 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
     private void writeScriptTag(IHtmlWriter writer, String uri,
             String jsBaseURI, String disabledCookiesPageURL, Boolean debugMode,
-            Boolean multiWindowMode) throws WriterException {
+            Boolean multiWindowMode, String domain) throws WriterException {
 
-        writeDebugModes(writer, null, disabledCookiesPageURL, debugMode,
+        IJavaScriptWriter jsWriter = writeDomain(null, writer, domain);
+
+        writeDebugModes(writer, jsWriter, disabledCookiesPageURL, debugMode,
                 multiWindowMode, false);
+
+        if (jsWriter != null) {
+            jsWriter.end();
+        }
 
         HtmlTools.includeScript(writer, jsBaseURI + "/" + uri,
                 IHtmlRenderContext.JAVASCRIPT_CHARSET);
     }
 
-    private void writeScriptTag_multiWindow(IHtmlWriter writer, String uri,
+    private void writeScriptTag_multiWindow(IHtmlWriter htmlWriter, String uri,
             String jsBaseURI, IHierarchicalRepository repository,
             IContext repositoryContext, String disabledCookiesPageURL,
-            Boolean debugMode) throws WriterException {
+            Boolean debugMode, String domain) throws WriterException {
 
-        IHtmlProcessContext htmlProcessContext = writer
+        IHtmlProcessContext htmlProcessContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getHtmlProcessContext();
 
         String javascriptCharset = IHtmlRenderContext.JAVASCRIPT_CHARSET;
 
-        IJavaScriptWriter jsWriter = openScriptTag(writer);
+        IJavaScriptWriter jsWriter = openScriptTag(htmlWriter);
 
         // new JavaScriptTag.JavaScriptWriterImpl( facesContext, symbols,
         // writer);
+
+        writeDomain(jsWriter, htmlWriter, domain);
 
         writeDebugModes(null, jsWriter, disabledCookiesPageURL, debugMode,
                 Boolean.TRUE, true);
@@ -810,6 +954,8 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
         boolean clientValidation;
 
+        boolean userAgentVary;
+
         Map symbols;
 
         String disabledCookiesPageURL;
@@ -823,6 +969,10 @@ public class InitRenderer extends AbstractHtmlRenderer {
         Set clientMessageIdFilter;
 
         String waiRolesNS;
+
+        String base;
+
+        String domain;
 
         private boolean symbolsInitialized;
 
@@ -858,6 +1008,9 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
             disableCache = "true".equalsIgnoreCase((String) initParameters
                     .get(JSP_DISABLE_CACHE_PARAMETER));
+
+            userAgentVary = "true".equalsIgnoreCase((String) initParameters
+                    .get(USER_AGENT_VARY_PARAMETER));
 
             clientValidation = ("false"
                     .equalsIgnoreCase((String) initParameters
@@ -897,6 +1050,24 @@ public class InitRenderer extends AbstractHtmlRenderer {
 
                 if (waiRolesNS.length() < 1) {
                     waiRolesNS = null;
+                }
+            }
+
+            base = (String) initParameters.get(BASE_PARAMETER);
+            if (base != null) {
+                base = base.trim();
+
+                if (base.length() < 1) {
+                    base = null;
+                }
+            }
+
+            domain = (String) initParameters.get(DOMAIN_PARAMETER);
+            if (domain != null) {
+                domain = domain.trim();
+
+                if (domain.length() < 1) {
+                    domain = null;
                 }
             }
 
