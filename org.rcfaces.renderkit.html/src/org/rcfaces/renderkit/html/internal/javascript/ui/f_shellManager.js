@@ -153,31 +153,38 @@ var __statics = {
 	GetShell: function(component) {
 		f_core.Assert(component, "f_shellManager.GetShell: Invalid component parameter '"+component+"'.");
 		
-		for(;component;) {
-			if (component._shell) {
-				return component._shell;
-			}
-			if (component._shellIdentifier) {
+		var root=component;
+		
+		try {
+			for(;component;) {
+				if (component._shell) {
+					return component._shell;
+				}
+				if (component._shellIdentifier) {
+					var win=f_core.GetWindow(component);
+				
+					var shell=win.f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
+					return shell;
+				}
+				
+				var parent=component.parentNode;
+				if (parent && parent.nodeType!=f_core.DOCUMENT_NODE) {
+					component=parent;
+					continue;
+				}
+				
 				var win=f_core.GetWindow(component);
+				if (!win) {
+					break;
+				}
+				
+				component=win.frameElement;
+			}		
 			
-				var shell=win.f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
-				return shell;
-			}
-			
-			var parent=component.parentNode;
-			if (parent && parent.nodeType!=f_core.DOCUMENT_NODE) {
-				component=parent;
-				continue;
-			}
-			
-			var win=f_core.GetWindow(component);
-			if (!win) {
-				break;
-			}
-			
-			component=win.frameElement;
+		} catch (ex) {
+			f_core.Error(f_shellManager, "Can not find shell from root='"+root.id+"' and component='"+component.id+"'.", ex);
 		}
-
+		
 		return null;
 	},
 	/**
