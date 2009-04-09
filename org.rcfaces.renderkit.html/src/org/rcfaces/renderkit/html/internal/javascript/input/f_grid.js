@@ -4599,11 +4599,11 @@ var __members = {
 			
 			total+=w;
 			
-			//alert("W="+w+" total="+total+"  tw="+(w-cellMargin));
-			
-			w-=cellMargin;
-			
-			column._head.style.width=w+"px";
+			var cw=w-cellMargin;
+			if (cw<0) {
+				cw=0;
+			}
+			column._head.style.width=cw+"px";
 			
 			this._updateTitleCellBody(column, w);
 		}
