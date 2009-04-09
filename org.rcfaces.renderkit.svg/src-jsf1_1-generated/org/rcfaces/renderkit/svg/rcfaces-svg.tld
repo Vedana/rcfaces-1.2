@@ -10,7 +10,7 @@
 		<tag-class>org.rcfaces.renderkit.svg.internal.taglib.ImageTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
+		<description><![CDATA[
 <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
       <p>The image Component has the following capabilities :
       <ul>
@@ -359,7 +359,7 @@ A binded object that hold the filters to use on the server side. This property i
 		<tag-class>org.rcfaces.renderkit.svg.internal.taglib.ImageButtonTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
 		<body-content>JSP</body-content>
-<description><![CDATA[
+		<description><![CDATA[
 <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
       <p>The imageButton Component has the following capabilities :
       <ul>

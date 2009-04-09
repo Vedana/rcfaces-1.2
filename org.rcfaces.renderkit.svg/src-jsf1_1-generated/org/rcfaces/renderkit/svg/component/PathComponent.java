@@ -13,7 +13,7 @@ public class PathComponent extends NodeComponent {
 
 	private static final Log LOG = LogFactory.getLog(PathComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.svg:path";
+	public static final String COMPONENT_TYPE="org.rcfaces.svg.path";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(NodeComponent.CAMELIA_ATTRIBUTES);
 	static {

@@ -12,7 +12,7 @@ public class GroupComponent extends NodeComponent {
 
 	private static final Log LOG = LogFactory.getLog(GroupComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.svg:group";
+	public static final String COMPONENT_TYPE="org.rcfaces.svg.group";
 
 
 	public GroupComponent() {

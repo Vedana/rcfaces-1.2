@@ -16,7 +16,7 @@
       </ul>
       </p>
 ]]></description>
-		<component-type>org.rcfaces.svg:image</component-type>
+		<component-type>org.rcfaces.svg.image</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.ImageComponent</component-class>
 		<attribute>
 			<attribute-name>pixelUnitToMillimeter</attribute-name>
@@ -46,7 +46,7 @@
       </ul>
       </p>
 ]]></description>
-		<component-type>org.rcfaces.svg:imageButton</component-type>
+		<component-type>org.rcfaces.svg.imageButton</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.ImageButtonComponent</component-class>
 		<attribute>
 			<description><![CDATA[
@@ -60,22 +60,22 @@ A boolean value indicating that this component's value must be
 		</attribute>
 	</component>
 	<component>
-		<component-type>org.rcfaces.svg:group</component-type>
+		<component-type>org.rcfaces.svg.group</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.GroupComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.svg:path</component-type>
+		<component-type>org.rcfaces.svg.path</component-type>
 		<component-class>org.rcfaces.renderkit.svg.component.PathComponent</component-class>
 	</component>
 	<render-kit>
 		<renderer>
 			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.svg:image</renderer-type>
+			<renderer-type>org.rcfaces.svg.image</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.svg.internal.renderer.ImageRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.svg:imageButton</renderer-type>
+			<renderer-type>org.rcfaces.svg.imageButton</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.svg.internal.renderer.ImageButtonRenderer</renderer-class>
 		</renderer>
 	</render-kit>

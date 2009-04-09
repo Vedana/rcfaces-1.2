@@ -45,7 +45,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	private static final Log LOG = LogFactory.getLog(ImageComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.svg:image";
+	public static final String COMPONENT_TYPE="org.rcfaces.svg.image";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {

@@ -47,7 +47,7 @@ public class ImageButtonComponent extends ImageComponent implements
 
 	private static final Log LOG = LogFactory.getLog(ImageButtonComponent.class);
 
-	public static final String COMPONENT_TYPE="org.rcfaces.svg:imageButton";
+	public static final String COMPONENT_TYPE="org.rcfaces.svg.imageButton";
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageComponent.CAMELIA_ATTRIBUTES);
 	static {
