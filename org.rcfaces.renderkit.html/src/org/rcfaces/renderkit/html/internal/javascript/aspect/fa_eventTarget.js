@@ -138,6 +138,10 @@ var __members = {
 			eventId=fa_eventTarget._EventId++;
 		}
 		
+		if (!window._rcfacesWindowInitialized) {
+			return false; 
+		}
+		
 		var event;
 		if (type instanceof f_event) {
 			event=type;
