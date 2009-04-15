@@ -39,7 +39,7 @@ var __statics = {
 	 * @param String label
 	 * @param optional String accessKey
 	 * @param optional boolean removeText
-	 * @return HTMLElement Underline zone component
+	 * @return HTMLElement Underlined zone component
 	 */
 	AddLabelWithAccessKey: function(parent, label, accessKey, removeText) {
 		f_core.Assert(parent.nodeType==f_core.ELEMENT_NODE, "Invalid parent parameter '"+parent+"'.");
@@ -76,7 +76,7 @@ var __statics = {
 			f_core.AppendChild(fragment, doc.createTextNode(label.substring(0, idx)));
 		}
 
-		f_core.CreateElement(fragment, "u", {
+		var sub=f_core.CreateElement(fragment, "u", {
 			className: "f_accessKey",
 			textnode: label.substring(idx, idx+1)
 		});
@@ -87,7 +87,7 @@ var __statics = {
 			f_core.AppendChild(fragment, doc.createTextNode(l));
 		}
 		
-		f_core.Append(parent, fragment);
+		f_core.AppendChild(parent, fragment);
 		
 		return sub;
 	},
