@@ -1720,7 +1720,7 @@ var f_core = {
 			
 			}
 			if (!win._rcfacesSubmitting) {
-				f_core._PostSubmit(form);
+				f_core._PerformPostSubmit(form);
 
 				if (win._rcfacesCleanUpOnSubmit!==false) {
 					var _win=win;
@@ -1899,8 +1899,9 @@ var f_core = {
 						f_core._FocusWindow(newWindow);
 					}
 				}
-	
+
 				f_core.Profile(null, "f_core._submit.preSubmit");
+
 				
 				// Don't replace the current handler form.submit() and call the previous
 				if (win._rcfacesNoSubmit!==true) {
@@ -1918,7 +1919,7 @@ var f_core = {
 					unlockEvents=true;
 
 				} else {
-					f_core._PostSubmit(form);
+					f_core._PerformPostSubmit(form);
 								
 					if (win._rcfacesCleanUpOnSubmit!==false) {
 						var _win=win;
@@ -1982,7 +1983,7 @@ var f_core = {
 	 * @method private static
 	 * @return void
 	 */
-	_PostSubmit: function(form) {
+	_PerformPostSubmit: function(form) {
 		var postSubmitListeners=f_core._PostSubmitListeners;
 		if (postSubmitListeners) {
 			for(var i=0;i<postSubmitListeners.length;i++) {
@@ -1992,11 +1993,14 @@ var f_core = {
 					postSubmitListener.call(f_core, form);
 					
 				} catch (x) {
-					f_core.Error(f_core, "_Submit: PostSubmitListener ("+postSubmitListener+") threw an exception.", x);
+					f_core.Error(f_core, "_Submit: PostSubmitListener ("+postSubmitListener+") throws an exception.", x);
 				}
 			}
 	
 			f_core.Profile(null, "f_core._submit.postSubmitListeners("+postSubmitListeners.length+")");
+
+		} else {
+			f_core.Profile(null, "f_core._submit.postSubmitListeners(0)");
 		}
 	
 		// IE Progress bar bug only
@@ -5747,10 +5751,14 @@ var f_core = {
 	 * @return void
 	 */
 	ProfileExit: function(win) {
+		if (!win) {
+			win=window;
+		}
 		win._rcfacesNoSubmit=true;
 		
 		win.document.forms[0].submit();
-		f_core._OnExit.call(win);		
+		
+		// f_core._OnExit.call(win); // Appelé par le submit ?!
 	},
 	/**
 	 * @method public static
