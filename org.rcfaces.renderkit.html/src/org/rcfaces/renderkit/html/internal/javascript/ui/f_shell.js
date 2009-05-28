@@ -143,6 +143,13 @@ var __statics = {
 	APPLICATION_MODAL_STYLE: 1<<16,
 	
 	/**
+	 * Style constant 
+	 * 
+	 * @field public static final number
+	 */
+	LIGHT_CONTAINER_STYLE: 1<<30,
+	
+	/**
 	 * @field private static final number
 	 */	
 	_DEFAULT_HEIGHT: 100,
@@ -474,7 +481,7 @@ var __members = {
 	},
 	
 	/**
-	 *  <p>construct the iframe. 
+	 *  <p>construct the content of the shell 
 	 *  </p>
 	 *
 	 * @method protected
@@ -487,7 +494,7 @@ var __members = {
 	},
 
 	/**
-	 *  <p>delete the iframe. </p>
+	 *  <p>delete the content of the shell. </p>
 	 *
 	 * @method protected
 	 * @return void

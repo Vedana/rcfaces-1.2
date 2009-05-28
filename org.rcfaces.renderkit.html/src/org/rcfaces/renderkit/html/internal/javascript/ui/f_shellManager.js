@@ -160,7 +160,7 @@ var __statics = {
 				if (component._shell) {
 					return component._shell;
 				}
-				if (component._shellIdentifier) {
+				if (component._rcfacesShellDecoratorIdentifier) {
 					var win=f_core.GetWindow(component);
 				
 					var shell=win.f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
@@ -508,7 +508,11 @@ var __members = {
 	 * @return f_shellDecorator
 	 */
 	f_newShellDecorator: function(shell) {
-		return f_shellDecorator.f_newInstance(shell);
+		if (shell.f_getStyle() & f_shell.LIGHT_CONTAINER_STYLE) {
+			return f_divShellDecorator.f_newInstance(shell);
+		}		
+	
+		return f_frameShellDecorator.f_newInstance(shell);
 	},
 	/**
 	 * @method hidden
