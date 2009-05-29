@@ -219,7 +219,7 @@ var __statics = {
 				return true;
 			}
 		} else if (f_core.IsGecko()) {
-			if (keyCode>0) {
+			if (keyCode>0 || jsEvent.ctrlKey) {
 				return true;
 			}
 			keyCode=charCode;
