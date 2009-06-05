@@ -1,3 +1,41 @@
+
+----------------------------------------------------------------------
+- @version I2544_Bunedic_19
+- @author Olivier Oeuillot
+- 
+
+f_httpRequest.js:
+Ajout de traces
+Support du onAbort()
+
+fa_commands.js:
+Ajout de traces
+
+f_accelerator.js/f_key.js/AcceleratorRenderer.java/f_core.js:
+Ajout de la possibilité d'invalider les accelerators si le composant courrant est éditable
+
+f_comboGrid.js/f_dataGrid.js/fa_dataGridPopup.js/f_popup.js:
+Correction d'un BUG du sablier persistant sous IE6
+
+f_core.js:
+Support du domaine de sécurité Javascript
+
+----------------------------------------------------------------------
+- @version I2544_Bunedic_13
+- @author Olivier Oeuillot
+- 
+f_divShellDecorators.js/f_frameShellDecorators.js/f_shell.js/f_shellDecorator.js/f_shellManager.js/f_viewDialog.js/f_waitingShell.js/repository.xml:
+Ajout d'un support des "shells" avec un <DIV> plutot qu'un <IFRAME>: cela à l'avantage d'être beaucou plus rapide, mais avec de potentiels problèmes de focus.
+
+f_core.js:
+Renomme _PostSubmit() en _PerformPostSubmit()
+
+f_clientValidator.js:
+Support de la touche CTRL+? sous firefox
+
+HyperLinkRenderer:
+Support de la génération CSS associée à l'état DISABLED
+
 ----------------------------------------------------------------------
 - @version I2544_Bunedic_11
 - @author Olivier Oeuillot

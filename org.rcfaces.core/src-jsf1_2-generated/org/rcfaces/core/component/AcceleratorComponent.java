@@ -161,6 +161,25 @@ public class AcceleratorComponent extends CameliaCommandComponent implements
 	public boolean isKeyBindingSetted() {
 		return engine.isPropertySetted(Properties.KEY_BINDING);
 	}
+	public boolean isIgnoreEditableComponent() {
+		return isIgnoreEditableComponent(null);
+	}
+
+	public boolean isIgnoreEditableComponent(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.IGNORE_EDITABLE_COMPONENT, false, facesContext);
+	}
+
+	public void setIgnoreEditableComponent(boolean ignoreEditableComponent) {
+		engine.setProperty(Properties.IGNORE_EDITABLE_COMPONENT, ignoreEditableComponent);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ignoreEditableComponent" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isIgnoreEditableComponentSetted() {
+		return engine.isPropertySetted(Properties.IGNORE_EDITABLE_COMPONENT);
+	}
 
 	protected Set getCameliaFields() {
 		return CAMELIA_ATTRIBUTES;

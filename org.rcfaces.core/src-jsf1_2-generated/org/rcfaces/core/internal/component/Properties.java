@@ -125,6 +125,7 @@ public class Properties {
 	public static final String HORIZONTAL_SCROLL_POSITION = "horizontalScrollPosition";
 	public static final String HOUR_STEP = "hourStep";
 	public static final String HOVER_IMAGE_URL = "hoverImageURL";
+	public static final String IGNORE_EDITABLE_COMPONENT = "ignoreEditableComponent";
 	public static final String IMAGE_HEIGHT = "imageHeight";
 	public static final String IMAGE_URL = "imageURL";
 	public static final String IMAGE_WIDTH = "imageWidth";
