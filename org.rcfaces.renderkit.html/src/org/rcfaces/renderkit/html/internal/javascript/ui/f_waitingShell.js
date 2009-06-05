@@ -49,7 +49,7 @@ var __members = {
 	 * @param optional String backgroundMode
 	 */
 	f_waitingShell: function(imageURL, text, width, height, showOnSubmit, backgroundMode) {
-		this.f_super(arguments, f_shell.TRANSPARENT);
+		this.f_super(arguments, f_shell.TRANSPARENT | f_shell.LIGHT_CONTAINER_STYLE);
 
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			if (!imageURL) {
@@ -104,7 +104,10 @@ var __members = {
 	f_installShowOnSubmit: function() {
 		var self=this;
 		var submitCb=function() {
+			if (self) {
 			self.f_open();
+		}
+			self=null;
 		}
 		f_core.AddPostSubmitListener(submitCb);
 	},

@@ -982,6 +982,16 @@
 				<required-class name="f_shellManager" />
 			</class>
 		 </file>
+		 <file name="ui/f_frameShellDecorator.js">
+			<class name="f_frameShellDecorator">
+				<required-class name="f_shellDecorator" />
+			</class>
+		 </file>
+		 <file name="ui/f_divShellDecorator.js">
+			<class name="f_divShellDecorator">
+				<required-class name="f_shellDecorator" />
+			</class>
+		 </file>
 		 <file name="ui/f_shell.js">
 			<class name="f_shell">
 				<required-class name="f_core" />
@@ -989,6 +999,9 @@
 				<required-class name="fa_eventTarget" />
 				<required-class name="f_shellManager" />
 				<required-class name="f_shellDecorator" />
+
+				<required-class name="f_frameShellDecorator" />
+				<required-class name="f_divShellDecorator" />
 			</class>
 		 </file>
 		 <file name="ui/f_dialog.js">

@@ -129,6 +129,7 @@ var __statics = {
 	 
 	/**
      * @method public static
+     * @param optional Document doc
      * @return Object size (width, height)
      */
     GetScreenSize: function(doc) {
@@ -152,11 +153,14 @@ var __statics = {
 	GetShell: function(component) {
 		f_core.Assert(component, "f_shellManager.GetShell: Invalid component parameter '"+component+"'.");
 		
+		var root=component;
+		
+		try {
 		for(;component;) {
 			if (component._shell) {
 				return component._shell;
 			}
-			if (component._shellIdentifier) {
+				if (component._rcfacesShellDecoratorIdentifier) {
 				var win=f_core.GetWindow(component);
 			
 				var shell=win.f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
@@ -177,7 +181,35 @@ var __statics = {
 			component=win.frameElement;
 		}
 
+		} catch (ex) {
+			f_core.Error(f_shellManager, "Can not find shell from root='"+root.id+"' and component='"+component.id+"'.", ex);
+		}
+		
 		return null;
+	},
+	/**
+	 * @method public static
+	 * @param Object object A f_event object or a component (rcfaces or html)
+	 * @param any returnValue
+	 * @return boolean Returns <code>true</code> if the shell is found.
+	 */
+	CloseShell: function(object, returnValue) {
+		if (object instanceof f_event) {
+			object=object.f_getComponent();
+		}
+		
+		if (object.nodeType!=f_core.ELEMENT_NODE) {
+			return false;
+		}
+		
+		var shell=f_shellManager.GetShell(object);
+		if (!shell) {
+			return false;
+		}
+		
+		shell.f_close(returnValue);
+		
+		return true;
 	},
 	Finalizer: function() {
 		var shellManager=f_shellManager._singleton;
@@ -476,7 +508,11 @@ var __members = {
 	 * @return f_shellDecorator
 	 */
 	f_newShellDecorator: function(shell) {
-		return f_shellDecorator.f_newInstance(shell);
+		if (shell.f_getStyle() & f_shell.LIGHT_CONTAINER_STYLE) {
+			return f_divShellDecorator.f_newInstance(shell);
+		}		
+	
+		return f_frameShellDecorator.f_newInstance(shell);
 	},
 	/**
 	 * @method hidden

@@ -245,7 +245,7 @@ var __statics = {
 var __members = {
 	
 	/**
-	 * @field private final f_shell
+	 * @field protected final f_shell
 	 */
 	_shell: undefined,
 	
@@ -257,13 +257,6 @@ var __members = {
 	},
 	f_finalize: function() {		
 		this._shell=undefined; // f_shell
-		
-		var iframe=this._iframe;
-		if (iframe) {	
-			this._iframe=undefined; // HtmlIFrame
-			
-			this.f_finalizeIframe(iframe);
-		}
 		
 		this._decorationValues=undefined; // Map<String,any>
 		this._shellBody=undefined; //HtmlElement
@@ -296,6 +289,13 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
+	
+	/**
+	 * @method public abstract
+	 * @return String
+	 */
+	 f_getId: f_class.ABSTRACT,
+	
 	/**
 	 * @method protected
 	 * @param HTMLElement button
@@ -336,13 +336,15 @@ var __members = {
 //		width+=2; // border
 //		height+=2; // border
 		
-		if (shell._style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE)) {
+		var style=shell.f_getStyle();
+		
+		if (style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE)) {
 			height+=20; // Le titre
 			
 			height+=1; // Border title
 		}
 		
-		if (shell._style & f_shell.RESIZE_STYLE) {
+		if (style & f_shell.RESIZE_STYLE) {
 			width+=2; // Les bords
 			height+=2;
 		}		
@@ -350,131 +352,37 @@ var __members = {
 		return { width: width, height: height };
 	},
 	
-	f_createDecoration: function(functionWhenReady) {
-		f_core.Assert(!this._iframe, "f_shellDecorator.f_createDecoration: Invalid state, iframe is not null ! ("+this._iframe+")");
+	/**
+	 * @method hidden abstract
+	 * @param Function functionWhenReady
+	 * @return void
+	 */	 
+	f_createDecoration: f_class.ABSTRACT,
 
-		f_core.Debug(f_shellDecorator, "f_createDecoration: create new decoration");
-
-		var iframe = document.createElement("iframe");
-		this._iframe=iframe;
-
-		iframe.id = this._shell.f_getId()+"::iframe";
-		iframe.name = iframe.id+"::name";
-	
-		var shell=this._shell;
-		
-		var shellIdentifier="rcfaces_shell_"+(f_shellDecorator._ShellIdentifier++);
-		iframe._shellIdentifier=shellIdentifier;
-		
-		var frameShells=f_shellDecorator._FrameShells;
-		if (!frameShells) {
-			frameShells=new Object;
-			f_shellDecorator._FrameShells=frameShells;
-		}
-		frameShells[shellIdentifier]=shell;
-
-		iframe.frameBorder = 0;
-		iframe.scrolling="no";
-		
-		var className="f_shellDecorator_frame";
-		if (this._shell._style & f_shell.TRANSPARENT) {
-			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
-				iframe.allowTransparency = true;
-			}
-			className+=" "+className+"_transparent";
-
-		} else {
-			className+=" "+className+"_border";			
-		}
-		
-		iframe.className=className;
-				
-		var self=this;
-		
-		if (f_core.IsInternetExplorer()) {
-			f_core.Debug(f_shell, "f_constructIFrame: IE use onreadystatechange ");
-			iframe.onreadystatechange=function() {
-				if (window._rcfacesExiting) {
-					return false;
-				}
-
-				f_core.Debug(f_shellDecorator, "f_createDecoration.readyStateChange: decoration created: "+this+" state="+this.readyState);
-
-				if (this.readyState != "interactive") {
-					return;
-				}	
-				
-				this.onreadystatechange=null;
-				
-				self.f_decorateFrame(this);
-				
-				functionWhenReady.call(window, self, shell);
-			};
-			
-		} else {
-			f_core.Debug(f_shell, "f_constructIFrame: Firefox use onload ");
-			iframe.onload=function() {
-				if (window._rcfacesExiting) {
-					return false;
-				}
-
-				f_core.Debug(f_shellDecorator, "f_createDecoration.onLoad: decoration created: "+this);
-	
-				this.onload=null;
-				
-				self.f_decorateFrame(this);
-				
-				functionWhenReady.call(window, self, shell);
-			};
-		}
-
-		iframe.src="about:blank";
-		
-		f_core.InsertBefore(document.body, iframe, document.body.firstChild);
-		
-		iframe.src="about:blank";
-		f_core.Debug(f_shellDecorator, "f_createDecoration: wait decoration creation");
-	},
-	
+	/**
+	 * @method hidden
+	 * @return void
+	 */	 
 	f_destroyDecoration: function() {
-		f_core.Assert(this._iframe, "f_shellDecorator.f_destroyDecoration: Invalid state, iframe is null !");
-		
-		var iframe=this._iframe;
-		if (iframe) {
-			this._iframe=undefined;
-			
-			this.f_finalizeIframe(iframe);
-		}
-				
-		iframe.parentNode.removeChild(iframe);
-
 		this._shell.f_setStatus(f_shell.CLOSED_STATUS);
 	},
 	
 	/**
-	 * @method protected
-	 * @param HtmlIFrameElement iframe
-	 * @return void
+	 * @method hidden
+	 * @return HTMLElement
 	 */
-	f_finalizeIframe: function(iframe) {
-		iframe.onreadystatechange=null;
-		// iframe._shellIdentifier=undefined;  // number
-		
-		f_core.VerifyProperties(iframe);		
-	},
-	
 	f_getShellBody: function() {
-		f_core.Assert(this._iframe, "f_shellDecorator.f_getShellBody: Invalid state, iframe is null !");
-
 		return this._shellBody;
 	},
+	/**
+	 * @method hidden
+	 * @param String key
+	 * @param optional any value
+	 * @return void
+	 */
 	f_setDecorationValue: function(key, value) {
 		this._decorationValues[key]=value;
 
-		if (!this._iframe) {
-			return;
-		}
-		
 		switch(key) {
 		case f_shellDecorator.TITLE_DECORATOR:
 			if (this._title) {
@@ -483,61 +391,34 @@ var __members = {
 			break;
 		}	
 	},
-	f_decorateFrame: function(iframe) {
-		f_core.Debug(f_shellDecorator, "f_decorateFrame: decorate frame="+iframe.contentWindow+" document="+iframe.contentWindow.document);
+	/**
+	 * @method public
+	 * @reutrn void
+	 */
+	f_showShell: f_class.ABSTRACT,
 		
-		var style=this._shell._style;
-		var decoration=style & (f_shell.COPY_STYLESHEET | f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE | f_shell.RESIZE_STYLE);
+	/**
+	 * @method public
+	 * @reutrn void
+	 */
+	f_hideShell: f_class.ABSTRACT,
 		
-		var shellDocument=iframe.contentWindow.document;
+	/**
+	 * @method protected
+	 * @param HTMLElement body of container
+	 * @return HTMLElement
+	 */
+	f_decorateShell: function(body) {
 		
-		var body=shellDocument.body;
-		body.topmargin=0;
-		body.leftmargin=0;
-		body.marginheight=0;
-		body.marginwidth=0;
+		var style=this._shell.f_getStyle();		
+		var decoration=style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE | f_shell.RESIZE_STYLE);
 	
-		var className="f_shellDecorator_body";
-		if (style && f_shell.TRANSPARENT) {
-			className+=" "+className+"_transparent";
-		}
-		
-		var shellStyleClass=this._shell.f_getStyleClass();
-		if (shellStyleClass) {
-			className+=" "+shellStyleClass;
-		}
-		body.className=className;	
-
-		if (style & f_shell.COPY_STYLESHEET) {
-			// Copie le BASE href
-			
-			var head=shellDocument.head;
-			if (!head) {
-				var root=shellDocument.documentElement;
-				
-				var head=f_core.GetFirstElementByTagName(root, "head");		
-				if (!head) {
-					head=f_core.CreateElement(root, "head");					
-				}
-			}
-						
-			var baseHref=document.baseURI || document.URL;
-			
-			if (!f_core.GetFirstElementByTagName(head, "base")) {
-				f_core.CreateElement(head, "base", {
-					href: baseHref
-				});
-			}
-		}
-		
-		f_core.CopyStyleSheets(shellDocument, document);
-		
 		if (!decoration) {
-			this._shellBody=shellDocument.body;
-			return;
+			this._shellBody=body;
+			return body;
 		}
 		
-		var tbody=f_core.CreateElement(shellDocument.body, "table", {
+		var tbody=f_core.CreateElement(body, "table", {
 			cellPadding: 0,
 			cellSpacing: 0,
 			cssWidth: "100%",
@@ -564,23 +445,10 @@ var __members = {
 		});
 		
 		this._shellBody=td;
+
+		return td;
 	},
-	f_showShell: function() {
 
-		if (!this._iframe) {
-			return;
-		}
-
-		this._iframe.style.visibility="visible";		
-	},
-	f_hideShell: function() {
-
-		if (!this._iframe) {
-			return;
-		}
-
-		this._iframe.style.visibility="hidden";		
-	},
 	/**
 	 * @method protected
 	 * @param HTMLElement td
@@ -588,7 +456,7 @@ var __members = {
 	 */
 	f_createTitle: function(parent) {
 			
-		var style=this._shell._style;
+		var style=this._shell.f_getStyle();
 		if (style & f_shell.CLOSE_STYLE) {
 			var tooltip=f_resourceBundle.Get(f_shell).f_get("CLOSE_TITLE_BUTTON_TOOLTIP");
 			
@@ -646,90 +514,27 @@ var __members = {
 		
 		this._buttons[name]=className;
 	},
-	f_setShellBounds: function(shell, x, y, width, height) {
-		
-		var iframe=this._iframe;
-		if (!iframe) {
-			return;
-		}
-		
-		// Def pos and size
-		iframe.style.top = y+"px";
-		iframe.style.left = x+"px";
-		iframe.style.height = height+"px";
-		iframe.style.width = width+"px";
-						
-		iframe._initialWidth=width;
-		iframe._initialHeight=height;
-		
-		
-		var table=iframe.contentWindow.document.body; //.firstChild;
-		if (table) {
-			table.style.height = height+"px";
-			table.style.width = width+"px";			
-		}
-	},
+	/**
+	 * @method hidden
+	 * @param f_shell shell
+	 * @param number x
+	 * @param number y
+	 * @param number width
+	 * @param number height
+	 * @return void
+	 */
+	f_setShellBounds: f_class.ABSTRACT,
 	/**
 	 * @method hidden
 	 * @param Object target
 	 * @return boolean
 	 */
-	f_isIntoShell: function(target) {
-
-		var iframe=this._iframe;
-		if (!iframe) {
-			return false;
-		}
-		
-		var targetDocument=null;
-		
-		switch(target.nodeType) {
-		case f_core.DOCUMENT_NODE:
-			targetDocument=target;
-			break;
-			
-		case f_core.ELEMENT_NODE:
-			if (target.tagName.toLowerCase()=="iframe") {
-				targetDocument=target.contentWindow.document;
-				break;
-			}
-
-			targetDocument=target.ownerDocument;
-			break;
-
-		default:
-			// Qu'est que c'est ????
-			
-			targetDocument=target.document;
-		}
-
-		if (!targetDocument) {
-			f_core.Debug(f_shellManager, "f_isIntoShell: type de noeud "+target.nodeType);
-			return false;			
-		}
- 		
- 		var frameDocument = iframe.contentWindow.document;
-
-     	if (targetDocument==frameDocument) {
- 			f_core.Debug(f_shellManager, "f_isIntoShell: Same document ("+targetDocument.location+"/"+frameDocument.location+")");
-     		return true;
-     	}
-     	
-		f_core.Debug(f_shellManager, "f_isIntoShell: Different document ("+targetDocument.location+"/"+frameDocument.location+")");
-     	return false;
-	},
+	f_isIntoShell: f_class.ABSTRACT,
 	/**
 	 * @method hidden
 	 * @return void
 	 */
 	f_setFocus: function() {
-		var iframe=this._iframe;
-		if (!iframe) {
-			return;
-		}
-
-		iframe.contentWindow.focus();
-		this._shell.f_setFocus();
 	},
 	/**
 	 * @method private
@@ -786,43 +591,25 @@ var __members = {
 	 * @method hidden
 	 * @return void
 	 */
-	f_performViewResizeEvent: function() {
-		var iframe=this._iframe;
-		if (!iframe) {
-			return;
-		}
+	f_performViewResizeEvent: f_class.ABSTRACT,
 		
-		var x=parseInt(iframe.style.left);
-		var y=parseInt(iframe.style.top);
-		var w=iframe._initialWidth;
-		var h=iframe._initialHeight;
+	/**
+	 * @method protected
+	 * @param String shellIdentifier
+	 * @param f_shell shell
+	 * @return String
+	 */
+	f_registerShell: function(shell) {
+		var shellIdentifier="rcfaces_shell_"+(f_shellDecorator._ShellIdentifier++);
 		
-		var screenSize=f_shellManager.GetScreenSize(iframe.ownerDocument);
-		if (f_core.IsGecko()) {
-			screenSize.width-=f_core.ComputeBorderLength(iframe, "left", "right");
-			screenSize.height-=f_core.ComputeBorderLength(iframe, "top", "bottom");
+		var frameShells=f_shellDecorator._FrameShells;
+		if (!frameShells) {
+			frameShells=new Object;
+			f_shellDecorator._FrameShells=frameShells;
 		}
+		frameShells[shellIdentifier]=shell;
 		
-		if (x+w>=screenSize.width) {
-			w=screenSize.width-x-1;
-			if (w<1) {
-				w=1;
-			}
-		}
-		if (w!=parseInt(iframe.style.width)) {
-			iframe.style.width=w+"px";
-		}
-
-		if (y+h>=screenSize.height) {
-			h=screenSize.height-y-1;
-			if (h<1) {
-				h=1;
-			}
-		}			
-		if (h!=parseInt(iframe.style.height)) {
-			iframe.style.height=h+"px";
-		}
-		
+		return shellIdentifier;
 	}
 }
 
