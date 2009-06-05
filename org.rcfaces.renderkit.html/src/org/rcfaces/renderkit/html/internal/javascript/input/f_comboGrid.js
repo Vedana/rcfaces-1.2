@@ -775,12 +775,18 @@ var __members = {
 	 				continueProcess=comboGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
 	 				
 	 			} catch (x) {
+	 				f_core.Error(f_dataGrid, "f_callServer.onError: fire event throws exception ", x);
+		 			
 	 				// On continue coute que coute !
-	 				continueProcess=false;
+	 				continueProcess=true;
 	 			}	 				
+	 			
+ 			 	f_core.Debug(f_dataGrid, "f_callServer.onError: continueProcess="+continueProcess); 			 	
  			 			
 		 		if (continueProcess===false) {
 					comboGrid._loading=undefined;
+					comboGrid._verifyingKey=undefined;		
+					comboGrid.f_updateInputStyle();		
 			 		return;
 		 		}
 	 			
@@ -788,7 +794,9 @@ var __members = {
 					return;
 				}
 	 		
-				dataGrid._loading=undefined;		
+ 			 	f_core.Debug(f_dataGrid, "f_callServer.onError: no more commands"); 			 	
+ 	 	 		
+				comboGrid._loading=undefined;		
 	 			 			
 				comboGrid._verifyingKey=undefined;		
 				comboGrid.f_updateInputStyle();		
@@ -801,6 +809,8 @@ var __members = {
 					return;
 				}
 	 				
+			 	f_core.Debug(f_dataGrid, "f_callServer.onLoad: no more commands"); 			 	
+ 				
 				comboGrid._verifyingKey=undefined;		
 				try {
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
@@ -841,6 +851,17 @@ var __members = {
 					comboGrid._loading=undefined;
 					comboGrid.f_updateInputStyle();		
 				}
+	 		},
+	 		onAbort: function() {
+				if (comboGrid.f_processNextCommand()) {
+					return;
+				}
+			 	f_core.Debug(f_dataGrid, "f_callServer.onAbort: no more commands"); 			 	
+
+				comboGrid._loading=undefined;		
+		 			
+				comboGrid._verifyingKey=undefined;		
+				comboGrid.f_updateInputStyle();		
 	 		}
 		});
 

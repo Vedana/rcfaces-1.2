@@ -815,7 +815,11 @@ var __members = {
 			if (window._rcfacesExiting) {
 				return;
 			}
-						
+			
+			if (!self._searchInput) {
+				return;
+			}
+				
 			try {
 				self._onSuggestTimeOut();
 				

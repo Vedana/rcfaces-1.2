@@ -986,9 +986,9 @@ var __members = {
 				this.f_releaseCells();
 			
 				// Detache temporairement !
-				if (tbody.parentNode) {
+				if (tbody.parentNode==this._table) {
 					
-					f_core.Assert(tbody.parentNode==this._table, "f_dataGrid.f_callServer: Not same parent ? ("+tbody.parentNode+")");
+					//f_core.Assert(tbody.parentNode==this._table, "f_dataGrid.f_callServer: Not same parent ? ("+tbody.parentNode+")");
 					
 					this._table.removeChild(tbody);
 				}
@@ -1244,8 +1244,9 @@ var __members = {
 		var cursorRow=undefined;
 		var tbody=this._tbody;
 		if (tbody && !this._partialWaiting) {
+			// Plante sous IE6 ???
 			f_core.Assert(tbody.parentNode!=this._table, "f_dataGrid.f_updateNewPage: Tbody has not been detached !");
-			
+						
 			f_core.AppendChild(this._table, tbody);
 			
 			if (this._scrollTitle && this._scrollBody) {
