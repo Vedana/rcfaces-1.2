@@ -58,7 +58,7 @@ var __statics={
 
 var __members={
 
-	f_accelerator: function(character, virtualKeys, keyFlags, forComponent, forItemValue) {
+	f_accelerator: function(character, virtualKeys, keyFlags, forComponent, forItemValue, ignoreEditableComponent) {
 		this.f_super(arguments);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
@@ -71,8 +71,10 @@ var __members={
 			}
 	
 			this._keyFlags = f_core.GetNumberAttribute(this, "v:keyFlags");
+			
+			this._ignoreEditableComponent=f_core.GetBooleanAttribute(this, "v:ignoreEditableComponent");
 	
-			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent);
+			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent, this._ignoreEditableComponent);
 	
 			var events=f_core.GetAttribute(this, "v:events");
 			if (events) {
@@ -92,8 +94,9 @@ var __members={
 			this._character=character;
 			this._virtualKeys=virtualKeys;
 			this._keyFlags=keyFlags;
-	
-			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent);
+			this._ignoreEditableComponent=ignoreEditableComponent;
+			
+			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent, this._ignoreEditableComponent);
 
 			if (forComponent) {
 				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
@@ -110,6 +113,7 @@ var __members={
 		this._keyFlags=undefined; // string
 		this._forComponentId=undefined; // string
 		this._forItemValue=undefined; // string
+		this._ignoreEditableComponent=undefined; // Boolean
 
 		this.f_super(arguments);
 	},
@@ -218,6 +222,13 @@ var __members={
 	 */
 	f_getForItemValue: function() {
 		return this._forItemValue;
+	},
+	/**
+	 * @method public
+	 * @return boolean
+	 */
+	f_isIgnoreEditableComponent: function() {
+		return this._ignoreEditableComponent;
 	}
 }
  

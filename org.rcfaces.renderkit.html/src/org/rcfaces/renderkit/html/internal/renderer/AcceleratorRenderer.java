@@ -71,9 +71,14 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
             htmlWriter.writeAttribute("v:keyFlags", state.keyFlags);
         }
 
+        if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
+            htmlWriter.writeAttribute("v:ignoreEditableComponent", true);
+        }
+
         htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
         declareLazyJavaScriptRenderer(htmlWriter);
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         super.encodeEnd(htmlWriter);
     }

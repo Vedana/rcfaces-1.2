@@ -413,9 +413,15 @@ var __statics = {
 	},
 	/** 
 	 * @method hidden static
+	 * @param String character
+	 * @param String virtualKeys
+	 * @param number keyFlags
+	 * @param HTMLElement component
+	 * @param function method
+	 * @param boolean ignoreEditableComponent
 	 * @return void
 	 */
-	 AddAccelerator: function(character, virtualKeys, keyFlags, component, method) {
+	 AddAccelerator: function(character, virtualKeys, keyFlags, component, method, ignoreEditableComponent) {
 	 	var scope=f_key._GetScopeByName();
 	 	
 	 	var accelerators=scope._accelerators;
@@ -429,7 +435,8 @@ var __statics = {
 	 		_virtualKeys: virtualKeys,
 	 		_keyFlags: keyFlags,
 	 		_component: component,
-	 		_method: method
+	 		_method: method,
+	 		_ignoreEditableComponent: ignoreEditableComponent
 	 	};
 			
 		f_core.Debug(f_key, "AddAccelerator: Add accelerator character='"+character+"' virtualKeys='"+virtualKeys+"' keyFlags='"+keyFlags+"'.");
@@ -486,13 +493,13 @@ var __statics = {
 			jsEvent = f_core.GetJsEvent(this);
 		}
 
+		if (f_event.GetEventLocked(jsEvent)) {
+			return f_core.CancelJsEvent(jsEvent);
+		}
+
 		var def=f_key._SearchDef(jsEvent, true);
 		if (!def) {
 			return true;
-		}
-
-		if (f_event.GetEventLocked(jsEvent)) {
-			return f_core.CancelJsEvent(jsEvent);
 		}
 		
 		var method=def._method;
@@ -502,6 +509,13 @@ var __statics = {
 		
 			return true;
 		}
+		
+		var ignoreEditableComponent=def._ignoreEditableComponent;
+		if (ignoreEditableComponent && f_key._IsComponentEditable(jsEvent)) {
+			return true;
+		}
+		
+		var ret=false;
 		
 		if (method) {
 			f_core.Debug(f_key, "_PerformKey: Call specific method.");
@@ -520,7 +534,10 @@ var __statics = {
 
 			if (component) {
 				try {
-					method.call(def._component, jsEvent, def._parameter, window);
+					var r = method.call(def._component, jsEvent, def._parameter, window);
+					if (r===true) {
+						ret=true;
+					}
 					
 				} catch (ex) {
 					f_core.Error(f_key, "_PerformKey: Exception/keyHandler, method="+method, ex);
@@ -529,7 +546,11 @@ var __statics = {
 				}				
 			}
 		}
-		
+	
+		if (ret===true) {
+			return true;
+		}
+	
 		if (f_core.IsInternetExplorer()) {
 			try {
 				jsEvent.keyCode=1; // Fake key !
@@ -560,9 +581,30 @@ var __statics = {
 		if (method==f_key.DefaultAccessKey) {
 			return true;
 		}	
+
+		var ignoreEditableComponent=def._ignoreEditableComponent;
+		if (ignoreEditableComponent && f_key._IsComponentEditable(jsEvent)) {
+			return true;
+		}
 		
 		return f_core.CancelJsEvent(jsEvent);
 	},	
+	/**
+	 * @method private static
+	 * @event Event evt
+	 * @return boolean
+	 */
+	_IsComponentEditable: function(evt) {
+		var target;
+		if (evt.target) {
+			target = evt.target;
+			
+		} else if (evt.srcElement) {
+			target = evt.srcElement;
+		}
+		
+		return f_core.IsComponentEditable(target);
+	},
 	/**
 	 * @method private static
 	 */
