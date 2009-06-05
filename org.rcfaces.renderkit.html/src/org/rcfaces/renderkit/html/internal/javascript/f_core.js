@@ -718,6 +718,12 @@ var f_core = {
 		if (win.rcfacesBuildId) {
 			f_core.Info(f_core, "_InitLibrary: RCFaces buildId: "+rcfacesBuildId);
 		}
+		
+		var domainEx=win._rcfacesDomainEx;
+		if (domainEx) {
+			// pas f_core.Error pour l'instant !
+			f_core.Info(f_core, "_InitLibrary: domain change exception", domainEx);
+		}
 	
 		// Bug sous IE en LEVEL3 ... on ne peut pas compter sur le this !
 		f_core._OnExit=function() {
@@ -1704,7 +1710,7 @@ var f_core = {
 			
 			}
 			if (!win._rcfacesSubmitting) {
-				f_core._PostSubmit(form);
+				f_core._PerformPostSubmit(form);
 
 				if (win._rcfacesCleanUpOnSubmit!==false) {
 					win.setTimeout(function () {
@@ -1895,7 +1901,7 @@ var f_core = {
 					unlockEvents=true;
 
 				} else {
-					f_core._PostSubmit(form);
+					f_core._PerformPostSubmit(form);
 								
 					if (win._rcfacesCleanUpOnSubmit!==false) {
 						win.setTimeout(function () {
@@ -1954,7 +1960,7 @@ var f_core = {
 	 * @method private static
 	 * @return void
 	 */
-	_PostSubmit: function(form) {
+	_PerformPostSubmit: function(form) {
 		var postSubmitListeners=f_core._PostSubmitListeners;
 		if (postSubmitListeners) {
 			for(var i=0;i<postSubmitListeners.length;i++) {
@@ -1964,11 +1970,14 @@ var f_core = {
 					postSubmitListener.call(f_core, form);
 					
 				} catch (x) {
-					f_core.Error(f_core, "_Submit: PostSubmitListener ("+postSubmitListener+") threw an exception.", x);
+					f_core.Error(f_core, "_Submit: PostSubmitListener ("+postSubmitListener+") throws an exception.", x);
 				}
 			}
 	
 			f_core.Profile(null, "f_core._submit.postSubmitListeners("+postSubmitListeners.length+")");
+
+		} else {
+			f_core.Profile(null, "f_core._submit.postSubmitListeners(0)");
 		}
 	
 		// IE Progress bar bug only
@@ -5574,6 +5583,46 @@ var f_core = {
 		}		
 	},
 	/**
+	 * @method hidden static
+	 * @param HTMLElement component
+	 * @return boolean
+	 */
+	IsComponentEditable: function(component) {
+		var tagName=component.tagName;
+		f_core.Assert(tagName, "f_core.IsComponentEditable: Invalid component parameter  ("+component+")");
+		
+		tagName=tagName.toUpperCase();
+		
+		switch (tagName) {
+		case "INPUT":
+			var type=component.type.toUpperCase();			
+			return (type=="TEXT");
+		
+		case "TEXTAREA":
+			return true;
+		
+		case "FRAME":
+			try {
+				var contentDocument;
+				if (f_core.IsInternetExplorer()) {
+					contentDocument=component.contentWindow.document;
+					
+				} else {
+					contentDocument=component.contentDocument;
+				}
+
+				return contentDocument.designMode=="on";
+				
+			} catch (ex) {
+				f_core.Info("IsComponentEditable: security exception ?", ex)
+			}
+			return false;			
+		}
+		
+		
+		return false;		
+	},
+	/**
 	 * @method public static
 	 * @return void
 	 */
@@ -5669,6 +5718,9 @@ var f_core = {
 	 * @return void
 	 */
 	ProfileExit: function(win) {
+		if (!win) {
+			win=window;
+		}
 		win._rcfacesNoSubmit=true;
 		
 		win.document.forms[0].submit();
