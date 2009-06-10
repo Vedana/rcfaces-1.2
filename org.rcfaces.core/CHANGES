@@ -1,5 +1,13 @@
 
 ----------------------------------------------------------------------
+- @version I2544_Bunedic_20
+- @author Olivier Oeuillot
+- 
+
+f_comboGrid.js:
+Avec certaines versions de IE la comboGrid pouvait rester en état de chargement au premier affichage
+
+----------------------------------------------------------------------
 - @version I2544_Bunedic_19
 - @author Olivier Oeuillot
 - 
