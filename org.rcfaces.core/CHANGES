@@ -1,5 +1,13 @@
 
 ----------------------------------------------------------------------
+- @version I2544_Bunedic_21
+- @author Olivier Oeuillot
+- 
+
+f_divShellDecorator.js/f_frameShellDecorator.js/f_shell.js:
+Correction d'une régression dans la fonction de fermeture de popup
+
+----------------------------------------------------------------------
 - @version I2544_Bunedic_20
 - @author Olivier Oeuillot
 - 
