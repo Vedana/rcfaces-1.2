@@ -580,9 +580,20 @@ var __members = {
 		
 		var self=this;
 		
+		var shellManager=this._shellManager;
+		
 		// On découple la destruction ... pour éviter des problèmes de sécurité !
 		window.setTimeout(function() {
-			self._shellManager.f_closeShell(self);
+			if (window._rcfacesExiting) {
+				return false;
+			}
+		
+			try {
+				shellManager.f_closeShell(self);
+
+			} finally {
+				shellManager=null;
+			}
 		}, 0);
 	},
 	f_preConstruct: function() {

@@ -10,12 +10,15 @@
  * @version $Revision$ $Date$
  */
 
-var __members = {
+var __statics = {
 	
 	/**
 	 * @field private static final String
-	_SHELL_DECORATOR_IDENTIFIER: "divShellDecorator";
-	
+	 */
+	_SHELL_DECORATOR_IDENTIFIER: "divShellDecorator"
+}
+
+var __members = {	
 	/**
 	 * @field private HTMLIFrame;
 	 */
@@ -252,5 +255,6 @@ var __members = {
 
 new f_class("f_divShellDecorator", {
 	extend: f_shellDecorator,
-	members: __members
+	members: __members,
+	statics: __statics
 });

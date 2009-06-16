@@ -10,11 +10,14 @@
  * @version $Revision$ $Date$
  */
 
-var __members = {
-	
+var __statics = {
 	/**
 	 * @field private static final String
-	_SHELL_DECORATOR_IDENTIFIER: "frameShellDecorator";
+	 */
+	_SHELL_DECORATOR_IDENTIFIER: "frameShellDecorator"
+}
+
+var __members = {
 	
 	/**
 	 * @field private HTMLIFrame;
@@ -355,5 +358,6 @@ var __members = {
 
 new f_class("f_frameShellDecorator", {
 	extend: f_shellDecorator,
-	members: __members
+	members: __members,
+	statics: __statics
 });
