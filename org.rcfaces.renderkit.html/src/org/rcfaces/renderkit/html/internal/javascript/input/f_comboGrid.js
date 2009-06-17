@@ -208,6 +208,7 @@ var __members = {
 	},
 
 	f_finalize: function() {
+		this._exited=true;
 		
 		var checkListeners=this._checkListeners;
 		if (checkListeners) {
@@ -767,6 +768,11 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
+	 			if (comboGrid._exited) {
+	 				// La comboGrid n'existe plus !!!
+	 				return;
+	 			}
+	
 	 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+status);
 	 			
 	 			var continueProcess;
@@ -805,7 +811,12 @@ var __members = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (comboGrid.f_processNextCommand()) {
+	 			if (comboGrid._exited) {
+	 				// La comboGrid n'existe plus !!!
+	 				return;
+	 			}
+
+	 			if (comboGrid.f_processNextCommand()) {
 					return;
 				}
 	 				
@@ -853,7 +864,12 @@ var __members = {
 				}
 	 		},
 	 		onAbort: function() {
-				if (comboGrid.f_processNextCommand()) {
+	 			if (comboGrid._exited) {
+	 				// La comboGrid n'existe plus !!!
+	 				return;
+	 			}
+	 			
+	 			if (comboGrid.f_processNextCommand()) {
 					return;
 				}
 			 	f_core.Debug(f_dataGrid, "f_callServer.onAbort: no more commands"); 			 	
