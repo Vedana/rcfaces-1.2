@@ -1,3 +1,10 @@
+----------------------------------------------------------------------
+- @version I2544_Bunedic_22
+- @author Olivier Oeuillot
+- 
+
+f_comboGrid.js:
+Correction d'un problème de libération d'objet pendant un cancel de f_httpRequest (le onAbort est exécuté sur un objet invalide)
 
 ----------------------------------------------------------------------
 - @version I2544_Bunedic_21
