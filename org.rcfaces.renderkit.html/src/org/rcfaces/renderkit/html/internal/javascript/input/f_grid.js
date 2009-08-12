@@ -200,12 +200,17 @@ var __statics = {
 		} else if (evt.srcElement) {
 			target = evt.srcElement;
 		}
-			
-		if (target && target.nodeType==f_core.ELEMENT_NODE) {
-			
+		
+		if (!target || target.nodeType!=f_core.ELEMENT_NODE) {
+			return true;
+		}
+		
+		for(;target;target=target.parentNode) {
+				
 			if (target._dataGrid || target._row) {
 				return true;
 			}
+			
 			var tagName=target.tagName;
 			if (tagName) {
 				switch(tagName.toLowerCase()) {
@@ -214,11 +219,11 @@ var __statics = {
 				case "a":
 					return false;
 				}
-				
-//				document.title="Unknown tag:"+tagName;
 			}
-		} else {
-//			document.title="Unknown target: "+target;
+			
+			if (f_core.GetAttribute(target, "v:className")) {
+				return false;
+			}
 		}
 				
 		return true;
@@ -2076,12 +2081,10 @@ var __members = {
 	
 		this.f_performPagedComponentInitialized();
 		
-		/*
 		if (!this.f_isVisible()) {
 			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
 			
-		} 
-		*/
+		} 		
 	},
 	/**
 	 * @method protected
