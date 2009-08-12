@@ -845,8 +845,21 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         htmlBorderWriter.startChild(writer, AbstractHtmlBorderRenderer.TD_TEXT,
                 halign, valign, width, height, 1, 1);
 
-        writer.startElement(IHtmlWriter.SPAN);
-        writer.writeId(getTextId(writer, htmlBorderWriter));
+
+        String clientId = getTextId(writer, htmlBorderWriter);
+
+        if (imageSrc == null) {
+            writer.startElement(IHtmlWriter.A);
+            writer.writeHRef("javascript:void(0)");
+
+            writer.addSubFocusableComponent(clientId);
+            writer.getJavaScriptEnableMode().enableOnFocus();
+
+        } else {
+            writer.startElement(IHtmlWriter.SPAN);
+        }
+
+        writer.writeId(clientId);
         writer.writeClass(getTextClassName(htmlBorderWriter));
 
         UIComponent mainComponent = writer.getComponentRenderContext()
@@ -869,7 +882,13 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         writeText();
 
-        writer.endElement(IHtmlWriter.SPAN);
+
+        if (imageSrc == null) {
+            writer.endElement(IHtmlWriter.A);
+
+        } else {
+            writer.endElement(IHtmlWriter.SPAN);
+        }
 
         htmlBorderWriter.endChild(writer);
     }
