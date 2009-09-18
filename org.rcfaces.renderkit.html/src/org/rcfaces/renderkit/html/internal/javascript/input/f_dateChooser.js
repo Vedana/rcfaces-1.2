@@ -40,7 +40,7 @@ var __members={
 		if (this.f_isReadOnly()) {
 			return false;
 		}
-
+		
 		return this.f_openCalendarPopup(event);
 	},
 	f_setDomEvent: function(type, target) {
