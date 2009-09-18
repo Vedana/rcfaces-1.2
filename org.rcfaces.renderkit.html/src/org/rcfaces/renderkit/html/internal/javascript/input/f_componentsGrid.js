@@ -561,8 +561,8 @@ var __members = {
 
 		if (this._selectable) {
 			row.onmousedown=f_grid.RowMouseDown;
-			row.onmouseup=f_core.CancelJsEventHandler;
-			row.onclick=f_core.CancelJsEventHandler;
+			row.onmouseup=f_grid.FiltredCancelJsEventHandler;
+			row.onclick=f_grid.FiltredCancelJsEventHandler;
 			row.ondblclick=f_grid.RowMouseDblClick;
 			row.onfocus=f_grid.GotFocus;
 		}
