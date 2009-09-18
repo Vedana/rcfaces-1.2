@@ -189,10 +189,6 @@ var __statics = {
 	 * @context event:evt
 	 */
 	VerifyTarget: function(evt) {
-		if (this._dataGrid || this._row) {
-			return true;
-		}
-			
 		var target;
 		if (evt.target) {
 			target = evt.target;
@@ -221,7 +217,7 @@ var __statics = {
 				}
 			}
 			
-			if (f_core.GetAttribute(target, "v:className")) {
+			if (f_core.GetAttribute(target, "v:class")) {
 				return false;
 			}
 		}
