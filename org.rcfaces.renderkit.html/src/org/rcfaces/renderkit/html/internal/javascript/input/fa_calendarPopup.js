@@ -329,7 +329,16 @@ var __statics = {
 			return null;
 		}
 
-		return calendarObject.f_parseDate(value, format);
+		try {
+			return calendarObject.f_parseDate(value, format);
+
+		} catch (x) {
+			// Erreur de saisie du jour/mois/année ???
+		}
+		
+		alert("La date saisie est incohérente !");
+		
+		return new Date();
 	}
 }
 
