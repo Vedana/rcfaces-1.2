@@ -1,4 +1,26 @@
 ----------------------------------------------------------------------
+- @version I2544_Bunedic_24
+- @author Olivier Oeuillot
+- 18/9/2009
+
+f_grid:
+Correction d'un problème qui désactivé le click dans des composants contenus dans une cellule quand celle-ci possédait un style particulier
+
+----------------------------------------------------------------------
+- @version I2544_Bunedic_23
+- @author Olivier Oeuillot
+- 
+
+fa_calendarPopup.js:
+Affichage d'une popup quand la date demandée au calendrier est invalide. (retour à la date du jour)
+
+f_componentsGrid.js:
+Correction qui permet la gestion du click/doubleclick par les composants dans les cellules
+
+f_dateFormat.js:
+Meilleure précision dans le type d'erreur
+
+----------------------------------------------------------------------
 - @version I2544_Bunedic_22
 - @author Olivier Oeuillot
 - 
