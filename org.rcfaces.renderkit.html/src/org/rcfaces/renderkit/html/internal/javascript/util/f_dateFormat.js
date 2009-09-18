@@ -15,6 +15,21 @@ var __statics = {
 	 * @field private static final number
 	 */
 	_DEFAULT_TWO_DIGIT_YEAR_START: 1960,
+
+	/**
+	 * @field public static final String
+	 */
+	INVALID_DATE_ERROR: "invalid.date",
+	
+	/**
+	 * @field public static final String
+	 */
+	INVALID_MONTH_ERROR: "invalid.month",
+	
+	/**
+	 * @field public static final String
+	 */
+	INVALID_YEAR_ERROR: "invalid.year",
 	
 	/**
 	 * @method public static final 
@@ -173,7 +188,7 @@ var __statics = {
 	 * @param optional String format Expression of parsing.
 	 * @param optional Date twoDigitYearStart 
 	 * @param optional f_locale locale Locale used by parsing.
-	 * @return Date Date parsed.
+	 * @return Date Parsed date.
 	 */
 	ParseDate: function(text, format, twoDigitYearStart, locale) {
 		f_core.Assert(typeof(text)=="string", "f_dateFormat.ParseDate: Invalid text parameter '"+text+"'.");
@@ -288,8 +303,21 @@ var __statics = {
 		if (year<100) {
 			year=f_dateFormat.ResolveYear(year, month, date, twoDigitYearStart, locale);
 		}
+	
+		var dateObject = new Date(year, month, date);
+		if (dateObject.getDate()!=date) {
+			throw new Error(f_dateFormat.INVALID_DATE_ERROR);
+		}
 		
-		return new Date(year, month, date);
+		if (dateObject.getMonth()!=month) {
+			throw new Error(f_dateFormat.INVALID_MONTH_ERROR);
+		}
+
+		if (dateObject.getFullYear()!=year) {
+			throw new Error(f_dateFormat.INVALID_YEAR_ERROR);
+		}
+
+		return dateObject;
 	},
 	
 	/**
