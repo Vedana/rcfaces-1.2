@@ -578,6 +578,13 @@ var __members = {
 		
 		cmp.focus();
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		return this.f_getEventElement();;	
+	},
 	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
 		if (type==f_event.SELECTION) {			
 			if (this.f_isReadOnly() || this.f_isDisabled()) {

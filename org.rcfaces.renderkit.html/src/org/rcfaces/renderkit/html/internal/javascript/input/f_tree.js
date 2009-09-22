@@ -2502,6 +2502,17 @@ var __members = {
 		this.setAttribute("v:breadCrumbsValues", values.join("|"));
 		this.setAttribute("v:breadCrumbsTexts", texts.join("|"));
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {		
+		if (this._cfocus) {
+			return this._cfocus;
+		}
+		
+		return this;
+	},	
 	f_setFocus: function() {
 		f_core.Debug(f_tree, "f_setFocus: Set focus on tree '"+this.id+"' cfocus="+this._cfocus);
 

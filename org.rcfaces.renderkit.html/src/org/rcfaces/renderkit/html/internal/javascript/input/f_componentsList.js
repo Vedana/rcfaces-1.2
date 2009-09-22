@@ -72,6 +72,13 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		return this;	
+	},
+	/**
+	 * @method protected
 	 * @return void
 	 */
 	f_documentComplete: function() {

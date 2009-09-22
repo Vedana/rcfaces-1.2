@@ -414,6 +414,18 @@ var __members = {
 		}		
 	},
 	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		var contentDocument=this._contentDocument;
+		if (!contentDocument) {
+			return null;
+		}
+		
+		return contentDocument.body;
+	},
+	/**
 	 * @method public
 	 * @param String text
 	 * @return void

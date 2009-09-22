@@ -333,6 +333,18 @@ var __members = {
 			f_core.VerifyProperties(button);			
 		}			
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		var buttons=this._buttons;
+		if (!buttons) {
+			return;
+		}
+		
+		return buttons[0];
+	},
 	
 	/* ****************************************************************** */
 	fa_pagedComponentInitialized: function(dataComponent) {

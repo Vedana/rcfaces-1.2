@@ -69,6 +69,13 @@ var __members = {
 			}
 		}
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		return this.f_getInput();	
+	},
 	
 	/**
 	 * @method protected

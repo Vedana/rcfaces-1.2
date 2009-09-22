@@ -792,7 +792,7 @@ var __members = {
 	 * @return HTMLElement
 	 */
 	f_getFocusableElement: function() {
-		return this;	
+		return null;	
 	},
 	/**
 	 * @method public

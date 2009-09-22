@@ -218,7 +218,19 @@ var __statics = {
 			}
 			
 			if (f_core.GetAttribute(target, "v:class")) {
-				return false;
+				// Un objet RCFACES !
+				
+				var win=f_core.GetWindow(target.ownerDocument);
+				var classLoader=f_classLoader.Get(win);
+				var obj = classLoader.f_init(target, true);
+				
+				if (obj.f_getFocusableElement && obj.f_getFocusableElement()) {
+					// Il peut traiter le focus, on lui donne la main !
+					return false;
+				}
+				
+				// Notre focus ne traite pas le focus ... on passe au parent ...
+				continue;
 			}
 		}
 				
