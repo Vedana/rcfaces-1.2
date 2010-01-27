@@ -730,7 +730,15 @@ var __members = {
 	 * @param boolean selected
 	 * @return void 
 	 */
-	fa_setElementSelected: f_class.ABSTRACT
+	fa_setElementSelected: f_class.ABSTRACT,
+	
+	
+	/**
+	 * @method protected abstract
+	 * @param any element
+	 * @return Object 
+	 */
+	fa_getElementValue: f_class.ABSTRACT
 }
 
 new f_aspect("fa_selectionManager", {

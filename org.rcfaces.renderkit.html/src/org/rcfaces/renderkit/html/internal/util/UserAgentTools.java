@@ -12,7 +12,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
-import org.rcfaces.renderkit.html.internal.ClientBrowserImpl;
+import org.rcfaces.renderkit.html.internal.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.IClientBrowser;
 import org.rcfaces.renderkit.html.item.IUserAgentVaryFileItem;
 
@@ -35,6 +35,11 @@ public class UserAgentTools {
                         IUserAgentVaryCapability.MICROSOFT_INTERNET_EXPLORER,
                         new Integer(
                                 IClientBrowser.MICROSOFT_INTERNET_EXPLORER_BROWSER_TYPE));
+        AGENT_NAMES
+                .put(
+                        IUserAgentVaryCapability.INTERNET_EXPLORER,
+                        new Integer(
+                                IClientBrowser.MICROSOFT_INTERNET_EXPLORER_BROWSER_TYPE));
 
         AGENT_NAMES.put(IUserAgentVaryCapability.FIREFOX, new Integer(
                 IClientBrowser.FIREFOX_BROWSER_TYPE));
@@ -44,6 +49,9 @@ public class UserAgentTools {
 
         AGENT_NAMES.put(IUserAgentVaryCapability.OPERA, new Integer(
                 IClientBrowser.OPERA_BROWSER_TYPE));
+
+        AGENT_NAMES.put(IUserAgentVaryCapability.CHROME, new Integer(
+                IClientBrowser.CHROME_BROWSER_TYPE));
     }
 
     public static boolean accept(FacesContext facesContext,
@@ -97,7 +105,7 @@ public class UserAgentTools {
             }
         }
 
-        IClientBrowser client = ClientBrowserImpl.get(facesContext);
+        IClientBrowser client = ClientBrowserFactory.Get().get(facesContext);
 
         if (client == null) {
             // Pas de client détecté !
@@ -202,9 +210,9 @@ public class UserAgentTools {
                         break;
                     }
                 }
-
-                return not == false;
             }
+
+            return not == false;
         }
 
         userAgentVersions.put(userAgent, Boolean.FALSE);

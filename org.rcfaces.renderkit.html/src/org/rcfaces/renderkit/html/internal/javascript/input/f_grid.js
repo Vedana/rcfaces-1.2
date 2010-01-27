@@ -138,6 +138,111 @@ var __statics = {
 	 * @return boolean
 	 * @context object:dataGrid
 	 */
+	RowMouseOver: function(evt) {
+		var dataGrid=this._dataGrid;
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
+		}
+		
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
+		
+		if (dataGrid.f_isDisabled()) {
+			return f_core.CancelJsEvent(evt);
+		}
+		
+		var row=f_grid.GetRowFromEvent(this, evt);
+		
+		if (!row || row._over) {
+			return;
+		}
+		
+		row._over=true;
+		dataGrid.fa_updateElementStyle(row);
+		
+		return true;
+	},
+		
+	/**
+	 * @method protected static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	RowMouseOut: function(evt) {
+		var dataGrid=this._dataGrid;
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		var row=f_grid.GetRowFromEvent(this, evt);
+		
+		if (!row || !row._over) {
+			return;
+		}
+		
+		row._over=false;
+		dataGrid.fa_updateElementStyle(row);
+	
+		return true;
+	},
+	/**
+	 * @method protected static
+	 * @param HTMLElement eventObject
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	GetRowFromEvent: function(eventObject, evt) {
+		var dataGrid=eventObject._dataGrid;
+				
+		var target;
+		if (evt.target) {
+			target = evt.target;
+			
+		} else if (evt.srcElement) {
+			target = evt.srcElement;
+		}
+			
+		if (!target || target.nodeType!=f_core.ELEMENT_NODE) {
+			return null;
+		}
+	
+		for(;target;target=target.parentNode) {
+
+			if (target._dataGrid!=dataGrid) {
+				continue;
+			}
+		
+			var tagName=target.tagName.toLowerCase();
+
+			if (tagName=="tr") {
+				return target;
+			}
+			
+			if (tagName=="td") {
+				continue;
+			}
+				
+			return null;							
+		}	
+		
+		return null;
+	},
+	
+	/**
+	 * @method protected static
+	 * @param Event evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
 	RowMouseDown: function(evt) {
 		var dataGrid=this._dataGrid;
 
@@ -201,11 +306,16 @@ var __statics = {
 			target = evt.srcElement;
 		}
 			
-		if (target && target.nodeType==f_core.ELEMENT_NODE) {
-			
+		if (!target || target.nodeType!=f_core.ELEMENT_NODE) {
+			return true;
+		}
+		
+		for(;target;target=target.parentNode) {
+				
 			if (target._dataGrid || target._row) {
 				return true;
 			}
+			
 			var tagName=target.tagName;
 			if (tagName) {
 				switch(tagName.toLowerCase()) {
@@ -214,13 +324,32 @@ var __statics = {
 				case "a":
 					return false;
 				}
-				
-//				document.title="Unknown tag:"+tagName;
 			}
-		} else {
-//			document.title="Unknown target: "+target;
-		}
+			
+			if (f_core.GetAttribute(target, "v:class")) {
+				// Un objet RCFACES !
 				
+				f_core.Debug(f_grid, "VerifyTarget: Initialize target='"+target+"'");
+				
+				var win=f_core.GetWindow(target.ownerDocument);
+				var classLoader=f_classLoader.Get(win);
+				
+				var obj = classLoader.f_init(target, true, true);
+				
+				if (!obj) {
+					continue;
+				}
+					
+				if (obj.f_getFocusableElement && obj.f_getFocusableElement()) {
+					// Il peut traiter le focus, on lui donne la main !
+					return false;
+				}
+				
+				// Notre focus ne traite pas le focus ... on passe au parent ...
+				continue;
+			}
+		}
+
 		return true;
 	},
 	/**
@@ -1371,7 +1500,7 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		if (dataGrid.f_getEventLocked(evt)) {
+		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
 		}
 
@@ -1690,7 +1819,11 @@ var __members = {
 			} else {
 				f_core.InsertBefore(this, focus, this.firstChild);
 			}
+			
 		}
+
+		this._table.onmouseover=f_grid.RowMouseOver;
+		this._table.onmouseout=f_grid.RowMouseOut;			
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);		
 	},
@@ -1797,6 +1930,8 @@ var __members = {
 	
 			table._dataGrid=undefined;
 			table.onbeforeactivate=null;
+			table.onmouseover=null;
+			table.onmouseout=null;
 			
 			if (table!=this) {
 				f_core.VerifyProperties(table);
@@ -2464,7 +2599,7 @@ var __members = {
 	 * @method protected
 	 */
 	fa_updateElementStyle: function(row, updateCells) {
-		var suffix;
+		var suffix="";
 		if (this.f_isDisabled()) {
 			suffix="_disabled"; //+"_disabled"; // La classe par du .f_grid_disabled
 
@@ -2491,9 +2626,15 @@ var __members = {
 			cl+=" "+rowClassName;
 		}
 		
-		if (suffix) {
-			cl+=" f_grid_row"+suffix;
+		cl+=" f_grid_row"+suffix;
+		if (rowClassName) {
+			cl+=" "+rowClassName+suffix;
+		}
 		
+		if (row._over) {		
+			suffix+="_over";
+			
+			cl+=" f_grid_row"+suffix;
 			if (rowClassName) {
 				cl+=" "+rowClassName+suffix;
 			}
@@ -2734,11 +2875,11 @@ var __members = {
 	 * Returns the value of the row.
 	 *
 	 * @method public
-	 * @param any rowIndex Row object.
+	 * @param any rowObject Row object.
 	 * @return String the key of the row.
 	 */
-	f_getRowValue: function(rowIndex) {
-		var row=this.f_getRow(rowIndex, true);
+	f_getRowValue: function(rowObject) {
+		var row=this.f_getRow(rowObject, true);
 		if (!row) {
 			return null;
 		}
@@ -3114,8 +3255,8 @@ var __members = {
 			row.onmouseup=null;
 			row.onclick=null;
 			row.ondblclick=null;
-			row.onmouseout=null;
-			row.onmouseover=null;
+//			row.onmouseout=null;
+//			row.onmouseover=null;
 			row.onfocus=null;
 
 		//	f_core.VerifyProperties(row);
@@ -4546,6 +4687,16 @@ var __members = {
 			return;
 		}
 		
+		if (this._scrollTitle) {
+			var sw=this.style.width;
+			if (sw && sw.indexOf("px")>0) {
+				var swPixel=parseInt(sw);
+				
+				swPixel-=f_core.ComputeContentBoxBorderLength(this, "left", "right");
+				this._scrollTitle.style.width=swPixel+"px";
+			}
+		}			
+		
 		if (!this._columnsLayoutPerformed) {
 			this.f_updateColumnsLayout();
 		}
@@ -4595,6 +4746,10 @@ var __members = {
 			var w=col.offsetWidth;
 			if (!w && !col.offsetHeight) {
 				w=parseInt(col.style.width);
+				
+				if (isNaN(w) || w<0) {
+					w=0;
+				}
 			}
 			
 			total+=w;

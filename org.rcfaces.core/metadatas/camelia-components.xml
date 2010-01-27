@@ -277,6 +277,8 @@
 	</facesComponent>
 
 	<component id="abstractBasic" abstract="true" extends="cameliaBase">
+		<capability id="IUnlockedClientAttributesCapability" />
+
 		<capability id="IClientDataCapability" />
 		<capability id="IServerDataCapability" />
 		<capability id="IPropertyChangeEventCapability" />
@@ -343,6 +345,7 @@
 	
 
 	<component id="abstractSelectMany" abstract="true" extends="cameliaSelectMany" extendsCapabilities="abstractInput">
+		<capability id="IUnlockedClientAttributesCapability" />
 	</component>
 
 	<component id="abstractCommand" abstract="true" extends="cameliaCommand" extendsCapabilities="abstractBasic">
@@ -363,6 +366,7 @@
 
 	<component id="abstractConverterCommand" abstract="true" extends="abstractCommand">
 		<implements id="org.rcfaces.core.internal.capability.IConvertValueHolder" />
+		<capability id="IUnlockedClientAttributesCapability" />
 			
 		<method id="setConverter(String)"/>
 		<method id="setConverter(javax.faces.context.FacesContext, String)"/>
@@ -471,6 +475,7 @@
 	
 	<component id="abstractMessage" abstract="true" extends="cameliaMessage" extendsCapabilities="abstractBasic">
 		<implements id="org.rcfaces.core.component.capability.IForCapability" importMethods="false" />
+		<capability id="IUnlockedClientAttributesCapability" />
 
 		<capability id="IMouseEventCapability" />
 		<capability id="IInitEventCapability" />
@@ -483,6 +488,7 @@
 	<component id="abstractMessages" abstract="true" extends="cameliaMessages" extendsCapabilities="abstractBasic">
 		<capability id="IMouseEventCapability" />
 		<capability id="IInitEventCapability" />
+		<capability id="IUnlockedClientAttributesCapability" />
 
 		<attribute id="showDetail" type="boolean" writeComponent="false"/>
 		<attribute id="showSummary" type="boolean" writeComponent="false"/>
@@ -493,6 +499,7 @@
 		<capability id="IDisabledCapability" />
 		<capability id="IServerDataCapability" />
 		<capability id="IClientDataCapability" />
+		<capability id="IUnlockedClientAttributesCapability" />
 
 		<implements id="org.rcfaces.core.internal.manager.IServerDataManager" />
 		<implements id="org.rcfaces.core.internal.manager.IClientDataManager" />
@@ -533,6 +540,7 @@
 		<capability id="IVisibilityCapability" />
 		<capability id="IHiddenModeCapability" />
 		<implements id="org.rcfaces.core.component.ISeparatorComponent" />
+		<capability id="IUnlockedClientAttributesCapability" />
 
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
 
@@ -543,6 +551,7 @@
 		<implements id="org.rcfaces.core.component.IMenuComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ICheckComponent" importMethods="false" />
+		<capability id="IUnlockedClientAttributesCapability" />
 
 		<capability id="ISelectionEventCapability" />
 	
@@ -1951,8 +1960,12 @@
 		<attribute id="pagerStyleClass" type="java.lang.String"/>
 		<attribute id="pagerLookId" type="java.lang.String"/>
 
+		<attribute id="popupStyleClass" type="java.lang.String"/>
+
 		<attribute id="gridStyleClass" type="java.lang.String"/>
 		<attribute id="gridLookId" type="java.lang.String"/>
+
+		<attribute id="searchFieldVisible" type="boolean" default="true"/>
 	
 		<method id="listColumns" returnType="org.rcfaces.core.component.iterator.IColumnIterator">
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
@@ -2374,6 +2387,8 @@ Dans le cas d'un mode period !
 
 		<attribute id="homeDateLabel" type="java.lang.String" />
 		
+		<attribute id="popupStyleClass" type="java.lang.String"/>
+
 		
 		<method id="getTextPositionConverter" modifier="protected" returnType="javax.faces.convert.Converter">
 			<import>org.rcfaces.core.internal.converter.TextPositionConverter</import>
@@ -2412,6 +2427,8 @@ Dans le cas d'un mode period !
 
 		<attribute id="collapseEffect" type="java.lang.String" />
 		<attribute id="collapsedText" type="java.lang.String" />
+
+		<attribute id="userExpandable" type="boolean" default="true" />
 		
 		<method id="setAsyncRenderMode(String)" />	
 		
@@ -2591,6 +2608,7 @@ Dans le cas d'un mode period !
 		<capability id="IImmediateCapability" />
 		<capability id="IValueLockedCapability" />
 		<capability id="IValidationEventCapability" />			
+		<capability id="IUserEventCapability" />
 
 		<implements id="org.rcfaces.core.internal.manager.IClientDataManager" />
 		<implements id="org.rcfaces.core.internal.manager.IServerDataManager" />
@@ -2734,6 +2752,7 @@ Dans le cas d'un mode period !
 		<capability id="ILookAndFeelCapability" />
 		<capability id="IWAIRoleCapability" />
 		<capability id="ISelectionEventCapability" />		
+		<capability id="IUserEventCapability" />
 
 		<attribute id="title" type="java.lang.String" />
 		<attribute id="defaultValue" type="java.lang.String" />
@@ -2771,6 +2790,7 @@ Dans le cas d'un mode period !
 		<capability id="IStyleClassCapability" />
 		<capability id="ISizeCapability" />		
 		<capability id="IWAIRoleCapability" />
+		<capability id="ILookAndFeelCapability" />
 	
 		<attribute id="backgroundMode" type="java.lang.String" />
 		
@@ -2815,6 +2835,8 @@ Dans le cas d'un mode period !
 
 		<attribute id="showIfMessage" type="boolean" />
 		<attribute id="showActiveComponentMessage" type="boolean" />
+		
+		<attribute id="maxCount" type="int" />
 	</component>
 
 	<component id="menu" extends="cameliaSelectMany" render="false">
@@ -2875,7 +2897,8 @@ Dans le cas d'un mode period !
 		<tagAttribute id="converter" type="java.lang.String" generate="true"/>
 	</component>
 	
-	<component id="menuBar" extends="abstractMenu">
+	<component id="menuBar" extends="abstractMenu" >
+		<action id="action" type="selection" default="true" />		
 	</component>
 
 	<component id="menuCheckItem" extends="menuItem" render="false">
@@ -3542,6 +3565,9 @@ Dans le cas d'un mode period !
 		<capability id="IVerticalAlignmentCapability" />
 		<capability id="IShowDropDownMarkCapability" />
 
+		<attribute id="defaultItemLookId" type="java.lang.String" />
+		<attribute id="defaultItemStyleClass" type="java.lang.String" />
+
 		<attribute id="itemHiddenMode" type="int" />
 
 		<method id="setItemHiddenMode(String)" />
@@ -3913,6 +3939,11 @@ Dans le cas d'un mode period !
 		<attribute id="defaultHoverImageURL" type="java.lang.String" />
 		<attribute id="defaultDisabledImageURL" type="java.lang.String" />
 
+		<attribute id="defaultItemInputType" type="int" />
+		<attribute id="defaultItemLookId" type="java.lang.String" />
+		<attribute id="defaultItemStyleClass" type="java.lang.String" />
+		<attribute id="defaultItemGroupName" type="java.lang.String" />
+
 		<attribute id="itemPadding" type="int" />
 		<attribute id="itemHiddenMode" type="int" />
 
@@ -3924,6 +3955,8 @@ Dans le cas d'un mode period !
 				return TextPositionConverter.SINGLETON;
 			</code>
 		</method>
+
+		<method id="setDefaultItemInputType(String)" />
 
 		<method id="setTextPosition(String)" />
 

@@ -27,6 +27,7 @@ public class IncludeHttpServletRequest extends HttpServletRequestWrapper {
         IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_IF_NONE_MATCH);
         IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_LAST_MODIFIED);
         IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_IF_NOT_HASH);
+        IGNORED_HEADER.add(ExtendedHttpServlet.HTTP_ACCEPT_ENCODING); // Desactive le GZIP !
     }
 
     public IncludeHttpServletRequest(HttpServletRequest servletRequest) {

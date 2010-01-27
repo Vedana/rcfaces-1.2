@@ -168,6 +168,11 @@ public abstract class AbstractContentAccessor implements IContentAccessor {
             }
         }
 
+        if (currentPathType == IContentAccessor.FILTER_PATH_TYPE) {
+            throw new FacesException("Filter '" + resolvedURLs
+                    + "' has not been processed !");
+        }
+
         throw new FacesException("Incompatible path type (requested=0x"
                 + Integer.toHexString(pathTypeMask) + ", pathType=0x"
                 + Integer.toHexString(currentPathType) + ", url='"

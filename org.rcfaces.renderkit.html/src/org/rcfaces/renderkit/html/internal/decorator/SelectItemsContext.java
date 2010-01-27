@@ -206,10 +206,11 @@ public class SelectItemsContext {
                         .booleanValue();
 
                 if (LOG_TREE) {
+                    String ss = "";
                     for (int s = 0; s < depth; s++) {
-                        System.out.print("  ");
+                        ss += "  ";
                     }
-                    System.out.println("+ " + parentSelectItem.getLabel());
+                    LOG.debug(ss + "+ " + parentSelectItem.getLabel());
                 }
 
                 int eval = selectItemNodeWriter.encodeNodeBegin(
@@ -267,10 +268,12 @@ public class SelectItemsContext {
                 boolean hasChild = it.hasNext();
 
                 if (LOG_TREE) {
+                    String ss = "";
                     for (int s = 0; s < depth; s++) {
-                        System.out.print("  ");
+                        ss += "  ";
                     }
-                    System.out.println("+ " + selectItem.getLabel());
+
+                    LOG.debug(ss + "+ " + selectItem.getLabel());
                 }
 
                 int eval = selectItemNodeWriter.encodeNodeBegin(component,
@@ -304,10 +307,12 @@ public class SelectItemsContext {
 
             if (opened != REFUSE_CHILD) {
                 if (LOG_TREE) {
+                    String ss = "";
                     for (int s = 0; s < depth; s++) {
-                        System.out.print("  ");
+                        ss += "  ";
                     }
-                    System.out.println("- " + selectItem.getLabel());
+
+                    LOG.debug(ss + "- " + selectItem.getLabel());
                 }
 
                 // On ferme alors ...

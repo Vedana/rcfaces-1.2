@@ -186,6 +186,11 @@ public abstract class AbstractJavaScriptRenderer extends
             if (sa.length() > 0) {
                 writer.writeAttribute("v:events", sa.toString());
             }
+
+            if (listenersByType.containsKey(ListenerTools.ATTRIBUTE_NAME_SPACE
+                    .getInitEventName())) {
+                writer.getJavaScriptEnableMode().enableOnInit();
+            }
         }
 
         return writer;

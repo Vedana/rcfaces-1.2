@@ -292,7 +292,10 @@ class DefaultItem extends SelectItemGroup {
             }
         }
 
-        if (selectItemComponent instanceof IVisibilityCapability) {
+        if (selectItemComponent.isRendered() == false) {
+            setVisible(false);
+
+        } else if (selectItemComponent instanceof IVisibilityCapability) {
             if (((IVisibilityCapability) selectItemComponent).isVisible() == false) {
                 setVisible(false);
             }

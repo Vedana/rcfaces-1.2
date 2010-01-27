@@ -36,6 +36,12 @@ var __statics = {
 	 */
 	_OpenPopup: function(dataGridPopup, position, offsetX, offsetY, callbackWhenReady) {
 		f_core.Debug(fa_dataGridPopup, "_OpenPopup: Open popup for dataGridPopup '"+dataGridPopup.id+"'. (popupOpened='"+dataGridPopup._popupOpened+"' popup='"+dataGridPopup._popup+"')");
+
+		var popupClassName="f_dataGridPopup_popup";
+		var ds=f_core.GetAttribute(dataGridPopup, "v:popupStyleClass");
+		if (ds) {
+			popupClassName+=" "+ds;
+		}			
 				
 		var popup=dataGridPopup._popup;
 		if (!popup) {
@@ -51,11 +57,11 @@ var __statics = {
 					
 					
 					var body=pdoc.createElement("div");
-					body.className="f_dataGridPopup_popup";
+					body.className=popupClassName;
 					body.style.visibility="inherit";
 					body.style.position="relative";
 					body.style.width=dataGridPopup._popupWidth+"px";
-					body.style.height=dataGridPopup._popupHeight+"px";
+				//	body.style.height=dataGridPopup._popupHeight+"px";
 	
 					f_core.AppendChild(pdoc.body, body);
 
@@ -65,6 +71,10 @@ var __statics = {
 						body._popupObject=true;
 						dataGridPopup.f_constructDataGrid(body);
 					}
+
+					var newHeight=body.offsetHeight;
+					popup.style.height=newHeight+"px";
+					body.style.height=newHeight+"px";
 			
 					fa_dataGridPopup._OpenPopup2(popup, dataGridPopup, position, offsetX, offsetY, callbackWhenReady);	
 				});
@@ -73,7 +83,7 @@ var __statics = {
 			}			
 
 			popup=dataGridPopup.ownerDocument.createElement("div");
-			popup.className="f_dataGridPopup_popup";
+			popup.className=popupClassName;
 			popup.style.width=dataGridPopup._popupWidth+"px";
 			popup.style.height=dataGridPopup._popupHeight+"px";
 
@@ -439,81 +449,98 @@ var __members = {
 		var width=this._popupWidth-2; /*border */
 		var height=this._popupHeight-2; /*border */
 		var pagerHeight=(hasPager)?(18):0;
-		var inputHeight=20;
+		var inputHeight=0;
+		
+		var tableClassName="fa_dataGridPopup_table";
 		
 		var dataGridContainer=f_core.CreateElement(parent, "table", {
 			cellSpacing: 0, 
-			cellPadding: 2,
-			className: "fa_dataGridPopup_table", 
+			cellPadding: 0,
+			className: tableClassName, 
 			"style": "width:"+width+"px;height:"+height+"px" 
 		});
 		
 		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");		
 		
-		var tr=f_core.CreateElement(tBodyContainer, "tr", {
-		 	className: "fa_dataGridPopup_search"
-		});								
+		var showTitle=f_core.GetBooleanAttribute(this, "v:searchFieldVisible", true);
 		
-		var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
+		var cwidth=width;
+		var cheight=height;
 		
-		var search=f_core.CreateElement(tr, "td", {
-			align: "left", 
-			valign: "middle" 
-		});
+		if (showTitle) {	
+			inputHeight=20;
+			cwidth-=2+2;
+			cheight-=2+2+inputHeight+2+2;
+				
+			var tr=f_core.CreateElement(tBodyContainer, "tr", {
+			 	className: "fa_dataGridPopup_search"
+			});								
+			
+			var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
+			
+			var search=f_core.CreateElement(tr, "td", {
+				align: "left", 
+				valign: "middle" 
+			});
+			
+			var div=f_core.CreateElement(search, "div", {
+				className: "fa_dataGridPopup_title"
+			});
+			
+			f_core.CreateElement(div, "div", {
+				className: "fa_dataGridPopup_label",
+				textNode: resourceBundle.f_get("SEARCH_LABEL")
+			});
+			
+			var form=f_core.CreateElement(div,  "form", {
+				className: "fa_dataGridPopup_form"
+			});
 		
-		var div=f_core.CreateElement(search, "ul", {
-			className: "fa_dataGridPopup_title"
-		});
+			var button=f_core.CreateElement(form, "img", {
+				className: "fa_dataGridPopup_icon",
+				src: f_env.GetBlankImageURL(),
+				name: "searchButton"
+			});	
+			this._searchIcon=button;
+			button._dataGridPopup=this;
+			button.onclick=fa_dataGridPopup._SearchButton_onclick;
+			
+			var input=f_core.CreateElement(form, "input", {
+				className: "fa_dataGridPopup_input",
+				name: "searchValue",
+				type: "text",
+				// He oui ! cela semble marcher sur tous les browsers ! (meme Gecko !?)		
+				autocomplete: "off"
+			});
+			this._searchInput=input;
+			input._dataGridPopup=this;
+			input.onkeyup=fa_dataGridPopup._SearchSuggest_onkeyup;
+		}
 		
-		f_core.CreateElement(div, "li", null, "label", {
-			className: "fa_dataGridPopup_label",
-			textNode: resourceBundle.f_get("SEARCH_LABEL")
-		});
-		
-		var form=f_core.CreateElement(div, "li", null, "form", {
-			className: "fa_dataGridPopup_form"
-		});
-	
-		var button=f_core.CreateElement(form, "img", {
-			className: "fa_dataGridPopup_icon",
-			src: f_env.GetBlankImageURL(),
-			name: "searchButton"
-		});	
-		this._searchIcon=button;
-		button._dataGridPopup=this;
-		button.onclick=fa_dataGridPopup._SearchButton_onclick;
-		
-		var input=f_core.CreateElement(form, "input", {
-			className: "fa_dataGridPopup_input",
-			name: "searchValue",
-			type: "text",
-			// He oui ! cela semble marcher sur tous les browsers ! (meme Gecko !?)		
-			autocomplete: "off"
-		});
-		this._searchInput=input;
-		input._dataGridPopup=this;
-		input.onkeyup=fa_dataGridPopup._SearchSuggest_onkeyup;
 		this._lastValue="";
 		
-		var cwidth=width-2-2;
-		
-		var cheight=height-2-2-inputHeight-2-2;
 		if (pagerHeight) {
 			cheight-=pagerHeight+2+2;
 		}
 		
 		var td=f_core.CreateElement(tBodyContainer, "tr", {
-			height: cheight+4
+			height: cheight
 		}, "td", {
 			align: "left", 
 			valign: "middle" 
 		});									
 		
+		var dataGridStyleClass="fa_dataGridPopup_grid";
+		var ds=f_core.GetAttribute(this, "v:gridStyleClass");
+		if (ds) {
+			dataGridStyleClass+=" "+ds;
+		}
+		
 		dataGrid=f_dataGridPopup.Create(td, 
 			this, 
 			cwidth, 
 			cheight,
-			f_core.GetAttribute(this, "v:gridStyleClass", "fa_dataGridPopup_grid"));
+			dataGridStyleClass);
 		
 		this._dataGrid=dataGrid;
 		
@@ -533,10 +560,17 @@ var __members = {
 			}, "td", {
 				align: "center", 
 				valign: "middle" });
+				
+			var psc="fa_dataGridPopup_pager";
+			var ppsc=f_core.GetAttribute(this, "v:pagerStyleClass");
+			if (ppsc) {
+				psc+=" "+ppsc;
+			}
+				
 			pager=f_pager.Create(td, 
 				this, 
 				":"+dataGrid.id,
-				f_core.GetAttribute(this, "v:pagerStyleClass", "fa_dataGridPopup_pager"));
+				psc);
 			this._pager=pager;			
 		}
 				

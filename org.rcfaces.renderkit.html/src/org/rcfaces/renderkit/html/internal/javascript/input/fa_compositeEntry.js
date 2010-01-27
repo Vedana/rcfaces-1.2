@@ -411,6 +411,18 @@ var __members={
 			input.disabled=disabled;
 		}
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		var inputs=this._inputs;
+		if (!inputs) {
+			return false;
+		}
+
+		return inputs[0];
+	},
 	
 	f_setFocus: function() {
 		var inputs=this._inputs;

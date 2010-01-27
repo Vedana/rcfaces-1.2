@@ -15,9 +15,11 @@
 	position: relative;
 	-moz-box-sizing: border-box;
 	padding: 2px 1px;
+	background-color: white;
 }
 
-.f_comboGrid_disabled {
+.f_comboGrid_disabled,
+.f_comboGrid_disabled_error {
 	border-color: #BBB;
 }
 
@@ -37,7 +39,7 @@
 	background: url("suggestTextEntry/waiting.gif") no-repeat right center;
 }
 
-.f_comboGrid_input_errored {
+.f_comboGrid_input_error {
 	background: #FFFFDD url("comboGrid/warning.gif") no-repeat right center;
 }
 
@@ -69,7 +71,8 @@
 	background-position: -32px 0;
 }
 
-.f_comboGrid_disabled .f_comboGrid_button {
+.f_comboGrid_disabled .f_comboGrid_button,
+.f_comboGrid_disabled_error .f_comboGrid_button {
 	background-position: -48px 0;
 	cursor: default;
 }

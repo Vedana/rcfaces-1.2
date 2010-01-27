@@ -251,7 +251,7 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
 
         Map applicationParamaters = new ApplicationParametersMap(servletContext);
 
-        BasicHierarchicalRepository repository = new JavaScriptRepository(
+        JavaScriptRepository repository = new JavaScriptRepository(
                 mainRepositoryURI, repositoryVersion, applicationParamaters);
         servletContext.setAttribute(REPOSITORY_PROPERTY, repository);
 
@@ -355,6 +355,9 @@ public class JavaScriptRepositoryServlet extends HierarchicalRepositoryServlet {
                     .debug("Repository location '" + repositoryLocation
                             + "' loaded");
         }
+        
+        // Resolve
+        repository.resolveDependencies();
 
         IFile file = null;
         try {

@@ -40,9 +40,22 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         ICalendarDecoderRenderer {
     private static final String REVISION = "$Revision$";
 
-    private static final String DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
+    private static final boolean USE_CSS_IMAGES = true;
 
-    private static final String DATE_CHOOSER_DISABLED_IMAGEURL = "dateChooser/dateChooser_disabled.gif";
+    private static final String DATE_CHOOSER_IMAGEURL;
+
+    private static final String DATE_CHOOSER_DISABLED_IMAGEURL;
+
+    static {
+        if (USE_CSS_IMAGES) {
+            DATE_CHOOSER_IMAGEURL = BLANK_IMAGE_URL;
+            DATE_CHOOSER_DISABLED_IMAGEURL = null;
+
+        } else {
+            DATE_CHOOSER_IMAGEURL = "dateChooser/dateChooser.gif";
+            DATE_CHOOSER_DISABLED_IMAGEURL = "dateChooser/dateChooser_disabled.gif";
+        }
+    }
 
     private static final int DATE_CHOOSER_WIDTH = 16;
 
@@ -96,6 +109,10 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
 
     public IContentAccessor getDateChooserDisabledImageAccessor(
             IHtmlWriter htmlWriter) {
+
+        if (USE_CSS_IMAGES) {
+            return null;
+        }
 
         IHtmlRenderContext htmlRenderContext = htmlWriter
                 .getHtmlComponentRenderContext().getHtmlRenderContext();
@@ -187,6 +204,12 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
                     .getComponentRenderContext();
             DateChooserComponent dateChooserComponent = (DateChooserComponent) componentRenderContext
                     .getComponent();
+
+            
+            String popupStyleClass=dateChooserComponent.getPopupStyleClass(facesContext);
+            if (popupStyleClass!=null) {
+                writer.writeAttribute("v:popupStyleClass", popupStyleClass);
+            }
 
             Calendar componentCalendar = CalendarTools.getCalendar(
                     componentRenderContext.getRenderContext()
@@ -293,7 +316,7 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
         }
 
         protected boolean useImageFilterIfNecessery() {
-            return true;
+            return USE_CSS_IMAGES == false;
         }
 
         protected boolean isCompositeComponent() {

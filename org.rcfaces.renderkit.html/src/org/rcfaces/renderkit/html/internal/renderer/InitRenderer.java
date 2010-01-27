@@ -25,12 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.GeneratedImageInformation;
+import org.rcfaces.core.image.operation.IIEFavoriteIconOperation;
 import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
-import org.rcfaces.core.internal.images.operation.IEFavoriteIconOperation;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -44,9 +44,11 @@ import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.InitComponent;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -436,8 +438,15 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
             }
 
+            String cssCharset = cssConfig.getCharSet();
+            if (cssCharset != null) {
+                htmlWriter.writeCharSet(cssCharset);
+            }
+
+            IClientBrowser clientBrowser = ClientBrowserFactory.Get().get(facesContext);
+
             String styleSheetURI = htmlProcessContext.getStyleSheetURI(
-                    cssConfig.getStyleSheetFileName(), true);
+                    cssConfig.getStyleSheetFileName(clientBrowser), true);
 
             htmlWriter.writeHRef(styleSheetURI);
 
@@ -667,14 +676,14 @@ public class InitRenderer extends AbstractHtmlRenderer {
         }
 
         if (ImageContentAccessorHandler.isOperationSupported(facesContext,
-                IEFavoriteIconOperation.ID, favoriteContentAccessor) == false) {
+                IIEFavoriteIconOperation.ID, favoriteContentAccessor) == false) {
             return;
         }
 
         GeneratedImageInformation generatedFavoriteIcoInformation = new GeneratedImageInformation();
 
         IContentAccessor favoriteIcoContentAccessor = ContentAccessorFactory
-                .createFromWebResource(null, IEFavoriteIconOperation.ID
+                .createFromWebResource(null, IIEFavoriteIconOperation.ID
                         + IContentAccessor.FILTER_SEPARATOR,
                         favoriteContentAccessor);
 

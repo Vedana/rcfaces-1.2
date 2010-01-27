@@ -3,9 +3,10 @@
  */
 package org.rcfaces.renderkit.html.internal;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,15 +35,21 @@ public class CssStyleClasses implements ICssStyleClasses {
     private Collection suffixes;
 
     public CssStyleClasses(String mainStyleClassName, String styleClasses[]) {
+        verifyStyleClass(mainStyleClassName);
+
         this.mainStyleClassName = mainStyleClassName;
 
-        if (styleClasses != null && styleClasses.length > 0) {
-            styleClasseNames = new OrderedSet(Arrays.asList(styleClasses));
+        if (styleClasses != null) {
+            for (int i = 0; i < styleClasses.length; i++) {
+                addStyleClass(styleClasses[i]);
+            }
         }
     }
 
     public CssStyleClasses(String mainStyleClassName,
             String componentStyleClasse) {
+        verifyStyleClass(mainStyleClassName);
+
         this.mainStyleClassName = mainStyleClassName;
 
         if (componentStyleClasse != null) {
@@ -50,12 +57,28 @@ public class CssStyleClasses implements ICssStyleClasses {
         }
     }
 
+    private void verifyStyleClass(String styleClass) {
+        if (styleClass == null) {
+            return;
+        }
+
+        if (styleClass.indexOf(' ') < 0) {
+            return;
+        }
+
+        throw new IllegalArgumentException(
+                "StyleClass can not contains spaces ! (" + styleClass + ")");
+    }
+
     public void addSpecificStyleClass(String styleClass) {
         if (specificStyleClasses == null) {
             specificStyleClasses = new OrderedSet(4);
         }
 
-        specificStyleClasses.add(styleClass);
+        StringTokenizer st = new StringTokenizer(styleClass);
+        for (; st.hasMoreTokens();) {
+            specificStyleClasses.add(st.nextToken());
+        }
     }
 
     public void addStyleClass(String styleClass) {
@@ -67,10 +90,15 @@ public class CssStyleClasses implements ICssStyleClasses {
             }
         }
 
-        styleClasseNames.add(styleClass);
+        StringTokenizer st = new StringTokenizer(styleClass);
+        for (; st.hasMoreTokens();) {
+            styleClasseNames.add(st.nextToken());
+        }
     }
 
     public void addSuffix(String suffixStyleClass) {
+        verifyStyleClass(suffixStyleClass);
+
         if (suffixes == null) {
             suffixes = new OrderedSet(2);
         }
@@ -111,6 +139,8 @@ public class CssStyleClasses implements ICssStyleClasses {
         StringAppender sa = new StringAppender(128);
 
         if (styleClasseNames != null) {
+            // Il y a le mainStyleClass dedans ...
+
             for (Iterator it = styleClasseNames.iterator(); it.hasNext();) {
                 String styleClassName = (String) it.next();
 
@@ -164,6 +194,45 @@ public class CssStyleClasses implements ICssStyleClasses {
                     + styleClasseNames + "' suffixes='" + suffixes
                     + "' specific='" + specificStyleClasses + "' => " + sa
                     + "'.");
+        }
+
+        return sa.toString();
+    }
+
+    public String constructUserStyleClasses() {
+        if (styleClasseNames == null || styleClasseNames.isEmpty()) {
+            return null;
+        }
+
+        Collection os = specificStyleClasses;
+
+        if (mainStyleClassName != null
+                && styleClasseNames.contains(mainStyleClassName)) {
+            os = new OrderedSet(styleClasseNames);
+            os.remove(mainStyleClassName);
+
+            if (os.isEmpty()) {
+                return null;
+            }
+        }
+
+        if (os.size() == 1) {
+            if (os instanceof List) {
+                return (String) ((List) os).get(0);
+            }
+
+            return (String) os.iterator().next();
+        }
+
+        StringAppender sa = new StringAppender(os.size() * 32);
+
+        for (Iterator it = os.iterator(); it.hasNext();) {
+            String styleClassName = (String) it.next();
+
+            if (sa.length() > 0) {
+                sa.append(' ');
+            }
+            sa.append(styleClassName);
         }
 
         return sa.toString();

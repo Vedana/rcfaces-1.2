@@ -21,6 +21,23 @@ if (!window._rcfacesInitLibraryDate) {
 var __SYMBOL=function(x) { return x };
 
 if (window._RCFACES_LEVEL3) {
+	/**
+	 * @dontReplaceInstanceOf
+	 */
+	var _rcfacesIO=function(obj, className, win) {
+		var c1=window[className];
+		if (obj instanceof c1) {
+			return true;
+		}
+
+		c1=win[className];
+		if (obj instanceof c1) {
+			return true;
+		}
+
+		return false;
+	}
+
 	var _rcfacesGW=function(thiz, evt) {
 		var win;
 		if (evt) {

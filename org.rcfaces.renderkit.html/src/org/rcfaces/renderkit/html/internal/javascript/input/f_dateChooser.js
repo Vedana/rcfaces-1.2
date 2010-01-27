@@ -60,6 +60,9 @@ var __members={
 		
 		return this.f_fireEvent(f_event.CHANGE, jsEvent, null, date);
 	},
+	f_calendarPopupClosed: function() {
+		this.f_clearMouseDownState();
+	},
 	f_serialize: function() {
 		var calendarObject=this.f_getCalendarObject();
 		

@@ -36,6 +36,8 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptRenderContext;
+import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.decorator.JavaScriptFilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository;
 import org.rcfaces.renderkit.html.internal.javascript.JavaScriptRepositoryServlet;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
@@ -366,5 +368,11 @@ public class JavaScriptRenderer extends AbstractFilesCollectorRenderer {
     }
 
     public void encodeChildren(FacesContext facesContext, UIComponent component) {
+    }
+
+    protected IComponentDecorator createComponentDecorator(
+            FacesContext facesContext, UIComponent component) {
+
+        return new JavaScriptFilesCollectorDecorator(component);
     }
 }

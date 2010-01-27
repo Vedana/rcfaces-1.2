@@ -1107,7 +1107,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(columnTagName);
 
         if (columnTagName == IHtmlWriter.A) {
-            htmlWriter.writeHRef("javascript:void(0)");
+            htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
 
             UIComponent component = htmlWriter.getComponentRenderContext()
                     .getComponent();

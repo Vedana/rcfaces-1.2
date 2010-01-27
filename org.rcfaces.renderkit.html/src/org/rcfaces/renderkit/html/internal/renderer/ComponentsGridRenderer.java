@@ -201,7 +201,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         int rowCount = encodeChildren(htmlWriter, tableContext, false, false);
-        if (rowCount > 0) {
+        if (rowCount >= 0) {
             componentRenderContext.setAttribute(ROWCOUNT_PROPERTY, new Integer(
                     rowCount));
         }
@@ -958,15 +958,14 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         super.encodeEnd(writer);
     }
 
-
     protected void addUnlockProperties(Set unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("selectedItems");
         unlockedProperties.add("deselectedItems");
-//        unlockedProperties.add("showAdditional");
-//        unlockedProperties.add("hideAdditional");
-//        unlockedProperties.add("cursor");
+        // unlockedProperties.add("showAdditional");
+        // unlockedProperties.add("hideAdditional");
+        // unlockedProperties.add("cursor");
     }
 
     protected void decode(IRequestContext context, UIComponent component,

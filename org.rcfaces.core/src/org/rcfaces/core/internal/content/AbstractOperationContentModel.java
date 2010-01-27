@@ -22,7 +22,6 @@ import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IResourceKeyParticipant;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
-import org.rcfaces.core.internal.images.ImageAdapterFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
@@ -152,7 +151,7 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
         String suffix = generatedInformation.getResponseSuffix();
 
         if (suffix == null && contentType != null) {
-            suffix = ImageAdapterFactory.getSuffixByMimeType(contentType);
+            suffix = ContentAdapterFactory.getSuffixByMimeType(contentType);
 
             generatedInformation.setResponseSuffix(suffix);
         }

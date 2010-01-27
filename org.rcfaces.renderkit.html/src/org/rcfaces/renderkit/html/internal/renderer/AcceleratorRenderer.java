@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.AcceleratorComponent;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
+import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.util.KeyTools;
 import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
@@ -103,8 +104,11 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
 
         FacesContext facesContext = jsWriter.getFacesContext();
 
-        AcceleratorComponent acceleratorComponent = (AcceleratorComponent) jsWriter
-                .getComponentRenderContext().getComponent();
+        IComponentRenderContext componentRenderContext = jsWriter
+                .getComponentRenderContext();
+
+        AcceleratorComponent acceleratorComponent = (AcceleratorComponent) componentRenderContext
+                .getComponent();
 
         String keyBinding = acceleratorComponent.getKeyBinding(facesContext);
 
@@ -151,7 +155,18 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
             for (; param > 0; param--) {
                 jsWriter.write(',').writeNull();
             }
-            jsWriter.write(',').writeString(forComponent);
+
+            // Il faut calculer le for, car l'accelerator n'est plus rattaché à
+            // un composant DOM !
+
+            IRenderContext renderContext = componentRenderContext
+                    .getRenderContext();
+
+            String forComponentClientId = renderContext
+                    .computeBrotherComponentClientId(acceleratorComponent,
+                            forComponent);
+
+            jsWriter.write(',').writeString(forComponentClientId);
 
         } else {
             param++;

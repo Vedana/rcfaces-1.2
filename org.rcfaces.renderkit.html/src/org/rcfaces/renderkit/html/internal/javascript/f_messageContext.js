@@ -105,6 +105,18 @@ var __statics = {
 		var messageContext;
 		if (clientId) {
 			component=f_core.GetElementByClientId(clientId);
+			
+			if (!component) {
+				var pendings=f_messageContext._PendingsMessages;
+				if (!pendings) {
+					pendings=new Array;
+					f_messageContext._PendingsMessages=pendings;
+				}
+				
+				pendings.push(clientId, f_core.PushArguments(null, arguments, 1));
+				return;
+			}
+			
 			messageContext=f_messageContext.Get(component);
 
 		} else {
@@ -133,6 +145,30 @@ var __statics = {
 //		f_core.Debug(f_messageContext, "ListMessages: messages of component '"+component+"': "+messages);
 
 		return messages;	
+	},
+	DocumentComplete: function() {
+		var pendings=f_messageContext._PendingsMessages;
+		if (!pendings) {
+			return;
+		}
+		f_messageContext._PendingsMessages=undefined;
+		
+		for(var i=0;i<pendings.length;) {
+			var clientId=pendings[i++];
+			var messages=pendings[i++];
+			
+			var component=f_core.GetElementByClientId(clientId);
+			if (!component) {
+				f_core.Error("Can not find component '"+clientId+"' to attach "+messages.length+" message(s) !");
+				continue;
+			}
+			
+			var messageContext=f_messageContext.Get(component);			
+					
+			for(var j=0;j<messages.length;j++) {
+				messageContext.f_addMessageObject(component, messages[j]);
+			}			
+		}
 	}
 }
 
@@ -281,7 +317,7 @@ var __members = {
 		f_core.Debug(f_messageContext, "f_removeMessageListener: Remove a new message event listener !");
 
 		if (!l) {
-			return;
+			return undefined;
 		}
 		
 		return l.f_removeElement(listener);

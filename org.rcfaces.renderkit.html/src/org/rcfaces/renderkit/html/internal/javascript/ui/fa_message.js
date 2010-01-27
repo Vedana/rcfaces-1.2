@@ -63,11 +63,18 @@ var __members = {
 		}
 		
 		var styleClass=this.f_getMainStyleClass();
-		
 		this._fatalStyleClass=styleClass+"_fatal";
 		this._errorStyleClass=styleClass+"_error";
 		this._warnStyleClass=styleClass+"_warn";
 		this._infoStyleClass=styleClass+"_info";
+		
+		styleClass=this.f_getStyleClass();
+		if (styleClass) {
+			this._fatalStyleClass+=" "+styleClass+"_fatal";
+			this._errorStyleClass+=" "+styleClass+"_error";
+			this._warnStyleClass+=" "+styleClass+"_warn";
+			this._infoStyleClass+=" "+styleClass+"_info";
+		}
 
 		return false;
 	},

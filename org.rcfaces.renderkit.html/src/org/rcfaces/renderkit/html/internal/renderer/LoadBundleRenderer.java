@@ -55,7 +55,7 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
     private static final boolean DEFAULT_CLIENT_SIDE = true;
 
-    private static final boolean DEFAULT_SERVER_SIDE = false;
+    private static final boolean DEFAULT_SERVER_SIDE = true;
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
@@ -66,14 +66,6 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
 
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
-
-        IClientBundleRepository bundleRepository = ClientResourceBundleServlet
-                .getBundleRepository(facesContext);
-        if (bundleRepository == null) {
-            throw new WriterException(
-                    "Client-Bundle engine is not initialized !", null,
-                    loadClientBundleComponent);
-        }
 
         Locale locale = ContextTools.getUserLocale(facesContext);
 
@@ -92,6 +84,7 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
         if (side == null) {
             serverSide = DEFAULT_SERVER_SIDE;
             clientSide = DEFAULT_CLIENT_SIDE;
+            
         } else {
             StringTokenizer st = new StringTokenizer(side.toLowerCase(), ",");
             for (; st.hasMoreTokens();) {
@@ -146,6 +139,15 @@ public class LoadBundleRenderer extends AbstractHtmlRenderer {
         }
 
         if (clientSide) {
+
+            IClientBundleRepository bundleRepository = ClientResourceBundleServlet
+                    .getBundleRepository(facesContext);
+            if (bundleRepository == null) {
+                throw new WriterException(
+                        "Client-Bundle engine is not initialized !", null,
+                        loadClientBundleComponent);
+            }
+
             JavaScriptRenderer.addRequires(htmlWriter, htmlWriter
                     .getHtmlComponentRenderContext().getHtmlRenderContext()
                     .getJavaScriptRenderContext(), null,

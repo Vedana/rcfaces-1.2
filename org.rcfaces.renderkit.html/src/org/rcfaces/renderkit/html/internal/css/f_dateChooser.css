@@ -11,6 +11,7 @@
  */
  
 .f_dateChooser {
+	-moz-box-sizing: border-box;
 	cursor: pointer;
 	position: relative;
 }
@@ -39,6 +40,14 @@
 	color: #A1A192;
 }
 
+.f_dateChooser IMG.f_dateChooser_image {
+	background: transparent url("dateChooser/dateChooser.gif") center center no-repeat;
+}
+
+.f_dateChooser_disabled IMG.f_dateChooser_image {
+	background: url("dateChooser/dateChooser_disabled.gif");
+}
+
 .f_dateChooser_marker {
 	background: url('imageCombo/popDown.gif') no-repeat 0 0;
 }
@@ -50,6 +59,7 @@
 
 
 .f_dateChooser_popup {
+	-moz-box-sizing: border-box;
 	background-color: white;
 	border: 1px solid #8A867A;
 	position: absolute;
@@ -69,8 +79,10 @@
 	width: 150px;
 }
 
+/*
 .f_dateChooser_popup .f_calendar_cursorMonthLabel {
 	width: 80px;
 }
+*/
 
 

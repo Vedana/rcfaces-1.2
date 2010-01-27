@@ -120,7 +120,7 @@ public class JavaScriptCollectorRenderContext extends
     public void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
         // Ce sont des lazys mais ils n'ont pas besoin d'être initialisés
 
-        //components.add(writer.getComponentRenderContext().getComponentClientId
+        // components.add(writer.getComponentRenderContext().getComponentClientId
         // ());
     }
 
@@ -181,6 +181,11 @@ public class JavaScriptCollectorRenderContext extends
                                     .getJavaScriptEnableMode()).getMode(),
                             null, null));
 
+            if (waitingRequiredClassesNames != null
+                    && waitingRequiredClassesNames.isEmpty() == false) {
+                ((JavaScriptCollectorRenderContext) parent).waitingRequiredClassesNames
+                        .addAll(waitingRequiredClassesNames);
+            }
             return;
         }
 
@@ -823,7 +828,7 @@ public class JavaScriptCollectorRenderContext extends
             htmlWriter.startElement(IHtmlElements.SCRIPT);
             htmlWriter.writeSrc(src);
             if (charSet != null && charSet.length() > 0) {
-                htmlWriter.writeCharset(charSet);
+                htmlWriter.writeCharSet(charSet);
             }
 
             if (htmlProcessContext.useMetaContentScriptType() == false) {

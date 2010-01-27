@@ -191,9 +191,9 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         Set unlockedProperties = null;
 
         if (isLockedClientAttributes()) {
-
             if (component instanceof IUnlockedClientAttributesCapability) {
-                unlockedProperties = filterProperties((IUnlockedClientAttributesCapability) component);
+                unlockedProperties = filterProperties(
+                        (IUnlockedClientAttributesCapability) component, true);
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Filtred properties => '" + properties + "'.");
@@ -203,17 +203,21 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                 unlockedProperties = Collections.EMPTY_SET;
             }
 
-            if (unlockedProperties != null
-                    && (renderer instanceof IDefaultUnlockedPropertiesRenderer)) {
-                String defaultUnlockedProperties[] = ((IDefaultUnlockedPropertiesRenderer) renderer)
-                        .getDefaultUnlockedProperties(getFacesContext(),
-                                component);
-                if (defaultUnlockedProperties != null
-                        && defaultUnlockedProperties.length > 0) {
-                    unlockedProperties = new HashSet(unlockedProperties);
-                    unlockedProperties.addAll(Arrays
-                            .asList(defaultUnlockedProperties));
-                }
+        } else if (component instanceof IUnlockedClientAttributesCapability) {
+            unlockedProperties = filterProperties(
+                    (IUnlockedClientAttributesCapability) component, false);
+
+        }
+
+        if (unlockedProperties != null
+                && (renderer instanceof IDefaultUnlockedPropertiesRenderer)) {
+            String defaultUnlockedProperties[] = ((IDefaultUnlockedPropertiesRenderer) renderer)
+                    .getDefaultUnlockedProperties(getFacesContext(), component);
+            if (defaultUnlockedProperties != null
+                    && defaultUnlockedProperties.length > 0) {
+                unlockedProperties = new HashSet(unlockedProperties);
+                unlockedProperties.addAll(Arrays
+                        .asList(defaultUnlockedProperties));
             }
         }
 
@@ -224,11 +228,21 @@ public class HtmlRequestContext extends AbstractRequestContext implements
         return hcd;
     }
 
-    private Set filterProperties(IUnlockedClientAttributesCapability component) {
+    private Set filterProperties(IUnlockedClientAttributesCapability component,
+            boolean defaultLock) {
         String unlockedAttributes = component.getUnlockedClientAttributeNames();
         if (unlockedAttributes == null) {
+            if (defaultLock) {
+                return Collections.EMPTY_SET;
+            }
+
+            return null;
+        }
+
+        if (defaultLock == false && unlockedAttributes.length() == 0) {
             return Collections.EMPTY_SET;
         }
+
         unlockedAttributes = unlockedAttributes.trim();
         if ("*".equals(unlockedAttributes)) {
             return null;

@@ -117,7 +117,7 @@ var __members = {
 		f_core.Assert(typeof(type)=="string", "f_eventTarget.f_setDomEvent: Type of event is incorrect ! ("+type+")");
 		f_core.Assert(target && target.tagName, "f_eventTarget.f_setDomEvent: Type of target is incorrect ! ("+target+")");
 		
-		f_core.Debug(f_eventTarget, "f_setDomEvent: component '"+this.tagName+"#"+this.id+"' add '"+type+"' callbak (target="+target.tagName+"#"+target.id+")");
+		f_core.Debug(f_eventTarget, "f_setDomEvent: component '"+this.tagName+"#"+this.id+"' add '"+type+"' callback (target="+target.tagName+"#"+target.id+")");
 		
 		var cb=f_eventTarget._Callbacks[type];
 

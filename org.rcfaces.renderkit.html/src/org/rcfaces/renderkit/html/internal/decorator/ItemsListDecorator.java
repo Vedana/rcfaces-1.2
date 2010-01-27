@@ -112,19 +112,41 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
     private String defaultSelectedImageURL;
 
+    private int defaultInputType = DEFAULT_INPUT_TYPE;
+
+    private String defaultItemStyleClass;
+
+    private String defaultItemLookId;
+
+    private String defaultItemGroupName;
+
     /**
      * Constructor
      * 
+     * @param facesContext
+     *            TODO
      * @param component
      *            component ItemsList
      */
-    public ItemsListDecorator(UIComponent component) {
+    public ItemsListDecorator(FacesContext facesContext, UIComponent component) {
         super(component, null);
 
         ItemsListComponent itemsListComponent = (ItemsListComponent) component;
 
+        defaultInputType = itemsListComponent
+                .getDefaultItemInputType(facesContext);
+
+        defaultItemLookId = itemsListComponent
+                .getDefaultItemLookId(facesContext);
+
+        defaultItemStyleClass = itemsListComponent
+                .getDefaultItemStyleClass(facesContext);
+
+        defaultItemGroupName = itemsListComponent
+                .getDefaultItemGroupName(facesContext);
+
         if (itemsListComponent.isBorderTypeSetted()) {
-            borderType = itemsListComponent.getBorderType();
+            borderType = itemsListComponent.getBorderType(facesContext);
 
         } else {
             borderType = null;
@@ -133,28 +155,30 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         if (itemsListComponent.isItemPaddingSetted()) {
             itemPaddingSetted = true;
 
-            itemPadding = itemsListComponent.getItemPadding();
+            itemPadding = itemsListComponent.getItemPadding(facesContext);
         }
 
         if (itemsListComponent.isDefaultImageURLSetted()) {
-            defaultImageURL = itemsListComponent.getDefaultImageURL();
+            defaultImageURL = itemsListComponent
+                    .getDefaultImageURL(facesContext);
         } else {
             defaultImageURL = null;
         }
         if (itemsListComponent.isDefaultDisabledImageURLSetted()) {
             defaultDisabledImageURL = itemsListComponent
-                    .getDefaultDisabledImageURL();
+                    .getDefaultDisabledImageURL(facesContext);
         } else {
             defaultDisabledImageURL = null;
         }
         if (itemsListComponent.isDefaultHoverImageURLSetted()) {
-            defaultHoverImageURL = itemsListComponent.getDefaultHoverImageURL();
+            defaultHoverImageURL = itemsListComponent
+                    .getDefaultHoverImageURL(facesContext);
         } else {
             defaultHoverImageURL = null;
         }
         if (itemsListComponent.isDefaultSelectedImageURLSetted()) {
             defaultSelectedImageURL = itemsListComponent
-                    .getDefaultSelectedImageURL();
+                    .getDefaultSelectedImageURL(facesContext);
         } else {
             defaultSelectedImageURL = null;
         }
@@ -208,8 +232,9 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter#encodeNodeEnd(javax.faces.component.UIComponent,
-     *      javax.faces.model.SelectItem, boolean, boolean)
+     * @seeorg.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter#
+     * encodeNodeEnd(javax.faces.component.UIComponent,
+     * javax.faces.model.SelectItem, boolean, boolean)
      */
     public void encodeNodeEnd(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
@@ -290,7 +315,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
                     inputType = IInputTypeCapability.AS_DROP_DOWN_MENU;
 
                 } else {
-                    inputType = DEFAULT_INPUT_TYPE;
+                    inputType = defaultInputType;
                 }
             }
 
@@ -360,8 +385,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
 
             /*
              * if (selectItem instanceof IStyleClassItem) { String styleClass =
-             * ((IStyleClassItem) selectItem) .getStyleClass(); if (styleClass !=
-             * null) { javaScriptWriter.write(',').writeSymbol("_styleClass")
+             * ((IStyleClassItem) selectItem) .getStyleClass(); if (styleClass
+             * != null) { javaScriptWriter.write(',').writeSymbol("_styleClass")
              * .write(':').writeString(styleClass); } }
              */
 
@@ -478,7 +503,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
                 style = IInputTypeCapability.AS_DROP_DOWN_MENU;
 
             } else {
-                style = DEFAULT_INPUT_TYPE;
+                style = defaultInputType;
             }
         }
 
@@ -487,6 +512,12 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         switch (style) {
         case IInputTypeCapability.AS_RADIO_BUTTON:
             itemComponent = new ImageRadioButtonComponent(itemId);
+
+            if (defaultItemGroupName != null) {
+                ((ImageRadioButtonComponent) itemComponent)
+                        .setGroupName(defaultItemGroupName);
+            }
+
             break;
 
         case IInputTypeCapability.AS_CHECK_BUTTON:
@@ -594,22 +625,36 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
             ((IDisabledCapability) itemComponent).setDisabled(true);
         }
 
-        if (selectItem instanceof ILookAndFeelItem) {
-            ILookAndFeelItem lookIdItem = (ILookAndFeelItem) selectItem;
+        if (itemComponent instanceof ILookAndFeelCapability) {
+            String lookId = null;
 
-            String lookId = lookIdItem.getLookId();
-            if (lookId != null
-                    && (itemComponent instanceof ILookAndFeelCapability)) {
+            if (selectItem instanceof ILookAndFeelItem) {
+                ILookAndFeelItem lookIdItem = (ILookAndFeelItem) selectItem;
+
+                lookId = lookIdItem.getLookId();
+            }
+
+            if (lookId == null) {
+                lookId = defaultItemLookId;
+            }
+
+            if (lookId != null) {
                 ((ILookAndFeelCapability) itemComponent).setLookId(lookId);
             }
         }
 
-        if (selectItem instanceof IStyleClassItem) {
-            IStyleClassItem lookIdItem = (IStyleClassItem) selectItem;
+        if (itemComponent instanceof IStyleClassCapability) {
+            String cssClass = null;
+            if (selectItem instanceof IStyleClassItem) {
+                IStyleClassItem lookIdItem = (IStyleClassItem) selectItem;
 
-            String cssClass = lookIdItem.getStyleClass();
-            if (cssClass != null
-                    && (itemComponent instanceof IStyleClassCapability)) {
+                cssClass = lookIdItem.getStyleClass();
+            }
+            if (cssClass == null) {
+                cssClass = defaultItemStyleClass;
+            }
+
+            if (cssClass != null) {
                 ((IStyleClassCapability) itemComponent).setStyleClass(cssClass);
             }
         }
@@ -778,8 +823,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        htmlWriter.startElement(IHtmlWriter.TR);
-        htmlWriter.startElement(IHtmlWriter.TD);
+        htmlWriter.startElement(IHtmlWriter.LI);
         htmlWriter.writeClass("f_itemsList_item");
 
         if (itemPaddingSetted && itemPadding >= 0) {
@@ -811,8 +855,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
             children.remove(itemComponent);
         }
 
-        htmlWriter.endElement(IHtmlWriter.TD);
-        htmlWriter.endElement(IHtmlWriter.TR);
+        htmlWriter.endElement(IHtmlWriter.LI);
 
         postEncodeItem(renderer, component, itemComponent, itemId);
     }
@@ -930,7 +973,9 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.IWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.IWriter)
      */
     protected SelectItemsContext createHtmlContext() {
         IComponentRenderContext componentRenderContext = htmlWriter
@@ -946,7 +991,9 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext(org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
+     * @see
+     * org.rcfaces.core.internal.renderkit.html.SelectItemsRenderer#createContext
+     * (org.rcfaces.core.internal.renderkit.html.IJavaScriptWriter)
      */
     protected SelectItemsContext createJavaScriptContext() {
 
@@ -963,8 +1010,10 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(javax.faces.component.UIComponent,
-     *      org.rcfaces.core.internal.renderkit.IComponentData)
+     * @see
+     * org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#decode(javax
+     * .faces.component.UIComponent,
+     * org.rcfaces.core.internal.renderkit.IComponentData)
      */
     public void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
@@ -1043,7 +1092,9 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.renderkit.html.internal.decorator.AbstractSelectItemsDecorator#convertToSelectItem(java.lang.Object)
+     * @see
+     * org.rcfaces.renderkit.html.internal.decorator.AbstractSelectItemsDecorator
+     * #convertToSelectItem(java.lang.Object)
      */
     protected SelectItem convertToSelectItem(Object value) {
         if (value instanceof IToolItem) {

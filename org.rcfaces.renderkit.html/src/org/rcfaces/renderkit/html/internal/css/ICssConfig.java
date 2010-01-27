@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal.css;
 
+import org.rcfaces.renderkit.html.internal.IClientBrowser;
+
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -13,6 +15,8 @@ public interface ICssConfig {
 
     String getDefaultStyleSheetURI();
 
-    String getStyleSheetFileName();
+    String getStyleSheetFileName(IClientBrowser clientBrowser);
+
+    String getCharSet();
 
 }

@@ -219,6 +219,9 @@ public final class StringAppender implements CharSequence {
     }
 
     public String toString() {
+        if (count == 0) {
+            return "";
+        }
         return new String(value, 0, count);
     }
 

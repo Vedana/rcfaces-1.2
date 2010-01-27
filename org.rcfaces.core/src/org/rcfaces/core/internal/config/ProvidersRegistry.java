@@ -331,13 +331,13 @@ public class ProvidersRegistry implements IProvidersRegistry {
 
                     LOG.debug("Start provider '" + providerId + "' done");
 
-                } catch (RuntimeException ex) {
+                } catch (Throwable ex) {
                     it.remove();
 
                     LOG.error("Exception when starting up provider '"
-                            + providerId + "'", ex);
+                            + providerId + "', remove it !", ex);
 
-                    throw ex;
+                    // throw ex;
                 }
             }
         }

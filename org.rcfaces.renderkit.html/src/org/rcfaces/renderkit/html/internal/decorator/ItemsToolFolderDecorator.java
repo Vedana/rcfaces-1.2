@@ -471,7 +471,12 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     private void encodeToolItemBegin(UIComponent component,
             SelectItem selectItem, boolean hasChild) throws WriterException {
 
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
+
         ToolBarContext toolBarContext = getToolBarContext();
+
+        ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) getComponent();
 
         Object selectItemValue = selectItem.getValue();
 
@@ -559,8 +564,6 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
 
         if (selectItem instanceof IVisibleItem) {
-            ItemsToolFolderComponent itemsToolFolderComponent = (ItemsToolFolderComponent) getComponent();
-
             int hiddenMode = IHiddenModeCapability.IGNORE_HIDDEN_MODE;
 
             if (itemComponent instanceof IHiddenModeCapability) {
@@ -625,22 +628,40 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             ((IDisabledCapability) itemComponent).setDisabled(true);
         }
 
-        if (selectItem instanceof ILookAndFeelItem) {
-            ILookAndFeelItem lookIdItem = (ILookAndFeelItem) selectItem;
+        if (itemComponent instanceof ILookAndFeelCapability) {
+            String lookId = null;
 
-            String lookId = lookIdItem.getLookId();
-            if (lookId != null
-                    && (itemComponent instanceof ILookAndFeelCapability)) {
+            if (selectItem instanceof ILookAndFeelItem) {
+                ILookAndFeelItem lookIdItem = (ILookAndFeelItem) selectItem;
+
+                lookId = lookIdItem.getLookId();
+            }
+
+            if (lookId == null) {
+                lookId = itemsToolFolderComponent
+                        .getDefaultItemLookId(facesContext);
+            }
+
+            if (lookId != null) {
                 ((ILookAndFeelCapability) itemComponent).setLookId(lookId);
             }
         }
 
-        if (selectItem instanceof IStyleClassItem) {
-            IStyleClassItem lookIdItem = (IStyleClassItem) selectItem;
+        if (itemComponent instanceof IStyleClassCapability) {
+            String cssClass = null;
 
-            String cssClass = lookIdItem.getStyleClass();
-            if (cssClass != null
-                    && (itemComponent instanceof IStyleClassCapability)) {
+            if (selectItem instanceof IStyleClassItem) {
+                IStyleClassItem lookIdItem = (IStyleClassItem) selectItem;
+
+                cssClass = lookIdItem.getStyleClass();
+            }
+
+            if (cssClass == null) {
+                cssClass = itemsToolFolderComponent
+                        .getDefaultItemStyleClass(facesContext);
+            }
+
+            if (cssClass != null) {
                 ((IStyleClassCapability) itemComponent).setStyleClass(cssClass);
             }
         }
@@ -761,9 +782,6 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
             ((IShowDropDownMarkCapability) itemComponent)
                     .setShowDropDownMark(showDropDownMark);
         }
-
-        FacesContext facesContext = htmlWriter.getComponentRenderContext()
-                .getFacesContext();
 
         Renderer renderer = getRenderer(facesContext, itemComponent);
         if (renderer == null) {

@@ -271,7 +271,7 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
             return clientBrowser;
         }
 
-        clientBrowser = ClientBrowserImpl.get(getFacesContext());
+        clientBrowser = ClientBrowserFactory.Get().get(getFacesContext());
 
         return clientBrowser;
     }

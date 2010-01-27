@@ -28,9 +28,12 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
 
     /**
      * surrounding for the decorator
-     * @param writer writer
-     * @param componentDecorator decorator
-     * @throws WriterException 
+     * 
+     * @param writer
+     *            writer
+     * @param componentDecorator
+     *            decorator
+     * @throws WriterException
      */
     protected void encodeBeforeDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
@@ -57,21 +60,23 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
             writer.writeAttribute("v:readOnly", true);
         }
 
-        writer.startElement(IHtmlWriter.TABLE);
-        writer.startElement(IHtmlWriter.TBODY);
+        writer.startElement(IHtmlWriter.UL);
+        writer.writeClass("f_itemsList_container");
     }
 
     /**
      * surrounding for the decorator
-     * @param writer writer
-     * @param componentDecorator decorator
-     * @throws WriterException 
+     * 
+     * @param writer
+     *            writer
+     * @param componentDecorator
+     *            decorator
+     * @throws WriterException
      */
     protected void encodeAfterDecorator(IHtmlWriter writer,
             IComponentDecorator componentDecorator) throws WriterException {
 
-        writer.endElement(IHtmlWriter.TBODY);
-        writer.endElement(IHtmlWriter.TABLE);
+        writer.endElement(IHtmlWriter.UL);
         writer.endElement(IHtmlWriter.DIV);
 
         super.encodeAfterDecorator(writer, componentDecorator);
@@ -80,7 +85,8 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#getJavaScriptClassName()
+     * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
+     * getJavaScriptClassName()
      */
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.ITEMS_LIST;
@@ -89,7 +95,8 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#getDecodesChildren()
+     * @seeorg.rcfaces.core.internal.renderkit.AbstractCameliaRenderer#
+     * getDecodesChildren()
      */
     public boolean getDecodesChildren() {
         return true;
@@ -97,9 +104,13 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
 
     /**
      * back from the client
-     * @param context context
-     * @param component component
-     * @param componentData componentData
+     * 
+     * @param context
+     *            context
+     * @param component
+     *            component
+     * @param componentData
+     *            componentData
      */
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
@@ -108,12 +119,15 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
 
     /**
      * Creates the decorator
-     * @param facesContext facesContext
-     * @param component component
+     * 
+     * @param facesContext
+     *            facesContext
+     * @param component
+     *            component
      */
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
-        return new ItemsListDecorator(component);
+        return new ItemsListDecorator(facesContext, component);
     }
-    
+
 }

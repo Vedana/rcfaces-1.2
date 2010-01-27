@@ -4,11 +4,13 @@
  */
 package org.rcfaces.core.internal.taglib;
 
+import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.capability.IRCFacesComponent;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -94,6 +96,15 @@ public abstract class CameliaTag extends UIComponentELTag {
 
             throw ex;
         }
+    }
+
+    protected void setProperties(UIComponent component) {
+
+        if (hasBinding()) {
+            ((IRCFacesComponent) component).clearListeners();
+        }
+
+        super.setProperties(component);
     }
 
 }

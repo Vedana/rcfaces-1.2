@@ -105,6 +105,9 @@ var __members = {
 	 *		},
 	 *		onLoad: function(httpObject, content, contentType) {
 	 *			alert("onLoad");
+	 *		},
+	 *		onAbort: function(httpObject, content, contentType) {
+	 *			alert("onAbort");
 	 *		}
 	 * 	}
 	 * </pre>
@@ -237,6 +240,8 @@ var __members = {
 	 * @return void
 	 */
 	f_cancelRequest: function() {
+		f_core.Debug(f_httpRequest, "f_cancelRequest: Cancel request");
+
 		var request=this._request;
 		if (request) {
 			this._request = undefined;
@@ -260,7 +265,21 @@ var __members = {
 			}
 			*/
 		}
-				
+		
+		if (this._initialized) {		
+			var onAbort=this._listener.onAbort;
+			if (onAbort) {
+				f_core.Debug(f_httpRequest, "f_cancelRequest: Call onAbort callback");
+
+				try {
+					onAbort.call(this, this);
+
+				} catch (ex) {
+					f_core.Error(f_httpRequest, "f_cancelRequest: Exception when calling onAbort for url="+this._url+".\n"+onAbort,ex);
+				}
+			}
+		}
+		
 		this._responseContentType = undefined;
 		this._response = undefined;
 		this._responseXML = undefined;

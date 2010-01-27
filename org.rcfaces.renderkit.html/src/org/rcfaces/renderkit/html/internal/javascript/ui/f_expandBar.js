@@ -94,20 +94,27 @@ var __members = {
 
 		var doc=this.ownerDocument;
 
+		var userExpandable=f_core.GetBooleanAttribute(this, "v:userExpandable", true);
+
 		var txt=null;
 		var head=doc.getElementById(this.id+f_expandBar._HEAD_ID_SUFFIX);
 		if (head) {
 			this._head=head;
 			head._link=this;
 			
-			head.onmouseover=f_expandBar._OnHeadOver;
-			head.onmouseout=f_expandBar._OnHeadOut;
-		
+			if (userExpandable) {
+				head.onmouseover=f_expandBar._OnHeadOver;
+				head.onmouseout=f_expandBar._OnHeadOut;
+			}
+					
 			var text=doc.getElementById(this.id+f_expandBar._LABEL_ID_SUFFIX);
 			if (text) {
 				this._text=text;
 				text._link=this;
-				text.onclick=f_expandBar._OnHeadClick;
+				
+				if (userExpandable) {
+					text.onclick=f_expandBar._OnHeadClick;
+				}
 				
 				txt=f_core.GetTextNode(text, true);
 				if (txt) {
@@ -133,7 +140,9 @@ var __members = {
 			this.f_addToGroup(groupName, this);
 		}
 	
-		this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
+		if (userExpandable) {
+			this.f_insertEventListenerFirst(f_event.SELECTION, this._onSelect);
+		}
 	},
 	f_finalize: function() {
 		// this._normalText=undefined; // String

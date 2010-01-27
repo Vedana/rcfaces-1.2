@@ -1,4 +1,62 @@
 
+
+----------------------------------------------------------------------
+- @version I2553
+- @author Olivier Oeuillot
+- 17/12/2009
+
+Traitement des images:
+Refonte du système de traitement d'image pour ne plus utilisé les classes AWT/SWING. (Pour Google App Engine)
+Génération d'un JAR indépendant pour le traitement des images AWT
+Génération d'un JAR indépendant pour le traitement des images sous Google App Engine.
+
+ClientValueChangeEvent:
+Possibilité de traiter un evenement si une client-value a changé
+
+User agent pour CSS/JavaScript:
+Possibilité de spécifier des fichiers CSS/Javascript pour un agent particulier
+
+CssStyles:
+Possibilité de fusionner des CSS grace au <vh:cssStyleItem>
+
+HTMLBorderRenderer:
+Possibilité de spécifier des facets pour les bords SUD et NORD.
+
+Grid.js:
+Support du HOVER des lignes
+
+Composants Javascript:  (f_getFocusableElement)
+Ajout d'une propriété pour spécifier si le composant traite le focus ou pas.
+Correction de l'initialisation compoletes des composants par la fonction  classLoader.f_init(x)
+ 
+f_dateFormat.js:
+Correction d'un problème de test de validité de date
+
+RadioButtons:
+Si le groupName commence par ':', le nom du groupe n'est pas préfixé  par le clientId du parent.
+
+----------------------------------------------------------------------
+- @version I2552
+- @author Olivier Oeuillot
+- 15/4/2009
+
+f_divShellDecorator.js/f_frameShellDecorator.js/f_shell.js/f_shellDecorator.js/f_shellManager.js/f_waiting_shell.js:
+Ajout d'un support des "shells" avec un <DIV> plutot qu'un <IFRAME>: cela à l'avantage d'être beaucou plus rapide, mais avec de potentiels problèmes de focus.
+
+f_core.js:
+Renomme _PostSubmit() en _PerformPostSubmit()
+
+f_clientValidator.js:
+Support de la touche CTRL+? sous firefox
+
+----------------------------------------------------------------------
+- @version I2551
+- @author Olivier Oeuillot
+- 15/4/2009
+
+f_component.js:
+Correction du générateur du visuel d'un "accesKey"
+
 ----------------------------------------------------------------------
 - @version I2550
 - @author Olivier Oeuillot

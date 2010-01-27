@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentStorage.GZipedResolvedContent;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
-import org.rcfaces.core.internal.images.Constants;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
 import org.rcfaces.core.internal.resource.IResourceLoaderFactory.IResourceLoader;
@@ -128,6 +127,13 @@ public abstract class AbstractBufferOperationContentModel extends
 
         String downloadedContentType = resourceLoader.getContentType();
 
+        if (downloadedContentType != null) {
+            int idx = downloadedContentType.indexOf(';');
+            if (idx > 0) {
+                downloadedContentType = downloadedContentType.substring(0, idx);
+            }
+        }
+
         if (downloadedContentType == null
                 || isMimeTypeValid(downloadedContentType) == false) {
             LOG.error("Different content types requested='"
@@ -189,6 +195,7 @@ public abstract class AbstractBufferOperationContentModel extends
             return new String(buffer, charSet);
 
         } catch (IOException ex) {
+            LOG.error("Can not make buffer", ex);
             return null;
 
         } finally {

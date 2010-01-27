@@ -4,6 +4,7 @@
 
 package org.rcfaces.renderkit.html.internal.css;
 
+import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
@@ -21,18 +23,27 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Globals;
+import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.SourceFilter;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.repository.SourceContainer.IParameterizedContent;
 import org.rcfaces.core.internal.util.ServletTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.internal.webapp.ExpirationDate;
 import org.rcfaces.core.internal.webapp.URIParameters;
+import org.rcfaces.renderkit.html.internal.ClientBrowserFactory;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlModulesServlet;
+import org.rcfaces.renderkit.html.internal.IClientBrowser;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
+import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -45,10 +56,14 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private static final Log LOG = LogFactory.getLog(StylesheetsServlet.class);
 
-    private static final String BASE_DIRECTORY = StylesheetsServlet.class
-            .getPackage().getName().replace('.', '/') + '/';
+    // private static final String BASE_DIRECTORY =
+    // StylesheetsServlet.class.getPackage().getName().replace('.', '/') + '/';
 
     static final String CAMELIA_CSS_URL = "rcfaces.css";
+
+    static final String CAMELIA_CSS_PREFIX = "rcfaces";
+
+    static final String CAMELIA_CSS_SUFFIX = ".css";
 
     private final int MAX_404_RESPONSE = 64;
 
@@ -94,6 +109,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             .getPackagePrefix()
             + ".CSS_CHARSET";
 
+    private static final String DEFAULT_MODULE_NAME = "core";
+
     private final Map bufferedResponse = new HashMap(1024);
 
     private String styleSheetURI;
@@ -104,11 +121,11 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
     private boolean noCache = false;
 
-    private StyleSheetSourceContainer repository;
+    private final Map moduleRepositories = new HashMap(8);
 
-    private Object useMetaContentStyleType;
+    // private Object useMetaContentStyleType;
 
-    private String repositoryVersion;
+    // private String repositoryVersion;
 
     private String charset;
 
@@ -116,6 +133,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     public StylesheetsServlet(String styleSheetURI) {
+        this();
         this.styleSheetURI = styleSheetURI;
     }
 
@@ -149,32 +167,236 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     + "\"  for sevlet '" + getServletName() + "'");
         }
 
-        if (getServletContext().getAttribute(CSS_CONFIG_PROPERTY) == null) {
-            String fileName = CAMELIA_CSS_URL;
-            String version = getRepository().getVersion();
-            if (version != null) {
-                URIParameters up = new URIParameters(fileName);
+        String repositoriesPaths[] = RcfacesContext.getInstance(
+                getServletContext(), null, null).getRepositoryManager()
+                .listRepositoryLocations("css");
 
-                // up.appendVersion(version);
+        for (int i = 0; i < repositoriesPaths.length; i++) {
+            loadRepository(repositoriesPaths[i]);
+        }
+    }
 
-                fileName = up.computeParametredURI();
+    private void loadRepository(String repositoryPath) throws ServletException {
+
+        final Set modules = new HashSet();
+
+        Digester digester = new Digester();
+        digester.setUseContextClassLoader(true);
+
+        digester.setEntityResolver(new EntityResolver() {
+            private static final String REVISION = "$Revision$";
+
+            public InputSource resolveEntity(String string, String string1) {
+                return new InputSource(new CharArrayReader(new char[0]));
             }
 
-            String uri = styleSheetURI;
+        });
 
-            if (Constants.VERSIONED_FRAMEWORK_URL_SUPPORT) {
-                if (version != null) {
-                    uri += "/" + version;
+        final String[] baseDirectoryRef = new String[1];
+
+        final Set modulesHasAgentVary = new HashSet();
+
+        digester.addRule("repository", new Rule() {
+
+            public void begin(String namespace, String name,
+                    Attributes attributes) {
+
+                String baseDirectory = attributes.getValue("baseDirectory");
+
+                if (baseDirectory != null && baseDirectory.length() > 0) {
+                    baseDirectoryRef[0] = baseDirectory;
+                }
+            }
+        });
+
+        digester.addRule("repository/module", new Rule() {
+
+            private String currentModule;
+
+            public void begin(String namespace, String name,
+                    Attributes attributes) {
+
+                String id = attributes.getValue("id");
+
+                if (id != null) {
+                    modules.add(id);
+
+                    currentModule = id;
+                    getDigester().push(currentModule);
                 }
             }
 
-            getServletContext().setAttribute(CSS_CONFIG_PROPERTY,
-                    new CssConfig(fileName, uri));
+            public void end(String namespace, String name) throws Exception {
+                super.end(namespace, name);
+
+                if (currentModule != null) {
+                    currentModule = null;
+
+                    getDigester().pop();
+                }
+            }
+
+        });
+
+        digester.addRule("repository/module/file", new Rule() {
+
+            public void begin(String namespace, String name,
+                    Attributes attributes) {
+
+                if (attributes.getIndex("userAgent") >= 0) {
+                    String currentModel = (String) getDigester().peek();
+
+                    if (currentModel != null) {
+                        modulesHasAgentVary.add(currentModel);
+                    }
+                }
+            }
+        });
+
+        URL url = getClass().getClassLoader().getResource(repositoryPath);
+        if (url == null) {
+            LOG.error("Can not get URL for path '" + repositoryPath + "'.",
+                    null);
+            return;
         }
 
-        StyleSheetSourceContainer r = getRepository();
+        URLConnection urlConnection;
+        try {
+            urlConnection = url.openConnection();
+
+        } catch (IOException ex) {
+            LOG.error("Can not get content of '" + repositoryPath + "'.", ex);
+
+            return;
+        }
+
+        long lastModified = urlConnection.getLastModified();
+
+        InputStream ins;
+        try {
+            ins = urlConnection.getInputStream();
+
+        } catch (IOException ex) {
+            LOG.error("Can not get content of '" + repositoryPath + "'.", ex);
+
+            return;
+        }
+
+        try {
+            digester.parse(ins);
+
+        } catch (Exception ex) {
+            LOG.error("Can not parse XML file '" + repositoryPath + "'", ex);
+            return;
+
+        } finally {
+            try {
+                ins.close();
+
+            } catch (Exception ex) {
+                LOG.error("Can not close stream", ex);
+            }
+        }
+
+        String baseURL = baseDirectoryRef[0];
+
+        for (Iterator it = modules.iterator(); it.hasNext();) {
+            String moduleName = (String) it.next();
+
+            if (Constants.RESOURCES_MODULE_URL_SUPPORT == false) {
+                if (DEFAULT_MODULE_NAME.equals(moduleName) == false) {
+                    throw new ServletException(
+                            "RESOURCES_MODULE_URL_SUPPORT must be enabled if the module name is not '"
+                                    + DEFAULT_MODULE_NAME + "'.");
+                }
+            }
+
+            if (moduleRepositories.containsKey(moduleName)) {
+                // throw new
+                // ServletException("Several modules defined in different files (name='"
+                // + moduleName + "')");
+                it.remove();
+                continue;
+            }
+        }
+
+        if (modules.isEmpty()) {
+            return;
+        }
+
+        StyleSheetSourceContainer styleSheetSourceContainer = createStyleSheetRepository(modules);
+
+        String repositoryVersionSupport = getParameter(REPOSITORY_VERSION_SUPPORT_PARAMETER);
+
+        for (Iterator it = modules.iterator(); it.hasNext();) {
+            String moduleName = (String) it.next();
+
+            String configurationVersion = null;
+            if ("false".equalsIgnoreCase(repositoryVersionSupport) == false) {
+                configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER
+                        + "." + moduleName);
+                if (configurationVersion == null) {
+                    configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
+                }
+
+                if (configurationVersion == null) {
+                    if (DEFAULT_MODULE_NAME.equals(moduleName)) {
+                        configurationVersion = Constants.getBuildId();
+                    }
+                }
+
+                if (configurationVersion == null && lastModified > 0) {
+                    configurationVersion = "." + lastModified;
+                }
+
+                LOG.info("Set module '" + moduleName + "' version to '"
+                        + configurationVersion + "' for servlet '"
+                        + getServletName() + "'.");
+            }
+
+            ModuleRepository moduleRepository = new ModuleRepository(
+                    styleSheetSourceContainer, baseURL, configurationVersion,
+                    modules);
+
+            moduleRepositories.put(moduleName, moduleRepository);
+
+            String propertyName = CSS_CONFIG_PROPERTY + "." + moduleName;
+
+            if (getServletContext().getAttribute(propertyName) == null) {
+                String fileName = CAMELIA_CSS_URL;
+                String version = moduleRepository.getVersion();
+                if (version != null) {
+                    URIParameters up = new URIParameters(fileName);
+
+                    // up.appendVersion(version);
+
+                    fileName = up.computeParametredURI();
+                }
+
+                String uri = styleSheetURI;
+
+                if (Constants.RESOURCES_MODULE_URL_SUPPORT) {
+                    if (moduleName != null) {
+                        uri += "/" + moduleName;
+                    }
+                }
+
+                if (Constants.VERSIONED_FRAMEWORK_URL_SUPPORT) {
+                    if (version != null) {
+                        uri += "/" + version;
+                    }
+                }
+
+                getServletContext().setAttribute(
+                        propertyName,
+                        new CssConfig(fileName, uri, styleSheetSourceContainer
+                                .getCharSet(), modulesHasAgentVary
+                                .contains(moduleName)));
+            }
+        }
+
         if (noCache == false) {
-            r.getRawBuffer();
+            styleSheetSourceContainer.getDefaultContent().getRawBuffer();
         }
     }
 
@@ -183,73 +405,59 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     }
 
     public static ICssConfig getConfig(IHtmlProcessContext htmlExternalContext) {
+        return getConfig(htmlExternalContext, DEFAULT_MODULE_NAME);
+    }
+
+    public static ICssConfig getConfig(IHtmlProcessContext htmlExternalContext,
+            String moduleName) {
         ICssConfig cssConfig = (ICssConfig) htmlExternalContext
                 .getFacesContext().getExternalContext().getApplicationMap()
-                .get(CSS_CONFIG_PROPERTY);
+                .get(CSS_CONFIG_PROPERTY + "." + moduleName);
 
         if (cssConfig == null) {
             throw new FacesException(
-                    "No initialized stylesheet config ! (You have forgotten the RCFaces servlet, or its startup has failed !)");
+                    "No initialized config for stylesheet module '"
+                            + moduleName
+                            + "' ! (You have forgotten the RCFaces servlet, or its startup has failed !)");
         }
 
         return cssConfig;
     }
 
-    private StyleSheetSourceContainer getRepository() throws ServletException {
-        synchronized (this) {
-            if (repository != null) {
-                return repository;
-            }
-
-            StyleSheetSourceContainer r = createStyleSheetRepository();
-            if (r == null) {
-                throw new ServletException("Can not load Stylesheet files ...");
-            }
-
-            if (noCache == false) {
-                this.repository = r;
-
-            } else {
-                LOG.debug("'noCache' is enable, ignore new repository !");
-            }
-
-            return r;
-        }
-    }
-
-    private StyleSheetSourceContainer createStyleSheetRepository()
+    private StyleSheetSourceContainer getRepository(String moduleName)
             throws ServletException {
 
-        String repositoryVersionSupport = getParameter(REPOSITORY_VERSION_SUPPORT_PARAMETER);
-        if ("false".equalsIgnoreCase(repositoryVersionSupport) == false) {
-            String buildId = Constants.getBuildId();
-
-            if (buildId == null) {
-                throw new FacesException(
-                        "Can not enable \"Repository version\", camelia buildId is not detected !");
-            }
-
-            String configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
-            if (configurationVersion != null) {
-                buildId += "." + configurationVersion;
-            }
-
-            repositoryVersion = buildId;
-
-            LOG.info("Set repository version to buildId='" + buildId
-                    + "' for servlet '" + getServletName() + "'.");
+        ModuleRepository mr = (ModuleRepository) moduleRepositories
+                .get(moduleName);
+        if (mr == null) {
+            throw new ServletException("Invalid module '" + moduleName + "'.");
         }
 
-        return new StyleSheetSourceContainer(getServletConfig(), getModules(),
+        if (noCache) {
+            LOG.debug("'noCache' is enable, ignore new repository !");
+
+            return createStyleSheetRepository(mr.listModules());
+        }
+
+        return mr.getStyleSheetRepository();
+    }
+
+    private StyleSheetSourceContainer createStyleSheetRepository(Set modules)
+            throws ServletException {
+
+        /* Pas de version au niveau du container ! */
+
+        return new StyleSheetSourceContainer(getServletConfig(), modules,
                 getCharset(), hasGZipSupport(), hasEtagSupport(),
-                hasHashSupport(), repositoryVersion);
+                hasHashSupport(), null);
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse)
+     * @see
+     * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
+     * , javax.servlet.http.HttpServletResponse)
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -296,7 +504,32 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                     + "'.");
         }
 
-        if (repositoryVersion != null) {
+        String moduleName = DEFAULT_MODULE_NAME;
+
+        if (Constants.RESOURCES_MODULE_URL_SUPPORT) {
+            idx = url.indexOf('/');
+            if (idx < 0) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            moduleName = url.substring(0, idx);
+            url = url.substring(idx + 1);
+        }
+
+        ModuleRepository moduleRepository = (ModuleRepository) moduleRepositories
+                .get(moduleName);
+
+        if (moduleRepository == null) {
+            LOG.error("Unknown module ! (moduleName='" + moduleName + "')");
+
+            setNoCache(response);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Unknown module '" + moduleName + "'");
+            return;
+        }
+
+        if (moduleRepository.getVersion() != null) {
             String version = null;
             if (Constants.VERSIONED_FRAMEWORK_URL_SUPPORT) {
                 idx = url.indexOf('/');
@@ -317,7 +550,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             if (version != null) {
-                String repositoryVersion = getRepository().getVersion();
+                String repositoryVersion = moduleRepository.getVersion();
                 if (repositoryVersion != null) {
                     if (repositoryVersion.equals(version) == false) {
                         LOG.error("Not same repository version ! (current="
@@ -333,14 +566,16 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
         }
 
+        String resourceKey = moduleName + "/" + url;
+
         Response res = null;
         ResponseFacade responseFacade = null;
         synchronized (bufferedResponse) {
-            Object ret = bufferedResponse.get(url);
+            Object ret = bufferedResponse.get(resourceKey);
             if (ret == null) {
-                responseFacade = new ResponseFacade(url);
+                responseFacade = new ResponseFacade(url, moduleRepository);
                 if (noCache == false) {
-                    bufferedResponse.put(url, responseFacade);
+                    bufferedResponse.put(resourceKey, responseFacade);
                 }
 
             } else if (ret instanceof Response) {
@@ -459,36 +694,105 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final String url;
 
+        private final ModuleRepository moduleRepository;
+
         private Response response;
 
-        public ResponseFacade(String url) {
+        public ResponseFacade(String url, ModuleRepository moduleRepository) {
             this.url = url;
+            this.moduleRepository = moduleRepository;
         }
 
         public synchronized void send(HttpServletRequest httpRequest,
                 HttpServletResponse httpResponse) throws IOException,
                 ServletException {
+            if (url.indexOf("..") >= 0 || url.indexOf("//") >= 0
+                    || url.indexOf("\\") >= 0) {
+                throw new ServletException("Invalid url '" + url + "'");
+            }
+
+            if (url.startsWith(CAMELIA_CSS_PREFIX)
+                    && url.endsWith(CAMELIA_CSS_SUFFIX)) {
+                if (url.indexOf('/') >= 0) {
+                    throw new ServletException("Invalid url '" + url + "'");
+                }
+
+                boolean cacheResponse = true;
+
+                IClientBrowser clientBrowser = null;
+
+                IClientBrowser userAgentClientBrowser = ClientBrowserFactory
+                        .Get().get(httpRequest);
+
+                IClientBrowser urlAgentClientBrowser = null;
+
+                URIParameters uriParameters = URIParameters.parseURI(url);
+                if (uriParameters != null && uriParameters.getAgent() != null) {
+                    
+                    String urlAgent = uriParameters.getAgent();
+                    // Un parametre dans l'URL
+                    urlAgentClientBrowser = ClientBrowserFactory.Get()
+                            .getClientBrowserById(urlAgent);
+
+                    if (userAgentClientBrowser != null) {
+                        if (userAgentClientBrowser
+                                .equalsType(urlAgentClientBrowser) == false) {
+
+                            // L'agent utilisé n'est pas le même
+                            cacheResponse = false;
+
+                            // Pas de cache ... car c'est pas normal !
+                            setNoCache(httpResponse);
+
+                            // Mais on prend le clientBrowser du BROWSER
+                            clientBrowser = userAgentClientBrowser;
+
+                        } else {
+                            // L'agent demandé est celui du browser => RAS
+
+                            clientBrowser = userAgentClientBrowser;
+                        }
+                    } else {
+                        // Pas d'agent dans l'URL
+                    }
+
+                } else {
+                    // Pas de parametre dans l'URL .... on desactive le
+                    // clientBrowser
+                    userAgentClientBrowser = null;
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("userAgentClientBrowser='"
+                            + userAgentClientBrowser
+                            + "' urlAgentClientBrowser='"
+                            + urlAgentClientBrowser + "' => " + clientBrowser);
+                }
+
+                StyleSheetRepositoryResponse repositoryResponse = new StyleSheetRepositoryResponse(
+                        CSS_MIME_TYPE + "; charset=" + getCharset(),
+                        moduleRepository, clientBrowser);
+
+                setResponse(repositoryResponse, httpRequest, httpResponse,
+                        cacheResponse);
+                return;
+            }
+
             if (response != null) {
                 response.send(httpRequest, httpResponse);
                 return;
             }
 
-            if (CAMELIA_CSS_URL.equals(url)) {
-                setResponse(new StyleSheetRepositoryResponse(CSS_MIME_TYPE+"; charset="+getCharset(),
-                        getRepository()), httpRequest, httpResponse);
-                return;
-            }
-
             URL resourceURL = getClass().getClassLoader().getResource(
-                    BASE_DIRECTORY + url);
+                    moduleRepository.getBaseURL() + url);
             if (resourceURL == null) {
-                setResponse(record404(url), httpRequest, httpResponse);
+                setResponse(record404(url), httpRequest, httpResponse, true);
                 return;
             }
 
             URLConnection urlConnection = resourceURL.openConnection();
             if (urlConnection == null) {
-                setResponse(record404(url), httpRequest, httpResponse);
+                setResponse(record404(url), httpRequest, httpResponse, true);
                 return;
             }
 
@@ -497,13 +801,13 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
             InputStream in = urlConnection.getInputStream();
             if (in == null) {
-                setResponse(record404(url), httpRequest, httpResponse);
+                setResponse(record404(url), httpRequest, httpResponse, true);
                 return;
             }
 
             try {
                 setResponse(record200(url, in, size, lastModified),
-                        httpRequest, httpResponse);
+                        httpRequest, httpResponse, true);
                 return;
 
             } finally {
@@ -516,11 +820,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
 
         private void setResponse(Response response,
-                HttpServletRequest httpRequest, HttpServletResponse httpResponse)
+                HttpServletRequest httpRequest,
+                HttpServletResponse httpResponse, boolean cacheResponse)
                 throws IOException, ServletException {
             this.response = response;
 
-            if (noCache == false) {
+            if (noCache == false && cacheResponse) {
                 synchronized (bufferedResponse) {
                     bufferedResponse.put(url, response);
                 }
@@ -655,6 +960,10 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             this.mimeType = mimeType;
         }
 
+        protected boolean isVersionned() {
+            return false;
+        }
+
         public final void send(HttpServletRequest request,
                 HttpServletResponse response) throws IOException,
                 ServletException {
@@ -671,7 +980,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 ConfiguredHttpServlet.setNoCache(response);
 
             } else {
-                ExpirationDate expirationDate = getDefaultExpirationDate(repositoryVersion != null);
+                ExpirationDate expirationDate = getDefaultExpirationDate(isVersionned());
                 if (expirationDate != null) {
                     expirationDate.sendExpires(response);
                 }
@@ -693,7 +1002,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             String hash = getHash();
             if (hash != null) {
                 String ifHash = request.getHeader(HTTP_IF_NOT_HASH);
-                if (etag.equals(ifHash)) {
+                if (hash.equals(ifHash)) {
                     response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                     return;
                 }
@@ -713,7 +1022,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             byte buf[] = getBuffer();
-            
+
             response.setContentType(mimeType);
 
             byte gzip[] = getGZipedBuffer();
@@ -765,51 +1074,49 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final StyleSheetSourceContainer styleSheetRepository;
 
+        private final IParameterizedContent parameterizedContent;
+
+        private final ModuleRepository moduleRepository;
+
         public StyleSheetRepositoryResponse(String mimeType,
-                StyleSheetSourceContainer styleSheetRepository) {
+                ModuleRepository moduleRepository, IClientBrowser clientBrowser)
+                throws ServletException {
             super(mimeType);
 
-            this.styleSheetRepository = styleSheetRepository;
+            this.moduleRepository = moduleRepository;
+            styleSheetRepository = moduleRepository.getStyleSheetRepository();
+
+            if (clientBrowser != null) {
+                parameterizedContent = styleSheetRepository
+                        .getContent(clientBrowser);
+
+            } else {
+                parameterizedContent = styleSheetRepository.getDefaultContent();
+            }
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.webapp.StylesheetsServlet.AbstractResponse#getBuffer()
-         */
+        protected boolean isVersionned() {
+            return moduleRepository.getVersion() != null;
+        }
+
         protected byte[] getBuffer() throws ServletException {
-            return styleSheetRepository.getRawBuffer();
+            return parameterizedContent.getRawBuffer();
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.webapp.StylesheetsServlet.AbstractResponse#getGZipedBuffer()
-         */
-        protected byte[] getGZipedBuffer() throws ServletException {
-            return styleSheetRepository.getGZipedBuffer();
+        protected byte[] getGZipedBuffer() {
+            return parameterizedContent.getGZipedBuffer();
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.webapp.StylesheetsServlet.AbstractResponse#getLastModified()
-         */
-        protected long getLastModified() throws ServletException {
-            return styleSheetRepository.getLastModified();
+        protected long getLastModified() {
+            return parameterizedContent.getLastModified();
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.rcfaces.core.webapp.StylesheetsServlet.AbstractResponse#getLastModified()
-         */
-        protected String getETag() throws ServletException {
-            return styleSheetRepository.getETag();
+        protected String getETag() {
+            return parameterizedContent.getETag();
         }
 
-        protected String getHash() throws ServletException {
-            return styleSheetRepository.getHash();
+        protected String getHash() {
+            return parameterizedContent.getHash();
         }
     }
 
@@ -821,21 +1128,98 @@ public class StylesheetsServlet extends HtmlModulesServlet {
     protected static final class CssConfig implements ICssConfig {
         private static final String REVISION = "$Revision$";
 
+        private final Map userAgentVaries;
+
         private final String styleSheetURI;
 
         private final String styleSheetFileName;
 
-        public CssConfig(String styleSheetFileName, String styleSheetURI) {
+        private final String charSet;
+
+        public CssConfig(String styleSheetFileName, String styleSheetURI,
+                String charSet, boolean userAgentVaryEnabled) {
             this.styleSheetFileName = styleSheetFileName;
             this.styleSheetURI = styleSheetURI;
+            this.charSet = charSet;
+            this.userAgentVaries = (userAgentVaryEnabled) ? (new HashMap())
+                    : null;
         }
 
         public String getDefaultStyleSheetURI() {
             return styleSheetURI;
         }
 
-        public String getStyleSheetFileName() {
-            return styleSheetFileName;
+        public String getStyleSheetFileName(IClientBrowser clientBrowser) {
+            if (userAgentVaries == null) {
+                return styleSheetFileName;
+            }
+
+            String browserId = clientBrowser.getBrowserId();
+
+            synchronized (userAgentVaries) {
+                String uri = (String) userAgentVaries.get(browserId);
+                if (uri != null) {
+                    return uri;
+                }
+
+                URIParameters uriParameters = new URIParameters(
+                        styleSheetFileName);
+                uriParameters.appendAgent(browserId);
+
+                uri = uriParameters.computeParametredURI();
+                userAgentVaries.put(browserId, uri);
+
+                return uri;
+            }
+        }
+
+        public String getCharSet() {
+            return charSet;
+        }
+    }
+
+    /**
+     * 
+     * @author Olivier Oeuillot (latest modification by $Author$)
+     * @version $Revision$ $Date$
+     */
+    protected static class ModuleRepository {
+        private final StyleSheetSourceContainer styleSheetSourceContainer;
+
+        private final String baseURL;
+
+        private final Set modules;
+
+        private final String version;
+
+        public ModuleRepository(
+                StyleSheetSourceContainer styleSheetSourceContainer,
+                String baseURL, String version, Set modules) {
+            this.version = version;
+            this.styleSheetSourceContainer = styleSheetSourceContainer;
+
+            if (baseURL.endsWith("/") == false) {
+                baseURL += "/";
+            }
+
+            this.baseURL = baseURL;
+            this.modules = modules;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public Set listModules() {
+            return modules;
+        }
+
+        public StyleSheetSourceContainer getStyleSheetRepository() {
+            return styleSheetSourceContainer;
+        }
+
+        public String getBaseURL() {
+            return baseURL;
         }
     }
 }

@@ -18,8 +18,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import org.rcfaces.core.internal.capability.IRCFacesComponent;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.service.AbstractAsyncRenderService;
+import org.rcfaces.core.internal.capability.IRCFacesComponent;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -48,12 +50,15 @@ public abstract class CameliaTag extends UIComponentBodyTag {
 
     private boolean suppressedChildren = false;
 
+    private boolean hasBinding = false;
+    
     public void release() {
         asyncRender = null;
         asyncRenderServer = null;
         ignoreBody = false;
         setupWriter = false;
         suppressedChildren = false;
+        hasBinding = false;
 
         super.release();
     }
@@ -228,5 +233,24 @@ public abstract class CameliaTag extends UIComponentBodyTag {
 
     public boolean enableLazyDownload() {
         return false;
+    }
+
+    protected void setProperties(UIComponent component) {
+
+        if (hasBinding()) {
+            ((IRCFacesComponent) component).clearListeners();
+        }
+
+        super.setProperties(component);
+    }
+    
+    public void setBinding(String binding) throws JspException {
+        super.setBinding(binding);
+        
+        hasBinding=(binding!=null);
+    }
+    
+    protected boolean hasBinding() {
+        return hasBinding;
     }
 }

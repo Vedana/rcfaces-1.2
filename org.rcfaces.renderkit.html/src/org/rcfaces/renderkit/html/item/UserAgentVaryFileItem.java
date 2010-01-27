@@ -14,17 +14,18 @@ import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class AbstractUserAgentVaryFileItem extends FileItem {
+public class UserAgentVaryFileItem extends FileItem implements
+        IUserAgentVaryFileItem {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = 7658229482218017683L;
 
     private String userAgent;
 
-    public AbstractUserAgentVaryFileItem() {
+    public UserAgentVaryFileItem() {
     }
 
-    public AbstractUserAgentVaryFileItem(IFileItem fileItem) {
+    public UserAgentVaryFileItem(IFileItem fileItem) {
         super(fileItem);
 
         if (fileItem instanceof IUserAgentVaryFileItem) {
@@ -32,7 +33,7 @@ public class AbstractUserAgentVaryFileItem extends FileItem {
         }
     }
 
-    public AbstractUserAgentVaryFileItem(UISelectItem component) {
+    public UserAgentVaryFileItem(UISelectItem component) {
         super(component);
 
         if (component instanceof IUserAgentVaryCapability) {

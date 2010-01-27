@@ -16,6 +16,7 @@ import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 
 /**
@@ -77,7 +78,8 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
         super(getValue(component), component.getItemLabel(), component
                 .getItemDescription(), component.isItemDisabled());
 
-        int s = IInputTypeCapability.AS_PUSH_BUTTON;
+        int s = 0; // IInputTypeCapability.AS_PUSH_BUTTON; // Pas de valeur par
+                   // défaut
 
         if (component instanceof IAccessKeyCapability) {
             accessKey = ((IAccessKeyCapability) component).getAccessKey();
@@ -129,6 +131,11 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
                 getClientDataMap().putAll(map);
             }
+        }
+
+        if (getDescription() == null
+                && (component instanceof IToolTipCapability)) {
+            setDescription(((IToolTipCapability) component).getToolTipText());
         }
 
         this.inputType = s;

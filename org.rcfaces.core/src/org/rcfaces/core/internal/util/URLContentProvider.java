@@ -41,8 +41,8 @@ public class URLContentProvider implements IContentProvider {
 
         String localized = contentReference.toString();
 
-        int idx = localized.lastIndexOf('.');
-        if (idx <= 0) {
+        int idx0 = localized.lastIndexOf('.');
+        if (idx0 <= 0) {
             return null;
         }
 
@@ -50,7 +50,13 @@ public class URLContentProvider implements IContentProvider {
         String country = locale.getCountry();
         String language = locale.getLanguage();
 
-        String baseURL = localized.substring(0, idx);
+        String suffix = "";
+        String baseURL = localized;
+        if (localized.lastIndexOf('/') < idx0) {
+            baseURL = localized.substring(0, idx0);
+            suffix = localized.substring(idx0);
+        }
+
         if (language.length() > 0) {
             int idx2 = baseURL.lastIndexOf('/');
 
@@ -58,10 +64,16 @@ public class URLContentProvider implements IContentProvider {
                     + baseURL.substring(idx2);
         }
 
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("searchLocalizedContentReference ref='"
+                    + contentReference + "' locale='" + locale
+                    + "' => baseURL=" + baseURL);
+        }
+
         try {
             if (variant != null && variant.length() > 0) {
                 URL l = new URL(baseURL + "_" + language + "_" + country + "_"
-                        + variant + localized.substring(idx));
+                        + variant + suffix);
 
                 Locale tryLocale = locale;
                 if (testURL(l, tryLocale)) {
@@ -77,7 +89,7 @@ public class URLContentProvider implements IContentProvider {
 
             if (country != null && country.length() > 0) {
                 URL l = new URL(baseURL + "_" + language + "_" + country
-                        + localized.substring(idx));
+                        + suffix);
 
                 Locale tryLocale = locale;
                 if (variant != null && variant.length() > 0) {
@@ -96,8 +108,7 @@ public class URLContentProvider implements IContentProvider {
             }
 
             if (language != null && language.length() > 0) {
-                URL l = new URL(baseURL + "_" + language
-                        + localized.substring(idx));
+                URL l = new URL(baseURL + "_" + language + suffix);
 
                 Locale tryLocale = locale;
                 if ((country != null && country.length() > 0)
@@ -133,6 +144,11 @@ public class URLContentProvider implements IContentProvider {
     private boolean testURL(URL contentReference, Locale locale) {
         IContent content = getContent(contentReference, locale);
 
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("TestURL '" + contentReference + "' locale='" + locale
+                    + "'");
+        }
+
         InputStream inputStream;
         try {
             inputStream = content.getInputStream();
@@ -147,6 +163,11 @@ public class URLContentProvider implements IContentProvider {
         }
 
         if (inputStream == null) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("TestURL '" + contentReference + "' locale='"
+                        + locale + "' => NOT FOUND");
+            }
+
             return false;
         }
 
@@ -155,6 +176,11 @@ public class URLContentProvider implements IContentProvider {
 
         } catch (IOException ex) {
             LOG.info("Can not close URL '" + contentReference + "'.", ex);
+        }
+
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("TestURL '" + contentReference + "' locale='" + locale
+                    + "' => FOUND");
         }
 
         return true;

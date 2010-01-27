@@ -588,7 +588,7 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    public IHtmlWriter writeCharset(String charset) throws WriterException {
+    public IHtmlWriter writeCharSet(String charset) throws WriterException {
         writeAttribute("charset", charset);
 
         return this;

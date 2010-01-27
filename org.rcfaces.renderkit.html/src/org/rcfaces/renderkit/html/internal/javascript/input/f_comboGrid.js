@@ -198,6 +198,9 @@ var __members = {
 		}
 		
 		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
+
+		this._gridStyleClass=f_core.GetNumberAttribute(this, "v:gridStyleClass", 0);
+
 		
 		this.f_getInput().onbeforedeactivate=f_comboGrid._OnBeforeDeactivate;
 		
@@ -354,14 +357,34 @@ var __members = {
 	 * @return void
 	 */
 	f_updateInputStyle: function() {
+
+		// Le composant principal !
+		var csuffix="";
+		if (this.f_isDisabled()) {
+			csuffix+="_disabled";
+
+		} else if (this.f_isReadOnly()) {
+			csuffix+="_readOnly";
+		}
+		if (this._keyErrored) {
+			csuffix+="_error";
+		}
+		
+		var componentClassName=this.f_computeStyleClass(csuffix);
+		if (this.className!=componentClassName) {
+			this.className=componentClassName;
+		}
+
+		// Le champ INPUT
+
 		var mainClassName="f_comboGrid_input";
-		var className=mainClassName;
+		var className=mainClassName;		
 		
 		if (this._verifyingKey) {
 			className+= " "+mainClassName+"_verifying";	
 
 		} else if (this._keyErrored) {
-			className+= " "+mainClassName+"_errored";
+			className+= " "+mainClassName+"_error";
 		}
 		
 		if (this._emptyMessageShown) {
@@ -530,6 +553,13 @@ var __members = {
 		}
 		
 		return true;
+	},
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getFormattedValue: function() {
+		return this._formattedValue;
 	},
 	/**
 	 * @method public
@@ -775,20 +805,28 @@ var __members = {
 	 				continueProcess=comboGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
 	 				
 	 			} catch (x) {
+	 				f_core.Error(f_dataGrid, "f_callServer.onError: fire event throws exception ", x);
+	 			
 	 				// On continue coute que coute !
-	 				continueProcess=false;
+	 				continueProcess=true;
 	 			}	 				
+ 			 			
+ 			 	f_core.Debug(f_dataGrid, "f_callServer.onError: continueProcess="+continueProcess); 			 	
  			 			
 		 		if (continueProcess===false) {
 					comboGrid._loading=undefined;
+					comboGrid._verifyingKey=undefined;		
+					comboGrid.f_updateInputStyle();		
 			 		return;
 		 		}
 	 			
 				if (comboGrid.f_processNextCommand()) {
 					return;
 				}
-	 		
-				dataGrid._loading=undefined;		
+			 			
+ 			 	f_core.Debug(f_dataGrid, "f_callServer.onError: no more commands"); 			 	
+ 	 		
+				comboGrid._loading=undefined;		
 	 			 			
 				comboGrid._verifyingKey=undefined;		
 				comboGrid.f_updateInputStyle();		
@@ -800,6 +838,8 @@ var __members = {
 				if (comboGrid.f_processNextCommand()) {
 					return;
 				}
+			 			
+ 			 	f_core.Debug(f_dataGrid, "f_callServer.onLoad: no more commands"); 			 	
 	 				
 				comboGrid._verifyingKey=undefined;		
 				try {
@@ -841,6 +881,17 @@ var __members = {
 					comboGrid._loading=undefined;
 					comboGrid.f_updateInputStyle();		
 				}
+	 		},
+	 		onAbort: function() {
+				if (comboGrid.f_processNextCommand()) {
+					return;
+				}
+			 	f_core.Debug(f_dataGrid, "f_callServer.onAbort: no more commands"); 			 	
+
+				comboGrid._loading=undefined;		
+		 			
+				comboGrid._verifyingKey=undefined;		
+				comboGrid.f_updateInputStyle();		
 	 		}
 		});
 
@@ -941,6 +992,11 @@ var __members = {
 
 		this._checkListeners=checkListeners;
 		f_core.AddCheckListener(this, checkListeners);			
+	},
+	/**
+	 * @method hidden
+	 */
+	f_setInteractiveShow: function(interactiveComponentId) {		
 	}
 }
 

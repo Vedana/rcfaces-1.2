@@ -566,7 +566,7 @@ var __members = {
 				var evt = f_core.GetJsEvent(this);
 				
 				var toElement=evt.toElement;
-				if (toElement==self) {
+				if (toElement==self || !toElement) {
 					// Necessaire pour la scrollBar !
 					return true;
 				}
@@ -824,15 +824,13 @@ var __members = {
 			var tree=self;
 			self=null;
 			
-			//alert("Scroll="+this.scrollWidth);
-			var width=tree.scrollWidth;
-			if (true || f_core.IsInternetExplorer()) {
-				width-=2;
-			}
-			
 			if (!tree._body) {
 				return;
 			}
+			
+			//alert("Scroll="+this.scrollWidth);
+			var width=tree.offsetWidth;
+			width-=f_core.ComputeContentBoxBorderLength(tree, "left", "right");
 			
 			tree._body.style.width=width+"px";
 		}, 50);
@@ -1004,7 +1002,7 @@ var __members = {
 				f_core.AppendChild(divNode, input);
 			}
 
-			var span=f_core.CreateElement(divNode, "label", {
+			var span=f_core.CreateElement(divNode, "div", {
 				_node: li,
 				onmouseover: f_tree._NodeLabel_mouseOver,
 				onmouseout: f_tree._NodeLabel_mouseOut				
@@ -1051,14 +1049,13 @@ var __members = {
 				f_core.AppendChild(li, ul);
 				
 				li._nodes=ul;
-				
 			}
 			
 			if (node._nodes) {
 				// f_core.Debug(f_tree, "constructTree: children: opened="+node._opened+" userExp="+this._userExpandable+" depth="+depth);
 				
 				if (node._opened || !this._userExpandable) {
-					this._constructTree(li._nodes, node._nodes, depth+1, fragment);
+					this._constructTree(li._nodes, node._nodes, depth+1, li._nodes);
 					
 					li._nodes.style.display="list-item";
 				}
@@ -1516,6 +1513,8 @@ var __members = {
 		var labelClassName="f_tree_node";
 		if (suffixLabel) {
 			labelClassName+=" f_tree_node"+suffixLabel;
+
+			divNodeClassName+=" f_tree_depth"+li._depth+suffixLabel;			
 		}
 		
 		if (divNode.className!=divNodeClassName) {
@@ -2525,6 +2524,17 @@ var __members = {
 		this.setAttribute("v:breadCrumbsValues", values.join("|"));
 		this.setAttribute("v:breadCrumbsTexts", texts.join("|"));
 	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {		
+		if (this._cfocus) {
+			return this._cfocus;
+		}
+		
+		return this;
+	},	
 	f_setFocus: function() {
 		f_core.Debug(f_tree, "f_setFocus: Set focus on tree '"+this.id+"' cfocus="+this._cfocus);
 

@@ -3,12 +3,14 @@
  */
 package org.rcfaces.renderkit.html.internal.border;
 
+import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.AbstractBorderRenderer;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -26,6 +28,10 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
     public static final String TD_TEXT = "_ctext";
 
     public static final String TD_IMAGE = "_cimage";
+
+    public static final String SOUTH_FACET = "_sfacet";
+
+    public static final String NORTH_FACET = "_nfacet";
 
     protected static final String DISABLED_SUFFIX = "_disabled";
 
@@ -366,13 +372,60 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         if (horizontalSpan > 1) {
             writer.writeColSpan(horizontalSpan);
         }
+
+        writeSouthFacet(writer);
+
         writer.endElement(IHtmlWriter.TD);
 
         return writer;
     }
 
+    protected void writeSouthFacet(IHtmlWriter writer) throws WriterException {
+        UIComponent component = writer.getComponentRenderContext()
+                .getComponent();
+
+        UIComponent southFacet = component.getFacet("south");
+        if (southFacet == null || southFacet.isRendered() == false) {
+            return;
+        }
+
+        writer.startElement(IHtmlWriter.DIV);
+        writer.writeClass(getSouthFacetClassName(writer));
+
+        ComponentTools.encodeRecursive(writer.getComponentRenderContext()
+                .getFacesContext(), southFacet);
+
+        writer.endElement(IHtmlWriter.DIV);
+    }
+
+    protected void writeNorthFacet(IHtmlWriter writer) throws WriterException {
+        UIComponent component = writer.getComponentRenderContext()
+                .getComponent();
+
+        UIComponent southFacet = component.getFacet("north");
+        if (southFacet == null || southFacet.isRendered() == false) {
+            return;
+        }
+
+        writer.startElement(IHtmlWriter.DIV);
+        writer.writeClass(getNorthFacetClassName(writer));
+
+        ComponentTools.encodeRecursive(writer.getComponentRenderContext()
+                .getFacesContext(), southFacet);
+
+        writer.endElement(IHtmlWriter.DIV);
+    }
+
     protected String getBorderSouthClassName(IHtmlWriter writer) {
         return getClassName() + BORDER_S;
+    }
+
+    protected String getSouthFacetClassName(IHtmlWriter writer) {
+        return getClassName() + SOUTH_FACET;
+    }
+
+    protected String getNorthFacetClassName(IHtmlWriter writer) {
+        return getClassName() + NORTH_FACET;
     }
 
     protected IHtmlWriter writeCellBorderNorth(IHtmlWriter writer)

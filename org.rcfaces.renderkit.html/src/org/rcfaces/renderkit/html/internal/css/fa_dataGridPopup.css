@@ -19,7 +19,7 @@
 	left: 0;
 	top: 0;
 	margin: 0;
-	padding: 0;
+	padding: 2px;
 	display: block;
 	visibility: hidden;
 	cursor: default;
@@ -27,6 +27,9 @@
 }
 
 .fa_dataGridPopup_table {
+	border: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .fa_dataGridPopup_label {
@@ -42,18 +45,20 @@
 	list-style-type: none;
 	margin: 0;
 	padding: 0;	
-	float: left;
-	display: block;
 	vertical-align: middle;
 }
 
-.fa_dataGridPopup_title LI {
+.fa_dataGridPopup_li_label,
+.fa_dataGridPopup_li_form {
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
-	float: left;
 	margin: 0;
 	padding: 0 2px 0 2px;	
+}
+
+.fa_dataGridPopup_label {
+	float: left;
 }
 
 .fa_dataGridPopup_form {
@@ -64,6 +69,7 @@
 	margin: 0;
 	width: 160px;
 	background: white;
+	float: left;
 }
 
 .fa_dataGridPopup_input {
@@ -92,4 +98,8 @@
 	background-color: transparent;
 	vertical-align: center;
 	text-align: center;
+}
+
+.fa_dataGridPopup_grid {
+	margin-top: 2px;
 }

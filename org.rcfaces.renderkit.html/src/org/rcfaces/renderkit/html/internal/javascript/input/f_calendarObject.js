@@ -1691,10 +1691,11 @@ var __members = {
 		var div=doc.createElement("div");
 		
 		var table=doc.createElement("table");
+		table.className=className+"_unitCursor";
 		table.align="center";
-		table.cellpadding=0;
-		table.cellspacing=0;
-		table.border=0;
+		table.cellPadding=0;
+		table.cellSpacing=0;
+//		table.border=0;
 		f_core.AppendChild(div, table);
 
 		var tbody=doc.createElement("tbody");
@@ -1778,15 +1779,17 @@ var __members = {
 	 */
 	_createDayList: function(doc, component, className, blankImageURL) {
 		var table=doc.createElement("table");
+		table.className=className+"_dayList";
 		table.align="center";
-		table.cellpadding=1;
-		table.cellspacing=1;
-		table.border=0;
+		table.cellPadding=0; //1;
+		table.cellSpacing=0; //1;
+//		table.border=0;
 
 		var tbody=doc.createElement("tbody");
 		f_core.AppendChild(table, tbody);
 
 		var tr=doc.createElement("tr");
+		tr.className=className+"_weekDayList";
 		f_core.AppendChild(tbody, tr);
 
 		var selectWeek=this._layout & f_calendarObject.SELECT_WEEK_LAYOUT;
@@ -1802,6 +1805,7 @@ var __members = {
 		var dof=this._firstDayOfWeek;
 		for(var j=0;j<7;j++) {
 			var td=doc.createElement("td");
+			td.className=className+"_weekDayItem";
 			td.align="center";
 			f_core.AppendChild(tr, td);
 				
@@ -1901,11 +1905,11 @@ var __members = {
 		this._monthButtons=new Array;
 
 		var table=doc.createElement("table");
-		
+		table.className=className+"_monthList";		
 		table.align="center";
-		table.cellpadding=1;
-		table.cellspacing=1;
-		table.border=0;
+		table.cellPadding=0; //1;
+		table.cellSpacing=0; //1;
+		//table.border=0;
 
 		var tbody=doc.createElement("tbody");
 		f_core.AppendChild(table, tbody);
@@ -1948,10 +1952,11 @@ var __members = {
 		this._yearButtons=new Array;
 		
 		var table=doc.createElement("table");
+		table.className=className+"_yearCursor";		
 		table.align="center";
-		table.cellpadding=1;
-		table.cellspacing=0;
-		table.border=0;
+		table.cellPadding=0; //1;
+		table.cellSpacing=0;
+		//table.border=0;
 		
 		var tbody=doc.createElement("tbody");
 		f_core.AppendChild(table, tbody);
@@ -2024,10 +2029,11 @@ var __members = {
 		this._monthCursors=new Array;
 		
 		var table=doc.createElement("table");
+		table.className=className+"_monthCursor";
 		table.align="center";
-		table.cellpadding=1;
-		table.cellspacing=0;
-		table.border=0;
+		table.cellPadding=0; //1;
+		table.cellSpacing=0;
+		//table.border=0;
 		
 		var tbody=doc.createElement("tbody");
 		f_core.AppendChild(table, tbody);

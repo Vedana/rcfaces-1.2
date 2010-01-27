@@ -62,6 +62,16 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
 
         htmlWriter.startElement(IHtmlWriter.DIV);
 
+        boolean disabled = dateEntryComponent.isDisabled(facesContext);
+        if (disabled) {
+            getCssStyleClasses(htmlWriter).addSuffix("_disabled");
+        }
+
+        boolean readOnly = dateEntryComponent.isReadOnly(facesContext);
+        if (readOnly) {
+            getCssStyleClasses(htmlWriter).addSuffix("_readOnly");
+        }
+
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
@@ -365,9 +375,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
                         }
                     }
 
-                    // htmlWriter.startElement(IHtmlWriter.SPAN");
-                    htmlWriter.writeText(sb.toString());
-                    // htmlWriter.endElement(IHtmlWriter.SPAN");
+                    writeSeparator(htmlWriter, sb.toString());
 
                     sb.setLength(0);
                 }
@@ -447,8 +455,27 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
         }
 
         if (sb.length() > 0) {
-            htmlWriter.writeText(sb.toString());
+            writeSeparator(htmlWriter, sb.toString());
         }
+    }
+
+    protected void writeSeparator(IHtmlWriter htmlWriter, String text)
+            throws WriterException {
+
+        htmlWriter.startElement(IHtmlWriter.SPAN);
+
+        String className = getSeparatorClassName(htmlWriter);
+        if (className != null) {
+            htmlWriter.writeClass(className);
+        }
+
+        htmlWriter.writeText(text);
+
+        htmlWriter.endElement(IHtmlWriter.SPAN);
+    }
+
+    protected String getSeparatorClassName(IHtmlWriter htmlWriter) {
+        return getMainStyleClassName() + "_sep";
     }
 
     protected String getSubStyleClassName(IHtmlWriter htmlWriter, char ch,

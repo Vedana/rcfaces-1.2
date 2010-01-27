@@ -93,8 +93,11 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             String styleClass = styleClassCapability.getStyleClass();
             if (styleClass != null) {
                 cssStyleClasses.addStyleClass(styleClass);
+            }
 
-                writer.writeAttribute("v:styleClass", styleClass);
+            String sc = cssStyleClasses.constructUserStyleClasses();
+            if (sc != null && sc.length() > 0) {
+                writer.writeAttribute("v:styleClass", sc);
             }
         }
 
@@ -112,31 +115,21 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
      */
 
     /*
-    protected String computeComponentStyleClass(UIComponent component,
-            String classSuffix) {
-        if (component instanceof IDisabledCapability) {
-            if (((IDisabledCapability) component).isDisabled()) {
-                classSuffix = "_disabled";
-            }
-        }
-
-        if (classSuffix == null) {
-            if (component instanceof IReadOnlyCapability) {
-                if (((IReadOnlyCapability) component).isReadOnly()) {
-                    classSuffix = "_readOnly";
-                }
-            }
-        }
-
-        if (component instanceof IRequiredCapability) {
-            if (((IRequiredCapability) component).isRequired()) {
-                classSuffix += "_required";
-            }
-        }
-
-        return classSuffix;
-    }
-    */
+     * protected String computeComponentStyleClass(UIComponent component, String
+     * classSuffix) { if (component instanceof IDisabledCapability) { if
+     * (((IDisabledCapability) component).isDisabled()) { classSuffix =
+     * "_disabled"; } }
+     * 
+     * if (classSuffix == null) { if (component instanceof IReadOnlyCapability)
+     * { if (((IReadOnlyCapability) component).isReadOnly()) { classSuffix =
+     * "_readOnly"; } } }
+     * 
+     * if (component instanceof IRequiredCapability) { if
+     * (((IRequiredCapability) component).isRequired()) { classSuffix +=
+     * "_required"; } }
+     * 
+     * return classSuffix; }
+     */
 
     protected final IHtmlWriter writeCssAttributes(IHtmlWriter htmlWriter)
             throws WriterException {

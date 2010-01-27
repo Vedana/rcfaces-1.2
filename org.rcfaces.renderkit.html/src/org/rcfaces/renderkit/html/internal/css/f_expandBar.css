@@ -53,12 +53,14 @@
 	border: 0;
 }
 
-
 .f_expandBar_label {
 	font-size: 10pt;
 	vertical-align: middle;
 	-moz-user-select: none;
 	user-select: none;
+}
+
+.f_expandBar_label_expandable {
 	cursor: pointer;
 }
 
@@ -69,11 +71,11 @@
 }
 
 .f_expandBar_head {
-	vertical-align: middle;
 	background-color: #EEEEEE;
 	color: black;
 	padding: 2px;
 	text-align: left;
+/*		vertical-align: middle;   PROBLEME SOUS IE */
 }
 
 .f_expandBar_head_over {

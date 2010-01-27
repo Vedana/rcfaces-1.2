@@ -137,7 +137,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
-//        boolean useValidator = false;
+        // boolean useValidator = false;
 
         if (textEntryComponent.isAutoTab(facesContext)) {
             htmlWriter.writeAttribute("v:autoTab", true);
@@ -163,7 +163,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
                         textEntryComponent);
         if (clientValidationContext != null) {
             renderValidator = true;
-//            useValidator = true;
+            // useValidator = true;
         }
 
         if (renderValidator == false) {
@@ -196,10 +196,11 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 
-/*        if (useValidator) {
-            htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
-                    .getJavaScriptRenderContext().forceJavaScriptStub();
-        } */
+        /*
+         * if (useValidator) {
+         * htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
+         * .getJavaScriptRenderContext().forceJavaScriptStub(); }
+         */
     }
 
     protected boolean useHtmlAccessKeyAttribute() {
@@ -417,38 +418,42 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
                 int i = 0;
 
-                for (; i < expressionParameters.length; i++) {
-                    IParameter parameter = expressionParameters[i];
+                if (expressionParameters != null) {
+                    for (; i < expressionParameters.length; i++) {
+                        IParameter parameter = expressionParameters[i];
 
-                    String name;
-                    if (i < defaultParameters.length) {
-                        name = defaultParameters[i].getName();
+                        String name;
+                        if (i < defaultParameters.length) {
+                            name = defaultParameters[i].getName();
 
-                    } else {
-                        name = parameter.getName();
+                        } else {
+                            name = parameter.getName();
+                        }
+                        params.add(name);
+
+                        // Les valeurs de l'expression sont prioritaires
+                        parametersMap.remove(name);
+
+                        String value = parameter.getValue();
+                        params.add(value);
                     }
-                    params.add(name);
-
-                    // Les valeurs de l'expression sont prioritaires
-                    parametersMap.remove(name);
-
-                    String value = parameter.getValue();
-                    params.add(value);
                 }
 
-                for (; i < defaultParameters.length; i++) {
-                    IParameter parameter = defaultParameters[i];
+                if (defaultParameters != null) {
+                    for (; i < defaultParameters.length; i++) {
+                        IParameter parameter = defaultParameters[i];
 
-                    String name = parameter.getName();
-                    params.add(name);
+                        String name = parameter.getName();
+                        params.add(name);
 
-                    // Les valeurs des parametres sont prioritaires
-                    String value = (String) parametersMap.remove(name);
-                    if (value == null) {
-                        value = parameter.getValue();
+                        // Les valeurs des parametres sont prioritaires
+                        String value = (String) parametersMap.remove(name);
+                        if (value == null) {
+                            value = parameter.getValue();
+                        }
+
+                        params.add(value);
                     }
-
-                    params.add(value);
                 }
             }
         }

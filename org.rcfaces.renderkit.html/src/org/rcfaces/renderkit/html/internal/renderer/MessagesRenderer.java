@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal.renderer;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.MessagesComponent;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -28,6 +29,8 @@ public class MessagesRenderer extends AbstractCssRenderer {
         IComponentRenderContext componentContext = writer
                 .getComponentRenderContext();
 
+        FacesContext facesContext = componentContext.getFacesContext();
+
         MessagesComponent messagesComponent = (MessagesComponent) componentContext
                 .getComponent();
 
@@ -51,8 +54,13 @@ public class MessagesRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:showDetail", true);
         }
 
-        if (messagesComponent.isShowActiveComponentMessage()) {
+        if (messagesComponent.isShowActiveComponentMessage(facesContext)) {
             htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
+        }
+
+        int maxCount = messagesComponent.getMaxCount(facesContext);
+        if (maxCount > 0) {
+            htmlWriter.writeAttribute("v:maxCount", maxCount);
         }
 
         htmlWriter.endElement(IHtmlWriter.TABLE);
@@ -109,8 +117,8 @@ public class MessagesRenderer extends AbstractCssRenderer {
             messagesComponent.setShowDetail(showSummary.booleanValue());
         }
         /*
-         * String forValue=componentData.getProperty("for"); if (forValue!=null) {
-         * messageComponent.setFor(forValue); }
+         * String forValue=componentData.getProperty("for"); if (forValue!=null)
+         * { messageComponent.setFor(forValue); }
          */
 
         super.decode(context, component, componentData);

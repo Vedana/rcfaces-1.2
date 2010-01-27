@@ -20,6 +20,8 @@ public interface IClientBrowser {
 
     int OPERA_BROWSER_TYPE = 4;
 
+    int CHROME_BROWSER_TYPE = 5;
+
     int getBrowserType();
 
     String getUserAgent();
@@ -29,4 +31,8 @@ public interface IClientBrowser {
     int getMinorVersion();
 
     int getReleaseVersion();
+
+    String getBrowserId();
+
+    boolean equalsType(IClientBrowser clientBrowser);
 }

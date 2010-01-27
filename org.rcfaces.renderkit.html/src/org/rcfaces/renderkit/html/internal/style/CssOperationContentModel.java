@@ -228,8 +228,9 @@ public class CssOperationContentModel extends
             }
             cmd = cmd.substring(8).trim();
 
-            if (cmd.endsWith(";")) {
-                cmd = cmd.substring(0, cmd.length() - 1).trim();
+            int idx = cmd.indexOf(';');
+            if (idx > 0) {
+                cmd = cmd.substring(0, idx).trim();
             }
 
             if ((cmd.startsWith("\"") && cmd.endsWith("\""))

@@ -27,6 +27,8 @@ var __statics = {
 			return;
 		}
 		dateChooser._popupOpened=undefined;
+		
+		dateChooser.f_calendarPopupClosed();
 
 		f_popup.UnregisterWindowClick(dateChooser);		
 					
@@ -67,6 +69,11 @@ var __statics = {
 			var body=null;
 			
 			var className="f_dateChooser_popup f_dateChooser_popup_"+dateChooser._layout;
+			
+			var usc=f_core.GetAttribute(dateChooser, "v:popupStyleClass");
+			if (usc) {
+				className+=" "+usc+" "+usc+"_"+dateChooser._layout;
+			}			
 			
 			if (dateChooser._iePopup) {
 				var doc=dateChooser.ownerDocument;
@@ -329,7 +336,18 @@ var __statics = {
 			return null;
 		}
 
-		return calendarObject.f_parseDate(value, format);
+		try {
+			return calendarObject.f_parseDate(value, format);
+
+		} catch (x) {
+			// Erreur de saisie du jour/mois/année ???
+			
+			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: Invalid value='"+value+"' format='"+format+"'.", x);
+		}
+		
+		alert("La date saisie est incohérente !");
+		
+		return new Date();
 	}
 }
 

@@ -87,7 +87,7 @@ var __statics = {
 	 */
 	_OnLoad: function(textEditor) {
 		try {
-			f_textEditor.f_getClassLoader().f_init(textEditor);
+			f_textEditor.f_getClassLoader().f_init(textEditor, false, true);
 			
 			textEditor._onLoad();
 			
@@ -429,6 +429,18 @@ var __members = {
 		default:
 			return contentDocument.body.innerHTML;
 		}		
+	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		var contentDocument=this._contentDocument;
+		if (!contentDocument) {
+			return null;
+		}
+		
+		return contentDocument.body;
 	},
 	/**
 	 * @method public

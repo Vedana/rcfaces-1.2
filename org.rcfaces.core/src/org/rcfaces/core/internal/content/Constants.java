@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.rcfaces.core.internal.images;
+package org.rcfaces.core.internal.content;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

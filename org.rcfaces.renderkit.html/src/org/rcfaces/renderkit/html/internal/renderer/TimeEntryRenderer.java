@@ -59,6 +59,16 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
         htmlWriter.startElement(IHtmlWriter.DIV);
 
+        boolean disabled = timeEntryComponent.isDisabled(facesContext);
+        if (disabled) {
+            getCssStyleClasses(htmlWriter).addSuffix("_disabled");
+        }
+
+        boolean readOnly = timeEntryComponent.isReadOnly(facesContext);
+        if (readOnly) {
+            getCssStyleClasses(htmlWriter).addSuffix("_readOnly");
+        }
+
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);

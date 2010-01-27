@@ -163,7 +163,7 @@ var __statics = {
 				if (component._rcfacesShellDecoratorIdentifier) {
 					var win=f_core.GetWindow(component);
 				
-					var shell=win.f_shellDecorator.GetShellFromIdentifier(component._shellIdentifier);
+					var shell=win.f_shellDecorator.GetShellFromIdentifier(component._rcfacesShellIdentifier);
 					return shell;
 				}
 				
@@ -488,7 +488,9 @@ var __members = {
 	f_getShellDecorator: function(shell) {
 		var shellDecorators=this._shellDecorators;
 		
-		var shellDecorator=shellDecorators[shell.f_getId()];
+		var shellId=shell.f_getId();
+		
+		var shellDecorator=shellDecorators[shellId];
 		
 		if (shellDecorator) {
 			return shellDecorator;
@@ -498,7 +500,7 @@ var __members = {
 
 		f_core.Debug(f_shellManager, "f_getShellDecorator: create new shell decorator: "+shellDecorator);
 
-		shellDecorators[shell.f_getId()]=shellDecorator;
+		shellDecorators[shellId]=shellDecorator;
 		
 		return shellDecorator;
 	},

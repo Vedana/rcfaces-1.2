@@ -141,7 +141,7 @@ var __statics = {
 		}
 		
 		// Attention notre waiting peut etre dans une popup, auquel cas la window n'est pas la même
-		return f_waiting.f_getClassLoader().f_init(node);
+		return f_waiting.f_getClassLoader().f_init(node, false, true);
 	},
 	/**
 	 * @method hidden static

@@ -9,12 +9,12 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
-import javax.faces.event.ValueChangeEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.event.BlurEvent;
 import org.rcfaces.core.event.CheckEvent;
+import org.rcfaces.core.event.ClientValueChangeEvent;
 import org.rcfaces.core.event.CloseEvent;
 import org.rcfaces.core.event.DoubleClickEvent;
 import org.rcfaces.core.event.FocusEvent;
@@ -106,8 +106,8 @@ public class EventDecoders {
                     public void decodeEvent(IRequestContext requestContext,
                             UIComponent component, IEventData eventData,
                             IEventObjectDecoder eventObjectDecoder) {
-                        FacesEvent event = new ValueChangeEvent(component,
-                                null, eventData.getEventValue());
+                        FacesEvent event = new ClientValueChangeEvent(
+                                component, null, eventData.getEventValue());
 
                         queueEvent(component, event);
                     }

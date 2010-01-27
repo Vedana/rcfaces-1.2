@@ -25,6 +25,8 @@ public class URIParameters {
 
     public static final char LOCALE_PARAMETER = 'L';
 
+    public static final char AGENT_PARAMETER = 'A';
+
     private static final int MAX_COMMANDS = 8;
 
     private final String uri;
@@ -164,12 +166,20 @@ public class URIParameters {
         append(VERSION_PARAMETER, version);
     }
 
+    public void appendAgent(String version) {
+        append(AGENT_PARAMETER, version);
+    }
+
     public String getVersion() {
         return getParameterByCommand(VERSION_PARAMETER);
     }
 
     public String getLocaleName() {
         return getParameterByCommand(LOCALE_PARAMETER);
+    }
+
+    public String getAgent() {
+        return getParameterByCommand(AGENT_PARAMETER);
     }
 
     private String getParameterByCommand(char command) {

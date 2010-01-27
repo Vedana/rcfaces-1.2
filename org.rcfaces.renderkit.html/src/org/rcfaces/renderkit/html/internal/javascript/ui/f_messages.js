@@ -114,7 +114,14 @@ var __members = {
 	
 		f_core.Debug(f_messages, "fa_updateMessages: Update "+messages.length+" messages.");
 		
-		for(var i=0;i<messages.length;i++) {
+		var messageLength = messages.length;
+		
+		var maxCount=f_core.GetNumberAttribute(this, "v:maxCount", 0);
+		if (maxCount>0 && messageLength>maxCount) {
+			messageLength=maxCount;
+		}
+		
+		for(var i=0;i<messageLength;i++) {
 			var message=messages[i];
 			
 			f_core.Assert(message, "f_messages.fa_updateMessages: Null message into list of message !");

@@ -151,7 +151,7 @@ public class ItemTools {
 
         BeanInfo targetBeanInfo;
         try {
-            targetBeanInfo = Introspector.getBeanInfo(targetClass, stopClass);
+            targetBeanInfo = Introspector.getBeanInfo(targetClass);
 
         } catch (IntrospectionException e) {
             LOG.error("Can not inspect '" + target + "'.", e);
@@ -174,7 +174,8 @@ public class ItemTools {
         Class sourceClass = source.getClass();
         BeanInfo sourceBeanInfo;
         try {
-            sourceBeanInfo = Introspector.getBeanInfo(sourceClass);
+            sourceBeanInfo = Introspector.getBeanInfo(sourceClass,
+                    (stopClass != null) ? stopClass.getSuperclass() : null);
 
         } catch (IntrospectionException e) {
             LOG.error("Can not inspect '" + source + "'.", e);

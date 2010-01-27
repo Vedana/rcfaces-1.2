@@ -93,4 +93,6 @@ public interface IHtmlElements {
     String SUBMIT_INPUT_TYPE = "submit";
 
     String TEXT_INPUT_TYPE = "text";
+
+    String JAVASCRIPT_VOID = "javascript:void(0)";
 }

@@ -17,6 +17,22 @@ var __statics = {
 	_DEFAULT_TWO_DIGIT_YEAR_START: 1960,
 	
 	/**
+	 * @field public static final String
+	 */
+	INVALID_DATE_ERROR: "invalid.date",
+	
+	/**
+	 * @field public static final String
+	 */
+	INVALID_MONTH_ERROR: "invalid.month",
+	
+	/**
+	 * @field public static final String
+	 */
+	INVALID_YEAR_ERROR: "invalid.year",
+	
+	
+	/**
 	 * @method public static final 
 	 * @param Date date Date to format.
 	 * @param optional String format Expression of format.
@@ -288,8 +304,21 @@ var __statics = {
 		if (year<100) {
 			year=f_dateFormat.ResolveYear(year, month, date, twoDigitYearStart, locale);
 		}
+				
+		var dateObject = new Date(year, month, date);
+		if (dateObject.getDate()!=date) {
+			throw new Error(f_dateFormat.INVALID_DATE_ERROR);
+		}
 		
-		return new Date(year, month, date);
+		if (dateObject.getMonth()!=month) {
+			throw new Error(f_dateFormat.INVALID_MONTH_ERROR);
+		}
+
+		if (dateObject.getFullYear()!=year) {
+			throw new Error(f_dateFormat.INVALID_YEAR_ERROR);
+		}
+
+		return dateObject;
 	},
 	
 	/**

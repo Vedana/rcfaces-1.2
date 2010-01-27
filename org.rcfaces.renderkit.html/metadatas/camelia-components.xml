@@ -53,6 +53,10 @@
 
 		<attribute id="src" type="java.lang.String" />
 		<attribute id="srcCharSet" type="java.lang.String" />
+		<attribute id="requiredModules" type="java.lang.String" />
+		<attribute id="requiredSets" type="java.lang.String" />
+
+		<attribute id="mergeStyles" type="boolean" />
 	</component>
 	
 	<component id="loadBundle" extends="cameliaBase" renderKit="html">

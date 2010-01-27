@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -266,6 +267,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             public void end(String namespace, String name) throws Exception {
 
                 ClassImpl clazz = (ClassImpl) this.digester.peek();
+                
+                /*
                 List l = null;
 
                 IClass cls[] = clazz.listRequiredClasses(null);
@@ -292,6 +295,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
                             .addDependencies((IHierarchicalFile[]) l
                                     .toArray(new IHierarchicalFile[l.size()]));
                 }
+                */
 
                 this.digester.pop();
             }
@@ -314,13 +318,7 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
                         ClassImpl clazz = (ClassImpl) this.digester.peek();
 
-                        IClass requiredClass = getClassByName(name);
-                        if (requiredClass == null) {
-                            throw new IllegalArgumentException(
-                                    "Unknown required class '" + name + "' !");
-                        }
-
-                        clazz.addRequiredClass(id, requiredClass);
+                        clazz.addRequiredClass(id, name);
                     }
                 });
     }
@@ -339,6 +337,8 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
 
         private List requiredClass;
 
+        private List requiredClassByName;
+
         private IClass requiredClassArray[];
 
         private Map requiredClassById = new HashMap();
@@ -352,7 +352,66 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
             return name;
         }
 
-        public void addRequiredClass(String requiredId, IClass clazz) {
+        public void addRequiredClass(String requiredId, String clazz) {
+            if (requiredClassByName == null) {
+                requiredClassByName = new ArrayList();
+            }
+
+            requiredClassByName.add(requiredId);
+            requiredClassByName.add(clazz);
+        }
+
+        void resolve(Map classesByName) {
+            if (requiredClassByName == null) {
+                return;
+            }
+
+            List l2 = requiredClassByName;
+            requiredClassByName = null;
+
+            for (Iterator it = l2.iterator(); it.hasNext();) {
+                String requiredId = (String) it.next();
+                String className = (String) it.next();
+
+                ClassImpl clazz = (ClassImpl) classesByName.get(className);
+                if (clazz == null) {
+                    throw new FacesException("Can not find class '" + className
+                            + "' to link requirements.");
+                }
+                
+                clazz.resolve(classesByName);
+
+                addRequiredClass(requiredId, clazz);
+            }
+
+            List l = null;
+
+            IClass cls[] = listRequiredClasses(null);
+            for (int i = 0; i < cls.length; i++) {
+                IHierarchicalFile file = cls[i].getFile();
+
+                if (l == null) {
+                    l = new ArrayList();
+                }
+                l.add(file);
+            }
+
+            IHierarchicalFile resources[] = listRequiredResources(null);
+            if (resources.length > 0) {
+                if (l == null) {
+                    l = new ArrayList();
+                }
+                l.addAll(Arrays.asList(resources));
+            }
+
+            if (l != null) {
+                ((HierarchicalFile) getFile())
+                        .addDependencies((IHierarchicalFile[]) l
+                                .toArray(new IHierarchicalFile[l.size()]));
+            }
+        }
+
+        private void addRequiredClass(String requiredId, IClass clazz) {
             if (requiredId == null) {
                 if (requiredClass == null) {
                     requiredClass = new ArrayList();
@@ -372,6 +431,10 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
         }
 
         public IClass[] listRequiredClasses(String requiredId) {
+            if (requiredClassByName != null) {
+                throw new IllegalStateException("Class linkage not processed !");
+            }
+
             if (requiredId == null) {
                 if (requiredClassArray != null) {
                     return requiredClassArray;
@@ -604,6 +667,14 @@ public class JavaScriptRepository extends BasicHierarchicalRepository implements
         sa.append(escape);
 
         return sa;
+    }
+
+    public void resolveDependencies() {
+        for (Iterator it = classByName.values().iterator(); it.hasNext();) {
+            ClassImpl clazz = (ClassImpl) it.next();
+
+            clazz.resolve(classByName);
+        }
     }
 
 }

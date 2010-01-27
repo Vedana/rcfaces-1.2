@@ -188,7 +188,7 @@ var __members = {
 				element=f_core.GetElementByClientId(elementId);
 
 			} else {
-				element = classLoader.f_init(element);			
+				element = classLoader.f_init(element, false, true);			
 			}
 
 			f_core.Debug(fa_groupName, "f_listGroup: Found element id='"+element.id+"' mainId='"+elementId+"' element='"+element+"'.");

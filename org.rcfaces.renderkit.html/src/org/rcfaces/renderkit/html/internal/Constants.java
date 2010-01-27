@@ -31,6 +31,8 @@ public class Constants {
         return CONSTANT_PREFIX;
     }
 
+    private static final String BUILDER_VERSION = null;
+
     private static final String RCFACES_HTML_VERSION_SYSTEM_PARAMETER = "rcfaces.html.version";
 
     public static final boolean INTERACTIVE_RENDER_DEFAULT_VALUE = true;
@@ -48,6 +50,8 @@ public class Constants {
     public static final String JAVASCRIPT_DEFAULT_CHARSET = "UTF-8";
 
     public static final String CSS_DEFAULT_CHARSET = "UTF-8";
+
+    public static final boolean RESOURCES_MODULE_URL_SUPPORT = true;
 
     public static final boolean VERSIONED_FRAMEWORK_URL_SUPPORT = true;
 
@@ -76,11 +80,19 @@ public class Constants {
     public static final boolean GENERATE_RCFACES_INIT_TIMER = true;
 
     static {
-        version = org.rcfaces.core.internal.Constants.searchVersion(
-                Constants.class, RCFACES_HTML_VERSION_SYSTEM_PARAMETER,
-                "RCFaces HTML");
+        if (BUILDER_VERSION != null) {
+            version = BUILDER_VERSION;
+
+        } else {
+            version = org.rcfaces.core.internal.Constants.searchVersion(
+                    Constants.class, RCFACES_HTML_VERSION_SYSTEM_PARAMETER,
+                    "RCFaces HTML");
+        }
 
         buildId = org.rcfaces.core.internal.Constants.getBuildId(version);
+
+        LOG.info("RCFaces HTML version='" + version + "' buildId='" + buildId
+                + "'");
 
         LOG.info("INTERACTIVE_RENDER_DEFAULT_VALUE="
                 + INTERACTIVE_RENDER_DEFAULT_VALUE);

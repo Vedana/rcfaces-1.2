@@ -1080,7 +1080,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             if (tableContext.isColumnImageURL(i)) {
                 String imageURL = ((ICellImageCapability) dc).getCellImageURL();
-                if (imageURL != null) {
+                if (imageURL != null && imageURL.length() > 0) {
                     if (images == null) {
                         images = new String[columnNumber];
                     }
@@ -1092,7 +1092,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (tableContext.isCellStyleClass(i)) {
                 String cs = ((ICellStyleClassCapability) dc)
                         .getCellStyleClass();
-                if (cs != null) {
+                if (cs != null && cs.length() > 0) {
                     if (cellStyleClasses == null) {
                         cellStyleClasses = new String[columnNumber];
                     }
@@ -1104,7 +1104,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (tableContext.isCellToolTipText(i)) {
                 String ct = ((ICellToolTipTextCapability) dc)
                         .getCellToolTipText();
-                if (ct != null) {
+                if (ct != null && ct.length() > 0) {
                     if (cellToolTipTexts == null) {
                         cellToolTipTexts = new String[columnNumber];
                     }

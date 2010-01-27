@@ -99,7 +99,7 @@ var __members={
 			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent, this._ignoreEditableComponent);
 
 			if (forComponent) {
-				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
+				this._forComponentId=forComponent; // Calculé coté serveur !!!!
 				this._forItemValue=forItemValue;
 					
 				this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);				

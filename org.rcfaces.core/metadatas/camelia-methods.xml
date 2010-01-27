@@ -670,6 +670,13 @@
 			setInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
 		</code>
 	</method>
+	<method id="setDefaultItemInputType">
+		<import>org.rcfaces.core.internal.converter.InputTypeConverter</import>
+		<parameter type="String" name="inputType" />
+		<code>
+			setDefaultItemInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
+		</code>
+	</method>
 	<method id="setAsyncRenderMode">
 		<import>org.rcfaces.core.internal.converter.AsyncRenderModeConverter</import>
 		<parameter type="String" name="asyncRenderMode" />

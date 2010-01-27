@@ -23,14 +23,14 @@ import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
+import org.rcfaces.core.image.operation.IDisableOperation;
+import org.rcfaces.core.image.operation.IHoverOperation;
+import org.rcfaces.core.image.operation.ISelectedOperation;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.component.IStatesImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
-import org.rcfaces.core.internal.images.operation.DisableOperation;
-import org.rcfaces.core.internal.images.operation.HoverOperation;
-import org.rcfaces.core.internal.images.operation.SelectedOperation;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
@@ -354,7 +354,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
                 } else {
                     // C'est un <a href> !
-                    writer.writeHRef("javascript:void(0)");
+                    writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
                     writeInputAttributes(writer);
 
                     writer.startElement(IHtmlWriter.IMG);
@@ -370,8 +370,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
             /*
              * Le javascript s'occupe de ca ! if (button == false &&
-             * imageJavascript == false) { writer.writeAttribute("href",
-             * "javascript:void(0)"); }
+             * imageJavascript == false) { writer.writeAttribute("href", IHtmlWriter.JAVASCRIPT_VOID); }
              */
 
             if (htmlBorderWriter != null) {
@@ -506,17 +505,17 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         IContentAccessor imageContentAccessor = getImageAccessor(htmlWriter);
 
         // RcfacesContext rcfacesContext =
-        //RcfacesContext.getInstance(htmlWriter.getHtmlComponentRenderContext().
+        // RcfacesContext.getInstance(htmlWriter.getHtmlComponentRenderContext().
         // getFacesContext()).getImage();
 
         if (ImageContentAccessorHandler.isOperationSupported(htmlWriter
                 .getComponentRenderContext().getFacesContext(),
-                HoverOperation.ID, imageContentAccessor) == false) {
+                IHoverOperation.ID, imageContentAccessor) == false) {
             return contentAccessor;
         }
 
         return ContentAccessorFactory.createFromWebResource(null,
-                HoverOperation.ID + IContentAccessor.FILTER_SEPARATOR,
+                IHoverOperation.ID + IContentAccessor.FILTER_SEPARATOR,
                 imageContentAccessor);
     }
 
@@ -531,12 +530,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (ImageContentAccessorHandler.isOperationSupported(htmlWriter
                 .getComponentRenderContext().getFacesContext(),
-                SelectedOperation.ID, imageContentAccessor) == false) {
+                ISelectedOperation.ID, imageContentAccessor) == false) {
             return contentAccessor;
         }
 
         return ContentAccessorFactory.createFromWebResource(null,
-                SelectedOperation.ID + IContentAccessor.FILTER_SEPARATOR,
+                ISelectedOperation.ID + IContentAccessor.FILTER_SEPARATOR,
                 imageContentAccessor);
     }
 
@@ -551,12 +550,12 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         if (ImageContentAccessorHandler.isOperationSupported(htmlWriter
                 .getComponentRenderContext().getFacesContext(),
-                DisableOperation.ID, imageContentAccessor) == false) {
+                IDisableOperation.ID, imageContentAccessor) == false) {
             return contentAccessor;
         }
 
         return ContentAccessorFactory.createFromWebResource(null,
-                DisableOperation.ID + IContentAccessor.FILTER_SEPARATOR,
+                IDisableOperation.ID + IContentAccessor.FILTER_SEPARATOR,
                 imageContentAccessor);
     }
 
@@ -645,6 +644,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         if (imageSrc == null) {
             return;
         }
+
         String inputElement = getInputElement();
         writer.startElement(inputElement);
         writeInputAttributes(writer);
@@ -669,7 +669,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         } else {
             writeImageAttributes();
-            writer.writeHRef("javascript:void(0)");
+            writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
 
             if (alternateText != null) {
                 writer.writeAlt(alternateText);
@@ -849,8 +849,20 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         htmlBorderWriter.startChild(writer, AbstractHtmlBorderRenderer.TD_TEXT,
                 halign, valign, width, height, 1, 1);
 
-        writer.startElement(IHtmlWriter.SPAN);
-        writer.writeId(getTextId(writer, htmlBorderWriter));
+        String clientId = getTextId(writer, htmlBorderWriter);
+
+        if (imageSrc == null) {
+            writer.startElement(IHtmlWriter.A);
+            writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+
+            writer.addSubFocusableComponent(clientId);
+            writer.getJavaScriptEnableMode().enableOnFocus();
+
+        } else {
+            writer.startElement(IHtmlWriter.SPAN);
+        }
+
+        writer.writeId(clientId);
         writer.writeClass(getTextClassName(htmlBorderWriter));
 
         UIComponent mainComponent = writer.getComponentRenderContext()
@@ -873,7 +885,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         writeText();
 
-        writer.endElement(IHtmlWriter.SPAN);
+        if (imageSrc == null) {
+            writer.endElement(IHtmlWriter.A);
+        } else {
+            writer.endElement(IHtmlWriter.SPAN);
+        }
 
         htmlBorderWriter.endChild(writer);
     }

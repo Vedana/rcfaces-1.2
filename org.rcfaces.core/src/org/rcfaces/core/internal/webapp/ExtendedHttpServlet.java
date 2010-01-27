@@ -241,8 +241,15 @@ public class ExtendedHttpServlet extends HttpServlet {
     }
 
     public static final void setNoCache(HttpServletResponse response) {
+        // Set standard HTTP/1.0 no-cache header.
         response.setHeader(HTTP_PRAGMA, "no-cache");
-        response.setHeader(HTTP_CACHE_CONTROL, "no-cache");
+        
+        // Set standard HTTP/1.1 no-cache headers.
+        response.setHeader(HTTP_CACHE_CONTROL, "no-cache, no-store, must-revalidate");
+        
+        // Set IE extended HTTP/1.1 no-cache headers (use addHeader)
+        response.addHeader(HTTP_CACHE_CONTROL, "post-check=0, pre-check=0");
+
         response.setDateHeader(HTTP_EXPIRES, 0);
         response.setDateHeader(HTTP_LAST_MODIFIED, System.currentTimeMillis());
     }

@@ -104,7 +104,7 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
         }
         /*
          * Le javascript s'occupe de ca ! if (button == false && imageJavascript
-         * == false) { htmlWriter.writeAttribute("href", "javascript:void(0)");
+         * == false) { htmlWriter.writeAttribute("href", IHtmlWriter.JAVASCRIPT_VOID);
          * }
          */
 

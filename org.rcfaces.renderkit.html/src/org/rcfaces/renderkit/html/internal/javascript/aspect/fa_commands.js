@@ -57,6 +57,7 @@ var __members = {
 	f_processNextCommand: function() {
 		var nextCommand=this._nextCommand;
 		if (!nextCommand) {
+			f_core.Debug(fa_commands, "f_processNextCommand: no more commands");
 			return false;
 		}
 	
@@ -79,6 +80,7 @@ var __members = {
 	 * @return void
 	 */
 	f_clearCommands: function() {
+		f_core.Debug(fa_commands, "f_clearCommands: clear commands");
 		this._nextCommand=undefined;
 	}
 }

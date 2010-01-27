@@ -116,11 +116,23 @@ var __members = {
 	 *  </p>
 	 *
 	 * @method protected
+	 * @param HTMLElement base
 	 * @return void
 	 */
 	f_fillBody: function(base) {
 		this.f_super(arguments, base);
-
+		
+		this.f_constructWaitingComponents(base);
+	},
+	
+	/**
+	 *  Construct waiting components
+	 *
+	 * @method protected
+	 * @param HTMLElement base
+	 * @return void
+	 */
+	f_constructWaitingComponents: function(base) {
 		var tr=f_core.CreateElement(base, "table", {
 			cellPadding: 0,
 			cellSpacing: 0

@@ -6,7 +6,6 @@ package org.rcfaces.core.image;
 
 import org.rcfaces.core.internal.content.AbstractBufferOperation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
-import org.rcfaces.core.internal.images.ImageOperationContentModel;
 
 /**
  * 
@@ -41,7 +40,7 @@ public abstract class AbstractImageOperation extends AbstractBufferOperation
         this.responseSuffix = responseSuffix;
     }
 
-    public void prepare(ImageOperationContentModel imageOperationContentModel,
+    public void prepare(IImageOperationContentModel imageOperationContentModel,
             IGenerationResourceInformation generationInformation,
             IGeneratedImageInformation generatedInformation) {
         if (sourceMimeType != null) {

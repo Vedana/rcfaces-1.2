@@ -91,7 +91,7 @@ public abstract class AbstractJavaScriptRenderContext implements
 
     private final IJavaScriptRepository repository;
 
-    private final Set waitingRequiredClassesNames = new HashSet(
+    protected final Set waitingRequiredClassesNames = new HashSet(
             DECLARED_CLASSES_INIT_SIZE);
 
     private final Set declaredClasses;

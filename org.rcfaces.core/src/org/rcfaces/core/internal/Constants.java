@@ -44,6 +44,8 @@ public class Constants {
         CONSTANT_PREFIX = name;
     }
 
+    private static final String BUILDER_VERSION = null;
+
     public static final boolean READ_ONLY_COLLECTION_LOCK_ENABLED = true;
 
     public static final boolean TEMPLATE_ENGINE_SUPPORT = true;
@@ -105,8 +107,15 @@ public class Constants {
 
     private static final String version;
     static {
-        version = searchVersion(Constants.class,
-                RCFACES_VERSION_SYSTEM_PARAMETER, "RCFaces Core");
+        if (BUILDER_VERSION != null) {
+            version = BUILDER_VERSION;
+
+        } else {
+            version = searchVersion(Constants.class,
+                    RCFACES_VERSION_SYSTEM_PARAMETER, "RCFaces Core");
+        }
+
+        LOG.info("RCFaces CORE version '" + version + "'");
     }
 
     private static final IFactory defaultFactory;
@@ -236,6 +245,7 @@ public class Constants {
 
     public static final String searchVersion(Class clazz,
             String systemParameter, String versionName) {
+
         try {
             String version = System.getProperty(systemParameter);
             if (version != null) {

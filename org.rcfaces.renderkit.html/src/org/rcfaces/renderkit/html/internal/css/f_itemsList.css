@@ -8,14 +8,25 @@
 
 .f_itemsList {
 	display: block;
+	margin: 0;
+	padding: 0;	
+	overflow: auto;
+	background-color: white;
+	position: relative;
+}
+
+.f_itemsList_item,
+.f_itemsList_container {
+	display: block;
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;	
-	overflow: auto;
-	display: block;
-	background-color: white;
-	position: relative;
 }
+
+.f_itemsList_item {
+	padding: 2px;
+}
+
 

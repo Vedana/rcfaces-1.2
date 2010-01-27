@@ -232,8 +232,10 @@ var __members={
 	f_getFocusComponent: function() {
 		var activeElement=this._getActiveElement();
 		
+		f_core.Debug(f_focusManager, "f_getFocusComponent: activeElement='"+activeElement+"'");
+		
 		if (activeElement) {
-			return this.f_getClassLoader().f_init(activeElement, true);
+			return this.f_getClassLoader().f_init(activeElement, true, true);
 		}
 		 
 		return null;

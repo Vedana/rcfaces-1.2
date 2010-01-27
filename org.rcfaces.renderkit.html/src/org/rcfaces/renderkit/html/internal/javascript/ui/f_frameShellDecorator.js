@@ -10,11 +10,14 @@
  * @version $Revision$ $Date$
  */
 
-var __members = {
-	
+var __statics = {
 	/**
 	 * @field private static final String
-	_SHELL_DECORATOR_IDENTIFIER: "frameShellDecorator";
+	 */
+	_SHELL_DECORATOR_IDENTIFIER: "frameShellDecorator"
+}
+
+var __members = {
 	
 	/**
 	 * @field private HTMLIFrame;
@@ -58,8 +61,9 @@ var __members = {
 		var shell=this._shell;
 		
 		var shellIdentifier=this.f_registerShell(shell);
-		iframe._shellIdentifier=shellIdentifier;
+		iframe._rcfacesShellIdentifier=shellIdentifier;
 		iframe._rcfacesShellDecoratorIdentifier=this.f_getId();
+		f_core.Assert(iframe._rcfacesShellDecoratorIdentifier, "f_frameShellDecorator.f_createDecoration: Invalid id '"+iframe._rcfacesShellDecoratorIdentifier+"'.");
 
 		iframe.frameBorder = 0;
 		iframe.scrolling="no";
@@ -151,7 +155,6 @@ var __members = {
 	f_finalizeIframe: function(iframe) {
 		iframe.onreadystatechange=null;
 		iframe.onload=null;
-		// iframe._shellIdentifier=undefined;  // number
 		
 		f_core.VerifyProperties(iframe);		
 	},
@@ -355,5 +358,6 @@ var __members = {
 
 new f_class("f_frameShellDecorator", {
 	extend: f_shellDecorator,
-	members: __members
+	members: __members,
+	statics: __statics
 });

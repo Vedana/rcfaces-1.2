@@ -44,7 +44,6 @@ import org.rcfaces.core.internal.contentProxy.ResourceProxyHandlerImpl;
 import org.rcfaces.core.internal.contentStorage.ContentStorageAccessorHandler;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
 import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
-import org.rcfaces.core.internal.images.ImageContentAccessorHandlerImpl;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.repository.RepositoryManagerImpl;
@@ -81,7 +80,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
             ResourceVersionHandlerImpl.class.getPackage(),
             ResourceProxyHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
-            ImageContentAccessorHandlerImpl.class.getPackage(),
+//            ImageContentAccessorHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
             ContentStorageAccessorHandler.class.getPackage(),
             RepositoryManagerImpl.class.getPackage() };

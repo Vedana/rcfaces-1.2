@@ -4,23 +4,37 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringTokenizer;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.style.IStyleContentAccessorHandler;
+import org.rcfaces.core.internal.util.PathTypeTools;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.component.CssStyleComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlProcessContext;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.css.ICssConfig;
+import org.rcfaces.renderkit.html.internal.css.StylesheetsServlet;
+import org.rcfaces.renderkit.html.internal.decorator.CssFilesCollectorDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.FilesCollectorDecorator;
+import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
 import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
 
@@ -31,6 +45,8 @@ import org.rcfaces.renderkit.html.internal.util.UserAgentTools;
  */
 public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory.getLog(CssStyleRenderer.class);
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
@@ -64,6 +80,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                 .useMetaContentStyleType();
 
         String src = cssStyleComponent.getSrc(facesContext);
+        String srcCharSet = cssStyleComponent.getSrcCharSet(facesContext);
 
         FileItemSource sources[] = null;
         FilesCollectorDecorator filesCollectorDecorator = (FilesCollectorDecorator) getComponentDecorator(componentRenderContext);
@@ -71,35 +88,112 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
             sources = filesCollectorDecorator.listSources();
         }
 
+        String requiredModules = cssStyleComponent
+                .getRequiredModules(facesContext);
+
+        String requiredSets = cssStyleComponent.getRequiredSets(facesContext);
+        if (requiredModules != null || requiredSets != null) {
+            sources = addRequired(htmlWriter, sources, requiredModules,
+                    requiredSets);
+        }
+
+        boolean mergeStyles = cssStyleComponent.isMergeStyles(facesContext);
+
         if (src != null || (sources != null && sources.length > 0)) {
 
-            IGenerationResourceInformation generationInformation = null;
-            if (sources != null && sources.length > 0) {
-                generationInformation = new FilesCollectorGenerationInformation(
-                        sources);
+            boolean srcFiltred = false;
 
-                if (src == null) {
-                    src = IStyleContentAccessorHandler.MERGE_FILTER_NAME
-                            + IContentAccessor.FILTER_SEPARATOR;
+            if (mergeStyles) {
+                IGenerationResourceInformation generationInformation = null;
+
+                if (sources != null && sources.length > 0) {
+                    if (src == null) {
+                        src = IStyleContentAccessorHandler.MERGE_FILTER_NAME
+                                + IContentAccessor.FILTER_SEPARATOR
+                                + sources[0].getSource();
+
+                        if (sources.length > 1) {
+                            FileItemSource fs[] = new FileItemSource[sources.length - 1];
+                            System.arraycopy(sources, 1, fs, 0,
+                                    sources.length - 1);
+
+                            sources = fs;
+                        } else {
+                            sources = null;
+                        }
+                    }
+
+                    if (sources != null) {
+                        generationInformation = new FilesCollectorGenerationInformation(
+                                sources);
+                    }
                 }
+
+                IContentAccessor contentAccessor = ContentAccessorFactory
+                        .createFromWebResource(facesContext, src,
+                                IContentFamily.STYLE);
+
+                IGeneratedResourceInformation generatedResourceInformation = new BasicGeneratedResourceInformation();
+
+                src = contentAccessor.resolveURL(facesContext,
+                        generatedResourceInformation, generationInformation);
+
+                // srcCharset=generatedResourceInformation.getCharset();
+
+                srcFiltred = true;
+
+                sources = null;
             }
 
-            IContentAccessor contentAccessor = ContentAccessorFactory
-                    .createFromWebResource(facesContext, src,
-                            IContentFamily.STYLE);
+            if (src != null && srcFiltred == false) {
+                IContentAccessor contentAccessor = ContentAccessorFactory
+                        .createFromWebResource(facesContext, src,
+                                IContentFamily.STYLE);
 
-            src = contentAccessor.resolveURL(facesContext, null,
-                    generationInformation);
+                src = contentAccessor.resolveURL(facesContext, null, null);
+            }
+
             if (src != null) {
+
                 htmlWriter.startElement(IHtmlWriter.LINK);
                 htmlWriter.writeRel(IHtmlRenderContext.STYLESHEET_REL);
                 if (useMetaContentStyleType == false) {
                     htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
                 }
+                if (srcCharSet != null) {
+                    htmlWriter.writeCharSet(srcCharSet);
+                }
 
                 htmlWriter.writeHRef(src);
 
                 htmlWriter.endElement(IHtmlWriter.LINK);
+            }
+
+            if (sources != null) {
+                for (int i = 0; i < sources.length; i++) {
+                    FileItemSource source = sources[i];
+
+                    htmlWriter.startElement(IHtmlWriter.LINK);
+                    htmlWriter.writeRel(IHtmlRenderContext.STYLESHEET_REL);
+                    if (useMetaContentStyleType == false) {
+                        htmlWriter.writeType(IHtmlRenderContext.CSS_TYPE);
+                    }
+                    if (source.getCharSet() != null) {
+                        htmlWriter.writeCharSet(source.getCharSet());
+                    }
+
+                    String itemSrc = source.getSource();
+                    IContentAccessor contentAccessor = ContentAccessorFactory
+                            .createFromWebResource(facesContext, itemSrc,
+                                    IContentFamily.STYLE);
+
+                    itemSrc = contentAccessor.resolveURL(facesContext, null,
+                            null);
+
+                    htmlWriter.writeHRef(itemSrc);
+
+                    htmlWriter.endElement(IHtmlWriter.LINK);
+                }
             }
         }
 
@@ -117,10 +211,60 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
         }
     }
 
+    private FileItemSource[] addRequired(IHtmlWriter writer,
+            FileItemSource[] sources, String requiredModules,
+            String requiredSets) {
+
+        IHtmlProcessContext htmlProcessContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext()
+                .getHtmlProcessContext();
+
+        List sl = new ArrayList(Arrays.asList(sources));
+
+        if (requiredModules != null) {
+            StringTokenizer st = new StringTokenizer(requiredModules, ",");
+            for (; st.hasMoreTokens();) {
+                String moduleName = st.nextToken().trim();
+
+                ICssConfig cssConfig = StylesheetsServlet.getConfig(
+                        htmlProcessContext, moduleName);
+
+                if (cssConfig == null) {
+                    LOG.error("Unknown module '" + moduleName + "'");
+                    continue;
+                }
+
+                String uri = cssConfig.getDefaultStyleSheetURI()
+                        + "/"
+                        + cssConfig.getStyleSheetFileName(htmlProcessContext
+                                .getClientBrowser());
+
+                uri = PathTypeTools
+                        .convertContextPathToAbsoluteType(writer
+                                .getHtmlComponentRenderContext()
+                                .getFacesContext(), uri);
+
+                sl.add(new FileItemSource(uri, null, null));
+            }
+        }
+
+        if (requiredSets != null) {
+
+        }
+
+        return (FileItemSource[]) sl.toArray(new FileItemSource[sl.size()]);
+    }
+
     public boolean getRendersChildren() {
         return true;
     }
 
     public void encodeChildren(FacesContext facesContext, UIComponent component) {
     }
+
+    protected IComponentDecorator createComponentDecorator(
+            FacesContext facesContext, UIComponent component) {
+        return new CssFilesCollectorDecorator(component);
+    }
+
 }

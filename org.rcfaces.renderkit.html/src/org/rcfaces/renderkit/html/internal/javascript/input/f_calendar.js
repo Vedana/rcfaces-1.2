@@ -81,6 +81,13 @@ var __members = {
 		this._calendar.f_constructComponent(this);		
 	},
 	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		return this;	
+	},
+	/**
 	 * @method hidden
 	 */
 	f_appendDateItem: function(date, label, disabled, styleClass) {

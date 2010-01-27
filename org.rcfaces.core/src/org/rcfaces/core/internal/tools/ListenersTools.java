@@ -96,6 +96,8 @@ public class ListenersTools {
 
         void addScriptListener(UIComponent component, String scriptType,
                 String expression);
+        
+        // void clearListeners(UIComponent component);
     }
 
     /**

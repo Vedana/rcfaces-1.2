@@ -18,7 +18,7 @@ var __members= {
 	 * @param optional Event jsEvent
 	 * @param optional Object item
 	 * @param optional any value
-	 * @param optional fa_selectionProvider<? extends Object> selectionProvider
+	 * @param optional fa_selectionProvider selectionProvider
 	 * @param optional any detail
 	 */
 	 f_event: function(component, type, jsEvent, item, value, selectionProvider, detail) {
@@ -111,7 +111,7 @@ var __members= {
 	 * Returns the selectionProvider wich contains the item associated to the event.
 	 *
 	 * @method public
-	 * @return fa_selectionProvider<? extends Object> Returns the selectionProvider associated to the item.
+	 * @return fa_selectionProvider Returns the selectionProvider associated to the item.
 	 */
 	f_getSelectionProvider: function() {
 		f_core.Assert(arguments.length==0, "f_event.f_getSelectionProvider: Invalid number of parameter");
@@ -492,7 +492,7 @@ var __statics = {
 	},
 	/**
 	 * @method public static
-	 * @return fa_selectionProvider<? extends Object>
+	 * @return fa_selectionProvider
 	 */
 	GetSelectionProvider: function() { 
 		f_core.Assert(arguments.length==0, "f_event.GetSelectionProvider: Invalid number of parameter");

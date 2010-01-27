@@ -19,9 +19,11 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
+import org.rcfaces.renderkit.html.internal.CssStyleClasses;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -156,6 +158,10 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnOver();
         }
 
+        if (expandBarComponent.isUserExpandable(facesContext) == false) {
+            htmlWriter.writeAttribute("v:userExpandable", false);
+        }
+
         htmlWriter.startElement(IHtmlWriter.LI);
         htmlWriter.writeId(getHeadId(htmlWriter));
         htmlWriter.writeClass(getHeadClassName(htmlWriter, collapsed));
@@ -274,7 +280,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.A);
         htmlWriter.writeId(buttonClientId);
         // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeHRef("javascript:void(0)");
+        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
         htmlWriter.writeClass(getInputClassName(htmlWriter));
 
         htmlWriter.addSubFocusableComponent(buttonClientId);
@@ -313,7 +319,13 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.startElement(IHtmlWriter.LABEL);
         htmlWriter.writeId(getLabelId(htmlWriter));
         htmlWriter.writeFor(buttonClientId);
-        htmlWriter.writeClass(getLabelClassName(htmlWriter));
+
+        ICssStyleClasses cssStyleClasses = new CssStyleClasses(
+                getLabelClassName(htmlWriter), (String) null);
+        if (expandBarComponent.isUserExpandable(facesContext)) {
+            cssStyleClasses.addSuffix("_expandable");
+        }
+        htmlWriter.writeClass(cssStyleClasses.constructClassName());
         writeTextDirection(htmlWriter, expandBarComponent);
 
         String text = (String) htmlWriter.getComponentRenderContext()
@@ -325,19 +337,19 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.LABEL);
 
-        /*
-         * UIComponent component = expandBarComponent.getFacet(HEAD_FACET_NAME);
-         * if (component != null) {
-         * 
-         * htmlWriter.startElement(IHtmlWriter.DIV");
-         * htmlWriter.writeClass(getFacetClassName(htmlWriter));
-         * 
-         * htmlWriter.flush();
-         * 
-         * ComponentTools.encodeRecursive(facesContext, component);
-         * 
-         * htmlWriter.endElement(IHtmlWriter.DIV"); }
-         */
+        UIComponent component = expandBarComponent.getFacet(HEAD_FACET_NAME);
+        if (component != null) {
+
+            htmlWriter.startElement(IHtmlWriter.DIV);
+            htmlWriter.writeClass(getFacetClassName(htmlWriter));
+
+            // htmlWriter.flush();
+
+            ComponentTools.encodeRecursive(facesContext, component);
+
+            htmlWriter.endElement(IHtmlWriter.DIV);
+        }
+
     }
 
     protected int getButtonImageWidth(IHtmlWriter htmlWriter) {

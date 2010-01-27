@@ -4,12 +4,8 @@
  */
 package org.rcfaces.core.image;
 
-import java.awt.image.BufferedImage;
-import java.util.Map;
-
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
-import org.rcfaces.core.internal.images.ImageOperationContentModel;
 
 /**
  * 
@@ -26,10 +22,7 @@ public interface IImageOperation extends IBufferOperation {
 
     void setEncoderMimeType(String encoderMimeType);
 
-    void prepare(ImageOperationContentModel imageOperationContentModel,
+    void prepare(IImageOperationContentModel imageOperationContentModel,
             IGenerationResourceInformation generationInformation,
             IGeneratedImageInformation generatedInformation);
-
-    BufferedImage filter(Map filterParameters, BufferedImage source,
-            BufferedImage destination);
 }

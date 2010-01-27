@@ -13,6 +13,7 @@
 .f_calendar {
 	font-family: arial, helvetica;
 	-moz-user-select: none;
+	-moz-box-sizing: border-box;
 	user-select: none;
 	text-align: left;
 	vertical-align: baseline;
@@ -42,7 +43,7 @@
 .f_calendar_nextYear,
 .f_calendar_prevYear_disabled,
 .f_calendar_nextYear_disabled {
-	background: url('calendar/arrows.gif') no-repeat 0 0;
+	background: url('calendar/arrows.gif') 0 0 no-repeat;
 	border: 0;
 }
 
@@ -161,6 +162,9 @@
 	text-decoration: underline;
 }
 
+.f_calendar_cday {
+	padding: 1px;
+}
 
 .f_calendar_cday
 .f_calendar_cday_disabled,
@@ -287,11 +291,12 @@
 }
 
 .f_calendar_today {
+	-moz-box-sizing: border-box;
 	text-align: center;
 	vertical-align: middle;
 	width: 100%;
-	height: 18px;
 	border-top: 1px solid #CCC;
+	padding: 3px 1px;
 }
 
 .f_calendar_today:hover {
@@ -300,4 +305,14 @@
 
 .f_calendar_rday {
 	height: 20px;
+}
+
+.f_calendar_yearCursor,
+.f_calendar_monthCursor,
+.f_calendar_monthList {
+	padding: 2px 1px 0 1px;
+}
+
+.f_calendar_dayList {
+	padding: 2px;
 }

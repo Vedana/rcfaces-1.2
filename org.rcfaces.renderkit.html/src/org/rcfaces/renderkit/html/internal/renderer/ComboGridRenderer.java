@@ -94,6 +94,35 @@ public class ComboGridRenderer extends DataGridRenderer implements
         ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
                 .getComponent();
 
+        String formattedValue = null;
+        String convertedSelectedValue = null;
+        Object selectedValue = comboGridComponent
+                .getSelectedValue(facesContext);
+        String valueColumnId = comboGridComponent
+                .getValueColumnId(facesContext);
+
+        if (selectedValue != null) {
+            UIComponent converterComponent = getColumn(comboGridComponent,
+                    valueColumnId);
+
+            convertedSelectedValue = ValuesTools.convertValueToString(
+                    selectedValue, converterComponent, facesContext);
+
+            if (convertedSelectedValue != null
+                    && convertedSelectedValue.length() > 0) {
+
+                formattedValue = formatValue(facesContext, comboGridComponent,
+                        convertedSelectedValue);
+
+                if (formattedValue == null) {
+                    componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,
+                            Boolean.TRUE);
+
+                    formattedValue = convertedSelectedValue;
+                }
+            }
+        }
+
         boolean disabled = comboGridComponent.isDisabled(facesContext);
         boolean readOnly = comboGridComponent.isReadOnly(facesContext);
         boolean editable = comboGridComponent.isEditable(facesContext);
@@ -105,6 +134,10 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
         } else if (readOnly) {
             cssStyleClasses.addSuffix("_readOnly");
+        }
+
+        if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
+            cssStyleClasses.addSuffix("_errored");
         }
 
         String width = comboGridComponent.getWidth(facesContext);
@@ -194,6 +227,12 @@ public class ComboGridRenderer extends DataGridRenderer implements
             htmlWriter.writeAttribute("v:pagerLookId", pagerLookId);
         }
 
+        String popupStyleClass = comboGridComponent
+                .getPopupStyleClass(facesContext);
+        if (popupStyleClass != null) {
+            htmlWriter.writeAttribute("v:popupStyleClass", popupStyleClass);
+        }
+
         String gridStyleClass = comboGridComponent
                 .getGridStyleClass(facesContext);
         if (gridStyleClass != null) {
@@ -205,8 +244,12 @@ public class ComboGridRenderer extends DataGridRenderer implements
             htmlWriter.writeAttribute("v:gridLookId", gridLookId);
         }
 
-        String valueColumnId = comboGridComponent
-                .getValueColumnId(facesContext);
+        boolean searchField = comboGridComponent
+                .isSearchFieldVisible(facesContext);
+        if (searchField == false) {
+            htmlWriter.writeAttribute("v:searchFieldVisible", searchField);
+        }
+
         if (valueColumnId != null) {
             htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
         }
@@ -266,35 +309,17 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
             htmlWriter.writeAttribute("v:emptyDataMessage", emptyDataMessage);
         }
-        // }
 
-        String formattedValue = null;
+        if (convertedSelectedValue != null
+                && convertedSelectedValue.length() > 0) {
 
-        Object selectedValue = comboGridComponent
-                .getSelectedValue(facesContext);
-        if (selectedValue != null) {
-            UIComponent converterComponent = getColumn(comboGridComponent,
-                    valueColumnId);
+            htmlWriter
+                    .writeAttribute("v:selectedValue", convertedSelectedValue);
 
-            String convertedSelectedValue = ValuesTools.convertValueToString(
-                    selectedValue, converterComponent, facesContext);
-
-            if (convertedSelectedValue != null
-                    && convertedSelectedValue.length() > 0) {
-                htmlWriter.writeAttribute("v:selectedValue",
-                        convertedSelectedValue);
-
-                formattedValue = formatValue(facesContext, comboGridComponent,
-                        convertedSelectedValue);
-
-                if (formattedValue == null) {
-                    // La clef est inconnue !
-                    htmlWriter.writeAttribute("v:invalidKey", true);
-                    componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,
-                            Boolean.TRUE);
-
-                    formattedValue = convertedSelectedValue;
-                }
+            if (componentRenderContext
+                    .containsAttribute(INPUT_ERRORED_PROPERTY)) {
+                // La clef est inconnue !
+                htmlWriter.writeAttribute("v:invalidKey", true);
             }
         }
 
@@ -463,6 +488,8 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
         if ((dataModel instanceof IFiltredModel) == false) {
             if (true) {
+                LOG
+                        .error("Model doest not implement IFiltredModel, returns *not found*");
                 return null;
             }
 

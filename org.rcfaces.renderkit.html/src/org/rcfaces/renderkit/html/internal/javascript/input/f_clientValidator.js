@@ -181,7 +181,9 @@ var __statics = {
 		validator._applyOutputValue();
 		validator._hasFocus = undefined;
 		
-		return bRet;
+		//return bRet;
+		// On appelle les autres BLURs ...
+		return true;
 	},
 	/**
 	 * @method private static
@@ -538,7 +540,7 @@ var __statics = {
 			break;
 
 		case f_clientValidator.BEHAVIOR:
-			setMsg = !!error;;
+			setMsg = !!error;
 			setFoc = setMsg;
 			break;
 

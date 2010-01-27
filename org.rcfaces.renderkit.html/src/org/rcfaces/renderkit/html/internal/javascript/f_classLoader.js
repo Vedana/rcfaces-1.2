@@ -489,15 +489,18 @@ f_classLoader.prototype = {
 		var pool;
 		if (systemClass) {
 			pool=this._systemComponentPool;
-			f_core.Debug(f_classLoader, "_newInstance: Add SYSTEM component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
+			f_core.Debug(f_classLoader, "_newInstance: Add SYSTEM component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.", (window.RCFACES_newInstanceStack)?(new Error()):null);
 	
 		} else if (object.tagName) {
 			pool=this._componentPool;
-			f_core.Debug(f_classLoader, "_newInstance: Add component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.");
+			f_core.Debug(f_classLoader, "_newInstance: Add component '"+object.id+"' of class '"+object._kclass._name+"' into component pool.", (window.RCFACES_newInstanceStack)?(new Error()):null);
 			
 		} else {
 			pool=this._objectPool;
-	//		f_core.Debug(f_classLoader, "_newInstance: Add object of class '"+object._kclass._name+"' into object pool.");
+			
+			if (f_core.IsDebugEnabled(f_classLoader) && window.RCFACES_newObjectInstanceStack) {
+				f_core.Debug(f_classLoader, "_newInstance: Add object of class '"+object._kclass._name+"' into object pool.", (window.RCFACES_newInstanceStack)?(new Error()):null);
+			}
 		}	
 		
 		f_core.Assert(pool, "f_classLoader._newInstance: Pool must be defined !");
@@ -776,20 +779,23 @@ f_classLoader.prototype = {
 		 
 		// var onInitComponentListeners=this._onInitComponentListeners;    // A voir ....
 		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var i=0;i<arguments.length;i++) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=arguments[i];
+			}	
+			
+			f_core.Debug(f_classLoader, "f_initIds: ("+arguments.length+" components) ids="+idsLog);
+		}
+		
 		for(var i=0;i<arguments.length;i++) {
-			var obj=this.f_init(arguments[i]);
+			var obj=this.f_init(arguments[i], false, true);
 			if (!obj) {
 				continue;
-			}
-			
-			var completeComponent=obj.f_completeComponent;
-			if (typeof(completeComponent)=="function") {
-				try {
-					completeComponent.call(obj);
-		
-				} catch (x) {
-					f_core.Error(f_classLoader, "f_initIds: f_completeComponent throws exception for component '"+obj.id+"'.", x);
-				}
 			}
 			
 			/* Pas sure !
@@ -801,10 +807,15 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden final
-	 * @param String... ids
+	 * @param String[] ids
 	 * @return void
 	 */
 	f_initOnMessage: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			f_core.Debug(f_classLoader, "f_initOnMessage: ("+ids.length+" components) ids="+ids.join());
+		}
+
 		var onMessageIds=this._onMessageIds;
 		if (!onMessageIds) {
 			onMessageIds=ids;
@@ -837,6 +848,11 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	_initializeIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			f_core.Debug(f_classLoader, "_initializeIds: ("+ids.length+" objects) ids="+ids.join());
+		}
+
 		for(var i=0;i<ids.length;i++) {
 			var componentId=ids[i];
 						
@@ -853,11 +869,7 @@ f_classLoader.prototype = {
 			
 			f_core.Info(f_classLoader,"_initializeIds["+i+"/"+ids.length+"]: Initialize component '"+componentId+"'.");
 			try {
-				this.f_init(component);
-				
-				if (typeof(component.f_completeComponent)=="function") {
-					component.f_completeComponent();
-				}
+				this.f_init(component, false, true);
 				
 			} catch (ex) {
 				f_core.Error(f_classLoader, "f_verifyOnMessage: Can not initialize component '"+componentId+"'.", ex);
@@ -871,11 +883,25 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden final
-	 * @param String... ids
+	 * @param Set ids
 	 * @return void
 	 */
-	f_initOnAccessIds: function(keys) {
-		f_key.AddAccessKeyByClientIds(keys);
+	f_initOnAccessIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var id in ids) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=id;
+			}	
+
+			f_core.Debug(f_classLoader, "f_initOnAccessIds: ids="+idsLog);
+		}
+
+		f_key.AddAccessKeyByClientIds(ids);
 	},
 	/**
 	 * @method hidden final
@@ -883,6 +909,11 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_initOnSubmitIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			f_core.Debug(f_classLoader, "f_initOnSubmitIds: ("+ids.length+" components) ids="+ids.join());
+		}
+
 		var onSubmitIds=this._onSubmitIds;
 		if (!onSubmitIds) {
 			onSubmitIds=ids;
@@ -911,10 +942,24 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden final
-	 * @param Object ids
+	 * @param Set ids
 	 * @return void
 	 */
 	f_initOnFocusIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var id in ids) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=id;
+			}	
+
+			f_core.Debug(f_classLoader, "f_initOnFocusIds: ids="+idsLog);
+		}
+
 		var onFocusIds=this._onFocusIds;
 		if (onFocusIds) {
 			for(var i in ids) {
@@ -953,11 +998,7 @@ f_classLoader.prototype = {
 			f_core.Debug(f_classLoader, "f_initOnFocusIds: Lazy onFocus initialization for "+component.id);
 			
 			try {
-				self.f_init(component);
-				
-				if (typeof(component.f_completeComponent)=="function") {
-					component.f_completeComponent();
-				}
+				self.f_init(component, false, true);
 
 			} catch (ex) {
 				f_core.Error(f_classLoader, "f_initOnFocusIds: Can not initialize component '"+componentId+"'.", ex);
@@ -993,6 +1034,20 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_initOnOverIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var id in ids) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=id;
+			}	
+
+			f_core.Debug(f_classLoader, "f_initOnOverIds: ids="+idsLog);
+		}
+
 		var onOverIds=this._onOverIds;
 		if (onOverIds) {		
 			for(var i in ids) {
@@ -1029,11 +1084,7 @@ f_classLoader.prototype = {
 			f_core.Debug(f_classLoader, "f_initOnOverIds: Lazy onMouseOver initialization for "+component.id);
 			
 			try {
-				self.f_init(component);
-				
-				if (typeof(component.f_completeComponent)=="function") {
-					component.f_completeComponent();
-				}
+				self.f_init(component, false, true);
 				
 			} catch (ex) {
 				f_core.Error(f_classLoader, "f_initOnOverIds: Can not initialize component '"+componentId+"'.", ex);
@@ -1071,10 +1122,11 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden final
 	 * @param Object obj Object or String
-	 * @param boolean ignoreNotFound
+	 * @param optionam boolean ignoreNotFound
+	 * @param optional boolean callCompleteComponent
 	 * @return Object
 	 */
-	f_init: function(obj, ignoreNotFound) {
+	f_init: function(obj, ignoreNotFound, callCompleteComponent) {
 		f_core.Assert(obj && (obj.nodeType || typeof(obj)=="string"), "f_classLoader.f_init: Invalid obj parameter ("+obj+")");
 		
 		if (typeof(obj)=="string") {
@@ -1120,12 +1172,14 @@ f_classLoader.prototype = {
 			// Deja initialisé !
 			return obj;
 		}
-				
+		
+		f_core.Debug(f_classLoader, "f_init: Initialize object '"+obj+"' (id='"+obj.id+"') ignore='"+ignoreNotFound+"'  typeof(obj)='"+typeof(obj)+"'");
+			
 		var claz = f_core.GetAttribute(obj, "v:class");
 		if (!claz) {
 			// La classe n'est pas définie ... c'est peut etre une form !
 	
-			f_core.Debug(f_classLoader, "_init: Class is not defined for component '"+obj.id+"'.");
+			f_core.Debug(f_classLoader, "f_init: Class is not defined for component '"+obj.id+"'.");
 			return obj;
 		}
 	
@@ -1133,12 +1187,36 @@ f_classLoader.prototype = {
 	
 		var cls=this.f_getClass(claz, look);
 		if (!cls) {
-			f_core.Assert(cls, "f_classLoader._init: Class '"+claz+"' lookId '"+look+"' not found !");
+			f_core.Assert(cls, "f_classLoader.f_init: Class '"+claz+"' lookId '"+look+"' not found !");
 	
-			throw new Error("f_classLoader._init: Class not found: name='"+claz+"' lookId='"+look+"'.");		
+			throw new Error("f_classLoader.f_init: Class not found: name='"+claz+"' lookId='"+look+"'.");		
 		}
 	
-		return f_class.Init(obj, cls, f_classLoader._EMPTY_ARGUMENTS);
+		var component =  f_class.Init(obj, cls, f_classLoader._EMPTY_ARGUMENTS);
+		
+		if (!component) {
+			return null;
+		}
+		
+		if (callCompleteComponent) {
+			
+			var clientDatas=f_core.ParseDataAttribute(component);
+			if (clientDatas) {
+				component._clientDatas=clientDatas;
+			}
+
+			var completeComponent=component.f_completeComponent;
+			if (typeof(completeComponent)=="function") {
+				try {
+					completeComponent.call(component);
+		
+				} catch (x) {
+					f_core.Error(f_classLoader, "f_init: f_completeComponent throws exception for component '"+component.id+"'.", x);
+				}
+			}
+		}
+				
+		return component;
 	},
 	
 	/**
@@ -1256,7 +1334,25 @@ f_classLoader.prototype = {
 	 */
 	_serializeComponents: function(components) {
 		var serializedStates=this._serializedStates;
-	
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for (var i=0; i<components.length; i++) {
+				var component = components[i];
+				if (!component) {
+					continue;
+				}
+				
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=component.id;
+			}	
+
+			f_core.Debug(f_classLoader, "_serializeComponents: ids="+idsLog);
+		}
+
 		try {
 			this._serializing=true;
 		
@@ -1269,8 +1365,7 @@ f_classLoader.prototype = {
 				var componentId=component.id;				
 				if (!componentId) {
 					continue;
-				}
-				
+				}				
 				
 				var f = component.f_serialize0;
 				/* Ca ne doit pas arriver !

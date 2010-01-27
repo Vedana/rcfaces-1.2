@@ -44,11 +44,17 @@ var __statics = {
 		
 		var dataGridPopupId=dataGridPopup.id+"::popup";
 		
+		var sc="f_grid";
+		
+		if (styleClass) {
+			sc+=" "+styleClass;
+		}
+		
 		var properties= { 
 			id: dataGridPopupId,
 			"v:nc": "true", 
 			role: "wairole:grid", 
-			className: "f_grid", 
+			className: sc, 
 			"v:asyncRender": "true", 
 			"v:filtred": "true",
 			"v:selectionCardinality": fa_cardinality.ONE_CARDINALITY
@@ -59,17 +65,17 @@ var __statics = {
 			if (height) {
 				properties.cssHeight=height+"px";
 			}
-		}
-		width-=2;
-		height-=2;
-		
-		if (styleClass) {
-			properties.className+=" "+styleClass;
-		}
+		}		
 		
 		f_dataGridPopup.CopyProperties(properties, dataGridPopup, "v:rows", "v:rowStyleClass", "v:paged", "v:headerVisible", "v:emptyDataMessage");
 		
 		var divDataGrid=f_core.CreateElement(parent, "div", properties);
+		
+		var bw=f_core.ComputeContentBoxBorderLength(divDataGrid, "left", "right");
+		var bh=f_core.ComputeContentBoxBorderLength(divDataGrid, "top", "bottom");
+		
+		width-=bw;
+		height-=bh;
 		
 		var headerVisible=f_core.GetBooleanAttribute(dataGridPopup, "v:headerVisible", false);
 		
@@ -183,6 +189,10 @@ var __statics = {
 		for(var i=0;i<columns.length;i++) {
 			var column=columns[i];
 
+			if (column._visibility===false) {
+				continue;
+			}
+
 			properties={};
 			var cw=column._width;
 			if (cw) {
@@ -202,6 +212,8 @@ var __statics = {
 		var dataGrid=f_class.Init(divDataGrid, f_dataGridPopup, [dataGridPopup]);
 		
 		dataGrid.f_setColumns2.apply(dataGrid, columns);
+		
+		dataGrid.f_updateTitle();
 		
 		dataGrid.f_completeComponent();		
 				

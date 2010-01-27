@@ -156,11 +156,12 @@ var __members = {
 			}
 		}
 		
-		var item=new Object();
-		item._id=component.id;
-		item._value=properties._value;
-		item._disabled=properties._disabled;
-		item._immediate=properties._immediate;
+		var item = {
+			_id: component.id,
+			_value: properties._value,
+			_disabled: properties._disabled,
+			_immediate: properties._immediate
+		}
 
 		if (properties._visible===false) {
 			this.f_setItemVisible(item, false);
@@ -400,7 +401,7 @@ var __members = {
 	},
 	*/
 	/**
-	 * @method hidden
+	 * @method public
 	 * @return f_component
 	 */
 	f_getItemComponent: function(item) {

@@ -3,6 +3,7 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.ValueHolder;
@@ -282,6 +283,10 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
         String groupName = radioButtonComponent.getGroupName(facesContext);
+        if (groupName == null) {
+            throw new FacesException("Group name of radio '" + id
+                    + "' is NULL !");
+        }
 
         groupName = HtmlTools.computeGroupName(componentRenderContext
                 .getHtmlRenderContext().getHtmlProcessContext(),

@@ -600,6 +600,10 @@ public class HtmlTools {
             return groupName;
         }
 
+        if (groupName.startsWith(":")) {
+            return groupName.substring(1);
+        }
+
         UIComponent container = component;
         // Recherche un Container
         for (; container != null; container = container.getParent()) {
@@ -1326,7 +1330,7 @@ public class HtmlTools {
         writer.writeSrc(src);
 
         if (javascriptCharset != null) {
-            writer.writeCharset(javascriptCharset);
+            writer.writeCharSet(javascriptCharset);
         }
 
         writer.endElement(IHtmlWriter.SCRIPT);

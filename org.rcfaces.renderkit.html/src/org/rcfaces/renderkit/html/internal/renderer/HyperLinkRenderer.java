@@ -38,8 +38,12 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
         boolean disabled = component.isDisabled(facesContext);
+        boolean readOnly = component.isReadOnly(facesContext);
         if (disabled) {
             getCssStyleClasses(htmlWriter).addSuffix("_disabled");
+
+        } else if (readOnly) {
+            getCssStyleClasses(htmlWriter).addSuffix("_readOnly");
         }
 
         htmlWriter.startElement(IHtmlWriter.A);
@@ -52,7 +56,7 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         }
 
         // Il faut le laisser pour le lazy FOCUS
-        htmlWriter.writeHRef("javascript:void(0)");
+        htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
 
         Object value = getValue(component);
         if (value != null) {

@@ -170,9 +170,8 @@ var __members = {
 	 */
 	f_imageButtonSelect: function(event) {
 		f_core.Debug(f_imageButton, "f_imageButtonSelect: focus="+this._focus);
-		
-		this._mouseDown_out = undefined;	
-		this._mouseDown = undefined;	
+
+		this.f_clearMouseDownState(false);
 		
 		if (!this._focus)  {
 			this.f_setFocus();
@@ -187,6 +186,22 @@ var __members = {
 	
 		return this.f_performImageSelection(event);
 	},
+	
+	/**
+	 * @method protected
+	 * @param optional boolean update
+	 * @return void
+	 */
+	f_clearMouseDownState: function(update) {
+		
+		this._mouseDown_out = undefined;	
+		this._mouseDown = undefined;	
+
+		if (update!==false) {
+			this._updateImage();
+		}	
+	},
+	
 	/**
 	 * 
 	 * 
@@ -461,9 +476,10 @@ var __members = {
 		this.f_super(arguments, type, target);
 	},
 	fa_updateImages: function(prop, url) {
-		if (prop==f_prop.HOVER_IMAGE_URL && url) {
+//		if (prop==f_prop.HOVER_IMAGE_URL && url) {
+// Tout le temps !!!!
 			this._installHoverFocus();
-		}
+//		}
 	
 		this._updateImage();
 	},
@@ -577,6 +593,13 @@ var __members = {
 		}
 		
 		cmp.focus();
+	},
+	/**
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	f_getFocusableElement: function() {
+		return this.f_getEventElement();
 	},
 	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
 		if (type==f_event.SELECTION) {			

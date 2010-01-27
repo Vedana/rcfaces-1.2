@@ -95,7 +95,7 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
     IHtmlWriter writeHttpEquiv(String equiv, String content)
             throws WriterException;
 
-    IHtmlWriter writeCharset(String charset) throws WriterException;
+    IHtmlWriter writeCharSet(String charset) throws WriterException;
 
     IHtmlWriter writeRole(String role) throws WriterException;
 

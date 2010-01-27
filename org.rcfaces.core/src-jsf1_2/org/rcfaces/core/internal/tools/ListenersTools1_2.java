@@ -24,6 +24,8 @@ public class ListenersTools1_2 extends ListenersTools {
 
     private static final Log LOG = LogFactory.getLog(ListenersTools1_2.class);
 
+    private static final Class[] NO_PARAMETER = new Class[0];
+
     public static void parseListener(FacesContext facesContext,
             UIComponent component, IListenerType listenerType,
             ValueExpression expression) {
@@ -59,7 +61,8 @@ public class ListenersTools1_2 extends ListenersTools {
             MethodExpression vb;
             if (BindingTools.isBindingExpression(expression)) {
                 vb = application.getExpressionFactory().createMethodExpression(
-                        facesContext.getELContext(), expression, null, null);
+                        facesContext.getELContext(), expression, null,
+                        NO_PARAMETER);
 
             } else {
                 vb = new ForwardMethodExpression(expression);
@@ -85,5 +88,4 @@ public class ListenersTools1_2 extends ListenersTools {
 
         listenerType.addActionListener(component, application, expression);
     }
-
 }

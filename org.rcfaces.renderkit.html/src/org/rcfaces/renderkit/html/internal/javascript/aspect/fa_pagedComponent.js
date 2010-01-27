@@ -182,7 +182,7 @@ var __members = {
 	 * List rows.
 	 *
 	 * @method public
-	 * @return Object[]
+	 * @return int
 	 */
 	f_getRows: function() {
 		return this._rows;

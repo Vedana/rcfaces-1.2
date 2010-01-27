@@ -15,6 +15,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
 import javax.faces.model.DataModel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
@@ -79,8 +81,10 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractGridRenderContext {
-
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(AbstractGridRenderContext.class);
 
     private static final ISortedComponent SORTED_COMPONENT_EMPTY_ARRAY[] = new ISortedComponent[0];
 
@@ -238,12 +242,12 @@ public abstract class AbstractGridRenderContext {
     protected void computeGridSize(ISizeCapability sizeCapability) {
         String width = sizeCapability.getWidth();
         if (width != null) {
-            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); //9);
+            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
         }
 
         String height = sizeCapability.getHeight();
         if (height != null) {
-            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); //9)
+            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); // 9)
         }
     }
 
@@ -393,7 +397,7 @@ public abstract class AbstractGridRenderContext {
         if (gridComponent instanceof IWidthCapability) {
             String width = ((IWidthCapability) gridComponent).getWidth();
             if (width != null) {
-                tableWidth = AbstractCssRenderer.computeSize(width, 0, 0); //9);
+                tableWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
             }
         }
 
@@ -476,12 +480,21 @@ public abstract class AbstractGridRenderContext {
             if (column instanceof IResizableCapability) {
                 if (((IResizableCapability) column).isResizable()) {
 
-                    resizable |= true;
+                    if (widthNotSpecified) {
+                        LOG
+                                .error("You must specify a width for a resizable column ! (#"
+                                        + i
+                                        + ", columnId="
+                                        + columnId
+                                        + ", idw=" + idw + ", dw='" + dw + "')");
 
-                    if (idw <= 0) {
                         throw new FacesException(
-                                "You must specify a width for a resizable column !");
+                                "You must specify a width for a resizable column ! (#"
+                                        + i + ", columnId=" + columnId
+                                        + ", idw=" + idw + ", dw='" + dw + "')");
                     }
+
+                    resizable |= true;
                 }
             }
 

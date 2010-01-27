@@ -22,4 +22,6 @@ public interface ICssStyleClasses {
     void addSuffix(String suffixStyleClass);
 
     void addSpecificStyleClass(String styleClass);
+
+    String constructUserStyleClasses();
 }

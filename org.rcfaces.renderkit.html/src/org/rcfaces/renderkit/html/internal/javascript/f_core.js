@@ -156,6 +156,17 @@ var f_core = {
 	 */
 	_OPEN_WINDOW_KEYWORDS: ["width", "height", "channelmode", "fullscreen", "resizable", "titlebar", "scrollbars", "location", "toolbar", "directories", "status", "menubar", "copyhistory" ],
 	
+	
+	/**
+	 * @field private static final String[]
+	 */
+	_BORDER_LENGTHS: [ "margin", "border", "padding"],
+	
+	/**
+	 * @field private static final String[]
+	 */
+	_CONTENT_LENGTHS: [ "border", "padding"],
+	
 	/**
 	 * @field hidden static boolean
 	 */
@@ -2651,7 +2662,7 @@ var f_core = {
 			return elt;
 		}
 		if (elt.nodeType==f_core.ELEMENT_NODE && f_core.GetAttribute(elt, "v:class")==claz) {
-			return f_classLoader.Get(window).f_init(elt);
+			return f_classLoader.Get(window).f_init(elt, false, true);
 		}
 		return null;
 	},
@@ -2801,22 +2812,16 @@ var f_core = {
 		var classLoader=f_classLoader.Get(win);
 		if (!obj) {
 			// Objet pas trouvé, on passe l'ID à la methode _init !
-			obj = classLoader.f_init(id, true);
+			obj = classLoader.f_init(id, true, noCompleteComponent!==true);
 			
 		} else {		
-			obj = classLoader.f_init(obj, true);
+			obj = classLoader.f_init(obj, true, noCompleteComponent!==true);
 		}
 		
 		if (!obj) {
 			return found;
 		}
-		
-		// Notre composant est trouvé mais il n'était pas initialisé !
-		if (noCompleteComponent!==true) {
-			if (typeof(obj.f_completeComponent)=="function") {
-				obj.f_completeComponent();
-			}
-		}
+
 		return obj;
 	},
 	/** 
@@ -3403,20 +3408,39 @@ var f_core = {
 		return values;
 	},
 	/**
-	 * @method private static
+	 * @method static
 	 * @param HTMLElement component
 	 * @param String... side
 	 * @return number
 	 */
 	ComputeBorderLength: function(component, side) {
+		return f_core.ComputeCssLengths(component, f_core._BORDER_LENGTHS, arguments);
+	},
+	/**
+	 * @method static
+	 * @param HTMLElement component
+	 * @param String... side
+	 * @return number
+	 */
+	ComputeContentBoxBorderLength: function(component, side) {
+		return f_core.ComputeCssLengths(component, f_core._CONTENT_LENGTHS, arguments);
+	},
+	/**
+	 * @method private static
+	 * @param HTMLElement component
+	 * @param String[] properties
+	 * @param String[] side
+	 * @return number
+	 */
+	ComputeCssLengths: function(component, properties, args) {	
 		var length=0;
 
 		var ie=f_core.IsInternetExplorer();		
 		
 		var width=(ie)?"Width":"-width";
 		
-		for(var i=1;i<arguments.length;i++) {
-			side=arguments[i];
+		for(var i=1;i<args.length;i++) {
+			side=args[i];
 
 			if (ie) {
 				side=side.substring(0, 1).toUpperCase()+side.substring(1);
@@ -3425,19 +3449,16 @@ var f_core = {
 				side="-"+side;
 			}
 			
-			var margin=f_core.GetCurrentStyleProperty(component, "margin"+side);
-			if (margin && margin.indexOf("px")>0) {
-				length+=parseInt(margin);
-			}
-		
-			var padding=f_core.GetCurrentStyleProperty(component, "padding"+side);
-			if (padding && padding.indexOf("px")>0) {
-				length+=parseInt(padding);
-			}
-		
-			var border=f_core.GetCurrentStyleProperty(component, "border"+side+width);
-			if (border && border.indexOf("px")>0) {
-				length+=parseInt(border);
+			for(var j=0;j<properties.length;j++) {				
+				var property=properties[j]+side;
+				if (properties[j]=="border") {
+					property+=width;
+				}
+				
+				var l=f_core.GetCurrentStyleProperty(component, property);
+				if (l && l.indexOf("px")>0) {
+					length+=parseInt(l);
+				}
 			}
 		}		
 		return length;
