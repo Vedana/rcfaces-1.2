@@ -398,7 +398,7 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
         htmlWriter.startElement(IHtmlWriter.INPUT);
         if (colWidth > 0) {
-            htmlWriter.writeStyle().writeWidth((colWidth - 4) + "px");
+            htmlWriter.writeStyle().writeWidthPx(colWidth - 4);
         }
 
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);

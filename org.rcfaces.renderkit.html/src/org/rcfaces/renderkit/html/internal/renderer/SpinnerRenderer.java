@@ -104,7 +104,7 @@ public class SpinnerRenderer extends TextEntryRenderer implements
         htmlWriter.addSubFocusableComponent(inputId);
 
         if (inputWidth > 0) {
-            htmlWriter.writeStyle().writeWidth(inputWidth + "px");
+            htmlWriter.writeStyle().writeWidthPx(inputWidth);
         }
         htmlWriter.writeClass(getInputClassName(htmlWriter));
         writeInputAttributes(htmlWriter);

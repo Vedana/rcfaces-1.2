@@ -52,6 +52,8 @@ public interface ICssWriter {
 
     ICssWriter writeProperty(String name, String value);
 
+    ICssWriter writeProperty(String name, String value, String unit);
+
     ICssWriter writeFont(IFontCapability capability);
 
     ICssWriter writeFont(String font);
@@ -102,7 +104,11 @@ public interface ICssWriter {
 
     ICssWriter writeWidth(String widthValue);
 
+    ICssWriter writeWidthPx(int widthPx);
+
     ICssWriter writeHeight(String heightValue);
+
+    ICssWriter writeHeightPx(int heightPx);
 
     ICssWriter writeTextAlign(String textAlignement);
 

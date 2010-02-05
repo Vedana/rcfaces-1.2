@@ -118,9 +118,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
         if (dg instanceof DataGridComponent) {
             if (((DataGridComponent) dg).isCellTextWrap(htmlWriter
                     .getComponentRenderContext().getFacesContext())) {
-            }
 
-            cssStyleClasses.addSpecificStyleClass(DATA_GRID_WRAP_CLASSNAME);
+                cssStyleClasses.addSpecificStyleClass(DATA_GRID_WRAP_CLASSNAME);
+            }
         }
 
         return cssStyleClasses;

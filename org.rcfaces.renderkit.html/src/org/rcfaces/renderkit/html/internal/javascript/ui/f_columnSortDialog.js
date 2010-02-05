@@ -440,7 +440,7 @@ var __members = {
 		}
 
 		for(var j=0;j<nbCols;j++) {
-			// Creation de la ligne de libell� Trier par
+			// Creation de la ligne de libellé Trier par
 
 			var ligneCorps = docBase.createElement("tr");
 			tbodCorps.appendChild(ligneCorps);

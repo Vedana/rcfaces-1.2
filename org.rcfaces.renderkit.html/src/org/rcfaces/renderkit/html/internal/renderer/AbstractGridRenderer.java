@@ -150,7 +150,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private static final int TEXT_RIGHT_PADDING = 4;
 
-    private static final int SORT_PADDING = 10;
+    private static final int TEXT_LEFT_PADDING = 4;
+
+    private static final int SORT_PADDING = 8;
 
     private static final String GRID_MAIN_STYLE_CLASS = "f_grid";
 
@@ -710,10 +712,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             ICssWriter cssWriter = htmlWriter.writeStyle();
             if (gridWidth > 0) {
-                cssWriter.writeWidth(gridWidth + "px");
+                cssWriter.writeWidthPx(gridWidth);
             }
             if (gridHeight > 0) {
-                cssWriter.writeHeight(gridHeight + "px");
+                cssWriter.writeHeightPx(gridHeight);
             }
         }
 
@@ -758,7 +760,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeId(getDataTitleScrollId(htmlWriter));
                 htmlWriter.writeClass(getDataTitleScrollClassName(htmlWriter));
                 if (w > 0) {
-                    htmlWriter.writeStyle().writeWidth(w + "px");
+                    htmlWriter.writeStyle().writeWidthPx(w);
                 }
 
                 encodeFixedHeader(htmlWriter, gridRenderContext, gridWidth,
@@ -779,10 +781,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                         gh -= getTitleHeight();
                     }
 
-                    cssWriter.writeHeight(gh + "px");
+                    cssWriter.writeHeightPx(gh);
                 }
                 if (w > 0) {
-                    cssWriter.writeWidth(w + "px");
+                    cssWriter.writeWidthPx(w);
                 }
 
                 // mainComponentScrollable = false;
@@ -794,7 +796,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 htmlWriter.writeId(getDataTitleScrollId(htmlWriter));
                 htmlWriter.writeClass(getDataTitleScrollClassName(htmlWriter));
                 if (w > 0) {
-                    htmlWriter.writeStyle().writeWidth(w + "px");
+                    htmlWriter.writeStyle().writeWidthPx(w);
                 }
                 encodeFixedHeader(htmlWriter, gridRenderContext, gridWidth,
                         false);
@@ -820,7 +822,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (resizable) {
             // 2 htmlWriter.writeAttribute("width", totalResize);
-            htmlWriter.writeStyle().writeWidth(totalResize + "px");
+            htmlWriter.writeStyle().writeWidthPx(totalResize);
 
         } else if (tableWidth > 0) {
             htmlWriter.writeWidth(tableWidth);
@@ -1090,13 +1092,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeClass(getTitleDivContainerClassName(htmlWriter));
 
         int width = tableContext.getColumnWidthInPixel(columnIndex);
-        String literalWidth = tableContext.getColumnWidth(columnIndex);
 
         if (width > 0) {
-            htmlWriter.writeStyle().writeWidth(
-                    (width - TEXT_RIGHT_PADDING) + "px");
-        } else if (literalWidth != null) {
-            htmlWriter.writeStyle().writeWidth(literalWidth);
+            htmlWriter.writeStyle().writeWidthPx(
+                    width - getTextRightPadding() - getTextLeftPadding());
+
+        } else {
+            String literalWidth = tableContext.getColumnWidth(columnIndex);
+            if (literalWidth != null) {
+                htmlWriter.writeStyle().writeWidth(literalWidth);
+            }
         }
 
         String columnTagName = IHtmlWriter.DIV;
@@ -1164,8 +1169,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeAlign(halign);
 
         if (width > 0) { // SORTER
-            htmlWriter.writeStyle().writeWidth(
-                    (width - TEXT_RIGHT_PADDING) + "px");
+            htmlWriter.writeStyle().writeWidthPx(
+                    width - getTextRightPadding() - getTextLeftPadding());
         }
 
         if (column instanceof IImageAccessorsCapability) {
@@ -1242,6 +1247,18 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(columnTagName);
 
         htmlWriter.endElement(IHtmlWriter.DIV);
+    }
+
+    private int getSortPadding() {
+        return SORT_PADDING;
+    }
+
+    private int getTextLeftPadding() {
+        return TEXT_LEFT_PADDING;
+    }
+
+    private int getTextRightPadding() {
+        return TEXT_RIGHT_PADDING;
     }
 
     protected String getTitleDivTextClassName(IHtmlWriter htmlWriter,
@@ -1374,6 +1391,15 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
                 htmlWriter.writeTitle(toolTip);
             }
+        }
+
+        int width = tableContext.getColumnWidthInPixel(columnIndex);
+        String literalWidth = tableContext.getColumnWidth(columnIndex);
+        if (width > 0) {
+            htmlWriter.writeStyle().writeWidthPx(width);
+
+        } else if (literalWidth != null) {
+            htmlWriter.writeStyle().writeWidth(literalWidth);
         }
 
         encodeTitleCellBody(htmlWriter, tableContext, column, columnIndex);

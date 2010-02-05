@@ -100,8 +100,13 @@ var __statics = {
 	/** 
 	 * @field private static final number	
 	 */
-	_TEXT_RIGHT_PADDING: 8,
-	
+	_TEXT_RIGHT_PADDING: 4,
+
+	/** 
+	 * @field private static final number	
+	 */
+	_TEXT_LEFT_PADDING: 4,
+
 	/** 
 	 * @field private static final number	
 	 */
@@ -1387,7 +1392,7 @@ var __statics = {
 			twidth-=f_grid._SORT_PADDING;
 		}
 		
-	 	if (f_core.IsInternetExplorer()) {
+	 	if (false && f_core.IsInternetExplorer()) {
 			// AVANT !
 			if (tableOffsetWidth) {
 				dataGrid._table.style.width=(tableOffsetWidth+dw)+"px";
@@ -1396,13 +1401,13 @@ var __statics = {
 			col.style.width=w+"px";
 			head.style.width=w+"px";
 			
-			var bw=w-f_grid._TEXT_RIGHT_PADDING;
+			var bw=w-f_grid._TEXT_RIGHT_PADDING-f_grid._LEFT_RIGHT_PADDING;
 			if (bw<0) {
 				bw=0;
 			}			
 			column._box.style.width=bw+"px";
 			
-			var lw=w-f_grid._TEXT_RIGHT_PADDING+twidth;
+			var lw=bw+twidth;
 			if (lw<0) {
 				lw=0;
 			}
@@ -1413,12 +1418,12 @@ var __statics = {
 				//tcol.style.width=w+"px";
 			}
 		
-			var cellMargin=8;
+			var cellMargin=0;
 	
 			col.style.width=w+"px";
 			head.style.width=(w-cellMargin)+"px";
-			column._box.style.width=(w-f_grid._TEXT_RIGHT_PADDING)+"px";
-			column._label.style.width=(w-f_grid._TEXT_RIGHT_PADDING+twidth)+"px";
+			column._box.style.width=(w-f_grid._TEXT_RIGHT_PADDING-f_grid._TEXT_LEFT_PADDING)+"px";
+			column._label.style.width=(w-f_grid._TEXT_RIGHT_PADDING-f_grid._TEXT_LEFT_PADDING+twidth)+"px";
 		
 			var totalCols=0;
 			var columns=dataGrid._columns;
@@ -4225,7 +4230,7 @@ var __members = {
 			swidth=parseInt(cw, 10);
 		}
 				
-		//swidth-=1; //f_grid._TEXT_RIGHT_PADDING;
+		swidth-=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
 		if (swidth<0) {
 			swidth=0;
 		}
@@ -4725,10 +4730,7 @@ var __members = {
 	
 		var t1=new Date().getTime();
 		
-		var cellMargin=8;
-		if (f_core.IsInternetExplorer()) {
-			cellMargin=0;
-		}
+		var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._LEFT_RIGHT_PADDING;
 		
 		var total=0;
 		var ci=0;

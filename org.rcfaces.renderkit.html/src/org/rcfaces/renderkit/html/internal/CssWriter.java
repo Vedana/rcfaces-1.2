@@ -73,6 +73,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
     protected static final String WIDTH = "width";
 
+    private static final String PX_UNIT = "px";
+
     private final IHtmlWriter htmlWriter;
 
     private boolean needSpace = false;
@@ -116,6 +118,10 @@ public class CssWriter extends FastWriter implements ICssWriter {
     }
 
     public ICssWriter writeProperty(String name, String value) {
+        return writeProperty(name, value, null);
+    }
+
+    public ICssWriter writeProperty(String name, String value, String unit) {
 
         ensure(name.length() + 2 + value.length() + 2);
 
@@ -124,6 +130,10 @@ public class CssWriter extends FastWriter implements ICssWriter {
         }
 
         write(name).write(':').write(value);
+
+        if (unit != null) {
+            write(unit);
+        }
 
         needSpace = true;
 
@@ -249,23 +259,23 @@ public class CssWriter extends FastWriter implements ICssWriter {
     }
 
     public ICssWriter writeFontFamily(String fontFamily) {
-        return writeProperty(FONT_FAMILY, fontFamily);
+        return writeProperty(FONT_FAMILY, fontFamily, null);
     }
 
     public ICssWriter writeFontSize(String fontSize) {
-        return writeProperty(FONT_SIZE, fontSize);
+        return writeProperty(FONT_SIZE, fontSize, null);
     }
 
     public ICssWriter writeFontStyle(String fontStyle) {
-        return writeProperty(FONT_STYLE, fontStyle);
+        return writeProperty(FONT_STYLE, fontStyle, null);
     }
 
     public ICssWriter writeFontWeight(String fontWeight) {
-        return writeProperty(FONT_WEIGHT, fontWeight);
+        return writeProperty(FONT_WEIGHT, fontWeight, null);
     }
 
     public ICssWriter writeFont(String font) {
-        return writeProperty(FONT, font);
+        return writeProperty(FONT, font, null);
     }
 
     public final ICssWriter writePosition(IPositionCapability element) {
@@ -296,27 +306,27 @@ public class CssWriter extends FastWriter implements ICssWriter {
     }
 
     public ICssWriter writeTop(String top) {
-        return writeProperty(TOP, top);
+        return writeProperty(TOP, top, null);
     }
 
     public ICssWriter writeLeft(String left) {
-        return writeProperty(LEFT, left);
+        return writeProperty(LEFT, left, null);
     }
 
     public ICssWriter writePosition(String position) {
-        return writeProperty(POSITION, position);
+        return writeProperty(POSITION, position, null);
     }
 
     public ICssWriter writeTextDecoration(String textDecoration) {
-        return writeProperty(TEXT_DECORATION, textDecoration);
+        return writeProperty(TEXT_DECORATION, textDecoration, null);
     }
 
     public ICssWriter writeColor(String color) {
-        return writeProperty(COLOR, color);
+        return writeProperty(COLOR, color, null);
     }
 
     public ICssWriter writeVisibility(String visibility) {
-        return writeProperty(VISIBILITY, visibility);
+        return writeProperty(VISIBILITY, visibility, null);
     }
 
     public final ICssWriter writeSize(ISizeCapability element) {
@@ -394,16 +404,16 @@ public class CssWriter extends FastWriter implements ICssWriter {
         }
 
         if (top != null) {
-            writeProperty(MARGIN_TOP, top);
+            writeProperty(MARGIN_TOP, top, null);
         }
         if (left != null) {
-            writeProperty(MARGIN_LEFT, left);
+            writeProperty(MARGIN_LEFT, left, null);
         }
         if (bottom != null) {
-            writeProperty(MARGIN_BOTTOM, bottom);
+            writeProperty(MARGIN_BOTTOM, bottom, null);
         }
         if (right != null) {
-            writeProperty(MARGIN_RIGHT, right);
+            writeProperty(MARGIN_RIGHT, right, null);
         }
 
         return this;
@@ -525,39 +535,47 @@ public class CssWriter extends FastWriter implements ICssWriter {
     }
 
     public ICssWriter writeOverflow(String overflowValue) {
-        return writeProperty(OVERFLOW, overflowValue);
+        return writeProperty(OVERFLOW, overflowValue, null);
     }
 
     public ICssWriter writeDisplay(String displayValue) {
-        return writeProperty(DISPLAY, displayValue);
+        return writeProperty(DISPLAY, displayValue, null);
     }
 
     public ICssWriter writeHeight(String heightValue) {
-        return writeProperty(HEIGHT, heightValue);
+        return writeProperty(HEIGHT, heightValue, null);
+    }
+
+    public ICssWriter writeHeightPx(int heightPx) {
+        return writeProperty(HEIGHT, String.valueOf(heightPx), PX_UNIT);
     }
 
     public ICssWriter writeTextAlign(String textAlignement) {
-        return writeProperty(TEXT_ALIGN, textAlignement);
+        return writeProperty(TEXT_ALIGN, textAlignement, null);
     }
 
     public ICssWriter writeVerticalAlign(String verticalAlignement) {
-        return writeProperty(VERTICAL_ALIGN, verticalAlignement);
+        return writeProperty(VERTICAL_ALIGN, verticalAlignement, null);
     }
 
     public ICssWriter writeWidth(String widthValue) {
-        return writeProperty(WIDTH, widthValue);
+        return writeProperty(WIDTH, widthValue, null);
+    }
+
+    public ICssWriter writeWidthPx(int widthPx) {
+        return writeProperty(WIDTH, String.valueOf(widthPx), PX_UNIT);
     }
 
     public ICssWriter writeBorderStyle(String borderStyle) {
-        return writeProperty(BORDER_STYLE, borderStyle);
+        return writeProperty(BORDER_STYLE, borderStyle, null);
     }
 
     public ICssWriter writeMargin(String margin) {
-        return writeProperty(MARGIN, margin);
+        return writeProperty(MARGIN, margin, null);
     }
 
     public ICssWriter writePadding(String padding) {
-        return writeProperty(PADDING, padding);
+        return writeProperty(PADDING, padding, null);
     }
 
     public ICssWriter writeURL(String url) {
@@ -568,7 +586,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
     }
 
     public ICssWriter writeBackgroundColor(String backgroundColor) {
-        return writeProperty(BACKGROUND_COLOR, backgroundColor);
+        return writeProperty(BACKGROUND_COLOR, backgroundColor, null);
     }
 
 }
