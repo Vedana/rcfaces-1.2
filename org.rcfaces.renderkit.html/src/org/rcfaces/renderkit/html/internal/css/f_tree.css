@@ -16,8 +16,10 @@
 	margin: 0;
 	padding: 1px 1px 1px 1px;
 	font: 8pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
-//	xxxoverflow: auto;
+
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
 	-moz-outline-style: none;
 	-moz-user-select: none;
 	user-select: none;

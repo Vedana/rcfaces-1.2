@@ -54,7 +54,9 @@
 	height: 24px;
 	user-select: none;
 	-moz-user-select: none;
+
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_shellDecorator_title_focused {
@@ -63,6 +65,8 @@
 
 .f_shellDecorator_title_cell {
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
 	vertical-align: top;
 	height: 24px;
 	border-bottom: 1px black solid;
@@ -108,5 +112,7 @@
 
 	background-color: #F0F0F0;
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
 	height: 42px;
 }

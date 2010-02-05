@@ -13,7 +13,10 @@
 
 .f_progressBar {
 	border: 0;
+
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	
 	-moz-outline-style: none;
 	-moz-user-select: none;
 	user-select: none;	
@@ -37,7 +40,9 @@
 	border: 0;
 	padding: 0;
 	margin: 0;
+
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .f_progressBar_fg {

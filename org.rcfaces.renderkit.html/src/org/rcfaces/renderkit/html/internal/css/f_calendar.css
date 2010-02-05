@@ -13,7 +13,10 @@
 .f_calendar {
 	font-family: arial, helvetica;
 	-moz-user-select: none;
+
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
 	user-select: none;
 	text-align: left;
 	vertical-align: baseline;
@@ -291,7 +294,10 @@
 }
 
 .f_calendar_today {
+
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
 	text-align: center;
 	vertical-align: middle;
 	width: 100%;
