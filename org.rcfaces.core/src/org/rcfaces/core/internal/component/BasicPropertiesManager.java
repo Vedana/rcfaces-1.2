@@ -112,4 +112,14 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
         return this;
     }
 
+    public String toString() {
+        if (deltaPropertiesAccessor != null) {
+            return deltaPropertiesAccessor.toString();
+        }
+        if (propertiesAccessor != null) {
+            return propertiesAccessor.toString();
+        }
+
+        return super.toString();
+    }
 }
