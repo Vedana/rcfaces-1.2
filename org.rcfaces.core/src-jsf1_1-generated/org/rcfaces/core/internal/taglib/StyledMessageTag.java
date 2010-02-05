@@ -177,14 +177,14 @@ public class StyledMessageTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof StyledMessageComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'StyledMessageComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		StyledMessageComponent component = (StyledMessageComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

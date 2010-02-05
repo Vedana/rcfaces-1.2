@@ -24,6 +24,7 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
@@ -42,6 +43,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 	ILookAndFeelCapability,
 	IWAIRoleCapability,
 	ISelectionEventCapability,
+	IUserEventCapability,
 	IImageAccessorsCapability {
 
 	private static final Log LOG = LogFactory.getLog(MessageDialogComponent.class);
@@ -50,7 +52,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","imageURL","width","defaultValue","validationListener","title","waiRole","hiddenMode","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","imageURL","width","defaultValue","validationListener","title","waiRole","hiddenMode","userEventListener","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId"}));
 	}
 
 	public MessageDialogComponent() {
@@ -376,6 +378,18 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listSelectionListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listUserEventListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
 	}
 
 	/**

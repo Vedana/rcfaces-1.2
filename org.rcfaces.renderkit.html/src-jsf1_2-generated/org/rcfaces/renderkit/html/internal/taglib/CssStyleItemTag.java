@@ -36,14 +36,14 @@ public class CssStyleItemTag extends FileItemTag implements Tag {
 			}
 			LOG.debug("  userAgent='"+userAgent+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CssStyleItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CssStyleItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CssStyleItemComponent component = (CssStyleItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

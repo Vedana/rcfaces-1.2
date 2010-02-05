@@ -52,14 +52,14 @@ public class SpinnerTag extends TextEntryTag implements Tag {
 			LOG.debug("  cycleValue='"+cycleValue+"'");
 			LOG.debug("  step='"+step+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof SpinnerComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'SpinnerComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		SpinnerComponent component = (SpinnerComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -61,14 +61,14 @@ public abstract class ExpandableItemTag extends UIImageItemTag implements Tag {
 			LOG.debug("  text='"+text+"'");
 			LOG.debug("  expandedImageURL='"+expandedImageURL+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ExpandableItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ExpandableItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ExpandableItemComponent component = (ExpandableItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

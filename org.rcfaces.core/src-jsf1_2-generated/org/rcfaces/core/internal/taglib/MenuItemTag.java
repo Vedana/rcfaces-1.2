@@ -57,14 +57,14 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof MenuItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'MenuItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		MenuItemComponent component = (MenuItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

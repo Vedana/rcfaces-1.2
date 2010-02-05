@@ -233,14 +233,14 @@ public class PathTag extends NodeTag implements Tag {
 			LOG.debug("  wordSpacing='"+wordSpacing+"'");
 			LOG.debug("  writingMode='"+writingMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof PathComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'PathComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		PathComponent component = (PathComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

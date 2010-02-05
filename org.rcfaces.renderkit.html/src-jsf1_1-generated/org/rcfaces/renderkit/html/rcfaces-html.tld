@@ -278,6 +278,18 @@ A string value sprecifying the charset associated to the "src" files.
 			<name>srcCharSet</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>requiredModules</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>requiredSets</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>mergeStyles</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>loadBundle</name>

@@ -38,14 +38,14 @@ public class ViewErrorListenerTag extends CameliaTag implements Tag {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ViewErrorListenerComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ViewErrorListenerComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ViewErrorListenerComponent component = (ViewErrorListenerComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

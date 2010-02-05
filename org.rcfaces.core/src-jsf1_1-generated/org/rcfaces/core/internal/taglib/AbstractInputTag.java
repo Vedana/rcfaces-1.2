@@ -453,14 +453,14 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractInputComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractInputComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractInputComponent component = (AbstractInputComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

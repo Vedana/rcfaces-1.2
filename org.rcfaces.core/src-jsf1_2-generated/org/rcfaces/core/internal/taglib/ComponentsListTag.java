@@ -88,14 +88,14 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  columnStyleClass='"+columnStyleClass+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ComponentsListComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComponentsListComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ComponentsListComponent component = (ComponentsListComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

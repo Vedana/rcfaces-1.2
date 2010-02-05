@@ -57,14 +57,14 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 			LOG.debug("  closable='"+closable+"'");
 			LOG.debug("  showValue='"+showValue+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TabbedPaneComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TabbedPaneComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TabbedPaneComponent component = (TabbedPaneComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

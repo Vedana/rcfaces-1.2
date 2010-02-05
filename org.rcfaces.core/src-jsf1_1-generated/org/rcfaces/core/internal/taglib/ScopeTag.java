@@ -58,14 +58,14 @@ public class ScopeTag extends CameliaTag implements Tag {
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ScopeComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ScopeComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ScopeComponent component = (ScopeComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

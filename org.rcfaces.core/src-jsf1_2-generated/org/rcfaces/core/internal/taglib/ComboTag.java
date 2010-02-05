@@ -75,14 +75,14 @@ public class ComboTag extends AbstractInputTag implements Tag {
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  filterProperties='"+filterProperties+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ComboComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComboComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ComboComponent component = (ComboComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

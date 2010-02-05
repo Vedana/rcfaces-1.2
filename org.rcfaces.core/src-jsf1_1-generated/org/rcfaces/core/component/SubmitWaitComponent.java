@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import javax.faces.el.ValueBinding;
@@ -24,6 +25,7 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 	IStyleClassCapability,
 	ISizeCapability,
 	IWAIRoleCapability,
+	ILookAndFeelCapability,
 	IImageAccessorsCapability {
 
 	private static final Log LOG = LogFactory.getLog(SubmitWaitComponent.class);
@@ -32,7 +34,7 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","waiRole","backgroundMode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","waiRole","lookId","backgroundMode"}));
 	}
 
 	public SubmitWaitComponent() {
@@ -194,6 +196,29 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public java.lang.String getLookId() {
+		return getLookId(null);
+	}
+
+	/**
+	 * See {@link #getLookId() getLookId()} for more details
+	 */
+	public java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "lookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLookIdSetted() {
+		return engine.isPropertySetted(Properties.LOOK_ID);
+	}
+
+	public void setLookId(java.lang.String lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
 	}
 
 	public String getBackgroundMode() {

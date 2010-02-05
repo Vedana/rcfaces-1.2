@@ -375,7 +375,7 @@
 		<component>
 			<component-type>org.rcfaces.core.menuBar</component-type>
 			<renderer-type>org.rcfaces.core.menuBar</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+			<handler-class>org.rcfaces.core.internal.facelets.MenuBarHandler</handler-class>
 		</component>
 	</tag>
 	<tag>

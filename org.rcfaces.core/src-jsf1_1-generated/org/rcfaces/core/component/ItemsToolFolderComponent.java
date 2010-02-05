@@ -56,7 +56,7 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","verticalAlignment","disabled","doubleClickListener","mouseOverListener","itemHiddenMode","showDropDownMark","checkListener","checkedValues","initListener","mouseOutListener","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","verticalAlignment","disabled","doubleClickListener","mouseOverListener","itemHiddenMode","defaultItemStyleClass","showDropDownMark","checkListener","checkedValues","initListener","defaultItemLookId","mouseOutListener","borderType","readOnly","textPosition"}));
 	}
 
 	public ItemsToolFolderComponent() {
@@ -324,6 +324,46 @@ public class ItemsToolFolderComponent extends AbstractInputComponent implements
 
 	public void setShowDropDownMark(boolean showDropDownMark) {
 		engine.setProperty(Properties.SHOW_DROP_DOWN_MARK, showDropDownMark);
+	}
+
+	public String getDefaultItemLookId() {
+		return getDefaultItemLookId(null);
+	}
+
+	public String getDefaultItemLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+	}
+
+	public void setDefaultItemLookId(String defaultItemLookId) {
+		engine.setProperty(Properties.DEFAULT_ITEM_LOOK_ID, defaultItemLookId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultItemLookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultItemLookIdSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_ITEM_LOOK_ID);
+	}
+
+	public String getDefaultItemStyleClass() {
+		return getDefaultItemStyleClass(null);
+	}
+
+	public String getDefaultItemStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+	}
+
+	public void setDefaultItemStyleClass(String defaultItemStyleClass) {
+		engine.setProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, defaultItemStyleClass);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultItemStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultItemStyleClassSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_ITEM_STYLE_CLASS);
 	}
 
 	public int getItemHiddenMode() {

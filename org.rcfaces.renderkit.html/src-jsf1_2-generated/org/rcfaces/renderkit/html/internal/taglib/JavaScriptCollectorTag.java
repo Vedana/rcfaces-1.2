@@ -35,14 +35,14 @@ public class JavaScriptCollectorTag extends CameliaTag implements Tag {
 			}
 			LOG.debug("  mergeScripts='"+mergeScripts+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof JavaScriptCollectorComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'JavaScriptCollectorComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		JavaScriptCollectorComponent component = (JavaScriptCollectorComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

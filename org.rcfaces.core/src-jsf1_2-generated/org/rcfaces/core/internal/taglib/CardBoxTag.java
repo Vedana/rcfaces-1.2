@@ -69,14 +69,14 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CardBoxComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CardBoxComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CardBoxComponent component = (CardBoxComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

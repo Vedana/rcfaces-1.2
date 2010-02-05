@@ -88,14 +88,14 @@ public class ServiceTag extends CameliaTag implements Tag {
 			LOG.debug("  serviceId='"+serviceId+"'");
 			LOG.debug("  enableViewState='"+enableViewState+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ServiceComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ServiceComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ServiceComponent component = (ServiceComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

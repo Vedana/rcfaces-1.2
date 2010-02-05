@@ -94,14 +94,14 @@ public class ToolItemTag extends UIImageItemTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ToolItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ToolItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ToolItemComponent component = (ToolItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

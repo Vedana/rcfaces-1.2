@@ -130,14 +130,14 @@ public class MessageFieldSetTag extends FieldSetTag implements Tag {
 			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
 			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof MessageFieldSetComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'MessageFieldSetComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		MessageFieldSetComponent component = (MessageFieldSetComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

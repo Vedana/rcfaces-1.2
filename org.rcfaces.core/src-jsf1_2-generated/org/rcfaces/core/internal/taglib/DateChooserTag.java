@@ -34,6 +34,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 	private ValueExpression forValueFormat;
 	private ValueExpression homeDate;
 	private ValueExpression homeDateLabel;
+	private ValueExpression popupStyleClass;
 	public String getComponentType() {
 		return DateChooserComponent.COMPONENT_TYPE;
 	}
@@ -102,6 +103,10 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		this.homeDateLabel = homeDateLabel;
 	}
 
+	public final void setPopupStyleClass(ValueExpression popupStyleClass) {
+		this.popupStyleClass = popupStyleClass;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (DateChooserComponent.COMPONENT_TYPE==getComponentType()) {
@@ -122,15 +127,16 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  forValueFormat='"+forValueFormat+"'");
 			LOG.debug("  homeDate='"+homeDate+"'");
 			LOG.debug("  homeDateLabel='"+homeDateLabel+"'");
+			LOG.debug("  popupStyleClass='"+popupStyleClass+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof DateChooserComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'DateChooserComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		DateChooserComponent component = (DateChooserComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -273,6 +279,15 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 				component.setHomeDateLabel(homeDateLabel.getExpressionString());
 			}
 		}
+
+		if (popupStyleClass != null) {
+			if (popupStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.POPUP_STYLE_CLASS, popupStyleClass);
+
+			} else {
+				component.setPopupStyleClass(popupStyleClass.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -292,6 +307,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		forValueFormat = null;
 		homeDate = null;
 		homeDateLabel = null;
+		popupStyleClass = null;
 
 		super.release();
 	}

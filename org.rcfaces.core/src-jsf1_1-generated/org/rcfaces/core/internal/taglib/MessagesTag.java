@@ -80,14 +80,14 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof MessagesComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'MessagesComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		MessagesComponent component = (MessagesComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

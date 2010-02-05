@@ -114,14 +114,14 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 			LOG.debug("  moreResultsMessage='"+moreResultsMessage+"'");
 			LOG.debug("  orderedItems='"+orderedItems+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof SuggestTextEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'SuggestTextEntryComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		SuggestTextEntryComponent component = (SuggestTextEntryComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

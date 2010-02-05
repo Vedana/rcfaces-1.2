@@ -162,14 +162,14 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  viewURL='"+viewURL+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ViewDialogComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ViewDialogComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ViewDialogComponent component = (ViewDialogComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

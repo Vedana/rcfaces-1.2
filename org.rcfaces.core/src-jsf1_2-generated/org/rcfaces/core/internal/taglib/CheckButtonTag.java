@@ -99,14 +99,14 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  selected='"+selected+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CheckButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CheckButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CheckButtonComponent component = (CheckButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

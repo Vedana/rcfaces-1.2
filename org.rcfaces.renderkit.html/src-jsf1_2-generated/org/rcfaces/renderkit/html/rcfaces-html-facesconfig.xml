@@ -171,6 +171,18 @@ A string value sprecifying the charset associated to the "src" files.
 			<attribute-name>srcCharSet</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>requiredModules</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>requiredSets</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>mergeStyles</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.html.loadBundle</component-type>

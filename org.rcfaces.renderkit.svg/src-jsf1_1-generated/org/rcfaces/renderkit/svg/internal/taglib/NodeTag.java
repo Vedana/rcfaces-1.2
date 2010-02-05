@@ -98,14 +98,14 @@ public abstract class NodeTag extends CameliaTag implements Tag {
 			LOG.debug("  itemDisabled='"+itemDisabled+"'");
 			LOG.debug("  targetId='"+targetId+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof NodeComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'NodeComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		NodeComponent component = (NodeComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

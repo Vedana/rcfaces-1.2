@@ -176,14 +176,14 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 			LOG.debug("  secondStep='"+secondStep+"'");
 			LOG.debug("  millisStep='"+millisStep+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TimeEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TimeEntryComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TimeEntryComponent component = (TimeEntryComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

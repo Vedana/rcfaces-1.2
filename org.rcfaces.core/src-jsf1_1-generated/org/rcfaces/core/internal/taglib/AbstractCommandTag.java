@@ -406,14 +406,14 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractCommandComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractCommandComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractCommandComponent component = (AbstractCommandComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

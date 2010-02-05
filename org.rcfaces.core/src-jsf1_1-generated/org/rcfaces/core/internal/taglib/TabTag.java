@@ -158,14 +158,14 @@ public class TabTag extends CardTag implements Tag {
 			LOG.debug("  imageURL='"+imageURL+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TabComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TabComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TabComponent component = (TabComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

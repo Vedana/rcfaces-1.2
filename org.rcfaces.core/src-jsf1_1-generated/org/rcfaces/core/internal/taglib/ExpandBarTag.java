@@ -44,6 +44,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private String overStyleClass;
 	private String collapseEffect;
 	private String collapsedText;
+	private String userExpandable;
 	public String getComponentType() {
 		return ExpandBarComponent.COMPONENT_TYPE;
 	}
@@ -248,6 +249,10 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.collapsedText = collapsedText;
 	}
 
+	public final void setUserExpandable(String userExpandable) {
+		this.userExpandable = userExpandable;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ExpandBarComponent.COMPONENT_TYPE==getComponentType()) {
@@ -275,15 +280,16 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
 			LOG.debug("  collapsedText='"+collapsedText+"'");
+			LOG.debug("  userExpandable='"+userExpandable+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ExpandBarComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ExpandBarComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ExpandBarComponent component = (ExpandBarComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -524,6 +530,16 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 				component.setCollapsedText(collapsedText);
 			}
 		}
+
+		if (userExpandable != null) {
+			if (isValueReference(userExpandable)) {
+				ValueBinding vb = application.createValueBinding(userExpandable);
+				component.setValueBinding(Properties.USER_EXPANDABLE, vb);
+
+			} else {
+				component.setUserExpandable(getBool(userExpandable));
+			}
+		}
 	}
 
 	public void release() {
@@ -553,6 +569,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		overStyleClass = null;
 		collapseEffect = null;
 		collapsedText = null;
+		userExpandable = null;
 
 		super.release();
 	}

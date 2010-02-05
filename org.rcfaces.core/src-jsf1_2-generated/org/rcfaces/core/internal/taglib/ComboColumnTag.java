@@ -239,14 +239,14 @@ public class ComboColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
 			LOG.debug("  value='"+value+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ComboColumnComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComboColumnComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ComboColumnComponent component = (ComboColumnComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

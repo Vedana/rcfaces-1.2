@@ -151,14 +151,14 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof DateEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'DateEntryComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		DateEntryComponent component = (DateEntryComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

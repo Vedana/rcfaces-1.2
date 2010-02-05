@@ -138,14 +138,14 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  horizontalScroll='"+horizontalScroll+"'");
 			LOG.debug("  verticalScroll='"+verticalScroll+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof BoxComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'BoxComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		BoxComponent component = (BoxComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

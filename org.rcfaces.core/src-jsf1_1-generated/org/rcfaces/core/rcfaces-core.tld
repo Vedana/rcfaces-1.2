@@ -4679,16 +4679,23 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A string value holding the current value of the component.
 ]]></description>
-			<name>margins</name>
+			<name>value</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the current value of the component.
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
-			<name>value</name>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -4698,13 +4705,6 @@ An int value specifying the number of rows to display, starting with the one ide
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5301,16 +5301,23 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A string value holding the current value of the component.
 ]]></description>
-			<name>margins</name>
+			<name>value</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the current value of the component.
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
-			<name>value</name>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5320,13 +5327,6 @@ An int value specifying the number of rows to display, starting with the one ide
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -5812,6 +5812,15 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A number identifying the row to be displayed at the top of the component.
 ]]></description>
 			<name>first</name>
@@ -5831,15 +5840,6 @@ An int value specifying the number of rows to display, starting with the one ide
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6144,11 +6144,19 @@ A string value specifying the name of the variable receiving the index of the cu
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>popupStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>gridStyleClass</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<name>gridLookId</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>searchFieldVisible</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -6481,16 +6489,23 @@ A string value holding the name of a request-scope attribute under which the mod
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A string value holding the current value of the component.
 ]]></description>
-			<name>margins</name>
+			<name>value</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the current value of the component.
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
-			<name>value</name>
+			<name>first</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -6500,13 +6515,6 @@ An int value specifying the number of rows to display, starting with the one ide
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -8470,6 +8478,10 @@ A string specifying the label associated with the home button.
 			<name>homeDateLabel</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>popupStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<name>expandBar</name>
@@ -8955,6 +8967,13 @@ A string value indicating the effect to use when transionning from one state to 
 A string value specifying the text to show when the component is collapsed.
 ]]></description>
 			<name>collapsedText</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the user can expand the component.
+]]></description>
+			<name>userExpandable</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -12469,6 +12488,17 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<name>validationListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the component is called.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>userEventListener</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -16634,6 +16664,17 @@ Executed when the component is selected.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+Executed when the component is called.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>userEventListener</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A string value specifying the title for the document.
 ]]></description>
 			<name>title</name>
@@ -16836,6 +16877,13 @@ A string value (as specified by CSS) for the height of the component.
 		</attribute>
 		<attribute>
 			<name>waiRole</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the choosen look of the component.
+]]></description>
+			<name>lookId</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17073,6 +17121,13 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A component's id that express the link between the two components.
+]]></description>
+			<name>for</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "true".
 ]]></description>
@@ -17092,13 +17147,6 @@ A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "false".
 ]]></description>
 			<name>showSummary</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A component's id that express the link between the two components.
-]]></description>
-			<name>for</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17923,17 +17971,9 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A boolean value indicating if the component specific messages should be shown or not.
 ]]></description>
-			<name>margins</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
-]]></description>
-			<name>showSummary</name>
+			<name>globalOnly</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -17946,9 +17986,17 @@ A boolean value indicating whether the summary portion of displayed messages
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating if the component specific messages should be shown or not.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>globalOnly</name>
+			<name>margins</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+]]></description>
+			<name>showSummary</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
@@ -18532,6 +18580,24 @@ A boolean value indicating that this component will prohibit
 A boolean value specifying wether the content of the component must be remove before the listener is called and the component displayed.
 ]]></description>
 			<name>removeAllWhenShown</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string that indicates the url to activate on the server when the component is actionned through a key mapping on the faces config file.
+]]></description>
+			<name>action</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the the component is activated by the user.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>actionListener</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -30707,6 +30773,14 @@ A string that represent the vertical alignement of the data in the component.
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>defaultItemLookId</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultItemStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>itemHiddenMode</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -32173,6 +32247,22 @@ An url string pointing to the default image for the selected state.
 An url string pointing to the default image for the disabled state.
 ]]></description>
 			<name>defaultDisabledImageURL</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultItemInputType</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultItemLookId</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultItemStyleClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultItemGroupName</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>

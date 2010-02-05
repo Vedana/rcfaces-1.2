@@ -24,7 +24,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"userAgent","text","srcCharSet","src"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"userAgent","text","mergeStyles","requiredSets","requiredModules","srcCharSet","src"}));
 	}
 
 	public CssStyleComponent() {
@@ -152,6 +152,66 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isSrcCharSetSetted() {
 		return engine.isPropertySetted(Properties.SRC_CHAR_SET);
+	}
+
+	public String getRequiredModules() {
+		return getRequiredModules(null);
+	}
+
+	public String getRequiredModules(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.REQUIRED_MODULES, facesContext);
+	}
+
+	public void setRequiredModules(String requiredModules) {
+		engine.setProperty(Properties.REQUIRED_MODULES, requiredModules);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "requiredModules" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRequiredModulesSetted() {
+		return engine.isPropertySetted(Properties.REQUIRED_MODULES);
+	}
+
+	public String getRequiredSets() {
+		return getRequiredSets(null);
+	}
+
+	public String getRequiredSets(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.REQUIRED_SETS, facesContext);
+	}
+
+	public void setRequiredSets(String requiredSets) {
+		engine.setProperty(Properties.REQUIRED_SETS, requiredSets);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "requiredSets" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRequiredSetsSetted() {
+		return engine.isPropertySetted(Properties.REQUIRED_SETS);
+	}
+
+	public boolean isMergeStyles() {
+		return isMergeStyles(null);
+	}
+
+	public boolean isMergeStyles(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.MERGE_STYLES, false, facesContext);
+	}
+
+	public void setMergeStyles(boolean mergeStyles) {
+		engine.setProperty(Properties.MERGE_STYLES, mergeStyles);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "mergeStyles" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isMergeStylesSetted() {
+		return engine.isPropertySetted(Properties.MERGE_STYLES);
 	}
 
 	protected Set getCameliaFields() {

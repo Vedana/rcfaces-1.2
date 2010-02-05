@@ -130,14 +130,14 @@ public class RulerTag extends CameliaTag implements Tag {
 			LOG.debug("  rendered='"+rendered+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof RulerComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'RulerComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		RulerComponent component = (RulerComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

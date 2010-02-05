@@ -24,6 +24,7 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 	private ValueExpression warnStyleClass;
 	private ValueExpression showIfMessage;
 	private ValueExpression showActiveComponentMessage;
+	private ValueExpression maxCount;
 	public String getComponentType() {
 		return MessagesComponent.COMPONENT_TYPE;
 	}
@@ -52,6 +53,10 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		this.showActiveComponentMessage = showActiveComponentMessage;
 	}
 
+	public final void setMaxCount(ValueExpression maxCount) {
+		this.maxCount = maxCount;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (MessagesComponent.COMPONENT_TYPE==getComponentType()) {
@@ -63,15 +68,16 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 			LOG.debug("  warnStyleClass='"+warnStyleClass+"'");
 			LOG.debug("  showIfMessage='"+showIfMessage+"'");
 			LOG.debug("  showActiveComponentMessage='"+showActiveComponentMessage+"'");
+			LOG.debug("  maxCount='"+maxCount+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof MessagesComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'MessagesComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		MessagesComponent component = (MessagesComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -129,6 +135,15 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 				component.setShowActiveComponentMessage(getBool(showActiveComponentMessage.getExpressionString()));
 			}
 		}
+
+		if (maxCount != null) {
+			if (maxCount.isLiteralText()==false) {
+				component.setValueExpression(Properties.MAX_COUNT, maxCount);
+
+			} else {
+				component.setMaxCount(getInt(maxCount.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -138,6 +153,7 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		warnStyleClass = null;
 		showIfMessage = null;
 		showActiveComponentMessage = null;
+		maxCount = null;
 
 		super.release();
 	}

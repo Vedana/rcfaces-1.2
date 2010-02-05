@@ -148,14 +148,14 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  curveFlatness='"+curveFlatness+"'");
 			LOG.debug("  distanceTolerance='"+distanceTolerance+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ImageComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ImageComponent component = (ImageComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

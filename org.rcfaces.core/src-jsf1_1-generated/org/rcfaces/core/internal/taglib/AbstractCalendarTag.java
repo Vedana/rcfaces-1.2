@@ -120,14 +120,14 @@ public abstract class AbstractCalendarTag extends AbstractInputTag implements Ta
 			LOG.debug("  cursorDate='"+cursorDate+"'");
 			LOG.debug("  disabledWeekDays='"+disabledWeekDays+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractCalendarComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractCalendarComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractCalendarComponent component = (AbstractCalendarComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

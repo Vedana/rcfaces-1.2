@@ -130,14 +130,14 @@ public class FieldSetTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof FieldSetComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'FieldSetComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		FieldSetComponent component = (FieldSetComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

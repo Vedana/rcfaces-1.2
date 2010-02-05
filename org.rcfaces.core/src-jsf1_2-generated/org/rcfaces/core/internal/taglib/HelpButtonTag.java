@@ -34,14 +34,14 @@ public class HelpButtonTag extends ImageButtonTag implements Tag {
 			}
 			LOG.debug("  forValue='"+forValue+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof HelpButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'HelpButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		HelpButtonComponent component = (HelpButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

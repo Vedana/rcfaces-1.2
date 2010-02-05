@@ -38,14 +38,14 @@ public class HyperLinkTag extends ButtonTag implements Tag {
 			}
 			LOG.debug("  converter='"+converter+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof HyperLinkComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'HyperLinkComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		HyperLinkComponent component = (HyperLinkComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

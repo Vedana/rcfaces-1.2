@@ -131,14 +131,14 @@ public class InitTag extends CameliaTag implements Tag {
 			LOG.debug("  clientValidation='"+clientValidation+"'");
 			LOG.debug("  userAgentVary='"+userAgentVary+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof InitComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'InitComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		InitComponent component = (InitComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

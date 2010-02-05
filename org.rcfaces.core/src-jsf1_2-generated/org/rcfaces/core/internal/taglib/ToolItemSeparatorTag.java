@@ -34,14 +34,14 @@ public class ToolItemSeparatorTag extends AbstractSeparatorTag implements Tag {
 			}
 			LOG.debug("  alternateText='"+alternateText+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ToolItemSeparatorComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ToolItemSeparatorComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ToolItemSeparatorComponent component = (ToolItemSeparatorComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

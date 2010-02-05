@@ -24,6 +24,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 	private String width;
 	private String height;
 	private String waiRole;
+	private String lookId;
 	private String backgroundMode;
 	public String getComponentType() {
 		return SubmitWaitComponent.COMPONENT_TYPE;
@@ -77,6 +78,14 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final String getLookId() {
+		return lookId;
+	}
+
+	public final void setLookId(String lookId) {
+		this.lookId = lookId;
+	}
+
 	public final void setBackgroundMode(String backgroundMode) {
 		this.backgroundMode = backgroundMode;
 	}
@@ -92,16 +101,17 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  backgroundMode='"+backgroundMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof SubmitWaitComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'SubmitWaitComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		SubmitWaitComponent component = (SubmitWaitComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -167,6 +177,16 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (lookId != null) {
+			if (isValueReference(lookId)) {
+				ValueBinding vb = application.createValueBinding(lookId);
+				component.setValueBinding(Properties.LOOK_ID, vb);
+
+			} else {
+				component.setLookId(lookId);
+			}
+		}
+
 		if (backgroundMode != null) {
 			if (isValueReference(backgroundMode)) {
 				ValueBinding vb = application.createValueBinding(backgroundMode);
@@ -185,6 +205,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		width = null;
 		height = null;
 		waiRole = null;
+		lookId = null;
 		backgroundMode = null;
 
 		super.release();

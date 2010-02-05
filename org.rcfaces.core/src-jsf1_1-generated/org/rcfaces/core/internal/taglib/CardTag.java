@@ -97,14 +97,14 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CardComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CardComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CardComponent component = (CardComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

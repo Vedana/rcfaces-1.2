@@ -272,14 +272,14 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractSelectManyComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractSelectManyComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractSelectManyComponent component = (AbstractSelectManyComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

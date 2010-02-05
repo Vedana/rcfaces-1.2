@@ -64,14 +64,14 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
 			LOG.debug("  noPagedMessage='"+noPagedMessage+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof PagerComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'PagerComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		PagerComponent component = (PagerComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -68,14 +68,14 @@ public class CustomButtonTag extends AbstractCommandTag implements Tag {
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CustomButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CustomButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CustomButtonComponent component = (CustomButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

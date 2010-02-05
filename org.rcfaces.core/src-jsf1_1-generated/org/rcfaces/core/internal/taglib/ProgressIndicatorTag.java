@@ -34,14 +34,14 @@ public class ProgressIndicatorTag extends AbstractBasicTag implements Tag {
 			}
 			LOG.debug("  indeterminate='"+indeterminate+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ProgressIndicatorComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ProgressIndicatorComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ProgressIndicatorComponent component = (ProgressIndicatorComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

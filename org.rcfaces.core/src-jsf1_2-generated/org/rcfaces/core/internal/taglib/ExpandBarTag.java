@@ -44,6 +44,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private ValueExpression overStyleClass;
 	private ValueExpression collapseEffect;
 	private ValueExpression collapsedText;
+	private ValueExpression userExpandable;
 	public String getComponentType() {
 		return ExpandBarComponent.COMPONENT_TYPE;
 	}
@@ -152,6 +153,10 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		this.collapsedText = collapsedText;
 	}
 
+	public final void setUserExpandable(ValueExpression userExpandable) {
+		this.userExpandable = userExpandable;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ExpandBarComponent.COMPONENT_TYPE==getComponentType()) {
@@ -179,15 +184,16 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  overStyleClass='"+overStyleClass+"'");
 			LOG.debug("  collapseEffect='"+collapseEffect+"'");
 			LOG.debug("  collapsedText='"+collapsedText+"'");
+			LOG.debug("  userExpandable='"+userExpandable+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ExpandBarComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ExpandBarComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ExpandBarComponent component = (ExpandBarComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -405,6 +411,15 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 				component.setCollapsedText(collapsedText.getExpressionString());
 			}
 		}
+
+		if (userExpandable != null) {
+			if (userExpandable.isLiteralText()==false) {
+				component.setValueExpression(Properties.USER_EXPANDABLE, userExpandable);
+
+			} else {
+				component.setUserExpandable(getBool(userExpandable.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -434,6 +449,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 		overStyleClass = null;
 		collapseEffect = null;
 		collapsedText = null;
+		userExpandable = null;
 
 		super.release();
 	}

@@ -40,14 +40,14 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 			LOG.debug("  focusId='"+focusId+"'");
 			LOG.debug("  setFocusIfMessage='"+setFocusIfMessage+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof FocusManagerComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'FocusManagerComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		FocusManagerComponent component = (FocusManagerComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

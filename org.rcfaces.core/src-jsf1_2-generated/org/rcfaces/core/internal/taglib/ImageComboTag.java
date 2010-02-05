@@ -100,14 +100,14 @@ public class ImageComboTag extends AbstractMenuTag implements Tag {
 			LOG.debug("  showDropDownMark='"+showDropDownMark+"'");
 			LOG.debug("  popupRowNumber='"+popupRowNumber+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ImageComboComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageComboComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ImageComboComponent component = (ImageComboComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

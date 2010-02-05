@@ -87,14 +87,14 @@ public class JavaScriptTag extends CameliaTag implements Tag {
 			LOG.debug("  requiredModules='"+requiredModules+"'");
 			LOG.debug("  requiredSets='"+requiredSets+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof JavaScriptComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'JavaScriptComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		JavaScriptComponent component = (JavaScriptComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

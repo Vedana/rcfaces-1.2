@@ -84,14 +84,14 @@ public class ToolFolderTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  borderType='"+borderType+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ToolFolderComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ToolFolderComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ToolFolderComponent component = (ToolFolderComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

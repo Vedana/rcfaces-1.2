@@ -226,14 +226,14 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 			LOG.debug("  defaultNumber='"+defaultNumber+"'");
 			LOG.debug("  maximum='"+maximum+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof NumberEntryComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'NumberEntryComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		NumberEntryComponent component = (NumberEntryComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -49,14 +49,14 @@ public abstract class AbstractMenuTag extends AbstractConverterCommandTag implem
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractMenuComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractMenuComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractMenuComponent component = (AbstractMenuComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

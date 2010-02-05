@@ -25,6 +25,9 @@ public class CssStyleTag extends CameliaTag implements Tag {
 	private ValueExpression userAgent;
 	private ValueExpression src;
 	private ValueExpression srcCharSet;
+	private ValueExpression requiredModules;
+	private ValueExpression requiredSets;
+	private ValueExpression mergeStyles;
 	public String getComponentType() {
 		return CssStyleComponent.COMPONENT_TYPE;
 	}
@@ -45,6 +48,18 @@ public class CssStyleTag extends CameliaTag implements Tag {
 		this.srcCharSet = srcCharSet;
 	}
 
+	public final void setRequiredModules(ValueExpression requiredModules) {
+		this.requiredModules = requiredModules;
+	}
+
+	public final void setRequiredSets(ValueExpression requiredSets) {
+		this.requiredSets = requiredSets;
+	}
+
+	public final void setMergeStyles(ValueExpression mergeStyles) {
+		this.mergeStyles = mergeStyles;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (CssStyleComponent.COMPONENT_TYPE==getComponentType()) {
@@ -54,15 +69,18 @@ public class CssStyleTag extends CameliaTag implements Tag {
 			LOG.debug("  userAgent='"+userAgent+"'");
 			LOG.debug("  src='"+src+"'");
 			LOG.debug("  srcCharSet='"+srcCharSet+"'");
+			LOG.debug("  requiredModules='"+requiredModules+"'");
+			LOG.debug("  requiredSets='"+requiredSets+"'");
+			LOG.debug("  mergeStyles='"+mergeStyles+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CssStyleComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CssStyleComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CssStyleComponent component = (CssStyleComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -102,6 +120,33 @@ public class CssStyleTag extends CameliaTag implements Tag {
 				component.setSrcCharSet(srcCharSet.getExpressionString());
 			}
 		}
+
+		if (requiredModules != null) {
+			if (requiredModules.isLiteralText()==false) {
+				component.setValueExpression(Properties.REQUIRED_MODULES, requiredModules);
+
+			} else {
+				component.setRequiredModules(requiredModules.getExpressionString());
+			}
+		}
+
+		if (requiredSets != null) {
+			if (requiredSets.isLiteralText()==false) {
+				component.setValueExpression(Properties.REQUIRED_SETS, requiredSets);
+
+			} else {
+				component.setRequiredSets(requiredSets.getExpressionString());
+			}
+		}
+
+		if (mergeStyles != null) {
+			if (mergeStyles.isLiteralText()==false) {
+				component.setValueExpression(Properties.MERGE_STYLES, mergeStyles);
+
+			} else {
+				component.setMergeStyles(getBool(mergeStyles.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -109,6 +154,9 @@ public class CssStyleTag extends CameliaTag implements Tag {
 		userAgent = null;
 		src = null;
 		srcCharSet = null;
+		requiredModules = null;
+		requiredSets = null;
+		mergeStyles = null;
 
 		super.release();
 	}

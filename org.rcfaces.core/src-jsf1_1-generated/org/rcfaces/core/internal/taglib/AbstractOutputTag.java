@@ -299,14 +299,14 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractOutputComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractOutputComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractOutputComponent component = (AbstractOutputComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

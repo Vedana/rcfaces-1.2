@@ -31,14 +31,14 @@ public abstract class AbstractConverterCommandTag extends AbstractCommandTag imp
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  converter='"+converter+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractConverterCommandComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractConverterCommandComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractConverterCommandComponent component = (AbstractConverterCommandComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

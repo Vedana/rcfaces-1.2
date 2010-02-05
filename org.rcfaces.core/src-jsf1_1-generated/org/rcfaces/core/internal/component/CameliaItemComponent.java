@@ -13,6 +13,7 @@ import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
+import javax.faces.event.FacesListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -471,6 +472,13 @@ public abstract class CameliaItemComponent extends javax.faces.component.UISelec
 		
 		super.queueEvent(e);
     }	
+    
+    public void clearListeners() {
+    	FacesListener fcs[]=getFacesListeners(FacesListener.class);
+    	for(int i=0;i<fcs.length;i++) {
+    		removeFacesListener(fcs[i]);
+    	}
+    }
 	
 	public String toString() {
 		String name=getClass().getName();

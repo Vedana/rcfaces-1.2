@@ -74,14 +74,14 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  mode='"+mode+"'");
 			LOG.debug("  autoSelection='"+autoSelection+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CalendarComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CalendarComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CalendarComponent component = (CalendarComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

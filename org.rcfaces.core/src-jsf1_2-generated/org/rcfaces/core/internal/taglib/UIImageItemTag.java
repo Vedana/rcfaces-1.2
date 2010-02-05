@@ -70,14 +70,14 @@ public class UIImageItemTag extends SelectItemTag implements Tag {
 			LOG.debug("  alternateText='"+alternateText+"'");
 			LOG.debug("  rendered='"+rendered+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof UIImageItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'UIImageItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		UIImageItemComponent component = (UIImageItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

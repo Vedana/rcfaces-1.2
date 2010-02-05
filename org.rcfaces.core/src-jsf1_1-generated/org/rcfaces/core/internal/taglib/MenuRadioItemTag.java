@@ -48,14 +48,14 @@ public class MenuRadioItemTag extends MenuCheckItemTag implements Tag {
 			LOG.debug("  radioValue='"+radioValue+"'");
 			LOG.debug("  groupName='"+groupName+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof MenuRadioItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'MenuRadioItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		MenuRadioItemComponent component = (MenuRadioItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -3,7 +3,7 @@
     <wb-module deploy-name="org.rcfaces.renderkit.html">
         <wb-resource deploy-path="/" source-path="/src"/>
         <wb-resource deploy-path="/" source-path="/src-generated"/>
-        <wb-resource deploy-path="/" source-path="/src-jsf1_2"/>
         <wb-resource deploy-path="/" source-path="/src-jsf1_2-generated"/>
+        <wb-resource deploy-path="/" source-path="/src-jsf1_2"/>
     </wb-module>
 </project-modules>

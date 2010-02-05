@@ -277,14 +277,14 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AdditionalInformationComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AdditionalInformationComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AdditionalInformationComponent component = (AdditionalInformationComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

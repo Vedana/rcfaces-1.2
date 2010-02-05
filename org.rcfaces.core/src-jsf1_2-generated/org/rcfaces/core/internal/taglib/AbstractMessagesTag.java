@@ -42,9 +42,9 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression initListeners;
+	private ValueExpression globalOnly;
 	private ValueExpression showSummary;
 	private ValueExpression showDetail;
-	private ValueExpression globalOnly;
 	private ValueExpression margins;
 	public final void setVisible(ValueExpression visible) {
 		this.visible = visible;
@@ -142,16 +142,16 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
+	public final void setGlobalOnly(ValueExpression globalOnly) {
+		this.globalOnly = globalOnly;
+	}
+
 	public final void setShowSummary(ValueExpression showSummary) {
 		this.showSummary = showSummary;
 	}
 
 	public final void setShowDetail(ValueExpression showDetail) {
 		this.showDetail = showDetail;
-	}
-
-	public final void setGlobalOnly(ValueExpression globalOnly) {
-		this.globalOnly = globalOnly;
 	}
 
 	public final void setMargins(ValueExpression margins) {
@@ -178,19 +178,19 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
-			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractMessagesComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractMessagesComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractMessagesComponent component = (AbstractMessagesComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -381,6 +381,15 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
+		if (globalOnly != null) {
+			if (globalOnly.isLiteralText()==false) {
+				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
+
+			} else {
+				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
+			}
+		}
+
 		if (showSummary != null) {
 			if (showSummary.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_SUMMARY, showSummary);
@@ -396,15 +405,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setShowDetail(getBool(showDetail.getExpressionString()));
-			}
-		}
-
-		if (globalOnly != null) {
-			if (globalOnly.isLiteralText()==false) {
-				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
-
-			} else {
-				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
 			}
 		}
 
@@ -441,9 +441,9 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
+		globalOnly = null;
 		showSummary = null;
 		showDetail = null;
-		globalOnly = null;
 		margins = null;
 
 		super.release();

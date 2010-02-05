@@ -58,14 +58,14 @@ public class SelectImageItemTag extends CameliaTag implements Tag {
 			LOG.debug("  itemLabel='"+itemLabel+"'");
 			LOG.debug("  itemDisabled='"+itemDisabled+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof SelectImageItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'SelectImageItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		SelectImageItemComponent component = (SelectImageItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

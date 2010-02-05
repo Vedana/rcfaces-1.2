@@ -117,14 +117,14 @@ public class ToolBarTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  itemPadding='"+itemPadding+"'");
 			LOG.debug("  locked='"+locked+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ToolBarComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ToolBarComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ToolBarComponent component = (ToolBarComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

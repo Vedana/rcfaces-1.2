@@ -54,14 +54,14 @@ public class TextEditorImageButtonTag extends ImageButtonTag implements Tag {
 			LOG.debug("  groupName='"+groupName+"'");
 			LOG.debug("  type='"+type+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TextEditorImageButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TextEditorImageButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TextEditorImageButtonComponent component = (TextEditorImageButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

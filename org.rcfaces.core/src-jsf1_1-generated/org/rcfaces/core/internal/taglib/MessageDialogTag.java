@@ -32,6 +32,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 	private String lookId;
 	private String waiRole;
 	private String selectionListeners;
+	private String userEventListeners;
 	private String title;
 	private String defaultValue;
 	private String value;
@@ -152,6 +153,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		this.selectionListeners = selectionListeners;
 	}
 
+	public final String getUserEventListener() {
+		return userEventListeners;
+	}
+
+	public final void setUserEventListener(String userEventListeners) {
+		this.userEventListeners = userEventListeners;
+	}
+
 	public final void setTitle(String title) {
 		this.title = title;
 	}
@@ -196,14 +205,14 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  title='"+title+"'");
 			LOG.debug("  defaultValue='"+defaultValue+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof MessageDialogComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'MessageDialogComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		MessageDialogComponent component = (MessageDialogComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -337,6 +346,10 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			ListenersTools.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
+		if (userEventListeners != null) {
+			ListenersTools.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+		}
+
 		if (title != null) {
 			if (isValueReference(title)) {
 				ValueBinding vb = application.createValueBinding(title);
@@ -393,6 +406,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		lookId = null;
 		waiRole = null;
 		selectionListeners = null;
+		userEventListeners = null;
 		title = null;
 		defaultValue = null;
 		value = null;

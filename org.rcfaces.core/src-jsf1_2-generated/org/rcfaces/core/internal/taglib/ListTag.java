@@ -45,14 +45,14 @@ public class ListTag extends ComboTag implements Tag {
 			LOG.debug("  multipleSelect='"+multipleSelect+"'");
 			LOG.debug("  rowNumber='"+rowNumber+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ListComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ListComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ListComponent component = (ListComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

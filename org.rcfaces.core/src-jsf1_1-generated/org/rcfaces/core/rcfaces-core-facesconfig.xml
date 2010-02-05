@@ -439,6 +439,10 @@ A string specifying the label associated with the home button.
 			<attribute-name>homeDateLabel</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>popupStyleClass</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -474,6 +478,13 @@ A string value specifying the text to show when the component is collapsed.
 ]]></description>
 			<attribute-name>collapsedText</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating wether the user can expand the component.
+]]></description>
+			<attribute-name>userExpandable</attribute-name>
+			<attribute-class>boolean</attribute-class>
 		</attribute>
 	</component>
 	<component>

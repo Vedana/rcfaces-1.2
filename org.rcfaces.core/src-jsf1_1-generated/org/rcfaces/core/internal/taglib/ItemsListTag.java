@@ -29,6 +29,10 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 	private String defaultSelectedImageURL;
 	private String defaultHoverImageURL;
 	private String defaultDisabledImageURL;
+	private String defaultItemInputType;
+	private String defaultItemLookId;
+	private String defaultItemStyleClass;
+	private String defaultItemGroupName;
 	private String itemPadding;
 	private String itemHiddenMode;
 	public String getComponentType() {
@@ -107,6 +111,22 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 		this.defaultDisabledImageURL = defaultDisabledImageURL;
 	}
 
+	public final void setDefaultItemInputType(String defaultItemInputType) {
+		this.defaultItemInputType = defaultItemInputType;
+	}
+
+	public final void setDefaultItemLookId(String defaultItemLookId) {
+		this.defaultItemLookId = defaultItemLookId;
+	}
+
+	public final void setDefaultItemStyleClass(String defaultItemStyleClass) {
+		this.defaultItemStyleClass = defaultItemStyleClass;
+	}
+
+	public final void setDefaultItemGroupName(String defaultItemGroupName) {
+		this.defaultItemGroupName = defaultItemGroupName;
+	}
+
 	public final void setItemPadding(String itemPadding) {
 		this.itemPadding = itemPadding;
 	}
@@ -128,17 +148,21 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 			LOG.debug("  defaultSelectedImageURL='"+defaultSelectedImageURL+"'");
 			LOG.debug("  defaultHoverImageURL='"+defaultHoverImageURL+"'");
 			LOG.debug("  defaultDisabledImageURL='"+defaultDisabledImageURL+"'");
+			LOG.debug("  defaultItemInputType='"+defaultItemInputType+"'");
+			LOG.debug("  defaultItemLookId='"+defaultItemLookId+"'");
+			LOG.debug("  defaultItemStyleClass='"+defaultItemStyleClass+"'");
+			LOG.debug("  defaultItemGroupName='"+defaultItemGroupName+"'");
 			LOG.debug("  itemPadding='"+itemPadding+"'");
 			LOG.debug("  itemHiddenMode='"+itemHiddenMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ItemsListComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ItemsListComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ItemsListComponent component = (ItemsListComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -231,6 +255,46 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (defaultItemInputType != null) {
+			if (isValueReference(defaultItemInputType)) {
+				ValueBinding vb = application.createValueBinding(defaultItemInputType);
+				component.setValueBinding(Properties.DEFAULT_ITEM_INPUT_TYPE, vb);
+
+			} else {
+				component.setDefaultItemInputType(defaultItemInputType);
+			}
+		}
+
+		if (defaultItemLookId != null) {
+			if (isValueReference(defaultItemLookId)) {
+				ValueBinding vb = application.createValueBinding(defaultItemLookId);
+				component.setValueBinding(Properties.DEFAULT_ITEM_LOOK_ID, vb);
+
+			} else {
+				component.setDefaultItemLookId(defaultItemLookId);
+			}
+		}
+
+		if (defaultItemStyleClass != null) {
+			if (isValueReference(defaultItemStyleClass)) {
+				ValueBinding vb = application.createValueBinding(defaultItemStyleClass);
+				component.setValueBinding(Properties.DEFAULT_ITEM_STYLE_CLASS, vb);
+
+			} else {
+				component.setDefaultItemStyleClass(defaultItemStyleClass);
+			}
+		}
+
+		if (defaultItemGroupName != null) {
+			if (isValueReference(defaultItemGroupName)) {
+				ValueBinding vb = application.createValueBinding(defaultItemGroupName);
+				component.setValueBinding(Properties.DEFAULT_ITEM_GROUP_NAME, vb);
+
+			} else {
+				component.setDefaultItemGroupName(defaultItemGroupName);
+			}
+		}
+
 		if (itemPadding != null) {
 			if (isValueReference(itemPadding)) {
 				ValueBinding vb = application.createValueBinding(itemPadding);
@@ -264,6 +328,10 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 		defaultSelectedImageURL = null;
 		defaultHoverImageURL = null;
 		defaultDisabledImageURL = null;
+		defaultItemInputType = null;
+		defaultItemLookId = null;
+		defaultItemStyleClass = null;
+		defaultItemGroupName = null;
 		itemPadding = null;
 		itemHiddenMode = null;
 

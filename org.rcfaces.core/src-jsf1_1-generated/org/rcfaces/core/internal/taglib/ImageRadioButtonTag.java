@@ -108,14 +108,14 @@ public class ImageRadioButtonTag extends RadioButtonTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ImageRadioButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageRadioButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ImageRadioButtonComponent component = (ImageRadioButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

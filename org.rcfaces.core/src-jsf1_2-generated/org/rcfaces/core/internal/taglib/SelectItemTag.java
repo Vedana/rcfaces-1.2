@@ -34,14 +34,14 @@ public class SelectItemTag extends AbstractItemTag implements Tag {
 			}
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof SelectItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'SelectItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		SelectItemComponent component = (SelectItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -35,6 +35,7 @@
 	<target name="buildHead" unless="branch.version">
 		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
 		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
+		<property name="build-imageIO" location="${basedir}/../org.rcfaces.image.imageIO" />
 		<property name="build-svg" location="${basedir}/../org.rcfaces.renderkit.svg" />
 
 		<property name="metadas.xml.core" location="${build-core}/metadatas" />
@@ -294,7 +295,10 @@
 
 		<property name="rcfaces-core.jar" value="${build.path}/rcfaces-core-jsf${jsf.version}.jar" />
 		<property name="rcfaces-core-src.jar" value="${build.path}/rcfaces-core-src-jsf${jsf.version}.jar" />
-		
+
+		<property name="rcfaces-imageIO.jar" value="${build.path}/rcfaces-imageIO-jsf${jsf.version}.jar" />
+		<property name="rcfaces-imageIO-src.jar" value="${build.path}/rcfaces-imageIO-src-jsf${jsf.version}.jar" />		
+
 		<property name="rcfaces-javadoc.zip" value="${build.path}/rcfaces-javadoc-jsf${jsf.version}.zip" />
 
 		<mkdir dir="${build.path}" />
@@ -308,6 +312,9 @@
 
 		<mkdir dir="${build.version.path}/src-html" />
 		<mkdir dir="${build.version.path}/bin-html" />
+
+		<mkdir dir="${build.version.path}/src-imageIO" />
+		<mkdir dir="${build.version.path}/bin-imageIO" />
 
 		<mkdir dir="${build.version.path}/src-svg" />
 		<mkdir dir="${build.version.path}/bin-svg" />
@@ -329,6 +336,13 @@
 				<exclude name="**/*_" />
 			</fileset>
 			<fileset dir="${build-html}/src-jsf${jsf.version}" />
+		</copy>
+
+		<copy todir="${build.version.path}/src-imageIO">
+			<fileset dir="${build-imageIO}/src">
+				<exclude name="**/*.db" />
+				<exclude name="**/*_" />
+			</fileset>
 		</copy>
 
 		<copy todir="${build.version.path}/src-svg">
@@ -464,9 +478,19 @@
 			<param name="pass.classpathId" value="html-classPathId"/>
 		</antcall>
 
+		<path id="imageIO-classPathId">
+			<path path="${build.version.path}/bin-core" />
+		</path>
+
+		<antcall target="imageIO_pass2">
+			<param name="pass.build" value="${build-imageIO}"/>
+			<param name="pass.classpathId" value="imageIO-classPathId"/>
+		</antcall>
+
 		<path id="svg-classPathId">
 			<path path="${build.version.path}/bin-core" />
 			<path path="${build.version.path}/bin-html" />
+			<path path="${build.version.path}/bin-imageIO" />
 		</path>
 
 		<antcall target="renderkit_pass2">
@@ -481,6 +505,11 @@
 
 	<!-- ############# Le CORE ################# -->
 	<target name="core_pass2">
+
+		<replace file="${build.version.path}/src-core/org/rcfaces/core/internal/Constants.java"
+			  token="String BUILDER_VERSION = null" 
+			  value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
+
 		<javac taskname="Build core" srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
@@ -491,13 +520,13 @@
 				</fileset>
 			</classpath>
 		</javac>
-	
+
 		<copy file="${build-core}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-core/META-INF" overwrite="true" />
 		<manifest file="${build.version.path}/src-core/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}" />
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
 			<attribute name="Build-Date" value="${TODAY}" />
-			<attribute name="Jsf-version" value="${jsf.version.manifest}" />
+			<attribute name="JSF-Version" value="${jsf.version.manifest}" />
 			<section name="org.rcfaces.core">
 			</section>
 		</manifest>
@@ -505,7 +534,7 @@
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core-facesconfig.xml" tofile="${build.version.path}/src-core/META-INF/faces-config.xml" />
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.taglib.xml" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.taglib.xml" />
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.tld" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.tld" />
-		<copy file="${build-core}/src/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" tofile="${build.version.path}/src-core/META-INF/services/javax.imageio.spi.ImageWriterSpi" />
+<!--		<copy file="${build-core}/src/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" tofile="${build.version.path}/src-core/META-INF/services/javax.imageio.spi.ImageWriterSpi" /> -->
 	
 		<copy todir="${build.version.path}/bin-core">
 			<fileset dir="${build.version.path}/src-core">
@@ -525,7 +554,69 @@
 			</fileset>
 		</jar>
 	</target>
+
+	<!-- ############# IMAGEIO ################# -->
 	
+	<target name="imageIO_pass2">
+
+		<replace file="${build.version.path}/src-imageIO/org/rcfaces/core/internal/images/Constants.java"
+			token="String BUILDER_VERSION = null" 
+			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
+
+		<javac taskname="Build imageIO" srcdir="${build.version.path}/src-imageIO" debug="true" destdir="${build.version.path}/bin-imageIO" optimize="no" target="${java.target}" encoding="utf-8">
+			<classpath>
+				<fileset dir="${build-core}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${build-core}/lib/jsf${jsf.version}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${pass.build}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<path refid="${pass.classpathId}"/>
+			</classpath>
+		</javac>
+	
+		<copy file="${build.version.path}/src-imageIO/META-INF/rcfaces-config.xml" 
+			  todir="${build.version.path}/bin-imageIO/META-INF" />
+		
+		<manifest file="${build.version.path}/bin-imageIO/META-INF/MANIFEST.MF" mode="update">
+			<attribute name="Specification-Version" value="${version}" />
+			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
+			<attribute name="Build-Date" value="${TODAY}" />
+			<attribute name="JSF-Version" value="${jsf.version.manifest}" />
+			<section name="org.rcfaces.image.ImageIO">
+			</section>
+		</manifest>
+
+		<copy file="${build.version.path}/bin-imageIO/META-INF/MANIFEST.MF" 
+			  toDir="${build.version.path}/src-imageIO/META-INF" overwrite="true" />
+
+		<copy file="${build.version.path}/src-imageIO/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" 
+			  todir="${build.version.path}/bin-imageIO/META-INF/services" />
+	
+		<copy todir="${build.version.path}/bin-imageIO">
+			<fileset dir="${build.version.path}/src-imageIO">
+				<exclude name="**/*.java" />
+				<exclude name="**/javax.imageio.spi.ImageWriterSpi" />
+				<exclude name="**/rcfaces-config.xml" />
+			</fileset>
+		</copy>
+
+		<delete file="${rcfaces-imageIO.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-imageIO.jar}" index="true" manifest="${build.version.path}/bin-imageIO/META-INF/MANIFEST.MF">
+			<fileset dir="${build.version.path}/bin-imageIO">
+			</fileset>
+		</jar>
+	
+		<delete file="${rcfaces-imageIO-src.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-imageIO-src.jar}" index="true" manifest="${build.version.path}/src-imageIO/META-INF/MANIFEST.MF">
+			<fileset dir="${build.version.path}/src-imageIO">
+			</fileset>
+		</jar>
+	</target>
+
 	<!-- ############################ LE HTML   ################################## -->
 
 	<target name="renderkit_pass2">
@@ -537,12 +628,16 @@
 		<move file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/rcfaces-${pass.type}.tld" tofile="${build.version.path}/src-${pass.type}/META-INF/rcfaces-${pass.type}.tld" />
 		<copy file="${pass.build}/src/org/rcfaces/renderkit/${pass.type}/internal/rcfaces-${pass.type}-config.xml" tofile="${build.version.path}/src-${pass.type}/META-INF/rcfaces-config.xml" />
 
+		<replace file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/Constants.java"
+			token="String BUILDER_VERSION = null" 
+			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />		
+		
 		<copy file="${pass.build}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-${pass.type}/META-INF" overwrite="true" />
 		<manifest file="${build.version.path}/src-${pass.type}/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}" />
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
 			<attribute name="Build-Date" value="${TODAY}" />
-			<attribute name="Jsf-version" value="${jsf.version.manifest}" />
+			<attribute name="JSF-Version" value="${jsf.version.manifest}" />
 			<section name="org.rcfaces.renderkit.${pass.type}">
 			</section>
 		</manifest>
@@ -683,16 +778,19 @@
 	<target name="setupInit">
 		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
 		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
+		<property name="build-svg" location="${basedir}/../org.rcfaces.renderkit.svg" />
 	</target>
 
 	<target name="setup1_1" depends="setupInit">
 		<copy file="${build-core}/.classpath-1_1" tofile="${build-core}/.classpath" overwrite="true" />
 		<copy file="${build-html}/.classpath-1_1" tofile="${build-html}/.classpath" overwrite="true" />
+		<copy file="${build-svg}/.classpath-1_1" tofile="${build-svg}/.classpath" overwrite="true" />
 	</target>
 
 	<target name="setup1_2" depends="setupInit">
 		<copy file="${build-core}/.classpath-1_2" tofile="${build-core}/.classpath" overwrite="true" />
 		<copy file="${build-html}/.classpath-1_2" tofile="${build-html}/.classpath" overwrite="true" />
+		<copy file="${build-svg}/.classpath-1_2" tofile="${build-svg}/.classpath" overwrite="true" />
 	</target>
 
 	<target name="copyUnedic">
@@ -747,6 +845,11 @@
 				<include name="org.rcfaces.renderkit.svg/META-INF/**" />
 				<include name="org.rcfaces.renderkit.svg/lib/**" />
 				<include name="org.rcfaces.renderkit.svg/metadatas/**" />
+
+				<include name="org.rcfaces.image.imageIO/src/**" />
+				<include name="org.rcfaces.image.imageIO/META-INF/**" />
+				<include name="org.rcfaces.image.imageIO/lib/**" />
+				<include name="org.rcfaces.image.imageIO/metadatas/**" />
 
 				<include name="org.rcfaces.packager/lib*/**" />
 				<include name="org.rcfaces.packager/*.xml" />

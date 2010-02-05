@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 import org.rcfaces.core.internal.tools.ToolBarTools;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.internal.tools.CheckTools;
@@ -47,7 +48,7 @@ public class ItemsListComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultDisabledImageURL","selectionListener","defaultImageURL","disabled","doubleClickListener","mouseOverListener","itemHiddenMode","itemPadding","defaultHoverImageURL","checkListener","checkedValues","defaultSelectedImageURL","initListener","mouseOutListener","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"defaultDisabledImageURL","selectionListener","defaultImageURL","disabled","doubleClickListener","mouseOverListener","defaultItemGroupName","itemHiddenMode","defaultItemStyleClass","defaultItemInputType","itemPadding","defaultHoverImageURL","checkListener","checkedValues","defaultSelectedImageURL","initListener","defaultItemLookId","mouseOutListener","borderType","readOnly","textPosition"}));
 	}
 
 	public ItemsListComponent() {
@@ -71,6 +72,13 @@ public class ItemsListComponent extends AbstractInputComponent implements
 
 				return TextPositionConverter.SINGLETON;
 			
+	}
+
+	public void setDefaultItemInputType(String inputType) {
+
+
+			setDefaultItemInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
+		
 	}
 
 	public void setTextPosition(String textPosition) {
@@ -376,6 +384,86 @@ public class ItemsListComponent extends AbstractInputComponent implements
 	 */
 	public boolean isDefaultDisabledImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_DISABLED_IMAGE_URL);
+	}
+
+	public int getDefaultItemInputType() {
+		return getDefaultItemInputType(null);
+	}
+
+	public int getDefaultItemInputType(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DEFAULT_ITEM_INPUT_TYPE, 0, facesContext);
+	}
+
+	public void setDefaultItemInputType(int defaultItemInputType) {
+		engine.setProperty(Properties.DEFAULT_ITEM_INPUT_TYPE, defaultItemInputType);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultItemInputType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultItemInputTypeSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_ITEM_INPUT_TYPE);
+	}
+
+	public String getDefaultItemLookId() {
+		return getDefaultItemLookId(null);
+	}
+
+	public String getDefaultItemLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_ITEM_LOOK_ID, facesContext);
+	}
+
+	public void setDefaultItemLookId(String defaultItemLookId) {
+		engine.setProperty(Properties.DEFAULT_ITEM_LOOK_ID, defaultItemLookId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultItemLookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultItemLookIdSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_ITEM_LOOK_ID);
+	}
+
+	public String getDefaultItemStyleClass() {
+		return getDefaultItemStyleClass(null);
+	}
+
+	public String getDefaultItemStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, facesContext);
+	}
+
+	public void setDefaultItemStyleClass(String defaultItemStyleClass) {
+		engine.setProperty(Properties.DEFAULT_ITEM_STYLE_CLASS, defaultItemStyleClass);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultItemStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultItemStyleClassSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_ITEM_STYLE_CLASS);
+	}
+
+	public String getDefaultItemGroupName() {
+		return getDefaultItemGroupName(null);
+	}
+
+	public String getDefaultItemGroupName(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_ITEM_GROUP_NAME, facesContext);
+	}
+
+	public void setDefaultItemGroupName(String defaultItemGroupName) {
+		engine.setProperty(Properties.DEFAULT_ITEM_GROUP_NAME, defaultItemGroupName);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultItemGroupName" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultItemGroupNameSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_ITEM_GROUP_NAME);
 	}
 
 	public int getItemPadding() {

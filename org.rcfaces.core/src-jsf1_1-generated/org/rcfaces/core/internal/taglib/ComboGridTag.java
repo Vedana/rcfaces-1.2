@@ -53,8 +53,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private String valueFormat;
 	private String pagerStyleClass;
 	private String pagerLookId;
+	private String popupStyleClass;
 	private String gridStyleClass;
 	private String gridLookId;
+	private String searchFieldVisible;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
 	}
@@ -291,12 +293,20 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.pagerLookId = pagerLookId;
 	}
 
+	public final void setPopupStyleClass(String popupStyleClass) {
+		this.popupStyleClass = popupStyleClass;
+	}
+
 	public final void setGridStyleClass(String gridStyleClass) {
 		this.gridStyleClass = gridStyleClass;
 	}
 
 	public final void setGridLookId(String gridLookId) {
 		this.gridLookId = gridLookId;
+	}
+
+	public final void setSearchFieldVisible(String searchFieldVisible) {
+		this.searchFieldVisible = searchFieldVisible;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -337,17 +347,19 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  valueFormat='"+valueFormat+"'");
 			LOG.debug("  pagerStyleClass='"+pagerStyleClass+"'");
 			LOG.debug("  pagerLookId='"+pagerLookId+"'");
+			LOG.debug("  popupStyleClass='"+popupStyleClass+"'");
 			LOG.debug("  gridStyleClass='"+gridStyleClass+"'");
 			LOG.debug("  gridLookId='"+gridLookId+"'");
+			LOG.debug("  searchFieldVisible='"+searchFieldVisible+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ComboGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComboGridComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ComboGridComponent component = (ComboGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -680,6 +692,16 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
+		if (popupStyleClass != null) {
+			if (isValueReference(popupStyleClass)) {
+				ValueBinding vb = application.createValueBinding(popupStyleClass);
+				component.setValueBinding(Properties.POPUP_STYLE_CLASS, vb);
+
+			} else {
+				component.setPopupStyleClass(popupStyleClass);
+			}
+		}
+
 		if (gridStyleClass != null) {
 			if (isValueReference(gridStyleClass)) {
 				ValueBinding vb = application.createValueBinding(gridStyleClass);
@@ -697,6 +719,16 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 			} else {
 				component.setGridLookId(gridLookId);
+			}
+		}
+
+		if (searchFieldVisible != null) {
+			if (isValueReference(searchFieldVisible)) {
+				ValueBinding vb = application.createValueBinding(searchFieldVisible);
+				component.setValueBinding(Properties.SEARCH_FIELD_VISIBLE, vb);
+
+			} else {
+				component.setSearchFieldVisible(getBool(searchFieldVisible));
 			}
 		}
 	}
@@ -737,8 +769,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		valueFormat = null;
 		pagerStyleClass = null;
 		pagerLookId = null;
+		popupStyleClass = null;
 		gridStyleClass = null;
 		gridLookId = null;
+		searchFieldVisible = null;
 
 		super.release();
 	}

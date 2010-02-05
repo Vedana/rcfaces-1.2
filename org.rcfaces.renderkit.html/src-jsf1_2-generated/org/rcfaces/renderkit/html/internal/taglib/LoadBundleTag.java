@@ -59,14 +59,14 @@ public class LoadBundleTag extends CameliaTag implements Tag {
 			LOG.debug("  serverScope='"+serverScope+"'");
 			LOG.debug("  override='"+override+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof LoadBundleComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'LoadBundleComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		LoadBundleComponent component = (LoadBundleComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

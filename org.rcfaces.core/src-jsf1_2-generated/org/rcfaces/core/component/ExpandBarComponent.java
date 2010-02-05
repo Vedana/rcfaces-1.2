@@ -72,7 +72,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","border","blurListener","fontName","focusListener","asyncRenderMode","collapseEffect","disabled","accessKey","groupName","fontItalic","overStyleClass","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","readOnly","tabIndex"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","border","blurListener","fontName","focusListener","asyncRenderMode","collapseEffect","disabled","accessKey","groupName","fontItalic","overStyleClass","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","userExpandable","readOnly","tabIndex"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -670,6 +670,42 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 	 */
 	public boolean isCollapsedTextSetted() {
 		return engine.isPropertySetted(Properties.COLLAPSED_TEXT);
+	}
+
+	/**
+	 * Returns a boolean value indicating wether the user can expand the component.
+	 * @return true if the user can expand the component
+	 */
+	public boolean isUserExpandable() {
+		return isUserExpandable(null);
+	}
+
+	/**
+	 * Returns a boolean value indicating wether the user can expand the component.
+	 * @return true if the user can expand the component
+	 */
+	public boolean isUserExpandable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.USER_EXPANDABLE, true, facesContext);
+	}
+
+	/**
+	 * Sets a boolean value indicating wether the user can expand the component.
+	 * @param userExpandable true if the user can expand the component
+	 */
+	public void setUserExpandable(boolean userExpandable) {
+		engine.setProperty(Properties.USER_EXPANDABLE, userExpandable);
+	}
+
+	/**
+	 * Sets a boolean value indicating wether the user can expand the component.
+	 * @param userExpandable true if the user can expand the component
+	 */
+	/**
+	 * Returns <code>true</code> if the attribute "userExpandable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isUserExpandableSetted() {
+		return engine.isPropertySetted(Properties.USER_EXPANDABLE);
 	}
 
 	protected Set getCameliaFields() {

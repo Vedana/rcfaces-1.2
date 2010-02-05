@@ -25,6 +25,9 @@ public class CssStyleTag extends CameliaTag implements Tag {
 	private String userAgent;
 	private String src;
 	private String srcCharSet;
+	private String requiredModules;
+	private String requiredSets;
+	private String mergeStyles;
 	public String getComponentType() {
 		return CssStyleComponent.COMPONENT_TYPE;
 	}
@@ -53,6 +56,18 @@ public class CssStyleTag extends CameliaTag implements Tag {
 		this.srcCharSet = srcCharSet;
 	}
 
+	public final void setRequiredModules(String requiredModules) {
+		this.requiredModules = requiredModules;
+	}
+
+	public final void setRequiredSets(String requiredSets) {
+		this.requiredSets = requiredSets;
+	}
+
+	public final void setMergeStyles(String mergeStyles) {
+		this.mergeStyles = mergeStyles;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (CssStyleComponent.COMPONENT_TYPE==getComponentType()) {
@@ -62,15 +77,18 @@ public class CssStyleTag extends CameliaTag implements Tag {
 			LOG.debug("  userAgent='"+userAgent+"'");
 			LOG.debug("  src='"+src+"'");
 			LOG.debug("  srcCharSet='"+srcCharSet+"'");
+			LOG.debug("  requiredModules='"+requiredModules+"'");
+			LOG.debug("  requiredSets='"+requiredSets+"'");
+			LOG.debug("  mergeStyles='"+mergeStyles+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CssStyleComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CssStyleComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CssStyleComponent component = (CssStyleComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -115,6 +133,36 @@ public class CssStyleTag extends CameliaTag implements Tag {
 				component.setSrcCharSet(srcCharSet);
 			}
 		}
+
+		if (requiredModules != null) {
+			if (isValueReference(requiredModules)) {
+				ValueBinding vb = application.createValueBinding(requiredModules);
+				component.setValueBinding(Properties.REQUIRED_MODULES, vb);
+
+			} else {
+				component.setRequiredModules(requiredModules);
+			}
+		}
+
+		if (requiredSets != null) {
+			if (isValueReference(requiredSets)) {
+				ValueBinding vb = application.createValueBinding(requiredSets);
+				component.setValueBinding(Properties.REQUIRED_SETS, vb);
+
+			} else {
+				component.setRequiredSets(requiredSets);
+			}
+		}
+
+		if (mergeStyles != null) {
+			if (isValueReference(mergeStyles)) {
+				ValueBinding vb = application.createValueBinding(mergeStyles);
+				component.setValueBinding(Properties.MERGE_STYLES, vb);
+
+			} else {
+				component.setMergeStyles(getBool(mergeStyles));
+			}
+		}
 	}
 
 	public void release() {
@@ -122,6 +170,9 @@ public class CssStyleTag extends CameliaTag implements Tag {
 		userAgent = null;
 		src = null;
 		srcCharSet = null;
+		requiredModules = null;
+		requiredSets = null;
+		mergeStyles = null;
 
 		super.release();
 	}

@@ -381,6 +381,27 @@ A string value sprecifying the charset associated to the "src" files.
 				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
+		<attribute>
+			<name>requiredModules</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>requiredSets</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>mergeStyles</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
 	</tag>
 	<tag>
 		<name>loadBundle</name>

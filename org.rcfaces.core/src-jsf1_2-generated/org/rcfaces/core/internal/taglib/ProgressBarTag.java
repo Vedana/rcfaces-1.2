@@ -46,14 +46,14 @@ public class ProgressBarTag extends AbstractInputTag implements Tag {
 			LOG.debug("  maximum='"+maximum+"'");
 			LOG.debug("  indeterminate='"+indeterminate+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ProgressBarComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ProgressBarComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ProgressBarComponent component = (ProgressBarComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

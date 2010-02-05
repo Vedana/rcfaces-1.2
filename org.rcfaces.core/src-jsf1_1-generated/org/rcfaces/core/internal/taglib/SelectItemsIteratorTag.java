@@ -136,14 +136,14 @@ public class SelectItemsIteratorTag extends CameliaTag implements Tag {
 			LOG.debug("  itemExpandedImageURL='"+itemExpandedImageURL+"'");
 			LOG.debug("  itemVisibility='"+itemVisibility+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof SelectItemsIteratorComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'SelectItemsIteratorComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		SelectItemsIteratorComponent component = (SelectItemsIteratorComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -81,7 +81,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","editable","suggestionDelayMs","horizontalScrollPosition","pagerStyleClass","clientAdditionalInformationFullState","message","valueColumnId","rowIndexVar","additionalInformationValues","pagerLookId","oneResultMessage","filterProperties","zeroResultMessage","additionalInformationListener","valueFormat","border","gridStyleClass","labelColumnId","suggestionMinChars","gridLookId","emptyMessage","verticalScrollPosition","paged","emptyDataMessage","required","disabled","selectedValue","maxTextLength","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","manyResultsMessage","popupWidth","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","editable","searchFieldVisible","suggestionDelayMs","horizontalScrollPosition","pagerStyleClass","clientAdditionalInformationFullState","message","valueColumnId","rowIndexVar","additionalInformationValues","pagerLookId","oneResultMessage","filterProperties","zeroResultMessage","additionalInformationListener","valueFormat","border","gridStyleClass","labelColumnId","suggestionMinChars","gridLookId","emptyMessage","verticalScrollPosition","paged","emptyDataMessage","required","disabled","selectedValue","maxTextLength","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","manyResultsMessage","popupWidth","readOnly","popupStyleClass"}));
 	}
 
 	public ComboGridComponent() {
@@ -1101,6 +1101,26 @@ public class ComboGridComponent extends AbstractGridComponent implements
 		return engine.isPropertySetted(Properties.PAGER_LOOK_ID);
 	}
 
+	public String getPopupStyleClass() {
+		return getPopupStyleClass(null);
+	}
+
+	public String getPopupStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+	}
+
+	public void setPopupStyleClass(String popupStyleClass) {
+		engine.setProperty(Properties.POPUP_STYLE_CLASS, popupStyleClass);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "popupStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPopupStyleClassSetted() {
+		return engine.isPropertySetted(Properties.POPUP_STYLE_CLASS);
+	}
+
 	public String getGridStyleClass() {
 		return getGridStyleClass(null);
 	}
@@ -1139,6 +1159,26 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 */
 	public boolean isGridLookIdSetted() {
 		return engine.isPropertySetted(Properties.GRID_LOOK_ID);
+	}
+
+	public boolean isSearchFieldVisible() {
+		return isSearchFieldVisible(null);
+	}
+
+	public boolean isSearchFieldVisible(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SEARCH_FIELD_VISIBLE, true, facesContext);
+	}
+
+	public void setSearchFieldVisible(boolean searchFieldVisible) {
+		engine.setProperty(Properties.SEARCH_FIELD_VISIBLE, searchFieldVisible);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "searchFieldVisible" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSearchFieldVisibleSetted() {
+		return engine.isPropertySetted(Properties.SEARCH_FIELD_VISIBLE);
 	}
 
 	protected Set getCameliaFields() {

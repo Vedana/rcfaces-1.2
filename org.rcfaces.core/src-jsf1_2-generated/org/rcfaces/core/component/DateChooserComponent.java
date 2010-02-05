@@ -50,7 +50,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","calendarLayout","valueChangeListener","homeDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","textPosition","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","calendarLayout","valueChangeListener","homeDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","popupStyleClass","textPosition","for"}));
 	}
 
 	public DateChooserComponent() {
@@ -490,6 +490,26 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 */
 	public boolean isHomeDateLabelSetted() {
 		return engine.isPropertySetted(Properties.HOME_DATE_LABEL);
+	}
+
+	public String getPopupStyleClass() {
+		return getPopupStyleClass(null);
+	}
+
+	public String getPopupStyleClass(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.POPUP_STYLE_CLASS, facesContext);
+	}
+
+	public void setPopupStyleClass(String popupStyleClass) {
+		engine.setProperty(Properties.POPUP_STYLE_CLASS, popupStyleClass);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "popupStyleClass" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPopupStyleClassSetted() {
+		return engine.isPropertySetted(Properties.POPUP_STYLE_CLASS);
 	}
 
 	protected Set getCameliaFields() {

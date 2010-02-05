@@ -82,14 +82,14 @@ public class ImageButtonTag extends ButtonTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ImageButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ImageButtonComponent component = (ImageButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

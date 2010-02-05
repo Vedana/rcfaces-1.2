@@ -343,14 +343,14 @@ public class ComponentsColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  cellDefaultToolTipText='"+cellDefaultToolTipText+"'");
 			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ComponentsColumnComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComponentsColumnComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ComponentsColumnComponent component = (ComponentsColumnComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

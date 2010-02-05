@@ -27,6 +27,8 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 	private ValueExpression readOnly;
 	private ValueExpression verticalAlignment;
 	private ValueExpression showDropDownMark;
+	private ValueExpression defaultItemLookId;
+	private ValueExpression defaultItemStyleClass;
 	private ValueExpression itemHiddenMode;
 	public String getComponentType() {
 		return ItemsToolFolderComponent.COMPONENT_TYPE;
@@ -68,6 +70,14 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 		this.showDropDownMark = showDropDownMark;
 	}
 
+	public final void setDefaultItemLookId(ValueExpression defaultItemLookId) {
+		this.defaultItemLookId = defaultItemLookId;
+	}
+
+	public final void setDefaultItemStyleClass(ValueExpression defaultItemStyleClass) {
+		this.defaultItemStyleClass = defaultItemStyleClass;
+	}
+
 	public final void setItemHiddenMode(ValueExpression itemHiddenMode) {
 		this.itemHiddenMode = itemHiddenMode;
 	}
@@ -83,16 +93,18 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  verticalAlignment='"+verticalAlignment+"'");
 			LOG.debug("  showDropDownMark='"+showDropDownMark+"'");
+			LOG.debug("  defaultItemLookId='"+defaultItemLookId+"'");
+			LOG.debug("  defaultItemStyleClass='"+defaultItemStyleClass+"'");
 			LOG.debug("  itemHiddenMode='"+itemHiddenMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ItemsToolFolderComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ItemsToolFolderComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ItemsToolFolderComponent component = (ItemsToolFolderComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -158,6 +170,24 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (defaultItemLookId != null) {
+			if (defaultItemLookId.isLiteralText()==false) {
+				component.setValueExpression(Properties.DEFAULT_ITEM_LOOK_ID, defaultItemLookId);
+
+			} else {
+				component.setDefaultItemLookId(defaultItemLookId.getExpressionString());
+			}
+		}
+
+		if (defaultItemStyleClass != null) {
+			if (defaultItemStyleClass.isLiteralText()==false) {
+				component.setValueExpression(Properties.DEFAULT_ITEM_STYLE_CLASS, defaultItemStyleClass);
+
+			} else {
+				component.setDefaultItemStyleClass(defaultItemStyleClass.getExpressionString());
+			}
+		}
+
 		if (itemHiddenMode != null) {
 			if (itemHiddenMode.isLiteralText()==false) {
 				component.setValueExpression(Properties.ITEM_HIDDEN_MODE, itemHiddenMode);
@@ -178,6 +208,8 @@ public class ItemsToolFolderTag extends AbstractInputTag implements Tag {
 		readOnly = null;
 		verticalAlignment = null;
 		showDropDownMark = null;
+		defaultItemLookId = null;
+		defaultItemStyleClass = null;
 		itemHiddenMode = null;
 
 		super.release();

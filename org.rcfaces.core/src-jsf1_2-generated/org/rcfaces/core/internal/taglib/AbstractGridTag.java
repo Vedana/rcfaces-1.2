@@ -51,10 +51,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression initListeners;
-	private ValueExpression rows;
 	private ValueExpression var;
 	private ValueExpression first;
 	private ValueExpression margins;
+	private ValueExpression rows;
 	private ValueExpression value;
 	public final void setVisible(ValueExpression visible) {
 		this.visible = visible;
@@ -188,10 +188,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final void setRows(ValueExpression rows) {
-		this.rows = rows;
-	}
-
 	public final void setVar(ValueExpression var) {
 		this.var = var;
 	}
@@ -202,6 +198,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 	public final void setMargins(ValueExpression margins) {
 		this.margins = margins;
+	}
+
+	public final void setRows(ValueExpression rows) {
+		this.rows = rows;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -231,19 +231,19 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  var='"+var+"'");
 			LOG.debug("  first='"+first+"'");
 			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  rows='"+rows+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractGridComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractGridComponent component = (AbstractGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -485,15 +485,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (rows != null) {
-			if (rows.isLiteralText()==false) {
-				component.setValueExpression(Properties.ROWS, rows);
-
-			} else {
-				component.setRows(getInt(rows.getExpressionString()));
-			}
-		}
-
 		if (var != null) {
 			if (var.isLiteralText()==false) {
 				component.setValueExpression(Properties.VAR, var);
@@ -517,6 +508,15 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
 				component.setMargins(margins.getExpressionString());
+		}
+
+		if (rows != null) {
+			if (rows.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROWS, rows);
+
+			} else {
+				component.setRows(getInt(rows.getExpressionString()));
+			}
 		}
 
 		if (value != null) {
@@ -563,10 +563,10 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		rows = null;
 		var = null;
 		first = null;
 		margins = null;
+		rows = null;
 		value = null;
 
 		super.release();

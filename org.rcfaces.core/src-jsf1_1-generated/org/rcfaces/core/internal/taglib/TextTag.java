@@ -140,14 +140,14 @@ public class TextTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  forValue='"+forValue+"'");
 			LOG.debug("  type='"+type+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TextComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TextComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TextComponent component = (TextComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

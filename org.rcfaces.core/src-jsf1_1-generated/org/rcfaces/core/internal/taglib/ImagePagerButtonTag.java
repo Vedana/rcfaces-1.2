@@ -50,14 +50,14 @@ public class ImagePagerButtonTag extends ImageButtonTag implements Tag {
 			LOG.debug("  type='"+type+"'");
 			LOG.debug("  hideIfDisabled='"+hideIfDisabled+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ImagePagerButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImagePagerButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ImagePagerButtonComponent component = (ImagePagerButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

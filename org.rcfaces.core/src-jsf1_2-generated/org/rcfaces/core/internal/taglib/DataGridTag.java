@@ -245,14 +245,14 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof DataGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'DataGridComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		DataGridComponent component = (DataGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -122,14 +122,14 @@ public class TextEditorTag extends AbstractInputTag implements Tag {
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TextEditorComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TextEditorComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TextEditorComponent component = (TextEditorComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

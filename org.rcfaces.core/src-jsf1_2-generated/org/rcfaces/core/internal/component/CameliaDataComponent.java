@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 
 import org.apache.commons.logging.Log;
@@ -518,6 +519,13 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 		
 		super.queueEvent(e);
     }	
+    
+    public void clearListeners() {
+    	FacesListener fcs[]=getFacesListeners(FacesListener.class);
+    	for(int i=0;i<fcs.length;i++) {
+    		removeFacesListener(fcs[i]);
+    	}
+    }
 	
 	public String toString() {
 		String name=getClass().getName();

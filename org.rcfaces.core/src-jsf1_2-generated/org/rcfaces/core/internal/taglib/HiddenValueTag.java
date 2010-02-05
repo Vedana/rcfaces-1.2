@@ -22,6 +22,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 	private ValueExpression immediate;
 	private ValueExpression valueLocked;
 	private ValueExpression validationListeners;
+	private ValueExpression userEventListeners;
 	private ValueExpression value;
 	private ValueExpression converter;
 	public String getComponentType() {
@@ -44,6 +45,10 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		this.validationListeners = validationListeners;
 	}
 
+	public final void setUserEventListener(ValueExpression userEventListeners) {
+		this.userEventListeners = userEventListeners;
+	}
+
 	public final void setValue(ValueExpression value) {
 		this.value = value;
 	}
@@ -60,14 +65,14 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  valueLocked='"+valueLocked+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof HiddenValueComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'HiddenValueComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		HiddenValueComponent component = (HiddenValueComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -98,6 +103,10 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.VALIDATION_LISTENER_TYPE, validationListeners);
 		}
 
+		if (userEventListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
@@ -122,6 +131,7 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		immediate = null;
 		valueLocked = null;
 		validationListeners = null;
+		userEventListeners = null;
 		value = null;
 		converter = null;
 

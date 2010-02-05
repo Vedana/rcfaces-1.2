@@ -75,14 +75,14 @@ public class CheckButton3StatesTag extends AbstractInputTag implements Tag {
 			LOG.debug("  focusStyleClass='"+focusStyleClass+"'");
 			LOG.debug("  selectedState='"+selectedState+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof CheckButton3StatesComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'CheckButton3StatesComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		CheckButton3StatesComponent component = (CheckButton3StatesComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

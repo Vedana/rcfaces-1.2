@@ -76,14 +76,14 @@ public class ImageCheckButtonTag extends CheckButtonTag implements Tag {
 			LOG.debug("  imageHeight='"+imageHeight+"'");
 			LOG.debug("  imageWidth='"+imageWidth+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ImageCheckButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ImageCheckButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ImageCheckButtonComponent component = (ImageCheckButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

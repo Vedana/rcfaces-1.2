@@ -33,14 +33,14 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractSeparatorComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractSeparatorComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractSeparatorComponent component = (AbstractSeparatorComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

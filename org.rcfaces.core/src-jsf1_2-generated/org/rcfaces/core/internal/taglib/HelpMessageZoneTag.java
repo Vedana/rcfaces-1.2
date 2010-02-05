@@ -76,14 +76,14 @@ public class HelpMessageZoneTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  fontUnderline='"+fontUnderline+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof HelpMessageZoneComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'HelpMessageZoneComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		HelpMessageZoneComponent component = (HelpMessageZoneComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

@@ -88,14 +88,14 @@ public class DateItemTag extends SelectItemTag implements Tag {
 			LOG.debug("  literalTimeZone='"+literalTimeZone+"'");
 			LOG.debug("  date='"+date+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof DateItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'DateItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		DateItemComponent component = (DateItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

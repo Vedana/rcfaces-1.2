@@ -24,6 +24,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 	private ValueExpression width;
 	private ValueExpression height;
 	private ValueExpression waiRole;
+	private ValueExpression lookId;
 	private ValueExpression backgroundMode;
 	public String getComponentType() {
 		return SubmitWaitComponent.COMPONENT_TYPE;
@@ -53,6 +54,10 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final void setLookId(ValueExpression lookId) {
+		this.lookId = lookId;
+	}
+
 	public final void setBackgroundMode(ValueExpression backgroundMode) {
 		this.backgroundMode = backgroundMode;
 	}
@@ -68,16 +73,17 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  backgroundMode='"+backgroundMode+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof SubmitWaitComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'SubmitWaitComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		SubmitWaitComponent component = (SubmitWaitComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
@@ -136,6 +142,15 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (lookId != null) {
+			if (lookId.isLiteralText()==false) {
+				component.setValueExpression(Properties.LOOK_ID, lookId);
+
+			} else {
+				component.setLookId(lookId.getExpressionString());
+			}
+		}
+
 		if (backgroundMode != null) {
 			if (backgroundMode.isLiteralText()==false) {
 				component.setValueExpression(Properties.BACKGROUND_MODE, backgroundMode);
@@ -153,6 +168,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		width = null;
 		height = null;
 		waiRole = null;
+		lookId = null;
 		backgroundMode = null;
 
 		super.release();

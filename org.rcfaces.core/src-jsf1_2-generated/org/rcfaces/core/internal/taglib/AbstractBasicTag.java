@@ -150,14 +150,14 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof AbstractBasicComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'AbstractBasicComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		AbstractBasicComponent component = (AbstractBasicComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

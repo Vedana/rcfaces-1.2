@@ -52,14 +52,14 @@ public class TextEditorToolFolderTag extends ToolFolderTag implements Tag {
 			LOG.debug("  fontNames='"+fontNames+"'");
 			LOG.debug("  forVal='"+forVal+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TextEditorToolFolderComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TextEditorToolFolderComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TextEditorToolFolderComponent component = (TextEditorToolFolderComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

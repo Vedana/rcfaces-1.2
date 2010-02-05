@@ -33,7 +33,7 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMessagesComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showActiveComponentMessage","errorStyleClass","showIfMessage","styleClass","fatalStyleClass","infoStyleClass","warnStyleClass"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showActiveComponentMessage","errorStyleClass","maxCount","showIfMessage","styleClass","fatalStyleClass","infoStyleClass","warnStyleClass"}));
 	}
 
 	public MessagesComponent() {
@@ -175,6 +175,26 @@ public class MessagesComponent extends AbstractMessagesComponent implements
 	 */
 	public boolean isShowActiveComponentMessageSetted() {
 		return engine.isPropertySetted(Properties.SHOW_ACTIVE_COMPONENT_MESSAGE);
+	}
+
+	public int getMaxCount() {
+		return getMaxCount(null);
+	}
+
+	public int getMaxCount(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.MAX_COUNT, 0, facesContext);
+	}
+
+	public void setMaxCount(int maxCount) {
+		engine.setProperty(Properties.MAX_COUNT, maxCount);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "maxCount" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isMaxCountSetted() {
+		return engine.isPropertySetted(Properties.MAX_COUNT);
 	}
 
 	protected Set getCameliaFields() {

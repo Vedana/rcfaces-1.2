@@ -41,14 +41,14 @@ public class NameSpaceTag extends CameliaTag implements Tag {
 			LOG.debug("  uri='"+uri+"'");
 			LOG.debug("  prefix='"+prefix+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof NameSpaceComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'NameSpaceComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		NameSpaceComponent component = (NameSpaceComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

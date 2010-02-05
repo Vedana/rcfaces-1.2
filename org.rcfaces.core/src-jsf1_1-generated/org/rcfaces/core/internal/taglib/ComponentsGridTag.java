@@ -258,14 +258,14 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowValue='"+rowValue+"'");
 			LOG.debug("  rowValueConverter='"+rowValueConverter+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof ComponentsGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'ComponentsGridComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		ComponentsGridComponent component = (ComponentsGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

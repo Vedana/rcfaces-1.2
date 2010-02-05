@@ -33,14 +33,14 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 			LOG.debug("  charSet='"+charSet+"'");
 			LOG.debug("  src='"+src+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof FileItemComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'FileItemComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		FileItemComponent component = (FileItemComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

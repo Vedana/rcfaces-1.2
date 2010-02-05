@@ -117,14 +117,14 @@ public class RadioButtonTag extends AbstractInputTag implements Tag {
 			LOG.debug("  groupName='"+groupName+"'");
 			LOG.debug("  required='"+required+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof RadioButtonComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'RadioButtonComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		RadioButtonComponent component = (RadioButtonComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();

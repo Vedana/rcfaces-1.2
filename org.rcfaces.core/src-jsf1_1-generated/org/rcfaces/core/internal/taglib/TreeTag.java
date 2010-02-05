@@ -301,14 +301,14 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
 		}
-		super.setProperties(uiComponent);
-
 		if ((uiComponent instanceof TreeComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
 				throw new IllegalStateException("The first component of the page must be a UIViewRoot component !");
 			}
 			throw new IllegalStateException("Component specified by tag is not instanceof of 'TreeComponent'.");
 		}
+
+		super.setProperties(uiComponent);
 
 		TreeComponent component = (TreeComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
