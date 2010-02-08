@@ -495,14 +495,26 @@ var __members = {
 		if (shellDecorator) {
 			return shellDecorator;
 		}
-				
+		
 		shellDecorator=this.f_newShellDecorator(shell);
 
-		f_core.Debug(f_shellManager, "f_getShellDecorator: create new shell decorator: "+shellDecorator);
-
-		shellDecorators[shellId]=shellDecorator;
+		this.f_setShellDecorator(shell, shellDecorator);
 		
 		return shellDecorator;
+	},
+	/**
+	 * @method public
+	 * @param f_shell shell
+	 * @param f_shellDecorator shellDecorator
+	 * @return void
+	 */
+	f_setShellDecorator: function(shell, shellDecorator) {
+		f_core.Debug(f_shellManager, "f_getShellDecorator: create new shell decorator: "+shellDecorator);
+		
+		var shellId=shell.f_getId();
+		var shellDecorators=this._shellDecorators;
+
+		shellDecorators[shellId]=shellDecorator;
 	},
 	/**
 	 * @method protected
@@ -644,6 +656,11 @@ var __members = {
 	 * @return void
 	 */
 	f_setShellDecoration: function(shell, key, value) {
+		if (key==f_shellDecorator.INSTANCE_DECORATOR) {
+			this.f_newShellDecorator(shell, value);
+			return;
+		}
+		
 		this.f_getShellDecorator(shell).f_setDecorationValue(key, value);
 	},
 	/**

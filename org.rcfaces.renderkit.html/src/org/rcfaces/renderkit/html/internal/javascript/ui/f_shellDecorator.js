@@ -17,6 +17,11 @@ var __statics = {
 	TITLE_DECORATOR: "title",
 	
 	/**
+	 * @field hidden static final String
+	 */
+	INSTANCE_DECORATOR: "instance",
+	
+	/**
 	 * @field private static number
 	 */
 	_ShellIdentifier: 0,

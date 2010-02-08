@@ -636,6 +636,16 @@ var __members = {
 		this._shellManager.f_setShellDecoration(this, f_shellDecorator.TITLE_DECORATOR, title);
 	},
 	/**
+	 * @method public
+	 * @param f_shellDecorator shellDecorator
+	 * @return void
+	 */
+	f_setShellDecorator: function(shellDecorator) {
+		f_core.Assert(typeof(shellDecorator)=="object", "f_shell.f_setShellDecorator: Invalid shellDecorator parameter ('"+shellDecorator+"')");
+		
+		this._shellManager.f_setShellDecoration(this, f_shellDecorator.INSTANCE_DECORATOR, shellDecorator);
+	},
+	/**
 	 * @method protected
 	 * @return f_shellManager 
 	 */
