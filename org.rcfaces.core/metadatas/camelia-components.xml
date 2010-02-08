@@ -2384,6 +2384,11 @@ Dans le cas d'un mode period !
 		<attribute id="homeDate" type="java.util.Date" />
 		<method id="setHomeDate(String)" />
 		<method id="getHomeDate(javax.faces.context.FacesContext)" />
+		
+		<attribute id="defaultSelectedDate" type="java.util.Date" />
+		<method id="setDefaultSelectedDate(String)" />
+		<method id="getDefaultSelectedDate(javax.faces.context.FacesContext)" />
+		
 
 		<attribute id="homeDateLabel" type="java.lang.String" />
 		
