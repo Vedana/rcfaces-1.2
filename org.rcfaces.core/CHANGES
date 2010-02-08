@@ -1,6 +1,18 @@
 
 
 ----------------------------------------------------------------------
+- @version I2554
+- @author Olivier Oeuillot & J
+- 
+
+Nouvel attribut defaultSelectedDate
+bla bla
+
+Correction ComponentsGrid & Componsants dans l'additionalInformation des DataGrids:
+Correction de la sauvegarde des états des composants dans les lignes.
+
+
+----------------------------------------------------------------------
 - @version I2553
 - @author Olivier Oeuillot
 - 17/12/2009
