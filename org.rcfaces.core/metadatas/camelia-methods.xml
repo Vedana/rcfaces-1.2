@@ -670,13 +670,6 @@
 			setInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
 		</code>
 	</method>
-	<method id="setDefaultItemInputType">
-		<import>org.rcfaces.core.internal.converter.InputTypeConverter</import>
-		<parameter type="String" name="inputType" />
-		<code>
-			setDefaultItemInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
-		</code>
-	</method>
 	<method id="setAsyncRenderMode">
 		<import>org.rcfaces.core.internal.converter.AsyncRenderModeConverter</import>
 		<parameter type="String" name="asyncRenderMode" />
@@ -1233,6 +1226,25 @@
 		<import>org.rcfaces.core.internal.converter.LiteralDateConverter</import>
 		<code>
 			Object value=engine.getProperty(Properties.HOME_DATE, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
+		</code>
+	</method>
+	<method id="setDefaultSelectedDate" returnType="void">
+		<parameter type="String" name="date" />
+		<code>
+			engine.setProperty(Properties.DEFAULT_SELECTED_DATE, date);
+		</code>
+	</method>
+	<method id="getDefaultSelectedDate" returnType="java.util.Date">
+		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+		<import>java.util.Date</import>
+		<import>org.rcfaces.core.internal.converter.LiteralDateConverter</import>
+		<code>
+			Object value=engine.getProperty(Properties.DEFAULT_SELECTED_DATE, facesContext);
 			if (value instanceof String) {
 				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
 			}

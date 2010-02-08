@@ -231,6 +231,14 @@ public class DateChooserRenderer extends AbstractCalendarRenderer implements
                 }
             }
 
+            Date selected = dateChooserComponent.getDefaultSelectedDate(facesContext);
+            if (selected != null) {
+
+                StringAppender sb = new StringAppender(16);
+                appendDate(componentCalendar, selected, sb, true);
+                writer.writeAttribute("v:defaultSelectedDate", sb.toString());
+            }
+            
             String forComponent = dateChooserComponent.getFor(facesContext);
             if (forComponent != null) {
                 writer.writeAttribute("v:for", forComponent);

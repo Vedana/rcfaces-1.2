@@ -353,6 +353,11 @@ var __statics = {
 
 var __members={
 
+		/**
+		 * @field private
+		 */
+		_defaultSelectedDate: undefined,
+		
 	fa_calendarPopup: function() {
 
 		this._layout=f_core.GetNumberAttribute(this, "v:layout", f_calendar.DEFAULT_LAYOUT);
@@ -402,7 +407,7 @@ var __members={
 			// this._initialDateSelection=undefined; // Date
 			// this._initialShowSelection=undefined; // boolean
 			// this._layout=undefined; // boolean
-		
+			// this._defaultSelectedDate=undefined; // Date
 			var calendar=this._calendar;
 			if (calendar) {
 				this._calendar=undefined;
@@ -442,7 +447,9 @@ var __members={
 					var forValueFormat=this._forValueFormat;					
 				
 					date=fa_calendarPopup._GetDateFromComponent(component, forValueFormat, this._calendar);
-					
+					if(!date){
+						date = this.f_getDefaultSelectedDate();
+					}
 				} catch (x) {
 					f_core.Debug(fa_calendarPopup, "f_openCalendarPopup: Get date of component '"+component.id+"' throws exception.", x);
 					date=null;
@@ -502,6 +509,31 @@ var __members={
 		fa_calendarPopup._ClosePopup(this, jsEvt);
 		return false;
 	},
+	
+	/**
+	 * @method public
+	 * @return Date
+	 * @override
+	 */
+	f_getDefaultSelectedDate: function() {
+		if (this._defaultSelectedDate) {
+			return this._defaultSelectedDate;
+		}
+	},
+	/**
+	 * @method public
+	 * @param Date defaultSelectedDate
+	 * @return void
+	 * @override
+	 */
+	f_setDefaultSelectedDate: function(date) {
+		
+		if (date instanceof Date){
+			this._defaultSelectedDate = date;
+		}	
+		return;
+	},
+	
 	/**
 	 * @method public
 	 * @return Date

@@ -17,6 +17,12 @@ var __members={
 		if (this._forComponent) {
 			this._forValueFormat=f_core.GetAttribute(this, "v:forValueFormat");
 		}
+		
+		
+		var defaultSelectedDate=f_core.GetAttribute(this, "v:defaultSelectedDate");
+		if (defaultSelectedDate) {
+			this.f_setDefaultSelectedDate(f_core.DeserializeDate(defaultSelectedDate));
+		}
 	},
 	/*
 	f_finalize: function() {
