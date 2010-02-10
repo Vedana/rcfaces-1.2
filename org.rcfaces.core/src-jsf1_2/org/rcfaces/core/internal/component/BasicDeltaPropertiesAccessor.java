@@ -34,20 +34,20 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
     private static final Object UNDEFINED = new Object();
 
-    private final BasicPropertiesAccessor accessor;
+    private final IPropertiesAccessor parent;
 
     private Map properties;
 
-    public BasicDeltaPropertiesAccessor(BasicPropertiesAccessor accessor) {
-        this.accessor = accessor;
+    public BasicDeltaPropertiesAccessor(IPropertiesAccessor parent) {
+        this.parent = parent;
     }
 
     public void commitProperties(FacesContext context) {
-        if (properties == null || properties.isEmpty()) {
+        if (hasModifiedProperties() == false) {
             return;
         }
 
-        accessor.putAll(context, properties.entrySet(), UNDEFINED);
+        parent.putAll(context, properties.entrySet(), UNDEFINED);
     }
 
     public boolean isPropertySetted(String propertyName) {
@@ -62,7 +62,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             }
         }
 
-        return accessor.isPropertySetted(propertyName);
+        return parent.isPropertySetted(propertyName);
     }
 
     public Object getProperty(String propertyName) {
@@ -77,7 +77,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             }
         }
 
-        Object value = accessor.getProperty(propertyName);
+        Object value = parent.getProperty(propertyName);
 
         if (CLONE_VALUE && value != null) {
             Object original = value;
@@ -103,7 +103,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
     public Object setProperty(FacesContext facesContext, String propertyName,
             Object value) {
 
-        Object initialValue = accessor.getProperty(propertyName);
+        Object initialValue = parent.getProperty(propertyName);
 
         // La propriété est identique au model ?
         if (initialValue == value
@@ -143,7 +143,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
     public Object removeProperty(FacesContext facesContext, String propertyName) {
 
-        Object initialValue = accessor.getProperty(propertyName);
+        Object initialValue = parent.getProperty(propertyName);
         if (initialValue != null) {
             // Un model existe !
 
@@ -181,13 +181,8 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
     }
 
     public Object saveState(FacesContext context) {
-        Object rets2[] = new Object[3];
-        rets2[0] = Boolean.TRUE;
-
-        rets2[1] = accessor.saveState(context);
-
-        if (properties == null || properties.isEmpty()) {
-            return rets2;
+        if (hasModifiedProperties() == false) {
+            return null;
         }
 
         Object rets[] = new Object[properties.size() * 2];
@@ -199,6 +194,7 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
             Object value = entry.getValue();
             if (value == UNDEFINED || value == null) {
+                i++;
                 continue;
             }
 
@@ -211,30 +207,20 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
             rets[i++] = value;
         }
 
-        rets2[2] = rets;
-
-        return rets2;
+        return rets;
     }
 
-    public IDeltaPropertiesAccessor restoreState(FacesContext context,
-            Object state) {
+    public void restoreState(FacesContext context, Object state) {
+        if (state == null) {
+            return;
+        }
+
         if ((state instanceof Object[]) == false) {
             throw new FacesException(
                     "Bad serialized format ! (not an objects array !)");
         }
 
-        Object params[] = (Object[]) state;
-        if (params.length != 3) {
-            throw new FacesException("Bad format ! (Bad object array length)");
-        }
-
-        accessor.restoreState(context, params[1]);
-
-        Object datas[] = (Object[]) params[2];
-
-        if (datas == null || datas.length == 0) {
-            return this;
-        }
+        Object datas[] = (Object[]) state;
 
         properties = new HashMap(datas.length / 2);
 
@@ -248,21 +234,14 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
             setProperty(context, key, value);
         }
-
-        return this;
     }
 
     public void release() {
         properties = null;
     }
 
-    public IDeltaPropertiesAccessor createDeltaPropertiesAccessor() {
-        throw new UnsupportedOperationException(
-                "Can not create a Delta of a delta properties !");
-    }
-
     public Set keySet() {
-        Set l = accessor.keySet();
+        Set l = parent.keySet();
         if (properties == null || properties.isEmpty()) {
             // Pas de propriétés locales !
             return l;
@@ -288,12 +267,16 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         return v;
     }
 
+    public boolean hasModifiedProperties() {
+        return properties != null && properties.size() > 0;
+    }
+
     public int size() {
-        if (properties == null || properties.isEmpty()) {
-            return accessor.size();
+        if (hasModifiedProperties() == false) {
+            return parent.size();
         }
 
-        Set l = accessor.keySet();
+        Set l = parent.keySet();
 
         int cnt = l.size();
         for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
@@ -325,8 +308,8 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
     }
 
     public String toString() {
-        if (properties == null || properties.isEmpty()) {
-            return accessor.toString();
+        if (hasModifiedProperties() == false) {
+            return "{NO DELTA}";
         }
 
         Set keys = keySet();

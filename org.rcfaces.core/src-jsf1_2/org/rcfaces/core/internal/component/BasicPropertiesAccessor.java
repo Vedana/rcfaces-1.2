@@ -17,7 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.util.StateHolderTools;
-import org.rcfaces.core.model.ICommitableObject;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -32,32 +31,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
     private static final boolean debugEnabled = LOG.isDebugEnabled();
 
     private Map properties;
-
-    void putAll(FacesContext context, Set entries, Object undefinedValue) {
-        for (Iterator it = entries.iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
-
-            String key = (String) entry.getKey();
-            Object value = entry.getValue();
-
-            if (value == undefinedValue) {
-                value = null;
-
-            } else if (value instanceof ICommitableObject) {
-                ICommitableObject commitableObject = (ICommitableObject) value;
-
-                if (commitableObject.isCommited() == false) {
-                    if (debugEnabled) {
-                        LOG.debug("Commit object '" + commitableObject + "'.");
-                    }
-
-                    commitableObject.commit();
-                }
-            }
-
-            setProperty(context, key, value);
-        }
-    }
 
     public Object getProperty(String propertyName) {
         if (properties == null || properties.isEmpty()) {
@@ -241,10 +214,9 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         properties = null;
     }
 
-    public IDeltaPropertiesAccessor restoreState(FacesContext context,
-            Object object) {
+    public void restoreState(FacesContext context, Object object) {
         if (object == null) {
-            return null;
+            return;
         }
 
         if ((object instanceof Object[]) == false) {
@@ -253,13 +225,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
         }
 
         Object datas[] = (Object[]) object;
-
-        if (((datas[0] instanceof String) == false) && datas.length == 3) {
-            BasicDeltaPropertiesAccessor deltaPropertiesAccessor = new BasicDeltaPropertiesAccessor(
-                    this);
-
-            return deltaPropertiesAccessor.restoreState(context, object);
-        }
 
         properties = createMap(datas.length / 2);
 
@@ -288,8 +253,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
 
             setProperty(context, (String) key, value);
         }
-
-        return null;
     }
 
     public boolean isPropertySetted(String propertyName) {
@@ -297,10 +260,6 @@ public class BasicPropertiesAccessor extends AbstractPropertiesAccessor {
             return false;
         }
         return properties.containsKey(propertyName);
-    }
-
-    public IDeltaPropertiesAccessor createDeltaPropertiesAccessor() {
-        return new BasicDeltaPropertiesAccessor(this);
     }
 
     public Set keySet() {

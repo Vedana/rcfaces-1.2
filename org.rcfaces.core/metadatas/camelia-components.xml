@@ -843,6 +843,7 @@
 		<implements id="org.rcfaces.core.internal.capability.ICellStyleClassSettings" />		
 		<implements id="org.rcfaces.core.internal.capability.ICellToolTipTextSettings" />
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
+		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
 
 		<capability id="IVisibilityCapability" />
 		<capability id="IHiddenModeCapability" />
@@ -2384,7 +2385,7 @@ Dans le cas d'un mode period !
 		<attribute id="homeDate" type="java.util.Date" />
 		<method id="setHomeDate(String)" />
 		<method id="getHomeDate(javax.faces.context.FacesContext)" />
-		
+
 		<attribute id="defaultSelectedDate" type="java.util.Date" />
 		<method id="setDefaultSelectedDate(String)" />
 		<method id="getDefaultSelectedDate(javax.faces.context.FacesContext)" />

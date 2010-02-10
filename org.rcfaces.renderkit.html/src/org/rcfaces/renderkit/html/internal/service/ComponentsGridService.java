@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.FacesException;
+import javax.faces.application.StateManager;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -205,8 +206,8 @@ public class ComponentsGridService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -356,7 +357,10 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
+            saveView(facesContext);
+
         } finally {
+
             if (oldResponseWriter != null) {
                 facesContext.setResponseWriter(oldResponseWriter);
             }
@@ -373,6 +377,15 @@ public class ComponentsGridService extends AbstractHtmlService {
 
             printWriter.write(cw.toCharArray());
         }
+    }
+
+    private void saveView(FacesContext facesContext) throws IOException {
+        StateManager stateManager = facesContext.getApplication()
+                .getStateManager();
+
+        Object state = stateManager.saveView(facesContext);
+
+        stateManager.writeState(facesContext, state);
     }
 
     public void setupComponent(IComponentRenderContext componentRenderContext) {

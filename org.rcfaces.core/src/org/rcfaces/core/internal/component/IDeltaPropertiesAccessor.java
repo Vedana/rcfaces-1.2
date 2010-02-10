@@ -12,5 +12,7 @@ import javax.faces.context.FacesContext;
  * @version $Revision$ $Date$
  */
 public interface IDeltaPropertiesAccessor extends IPropertiesAccessor {
+    boolean hasModifiedProperties();
+
     void commitProperties(FacesContext facesContext);
 }

@@ -27,7 +27,7 @@ public interface IPropertiesAccessor {
 
     Object saveState(FacesContext context);
 
-    IDeltaPropertiesAccessor restoreState(FacesContext context, Object state);
+    void restoreState(FacesContext context, Object state);
 
     void release();
 
@@ -36,5 +36,7 @@ public interface IPropertiesAccessor {
     Set keySet();
 
     int size();
+
+    void putAll(FacesContext context, Set propertiesMapEntry, Object undefined);
 
 }

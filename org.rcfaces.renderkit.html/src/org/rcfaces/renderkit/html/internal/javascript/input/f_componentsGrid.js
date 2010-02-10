@@ -660,7 +660,7 @@ var __members = {
 			td.align=align;
 				
 			try {
-				this.f_getClass().f_getClassLoader().f_loadContent(this, td, content, false);
+				this.f_getClass().f_getClassLoader().f_loadContent(this, td, content /*, false*/);
 				
 			} catch (x) {
 	 			f_core.Error(f_componentsGrid, "f_addRow2: Can not load content of componentsGrid cell '"+content+"'");

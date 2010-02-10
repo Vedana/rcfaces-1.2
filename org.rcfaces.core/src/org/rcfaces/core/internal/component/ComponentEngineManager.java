@@ -65,7 +65,8 @@ class ComponentEngineManager {
             Method method = getGetter(component.getClass());
 
             try {
-                return (IComponentEngine) method.invoke(component, (Object[])null);
+                return (IComponentEngine) method.invoke(component,
+                        (Object[]) null);
 
             } catch (Throwable e) {
                 throw new RuntimeException("Can not call getter '" + method
@@ -95,8 +96,10 @@ class ComponentEngineManager {
             for (Class cls = componentClass; cls != null; cls = cls
                     .getSuperclass()) {
                 try {
-                    method = cls.getDeclaredMethod(
-                            COMPONENT_ENGINE_GETTER_METHOD_NAME, (Class[])null);
+                    method = cls
+                            .getDeclaredMethod(
+                                    COMPONENT_ENGINE_GETTER_METHOD_NAME,
+                                    (Class[]) null);
 
                     break;
 
@@ -191,4 +194,12 @@ class ComponentEngineManager {
         }
     }
 
+    public static void cloneComponentEngine(IRCFacesComponent component) {
+        IComponentEngine componentEngine = getComponentEngine(component);
+
+        IComponentEngine newComponentEngine = componentEngine
+                .copyOriginalState();
+
+        setComponentEngine(component, newComponentEngine);
+    }
 }

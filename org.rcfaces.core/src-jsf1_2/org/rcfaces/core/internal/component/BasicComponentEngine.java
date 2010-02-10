@@ -19,6 +19,7 @@ import javax.faces.convert.Converter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IStateChildrenList;
 
 /**
@@ -67,6 +68,33 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     public BasicComponentEngine(IFactory factory) {
         super(factory);
+    }
+
+    protected BasicComponentEngine(BasicComponentEngine original) {
+        this(original.factory);
+
+        if (original.propertiesManager != null) {
+            propertiesManager = original.propertiesManager.copyOriginalState();
+        }
+
+        if (original.dataAccessorsByName != null
+                && original.dataAccessorsByName.isEmpty() == false) {
+
+            dataAccessorsByName = new HashMap(DATA_ACCESSORS_INIT_SIZE);
+
+            for (Iterator it = original.dataAccessorsByName.entrySet()
+                    .iterator(); it.hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
+
+                BasicDataAccessor originalDataAccessor = (BasicDataAccessor) entry
+                        .getValue();
+
+                BasicDataAccessor newDataAccessor = (BasicDataAccessor) originalDataAccessor
+                        .copyOriginalState();
+
+                dataAccessorsByName.put(entry.getKey(), newDataAccessor);
+            }
+        }
     }
 
     public final Boolean getBooleanProperty(String propertyName,
@@ -392,7 +420,9 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext)
+     * @see
+     * javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext
+     * )
      */
     public Object saveState(FacesContext context) {
         Object states[] = new Object[3];
@@ -447,8 +477,9 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     /*
      * (non-Javadoc)
      * 
-     * @see javax.faces.component.UIComponent#setValueExpression(java.lang.String,
-     *      javax.faces.el.ValueExpression)
+     * @see
+     * javax.faces.component.UIComponent#setValueExpression(java.lang.String,
+     * javax.faces.el.ValueExpression)
      */
     public final void setValue(String valueName, Object value) {
         setInternalProperty(valueName, value);
@@ -654,6 +685,16 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                     forceDelta);
         }
 
+        @Override
+        public IPropertiesManager copyOriginalState() {
+            BasicDataAccessor copy = new BasicDataAccessor(name);
+            copy.propertiesManager = copy;
+            copy.setCameliaFactory(factory);
+            copy.originalPropertiesAccessor = originalPropertiesAccessor;
+
+            return copy;
+        }
+
         protected IPropertiesManager createPropertiesManager() {
             return this;
         }
@@ -782,6 +823,13 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     public IStateChildrenList createStateChildrenList() {
         return new BasicStateChildrenList();
+    }
+
+    public IComponentEngine copyOriginalState() {
+
+        BasicComponentEngine newComponentEngine = new BasicComponentEngine(this);
+
+        return newComponentEngine;
     }
 
     public String toString() {
