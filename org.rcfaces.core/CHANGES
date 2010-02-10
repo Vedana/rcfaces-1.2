@@ -1,10 +1,18 @@
 ----------------------------------------------------------------------
+- @version I2544_Bunedic_26
+- @author Olivier Oeuillot
+- 3/2/2010
+
+DataGridRenderer:
+Correction du cellTextWrapMode
+
+----------------------------------------------------------------------
 - @version I2544_Bunedic_25
 - @author Olivier Oeuillot
 - 22/9/2009
 
 f_grid:
-Verifie si le composant clické prend le focus ou non pour selectionner la ligne du tableau
+Verifie si le composant cliqué prend le focus ou non pour sélectionner la ligne du tableau
 
 f_component, f_calendar, f_componentsList, f_imageButton, f_input, f_pager, f_textEditor, f_tree, fa_compositeEntry
 Ajout du support de la méthode f_getFocusableElement(); 
