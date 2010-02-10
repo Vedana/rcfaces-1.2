@@ -514,6 +514,10 @@ var __members = {
 		var shellId=shell.f_getId();
 		var shellDecorators=this._shellDecorators;
 
+		if (shellDecorators[shellId]) {
+			throw new Error("Shell decorator is already setted !");
+		}
+		
 		shellDecorators[shellId]=shellDecorator;
 	},
 	/**
@@ -657,7 +661,7 @@ var __members = {
 	 */
 	f_setShellDecoration: function(shell, key, value) {
 		if (key==f_shellDecorator.INSTANCE_DECORATOR) {
-			this.f_newShellDecorator(shell, value);
+			this.f_setShellDecorator(shell, value);
 			return;
 		}
 		
