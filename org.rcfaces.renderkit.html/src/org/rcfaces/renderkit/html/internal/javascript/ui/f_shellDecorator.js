@@ -11,6 +11,12 @@
  */
 
 var __statics = {
+		
+	/**
+	 * @field protected static final Number
+	 */
+	_DEFAULT_TITLE_HEIGHT: 20,
+	
 	/**
 	 * @field hidden static final String
 	 */
@@ -30,6 +36,8 @@ var __statics = {
 	 * @field private static Object
 	 */
 	_FrameShells: undefined,
+	
+	
 	
 	/**
 	 * @method private static
@@ -344,7 +352,7 @@ var __members = {
 		var style=shell.f_getStyle();
 		
 		if (style & (f_shell.TITLE_STYLE | f_shell.CLOSE_STYLE)) {
-			height+=20; // Le titre
+			height+=(this.f_getTitleHeight()+this.f_getBottomHeight()); // Le titre
 			
 			height+=1; // Border title
 		}
@@ -352,7 +360,7 @@ var __members = {
 		if (style & f_shell.RESIZE_STYLE) {
 			width+=2; // Les bords
 			height+=2;
-		}		
+		}
 		
 		return { width: width, height: height };
 	},
@@ -615,7 +623,23 @@ var __members = {
 		frameShells[shellIdentifier]=shell;
 		
 		return shellIdentifier;
-	}	
+	},
+	
+	/**
+	 * @method protected
+	 * @return Number
+	 */
+	f_getTitleHeight : function(){
+		return f_shellDecorator._DEFAULT_TITLE_HEIGHT;
+	},
+	
+	/**
+	 * @method protected
+	 * @return Number
+	 */
+	f_getBottomHeight : function(){
+		return  0;
+	}
 }
 
 
