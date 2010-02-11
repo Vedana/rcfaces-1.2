@@ -513,7 +513,6 @@ var __members={
 	/**
 	 * @method public
 	 * @return Date
-	 * @override
 	 */
 	f_getDefaultSelectedDate: function() {
 		if (this._defaultSelectedDate) {
@@ -524,7 +523,6 @@ var __members={
 	 * @method public
 	 * @param Date defaultSelectedDate
 	 * @return void
-	 * @override
 	 */
 	f_setDefaultSelectedDate: function(date) {
 		
