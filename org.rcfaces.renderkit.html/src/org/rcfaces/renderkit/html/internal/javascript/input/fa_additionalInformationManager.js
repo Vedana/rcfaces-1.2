@@ -471,11 +471,15 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object[] additional The new additional.
-	 * @param optional boolean show Show the first new selected element.
+	 * @param optional boolean show Show the first new shown element.
 	 * @return void
 	 */
-	f_showAdditional: function(additional, show) {
-		f_core.Assert(typeof(additional)=="object", "fa_additionalInformationManager.f_showAdditional: Invalid additional parameter ("+additional+")");
+	f_expandAdditionalInformations: function(additional, show) {
+		if (additional && typeof(additional)=="object" && (additional instanceof Array)==false) {
+			additional=[additional];
+		}
+		
+		f_core.Assert(additional===undefined || (additional instanceof Array), "fa_additionalInformationManager.f_showAdditional: Invalid additional parameter ("+additional+")");
 		f_core.Assert(show===undefined || typeof(show)=="boolean", "fa_additionalInformationManager.f_showAdditional: Invalid show parameter ("+show+")");
 		
 		f_core.Debug(fa_additionalInformationManager, "f_showAdditional: Set additional to '"+additional+"' show='"+show+"'.");
@@ -486,7 +490,6 @@ var __members = {
 			return;
 		}
 		
-		this._hideAllAdditionalElements(); // ??
 		this._showAdditionalElementsRange(additional, show);
 		
 		this.fa_fireAdditionalInformationChangedEvent();
