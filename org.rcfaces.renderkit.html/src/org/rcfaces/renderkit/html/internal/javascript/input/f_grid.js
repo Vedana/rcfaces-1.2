@@ -2112,7 +2112,9 @@ var __members = {
 		if (serializedIndexes) {
 			this.f_setProperty(f_prop.SERIALIZED_INDEXES, serializedIndexes.join(','));
 		}
+		f_core.Debug(f_dataGrid, "f_serialize: serializedIndexes="+serializedIndexes);
 
+		
 		var cursor=this._cursor;
 		var cursorValue=null;
 		if (cursor) {		
@@ -2132,25 +2134,81 @@ var __members = {
 	 * @param number rows
 	 * @return number[]
 	 */
-	f_addSerializedIndexes: function(first, rows) {
+	f_addSerializedIndexes: function(nStart, nLength) {
+		
+		var serializedIndexes=this.f_listSerializedIndexes();
 					
+		var nEnd=nStart+nLength;
+		
+		var found=false;
+		
+		for(var i=0;i<serializedIndexes.length;i+=2) {
+			var aStart=serializedIndexes[i];
+			var aLength=serializedIndexes[i+1];
+			var aEnd=aStart+aLength;
+			
+			if (nEnd<aStart) {
+				// Interval avant
+				
+				serializedIndexes.unshift(nStart, nEnd-nStart);
+				found=true;
+				break;
+			}
+			
+			if (nStart>aEnd) {
+				// Interval apres
+				// On essaye les suivants ...
+				continue;
+			}
+			
+			if (nEnd<=aEnd) {
+				// On fusionne, le nouveau est juste avant l'ancien
+			
+				serializedIndexes[i]=nStart;
+				serializedIndexes[i+1]=aEnd-nStart;
+				found=true;
+				break;
+			}
+			
+			nStart=aStart;
+			
+			if (serializedIndexes.length==2) {
+				serializedIndexes[0]=nStart;
+				serializedIndexes[1]=nEnd-nStart;
+				found=true;
+				break;
+			}
+			
+			// Le nouveau depasse à droite l'ancien
+			serializedIndexes.shift();
+			serializedIndexes.shift();
+			i-=2;
+		}
+		
+		if (!found) {		
+			serializedIndexes.push(nStart, nEnd-nStart);
+		}
+		
+		return serializedIndexes;
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_clearSerializedIndexes: function() {
+		this._serializedIndexes=undefined;
+	},
+	/**
+	 * @method protected
+	 * @return Array
+	 */
+	f_listSerializedIndexes: function() {
+		
 		var serializedIndexes=this._serializedIndexes;
 		if (!serializedIndexes) {
 			serializedIndexes=new Array;
 			this._serializedIndexes=serializedIndexes;
-
-		} else {		
-			for(var i=0;i<serializedIndexes.length;) {
-				var f=serializedIndexes[i++];
-				var r=serializedIndexes[i++];
-				
-				if (f==first && r==rows) {
-					return serializedIndexes;
-				}
-			}
 		}
-				
-		serializedIndexes.push(this._first, this._rows);
 		
 		return serializedIndexes;
 	},
@@ -5176,7 +5234,10 @@ var __members = {
 						self.f_hideAdditionalContent(row, animated);
 						
 					} else {
+						
 						self.f_getClass().f_getClassLoader().f_loadContent(self, additionalCell, ret);
+						
+						self.f_addSerializedIndexes(additionalRow._row._rowIndex, 1);
 					}
 					
 				} catch(x) {				
@@ -5473,7 +5534,36 @@ var __members = {
 	
 		return this.f_clear.apply(this, visibleElements);
 	},
-	
+	/**
+	 * @method public
+	 * @return void
+	 */
+	f_expandAllAdditionalInformations: function() {
+		var elements=this.fa_listVisibleElements();
+		var values=new Array();
+
+		for(var i=0;i<elements.length;i++) {
+			var value=this.f_getRowValue(elements[i]);
+			if (value===undefined) {
+				continue;
+			}
+			
+			values.push(value);
+		}
+		
+		if (!values.length) {
+			return;
+		}
+		
+		this.f_expandAdditionalInformations(values);
+	},
+	/**
+	 * @method public
+	 * @return void
+	 */
+	f_collapseAllAdditionalInformations: function() {
+		this.f_expandAdditionalInformations();
+	},
 	/**
 	 * 
 	 * @method public abstract
