@@ -479,6 +479,10 @@ var __members = {
 			}
 		}
 		
+		if (row._additionalContent) {
+			this.f_addSerializedIndexes(row._rowIndex, 1);
+		}
+		
 		var initCursorValue=this._initCursorValue;
 		if (!this._cursor && row._index==initCursorValue) {
 			this._cursor=row;
@@ -999,9 +1003,15 @@ var __members = {
 					params.serializedFirst=this._first;
 					params.serializedRows=this._rows;
 					
-					var serializedIndexes=this.f_addSerializedIndexes(this._first, this._rows);
+					//var serializedIndexes=this.f_addSerializedIndexes(this._first, this._rows);
+					
+					var serializedIndexes=this.f_listSerializedIndexes();
+					f_core.Debug(f_dataGrid, "f_callServer: serializedIndexes="+serializedIndexes);
 					
 					params[f_prop.SERIALIZED_INDEXES]=serializedIndexes.join(',');
+					
+					this.f_clearSerializedIndexes();					
+					
 //				}
 
 //				if (this._additionalInformations) { // Des AdditionalInformations à effacer ?
