@@ -285,9 +285,9 @@ var __members = {
 		
 		var noPagedMessage=f_core.GetAttribute(this, "v:noPagedMessage");
 		if (!noPagedMessage) {
-			var resourceBundle=f_resourceBundle.Get(f_pager);
+			//var resourceBundle=f_resourceBundle.Get(f_pager);
 			
-			noPagedMessage=resourceBundle.f_get("NO_PAGED_MESSAGE");			
+			//noPagedMessage=resourceBundle.f_get("NO_PAGED_MESSAGE");			
 		}
 		this._noPagedMessage=noPagedMessage;
 		
@@ -389,7 +389,7 @@ var __members = {
 			var maxRows=dataComponent.f_getMaxRows();
 			var paged=dataComponent.f_isPaged();
 	
-			if (rows<1 || !paged) {
+			if (this._noPagedMessage && (rows<1 || !paged)) {
 				message=this._noPagedMessage;
 	
 			} else {
