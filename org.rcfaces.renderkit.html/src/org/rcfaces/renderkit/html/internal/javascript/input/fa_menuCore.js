@@ -495,8 +495,17 @@ var __members = {
 		}
 	
 		var uiPopup=doc.createElement("ul");		
-		uiPopup.className="f_menu_popup";
-
+		
+		var cs="f_menu_popup";
+		
+		if (parentItem._component.f_getStyleClass){
+			var pcs=parentItem._component.f_getStyleClass();
+			if (pcs) {
+				cs+=" "+pcs+"_popup";
+			}
+		}	
+		uiPopup.className=cs;
+		
 		if (!popupObject) {
 			uiPopup.style.visibility="hidden";
 			popupObject=uiPopup;
