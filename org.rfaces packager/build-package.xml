@@ -226,8 +226,8 @@
 		<java taskname="tlddoc" fork="true" failonerror="true" jar="lib-doc/tlddoc-1.3.jar">
 			<arg value="-d" />
 			<arg path="${build}/camelia-tlddoc" />
-			<arg path="${build}/1_1/bin-core/META-INF/rcfaces-core.tld" />
-			<arg path="${build}/1_1/bin-html/META-INF/rcfaces-html.tld" />
+			<arg path="${build}/1_2/bin-core/META-INF/rcfaces-core.tld" />
+			<arg path="${build}/1_2/bin-html/META-INF/rcfaces-html.tld" />
 		</java>
 		<zip destfile="${rcfaces-tlddoc.zip}">
 			<fileset dir="${build}/camelia-tlddoc">
@@ -267,7 +267,7 @@
 			</fileset>
 		</zip>
 	</target>
-
+<!--
 	<target name="build1_1" depends="main">
 		<ant antfile="build-package.xml" target="buildVersion">
 			<property name="jsf.version" value="1_1" />
@@ -277,6 +277,7 @@
 			<property name="minorRelease" value="0" />
 		</ant>
 	</target>
+	-->
 
 	<target name="build1_2" depends="main">
 		<ant antfile="build-package.xml" target="buildVersion">
@@ -531,9 +532,11 @@
 			</section>
 		</manifest>
 	
+		<!--
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core-facesconfig.xml" tofile="${build.version.path}/src-core/META-INF/faces-config.xml" />
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.taglib.xml" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.taglib.xml" />
 		<move file="${build.version.path}/src-core/org/rcfaces/core/rcfaces-core.tld" tofile="${build.version.path}/src-core/META-INF/rcfaces-core.tld" />
+		-->
 <!--		<copy file="${build-core}/src/org/rcfaces/core/internal/images/ico/javax.imageio.spi.ImageWriterSpi" tofile="${build.version.path}/src-core/META-INF/services/javax.imageio.spi.ImageWriterSpi" /> -->
 	
 		<copy todir="${build.version.path}/bin-core">
@@ -623,11 +626,13 @@
 		<echo message="Pass 2 of renderKit ${pass.type}" />
 		<mkdir dir="${build.version.path}/bin-${pass.type}c" />
 
+		<!--
 		<move file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/rcfaces-${pass.type}-facesconfig.xml" tofile="${build.version.path}/src-${pass.type}/META-INF/faces-config.xml" />
 		<move file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/rcfaces-${pass.type}.taglib.xml" tofile="${build.version.path}/src-${pass.type}/META-INF/rcfaces-${pass.type}.taglib.xml" />
 		<move file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/rcfaces-${pass.type}.tld" tofile="${build.version.path}/src-${pass.type}/META-INF/rcfaces-${pass.type}.tld" />
 		<copy file="${pass.build}/src/org/rcfaces/renderkit/${pass.type}/internal/rcfaces-${pass.type}-config.xml" tofile="${build.version.path}/src-${pass.type}/META-INF/rcfaces-config.xml" />
-
+-->
+		
 		<replace file="${build.version.path}/src-${pass.type}/org/rcfaces/renderkit/${pass.type}/internal/Constants.java"
 			token="String BUILDER_VERSION = null" 
 			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />		
@@ -781,11 +786,13 @@
 		<property name="build-svg" location="${basedir}/../org.rcfaces.renderkit.svg" />
 	</target>
 
+	<!--
 	<target name="setup1_1" depends="setupInit">
 		<copy file="${build-core}/.classpath-1_1" tofile="${build-core}/.classpath" overwrite="true" />
 		<copy file="${build-html}/.classpath-1_1" tofile="${build-html}/.classpath" overwrite="true" />
 		<copy file="${build-svg}/.classpath-1_1" tofile="${build-svg}/.classpath" overwrite="true" />
 	</target>
+	-->
 
 	<target name="setup1_2" depends="setupInit">
 		<copy file="${build-core}/.classpath-1_2" tofile="${build-core}/.classpath" overwrite="true" />
@@ -828,14 +835,12 @@
 		<copy todir="${spool.workspace}" verbose="true">
 			<fileset dir="${build-core}/..">
 				<include name="org.rcfaces.core/src/**" />
-				<include name="org.rcfaces.core/src-jsf1_1/**" />
 				<include name="org.rcfaces.core/src-jsf1_2/**" />
 				<include name="org.rcfaces.core/metadatas/**" />
 				<include name="org.rcfaces.core/META-INF/**" />
 				<include name="org.rcfaces.core/lib/**" />
 
 				<include name="org.rcfaces.renderkit.html/src/**" />
-				<include name="org.rcfaces.renderkit.html/src-jsf1_1/**" />
 				<include name="org.rcfaces.renderkit.html/src-jsf1_2/**" />
 				<include name="org.rcfaces.renderkit.html/META-INF/**" />
 				<include name="org.rcfaces.renderkit.html/lib/**" />
