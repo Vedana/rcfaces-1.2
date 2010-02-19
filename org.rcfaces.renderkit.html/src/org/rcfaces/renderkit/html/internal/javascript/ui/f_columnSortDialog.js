@@ -349,9 +349,17 @@ var __members = {
 			f_shell.TITLE_STYLE | 
 			f_shell.CLOSE_STYLE | 
 			f_shell.COPY_STYLESHEET);
-		
-		this.f_setTitle(f_resourceBundle.Get(f_columnSortDialog).f_get("TITLE"));
+
 		this._grid=grid;
+		this.f_setShellFeatures();	
+	},
+	
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	f_setShellFeatures: function() {
+		this.f_setTitle(f_resourceBundle.Get(f_columnSortDialog).f_get("TITLE"));
 	},
 
 	/**
