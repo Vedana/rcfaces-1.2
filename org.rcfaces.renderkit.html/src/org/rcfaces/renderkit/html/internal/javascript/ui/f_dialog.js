@@ -52,6 +52,11 @@ var __members = {
 			backgroundMode = f_core.GetAttribute(this, "v:backgroundMode", null);
 		}
 		
+		var shellDecorator=defaultFeatures.shellDecorator;
+		if (shellDecorator) {
+			this.f_setShellDecorator(shellDecorator);
+		}
+		
 		if (title===null) {
 			title=defaultFeatures.title;
 		}
