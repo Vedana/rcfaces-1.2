@@ -78,6 +78,17 @@ var __members = {
 		} else {
 			className+=" "+className+"_border";			
 		}
+
+		var styleClass=this.f_getStyleClass();
+		if (styleClass) {
+			className+=" "+styleClass;
+			if (this._shell.f_getStyle() & f_shell.TRANSPARENT) {
+				className+=" "+styleClass+"_transparent";
+	
+			} else {
+				className+=" "+styleClass+"_border";			
+			}
+		}
 		
 		iframe.className=className;
 				
@@ -127,7 +138,7 @@ var __members = {
 		iframe.src="about:blank";
 		f_core.Debug(f_frameShellDecorator, "f_createDecoration: wait decoration creation");
 	},
-
+	
 	/**
 	 * @method protected
 	 * @return Boolean
@@ -186,6 +197,14 @@ var __members = {
 		if (style && f_shell.TRANSPARENT) {
 			className+=" "+className+"_transparent";
 		}
+
+		var styleClass=this.f_getStyleClass();
+		if (styleClass) {
+			className+=" "+styleClass+"_body";
+			if (style && f_shell.TRANSPARENT) {
+				className+=" "+styleClass+"_body_transparent";
+			}
+		}
 		
 		var shellStyleClass=this._shell.f_getStyleClass();
 		if (shellStyleClass) {
@@ -218,6 +237,15 @@ var __members = {
 		f_core.CopyStyleSheets(shellDocument, document);
 
 		this.f_decorateShell(body);
+	},
+	/**
+	 * Return a personalized css class name.
+	 *
+	 * @method protected
+	 * @return String
+	 */
+	f_getStyleClass: function() {
+		return null;
 	},
 	f_showShell: function() {
 
