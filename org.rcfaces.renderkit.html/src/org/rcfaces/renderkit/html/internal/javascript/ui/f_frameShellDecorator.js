@@ -69,7 +69,7 @@ var __members = {
 		iframe.scrolling="no";
 		
 		var className="f_shellDecorator_frame";
-		if (this._shell.f_getStyle() & f_shell.TRANSPARENT) {
+		if (this.f_isTransparentShell()) {
 			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
 				iframe.allowTransparency = true;
 			}
@@ -126,6 +126,14 @@ var __members = {
 		
 		iframe.src="about:blank";
 		f_core.Debug(f_frameShellDecorator, "f_createDecoration: wait decoration creation");
+	},
+
+	/**
+	 * @method protected
+	 * @return Boolean
+	 */
+	f_isTransparentShell: function() {
+		return (this._shell.f_getStyle() & f_shell.TRANSPARENT); 
 	},
 	
 	/**
