@@ -7,6 +7,7 @@ package org.rcfaces.core.internal.listener;
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
+import javax.el.PropertyNotFoundException;
 import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.StateHolder;
@@ -159,6 +160,14 @@ abstract class AbstractActionListener implements StateHolder,
 
             return null;
 
+        } catch (PropertyNotFoundException ex) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Property not found for expression '" + expression
+                        + "'.", ex);
+            }
+
+            return ex;
+
         } catch (MethodNotFoundException ex) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Method not found for expression '" + expression
@@ -188,6 +197,11 @@ abstract class AbstractActionListener implements StateHolder,
         if (cause instanceof MethodNotFoundException) {
             return (Exception) cause;
         }
+
+        if (cause instanceof PropertyNotFoundException) {
+            return (Exception) cause;
+        }
+        
         if (cause instanceof NoSuchMethodException) {
             return (Exception) cause;
         }
