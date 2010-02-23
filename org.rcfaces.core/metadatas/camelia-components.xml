@@ -3213,13 +3213,13 @@ Dans le cas d'un mode period !
 	
 	<component id="card" extends="abstractOutput">
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
-		<implements id="org.rcfaces.core.component.capability.IPrependIdCapability" />
 		<implements id="javax.faces.component.NamingContainer" />
 
 		<capability id="ITextAlignmentCapability" />
 		<capability id="IVerticalAlignmentCapability" />
 		<capability id="IVariableScopeCapability" />	
 		<capability id="IAsyncDecodeModeCapability" />
+		<capability id="IPrependIdCapability" />
 
 		<capability id="ILoadEventCapability" />
 
