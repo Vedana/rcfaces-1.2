@@ -31,6 +31,7 @@ public class CardComponent extends AbstractOutputComponent implements
 	IVariableScopeCapability,
 	IAsyncDecodeModeCapability,
 	ILoadEventCapability,
+	NamingContainer,
 	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(CardComponent.class);
@@ -246,7 +247,7 @@ public class CardComponent extends AbstractOutputComponent implements
 	}
 
 	public boolean isPrependId(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.PREPEND_ID, true, facesContext);
+		return engine.getBoolProperty(Properties.PREPEND_ID, false, facesContext);
 	}
 
 	public void setPrependId(boolean prependId) {
