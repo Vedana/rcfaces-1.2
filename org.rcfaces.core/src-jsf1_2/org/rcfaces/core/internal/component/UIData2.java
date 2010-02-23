@@ -188,8 +188,7 @@ public class UIData2 extends UIData0 {
 
         super.restoreState(context, states[0]);
 
-        saved = TypedCollections.dynamicallyCastMap((Map) states[1],
-                String.class, SavedState2.class);
+        saved = (Map) states[1];
     }
 
     @Override

@@ -637,8 +637,7 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
 		first = (Integer) values[1];
 		rowIndex = (Integer) values[2];
 		rows = (Integer) values[3];
-		saved = TypedCollections.dynamicallyCastMap((Map) values[4],
-				String.class, SavedState.class);
+		saved = (Map) values[4];
 		value = values[5];
 		var = (String) values[6];
 
