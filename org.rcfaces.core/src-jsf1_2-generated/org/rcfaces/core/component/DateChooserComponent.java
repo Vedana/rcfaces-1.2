@@ -50,7 +50,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","calendarLayout","valueChangeListener","homeDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","popupStyleClass","textPosition","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","calendarLayout","valueChangeListener","homeDate","defaultSelectedDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","popupStyleClass","textPosition","for"}));
 	}
 
 	public DateChooserComponent() {
@@ -73,6 +73,25 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 
 			Object value=engine.getProperty(Properties.HOME_DATE, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
+		
+	}
+
+	public void setDefaultSelectedDate(String date) {
+
+
+			engine.setProperty(Properties.DEFAULT_SELECTED_DATE, date);
+		
+	}
+
+	public Date getDefaultSelectedDate(FacesContext facesContext) {
+
+
+			Object value=engine.getProperty(Properties.DEFAULT_SELECTED_DATE, facesContext);
 			if (value instanceof String) {
 				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
 			}
@@ -454,6 +473,22 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 	 */
 	public boolean isHomeDateSetted() {
 		return engine.isPropertySetted(Properties.HOME_DATE);
+	}
+
+	public java.util.Date getDefaultSelectedDate() {
+		return getDefaultSelectedDate(null);
+	}
+
+	public void setDefaultSelectedDate(java.util.Date defaultSelectedDate) {
+		engine.setProperty(Properties.DEFAULT_SELECTED_DATE, defaultSelectedDate);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultSelectedDate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultSelectedDateSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_SELECTED_DATE);
 	}
 
 	/**

@@ -18,6 +18,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(AbstractBasicTag.class);
 
+	private ValueExpression unlockedClientAttributeNames;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression userEventListeners;
 	private ValueExpression errorListeners;
@@ -40,6 +41,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private ValueExpression lookId;
 	private ValueExpression styleClass;
 	private ValueExpression margins;
+	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
+	}
+
 	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
@@ -130,6 +135,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
@@ -161,6 +167,15 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 		AbstractBasicComponent component = (AbstractBasicComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (unlockedClientAttributeNames != null) {
+			if (unlockedClientAttributeNames.isLiteralText()==false) {
+				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+
+			} else {
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
+			}
+		}
 
 		if (propertyChangeListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
@@ -345,6 +360,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	}
 
 	public void release() {
+		unlockedClientAttributeNames = null;
 		propertyChangeListeners = null;
 		userEventListeners = null;
 		errorListeners = null;

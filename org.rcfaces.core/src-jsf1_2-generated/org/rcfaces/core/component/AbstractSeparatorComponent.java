@@ -1,7 +1,7 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import java.lang.String;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.apache.commons.logging.LogFactory;
@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.ISeparatorComponent;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
@@ -21,13 +22,14 @@ import org.rcfaces.core.internal.component.CameliaBaseComponent;
 public abstract class AbstractSeparatorComponent extends CameliaBaseComponent implements 
 	IVisibilityCapability,
 	IHiddenModeCapability,
+	IUnlockedClientAttributesCapability,
 	ISeparatorComponent {
 
 	private static final Log LOG = LogFactory.getLog(AbstractSeparatorComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","hiddenMode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"unlockedClientAttributeNames","visible","hiddenMode"}));
 	}
 
 
@@ -100,6 +102,29 @@ public abstract class AbstractSeparatorComponent extends CameliaBaseComponent im
 
 	public void setHiddenMode(int hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public java.lang.String getUnlockedClientAttributeNames() {
+		return getUnlockedClientAttributeNames(null);
+	}
+
+	/**
+	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 */
+	public java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "unlockedClientAttributeNames" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isUnlockedClientAttributeNamesSetted() {
+		return engine.isPropertySetted(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES);
+	}
+
+	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
 	protected Set getCameliaFields() {

@@ -1004,27 +1004,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public String getVar() {
-		return getVar(null);
-	}
-
-	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
-	}
-
-	public void setVar(String var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=var;
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "var" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isVarSetted() {
-		return engine.isPropertySetted(Properties.VAR);
-	}
-
 	public int getFirst() {
 		return getFirst(null);
 	}
@@ -1063,6 +1042,27 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isRowsSetted() {
 		return engine.isPropertySetted(Properties.ROWS);
+	}
+
+	public String getVar() {
+		return getVar(null);
+	}
+
+	public String getVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VAR, facesContext);
+	}
+
+	public void setVar(String var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=var;
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "var" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isVarSetted() {
+		return engine.isPropertySetted(Properties.VAR);
 	}
 
 	protected Set getCameliaFields() {

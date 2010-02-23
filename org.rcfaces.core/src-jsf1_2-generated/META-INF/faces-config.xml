@@ -433,6 +433,10 @@ A string indicating the date selected when the "home" button is pressed.
 			<attribute-class>java.util.Date</attribute-class>
 		</attribute>
 		<attribute>
+			<attribute-name>defaultSelectedDate</attribute-name>
+			<attribute-class>java.util.Date</attribute-class>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A string specifying the label associated with the home button.
 ]]></description>
@@ -1461,6 +1465,10 @@ An element belonging to a <a href="/comps/cardBoxComponent.html">cardBox Compone
 ]]></description>
 		<component-type>org.rcfaces.core.card</component-type>
 		<component-class>org.rcfaces.core.component.CardComponent</component-class>
+		<attribute>
+			<attribute-name>prependId</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[

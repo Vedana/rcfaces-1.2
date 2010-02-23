@@ -20,8 +20,8 @@ import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.internal.component.CameliaColumnComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IResizableCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
@@ -33,6 +33,7 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import java.util.Set;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
@@ -67,7 +68,8 @@ public class ComponentsColumnComponent extends CameliaColumnComponent implements
 	IInitEventCapability,
 	ICellToolTipTextSettings,
 	IImageAccessorsCapability,
-	ICellStyleClassSettings {
+	ICellStyleClassSettings,
+	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(ComponentsColumnComponent.class);
 

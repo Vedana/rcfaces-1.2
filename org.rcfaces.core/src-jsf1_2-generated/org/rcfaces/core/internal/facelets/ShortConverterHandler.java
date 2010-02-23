@@ -1,13 +1,14 @@
 package org.rcfaces.core.internal.facelets;
 
-import com.sun.facelets.tag.TagConfig;
+import com.sun.facelets.tag.jsf.ConverterConfig;
 
 public class ShortConverterHandler extends CameliaConverterHandler {
 
-	public ShortConverterHandler(TagConfig config) {
+	public ShortConverterHandler(ConverterConfig config) {
 		super(config);
 	}
 
+	@Override
 	protected String getConverterId() {
 		return "org.rcfaces.Short";
 	}

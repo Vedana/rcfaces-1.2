@@ -19,12 +19,17 @@ public abstract class AbstractItemTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(AbstractItemTag.class);
 
 	private ValueExpression disabled;
+	private ValueExpression unlockedClientAttributeNames;
 	private ValueExpression itemValue;
 	private ValueExpression itemLabel;
 	private ValueExpression itemDescription;
 	private ValueExpression itemDisabled;
 	public final void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
+	}
+
+	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
 	public final void setItemValue(ValueExpression itemValue) {
@@ -46,6 +51,7 @@ public abstract class AbstractItemTag extends CameliaTag implements Tag {
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  disabled='"+disabled+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  itemValue='"+itemValue+"'");
 			LOG.debug("  itemLabel='"+itemLabel+"'");
 			LOG.debug("  itemDescription='"+itemDescription+"'");
@@ -69,6 +75,15 @@ public abstract class AbstractItemTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setDisabled(getBool(disabled.getExpressionString()));
+			}
+		}
+
+		if (unlockedClientAttributeNames != null) {
+			if (unlockedClientAttributeNames.isLiteralText()==false) {
+				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+
+			} else {
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
 			}
 		}
 
@@ -111,6 +126,7 @@ public abstract class AbstractItemTag extends CameliaTag implements Tag {
 
 	public void release() {
 		disabled = null;
+		unlockedClientAttributeNames = null;
 		itemValue = null;
 		itemLabel = null;
 		itemDescription = null;

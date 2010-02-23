@@ -20,8 +20,8 @@ import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IForCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.CameliaMessageComponent;
@@ -49,6 +50,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 	IMouseEventCapability,
 	IHelpCapability,
 	IClientDataCapability,
+	IUnlockedClientAttributesCapability,
 	ILookAndFeelCapability,
 	IPositionCapability,
 	IErrorEventCapability,
@@ -69,7 +71,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","for","waiRole","toolTipText","mouseOverListener","userEventListener","showDetail","marginBottom","helpURL","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","for","waiRole","toolTipText","mouseOverListener","showDetail","userEventListener","helpURL","marginBottom","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -425,6 +427,29 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
             
 		return (String)dataMapAccessor.removeData(name, null);
 		
+	}
+
+	public java.lang.String getUnlockedClientAttributeNames() {
+		return getUnlockedClientAttributeNames(null);
+	}
+
+	/**
+	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 */
+	public java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "unlockedClientAttributeNames" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isUnlockedClientAttributeNamesSetted() {
+		return engine.isPropertySetted(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES);
+	}
+
+	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
 	public java.lang.String getLookId() {

@@ -33,6 +33,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 	private ValueExpression calendarLayout;
 	private ValueExpression forValueFormat;
 	private ValueExpression homeDate;
+	private ValueExpression defaultSelectedDate;
 	private ValueExpression homeDateLabel;
 	private ValueExpression popupStyleClass;
 	public String getComponentType() {
@@ -99,6 +100,10 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		this.homeDate = homeDate;
 	}
 
+	public final void setDefaultSelectedDate(ValueExpression defaultSelectedDate) {
+		this.defaultSelectedDate = defaultSelectedDate;
+	}
+
 	public final void setHomeDateLabel(ValueExpression homeDateLabel) {
 		this.homeDateLabel = homeDateLabel;
 	}
@@ -126,6 +131,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			LOG.debug("  calendarLayout='"+calendarLayout+"'");
 			LOG.debug("  forValueFormat='"+forValueFormat+"'");
 			LOG.debug("  homeDate='"+homeDate+"'");
+			LOG.debug("  defaultSelectedDate='"+defaultSelectedDate+"'");
 			LOG.debug("  homeDateLabel='"+homeDateLabel+"'");
 			LOG.debug("  popupStyleClass='"+popupStyleClass+"'");
 		}
@@ -271,6 +277,15 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 			}
 		}
 
+		if (defaultSelectedDate != null) {
+			if (defaultSelectedDate.isLiteralText()==false) {
+				component.setValueExpression(Properties.DEFAULT_SELECTED_DATE, defaultSelectedDate);
+
+			} else {
+				component.setDefaultSelectedDate(defaultSelectedDate.getExpressionString());
+			}
+		}
+
 		if (homeDateLabel != null) {
 			if (homeDateLabel.isLiteralText()==false) {
 				component.setValueExpression(Properties.HOME_DATE_LABEL, homeDateLabel);
@@ -306,6 +321,7 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		calendarLayout = null;
 		forValueFormat = null;
 		homeDate = null;
+		defaultSelectedDate = null;
 		homeDateLabel = null;
 		popupStyleClass = null;
 

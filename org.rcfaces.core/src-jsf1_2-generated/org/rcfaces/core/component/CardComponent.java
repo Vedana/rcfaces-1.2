@@ -10,11 +10,13 @@ import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.util.Set;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import java.util.HashSet;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.apache.commons.logging.Log;
+import javax.faces.component.NamingContainer;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
@@ -37,7 +39,7 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment","scopeSaveValue","asyncDecodeMode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment","scopeSaveValue","asyncDecodeMode","prependId"}));
 	}
 
 	public CardComponent() {
@@ -76,6 +78,23 @@ public class CardComponent extends AbstractOutputComponent implements
 
 
 			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
+		
+	}
+
+	public String getContainerClientId(FacesContext facesContext) {
+
+
+	        if (this.isPrependId()) {
+    	        return super.getContainerClientId(facesContext);
+        	}
+            UIComponent parent = this.getParent();
+            while (parent != null) {
+                if (parent instanceof NamingContainer) {
+                    return parent.getContainerClientId(facesContext);
+                }
+                parent = parent.getParent();
+            }        
+        	return null;
 		
 	}
 
@@ -220,6 +239,26 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	public final javax.faces.event.FacesListener [] listLoadListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
+	}
+
+	public boolean isPrependId() {
+		return isPrependId(null);
+	}
+
+	public boolean isPrependId(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PREPEND_ID, true, facesContext);
+	}
+
+	public void setPrependId(boolean prependId) {
+		engine.setProperty(Properties.PREPEND_ID, prependId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "prependId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPrependIdSetted() {
+		return engine.isPropertySetted(Properties.PREPEND_ID);
 	}
 
 	protected Set getCameliaFields() {

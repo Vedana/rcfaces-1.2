@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.iterator.IMenuItemIterator;
@@ -24,6 +25,7 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
  * Technical component, used as a basis for building new RCFaces components.
  */
 public abstract class AbstractMenuComponent extends AbstractConverterCommandComponent implements 
+	IUnlockedClientAttributesCapability,
 	ISelectionEventCapability,
 	ICheckEventCapability,
 	ICheckedValuesCapability,
@@ -36,7 +38,7 @@ public abstract class AbstractMenuComponent extends AbstractConverterCommandComp
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractConverterCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","checkedValues","checkListener","removeAllWhenShown","readOnly"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","unlockedClientAttributeNames","checkedValues","checkListener","removeAllWhenShown","readOnly"}));
 	}
 
 

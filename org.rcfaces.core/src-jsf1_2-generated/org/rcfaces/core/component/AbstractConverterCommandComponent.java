@@ -2,27 +2,30 @@ package org.rcfaces.core.component;
 
 import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
-import javax.faces.context.FacesContext;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.AbstractCommandComponent;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import org.apache.commons.logging.Log;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
  */
 public abstract class AbstractConverterCommandComponent extends AbstractCommandComponent implements 
+	IUnlockedClientAttributesCapability,
 	IConvertValueHolder {
 
 	private static final Log LOG = LogFactory.getLog(AbstractConverterCommandComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"converter"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"converter","unlockedClientAttributeNames"}));
 	}
 
 

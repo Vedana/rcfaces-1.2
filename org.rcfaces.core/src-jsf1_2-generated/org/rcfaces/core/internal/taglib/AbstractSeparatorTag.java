@@ -20,6 +20,7 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 
 	private ValueExpression visible;
 	private ValueExpression hiddenMode;
+	private ValueExpression unlockedClientAttributeNames;
 	public final void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
@@ -28,10 +29,15 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
+	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  visible='"+visible+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 		}
 		if ((uiComponent instanceof AbstractSeparatorComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -62,11 +68,21 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 				component.setHiddenMode(hiddenMode.getExpressionString());
 			}
 		}
+
+		if (unlockedClientAttributeNames != null) {
+			if (unlockedClientAttributeNames.isLiteralText()==false) {
+				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+
+			} else {
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
 		visible = null;
 		hiddenMode = null;
+		unlockedClientAttributeNames = null;
 
 		super.release();
 	}

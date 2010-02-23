@@ -26,6 +26,7 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private ValueExpression helpMessage;
 	private ValueExpression helpURL;
 	private ValueExpression toolTipText;
+	private ValueExpression unlockedClientAttributeNames;
 	private ValueExpression lookId;
 	private ValueExpression x;
 	private ValueExpression y;
@@ -42,8 +43,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression initListeners;
-	private ValueExpression globalOnly;
 	private ValueExpression showSummary;
+	private ValueExpression globalOnly;
 	private ValueExpression showDetail;
 	private ValueExpression margins;
 	public final void setVisible(ValueExpression visible) {
@@ -76,6 +77,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 	public final void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
+	}
+
+	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
 	public final void setLookId(ValueExpression lookId) {
@@ -142,12 +147,12 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final void setGlobalOnly(ValueExpression globalOnly) {
-		this.globalOnly = globalOnly;
-	}
-
 	public final void setShowSummary(ValueExpression showSummary) {
 		this.showSummary = showSummary;
+	}
+
+	public final void setGlobalOnly(ValueExpression globalOnly) {
+		this.globalOnly = globalOnly;
 	}
 
 	public final void setShowDetail(ValueExpression showDetail) {
@@ -166,6 +171,7 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  helpMessage='"+helpMessage+"'");
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
+			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
@@ -178,8 +184,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
+			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
@@ -254,6 +260,15 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setToolTipText(toolTipText.getExpressionString());
+			}
+		}
+
+		if (unlockedClientAttributeNames != null) {
+			if (unlockedClientAttributeNames.isLiteralText()==false) {
+				component.setValueExpression(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+
+			} else {
+				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
 			}
 		}
 
@@ -381,21 +396,21 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (globalOnly != null) {
-			if (globalOnly.isLiteralText()==false) {
-				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
-
-			} else {
-				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
-			}
-		}
-
 		if (showSummary != null) {
 			if (showSummary.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_SUMMARY, showSummary);
 
 			} else {
 				component.setShowSummary(getBool(showSummary.getExpressionString()));
+			}
+		}
+
+		if (globalOnly != null) {
+			if (globalOnly.isLiteralText()==false) {
+				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
+
+			} else {
+				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
 			}
 		}
 
@@ -425,6 +440,7 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		helpMessage = null;
 		helpURL = null;
 		toolTipText = null;
+		unlockedClientAttributeNames = null;
 		lookId = null;
 		x = null;
 		y = null;
@@ -441,8 +457,8 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		globalOnly = null;
 		showSummary = null;
+		globalOnly = null;
 		showDetail = null;
 		margins = null;
 

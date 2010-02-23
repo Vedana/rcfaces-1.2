@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.apache.commons.logging.Log;
@@ -38,6 +39,7 @@ import org.rcfaces.core.component.capability.IServerDataCapability;
  * Technical component, used as a basis for building new RCFaces components.
  */
 public abstract class AbstractBasicComponent extends CameliaBaseComponent implements 
+	IUnlockedClientAttributesCapability,
 	IClientDataCapability,
 	IServerDataCapability,
 	IPropertyChangeEventCapability,
@@ -60,7 +62,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","waiRole","marginRight","toolTipText","hiddenMode","foregroundColor","userEventListener","helpMessage","helpURL","marginBottom","styleClass","height","margins","visible","y","propertyChangeListener","lookId","marginLeft","marginTop","backgroundColor","errorListener","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","waiRole","marginRight","toolTipText","hiddenMode","foregroundColor","helpMessage","userEventListener","helpURL","marginBottom","styleClass","height","margins","visible","y","propertyChangeListener","lookId","marginLeft","marginTop","backgroundColor","errorListener","x"}));
 	}
 
 
@@ -202,6 +204,29 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 			
 			return Boolean.valueOf(isVisible(facesContext));
 		
+	}
+
+	public java.lang.String getUnlockedClientAttributeNames() {
+		return getUnlockedClientAttributeNames(null);
+	}
+
+	/**
+	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 */
+	public java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "unlockedClientAttributeNames" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isUnlockedClientAttributeNamesSetted() {
+		return engine.isPropertySetted(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES);
+	}
+
+	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
 	public Map getClientDataMap() {

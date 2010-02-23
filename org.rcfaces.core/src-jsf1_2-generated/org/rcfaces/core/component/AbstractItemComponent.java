@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Set;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import java.util.HashSet;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.manager.IClientDataManager;
@@ -29,6 +30,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 	IDisabledCapability,
 	IServerDataCapability,
 	IClientDataCapability,
+	IUnlockedClientAttributesCapability,
 	IServerDataManager,
 	IClientDataManager {
 
@@ -36,7 +38,7 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemDescription","itemLabel","disabled","itemDisabled","itemValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemDescription","unlockedClientAttributeNames","itemLabel","disabled","itemDisabled","itemValue"}));
 	}
 
 
@@ -270,6 +272,29 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
             
 		return (String)dataMapAccessor.removeData(name, null);
 		
+	}
+
+	public java.lang.String getUnlockedClientAttributeNames() {
+		return getUnlockedClientAttributeNames(null);
+	}
+
+	/**
+	 * See {@link #getUnlockedClientAttributeNames() getUnlockedClientAttributeNames()} for more details
+	 */
+	public java.lang.String getUnlockedClientAttributeNames(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "unlockedClientAttributeNames" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isUnlockedClientAttributeNamesSetted() {
+		return engine.isPropertySetted(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES);
+	}
+
+	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
+		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
 	}
 
 	protected Set getCameliaFields() {

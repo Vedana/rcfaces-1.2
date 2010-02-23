@@ -25,6 +25,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 	private ValueExpression scopeVar;
 	private ValueExpression asyncDecodeMode;
 	private ValueExpression loadListeners;
+	private ValueExpression prependId;
 	public String getComponentType() {
 		return CardComponent.COMPONENT_TYPE;
 	}
@@ -57,6 +58,10 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
+	public final void setPrependId(ValueExpression prependId) {
+		this.prependId = prependId;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (CardComponent.COMPONENT_TYPE==getComponentType()) {
@@ -68,6 +73,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			LOG.debug("  scopeValue='"+scopeValue+"'");
 			LOG.debug("  scopeVar='"+scopeVar+"'");
 			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
+			LOG.debug("  prependId='"+prependId+"'");
 		}
 		if ((uiComponent instanceof CardComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -138,6 +144,15 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		if (loadListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
+
+		if (prependId != null) {
+			if (prependId.isLiteralText()==false) {
+				component.setValueExpression(Properties.PREPEND_ID, prependId);
+
+			} else {
+				component.setPrependId(getBool(prependId.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -148,6 +163,7 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		scopeVar = null;
 		asyncDecodeMode = null;
 		loadListeners = null;
+		prependId = null;
 
 		super.release();
 	}
