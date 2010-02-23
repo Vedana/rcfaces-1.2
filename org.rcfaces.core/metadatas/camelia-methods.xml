@@ -1195,6 +1195,13 @@
 			return (Date)value;
 		</code>
 	</method>
+	<method id="setDefaultItemInputType">
+		<import>org.rcfaces.core.internal.converter.InputTypeConverter</import>
+		<parameter type="String" name="inputType" />
+		<code>
+			setDefaultItemInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
+		</code>
+	</method>
 	<method id="setDefaultDate" returnType="void">
 		<parameter type="String" name="date" />
 		<code>
@@ -1559,6 +1566,23 @@
     	</code>
     </method>
 			
-			
+	<method id="getContainerClientId" returnType="java.lang.String" modifier="public">
+		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+		<import>javax.faces.component.UIComponent</import>
+		<import>javax.faces.component.NamingContainer</import>
+		<code>
+	        if (this.isPrependId()) {
+    	        return super.getContainerClientId(facesContext);
+        	}
+            UIComponent parent = this.getParent();
+            while (parent != null) {
+                if (parent instanceof NamingContainer) {
+                    return parent.getContainerClientId(facesContext);
+                }
+                parent = parent.getParent();
+            }        
+        	return null;
+		</code>	
+	</method>
 </camelia-components>
 	

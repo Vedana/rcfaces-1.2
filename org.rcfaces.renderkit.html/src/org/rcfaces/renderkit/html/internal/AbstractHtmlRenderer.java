@@ -30,7 +30,7 @@ import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IPagerMessageCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IPreprendIdCapability;
+import org.rcfaces.core.component.capability.IPrependIdCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IScrollableCapability;
@@ -320,8 +320,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         if (component instanceof NamingContainer) {
             boolean writeNamingContainer = true;
             
-            if (component instanceof IPreprendIdCapability) {
-                if (((IPreprendIdCapability) component).isPrependId() == false) {
+            if (component instanceof IPrependIdCapability) {
+                if (((IPrependIdCapability) component).isPrependId() == false) {
                     writeNamingContainer = false;
                 }
             }

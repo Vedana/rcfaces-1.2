@@ -3213,6 +3213,9 @@ Dans le cas d'un mode period !
 	
 	<component id="card" extends="abstractOutput">
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
+		<implements id="org.rcfaces.core.component.capability.IPrependIdCapability" />
+		<implements id="javax.faces.component.NamingContainer" />
+
 		<capability id="ITextAlignmentCapability" />
 		<capability id="IVerticalAlignmentCapability" />
 		<capability id="IVariableScopeCapability" />	
@@ -3245,6 +3248,8 @@ Dans le cas d'un mode period !
 		</method>
 		
 		<method id="setAsyncDecodeMode(String)" />	
+		
+		<method id="getContainerClientId(javax.faces.context.FacesContext)" />		
 	</component>
 
 	<component id="tabbedPane" extends="cardBox">
@@ -3294,6 +3299,7 @@ Dans le cas d'un mode period !
 				return (TabbedPaneComponent)getCardBox();
 			</code>
 		</method>
+		
 	</component>
 
 	<component id="text" extends="abstractOutput" textBodyContent="true">
