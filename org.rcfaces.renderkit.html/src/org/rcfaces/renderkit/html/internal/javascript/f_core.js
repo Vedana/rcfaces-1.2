@@ -1534,6 +1534,9 @@ var f_core = {
 	},
 	/**
 	 * @method static hidden
+	 * @param Element component
+	 * @param optional Boolean concatChildren
+	 * @return String
 	 */
 	GetTextNode: function(component, concatChildren) {
 		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.GetTextNode: Invalid component ! ("+component+")");
