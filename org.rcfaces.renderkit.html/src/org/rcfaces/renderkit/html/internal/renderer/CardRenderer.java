@@ -84,8 +84,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 		IJavaScriptRenderContext javascriptRenderContext = htmlRenderContext
 				.getJavaScriptRenderContext();
 
-		if (htmlRenderContext
-				.containsAttribute(TabbedPaneRenderer.TABBED_PANE_JSF12_PROPERTY) == false) {
+		if (CardBoxRenderer.isCardBoxJSF12_Generation(htmlRenderContext) == false) {
 
 			javascriptRenderContext.removeJavaScriptWriter(htmlWriter);
 
