@@ -33,6 +33,10 @@ var __members = {
 	 */
 	_viewURL: undefined,
 	
+	/**
+	 * @field private String
+	 */
+	_shellDecoratorName: undefined,
 
 	/**
 	 * @field private HTMLIFrameElement
@@ -49,6 +53,9 @@ var __members = {
 		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE | f_shell.CLOSE_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
+			
+			this._shellDecoratorName = f_core.GetAttribute(this, "v:shellDecorator");
+			
 			this.f_setViewURL(f_core.GetAttribute(this, "v:viewURL", "about:blank"));
 
 			if (f_core.GetBooleanAttribute(this, "v:visible", true)) {
@@ -86,6 +93,8 @@ var __members = {
 		return this._viewURL;
 	},
 	
+	
+	
 	/**
 	 *  <p>Sets the viewURL URL.</p>
 	 *
@@ -102,6 +111,34 @@ var __members = {
 			this._iframe.src=this.f_getIFrameUrl();
 		}
 	},
+	
+	
+	/**
+	 *  <p>Return the shellDecoratorName String.</p>
+	 *
+	 * @method public 
+	 * @return String viewURL
+	 */
+	f_getShellDecoratorName: function() {
+		return this._shellDecoratorName;
+	},
+	
+	/**
+	 *  <p>Sets the shellDecoratorName String.</p>
+	 *
+	 * @method public 
+	 * @param String shellDecoratorName
+	 * @return void
+	 */
+	f_setShellDecoratorName: function(shellDecoratorName) {
+    	f_core.Assert((typeof(shellDecoratorName)=="string"), "f_viewDialog.f_setsShellDecoratorName: Invalid parameter '"+shellDecoratorName+"'.");
+    	
+		this._shellDecoratorName = shellDecoratorName;
+		
+	},
+	
+	
+	
 
 	/**
 	 *  <p>returns the url to show in the iFrame 

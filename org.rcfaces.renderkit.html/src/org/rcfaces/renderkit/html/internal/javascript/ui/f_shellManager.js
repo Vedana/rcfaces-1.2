@@ -224,6 +224,25 @@ var __statics = {
 		}
 
 		f_shellManager._documentComplete=undefined; //boolean
+	},
+	
+	
+	/**
+	 * @method public static
+	 * @param String name
+	 * @param Function constructor
+	 * @return void
+	 */
+	RegisterShellDecorator: function(name, constructor) {
+		var shellDecorators=f_shellManager._ShellDecorators;
+		if (!shellDecorators) {
+			shellDecorators=new Object;
+			f_shellManager._ShellDecorators = shellDecorators;
+		}
+		shellDecorators[name]=constructor;
+	},
+	Finalizer: function() {
+		f_shellManager._ShellDecorators=undefined;
 	}
 }
 
@@ -526,6 +545,17 @@ var __members = {
 	 * @return f_shellDecorator
 	 */
 	f_newShellDecorator: function(shell) {
+		var shellDecoratorName = shell.f_getShellDecoratorName();
+		if (shellDecoratorName && f_shellManager._ShellDecorators) {
+			var f =f_shellManager._ShellDecorators[shellDecoratorName];
+			if (f) {
+				var decorator = f.call(this,shell);
+				if (decorator) {
+					return decorator;
+				}
+			}
+		}
+		
 		if (shell.f_getStyle() & f_shell.LIGHT_CONTAINER_STYLE) {
 			return f_divShellDecorator.f_newInstance(shell);
 		}		

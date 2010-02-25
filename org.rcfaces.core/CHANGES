@@ -2,11 +2,14 @@
 
 ----------------------------------------------------------------------
 - @version I2554
-- @author Olivier Oeuillot & J
+- @author Olivier Oeuillot & JBM
 - 
 
-Nouvel attribut defaultSelectedDate
-bla bla
+ViewDialog: 
+Nouvel attribut ShellDecoratorName : permet de definir le nom du décorateur à utiliser.
+
+Nouvel attribut defaultSelectedDate pour le composant DateChooser
+L'attribut defaultSelectedDate permet de sélectionner une date par défaut dans le calendrier si aucune date n'est sélectionnée.  
 
 Correction ComponentsGrid & Componsants dans l'additionalInformation des DataGrids:
 Correction de la sauvegarde des états des composants dans les lignes.

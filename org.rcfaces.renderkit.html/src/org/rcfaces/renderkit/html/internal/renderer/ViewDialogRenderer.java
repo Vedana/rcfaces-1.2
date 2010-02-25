@@ -70,6 +70,12 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
                 htmlWriter.writeAttribute("v:viewURL", src);
             }
         }
+        
+        String shellDecorator = component.getShellDecoratorName(facesContext);
+        if (shellDecorator != null) {
+        	htmlWriter.writeAttribute("v:shellDecorator", shellDecorator);
+        }
+        
         if (!component.isVisible(facesContext)) {
             htmlWriter.writeAttribute("v:visible", false);
         }

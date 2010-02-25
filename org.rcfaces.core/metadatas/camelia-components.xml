@@ -2783,6 +2783,7 @@ Dans le cas d'un mode period !
 		<capability id="IWAIRoleCapability" />
 
 		<attribute id="viewURL" type="java.lang.String" />
+		<attribute id="shellDecoratorName" type="java.lang.String" />
 
 		<method id="setHiddenMode(String)" />
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
