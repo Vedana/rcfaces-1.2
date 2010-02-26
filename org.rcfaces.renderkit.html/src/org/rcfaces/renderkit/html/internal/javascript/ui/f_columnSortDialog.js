@@ -49,207 +49,6 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_SORT_MANAGER_NAME: "dialog",
-	
-     /**
-     * @method private static
-     * @param Event evt the event
-     * @return boolean
-     * @context object:base
-     */
-    _OnClick: function(evt) {
-    	var button=this;
-		var base=button._base;
-		
-		f_core.Debug(f_columnSortDialog, "_OnClick: entering");
-
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (base.f_getEventLocked(evt, true)) {
-			f_core.Debug(f_columnSortDialog, "_OnClick : popup.f_getEventLocked(true)");
-			return false;
-		}
-		
-		f_core.Debug(f_columnSortDialog, "_OnClick: before popup.f_buttonOnClick(button);");
-		base.f_buttonOnClick(button, evt);
-		
-
-		return f_core.CancelJsEvent(evt);
-    },
-    
-     /**
-     * @method private static
-     * @param Event evt the event
-     * @return boolean
-     * @context object:base
-     */
-    _SelectOnChange: function(evt) {
-    	var selectedSelect=this;
-		var base=selectedSelect._base;
-		
-		var docBase = selectedSelect.ownerDocument;
-		var number = selectedSelect._number
-		
-		f_core.Debug(f_columnSortDialog, "_SelectOnChange: entering");
-
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-		
-		var grid=base._grid;
-		var cols = f_columnSortDialog.GetColumns(grid);		
-		
-		var selects=base._selects;
-		var radios=base._radios;
-		for(var i=0;i<selects.length;i++) {
-			var select=selects[i];
-			
-			var selection=select.selectedIndex;
-			
-			if (selection==0) {
-				select._sort=undefined;
-				// Plus de selection !
-				for(i++;i<selects.length;i++) {
-					// Deselectionne le reste ...
-					selects[i].selectedIndex=0;
-					selects[i]._sort=undefined;
-				}
-				break;
-			}
-
-			var colIndex=select.options[selection]._columnIndex;
-
-			// On verifie qu'il n'y a pas de doublons			
-			for(var j=0;j<i;j++) {
-				var s=selects[j];
-				var sc=s.options[s.selectedIndex]._columnIndex;
-				
-				if (sc!=colIndex) {
-					continue;
-				}
-				
-				// Conflit, on reinitialise tout !
-								
-				for(i=j+1;i<selects.length;i++) {
-					selects[i].selectedIndex=0;
-					selects[i]._sort=undefined;
-				}
-				break;
-			}
-		}
-		
-		if (selectedSelect.selectedIndex>0 && !selectedSelect._sort) {
-			selectedSelect._sort=1;
-		}
-
-		f_columnSortDialog._UpdateRadioButtons(selects, 0, radios);
-
-		for(var i=1;i<selects.length;i++) { // On debute a la deuxieme combo !
-			// On remplis les selects en essayant de conserver la selection
-				
-			var select=selects[i];
-			
-			select.disabled=(selects[i-1].selectedIndex==0);
-				
-			var colIndex=-1;
-			var selection=select.selectedIndex;
-			if (selection) {
-				colIndex=select.options[selection]._columnIndex;
-			}
-			
-			for(;select.firstChild;) {
-				select.removeChild(select.firstChild);
-			}
-			
-			// Remplissage
-			f_columnSortDialog._AddOptions(grid, select, cols, selects, radios, colIndex);
-		}
-		
-		return true;
-    },
-    /**
-     * @method private static
-     * @return void
-     */
-	_AddOptions: function(grid, select, cols, selects, radios, colIndex) {
-		f_columnSortDialog.AddOption(select); // Ajoute vide
-		select.selectedIndex = 0;
-		
-		var i=0;
-		for(;i<selects.length;i++) {
-			if (selects[i]==select) {
-				break;
-			}
-		}
-
-		f_columnSortDialog._UpdateRadioButtons(selects, 0, radios);
-		
-		var cnt=0;
-		for (var j = 0; j < cols.length; j++) {				
-			var found=false; // On retire les colonnes deja referencees !
-			for(var k=0;k<i;k++) {
-				var selection=selects[k].selectedIndex;
-				if (!selection) {
-					break;
-				}
-				
-				var s=selects[k].options[selection]._columnIndex;
-				if (s==j) {
-					found=true;
-					break;
-				}
-			}
-			
-			if (found) {
-				continue;
-			}
-			
-			f_columnSortDialog.AddOption(select, cols[j], j);
-			
-			if (colIndex==j) {
-				if (!select._sort) {
-					select._sort = grid.f_getColumnOrderState(cols[j]);
-				}
-				select.selectedIndex = cnt+1;
-			}
-
-			cnt++;	
-		}
-		if (!select._sort) {
-			//select._sort = 1;
-		}
-			
-		f_columnSortDialog._UpdateRadioButtons(selects, i, radios);			
-		
-	},
-	/**
-	 * @method private static
-	 * @param Object[] selects
-	 * @param number i
-	 * @param HTMLInputElement[] radios
-	 * @return void
-	 */
-	_UpdateRadioButtons: function(selects, i, radios) {		
-		if (i && selects[i-1].selectedIndex==0) {
-			// Le precedant n'est pas trié !
-			i*=2;
-			radios[i].checked=false;
-			radios[i+1].checked=false;
-			radios[i].disabled=true;
-			radios[i+1].disabled=true;
-			return;
-		}
-
-
-		var sort=selects[i]._sort;
-
-		i*=2;
-		radios[i].checked=(sort==1);
-		radios[i+1].checked=(sort==-1);
-		radios[i].disabled=false;
-		radios[i+1].disabled=false;
-	},
 
     /**
      * <p>js listener example</p>
@@ -264,60 +63,7 @@ var __statics = {
     	return true;
     },
     */
-    /**
-     * @method hidden static
-     * @param HTMLDocument docBase document
-     * @param HTMLElement selectComp Select
-     * @param Object column
-     * @return HTMLOptionElement
-     */
-    AddOption: function(selectComp, column, columnIndex) {
-        var newOpt = selectComp.ownerDocument.createElement("option");
-        var text;
-
-        if (column) {
-	        text = column.f_getGrid().f_getColumnName(column);
-	        if (!text) {
-	        	text = column.f_getId();
-	        }
-
-	    } else {
-	    	text = f_resourceBundle.Get(f_columnSortDialog).f_get("NO_COLUMN");
-	    	
-	    	newOpt.className="f_columnSortDialog_no_column";
-	    }
-	    
-        newOpt.value = text;
-        f_core.AppendChild(newOpt, selectComp.ownerDocument.createTextNode(text));
-        newOpt._columnIndex = columnIndex;
-        
-        return selectComp.appendChild(newOpt);
-  	},
-	/**
-	 *  <p>get the columns.</p>
-     * @method public static
-     * @param f_grid grid
-     * @return Object[] array of visible columns
-	 */
-	GetColumns: function(grid) {
-		if (!grid) {
-			f_core.Error(f_columnSortDialog, "GetColumns: grid is undefined !");
-			return [];
-		}
-		var allCols = grid.f_getColumns();
-		
-		var visibleCols = new Array;
-		for (var i=0; i<allCols.length; i++) {
-			var col = allCols[i];
-			f_core.Debug(f_columnSortDialog, "GetColumns: col "+col.f_getId()+" visibility :" +col.f_isVisible());
-			f_core.Debug(f_columnSortDialog, "GetColumns: col "+col.f_getId()+" sortability :" +col.f_isSortable());
-			if (col.f_isVisible() && col.f_isSortable()) {
-				visibleCols.push(col);
-			}
-		}
-		return visibleCols;
-	},
-
+ 
 	Initializer: function() {
 		f_grid.RegisterSortManager(f_columnSortDialog._SORT_MANAGER_NAME, function(event) {
 			var grid=event.f_getComponent();
@@ -332,9 +78,9 @@ var __statics = {
 var __members = {
 	
 	/**
-	 * @field private f_grid
+	 * @field private f_columnSortConfigurator
 	 */
-	_grid: undefined,
+	_configurator: undefined,
 
 	/**
 	 * <p>Construct a new <code>f_columnSortDialog</code> with the specified
@@ -343,14 +89,14 @@ var __members = {
 	 * @method public
 	 * @param f_grid grid
 	 */
-	f_columnSortDialog: function(grid) {
-		this.f_super(arguments, 
-			f_shell.PRIMARY_MODAL_STYLE | 
+	f_columnSortDialog: function(grid, style) {
+		this.f_super(arguments, (style)?style:(f_shell.PRIMARY_MODAL_STYLE | 
 			f_shell.TITLE_STYLE | 
 			f_shell.CLOSE_STYLE | 
-			f_shell.COPY_STYLESHEET);
+			f_shell.COPY_STYLESHEET));
 
 		this._grid=grid;
+		this._configurator=f_columnSortConfigurator.f_newInstance(this, grid);
 		this.f_setShellFeatures();	
 	},
 	
@@ -371,6 +117,13 @@ var __members = {
 		// this._title=undefined; // String
 		this._grid=undefined; // f_grid
 
+		var configurator=this._configurator;
+		if (configurator) {
+			this._configurator=undefined;
+						
+			f_classLoader.Destroy(configurator);
+		}
+		
 		this.f_super(arguments);
 	},
 	/**
@@ -405,8 +158,6 @@ var __members = {
 		actForm.style.height=this.f_getHeight()+"px";
 		
 		base.appendChild(actForm);
-
-		actForm.onsubmit=f_columnSortDialog._OnClick;
 		//actForm._button=button;
 		
 		// Creation de la table
@@ -436,12 +187,11 @@ var __members = {
 		
 		// Corps de la popup : 3 (max) combos et des radios
 
-		this._radios = new Array;
-		this._selects = new Array;
-		this._buttons = new Array;
+		var _radios = new Array;
+		var _selects = new Array;
 
 		var sortedCols = grid.f_getSortedColumns();
-		var cols = f_columnSortDialog.GetColumns(grid);
+		var cols = f_columnSortConfigurator.GetColumns(grid);
 		var nbCols = cols.length;
 		if (nbCols > 3) {
 			nbCols = 3;
@@ -486,35 +236,13 @@ var __members = {
 
 			selectComp.className = "f_columnSortDialog_select";
 	
-			var selectedColIndex=-1;
-			if (j < sortedCols.length) {
-				var selectedCol = sortedCols[j];
-				
-				for (var i = 0; i < cols.length; i++) {
-					if (cols[i]==selectedCol) {
-						selectedColIndex=i;
-						break;
-					}
-				}			
-			}
-				
-			if (j>0) {
-				selectComp.disabled=(this._selects[j-1].selectedIndex==0);
-			}
-					
-			selectComp._base = this;
-			selectComp.onchange = f_columnSortDialog._SelectOnChange;
-	
-			this._selects.push(selectComp);
+			_selects.push(selectComp);
 
 			cellCorps = docBase.createElement("td");
 			ligneCorps.appendChild(cellCorps);
 			
-			this._createTableRadio(cellCorps, "sort"+j, selectComp);			
-
-			// Remplissage
-			f_columnSortDialog._AddOptions(grid, selectComp, cols, this._selects, this._radios,selectedColIndex);
-			
+			this._createTableRadio(cellCorps, "sort"+j, selectComp, _radios);			
+	
 			if (j+1<nbCols) {
 				var ligneCorps = docBase.createElement("tr");
 				tbodCorps.appendChild(ligneCorps);
@@ -532,7 +260,7 @@ var __members = {
 			}
 		}
 
-	//fin de la table de corps
+		//fin de la table de corps
 
 		// Creation de la ligne de boutons
 		var ligne = f_core.CreateElement(table, "li", {	
@@ -540,48 +268,31 @@ var __members = {
 		});
 				
 		// Bouton OK
-		var button = f_core.CreateElement(ligne, "input", {
+		var okButton = f_core.CreateElement(ligne, "input", {
 			type: "submit",
 			className: "f_columnSortDialog_button",
 			value: f_resourceBundle.Get(f_shell).f_get("VALID_BUTTON")
 		});
 		
-		button.onclick=f_columnSortDialog._OnClick;
-		button._base = this;
-		button._close = true;
-		button._apply = true;
-		//button.onfocusin=noFocus;
-		this._buttons.push(button);
+		var applyButton;
 
 		// Bouton Apply
-		if (this._style & f_columnSortDialog.APPLY_BUTTON) {
-			
-			var button = f_core.CreateElement(ligne, "input", {
+		if (this._style & f_columnSortDialog.APPLY_BUTTON) {			
+			applyButton = f_core.CreateElement(ligne, "input", {
 				type: "button",
 				className: "f_columnSortDialog_button",
 				value: f_resourceBundle.Get(f_shell).f_get("APPLY_BUTTON")
 			});
-			
-			button.onclick=f_columnSortDialog._OnClick;
-			button._base = this;
-			button._apply = true;
-			//button.onfocusin=noFocus;
-			this._buttons.push(button);
 		}
 
 		// Bouton Annuler
-		var button = f_core.CreateElement(ligne, "input", {
+		var cancelButton = f_core.CreateElement(ligne, "input", {
 			type: "button",
 			className: "f_columnSortDialog_button",
 			value: f_resourceBundle.Get(f_shell).f_get("CANCEL_BUTTON")
 		});
 
-		button._close = true;
-		button._apply = false;
-		button.onclick=f_columnSortDialog._OnClick;
-		button._base = this;
-		//button.onfocusin=noFocus;
-		this._buttons.push(button);
+		this._configurator.f_fillBody(_selects, _radios, okButton, cancelButton, applyButton);
 	},
 	
 	/**
@@ -591,7 +302,7 @@ var __members = {
 	 * @param number sort
 	 * @return HTMLElement table with radios
 	 */
-	_createTableRadio: function(parent, name, selectComp) {
+	_createTableRadio: function(parent, name, selectComp, _radios) {
 
 		var resourceBundle = f_resourceBundle.Get(f_columnSortDialog);
  
@@ -619,14 +330,11 @@ var __members = {
 			value: f_columnSortDialog.LIB_ASCENDANT,
 			className: "f_columnSortDialog_radio"		
 		});
+		_radios.push(radioComp);
 		
 		label.appendChild(label.ownerDocument.createTextNode(resourceBundle.f_get("ASCENDANT")));
 		
-		this._radios.push(radioComp);
-        radioComp.onclick = function() {
-        	selectComp._sort = 1;
-        };
-  
+        
 		var rowRadio=f_core.CreateElement(tbodyRadio, "tr");
 		rowRadio.verticalAlign="middle";
 		rowRadio.style.height="20px";
@@ -644,137 +352,27 @@ var __members = {
 			value: f_columnSortDialog.LIB_DESCENDANT,
 			className: "f_columnSortDialog_radio"
 		});
+		_radios.push(radioComp);
 		
 		label.appendChild(label.ownerDocument.createTextNode(resourceBundle.f_get("DESCENDANT")));
-		
-		this._radios.push(radioComp);
-        radioComp.onclick = function() {
-        	selectComp._sort = -1;
-        };
 
   		
 		return tableRadio;
 	},
-	
-	/**
-	 *  <p>callBack that will call the user provided callBack</p>
-	 *
-	 * @method protected 
-	 * @param HTMLInputElement selectedButton The button that was pushed
-	 * @param Event jsEvent
-	 * @return void
-	 */
-	f_buttonOnClick: function(selectedButton, jsEvent) {
-     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: entering ("+selectedButton+")");
-	
-		var close=selectedButton._close;
-		var apply=selectedButton._apply;
 
-     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: button close="+close+", apply="+apply);
-		
-		var colsSorted = new Array;
-
-		var grid = this._grid;
-		if (apply) {
-			var cols = f_columnSortDialog.GetColumns(grid);		
-
-			var selects=this._selects;
-			for (var i=0; i<selects.length; i++) {
-				var select = selects[i];
-				
-				if (!select.selectedIndex) {
-					break;
-				}
-				
-				var sc=select.options[select.selectedIndex]._columnIndex;
-				
-				colsSorted.push(cols[sc], select._sort>=0);
-				if (i==0) {
-					colsSorted.push(false); // Append mode
-				}
-			}
-
-			// Impact the grid
-	     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: sorting "+(colsSorted.length/3)+" cols");
-			
-     		var delayedSort = function () {
-     			if (!colsSorted.length) {
-     				grid.f_clearSort();
-     				return;
-     			}
-     			
-     			grid.f_setColumnSort.apply(grid, colsSorted);
-			};	     		
-
-	     	f_core.Debug(f_columnSortDialog, "f_buttonOnClick: setting timeout on "+window);
-			// main window
-			window.setTimeout(delayedSort, 10);
-		}
-
-		if (close) {
-			//delete the iFrame
-			this.f_close();
-		}
-	},
 	/**
 	 * @method protected
 	 */
 	f_preDestruction: function() {
-		this._cleanInputs();
+		var configurator=this._configurator;
+		if (configurator) {
+			this._configurator=undefined;
+			
+			f_classLoader.Destroy(configurator);
+		}
+		
 
 		this.f_super(arguments);		
-	},
-	
-	/**
-	 * @method private
-	 * @return void
-	 */
-	_cleanInputs: function() {
-		var buttons = this._buttons;
-		if (buttons) {
-			this._buttons=undefined;
-			
-			// Buttons cleaning
-			for (var i=0; i<buttons.length; i++) {
-				var button = buttons[i];
-				button._base=undefined; // f_columnSortDialog
-				// button._close=undefined; // boolean
-				// button._apply=undefined; // boolean
-				button.onclick=null;
-				button.onfocusin=null;
-				
-				f_core.VerifyProperties(button);
-			}
-		}
-
-		var radios = this._radios;
-		if (radios) {
-			this._radios=undefined;
-			
-			// Radios cleaning
-			for (var i=0; i<radios.length; i++) {
-				var radio = radios[i];
-				radio.onclick=null;
-				
-				f_core.VerifyProperties(radio);
-			}
-		}	
-		
-		var selects = this._selects;
-		if (selects) {
-			this._selects=undefined;
-			
-			// Selects cleaning
-			// & Get the informations !!!
-			for (var i=0; i<selects.length; i++) {
-				var select = selects[i];
-				select._base=undefined; // f_columnSortDialog
-				select.onchange=null;
-				select.onfocusin=null;
-				
-				f_core.VerifyProperties(select);
-			}
-		}
 	},
 	
 	/**
@@ -788,4 +386,8 @@ var __members = {
 	}
 }
 
-new f_class("f_columnSortDialog", null, __statics, __members, f_dialog);
+new f_class("f_columnSortDialog", {
+	extend: f_dialog,
+	members: __members,
+	statics: __statics
+});

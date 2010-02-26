@@ -1,0 +1,16 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_columnSortConfigurator
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+
+.f_columnSortConfigurator_no_column {
+	font-style: italic;
+}
+ 
