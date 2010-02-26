@@ -2784,6 +2784,7 @@ Dans le cas d'un mode period !
 
 		<attribute id="viewURL" type="java.lang.String" />
 		<attribute id="shellDecoratorName" type="java.lang.String" />
+		<attribute id="closable"  type="boolean" default="true" />
 
 		<method id="setHiddenMode(String)" />
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />

@@ -67,6 +67,10 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         if (text != null) {
             htmlWriter.writeAttribute("v:title", text);
         }
+        boolean closable = component.isClosable(facesContext);
+        if (closable == false) {
+            htmlWriter.writeAttribute("v:closable", closable);
+        }
         String src = component.getViewURL(facesContext);
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
@@ -113,14 +117,14 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
 
             appendData(datas, key, value);
         }
-
+        
         htmlWriter.writeAttribute("v:parameter", datas.toString());
-
+        
         String shellDecorator = component.getShellDecoratorName(facesContext);
         if (shellDecorator != null) {
             htmlWriter.writeAttribute("v:shellDecorator", shellDecorator);
         }
-
+        
         if (!component.isVisible(facesContext)) {
             htmlWriter.writeAttribute("v:visible", false);
         }

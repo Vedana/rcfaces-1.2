@@ -292,8 +292,12 @@ var __members = {
 			if (shellDecoratorName) {
 				this._shellDecoratorName = shellDecoratorName;
 			}
+			
+			var closable = f_core.GetBooleanAttribute(this, "v:closable");
+			if (closable == undefined) {
+				this._style |= f_shell.CLOSE_STYLE;
+			}
 		}
-		
 	},
 
 
@@ -682,6 +686,19 @@ var __members = {
 		}
 		shellManager.f_setShellDecoration(this, f_shellDecorator.TITLE_DECORATOR, title);
 	},
+	
+	
+	/**
+	 * @method hidden
+	 * @param f_shemmDecorator shellDecorator
+	 * @return void 
+	 */
+	f_updateDecoration: function(shellDecorator){
+		var title = this.f_getTitle();
+		if (title) {
+			shellDecorator.f_setDecorationValue(f_shellDecorator.TITLE_DECORATOR, title);
+		}
+	},
 	/**
 	 * @method public
 	 * @param f_shellDecorator shellDecorator
@@ -690,7 +707,7 @@ var __members = {
 	f_setShellDecorator: function(shellDecorator) {
 		f_core.Assert(typeof(shellDecorator)=="object", "f_shell.f_setShellDecorator: Invalid shellDecorator parameter ('"+shellDecorator+"')");
 		
-		this._shellManager.f_setShellDecoration(this, f_shellDecorator.INSTANCE_DECORATOR, shellDecorator);
+		this._shellManager.f_setShellDecorator(this, shellDecorator);
 	},
 	/**
 	 * @method protected

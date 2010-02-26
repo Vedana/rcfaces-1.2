@@ -44,8 +44,8 @@ var __members = {
 	 *
 	 * @method public
 	 */
-	f_viewDialog: function() {
-		this.f_super(arguments, f_shell.PRIMARY_MODAL_STYLE | f_shell.CLOSE_STYLE);
+	f_viewDialog: function(style) {
+		this.f_super(arguments, style | f_shell.PRIMARY_MODAL_STYLE);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			
