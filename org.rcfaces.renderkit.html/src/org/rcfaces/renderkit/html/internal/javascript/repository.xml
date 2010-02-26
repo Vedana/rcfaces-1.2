@@ -1169,10 +1169,17 @@
 	</module>
 
 	<module id="gridHelp">
+
+		 <file name="ui/f_columnSortConfigurator.js">
+			<class name="f_columnSortConfigurator">
+				<required-class name="f_grid" />
+			</class>
+		 </file>
 		 <file name="ui/f_columnSortDialog.js">
 			<class name="f_columnSortDialog">
 				<required-class name="f_dialog" />
 				<required-class name="f_grid" />
+				<required-class name="f_columnSortConfigurator" />
 			</class>
 		 </file>
 	</module>
