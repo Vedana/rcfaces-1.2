@@ -532,7 +532,7 @@ var __members = {
 		
 		var shellId=shell.f_getId();
 		var shellDecorators=this._shellDecorators;
-		
+
 		var title = shell.f_getTitle();
 		if(title){
 			shellDecorator.f_setDecorationValue(f_shellDecorator.TITLE_DECORATOR, title);
@@ -645,7 +645,9 @@ var __members = {
 		}
 		
 		if (shell.f_getStatus()==f_shell.DESTROYED_STATUS) {
-			this.f_showNextShell();
+			if (showNextShell!==false) {
+				this.f_showNextShell();
+			}
 		}
 	},
 	/**
