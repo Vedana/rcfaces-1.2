@@ -23,7 +23,6 @@ var __members = {
 
 		if (forComponent) {
 			this._for=forComponent;
-			fa_pagedComponent.RegisterPager(forComponent, this);
 			
 		} else  {
 			f_core.Error(f_imagePagerButton, "f_imagePagerButton: 'for' attribute is not defined !");
@@ -87,8 +86,8 @@ var __members = {
 		}
 	},
 	
-	fa_updateDisabled: function() {
-		this.f_super(arguments);
+	fa_updateDisabled: function(set) {
+		this.f_super(arguments, set);
 		
 		if (this._hideIfDisabled) {
 			this.f_setVisible(this.f_isDisabled());
@@ -156,6 +155,16 @@ var __members = {
 		}
 		
 		return false;
+	},
+	
+	f_update: function() {
+		this.f_super(arguments);
+
+		var forComponent=this._for;
+		
+		if (forComponent) {
+			fa_pagedComponent.RegisterPager(forComponent, this);
+		}
 	}
 }
 
