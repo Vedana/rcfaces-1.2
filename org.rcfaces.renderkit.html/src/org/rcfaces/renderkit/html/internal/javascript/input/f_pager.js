@@ -283,11 +283,11 @@ var __members = {
 		this._manyMessage=(manyMessage!==undefined)?manyMessage:message;
 		this._manyMessage2=(manyMessage2!==undefined)?manyMessage2:this._manyMessage;
 		
-		var noPagedMessage=f_core.GetAttribute(this, "v:noPagedMessage");
-		if (!noPagedMessage) {
-			//var resourceBundle=f_resourceBundle.Get(f_pager);
+		var noPagedMessage=f_core.GetAttribute(this, "v:noPagedMessage", null);
+		if (noPagedMessage===null) {
+			var resourceBundle=f_resourceBundle.Get(f_pager);
 			
-			//noPagedMessage=resourceBundle.f_get("NO_PAGED_MESSAGE");			
+			noPagedMessage=resourceBundle.f_get("NO_PAGED_MESSAGE");			
 		}
 		this._noPagedMessage=noPagedMessage;
 		
