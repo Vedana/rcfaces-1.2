@@ -2544,7 +2544,7 @@ var f_core = {
 	},
 	/**
 	 * @method public static
-	 * @param optional String url
+	 * @param optional String url or f_event object
 	 * @param optional String dest Window name.
 	 * @param optional HTMLElement elt
 	 * @param optional f_event event 
