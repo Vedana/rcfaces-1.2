@@ -522,7 +522,7 @@
 			</classpath>
 		</javac>
 
-		<copy file="${build-core}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-core/META-INF" overwrite="true" />
+		<copy file="${build-core}/src/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-core/META-INF" overwrite="true" />
 		<manifest file="${build.version.path}/src-core/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}" />
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
@@ -637,7 +637,7 @@
 			token="String BUILDER_VERSION = null" 
 			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />		
 		
-		<copy file="${pass.build}/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-${pass.type}/META-INF" overwrite="true" />
+		<copy file="${pass.build}/src/META-INF/MANIFEST.MF" toDir="${build.version.path}/src-${pass.type}/META-INF" overwrite="true" />
 		<manifest file="${build.version.path}/src-${pass.type}/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="Specification-Version" value="${version}" />
 			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
