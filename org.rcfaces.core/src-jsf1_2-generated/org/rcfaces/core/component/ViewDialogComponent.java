@@ -44,7 +44,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageURL","width","shellDecoratorName","waiRole","hiddenMode","textDirection","styleClass","text","height","dialogPriority","visible","lookId","viewURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageURL","width","shellDecoratorName","waiRole","closable","hiddenMode","textDirection","styleClass","text","height","dialogPriority","visible","lookId","viewURL"}));
 	}
 
 	public ViewDialogComponent() {
@@ -386,6 +386,26 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 */
 	public boolean isShellDecoratorNameSetted() {
 		return engine.isPropertySetted(Properties.SHELL_DECORATOR_NAME);
+	}
+
+	public boolean isClosable() {
+		return isClosable(null);
+	}
+
+	public boolean isClosable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLOSABLE, true, facesContext);
+	}
+
+	public void setClosable(boolean closable) {
+		engine.setProperty(Properties.CLOSABLE, closable);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "closable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isClosableSetted() {
+		return engine.isPropertySetted(Properties.CLOSABLE);
 	}
 
 	protected Set getCameliaFields() {

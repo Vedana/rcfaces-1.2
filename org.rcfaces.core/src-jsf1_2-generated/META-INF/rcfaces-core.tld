@@ -22514,6 +22514,16 @@ A string value specifying the choosen look of the component.
 				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
+		<attribute>
+			<description><![CDATA[
+Experimental : Do not use !
+]]></description>
+			<name>closable</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
 	</tag>
 	<tag>
 		<name>submitWait</name>

@@ -31,6 +31,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression viewURL;
 	private ValueExpression shellDecoratorName;
+	private ValueExpression closable;
 	private ValueExpression value;
 	private ValueExpression converter;
 	public String getComponentType() {
@@ -89,6 +90,10 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		this.shellDecoratorName = shellDecoratorName;
 	}
 
+	public final void setClosable(ValueExpression closable) {
+		this.closable = closable;
+	}
+
 	public final void setValue(ValueExpression value) {
 		this.value = value;
 	}
@@ -115,6 +120,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  viewURL='"+viewURL+"'");
 			LOG.debug("  shellDecoratorName='"+shellDecoratorName+"'");
+			LOG.debug("  closable='"+closable+"'");
 		}
 		if ((uiComponent instanceof ViewDialogComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -245,6 +251,15 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (closable != null) {
+			if (closable.isLiteralText()==false) {
+				component.setValueExpression(Properties.CLOSABLE, closable);
+
+			} else {
+				component.setClosable(getBool(closable.getExpressionString()));
+			}
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
@@ -278,6 +293,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		waiRole = null;
 		viewURL = null;
 		shellDecoratorName = null;
+		closable = null;
 		value = null;
 		converter = null;
 
