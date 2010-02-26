@@ -78,19 +78,22 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
                 htmlWriter.writeAttribute("v:viewURL", src);
             }
         }
-        List<UISelectItem> children = component.getChildren();
-		int i = 0;
-		Map<String, String> values = new HashMap<String, String>(); 
-		UISelectItem selectItem;
-		while (i < children.size()) {
-			if (children.get(i) instanceof UISelectItem) {
-				selectItem = (UISelectItem) children.get(i);
-				values.put(selectItem.getItemLabel(), selectItem.getItemValue().toString());
-			}
-			i++;
-		}
-		
-		StringAppender datas = new StringAppender(values.size() * 64);
+        
+        // TODO A refaire en décorator !
+        List children = component.getChildren();
+        int i = 0;
+        Map values = new HashMap();
+        UISelectItem selectItem;
+        while (i < children.size()) {
+            if (children.get(i) instanceof UISelectItem) {
+                selectItem = (UISelectItem) children.get(i);
+                values.put(selectItem.getItemLabel(), selectItem.getItemValue()
+                        .toString());
+            }
+            i++;
+        }
+
+        StringAppender datas = new StringAppender(values.size() * 64);
         for (Iterator it = values.entrySet().iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
 
@@ -110,17 +113,14 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
 
             appendData(datas, key, value);
         }
-        
-        
-        
+
         htmlWriter.writeAttribute("v:parameter", datas.toString());
-        System.out.println(datas.toString());
-        
+
         String shellDecorator = component.getShellDecoratorName(facesContext);
         if (shellDecorator != null) {
-        	htmlWriter.writeAttribute("v:shellDecorator", shellDecorator);
+            htmlWriter.writeAttribute("v:shellDecorator", shellDecorator);
         }
-        
+
         if (!component.isVisible(facesContext)) {
             htmlWriter.writeAttribute("v:visible", false);
         }
@@ -143,7 +143,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             IHtmlComponentRenderContext htmlComponentContext) {
         return false;
     }
-    
+
     private void appendData(StringAppender datas, String key, String value) {
         URLFormCodec.encode(datas, key);
         datas.append('=');
