@@ -294,10 +294,11 @@ var __members = {
 			}
 			
 			var closable = f_core.GetBooleanAttribute(this, "v:closable");
-			if (closable == undefined) {
+			if (closable === undefined) {
 				this._style |= f_shell.CLOSE_STYLE;
 			}
 		}
+		
 	},
 
 
@@ -686,8 +687,6 @@ var __members = {
 		}
 		shellManager.f_setShellDecoration(this, f_shellDecorator.TITLE_DECORATOR, title);
 	},
-	
-	
 	/**
 	 * @method hidden
 	 * @param f_shemmDecorator shellDecorator
