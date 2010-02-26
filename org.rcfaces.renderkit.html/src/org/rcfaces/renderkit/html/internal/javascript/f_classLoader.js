@@ -1809,7 +1809,7 @@ f_classLoader._MakeClassName=function(claz, lookId) {
 
 
 /**
- * @method hidden static
+ * @method public static
  * @param Object... objects
  * @return void
  */
