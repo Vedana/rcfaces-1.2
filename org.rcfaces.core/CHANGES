@@ -2,18 +2,63 @@
 
 ----------------------------------------------------------------------
 - @version I2554
-- @author Olivier Oeuillot & JBM
+- @author Olivier Oeuillot & Jean-Baptiste Meslin
 - 
+
+RCFACES jsf 1.1:
+LA VERSION 1.1 de RCFACES passe en mode MAINTENANCE, il n'y aura plus d'évolution pour la version compatible jsf 1.1 .
+
+Facelets:
+Utilisation de la version 1.1.15 compatible avec JSF 1.2
 
 ViewDialog: 
 Nouvel attribut ShellDecoratorName : permet de definir le nom du décorateur à utiliser.
 
-Nouvel attribut defaultSelectedDate pour le composant DateChooser
-L'attribut defaultSelectedDate permet de sélectionner une date par défaut dans le calendrier si aucune date n'est sélectionnée.  
+Nouvel attribut defaultSelectedDate
+Permet de spécifier une date par défaut, si aucune date n'est sélectionnée !
+
+Gestion des messages du pager pour les tableaux non paginés:
+Si le tableau n'est pas paginé et qu'aucun message associé à la non pagination est défini, 
+on utilise les messages définis pour un tableau paginé.
 
 Correction ComponentsGrid & Componsants dans l'additionalInformation des DataGrids:
 Correction de la sauvegarde des états des composants dans les lignes.
 
+Réorganisation de f_columnSortDialog
+Réorganisation de f_columnSortDialog afin de permettre d'utiliser des columnSortDialog personnalisés.
+
+rcfaces-config.xml, faces-config.xml
+Réorganisation des fichiers pour les mettres dans META-INF/ dans les sources.
+
+Facelets.
+Diverses corrections dans la génération des facelets pour la compatibilité avec les versions courantes.
+
+DataGrid, ComponentsGrid:
+Amélioration de l'alignement des colonnes 
+
+Pager:
+Permet l'affichage d'informations même si le tableau associé n'est pas paginé.
+
+f_imagePagerButton:
+Correction de l'initialisation du bouton hors <vh:javaScriptCollector>
+
+f_imageButton:
+Création d'un evenement SELECTION_POST afin de pouvoir mieux traiter les cas du submitButton avec un selectionListener.
+
+f_calendar.css:
+Correction d'une regle CSS correspondant à l'image des boutons GAUCHE/DROITE
+
+f_shellDecorator.css:
+Correction de l'image de la souris lors du survol du bouton CLOSE
+
+f_classLoader.js:
+Rend la méthode f_classLoader.Destroy(x) publique.
+
+f_viewDialog.js:
+Ajout de la méthode "f_performFrameReady" qui est appelée quand le contenu HTML de la dialogue est chargé.
+
+SelectItemTools.java:
+Ajout de plusieurs méthodes utilitaires dans SelectItemNode.
 
 ----------------------------------------------------------------------
 - @version I2553
