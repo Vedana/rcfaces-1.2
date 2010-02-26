@@ -44,7 +44,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","dialogPriority","waiRole","visible","hiddenMode","lookId","viewURL","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageURL","width","shellDecoratorName","waiRole","hiddenMode","textDirection","styleClass","text","height","dialogPriority","visible","lookId","viewURL"}));
 	}
 
 	public ViewDialogComponent() {
@@ -366,6 +366,26 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 */
 	public boolean isViewURLSetted() {
 		return engine.isPropertySetted(Properties.VIEW_URL);
+	}
+
+	public String getShellDecoratorName() {
+		return getShellDecoratorName(null);
+	}
+
+	public String getShellDecoratorName(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SHELL_DECORATOR_NAME, facesContext);
+	}
+
+	public void setShellDecoratorName(String shellDecoratorName) {
+		engine.setProperty(Properties.SHELL_DECORATOR_NAME, shellDecoratorName);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "shellDecoratorName" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isShellDecoratorNameSetted() {
+		return engine.isPropertySetted(Properties.SHELL_DECORATOR_NAME);
 	}
 
 	protected Set getCameliaFields() {

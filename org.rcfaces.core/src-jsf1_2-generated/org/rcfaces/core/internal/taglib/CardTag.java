@@ -24,8 +24,8 @@ public class CardTag extends AbstractOutputTag implements Tag {
 	private ValueExpression scopeValue;
 	private ValueExpression scopeVar;
 	private ValueExpression asyncDecodeMode;
-	private ValueExpression loadListeners;
 	private ValueExpression prependId;
+	private ValueExpression loadListeners;
 	public String getComponentType() {
 		return CardComponent.COMPONENT_TYPE;
 	}
@@ -54,12 +54,12 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		this.asyncDecodeMode = asyncDecodeMode;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
-		this.loadListeners = loadListeners;
-	}
-
 	public final void setPrependId(ValueExpression prependId) {
 		this.prependId = prependId;
+	}
+
+	public final void setLoadListener(ValueExpression loadListeners) {
+		this.loadListeners = loadListeners;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -141,10 +141,6 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			}
 		}
 
-		if (loadListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
-		}
-
 		if (prependId != null) {
 			if (prependId.isLiteralText()==false) {
 				component.setValueExpression(Properties.PREPEND_ID, prependId);
@@ -152,6 +148,10 @@ public class CardTag extends AbstractOutputTag implements Tag {
 			} else {
 				component.setPrependId(getBool(prependId.getExpressionString()));
 			}
+		}
+
+		if (loadListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
 		}
 	}
 
@@ -162,8 +162,8 @@ public class CardTag extends AbstractOutputTag implements Tag {
 		scopeValue = null;
 		scopeVar = null;
 		asyncDecodeMode = null;
-		loadListeners = null;
 		prependId = null;
+		loadListeners = null;
 
 		super.release();
 	}

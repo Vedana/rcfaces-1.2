@@ -16,6 +16,7 @@ import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IPrependIdCapability;
 import javax.faces.component.NamingContainer;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.AbstractOutputComponent;
@@ -30,6 +31,7 @@ public class CardComponent extends AbstractOutputComponent implements
 	IVerticalAlignmentCapability,
 	IVariableScopeCapability,
 	IAsyncDecodeModeCapability,
+	IPrependIdCapability,
 	ILoadEventCapability,
 	NamingContainer,
 	IAsyncRenderComponent {
@@ -230,6 +232,29 @@ public class CardComponent extends AbstractOutputComponent implements
 		engine.setProperty(Properties.ASYNC_DECODE_MODE, asyncDecodeMode);
 	}
 
+	public boolean isPrependId() {
+		return isPrependId(null);
+	}
+
+	/**
+	 * See {@link #isPrependId() isPrependId()} for more details
+	 */
+	public boolean isPrependId(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PREPEND_ID, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "prependId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPrependIdSetted() {
+		return engine.isPropertySetted(Properties.PREPEND_ID);
+	}
+
+	public void setPrependId(boolean prependId) {
+		engine.setProperty(Properties.PREPEND_ID, prependId);
+	}
+
 	public final void addLoadListener(org.rcfaces.core.event.ILoadListener listener) {
 		addFacesListener(listener);
 	}
@@ -240,26 +265,6 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	public final javax.faces.event.FacesListener [] listLoadListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
-	}
-
-	public boolean isPrependId() {
-		return isPrependId(null);
-	}
-
-	public boolean isPrependId(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.PREPEND_ID, false, facesContext);
-	}
-
-	public void setPrependId(boolean prependId) {
-		engine.setProperty(Properties.PREPEND_ID, prependId);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "prependId" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isPrependIdSetted() {
-		return engine.isPropertySetted(Properties.PREPEND_ID);
 	}
 
 	protected Set getCameliaFields() {
