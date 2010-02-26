@@ -304,9 +304,10 @@ var __members = {
 	 * @return void
 	 */
 	f_finalize: function() {
+		// this._title=undefined; // String
+		// this._shellDecoratorName=undefined; // String
+
 		var shellStatus=this._shellStatus;
-		this._title=undefined;
-		this._shellDecoratorName=undefined;
 		if (shellStatus!=f_shell.CREATED_STATUS &&
 			shellStatus!=f_shell.DESTROYED_STATUS) {
 
