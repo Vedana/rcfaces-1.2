@@ -43,7 +43,7 @@ public class SelectItemTools {
             facesContext = FacesContext.getCurrentInstance();
         }
 
-        SelectItemNode root = new SelectItemNode(null, null);
+        SelectItemNode root = new SelectItemNode(null, null, null, 0);
 
         Set selectItemIds = new HashSet();
 
@@ -62,47 +62,52 @@ public class SelectItemTools {
         if (component instanceof UISelectItem) {
             UISelectItem uiSelectItem = (UISelectItem) component;
 
+            SelectItemNode singleItemNode = null;
+
             Object value = uiSelectItem.getValue();
             if (value instanceof SelectItem) {
-                addSelectItem(facesContext, root, component, selectItemIds,
-                        (SelectItem) value);
-                return;
-            }
 
-            if (value instanceof SelectItem[]) {
+                singleItemNode = addSelectItem(facesContext, root, component,
+                        selectItemIds, (SelectItem) value);
+
+            } else if (value instanceof SelectItem[]) {
                 SelectItem selectItems[] = (SelectItem[]) value;
                 for (int i = 0; i < selectItems.length; i++) {
                     addSelectItem(facesContext, root, component, selectItemIds,
                             selectItems[i]);
                 }
 
-                return;
-            }
-
-            if (value instanceof SelectItemGroup[]) {
+            } else if (value instanceof SelectItemGroup[]) {
                 SelectItemGroup selectItems[] = (SelectItemGroup[]) value;
                 for (int i = 0; i < selectItems.length; i++) {
                     addSelectItem(facesContext, root, component, selectItemIds,
                             selectItems[i]);
                 }
 
-                return;
-            }
-
-            if (value == null) {
-                SelectItem si;
+            } else if (value == null) {
+                SelectItem selectItem;
                 if (uiSelectItem instanceof IImageCapability) {
-                    si = new BasicImagesSelectItem(uiSelectItem);
-                } else {
+                    selectItem = new BasicImagesSelectItem(uiSelectItem);
 
-                    si = new BasicSelectItem(uiSelectItem);
+                } else {
+                    selectItem = new BasicSelectItem(uiSelectItem);
                 }
 
-                addSelectItem(facesContext, root, component, selectItemIds, si);
+                singleItemNode = addSelectItem(facesContext, root, component,
+                        selectItemIds, selectItem);
             }
-        }
 
-        if (component instanceof UISelectItems) {
+            if (singleItemNode != null && component.getChildCount() > 0) {
+                List children = component.getChildren();
+                for (Iterator it = children.iterator(); it.hasNext();) {
+                    UIComponent child = (UIComponent) it.next();
+
+                    listSelectItems(facesContext, child, selectItemIds,
+                            singleItemNode);
+                }
+            }
+
+        } else if (component instanceof UISelectItems) {
             Object value = ((UISelectItems) component).getValue();
             if (value instanceof SelectItem[]) {
                 SelectItem selectItems[] = (SelectItem[]) value;
@@ -110,13 +115,11 @@ public class SelectItemTools {
                     addSelectItem(facesContext, root, component, selectItemIds,
                             selectItems[i]);
                 }
-
-                return;
             }
         }
     }
 
-    private static void addSelectItem(FacesContext facesContext,
+    private static SelectItemNode addSelectItem(FacesContext facesContext,
             SelectItemNode root, UIComponent component, Set selectItemIds,
             SelectItem value) {
         String id = component.getClientId(facesContext);
@@ -126,7 +129,9 @@ public class SelectItemTools {
             selectItemIds.add(id);
         }
 
-        root.addChild(id, value);
+        SelectItemNode node = root.addChild(id, value);
+
+        return node;
     }
 
     /**
@@ -135,19 +140,36 @@ public class SelectItemTools {
      * @version $Revision$ $Date$
      */
     public static class SelectItemNode {
+        private static final SelectItemNode[] EMPTY_ARRAY = new SelectItemNode[0];
+
         private final SelectItem selectItem;
 
-        private final List children = new ArrayList();
+        private List children = null;
 
         private final String id;
 
-        SelectItemNode(String id, SelectItem selectItem) {
+        private final int depth;
+
+        private final SelectItemNode parent;
+
+        SelectItemNode(SelectItemNode parent, String id, SelectItem selectItem,
+                int depth) {
+            this.parent = parent;
             this.selectItem = selectItem;
             this.id = id;
+            this.depth = depth;
         }
 
-        public void addChild(String id, SelectItem selectItem) {
-            children.add(new SelectItemNode(id, selectItem));
+        public SelectItemNode addChild(String id, SelectItem selectItem) {
+            SelectItemNode child = new SelectItemNode(this, id, selectItem,
+                    depth + 1);
+
+            if (children == null) {
+                children = new ArrayList();
+            }
+            children.add(child);
+
+            return child;
         }
 
         public SelectItem getSelectItem() {
@@ -155,6 +177,9 @@ public class SelectItemTools {
         }
 
         public SelectItemNode[] getChildren() {
+            if (children == null) {
+                return EMPTY_ARRAY;
+            }
             return (SelectItemNode[]) children
                     .toArray(new SelectItemNode[children.size()]);
         }
@@ -162,21 +187,97 @@ public class SelectItemTools {
         public String getId() {
             return id;
         }
+
+        public SelectItemNode getParent() {
+            return parent;
+        }
+
+        public int getDepth() {
+            return depth;
+        }
+
+        public SelectItemNode searchById(String id) {
+            if (id.equals(getId())) {
+                return this;
+            }
+
+            SelectItemNode chilren[] = getChildren();
+            for (int i = 0; i < chilren.length; i++) {
+                SelectItemNode si = chilren[i].searchById(id);
+                if (si != null) {
+                    return si;
+                }
+            }
+
+            return null;
+        }
+
+        public SelectItemNode searchByValue(Object value) {
+            if (selectItem != null && value.equals(selectItem.getValue())) {
+                return this;
+            }
+
+            SelectItemNode chilren[] = getChildren();
+            for (int i = 0; i < chilren.length; i++) {
+                SelectItemNode si = chilren[i].searchByValue(value);
+                if (si != null) {
+                    return si;
+                }
+            }
+
+            return null;
+        }
+
+        public SelectItemNode getRoot() {
+            SelectItemNode node = this;
+            for (; node.getParent() != null; node = node.getParent()) {
+            }
+
+            return node;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + depth;
+            result = prime * result + ((id == null) ? 0 : id.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof SelectItemNode)) {
+                return false;
+            }
+            SelectItemNode other = (SelectItemNode) obj;
+            if (depth != other.depth) {
+                return false;
+            }
+            if (id == null) {
+                if (other.id != null) {
+                    return false;
+                }
+            } else if (!id.equals(other.id)) {
+                return false;
+            }
+            return true;
+        }
+
     }
 
     public static SelectItem searchId(SelectItemNode node, String id) {
-        if (id.equals(node.getId())) {
-            return node.getSelectItem();
+        SelectItemNode sn = node.searchById(id);
+        if (sn == null) {
+            return null;
         }
 
-        SelectItemNode chilren[] = node.getChildren();
-        for (int i = 0; i < chilren.length; i++) {
-            SelectItem si = searchId(chilren[i], id);
-            if (si != null) {
-                return si;
-            }
-        }
-
-        return null;
+        return sn.getSelectItem();
     }
 }
