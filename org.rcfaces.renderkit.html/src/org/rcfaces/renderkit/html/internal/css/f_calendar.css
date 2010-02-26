@@ -33,64 +33,64 @@
 	border: 0;
 }
 
-.f_calendar_prevUnitImg,
-.f_calendar_nextUnitImg,
-.f_calendar_prevUnitImg_disabled,
-.f_calendar_nextUnitImg_disabled,
-.f_calendar_weekImage,
-.f_calendar_prevMonth,
-.f_calendar_nextMonth,
-.f_calendar_prevMonth_disabled,
-.f_calendar_nextMonth_disabled,
-.f_calendar_prevYear,
-.f_calendar_nextYear,
-.f_calendar_prevYear_disabled,
-.f_calendar_nextYear_disabled {
+IMG.f_calendar_prevUnitImg,
+IMG.f_calendar_nextUnitImg,
+IMG.f_calendar_prevUnitImg_disabled,
+IMG.f_calendar_nextUnitImg_disabled,
+IMG.f_calendar_weekImage,
+IMG.f_calendar_prevMonth,
+IMG.f_calendar_nextMonth,
+IMG.f_calendar_prevMonth_disabled,
+IMG.f_calendar_nextMonth_disabled,
+IMG.f_calendar_prevYear,
+IMG.f_calendar_nextYear,
+IMG.f_calendar_prevYear_disabled,
+IMG.f_calendar_nextYear_disabled {
 	background: url('calendar/arrows.gif') 0 0 no-repeat;
 	border: 0;
 }
 
-.f_calendar_weekImage {
+IMG.f_calendar_weekImage {
 	background-position: -64px 0;
 }
 
-.f_calendar_week_disabled .f_calendar_weekImage {
+IMG.f_calendar_week_disabled .f_calendar_weekImage {
 	background-position: -80px 0;
 }
 
-.f_calendar_prevMonth,
-.f_calendar_prevYear {
+IMG.f_calendar_prevMonth,
+IMG.f_calendar_prevYear {
 	background-position: 0 0;
 }
 
-.f_calendar_nextMonth,
-.f_calendar_nextYear {
+IMG.f_calendar_nextMonth,
+IMG.f_calendar_nextYear {
 	background-position: -16px 0;
 }
 
-.f_calendar_prevMonth_disabled,
-.f_calendar_prevYear_disabled {
+IMG.f_calendar_prevMonth_disabled,
+IMG.f_calendar_prevYear_disabled {
 	background-position: -32px 0;
 }
 
-.f_calendar_nextMonth_disabled,
-.f_calendar_nextYear_disabled {
+IMG.f_calendar_nextMonth_disabled,
+IMG.f_calendar_nextYear_disabled {
 	background-position: -48px 0;
 }
 
-.f_calendar_prevUnitImg {
+IMG.f_calendar_prevUnitImg {
 	background-position: -96px 0;
 }
 
-.f_calendar_nextUnitImg {
+IMG.f_calendar_nextUnitImg {
 	background-position: -112px 0;
 }
 
-.f_calendar_prevUnitImg_disabled {
+IMG.f_calendar_prevUnitImg_disabled {
 	background-position: -128px 0;
 }
 
-.f_calendar_nextUnitImg_disabled {
+IMG.f_calendar_nextUnitImg_disabled {
 	background-position: -144px 0;
 }
 
