@@ -1389,7 +1389,7 @@ var __statics = {
 		
 		var twidth=0;
 		if (column._ascendingOrder!==undefined) {
-			twidth-=f_grid._SORT_PADDING;
+			twidth-=this._sortPadding;
 		}
 		
 	 	if (false && f_core.IsInternetExplorer()) {
@@ -1401,7 +1401,7 @@ var __statics = {
 			col.style.width=w+"px";
 			head.style.width=w+"px";
 			
-			var bw=w-f_grid._TEXT_RIGHT_PADDING-f_grid._LEFT_RIGHT_PADDING;
+			var bw=w-f_grid._TEXT_RIGHT_PADDING-f_grid._TEXT_LEFT_PADDING;
 			if (bw<0) {
 				bw=0;
 			}			
@@ -1697,6 +1697,8 @@ var __members = {
 			this._rowStyleClasses=this.f_getDefaultRowStyleClasses();
 		}
 		
+		this._sortPadding=f_core.GetNumberAttribute(this, "v:sortPadding", f_grid._SORT_PADDING);
+		
 		this.f_initializeTableLayout();
 		
 //		this._tbody.style.visibility="hidden";
@@ -1865,6 +1867,7 @@ var __members = {
 			sortIndicator.onmouseup=null;
 		}
 		
+//		this._sortPadding=undefined; // Number
 //		this._serializedIndexes=undefined; // number[]
 //		this._keySearchColumnIndex=undefined; // number
 
@@ -4308,7 +4311,7 @@ var __members = {
 		}
 	
 		if (column._ascendingOrder!==undefined) {
-			swidth-=f_grid._SORT_PADDING;
+			swidth-=this._sortPadding;
 			if (swidth<0) {
 				swidth=0;
 			}
@@ -4487,6 +4490,10 @@ var __members = {
 	f_selectRow: function(rowValue, append, show, jsEvent) {
 		var row=this.f_getRowByValue(rowValue, true);
 	
+		if (this.f_isRowSelected(row)) {
+			return false;
+		}
+		
 		var selection=(append)?fa_selectionManager.APPEND_SELECTION:0;
 		
 		return this.f_performElementSelection(row, show, jsEvent, selection);
@@ -4788,7 +4795,7 @@ var __members = {
 	
 		var t1=new Date().getTime();
 		
-		var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._LEFT_RIGHT_PADDING;
+		//var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
 		
 		var total=0;
 		var ci=0;
@@ -4810,11 +4817,13 @@ var __members = {
 				if (isNaN(w) || w<0) {
 					w=0;
 				}
+			} else if (!col.style.width) {
+				col.style.width=w+"px"; // Probleme de scale sous firefox !
 			}
 			
 			total+=w;
 			
-			var cw=w-cellMargin;
+			var cw=w; //-cellMargin;
 			if (cw<0) {
 				cw=0;
 			}

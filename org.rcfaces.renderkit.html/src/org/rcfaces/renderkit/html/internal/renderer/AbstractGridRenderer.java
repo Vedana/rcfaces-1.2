@@ -152,7 +152,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private static final int TEXT_LEFT_PADDING = 4;
 
-    private static final int SORT_PADDING = 8;
+    private static final int SORT_PADDING = 18;
 
     private static final String GRID_MAIN_STYLE_CLASS = "f_grid";
 
@@ -685,6 +685,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
         }
 
+        if (getSortPadding() != SORT_PADDING) {
+            htmlWriter.writeAttribute("v:sortPadding", getSortPadding());
+        }
+
         writeGridComponentAttributes(htmlWriter, gridRenderContext,
                 gridComponent);
 
@@ -1106,13 +1110,19 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         String columnTagName = IHtmlWriter.DIV;
 
+        boolean command = false;
         if (tableContext.getSortCommand(columnIndex) != null) {
             columnTagName = IHtmlWriter.A;
+            command = true;
         }
         htmlWriter.startElement(columnTagName);
 
-        if (columnTagName == IHtmlWriter.A) {
-            htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+        boolean sorted = false;
+
+        if (command) {
+            if (columnTagName == IHtmlWriter.A) {
+                htmlWriter.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
+            }
 
             UIComponent component = htmlWriter.getComponentRenderContext()
                     .getComponent();
@@ -1142,6 +1152,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                         altText = getResourceBundleValue(htmlWriter,
                                 "f_grid.ASCENDING_SORT");
                     }
+
+                    sorted = true;
                     break;
                 }
 
@@ -1169,8 +1181,18 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.writeAlign(halign);
 
         if (width > 0) { // SORTER
-            htmlWriter.writeStyle().writeWidthPx(
-                    width - getTextRightPadding() - getTextLeftPadding());
+
+            int w = width - getTextRightPadding() - getTextLeftPadding();
+
+            if (sorted) {
+                w -= getSortPadding();
+            }
+
+            if (w < 0) {
+                w = 0;
+            }
+
+            htmlWriter.writeStyle().writeWidthPx(w);
         }
 
         if (column instanceof IImageAccessorsCapability) {
@@ -1249,7 +1271,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(IHtmlWriter.DIV);
     }
 
-    private int getSortPadding() {
+    protected int getSortPadding() {
         return SORT_PADDING;
     }
 
