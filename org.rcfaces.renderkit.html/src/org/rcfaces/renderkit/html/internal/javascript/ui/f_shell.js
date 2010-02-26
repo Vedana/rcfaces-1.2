@@ -252,6 +252,16 @@ var __members = {
 	_returnValue: undefined,
 	
 	/**
+	 * @field protected String
+	 */
+	_title: undefined,
+	
+	/**
+	 * @field protected String
+	 */
+	_shellDecoratorName: undefined,
+
+	/**
 	 * <p>Construct a new <code>f_shell</code> with the specified
      * initial values.</p>
 	 *
@@ -276,6 +286,14 @@ var __members = {
 		this._height=f_shell._DEFAULT_HEIGHT;
 		
 		this._shellManager=f_shellManager.Get();
+		
+		if (this.nodeType==f_core.ELEMENT_NODE) {
+			var shellDecoratorName = f_core.GetAttribute(this, "v:shellDecorator");
+			if (shellDecoratorName) {
+				this._shellDecoratorName = shellDecoratorName;
+			}
+		}
+		
 	},
 
 
@@ -287,6 +305,8 @@ var __members = {
 	 */
 	f_finalize: function() {
 		var shellStatus=this._shellStatus;
+		this._title=undefined;
+		this._shellDecoratorName=undefined;
 		if (shellStatus!=f_shell.CREATED_STATUS &&
 			shellStatus!=f_shell.DESTROYED_STATUS) {
 
@@ -621,6 +641,15 @@ var __members = {
 			f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
 		}
 	},
+		
+	/**
+	 * @method public
+	 * @return String
+	 */
+	f_getTitle: function(title) {
+		return this._title ;
+	},
+	
 	/**
 	 * @method public
 	 * @param String title
@@ -629,11 +658,28 @@ var __members = {
 	f_setTitle: function(title) {
 		f_core.Assert(title===null || typeof(title)=="string", "f_shell.f_setTitle: Invalid title parameter ('"+title+"')");
 
-		if (title) {
-			this._style|=f_shell.TITLE_STYLE;			
+		if (title==this._title) {
+			return;
 		}
 		
-		this._shellManager.f_setShellDecoration(this, f_shellDecorator.TITLE_DECORATOR, title);
+		var styleChanged=false;
+		if (title && !(this._style & f_shell.TITLE_STYLE)) {
+			this._style|=f_shell.TITLE_STYLE;
+			styleChanged=true;
+		}
+		
+		this._title = title;
+		
+		var shellManager = this.f_getShellManager();
+		
+		if (shellManager.f_hasShellDecorator(this)==false) {
+			return;
+		}
+		
+		if (styleChanged) {
+			shellManager.f_setShellDecoration(this, f_shellDecorator.STYLE_DECORATOR, this._style);
+		}
+		shellManager.f_setShellDecoration(this, f_shellDecorator.TITLE_DECORATOR, title);
 	},
 	/**
 	 * @method public
@@ -686,6 +732,31 @@ var __members = {
 
 		this._shellStatus=status;
 	},
+	
+	/**
+	 *  <p>Return the shellDecoratorName String.</p>
+	 *
+	 * @method public 
+	 * @return String shellDecorateurName
+	 */
+	f_getShellDecoratorName: function() {
+		return this._shellDecoratorName;
+	},
+	
+	/**
+	 *  <p>Sets the shellDecoratorName String.</p>
+	 *
+	 * @method public 
+	 * @param String shellDecoratorName
+	 * @return void
+	 */
+	f_setShellDecoratorName: function(shellDecoratorName) {
+    	f_core.Assert((typeof(shellDecoratorName)=="string"), "f_shell.f_setShellDecoratorName: Invalid parameter '"+shellDecoratorName+"'.");
+    	
+		this._shellDecoratorName = shellDecoratorName;
+		
+	},
+	
 	/**
 	 * @method public
 	 * @return String

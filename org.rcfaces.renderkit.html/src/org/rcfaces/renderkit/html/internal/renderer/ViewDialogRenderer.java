@@ -3,11 +3,19 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ViewDialogComponent;
+import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
@@ -70,6 +78,43 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
                 htmlWriter.writeAttribute("v:viewURL", src);
             }
         }
+        List<UISelectItem> children = component.getChildren();
+		int i = 0;
+		Map<String, String> values = new HashMap<String, String>(); 
+		UISelectItem selectItem;
+		while (i < children.size()) {
+			if (children.get(i) instanceof UISelectItem) {
+				selectItem = (UISelectItem) children.get(i);
+				values.put(selectItem.getItemLabel(), selectItem.getItemValue().toString());
+			}
+			i++;
+		}
+		
+		StringAppender datas = new StringAppender(values.size() * 64);
+        for (Iterator it = values.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            String key = (String) entry.getKey();
+            if (key == null || key.length() < 1) {
+                continue;
+            }
+
+            String value = (String) entry.getValue();
+            if (value == null) {
+                continue;
+            }
+
+            if (datas.length() > 0) {
+                datas.append(',');
+            }
+
+            appendData(datas, key, value);
+        }
+        
+        
+        
+        htmlWriter.writeAttribute("v:parameter", datas.toString());
+        System.out.println(datas.toString());
         
         String shellDecorator = component.getShellDecoratorName(facesContext);
         if (shellDecorator != null) {
@@ -97,6 +142,12 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
     protected boolean sendCompleteComponent(
             IHtmlComponentRenderContext htmlComponentContext) {
         return false;
+    }
+    
+    private void appendData(StringAppender datas, String key, String value) {
+        URLFormCodec.encode(datas, key);
+        datas.append('=');
+        URLFormCodec.encode(datas, value);
     }
 
 }

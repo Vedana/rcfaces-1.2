@@ -5499,13 +5499,18 @@ var f_core = {
 
 	/**
 	 * @method hidden static 
-	 * @param HTMLElement Node which defines v:data attribute.
+	 * @param HTMLElement node Node which defines v:data attribute.
+	 * @param optional String attributeName
 	 * @return Object
 	 */
-	ParseDataAttribute: function(node) {
+	ParseDataAttribute: function(node, attributeName) {
 		var clientData=new Object;
 		
-		var att=f_core.GetAttribute(node, "v:data");
+		if (!attributeName) {
+			attributeName="v:data";
+		}
+		
+		var att=f_core.GetAttribute(node, attributeName);
 		if (!att) {
 			return clientData;
 		}

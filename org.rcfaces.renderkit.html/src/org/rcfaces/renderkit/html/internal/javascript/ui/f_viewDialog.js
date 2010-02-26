@@ -34,11 +34,6 @@ var __members = {
 	_viewURL: undefined,
 	
 	/**
-	 * @field private String
-	 */
-	_shellDecoratorName: undefined,
-
-	/**
 	 * @field private HTMLIFrameElement
 	 */
 	_iframe: undefined,
@@ -54,7 +49,7 @@ var __members = {
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			
-			this._shellDecoratorName = f_core.GetAttribute(this, "v:shellDecorator");
+			this._parameters=f_core.ParseDataAttribute(this, "v:parameter");
 			
 			this.f_setViewURL(f_core.GetAttribute(this, "v:viewURL", "about:blank"));
 
@@ -70,16 +65,14 @@ var __members = {
 	 * @method public
 	 */
 	f_finalize: function() {
-		// this._viewURL=undefined // String
-		// this._shellDecoratorName=undefined // String
-
+		// this._viewURL=undefined // string
 		var iframe=this._iframe;
 		if (iframe) {	
 			this._iframe=undefined; // HtmlIFrame
 			
 			this.f_finalizeIframe(iframe);
 		}
-
+		this._parameters=undefined;
 		this.f_super(arguments);		
 	},
 	/**
@@ -118,29 +111,6 @@ var __members = {
 	},
 	
 	/**
-	 *  <p>Return the shell's decorator name.</p>
-	 *
-	 * @method hidden 
-	 * @return String Shell decorator name.
-	 */
-	f_getShellDecoratorName: function() {
-		return this._shellDecoratorName;
-	},
-	
-	/**
-	 *  <p>Sets the shell's decorator name.</p>
-	 *
-	 * @method hidden 
-	 * @param String Shell decorator name.
-	 * @return void
-	 */
-	f_setShellDecoratorName: function(shellDecoratorName) {
-    	f_core.Assert((typeof(shellDecoratorName)=="string"), "f_viewDialog.f_setsShellDecoratorName: Invalid parameter '"+shellDecoratorName+"'.");
-    	
-		this._shellDecoratorName = shellDecoratorName;
-	},
-	
-	/**
 	 *  <p>returns the url to show in the iFrame 
 	 *  </p>
 	 *
@@ -151,6 +121,21 @@ var __members = {
 		var url=this.f_getViewURL();
 		if (!url) {
 			return "about:blank";
+		}
+		
+		var param = this._parameters;
+		if (param){
+			var first=url.indexOf("?")<0;
+			for(var key in param) {
+				if (first) {
+					url+="?";
+					first=false;
+				} else {
+					url+="&";
+				}
+				
+				url+=encodeURIComponent(key)+"="+encodeURIComponent(param[key]);
+			}
 		}
 		
 		var pos=url.indexOf("?");
@@ -267,7 +252,7 @@ var __members = {
 	f_postDestruction: function() {
 		this._iframe=undefined; // HtmlIFrame
 		
-		this.f_sCuper(arguments);
+		this.f_super(arguments);
 	},
 
 	/**

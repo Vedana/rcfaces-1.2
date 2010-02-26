@@ -388,7 +388,7 @@ var __members = {
 		return this._shellBody;
 	},
 	/**
-	 * @method hidden
+	 * @method protected
 	 * @param String key
 	 * @param optional any value
 	 * @return void

@@ -532,7 +532,12 @@ var __members = {
 		
 		var shellId=shell.f_getId();
 		var shellDecorators=this._shellDecorators;
-
+		
+		var title = shell.f_getTitle();
+		if(title){
+			shellDecorator.f_setDecorationValue(f_shellDecorator.TITLE_DECORATOR, title);
+		}
+	
 		if (shellDecorators[shellId]) {
 			throw new Error("Shell decorator is already setted !");
 		}
@@ -682,6 +687,20 @@ var __members = {
 	    	}			
     	}			    
 	},
+	
+	/**
+	 * @method hidden
+	 * @param f_shell shell
+	 * @return Boolean
+	 */
+	f_hasShellDecorator: function (shell) {
+		var shellDecorators=this._shellDecorators;
+		if(shellDecorators[shell.f_getId()]){
+			return false;
+		}
+		return false
+	},
+	
 	/**
 	 * @method hidden
 	 * @param f_shell shell
