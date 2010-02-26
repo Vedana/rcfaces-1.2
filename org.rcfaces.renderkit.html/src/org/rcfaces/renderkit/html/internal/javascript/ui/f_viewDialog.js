@@ -70,8 +70,15 @@ var __members = {
 	 * @method public
 	 */
 	f_finalize: function() {
-		// this._viewURL=undefined // string
-		this._iframe=undefined; // HtmlIFrame
+		// this._viewURL=undefined // String
+		// this._shellDecoratorName=undefined // String
+
+		var iframe=this._iframe;
+		if (iframe) {	
+			this._iframe=undefined; // HtmlIFrame
+			
+			this.f_finalizeIframe(iframe);
+		}
 
 		this.f_super(arguments);		
 	},
@@ -93,8 +100,6 @@ var __members = {
 		return this._viewURL;
 	},
 	
-	
-	
 	/**
 	 *  <p>Sets the viewURL URL.</p>
 	 *
@@ -112,34 +117,29 @@ var __members = {
 		}
 	},
 	
-	
 	/**
-	 *  <p>Return the shellDecoratorName String.</p>
+	 *  <p>Return the shell's decorator name.</p>
 	 *
-	 * @method public 
-	 * @return String viewURL
+	 * @method hidden 
+	 * @return String Shell decorator name.
 	 */
 	f_getShellDecoratorName: function() {
 		return this._shellDecoratorName;
 	},
 	
 	/**
-	 *  <p>Sets the shellDecoratorName String.</p>
+	 *  <p>Sets the shell's decorator name.</p>
 	 *
-	 * @method public 
-	 * @param String shellDecoratorName
+	 * @method hidden 
+	 * @param String Shell decorator name.
 	 * @return void
 	 */
 	f_setShellDecoratorName: function(shellDecoratorName) {
     	f_core.Assert((typeof(shellDecoratorName)=="string"), "f_viewDialog.f_setsShellDecoratorName: Invalid parameter '"+shellDecoratorName+"'.");
     	
 		this._shellDecoratorName = shellDecoratorName;
-		
 	},
 	
-	
-	
-
 	/**
 	 *  <p>returns the url to show in the iFrame 
 	 *  </p>
@@ -170,8 +170,74 @@ var __members = {
 		iframe.style.width=this.f_getWidth();
 		iframe.style.height=this.f_getHeight();
 		
+		var self=this;
+		if (f_core.IsInternetExplorer()) {
+			f_core.Debug(f_viewDialog, "f_fillBody: IE use onreadystatechange ");
+			iframe.onreadystatechange=function() {
+				if (window._rcfacesExiting) {
+					return false;
+				}
+
+				f_core.Debug(f_viewDialog, "f_fillBody: on ready state change: "+this+" state="+this.readyState);
+
+				if (this.readyState != "interactive") {
+					return;
+				}	
+				
+				this.onreadystatechange=null;
+				
+				try {
+					self.f_performFrameReady(this, this.contentWindow.document);
+
+				} catch (x) {					
+					f_core.Error(f_viewDialog, "f_fillBody: f_performFrameReady throws exception.", x);
+				}
+			};
+			
+		} else {
+			f_core.Debug(f_viewDialog, "f_fillBody: Firefox use onload ");
+			iframe.onload=function() {
+				if (window._rcfacesExiting) {
+					return false;
+				}
+
+				f_core.Debug(f_viewDialog, "f_fillBody: on ready state change: "+this+" state="+this.readyState);
+	
+				this.onload=null;
+				
+				try {
+					self.f_performFrameReady(this, this.contentWindow.document);
+
+				} catch (x) {					
+					f_core.Error(f_viewDialog, "f_fillBody: f_performFrameReady throws exception.", x);
+				}
+			};
+		}
+		
 		iframe.src=this.f_getIFrameUrl();
 	},
+	
+	/**
+	 * @method protected
+	 * @param HtmlIFrameElement iframe
+	 * @return void
+	 */
+	f_finalizeIframe: function(iframe) {
+		iframe.onreadystatechange=null;
+		iframe.onload=null;
+		
+		f_core.VerifyProperties(iframe);		
+	},
+	/**
+	 * @method protected
+	 * @param HtmlIFrameElement iframe
+	 * @param Document doc
+	 * @return void
+	 */
+	f_performFrameReady: function(iframe, doc) {
+		f_core.Debug(f_frameShellDecorator, "f_performFrameReady: frame '"+iframe+"' is ready !");
+	},
+	
 	/* Plus nécessaire par la redéfinition de  _OnExit 
 	f_preDestruction: function() {
 		if (window._RCFACES_LEVEL3) {
@@ -201,7 +267,7 @@ var __members = {
 	f_postDestruction: function() {
 		this._iframe=undefined; // HtmlIFrame
 		
-		this.f_super(arguments);
+		this.f_sCuper(arguments);
 	},
 
 	/**
