@@ -10,6 +10,12 @@
  * @version $Revision$ $Date$
  */ 
 var __statics = {
+		
+	
+	/**
+	 * @field hidden static final String
+	 */
+	SELECTION_POST: "selectionPost",
 
 	/**
 	 * @field private static final String
@@ -44,7 +50,8 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.SELECTION, this.f_imageButtonSelect);
 		this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
-		this.f_addEventListener(f_event.SELECTION, this.f_imageButtonSelectEnd);
+		
+		this.f_addEventListener(f_imageButton.SELECTION_POST, this.f_imageButtonSelectEnd);
 		
 		this._tabIndex=this.tabIndex;
 		
@@ -612,7 +619,13 @@ var __members = {
 			}
 		}	
 		
-		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
+		var ret = this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
+		
+		if (ret!==false && type==f_event.SELECTION) {			
+			ret = this.f_super(arguments, f_imageButton.SELECTION_POST, evt, item, value, selectionProvider, detail);
+		}
+		
+		return ret;
 	},
 	fa_getInitialImageURL: function() {
 		var imageElement=this.f_getImageElement();
