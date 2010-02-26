@@ -29,6 +29,8 @@ public class TextTypeTools {
     private static final Map HTML_TYPES = new HashMap(32);
     static {
         HTML_TYPES.put("label", IHtmlWriter.LABEL);
+        HTML_TYPES.put("div", IHtmlWriter.DIV);
+        HTML_TYPES.put("span", IHtmlWriter.SPAN);
         HTML_TYPES.put("emphasis", "em");
         HTML_TYPES.put("cite", "cite");
         HTML_TYPES.put("definition", "dfn");
