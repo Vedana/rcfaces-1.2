@@ -13,6 +13,7 @@ Utilisation de la version 1.1.15 compatible avec JSF 1.2
 
 ViewDialog: 
 Nouvel attribut ShellDecoratorName : permet de definir le nom du décorateur à utiliser.
+Nouvel attribut closable : permet de definir si la boite de diaglogue peut être fermée sans boutons.
 
 Nouvel attribut defaultSelectedDate
 Permet de spécifier une date par défaut, si aucune date n'est sélectionnée !
@@ -59,12 +60,6 @@ Ajout de la méthode "f_performFrameReady" qui est appelée quand le contenu HTML 
 
 SelectItemTools.java:
 Ajout de plusieurs méthodes utilitaires dans SelectItemNode.
-
-TextTypeTools.java:
-Ajout du support des types DIV/SPAN.
-
-f_shellManager.js:
-Correction de l'enchainement des shells.
 
 ----------------------------------------------------------------------
 - @version I2553
