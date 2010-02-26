@@ -60,6 +60,12 @@ Ajout de la méthode "f_performFrameReady" qui est appelée quand le contenu HTML 
 SelectItemTools.java:
 Ajout de plusieurs méthodes utilitaires dans SelectItemNode.
 
+TextTypeTools.java:
+Ajout du support des types DIV/SPAN.
+
+f_shellManager.js:
+Correction de l'enchainement des shells.
+
 ----------------------------------------------------------------------
 - @version I2553
 - @author Olivier Oeuillot
