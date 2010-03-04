@@ -596,4 +596,7 @@ A string value sprecifying the charset associated to the "src" files.
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.JavaScriptCollectorRenderer</renderer-class>
 		</renderer>
 	</render-kit>
+	<lifecycle>
+		<phase-listener>org.rcfaces.renderkit.html.internal.phase.ParameterDecoderPhaseListener</phase-listener>
+	</lifecycle>
 </faces-config>
