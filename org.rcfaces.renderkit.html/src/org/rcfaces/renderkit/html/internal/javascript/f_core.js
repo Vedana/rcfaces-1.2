@@ -213,6 +213,11 @@ var f_core = {
 	_PostSubmitListeners: undefined,
 	
 	/**
+	 * @field private static Number
+	 */
+	_RequestKey: 0,
+	
+	/**
 	 * Throws a message if the expression is true.
 	 *
 	 * @method public static
@@ -5788,6 +5793,15 @@ var f_core = {
 		win.document.forms[0].submit();
 		
 		// f_core._OnExit.call(win); // Appelé par le submit ?!
+	},
+	/**
+	 * Return a unique Key of request.
+	 * 
+	 * @method hidden static
+	 * @return Number
+	 */
+	AllocateRequestKey: function() {
+		return f_core._RequestKey++;
 	},
 	/**
 	 * @method public static
