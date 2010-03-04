@@ -34,6 +34,11 @@ var __members = {
 	_viewURL: undefined,
 	
 	/**
+	 * @field private Map
+	 */
+	_parameters: undefined,
+	
+	/**
 	 * @field private HTMLIFrameElement
 	 */
 	_iframe: undefined,
@@ -82,6 +87,55 @@ var __members = {
 	f_getDefaultFeatures: function() {
 		return f_viewDialog._DEFAULT_FEATURES;
 	},
+	
+	/**
+	 *  <p>Returns value associated to the parameter's key.</p>
+	 *
+	 * @method public 
+	 * @param String key
+	 * @return String value
+	 */
+	f_getParameter: function(key) {
+		f_core.Assert(typeof(key)=="string", "f_viewDialog.f_getParameter: Invalid key parameter ("+key+")");
+
+		if(this._parameters) {
+			return this._parameters[key];
+		}
+		return null;
+	},
+	
+	/**
+	 *  <p>add or replace a parameter.</p>
+	 *
+	 * @method public 
+	 * @param String key
+	 * @param String value
+	 * @return void
+	 */
+	f_setParameter: function(key,value) {
+		f_core.Assert(typeof(key)=="string", "f_viewDialog.f_setParameter: Invalid key parameter ("+key+")");
+		f_core.Assert(typeof(value)=="string", "f_viewDialog.f_setParameter: Invalid value parameter ("+value+")");
+		if(!this._parameters) {
+			this._parameters = new Object;
+		}
+		this._parameters[key] = value;
+	},
+	
+	/**
+	 *  <p>Delete a parameter.</p>
+	 *
+	 * @method public 
+	 * @param String key
+	 * @return void
+	 */
+	f_removeParameter: function(key) {
+		f_core.Assert(typeof(key)=="string", "f_viewDialog.f_removeParameter: Invalid key parameter ("+key+")");
+		if(this._parameters) {
+			delete this._parameters[key];
+		}
+	},
+	
+	
 
 	/**
 	 *  <p>Return the viewURL URL.</p>
@@ -102,7 +156,6 @@ var __members = {
 	 */
 	f_setViewURL: function(viewURL) {
     	f_core.Assert((typeof(viewURL)=="string"), "f_shell.f_setViewURL: Invalid parameter '"+viewURL+"'.");
-    	
 		this._viewURL = f_env.ResolveContentUrl(viewURL);
 		
 		if (this._iframe && this.f_getStatus()==f_shell.OPENED_STATUS) { 
