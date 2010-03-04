@@ -125,25 +125,39 @@ var __members = {
 		
 		var param = this._parameters;
 		if (param){
-			var first=url.indexOf("?")<0;
+			var ds="";
+			var first=true;
+			
 			for(var key in param) {
 				if (first) {
-					url+="?";
 					first=false;
 				} else {
-					url+="&";
+					ds+=",";
 				}
 				
-				url+=encodeURIComponent(key)+"="+encodeURIComponent(param[key]);
+				ds+=encodeURIComponent(key)+"="+encodeURIComponent(param[key]);
+			}
+			
+			ds="__rcfaces_utf8="+encodeURIComponent(ds);
+
+			var pos=url.indexOf("?");
+			if (pos<0) {
+				url+="?"+ds;
+			}  else {
+				url+="&"+ds;
 			}
 		}
 		
+		var requestId="__rcfaces_var="+f_core.AllocateRequestKey();
 		var pos=url.indexOf("?");
 		if (pos<0) {
-			return url+"?vedvar=1";
-		} 
+			url+="?"+requestId;
+			
+		}  else {
+			url=url.substring(0, pos+1)+requestId+"&"+url.substring(pos+1);
+		}
 		
-		return url.substring(0,pos+1)+"vedvar=1&"+url.substring(pos+1);
+		return url;
 	},
 	
 	f_fillBody: function(base) {
