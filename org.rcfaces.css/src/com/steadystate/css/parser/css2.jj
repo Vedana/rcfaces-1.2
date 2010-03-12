@@ -373,8 +373,7 @@ void styleSheetRuleList() :
 {
   ( charsetRule() )?
   ( <S> | <CDO> | <CDC> )*
-  ( importRule() ( <S> | <CDO> | <CDC> )* )*
-  ( ( styleRule() | mediaRule() | pageRule() | fontFaceRule() | unknownRule() ) ( <S> | <CDO> | <CDC> )* )*
+  ( (  importRule() | styleRule() | mediaRule() | pageRule() | fontFaceRule() | unknownRule() ) ( <S> | <CDO> | <CDC> )* )*
 }
 
 //
