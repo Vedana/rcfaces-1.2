@@ -1074,6 +1074,7 @@
 		 <file name="ui/f_viewDialog.js">
 			<class name="f_viewDialog">
 				<required-class name="f_dialog" />
+				<required-class name="fa_immediate" />
 			</class>
 		 </file>
 	</module>
