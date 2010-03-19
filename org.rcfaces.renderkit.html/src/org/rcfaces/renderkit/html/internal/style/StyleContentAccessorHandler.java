@@ -22,6 +22,7 @@ import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
@@ -39,6 +40,7 @@ import org.rcfaces.core.internal.webapp.ExtendedHttpServlet;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
+import org.rcfaces.renderkit.html.internal.renderer.IFrameworkResourceGenerationInformation;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 
 /**
@@ -59,6 +61,8 @@ public class StyleContentAccessorHandler extends
             + ".MERGE_STYLE_FILES";
 
     private static final String VERSION_FILTER_NAME = "version";
+
+    private static final String MERGE_FILTER_NAME = "merge";
 
     private final Map operationsById = new HashMap(32);
 
@@ -121,12 +125,12 @@ public class StyleContentAccessorHandler extends
 
         int pathType = contentAccessor.getPathType();
 
-        if (pathType != IContentAccessor.FILTER_PATH_TYPE) {
+        if (pathType != IContentPath.FILTER_PATH_TYPE) {
 
             // On verifie si la "versionalisation" n'est pas activée
 
             if (resourceVersionHandler == null
-                    || (pathType != IContentAccessor.CONTEXT_PATH_TYPE && pathType != IContentAccessor.RELATIVE_PATH_TYPE)) {
+                    || (pathType != IContentPath.CONTEXT_PATH_TYPE && pathType != IContentPath.RELATIVE_PATH_TYPE)) {
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Path type not supported '" + pathType + "' ("
@@ -160,17 +164,27 @@ public class StyleContentAccessorHandler extends
 
         int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
 
+        boolean frameworkResource = false;
+        if (generationInformation instanceof IFrameworkResourceGenerationInformation) {
+            frameworkResource = ((IFrameworkResourceGenerationInformation) generationInformation)
+                    .isFrameworkResource();
+        }
+
         String filter;
         String newURL;
         int newUrlPathType;
         if (idx < 0) {
-            filter = VERSION_FILTER_NAME;
+            if (frameworkResource) {
+                filter = MERGE_FILTER_NAME;
+            } else {
+                filter = VERSION_FILTER_NAME;
+            }
             newURL = url;
             newUrlPathType = pathType;
 
         } else if (idx == url.length() - 2) { // Filtre tout seul !
             filter = url.substring(0, idx);
-            newUrlPathType = IContentAccessor.FILTER_PATH_TYPE;
+            newUrlPathType = IContentPath.FILTER_PATH_TYPE;
             // throw new FacesException("You can not specify a filter only.");
             newURL = null;
 
@@ -178,7 +192,7 @@ public class StyleContentAccessorHandler extends
             filter = url.substring(0, idx);
             newURL = url.substring(idx
                     + IContentAccessor.FILTER_SEPARATOR.length());
-            newUrlPathType = IContentAccessor.UNDEFINED_PATH_TYPE;
+            newUrlPathType = IContentPath.UNDEFINED_PATH_TYPE;
         }
 
         modifiedContentAccessor = new FiltredContentAccessor(filter,
@@ -254,16 +268,16 @@ public class StyleContentAccessorHandler extends
         IContentStorageEngine contentStorageEngine = rcfacesContext
                 .getContentStorageEngine();
 
-        // Il nous faut un path en relatif !
+        // Il nous faut un path en relatif context !
         switch (resourcePathType) {
-        case IContentAccessor.EXTERNAL_PATH_TYPE:
+        case IContentPath.EXTERNAL_PATH_TYPE:
             throw new FacesException(
                     "Can not make operation on an external URL !");
 
-        case IContentAccessor.CONTEXT_PATH_TYPE:
+        case IContentPath.CONTEXT_PATH_TYPE:
             break;
 
-        case IContentAccessor.ABSOLUTE_PATH_TYPE:
+        case IContentPath.ABSOLUTE_PATH_TYPE:
             String relativeURL = PathTypeTools
                     .convertAbsolutePathToContextType(facesContext, resourceURL);
 
@@ -275,7 +289,7 @@ public class StyleContentAccessorHandler extends
             resourceURL = relativeURL;
             break;
 
-        case IContentAccessor.RELATIVE_PATH_TYPE:
+        case IContentPath.RELATIVE_PATH_TYPE:
             IProcessContext processContext = AbstractProcessContext
                     .getProcessContext(facesContext);
 

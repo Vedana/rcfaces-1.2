@@ -19,7 +19,9 @@ import org.rcfaces.core.internal.content.AbstractBufferOperationContentModel;
 import org.rcfaces.core.internal.content.IBufferOperation;
 import org.rcfaces.core.internal.content.IFileBuffer;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.BasicContentPath;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -33,7 +35,7 @@ import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.internal.version.ResourceVersionHandlerImpl;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.renderkit.html.internal.renderer.FilesCollectorGenerationInformation;
+import org.rcfaces.renderkit.html.internal.renderer.CssStyleRenderer.CssFilesCollectorGenerationInformation;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser;
 import org.rcfaces.renderkit.html.internal.style.CssParserFactory.ICssParser.IParserContext;
 import org.rcfaces.renderkit.html.internal.util.FileItemSource;
@@ -113,51 +115,65 @@ public class CssOperationContentModel extends
                     contentInfo);
         }
 
-        if (generationInformation instanceof FilesCollectorGenerationInformation) {
-            FileItemSource sources[] = ((FilesCollectorGenerationInformation) generationInformation)
-                    .listSources();
+        IResourceVersionHandler _resourceVersionHandler = this.resourceVersionHandler;
+
+        if (generationInformation instanceof CssFilesCollectorGenerationInformation) {
+            CssFilesCollectorGenerationInformation cs = (CssFilesCollectorGenerationInformation) generationInformation;
+
+            if (cs.isFrameworkResource()) {
+                _resourceVersionHandler = null;
+            }
+
+            FileItemSource sources[] = cs.listSources();
 
             if (sources != null && sources.length > 0) {
                 StringAppender sa = null;
 
+                IPath path = null;
+                if (resourceURL != null) {
+                    IPath sourcePath = new Path(resourceURL);
+                    IPath parent = new Path("..");
+                    path = parent;
+
+                    for (int i = 2; i < sourcePath.segmentCount(); i++) {
+                        path = path.append(parent);
+                    }
+                }
+
                 for (int i = 0; i < sources.length; i++) {
                     FileItemSource source = sources[i];
 
-                    ContentInformation contentInfo2[] = new ContentInformation[1];
-
-                    String cs = source.getCharSet();
-                    if (cs == null) {
-                        cs = getDefaultCharset();
+                    if (source.isFrameworkResource()) {
+                        // On desactive le versioning !
+                        _resourceVersionHandler = null;
                     }
 
-                    String styleSheet2 = loadContent(facesContext,
-                            resourceLoaderFactory, source.getSource(), cs,
-                            contentInfo2);
-                    if (styleSheet2 == null) {
-                        continue;
+                    String sourcePath = source.getSource();
+
+                    IContentPath bca = new BasicContentPath(null, sourcePath);
+                    String resolvedSourcePath = bca.convertToPathType(
+                            facesContext, IContentPath.CONTEXT_PATH_TYPE);
+
+                    if (path != null) {
+                        IPath pr = path.append(new Path(resolvedSourcePath));
+
+                        resolvedSourcePath = pr.toString();
                     }
 
                     if (sa == null) {
                         if (styleSheetContent != null) {
                             sa = new StringAppender(styleSheetContent,
-                                    styleSheet2.length()
+                                    sources.length * 64
                                             + STYLESHEET_BUFFER_INITIAL_SIZE);
                         } else {
-                            sa = new StringAppender(styleSheet2.length()
+                            sa = new StringAppender(sources.length * 64
                                     + STYLESHEET_BUFFER_INITIAL_SIZE);
                         }
                     }
 
-                    sa.append(styleSheet2);
+                    sa.append("\n@import url(\"").append(resolvedSourcePath)
+                            .append("\");\n");
 
-                    if (contentInfo2[0] != null) {
-                        if (contentInfo[0] == null) {
-                            contentInfo[0] = contentInfo2[0];
-
-                        } else {
-                            contentInfo[0].merge(contentInfo2[0]);
-                        }
-                    }
                 }
 
                 if (sa != null) {
@@ -170,7 +186,7 @@ public class CssOperationContentModel extends
             try {
                 IParserContext parserContext = new ParserContext(facesContext,
                         contentInfo[0].getCharSet(), contentInfo[0]
-                                .getLastModified(), resourceVersionHandler);
+                                .getLastModified(), _resourceVersionHandler);
 
                 String newStyleSheetContent = filter(applicationParameters,
                         resourceLoaderFactory, cssParser, resourceURL,
@@ -370,7 +386,7 @@ public class CssOperationContentModel extends
 
             IContentAccessor contentAccessor = new BasicContentAccessor(
                     facesContext, contextPath.toString(),
-                    IContentAccessor.CONTEXT_PATH_TYPE, contentFamily);
+                    IContentPath.CONTEXT_PATH_TYPE, contentFamily);
 
             if (IContentFamily.STYLE.equals(contentFamily) == false) {
                 // Le style se versionne tout seul !
@@ -381,7 +397,7 @@ public class CssOperationContentModel extends
             }
 
             String versionedURL = contentAccessor.resolveURL(getFacesContext(),
-                    null, null, IContentAccessor.CONTEXT_PATH_TYPE);
+                    null, null, IContentPath.CONTEXT_PATH_TYPE);
             if (versionedURL.startsWith("/")) {
                 versionedURL = versionedURL.substring(1);
             }

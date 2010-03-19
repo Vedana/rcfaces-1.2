@@ -124,8 +124,8 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                     }
 
                     if (sources != null) {
-                        generationInformation = new FilesCollectorGenerationInformation(
-                                sources);
+                        generationInformation = new CssFilesCollectorGenerationInformation(
+                                sources, false);
                     }
                 }
 
@@ -187,8 +187,11 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                             .createFromWebResource(facesContext, itemSrc,
                                     IContentFamily.STYLE);
 
+                    CssFilesCollectorGenerationInformation generation = new CssFilesCollectorGenerationInformation(
+                            null, source.isFrameworkResource());
+
                     itemSrc = contentAccessor.resolveURL(facesContext, null,
-                            null);
+                            generation);
 
                     htmlWriter.writeHRef(itemSrc);
 
@@ -244,7 +247,7 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
                                 .getHtmlComponentRenderContext()
                                 .getFacesContext(), uri);
 
-                sl.add(new FileItemSource(uri, null, null));
+                sl.add(new FileItemSource(uri, null, null, true));
             }
         }
 
@@ -265,6 +268,35 @@ public class CssStyleRenderer extends AbstractFilesCollectorRenderer {
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
         return new CssFilesCollectorDecorator(component);
+    }
+
+    public static class CssFilesCollectorGenerationInformation extends
+            FilesCollectorGenerationInformation implements
+            IFrameworkResourceGenerationInformation {
+
+        private static final String FRAMEWORK_ATTRIBUTE = "org.rcfaces.FrameworkResource";
+
+        public CssFilesCollectorGenerationInformation(FileItemSource[] sources,
+                boolean frameworkResource) {
+            super(sources);
+
+            if (sources != null && frameworkResource == false) {
+                for (int i = 0; i < sources.length; i++) {
+                    if (sources[i].isFrameworkResource()) {
+                        frameworkResource = true;
+                        break;
+                    }
+                }
+            }
+
+            if (frameworkResource) {
+                setAttribute(FRAMEWORK_ATTRIBUTE, Boolean.TRUE);
+            }
+        }
+
+        public boolean isFrameworkResource() {
+            return Boolean.TRUE.equals(getAttribute(FRAMEWORK_ATTRIBUTE));
+        }
     }
 
 }

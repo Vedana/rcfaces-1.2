@@ -529,6 +529,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             return;
         }
 
+        boolean versionned = false;
+
         if (moduleRepository.getVersion() != null) {
             String version = null;
             if (Constants.VERSIONED_FRAMEWORK_URL_SUPPORT) {
@@ -550,6 +552,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             if (version != null) {
+                versionned = true;
+
                 String repositoryVersion = moduleRepository.getVersion();
                 if (repositoryVersion != null) {
                     if (repositoryVersion.equals(version) == false) {
@@ -591,11 +595,12 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             return;
         }
 
-        responseFacade.send(request, response);
+        responseFacade.send(request, response, versionned);
     }
 
     private Response record200(String url, InputStream in, int size,
-            long lastModified) throws IOException, ServletException {
+            long lastModified, boolean versionned) throws IOException,
+            ServletException {
 
         int ex = url.lastIndexOf('.');
         int ex2 = url.lastIndexOf('/');
@@ -665,7 +670,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
 
         Response res = new BytesResponse(workBytes, mimeType, bufferGZIP,
-                lastModified);
+                lastModified, versionned);
 
         return res;
     }
@@ -704,8 +709,8 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         }
 
         public synchronized void send(HttpServletRequest httpRequest,
-                HttpServletResponse httpResponse) throws IOException,
-                ServletException {
+                HttpServletResponse httpResponse, boolean versionned)
+                throws IOException, ServletException {
             if (url.indexOf("..") >= 0 || url.indexOf("//") >= 0
                     || url.indexOf("\\") >= 0) {
                 throw new ServletException("Invalid url '" + url + "'");
@@ -728,7 +733,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
                 URIParameters uriParameters = URIParameters.parseURI(url);
                 if (uriParameters != null && uriParameters.getAgent() != null) {
-                    
+
                     String urlAgent = uriParameters.getAgent();
                     // Un parametre dans l'URL
                     urlAgentClientBrowser = ClientBrowserFactory.Get()
@@ -806,7 +811,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             }
 
             try {
-                setResponse(record200(url, in, size, lastModified),
+                setResponse(record200(url, in, size, lastModified, versionned),
                         httpRequest, httpResponse, true);
                 return;
 
@@ -898,12 +903,15 @@ public class StylesheetsServlet extends HtmlModulesServlet {
 
         private final String hash;
 
+        private final boolean versionned;
+
         public BytesResponse(byte[] buffer, String mimeType, byte bufferGZIP[],
-                long lastModified) {
+                long lastModified, boolean versionned) {
             super(mimeType);
 
             this.buffer = buffer;
             this.bufferGZIP = bufferGZIP;
+            this.versionned = versionned;
 
             this.lastModified = lastModified;
 
@@ -920,6 +928,10 @@ public class StylesheetsServlet extends HtmlModulesServlet {
             } else {
                 hash = null;
             }
+        }
+
+        protected boolean isVersionned() {
+            return versionned;
         }
 
         protected byte[] getBuffer() {

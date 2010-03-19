@@ -26,6 +26,8 @@ public class FileItemSource implements StateHolder, IResourceKeyParticipant {
 
     private boolean transientState;
 
+    private boolean frameworkResource;
+
     public FileItemSource(SelectItem selectItem) {
         source = (String) selectItem.getValue();
 
@@ -34,10 +36,13 @@ public class FileItemSource implements StateHolder, IResourceKeyParticipant {
         }
     }
 
-    public FileItemSource(String source, String userAgentVary, String charSet) {
+    public FileItemSource(String source, String userAgentVary, String charSet,
+            boolean frameworkResource) {
         this.source = source;
 
         this.charSet = charSet;
+
+        this.frameworkResource = frameworkResource;
     }
 
     public FileItemSource() {
@@ -49,6 +54,10 @@ public class FileItemSource implements StateHolder, IResourceKeyParticipant {
 
     public String getCharSet() {
         return charSet;
+    }
+
+    public boolean isFrameworkResource() {
+        return frameworkResource;
     }
 
     public boolean isTransient() {

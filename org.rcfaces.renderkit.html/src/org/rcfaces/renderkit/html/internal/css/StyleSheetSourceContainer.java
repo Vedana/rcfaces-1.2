@@ -4,6 +4,8 @@
  */
 package org.rcfaces.renderkit.html.internal.css;
 
+import java.io.IOException;
+import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +44,7 @@ public class StyleSheetSourceContainer extends SourceContainer {
     protected StringAppender preConstructBuffer(
             BasicParameterizedContent parameterizedBuffer, StringAppender buffer) {
 
-        buffer.append("@charset \"").append(getCharSet()).append("\";");
+        buffer.append("@charset \"").append(getCharSet()).append("\";\n");
 
         return buffer;
     }
@@ -73,6 +75,27 @@ public class StyleSheetSourceContainer extends SourceContainer {
         return new UserAgentSourceFile();
     }
 
+    protected void addURLContent(URLConnection urlConnection,
+            StringAppender buffer) throws IOException {
+
+        StringAppender defferedBuffer = new StringAppender(32000);
+
+        super.addURLContent(urlConnection, defferedBuffer);
+
+        String db = defferedBuffer.toString();
+        int idx = db.indexOf('\n');
+        if (idx > 0) {
+            String firstList = db.substring(0, idx).toLowerCase();
+            if (firstList.startsWith("@charset")) {
+                buffer.append(defferedBuffer, idx + 1, defferedBuffer.length()
+                        - idx - 1);
+                return;
+            }
+        }
+
+        buffer.append(defferedBuffer);
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -87,6 +110,11 @@ public class StyleSheetSourceContainer extends SourceContainer {
 
         public void setUserAgent(String userAgent) {
             this.userAgent = userAgent;
+        }
+
+        public String toString() {
+            return "[UserAgentSourceFile fileName='" + getFileName()
+                    + "' userAgent='" + getUserAgent() + "']";
         }
 
     }
