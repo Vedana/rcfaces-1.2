@@ -126,6 +126,8 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @param f_event evt
+	 * @return Boolean
 	 */
 	f_performSelectionEvent: function(evt) {
 		if (this.f_isDisabled()) {
