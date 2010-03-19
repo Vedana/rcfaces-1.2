@@ -391,6 +391,14 @@ var __members = {
 		
 		return this._selectElementsRange(l, appendSelection, false, elements);
 	},
+	/**
+	 * @method private
+	 * @param Array<T> l
+	 * @param Boolean appendSelection
+	 * @param Boolean show
+	 * @param Array<Object> elements
+	 * @return void
+	 */
 	_selectElementsRange: function(l, appendSelection, show, elements) {
 		if (f_core.IsDebugEnabled(fa_selectionManager)) {
 			var s="Range select: "+l.length+" elements: ";
