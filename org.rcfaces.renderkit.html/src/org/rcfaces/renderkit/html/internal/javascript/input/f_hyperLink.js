@@ -50,7 +50,7 @@ var __members = {
 		
 		this.f_setProperty(f_prop.TEXT,text);
 	},
-	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
+	f_fireEvent: function(type, evt, item, value, selectionProvider, detail, stage) {
 		if (type==f_event.SELECTION) {			
 			if (this.f_isReadOnly() || this.f_isDisabled()) {
 				return false;
@@ -61,7 +61,7 @@ var __members = {
 			}
 		}	
 		
-		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
+		return this.f_super(arguments, type, evt, item, value, selectionProvider, detail, stage);
 	}
 }
 new f_class("f_hyperLink", {
