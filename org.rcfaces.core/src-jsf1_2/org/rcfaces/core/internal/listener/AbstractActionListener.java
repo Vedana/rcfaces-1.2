@@ -4,6 +4,8 @@
  */
 package org.rcfaces.core.internal.listener;
 
+import java.util.Arrays;
+
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
@@ -152,9 +154,21 @@ abstract class AbstractActionListener implements StateHolder,
             MethodExpression methodBinding, Object parameters[],
             FacesEvent event) {
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Try method expression '" + methodBinding
+                    + "' parameters='" + Arrays.asList(parameters)
+                    + "' event='" + event + "'");
+        }
+
         try {
             Object ret = methodBinding.invoke(facesContext.getELContext(),
                     parameters);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Call method expression '" + methodBinding
+                        + "' parameters='" + Arrays.asList(parameters)
+                        + "' event='" + event + "' returns '" + ret + "'");
+            }
 
             processReturn(facesContext, methodBinding, event, ret);
 
@@ -183,10 +197,23 @@ abstract class AbstractActionListener implements StateHolder,
             }
 
             return processException(ex, event);
+
+        } catch (RuntimeException ex) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Evaluation exception for expression '" + expression
+                        + "'.", ex);
+            }
+
+            throw ex;
         }
     }
 
     protected Exception processException(ELException ex, FacesEvent event) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Process exception '" + ex + "' event='" + event
+                    + "', ex");
+        }
 
         Throwable cause = ex.getCause();
 
@@ -201,7 +228,7 @@ abstract class AbstractActionListener implements StateHolder,
         if (cause instanceof PropertyNotFoundException) {
             return (Exception) cause;
         }
-        
+
         if (cause instanceof NoSuchMethodException) {
             return (Exception) cause;
         }
