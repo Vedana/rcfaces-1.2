@@ -151,6 +151,21 @@ public final class StringAppender implements CharSequence {
         return this;
     }
 
+    public StringAppender append(StringAppender sb, int offset, int len) {
+        if (sb == null) {
+            return append((String) null);
+        }
+
+        int newcount = count + len;
+        if (newcount > value.length) {
+            expandCapacity(newcount);
+        }
+
+        sb.getChars(offset, offset + len, value, count);
+        count = newcount;
+        return this;
+    }
+
     public StringAppender append(char str[]) {
         return append(str, 0, str.length);
     }
