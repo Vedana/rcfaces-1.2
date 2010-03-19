@@ -59,7 +59,7 @@ var __members = {
 	fa_focusMenuItem: function(item) {
 		// Ca sert au changement de menuBarItem !
 	},
-	f_fireEvent: function(type, jsEvt, item, value, selectionProvider) {
+	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail, stage) {
 		var redir=this._redirectEvents;
 		if (redir) {
 			f_core.Assert(typeof(redir.f_fireEvent)=="function", "f_menu.f_fireEvent: Invalid redir object ("+redir+")");
@@ -69,7 +69,7 @@ var __members = {
 			return redir.f_fireEvent.apply(redir, arguments);
 		}
 		
-		return this.f_super(arguments, type, jsEvt, item, value, selectionProvider);
+		return this.f_super(arguments, type, jsEvt, item, value, selectionProvider, detail, stage);
 	},
 	/** 
 	 * @method public
