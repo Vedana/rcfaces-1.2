@@ -33,10 +33,35 @@ abstract class AbstractRenderKitRegistryImpl {
                 return renderKitsById;
             }
 
-            renderKitsById = new HashMap(16);
+            Map applicationMap = null;
+            String applicationPropertyId = getApplicationPropertyId();
+            if (applicationPropertyId != null) {
+
+                if (facesContext == null) {
+                    facesContext = FacesContext.getCurrentInstance();
+                }
+
+                applicationMap = facesContext.getExternalContext()
+                        .getApplicationMap();
+
+                renderKitsById = (Map) applicationMap
+                        .get(applicationPropertyId);
+            }
+
+            if (renderKitsById == null) {
+                renderKitsById = new HashMap(16);
+
+                if (applicationMap != null) {
+                    applicationMap.put(applicationPropertyId, renderKitsById);
+                }
+            }
 
             return renderKitsById;
         }
+    }
+
+    protected String getApplicationPropertyId() {
+        return null;
     }
 
     protected final RenderKit getRenderKit(FacesContext facesContext,

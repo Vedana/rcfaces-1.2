@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -80,7 +79,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
             ResourceVersionHandlerImpl.class.getPackage(),
             ResourceProxyHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
-//            ImageContentAccessorHandlerImpl.class.getPackage(),
+            // ImageContentAccessorHandlerImpl.class.getPackage(),
             ContentAccessorsRegistryImpl.class.getPackage(),
             ContentStorageAccessorHandler.class.getPackage(),
             RepositoryManagerImpl.class.getPackage() };
@@ -205,7 +204,11 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
         LOG.error("Can not find Services Registry into lifeCycle factories.");
 
-        throw new FacesException("Can not find ServicesRegistry !");
+        // On en créée un en attendant !
+        ServicesRegistryImpl services = new ServicesRegistryImpl();
+        services.initialize(null);
+
+        return services;
     }
 
     public final IClientValidatorsRegistry getClientValidatorsRegistry() {

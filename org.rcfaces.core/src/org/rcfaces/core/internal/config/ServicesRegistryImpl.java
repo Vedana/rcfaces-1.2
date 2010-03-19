@@ -42,7 +42,13 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
 
     private static final String SERVICE_WAIT_PROPERTY = "org.rcfaces.core.services.WAIT";
 
+    private static final String SERVICE_PROPERTY = "org.rcfaces.core.config.SERVICE_REGISTRY";
+
     public ServicesRegistryImpl() {
+    }
+
+    protected String getApplicationPropertyId() {
+        return SERVICE_PROPERTY;
     }
 
     public IService getService(FacesContext facesContext, String renderKitId,
