@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Delay;
 
 /**
@@ -152,6 +153,54 @@ public class ExpirationDate implements Serializable {
 
     public long getExpiresDelay() {
         return expiresDelay;
+    }
+
+    public String toString() {
+        StringAppender sa = new StringAppender("[ExpirationDate", 128);
+
+        if (expiresDate > 0) {
+            sa.append(" expiresDate='");
+            sa.append(new SimpleDateFormat().format(new Date(expiresDate)));
+            sa.append('\'');
+        }
+
+        if (expiresDelay > 0) {
+            sa.append(" expiresDelay='");
+            long d = expiresDelay;
+            if (d >= Delay.YEAR) {
+                sa.append(" YEAR=").append(d / Delay.YEAR);
+                d %= Delay.YEAR;
+            }
+            if (d >= Delay.MONTH) {
+                sa.append(" MONTH=").append(d / Delay.MONTH);
+                d %= Delay.MONTH;
+            }
+            if (d >= Delay.DAY) {
+                sa.append(" DAY=").append(d / Delay.DAY);
+                d %= Delay.DAY;
+            }
+            if (d >= Delay.HOUR) {
+                sa.append(" HOUR=").append(d / Delay.HOUR);
+                d %= Delay.HOUR;
+            }
+            if (d >= Delay.MINUTE) {
+                sa.append(" MINUTE=").append(d / Delay.MINUTE);
+                d %= Delay.MINUTE;
+            }
+            if (d >= Delay.SECOND) {
+                sa.append(" SECOND=").append(d / Delay.SECOND);
+                d %= Delay.SECOND;
+            }
+            if (d > 0) {
+                sa.append(" MILLIS=").append(d);
+            }
+
+            sa.append('\'');
+        }
+
+        sa.append(']');
+
+        return sa.toString();
     }
 
 }
