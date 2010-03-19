@@ -94,6 +94,17 @@ public class Delay {
                 continue;
             }
 
+            if (token.equalsIgnoreCase("y")) {
+                if (cv == false) {
+                    throw new ParseException(
+                            "Specified 'y' token, but no value defined ! expression='"
+                                    + value + "'  token='" + token + "'", 0);
+                }
+                cv = false;
+                total += current * Delay.YEAR;
+                continue;
+            }
+
             if (token.equalsIgnoreCase("w")) {
                 if (cv == false) {
                     throw new ParseException(
