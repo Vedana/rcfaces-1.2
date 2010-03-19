@@ -53,12 +53,19 @@ public class BindingTools {
             if (facesContext == null) {
                 facesContext = FacesContext.getCurrentInstance();
             }
+
             object = ((ValueExpression) object).getValue(facesContext
                     .getELContext());
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Get value of binding => " + object);
             }
+
+            return object;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Unknown type of value  => " + object);
         }
 
         return object;
@@ -154,12 +161,20 @@ public class BindingTools {
     }
 
     public static void invokeActionListener(FacesContext facesContext,
-            UICommand component, ActionEvent facesEvent) {
+            UICommand component, ActionEvent actionEvent) {
 
         // Notify the specified action listener method (if any)
         MethodExpression me = component.getActionExpression();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("invokeAction on '" + component + "' actionEvent='"
+                    + actionEvent + " => methodExpression='" + me + "'");
+        }
+
         if (me != null) {
-            me.invoke(facesContext.getELContext(), new Object[] { facesEvent });
+            me
+                    .invoke(facesContext.getELContext(),
+                            new Object[] { actionEvent });
         }
     }
 
@@ -170,7 +185,7 @@ public class BindingTools {
         if (ve == null) {
             return;
         }
-        
+
         try {
             ve.setValue(context.getELContext(), value);
 

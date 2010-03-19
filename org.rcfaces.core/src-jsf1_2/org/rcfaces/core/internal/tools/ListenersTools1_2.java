@@ -49,6 +49,13 @@ public class ListenersTools1_2 extends ListenersTools {
     public static final void parseAction(FacesContext facesContext,
             UIComponent component, IListenerType listenerType, String expression) {
         expression = expression.trim();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("ParseAction  component='" + component
+                    + "' listenerType='" + listenerType + "' expression='"
+                    + expression + "'.");
+        }
+
         if (expression.length() < 1) {
             return;
         }

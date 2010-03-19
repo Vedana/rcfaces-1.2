@@ -319,7 +319,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
         if (component instanceof NamingContainer) {
             boolean writeNamingContainer = true;
-            
+
             if (component instanceof IPrependIdCapability) {
                 if (((IPrependIdCapability) component).isPrependId() == false) {
                     writeNamingContainer = false;
@@ -453,9 +453,20 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Decode component='" + component + "' eventComponent="
+                    + componentData.isEventComponent() + " componentData='"
+                    + componentData + "'.");
+        }
+
         if (hasComponenDecoratorSupport()) {
             IComponentDecorator componentDecorator = getComponentDecorator(
                     context.getFacesContext(), component);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Decode decorator '" + componentDecorator + "'.");
+            }
+
             if (componentDecorator != null) {
                 componentDecorator.decode(context, component, componentData);
             }
@@ -678,15 +689,16 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         IEventDecoder eventDecoder = getEventDecoder(requestContext, component,
                 eventData);
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Decode event type='" + eventData.getEventName()
+                    + "' for component='" + component.getId() + "' eventData='"
+                    + eventData + "' eventDecoder='" + eventDecoder + "'.");
+        }
+
         if (eventDecoder == null) {
             LOG.error("Unknown decoder for event name '"
                     + eventData.getEventName() + "'.");
             return;
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Decode event type='" + eventData.getEventName()
-                    + "' for component='" + component.getId() + "'.");
         }
 
         eventDecoder.decodeEvent(requestContext, component, eventData, this);
