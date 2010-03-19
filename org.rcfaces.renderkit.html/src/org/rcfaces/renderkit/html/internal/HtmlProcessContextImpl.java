@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
@@ -153,7 +154,7 @@ public class HtmlProcessContextImpl extends AbstractProcessContext implements
 
         contentAccessor.setContentVersionHandler(null); // Pas besoin de version
         // !
-        contentAccessor.setPathType(IContentAccessor.CONTEXT_PATH_TYPE);
+        contentAccessor.setPathType(IContentPath.CONTEXT_PATH_TYPE);
 
         return contentAccessor;
     }
