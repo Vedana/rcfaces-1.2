@@ -35,6 +35,11 @@ var f_core = {
 	/**
 	 * @field private static final String
 	 */
+	_OBJECT_VALUE:				"VFC_OVALUE",
+
+	/**
+	 * @field private static final String
+	 */
 	_ITEM:				"VFC_ITEM",
 
 	/**
@@ -112,6 +117,16 @@ var f_core = {
 	 */
 	INTERNET_EXPLORER_7: "iexplorer.7",
 
+	/**
+	 * @field hidden static final String
+	 */
+	REQUEST_PARAMETERS_UTF8: "__rcfaces_utf8",
+
+	/**
+	 * @field hidden static final String
+	 */
+	REQUEST_PARAMETERS_KEY: "__rcfaces_requestKey",	
+		
 	/**
 	 * @field private static final String
 	 */
@@ -1252,11 +1267,11 @@ var f_core = {
 		f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core.SetInputHidden: Invalid form component ! "+form);
 		f_core.Assert(name, "f_core.SetInputHidden: Invalid name of hidden input ! ("+name+")");
 		
-		if (val) {
+		if (val!==null && val!==undefined) {
 			switch (typeof(val)) {
 			case "string":
 				break;
-
+	
 			case "boolean":
 			case "number":
 				val=String(val);
@@ -1294,7 +1309,7 @@ var f_core = {
 			return;
 		}
 		
-		if (!val) {
+		if (val===null || val===undefined) {
 			// Il est vide : on laisse tomber ...
 			return;
 		}
@@ -1871,6 +1886,13 @@ var f_core = {
 			
 			var eventValue=(event)?event.f_getValue():null;
 			f_core.SetInputHidden(form, f_core._VALUE, eventValue);
+			
+			var typeValue=typeof(eventValue);
+			if (typeValue!="undefined" && typeValue!="string" && eventValue!==null) {
+				var encodedValue=f_core.EncodePrimitive(eventValue);
+				
+				f_core.SetInputHidden(form, f_core._OBJECT_VALUE, encodedValue);
+			}
 		
 			var eventItem=(event)?event.f_getItem():null;
 			if (eventItem) {
@@ -4038,6 +4060,112 @@ var f_core = {
 		return null;
 	},
 	/**
+	 * @method private static 
+	 * @param Array d
+	 * @param Object v
+	 * @return void
+	 */
+	_EncodeField: function(d, v) {
+		if (v===null || v===undefined) {
+			d.push("L");
+			return;
+		}
+
+		if (v===true) {
+			d.push("T");
+			return;
+		}			
+
+		if (v===false) {
+			d.push("F");
+			return;
+		}
+		
+		if (v==="") {
+			// Vide !
+			return;
+		}
+		
+		if (v instanceof Array) {
+			var l=v.length;
+			
+			if (!l) {
+				d.push("[0]");
+				return;
+			}
+			
+			d.push("[", String(l), ":");
+
+			for(var i=0;i<l;i++) {
+				if (i) {
+					d.push(',');
+				}
+					
+				arguments.callee(d, v[i]);
+			}
+			
+			d.push("]");
+
+			return;
+		}
+		
+		if (typeof(v)=="number") {
+			if (!v) {
+				d.push("0");
+				return;
+			}
+			
+//			d+="N";
+			
+			var fixed=v.toFixed();
+			if (fixed==v) {
+				v=fixed;
+			}
+			
+			if (v<0.0) {
+				d.push("-");
+				v=-v;
+			}
+			
+		} else if (typeof(v)=="string") {
+			d.push("S");
+			
+		} else if (v instanceof Date) {
+			d.push("D");
+			v=f_core.SerializeDate(v);
+			
+		} else if (v instanceof Document) {
+			d.push("X");
+			v=f_xml.Serialize(v);
+			
+		} else if (f_class.IsClassDefined("f_time") && (v instanceof f_time)) {
+			d.push("M");
+			v=f_time.Serialize(v);
+			
+		} else if (f_class.IsClassDefined("f_period") && (v instanceof f_period)) {
+			d.push("P");
+			v=f_period.Serialize(v);
+
+		} else {
+			f_core.Error(f_core, "EncodeObject: Can not serialize '"+v+"'.");
+			return;
+		}
+		
+		d.push(encodeURIComponent(v));
+	},
+	/**
+	 * @method hidden static 
+	 * @param Object v
+	 * @return String
+	 */
+	EncodePrimitive: function(v) {
+		var d=new Array;
+		
+		f_core._EncodeField(d, v);
+		
+		return d.join('');
+	},
+	/**
 	 * @method hidden static 
 	 * @param Object p
 	 * @param optional String sep
@@ -4051,95 +4179,6 @@ var f_core = {
 		
 		var d = new Array;
 		
-		function f(d, v) {
-			if (v===null || v===undefined) {
-				d.push("L");
-				return;
-			}
-
-			if (v===true) {
-				d.push("T");
-				return;
-			}			
-
-			if (v===false) {
-				d.push("F");
-				return;
-			}
-			
-			if (v==="") {
-				// Vide !
-				return;
-			}
-			
-			if (v instanceof Array) {
-				var l=v.length;
-				
-				if (!l) {
-					d.push("[0]");
-					return;
-				}
-				
-				d.push("[", String(l), ":");
-
-				for(var i=0;i<l;i++) {
-					if (i) {
-						d.push(',');
-					}
-						
-					arguments.callee(d, v[i]);
-				}
-				
-				d.push("]");
-
-				return;
-			}
-			
-			if (typeof(v)=="number") {
-				if (!v) {
-					d.push("0");
-					return;
-				}
-				
-//				d+="N";
-				
-				var fixed=v.toFixed();
-				if (fixed==v) {
-					v=fixed;
-				}
-				
-				if (v<0.0) {
-					d.push("-");
-					v=-v;
-				}
-				
-			} else if (typeof(v)=="string") {
-				d.push("S");
-				
-			} else if (v instanceof Date) {
-				d.push("D");
-				v=f_core.SerializeDate(v);
-				
-			} else if (v instanceof Document) {
-				d.push("X");
-				v=f_xml.Serialize(v);
-				
-			} else if (f_class.IsClassDefined("f_time") && (v instanceof f_time)) {
-				d.push("M");
-				v=f_time.Serialize(v);
-				
-			} else if (f_class.IsClassDefined("f_period") && (v instanceof f_period)) {
-				d.push("P");
-				v=f_period.Serialize(v);
-
-			} else {
-				f_core.Error(f_core, "EncodeObject: Can not serialize '"+v+"'.");
-				return;
-			}
-			
-			d.push(encodeURIComponent(v));
-		}
-		
 		for (var i in p) {
 			if (d.length) { 
 				d.push(sep);
@@ -4147,7 +4186,7 @@ var f_core = {
 			
 			d.push(i, "=");
 			
-			f(d, p[i]);
+			f_core._EncodeField(d, p[i]);
 		}
 	
 		return d.join('');
@@ -4592,13 +4631,17 @@ var f_core = {
 		return f_core.GetEvtButton(evt)==f_core._POPUP_BUTTON;
 	},
 	/** 
-	 * @method hidden static
+	 * @method public static
+	 * @param Event evt
+	 * @return boolean
 	 */
 	IsAppendMode: function(evt) {
 		return evt.ctrlKey;
 	},
 	/** 
-	 * @method hidden static
+	 * @method public static
+	 * @param Event evt
+	 * @return boolean
 	 */
 	IsAppendRangeMode: function(evt) {
 		return evt.shiftKey;
@@ -5798,25 +5841,33 @@ var f_core = {
 	 * Return a unique Key of request.
 	 * 
 	 * @method hidden static
-	 * @return Number
+	 * @return String
 	 */
 	AllocateRequestKey: function() {
-		return f_core._RequestKey++;
+		return String(f_core._RequestKey++);
 	},
 	/**
 	 * @method public static
-	 * @param String url
-	 * @param String parameterName
-	 * @param String... parameterValue
-	 * @return String
+	 * @param optional String url
+	 * @return Map<String, String>
 	 */
-	AddParameter: function(url, parameterName, parameterValue) {
-		var params={};
+	ListParameters: function(url) {		
+		f_core.Assert(url===undefined || typeof(url)=="string", "f_core.ListParameters: Invalid URL parameter '"+url+"'.");
+
+		if (url===undefined) {
+			url=String(document.location);
+		}
+		
+		var params=new Object();
+		
+		var sharpIdx=url.indexOf('#');
+		if (sharpIdx>=0) {
+			url=url.substring(0, sharpIdx);
+		}
 		
 		var r=url.indexOf('?');
 		if (r>=0) {
 			var ps=url.substring(r+1);			
-			url=url.substring(0, r);
 			
 			var ps=ps.split("&");
 			for(var i=0;i<ps.length;i++) {
@@ -5837,10 +5888,33 @@ var f_core = {
 				} 
 			}
 		}
+	
+		return params;
+	},
+	/**
+	 * @method public static
+	 * @param String url
+	 * @param String parameterName
+	 * @param String... parameterValue
+	 * @return String
+	 */
+	AddParameter: function(url, parameterName, parameterValue) {
+		f_core.Assert(typeof(url)=="string", "f_core.AddParameter: Invalid URL parameter '"+url+"'.");
+
+		var sharpIdx=url.indexOf('#');
+		var sharp="";
+		if (sharpIdx>=0) {
+			sharp=url.substring(sharpIdx);
+			url=url.substring(0, sharpIdx);
+		}
+		
+		var params=f_core.ListParameters(url);
 		
 		for(var i=1;i<arguments.length;) {
 			var key=arguments[i++];
-			var value=arguments[i++];
+			f_core.Assert(typeof(key)=="string", "f_core.AddParameter: Invalid parameter key '"+key+"'.");
+						
+			var value=String(arguments[i++]);
 			
 			params[key]=value;
 		}
@@ -5870,7 +5944,7 @@ var f_core = {
 			}
 		}
 		
-		return ret.join("");
+		return ret.join("")+sharp;
 	},
 	/**
 	 * @method public static
