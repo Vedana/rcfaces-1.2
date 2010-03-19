@@ -18,4 +18,6 @@ public interface IEventData {
     String getEventItem();
 
     int getEventDetail();
+
+    Object getEventObject(IDecoderContext decoderContext);
 }
