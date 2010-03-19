@@ -33,6 +33,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.codec.URLFormCodec;
 import org.rcfaces.core.internal.component.UIData2;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.renderkit.IDecoderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
@@ -161,6 +162,13 @@ public class HtmlTools {
         return properties;
     }
 
+    public static Object decodeObject(String value,
+            IDecoderContext decoderContext, String attributeName) {
+
+        return decodeObject(value.toCharArray(), new Position(value),
+                decoderContext, null, attributeName);
+    }
+
     private static Object decodeObject(char cs[], Position position,
             IDecoderContext decoderContext, String separators,
             String attributeName) {
@@ -168,9 +176,11 @@ public class HtmlTools {
         if (position.start >= cs.length) {
             return "";
         }
-        if (separators.indexOf(cs[position.start]) >= 0) {
-            position.start++;
-            return "";
+        if (separators != null) {
+            if (separators.indexOf(cs[position.start]) >= 0) {
+                position.start++;
+                return "";
+            }
         }
 
         char type = cs[position.start++];
@@ -209,9 +219,15 @@ public class HtmlTools {
 
         int start = position.start;
         int end = start;
-        for (; end < cs.length; end++) {
-            if (separators.indexOf(cs[end]) >= 0) {
-                break;
+
+        if (separators == null) {
+            end = cs.length;
+
+        } else {
+            for (; end < cs.length; end++) {
+                if (separators.indexOf(cs[end]) >= 0) {
+                    break;
+                }
             }
         }
 
