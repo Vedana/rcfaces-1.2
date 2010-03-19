@@ -21,6 +21,7 @@ import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
@@ -101,7 +102,7 @@ public class ScriptContentAccessorHandler extends
             IGeneratedResourceInformation[] generatedInformationRef,
             IGenerationResourceInformation generationInformation) {
 
-        if (contentAccessor.getPathType() != IContentAccessor.FILTER_PATH_TYPE) {
+        if (contentAccessor.getPathType() != IContentPath.FILTER_PATH_TYPE) {
             return null;
         }
 
@@ -135,7 +136,7 @@ public class ScriptContentAccessorHandler extends
 
         modifiedContentAccessor = new FiltredContentAccessor(filter,
                 new BasicContentAccessor(facesContext, newURL, contentAccessor,
-                        IContentAccessor.UNDEFINED_PATH_TYPE));
+                        IContentPath.UNDEFINED_PATH_TYPE));
 
         if (generationInformation == null) {
             generationInformation = new BasicGenerationResourceInformation();
@@ -207,14 +208,14 @@ public class ScriptContentAccessorHandler extends
 
         // Il nous faut un path en relatif !
         switch (resourcePathType) {
-        case IContentAccessor.EXTERNAL_PATH_TYPE:
+        case IContentPath.EXTERNAL_PATH_TYPE:
             throw new FacesException(
                     "Can not make operation on an external URL !");
 
-        case IContentAccessor.CONTEXT_PATH_TYPE:
+        case IContentPath.CONTEXT_PATH_TYPE:
             break;
 
-        case IContentAccessor.ABSOLUTE_PATH_TYPE:
+        case IContentPath.ABSOLUTE_PATH_TYPE:
             String relativeURL = PathTypeTools
                     .convertAbsolutePathToContextType(facesContext, resourceURL);
 
@@ -226,9 +227,9 @@ public class ScriptContentAccessorHandler extends
             resourceURL = relativeURL;
             break;
 
-        case IContentAccessor.RELATIVE_PATH_TYPE:
+        case IContentPath.RELATIVE_PATH_TYPE:
             resourceURL = PathTypeTools.convertRelativePathToContextPath(
-                    facesContext, resourceURL);
+                    facesContext, resourceURL, null);
             break;
 
         default:
