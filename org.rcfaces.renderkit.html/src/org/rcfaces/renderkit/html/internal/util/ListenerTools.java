@@ -12,6 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
@@ -131,6 +132,10 @@ public final class ListenerTools {
             return JavaScriptClasses.EVENT_VALIDATION_CST;
         }
 
+        public String getCloseEventName() {
+            return JavaScriptClasses.EVENT_CLOSE_CST;
+        }
+
     };
 
     /**
@@ -222,6 +227,10 @@ public final class ListenerTools {
 
         public String getValidationEventName() {
             return JavaScriptClasses.EVENT_VALIDATION_ATTRIBUTE;
+        }
+
+        public String getCloseEventName() {
+            return JavaScriptClasses.EVENT_CLOSE_ATTRIBUTE;
         }
 
     };
@@ -485,6 +494,19 @@ public final class ListenerTools {
             }
         }
 
+        if (component instanceof ICloseEventCapability) {
+            ICloseEventCapability closeListenerCapability = (ICloseEventCapability) component;
+
+            FacesListener fls[] = closeListenerCapability.listCloseListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getCloseEventName(), fls);
+            }
+        }
+
         if (component instanceof IValidationEventCapability) {
             IValidationEventCapability clientValidationListenerCapability = (IValidationEventCapability) component;
 
@@ -552,6 +574,8 @@ public final class ListenerTools {
         String getUserEventName();
 
         String getValueChangeEventName();
+
+        String getCloseEventName();
     }
 
 }
