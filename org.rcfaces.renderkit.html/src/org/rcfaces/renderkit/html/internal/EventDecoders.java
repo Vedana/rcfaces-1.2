@@ -30,6 +30,7 @@ import org.rcfaces.core.event.SelectionEvent;
 import org.rcfaces.core.event.SortEvent;
 import org.rcfaces.core.event.SuggestionEvent;
 import org.rcfaces.core.event.UserEvent;
+import org.rcfaces.core.internal.renderkit.IDecoderContext;
 import org.rcfaces.core.internal.renderkit.IEventData;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 
@@ -253,7 +254,13 @@ public class EventDecoders {
                     public void decodeEvent(IRequestContext requestContext,
                             UIComponent component, IEventData eventData,
                             IEventObjectDecoder eventObjectDecoder) {
-                        FacesEvent event = new CloseEvent(component);
+
+                        IDecoderContext decoderContext = new HtmlTools.BasicDecoderContext(
+                                requestContext.getProcessContext(), component);
+
+                        FacesEvent event = new CloseEvent(component, eventData
+                                .getEventValue(), eventData
+                                .getEventObject(decoderContext));
                         queueEvent(component, event);
                     }
                 });
