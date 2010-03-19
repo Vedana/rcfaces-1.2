@@ -16,6 +16,7 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IContentVersionHandler;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -159,14 +160,14 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         int pathType = contentAccessor.getPathType();
         switch (pathType) {
 
-        case IContentAccessor.RELATIVE_PATH_TYPE:
+        case IContentPath.RELATIVE_PATH_TYPE:
             IProcessContext processContext = AbstractProcessContext
                     .getProcessContext(facesContext);
 
             url = processContext.getAbsolutePath(url, false);
             break;
 
-        case IContentAccessor.CONTEXT_PATH_TYPE:
+        case IContentPath.CONTEXT_PATH_TYPE:
             break;
 
         default:
@@ -182,7 +183,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
             sa.append(url);
 
             return new BasicContentAccessor(facesContext, sa.toString(),
-                    contentAccessor, IContentAccessor.CONTEXT_PATH_TYPE);
+                    contentAccessor, IContentPath.CONTEXT_PATH_TYPE);
         }
 
         StringAppender sa = new StringAppender(prefixURI, 1
@@ -203,7 +204,7 @@ public class ResourceVersionHandlerImpl extends AbstractProvider implements
         sa.append(url);
 
         return new BasicContentAccessor(facesContext, sa.toString(),
-                contentAccessor, IContentAccessor.CONTEXT_PATH_TYPE);
+                contentAccessor, IContentPath.CONTEXT_PATH_TYPE);
     }
 
     public String getResourceVersion(FacesContext facesContext,

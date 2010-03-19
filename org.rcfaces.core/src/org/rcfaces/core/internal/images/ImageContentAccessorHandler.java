@@ -19,6 +19,7 @@ import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.FiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.lang.IContentFamily;
@@ -83,7 +84,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
                         .debug("Provider is disabled, return an unsupported content accessor flag");
             }
 
-            if (contentAccessor.getPathType() == IContentAccessor.FILTER_PATH_TYPE) {
+            if (contentAccessor.getPathType() == IContentPath.FILTER_PATH_TYPE) {
                 return ContentAccessorFactory.UNSUPPORTED_CONTENT_ACCESSOR;
             }
 
@@ -111,7 +112,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
 
         IContentAccessor modifiedContentAccessor = contentAccessor;
 
-        if (contentAccessor.getPathType() == IContentAccessor.FILTER_PATH_TYPE) {
+        if (contentAccessor.getPathType() == IContentPath.FILTER_PATH_TYPE) {
 
             int idx = url.indexOf(IContentAccessor.FILTER_SEPARATOR);
             String filter = url.substring(0, idx);
@@ -135,7 +136,7 @@ public abstract class ImageContentAccessorHandler extends AbstractProvider
                 modifiedContentAccessor = new FiltredContentAccessor(filter,
                         new BasicContentAccessor(facesContext, newURL,
                                 contentAccessor,
-                                IContentAccessor.UNDEFINED_PATH_TYPE));
+                                IContentPath.UNDEFINED_PATH_TYPE));
             }
         }
 

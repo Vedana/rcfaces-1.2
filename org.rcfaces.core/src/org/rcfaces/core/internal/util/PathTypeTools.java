@@ -7,6 +7,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.renderkit.AbstractProcessContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 
@@ -110,7 +111,8 @@ public class PathTypeTools {
     }
 
     public static String convertRelativePathToContextPath(
-            FacesContext facesContext, String url) {
+            FacesContext facesContext, String url, IContentPath basePath) {
+
         IProcessContext processContext = AbstractProcessContext
                 .getProcessContext(facesContext);
 

@@ -93,6 +93,19 @@ public class ContentAccessorFactory {
             return 0;
         }
 
+        public String convertToPathType(FacesContext facesContext,
+                int targetPathType) {
+            return null;
+        }
+
+        public IContentPath getParentContentPath() {
+            return null;
+        }
+
+        public String getPath() {
+            return null;
+        }
+
     };
 
     private static final IContentProxyHandler RESOURCE_CONTENT_PROXY_HANDLER = new AbstractContentProxyHandler() {
@@ -191,7 +204,7 @@ public class ContentAccessorFactory {
             FacesContext facesContext, Object value, IContentAccessor parent) {
 
         return new BasicContentAccessor(facesContext, value, parent,
-                IContentAccessor.UNDEFINED_PATH_TYPE);
+                IContentPath.UNDEFINED_PATH_TYPE);
     }
 
     public static IContentAccessors createSingleImageWebResource(

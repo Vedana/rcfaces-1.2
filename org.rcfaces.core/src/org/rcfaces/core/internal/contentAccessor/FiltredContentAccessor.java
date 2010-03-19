@@ -1,6 +1,5 @@
 package org.rcfaces.core.internal.contentAccessor;
 
-
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -16,10 +15,14 @@ public class FiltredContentAccessor extends AbstractContentAccessor implements
         super(parentAccessor);
         this.filter = filter;
 
-        setPathType(IContentAccessor.FILTER_PATH_TYPE);
+        setPathType(IContentPath.FILTER_PATH_TYPE);
     }
 
     public Object getContentRef() {
+        return null;
+    }
+
+    public String getPath() {
         return null;
     }
 
@@ -29,7 +32,8 @@ public class FiltredContentAccessor extends AbstractContentAccessor implements
 
     public String toString() {
         return "[FiltredContentAccessor filter='" + filter + "' contentType="
-                + getContentFamily() + " pathType=" + getPathTypeName(getPathType())
+                + getContentFamily() + " pathType="
+                + BasicContentPath.getPathTypeName(getPathType())
                 + " versionHandler=" + getContentVersionHandler() + " root="
                 + getParentAccessor() + "]";
     }

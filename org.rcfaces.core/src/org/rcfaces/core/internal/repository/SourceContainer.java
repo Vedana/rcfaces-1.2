@@ -420,6 +420,30 @@ public abstract class SourceContainer {
         return new BasicParameterizedContent(parameter);
     }
 
+    protected void addURLContent(URLConnection urlConnection,
+            StringAppender buffer) throws IOException {
+
+        InputStream inputStream = urlConnection.getInputStream();
+
+        try {
+            char buf[] = new char[4096];
+
+            InputStreamReader inr = new InputStreamReader(
+                    new BufferedInputStream(inputStream, buf.length), charSet);
+
+            for (;;) {
+                int len = inr.read(buf, 0, buf.length);
+                if (len < 1) {
+                    break;
+                }
+
+                buffer.append(buf, 0, len);
+            }
+        } finally {
+            inputStream.close();
+        }
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -655,7 +679,7 @@ public abstract class SourceContainer {
                 }
 
                 try {
-                    addURLContent(fileURL);
+                    addURLContent(fileURL, buffer);
 
                 } catch (IOException e) {
                     error("Can not append external file '" + fileURL + "'.", e);
@@ -663,11 +687,8 @@ public abstract class SourceContainer {
             }
         }
 
-        protected List filterFiles(List files) {
-            return files;
-        }
-
-        protected void addURLContent(URL url) throws IOException {
+        protected void addURLContent(URL url, StringAppender buffer)
+                throws IOException {
 
             URLConnection urlConnection = url.openConnection();
 
@@ -676,26 +697,11 @@ public abstract class SourceContainer {
 
             updateLastModification(urlConnection);
 
-            InputStream inputStream = urlConnection.getInputStream();
+            SourceContainer.this.addURLContent(urlConnection, buffer);
+        }
 
-            try {
-                char buf[] = new char[4096];
-
-                InputStreamReader inr = new InputStreamReader(
-                        new BufferedInputStream(inputStream, buf.length),
-                        charSet);
-
-                for (;;) {
-                    int len = inr.read(buf, 0, buf.length);
-                    if (len < 1) {
-                        break;
-                    }
-
-                    buffer.append(buf, 0, len);
-                }
-            } finally {
-                inputStream.close();
-            }
+        protected List filterFiles(List files) {
+            return files;
         }
 
         protected void addRepositoryFiles() throws ServletException {
@@ -745,5 +751,8 @@ public abstract class SourceContainer {
             this.fileName = fileName;
         }
 
+        public String toString() {
+            return "[SourceFile fileName='" + fileName + "']";
+        }
     }
 }

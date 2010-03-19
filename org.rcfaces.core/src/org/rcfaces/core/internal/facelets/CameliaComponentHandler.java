@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.faces.component.UIComponent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.tools.ListenersTools;
 import org.rcfaces.core.internal.tools.ListenersTools.IListenerType;
@@ -23,7 +25,6 @@ import com.sun.facelets.tag.MetadataTarget;
 import com.sun.facelets.tag.TagAttribute;
 import com.sun.facelets.tag.TextHandler;
 import com.sun.facelets.tag.jsf.ComponentConfig;
-import com.sun.facelets.tag.jsf.ComponentHandler;
 
 /**
  * 
@@ -31,7 +32,8 @@ import com.sun.facelets.tag.jsf.ComponentHandler;
  * @version $Revision$ $Date$
  */
 public class CameliaComponentHandler extends CameliaComponentHandler0 {
-    private static final String REVISION = "$Revision$";
+    private static final Log LOG = LogFactory
+            .getLog(CameliaComponentHandler.class);
 
     /**
      * 
@@ -150,7 +152,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         ATTRIBUTES_METADATA.put("selectionListener",
                 new ListenerAttributeMetaData(
                         ListenersTools.SELECTION_LISTENER_TYPE));
-        ATTRIBUTES_METADATA.put("serviceListener",
+        ATTRIBUTES_METADATA.put("serviceEventListener",
                 new ListenerAttributeMetaData(
                         ListenersTools.SERVICE_EVENT_LISTENER_TYPE));
         ATTRIBUTES_METADATA.put("sortListener", new ListenerAttributeMetaData(
@@ -269,6 +271,13 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         public Metadata applyRule(String name, TagAttribute attribute,
                 MetadataTarget meta) {
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Apply AttributeMetaData rule for attribute '" + name
+                        + "', tagAttribute='" + attribute + "', meta='" + meta
+                        + "', defaultListenerType='" + defaultListenerType
+                        + "'.");
+            }
+
             final String expression = attribute.getValue();
             if (expression == null) {
                 return null;
@@ -278,7 +287,21 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
                     .get(name);
 
             if (attributeMetaData == null) {
+                if (LOG.isDebugEnabled()) {
+                    if (name.endsWith("Listener")) {
+                        LOG.error("No attributeMetaData for attribute '" + name
+                                + "'");
+                    } else {
+                        LOG.debug("No attributeMetaData for attribute '" + name
+                                + "'");
+                    }
+                }
                 return null;
+            }
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("AttributeMetaData for attribute '" + name + "' => "
+                        + attributeMetaData);
             }
 
             return attributeMetaData.processAttribute(expression,

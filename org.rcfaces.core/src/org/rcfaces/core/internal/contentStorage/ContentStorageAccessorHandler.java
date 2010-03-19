@@ -9,6 +9,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorsRegistryImpl;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessorHandler;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.model.IContentModel;
@@ -44,7 +45,7 @@ public class ContentStorageAccessorHandler extends AbstractProvider implements
             IGeneratedResourceInformation[] generatedInformationRef,
             IGenerationResourceInformation generationInformation) {
 
-        if (contentAccessor.getPathType() != IContentAccessor.UNDEFINED_PATH_TYPE) {
+        if (contentAccessor.getPathType() != IContentPath.UNDEFINED_PATH_TYPE) {
             return null;
         }
 

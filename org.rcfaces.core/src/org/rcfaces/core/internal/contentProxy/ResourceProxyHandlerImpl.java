@@ -29,6 +29,7 @@ import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IContentProxyHandler;
 import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -176,9 +177,9 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
             IGeneratedResourceInformation[] contentInformationRef) {
 
         int pathType = contentAccessor.getPathType();
-        if (pathType != IContentAccessor.RELATIVE_PATH_TYPE
-                && pathType != IContentAccessor.ABSOLUTE_PATH_TYPE
-                && pathType != IContentAccessor.CONTEXT_PATH_TYPE) {
+        if (pathType != IContentPath.RELATIVE_PATH_TYPE
+                && pathType != IContentPath.ABSOLUTE_PATH_TYPE
+                && pathType != IContentPath.CONTEXT_PATH_TYPE) {
 
             return contentAccessor;
         }
@@ -189,13 +190,13 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
 
         String url = (String) contentAccessor.getContentRef();
 
-        if (pathType == IContentAccessor.RELATIVE_PATH_TYPE) {
+        if (pathType == IContentPath.RELATIVE_PATH_TYPE) {
             // A convertir en CONTEXT
 
             url = PathTypeTools.convertRelativePathToContextPath(facesContext,
-                    url);
+                    url, null);
 
-        } else if (pathType == IContentAccessor.ABSOLUTE_PATH_TYPE) {
+        } else if (pathType == IContentPath.ABSOLUTE_PATH_TYPE) {
             // A convertir en CONTEXT
 
             String converted = PathTypeTools.convertAbsolutePathToContextType(
@@ -221,7 +222,7 @@ public class ResourceProxyHandlerImpl extends AbstractProvider implements
         }
 
         return new BasicContentAccessor(facesContext, converted,
-                contentAccessor, IContentAccessor.EXTERNAL_PATH_TYPE);
+                contentAccessor, IContentPath.EXTERNAL_PATH_TYPE);
     }
 
     public String computeProxyedURL(FacesContext facesContext,

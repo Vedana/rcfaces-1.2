@@ -53,12 +53,17 @@ public class BasicContentAccessor extends AbstractContentAccessor {
             IContentAccessor root, int pathType) {
         super(root);
 
-        if (pathType == UNDEFINED_PATH_TYPE) {
+        if (pathType == IContentPath.UNDEFINED_PATH_TYPE) {
             this.value = convertURL(facesContext, url);
+
         } else {
             this.value = url;
             setPathType(pathType);
         }
+    }
+
+    public String getPath() {
+        return String.valueOf(getContentRef());
     }
 
     public Object getContentRef() {
@@ -67,7 +72,7 @@ public class BasicContentAccessor extends AbstractContentAccessor {
 
     protected Object convertURL(FacesContext facesContext, Object url) {
         if (url == null) {
-            setPathType(IContentAccessor.UNDEFINED_PATH_TYPE);
+            setPathType(IContentPath.UNDEFINED_PATH_TYPE);
 
             return null;
         }
@@ -75,16 +80,22 @@ public class BasicContentAccessor extends AbstractContentAccessor {
         url = BindingTools.resolveBinding(facesContext, url);
 
         if ((url instanceof String) == false) {
-            setPathType(IContentAccessor.UNDEFINED_PATH_TYPE);
+            setPathType(IContentPath.UNDEFINED_PATH_TYPE);
             return url;
         }
 
-        return resolvePath(facesContext, (String) url);
+        IContentPath cp = new BasicContentPath(getParentContentPath(),
+                (String) url);
+
+        setPathType(cp.getPathType());
+
+        return cp.getPath();
     }
 
     public String toString() {
         return "[AbstractContentAccessor contentType=" + getContentFamily()
-                + " pathType=" + getPathTypeName(getPathType())
+                + " pathType="
+                + BasicContentPath.getPathTypeName(getPathType())
                 + " versionHandler=" + getContentVersionHandler()
                 + " content='" + value + "' root=" + getParentAccessor() + "]";
     }

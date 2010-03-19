@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.internal.contentAccessor;
 
+import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -161,21 +163,73 @@ public class AbstractInformation implements StateHolder,
                 continue;
             }
 
-            if ((value instanceof String) || (value instanceof Number)
-                    || (value instanceof Boolean)) {
-                sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR)
-                        .append(String.valueOf(value));
-                continue;
-            }
-
-            if (value instanceof IResourceKeyParticipant) {
-                sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
-                ((IResourceKeyParticipant) value).participeKey(sa);
-                continue;
-            }
-
-            appendToKey(sa, key, value);
+            participeValue(sa, key, value);
         }
+    }
+
+    private void participeValue(StringAppender sa, String key, Object value) {
+
+        if ((value instanceof String) || (value instanceof Number)
+                || (value instanceof Boolean)) {
+            sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR).append(
+                    String.valueOf(value));
+            return;
+        }
+
+        if (value instanceof IResourceKeyParticipant) {
+            sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR);
+            ((IResourceKeyParticipant) value).participeKey(sa);
+            return;
+        }
+
+        if (value.getClass().isArray()) {
+            int len = Array.getLength(value);
+            sa.append('[');
+            for (int i = 0; i < len; i++) {
+                if (i > 0) {
+                    sa.append(',');
+                }
+
+                Object valueItem = Array.get(value, i);
+                if (valueItem == null) {
+                    continue;
+                }
+
+                participeValue(sa, key, valueItem);
+            }
+
+            sa.append(']');
+
+            return;
+        }
+
+        if (value instanceof Collection) {
+            Collection cl = (Collection) value;
+
+            sa.append('[');
+            boolean first = true;
+            for (Iterator it = cl.iterator(); it.hasNext();) {
+                if (first) {
+                    first = false;
+                } else {
+                    sa.append(',');
+                }
+
+                Object valueItem = it.next();
+                if (valueItem == null) {
+                    continue;
+                }
+
+                participeValue(sa, key, valueItem);
+            }
+
+            sa.append(']');
+
+            return;
+        }
+
+        appendToKey(sa, key, value);
+
     }
 
 }

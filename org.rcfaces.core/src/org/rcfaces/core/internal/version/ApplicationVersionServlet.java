@@ -5,13 +5,16 @@
 package org.rcfaces.core.internal.version;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -103,12 +106,32 @@ public class ApplicationVersionServlet extends ConfiguredHttpServlet {
                     "Can not get request dispatcher for url '" + url + "'.");
         }
 
-        ExpirationDate expirationDate = getDefaultExpirationDate(true);
-        if (expirationDate != null) {
-            expirationDate.sendExpires(response);
-        }
+        HttpServletResponse wrappedResponse = new HttpServletResponseWrapper(
+                response) {
 
-        requestDispatcher.forward(request, response);
+            protected void updateExpiration() {
+                ExpirationDate expirationDate = getDefaultExpirationDate(true);
+                if (expirationDate != null) {
+                    expirationDate.sendExpires(this);
+                }
+            }
+
+            @Override
+            public ServletOutputStream getOutputStream() throws IOException {
+                updateExpiration();
+
+                return super.getOutputStream();
+            }
+
+            @Override
+            public PrintWriter getWriter() throws IOException {
+                updateExpiration();
+
+                return super.getWriter();
+            }
+
+        };
+
+        requestDispatcher.forward(request, wrappedResponse);
     }
-
 }
