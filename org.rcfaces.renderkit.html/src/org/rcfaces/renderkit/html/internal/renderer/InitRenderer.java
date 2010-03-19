@@ -29,6 +29,7 @@ import org.rcfaces.core.image.operation.IIEFavoriteIconOperation;
 import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.images.ImageContentAccessorHandler;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -295,7 +296,7 @@ public class InitRenderer extends AbstractHtmlRenderer {
                 // href=\"");
             }
 
-            if (base.startsWith(IContentAccessor.CONTEXT_KEYWORD)) {
+            if (base.startsWith(IContentPath.CONTEXT_KEYWORD)) {
                 StringAppender sa = new StringAppender(facesContext
                         .getExternalContext().getRequestContextPath(), base
                         .length());
