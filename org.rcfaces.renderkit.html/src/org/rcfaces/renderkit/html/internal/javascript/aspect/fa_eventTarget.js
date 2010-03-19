@@ -126,9 +126,10 @@ var __members = {
 	 * @param optional any value
 	 * @param optional fa_selectionProvider<? extends Object> selectionProvider
 	 * @param optional any detail
+	 * @param optional String stage
 	 * @return boolean
 	 */
-	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail) {
+	f_fireEvent: function(type, jsEvt, item, value, selectionProvider, detail, stage) {
 		
 		var eventId=undefined;
 		if (f_core.IsDebugEnabled(fa_eventTarget)) {
@@ -162,8 +163,12 @@ var __members = {
 
 //		f_core.Profile(false, "fa_eventTarget.fireEvent(#"+eventId+","+type+","+this.id+")");
 
-		try {				
-			var al=this.f_getActionList(type);
+		try {
+			if (!stage) {
+				stage=type;
+			}
+			
+			var al=this.f_getActionList(stage);
 			if (!al) {
 				f_core.Debug(fa_eventTarget, "f_fireEvent: No listeners for event '"+type+"' on '"+this.id+"'"+((event)?("item='"+event._item+"' value='"+event._value+"' selectionProvider='"+event._selectionProvider+"'"):"")+".");
 				
