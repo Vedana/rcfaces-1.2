@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.internal.renderkit.AbstractRequestContext;
 import org.rcfaces.core.internal.renderkit.IComponentData;
+import org.rcfaces.core.internal.renderkit.IDecoderContext;
 import org.rcfaces.core.internal.renderkit.IDefaultUnlockedPropertiesRenderer;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -46,6 +47,8 @@ public class HtmlRequestContext extends AbstractRequestContext implements
     private static final String EVENT_COMPONENT_ID = "VFC_COMPONENT";
 
     private static final String EVENT_VALUE = "VFC_VALUE";
+
+    private static final String EVENT_OBJECT_VALUE = "VFC_OVALUE";
 
     private static final String EVENT_ITEM = "VFC_ITEM";
 
@@ -271,17 +274,33 @@ public class HtmlRequestContext extends AbstractRequestContext implements
     private static final String getStringParameter(Map parameters, String name) {
         Object value = parameters.get(name);
         if (value == null) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("getStringParameter('" + name
+                        + "')=null   parameters=" + parameters);
+            }
+
             return null;
         }
 
         if (value instanceof String[]) {
             String array[] = (String[]) value;
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("getStringParameter('" + name + "')="
+                        + Arrays.asList(array) + "   parameters=" + parameters);
+            }
+
             if (array.length < 1) {
                 return null;
             }
 
             return array[0];
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getStringParameter('" + name + "')='" + value
+                    + "'   parameters=" + parameters);
         }
 
         return value.toString();
@@ -294,12 +313,31 @@ public class HtmlRequestContext extends AbstractRequestContext implements
 
         } else if (object.getClass().isArray()) {
             if (Array.getLength(object) == 0) {
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("parseCameliaData('" + object
+                            + "')=*Empty array*");
+                }
+
                 return Collections.EMPTY_MAP;
             }
 
-            return parseCameliaData(Array.get(object, 0));
+            Map ret = parseCameliaData(Array.get(object, 0));
+
+            if (LOG.isDebugEnabled()) {
+                LOG
+                        .debug("parseCameliaData('" + object + "')[0]='" + ret
+                                + "'");
+            }
+
+            return ret;
 
         } else {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("parseCameliaData('" + object + "')=*UNKNOWN*");
+            }
+
             return Collections.EMPTY_MAP;
         }
 
@@ -365,6 +403,12 @@ public class HtmlRequestContext extends AbstractRequestContext implements
                 throwFormatException("Bad Char ", i, datas);
             }
             i++;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG
+                    .debug("parseCameliaData('" + object + "')='" + properties
+                            + "'");
         }
 
         if (properties.size() < 1) {
@@ -433,6 +477,10 @@ public class HtmlRequestContext extends AbstractRequestContext implements
 
         private int detail;
 
+        private boolean valueDeserialized;
+
+        private Object eventValue;
+
         public final void set(Map parameters) {
             this.parameters = parameters;
         }
@@ -484,6 +532,21 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             return getParameter(EVENT_ITEM);
         }
 
+        public Object getEventObject(IDecoderContext decoderContext) {
+            if (valueDeserialized == false) {
+                valueDeserialized = true;
+
+                String eventObject = getParameter(EVENT_OBJECT_VALUE);
+
+                if (eventObject != null && eventObject.length() > 0) {
+                    eventValue = HtmlTools.decodeObject(eventObject,
+                            decoderContext, "event");
+                }
+            }
+
+            return eventValue;
+        }
+
         public final int getEventDetail() {
             if (detailInitialized == false) {
                 detailInitialized = true;
@@ -501,6 +564,13 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             }
 
             return detail;
+        }
+
+        public String toString() {
+            return "[AbstractHtmlComponentData parameters='" + parameters
+                    + "' detailInitialized=" + detailInitialized + " detail='"
+                    + detail + "' valueDeserialized=" + valueDeserialized
+                    + " eventValue='" + eventValue + "']";
         }
     }
 
@@ -532,6 +602,34 @@ public class HtmlRequestContext extends AbstractRequestContext implements
             this.properties = properties;
             this.eventComponent = eventComponent;
             this.unlockedProperties = unlockedProperties;
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Init componentData");
+                LOG.debug("-        componentId='" + componentId + "'");
+                LOG.debug("-          component='" + component + "'");
+                LOG.debug("-     eventComponent='" + eventComponent + "'");
+                LOG.debug("-         properties='" + properties + "'");
+                LOG.debug("- unlockedProperties='" + unlockedProperties + "'");
+
+                LOG.debug("-         parameters=");
+                if (parameters != null) {
+                    for (Iterator it = parameters.entrySet().iterator(); it
+                            .hasNext();) {
+                        Map.Entry entry = (Map.Entry) it.next();
+
+                        String key = (String) entry.getKey();
+                        Object vs = entry.getValue();
+
+                        if (vs instanceof String[]) {
+                            LOG.debug(" # '" + key + "'='"
+                                    + Arrays.asList((String[]) vs) + "'");
+                            continue;
+                        }
+
+                        LOG.debug("  '" + key + "'='" + vs + "'");
+                    }
+                }
+            }
         }
 
         /*
@@ -594,6 +692,14 @@ public class HtmlRequestContext extends AbstractRequestContext implements
          */
         public boolean isEventComponent() {
             return eventComponent;
+        }
+
+        public String toString() {
+            return "[HtmlComponentData super='" + super.toString()
+                    + "' componentId='" + componentId + "' component='"
+                    + component + "' properties='" + properties
+                    + "' eventComponent=" + eventComponent
+                    + " unlockedProperties='" + unlockedProperties + "']";
         }
     }
 
