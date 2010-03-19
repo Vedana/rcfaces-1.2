@@ -2781,10 +2781,12 @@ Dans le cas d'un mode period !
 		<capability id="IHiddenModeCapability" />
 		<capability id="ILookAndFeelCapability" />
 		<capability id="IWAIRoleCapability" />
+		<capability id="ICloseEventCapability" />
+		<capability id="IClosableCapability" default="true" />
+		<capability id="IImmediateCapability" forceComponent="true"/>
 
 		<attribute id="viewURL" type="java.lang.String" />
 		<attribute id="shellDecoratorName" type="java.lang.String" />
-		<attribute id="closable"  type="boolean" default="true" />
 
 		<method id="setHiddenMode(String)" />
 		<method id="getVisibleState(javax.faces.context.FacesContext)" />
