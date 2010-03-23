@@ -1004,24 +1004,25 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
 	}
 
-	public int getFirst() {
-		return getFirst(null);
+	public String getVar() {
+		return getVar(null);
 	}
 
-	public int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	public String getVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VAR, facesContext);
 	}
 
-	public void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
+	public void setVar(String var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=var;
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "first" is set.
+	 * Returns <code>true</code> if the attribute "var" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
+	public boolean isVarSetted() {
+		return engine.isPropertySetted(Properties.VAR);
 	}
 
 	public int getRows() {
@@ -1044,25 +1045,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.ROWS);
 	}
 
-	public String getVar() {
-		return getVar(null);
+	public int getFirst() {
+		return getFirst(null);
 	}
 
-	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+	public int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
 	}
 
-	public void setVar(String var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=var;
+	public void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "var" is set.
+	 * Returns <code>true</code> if the attribute "first" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isVarSetted() {
-		return engine.isPropertySetted(Properties.VAR);
+	public boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	protected Set getCameliaFields() {

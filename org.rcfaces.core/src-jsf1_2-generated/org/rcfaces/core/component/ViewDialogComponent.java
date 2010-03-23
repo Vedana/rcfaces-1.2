@@ -1,29 +1,32 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IDialogPriorityCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.component.CameliaOutputComponent;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import java.lang.String;
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
+import java.util.Set;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.ICloseEventCapability;
+import org.rcfaces.core.component.capability.IClosableCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.component.CameliaOutputComponent;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 
 public class ViewDialogComponent extends CameliaOutputComponent implements 
 	IImageCapability,
@@ -36,6 +39,9 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	IHiddenModeCapability,
 	ILookAndFeelCapability,
 	IWAIRoleCapability,
+	ICloseEventCapability,
+	IClosableCapability,
+	IImmediateCapability,
 	IImageAccessorsCapability {
 
 	private static final Log LOG = LogFactory.getLog(ViewDialogComponent.class);
@@ -44,7 +50,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageURL","width","shellDecoratorName","waiRole","closable","hiddenMode","textDirection","styleClass","text","height","dialogPriority","visible","lookId","viewURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"shellDecoratorName","imageURL","width","waiRole","closable","hiddenMode","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId","closeListener","viewURL"}));
 	}
 
 	public ViewDialogComponent() {
@@ -348,6 +354,64 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
+	public final void addCloseListener(org.rcfaces.core.event.ICloseListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeCloseListener(org.rcfaces.core.event.ICloseListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listCloseListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ICloseListener.class);
+	}
+
+	public boolean isClosable() {
+		return isClosable(null);
+	}
+
+	/**
+	 * See {@link #isClosable() isClosable()} for more details
+	 */
+	public boolean isClosable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CLOSABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "closable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isClosableSetted() {
+		return engine.isPropertySetted(Properties.CLOSABLE);
+	}
+
+	public void setClosable(boolean closable) {
+		engine.setProperty(Properties.CLOSABLE, closable);
+	}
+
+	public boolean isImmediate() {
+		return isImmediate(null);
+	}
+
+	/**
+	 * See {@link #isImmediate() isImmediate()} for more details
+	 */
+	public boolean isImmediate(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.IMMEDIATE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "immediate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImmediateSetted() {
+		return engine.isPropertySetted(Properties.IMMEDIATE);
+	}
+
+	public void setImmediate(boolean immediate) {
+		engine.setProperty(Properties.IMMEDIATE, immediate);
+	}
+
 	public String getViewURL() {
 		return getViewURL(null);
 	}
@@ -386,26 +450,6 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 	 */
 	public boolean isShellDecoratorNameSetted() {
 		return engine.isPropertySetted(Properties.SHELL_DECORATOR_NAME);
-	}
-
-	public boolean isClosable() {
-		return isClosable(null);
-	}
-
-	public boolean isClosable(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.CLOSABLE, true, facesContext);
-	}
-
-	public void setClosable(boolean closable) {
-		engine.setProperty(Properties.CLOSABLE, closable);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "closable" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isClosableSetted() {
-		return engine.isPropertySetted(Properties.CLOSABLE);
 	}
 
 	protected Set getCameliaFields() {

@@ -29,9 +29,11 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 	private ValueExpression hiddenMode;
 	private ValueExpression lookId;
 	private ValueExpression waiRole;
+	private ValueExpression closeListeners;
+	private ValueExpression closable;
+	private ValueExpression immediate;
 	private ValueExpression viewURL;
 	private ValueExpression shellDecoratorName;
-	private ValueExpression closable;
 	private ValueExpression value;
 	private ValueExpression converter;
 	public String getComponentType() {
@@ -82,16 +84,24 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final void setCloseListener(ValueExpression closeListeners) {
+		this.closeListeners = closeListeners;
+	}
+
+	public final void setClosable(ValueExpression closable) {
+		this.closable = closable;
+	}
+
+	public final void setImmediate(ValueExpression immediate) {
+		this.immediate = immediate;
+	}
+
 	public final void setViewURL(ValueExpression viewURL) {
 		this.viewURL = viewURL;
 	}
 
 	public final void setShellDecoratorName(ValueExpression shellDecoratorName) {
 		this.shellDecoratorName = shellDecoratorName;
-	}
-
-	public final void setClosable(ValueExpression closable) {
-		this.closable = closable;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -118,9 +128,10 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  closable='"+closable+"'");
+			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  viewURL='"+viewURL+"'");
 			LOG.debug("  shellDecoratorName='"+shellDecoratorName+"'");
-			LOG.debug("  closable='"+closable+"'");
 		}
 		if ((uiComponent instanceof ViewDialogComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -233,6 +244,28 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (closeListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.CLOSE_LISTENER_TYPE, closeListeners);
+		}
+
+		if (closable != null) {
+			if (closable.isLiteralText()==false) {
+				component.setValueExpression(Properties.CLOSABLE, closable);
+
+			} else {
+				component.setClosable(getBool(closable.getExpressionString()));
+			}
+		}
+
+		if (immediate != null) {
+			if (immediate.isLiteralText()==false) {
+				component.setValueExpression(Properties.IMMEDIATE, immediate);
+
+			} else {
+				component.setImmediate(getBool(immediate.getExpressionString()));
+			}
+		}
+
 		if (viewURL != null) {
 			if (viewURL.isLiteralText()==false) {
 				component.setValueExpression(Properties.VIEW_URL, viewURL);
@@ -248,15 +281,6 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setShellDecoratorName(shellDecoratorName.getExpressionString());
-			}
-		}
-
-		if (closable != null) {
-			if (closable.isLiteralText()==false) {
-				component.setValueExpression(Properties.CLOSABLE, closable);
-
-			} else {
-				component.setClosable(getBool(closable.getExpressionString()));
 			}
 		}
 
@@ -291,9 +315,11 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		hiddenMode = null;
 		lookId = null;
 		waiRole = null;
+		closeListeners = null;
+		closable = null;
+		immediate = null;
 		viewURL = null;
 		shellDecoratorName = null;
-		closable = null;
 		value = null;
 		converter = null;
 
