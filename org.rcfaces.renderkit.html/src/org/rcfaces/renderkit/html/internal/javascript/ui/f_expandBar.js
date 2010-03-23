@@ -329,22 +329,23 @@ var __members = {
 	},
 	fa_updateCollapsed: function(set) {
 		var body=this._body;
-		
 		if (!body) {	
 			return;
 		}
-		var content=this._content;
-
-		var alt;
-		if (set) {
-			alt=f_resourceBundle.Get(f_expandBar).f_get("EXPAND_BUTTON");
-			
-		} else {
-			alt=f_resourceBundle.Get(f_expandBar).f_get("COLLAPSE_BUTTON");
-		}
+		
 		var button=this.f_getButton();
-		if (button.alt!=alt) {
-			button.alt=alt;
+		if (button) {
+			var alt;
+			if (set) {
+				alt=f_resourceBundle.Get(f_expandBar).f_get("EXPAND_BUTTON");
+				
+			} else {
+				alt=f_resourceBundle.Get(f_expandBar).f_get("COLLAPSE_BUTTON");
+			}
+			
+			if (button.alt!=alt) {
+				button.alt=alt;
+			}
 		}
 		
 		this.f_updateStyleClass();
@@ -374,6 +375,8 @@ var __members = {
 		}
 		
 		if (suffix!==false) {
+			var content=this._content;
+
 			var contentClassName="f_expandBar_content";
 			var bodyClassName="f_expandBar_body";
 			if (suffix) {
