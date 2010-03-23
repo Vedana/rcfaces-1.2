@@ -621,27 +621,57 @@ var __members = {
 		}
 
 		if (shell.f_getStatus()==f_shell.CLOSING_STATUS) {
-			this.f_getShellDecorator(shell).f_hideShell();
+			try {
+				this.f_getShellDecorator(shell).f_hideShell();
+			
+			} catch (x) {
+				f_core.Error(f_shellManager, "f_closeShell: f_hideShell throws exception self="+self, x);
+			}
 
-			shell.f_preDestruction(); // C'est le preDestruction qui positionne le status ABOUT_TO_CLOSE ...
+			try {
+				shell.f_preDestruction(); // C'est le preDestruction qui positionne le status ABOUT_TO_CLOSE ...
+
+			} catch (x) {
+				f_core.Error(f_shellManager, "f_closeShell: f_preDestruction throws exception self="+self, x);
+			}
 		}
 
 		if (shell.f_getStatus()==f_shell.ABOUT_TO_CLOSE_STATUS) {
-			this.f_getShellDecorator(shell).f_destroyDecoration();
-			// C'est le Shell decorator qui positionne CLOSED_STATUS
+			try {
+				this.f_getShellDecorator(shell).f_destroyDecoration();
+				// C'est le Shell decorator qui positionne CLOSED_STATUS
+			} catch (x) {
+				f_core.Error(f_shellManager, "f_closeShell: f_destroyDecoration throws exception self="+self, x);
+			}
+
 		}
 		
 		if (shell.f_getStatus()==f_shell.CLOSED_STATUS) {
-			this.f_popShell(shell);
+			try {
+				this.f_popShell(shell);
+			
+			} catch (x) {
+				f_core.Error(f_shellManager, "f_closeShell: f_popShell throws exception self="+self, x);
+			}
 			
 			// C'est le Shell decorator qui positionne DESTROYING_STATUS
 		}
 		
 		if (shell.f_getStatus()==f_shell.DESTROYING_STATUS) {
-			shell.f_postDestruction();
+			try {
+				shell.f_postDestruction();
+				
+			} catch (x) {
+				f_core.Error(f_shellManager, "f_closeShell: postDestruction throws exception self="+self, x);
+			}
 		}
 		
 		if (shell.f_getStatus()==f_shell.DESTROYED_STATUS) {
+			
+			if (showNextShell!==false) {
+				showNextShell=(shell.f_isNextShellCanceled()===true);
+			}
+			
 			if (showNextShell!==false) {
 				this.f_showNextShell();
 			}
