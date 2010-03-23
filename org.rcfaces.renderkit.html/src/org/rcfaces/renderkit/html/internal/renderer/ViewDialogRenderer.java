@@ -59,18 +59,22 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         if (width != null) {
             htmlWriter.writeAttribute("v:width", width);
         }
+
         String height = component.getHeight(facesContext);
         if (height != null) {
             htmlWriter.writeAttribute("v:height", height);
         }
+
         String text = component.getText(facesContext);
         if (text != null) {
             htmlWriter.writeAttribute("v:title", text);
         }
+
         boolean closable = component.isClosable(facesContext);
         if (closable == false) {
             htmlWriter.writeAttribute("v:closable", closable);
         }
+
         String src = component.getViewURL(facesContext);
         if (src != null) {
             IContentAccessor contentAccessor = ContentAccessorFactory
@@ -82,49 +86,58 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
                 htmlWriter.writeAttribute("v:viewURL", src);
             }
         }
-        
+
         // TODO A refaire en décorator !
         List children = component.getChildren();
-        int i = 0;
-        Map values = new HashMap();
-        UISelectItem selectItem;
-        while (i < children.size()) {
+        Map values = null;
+        for (int i = 0; i < children.size(); i++) {
             if (children.get(i) instanceof UISelectItem) {
-                selectItem = (UISelectItem) children.get(i);
-                values.put(selectItem.getItemLabel(), selectItem.getItemValue()
-                        .toString());
+                UISelectItem selectItem = (UISelectItem) children.get(i);
+
+                Object value = selectItem.getItemValue();
+                if (value == null) {
+                    continue;
+                }
+
+                if (values == null) {
+                    values = new HashMap(8);
+                }
+                values.put(selectItem.getItemLabel(), value);
             }
-            i++;
         }
 
-        StringAppender datas = new StringAppender(values.size() * 64);
-        for (Iterator it = values.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+        if (values != null) {
+            StringAppender datas = new StringAppender(values.size() * 64);
+            for (Iterator it = values.entrySet().iterator(); it.hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
 
-            String key = (String) entry.getKey();
-            if (key == null || key.length() < 1) {
-                continue;
-            }
+                String key = (String) entry.getKey();
+                if (key == null || key.length() < 1) {
+                    continue;
+                }
 
-            String value = (String) entry.getValue();
-            if (value == null) {
-                continue;
+                String value = (String) entry.getValue();
+                if (value == null) {
+                    continue;
+                }
+
+                if (datas.length() > 0) {
+                    datas.append(',');
+                }
+
+                appendData(datas, key, value);
             }
 
             if (datas.length() > 0) {
-                datas.append(',');
+                htmlWriter.writeAttribute("v:parameter", datas.toString());
             }
-
-            appendData(datas, key, value);
         }
-        
-        htmlWriter.writeAttribute("v:parameter", datas.toString());
-        
+
         String shellDecorator = component.getShellDecoratorName(facesContext);
         if (shellDecorator != null) {
             htmlWriter.writeAttribute("v:shellDecorator", shellDecorator);
         }
-        
+
         if (!component.isVisible(facesContext)) {
             htmlWriter.writeAttribute("v:visible", false);
         }
