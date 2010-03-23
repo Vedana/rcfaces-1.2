@@ -5,7 +5,7 @@
 /**
  * <p><strong>f_viewDialog</strong> represents popup modal view.
  *
- * @class public f_viewDialog extends f_dialog
+ * @class public f_viewDialog extends f_dialog, fa_immediate
  * @author Fred Lefevere-Laoide (latest mdialogodification by $Author$)
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
@@ -173,7 +173,7 @@ var __members = {
 	f_getIFrameUrl: function() {
 		var url=this.f_getViewURL();
 		if (!url) {
-			return "about:blank";
+			url="about:blank";
 		}
 		
 		var param = this._parameters;
@@ -191,24 +191,12 @@ var __members = {
 				ds+=encodeURIComponent(key)+"="+encodeURIComponent(param[key]);
 			}
 			
-			ds="__rcfaces_utf8="+encodeURIComponent(ds);
-
-			var pos=url.indexOf("?");
-			if (pos<0) {
-				url+="?"+ds;
-			}  else {
-				url+="&"+ds;
+			if (ds) {				
+				url=f_core.AddParameter(url, f_core.REQUEST_PARAMETERS_UTF8, ds);
 			}
 		}
-		
-		var requestId="__rcfaces_var="+f_core.AllocateRequestKey();
-		var pos=url.indexOf("?");
-		if (pos<0) {
-			url+="?"+requestId;
-			
-		}  else {
-			url=url.substring(0, pos+1)+requestId+"&"+url.substring(pos+1);
-		}
+
+		url=f_core.AddParameter(url, f_core.REQUEST_PARAMETERS_KEY, f_core.AllocateRequestKey());
 		
 		return url;
 	},
@@ -333,6 +321,7 @@ var __members = {
 
 new f_class("f_viewDialog", {
 	extend: f_dialog,
+	aspects: [ fa_immediate ],
 	members: __members,
 	statics: __statics
 });
