@@ -608,7 +608,7 @@ var __members = {
 	f_getFocusableElement: function() {
 		return this.f_getEventElement();
 	},
-	f_fireEvent: function(type, evt, item, value, selectionProvider, detail) {
+	f_fireEvent: function(type, evt, item, value, selectionProvider, detail, stage) {
 		if (type==f_event.SELECTION) {			
 			if (this.f_isReadOnly() || this.f_isDisabled()) {
 				return false;
@@ -619,10 +619,10 @@ var __members = {
 			}
 		}	
 		
-		var ret = this.f_super(arguments, type, evt, item, value, selectionProvider, detail);
+		var ret = this.f_super(arguments, type, evt, item, value, selectionProvider, detail, stage);
 		
-		if (ret!==false && type==f_event.SELECTION) {			
-			ret = this.f_super(arguments, f_imageButton.SELECTION_POST, evt, item, value, selectionProvider, detail);
+		if (ret!==false && type==f_event.SELECTION && !stage) {			
+			ret = this.f_super(arguments, f_imageButton.SELECTION, evt, item, value, selectionProvider, detail, f_imageButton.SELECTION_POST);
 		}
 		
 		return ret;
