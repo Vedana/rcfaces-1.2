@@ -11,7 +11,16 @@
  * @version $Revision$ $Date$
  */
 var __statics = {
-	
+
+	/**
+	 * @field private static final
+	 */
+	_EVENTS: {
+			init: f_event.INIT,
+			close: f_event.CLOSE,
+			user: f_event.USER
+	},
+
 	/**
 	 * @field public static final String
 	 */
@@ -287,7 +296,12 @@ var __members = {
 		
 		this._shellManager=f_shellManager.Get();
 		
-		if (this.nodeType==f_core.ELEMENT_NODE) {
+		if (this.nodeType==f_core.ELEMENT_NODE) {			
+			var events=f_core.GetAttribute(this, "v:events");
+			if (events) {
+				this.f_initEventAtts(f_shell._EVENTS, events);
+			}
+
 			var shellDecoratorName = f_core.GetAttribute(this, "v:shellDecorator");
 			if (shellDecoratorName) {
 				this._shellDecoratorName = shellDecoratorName;
@@ -617,7 +631,10 @@ var __members = {
 		
 			try {
 				shellManager.f_closeShell(self);
-
+				
+			} catch (ex) {
+				f_core.Error(f_shell, "f_close.timer: Can not close '"+self+"'", ex);
+				
 			} finally {
 				shellManager=null;
 			}
@@ -632,22 +649,41 @@ var __members = {
 	},
 	f_postDestruction: function() {
 		this.f_setStatus(f_shell.DESTROYED_STATUS);
-
-		var returnValueFunction=this._returnValueFunction;
-		if (typeof(returnValueFunction)!="function") {
-			return;
-		}
 		
 		var returnValue=this._returnValue;
+			
+		//function(type, jsEvt, item, value, selectionProvider, detail) 
+		this.f_fireEvent(f_event.CLOSE, null, null, returnValue, null, null);
 		
-		try {
-			this._showNextShell=returnValueFunction.call(this, returnValue);
-
-		} catch (x) {
-			f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
+		var returnValueFunction=this._returnValueFunction;
+		if (typeof(returnValueFunction)=="function") {
+			try {
+				if (returnValueFunction.call(this, returnValue)==false) {
+					this.f_cancelNextShell();
+				}
+	
+			} catch (x) {
+				f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
+			}
 		}
 	},
-		
+	
+	/**
+	 * @method public
+	 * @reurn void
+	 */
+	f_cancelNextShell: function() {
+		this._showNextShell=false;
+	},
+	
+	/**
+	 * @method public
+	 * @return Boolean
+	 */
+	f_isNextShellCanceled: function() {
+		return this._showNextShell;
+	},
+	
 	/**
 	 * @method public
 	 * @return String
