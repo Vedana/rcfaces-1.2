@@ -1,4 +1,54 @@
 
+----------------------------------------------------------------------
+- @version I2555
+- @author Olivier Oeuillot & Jean-Baptiste Meslin
+- 
+
+f_core
+Ajout de la gestion du requestKey pour l'appel des URLs
+
+f_vb.js:
+Correction du checker TRIM
+
+f_viewDialog / ParameterDecoderPhaseListener:
+Gestion des parametres en UTF8
+
+CloseEvent:
+Ajout de la gestion d'un parametre "value" à l'evenement.
+
+IFacesEvent/IValueFacesEvent:
+Généralisation des évenements JSF.
+
+IContentPath:
+Regroupement des constantes concernant les chemins dans l'interface IContentPath
+
+Delay:
+Support du "y" pour la durée d'expiration
+
+IEventData:
+Ajout de la possibilité d'associé un Objet à un evenement (en plus de la value qui est un string)
+
+Facelets:
+Corrections pour compatibilité facelets 1.0
+
+f_core.js:
+Ajout d'une API qui permet de récuperer et d'ajouter des parametres à une URL 
+Ajout de la sérialisation de l'objet associé à un évenement
+
+f_viewDialog.js:
+Refonte du systeme d'ajout de parametres dans les URLs
+
+ListenerTools/EventDecoders/f_shell.js:
+Support de l'évenement CLOSE
+
+fa_eventTarget:
+Ajout d'un nouveau parametre lors du traitement de l'evenement afin de classer les listeners par ordre d'execution.
+
+CssStyleRenderer/CssOperationContentModel/StyleContentAccessorHandler/FileItemSource/StyleSheetSourceContainer/StylesheetsServlet:
+Amélioration du système de merge des CSS
+
+f_shellManager.js/f_shell.js:
+Ajout d'un systeme de blocage quand plusieurs shell se succedent et que l'une d'elle bloque tout.
 
 ----------------------------------------------------------------------
 - @version I2554
