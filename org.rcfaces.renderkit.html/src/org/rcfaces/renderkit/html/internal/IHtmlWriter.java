@@ -105,6 +105,8 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
 
     IHtmlWriter writeBorder(int size) throws WriterException;
 
+    IHtmlWriter writeAutoComplete(String mode) throws WriterException;
+    
     // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws
     // WriterException;
 }

@@ -95,4 +95,6 @@ public interface IHtmlElements {
     String TEXT_INPUT_TYPE = "text";
 
     String JAVASCRIPT_VOID = "javascript:void(0)";
+
+    String AUTOCOMPLETE_OFF = "off";
 }

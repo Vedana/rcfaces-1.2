@@ -194,7 +194,7 @@ public abstract class AbstractHtmlWriter extends
         String value;
         if (values.length == 1) {
             value = values[0];
-            
+
         } else {
             StringAppender sa = new StringAppender((values.length + separator
                     .length()) * 32);
@@ -205,10 +205,10 @@ public abstract class AbstractHtmlWriter extends
 
                 sa.append(values[i]);
             }
-            
+
             value = sa.toString();
         }
-        
+
         try {
             responseWriter.writeAttribute(name, value, null);
 
@@ -379,10 +379,9 @@ public abstract class AbstractHtmlWriter extends
     public final IHtmlWriter writeClass(String className)
             throws WriterException {
         /*
-        if (className.indexOf('@')>=0) {
-            throw new IllegalArgumentException("Invalid className='"+className+"'");
-        }
-*/      
+         * if (className.indexOf('@')>=0) { throw new
+         * IllegalArgumentException("Invalid className='"+className+"'"); }
+         */
         writeAttribute("class", className);
 
         return this;
@@ -590,6 +589,12 @@ public abstract class AbstractHtmlWriter extends
 
     public IHtmlWriter writeCharSet(String charset) throws WriterException {
         writeAttribute("charset", charset);
+
+        return this;
+    }
+
+    public IHtmlWriter writeAutoComplete(String mode) throws WriterException {
+        writeAttribute("autocomplete", mode);
 
         return this;
     }
