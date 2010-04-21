@@ -198,17 +198,19 @@ var __members = {
 		this.f_super(arguments);
 	},
 	f_setDomEvent: function(type, target) {
-		var link=this.f_getButton();
-		if (link) {
-			switch(type) {
-			case f_event.SELECTION: 
-			case f_event.BLUR: 
-			case f_event.FOCUS: 
-			case f_event.KEYDOWN:
-			case f_event.KEYUP:
-				target=link;
-				break;
+		switch(type) {
+		case f_event.SELECTION: 
+		case f_event.BLUR: 
+		case f_event.FOCUS: 
+		case f_event.KEYDOWN:
+		case f_event.KEYUP:
+			var link=this.f_getButton();
+			if (!link) {
+				return;
 			}
+			
+			target=link;
+			break;
 		}
 						
 		this.f_super(arguments, type, target);
@@ -231,17 +233,19 @@ var __members = {
 		return button;
 	},
 	f_clearDomEvent: function(type, target) {
-		var link=this._button;
-		if (link) {
-			switch(type) {
-			case f_event.SELECTION:
-			case f_event.BLUR:
-			case f_event.FOCUS:
-			case f_event.KEYDOWN:
-			case f_event.KEYUP:
-				target=link;
-				break;
+		switch(type) {
+		case f_event.SELECTION:
+		case f_event.BLUR:
+		case f_event.FOCUS:
+		case f_event.KEYDOWN:
+		case f_event.KEYUP:
+			var link=this._button;
+			if (!link) {
+				return;
 			}
+			
+			target=link;
+			break;
 		}
 				
 		this.f_super(arguments, type, target);
