@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
@@ -959,6 +960,12 @@ public class ComboGridRenderer extends DataGridRenderer implements
     public String computeSubInputClientId(IRenderContext renderContext,
             UIComponent component, String clientId) {
         return clientId + INPUT_ID_SUFFIX;
+    }
+
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
+
+        unlockedProperties.add("selectedValue");
     }
 
     /**
