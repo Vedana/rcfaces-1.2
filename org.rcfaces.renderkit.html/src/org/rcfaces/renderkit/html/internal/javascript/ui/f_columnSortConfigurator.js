@@ -211,7 +211,7 @@ var __members = {
 		
 		this._grid=undefined; // f_grid
 
-		this._cleanInputs();
+		this.f_cleanInputs();
 		
 		this.f_super(arguments);
 	},
@@ -466,10 +466,10 @@ var __members = {
 	},
 	
 	/**
-	 * @method private
+	 * @method public
 	 * @return void
 	 */
-	_cleanInputs: function() {
+	f_cleanInputs: function() {
 		/*
 		var form=this._form;
 		if (form) {
@@ -527,7 +527,7 @@ var __members = {
 		}
 	},
     /**
-     * @method private static
+     * @method private 
      * @return void
      */
 	f_addOptions: function(select, cols, colIndex) {
