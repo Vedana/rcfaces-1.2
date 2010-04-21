@@ -5,6 +5,7 @@
 package org.rcfaces.core.internal.taglib;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
@@ -20,6 +21,8 @@ public abstract class CameliaTag extends UIComponentELTag {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CameliaTag.class);
+
+    private static final boolean debugEnabled = LOG.isDebugEnabled();
 
     protected static final boolean getBool(String value) {
         return Boolean.valueOf(value).booleanValue();
@@ -107,4 +110,33 @@ public abstract class CameliaTag extends UIComponentELTag {
         super.setProperties(component);
     }
 
+    protected UIComponent createComponent(FacesContext facesContext,
+            String newId) throws JspException {
+        UIComponent component = super.createComponent(facesContext, newId);
+
+        if (debugEnabled) {
+            LOG.debug("Create component for id '" + newId + "' returns '"
+                    + component + "'.");
+        }
+
+        return component;
+    }
+
+    protected UIComponent findComponent(FacesContext context)
+            throws JspException {
+
+        if (debugEnabled) {
+            LOG.debug("Find component '" + getId() + "' ... (current="
+                    + getComponentInstance() + ")");
+        }
+
+        UIComponent component = super.findComponent(context);
+
+        if (debugEnabled) {
+            LOG.debug("Find component '" + getId() + "' returns '" + component
+                    + "'");
+        }
+
+        return component;
+    }
 }
