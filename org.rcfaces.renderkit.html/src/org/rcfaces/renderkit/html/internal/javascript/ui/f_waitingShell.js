@@ -20,7 +20,8 @@ var __statics = {
 		width: 150,
 		height: 150,
 		styleClass: "f_waitingShell",
-		backgroundMode: f_shell.GREYED_BACKGROUND_MODE
+		backgroundMode: f_shell.GREYED_BACKGROUND_MODE,
+		closable: false
 	},
  
     /**
