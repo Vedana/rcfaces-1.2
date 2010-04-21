@@ -683,9 +683,9 @@ var f_core = {
 	 * @return void
 	 */
 	SetDesignerMode: function(designerMode) {
-		f_core.Assert(typeof(designerMode)=="function", "f_core.SetDesignerMode: Invalid designerMode parameter ("+designerMode+")");
+		f_core.Assert(designerMode===undefined || typeof(designerMode)=="boolean", "f_core.SetDesignerMode: Invalid designerMode parameter ("+designerMode+")");
 
-		f_core.DesignerMode=designerMode;
+		f_core.DesignerMode=(designerMode!==false);
 	},
 	/**
 	 * @method hidden static
@@ -5918,7 +5918,12 @@ var f_core = {
 			
 			params[key]=value;
 		}
-		
+
+		var r=url.indexOf('?');
+		if (r>=0) {
+			url=url.substring(0, r);
+		}
+	
 		var ret=[url];
 				
 		var first=true;
