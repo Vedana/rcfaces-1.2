@@ -49,132 +49,132 @@ var __statics = {
 	/**
 	 * Style constant for resize area trim
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	MOVE_STYLE: 1<<3,
 	
 	/**
 	 * Style constant for resize area trim
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	RESIZE_STYLE: 1<<4,
 	
 	/**
 	 * Style constant for title area trim
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	TITLE_STYLE: 1<<5,
 	
 	/**
 	 * Style constant for close box trim
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	CLOSE_STYLE: 1<<6,
 	
 	/**
 	 * Style constant for minimize box trim
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	MIN_STYLE: 1<<7,
 	
 	/**
 	 * Style constant for horizontal scrollbar behavior
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	H_SCROLL_STYLE: 1<<8,
 	
 	/**
 	 * Style constant for vertical scrollbar behavior
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	V_SCROLL_STYLE: 1<<9,
 	
 	/**
 	 * Style constant for maximize box trim
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	MAX_STYLE: 1<<10,
 	
 	/**
 	 * Style constant for hide background
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	HIDE_SCREEN_STYLE: 1<<11,
 	
 	/**
 	 * Copy styleSheet from the main frame
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	COPY_STYLESHEET: 1<<12,
 	
 	/**
 	 * Force the body of the shell to be an IFrame
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	FRAME_ELEMENT: 1<<13,
 	
 	/**
 	 * The frame can be transparent
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	TRANSPARENT: 1<<14,
 	
 	/**
 	 * Style constant for modeless behavior
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	MODELESS_STYLE: 0,
 	
 	/**
 	 * Style constant for primary modal behavior
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	PRIMARY_MODAL_STYLE: 1<<15,
 	
 	/**
 	 * Style constant for application modal behavior
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	APPLICATION_MODAL_STYLE: 1<<16,
 	
 	/**
 	 * Style constant 
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	LIGHT_CONTAINER_STYLE: 1<<30,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */	
 	_DEFAULT_HEIGHT: 100,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */	
 	_DEFAULT_WIDTH: 300,
 	
 	/**
-	 * @field private static number
+	 * @field private static Number
 	 */
 	_ID: 0,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	CREATED_STATUS: 0x00,
 	
@@ -184,43 +184,47 @@ var __statics = {
 	OPENING_STATUS: 0x10,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	OPENED_STATUS: 0x12,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */	
 	CLOSING_STATUS: 0x20,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */	
 	ABOUT_TO_CLOSE_STATUS: 0x21,
 	
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	CLOSED_STATUS: 0x24,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DESTROYING_STATUS: 0x30,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DESTROYED_STATUS: 0x31
 }
 
 var __members = {
 
+
+	/**
+	 * @field private String
+	 */
 	_id: undefined,
 
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_style: undefined,
 	
@@ -230,28 +234,33 @@ var __members = {
 	_backgroundMode: undefined,
 
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_height: undefined,
 	
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_width: undefined,
 	
 	/**
-	 * @field private number
+	 * @field private Boolean
+	 */
+	_closable: undefined,
+	
+	/**
+	 * @field private Number
 	 */
 	_priority: 0,
 	
 	
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_shellStatus: 0,
 	
 	/**
-	 * @field hidden boolean
+	 * @field hidden Boolean
 	 */
 	_showNextShell: true,
 
