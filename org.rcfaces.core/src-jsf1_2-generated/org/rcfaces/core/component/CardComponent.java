@@ -10,14 +10,11 @@ import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import java.util.Set;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import java.util.HashSet;
-import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IPrependIdCapability;
-import javax.faces.component.NamingContainer;
 import org.rcfaces.core.internal.tools.CardBoxTools;
 import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
@@ -31,9 +28,7 @@ public class CardComponent extends AbstractOutputComponent implements
 	IVerticalAlignmentCapability,
 	IVariableScopeCapability,
 	IAsyncDecodeModeCapability,
-	IPrependIdCapability,
 	ILoadEventCapability,
-	NamingContainer,
 	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(CardComponent.class);
@@ -42,7 +37,7 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment","scopeSaveValue","asyncDecodeMode","prependId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","scopeValue","scopeVar","verticalAlignment","textAlignment","scopeSaveValue","asyncDecodeMode"}));
 	}
 
 	public CardComponent() {
@@ -81,23 +76,6 @@ public class CardComponent extends AbstractOutputComponent implements
 
 
 			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
-		
-	}
-
-	public String getContainerClientId(FacesContext facesContext) {
-
-
-	        if (this.isPrependId()) {
-    	        return super.getContainerClientId(facesContext);
-        	}
-            UIComponent parent = this.getParent();
-            while (parent != null) {
-                if (parent instanceof NamingContainer) {
-                    return parent.getContainerClientId(facesContext);
-                }
-                parent = parent.getParent();
-            }        
-        	return null;
 		
 	}
 
@@ -230,29 +208,6 @@ public class CardComponent extends AbstractOutputComponent implements
 
 	public void setAsyncDecodeMode(int asyncDecodeMode) {
 		engine.setProperty(Properties.ASYNC_DECODE_MODE, asyncDecodeMode);
-	}
-
-	public boolean isPrependId() {
-		return isPrependId(null);
-	}
-
-	/**
-	 * See {@link #isPrependId() isPrependId()} for more details
-	 */
-	public boolean isPrependId(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.PREPEND_ID, false, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "prependId" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isPrependIdSetted() {
-		return engine.isPropertySetted(Properties.PREPEND_ID);
-	}
-
-	public void setPrependId(boolean prependId) {
-		engine.setProperty(Properties.PREPEND_ID, prependId);
 	}
 
 	public final void addLoadListener(org.rcfaces.core.event.ILoadListener listener) {

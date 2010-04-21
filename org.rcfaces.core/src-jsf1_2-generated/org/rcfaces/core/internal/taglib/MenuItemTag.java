@@ -21,6 +21,7 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 	private ValueExpression accessKey;
 	private ValueExpression acceleratorKey;
 	private ValueExpression styleClass;
+	private ValueExpression immediate;
 	private ValueExpression menuListeners;
 	private ValueExpression removeAllWhenShown;
 	public String getComponentType() {
@@ -39,6 +40,10 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 		this.styleClass = styleClass;
 	}
 
+	public final void setImmediate(ValueExpression immediate) {
+		this.immediate = immediate;
+	}
+
 	public final void setMenuListener(ValueExpression menuListeners) {
 		this.menuListeners = menuListeners;
 	}
@@ -55,6 +60,7 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  acceleratorKey='"+acceleratorKey+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
+			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  removeAllWhenShown='"+removeAllWhenShown+"'");
 		}
 		if ((uiComponent instanceof MenuItemComponent)==false) {
@@ -96,6 +102,15 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 			}
 		}
 
+		if (immediate != null) {
+			if (immediate.isLiteralText()==false) {
+				component.setValueExpression(Properties.IMMEDIATE, immediate);
+
+			} else {
+				component.setImmediate(getBool(immediate.getExpressionString()));
+			}
+		}
+
 		if (menuListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MENU_LISTENER_TYPE, menuListeners);
 		}
@@ -114,6 +129,7 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 		accessKey = null;
 		acceleratorKey = null;
 		styleClass = null;
+		immediate = null;
 		menuListeners = null;
 		removeAllWhenShown = null;
 

@@ -311,16 +311,19 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 		        CameliaComponents.processDecodes(context, this, renderer);
 		    }
 			
+            boolean immediate=false;
 	  		if (this instanceof IValidationEventCapability) {
-	            boolean immediate=false;
 	            if (this instanceof IImmediateCapability) {
 	                immediate=((IImmediateCapability)this).isImmediate();
 	            }
-	 			if (immediate) {
-					if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
-						this.broadcast(new ValidationEvent(this));
-					}
+			}
+
+ 			if (immediate) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
 				}
+				
+				processEngineValidators(context);
 			}
 	       
 	        if (varScope!=null) {
@@ -357,18 +360,20 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	        }
 	
 			super.processValidators(context);
-			
+	
+            boolean immediate=false;
 	 		if (this instanceof IValidationEventCapability) {
-	            boolean immediate=false;
 	            if (this instanceof IImmediateCapability) {
 	                immediate=((IImmediateCapability)this).isImmediate();
 	            }
+			}
 	 			
-				if (immediate==false) {
-					if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
-						this.broadcast(new ValidationEvent(this));
-					}
+			if (immediate==false) {
+				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
+					this.broadcast(new ValidationEvent(this));
 				}
+			
+				processEngineValidators(context);
 			}
 			       
 	        if (varScope!=null) {
@@ -381,7 +386,11 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 	    	throw ex;
 	    }
 	}
-
+  
+	protected void processEngineValidators(FacesContext context) {
+		engine.processValidation(context);			
+	}
+ 
     public void processUpdates(FacesContext context) {
 
 		try {

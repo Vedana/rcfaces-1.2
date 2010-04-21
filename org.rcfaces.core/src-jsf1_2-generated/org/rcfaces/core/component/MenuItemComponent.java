@@ -15,6 +15,7 @@ import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 
 /**
  * A menu item
@@ -23,6 +24,7 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 	IAccessKeyCapability,
 	IAcceleratorKeyCapability,
 	IStyleClassCapability,
+	IImmediateCapability,
 	IMenuEventCapability {
 
 	private static final Log LOG = LogFactory.getLog(MenuItemComponent.class);
@@ -31,7 +33,7 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","acceleratorKey","removeAllWhenShown","accessKey","menuListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","immediate","acceleratorKey","removeAllWhenShown","accessKey","menuListener"}));
 	}
 
 	public MenuItemComponent() {
@@ -124,6 +126,29 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 
 	public void setStyleClass(java.lang.String styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	public boolean isImmediate() {
+		return isImmediate(null);
+	}
+
+	/**
+	 * See {@link #isImmediate() isImmediate()} for more details
+	 */
+	public boolean isImmediate(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.IMMEDIATE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "immediate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImmediateSetted() {
+		return engine.isPropertySetted(Properties.IMMEDIATE);
+	}
+
+	public void setImmediate(boolean immediate) {
+		engine.setProperty(Properties.IMMEDIATE, immediate);
 	}
 
 	public final void addMenuListener(org.rcfaces.core.event.IMenuListener listener) {

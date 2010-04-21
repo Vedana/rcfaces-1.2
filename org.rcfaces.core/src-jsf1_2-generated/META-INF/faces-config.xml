@@ -1491,6 +1491,10 @@ An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane C
 		<component-class>org.rcfaces.core.component.TabComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.tabNamingContainer</component-type>
+		<component-class>org.rcfaces.core.component.TabNamingContainerComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 <p>The text Component is a placeholder for displaying text.</p>
       <p>The text Component has the following capabilities :

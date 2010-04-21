@@ -543,6 +543,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>tabNamingContainer</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.tabNamingContainer</component-type>
+			<renderer-type>org.rcfaces.core.tabNamingContainer</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>text</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.text</component-type>
