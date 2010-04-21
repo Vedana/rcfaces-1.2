@@ -802,6 +802,13 @@ var __members = {
 	},
 	/**
 	 * @method public
+	 * @return Document
+	 */
+	f_getDocument: function() {
+		return this.f_getClassLoader().f_getDocument();
+	},
+	/**
+	 * @method public
 	 * @return String
 	 */
 	toString: function() {
