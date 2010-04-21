@@ -754,6 +754,8 @@ var __members = {
 				this._cursor=undefined;
 			}
 			
+			this.f_getClass().f_getClassLoader().f_garbageObjects(false, row);
+			
 			tbody.removeChild(row);
 			rowsPool.f_removeElement(row);
 		
@@ -1028,7 +1030,11 @@ var __members = {
 
 				this.f_releaseRows();
 				this.f_releaseCells();
-			
+
+				if (this._waitingMode==f_grid.END_WAITING) {
+					this.f_removePagedWait();
+				}
+
 				// Detache temporairement !
 				if (tbody.parentNode) {
 					
@@ -1037,9 +1043,6 @@ var __members = {
 					this._table.removeChild(tbody);
 				}
 
-				if (this._waitingMode==f_grid.END_WAITING) {
-					this.f_removePagedWait();
-				}
 				this._shadowRows=undefined;
 				this._endRowIndex=undefined;
 	
@@ -1638,7 +1641,7 @@ var __members = {
 	 * @method protected
 	 * @return void
 	 */
-	f_sortClientSide: function(methods, ascendings,tdIndexes) {
+	f_sortClientSide: function(methods, ascendings, tdIndexes) {
 		
 		var self=this;
 		function internalSort(obj1, obj2) {				

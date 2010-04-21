@@ -2338,8 +2338,8 @@ var __members = {
 		var waitingRow=this._waitingRow;
 		if (waitingRow) {
 			this._waitingRow=undefined;
-			
-			waitingRow.parentNode.removeChild(waitingRow);
+						
+			f_classLoader.Destroy(waitingRow);
 		}
 	},
 	/**
@@ -5083,7 +5083,7 @@ var __members = {
 		if (additionalContent===false) {
 			return;			
 		}
-		row._additionalContent=true;	
+		//row._additionalContent=true;	
 
 		this._additionalInformationCount++;
 
@@ -5114,7 +5114,7 @@ var __members = {
 		additionalRow._additionalBody=true;
 		additionalRow._row=row;
 		additionalRow._parentNode=row;
-		additionalRow.className=row._className+" f_grid_additionalRow"
+		additionalRow.className=row._className+" f_grid_additionalRow";
 		row._additionalRow=additionalRow;
 
 		if (row._additionalHeight) {
@@ -5174,6 +5174,8 @@ var __members = {
 	 				
 	 				waiting.f_hide();
 	 				waiting.f_close();
+
+					f_classLoader.Destroy(waiting);
 	 			}
 				
 				f_grid.Info(f_grid, "f_showAdditionalContent.onError: Bad status: "+status);
@@ -5209,6 +5211,8 @@ var __members = {
 	 				
 	 				waiting.f_hide();
 	 				waiting.f_close();
+
+					f_classLoader.Destroy(waiting);
 	 			}
 
 				var ret=undefined;
@@ -5305,9 +5309,15 @@ var __members = {
 			return;
 		}
 
-		if (row._additionalContent===false) {
+		if (true) {
+			additionalRow.className="f_grid_hiddenAV";
+			return;
+		}
+		
+		row._additionalRow=undefined;
+
+		if (row._additionalContent!==false) {
 			// On l'efface !
-			row._additionalRow=undefined;
 			
 			additionalRow._parentNode=undefined; // HTMLRowElement
 			additionalRow._row=undefined; // HtmlRowElement
@@ -5321,11 +5331,12 @@ var __members = {
 			}				
 			
 			if (additionalRow.hasChildNodes()) {
+				
+				this.f_getClass().f_getClassLoader().f_garbageObjects(undefined, additionalRow);
+
 				while (additionalRow.hasChildNodes()) {
 					additionalRow.removeChild(additionalRow.lastChild);
 				}			
-				
-				this.f_getClass().f_getClassLoader().f_garbageObjects();
 			}
 		}
 		
