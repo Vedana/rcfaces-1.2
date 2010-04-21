@@ -17,6 +17,8 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.util.StateHolderTools;
 
 /**
@@ -27,6 +29,9 @@ import org.rcfaces.core.internal.util.StateHolderTools;
 public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
         implements IDeltaPropertiesAccessor {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(BasicDeltaPropertiesAccessor.class);
 
     private static final int PROPERTY_INITIAL_SIZE = 8;
 
@@ -135,7 +140,16 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
     }
 
     public void setProperty(FacesContext facesContext, String propertyName,
-            ValueExpression valueBinding) {
+            ValueExpression valueExpression) {
+
+        Object initialValue = parent.getProperty(propertyName);
+        if (initialValue != null && initialValue.equals(valueExpression)) {
+            return;
+        }
+
+        LOG.error("Can not change a ValueExpression property '" + propertyName
+                + "' valueExpression=" + valueExpression + " original='"
+                + initialValue + "'.");
 
         throw new FacesException(
                 "Can not set a ValueExpression while a delta phase.");
@@ -309,12 +323,12 @@ public class BasicDeltaPropertiesAccessor extends AbstractPropertiesAccessor
 
     public String toString() {
         if (hasModifiedProperties() == false) {
-            return "{NO DELTA}";
+            return "{Delta: NONE}";
         }
 
         Set keys = keySet();
 
-        String s = "{DELTA:";
+        String s = "{Delta: ";
 
         boolean first = true;
         for (Iterator it = keys.iterator(); it.hasNext();) {

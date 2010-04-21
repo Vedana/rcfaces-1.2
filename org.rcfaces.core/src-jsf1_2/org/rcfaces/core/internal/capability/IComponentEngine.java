@@ -72,6 +72,8 @@ public interface IComponentEngine extends IReleasable,
 
     void startDecodes(FacesContext context);
 
+    void processValidation(FacesContext context);
+
     void processUpdates(FacesContext context);
 
     IDataMapAccessor getDataMapAccessor(FacesContext context, String name,

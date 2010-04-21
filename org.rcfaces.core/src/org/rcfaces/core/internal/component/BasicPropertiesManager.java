@@ -21,6 +21,8 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
     private static final Log LOG = LogFactory
             .getLog(BasicPropertiesManager.class);
 
+    private static final boolean debugEnabled = LOG.isDebugEnabled();
+
     private static final boolean COMMITED_PROPERTIES_ENABLED = false;
 
     protected IFactory factory;
@@ -53,6 +55,11 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
     }
 
     public void commitManager(FacesContext context) {
+        if (debugEnabled) {
+            LOG.debug("Commit manager deltaProperties="
+                    + deltaPropertiesAccessor);
+        }
+
         if (deltaPropertiesAccessor == null) {
             return;
         }
@@ -63,6 +70,12 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
 
         if (commitedPropertiesAccessor != null
                 && commitedPropertiesAccessor.hasModifiedProperties() == false) {
+
+            if (debugEnabled) {
+                LOG.debug("Release commited properties ="
+                        + commitedPropertiesAccessor);
+            }
+
             commitedPropertiesAccessor.release();
             commitedPropertiesAccessor = null;
         }
@@ -80,17 +93,33 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
     public IPropertiesAccessor getPropertiesAccessor(boolean enableDelta,
             boolean forceDelta) {
 
+        if (debugEnabled) {
+            LOG.debug("getPropertiesAccessor(enableDelta=" + enableDelta
+                    + ", forceDelta=" + forceDelta + ") => ");
+        }
+
         if (enableDelta) {
             if (forceDelta) {
                 if (deltaPropertiesAccessor == null) {
                     if (originalPropertiesAccessor == null) {
                         originalPropertiesAccessor = createPropertiesAccessor();
+
+                        if (debugEnabled) {
+                            LOG.debug("  create originalPropertiesAccessor="
+                                    + originalPropertiesAccessor);
+                        }
                     }
 
                     if (COMMITED_PROPERTIES_ENABLED) {
                         if (commitedPropertiesAccessor == null) {
                             commitedPropertiesAccessor = originalPropertiesAccessor
                                     .createDeltaPropertiesAccessor();
+
+                            if (debugEnabled) {
+                                LOG
+                                        .debug("  create commitedPropertiesAccessor="
+                                                + commitedPropertiesAccessor);
+                            }
                         }
                     }
 
@@ -98,29 +127,66 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
                         deltaPropertiesAccessor = commitedPropertiesAccessor
                                 .createDeltaPropertiesAccessor();
 
+                        if (debugEnabled) {
+                            LOG
+                                    .debug("  create deltaPropertiesAccessor from commited ="
+                                            + deltaPropertiesAccessor);
+                        }
+
                     } else {
                         deltaPropertiesAccessor = originalPropertiesAccessor
                                 .createDeltaPropertiesAccessor();
+
+                        if (debugEnabled) {
+                            LOG
+                                    .debug("  create deltaPropertiesAccessor from original ="
+                                            + deltaPropertiesAccessor);
+                        }
                     }
+                }
+
+                if (debugEnabled) {
+                    LOG.debug("  returns deltaPropertiesAccessor="
+                            + deltaPropertiesAccessor);
                 }
 
                 return deltaPropertiesAccessor;
             }
 
             if (deltaPropertiesAccessor != null) {
+                if (debugEnabled) {
+                    LOG.debug("  returns deltaPropertiesAccessor="
+                            + deltaPropertiesAccessor);
+                }
+
                 return deltaPropertiesAccessor;
             }
         }
 
         if (commitedPropertiesAccessor != null) {
+            if (debugEnabled) {
+                LOG.debug("  returns commitedPropertiesAccessor="
+                        + commitedPropertiesAccessor);
+            }
+
             return commitedPropertiesAccessor;
         }
 
         if (originalPropertiesAccessor != null || forceDelta == false) {
+            if (debugEnabled) {
+                LOG.debug("  returns originalPropertiesAccessor="
+                        + originalPropertiesAccessor);
+            }
+
             return originalPropertiesAccessor;
         }
 
         originalPropertiesAccessor = createPropertiesAccessor();
+
+        if (debugEnabled) {
+            LOG.debug("  create and returns originalPropertiesAccessor="
+                    + originalPropertiesAccessor);
+        }
 
         return originalPropertiesAccessor;
 
@@ -132,6 +198,16 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
         }
 
         Object states[] = (Object[]) state;
+
+        if (debugEnabled) {
+            if (states != null) {
+                LOG.debug("Restore manager state [0]='" + states[0] + "' [1]='"
+                        + states[1] + "' [2]='" + states[2] + "'.");
+            } else {
+                LOG.debug("Restore manager state states=" + states);
+
+            }
+        }
 
         if (states != null && states[0] != null) {
             originalPropertiesAccessor = createPropertiesAccessor();
@@ -164,26 +240,36 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
 
     public Object saveManagerState(FacesContext context) {
         if (originalPropertiesAccessor == null) {
+            if (debugEnabled) {
+                LOG.debug("Save manager state returns null.");
+            }
+
             return null;
         }
 
-        Object ts[] = new Object[3];
+        Object states[] = new Object[3];
 
         if (originalPropertiesAccessor != null) {
-            ts[0] = originalPropertiesAccessor.saveState(context);
+            states[0] = originalPropertiesAccessor.saveState(context);
 
             if (commitedPropertiesAccessor != null
                     && commitedPropertiesAccessor.hasModifiedProperties()) {
-                ts[1] = commitedPropertiesAccessor.saveState(context);
+                states[1] = commitedPropertiesAccessor.saveState(context);
             }
 
             if (deltaPropertiesAccessor != null
                     && deltaPropertiesAccessor.hasModifiedProperties()) {
-                ts[2] = deltaPropertiesAccessor.saveState(context);
+                states[2] = deltaPropertiesAccessor.saveState(context);
             }
         }
 
-        return ts;
+        if (debugEnabled) {
+            LOG.debug("Save manager state [0]='" + states[0] + "' [1]='"
+                    + states[1] + "' [2]='" + states[2] + "'.");
+
+        }
+
+        return states;
     }
 
     protected IPropertiesAccessor createPropertiesAccessor() {

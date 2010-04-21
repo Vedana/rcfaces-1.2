@@ -73,6 +73,10 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     protected BasicComponentEngine(BasicComponentEngine original) {
         this(original.factory);
 
+        if (debugEnabled) {
+            LOG.debug("Clone BasicComponentEngine  source=" + original);
+        }
+
         if (original.propertiesManager != null) {
             propertiesManager = original.propertiesManager.copyOriginalState();
         }
@@ -160,17 +164,27 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     final Object getLocalProperty(String propertyName) {
+
+        if (debugEnabled) {
+            LOG.debug("getLocalProperty(\"" + propertyName + "\") ...");
+        }
+
         IPropertiesAccessor propertiesAccessor = getPropertiesAccessor(false);
         if (propertiesAccessor == null) {
+            if (debugEnabled) {
+                LOG.debug("getLocalProperty(\"" + propertyName
+                        + "\") returns null (propertiesAccessor="
+                        + propertiesAccessor + ")");
+            }
             return null;
         }
 
         Object value = propertiesAccessor.getProperty(propertyName);
 
         if (debugEnabled) {
-            LOG
-                    .debug("getLocalProperty(\"" + propertyName
-                            + "\") returns null");
+            LOG.debug("getLocalProperty(\"" + propertyName + "\") returns "
+                    + value + "  (propertiesAccessor=" + propertiesAccessor
+                    + ")");
         }
 
         return value;
@@ -178,6 +192,15 @@ public class BasicComponentEngine extends AbstractComponentEngine {
 
     public final Object getInternalProperty(String propertyName,
             Class requestedClass, FacesContext facesContext) {
+
+        if (debugEnabled) {
+            LOG.debug("getInternalProperty(\""
+                    + propertyName
+                    + "\" ["
+                    + ((requestedClass != null) ? requestedClass.getName()
+                            : "no class") + "]) ... (enableDelta="
+                    + enableDelta + ")");
+        }
 
         Object object = getLocalProperty(propertyName);
         if (object == null) {
@@ -193,13 +216,13 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         if (object instanceof ValueExpression) {
-            ValueExpression valueBinding = (ValueExpression) object;
+            ValueExpression valueExpression = (ValueExpression) object;
 
             if (facesContext == null) {
                 facesContext = getFacesContext();
             }
 
-            object = valueBinding.getValue(facesContext.getELContext());
+            object = valueExpression.getValue(facesContext.getELContext());
 
             if (debugEnabled) {
                 LOG.debug("getInternalProperty(\""
@@ -207,7 +230,7 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                         + "\" ["
                         + ((requestedClass != null) ? requestedClass.getName()
                                 : "no class") + "]) returns a value binding ("
-                        + valueBinding + ") => " + object);
+                        + valueExpression + ") => " + object);
             }
             return object;
         }
@@ -233,26 +256,38 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     protected final void setInternalProperty(String propertyName, Object value) {
-        IPropertiesAccessor pa = getPropertiesAccessor(true);
 
         if (debugEnabled) {
             LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
-                    + ")");
+                    + ") ...");
         }
 
+        IPropertiesAccessor pa = getPropertiesAccessor(true);
+
         pa.setProperty(null, propertyName, value);
+
+        if (debugEnabled) {
+            LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
+                    + ") propertiesAccessor=" + pa);
+        }
     }
 
     protected final void setInternalProperty(String propertyName,
             ValueExpression value) {
-        IPropertiesAccessor pa = getPropertiesAccessor(true);
 
         if (debugEnabled) {
             LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
-                    + ")");
+                    + ") ...");
         }
 
+        IPropertiesAccessor pa = getPropertiesAccessor(true);
+
         pa.setProperty(null, propertyName, value);
+
+        if (debugEnabled) {
+            LOG.debug("setInternalProperty(\"" + propertyName + "\", " + value
+                    + ") propertiesAccessor=" + pa);
+        }
     }
 
     public final void setProperty(String propertyName, boolean value) {
@@ -325,6 +360,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     final IPropertiesAccessor getPropertiesAccessor(boolean forceDelta) {
+
+        if (debugEnabled) {
+            LOG.debug("getPropertiesAccessor  enableDelta=" + enableDelta
+                    + " forceDelta=" + forceDelta + " ...");
+        }
+
         if (propertiesManager != null) {
             return propertiesManager.getPropertiesAccessor(enableDelta,
                     forceDelta);
@@ -335,6 +376,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         }
 
         propertiesManager = factory.createPropertiesManager(this);
+
+        if (debugEnabled) {
+            LOG.debug("Create propertiesManager='" + propertiesManager
+                    + " for this='" + this + "' enableDelta=" + enableDelta
+                    + " forceDelta=" + forceDelta);
+        }
 
         return propertiesManager.getPropertiesAccessor(enableDelta, forceDelta);
     }
@@ -609,12 +656,43 @@ public class BasicComponentEngine extends AbstractComponentEngine {
     }
 
     public boolean isPropertySetted(String propertyName) {
+
+        if (debugEnabled) {
+            LOG.debug("Is property setted '" + propertyName + "' ...");
+        }
+
         IPropertiesAccessor propertiesAccessor = getPropertiesAccessor(false);
         if (propertiesAccessor == null) {
+
+            if (debugEnabled) {
+                LOG.debug("Is property setted '" + propertyName
+                        + "' => FALSE  (propertiesAccessor='"
+                        + propertiesAccessor + "')");
+            }
             return false;
         }
 
-        return propertiesAccessor.isPropertySetted(propertyName);
+        boolean setted = propertiesAccessor.isPropertySetted(propertyName);
+
+        if (debugEnabled) {
+            LOG.debug("Is property setted '" + propertyName + "' => " + setted
+                    + "  (propertiesAccessor='" + propertiesAccessor + "')");
+        }
+
+        return setted;
+    }
+
+    public void processValidation(FacesContext context) {
+
+        if (debugEnabled) {
+            LOG.debug("Process validation, enableDelta=" + enableDelta);
+        }
+
+        if (enableDelta == false) {
+            return;
+        }
+
+        enableDelta = false;
     }
 
     public void processUpdates(FacesContext context) {
@@ -623,11 +701,10 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             LOG.debug("Process update, enableDelta=" + enableDelta);
         }
 
-        if (enableDelta == false) {
-            return;
+        if (enableDelta == true) {
+            throw new FacesException(
+                    "Invalid update state without validation phase !");
         }
-
-        enableDelta = false;
 
         if (dataAccessorsByName != null
                 && dataAccessorsByName.isEmpty() == false) {
