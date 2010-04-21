@@ -1312,10 +1312,8 @@ var __statics = {
 	 * @context object:validator
 	 */
 	Behavior_required : function(validator, inVal) {
-		var bRet;
-
 		// Check if input value from format
-		bRet = (inVal != null && inVal != "");
+		var bRet = (inVal != null && inVal != "");
 
 		// Fill error status
 		if (!bRet) {
