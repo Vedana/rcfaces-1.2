@@ -109,6 +109,128 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param Array<T> l
+	 * @param Boolean appendSelection
+	 * @param Boolean show
+	 * @param Array<Object> elements
+	 * @return Boolean
+	 */
+	_checkElementsRange: function(l, appendSelection, show, elements) {
+		if (f_core.IsDebugEnabled(fa_checkManager)) {
+			var s="Range check: "+l.length+" elements: ";
+
+			if (!l.length) {
+				s+=" EMPTY ???";
+				
+			} else {
+				s+=l.join(",");
+			}
+						
+			f_core.Debug("fa_checkManager", s);
+		}
+		
+		var checkFound=false;
+
+		var elementByValue=new Object;
+		if (elements===undefined) {
+			elements=this.fa_listVisibleElements();
+		}
+		
+		for(var i=0;i<elements.length;i++) {
+			var element=elements[i];
+			
+			elementByValue[this.fa_getElementValue(element)]=element;
+		}
+			
+		var checkedElementValues=this._checkedElementValues;
+		for(var i=0;i<checkedElementValues.length;) {
+			var checkedElementValue=checkedElementValues[i];
+				
+			var found=false;
+			for(var j=0;j<l.length;j++) {
+				if (checkedElementValue!=l[j]) {
+					continue;
+				}
+				
+				// On le laisse selectionné, on le retire de notre liste "à selectionner" !
+				l.splice(j, 1);
+				found=true;
+				break;
+			}
+			
+			if (found || appendSelection) {
+				i++;
+				continue;
+			}
+
+			var element=elementByValue[checkedElementValue];
+			
+			if (element) {
+				checkFound=true;
+				
+				this._uncheckElement(element);
+				continue;
+			}
+
+			// Pas dans les visibles, on supprime directement du tableau.
+			checkedElementValues.splice(i, 1);
+		}
+		
+		if (!this._clearAllCheckedElements) { 
+			var uncheckedElementValues=this._uncheckedElementValues;
+
+			for(var i=0;i<uncheckedElementValues.length;) {
+				var uncheckedElementValue=uncheckedElementValues[i];
+				
+				var found=false;
+				for(var j=0;j<l.length;j++) {
+					if (uncheckedElementValue!=l[j]) {
+						continue;
+					}
+					
+					// On le retire de la deselection !
+					checkFound=true;
+					found=true;
+					l.splice(j, 1);
+					break;
+				}
+					
+				if (!found) {
+					i++;
+					continue;
+				}
+				
+				// On le retire de la liste des "déselectionnés" et on le reselectionne !
+				var element=elementByValue[uncheckedElementValue];
+				if (element) {
+					this._checkElement(element, uncheckedElementValue, show);
+					show=false;
+					checkFound=true;
+					continue;
+				}
+
+				uncheckedElementValues.splice(i, 1);
+			}			
+		}
+		
+		for(var i=0;i<l.length;i++) {
+			var value=l[i];
+			var element=elementByValue[value];
+			if (!element) {
+				// La valeur n'est pas affichée !
+				
+				checkedElementValues.push(value);
+				continue;
+			}
+			
+			this._checkElement(element, value, show);
+			show=false;
+		}		
+		
+		return checkFound;
+	},
+	/**
+	 * @method private
 	 */
 	_uncheckElement: function(element, value) {
 		if (!this.fa_isElementChecked(element)) {
@@ -325,7 +447,23 @@ var __members = {
 	 * @param any[] An array of values
 	 * @return void
 	 */
-	f_setCheckedValues: f_class.ABSTRACT,
+	f_setCheckedValues: function(checkedValues, show) {
+		f_core.Assert(typeof(checkedValues)=="object", "fa_checkManager.f_setCheckedValues: Invalid checkedValues parameter ("+selection+")");
+		f_core.Assert(show===undefined || typeof(show)=="boolean", "fa_checkManager.f_setCheckedValues: Invalid show parameter ("+show+")");
+		
+		f_core.Debug(fa_selectionManager, "f_setCheckedValues: Set checked values to '"+checkedValues+"' show='"+show+"'.");
+		
+		if (!checkedValues || !checkedValues.length) {
+			this._uncheckAllElements();
+			this.fa_fireCheckChangedEvent();
+			return;
+		}
+		
+		this._uncheckAllElements(); // ??
+		this._checkElementsRange(checkedValues, show);
+		
+		this.fa_fireCheckChangedEvent();
+	},
 
 	/**
 	 * @method protected abstract
