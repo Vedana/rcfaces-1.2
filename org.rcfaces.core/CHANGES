@@ -1,5 +1,55 @@
 
 ----------------------------------------------------------------------
+- @version I2556
+- @author Olivier Oeuillot & Jean-Baptiste Meslin
+- 
+
+IMenuItem:
+Ajout de Immediate
+
+ComponentTools:
+Gestion du prependId
+
+CameliaTag:
+Ajout de logs
+
+BasicPropertiesManager/IComponentEngine/BasicComponentEngine/BasicDeltaPropertiesAccessor:
+Correction de la phase de validation lors d'un immediate TRUE
+
+f_component.js:
+Ajout de f_getDocument()
+
+f_dataGrid.js/f_grid.js:
+Correction de la collecte d'objets effacés lors du repliage des additionalInformations / waiting
+
+fa_checkManager.js:
+Implementation de f_setCheckedValues()
+
+f_core.js:
+Correction du designerMode (nodus)
+
+f_columnSortDialog.js:
+Corrections diverses
+
+f_expandBar.js:
+Correction quand il n'y a pas d'icones OUVERTURE/FERMETURE
+
+f_waiting.js:
+Correction pour le garbage collecteur partiel
+
+IHtmlElements/IHtmlWriter/AbstractHtmlWriter
+Gestion de l'AUTOMCOMPLETE à OFF
+
+CheckButtonRenderer/DateEntryRenderer/HiddenValueRenderer/ImageButtonRenderer/RadioButtonRenderer/TextAreaRenderer/TextEntryRenderer:
+Ajout de AUTOCOMPLETE à OFF pour le champ caché du bouton
+
+ComboGridRenderer:
+Ajout de la propriété "selectedValue" à dévérouiller par défaut
+
+TabNamingContainerRenderer:
+Ajout du renderer du tabNamingContainer
+
+----------------------------------------------------------------------
 - @version I2555
 - @author Olivier Oeuillot & Jean-Baptiste Meslin
 - 
