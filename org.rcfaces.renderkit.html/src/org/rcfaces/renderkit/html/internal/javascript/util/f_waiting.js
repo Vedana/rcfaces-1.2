@@ -368,7 +368,13 @@ var __members = {
 		// this._alignment=undefined; // number 
 		// this._text=undefined; // string
 		// this._waitStep=undefined; // number
-		this._parentElement=undefined; // HtmlElement
+		
+		var parent=this._parentElement;
+		if (parent) {
+			this._parentElement=undefined; // HtmlElement
+			parent.removeChild(this);
+		}
+		
 		// this._parentElementOldCursor=undefined; // string
 
 		this.f_super(arguments);
@@ -405,10 +411,7 @@ var __members = {
 	 * @return void
 	 */
 	f_close: function() {
-		var parent=this.parentNode;
-		f_core.Assert(parent && parent.tagName, "No parent ! Already closed ?");
-		
-		parent.removeChild(this);
+		this.style.display="none";
 	},
 	
 	/**
