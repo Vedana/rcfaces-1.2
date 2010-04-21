@@ -10,5 +10,6 @@ package org.rcfaces.core.item;
  */
 public interface IMenuItem extends ISelectItemGroup, IImagesItem,
         IGroupSelectItem, IInputTypeItem, IStyleClassItem, IServerDataItem,
-        IClientDataItem, IAccessKeyItem, IAcceleratorKeyItem, IVisibleItem {
+        IClientDataItem, IAccessKeyItem, IAcceleratorKeyItem, IVisibleItem,
+        IImmediateItem {
 }
