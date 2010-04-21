@@ -30,6 +30,7 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
+import org.rcfaces.core.component.capability.IPrependIdCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
 import org.rcfaces.core.internal.capability.IComponentEngine;
@@ -187,7 +188,14 @@ public final class ComponentTools extends ComponentTools0 {
         for (int i = 0; i < size; i++) {
             UIComponent comp = (UIComponent) children.get(i);
 
-            if (comp instanceof NamingContainer) {
+            boolean nc = (comp instanceof NamingContainer);
+            if (nc) {
+                if (comp instanceof IPrependIdCapability) {
+                    nc = ((IPrependIdCapability) comp).isPrependId();
+                }
+            }
+
+            if (nc) {
                 try {
                     UIComponent retComp = comp.findComponent(forComponent);
 
