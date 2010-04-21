@@ -45,6 +45,7 @@ public class HiddenValueRenderer extends AbstractJavaScriptRenderer {
         htmlWriter.writeName(componentRenderContext.getComponentClientId());
 
         htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+        htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
         Object value = getValue(hiddenValueComponent);
         if (value != null) {

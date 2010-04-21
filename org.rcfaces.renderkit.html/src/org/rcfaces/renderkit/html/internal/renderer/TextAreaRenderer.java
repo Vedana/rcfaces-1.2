@@ -73,6 +73,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
             htmlWriter.startElement(IHtmlWriter.INPUT);
             htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+            htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
             String name = componentRenderContext.getComponentClientId()
                     + "::value";
@@ -107,7 +108,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
             // htmlWriter.enableJavaScript(); Bof bof ... on peut le faire à la
             // génération ?
-            
+
             htmlWriter.getJavaScriptEnableMode().enableOnFocus();
         }
 

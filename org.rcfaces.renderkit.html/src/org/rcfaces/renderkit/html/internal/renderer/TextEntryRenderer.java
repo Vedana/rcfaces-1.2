@@ -98,7 +98,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
         }
 
         if (textEntryComponent.isAutoCompletion(facesContext) == false) {
-            htmlWriter.writeAttribute("autocomplete", "off");
+            htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
         }
 
         if (textEntryComponent.isRequired()) {
@@ -301,6 +301,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             htmlWriter.startElement(IHtmlWriter.INPUT);
             htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+            htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
             String name = componentRenderContext.getComponentClientId()
                     + "::value";

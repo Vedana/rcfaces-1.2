@@ -153,6 +153,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
 
             htmlWriter.startElement(IHtmlWriter.INPUT);
             htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+            htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
             String name = componentRenderContext.getComponentClientId()
                     + "::value";

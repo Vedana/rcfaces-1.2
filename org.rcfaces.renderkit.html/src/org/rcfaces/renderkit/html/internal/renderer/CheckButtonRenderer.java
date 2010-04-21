@@ -144,6 +144,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
                     && button.isSelected(facesContext)) {
                 htmlWriter.startElement(IHtmlWriter.INPUT);
                 htmlWriter.writeType(IHtmlWriter.HIDDEN_INPUT_TYPE);
+                htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
                 String name = htmlWriter.getComponentRenderContext()
                         .getComponentClientId()
@@ -227,7 +228,9 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
                 for (int i = 0; i < values.length; i++) {
                     selected = (values[i].length() > 0);
 
-                    break;
+                    if (selected) {
+                        break;
+                    }
                 }
 
             } else {
