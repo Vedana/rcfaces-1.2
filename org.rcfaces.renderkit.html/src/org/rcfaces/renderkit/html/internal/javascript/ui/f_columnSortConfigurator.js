@@ -351,6 +351,19 @@ var __members = {
 			this.f_addOptions(selectComp, cols, selectedColIndex);
 		}
 		
+		for(var j=nbCols; j<this._maxColumnNumber;j++){
+			var selectComp=selects[j];
+			if (selectComp) {
+				selectComp.disabled = true;
+			}
+			if(radios[j*2]) {
+				this._changeButtonState(radios[j*2], false, true);
+			}
+			if(radios[j*2+1]) {
+				this._changeButtonState(radios[j*2+1], false, true);
+			}
+		}
+		
 		var self=this;
 		if (okButton) {
 			if (okButton.f_addEventListener) {
@@ -506,7 +519,7 @@ var __members = {
 				radio.onclick=null;
 				radio._select=undefined; // HtmlSelectElement
 				
-				f_core.VerifyProperties(radio);
+				//f_core.VerifyProperties(radio);
 			}
 		}	
 		
@@ -522,7 +535,7 @@ var __members = {
 				select.onchange=null;
 				select.onfocusin=null;
 				
-				f_core.VerifyProperties(select);
+				//f_core.VerifyProperties(select);
 			}
 		}
 	},
