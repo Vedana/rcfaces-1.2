@@ -825,7 +825,7 @@
 	<target name="sloop">
 		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
 		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
-		<property name="spool.workspace" location="s:/camelia/workspace" />
+		<property name="spool.workspace" location="k:/camelia/workspace" />
 
 		<!--
 		<delete dir="${spool.workspace}" failonerror="false" />		
