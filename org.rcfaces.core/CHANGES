@@ -4,6 +4,10 @@
 - @author Olivier Oeuillot & Jean-Baptiste Meslin
 - 
 
+Popup de tri :
+Supression de la vérification de létat des combo et radio au niveau HTML.
+Contrôle du nombre de bloques à gérer en fonction du nombre de colonnes triables 
+
 IMenuItem:
 Ajout de Immediate
 
