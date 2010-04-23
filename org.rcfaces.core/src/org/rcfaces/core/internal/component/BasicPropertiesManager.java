@@ -152,15 +152,16 @@ public class BasicPropertiesManager extends BasicPropertiesAccessor implements
 
                 return deltaPropertiesAccessor;
             }
+        }
 
-            if (deltaPropertiesAccessor != null) {
-                if (debugEnabled) {
-                    LOG.debug("  returns deltaPropertiesAccessor="
-                            + deltaPropertiesAccessor);
-                }
-
-                return deltaPropertiesAccessor;
+        // On peut avoir des deltas ... même si on ne peut plus en créer
+        if (deltaPropertiesAccessor != null) {
+            if (debugEnabled) {
+                LOG.debug("  returns deltaPropertiesAccessor="
+                        + deltaPropertiesAccessor);
             }
+
+            return deltaPropertiesAccessor;
         }
 
         if (commitedPropertiesAccessor != null) {
