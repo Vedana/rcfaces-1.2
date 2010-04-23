@@ -1963,6 +1963,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         IGridComponent gridComponent = (IGridComponent) component;
 
         if (component instanceof UIData2) {
+            ((UIData2) component).addDecodedIndexes(0, 0);
+
             String serializedIndexes = componentData
                     .getStringProperty("serializedIndexes");
             if (serializedIndexes != null) {

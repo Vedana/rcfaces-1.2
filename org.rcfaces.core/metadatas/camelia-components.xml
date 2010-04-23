@@ -622,6 +622,7 @@
 	
 	<component id="additionalInformation" extends="cameliaColumn" >
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
+		<implements id="org.rcfaces.core.component.capability.IAdditionalInformationContainer" />
 
 		<capability id="IPropertyChangeEventCapability" />
 		<capability id="IUserEventCapability" />
@@ -647,6 +648,29 @@
 		<method id="isVisible()"/>
 
 		<method id="setMargins(String)"/>
+<!-- 
+		<method id="processDecodes">
+			<parameter type="javax.faces.context.FacesContext" name="context" />
+			<import>javax.faces.component.UIComponent</import>
+			<import>org.rcfaces.core.internal.component.UIData2</import>
+			<code><![CDATA[
+			
+				if (isRendered()==false) {
+					return;
+				}
+			
+				UIComponent parent=getParent();
+				if (parent instanceof UIData2) {
+					if (((UIData2)parent).decodeAdditionalInformation(this)==false) {
+						return;
+					}
+				}
+				
+				super.processDecodes(context);			
+			]]>
+			</code>		
+		</method>
+		 -->
 
 	</component>
 	

@@ -240,7 +240,7 @@ public class AdditionalInformationService extends AbstractHtmlService {
         }
 
         if (dgc instanceof UIData2) {
-            ((UIData2) dgc).addDecodedIndexes(Integer.parseInt(rowIndex), 1);
+      //      ((UIData2) dgc).addDecodedIndexes(Integer.parseInt(rowIndex), 1);
 
             ((UIComponent) dgc).processDecodes(facesContext);
         }
