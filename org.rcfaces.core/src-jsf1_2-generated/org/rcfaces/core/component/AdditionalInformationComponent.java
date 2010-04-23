@@ -25,9 +25,10 @@ import java.util.HashSet;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IAdditionalInformationContainer;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 
 public class AdditionalInformationComponent extends CameliaColumnComponent implements 
@@ -46,6 +47,7 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 	ILoadEventCapability,
 	IMenuCapability,
 	IVariableScopeCapability,
+	IAdditionalInformationContainer,
 	IAsyncRenderComponent {
 
 	private static final Log LOG = LogFactory.getLog(AdditionalInformationComponent.class);
