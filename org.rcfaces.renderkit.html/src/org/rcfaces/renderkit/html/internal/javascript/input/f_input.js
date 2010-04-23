@@ -16,6 +16,10 @@ var __statics = {
 	 */
 	_REDIRECT_INPUT: new Object,
 	
+	/**
+	 * @method protected static
+	 * @return void
+	 */
 	Initializer: function() {
 		var redirect=f_input._REDIRECT_INPUT;
 		
