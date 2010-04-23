@@ -832,7 +832,7 @@
 		<mkdir dir="${spool.workspace}"/>
 		--> 
 
-		<copy todir="${spool.workspace}" verbose="true">
+		<copy todir="${spool.workspace}" verbose="true" preservelastmodified="false">
 			<fileset dir="${build-core}/..">
 				<include name="org.rcfaces.core/src/**" />
 				<include name="org.rcfaces.core/src-jsf1_2/**" />

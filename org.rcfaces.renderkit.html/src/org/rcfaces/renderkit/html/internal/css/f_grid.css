@@ -376,3 +376,10 @@
 	border: 0;
 	background: transparent url('grid/sort.gif') scroll no-repeat center center;
 }
+
+.f_grid_hiddenAV {
+	display: none;
+	height: 0;
+	line-height: 0.1;
+	font-size: 0.1px;
+}
