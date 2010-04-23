@@ -1088,8 +1088,8 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
 			// state here
 		}
 
+        decode(context); // OO: INVERSE
 		iterate(context, PhaseId.APPLY_REQUEST_VALUES);
-		decode(context);
 
 	}
 
@@ -1360,6 +1360,11 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
 					if (!(kid instanceof UIColumn) || !kid.isRendered()) {
 						continue;
 					}
+					
+					if (renderColumn((UIColumn) kid, phaseId)==false) {
+					    continue;
+					}
+					
 					if (kid.getChildCount() > 0) {
 						for (UIComponent grandkid : kid.getChildren()) {
 							if (!grandkid.isRendered()) {
@@ -1386,7 +1391,11 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
 
 	}
 
-	/**
+	protected boolean renderColumn(UIColumn column, PhaseId phaseId) {
+        return true;
+    }
+
+    /**
 	 * <p>
 	 * Return <code>true</code> if we need to keep the saved per-child state
 	 * information. This will be the case if any of the following are true:

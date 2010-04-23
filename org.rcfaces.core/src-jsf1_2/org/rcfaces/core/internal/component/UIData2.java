@@ -43,11 +43,10 @@ import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAdditionalInformationContainer;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
-
-import com.sun.faces.util.TypedCollections;
 
 /**
  * <p>
@@ -74,6 +73,8 @@ import com.sun.faces.util.TypedCollections;
 public class UIData2 extends UIData0 {
 
     private static final Log LOG = LogFactory.getLog(UIData2.class);
+
+    private static final boolean DEBUG_ENABLED = LOG.isDebugEnabled();
 
     private transient List<int[]> decodedIndexes;
 
@@ -103,6 +104,11 @@ public class UIData2 extends UIData0 {
             return;
         }
 
+        if (true) {
+            super.iterate(context, phaseId);
+            return;
+        }
+
         iterateModeFirst = 0;
         iterateModeRows = 0;
         iterateModeIndex = 0;
@@ -119,6 +125,14 @@ public class UIData2 extends UIData0 {
         } finally {
             iterateMode = false;
         }
+    }
+
+    protected boolean renderColumn(UIColumn column, PhaseId phaseId) {
+        if (column instanceof IAdditionalInformationContainer) {
+            return decodeAdditionalInformation((IAdditionalInformationContainer) column);
+        }
+
+        return true;
     }
 
     @Override
@@ -168,7 +182,7 @@ public class UIData2 extends UIData0 {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Iterate translate mode: return rowIndex(" + rowIndex
-                    + " =>" + translatedRowIndex);
+                    + ") =>" + translatedRowIndex);
         }
 
         super.setRowIndex(translatedRowIndex);
@@ -179,7 +193,9 @@ public class UIData2 extends UIData0 {
             decodedIndexes = new ArrayList<int[]>();
         }
 
-        decodedIndexes.add(new int[] { first, rows });
+        if (rows > 0) {
+            decodedIndexes.add(new int[] { first, rows });
+        }
     }
 
     @Override
@@ -336,5 +352,58 @@ public class UIData2 extends UIData0 {
 
             out.writeObject(serializedComponentEngine);
         }
+    }
+
+    public boolean decodeAdditionalInformation(
+            IAdditionalInformationContainer additionalInformationComponent) {
+        if (decodedIndexes == null) {
+            if (DEBUG_ENABLED) {
+                int rowIndex = getRowIndex();
+
+                LOG.debug("Decode additional #" + rowIndex + " ("
+                        + decodedIndexesToString() + ") => FALSE");
+            }
+            return false;
+        }
+
+        int rowIndex = getRowIndex();
+
+        for (int[] is : decodedIndexes) {
+            if (rowIndex >= is[0] && rowIndex < is[0] + is[1]) {
+                if (DEBUG_ENABLED) {
+                    LOG.debug("Decode additional #" + rowIndex + " ("
+                            + decodedIndexesToString() + ") => TRUE");
+                }
+                return true;
+            }
+        }
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("Decode additional #" + rowIndex + " ("
+                    + decodedIndexesToString() + ") => FALSE");
+        }
+
+        return false;
+    }
+
+    private String decodedIndexesToString() {
+        if (decodedIndexes == null) {
+            return "null";
+        }
+
+        if (decodedIndexes.isEmpty()) {
+            return "[]";
+        }
+
+        StringBuffer sb = new StringBuffer();
+
+        for (int is[] : decodedIndexes) {
+            if (sb.length() > 0) {
+                sb.append(',');
+            }
+            sb.append("[" + is[0] + "->" + (is[0] + is[1] - 1) + "]");
+        }
+
+        return sb.toString();
     }
 }
