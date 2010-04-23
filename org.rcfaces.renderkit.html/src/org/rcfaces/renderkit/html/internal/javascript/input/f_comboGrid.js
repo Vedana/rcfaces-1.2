@@ -797,6 +797,10 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
+	 			if (window._rcfacesExiting) {
+	 				return;
+	 			}
+	
 	 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+status);
 	 			
 	 			var continueProcess;
@@ -835,7 +839,11 @@ var __members = {
 			 * @method public
 			 */
 	 		onLoad: function(request, content, contentType) {
-				if (comboGrid.f_processNextCommand()) {
+	 			if (window._rcfacesExiting) {
+	 				return;
+	 			}
+
+	 			if (comboGrid.f_processNextCommand()) {
 					return;
 				}
 			 			
@@ -883,6 +891,10 @@ var __members = {
 				}
 	 		},
 	 		onAbort: function() {
+	 			if (window._rcfacesExiting) {
+	 				return;
+	 			}
+	 			
 				if (comboGrid.f_processNextCommand()) {
 					return;
 				}
