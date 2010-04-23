@@ -2,7 +2,7 @@
 ----------------------------------------------------------------------
 - @version I2556
 - @author Olivier Oeuillot & Jean-Baptiste Meslin
-- 
+- 23/4/2010
 
 Popup de tri :
 Supression de la vérification de létat des combo et radio au niveau HTML.
@@ -52,6 +52,23 @@ Ajout de la propriété "selectedValue" à dévérouiller par défaut
 
 TabNamingContainerRenderer:
 Ajout du renderer du tabNamingContainer
+
+AdditionalInformationContainer/UIData0/UIData2/AbstractGridRenderer/AdditionalInformationService:
+Correction de la synchronization des composants à l'intérieur d'un AdditionalInformation. 
+
+f_httpRequest.js:
+Correction du traitement des aborts() lors de libération mémoire
+
+f_comboGrid.js:
+Traitement du cas de figure de requetes AJAX en cours, pendant une libération mémoire 
+
+f_input.js:
+Correction d'un probleme de BLUR en mode LEVEL3
+
+f_shell.js:
+Changement de l'état du closable par défaut (à FALSE maintenant)
+
+
 
 ----------------------------------------------------------------------
 - @version I2555
