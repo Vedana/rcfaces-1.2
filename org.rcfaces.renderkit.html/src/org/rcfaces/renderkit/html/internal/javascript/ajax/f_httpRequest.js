@@ -246,13 +246,15 @@ var __members = {
 		if (request) {
 			this._request = undefined;
 	
-			try {
-				request.abort();
-				
-			} catch (x) {
-				f_core.Error(f_httpRequest, "f_cancelRequest: Cancel request has failed !", x);
+			if (!this._ready) {
+				try {
+					request.abort();
+					
+				} catch (x) {
+					f_core.Error(f_httpRequest, "f_cancelRequest: Cancel request has failed !", x);
+				}
 			}
-
+			
 			/* Ca marche pas ! ????*/
 			try {
 				request.onreadystatechange=null;
@@ -266,7 +268,7 @@ var __members = {
 			*/
 		}
 		
-		if (this._initialized) {		
+		if (this._initialized && !this._ready) {		
 			var onAbort=this._listener.onAbort;
 			if (onAbort) {
 				f_core.Debug(f_httpRequest, "f_cancelRequest: Call onAbort callback");
@@ -283,7 +285,7 @@ var __members = {
 		this._responseContentType = undefined;
 		this._response = undefined;
 		this._responseXML = undefined;
-		this._ready = true;
+		this._ready = false;
 		this._initialized=undefined;
 		this._date=undefined;
 	},
@@ -363,16 +365,16 @@ var __members = {
 		f_core.Profile(false, "f_httpRequest.doRequest("+this._url+")");
 		try {
 			// Check if pending request		
-			if (!this._ready) {
+			if (this._ready) {
 				return false;
 			}
-			this._ready = false;
-			this._error = false;
-	
 		
 			// Cleanup
 			this.f_cancelRequest();
-	
+
+			// this._ready = false; // Deja fait !
+			this._error = false;	
+
 			this._date=new Date().getTime();
 		
 			f_core.Assert(typeof(this._url)=="string", "f_httpRequest._doRequest: URL is invalid ! ("+this._url+")");
