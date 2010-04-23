@@ -317,7 +317,7 @@ var __members = {
 			}
 			
 			var closable = f_core.GetBooleanAttribute(this, "v:closable");
-			if (closable === undefined) {
+			if (closable === true) {
 				this._style |= f_shell.CLOSE_STYLE;
 			}
 		}
