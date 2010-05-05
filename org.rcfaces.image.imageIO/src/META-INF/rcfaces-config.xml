@@ -31,19 +31,19 @@
 			</operation-class>
 		</operation>
 		<operation>
-			<operation-id>brithness</operation-id>
-			<operation-name>Brithness operation</operation-name>
+			<operation-id>brightness</operation-id>
+			<operation-name>Brighthness operation</operation-name>
 			<operation-class>
-				org.rcfaces.core.internal.images.operation.BrithnessOperation
+				org.rcfaces.core.internal.images.operation.BrightnessOperation
 			</operation-class>
 		</operation>
 		<operation>
 			<operation-id>colorRescale</operation-id>
 			<operation-name>
-				Contrast and brithness operations
+				Contrast and brightness operations
 			</operation-name>
 			<operation-class>
-				org.rcfaces.core.internal.images.operation.ContrastBrithnessOperation
+				org.rcfaces.core.internal.images.operation.ContrastBrightnessOperation
 			</operation-class>
 		</operation>
 		<operation>

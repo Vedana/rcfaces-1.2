@@ -9,14 +9,10 @@ package org.rcfaces.core.internal.images.operation;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ContrastBrithnessOperation extends ColorsRescaleOperation {
+public class BrightnessOperation extends ContrastBrightnessOperation {
     private static final String REVISION = "$Revision$";
 
-    protected String getOffsetPropertyName() {
-        return "brightness";
-    }
-
-    protected String getScalePropertyName() {
-        return "contrast";
+    protected String getDefaultPropertyName() {
+        return getOffsetPropertyName();
     }
 }

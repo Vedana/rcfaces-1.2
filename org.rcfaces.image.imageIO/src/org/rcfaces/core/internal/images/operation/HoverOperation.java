@@ -11,7 +11,7 @@ import org.rcfaces.core.image.operation.IHoverOperation;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class HoverOperation extends ContrastBrithnessOperation implements
+public class HoverOperation extends ContrastBrightnessOperation implements
         IHoverOperation {
     private static final String REVISION = "$Revision$";
 
