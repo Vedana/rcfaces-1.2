@@ -28,6 +28,7 @@ import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
@@ -453,14 +454,14 @@ public class ImageContentAccessorHandlerImpl extends
 
         // Il nous faut un path en relatif !
         switch (resourcePathType) {
-        case IContentAccessor.EXTERNAL_PATH_TYPE:
+        case IContentPath.EXTERNAL_PATH_TYPE:
             throw new FacesException(
                     "Can not make operation on an external URL !");
 
-        case IContentAccessor.CONTEXT_PATH_TYPE:
+        case IContentPath.CONTEXT_PATH_TYPE:
             break;
 
-        case IContentAccessor.ABSOLUTE_PATH_TYPE:
+        case IContentPath.ABSOLUTE_PATH_TYPE:
             String relativeURL = PathTypeTools
                     .convertAbsolutePathToContextType(facesContext, resourceURL);
 
@@ -472,9 +473,9 @@ public class ImageContentAccessorHandlerImpl extends
             resourceURL = relativeURL;
             break;
 
-        case IContentAccessor.RELATIVE_PATH_TYPE:
+        case IContentPath.RELATIVE_PATH_TYPE:
             resourceURL = PathTypeTools.convertRelativePathToContextPath(
-                    facesContext, resourceURL);
+                    facesContext, resourceURL, null);
             break;
 
         default:
