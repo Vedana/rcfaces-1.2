@@ -1334,7 +1334,7 @@ var f_core = {
 	GetParentForm: function(elt) {
 		f_core.Assert(elt.ownerDocument, "f_core.GetParentForm: Invalid parameter element ("+elt+")");
 	
-		var form=f_core._CachedForm;
+		var form= undefined;
 		if (form!==undefined) {
 			return form;
 		}
@@ -1344,14 +1344,15 @@ var f_core = {
 		switch(forms.length) {
 		case 0:
 			f_core.Debug(f_core, "GetParentForm: No form into document !");
-			f_core._CachedForm=null;
+			
+			//f_core._CachedForm=null;
 			return null;
 
 		case 1:
-//			f_core.Debug(f_core, "GetParentForm: Only one form into document, returns "+forms[0].id);
+			f_core.Debug(f_core, "GetParentForm: Only one form into document, returns "+forms[0].id);
 
 			form=forms[0];
-			f_core._CachedForm=form;
+			//f_core._CachedForm=form;
 			return form;
 		}
 	
@@ -4009,8 +4010,8 @@ var f_core = {
 		}
 
 		if (f_core.IsGecko()) {
-			listener._mainResizeCallback=function() {
-				return listener.call(component);
+			listener._mainResizeCallback=function(event) {
+				return listener.call(component, event);
 			}
 		
 			window.addEventListener("resize", listener._mainResizeCallback, false);
