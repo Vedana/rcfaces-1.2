@@ -741,10 +741,10 @@ var __members = {
 		
 		this._setSuggestion(proposalLabel, proposalValue, proposalItem, jsEvt);
 		
-		this.f_setSelection({
-			start: label.length,
-			end: proposalLabel.length
-		});
+		var textSelection = new f_textSelection;
+		textSelection.f_textSelection(label.length, proposalLabel.length, proposalLabel.substring(label.length));
+
+		this.f_setSelection(textSelection);
 	},
 	/**
 	 * @method private
@@ -963,4 +963,10 @@ var __members = {
 	}
 }
 
-new f_class("f_suggestTextEntry", null, __statics, __members, f_textEntry, fa_filterProperties, fa_commands);
+//new f_class("f_suggestTextEntry", null, __statics, __members, f_textEntry, fa_filterProperties, fa_commands);
+new f_class("f_suggestTextEntry", {
+	extend: f_textEntry, 
+	aspects: [ fa_filterProperties, fa_commands ],
+	statics: __statics,
+	members: __members
+});
