@@ -1,4 +1,8 @@
+f_grid:  
+réécriture des méthodes setHeight et setWidth
 
+IHeightRangeCapability:
+Permet de définir minHeight et maxHeight
 ----------------------------------------------------------------------
 - @version I2556
 - @author Olivier Oeuillot & Jean-Baptiste Meslin

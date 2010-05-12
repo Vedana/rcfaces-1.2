@@ -328,7 +328,7 @@ var __members = {
 	 * @return Object
 	 */
 	f_addRow: function(value, columnValue1) {
-		f_core.Assert(this._rows==0, "All rows of the DataGrid must be loaded (attribute rows=0)");
+		//f_core.Assert(this._rows==0, "All rows of the DataGrid must be loaded (attribute rows=0)");
 		
 		var properties=new Object;
 		
