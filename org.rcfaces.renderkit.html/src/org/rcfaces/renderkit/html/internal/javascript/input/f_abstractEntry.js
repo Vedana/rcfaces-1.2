@@ -231,13 +231,10 @@ var __members = {
 		var pos=f_core.GetTextSelection(this);
 		
 		var value=this.f_getText();
-		var textSelection = new f_textSelection;
 		if (!pos) {
-			textSelection.f_textSelection(0, value.length, value);
-		} else {
-			textSelection.f_textSelection(pos[0], pos[1]-pos[0], value.substring(pos[0], pos[1]));
+			return new f_textSelection(0, value.length, value);
 		}
-		return textSelection;
+		return new f_textSelection(pos[0], pos[1]-pos[0], value.substring(pos[0], pos[1]));
 	},
 	/**
 	 * @method public

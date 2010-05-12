@@ -741,10 +741,7 @@ var __members = {
 		
 		this._setSuggestion(proposalLabel, proposalValue, proposalItem, jsEvt);
 		
-		var textSelection = new f_textSelection;
-		textSelection.f_textSelection(label.length, proposalLabel.length, proposalLabel.substring(label.length));
-
-		this.f_setSelection(textSelection);
+		this.f_setSelection(new f_textSelection(label.length, proposalLabel.length, proposalLabel.substring(label.length)));
 	},
 	/**
 	 * @method private
