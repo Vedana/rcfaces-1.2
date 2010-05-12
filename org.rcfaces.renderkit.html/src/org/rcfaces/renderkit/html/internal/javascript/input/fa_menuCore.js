@@ -498,7 +498,7 @@ var __members = {
 		
 		var cs="f_menu_popup";
 		
-		if (parentItem._component.f_getStyleClass){
+		if (parentItem._component && parentItem._component.f_getStyleClass){
 			var pcs=parentItem._component.f_getStyleClass();
 			if (pcs) {
 				cs+=" "+pcs+"_popup";
