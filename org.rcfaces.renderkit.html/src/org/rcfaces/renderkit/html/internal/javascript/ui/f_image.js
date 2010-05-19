@@ -104,7 +104,7 @@ var __members = {
 		 		if (continueProcess===false) {
 					image._loading=false;		
 					
-					image.className=this.f_computeStyleClass();
+					image.className=image.f_computeStyleClass();
 					return;
 		 		}
 	 			
@@ -114,7 +114,7 @@ var __members = {
 	 		
 				image._loading=false;		
 				
-				image.className=this.f_computeStyleClass();
+				image.className=image.f_computeStyleClass();
 	 		},
 			/**
 			 * @method public
@@ -130,7 +130,7 @@ var __members = {
 				}
 				
 				try {
-					image.className=this.f_computeStyleClass();
+					image.className=image.f_computeStyleClass();
 
 					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
 						image.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
