@@ -1334,7 +1334,7 @@ var f_core = {
 	GetParentForm: function(elt) {
 		f_core.Assert(elt.ownerDocument, "f_core.GetParentForm: Invalid parameter element ("+elt+")");
 	
-		var form= undefined;
+		var form=f_core._CachedForm;
 		if (form!==undefined) {
 			return form;
 		}
@@ -3660,7 +3660,7 @@ var f_core = {
 			return;
 		}
 	},
-	/*
+	/**
 	 * Returns the position of the Window.
 	 *
 	 * @method public static 
@@ -4010,8 +4010,8 @@ var f_core = {
 		}
 
 		if (f_core.IsGecko()) {
-			listener._mainResizeCallback=function(event) {
-				return listener.call(component, event);
+			listener._mainResizeCallback=function() {
+				return listener.call(component);
 			}
 		
 			window.addEventListener("resize", listener._mainResizeCallback, false);
@@ -5850,7 +5850,7 @@ var f_core = {
 	/**
 	 * @method public static
 	 * @param optional String url
-	 * @return Map<String, String>
+	 * @return Map<String,String>
 	 */
 	ListParameters: function(url) {		
 		f_core.Assert(url===undefined || typeof(url)=="string", "f_core.ListParameters: Invalid URL parameter '"+url+"'.");
