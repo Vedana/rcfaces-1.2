@@ -221,11 +221,13 @@ var __statics = {
 	 * @method private static final
 	 */
 	_CMN: function(q, a, b, x, s, t) {
-		return f_md5._Safe_add(
-		  	f_md5._Bit_rol(
-		  		f_md5._Safe_add(
-		  			f_md5._Safe_add(a, q), 
-		  			f_md5._Safe_add(x, t)),
+		var sa = f_md5._Safe_add;
+		var br = f_md5._Bit_rol; 
+		return sa(
+				br(
+		  		sa(
+		  			sa(a, q), 
+		  			sa(x, t)),
 		  		s),
 	  		b);
 	},
