@@ -3672,18 +3672,18 @@ var f_core = {
 			doc=document;
 		}
 		  
-		var window=f_core.GetWindow(doc);
+		var win=f_core.GetWindow(doc);
 
 		if (f_core.IsInternetExplorer()) {
 			return {
-				x: window.screenLeft,
-				y: window.screenTop
+				x: win.screenLeft,
+				y: win.screenTop
 			};
 		}
 				 
 		return { 
-			x: window.screenX,
-			y: window.screenY
+			x: win.screenX,
+			y: win.screenY
 		};
 	},
 	/**
@@ -3723,10 +3723,10 @@ var f_core = {
 			};
 		}
  	 
- 		var window=f_core.GetWindow(doc);
+ 		var win=f_core.GetWindow(doc);
 		return { 
-		    x: window.scrollX + event.clientX,
-			y: window.scrollY + event.clientY
+		    x: win.scrollX + event.clientX,
+			y: win.scrollY + event.clientY
 		};
 	},
 	/**
