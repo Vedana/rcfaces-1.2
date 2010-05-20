@@ -88,6 +88,10 @@ public class BindingTools {
     public static Object evalBinding(FacesContext facesContext,
             String expression, Class type) {
 
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
         Application application = facesContext.getApplication();
 
         ELContext elContext = facesContext.getELContext();
