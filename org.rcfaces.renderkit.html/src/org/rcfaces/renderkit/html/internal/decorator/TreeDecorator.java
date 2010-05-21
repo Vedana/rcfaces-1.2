@@ -34,6 +34,7 @@ import org.rcfaces.core.item.IClientDataItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.item.ITreeNode;
+import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.TreeNode;
 import org.rcfaces.core.lang.OrderedSet;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
@@ -311,6 +312,12 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
      */
     public int encodeNodeBegin(UIComponent component, SelectItem selectItem,
             boolean hasChild, boolean isVisible) throws WriterException {
+
+        if (selectItem instanceof IVisibleItem) {
+            if (((IVisibleItem) selectItem).isVisible() == false) {
+                return SKIP_NODE;
+            }
+        }
 
         TreeRenderContext treeRenderContext = (TreeRenderContext) getContext();
 

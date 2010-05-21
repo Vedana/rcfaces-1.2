@@ -218,8 +218,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         }
 
         if (getContext().getDepth() == 1) {
-            encodeToolItemBegin(component, selectItem, hasChild);
-            return EVAL_NODE;
+            return encodeToolItemBegin(component, selectItem, hasChild);
         }
 
         // encodeToolItemBegin(component, selectItem, hasChild);
@@ -284,20 +283,8 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
             }
 
             if (selectItem instanceof IVisibleItem) {
-                if (component instanceof IVisibilityCapability) {
-                    IVisibilityCapability visibilityCapability = (IVisibilityCapability) component;
-                    if (visibilityCapability.isVisible() == false) {
-                        ItemsListComponent itemsListComponent = (ItemsListComponent) getComponent();
-
-                        FacesContext facesContext = getComponentRenderContext()
-                                .getFacesContext();
-
-                        int hiddenMode = itemsListComponent
-                                .getItemHiddenMode(facesContext);
-                        if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
-                            return SKIP_NODE;
-                        }
-                    }
+                if (((IVisibleItem) selectItem).isVisible() == false) {
+                    return SKIP_NODE;
                 }
             }
 
@@ -482,7 +469,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
      *            hasChild
      * @throws WriterException
      */
-    private void encodeToolItemBegin(UIComponent component,
+    private int encodeToolItemBegin(UIComponent component,
             SelectItem selectItem, boolean hasChild) throws WriterException {
 
         String itemId = allocateItemId();
@@ -594,7 +581,7 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
                 // if the component is not to be drawn on the client :
                 // exit
                 if (hiddenMode == IHiddenModeCapability.SERVER_HIDDEN_MODE) {
-                    return;
+                    return SKIP_NODE;
                 }
 
                 if (itemComponent instanceof IVisibilityCapability) {
@@ -799,10 +786,12 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
         Renderer renderer = getRenderer(facesContext, itemComponent);
         if (renderer == null) {
             LOG.error("No renderer for component '" + itemComponent + "' ?");
-            return;
+            return EVAL_NODE;
         }
 
         encodeItem(renderer, component, itemComponent, itemId);
+
+        return EVAL_NODE;
     }
 
     /**
