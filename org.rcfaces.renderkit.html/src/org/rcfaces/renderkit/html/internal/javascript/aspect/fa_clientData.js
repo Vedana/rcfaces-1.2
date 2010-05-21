@@ -50,6 +50,15 @@ var __members = {
 	/**
 	 * 
 	 * @method public
+	 * @return Object
+	 * @see #f_getClientDataSet()
+	 */
+	f_getClientDatas: function() {
+		return this.f_getClientDataSet();
+	},
+	/**
+	 * 
+	 * @method public
 	 * @return Object 
 	 */
 	f_getClientDataSet: function() {

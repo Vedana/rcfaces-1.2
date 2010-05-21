@@ -5,7 +5,7 @@
 /**
  * Aspect Items
  *
- * @aspect public abstract fa_itemsWrapper
+ * @aspect public abstract fa_itemsWrapper extends fa_itemClientDatas
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -206,6 +206,24 @@ var __members = {
 	 */
 	f_getItemClientData: function(item, key) {
 		return this._getItemsWrapper().f_getItemClientData(item, key);
+	},
+	/**
+	 * @method public
+	 * @param Object item Item object.
+	 * @param String key Key of property.
+	 * @param optional String value Value of property.
+	 * @return String old value
+	 */
+	f_setItemClientData: function(item, key, value) {
+		return this._getItemsWrapper().f_setItemClientData(item, key, calue);
+	},
+	/**
+	 * @method public
+	 * @param Object item Item object.
+	 * @return Object Values associated to the specified property.
+	 */
+	f_getItemClientDatas: function(item) {
+		return this._getItemsWrapper().f_getItemClientDatas(item);
 	},
 	/**
 	 * @method private
