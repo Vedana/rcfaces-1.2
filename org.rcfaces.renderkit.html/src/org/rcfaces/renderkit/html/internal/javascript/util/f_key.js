@@ -744,7 +744,12 @@ var __statics = {
 		}
 */	
 		if (f_core.IsGecko()) {
-			styleSheet.insertRule(".f_accessKey { text-decoration: underline }", styleSheet.cssRules.length);
+			try {
+				styleSheet.insertRule(".f_accessKey { text-decoration: underline }", styleSheet.cssRules.length);
+
+			} catch (x) {
+				f_core.Error(f_key, "Enable accessKey underline error !", x);
+			}
 			return;			
 		}
 	},
