@@ -622,7 +622,7 @@ var __members = {
 		var ret = this.f_super(arguments, type, evt, item, value, selectionProvider, detail, stage);
 		
 		if (ret!==false && type==f_event.SELECTION && !stage) {			
-			ret = this.f_super(arguments, f_imageButton.SELECTION, evt, item, value, selectionProvider, detail, f_imageButton.SELECTION_POST);
+			ret = this.f_super(arguments, type, evt, item, value, selectionProvider, detail, f_imageButton.SELECTION_POST);
 		}
 		
 		return ret;
