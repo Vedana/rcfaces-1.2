@@ -273,6 +273,18 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
         return writer;
     }
+    
+    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer, UIComponent component) throws WriterException {
+        if (component instanceof ITabIndexCapability) {
+            writeTabIndex(writer, (ITabIndexCapability) component);
+        }
+
+        if (component instanceof IAccessKeyCapability) {
+            writeAccessKey(writer, (IAccessKeyCapability) component);
+        }
+
+        return writer;
+    }
 
     protected final IHtmlWriter writeHtmlAttributes(IHtmlWriter _writer)
             throws WriterException {
@@ -285,16 +297,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             writeTitle(writer, (IToolTipCapability) component);
         }
 
-        if (component instanceof ITabIndexCapability) {
-            writeTabIndex(writer, (ITabIndexCapability) component);
-        }
-
         if (component instanceof IHelpCapability) {
             writeHelp(writer, (IHelpCapability) component);
-        }
-
-        if (component instanceof IAccessKeyCapability) {
-            writeAccessKey(writer, (IAccessKeyCapability) component);
         }
 
         if (component instanceof IRequiredCapability) {
@@ -331,6 +335,8 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             }
         }
 
+        writeUserInputAttributes(writer, component);
+        
         writeRole(writer, component);
 
         return writer;

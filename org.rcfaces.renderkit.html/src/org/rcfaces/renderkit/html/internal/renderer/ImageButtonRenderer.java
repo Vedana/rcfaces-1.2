@@ -122,6 +122,10 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         return IAccessibilityRoles.BUTTON;
     }
 
+    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer, UIComponent component) throws WriterException {
+    	return writer;
+    }
+    
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
