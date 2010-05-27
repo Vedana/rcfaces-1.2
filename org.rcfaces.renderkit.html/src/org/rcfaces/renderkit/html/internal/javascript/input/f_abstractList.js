@@ -99,8 +99,8 @@ var __members = {
 	 * @return String Value of the item.
 	 */
 	f_getValueFromIndex: function(idx) {
-		f_core.Assert(typeof(idx)=="number", "f_combo.f_getValueFromIndex: Invalid idx parameter.");
-		f_core.Assert(idx<0, "f_combo.f_getValueFromIndex: Index parameter is out of range (0<="+idx+"<"+items.length+").");
+		f_core.Assert(typeof(idx)=="number", "f_abstractList.f_getValueFromIndex: Invalid idx parameter.");
+		f_core.Assert(idx<0, "f_abstractList.f_getValueFromIndex: Index parameter is out of range (0<="+idx+"<"+items.length+").");
 
 		var items = this.options;
 		
@@ -150,7 +150,7 @@ var __members = {
 	 * @return number Number of removed items.
 	 */
 	f_clearArray: function(values) {
-		f_core.Assert(values instanceof Array, "f_combo.f_clearArray: Invalid values parameter '"+values+"'.");
+		f_core.Assert(values instanceof Array, "f_abstractList.f_clearArray: Invalid values parameter '"+values+"'.");
 
 		return this.f_clear.apply(this, values);
 	},
@@ -212,7 +212,7 @@ var __members = {
 	f_setDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.SELECTION: 
-			this.onchange = f_combo._OnChange;
+			this.onchange = f_abstractList._OnChange;
 			return;
 		}
 		this.f_super(arguments, type, target);
@@ -244,7 +244,7 @@ var __members = {
 			}
 		}
 		
-		// f_core.Info(f_combo, "Width="+w);
+		// f_core.Info(f_abstractList, "Width="+w);
 		
 		if (!w || w=="auto") {
 			if (!this._oldWidth) {
@@ -255,8 +255,8 @@ var __members = {
 			}
 						
 			w=this.offsetWidth;
-			if (w<f_combo._MIN_WIDTH) {
-				w=f_combo._MIN_WIDTH;
+			if (w<f_abstractList._MIN_WIDTH) {
+				w=f_abstractList._MIN_WIDTH;
 			}
 			this.style.width=w+"px";
 		}
@@ -310,7 +310,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			f_core.Info(f_combo, "f_callServer.onError: Bad status: "+status);
+	 			f_core.Info(f_abstractList, "f_callServer.onError: Bad status: "+status);
 	 			
 				if (combo.f_processNextCommand()) {
 					return;
@@ -392,7 +392,7 @@ var __members = {
 						f_core.WindowScopeEval(ret);
 						
 					} catch (x) {
-						f_core.Error(f_combo, "_callServer.onLoad: Can not eval response '"+ret+"'.", x);
+						f_core.Error(f_abstractList, "_callServer.onLoad: Can not eval response '"+ret+"'.", x);
 					}
 
 				} finally {
