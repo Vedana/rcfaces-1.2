@@ -54,6 +54,9 @@ var __members = {
 		this.f_addEventListener(f_imageButton.SELECTION_POST, this.f_imageButtonSelectEnd);
 		
 		this._tabIndex=this.tabIndex;
+		if (this.tabIndex == -1 && this._eventComponent && this._eventComponent.tabIndex) {
+			this._tabIndex=this._eventComponent.tabIndex;
+		}
 		
 		if (this.f_isDisabled()) {
 			this.fa_updateDisabled(true); // Pas d'update de l'image car le composant n'a pas enocre été updaté
@@ -146,7 +149,7 @@ var __members = {
 				if (!tabIndex) {
 					tabIndex=0;
 				}
-				if (tabIndex>=0) {
+				if (tabIndex>=0 && !eventComponent.tabIndex) {
 					eventComponent.tabIndex=tabIndex;
 				}
 			}
