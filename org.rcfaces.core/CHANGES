@@ -1549,6 +1549,10 @@ Ajout de l'evenement à la méthode f_popup.IsChildOfDocument()
 f_toolFolder:
 Utilisation de la mouvelle forme de déclaration des classes
 
+f_tree:
+Ajout de f_revealNode qui déploit tous les noeuds pour montrer le noeud cherché
+Ajout de f_revealAndSelectNode qui en plus sélectionne le noeud cherché
+
 f_resourceBundle:
 Ajout de toString()
 

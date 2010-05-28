@@ -1913,6 +1913,64 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @param node
+	 * @return node
+	 */
+	_getParentNode: function(node) {
+		if (node) {
+			if (node._parentTreeNode) {
+				return node._parentTreeNode;
+			} else {
+				return this._getParentNode(node._node);
+			}
+		}
+		return node;
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object
+	 * @return boolean <code>true</code> if the node was found.
+	 */
+	f_revealAndSelectNode: function(value) {
+		var item=this._searchComponentByNodeOrValue(value);
+		if (!item) {
+			return false;
+		}
+		var node = item._node;
+		if (this.f_revealNode(node)) {
+			return this.f_select(node);
+		}
+		return false;
+	},
+	/**
+	 * @method public
+	 * @param any value Value of the node, or the node object
+	 * @return boolean <code>true</code> if the node was found.
+	 */
+	f_revealNode: function(value) {
+		var item=this._searchComponentByNodeOrValue(value);
+		if (!item) {
+			return false;
+		}
+		
+		var parents = [];
+		var parent = this._getParentNode(item);
+		// tant qu'on est pas au niveau racine et que le noeud n'est pas ouvert
+		while (parent != this && !this.f_isOpened(parent)) {
+			parents.push(parent);
+			parent = this._getParentNode(parent);
+		}
+		while (parents.length > 0) {
+			parent = parents.pop();
+			this.f_openNode(parent);
+		}
+		
+		this.fa_showElement(item);
+		
+		return true;
+	},
+	/**
+	 * @method private
 	 * @param f_event cevt
 	 * @return boolean
 	 */
