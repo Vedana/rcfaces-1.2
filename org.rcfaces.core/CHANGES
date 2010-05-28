@@ -1537,6 +1537,9 @@ Correction d'un bug concernant le focus des boutons des mois, si ceux-ci n'exist
 f_grid:
 Les titres des colonnes sont focusables
 
+f_imageButton:
+Correction d'un BUG de tabIndex déclaré sur la Div et sur l'anchor
+
 f_imageCombo:
 Correction d'un BUG (sous IE uniquement) de l'ouverture de la popup par clavier
 
