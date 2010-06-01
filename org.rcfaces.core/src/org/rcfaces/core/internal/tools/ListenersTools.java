@@ -15,6 +15,7 @@ import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IExpandEventCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IKeyDownEventCapability;
@@ -46,6 +47,8 @@ import org.rcfaces.core.internal.listener.DoubleClickActionListener;
 import org.rcfaces.core.internal.listener.DoubleClickScriptListener;
 import org.rcfaces.core.internal.listener.ErrorActionListener;
 import org.rcfaces.core.internal.listener.ErrorScriptListener;
+import org.rcfaces.core.internal.listener.ExpandActionListener;
+import org.rcfaces.core.internal.listener.ExpandScriptListener;
 import org.rcfaces.core.internal.listener.FocusScriptListener;
 import org.rcfaces.core.internal.listener.InitScriptListener;
 import org.rcfaces.core.internal.listener.KeyDownScriptListener;
@@ -162,6 +165,27 @@ public class ListenersTools {
             throw new UnsupportedListenerTypeException("Load");
         }
     };
+    
+    public static final IListenerType EXPAND_LISTENER_TYPE = new AbstractListenerType() {
+        private static final String REVISION = "$Revision$";
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
+
+            expandEventCapability.addExpandListener(new ExpandScriptListener(
+                    scriptType, command));
+        }
+
+        public void addActionListener(UIComponent component,
+                Application application, String expression) {
+        	 IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
+        	 
+        	 expandEventCapability.addExpandListener(new ExpandActionListener(
+                     expression));
+        }
+    };
+    
 
     public static final IListenerType ERROR_LISTENER_TYPE = new AbstractListenerType() {
         private static final String REVISION = "$Revision$";

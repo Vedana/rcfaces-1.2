@@ -258,13 +258,14 @@ var __statics = {
 
 		if (tree._userExpandable) {
 			if (node._opened) {
-				tree._closeNode(node, evt, li);
+				tree._userCloseNode(node, evt, li);
 	
 			} else {
-				tree._openNode(node, evt, li);
+				//
+				tree._userOpenNode(node, evt, li);
 			}
 		}
-		
+		 
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
@@ -855,6 +856,7 @@ var __members = {
 		case f_event.KEYDOWN:
 		case f_event.KEYPRESS:
 		case f_event.KEYUP:
+		case f_event.EXPAND:	
 			return;
 		}
 
@@ -867,6 +869,7 @@ var __members = {
 		case f_event.KEYDOWN:
 		case f_event.KEYPRESS:
 		case f_event.KEYUP:
+		case f_event.EXPAND:
 			return;
 		}
 
@@ -1079,6 +1082,23 @@ var __members = {
 		
 		return this._closeNode(li._node, evt, li);
 	},
+	
+	/**
+	 * @method protected
+	 * @param Object node 
+	 * @param optional Event evt Javascript event.
+	 * @param hidden li
+	 * @return boolean <code>true</code> if success ...
+	 */
+	_userCloseNode: function(node, evt, li) {
+		var item = li;
+		var itemValue = (item==this)?undefined:this.fa_getElementValue(item);
+		if (this.f_fireEvent(f_event.EXPAND, evt, item, itemValue, this, 0)===false){
+			return false;
+		}
+		return this._closeNode(node, evt, li);
+	},
+	
 	/**
 	 * @method protected
 	 * @param Object node TreeNode
@@ -1121,6 +1141,24 @@ var __members = {
 		var li=this._searchComponentByNodeOrValue(value);
 		
 		return this._openNode(li._node, evt, li);
+	},
+	
+	
+
+	/**
+	 * @method protected
+	 * @param Object node 
+	 * @param optional Event evt Javascript event.
+	 * @param hidden li
+	 * @return boolean <code>true</code> if success ...
+	 */
+	_userOpenNode: function(node, evt, li) {
+		var item = li;
+		var itemValue = (item==this)?undefined:this.fa_getElementValue(item);
+		if (this.f_fireEvent(f_event.EXPAND, evt, item, itemValue, this, 1)===false){
+			return false;
+		}
+		return this._openNode(node, evt, li);
 	},
 	/**
 	 * @method protected
@@ -1326,7 +1364,10 @@ var __members = {
 
 					return;
 				}
-
+				
+				var item = waitingNode._li;
+				var itemValue = (item==tree)?undefined:tree.fa_getElementValue(item);
+				
 	 			var ret=request.f_getResponse();
 				try {
 					//alert("ret="+ret);
@@ -1336,7 +1377,7 @@ var __members = {
 				 	tree.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
 				}
 	
-				var event=new f_event(tree, f_event.CHANGE);
+				var event=new f_event(tree, f_event.LOAD, null, item, itemValue, tree);
 				try {
 					tree.f_fireEvent(event);
 					
@@ -3237,14 +3278,30 @@ var __members = {
 	fa_getScrolledVerticalTitle: function() {
 		return null;
 	},
+	
+	/**
+	 * @method public
+	 * @param Object nodeOrValue
+	 * @return String
+	 */
+	f_getItemDepth: function(nodeOrValue) {
+		var li=this._searchComponentByNodeOrValue(nodeOrValue);
+		if (!li){
+			return undefined;
+		}
+		return li._node._depth;
+	},
+	
 	/**
 	 * @method public
 	 * @param Object nodeOrValue
 	 * @return String
 	 */
 	f_getItemStyleClass: function(nodeOrValue) {
-		var li=this._searchComponentByNodeOrValue(value);
-
+		var li=this._searchComponentByNodeOrValue(nodeOrValue);
+		if (!li){
+			return undefined;
+		}
 		return li._node._styleClass;
 	},
 	/**

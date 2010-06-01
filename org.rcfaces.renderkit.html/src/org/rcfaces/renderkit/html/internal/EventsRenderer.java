@@ -110,6 +110,9 @@ public class EventsRenderer {
                 JavaScriptClasses.EVENT_BLUR_ATTRIBUTE,
                 ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_EXPAND_ATTRIBUTE,
+                ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_FOCUS_ATTRIBUTE,
                 ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(

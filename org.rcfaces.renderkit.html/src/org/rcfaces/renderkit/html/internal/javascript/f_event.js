@@ -304,6 +304,13 @@ var __statics = {
 	 * @field public static final String
 	 */
 	ERROR:		"error",
+	
+	/**
+ 	 * Expand event name.
+ 	 *
+	 * @field public static final String
+	 */
+	EXPAND:		"expand",
 
 	/**
  	 * Focus event name.
@@ -601,16 +608,19 @@ var __statics = {
 		if (f_event._EvtLock & f_event.POPUP_LOCK) {
 			if (f_popup.VerifyLock()===false) {
 				// Finalement nous ne sommes plus en LOCK ...
-				// 					
+				// La popup a été fermée automatiquement par le navigateur ...
 				currentLock=f_event._EvtLock;
 				if (mask) {
 					currentLock &= ~mask;
 				}
+				
 				if (!currentLock) {
 					return false;
 				}
 				
 			} else if (jsEvent) {
+				// On va rechercher si notre evenement est dans ou en dehors de la popup
+				
 				var target=jsEvent.target;
 				if (!target) {
 					target = jsEvent.srcElement;
@@ -618,15 +628,22 @@ var __statics = {
 			
 				var ret;
 				if (target) {
+					// On recherche si le click se situe dans la popup
+
 					ret=f_popup.IsChildOfDocument(target, jsEvent);
+					
+					// Ret=TRUE le click est dans la popup ou le composant qui a ouvert la popup (cf f_isPopupLock() )
 				}
 				
 				f_core.Debug(f_event, "GetEventLocked: Search popup child: target="+target+" return="+ret);
 
 				if (ret) {
-					// C'est un composant dans la popup !
+					// C'est un click d'un composant dans la popup !
 					return false;
 				}
+				
+				// Click en dehors de la popup
+				return false;
 
 			} else {
 				f_core.Debug(f_event, "GetEventLocked: Can not test popup case !");

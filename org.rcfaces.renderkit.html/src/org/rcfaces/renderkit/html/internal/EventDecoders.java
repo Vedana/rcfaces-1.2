@@ -17,6 +17,7 @@ import org.rcfaces.core.event.CheckEvent;
 import org.rcfaces.core.event.ClientValueChangeEvent;
 import org.rcfaces.core.event.CloseEvent;
 import org.rcfaces.core.event.DoubleClickEvent;
+import org.rcfaces.core.event.ExpandEvent;
 import org.rcfaces.core.event.FocusEvent;
 import org.rcfaces.core.event.KeyDownEvent;
 import org.rcfaces.core.event.KeyPressEvent;
@@ -346,6 +347,21 @@ public class EventDecoders {
                         queueEvent(component, event);
                     }
                 });
+        
+        EVENT_DECODERS.put(JavaScriptClasses.EVENT_EXPAND,
+                new AbstractEventDecoder() {
+                    private static final String REVISION = "$Revision$";
+
+                    public void decodeEvent(IRequestContext requestContext,
+                            UIComponent component, IEventData eventData,
+                            IEventObjectDecoder eventObjectDecoder) {
+                        // @XXX A Completer avec les noms des 
+
+                        FacesEvent event = new ExpandEvent(component);
+                        queueEvent(component, event);
+                    }
+                });
+        
     }
 
     public static IEventDecoder get(String eventName) {

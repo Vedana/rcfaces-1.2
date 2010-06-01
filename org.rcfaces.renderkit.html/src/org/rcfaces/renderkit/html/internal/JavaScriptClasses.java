@@ -177,6 +177,10 @@ public final class JavaScriptClasses {
     public static final String EVENT_ERROR = "error";
 
     public static final String EVENT_ERROR_CST = "f_event.ERROR";
+    
+     public static final String EVENT_EXPAND = "expand";
+    
+    public static final String EVENT_EXPAND_CST = "f_event.EXPAND";
 
     public static final String EVENT_VALUE_CHANGE = "change";
 
@@ -257,6 +261,8 @@ public final class JavaScriptClasses {
     public static final String EVENT_DBLCLICK_ATTRIBUTE = "dblClick";
 
     public static final String EVENT_ERROR_ATTRIBUTE = "error";
+    
+    public static final String EVENT_EXPAND_ATTRIBUTE = "expand";
 
     public static final String EVENT_FOCUS_ATTRIBUTE = "focus";
 

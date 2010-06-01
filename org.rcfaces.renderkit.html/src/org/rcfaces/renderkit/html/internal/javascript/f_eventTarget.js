@@ -21,6 +21,7 @@ var __statics = {
 			blur: f_event.BLUR,
 			dblClick: f_event.DBLCLICK,
 			error: f_event.ERROR,
+			expand: f_event.EXPAND,
 			focus: f_event.FOCUS,
 			init: f_event.INIT,
 			keyUp: f_event.KEYUP,
@@ -62,6 +63,7 @@ var __statics = {
 		cb[f_event.CLOSE]=null;
 		cb[f_event.DBLCLICK]={_dom: "ondblclick" }; 
 		cb[f_event.ERROR]=noLock;
+		cb[f_event.EXPAND]=null;
 		cb[f_event.FOCUS]={_dom: "onfocus", _lock: false }; 
 		cb[f_event.INIT]=noLock;
 		cb[f_event.KEYDOWN]={_dom: "onkeydown" }; 
