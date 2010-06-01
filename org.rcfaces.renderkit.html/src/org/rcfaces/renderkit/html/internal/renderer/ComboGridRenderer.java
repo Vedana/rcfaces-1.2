@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
@@ -22,6 +23,7 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComboGridComponent;
+import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
@@ -95,38 +97,11 @@ public class ComboGridRenderer extends DataGridRenderer implements
         ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
                 .getComponent();
 
-        String formattedValue = null;
-        String convertedSelectedValue = null;
-        Object selectedValue = comboGridComponent
-                .getSelectedValue(facesContext);
-        String valueColumnId = comboGridComponent
-                .getValueColumnId(facesContext);
-
-        if (selectedValue != null) {
-            UIComponent converterComponent = getColumn(comboGridComponent,
-                    valueColumnId);
-
-            convertedSelectedValue = ValuesTools.convertValueToString(
-                    selectedValue, converterComponent, facesContext);
-
-            if (convertedSelectedValue != null
-                    && convertedSelectedValue.length() > 0) {
-
-                formattedValue = formatValue(facesContext, comboGridComponent,
-                        convertedSelectedValue);
-
-                if (formattedValue == null) {
-                    componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,
-                            Boolean.TRUE);
-
-                    formattedValue = convertedSelectedValue;
-                }
-            }
-        }
-
+        
         boolean disabled = comboGridComponent.isDisabled(facesContext);
         boolean readOnly = comboGridComponent.isReadOnly(facesContext);
         boolean editable = comboGridComponent.isEditable(facesContext);
+        
 
         ICssStyleClasses cssStyleClasses = getCssStyleClasses(htmlWriter);
 
@@ -159,6 +134,56 @@ public class ComboGridRenderer extends DataGridRenderer implements
         writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
 
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
+        
+        Map formatValues = new HashMap();
+        
+        String valueFormat = comboGridComponent.getValueFormat(facesContext);
+        if (valueFormat != null) {
+            htmlWriter.writeAttribute("v:valueFormat", valueFormat);
+            formatValues.put("valueFormat", valueFormat);
+        }
+        
+        String valueFormatLabel = comboGridComponent.getValueFormatLabel(facesContext);
+        if (valueFormatLabel != null) {
+            htmlWriter.writeAttribute("v:valueFormatLabel", valueFormatLabel);
+            formatValues.put("valueFormatLabel", valueFormatLabel);
+        }
+        
+        Map formattedValues = null;
+        String formattedValue = null;
+        String formattedValueLabel = null;
+        String convertedSelectedValue = null;
+        Object selectedValue = comboGridComponent
+                .getSelectedValue(facesContext);
+        String valueColumnId = comboGridComponent
+                .getValueColumnId(facesContext);
+
+        if (selectedValue != null) {
+            UIComponent converterComponent = getColumn(comboGridComponent,
+                    valueColumnId);
+
+            convertedSelectedValue = ValuesTools.convertValueToString(
+                    selectedValue, converterComponent, facesContext);
+
+            if (convertedSelectedValue != null
+                    && convertedSelectedValue.length() > 0) {
+
+                formattedValues = formatValue(facesContext, comboGridComponent,
+                        convertedSelectedValue, formatValues);
+                if (formattedValues != null) {
+                	formattedValue = (String) formattedValues.get("valueFormat");
+                	formattedValueLabel = (String) formattedValues.get("valueFormatLabel");
+                }
+                
+                if (formattedValue == null) {
+                    componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,
+                            Boolean.TRUE);
+
+                    formattedValue = convertedSelectedValue;
+                }
+            }
+        }
+
 
         int rows = gridRenderContext.getRows();
         if (rows > 0) {
@@ -211,11 +236,35 @@ public class ComboGridRenderer extends DataGridRenderer implements
             htmlWriter.writeAttribute("v:suggestionMinChars",
                     suggestionMinChars);
         }
-
-        String valueFormat = comboGridComponent.getValueFormat(facesContext);
-        if (valueFormat != null) {
-            htmlWriter.writeAttribute("v:valueFormat", valueFormat);
+        
+        String noValueFormatLabel = comboGridComponent.getNoValueFormatLabel(facesContext);
+        if (noValueFormatLabel != null) {
+            htmlWriter.writeAttribute("v:noValueFormatLabel", noValueFormatLabel);
         }
+
+        String ac = comboGridComponent.getForLabel(facesContext);
+		
+
+		 IRenderContext renderContext = componentRenderContext
+        .getRenderContext();
+		
+		String forId = renderContext.computeBrotherComponentClientId(
+				comboGridComponent, ac);
+		
+		if (forId != null) {
+			 htmlWriter.writeAttribute("v:forLabel", forId);
+			 
+			 UIComponent label = facesContext.getViewRoot().findComponent(forId);
+			 if (null != label && label instanceof TextComponent){
+				 if(formattedValueLabel != null) {
+					 ((TextComponent) label).setValue(formattedValueLabel);
+				 }else  if (noValueFormatLabel != null) {
+					 ((TextComponent) label).setValue(noValueFormatLabel);
+				 }
+			 }
+		}
+        
+        
 
         String pagerStyleClass = comboGridComponent
                 .getPagerStyleClass(facesContext);
@@ -250,6 +299,12 @@ public class ComboGridRenderer extends DataGridRenderer implements
         if (searchField == false) {
             htmlWriter.writeAttribute("v:searchFieldVisible", searchField);
         }
+        
+        boolean forceValidation = comboGridComponent
+        .isForceValidation(facesContext);
+		if (forceValidation == true) {
+		    htmlWriter.writeAttribute("v:forceValidation", forceValidation);
+		}
 
         if (valueColumnId != null) {
             htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
@@ -478,8 +533,8 @@ public class ComboGridRenderer extends DataGridRenderer implements
         return true;
     }
 
-    private String formatValue(FacesContext facesContext,
-            ComboGridComponent comboGridComponent, String convertedSelectedValue) {
+    private Map formatValue(FacesContext facesContext,
+            ComboGridComponent comboGridComponent, String convertedSelectedValue, Map formatValues ) {
 
         DataModel dataModel = comboGridComponent.getDataModelValue();
 
@@ -525,7 +580,7 @@ public class ComboGridRenderer extends DataGridRenderer implements
 
                     // Oui !
                     return formatValue(facesContext, comboGridComponent,
-                            rowData);
+                            rowData, formatValues);
                 }
 
             } finally {
@@ -579,7 +634,7 @@ public class ComboGridRenderer extends DataGridRenderer implements
             Object oldValue = requestMap.put(var, rowData);
 
             try {
-                return formatValue(facesContext, comboGridComponent, rowData);
+                return formatValue(facesContext, comboGridComponent, rowData, formatValues);
 
             } finally {
                 requestMap.put(var, oldValue);
@@ -590,8 +645,8 @@ public class ComboGridRenderer extends DataGridRenderer implements
         }
     }
 
-    private String formatValue(FacesContext facesContext,
-            ComboGridComponent comboGridComponent, Object rowData) {
+    private Map formatValue(FacesContext facesContext,
+            ComboGridComponent comboGridComponent, Object rowData, Map formatValues) {
 
         Map columnValues = new HashMap();
 
@@ -615,17 +670,24 @@ public class ComboGridRenderer extends DataGridRenderer implements
             columnValues.put(String.valueOf(idx), svalue);
         }
 
-        String valueFormat = comboGridComponent.getValueFormat(facesContext);
-        if (valueFormat == null) {
-            String labelColumnId = comboGridComponent.getLabelColumnId();
-            if (labelColumnId != null) {
-                valueFormat = "{" + labelColumnId + "}";
-            } else {
-                valueFormat = "{0}";
-            }
-        }
-
-        return formatMessage(valueFormat, columnValues);
+        Map results = new HashMap();
+        Iterator iterator = formatValues.entrySet().iterator();
+        while (iterator.hasNext()) {
+        	Map.Entry entry=(Map.Entry) iterator.next();
+			String key = (String) entry.getKey();
+			String valueFormat = (String) entry.getValue();
+			if (valueFormat == null) {
+	            String labelColumnId = comboGridComponent.getLabelColumnId();
+	            if (labelColumnId != null) {
+	                valueFormat = "{" + labelColumnId + "}";
+	            } else {
+	                valueFormat = "{0}";
+	            }
+	        }
+			results.put(key,  formatMessage(valueFormat, columnValues));
+		}
+        return results;
+        
     }
 
     private String formatMessage(String message, Map parameters) {

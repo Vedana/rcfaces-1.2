@@ -1,5 +1,12 @@
+ComboGrid:
+Ajout des attributs forceValue, forLabel, valueFormatLabel et novalueFormatLabel.
+Modification du checkListener
+
+f_comboGrid, f_popup, f_menuBar :
+correction du bug à l'ouverture des comboGrids:
+
 f_tree:
-Implementation de l'ExpandListener
+Implementation de l'ExpandListener et loadListener
 
 IExpandListener:
 Ajout de la capability IExpandEventCapbility

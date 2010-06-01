@@ -531,13 +531,18 @@ var __statics = {
 		return false;
 	},
 	/**
+	 * On verifie que la target de l'evenement est bien dans la popup ouverte
+	 * 
 	 * @method hidden static
+	 * @return <code>true</code> if the target is contain by the current popup.
 	 */
 	IsChildOfDocument: function(target, event) {
 		f_core.Debug(f_popup, "IsChildOfDocument: Search parent target='"+target+"' document='"+f_popup.Popup+"'.");
 
 		var popupDocument=f_popup.Popup;
 		if (!popupDocument) {
+			// Pas de popup
+			
 			f_core.Debug(f_popup, "IsChildOfDocument: no popup document => false");
 			return false;
 		}
@@ -546,21 +551,40 @@ var __statics = {
 			f_core.Debug(f_popup, "IsChildOfDocument: Test child '"+target+"' #"+target.id+" popupObject='"+target._popupObject+"' popupParent='"+target._popupParent+"'");
 		
 			if (target==popupDocument) {
+				// on tombe sur notre popup => retourne TRUE
+				
 				f_core.Debug(f_popup, "IsChildOfDocument: parent is popup document => true");
 				return true;
 			}
 
 			if (target._menu==popupDocument || target._popupObject) {
+				// C'est un sous menu => retourne TRUE
+				
 				f_core.Debug(f_popup, "IsChildOfDocument: menu or popupObject => true");
 				return true;
 			}
+						
+			var isPopupLock=target.f_isPopupLock; // Le composant qui a ouvert la popup peut s'inclure dans la popup
 			
-			var isPopupLock=target.f_isPopupLock;
-			if (typeof(isPopupLock)=="function" && isPopupLock.call(target, popupDocument, event)===false) {
-				f_core.Debug(f_popup, "IsChildOfDocument: f_isPopupLock returns false => true");
-				return true;
+			if (typeof(isPopupLock)=="function") {
+				var cret=isPopupLock.call(target, popupDocument, event);
+				
+				if (cret===false) {
+					// Notre composant indique de ne pas considerer la target dans la popup
+
+					f_core.Debug(f_popup, "IsChildOfDocument: f_isPopupLock returns false");
+					return false;
+				}
+				
+				if (cret===true) {
+					// Notre composant indique que la target est bien dans la popup
+					f_core.Debug(f_popup, "IsChildOfDocument: f_isPopupLock returns true");
+					return true;
+				}
 			}
 		}
+		
+		// La target n'est pas dans la popup
 		
 		f_core.Debug(f_popup, "IsChildOfDocument: no parent popup => false");
 		return false;
@@ -834,14 +858,19 @@ var __statics = {
 	 */
 	VerifyLock: function() {
 		if (f_popup.Ie_enablePopup()) {
-			var popup=f_popup.Popup;
+			// IE ferme tout seul la popup lors d'un click hors de la popup
+			// On verifie que la popup est encore ouverte ....
 			
+			var popup=f_popup.Popup;
+
 			if (popup && popup.tagName=="IFRAME") {
-				return true;
+				return true; // Pas de probleme de popup si c'est une IFrame
 			}
 			
 			popup=document._rcfacesIEPopup;
-			
+
+			f_core.Debug(f_popup, "VerifyLock: test popup ! popup="+popup+" open="+popup.isOpen);
+
 			if (popup && !popup.isOpen) {
 				// Ca va pas !
 				// Le popup est fermÃ© et personne n'est prÃ©venu !
@@ -855,11 +884,12 @@ var __statics = {
 					cbs.exit.call(f_popup.Component, null);
 				}
 				
-				return false; // undefined
+				return false; // FALSE= La popup a été fermée, on revient en scope normal
 			}	
 		}
 		
-		return true;
+		// Le navigateur ne ferme pas la popup tout seul !
+		return true; // TRUE= RAS
 	},
 	/**
 	 * Verify que l'evenement a eu lieu dans une popup !

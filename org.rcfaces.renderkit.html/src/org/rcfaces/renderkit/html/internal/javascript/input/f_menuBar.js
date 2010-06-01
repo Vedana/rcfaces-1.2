@@ -904,12 +904,12 @@ var __members = {
 	f_isPopupLock: function(popupDocument) {
 		var menuItem=this.f_uiGetSelectedItem(this);
 		if (!menuItem) {
-			return true;
+			return false;
 		}
 	
 		var popup=this.f_getUIPopup(menuItem);
 	
-		return (popup!=popupDocument); // On reste bloqué si ce n'est pas le meme
+		return (popup==popupDocument); // On reste bloqué si ce n'est pas le meme
 	}
 }
 

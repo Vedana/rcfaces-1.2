@@ -168,6 +168,9 @@ var __members = {
 		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", f_comboGrid._DEFAULT_SUGGESTION_MIN_CHARS);
 		
 		this._valueFormat=f_core.GetAttribute(this, "v:valueFormat");
+		this._forLabel=f_core.GetAttribute(this, "v:forLabel");
+		this._valueFormatLabel=f_core.GetAttribute(this, "v:valueFormatLabel");
+		this._noValueFormatLabel=f_core.GetAttribute(this, "v:noValueFormatLabel");
 		
 		this._filtred=true;
 		
@@ -201,6 +204,11 @@ var __members = {
 
 		this._gridStyleClass=f_core.GetNumberAttribute(this, "v:gridStyleClass", 0);
 
+		this._foceValidation=f_core.GetBooleanAttribute(this, "v:forceValidation", false);
+		
+		if(this._foceValidation) {
+			this._installcheckListener();
+		}
 		
 		this.f_getInput().onbeforedeactivate=f_comboGrid._OnBeforeDeactivate;
 		
@@ -226,6 +234,9 @@ var __members = {
 		// this._suggestionDelayMs=undefined;  // number
 		// this._suggestionMinChars=undefined; // number
 		// this._valueFormat=undefined; // String
+		// this._valueFormatLabel=undefined; // String
+		// this._noValueFormatLabel=undefined; // String
+		// this._forLabel=undefined; // String
 		// this._formattedValue=undefined; // String
 		// this._inputValue=undefined; // String
 		// this._focus=undefined; // boolean
@@ -235,6 +246,8 @@ var __members = {
 		// this._readOnly=undefined; // boolean 
 		// this._maxTextLength=undefined; // number
 		// this._emptyMessageShown=undefined; boolean
+		// this._foceValidation=undefined; boolean
+		// this._required=undefined; boolean
 	
 		var button=this._button;
 		if (button) {
@@ -270,6 +283,58 @@ var __members = {
 		
 		this.f_super(arguments);	
 	},
+	
+	
+	/**
+	 * @method private
+	 * @return void
+	 */
+	_installcheckListener: function() {
+		var comboGrid=this;
+		var checkListeners={
+				
+			f_performCheckValue: function(event) {
+				if (comboGrid._inputValue) {
+					if(comboGrid._foceValidation && comboGrid._keyErrored) {
+						return false;
+					}
+					return true;
+				}
+				
+				if (comboGrid._required) {
+					var summary=comboGrid.f_getClientValidatorParameter("REQUIRED_ERROR_SUMMARY");
+					var detail=comboGrid.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
+					
+					if (!summary) {
+						var resourceBundle=f_resourceBundle.Get(f_comboGrid);
+						summary=resourceBundle.f_formatParams("REQUIRED_ERROR_SUMMARY");
+						//detail=resourceBundle.f_formatParams("REQUIRED_ERROR_DETAIL");
+						
+						if (!summary) {	
+							summary=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_REQUIRED", null, "A value is required.");
+						}
+					}
+						
+					var messageContext=f_messageContext.Get(comboGrid);	
+					messageContext.f_addMessage(comboGrid, f_messageObject.SEVERITY_ERROR, summary, detail);
+					
+					return false;
+				}
+			},	
+		
+			f_performCheckPre: function(event) {
+			},
+
+		
+			f_performCheckPost: function(event) {
+			}
+		};
+
+		this._checkListeners=checkListeners;
+		f_core.AddCheckListener(this, checkListeners);
+	
+	},
+	
 	/**
 	 * @method private
 	 * @param Event jsEvent
@@ -321,6 +386,7 @@ var __members = {
 		if (!this._buttonOver) {
 			return;
 		}
+		
 		this._buttonDown=false; // Obligé sinon sous IE on sait plus quand c'est relaché
 		this._buttonOver=false;
 		this.f_updateButtonStyle();	
@@ -630,6 +696,12 @@ var __members = {
 			this._formattedValue=this.f_getInput().value;
 			this._selectedValue="";
 			this._cancelVerification();
+			if(this._forLabel){
+				var labelComponent = f_core.GetElementById(this._forLabel,document);
+				if (labelComponent) {
+					labelComponent.f_setText(this._noValueFormatLabel);
+				}
+			}
 			return;
 		}
 		
@@ -639,6 +711,12 @@ var __members = {
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
 		this._inputValue=value;
+		if(this._forLabel){
+			var labelComponent = f_core.GetElementById(this._forLabel,document);
+			if (labelComponent) {
+				labelComponent.f_setText(f_core.FormatMessage(this._valueFormatLabel,rowValues));
+			}
+		}
 		
 		var input=this.f_getInput();
 		
@@ -970,40 +1048,14 @@ var __members = {
 	 */
 	fa_updateRequired: function() {
 		this.f_updateStyleClass();
-
+		this._required = true;
 		if (this._checkListeners) {
 			return;
+		}else {
+			this._installcheckListener();
 		}
 
-		var comboGrid=this;
-		var checkListeners={
-			f_performCheckValue: function(event) {
-				if (comboGrid._inputValue) {
-					return;
-				}
-				
-				var summary=comboGrid.f_getClientValidatorParameter("REQUIRED_ERROR_SUMMARY");
-				var detail=comboGrid.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
-				
-				if (!summary) {
-					var resourceBundle=f_resourceBundle.Get(f_comboGrid);
-					summary=resourceBundle.f_formatParams("REQUIRED_ERROR_SUMMARY");
-					//detail=resourceBundle.f_formatParams("REQUIRED_ERROR_DETAIL");
-					
-					if (!summary) {	
-						summary=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_REQUIRED", null, "A value is required.");
-					}
-				}
-					
-				var messageContext=f_messageContext.Get(comboGrid);	
-				messageContext.f_addMessage(comboGrid, f_messageObject.SEVERITY_ERROR, summary, detail);
-				
-				return false;
-			}		
-		};
-
-		this._checkListeners=checkListeners;
-		f_core.AddCheckListener(this, checkListeners);			
+			
 	},
 	/**
 	 * @method hidden
