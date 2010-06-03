@@ -3289,7 +3289,7 @@ var __members = {
 		if (!li){
 			return undefined;
 		}
-		return li._node._depth;
+		return li._depth;
 	},
 	
 	/**
