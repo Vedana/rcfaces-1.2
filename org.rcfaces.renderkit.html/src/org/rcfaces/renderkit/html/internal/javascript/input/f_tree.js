@@ -5,7 +5,7 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
@@ -1396,6 +1396,12 @@ var __members = {
 			waitingId: waitingNode._id,
 			node: params 
 		};
+		
+		var filterExpression=this.fa_getSerializedPropertiesExpression();
+		if (filterExpression) {
+			params.filterExpression=filterExpression;
+		}
+
 		request.f_doFormRequest(params);
 		
 	},
@@ -3333,12 +3339,18 @@ var __members = {
 		}
 		
 		return item._node;
+	},
+	fa_updateFilterProperties : function(filterProperties) {
+		
+		this.f_refreshContent();
+		
+		return false;
 	}
 }
 
 new f_class("f_tree", {
 	extend: f_component,
-	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass ],
+	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties ],
 	members: __members,
 	statics: __statics
 });

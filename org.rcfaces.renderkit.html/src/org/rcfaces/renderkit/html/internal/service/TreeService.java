@@ -30,6 +30,7 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -121,6 +122,8 @@ public class TreeService extends AbstractHtmlService {
             return;
         }
 
+        String filterExpression = (String) parameters.get("filterExpression");
+
         try {
             UIComponent component = localizedComponent.getComponent();
 
@@ -161,8 +164,8 @@ public class TreeService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -176,7 +179,7 @@ public class TreeService extends AbstractHtmlService {
                 }
 
                 writeJs(facesContext, printWriter, treeComponent, treeId,
-                        treeRenderer, waitingId, node);
+                        treeRenderer, waitingId, node, filterExpression);
 
             } catch (IOException ex) {
                 throw new FacesException(
@@ -214,8 +217,15 @@ public class TreeService extends AbstractHtmlService {
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
             TreeComponent treeComponent, String treeId,
-            TreeRenderer treeRenderer, String waitingId, String node)
-            throws IOException {
+            TreeRenderer treeRenderer, String waitingId, String node,
+            String filterExpression) throws IOException {
+
+        if (filterExpression != null) {
+            IFilterProperties filtersMap = HtmlTools.decodeFilterExpression(
+                    null, treeComponent, filterExpression);
+
+            treeComponent.setFilterProperties(filtersMap);
+        }
 
         HtmlProcessContextImpl.getHtmlProcessContext(facesContext);
 
