@@ -3,8 +3,11 @@
  */
 package org.rcfaces.renderkit.html.internal.decorator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.faces.component.UIComponent;
@@ -16,9 +19,13 @@ import javax.faces.model.SelectItem;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.TreeNodeComponent;
 import org.rcfaces.core.component.capability.ICardinality;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
+import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.rcfaces.core.internal.component.IImageAccessors;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -31,12 +38,15 @@ import org.rcfaces.core.internal.tools.SelectItemMappers;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.item.IClientDataItem;
+import org.rcfaces.core.item.IDraggableItem;
+import org.rcfaces.core.item.IDroppableItem;
 import org.rcfaces.core.item.IImagesItem;
 import org.rcfaces.core.item.IStyleClassItem;
 import org.rcfaces.core.item.ITreeNode;
 import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.TreeNode;
 import org.rcfaces.core.lang.OrderedSet;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -60,10 +70,23 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
     private final Converter converter;
 
+    private DragWalker dragWalker;
+
+    private DropWalker dropWalker;
+
     public TreeDecorator(TreeComponent component) {
-        super(component, null);
+        super(component, component.getFilterProperties());
 
         converter = component.getConverter();
+
+        if (component.isDraggable()) {
+            dragWalker = new DragWalker(component);
+        }
+
+        if (component.isDroppable()) {
+            dropWalker = new DropWalker(component);
+        }
+
     }
 
     protected void preEncodeContainer() throws WriterException {
@@ -429,6 +452,14 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             }
         }
 
+        if (dragWalker != null) {
+            dragWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
+        }
+
+        if (dropWalker != null) {
+            dropWalker.pushAndWriteAttributes(objectLiteralWriter, selectItem);
+        }
+
         objectLiteralWriter.end().writeln(");");
 
         return EVAL_NODE;
@@ -455,7 +486,16 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 return;
             }
         }
+
         treeRenderContext.popVarId();
+
+        if (dragWalker != null) {
+            dragWalker.pop(selectItem);
+        }
+
+        if (dropWalker != null) {
+            dropWalker.pop(selectItem);
+        }
     }
 
     /*
@@ -703,5 +743,290 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         }
 
         return super.createSelectItem(component);
+    }
+
+    protected static class DragDropItemState {
+        private final SelectItem draggleItem;
+
+        private final UIComponent component;
+
+        private final Integer draggableEffects;
+
+        private final String draggableTypes;
+
+        public DragDropItemState(UIComponent component,
+                Integer draggableEffects, String draggableTypes) {
+
+            this.component = component;
+            this.draggleItem = null;
+            this.draggableEffects = draggableEffects;
+            this.draggableTypes = draggableTypes;
+        }
+
+        public DragDropItemState(SelectItem draggleItem,
+                Integer draggableEffects, String draggableTypes) {
+
+            this.component = null;
+            this.draggleItem = draggleItem;
+            this.draggableEffects = draggableEffects;
+            this.draggableTypes = draggableTypes;
+
+        }
+
+        public SelectItem getDragDropItem() {
+            return draggleItem;
+        }
+
+        public Integer getDragDropEffects() {
+            return draggableEffects;
+        }
+
+        public String getSerializedDragDropTypes() {
+            return draggableTypes;
+        }
+    }
+
+    protected abstract class AbstractDragDropWalker {
+
+        private final List dragDropSelectItemStates;
+
+        private final List selectItemLastDragDropInfos;
+
+        private String[] cachedDragDropTypes;
+
+        private String cachedDerializedDragDropTypes;
+
+        public AbstractDragDropWalker(int dragDropEffects,
+                String dragDropTypes[]) {
+            dragDropSelectItemStates = new ArrayList(8);
+            selectItemLastDragDropInfos = new ArrayList(8);
+
+            if (dragDropEffects < 0) {
+                dragDropEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+            }
+
+            Integer dragEffects = new Integer(dragDropEffects);
+            String serializedDragTypes = serializeDragType(dragDropTypes);
+
+            dragDropSelectItemStates.add(new DragDropItemState(component,
+                    dragEffects, serializedDragTypes));
+
+            selectItemLastDragDropInfos.add(serializedDragTypes);
+            selectItemLastDragDropInfos.add(dragEffects);
+
+        }
+
+        public void pop(SelectItem selectItem) {
+
+            if (getCurrentDragDropItemState(0).getDragDropItem() == selectItem) {
+                dragDropSelectItemStates
+                        .remove(dragDropSelectItemStates.size() - 1);
+            }
+
+            int size = selectItemLastDragDropInfos.size();
+            selectItemLastDragDropInfos.remove(size - 1);
+            selectItemLastDragDropInfos.remove(size - 2);
+        }
+
+        public void pushAndWriteAttributes(
+                IObjectLiteralWriter objectLiteralWriter, SelectItem selectItem)
+                throws WriterException {
+
+            Integer dragDropEffects = null;
+            String serializedDragDropTypes = null;
+            boolean effectsFound = false;
+            boolean typesFound = false;
+
+            if (isDragDropItem(selectItem)) {
+                int d = getDragDropEffects(selectItem, selectItem);
+                if (d >= 0) {
+                    dragDropEffects = new Integer(d);
+                    effectsFound = true;
+                }
+
+                String ts[] = getDragDropTypes(selectItem, selectItem);
+                if (ts != null) {
+                    serializedDragDropTypes = serializeDragType(ts);
+                    typesFound = true;
+                }
+            }
+
+            for (int i = 0; effectsFound == false && typesFound == false; i++) {
+                DragDropItemState draggableItemState = getCurrentDragDropItemState(i);
+                if (draggableItemState == null) {
+                    break;
+                }
+
+                SelectItem draggableItem = draggableItemState.getDragDropItem();
+                if (draggableItem == null) { // C'est le component ! (retour à
+                    // la racine)
+                    if (effectsFound == false) {
+                        dragDropEffects = draggableItemState
+                                .getDragDropEffects();
+                        effectsFound = true;
+                    }
+                    if (typesFound == false) {
+                        serializedDragDropTypes = draggableItemState
+                                .getSerializedDragDropTypes();
+                        typesFound = true;
+                    }
+
+                    break;
+                }
+
+                if (effectsFound == false) {
+                    int d = getDragDropEffects(draggableItem, selectItem);
+                    if (d >= 0) {
+                        dragDropEffects = new Integer(d);
+                        effectsFound = true;
+                    }
+                }
+
+                if (typesFound == false) {
+                    String ts[] = getDragDropTypes(draggableItem, selectItem);
+                    if (ts != null) {
+                        serializedDragDropTypes = serializeDragType(ts);
+                        typesFound = true;
+                    }
+                }
+            }
+
+            if (isDragDropItem(selectItem)) {
+                dragDropSelectItemStates.add(new DragDropItemState(selectItem,
+                        dragDropEffects, serializedDragDropTypes));
+            }
+
+            int depth = selectItemLastDragDropInfos.size();
+
+            if (typesFound && serializedDragDropTypes != null) {
+                if (depth == 0
+                        || serializedDragDropTypes
+                                .equals(selectItemLastDragDropInfos
+                                        .get(depth - 2)) == false) {
+                    objectLiteralWriter.writeSymbol(getDragDropTypesSymbol())
+                            .writeString(serializedDragDropTypes);
+                }
+            }
+            if (effectsFound && dragDropEffects != null) {
+                if (depth == 0
+                        || dragDropEffects.equals(selectItemLastDragDropInfos
+                                .get(depth - 1)) == false) {
+                    objectLiteralWriter.writeSymbol(getDragDropEffectsSymbol())
+                            .writeInt(dragDropEffects.intValue());
+                }
+            }
+
+            selectItemLastDragDropInfos.add(serializedDragDropTypes);
+            selectItemLastDragDropInfos.add(dragDropEffects);
+        }
+
+        protected final String serializeDragType(String[] dragDropTypes) {
+            if (dragDropTypes == null) {
+                return null;
+            }
+            if (dragDropTypes.length == 0) {
+                return "";
+            }
+            if (dragDropTypes.length == 1) {
+                return dragDropTypes[0];
+            }
+
+            if (cachedDragDropTypes != null
+                    && Arrays.equals(cachedDragDropTypes, dragDropTypes)) {
+                return cachedDerializedDragDropTypes;
+            }
+
+            StringAppender sb = new StringAppender(dragDropTypes[0],
+                    dragDropTypes.length * 128);
+
+            for (int i = 1; i < dragDropTypes.length; i++) {
+                sb.append(HtmlTools.LIST_SEPARATORS);
+                sb.append(dragDropTypes[i]);
+            }
+
+            cachedDragDropTypes = dragDropTypes;
+            cachedDerializedDragDropTypes = sb.toString();
+
+            return cachedDerializedDragDropTypes;
+        }
+
+        protected DragDropItemState getCurrentDragDropItemState(int offset) {
+            if (dragDropSelectItemStates == null
+                    || dragDropSelectItemStates.size() <= offset) {
+                return null;
+            }
+
+            return (DragDropItemState) dragDropSelectItemStates
+                    .get(dragDropSelectItemStates.size() - offset - 1);
+        }
+
+        protected abstract String[] getDragDropTypes(SelectItem mainItem,
+                SelectItem childSelectItem);
+
+        protected abstract int getDragDropEffects(SelectItem mainItem,
+                SelectItem childSelectItem);
+
+        protected abstract String getDragDropTypesSymbol();
+
+        protected abstract String getDragDropEffectsSymbol();
+
+        protected abstract boolean isDragDropItem(SelectItem selectItem);
+
+    }
+
+    protected class DragWalker extends AbstractDragDropWalker {
+        public DragWalker(IDraggableCapability component) {
+            super(component.getDragEffects(), component.getDragTypes());
+        }
+
+        protected String[] getDragDropTypes(SelectItem mainItem,
+                SelectItem childSelectItem) {
+            return ((IDraggableItem) mainItem).getDragTypes(childSelectItem);
+        }
+
+        protected int getDragDropEffects(SelectItem mainItem,
+                SelectItem childSelectItem) {
+            return ((IDraggableItem) mainItem).getDragEffects(childSelectItem);
+        }
+
+        protected String getDragDropTypesSymbol() {
+            return "_dragTypes";
+        }
+
+        protected String getDragDropEffectsSymbol() {
+            return "_dragEffects";
+        }
+
+        protected boolean isDragDropItem(SelectItem selectItem) {
+            return selectItem instanceof IDraggableItem;
+        }
+    }
+
+    protected class DropWalker extends AbstractDragDropWalker {
+        public DropWalker(IDroppableCapability component) {
+            super(component.getDropEffects(), component.getDropTypes());
+        }
+
+        protected String[] getDragDropTypes(SelectItem mainItem,
+                SelectItem childSelectItem) {
+            return ((IDroppableItem) mainItem).getDropTypes(childSelectItem);
+        }
+
+        protected int getDragDropEffects(SelectItem mainItem,
+                SelectItem childSelectItem) {
+            return ((IDroppableItem) mainItem).getDropEffects(childSelectItem);
+        }
+
+        protected String getDragDropTypesSymbol() {
+            return "_dropTypes";
+        }
+
+        protected String getDragDropEffectsSymbol() {
+            return "_dropEffects";
+        }
+
+        protected boolean isDragDropItem(SelectItem selectItem) {
+            return selectItem instanceof IDroppableItem;
+        }
     }
 }
