@@ -12,6 +12,8 @@ import javax.faces.model.SelectItem;
 import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
+import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
@@ -49,6 +51,10 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
     private String styleClass;
 
+    private int dragEffects = IDragAndDropEffects.UNKNOWN_DND_EFFECT;
+
+    private String[] dragTypes;
+
     public BasicSelectItem() {
     }
 
@@ -79,7 +85,7 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
                 .getItemDescription(), component.isItemDisabled());
 
         int s = 0; // IInputTypeCapability.AS_PUSH_BUTTON; // Pas de valeur par
-                   // défaut
+        // défaut
 
         if (component instanceof IAccessKeyCapability) {
             accessKey = ((IAccessKeyCapability) component).getAccessKey();
@@ -144,6 +150,13 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
             IStyleClassCapability styleClassCapability = (IStyleClassCapability) component;
 
             styleClass = styleClassCapability.getStyleClass();
+        }
+
+        if (component instanceof IDraggableCapability) {
+            IDraggableCapability draggableItemCapability = (IDraggableCapability) component;
+
+            dragTypes = draggableItemCapability.getDragTypes();
+            dragEffects = draggableItemCapability.getDragEffects();
         }
     }
 
@@ -241,5 +254,37 @@ public class BasicSelectItem extends SelectItem implements ISelectItem,
 
     public String getAcceleratorKey() {
         return acceleratorKey;
+    }
+
+    public int getDragEffects(SelectItem dragItem) {
+        if (dragItem == null || equals(getValue(), dragItem.getValue())) {
+            return dragEffects;
+        }
+
+        return IDragAndDropEffects.UNKNOWN_DND_EFFECT;
+    }
+
+    public void setDragEffects(int dragEffects) {
+        this.dragEffects = dragEffects;
+    }
+
+    public String[] getDragTypes(SelectItem dragItem) {
+        if (dragItem == null || equals(getValue(), dragItem.getValue())) {
+            return dragTypes;
+        }
+
+        return null;
+    }
+
+    public void setDragTypes(String[] dragTypes) {
+        this.dragTypes = dragTypes;
+    }
+
+    private boolean equals(Object value1, Object value2) {
+        if (value1 == value2) {
+            return true;
+        }
+
+        return value1 != null && value1.equals(value2);
     }
 }

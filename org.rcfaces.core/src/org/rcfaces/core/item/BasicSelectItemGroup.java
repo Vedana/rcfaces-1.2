@@ -56,15 +56,36 @@ public class BasicSelectItemGroup extends SelectItemGroup implements
     }
 
     public BasicSelectItemGroup(ISelectItem selectItem) {
-        super(selectItem.getLabel(), selectItem.getDescription(), selectItem
-                .isDisabled(), null);
+        super(selectItem.getLabel());
+
+        String description = selectItem.getDescription();
+        if (description != null) {
+            setDescription(description);
+        }
+
+        if (selectItem.isDisabled()) {
+            setDisabled(true);
+        }
 
         setValue(selectItem.getValue());
     }
 
     public BasicSelectItemGroup(ISelectItemGroup selectItemGroup) {
-        super(selectItemGroup.getLabel(), selectItemGroup.getDescription(),
-                selectItemGroup.isDisabled(), selectItemGroup.getSelectItems());
+        super(selectItemGroup.getLabel());
+
+        String description = selectItemGroup.getDescription();
+        if (description != null) {
+            setDescription(description);
+        }
+
+        if (selectItemGroup.isDisabled()) {
+            setDisabled(true);
+        }
+
+        SelectItem children[] = selectItemGroup.getSelectItems();
+        if (children != null) {
+            setSelectItems(children);
+        }
 
         setValue(selectItemGroup.getValue());
     }

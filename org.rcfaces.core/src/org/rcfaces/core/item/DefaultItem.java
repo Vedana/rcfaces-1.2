@@ -16,6 +16,10 @@ import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
 import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
+import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.capability.IDroppableCapability;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.IImageCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
@@ -76,7 +80,7 @@ class DefaultItem extends SelectItemGroup {
 
     private String borderType;
 
-    private int textPosition = -1;
+    private int textPosition = IHorizontalTextPositionCapability.UNKNOWN_POSITION;
 
     private String accessKey;
 
@@ -89,6 +93,14 @@ class DefaultItem extends SelectItemGroup {
     private String width;
 
     private String alternateText;
+
+    private int dragEffects = IDragAndDropEffects.UNKNOWN_DND_EFFECT;
+
+    private String dragTypes[];
+
+    private int dropEffects = IDragAndDropEffects.UNKNOWN_DND_EFFECT;
+
+    private String dropTypes[];
 
     public DefaultItem() {
     }
@@ -103,8 +115,21 @@ class DefaultItem extends SelectItemGroup {
     }
 
     public DefaultItem(ISelectItemGroup selectItem) {
-        super(selectItem.getLabel(), selectItem.getDescription(), selectItem
-                .isDisabled(), selectItem.getSelectItems());
+        super(selectItem.getLabel());
+
+        String description = selectItem.getDescription();
+        if (description != null) {
+            setDescription(description);
+        }
+
+        if (selectItem.isDisabled()) {
+            setDisabled(true);
+        }
+
+        SelectItem children[] = selectItem.getSelectItems();
+        if (children != null) {
+            setSelectItems(children);
+        }
 
         Object itemValue = selectItem.getValue();
         if (itemValue != null) {
@@ -186,6 +211,28 @@ class DefaultItem extends SelectItemGroup {
         if (selectItem instanceof IAlternateTextItem) {
             setAlternateText(((IAlternateTextItem) selectItem)
                     .getAlternateText());
+        }
+
+        if (selectItem instanceof SelectItem) {
+            if (selectItem instanceof IDraggableItem) {
+                IDraggableItem draggableItem = (IDraggableItem) selectItem;
+
+                setDragEffects(draggableItem
+                        .getDragEffects((SelectItem) selectItem));
+
+                setDragTypes(draggableItem
+                        .getDragTypes((SelectItem) selectItem));
+            }
+
+            if (selectItem instanceof IDroppableItem) {
+                IDroppableItem droppableItem = (IDroppableItem) selectItem;
+
+                setDropEffects(droppableItem
+                        .getDropEffects((SelectItem) selectItem));
+
+                setDropTypes(droppableItem
+                        .getDropTypes((SelectItem) selectItem));
+            }
         }
     }
 
@@ -328,6 +375,20 @@ class DefaultItem extends SelectItemGroup {
         if (selectItemComponent instanceof IImmediateCapability) {
             setImmediate(((IImmediateCapability) selectItemComponent)
                     .isImmediate());
+        }
+
+        if (selectItemComponent instanceof IDraggableCapability) {
+            IDraggableCapability draggableCapability = (IDraggableCapability) selectItemComponent;
+
+            setDragEffects(draggableCapability.getDragEffects());
+            setDragTypes(draggableCapability.getDragTypes());
+        }
+
+        if (selectItemComponent instanceof IDroppableCapability) {
+            IDroppableCapability droppableCapability = (IDroppableCapability) selectItemComponent;
+
+            setDropEffects(droppableCapability.getDropEffects());
+            setDropTypes(droppableCapability.getDropTypes());
         }
 
     }
@@ -556,6 +617,78 @@ class DefaultItem extends SelectItemGroup {
 
     public final void setAlternateText(String alternateText) {
         this.alternateText = alternateText;
+    }
+
+    public int getDragEffects() {
+        return dragEffects;
+    }
+
+    public void setDragEffects(int dragEffects) {
+        this.dragEffects = dragEffects;
+    }
+
+    public String[] getDragTypes() {
+        return dragTypes;
+    }
+
+    public void setDragTypes(String[] dragTypes) {
+        this.dragTypes = dragTypes;
+    }
+
+    public int getDragEffects(SelectItem dragItem) {
+        if (dragItem == null || equals(getValue(), dragItem.getValue())) {
+            return dragEffects;
+        }
+
+        return IDragAndDropEffects.UNKNOWN_DND_EFFECT;
+    }
+
+    public String[] getDragTypes(SelectItem dragItem) {
+        if (dragItem == null || equals(getValue(), dragItem.getValue())) {
+            return dragTypes;
+        }
+
+        return null;
+    }
+
+    public int getDropEffects() {
+        return dropEffects;
+    }
+
+    public void setDropEffects(int dropEffects) {
+        this.dropEffects = dropEffects;
+    }
+
+    public String[] getDropTypes() {
+        return dropTypes;
+    }
+
+    public void setDropTypes(String[] dropTypes) {
+        this.dropTypes = dropTypes;
+    }
+
+    public int getDropEffects(SelectItem dropItem) {
+        if (dropItem == null || equals(getValue(), dropItem.getValue())) {
+            return dropEffects;
+        }
+
+        return IDragAndDropEffects.UNKNOWN_DND_EFFECT;
+    }
+
+    public String[] getDropTypes(SelectItem dropItem) {
+        if (dropItem == null || equals(getValue(), dropItem.getValue())) {
+            return dropTypes;
+        }
+
+        return null;
+    }
+
+    private boolean equals(Object value1, Object value2) {
+        if (value1 == value2) {
+            return true;
+        }
+
+        return value1 != null && value1.equals(value2);
     }
 
 }
