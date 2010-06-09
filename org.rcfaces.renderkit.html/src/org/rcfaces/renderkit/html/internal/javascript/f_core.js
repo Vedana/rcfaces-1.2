@@ -1332,7 +1332,7 @@ var f_core = {
 	 * @return HTMLFormElement
 	 */
 	GetParentForm: function(elt) {
-		f_core.Assert(elt.ownerDocument, "f_core.GetParentForm: Invalid parameter element ("+elt+")");
+		f_core.Assert(elt && elt.nodeType==f_core.ELEMENT_NODE && elt.ownerDocument, "f_core.GetParentForm: Invalid element parameter ("+elt+")");
 	
 		var form=f_core._CachedForm;
 		if (form!==undefined) {
@@ -2328,6 +2328,20 @@ var f_core = {
 		return newWindow;
 	},
 	/**
+	 * @method public static
+	 * @param HTMLElement component
+	 * @return boolean
+	 */
+	ValidateForm: function(component) {
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.ValidateForm: Invalid component parameter '"+parameter+"'");
+
+		var form=f_core.GetParentForm(component);
+		f_core.Assert(form, "f_core.ValidateForm: Can not get form of component '"+component.id+"'.");
+		
+		return f_core._CallFormCheckListeners(form);
+	},
+		
+	/**
 	 * @method private static
 	 * @param HTMLFormElement form
 	 * @return boolean
@@ -2493,7 +2507,7 @@ var f_core = {
 	 */
 	AddCheckListener: function(component, listener, first) {
 		f_core.Assert(listener===undefined || typeof(listener)=="object", "f_core.AddCheckListener: Listener must be an object ! ("+listener+")");
-		f_core.Assert(component.nodeType, "f_core.AddCheckListener: Invalid component parameter ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.AddCheckListener: Invalid component parameter ("+component+")");
 
 		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_core.AddCheckListener: Can not get form of component '"+component.id+"'.");
@@ -2531,7 +2545,7 @@ var f_core = {
 	 * @method hidden static hidden
 	 */
 	AddResetListener: function(component, callback) {
-		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.AddResetListener: Component is invalid  ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.AddResetListener: Component is invalid  ("+component+")");
 		f_core.Assert(typeof(callback)=="function", "f_core.AddResetListener: Listener is invalid ("+callback+")");
 
 		var form=f_core.GetParentForm(component);
@@ -2549,7 +2563,7 @@ var f_core = {
 	 * @method public static hidden
 	 */
 	RemoveResetListener: function(component, callback) {
-		f_core.Assert(component.nodeType==f_core.ELEMENT_NODE, "f_core.RemoveResetListener: Component is invalid  ("+component+")");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.RemoveResetListener: Component is invalid  ("+component+")");
 		f_core.Assert(typeof(callback)=="function", "f_core.RemoveResetListener: Listener is invalid ("+callback+")");
 
 		var form=f_core.GetParentForm(component);
