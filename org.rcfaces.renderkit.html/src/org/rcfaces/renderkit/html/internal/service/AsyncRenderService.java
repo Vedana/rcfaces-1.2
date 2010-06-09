@@ -496,8 +496,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
                         LOG
                                 .debug("Send an already gzipped interactive buffer. (no state field marker)");
                     }
-                    ExtendedHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ExtendedHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     outputStream.write(gzippedContent);
                     return;
@@ -533,8 +533,8 @@ public class AsyncRenderService extends AbstractAsyncRenderService {
 
             ByteBufferOutputStream bos = null;
             if (useGzip && content.length() > GZIP_MINIMUM_SIZE) {
-                ConfiguredHttpServlet
-                        .setGzipContentEncoding((HttpServletResponse) response, true);
+                ConfiguredHttpServlet.setGzipContentEncoding(
+                        (HttpServletResponse) response, true);
 
                 if (hasSaveStateFieldMarker == false) {
                     bos = new ByteBufferOutputStream(content.length());

@@ -211,11 +211,11 @@ public abstract class AbstractJavaScriptRenderer extends
     }
 
     protected static final void appendAttributeEventForm(StringAppender sa,
-            IHtmlWriter writer, Map listenersByType) {
-        IRenderContext renderContext = writer.getComponentRenderContext()
+            IHtmlWriter htmlWriter, Map listenersByType) {
+        IRenderContext renderContext = htmlWriter.getComponentRenderContext()
                 .getRenderContext();
 
-        IJavaScriptEnableMode javaScriptEnableMode = writer
+        IJavaScriptEnableMode javaScriptEnableMode = htmlWriter
                 .getJavaScriptEnableMode();
 
         for (Iterator it = listenersByType.entrySet().iterator(); it.hasNext();) {
