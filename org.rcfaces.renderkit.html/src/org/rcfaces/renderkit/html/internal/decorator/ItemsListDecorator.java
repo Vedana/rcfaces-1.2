@@ -537,14 +537,14 @@ public class ItemsListDecorator extends AbstractSelectItemsDecorator {
             ((ITextCapability) itemComponent).setText(label);
 
             if (itemComponent instanceof ITextPositionCapability) {
-                int textPosition = 0;
+                int textPosition = ITextPositionCapability.UNKNOWN_POSITION;
 
                 if (selectItem instanceof ITextPositionItem) {
                     textPosition = ((ITextPositionItem) selectItem)
                             .getTextPosition();
                 }
 
-                if (textPosition == 0) {
+                if (textPosition == ITextPositionCapability.UNKNOWN_POSITION) {
                     textPosition = getDefaultTextPosition(selectItem);
                 }
 
