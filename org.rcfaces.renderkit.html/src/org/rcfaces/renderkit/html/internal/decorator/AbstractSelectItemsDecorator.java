@@ -172,7 +172,8 @@ public abstract class AbstractSelectItemsDecorator extends
         eventDecoder.decodeEvent(requestContext, component, eventData, this);
     }
 
-    public Object decodeEventObject(IRequestContext requestContext, UIComponent component, IEventData eventData) {
+    public Object decodeEventObject(IRequestContext requestContext,
+            UIComponent component, IEventData eventData) {
         return null;
     }
 
@@ -679,9 +680,8 @@ public abstract class AbstractSelectItemsDecorator extends
             return;
         }
 
-        if (value instanceof IFiltredCollection) {
-            IFiltredCollection filtredList = (IFiltredCollection) value;
-
+        if ((value instanceof IFiltredCollection)
+                || (value instanceof IFiltredCollection2)) {
             int max = getMaxResultNumber();
             if (max > 0) {
                 max -= selectItemCount;
@@ -695,7 +695,8 @@ public abstract class AbstractSelectItemsDecorator extends
                 it = ((IFiltredCollection2) value).iterator(getComponent(),
                         filterProperties, max);
             } else {
-                it = filtredList.iterator(filterProperties, max);
+                it = ((IFiltredCollection) value).iterator(filterProperties,
+                        max);
             }
 
             try {
