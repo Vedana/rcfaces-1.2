@@ -6,7 +6,7 @@
 /**
  * f_classLoader
  *
- * @class public f_classLoader
+ * @class public f_classLoader extends Object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

@@ -534,7 +534,7 @@ var __statics = {
 	 * On verifie que la target de l'evenement est bien dans la popup ouverte
 	 * 
 	 * @method hidden static
-	 * @return <code>true</code> if the target is contain by the current popup.
+	 * @return Boolean <code>true</code> if the target is contain by the current popup.
 	 */
 	IsChildOfDocument: function(target, event) {
 		f_core.Debug(f_popup, "IsChildOfDocument: Search parent target='"+target+"' document='"+f_popup.Popup+"'.");
@@ -594,7 +594,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_Ie_OnMouseDown: function(evt) {
@@ -623,7 +623,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 * @context document:this
 	 */
 	_Gecko_OnClick: function(evt) {	
@@ -696,7 +696,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param f_event evt 
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:this
 	 */
 	_OnKeyDown: function(evt) {
@@ -705,7 +705,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_OnKeyDownJs: function(evt) {	
@@ -761,7 +761,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param f_event evt 
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:this
 	 */
 	_OnKeyUp: function(evt) {				
@@ -770,7 +770,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_OnKeyUpJs: function(evt) {	
@@ -808,7 +808,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param f_event evt 
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:this
 	 */
 	_OnKeyPress: function(evt) {
@@ -817,7 +817,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_OnKeyPressJs: function(evt) {	
@@ -854,7 +854,7 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static
-	 * @return boolean
+	 * @return Boolean
 	 */
 	VerifyLock: function() {
 		if (f_popup.Ie_enablePopup()) {
@@ -884,7 +884,7 @@ var __statics = {
 					cbs.exit.call(f_popup.Component, null);
 				}
 				
-				return false; // FALSE= La popup a été fermée, on revient en scope normal
+				return false; // FALSE= La popup a ï¿½tï¿½ fermï¿½e, on revient en scope normal
 			}	
 		}
 		

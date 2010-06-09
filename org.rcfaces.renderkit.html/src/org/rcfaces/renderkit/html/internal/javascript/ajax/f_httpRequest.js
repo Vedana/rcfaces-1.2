@@ -5,7 +5,7 @@
 /**
  * HTTP request support.
  *
- * @class f_httpRequest
+ * @class f_httpRequest extends f_object
  * @author Joel Merlin
  * @author Olivier Oeuillot
  */

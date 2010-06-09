@@ -7,7 +7,7 @@ package org.rcfaces.core.component.capability;
 import org.rcfaces.core.model.IFilterProperties;
 
 /**
- * An object that represent the filter to use on the server side.
+ * An object that represents the filter to use on the server side.
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$

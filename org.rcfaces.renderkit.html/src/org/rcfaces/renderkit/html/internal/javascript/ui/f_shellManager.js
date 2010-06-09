@@ -5,7 +5,7 @@
 /**
  * <p><strong>f_shellManager</strong> represents shell manager.
  *
- * @class public f_shellManager
+ * @class public f_shellManager extends f_object
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */

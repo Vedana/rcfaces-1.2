@@ -734,7 +734,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @param f_shemmDecorator shellDecorator
+	 * @param f_shellDecorator shellDecorator
 	 * @return void 
 	 */
 	f_updateDecoration: function(shellDecorator){
