@@ -20,6 +20,8 @@ var __statics = {
 			check: f_event.CHECK,
 			blur: f_event.BLUR,
 			dblClick: f_event.DBLCLICK,
+			drag: f_event.DRAG,
+			drop: f_event.DROP,
 			error: f_event.ERROR,
 			expand: f_event.EXPAND,
 			focus: f_event.FOCUS,
@@ -62,6 +64,8 @@ var __statics = {
 		cb[f_event.CHECK]=null;
 		cb[f_event.CLOSE]=null;
 		cb[f_event.DBLCLICK]={_dom: "ondblclick" }; 
+		cb[f_event.DRAG]=null;
+		cb[f_event.DROP]=null;
 		cb[f_event.ERROR]=noLock;
 		cb[f_event.EXPAND]=null;
 		cb[f_event.FOCUS]={_dom: "onfocus", _lock: false }; 
