@@ -15,10 +15,12 @@ import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.TreeComponent;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -128,6 +130,54 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
 
             // htmlWriter.getJavaScriptEnableMode().enableOnOver();
+        }
+
+        if (treeComponent.isDraggable(facesContext)) {
+            int dragEffects = treeComponent.getDragEffects(facesContext);
+
+            if (dragEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
+                dragEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
+            }
+            htmlWriter.writeAttribute("v:dragEffects", dragEffects);
+
+            String dragTypes[] = treeComponent.getDragTypes(facesContext);
+            if (dragTypes != null && dragTypes.length > 0) {
+                StringAppender sa = new StringAppender(dragTypes.length * 32);
+
+                for (int i = 0; i < dragTypes.length; i++) {
+                    if (sa.length() > 0) {
+                        sa.append(',');
+                    }
+
+                    sa.append(dragTypes[i]);
+                }
+
+                htmlWriter.writeAttribute("v:dragTypes", sa.toString());
+            }
+        }
+
+        if (treeComponent.isDroppable(facesContext)) {
+            int dropEffects = treeComponent.getDropEffects(facesContext);
+
+            if (dropEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
+                dropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
+            }
+            htmlWriter.writeAttribute("v:dropEffects", dropEffects);
+
+            String dropTypes[] = treeComponent.getDragTypes(facesContext);
+            if (dropTypes != null && dropTypes.length > 0) {
+                StringAppender sa = new StringAppender(dropTypes.length * 32);
+
+                for (int i = 0; i < dropTypes.length; i++) {
+                    if (sa.length() > 0) {
+                        sa.append(',');
+                    }
+
+                    sa.append(dropTypes[i]);
+                }
+
+                htmlWriter.writeAttribute("v:dropTypes", sa.toString());
+            }
         }
 
         htmlWriter.startElement(IHtmlWriter.A);
