@@ -2,13 +2,16 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.internal.tools.SortTools;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import java.util.Arrays;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
+import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.internal.converter.DragDropTypesConverter;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IScrollableCapability;
@@ -26,9 +29,12 @@ import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
+import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
 import org.rcfaces.core.component.iterator.IDataColumnIterator;
@@ -42,6 +48,7 @@ import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
+import org.rcfaces.core.component.capability.IDropEventCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
@@ -95,6 +102,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 	ISelectableCapability,
 	ISelectionCardinalityCapability,
 	ISelectedValuesCapability,
+	IDragEventCapability,
+	IDraggableCapability,
+	IDropEventCapability,
+	IDroppableCapability,
 	ICheckEventCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
@@ -137,7 +148,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","rowValueColumnId","horizontalScrollPosition","clientAdditionalInformationFullState","doubleClickListener","preferences","rowIndexVar","additionalInformationValues","selectable","loadListener","showValue","filterProperties","checkable","checkedValues","additionalInformationListener","checkCardinality","border","cellTextWrap","verticalScrollPosition","paged","emptyDataMessage","required","disabled","cursorValue","additionalInformationCardinality","clientCheckFullState","rowStyleClass","headerVisible","keySearchColumnId","rowCountVar","clientSelectionFullState","checkListener","selectionCardinality","readOnly","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","rowValueColumnId","horizontalScrollPosition","clientAdditionalInformationFullState","doubleClickListener","preferences","draggable","rowIndexVar","selectable","additionalInformationValues","showValue","loadListener","filterProperties","checkable","droppable","checkedValues","additionalInformationListener","checkCardinality","border","cellTextWrap","verticalScrollPosition","paged","dragListener","emptyDataMessage","dropEffects","required","disabled","dropListener","cursorValue","additionalInformationCardinality","clientCheckFullState","rowStyleClass","headerVisible","keySearchColumnId","dragEffects","rowCountVar","dragTypes","clientSelectionFullState","dropTypes","checkListener","readOnly","selectionCardinality","selectedValues"}));
 	}
 
 	public DataGridComponent() {
@@ -175,6 +186,34 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
 			
+	}
+
+	public void setDragEffects(String dragEffects) {
+
+
+			setDragEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dragEffects)).intValue());
+		
+	}
+
+	public void setDragTypes(String dragTypes) {
+
+
+			setDragTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dragTypes));
+		
+	}
+
+	public void setDropEffects(String dropEffects) {
+
+
+			setDropEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dropEffects)).intValue());
+		
+	}
+
+	public void setDropTypes(String dropTypes) {
+
+
+			setDropTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dropTypes));
+		
 	}
 
 	public IComponentValueType getComponentValueType() {
@@ -699,6 +738,168 @@ public class DataGridComponent extends AbstractDataComponent implements
 			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
 		}
 		return valueExpression.getType(facesContext.getELContext());
+	}
+
+	public final void addDragListener(org.rcfaces.core.event.IDragListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDragListener(org.rcfaces.core.event.IDragListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDragListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDragListener.class);
+	}
+
+	public int getDragEffects() {
+		return getDragEffects(null);
+	}
+
+	/**
+	 * See {@link #getDragEffects() getDragEffects()} for more details
+	 */
+	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dragEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDragEffectsSetted() {
+		return engine.isPropertySetted(Properties.DRAG_EFFECTS);
+	}
+
+	public void setDragEffects(int dragEffects) {
+		engine.setProperty(Properties.DRAG_EFFECTS, dragEffects);
+	}
+
+	public java.lang.String[] getDragTypes() {
+		return getDragTypes(null);
+	}
+
+	/**
+	 * See {@link #getDragTypes() getDragTypes()} for more details
+	 */
+	public java.lang.String[] getDragTypes(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.String[])engine.getProperty(Properties.DRAG_TYPES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dragTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDragTypesSetted() {
+		return engine.isPropertySetted(Properties.DRAG_TYPES);
+	}
+
+	public void setDragTypes(java.lang.String[] dragTypes) {
+		engine.setProperty(Properties.DRAG_TYPES, dragTypes);
+	}
+
+	public boolean isDraggable() {
+		return isDraggable(null);
+	}
+
+	/**
+	 * See {@link #isDraggable() isDraggable()} for more details
+	 */
+	public boolean isDraggable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DRAGGABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "draggable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDraggableSetted() {
+		return engine.isPropertySetted(Properties.DRAGGABLE);
+	}
+
+	public void setDraggable(boolean draggable) {
+		engine.setProperty(Properties.DRAGGABLE, draggable);
+	}
+
+	public final void addDropListener(org.rcfaces.core.event.IDropListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDropListener(org.rcfaces.core.event.IDropListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDropListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDropListener.class);
+	}
+
+	public int getDropEffects() {
+		return getDropEffects(null);
+	}
+
+	/**
+	 * See {@link #getDropEffects() getDropEffects()} for more details
+	 */
+	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dropEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDropEffectsSetted() {
+		return engine.isPropertySetted(Properties.DROP_EFFECTS);
+	}
+
+	public void setDropEffects(int dropEffects) {
+		engine.setProperty(Properties.DROP_EFFECTS, dropEffects);
+	}
+
+	public java.lang.String[] getDropTypes() {
+		return getDropTypes(null);
+	}
+
+	/**
+	 * See {@link #getDropTypes() getDropTypes()} for more details
+	 */
+	public java.lang.String[] getDropTypes(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.String[])engine.getProperty(Properties.DROP_TYPES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dropTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDropTypesSetted() {
+		return engine.isPropertySetted(Properties.DROP_TYPES);
+	}
+
+	public void setDropTypes(java.lang.String[] dropTypes) {
+		engine.setProperty(Properties.DROP_TYPES, dropTypes);
+	}
+
+	public boolean isDroppable() {
+		return isDroppable(null);
+	}
+
+	/**
+	 * See {@link #isDroppable() isDroppable()} for more details
+	 */
+	public boolean isDroppable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DROPPABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "droppable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDroppableSetted() {
+		return engine.isPropertySetted(Properties.DROPPABLE);
+	}
+
+	public void setDroppable(boolean droppable) {
+		engine.setProperty(Properties.DROPPABLE, droppable);
 	}
 
 	public final void addCheckListener(org.rcfaces.core.event.ICheckListener listener) {

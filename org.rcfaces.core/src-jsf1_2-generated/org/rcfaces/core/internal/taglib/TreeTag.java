@@ -26,6 +26,17 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression readOnly;
 	private ValueExpression showValue;
 	private ValueExpression overStyleClass;
+	private ValueExpression filterProperties;
+	private ValueExpression loadListeners;
+	private ValueExpression expandListeners;
+	private ValueExpression dragListeners;
+	private ValueExpression dragEffects;
+	private ValueExpression dragTypes;
+	private ValueExpression draggable;
+	private ValueExpression dropListeners;
+	private ValueExpression dropEffects;
+	private ValueExpression dropTypes;
+	private ValueExpression droppable;
 	private ValueExpression checkable;
 	private ValueExpression checkCardinality;
 	private ValueExpression checkListeners;
@@ -84,6 +95,50 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setOverStyleClass(ValueExpression overStyleClass) {
 		this.overStyleClass = overStyleClass;
+	}
+
+	public final void setFilterProperties(ValueExpression filterProperties) {
+		this.filterProperties = filterProperties;
+	}
+
+	public final void setLoadListener(ValueExpression loadListeners) {
+		this.loadListeners = loadListeners;
+	}
+
+	public final void setExpandListener(ValueExpression expandListeners) {
+		this.expandListeners = expandListeners;
+	}
+
+	public final void setDragListener(ValueExpression dragListeners) {
+		this.dragListeners = dragListeners;
+	}
+
+	public final void setDragEffects(ValueExpression dragEffects) {
+		this.dragEffects = dragEffects;
+	}
+
+	public final void setDragTypes(ValueExpression dragTypes) {
+		this.dragTypes = dragTypes;
+	}
+
+	public final void setDraggable(ValueExpression draggable) {
+		this.draggable = draggable;
+	}
+
+	public final void setDropListener(ValueExpression dropListeners) {
+		this.dropListeners = dropListeners;
+	}
+
+	public final void setDropEffects(ValueExpression dropEffects) {
+		this.dropEffects = dropEffects;
+	}
+
+	public final void setDropTypes(ValueExpression dropTypes) {
+		this.dropTypes = dropTypes;
+	}
+
+	public final void setDroppable(ValueExpression droppable) {
+		this.droppable = droppable;
 	}
 
 	public final void setCheckable(ValueExpression checkable) {
@@ -194,6 +249,13 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  readOnly='"+readOnly+"'");
 			LOG.debug("  showValue='"+showValue+"'");
 			LOG.debug("  overStyleClass='"+overStyleClass+"'");
+			LOG.debug("  filterProperties='"+filterProperties+"'");
+			LOG.debug("  dragEffects='"+dragEffects+"'");
+			LOG.debug("  dragTypes='"+dragTypes+"'");
+			LOG.debug("  draggable='"+draggable+"'");
+			LOG.debug("  dropEffects='"+dropEffects+"'");
+			LOG.debug("  dropTypes='"+dropTypes+"'");
+			LOG.debug("  droppable='"+droppable+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -293,6 +355,85 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 			} else {
 				component.setOverStyleClass(overStyleClass.getExpressionString());
+			}
+		}
+
+		if (filterProperties != null) {
+			if (filterProperties.isLiteralText()==false) {
+				component.setValueExpression(Properties.FILTER_PROPERTIES, filterProperties);
+
+			} else {
+				component.setFilterProperties(filterProperties.getExpressionString());
+			}
+		}
+
+		if (loadListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+		}
+
+		if (expandListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.EXPAND_LISTENER_TYPE, expandListeners);
+		}
+
+		if (dragListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DRAG_LISTENER_TYPE, dragListeners);
+		}
+
+		if (dragEffects != null) {
+			if (dragEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAG_EFFECTS, dragEffects);
+
+			} else {
+				component.setDragEffects(dragEffects.getExpressionString());
+			}
+		}
+
+		if (dragTypes != null) {
+			if (dragTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAG_TYPES, dragTypes);
+
+			} else {
+				component.setDragTypes(dragTypes.getExpressionString());
+			}
+		}
+
+		if (draggable != null) {
+			if (draggable.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAGGABLE, draggable);
+
+			} else {
+				component.setDraggable(getBool(draggable.getExpressionString()));
+			}
+		}
+
+		if (dropListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DROP_LISTENER_TYPE, dropListeners);
+		}
+
+		if (dropEffects != null) {
+			if (dropEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROP_EFFECTS, dropEffects);
+
+			} else {
+				component.setDropEffects(dropEffects.getExpressionString());
+			}
+		}
+
+		if (dropTypes != null) {
+			if (dropTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROP_TYPES, dropTypes);
+
+			} else {
+				component.setDropTypes(dropTypes.getExpressionString());
+			}
+		}
+
+		if (droppable != null) {
+			if (droppable.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROPPABLE, droppable);
+
+			} else {
+				component.setDroppable(getBool(droppable.getExpressionString()));
 			}
 		}
 
@@ -497,6 +638,17 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		readOnly = null;
 		showValue = null;
 		overStyleClass = null;
+		filterProperties = null;
+		loadListeners = null;
+		expandListeners = null;
+		dragListeners = null;
+		dragEffects = null;
+		dragTypes = null;
+		draggable = null;
+		dropListeners = null;
+		dropEffects = null;
+		dropTypes = null;
+		droppable = null;
 		checkable = null;
 		checkCardinality = null;
 		checkListeners = null;

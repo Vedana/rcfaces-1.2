@@ -36,6 +36,7 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 	private ValueExpression marginLeft;
 	private ValueExpression marginRight;
 	private ValueExpression marginTop;
+	private ValueExpression partialRendering;
 	private ValueExpression backgroundColor;
 	private ValueExpression foregroundColor;
 	private ValueExpression styleClass;
@@ -119,6 +120,10 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		this.marginTop = marginTop;
 	}
 
+	public final void setPartialRendering(ValueExpression partialRendering) {
+		this.partialRendering = partialRendering;
+	}
+
 	public final void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
@@ -180,6 +185,7 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
 			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  partialRendering='"+partialRendering+"'");
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  styleClass='"+styleClass+"'");
@@ -346,6 +352,15 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (partialRendering != null) {
+			if (partialRendering.isLiteralText()==false) {
+				component.setValueExpression(Properties.PARTIAL_RENDERING, partialRendering);
+
+			} else {
+				component.setPartialRendering(getBool(partialRendering.getExpressionString()));
+			}
+		}
+
 		if (backgroundColor != null) {
 			if (backgroundColor.isLiteralText()==false) {
 				component.setValueExpression(Properties.BACKGROUND_COLOR, backgroundColor);
@@ -448,6 +463,7 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		marginLeft = null;
 		marginRight = null;
 		marginTop = null;
+		partialRendering = null;
 		backgroundColor = null;
 		foregroundColor = null;
 		styleClass = null;

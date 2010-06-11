@@ -57,6 +57,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private ValueExpression gridStyleClass;
 	private ValueExpression gridLookId;
 	private ValueExpression searchFieldVisible;
+	private ValueExpression forceValidation;
+	private ValueExpression forLabel;
+	private ValueExpression valueFormatLabel;
+	private ValueExpression noValueFormatLabel;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
 	}
@@ -217,6 +221,22 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.searchFieldVisible = searchFieldVisible;
 	}
 
+	public final void setForceValidation(ValueExpression forceValidation) {
+		this.forceValidation = forceValidation;
+	}
+
+	public final void setForLabel(ValueExpression forLabel) {
+		this.forLabel = forLabel;
+	}
+
+	public final void setValueFormatLabel(ValueExpression valueFormatLabel) {
+		this.valueFormatLabel = valueFormatLabel;
+	}
+
+	public final void setNoValueFormatLabel(ValueExpression noValueFormatLabel) {
+		this.noValueFormatLabel = noValueFormatLabel;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComboGridComponent.COMPONENT_TYPE==getComponentType()) {
@@ -259,6 +279,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  gridStyleClass='"+gridStyleClass+"'");
 			LOG.debug("  gridLookId='"+gridLookId+"'");
 			LOG.debug("  searchFieldVisible='"+searchFieldVisible+"'");
+			LOG.debug("  forceValidation='"+forceValidation+"'");
+			LOG.debug("  forLabel='"+forLabel+"'");
+			LOG.debug("  valueFormatLabel='"+valueFormatLabel+"'");
+			LOG.debug("  noValueFormatLabel='"+noValueFormatLabel+"'");
 		}
 		if ((uiComponent instanceof ComboGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -603,6 +627,42 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 				component.setSearchFieldVisible(getBool(searchFieldVisible.getExpressionString()));
 			}
 		}
+
+		if (forceValidation != null) {
+			if (forceValidation.isLiteralText()==false) {
+				component.setValueExpression(Properties.FORCE_VALIDATION, forceValidation);
+
+			} else {
+				component.setForceValidation(getBool(forceValidation.getExpressionString()));
+			}
+		}
+
+		if (forLabel != null) {
+			if (forLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.FOR_LABEL, forLabel);
+
+			} else {
+				component.setForLabel(forLabel.getExpressionString());
+			}
+		}
+
+		if (valueFormatLabel != null) {
+			if (valueFormatLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE_FORMAT_LABEL, valueFormatLabel);
+
+			} else {
+				component.setValueFormatLabel(valueFormatLabel.getExpressionString());
+			}
+		}
+
+		if (noValueFormatLabel != null) {
+			if (noValueFormatLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.NO_VALUE_FORMAT_LABEL, noValueFormatLabel);
+
+			} else {
+				component.setNoValueFormatLabel(noValueFormatLabel.getExpressionString());
+			}
+		}
 	}
 
 	public void release() {
@@ -645,6 +705,10 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		gridStyleClass = null;
 		gridLookId = null;
 		searchFieldVisible = null;
+		forceValidation = null;
+		forLabel = null;
+		valueFormatLabel = null;
+		noValueFormatLabel = null;
 
 		super.release();
 	}

@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.lang.Object;
 import org.apache.commons.logging.LogFactory;
@@ -20,8 +21,8 @@ import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import java.lang.String;
 import javax.el.ValueExpression;
@@ -46,13 +47,14 @@ import org.rcfaces.core.component.capability.IServerDataCapability;
 public abstract class AbstractMessagesComponent extends CameliaMessagesComponent implements 
 	IVisibilityCapability,
 	ISizeCapability,
-	IMouseEventCapability,
 	IHelpCapability,
+	IMouseEventCapability,
 	IClientDataCapability,
 	IUnlockedClientAttributesCapability,
 	ILookAndFeelCapability,
 	IPositionCapability,
 	IErrorEventCapability,
+	IPartialRenderingCapability,
 	IMarginCapability,
 	IForegroundBackgroundColorCapability,
 	IStyleClassCapability,
@@ -69,7 +71,7 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessagesComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","globalOnly","margins","initListener","propertyChangeListener","mouseOutListener","waiRole","toolTipText","mouseOverListener","showDetail","userEventListener","helpURL","marginBottom","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","globalOnly","margins","initListener","propertyChangeListener","mouseOutListener","waiRole","mouseOverListener","toolTipText","showDetail","userEventListener","helpURL","marginBottom","partialRendering","showSummary","y","visible","lookId","marginLeft","marginTop","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -289,30 +291,6 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 		engine.setProperty(Properties.HEIGHT, height);
 	}
 
-	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listMouseOutListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IMouseOutListener.class);
-	}
-
-	public final void addMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listMouseOverListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
-	}
-
 	public java.lang.String getHelpMessage() {
 		return getHelpMessage(null);
 	}
@@ -380,6 +358,30 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 
 	public void setToolTipText(java.lang.String toolTipText) {
 		engine.setProperty(Properties.TOOL_TIP_TEXT, toolTipText);
+	}
+
+	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listMouseOutListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IMouseOutListener.class);
+	}
+
+	public final void addMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeMouseOverListener(org.rcfaces.core.event.IMouseOverListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listMouseOverListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
 	}
 
 	public Map getClientDataMap() {
@@ -529,6 +531,29 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 
 	public final javax.faces.event.FacesListener [] listErrorListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public boolean isPartialRendering() {
+		return isPartialRendering(null);
+	}
+
+	/**
+	 * See {@link #isPartialRendering() isPartialRendering()} for more details
+	 */
+	public boolean isPartialRendering(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PARTIAL_RENDERING, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "partialRendering" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPartialRenderingSetted() {
+		return engine.isPropertySetted(Properties.PARTIAL_RENDERING);
+	}
+
+	public void setPartialRendering(boolean partialRendering) {
+		engine.setProperty(Properties.PARTIAL_RENDERING, partialRendering);
 	}
 
 	public java.lang.String getMarginBottom() {

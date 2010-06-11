@@ -81,7 +81,7 @@ public class ComboGridComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","editable","searchFieldVisible","suggestionDelayMs","horizontalScrollPosition","pagerStyleClass","clientAdditionalInformationFullState","message","valueColumnId","rowIndexVar","additionalInformationValues","pagerLookId","oneResultMessage","filterProperties","zeroResultMessage","additionalInformationListener","valueFormat","border","gridStyleClass","labelColumnId","suggestionMinChars","gridLookId","emptyMessage","verticalScrollPosition","paged","emptyDataMessage","required","disabled","selectedValue","maxTextLength","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","manyResultsMessage","popupWidth","readOnly","popupStyleClass"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","editable","searchFieldVisible","suggestionDelayMs","horizontalScrollPosition","pagerStyleClass","clientAdditionalInformationFullState","message","valueFormatLabel","valueColumnId","rowIndexVar","additionalInformationValues","pagerLookId","oneResultMessage","filterProperties","zeroResultMessage","additionalInformationListener","valueFormat","border","forLabel","gridStyleClass","labelColumnId","suggestionMinChars","gridLookId","emptyMessage","verticalScrollPosition","paged","emptyDataMessage","required","disabled","selectedValue","maxTextLength","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","manyResultsMessage","popupWidth","forceValidation","readOnly","popupStyleClass","noValueFormatLabel"}));
 	}
 
 	public ComboGridComponent() {
@@ -1179,6 +1179,86 @@ public class ComboGridComponent extends AbstractGridComponent implements
 	 */
 	public boolean isSearchFieldVisibleSetted() {
 		return engine.isPropertySetted(Properties.SEARCH_FIELD_VISIBLE);
+	}
+
+	public boolean isForceValidation() {
+		return isForceValidation(null);
+	}
+
+	public boolean isForceValidation(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.FORCE_VALIDATION, false, facesContext);
+	}
+
+	public void setForceValidation(boolean forceValidation) {
+		engine.setProperty(Properties.FORCE_VALIDATION, forceValidation);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "forceValidation" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isForceValidationSetted() {
+		return engine.isPropertySetted(Properties.FORCE_VALIDATION);
+	}
+
+	public String getForLabel() {
+		return getForLabel(null);
+	}
+
+	public String getForLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.FOR_LABEL, facesContext);
+	}
+
+	public void setForLabel(String forLabel) {
+		engine.setProperty(Properties.FOR_LABEL, forLabel);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "forLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isForLabelSetted() {
+		return engine.isPropertySetted(Properties.FOR_LABEL);
+	}
+
+	public String getValueFormatLabel() {
+		return getValueFormatLabel(null);
+	}
+
+	public String getValueFormatLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VALUE_FORMAT_LABEL, facesContext);
+	}
+
+	public void setValueFormatLabel(String valueFormatLabel) {
+		engine.setProperty(Properties.VALUE_FORMAT_LABEL, valueFormatLabel);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "valueFormatLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isValueFormatLabelSetted() {
+		return engine.isPropertySetted(Properties.VALUE_FORMAT_LABEL);
+	}
+
+	public String getNoValueFormatLabel() {
+		return getNoValueFormatLabel(null);
+	}
+
+	public String getNoValueFormatLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.NO_VALUE_FORMAT_LABEL, facesContext);
+	}
+
+	public void setNoValueFormatLabel(String noValueFormatLabel) {
+		engine.setProperty(Properties.NO_VALUE_FORMAT_LABEL, noValueFormatLabel);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "noValueFormatLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isNoValueFormatLabelSetted() {
+		return engine.isPropertySetted(Properties.NO_VALUE_FORMAT_LABEL);
 	}
 
 	protected Set getCameliaFields() {

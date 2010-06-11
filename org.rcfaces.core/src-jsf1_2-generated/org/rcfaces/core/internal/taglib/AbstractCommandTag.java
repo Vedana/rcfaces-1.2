@@ -41,9 +41,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 	private ValueExpression helpURL;
 	private ValueExpression toolTipText;
 	private ValueExpression tabIndex;
+	private ValueExpression lookId;
 	private ValueExpression x;
 	private ValueExpression y;
-	private ValueExpression lookId;
+	private ValueExpression partialRendering;
 	private ValueExpression validationListeners;
 	private ValueExpression marginBottom;
 	private ValueExpression marginLeft;
@@ -150,6 +151,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.tabIndex = tabIndex;
 	}
 
+	public final void setLookId(ValueExpression lookId) {
+		this.lookId = lookId;
+	}
+
 	public final void setX(ValueExpression x) {
 		this.x = x;
 	}
@@ -158,8 +163,8 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.y = y;
 	}
 
-	public final void setLookId(ValueExpression lookId) {
-		this.lookId = lookId;
+	public final void setPartialRendering(ValueExpression partialRendering) {
+		this.partialRendering = partialRendering;
 	}
 
 	public final void setValidationListener(ValueExpression validationListeners) {
@@ -237,9 +242,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			LOG.debug("  helpURL='"+helpURL+"'");
 			LOG.debug("  toolTipText='"+toolTipText+"'");
 			LOG.debug("  tabIndex='"+tabIndex+"'");
+			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
-			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  partialRendering='"+partialRendering+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
@@ -439,6 +445,15 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (lookId != null) {
+			if (lookId.isLiteralText()==false) {
+				component.setValueExpression(Properties.LOOK_ID, lookId);
+
+			} else {
+				component.setLookId(lookId.getExpressionString());
+			}
+		}
+
 		if (x != null) {
 			if (x.isLiteralText()==false) {
 				component.setValueExpression(Properties.X, x);
@@ -457,12 +472,12 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (lookId != null) {
-			if (lookId.isLiteralText()==false) {
-				component.setValueExpression(Properties.LOOK_ID, lookId);
+		if (partialRendering != null) {
+			if (partialRendering.isLiteralText()==false) {
+				component.setValueExpression(Properties.PARTIAL_RENDERING, partialRendering);
 
 			} else {
-				component.setLookId(lookId.getExpressionString());
+				component.setPartialRendering(getBool(partialRendering.getExpressionString()));
 			}
 		}
 
@@ -600,9 +615,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		helpURL = null;
 		toolTipText = null;
 		tabIndex = null;
+		lookId = null;
 		x = null;
 		y = null;
-		lookId = null;
+		partialRendering = null;
 		validationListeners = null;
 		marginBottom = null;
 		marginLeft = null;

@@ -22,6 +22,14 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression selectable;
 	private ValueExpression selectionCardinality;
 	private ValueExpression selectedValues;
+	private ValueExpression dragListeners;
+	private ValueExpression dragEffects;
+	private ValueExpression dragTypes;
+	private ValueExpression draggable;
+	private ValueExpression dropListeners;
+	private ValueExpression dropEffects;
+	private ValueExpression dropTypes;
+	private ValueExpression droppable;
 	private ValueExpression checkListeners;
 	private ValueExpression checkable;
 	private ValueExpression checkCardinality;
@@ -73,6 +81,38 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 	public final void setSelectedValues(ValueExpression selectedValues) {
 		this.selectedValues = selectedValues;
+	}
+
+	public final void setDragListener(ValueExpression dragListeners) {
+		this.dragListeners = dragListeners;
+	}
+
+	public final void setDragEffects(ValueExpression dragEffects) {
+		this.dragEffects = dragEffects;
+	}
+
+	public final void setDragTypes(ValueExpression dragTypes) {
+		this.dragTypes = dragTypes;
+	}
+
+	public final void setDraggable(ValueExpression draggable) {
+		this.draggable = draggable;
+	}
+
+	public final void setDropListener(ValueExpression dropListeners) {
+		this.dropListeners = dropListeners;
+	}
+
+	public final void setDropEffects(ValueExpression dropEffects) {
+		this.dropEffects = dropEffects;
+	}
+
+	public final void setDropTypes(ValueExpression dropTypes) {
+		this.dropTypes = dropTypes;
+	}
+
+	public final void setDroppable(ValueExpression droppable) {
+		this.droppable = droppable;
 	}
 
 	public final void setCheckListener(ValueExpression checkListeners) {
@@ -215,6 +255,12 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  selectable='"+selectable+"'");
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
 			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  dragEffects='"+dragEffects+"'");
+			LOG.debug("  dragTypes='"+dragTypes+"'");
+			LOG.debug("  draggable='"+draggable+"'");
+			LOG.debug("  dropEffects='"+dropEffects+"'");
+			LOG.debug("  dropTypes='"+dropTypes+"'");
+			LOG.debug("  droppable='"+droppable+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -281,6 +327,68 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 		if (selectedValues != null) {
 				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
+		}
+
+		if (dragListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DRAG_LISTENER_TYPE, dragListeners);
+		}
+
+		if (dragEffects != null) {
+			if (dragEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAG_EFFECTS, dragEffects);
+
+			} else {
+				component.setDragEffects(dragEffects.getExpressionString());
+			}
+		}
+
+		if (dragTypes != null) {
+			if (dragTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAG_TYPES, dragTypes);
+
+			} else {
+				component.setDragTypes(dragTypes.getExpressionString());
+			}
+		}
+
+		if (draggable != null) {
+			if (draggable.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAGGABLE, draggable);
+
+			} else {
+				component.setDraggable(getBool(draggable.getExpressionString()));
+			}
+		}
+
+		if (dropListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DROP_LISTENER_TYPE, dropListeners);
+		}
+
+		if (dropEffects != null) {
+			if (dropEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROP_EFFECTS, dropEffects);
+
+			} else {
+				component.setDropEffects(dropEffects.getExpressionString());
+			}
+		}
+
+		if (dropTypes != null) {
+			if (dropTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROP_TYPES, dropTypes);
+
+			} else {
+				component.setDropTypes(dropTypes.getExpressionString());
+			}
+		}
+
+		if (droppable != null) {
+			if (droppable.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROPPABLE, droppable);
+
+			} else {
+				component.setDroppable(getBool(droppable.getExpressionString()));
+			}
 		}
 
 		if (checkListeners != null) {
@@ -537,6 +645,14 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		selectable = null;
 		selectionCardinality = null;
 		selectedValues = null;
+		dragListeners = null;
+		dragEffects = null;
+		dragTypes = null;
+		draggable = null;
+		dropListeners = null;
+		dropEffects = null;
+		dropTypes = null;
+		droppable = null;
 		checkListeners = null;
 		checkable = null;
 		checkCardinality = null;

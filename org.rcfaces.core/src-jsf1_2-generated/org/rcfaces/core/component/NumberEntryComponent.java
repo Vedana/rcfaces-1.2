@@ -12,6 +12,7 @@ import org.rcfaces.core.internal.converter.NumberFormatTypeConverter;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
+import java.lang.Number;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import java.lang.String;

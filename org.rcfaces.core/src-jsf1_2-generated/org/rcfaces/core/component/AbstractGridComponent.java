@@ -4,6 +4,7 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.internal.component.CameliaGridComponent;
 import java.lang.Object;
@@ -63,6 +64,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	IFocusBlurEventCapability,
 	IErrorEventCapability,
 	IMarginCapability,
+	IPartialRenderingCapability,
 	IForegroundBackgroundColorCapability,
 	IKeyEventCapability,
 	IResetEventCapability,
@@ -82,7 +84,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 private transient String var;
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","visible","y","lookId","marginLeft","marginTop","tabIndex","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","partialRendering","visible","y","lookId","marginLeft","marginTop","tabIndex","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -755,6 +757,29 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
+	public boolean isPartialRendering() {
+		return isPartialRendering(null);
+	}
+
+	/**
+	 * See {@link #isPartialRendering() isPartialRendering()} for more details
+	 */
+	public boolean isPartialRendering(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PARTIAL_RENDERING, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "partialRendering" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPartialRenderingSetted() {
+		return engine.isPropertySetted(Properties.PARTIAL_RENDERING);
+	}
+
+	public void setPartialRendering(boolean partialRendering) {
+		engine.setProperty(Properties.PARTIAL_RENDERING, partialRendering);
+	}
+
 	public java.lang.String getBackgroundColor() {
 		return getBackgroundColor(null);
 	}
@@ -1025,26 +1050,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.VAR);
 	}
 
-	public int getFirst() {
-		return getFirst(null);
-	}
-
-	public int getFirst(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
-	}
-
-	public void setFirst(int first) {
-		engine.setProperty(Properties.FIRST, first);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "first" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isFirstSetted() {
-		return engine.isPropertySetted(Properties.FIRST);
-	}
-
 	public int getRows() {
 		return getRows(null);
 	}
@@ -1063,6 +1068,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isRowsSetted() {
 		return engine.isPropertySetted(Properties.ROWS);
+	}
+
+	public int getFirst() {
+		return getFirst(null);
+	}
+
+	public int getFirst(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.FIRST, 0, facesContext);
+	}
+
+	public void setFirst(int first) {
+		engine.setProperty(Properties.FIRST, first);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "first" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isFirstSetted() {
+		return engine.isPropertySetted(Properties.FIRST);
 	}
 
 	protected Set getCameliaFields() {

@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.lang.Object;
@@ -56,6 +57,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 	IPositionCapability,
 	IErrorEventCapability,
 	IMarginCapability,
+	IPartialRenderingCapability,
 	IForegroundBackgroundColorCapability,
 	IStyleClassCapability,
 	IUserEventCapability,
@@ -71,7 +73,7 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","waiRole","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","y","visible","lookId","marginLeft","marginTop","valueLocked","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","waiRole","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","partialRendering","y","visible","lookId","marginLeft","marginTop","valueLocked","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -646,6 +648,29 @@ public abstract class AbstractOutputComponent extends CameliaOutputComponent imp
 
 	public void setMarginTop(java.lang.String marginTop) {
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
+	}
+
+	public boolean isPartialRendering() {
+		return isPartialRendering(null);
+	}
+
+	/**
+	 * See {@link #isPartialRendering() isPartialRendering()} for more details
+	 */
+	public boolean isPartialRendering(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PARTIAL_RENDERING, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "partialRendering" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPartialRenderingSetted() {
+		return engine.isPropertySetted(Properties.PARTIAL_RENDERING);
+	}
+
+	public void setPartialRendering(boolean partialRendering) {
+		engine.setProperty(Properties.PARTIAL_RENDERING, partialRendering);
 	}
 
 	public java.lang.String getBackgroundColor() {

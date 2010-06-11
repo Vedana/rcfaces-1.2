@@ -22,6 +22,12 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 	private ValueExpression styleClass;
 	private ValueExpression menuPopupId;
 	private ValueExpression inputType;
+	private ValueExpression dragEffects;
+	private ValueExpression dragTypes;
+	private ValueExpression draggable;
+	private ValueExpression dropEffects;
+	private ValueExpression dropTypes;
+	private ValueExpression droppable;
 	public String getComponentType() {
 		return TreeNodeComponent.COMPONENT_TYPE;
 	}
@@ -42,6 +48,30 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 		this.inputType = inputType;
 	}
 
+	public final void setDragEffects(ValueExpression dragEffects) {
+		this.dragEffects = dragEffects;
+	}
+
+	public final void setDragTypes(ValueExpression dragTypes) {
+		this.dragTypes = dragTypes;
+	}
+
+	public final void setDraggable(ValueExpression draggable) {
+		this.draggable = draggable;
+	}
+
+	public final void setDropEffects(ValueExpression dropEffects) {
+		this.dropEffects = dropEffects;
+	}
+
+	public final void setDropTypes(ValueExpression dropTypes) {
+		this.dropTypes = dropTypes;
+	}
+
+	public final void setDroppable(ValueExpression droppable) {
+		this.droppable = droppable;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (TreeNodeComponent.COMPONENT_TYPE==getComponentType()) {
@@ -51,6 +81,12 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  menuPopupId='"+menuPopupId+"'");
 			LOG.debug("  inputType='"+inputType+"'");
+			LOG.debug("  dragEffects='"+dragEffects+"'");
+			LOG.debug("  dragTypes='"+dragTypes+"'");
+			LOG.debug("  draggable='"+draggable+"'");
+			LOG.debug("  dropEffects='"+dropEffects+"'");
+			LOG.debug("  dropTypes='"+dropTypes+"'");
+			LOG.debug("  droppable='"+droppable+"'");
 		}
 		if ((uiComponent instanceof TreeNodeComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -99,6 +135,60 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 				component.setInputType(inputType.getExpressionString());
 			}
 		}
+
+		if (dragEffects != null) {
+			if (dragEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAG_EFFECTS, dragEffects);
+
+			} else {
+				component.setDragEffects(dragEffects.getExpressionString());
+			}
+		}
+
+		if (dragTypes != null) {
+			if (dragTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAG_TYPES, dragTypes);
+
+			} else {
+				component.setDragTypes(dragTypes.getExpressionString());
+			}
+		}
+
+		if (draggable != null) {
+			if (draggable.isLiteralText()==false) {
+				component.setValueExpression(Properties.DRAGGABLE, draggable);
+
+			} else {
+				component.setDraggable(getBool(draggable.getExpressionString()));
+			}
+		}
+
+		if (dropEffects != null) {
+			if (dropEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROP_EFFECTS, dropEffects);
+
+			} else {
+				component.setDropEffects(dropEffects.getExpressionString());
+			}
+		}
+
+		if (dropTypes != null) {
+			if (dropTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROP_TYPES, dropTypes);
+
+			} else {
+				component.setDropTypes(dropTypes.getExpressionString());
+			}
+		}
+
+		if (droppable != null) {
+			if (droppable.isLiteralText()==false) {
+				component.setValueExpression(Properties.DROPPABLE, droppable);
+
+			} else {
+				component.setDroppable(getBool(droppable.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -106,6 +196,12 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 		styleClass = null;
 		menuPopupId = null;
 		inputType = null;
+		dragEffects = null;
+		dragTypes = null;
+		draggable = null;
+		dropEffects = null;
+		dropTypes = null;
+		droppable = null;
 
 		super.release();
 	}

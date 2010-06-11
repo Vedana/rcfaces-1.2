@@ -4,6 +4,7 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IValueLockedCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
@@ -77,6 +78,7 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 	IPositionCapability,
 	IValidationEventCapability,
 	IMarginCapability,
+	IPartialRenderingCapability,
 	ITextAlignmentCapability,
 	IImmediateCapability,
 	IUserEventCapability,
@@ -91,7 +93,7 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","marginRight","fontSize","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","keyDownListener","fontName","focusListener","validationListener","waiRole","keyUpListener","disabled","mouseOverListener","toolTipText","accessKey","userEventListener","marginBottom","helpURL","fontItalic","fontBold","textAlignment","immediate","y","visible","marginLeft","lookId","marginTop","tabIndex","valueLocked","backgroundColor","errorListener","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","keyPressListener","marginRight","fontSize","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","keyDownListener","fontName","focusListener","validationListener","waiRole","keyUpListener","disabled","mouseOverListener","toolTipText","accessKey","userEventListener","marginBottom","helpURL","fontItalic","partialRendering","fontBold","textAlignment","immediate","y","visible","marginLeft","lookId","marginTop","tabIndex","valueLocked","backgroundColor","errorListener","x"}));
 	}
 
 
@@ -1030,6 +1032,29 @@ public abstract class AbstractSelectManyComponent extends CameliaSelectManyCompo
 
 	public void setMarginTop(java.lang.String marginTop) {
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
+	}
+
+	public boolean isPartialRendering() {
+		return isPartialRendering(null);
+	}
+
+	/**
+	 * See {@link #isPartialRendering() isPartialRendering()} for more details
+	 */
+	public boolean isPartialRendering(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PARTIAL_RENDERING, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "partialRendering" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPartialRenderingSetted() {
+		return engine.isPropertySetted(Properties.PARTIAL_RENDERING);
+	}
+
+	public void setPartialRendering(boolean partialRendering) {
+		engine.setProperty(Properties.PARTIAL_RENDERING, partialRendering);
 	}
 
 	public java.lang.String getTextAlignment() {

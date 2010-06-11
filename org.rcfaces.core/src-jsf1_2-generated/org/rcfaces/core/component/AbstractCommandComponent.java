@@ -7,6 +7,7 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.apache.commons.logging.LogFactory;
@@ -67,8 +68,9 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 	IHelpCapability,
 	IClientDataCapability,
 	ITabIndexCapability,
-	IPositionCapability,
 	ILookAndFeelCapability,
+	IPositionCapability,
+	IPartialRenderingCapability,
 	IValidationEventCapability,
 	IMarginCapability,
 	ITextAlignmentCapability,
@@ -85,7 +87,7 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","marginRight","fontSize","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","fontName","focusListener","validationListener","waiRole","disabled","mouseOverListener","toolTipText","accessKey","userEventListener","marginBottom","helpURL","fontItalic","fontBold","textAlignment","immediate","visible","y","marginLeft","lookId","marginTop","backgroundColor","errorListener","tabIndex","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","width","unlockedClientAttributeNames","marginRight","fontSize","hiddenMode","foregroundColor","helpMessage","styleClass","height","margins","initListener","propertyChangeListener","mouseOutListener","blurListener","fontName","focusListener","validationListener","waiRole","disabled","mouseOverListener","toolTipText","accessKey","userEventListener","marginBottom","helpURL","fontItalic","partialRendering","fontBold","textAlignment","immediate","y","visible","marginLeft","lookId","marginTop","backgroundColor","errorListener","tabIndex","x"}));
 	}
 
 
@@ -794,6 +796,29 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
+	public java.lang.String getLookId() {
+		return getLookId(null);
+	}
+
+	/**
+	 * See {@link #getLookId() getLookId()} for more details
+	 */
+	public java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "lookId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLookIdSetted() {
+		return engine.isPropertySetted(Properties.LOOK_ID);
+	}
+
+	public void setLookId(java.lang.String lookId) {
+		engine.setProperty(Properties.LOOK_ID, lookId);
+	}
+
 	public java.lang.String getX() {
 		return getX(null);
 	}
@@ -840,27 +865,27 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 		engine.setProperty(Properties.Y, y);
 	}
 
-	public java.lang.String getLookId() {
-		return getLookId(null);
+	public boolean isPartialRendering() {
+		return isPartialRendering(null);
 	}
 
 	/**
-	 * See {@link #getLookId() getLookId()} for more details
+	 * See {@link #isPartialRendering() isPartialRendering()} for more details
 	 */
-	public java.lang.String getLookId(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.LOOK_ID, facesContext);
+	public boolean isPartialRendering(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PARTIAL_RENDERING, false, facesContext);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "lookId" is set.
+	 * Returns <code>true</code> if the attribute "partialRendering" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public final boolean isLookIdSetted() {
-		return engine.isPropertySetted(Properties.LOOK_ID);
+	public final boolean isPartialRenderingSetted() {
+		return engine.isPropertySetted(Properties.PARTIAL_RENDERING);
 	}
 
-	public void setLookId(java.lang.String lookId) {
-		engine.setProperty(Properties.LOOK_ID, lookId);
+	public void setPartialRendering(boolean partialRendering) {
+		engine.setProperty(Properties.PARTIAL_RENDERING, partialRendering);
 	}
 
 	public final void addValidationListener(org.rcfaces.core.event.IValidationListener listener) {

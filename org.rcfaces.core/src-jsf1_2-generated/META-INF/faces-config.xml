@@ -1094,28 +1094,28 @@ Experimental Do not use.
 A number typed value.
 ]]></description>
 			<attribute-name>number</attribute-name>
-			<attribute-class>Number</attribute-class>
+			<attribute-class>java.lang.Number</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
 An int value specifying the lower limit for the value of the component.
 ]]></description>
 			<attribute-name>minimum</attribute-name>
-			<attribute-class>Number</attribute-class>
+			<attribute-class>java.lang.Number</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
 the default value.
 ]]></description>
 			<attribute-name>defaultNumber</attribute-name>
-			<attribute-class>Number</attribute-class>
+			<attribute-class>java.lang.Number</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
 An int value specifying the upper limit for the value of the component.
 ]]></description>
 			<attribute-name>maximum</attribute-name>
-			<attribute-class>Number</attribute-class>
+			<attribute-class>java.lang.Number</attribute-class>
 		</attribute>
 	</component>
 	<component>

@@ -5,15 +5,20 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.ExpandableItemComponent;
+import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import javax.faces.context.FacesContext;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
+import org.rcfaces.core.component.capability.IDroppableCapability;
 import java.util.Arrays;
 import java.util.Set;
 import org.rcfaces.core.component.TreeComponent;
 import java.util.HashSet;
 import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.internal.converter.DragDropTypesConverter;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.apache.commons.logging.Log;
@@ -25,7 +30,9 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	IRadioGroupCapability,
 	IStyleClassCapability,
 	IMenuPopupIdCapability,
-	IInputTypeCapability {
+	IInputTypeCapability,
+	IDraggableCapability,
+	IDroppableCapability {
 
 	private static final Log LOG = LogFactory.getLog(TreeNodeComponent.class);
 
@@ -33,7 +40,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","styleClass","inputType","groupName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","dragTypes","styleClass","dropTypes","inputType","dropEffects","droppable","groupName","draggable","dragEffects"}));
 	}
 
 	public TreeNodeComponent() {
@@ -49,6 +56,34 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 
 
 			setInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
+		
+	}
+
+	public void setDragEffects(String dragEffects) {
+
+
+			setDragEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dragEffects)).intValue());
+		
+	}
+
+	public void setDragTypes(String dragTypes) {
+
+
+			setDragTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dragTypes));
+		
+	}
+
+	public void setDropEffects(String dropEffects) {
+
+
+			setDropEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dropEffects)).intValue());
+		
+	}
+
+	public void setDropTypes(String dropTypes) {
+
+
+			setDropTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dropTypes));
 		
 	}
 
@@ -177,6 +212,144 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 
 	public void setInputType(int inputType) {
 		engine.setProperty(Properties.INPUT_TYPE, inputType);
+	}
+
+	public int getDragEffects() {
+		return getDragEffects(null);
+	}
+
+	/**
+	 * See {@link #getDragEffects() getDragEffects()} for more details
+	 */
+	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dragEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDragEffectsSetted() {
+		return engine.isPropertySetted(Properties.DRAG_EFFECTS);
+	}
+
+	public void setDragEffects(int dragEffects) {
+		engine.setProperty(Properties.DRAG_EFFECTS, dragEffects);
+	}
+
+	public java.lang.String[] getDragTypes() {
+		return getDragTypes(null);
+	}
+
+	/**
+	 * See {@link #getDragTypes() getDragTypes()} for more details
+	 */
+	public java.lang.String[] getDragTypes(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.String[])engine.getProperty(Properties.DRAG_TYPES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dragTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDragTypesSetted() {
+		return engine.isPropertySetted(Properties.DRAG_TYPES);
+	}
+
+	public void setDragTypes(java.lang.String[] dragTypes) {
+		engine.setProperty(Properties.DRAG_TYPES, dragTypes);
+	}
+
+	public boolean isDraggable() {
+		return isDraggable(null);
+	}
+
+	/**
+	 * See {@link #isDraggable() isDraggable()} for more details
+	 */
+	public boolean isDraggable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DRAGGABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "draggable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDraggableSetted() {
+		return engine.isPropertySetted(Properties.DRAGGABLE);
+	}
+
+	public void setDraggable(boolean draggable) {
+		engine.setProperty(Properties.DRAGGABLE, draggable);
+	}
+
+	public int getDropEffects() {
+		return getDropEffects(null);
+	}
+
+	/**
+	 * See {@link #getDropEffects() getDropEffects()} for more details
+	 */
+	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dropEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDropEffectsSetted() {
+		return engine.isPropertySetted(Properties.DROP_EFFECTS);
+	}
+
+	public void setDropEffects(int dropEffects) {
+		engine.setProperty(Properties.DROP_EFFECTS, dropEffects);
+	}
+
+	public java.lang.String[] getDropTypes() {
+		return getDropTypes(null);
+	}
+
+	/**
+	 * See {@link #getDropTypes() getDropTypes()} for more details
+	 */
+	public java.lang.String[] getDropTypes(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.String[])engine.getProperty(Properties.DROP_TYPES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dropTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDropTypesSetted() {
+		return engine.isPropertySetted(Properties.DROP_TYPES);
+	}
+
+	public void setDropTypes(java.lang.String[] dropTypes) {
+		engine.setProperty(Properties.DROP_TYPES, dropTypes);
+	}
+
+	public boolean isDroppable() {
+		return isDroppable(null);
+	}
+
+	/**
+	 * See {@link #isDroppable() isDroppable()} for more details
+	 */
+	public boolean isDroppable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DROPPABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "droppable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDroppableSetted() {
+		return engine.isPropertySetted(Properties.DROPPABLE);
+	}
+
+	public void setDroppable(boolean droppable) {
+		engine.setProperty(Properties.DROPPABLE, droppable);
 	}
 
 	protected Set getCameliaFields() {

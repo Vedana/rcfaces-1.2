@@ -19,6 +19,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private static final Log LOG=LogFactory.getLog(AbstractBasicTag.class);
 
 	private ValueExpression unlockedClientAttributeNames;
+	private ValueExpression partialRendering;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression userEventListeners;
 	private ValueExpression errorListeners;
@@ -43,6 +44,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private ValueExpression margins;
 	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
+	}
+
+	public final void setPartialRendering(ValueExpression partialRendering) {
+		this.partialRendering = partialRendering;
 	}
 
 	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
@@ -136,6 +141,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
+			LOG.debug("  partialRendering='"+partialRendering+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
@@ -174,6 +180,15 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setUnlockedClientAttributeNames(unlockedClientAttributeNames.getExpressionString());
+			}
+		}
+
+		if (partialRendering != null) {
+			if (partialRendering.isLiteralText()==false) {
+				component.setValueExpression(Properties.PARTIAL_RENDERING, partialRendering);
+
+			} else {
+				component.setPartialRendering(getBool(partialRendering.getExpressionString()));
 			}
 		}
 
@@ -361,6 +376,7 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	public void release() {
 		unlockedClientAttributeNames = null;
+		partialRendering = null;
 		propertyChangeListeners = null;
 		userEventListeners = null;
 		errorListeners = null;

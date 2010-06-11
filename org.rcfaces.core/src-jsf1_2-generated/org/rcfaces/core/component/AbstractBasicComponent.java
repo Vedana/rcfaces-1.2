@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +41,7 @@ import org.rcfaces.core.component.capability.IServerDataCapability;
  */
 public abstract class AbstractBasicComponent extends CameliaBaseComponent implements 
 	IUnlockedClientAttributesCapability,
+	IPartialRenderingCapability,
 	IClientDataCapability,
 	IServerDataCapability,
 	IPropertyChangeEventCapability,
@@ -62,7 +64,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","waiRole","marginRight","toolTipText","hiddenMode","foregroundColor","helpMessage","userEventListener","helpURL","marginBottom","styleClass","height","margins","visible","y","propertyChangeListener","lookId","marginLeft","marginTop","backgroundColor","errorListener","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","waiRole","marginRight","toolTipText","hiddenMode","foregroundColor","helpMessage","userEventListener","helpURL","marginBottom","partialRendering","styleClass","height","margins","visible","y","propertyChangeListener","lookId","marginLeft","marginTop","backgroundColor","errorListener","x"}));
 	}
 
 
@@ -227,6 +229,29 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
 		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	}
+
+	public boolean isPartialRendering() {
+		return isPartialRendering(null);
+	}
+
+	/**
+	 * See {@link #isPartialRendering() isPartialRendering()} for more details
+	 */
+	public boolean isPartialRendering(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.PARTIAL_RENDERING, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "partialRendering" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isPartialRenderingSetted() {
+		return engine.isPropertySetted(Properties.PARTIAL_RENDERING);
+	}
+
+	public void setPartialRendering(boolean partialRendering) {
+		engine.setProperty(Properties.PARTIAL_RENDERING, partialRendering);
 	}
 
 	public Map getClientDataMap() {

@@ -53,6 +53,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private ValueExpression marginLeft;
 	private ValueExpression marginRight;
 	private ValueExpression marginTop;
+	private ValueExpression partialRendering;
 	private ValueExpression textAlignment;
 	private ValueExpression immediate;
 	private ValueExpression userEventListeners;
@@ -203,6 +204,10 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		this.marginTop = marginTop;
 	}
 
+	public final void setPartialRendering(ValueExpression partialRendering) {
+		this.partialRendering = partialRendering;
+	}
+
 	public final void setTextAlignment(ValueExpression textAlignment) {
 		this.textAlignment = textAlignment;
 	}
@@ -270,6 +275,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
 			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  partialRendering='"+partialRendering+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
@@ -554,6 +560,15 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (partialRendering != null) {
+			if (partialRendering.isLiteralText()==false) {
+				component.setValueExpression(Properties.PARTIAL_RENDERING, partialRendering);
+
+			} else {
+				component.setPartialRendering(getBool(partialRendering.getExpressionString()));
+			}
+		}
+
 		if (textAlignment != null) {
 			if (textAlignment.isLiteralText()==false) {
 				component.setValueExpression(Properties.TEXT_ALIGNMENT, textAlignment);
@@ -669,6 +684,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		marginLeft = null;
 		marginRight = null;
 		marginTop = null;
+		partialRendering = null;
 		textAlignment = null;
 		immediate = null;
 		userEventListeners = null;

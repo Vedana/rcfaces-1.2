@@ -1,52 +1,64 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IDraggableCapability;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.component.capability.IExpandableCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.internal.converter.DragDropTypesConverter;
+import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
-import org.rcfaces.core.internal.tools.ExpansionTools;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import javax.faces.component.UISelectItem;
-import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
+import org.rcfaces.core.component.capability.IDroppableCapability;
+import org.rcfaces.core.component.capability.IExpandedValuesCapability;
+import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
+import org.rcfaces.core.internal.capability.ISelectionComponent;
+import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.component.capability.IExpandableCapability;
+import org.rcfaces.core.component.capability.IDropEventCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
+import org.rcfaces.core.internal.tools.ExpansionTools;
+import org.rcfaces.core.component.IMenuComponent;
+import javax.faces.component.UISelectItem;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import java.lang.String;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.tools.SelectionTools;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
+import org.rcfaces.core.component.capability.IExpandEventCapability;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import org.rcfaces.core.internal.capability.ICheckComponent;
-import org.rcfaces.core.component.capability.IExpandedValuesCapability;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.internal.tools.TreeTools;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.internal.util.ComponentIterators;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
-import org.rcfaces.core.internal.capability.ISelectionComponent;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
@@ -75,6 +87,13 @@ public class TreeComponent extends AbstractInputComponent implements
 	IMenuCapability,
 	IShowValueCapability,
 	IOverStyleClassCapability,
+	IFilterCapability,
+	ILoadEventCapability,
+	IExpandEventCapability,
+	IDragEventCapability,
+	IDraggableCapability,
+	IDropEventCapability,
+	IDroppableCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
 	ICheckEventCapability,
@@ -98,7 +117,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","selectable","defaultExpandedLeafImageURL","showValue","checkable","checkedValues","defaultSelectedImageURL","defaultLeafImageURL","checkCardinality","border","defaultExpandedImageURL","defaultDisabledLeafImageURL","verticalScrollPosition","defaultDisabledImageURL","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","cursorValue","clientCheckFullState","overStyleClass","expandable","clientSelectionFullState","checkListener","preloadedLevelDepth","readOnly","selectionCardinality","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","draggable","selectable","defaultExpandedLeafImageURL","loadListener","showValue","expandListener","filterProperties","checkable","defaultSelectedImageURL","droppable","checkedValues","defaultLeafImageURL","defaultExpandedImageURL","border","checkCardinality","defaultDisabledLeafImageURL","defaultDisabledImageURL","verticalScrollPosition","dragListener","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","dropEffects","dropListener","cursorValue","clientCheckFullState","overStyleClass","dragEffects","expandable","dragTypes","clientSelectionFullState","dropTypes","preloadedLevelDepth","checkListener","selectionCardinality","readOnly","selectedValues"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -109,6 +128,34 @@ public class TreeComponent extends AbstractInputComponent implements
 	public TreeComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public void setDragEffects(String dragEffects) {
+
+
+			setDragEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dragEffects)).intValue());
+		
+	}
+
+	public void setDragTypes(String dragTypes) {
+
+
+			setDragTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dragTypes));
+		
+	}
+
+	public void setDropEffects(String dropEffects) {
+
+
+			setDropEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dropEffects)).intValue());
+		
+	}
+
+	public void setDropTypes(String dropTypes) {
+
+
+			setDropTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dropTypes));
+		
 	}
 
 	public void setClientSelectionFullState(String state) {
@@ -122,6 +169,15 @@ public class TreeComponent extends AbstractInputComponent implements
 
 
 			setClientCheckFullState(((Integer)ClientFullStateConverter.SINGLETON.getAsObject(null, this, state)).intValue());
+		
+	}
+
+	public void setFilterProperties(String properties) {
+
+
+			IFilterProperties filterProperties=(IFilterProperties)FilterPropertiesConverter.SINGLETON.getAsObject(null, this, properties);
+			
+			setFilterProperties(filterProperties);
 		
 	}
 
@@ -550,6 +606,215 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public void setOverStyleClass(java.lang.String overStyleClass) {
 		engine.setProperty(Properties.OVER_STYLE_CLASS, overStyleClass);
+	}
+
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties() {
+		return getFilterProperties(null);
+	}
+
+	/**
+	 * See {@link #getFilterProperties() getFilterProperties()} for more details
+	 */
+	public org.rcfaces.core.model.IFilterProperties getFilterProperties(javax.faces.context.FacesContext facesContext) {
+		return (org.rcfaces.core.model.IFilterProperties)engine.getProperty(Properties.FILTER_PROPERTIES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "filterProperties" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFilterPropertiesSetted() {
+		return engine.isPropertySetted(Properties.FILTER_PROPERTIES);
+	}
+
+	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
+		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
+	}
+
+	public final void addLoadListener(org.rcfaces.core.event.ILoadListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeLoadListener(org.rcfaces.core.event.ILoadListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listLoadListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
+	}
+
+	public final void addExpandListener(org.rcfaces.core.event.IExpandListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeExpandListener(org.rcfaces.core.event.IExpandListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listExpandListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IExpandListener.class);
+	}
+
+	public final void addDragListener(org.rcfaces.core.event.IDragListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDragListener(org.rcfaces.core.event.IDragListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDragListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDragListener.class);
+	}
+
+	public int getDragEffects() {
+		return getDragEffects(null);
+	}
+
+	/**
+	 * See {@link #getDragEffects() getDragEffects()} for more details
+	 */
+	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dragEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDragEffectsSetted() {
+		return engine.isPropertySetted(Properties.DRAG_EFFECTS);
+	}
+
+	public void setDragEffects(int dragEffects) {
+		engine.setProperty(Properties.DRAG_EFFECTS, dragEffects);
+	}
+
+	public java.lang.String[] getDragTypes() {
+		return getDragTypes(null);
+	}
+
+	/**
+	 * See {@link #getDragTypes() getDragTypes()} for more details
+	 */
+	public java.lang.String[] getDragTypes(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.String[])engine.getProperty(Properties.DRAG_TYPES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dragTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDragTypesSetted() {
+		return engine.isPropertySetted(Properties.DRAG_TYPES);
+	}
+
+	public void setDragTypes(java.lang.String[] dragTypes) {
+		engine.setProperty(Properties.DRAG_TYPES, dragTypes);
+	}
+
+	public boolean isDraggable() {
+		return isDraggable(null);
+	}
+
+	/**
+	 * See {@link #isDraggable() isDraggable()} for more details
+	 */
+	public boolean isDraggable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DRAGGABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "draggable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDraggableSetted() {
+		return engine.isPropertySetted(Properties.DRAGGABLE);
+	}
+
+	public void setDraggable(boolean draggable) {
+		engine.setProperty(Properties.DRAGGABLE, draggable);
+	}
+
+	public final void addDropListener(org.rcfaces.core.event.IDropListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDropListener(org.rcfaces.core.event.IDropListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDropListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDropListener.class);
+	}
+
+	public int getDropEffects() {
+		return getDropEffects(null);
+	}
+
+	/**
+	 * See {@link #getDropEffects() getDropEffects()} for more details
+	 */
+	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dropEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDropEffectsSetted() {
+		return engine.isPropertySetted(Properties.DROP_EFFECTS);
+	}
+
+	public void setDropEffects(int dropEffects) {
+		engine.setProperty(Properties.DROP_EFFECTS, dropEffects);
+	}
+
+	public java.lang.String[] getDropTypes() {
+		return getDropTypes(null);
+	}
+
+	/**
+	 * See {@link #getDropTypes() getDropTypes()} for more details
+	 */
+	public java.lang.String[] getDropTypes(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.String[])engine.getProperty(Properties.DROP_TYPES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "dropTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDropTypesSetted() {
+		return engine.isPropertySetted(Properties.DROP_TYPES);
+	}
+
+	public void setDropTypes(java.lang.String[] dropTypes) {
+		engine.setProperty(Properties.DROP_TYPES, dropTypes);
+	}
+
+	public boolean isDroppable() {
+		return isDroppable(null);
+	}
+
+	/**
+	 * See {@link #isDroppable() isDroppable()} for more details
+	 */
+	public boolean isDroppable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.DROPPABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "droppable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isDroppableSetted() {
+		return engine.isPropertySetted(Properties.DROPPABLE);
+	}
+
+	public void setDroppable(boolean droppable) {
+		engine.setProperty(Properties.DROPPABLE, droppable);
 	}
 
 	public boolean isCheckable() {
