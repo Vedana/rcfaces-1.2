@@ -74,7 +74,7 @@ public class UIData2 extends UIData0 {
 
     private static final Log LOG = LogFactory.getLog(UIData2.class);
 
-    private static final boolean DEBUG_ENABLED = LOG.isDebugEnabled();
+    private static boolean DEBUG_ENABLED = LOG.isDebugEnabled();
 
     private transient List<int[]> decodedIndexes;
 
@@ -90,6 +90,11 @@ public class UIData2 extends UIData0 {
     private int iterateModeIndex;
 
     private int iterateModeRows;
+
+    public UIData2() {
+        // Certains logs sont positionnés APRES !
+        DEBUG_ENABLED = LOG.isDebugEnabled();
+    }
 
     public void encodeBegin(FacesContext context) throws IOException {
 
@@ -138,10 +143,16 @@ public class UIData2 extends UIData0 {
     @Override
     public int getFirst() {
         if (iterateMode == false) {
-            return super.getFirst();
+            int first = super.getFirst();
+
+            if (DEBUG_ENABLED) {
+                LOG.debug("getFirst returns " + first);
+            }
+
+            return first;
         }
 
-        if (LOG.isDebugEnabled()) {
+        if (DEBUG_ENABLED) {
             LOG.debug("Iterate translate mode: return first="
                     + iterateModeFirst);
         }
@@ -150,13 +161,73 @@ public class UIData2 extends UIData0 {
     }
 
     @Override
-    public int getRows() {
-        if (iterateMode == false) {
-            return super.getRows();
+    public int getRowCount() {
+        int rowCount = super.getRowCount();
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("getRowCount() returns " + rowCount);
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Iterate translate mode: return rows=" + iterateModeRows);
+        return rowCount;
+    }
+
+    @Override
+    public int getRowIndex() {
+        int rowIndex = super.getRowIndex();
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("getRowIndex() returns " + rowIndex);
+        }
+
+        return rowIndex;
+    }
+
+    @Override
+    public boolean isRowAvailable() {
+        boolean rowAvailable = super.isRowAvailable();
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("isRowAvailable() returns " + rowAvailable);
+        }
+
+        return rowAvailable;
+    }
+
+    @Override
+    public void setFirst(int first) {
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("setFirst(" + first + ")");
+        }
+
+        super.setFirst(first);
+    }
+
+    @Override
+    public void setRows(int rows) {
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("setRows(" + rows + ")");
+        }
+
+        super.setRows(rows);
+    }
+
+    @Override
+    public int getRows() {
+        if (iterateMode == false) {
+            int rows = super.getRows();
+
+            if (DEBUG_ENABLED) {
+                LOG.debug("getRows() returns " + rows);
+            }
+
+            return rows;
+        }
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("getRows(): Iterate translate mode returns rows="
+                    + iterateModeRows);
         }
 
         return iterateModeRows;
@@ -165,6 +236,11 @@ public class UIData2 extends UIData0 {
     @Override
     public void setRowIndex(int rowIndex) {
         if (iterateMode == false || rowIndex < 0) {
+
+            if (DEBUG_ENABLED) {
+                LOG.debug("setRowIndex(" + rowIndex + ")");
+            }
+
             super.setRowIndex(rowIndex);
             return;
         }
@@ -180,15 +256,21 @@ public class UIData2 extends UIData0 {
             break;
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Iterate translate mode: return rowIndex(" + rowIndex
-                    + ") =>" + translatedRowIndex);
+        if (DEBUG_ENABLED) {
+            LOG.debug("setRowIndex(" + rowIndex
+                    + ") Iterate translate mode => rowIndex="
+                    + translatedRowIndex);
         }
 
         super.setRowIndex(translatedRowIndex);
     }
 
     public void addDecodedIndexes(int first, int rows) {
+
+        if (DEBUG_ENABLED) {
+            LOG.debug("Add decoded indexes first=" + first + " rows=" + rows);
+        }
+
         if (decodedIndexes == null) {
             decodedIndexes = new ArrayList<int[]>();
         }
