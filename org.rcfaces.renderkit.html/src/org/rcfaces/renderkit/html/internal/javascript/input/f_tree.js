@@ -502,6 +502,8 @@ var __members = {
 	f_tree: function() {
 		this.f_super(arguments);
 		
+		this._filtred = true;
+		
 		this._nodesList=new Array();
 
 		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender", false);
