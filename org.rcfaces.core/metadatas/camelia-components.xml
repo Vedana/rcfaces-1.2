@@ -4068,6 +4068,130 @@ Dans le cas d'un mode period !
 		<attribute id="focusId" type="java.lang.String" />
 		<attribute id="setFocusIfMessage" type="boolean"  default="true" />
 	</component>
+	
+	<component id="scheduler" extends="cameliaBase">
+		<import>org.rcfaces.core.lang.Time</import>
+		
+		<capability id="IWidthCapability" />
+		<capability id="IHeightCapability" />
+		<capability id="IScrollableCapability" />
+		<capability id="ILiteralLocaleCapability" />
+		<capability id="ILiteralTimeZoneCapability" />
+		<capability id="IStyleClassCapability"/>
+		
+		<capability id="IImmediateCapability" forceComponent="true"/>
+		
+		<capability id="ISelectionEventCapability" />
+		
+		<attribute id="dateBegin" type="java.util.Date"/>
+		<method id="setDateBegin(String)" />
+		<method id="getDateBegin(javax.faces.context.FacesContext)" />
+		
+		
+		<attribute id="hourBegin" type="org.rcfaces.core.lang.Time"/>
+		
+		<method id="setHourBegin" returnType="void">
+		<parameter type="String" name="time" />
+			<import>org.rcfaces.core.internal.converter.LiteralTimeConverter</import>
+			<import>org.rcfaces.core.lang.Time</import>
+			<code>
+				Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
+				setHourBegin(timeValue);
+			</code>
+		</method>
+		<attribute id="hourEnd" type="org.rcfaces.core.lang.Time" />
+		
+		<method id="setHourEnd" returnType="void">
+		<parameter type="String" name="time" />
+			<import>org.rcfaces.core.internal.converter.LiteralTimeConverter</import>
+			<import>org.rcfaces.core.lang.Time</import>
+			<code>
+				Time timeValue=(Time)LiteralTimeConverter.SINGLETON.getAsObject(null, this, time);
+				setHourEnd(timeValue);
+			</code>
+		</method>
+		
+		
+		<attribute id="periods" type="java.lang.Object"/>
+		<attribute id="periodBegin" type="java.util.Date"/>
+		<method id="setPeriodBegin(String)" />
+		<method id="getPeriodBegin(javax.faces.context.FacesContext)" />
+		<attribute id="periodEnd" type="java.util.Date"/>
+		<method id="setPeriodEnd(String)" />
+		<method id="getPeriodEnd(javax.faces.context.FacesContext)" />
+		<attribute id="periodLabel" type="java.lang.String"/>
+		<attribute id="periodStyle" type="java.lang.String"/>
+		<attribute id="periodSelectable" type="boolean" generate="false"/>
+		<attribute id="periodToolTip" type="java.lang.String"/>
+		<attribute id="periodValue" type="java.lang.String"/>
+		
+		<attribute id="var" type="java.lang.String" />
+		
+		
+		<method id="setLiteralLocale(String)" />
+		<method id="setLiteralTimeZone(String)" />
+		
+		<method id="getSchedulerColumn" returnType="java.util.List">
+			<import>org.rcfaces.core.internal.util.ComponentIterators;</import>
+			<code>
+				return ComponentIterators.list(this, SchedulerColumnComponent.class);
+			</code>
+		</method>
+		
+	
+	</component>
+	
+	<component id="schedulerColumn" extends="cameliaValueColumn" render="false" converter="true">
+		
+		<capability id="ITextCapability" />
+		<capability id="ITextDirectionCapability" />
+		<capability id="IToolTipCapability" />
+		<capability id="IAlignmentCapability" />
+		<capability id="IForegroundBackgroundColorCapability" />
+		<capability id="IStyleClassCapability" />
+		<capability id="IWidthCapability" />
+		<capability id="IHeightCapability" />
+		<capability id="IVerticalAlignmentCapability" />
+		
+		<capability id="ISelectionEventCapability" />	
+		<capability id="IDoubleClickEventCapability" />
+		
+		<capability id="IUserEventCapability" />
+		<capability id="IInitEventCapability" />
+
+		<attribute id="value" type="java.lang.Object" writeComponent="false"/>
+
+		<method id="setConverter(String)"/>
+		<method id="setConverter(javax.faces.context.FacesContext, String)"/>
+
+		<method id="setConverter(javax.faces.convert.Converter)"/>
+		<method id="getConverter()"/>
+
+
+		<method id="getLocalValue" returnType="Object">
+			<code>
+				return engine.getLocalValue(Properties.VALUE);
+			</code>
+		</method>
+
+		<method id="getValue" returnType="Object">
+			<code>
+				return getValue(null);
+			</code>
+		</method>
+		<method id="getValue" returnType="Object">
+			<parameter type="javax.faces.context.FacesContext" name="context" />
+			<code>
+				return engine.getValue(Properties.VALUE, context);
+			</code>
+		</method>
+		<method id="setValue">
+			<parameter type="Object" name="value" />
+			<code>
+				engine.setValue(Properties.VALUE, value);
+			</code>
+		</method>
+	</component>
 		
 	<component id="selectItemsIterator" extends="cameliaItems" render="false">
 	
@@ -4205,6 +4329,27 @@ Dans le cas d'un mode period !
 	<tag>
 		<name>clientData</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ClientDataTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>periodClientData</name>
+		<tag-class>org.rcfaces.core.internal.taglib.PeriodClientDataTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>name</name>

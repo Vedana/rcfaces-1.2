@@ -312,6 +312,14 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeLeft(String left) {
         return writeProperty(LEFT, left, null);
     }
+    
+    public ICssWriter writeLeftPx(int left) {
+		return writeProperty(LEFT, String.valueOf(left), PX_UNIT);
+	}
+
+	public ICssWriter writeTopPx(int top) {
+		return writeProperty(TOP, String.valueOf(top), PX_UNIT);
+	}
 
     public ICssWriter writePosition(String position) {
         return writeProperty(POSITION, position, null);
@@ -588,5 +596,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeBackgroundColor(String backgroundColor) {
         return writeProperty(BACKGROUND_COLOR, backgroundColor, null);
     }
+
+	
 
 }

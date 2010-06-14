@@ -80,6 +80,10 @@ public interface ICssWriter {
 
     ICssWriter writeTextDecoration(String textDecoration);
 
+    ICssWriter writeTopPx(int top);
+
+    ICssWriter writeLeftPx(int left);
+    
     ICssWriter writeTop(String top);
 
     ICssWriter writeLeft(String left);

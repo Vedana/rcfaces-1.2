@@ -1550,4 +1550,19 @@
 			</class>
 		</file>
 	</module>
+	
+	<module id="scheduler">
+		 <file name="input/f_scheduler.js">
+			<class name="f_scheduler">
+				<required-class name="f_component" />
+				<required-class name="fa_items" />
+				<required-class name="fa_selectionManager" />
+				<required-class name="f_core" />
+				
+				<required-style name="f_scheduler.css" />
+			</class>
+			
+		 </file>
+	</module>
+	
 </repository>

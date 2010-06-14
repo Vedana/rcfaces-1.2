@@ -1202,6 +1202,63 @@
 			setDefaultItemInputType(((Integer)InputTypeConverter.SINGLETON.getAsObject(null, this, inputType)).intValue());
 		</code>
 	</method>
+	<method id="setDateBegin" returnType="void">
+		<parameter type="String" name="date" />
+		<code>
+			engine.setProperty(Properties.DATE_BEGIN, date);
+		</code>
+	</method>
+	<method id="getDateBegin" returnType="java.util.Date">
+		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+		<import>java.util.Date</import>
+		<import>org.rcfaces.core.internal.converter.LiteralDateConverter</import>
+		<code>
+			Object value=engine.getProperty(Properties.DATE_BEGIN, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
+		</code>
+	</method>
+	<method id="setPeriodBegin" returnType="void">
+		<parameter type="String" name="date" />
+		<code>
+			engine.setProperty(Properties.PERIOD_BEGIN, date);
+		</code>
+	</method>
+	<method id="getPeriodBegin" returnType="java.util.Date">
+		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+		<import>java.util.Date</import>
+		<import>org.rcfaces.core.internal.converter.LiteralDateConverter</import>
+		<code>
+			Object value=engine.getProperty(Properties.PERIOD_BEGIN, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
+		</code>
+	</method>
+	<method id="setPeriodEnd" returnType="void">
+		<parameter type="String" name="date" />
+		<code>
+			engine.setProperty(Properties.PERIOD_END, date);
+		</code>
+	</method>
+	<method id="getPeriodEnd" returnType="java.util.Date">
+		<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+		<import>java.util.Date</import>
+		<import>org.rcfaces.core.internal.converter.LiteralDateConverter</import>
+		<code>
+			Object value=engine.getProperty(Properties.PERIOD_END, facesContext);
+			if (value instanceof String) {
+				value=LiteralDateConverter.SINGLETON.getAsObject(facesContext, this, (String)value);
+			}
+			
+			return (Date)value;
+		</code>
+	</method>
 	<method id="setDefaultDate" returnType="void">
 		<parameter type="String" name="date" />
 		<code>

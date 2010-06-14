@@ -119,6 +119,8 @@ public final class JavaScriptClasses {
     public static final String RESET_BUTTON = "f_resetButton";
 
     public static final String RULER = "f_ruler";
+    
+    public static final String SCHEDULER = "f_scheduler";
 
     public static final String SERVICE = "f_service";
 
