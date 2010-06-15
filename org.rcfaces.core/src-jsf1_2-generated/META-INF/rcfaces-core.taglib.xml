@@ -120,6 +120,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>keyEntry</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.keyEntry</component-type>
+			<renderer-type>org.rcfaces.core.keyEntry</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>componentsList</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.componentsList</component-type>
@@ -672,6 +680,21 @@
 		<component>
 			<component-type>org.rcfaces.core.focusManager</component-type>
 			<renderer-type>org.rcfaces.core.focusManager</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>scheduler</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.scheduler</component-type>
+			<renderer-type>org.rcfaces.core.scheduler</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>schedulerColumn</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.schedulerColumn</component-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>

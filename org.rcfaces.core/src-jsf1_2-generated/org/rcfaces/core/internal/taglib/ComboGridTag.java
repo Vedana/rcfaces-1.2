@@ -13,7 +13,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 
-public class ComboGridTag extends AbstractGridTag implements Tag {
+public class ComboGridTag extends KeyEntryTag implements Tag {
 
 
 	private static final Log LOG=LogFactory.getLog(ComboGridTag.class);
@@ -23,44 +23,21 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 	private ValueExpression additionalInformationValues;
 	private ValueExpression clientAdditionalInformationFullState;
 	private ValueExpression additionalInformationCardinality;
-	private ValueExpression emptyMessage;
-	private ValueExpression emptyDataMessage;
-	private ValueExpression disabled;
-	private ValueExpression required;
-	private ValueExpression readOnly;
-	private ValueExpression border;
 	private ValueExpression rowStyleClass;
 	private ValueExpression manyResultsMessage;
 	private ValueExpression message;
 	private ValueExpression oneResultMessage;
 	private ValueExpression zeroResultMessage;
-	private ValueExpression maxTextLength;
-	private ValueExpression editable;
-	private ValueExpression horizontalScrollPosition;
-	private ValueExpression verticalScrollPosition;
-	private ValueExpression filterProperties;
 	private ValueExpression paged;
 	private ValueExpression headerVisible;
-	private ValueExpression suggestionDelayMs;
-	private ValueExpression suggestionMinChars;
-	private ValueExpression rowCountVar;
-	private ValueExpression rowIndexVar;
-	private ValueExpression valueColumnId;
-	private ValueExpression labelColumnId;
-	private ValueExpression selectedValue;
 	private ValueExpression popupWidth;
 	private ValueExpression popupHeight;
-	private ValueExpression valueFormat;
 	private ValueExpression pagerStyleClass;
 	private ValueExpression pagerLookId;
 	private ValueExpression popupStyleClass;
 	private ValueExpression gridStyleClass;
 	private ValueExpression gridLookId;
 	private ValueExpression searchFieldVisible;
-	private ValueExpression forceValidation;
-	private ValueExpression forLabel;
-	private ValueExpression valueFormatLabel;
-	private ValueExpression noValueFormatLabel;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
 	}
@@ -85,30 +62,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.additionalInformationCardinality = additionalInformationCardinality;
 	}
 
-	public final void setEmptyMessage(ValueExpression emptyMessage) {
-		this.emptyMessage = emptyMessage;
-	}
-
-	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
-		this.emptyDataMessage = emptyDataMessage;
-	}
-
-	public final void setDisabled(ValueExpression disabled) {
-		this.disabled = disabled;
-	}
-
-	public final void setRequired(ValueExpression required) {
-		this.required = required;
-	}
-
-	public final void setReadOnly(ValueExpression readOnly) {
-		this.readOnly = readOnly;
-	}
-
-	public final void setBorder(ValueExpression border) {
-		this.border = border;
-	}
-
 	public final void setRowStyleClass(ValueExpression rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
 	}
@@ -129,26 +82,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.zeroResultMessage = zeroResultMessage;
 	}
 
-	public final void setMaxTextLength(ValueExpression maxTextLength) {
-		this.maxTextLength = maxTextLength;
-	}
-
-	public final void setEditable(ValueExpression editable) {
-		this.editable = editable;
-	}
-
-	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
-		this.horizontalScrollPosition = horizontalScrollPosition;
-	}
-
-	public final void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
-		this.verticalScrollPosition = verticalScrollPosition;
-	}
-
-	public final void setFilterProperties(ValueExpression filterProperties) {
-		this.filterProperties = filterProperties;
-	}
-
 	public final void setPaged(ValueExpression paged) {
 		this.paged = paged;
 	}
@@ -157,44 +90,12 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.headerVisible = headerVisible;
 	}
 
-	public final void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
-		this.suggestionDelayMs = suggestionDelayMs;
-	}
-
-	public final void setSuggestionMinChars(ValueExpression suggestionMinChars) {
-		this.suggestionMinChars = suggestionMinChars;
-	}
-
-	public final void setRowCountVar(ValueExpression rowCountVar) {
-		this.rowCountVar = rowCountVar;
-	}
-
-	public final void setRowIndexVar(ValueExpression rowIndexVar) {
-		this.rowIndexVar = rowIndexVar;
-	}
-
-	public final void setValueColumnId(ValueExpression valueColumnId) {
-		this.valueColumnId = valueColumnId;
-	}
-
-	public final void setLabelColumnId(ValueExpression labelColumnId) {
-		this.labelColumnId = labelColumnId;
-	}
-
-	public final void setSelectedValue(ValueExpression selectedValue) {
-		this.selectedValue = selectedValue;
-	}
-
 	public final void setPopupWidth(ValueExpression popupWidth) {
 		this.popupWidth = popupWidth;
 	}
 
 	public final void setPopupHeight(ValueExpression popupHeight) {
 		this.popupHeight = popupHeight;
-	}
-
-	public final void setValueFormat(ValueExpression valueFormat) {
-		this.valueFormat = valueFormat;
 	}
 
 	public final void setPagerStyleClass(ValueExpression pagerStyleClass) {
@@ -221,22 +122,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		this.searchFieldVisible = searchFieldVisible;
 	}
 
-	public final void setForceValidation(ValueExpression forceValidation) {
-		this.forceValidation = forceValidation;
-	}
-
-	public final void setForLabel(ValueExpression forLabel) {
-		this.forLabel = forLabel;
-	}
-
-	public final void setValueFormatLabel(ValueExpression valueFormatLabel) {
-		this.valueFormatLabel = valueFormatLabel;
-	}
-
-	public final void setNoValueFormatLabel(ValueExpression noValueFormatLabel) {
-		this.noValueFormatLabel = noValueFormatLabel;
-	}
-
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComboGridComponent.COMPONENT_TYPE==getComponentType()) {
@@ -245,44 +130,21 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			LOG.debug("  additionalInformationValues='"+additionalInformationValues+"'");
 			LOG.debug("  clientAdditionalInformationFullState='"+clientAdditionalInformationFullState+"'");
 			LOG.debug("  additionalInformationCardinality='"+additionalInformationCardinality+"'");
-			LOG.debug("  emptyMessage='"+emptyMessage+"'");
-			LOG.debug("  emptyDataMessage='"+emptyDataMessage+"'");
-			LOG.debug("  disabled='"+disabled+"'");
-			LOG.debug("  required='"+required+"'");
-			LOG.debug("  readOnly='"+readOnly+"'");
-			LOG.debug("  border='"+border+"'");
 			LOG.debug("  rowStyleClass='"+rowStyleClass+"'");
 			LOG.debug("  manyResultsMessage='"+manyResultsMessage+"'");
 			LOG.debug("  message='"+message+"'");
 			LOG.debug("  oneResultMessage='"+oneResultMessage+"'");
 			LOG.debug("  zeroResultMessage='"+zeroResultMessage+"'");
-			LOG.debug("  maxTextLength='"+maxTextLength+"'");
-			LOG.debug("  editable='"+editable+"'");
-			LOG.debug("  horizontalScrollPosition='"+horizontalScrollPosition+"'");
-			LOG.debug("  verticalScrollPosition='"+verticalScrollPosition+"'");
-			LOG.debug("  filterProperties='"+filterProperties+"'");
 			LOG.debug("  paged='"+paged+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
-			LOG.debug("  suggestionDelayMs='"+suggestionDelayMs+"'");
-			LOG.debug("  suggestionMinChars='"+suggestionMinChars+"'");
-			LOG.debug("  rowCountVar='"+rowCountVar+"'");
-			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
-			LOG.debug("  valueColumnId='"+valueColumnId+"'");
-			LOG.debug("  labelColumnId='"+labelColumnId+"'");
-			LOG.debug("  selectedValue='"+selectedValue+"'");
 			LOG.debug("  popupWidth='"+popupWidth+"'");
 			LOG.debug("  popupHeight='"+popupHeight+"'");
-			LOG.debug("  valueFormat='"+valueFormat+"'");
 			LOG.debug("  pagerStyleClass='"+pagerStyleClass+"'");
 			LOG.debug("  pagerLookId='"+pagerLookId+"'");
 			LOG.debug("  popupStyleClass='"+popupStyleClass+"'");
 			LOG.debug("  gridStyleClass='"+gridStyleClass+"'");
 			LOG.debug("  gridLookId='"+gridLookId+"'");
 			LOG.debug("  searchFieldVisible='"+searchFieldVisible+"'");
-			LOG.debug("  forceValidation='"+forceValidation+"'");
-			LOG.debug("  forLabel='"+forLabel+"'");
-			LOG.debug("  valueFormatLabel='"+valueFormatLabel+"'");
-			LOG.debug("  noValueFormatLabel='"+noValueFormatLabel+"'");
 		}
 		if ((uiComponent instanceof ComboGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -323,60 +185,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 			} else {
 				component.setAdditionalInformationCardinality(getInt(additionalInformationCardinality.getExpressionString()));
-			}
-		}
-
-		if (emptyMessage != null) {
-			if (emptyMessage.isLiteralText()==false) {
-				component.setValueExpression(Properties.EMPTY_MESSAGE, emptyMessage);
-
-			} else {
-				component.setEmptyMessage(emptyMessage.getExpressionString());
-			}
-		}
-
-		if (emptyDataMessage != null) {
-			if (emptyDataMessage.isLiteralText()==false) {
-				component.setValueExpression(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
-
-			} else {
-				component.setEmptyDataMessage(emptyDataMessage.getExpressionString());
-			}
-		}
-
-		if (disabled != null) {
-			if (disabled.isLiteralText()==false) {
-				component.setValueExpression(Properties.DISABLED, disabled);
-
-			} else {
-				component.setDisabled(getBool(disabled.getExpressionString()));
-			}
-		}
-
-		if (required != null) {
-			if (required.isLiteralText()==false) {
-				component.setValueExpression(Properties.REQUIRED, required);
-
-			} else {
-				component.setRequired(getBool(required.getExpressionString()));
-			}
-		}
-
-		if (readOnly != null) {
-			if (readOnly.isLiteralText()==false) {
-				component.setValueExpression(Properties.READ_ONLY, readOnly);
-
-			} else {
-				component.setReadOnly(getBool(readOnly.getExpressionString()));
-			}
-		}
-
-		if (border != null) {
-			if (border.isLiteralText()==false) {
-				component.setValueExpression(Properties.BORDER, border);
-
-			} else {
-				component.setBorder(getBool(border.getExpressionString()));
 			}
 		}
 
@@ -425,51 +233,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
-		if (maxTextLength != null) {
-			if (maxTextLength.isLiteralText()==false) {
-				component.setValueExpression(Properties.MAX_TEXT_LENGTH, maxTextLength);
-
-			} else {
-				component.setMaxTextLength(getInt(maxTextLength.getExpressionString()));
-			}
-		}
-
-		if (editable != null) {
-			if (editable.isLiteralText()==false) {
-				component.setValueExpression(Properties.EDITABLE, editable);
-
-			} else {
-				component.setEditable(getBool(editable.getExpressionString()));
-			}
-		}
-
-		if (horizontalScrollPosition != null) {
-			if (horizontalScrollPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.HORIZONTAL_SCROLL_POSITION, horizontalScrollPosition);
-
-			} else {
-				component.setHorizontalScrollPosition(getInt(horizontalScrollPosition.getExpressionString()));
-			}
-		}
-
-		if (verticalScrollPosition != null) {
-			if (verticalScrollPosition.isLiteralText()==false) {
-				component.setValueExpression(Properties.VERTICAL_SCROLL_POSITION, verticalScrollPosition);
-
-			} else {
-				component.setVerticalScrollPosition(getInt(verticalScrollPosition.getExpressionString()));
-			}
-		}
-
-		if (filterProperties != null) {
-			if (filterProperties.isLiteralText()==false) {
-				component.setValueExpression(Properties.FILTER_PROPERTIES, filterProperties);
-
-			} else {
-				component.setFilterProperties(filterProperties.getExpressionString());
-			}
-		}
-
 		if (paged != null) {
 			if (paged.isLiteralText()==false) {
 				component.setValueExpression(Properties.PAGED, paged);
@@ -488,65 +251,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 			}
 		}
 
-		if (suggestionDelayMs != null) {
-			if (suggestionDelayMs.isLiteralText()==false) {
-				component.setValueExpression(Properties.SUGGESTION_DELAY_MS, suggestionDelayMs);
-
-			} else {
-				component.setSuggestionDelayMs(getInt(suggestionDelayMs.getExpressionString()));
-			}
-		}
-
-		if (suggestionMinChars != null) {
-			if (suggestionMinChars.isLiteralText()==false) {
-				component.setValueExpression(Properties.SUGGESTION_MIN_CHARS, suggestionMinChars);
-
-			} else {
-				component.setSuggestionMinChars(getInt(suggestionMinChars.getExpressionString()));
-			}
-		}
-
-		if (rowCountVar != null) {
-			if (rowCountVar.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'rowCountVar' does not accept binding !");
-			}
-				component.setRowCountVar(rowCountVar.getExpressionString());
-		}
-
-		if (rowIndexVar != null) {
-			if (rowIndexVar.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'rowIndexVar' does not accept binding !");
-			}
-				component.setRowIndexVar(rowIndexVar.getExpressionString());
-		}
-
-		if (valueColumnId != null) {
-			if (valueColumnId.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE_COLUMN_ID, valueColumnId);
-
-			} else {
-				component.setValueColumnId(valueColumnId.getExpressionString());
-			}
-		}
-
-		if (labelColumnId != null) {
-			if (labelColumnId.isLiteralText()==false) {
-				component.setValueExpression(Properties.LABEL_COLUMN_ID, labelColumnId);
-
-			} else {
-				component.setLabelColumnId(labelColumnId.getExpressionString());
-			}
-		}
-
-		if (selectedValue != null) {
-			if (selectedValue.isLiteralText()==false) {
-				component.setValueExpression(Properties.SELECTED_VALUE, selectedValue);
-
-			} else {
-				component.setSelectedValue(selectedValue.getExpressionString());
-			}
-		}
-
 		if (popupWidth != null) {
 			if (popupWidth.isLiteralText()==false) {
 				component.setValueExpression(Properties.POPUP_WIDTH, popupWidth);
@@ -562,15 +266,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 
 			} else {
 				component.setPopupHeight(getInt(popupHeight.getExpressionString()));
-			}
-		}
-
-		if (valueFormat != null) {
-			if (valueFormat.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE_FORMAT, valueFormat);
-
-			} else {
-				component.setValueFormat(valueFormat.getExpressionString());
 			}
 		}
 
@@ -627,42 +322,6 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 				component.setSearchFieldVisible(getBool(searchFieldVisible.getExpressionString()));
 			}
 		}
-
-		if (forceValidation != null) {
-			if (forceValidation.isLiteralText()==false) {
-				component.setValueExpression(Properties.FORCE_VALIDATION, forceValidation);
-
-			} else {
-				component.setForceValidation(getBool(forceValidation.getExpressionString()));
-			}
-		}
-
-		if (forLabel != null) {
-			if (forLabel.isLiteralText()==false) {
-				component.setValueExpression(Properties.FOR_LABEL, forLabel);
-
-			} else {
-				component.setForLabel(forLabel.getExpressionString());
-			}
-		}
-
-		if (valueFormatLabel != null) {
-			if (valueFormatLabel.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE_FORMAT_LABEL, valueFormatLabel);
-
-			} else {
-				component.setValueFormatLabel(valueFormatLabel.getExpressionString());
-			}
-		}
-
-		if (noValueFormatLabel != null) {
-			if (noValueFormatLabel.isLiteralText()==false) {
-				component.setValueExpression(Properties.NO_VALUE_FORMAT_LABEL, noValueFormatLabel);
-
-			} else {
-				component.setNoValueFormatLabel(noValueFormatLabel.getExpressionString());
-			}
-		}
 	}
 
 	public void release() {
@@ -671,44 +330,21 @@ public class ComboGridTag extends AbstractGridTag implements Tag {
 		additionalInformationValues = null;
 		clientAdditionalInformationFullState = null;
 		additionalInformationCardinality = null;
-		emptyMessage = null;
-		emptyDataMessage = null;
-		disabled = null;
-		required = null;
-		readOnly = null;
-		border = null;
 		rowStyleClass = null;
 		manyResultsMessage = null;
 		message = null;
 		oneResultMessage = null;
 		zeroResultMessage = null;
-		maxTextLength = null;
-		editable = null;
-		horizontalScrollPosition = null;
-		verticalScrollPosition = null;
-		filterProperties = null;
 		paged = null;
 		headerVisible = null;
-		suggestionDelayMs = null;
-		suggestionMinChars = null;
-		rowCountVar = null;
-		rowIndexVar = null;
-		valueColumnId = null;
-		labelColumnId = null;
-		selectedValue = null;
 		popupWidth = null;
 		popupHeight = null;
-		valueFormat = null;
 		pagerStyleClass = null;
 		pagerLookId = null;
 		popupStyleClass = null;
 		gridStyleClass = null;
 		gridLookId = null;
 		searchFieldVisible = null;
-		forceValidation = null;
-		forLabel = null;
-		valueFormatLabel = null;
-		noValueFormatLabel = null;
 
 		super.release();
 	}

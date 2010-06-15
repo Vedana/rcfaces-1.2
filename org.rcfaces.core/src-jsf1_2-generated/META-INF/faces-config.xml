@@ -277,6 +277,10 @@ A string value specifying the name of the variable receiving the index of the cu
 		<component-class>org.rcfaces.core.component.ComboGridComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.keyEntry</component-type>
+		<component-class>org.rcfaces.core.component.KeyEntryComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 Shows the components for each data with pagination.
 ]]></description>
@@ -1879,6 +1883,14 @@ A boolean value indicating wether the component should be get the focus when a m
 			<attribute-name>setFocusIfMessage</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.scheduler</component-type>
+		<component-class>org.rcfaces.core.component.SchedulerComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.schedulerColumn</component-type>
+		<component-class>org.rcfaces.core.component.SchedulerColumnComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.selectItemsIterator</component-type>
