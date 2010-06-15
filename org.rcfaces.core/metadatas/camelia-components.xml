@@ -278,6 +278,7 @@
 
 	<component id="abstractBasic" abstract="true" extends="cameliaBase">
 		<capability id="IUnlockedClientAttributesCapability" />
+		<capability id="IPartialRenderingCapability" />
 
 		<capability id="IClientDataCapability" />
 		<capability id="IServerDataCapability" />
@@ -1076,6 +1077,16 @@
 		<capability id="ISelectionCardinalityCapability" />
 		<capability id="ISelectedValuesCapability" onlyValueBinding="true" />
 
+		<capability id="IDragEventCapability" />
+		<capability id="IDraggableCapability" />
+		<capability id="IDropEventCapability" />
+		<capability id="IDroppableCapability" />
+		<method id="setDragEffects(String)" />	
+		<method id="setDragTypes(String)" />
+		<method id="setDropEffects(String)" />
+		<method id="setDropTypes(String)" />
+	
+
 		<capability id="ICheckEventCapability" />
 		<capability id="ICheckableCapability" />
 		<capability id="ICheckCardinalityCapability" />
@@ -1122,7 +1133,7 @@
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
 				
 		<action id="action" type="selection" default="true"/>
-	
+		
 		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
@@ -1922,8 +1933,7 @@
 	</component>
 	
 
-	<component id="comboGrid" extends="abstractGrid">
-		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />
+	<component id="comboGrid" extends="keyEntry">
 		<implements id="org.rcfaces.core.component.capability.ISortedChildrenCapability" properties="sortedChildren"/>
 		<implements id="org.rcfaces.core.component.capability.IOrderedChildrenCapability" properties="orderedChildren" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
@@ -1942,45 +1952,19 @@
 		<capability id="IAdditionalInformationValuesCapability" onlyValueBinding="true" />
 		<capability id="IClientAdditionalInformationFullStateCapability"/>
 		<capability id="IAdditionalInformationCardinalityCapability" />
-		<capability id="IEmptyMessageCapability" />
-		<capability id="IEmptyDataMessageCapability" />
 
-		<capability id="IDisabledCapability" />
-		<capability id="IRequiredCapability" />
-		<capability id="IReadOnlyCapability" />
-		<capability id="IBorderCapability" />
 		<capability id="IRowStyleClassCapability" />
 		<capability id="IPagerMessageCapability" />
-		<capability id="IMaxTextLengthCapability" />
-		<capability id="IEditableCapability" default="true" />
 
-		<capability id="IScrollableCapability" />
 		<capability id="IFilterCapability"/>
 
 		<capability id="IPagedCapability" />
 
 		<capability id="IHeaderVisibilityCapability" default="true"/>
 
-		<attribute id="suggestionDelayMs" type="int" />		
-		<attribute id="suggestionMinChars" type="int" />		
-
-		<attribute id="rowCountVar" type="java.lang.String" noValueBinding="true"/>
-		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
-
-		<attribute id="valueColumnId" type="java.lang.String"/>
-		<attribute id="labelColumnId" type="java.lang.String"/>
-
-		<attribute id="selectedValue" type="java.lang.Object"/>
-		<!-- Non c'est la colonne 'valueColumnId' qui porte le converter
-		<attribute id="selectionValueConverter" type="javax.faces.convert.Converter"/>
-		<method id="setSelectionValueConverter(String)"/>
-		<method id="setSelectionValueConverter(String,javax.faces.context.FacesContext)"/>
-			-->
-
 		<attribute id="popupWidth" type="int"/>
 		<attribute id="popupHeight" type="int"/>
 
-		<attribute id="valueFormat" type="java.lang.String"/>
 
 		<attribute id="pagerStyleClass" type="java.lang.String"/>
 		<attribute id="pagerLookId" type="java.lang.String"/>
@@ -1992,12 +1976,6 @@
 
 		<attribute id="searchFieldVisible" type="boolean" default="true"/>
 		
-		<attribute id="forceValidation" type="boolean" default="false"/>
-		
-		<attribute id="forLabel" type="java.lang.String"/>
-		<attribute id="valueFormatLabel" type="java.lang.String"/>
-		<attribute id="noValueFormatLabel" type="java.lang.String"/>
-	
 		<method id="listColumns" returnType="org.rcfaces.core.component.iterator.IColumnIterator">
 			<import>org.rcfaces.core.internal.tools.GridTools</import>
 			<code>
@@ -2167,13 +2145,52 @@
 			</code>
 		</method>
 		
+	</component>
+	
+	<component id="keyEntry" extends="abstractGrid">
+		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />
+	
+		<capability id="IEmptyMessageCapability" />
+		<capability id="IEmptyDataMessageCapability" />
+
+		<capability id="IDisabledCapability" />
+		<capability id="IRequiredCapability" />
+		<capability id="IReadOnlyCapability" />
+		<capability id="IBorderCapability" />
+		<capability id="IMaxTextLengthCapability" />
+		<capability id="IEditableCapability" default="true" />
+
+		<capability id="IFilterCapability"/>
+
+		<attribute id="suggestionDelayMs" type="int" />		
+		<attribute id="suggestionMinChars" type="int" />		
+
+		<attribute id="rowCountVar" type="java.lang.String" noValueBinding="true"/>
+		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
+
+		<attribute id="valueColumnId" type="java.lang.String"/>
+		<attribute id="labelColumnId" type="java.lang.String"/>
+
+		<attribute id="selectedValue" type="java.lang.Object"/>
+	
+		<attribute id="valueFormat" type="java.lang.String"/>
+	
+		<attribute id="forceValidation" type="boolean" default="false"/>
+		
+		<attribute id="forLabel" type="java.lang.String"/>
+		<attribute id="valueFormatLabel" type="java.lang.String"/>
+		<attribute id="noValueFormatLabel" type="java.lang.String"/>
+	
+		<method id="listColumns" returnType="org.rcfaces.core.component.iterator.IColumnIterator">
+			<import>org.rcfaces.core.internal.tools.GridTools</import>
+			<code>
+			return GridTools.listColumns(this, javax.faces.component.UIColumn.class);
+			</code>
+		</method>
+		
 		<method id="setFilterProperties(String)" returnType="void" />
 		
 	</component>
-	
-	<!-- component id="keyEntry" extends="comboGrid" >
-		
-	</component -->
 	
 	<component id="componentsList" extends="abstractData">
 		<capability id="IMenuCapability" />
@@ -3014,8 +3031,8 @@ Dans le cas d'un mode period !
 			</code>
 		</method>	
 
-		<attribute id="number" type="Number" writeComponent="false"/>
-		<method id="getNumber" returnType="Number">
+		<attribute id="number" type="java.lang.Number" writeComponent="false"/>
+		<method id="getNumber" returnType="java.lang.Number">
 			<code>
 				Object submittedValue=getSubmittedExternalValue();
 				if (submittedValue!=null) {
@@ -3047,13 +3064,13 @@ Dans le cas d'un mode period !
 			</code>
 		</method>
 
-		<attribute id="minimum" type="Number" />
+		<attribute id="minimum" type="java.lang.Number" />
 		<method id="setMinimum(String)" />
 
-		<attribute id="defaultNumber" type="Number" />
+		<attribute id="defaultNumber" type="java.lang.Number" />
 		<method id="setDefaultNumber(String)" />
 
-		<attribute id="maximum" type="Number" />
+		<attribute id="maximum" type="java.lang.Number" />
 		<method id="setMaximum(String)" />
 
 		<propertyValue>number</propertyValue>
@@ -3681,9 +3698,22 @@ Dans le cas d'un mode period !
 		<capability id="IMenuCapability" />
 		<capability id="IShowValueCapability"/>
 		<capability id="IOverStyleClassCapability"/>
+		<capability id="IFilterCapability"/>
 
 		<capability id="ILoadEventCapability" />
 		<capability id="IExpandEventCapability" />
+
+		<capability id="IDragEventCapability" />
+		<capability id="IDraggableCapability" />
+		<!--  capability id="IDraggableItemsCapability" /-->
+		<capability id="IDropEventCapability" />
+		<capability id="IDroppableCapability" />
+		<!-- capability id="IDroppableItemsCapability" /-->
+		<method id="setDragEffects(String)" />	
+		<method id="setDragTypes(String)" />
+		<method id="setDropEffects(String)" />
+		<method id="setDropTypes(String)" />
+
 
 		<capability id="ICheckableCapability" />
 		<capability id="ICheckCardinalityCapability" />
@@ -3723,6 +3753,7 @@ Dans le cas d'un mode period !
 
 		<propertyValue>value</propertyValue>
 
+		<method id="setFilterProperties(String)" returnType="void" />
 	
 		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
 			<import>org.rcfaces.core.internal.tools.TreeTools</import>
@@ -4026,6 +4057,13 @@ Dans le cas d'un mode period !
 		<capability id="IInputTypeCapability" />
 		<method id="setInputType(String)" />
 
+		<capability id="IDraggableCapability" />
+		<capability id="IDroppableCapability" />
+		<method id="setDragEffects(String)" />	
+		<method id="setDragTypes(String)" />
+		<method id="setDropEffects(String)" />
+		<method id="setDropTypes(String)" />
+
 		<method id="setExpanded" returnType="void">
 			<parameter type="boolean" name="expanded" />
 			<import>org.rcfaces.core.internal.tools.TreeTools</import>
@@ -4068,7 +4106,7 @@ Dans le cas d'un mode period !
 		<attribute id="focusId" type="java.lang.String" />
 		<attribute id="setFocusIfMessage" type="boolean"  default="true" />
 	</component>
-	
+		
 	<component id="scheduler" extends="cameliaBase">
 		<import>org.rcfaces.core.lang.Time</import>
 		
@@ -4329,27 +4367,6 @@ Dans le cas d'un mode period !
 	<tag>
 		<name>clientData</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ClientDataTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>name</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>value</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-		</attribute>
-	</tag>
-	
-	<tag>
-		<name>periodClientData</name>
-		<tag-class>org.rcfaces.core.internal.taglib.PeriodClientDataTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>name</name>

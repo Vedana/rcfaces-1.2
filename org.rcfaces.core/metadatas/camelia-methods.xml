@@ -663,6 +663,34 @@
 			setItemHiddenMode(((Integer)HiddenModeConverter.SINGLETON.getAsObject(null, this, hiddenMode)).intValue());
 		</code>
 	</method>
+	<method id="setDragEffects">
+		<import>org.rcfaces.core.internal.converter.DragDropEffectsConverter</import>
+		<parameter type="String" name="dragEffects" />
+		<code>
+			setDragEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dragEffects)).intValue());
+		</code>
+	</method>
+	<method id="setDropEffects">
+		<import>org.rcfaces.core.internal.converter.DragDropEffectsConverter</import>
+		<parameter type="String" name="dropEffects" />
+		<code>
+			setDropEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dropEffects)).intValue());
+		</code>
+	</method>
+	<method id="setDragTypes">
+		<import>org.rcfaces.core.internal.converter.DragDropTypesConverter</import>
+		<parameter type="String" name="dragTypes" />
+		<code>
+			setDragTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dragTypes));
+		</code>
+	</method>
+	<method id="setDropTypes">
+		<import>org.rcfaces.core.internal.converter.DragDropEffectsConverter</import>
+		<parameter type="String" name="dropTypes" />
+		<code>
+			setDropTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dropTypes));
+		</code>
+	</method>
 	<method id="setInputType">
 		<import>org.rcfaces.core.internal.converter.InputTypeConverter</import>
 		<parameter type="String" name="inputType" />
