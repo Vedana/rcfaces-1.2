@@ -2333,7 +2333,7 @@ var f_core = {
 	 * @return boolean
 	 */
 	ValidateForm: function(component) {
-		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.ValidateForm: Invalid component parameter '"+parameter+"'");
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.ValidateForm: Invalid component parameter '"+component+"'");
 
 		var form=f_core.GetParentForm(component);
 		f_core.Assert(form, "f_core.ValidateForm: Can not get form of component '"+component.id+"'.");
