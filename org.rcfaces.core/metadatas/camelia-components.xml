@@ -4170,7 +4170,7 @@ Dans le cas d'un mode period !
 		<method id="setLiteralTimeZone(String)" />
 		
 		<method id="getSchedulerColumn" returnType="java.util.List">
-			<import>org.rcfaces.core.internal.util.ComponentIterators;</import>
+			<import>org.rcfaces.core.internal.util.ComponentIterators</import>
 			<code>
 				return ComponentIterators.list(this, SchedulerColumnComponent.class);
 			</code>
