@@ -1155,14 +1155,24 @@
 			</class>
 		</file>
 					
-		<file name="input/f_comboGrid.js">
-			<class name="f_comboGrid">
+		<file name="input/f_keyEntry.js">
+			<class name="f_keyEntry">
 				<required-class name="f_textEntry" />
 
-				<required-class name="fa_dataGridPopup" />
+				<required-class name="fa_commands" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_editable" />
 				<required-class name="fa_clientValidatorParameters" />
+				
+				<required-style name="f_comboGrid.css" />
+			</class>
+		</file>
+					
+		<file name="input/f_comboGrid.js">
+			<class name="f_comboGrid">
+				<required-class name="f_keyEntry" />
+
+				<required-class name="fa_dataGridPopup" />
 				
 				<required-style name="f_comboGrid.css" />
 			</class>
@@ -1199,6 +1209,7 @@
 				<required-class name="fa_itemClientDatas" />
 				<required-class name="fa_scrollPositions" />
 				<required-class name="fa_overStyleClass" />
+				<required-class name="fa_filterProperties" />
 				<required-class name="f_imageRepository" />
 				<required-class name="f_error" />
 				<required-class id="menu" name="f_menu" />
@@ -1564,5 +1575,12 @@
 			
 		 </file>
 	</module>
-	
+
+<!-- 
+	<module id="partialRendering">
+		<file name="core/f_partialRenderingEngine.js">
+			<class name="f_partialRenderingEngine" />
+		</file>
+	</module>
+	 -->
 </repository>
