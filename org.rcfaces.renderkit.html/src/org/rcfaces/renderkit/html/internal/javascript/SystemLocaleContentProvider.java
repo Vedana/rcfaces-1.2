@@ -50,6 +50,13 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
         String bundleName = factory.getApplication().getMessageBundle();
         if (bundleName == null) {
             bundleName = FacesMessage.FACES_MESSAGES;
+
+            LOG.info("Use default bundleName for faces messages '" + bundleName
+                    + "'.");
+
+        } else {
+            LOG.info("Use specified bundleName for faces messages '"
+                    + bundleName + "'.");
         }
 
         this.bundleName = bundleName;
@@ -86,17 +93,13 @@ public class SystemLocaleContentProvider extends FilteredContentProvider {
     }
 
     /*
-    public boolean searchLocale(Object contentReference, Locale locale,
-            Locale[] foundLocale) {
-        String surl = contentReference.toString();
-        int idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN);
-        if (idx < 0) {
-            return false;
-        }
-
-        return true;
-    }
-    */
+     * public boolean searchLocale(Object contentReference, Locale locale,
+     * Locale[] foundLocale) { String surl = contentReference.toString(); int
+     * idx = surl.lastIndexOf(LOCALE_CLASS_PATTERN); if (idx < 0) { return
+     * false; }
+     * 
+     * return true; }
+     */
 
     protected String getCharset() {
         return JAVASCRIPT_CHARSET;
