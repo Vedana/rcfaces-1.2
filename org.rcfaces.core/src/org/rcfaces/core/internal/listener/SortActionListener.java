@@ -19,11 +19,15 @@ public class SortActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { SortEvent.class };
 
+    public SortActionListener() {
+    }
+
     public SortActionListener(String expression) {
         super(expression);
     }
 
-    public SortActionListener() {
+    public SortActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processSort(SortEvent event) throws AbortProcessingException {

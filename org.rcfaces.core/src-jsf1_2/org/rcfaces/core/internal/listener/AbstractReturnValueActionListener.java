@@ -33,6 +33,11 @@ public abstract class AbstractReturnValueActionListener extends
         super(expression);
     }
 
+    public AbstractReturnValueActionListener(String expression,
+            boolean partialRendering) {
+        super(expression, partialRendering);
+    }
+
     protected void processReturn(FacesContext facesContext,
             MethodExpression binding, FacesEvent event, Object ret) {
         // Pas de traitement de retour !
@@ -53,11 +58,11 @@ public abstract class AbstractReturnValueActionListener extends
             if (cause instanceof ApplicationException) {
                 ((IApplicationExceptionCapability) event)
                         .setApplicationException((ApplicationException) cause);
-                
+
                 return null;
             }
         }
-        
+
         return super.processException(ex, event);
     }
 

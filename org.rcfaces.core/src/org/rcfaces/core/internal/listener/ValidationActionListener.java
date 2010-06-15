@@ -27,10 +27,16 @@ public class ValidationActionListener extends AbstractActionListener implements
         super(expression);
     }
 
+    public ValidationActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
+    }
+
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.component.listener.IChangeListener#processChange(org.rcfaces.core.component.listener.ChangeEvent)
+     * @see
+     * org.rcfaces.core.component.listener.IChangeListener#processChange(org
+     * .rcfaces.core.component.listener.ChangeEvent)
      */
     public void processValidationEvent(ValidationEvent event)
             throws AbortProcessingException {

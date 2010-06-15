@@ -20,11 +20,16 @@ public class AdditionalInformationActionListener extends AbstractActionListener
 
     private static final Class actionParameters[] = { SelectionEvent.class };
 
+    public AdditionalInformationActionListener() {
+    }
+
     public AdditionalInformationActionListener(String expression) {
         super(expression);
     }
 
-    public AdditionalInformationActionListener() {
+    public AdditionalInformationActionListener(String expression,
+            boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processAdditionalInformation(AdditionalInformationEvent event)

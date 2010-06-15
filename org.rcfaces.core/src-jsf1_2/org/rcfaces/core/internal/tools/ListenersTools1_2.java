@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.util.ForwardMethodExpression;
 
 /**
@@ -29,25 +30,27 @@ public class ListenersTools1_2 extends ListenersTools {
     public static void parseListener(FacesContext facesContext,
             UIComponent component, IListenerType listenerType,
             ValueExpression expression) {
-        parseListener(facesContext, component, listenerType, expression, false);
+        parseListener(facesContext, component, listenerType, expression
+                .getExpressionString(), false, null);
     }
 
     public static void parseListener(FacesContext facesContext,
             UIComponent component, IListenerType listenerType,
             ValueExpression expression, boolean defaultAction) {
         parseListener(facesContext, component, listenerType, expression
-                .getExpressionString(), defaultAction);
+                .getExpressionString(), defaultAction, null);
     }
 
     public static final void parseAction(FacesContext facesContext,
             UIComponent component, IListenerType listenerType,
             ValueExpression expression) {
         parseAction(facesContext, component, listenerType, expression
-                .getExpressionString());
+                .getExpressionString(), null);
     }
 
     public static final void parseAction(FacesContext facesContext,
-            UIComponent component, IListenerType listenerType, String expression) {
+            UIComponent component, IListenerType listenerType,
+            String expression, IMethodExpressionCreator methodExpressionCreator) {
         expression = expression.trim();
 
         if (LOG.isDebugEnabled()) {
@@ -66,10 +69,19 @@ public class ListenersTools1_2 extends ListenersTools {
             UICommand command = (UICommand) component;
 
             MethodExpression vb;
+
             if (BindingTools.isBindingExpression(expression)) {
-                vb = application.getExpressionFactory().createMethodExpression(
-                        facesContext.getELContext(), expression, null,
-                        NO_PARAMETER);
+                if (methodExpressionCreator != null) {
+
+                    vb = methodExpressionCreator.create(expression,
+                            NO_PARAMETER);
+
+                } else {
+                    vb = application.getExpressionFactory()
+                            .createMethodExpression(
+                                    facesContext.getELContext(), expression,
+                                    null, NO_PARAMETER);
+                }
 
             } else {
                 vb = new ForwardMethodExpression(expression);
@@ -93,6 +105,14 @@ public class ListenersTools1_2 extends ListenersTools {
                     + "' : " + expression);
         }
 
-        listenerType.addActionListener(component, application, expression);
+        IServerActionListener serverActionListener = listenerType
+                .addActionListener(component, application, expression, false);
+
+        if (serverActionListener != null && methodExpressionCreator != null) {
+
+            serverActionListener.createMethodExpression(facesContext,
+                    methodExpressionCreator);
+        }
+
     }
 }

@@ -19,11 +19,15 @@ public class ErrorActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { ErrorEvent.class };
 
+    public ErrorActionListener() {
+    }
+
     public ErrorActionListener(String expression) {
         super(expression);
     }
 
-    public ErrorActionListener() {
+    public ErrorActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processError(ErrorEvent event) throws AbortProcessingException {

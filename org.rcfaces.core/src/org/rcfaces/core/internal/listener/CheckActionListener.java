@@ -19,11 +19,15 @@ public class CheckActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { CheckEvent.class };
 
+    public CheckActionListener() {
+    }
+
     public CheckActionListener(String expression) {
         super(expression);
     }
 
-    public CheckActionListener() {
+    public CheckActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processCheck(CheckEvent event) throws AbortProcessingException {

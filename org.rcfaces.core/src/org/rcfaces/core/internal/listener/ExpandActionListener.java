@@ -1,6 +1,5 @@
 package org.rcfaces.core.internal.listener;
 
-
 import org.rcfaces.core.event.ExpandEvent;
 import org.rcfaces.core.event.IExpandListener;
 
@@ -8,24 +7,27 @@ import org.rcfaces.core.event.IExpandListener;
  * @author meslin.jb@vedana.com
  */
 public class ExpandActionListener extends AbstractActionListener implements
-		IExpandListener {
-	private static final String REVISION = "$Revision: 1.0";
+        IExpandListener {
+    private static final String REVISION = "$Revision: 1.0";
 
-	private static final Class actionParameters[] = { ExpandEvent.class };
+    private static final Class actionParameters[] = { ExpandEvent.class };
 
-	public ExpandActionListener(String expression) {
-		super(expression);
-	}
+    public ExpandActionListener() {
+    }
 
-	public ExpandActionListener() {
-	}
+    public ExpandActionListener(String expression) {
+        super(expression);
+    }
 
-	protected Class[] listParameterClasses() {
-		return actionParameters;
-	}
+    public ExpandActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
+    }
 
-	@Override
-	public void processExpand(ExpandEvent event) {
-		process(event);
-	}
+    protected Class[] listParameterClasses() {
+        return actionParameters;
+    }
+
+    public void processExpand(ExpandEvent event) {
+        process(event);
+    }
 }

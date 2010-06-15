@@ -26,6 +26,11 @@ public class ServiceEventActionListener extends
         super(expression);
     }
 
+    public ServiceEventActionListener(String expression,
+            boolean partialRendering) {
+        super(expression, partialRendering);
+    }
+
     public void processServiceEvent(ServiceEvent event)
             throws AbortProcessingException {
         process(event);

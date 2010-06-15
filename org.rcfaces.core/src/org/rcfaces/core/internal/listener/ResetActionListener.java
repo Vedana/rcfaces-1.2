@@ -19,11 +19,15 @@ public class ResetActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { ResetEvent.class };
 
+    public ResetActionListener() {
+    }
+
     public ResetActionListener(String expression) {
         super(expression);
     }
 
-    public ResetActionListener() {
+    public ResetActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processReset(ResetEvent event) throws AbortProcessingException {

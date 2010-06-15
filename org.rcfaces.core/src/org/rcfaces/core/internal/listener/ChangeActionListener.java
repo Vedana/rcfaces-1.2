@@ -18,11 +18,15 @@ public class ChangeActionListener extends AbstractActionListener implements
 
     private final static Class actionParameters[] = { ValueChangeEvent.class };
 
+    public ChangeActionListener() {
+    }
+
     public ChangeActionListener(String expression) {
         super(expression);
     }
 
-    public ChangeActionListener() {
+    public ChangeActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processValueChange(ValueChangeEvent event)

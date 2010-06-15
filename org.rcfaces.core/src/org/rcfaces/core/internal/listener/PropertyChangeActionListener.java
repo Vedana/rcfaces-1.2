@@ -19,17 +19,24 @@ public class PropertyChangeActionListener extends AbstractActionListener
 
     private static final Class actionParameters[] = { PropertyChangeEvent.class };
 
+    public PropertyChangeActionListener() {
+    }
+
     public PropertyChangeActionListener(String expression) {
         super(expression);
     }
 
-    public PropertyChangeActionListener() {
+    public PropertyChangeActionListener(String expression,
+            boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.component.listener.IChangeListener#processChange(org.rcfaces.core.component.listener.ChangeEvent)
+     * @see
+     * org.rcfaces.core.component.listener.IChangeListener#processChange(org
+     * .rcfaces.core.component.listener.ChangeEvent)
      */
     public void processPropertyChange(PropertyChangeEvent event)
             throws AbortProcessingException {

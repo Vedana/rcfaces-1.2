@@ -19,11 +19,15 @@ public class DoubleClickActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { DoubleClickEvent.class };
 
+    public DoubleClickActionListener() {
+    }
+
     public DoubleClickActionListener(String expression) {
         super(expression);
     }
 
-    public DoubleClickActionListener() {
+    public DoubleClickActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processDoubleClick(DoubleClickEvent event)

@@ -19,11 +19,15 @@ public class SelectionActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { SelectionEvent.class };
 
+    public SelectionActionListener() {
+    }
+
     public SelectionActionListener(String expression) {
         super(expression);
     }
 
-    public SelectionActionListener() {
+    public SelectionActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void componentSelected(SelectionEvent event)

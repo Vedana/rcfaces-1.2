@@ -6,8 +6,10 @@ package org.rcfaces.core.internal.listener;
 
 import java.util.Arrays;
 
+import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.MethodExpression;
+import javax.el.MethodInfo;
 import javax.el.MethodNotFoundException;
 import javax.el.PropertyNotFoundException;
 import javax.faces.FacesException;
@@ -19,14 +21,17 @@ import javax.faces.event.FacesEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.ListenersTools.IMethodExpressionCreator;
 import org.rcfaces.core.internal.util.ForwardMethodExpression;
+
+import com.sun.faces.el.ELConstants;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 abstract class AbstractActionListener implements StateHolder,
-        IServerActionListener {
+        IServerActionListener, IPartialRenderingListener {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
@@ -37,6 +42,8 @@ abstract class AbstractActionListener implements StateHolder,
     private static final Class[] NO_PARAMETERS = new Class[0];
 
     private String expression;
+
+    private MethodExpression speciedMethodExpression;
 
     private transient boolean forwarNameMethodInitialized;
 
@@ -56,12 +63,27 @@ abstract class AbstractActionListener implements StateHolder,
 
     private boolean transientValue;
 
+    private boolean partialRendering;
+
     protected AbstractActionListener() {
         // Pour la deserialisation
     }
 
     protected AbstractActionListener(String expression) {
         this.expression = expression;
+    }
+
+    protected AbstractActionListener(String expression, boolean partialRendering) {
+        this(expression);
+        this.partialRendering = partialRendering;
+    }
+
+    public boolean isPartialRendering() {
+        return partialRendering;
+    }
+
+    public void setPartialRendering(boolean partialRendering) {
+        this.partialRendering = partialRendering;
     }
 
     /*
@@ -71,6 +93,25 @@ abstract class AbstractActionListener implements StateHolder,
     protected void process(FacesEvent event) throws AbortProcessingException {
 
         FacesContext facesContext = getFacesContext();
+
+        Object parameters[] = new Object[] { event };
+
+        if (speciedMethodExpression != null) {
+            Exception th = tryMethodExpression(facesContext,
+                    speciedMethodExpression, parameters, event);
+
+            if (th == null) {
+                return;
+            }
+
+            if (th instanceof RuntimeException) {
+                throw (RuntimeException) th;
+            }
+
+            throw new FacesException(
+                    "Exception when calling forward name method '" + expression
+                            + "'.", th);
+        }
 
         if (forwarNameMethodInitialized == false) {
             forwarNameMethodInitialized = true;
@@ -100,7 +141,6 @@ abstract class AbstractActionListener implements StateHolder,
                             + "'.", th);
         }
 
-        Object parameters[] = new Object[] { event };
         Exception firstThrowable = null;
 
         if (argsMethodExpressionInitialized == false) {
@@ -296,18 +336,26 @@ abstract class AbstractActionListener implements StateHolder,
     }
 
     public final void restoreState(FacesContext context, Object state) {
-        expression = (String) state;
+        Object ret[] = (Object[]) state;
+
+        expression = (String) ret[0];
         if (expression == null) {
             throw new NullPointerException("Expression is null !");
         }
+
+        partialRendering = Boolean.TRUE.equals(ret[1]);
+
+        speciedMethodExpression = (MethodExpression) ret[2];
 
         forwarNameMethodInitialized = false;
     }
 
     public final Object saveState(FacesContext context) {
-        // Object objects[] = new Object[1];
+        Object objects[] = { expression,
+                (partialRendering) ? Boolean.TRUE : null,
+                speciedMethodExpression };
 
-        return expression;
+        return objects;
     }
 
     protected void processReturn(FacesContext facesContext,
@@ -362,4 +410,97 @@ abstract class AbstractActionListener implements StateHolder,
         return expression.hashCode();
     }
 
+    public MethodExpression getSpeciedMethodExpression() {
+        return speciedMethodExpression;
+    }
+
+    public void createMethodExpression(FacesContext facesContext,
+            IMethodExpressionCreator methodExpressionCreator) {
+
+        if (facesContext == null) {
+            facesContext = FacesContext.getCurrentInstance();
+        }
+
+        ELContext elContext = facesContext.getELContext();
+
+        Class parameters[] = listParameterClasses();
+
+        RuntimeException firstEx = null;
+        try {
+            speciedMethodExpression = methodExpressionCreator.create(
+                    expression, parameters);
+
+            MethodInfo methodInfo = speciedMethodExpression
+                    .getMethodInfo(elContext);
+            // On provoque la recherche d'info pour vérifier que la méthode existe :-)
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Method expression for '" + expression
+                        + "' with parameter '" + parameters[0].getName()
+                        + "' detected ! " + speciedMethodExpression
+                        + " methodInfo=" + methodInfo);
+            }
+
+            return;
+
+        } catch (RuntimeException ex) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Create method expression for '" + expression
+                        + "' with parameter '" + parameters[0].getName()
+                        + "' throws exception.", ex);
+            }
+
+            firstEx = ex;
+        }
+
+        try {
+            speciedMethodExpression = methodExpressionCreator.create(
+                    expression, FACES_PARAMETERS);
+
+            MethodInfo methodInfo = speciedMethodExpression
+                    .getMethodInfo(elContext);
+
+            if (LOG.isDebugEnabled()) {
+                LOG
+                        .debug("Method expression for '" + expression
+                                + "' with FacesEvent parameter detected ! "
+                                + speciedMethodExpression + " methodInfo="
+                                + methodInfo);
+            }
+
+            return;
+
+        } catch (RuntimeException ex) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Create method expression for '" + expression
+                        + "' with facesEvent parameter throws exception.", ex);
+            }
+        }
+
+        try {
+            speciedMethodExpression = methodExpressionCreator.create(
+                    expression, NO_PARAMETERS);
+
+            MethodInfo methodInfo = speciedMethodExpression
+                    .getMethodInfo(elContext);
+
+            if (LOG.isDebugEnabled()) {
+                LOG
+                        .debug("Method expression for '" + expression
+                                + "' with no parameter detected ! "
+                                + speciedMethodExpression + " methodInfo="
+                                + methodInfo);
+            }
+
+            return;
+
+        } catch (RuntimeException ex) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Create method expression for '" + expression
+                        + "' without parameters throws exception.", ex);
+            }
+        }
+
+        throw firstEx;
+    }
 }

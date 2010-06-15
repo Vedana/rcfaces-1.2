@@ -19,11 +19,15 @@ public class KeyPressActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { KeyPressEvent.class };
 
+    public KeyPressActionListener() {
+    }
+
     public KeyPressActionListener(String expression) {
         super(expression);
     }
 
-    public KeyPressActionListener() {
+    public KeyPressActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processKeyPress(KeyPressEvent event)

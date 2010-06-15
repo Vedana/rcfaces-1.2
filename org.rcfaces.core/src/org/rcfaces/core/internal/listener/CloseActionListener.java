@@ -19,11 +19,15 @@ public class CloseActionListener extends AbstractActionListener implements
 
     private static final Class actionParameters[] = { CloseEvent.class };
 
+    public CloseActionListener() {
+    }
+
     public CloseActionListener(String expression) {
         super(expression);
     }
 
-    public CloseActionListener() {
+    public CloseActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
     }
 
     public void processClose(CloseEvent event) throws AbortProcessingException {

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
 
 import org.apache.commons.logging.Log;
@@ -18,6 +20,7 @@ import org.rcfaces.core.internal.tools.ListenersTools.IListenerType;
 
 import com.sun.facelets.FaceletContext;
 import com.sun.facelets.FaceletException;
+import com.sun.facelets.el.TagMethodExpression;
 import com.sun.facelets.tag.MetaRule;
 import com.sun.facelets.tag.MetaRuleset;
 import com.sun.facelets.tag.Metadata;
@@ -42,7 +45,8 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
      */
     private static interface IAttributeMetaData {
         Metadata processAttribute(String expression,
-                IListenerType defaultListenerType, String attributeName);
+                IListenerType defaultListenerType, String attributeName,
+                TagAttribute tagAttribute);
     }
 
     /**
@@ -61,14 +65,35 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         }
 
         public Metadata processAttribute(final String expression,
-                final IListenerType defaultListenerType, String attributeName) {
-            return new Metadata() {
-                public void applyMetadata(FaceletContext ctx, Object instance) {
+                final IListenerType defaultListenerType, String attributeName,
+                final TagAttribute tagAttribute) {
+            Metadata metadata = new Metadata() {
+                public void applyMetadata(final FaceletContext ctx,
+                        Object instance) {
                     ListenersTools.parseListener(ctx.getFacesContext(),
                             (UIComponent) instance, listenerType, expression,
-                            listenerType == defaultListenerType);
+                            listenerType == defaultListenerType,
+                            new ListenersTools.IMethodExpressionCreator() {
+
+                                public MethodExpression create(
+                                        String expression, Class[] paramTypes) {
+
+                                    ExpressionFactory expressionFactory = ctx
+                                            .getExpressionFactory();
+
+                                    MethodExpression methodExpression = expressionFactory
+                                            .createMethodExpression(ctx,
+                                                    expression, null,
+                                                    paramTypes);
+
+                                    return new TagMethodExpression(
+                                            tagAttribute, methodExpression);
+                                }
+                            });
                 }
             };
+
+            return metadata;
         }
     }
 
@@ -78,9 +103,10 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         private static final String REVISION = "$Revision$";
 
         public Metadata processAttribute(final String expression,
-                IListenerType defaultListenerType, final String attributeName) {
+                IListenerType defaultListenerType, final String attributeName,
+                TagAttribute tagAttribute) {
 
-            return new Metadata() {
+            Metadata metadata = new Metadata() {
                 public void applyMetadata(FaceletContext ctx, Object instance) {
                     try {
                         String setterMethodName = "set"
@@ -103,6 +129,8 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
                 }
 
             };
+
+            return metadata;
         }
     };
 
@@ -172,13 +200,13 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
 
             public Metadata processAttribute(final String expression,
                     final IListenerType defaultListenerType,
-                    String attributeName) {
+                    String attributeName, final TagAttribute tagAttribute) {
                 return new Metadata() {
                     public void applyMetadata(FaceletContext ctx,
                             Object instance) {
 
                         actionApplyMetaData(ctx, (UIComponent) instance,
-                                expression, defaultListenerType);
+                                expression, defaultListenerType, tagAttribute);
                     }
                 };
             }
@@ -305,7 +333,7 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
             }
 
             return attributeMetaData.processAttribute(expression,
-                    defaultListenerType, name);
+                    defaultListenerType, name, attribute);
         }
     }
 }

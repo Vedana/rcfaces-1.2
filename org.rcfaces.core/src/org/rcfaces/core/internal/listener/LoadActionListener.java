@@ -6,28 +6,28 @@ package org.rcfaces.core.internal.listener;
 
 import javax.faces.event.AbortProcessingException;
 
-import org.rcfaces.core.event.BlurEvent;
-import org.rcfaces.core.event.IBlurListener;
+import org.rcfaces.core.event.ILoadListener;
+import org.rcfaces.core.event.LoadEvent;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class BlurActionListener extends AbstractActionListener implements
-        IBlurListener {
+public class LoadActionListener extends AbstractActionListener implements
+        ILoadListener {
     private static final String REVISION = "$Revision$";
 
-    private static final Class actionParameters[] = { BlurEvent.class };
+    private static final Class actionParameters[] = { LoadEvent.class };
 
-    public BlurActionListener() {
+    public LoadActionListener() {
         // Pour la déserialisation ...
     }
 
-    public BlurActionListener(String expression) {
+    public LoadActionListener(String expression) {
         super(expression);
     }
 
-    public BlurActionListener(String expression, boolean partialRendering) {
+    public LoadActionListener(String expression, boolean partialRendering) {
         super(expression, partialRendering);
     }
 
@@ -38,7 +38,7 @@ public class BlurActionListener extends AbstractActionListener implements
      * org.rcfaces.core.component.listener.IChangeListener#processChange(org
      * .rcfaces.core.component.listener.ChangeEvent)
      */
-    public void processBlur(BlurEvent event) throws AbortProcessingException {
+    public void processLoad(LoadEvent event) throws AbortProcessingException {
         process(event);
     }
 

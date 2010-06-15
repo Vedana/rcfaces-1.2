@@ -27,10 +27,16 @@ public class SuggestionActionListener extends AbstractActionListener implements
         super(expression);
     }
 
+    public SuggestionActionListener(String expression, boolean partialRendering) {
+        super(expression, partialRendering);
+    }
+
     /*
      * (non-Javadoc)
      * 
-     * @see org.rcfaces.core.component.listener.IChangeListener#processChange(org.rcfaces.core.component.listener.ChangeEvent)
+     * @see
+     * org.rcfaces.core.component.listener.IChangeListener#processChange(org
+     * .rcfaces.core.component.listener.ChangeEvent)
      */
     public void processSuggestion(SuggestionEvent event)
             throws AbortProcessingException {
