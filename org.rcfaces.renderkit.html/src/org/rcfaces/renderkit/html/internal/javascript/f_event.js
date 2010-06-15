@@ -265,6 +265,11 @@ var __statics = {
 	POPUP_LOCK : 4,
 
 	/**
+	 * @field hidden static final number
+	 */
+	DND_LOCK : 8,
+
+	/**
 	 * @field private static number
 	 */
 	_EvtLock : 0,
@@ -658,6 +663,7 @@ var __statics = {
 		}
 
 		if (!currentLock) {
+			// Pas de lock !
 			return false;
 		}
 
@@ -718,10 +724,17 @@ var __statics = {
 			}
 		}
 
-		var currentMode = f_event._EvtLockMode;
-		if (currentLock == f_event.SUBMIT_LOCK && currentMode === false) {
+		if (currentLock == f_event.DND_LOCK) {
 			return false;
 		}
+		
+		var currentMode = f_event._EvtLockMode;
+		if (currentLock == f_event.SUBMIT_LOCK && currentMode === false) {
+			// Nous sommes en LOCK,  mais c'est pas bloqué
+			return false;
+		}
+		
+		// Nous sommes en LOCK et c'est bloqué !
 
 		f_core.Debug(f_event,
 				"GetEventLocked: Events are locked, break current process ! (mode="
