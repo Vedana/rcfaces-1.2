@@ -17,6 +17,7 @@ import javax.faces.render.Renderer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -56,8 +57,8 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     protected void addUnlockProperties(Set unlockedProperties) {
     }
 
-    public String[] getDefaultUnlockedProperties(
-            FacesContext facesContext, UIComponent component) {
+    public String[] getDefaultUnlockedProperties(FacesContext facesContext,
+            UIComponent component) {
         return defaultUnlockedProperties;
     }
 
@@ -199,6 +200,14 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
          * component) {
          * componentRenderContext.removeAttribute(COMPONENT_HIDDEN); } }
          */
+
+        if (component instanceof IPartialRenderingCapability) {
+            IPartialRenderingCapability partialRenderingCapability = (IPartialRenderingCapability) component;
+
+            if (partialRenderingCapability.isPartialRendering()) {
+                
+            }
+        }
 
         renderContext.popComponent(component);
     }

@@ -13,6 +13,7 @@ import javax.faces.event.FacesListener;
 
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.AbstractScriptListener;
+import org.rcfaces.core.internal.listener.IPartialRenderingListener;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
@@ -33,9 +34,15 @@ public class EventsRenderer {
     // On conserve le mot clef coté client !
     private static final String DEFAULT_SUBMIT_JAVA_SCRIPT = "submit";
 
+    private static final String DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT = "submitPPR";
+
     private static final String DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME = "fa_eventTarget";
 
     private static final String DEFAULT_SUBMIT_JAVA_SCRIPT_CB = "DefaultSubmit";
+
+    private static final String DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CLASSNAME = "f_pprEngine";
+
+    private static final String DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CB = "DefaultPPR";
 
     private static final String ADD_EVENT_LISTENERS = "f_addEventListener";
 
@@ -88,6 +95,10 @@ public class EventsRenderer {
             mode.enableOnOver();
         }
     };
+
+    private static final int PPR_SUBMIT_TYPE = 2;
+
+    private static final int GLOBAL_SUBMIT_TYPE = 1;
 
     private static final Map ENABLE_JAVASCRIPT_BY_LISTENER_TYPE = new HashMap(8);
     static {
@@ -187,11 +198,13 @@ public class EventsRenderer {
 
         boolean first = true;
 
-        boolean clientSubmit = false;
-        boolean needSubmit = false;
+        boolean clientSubmitted = false;
+        int submitType = 0;
 
         IProcessContext processContext = js.getHtmlRenderContext()
                 .getProcessContext();
+        IJavaScriptRenderContext javaScriptRenderContext = js
+                .getJavaScriptRenderContext();
 
         for (int i = 0; i < facesListeners.length; i++) {
             FacesListener fl = facesListeners[i];
@@ -200,7 +213,7 @@ public class EventsRenderer {
                 // C'est un listener serveur, il nous faut un submit coté client
                 // !
 
-                if (clientSubmit) {
+                if (clientSubmitted) {
                     // Submit déjà généré : on arrete tout !
                     break;
                 }
@@ -208,12 +221,20 @@ public class EventsRenderer {
                 if (submitSupport == false) {
                     continue;
                 }
+
+                if (fl instanceof IPartialRenderingListener) {
+                    if (((IPartialRenderingListener) fl).isPartialRendering()) {
+                        submitType = PPR_SUBMIT_TYPE;
+                        continue;
+                    }
+                }
+
                 // Il faut générer un submit en javascript !
-                needSubmit = true;
+                submitType = GLOBAL_SUBMIT_TYPE;
                 continue;
             }
 
-            if (clientSubmit) {
+            if (clientSubmitted) {
                 // Le client a déjà généré un submit : on ignore la suite !
                 continue;
             }
@@ -241,20 +262,19 @@ public class EventsRenderer {
                             + listenerType + "'.");
                 }
 
-                clientSubmit = true;
-                needSubmit = false;
-
                 js.write(DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME).write('.');
-                js.write(js.getJavaScriptRenderContext().convertSymbol(
+                js.write(javaScriptRenderContext.convertSymbol(
                         DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME,
                         DEFAULT_SUBMIT_JAVA_SCRIPT_CB));
+
+                clientSubmitted = true;
 
             } else {
                 js.writeString(command);
             }
         }
 
-        if (needSubmit) {
+        if (clientSubmitted == false && submitType != 0) {
 
             if (first) {
                 first = false;
@@ -262,10 +282,23 @@ public class EventsRenderer {
             }
 
             js.write(',');
-            js.write(DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME).write('.');
-            js.write(js.getJavaScriptRenderContext().convertSymbol(
-                    DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME,
-                    DEFAULT_SUBMIT_JAVA_SCRIPT_CB));
+
+            if (submitType == GLOBAL_SUBMIT_TYPE) {
+                js.write(DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME).write('.');
+                js.write(javaScriptRenderContext.convertSymbol(
+                        DEFAULT_SUBMIT_JAVA_SCRIPT_CLASSNAME,
+                        DEFAULT_SUBMIT_JAVA_SCRIPT_CB));
+
+            } else {
+                js.write(DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CLASSNAME)
+                        .write('.');
+                js.write(javaScriptRenderContext.convertSymbol(
+                        DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CLASSNAME,
+                        DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CB));
+
+                js.getJavaScriptRenderContext().appendRequiredClass(
+                        DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CLASSNAME, null);
+            }
         }
 
         if (first == false) {
@@ -309,8 +342,8 @@ public class EventsRenderer {
 
         int cnt = 0;
 
-        boolean clientSubmit = false;
-        boolean needSubmit = false;
+        boolean clientSubmitted = false;
+        int submitType = 0;
 
         IProcessContext processContext = renderContext.getProcessContext();
 
@@ -321,7 +354,7 @@ public class EventsRenderer {
                 // C'est un listener serveur, il nous faut un submit coté client
                 // !
 
-                if (clientSubmit) {
+                if (clientSubmitted) {
                     // Submit déjà généré : on arrete tout !
                     break;
                 }
@@ -329,12 +362,20 @@ public class EventsRenderer {
                 if (submitSupport == false) {
                     continue;
                 }
+
+                if (fl instanceof IPartialRenderingListener) {
+                    if (((IPartialRenderingListener) fl).isPartialRendering()) {
+                        submitType = PPR_SUBMIT_TYPE;
+                        continue;
+                    }
+                }
+
                 // Il faut générer un submit en javascript !
-                needSubmit = true;
+                submitType = GLOBAL_SUBMIT_TYPE;
                 continue;
             }
 
-            if (clientSubmit) {
+            if (clientSubmitted) {
                 // Le client a déjà généré un submit : on ignore la suite !
                 continue;
             }
@@ -356,8 +397,7 @@ public class EventsRenderer {
                 }
 
                 command = DEFAULT_SUBMIT_JAVA_SCRIPT;
-                clientSubmit = true;
-                needSubmit = false;
+                clientSubmitted = true;
             }
 
             if (command.length() < 1) {
@@ -389,7 +429,7 @@ public class EventsRenderer {
             }
         }
 
-        if (needSubmit) {
+        if (clientSubmitted == false && submitType != 0) {
             // Des evenements serveurs mais pas Javascript
             // Aussi on ajoute un submit() histoire de soliciter les methodes
             // coté serveur
@@ -398,7 +438,15 @@ public class EventsRenderer {
             }
             sb.append(listenerType);
             sb.append(':');
-            sb.append(DEFAULT_SUBMIT_JAVA_SCRIPT);
+            if (submitType == GLOBAL_SUBMIT_TYPE) {
+                sb.append(DEFAULT_SUBMIT_JAVA_SCRIPT);
+            } else {
+                sb.append(DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT);
+
+                ((IJavaScriptRenderContext) renderContext
+                        .getScriptRenderContext()).appendRequiredClass(
+                        DEFAULT_PARTIAL_RENDERING_JAVA_SCRIPT_CLASSNAME, null);
+            }
 
             IJavascriptMode javascriptMode = (IJavascriptMode) ENABLE_JAVASCRIPT_BY_LISTENER_TYPE
                     .get(listenerType);
