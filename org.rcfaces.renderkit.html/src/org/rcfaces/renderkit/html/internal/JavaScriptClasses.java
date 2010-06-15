@@ -86,6 +86,8 @@ public final class JavaScriptClasses {
 
     public static final String ITEMS_LIST = "f_itemsList";
 
+    public static final String KEY_ENTRY = "f_keyEntry";
+
     public static final String LINE_BREAK = "f_lineBreak";
 
     public static final String LIST = "f_list";
@@ -119,7 +121,7 @@ public final class JavaScriptClasses {
     public static final String RESET_BUTTON = "f_resetButton";
 
     public static final String RULER = "f_ruler";
-    
+
     public static final String SCHEDULER = "f_scheduler";
 
     public static final String SERVICE = "f_service";

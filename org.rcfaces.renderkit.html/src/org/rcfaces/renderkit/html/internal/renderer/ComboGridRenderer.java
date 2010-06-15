@@ -3,21 +3,13 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
-import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,24 +18,15 @@ import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.lang.StringAppender;
-import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IRenderContext;
-import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.FilterExpressionTools;
-import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
-import org.rcfaces.core.lang.FilterPropertiesMap;
-import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -51,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
@@ -60,13 +42,11 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class ComboGridRenderer extends DataGridRenderer implements
+public class ComboGridRenderer extends KeyEntryRenderer implements
         ISubInputClientIdRenderer {
     private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
-
-    private static final String GRID_HTML_CONTENT = "org.rcfaces.renderkit.html.GRID_HTML_CONTENT";
 
     private static final int ARROW_IMAGE_WIDTH = 16;
 
@@ -79,8 +59,6 @@ public class ComboGridRenderer extends DataGridRenderer implements
     private static final String INPUT_ID_SUFFIX = ""
             + UINamingContainer.SEPARATOR_CHAR
             + UINamingContainer.SEPARATOR_CHAR + "input";
-
-    private static final String INPUT_ERRORED_PROPERTY = "org.rcfaces.html.COMBO_GRID_ERRORED";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMBO_GRID;
@@ -526,256 +504,6 @@ public class ComboGridRenderer extends DataGridRenderer implements
         }
     }
 
-    protected boolean needAjaxJavaScriptClasses(IHtmlWriter writer,
-            IGridComponent dataGridComponent) {
-        return true;
-    }
-
-    private Map formatValue(FacesContext facesContext,
-            ComboGridComponent comboGridComponent,
-            String convertedSelectedValue, Map formatValues) {
-
-        DataModel dataModel = comboGridComponent.getDataModelValue();
-
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel).setComponent(comboGridComponent);
-        }
-
-        if ((dataModel instanceof IFiltredModel) == false) {
-            if (true) {
-                LOG
-                        .error("Model doest not implement IFiltredModel, returns *not found*");
-                return null;
-            }
-
-            if (LOG.isInfoEnabled()) {
-                LOG
-                        .info("Search a row value in a not filtred DataModel ! (comboGridComponent="
-                                + comboGridComponent.getId() + ")");
-            }
-
-            String var = comboGridComponent.getVar(facesContext);
-            if (var == null) {
-                throw new FacesException("Var attribute is null !");
-            }
-
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
-            Object oldValue = requestMap.get(var);
-
-            try {
-                for (int rowIndex = 0;; rowIndex++) {
-                    dataModel.setRowIndex(rowIndex);
-
-                    if (dataModel.isRowAvailable() == false) {
-                        break;
-                    }
-
-                    Object rowData = dataModel.getRowData();
-
-                    // @XXX TODO Est-ce la bonne clef ?
-                    if (true) {
-                        continue;
-                    }
-
-                    // Oui !
-                    return formatValue(facesContext, comboGridComponent,
-                            rowData, formatValues);
-                }
-
-            } finally {
-                requestMap.put(var, oldValue);
-                dataModel.setRowIndex(-1);
-            }
-
-            return null;
-        }
-
-        IFilterProperties filterProperties = comboGridComponent
-                .getFilterProperties(facesContext);
-        if (filterProperties == null) {
-            filterProperties = new FilterPropertiesMap();
-        } else {
-            filterProperties = new FilterPropertiesMap(filterProperties);
-        }
-
-        filterProperties.put("key", convertedSelectedValue);
-        filterProperties.put("text", convertedSelectedValue);
-
-        ((IFiltredModel) dataModel).setFilter(filterProperties);
-
-        try {
-            dataModel.setRowIndex(0);
-
-            boolean available = dataModel.isRowAvailable();
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("formatValue index=0 available=" + available);
-            }
-
-            if (available == false) {
-                return null;
-            }
-
-            Object rowData = dataModel.getRowData();
-
-            String var = comboGridComponent.getVar(facesContext);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("formatValue rowData='" + rowData + "' var='" + var
-                        + "'");
-            }
-
-            if (var == null) {
-                throw new FacesException("Var attribute is null !");
-            }
-
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
-            Object oldValue = requestMap.put(var, rowData);
-
-            try {
-                return formatValue(facesContext, comboGridComponent, rowData,
-                        formatValues);
-
-            } finally {
-                requestMap.put(var, oldValue);
-            }
-
-        } finally {
-            dataModel.setRowIndex(-1);
-        }
-    }
-
-    private Map formatValue(FacesContext facesContext,
-            ComboGridComponent comboGridComponent, Object rowData,
-            Map formatValues) {
-
-        Map columnValues = new HashMap();
-
-        IColumnIterator it = comboGridComponent.listColumns();
-        for (int idx = 0; it.hasNext(); idx++) {
-            UIColumn column = it.next();
-            if ((column instanceof ValueHolder) == false) {
-                continue;
-            }
-
-            String columnId = column.getId();
-            if (columnId == null) {
-                continue;
-            }
-
-            Object value = ((ValueHolder) column).getValue();
-            String svalue = ValuesTools.convertValueToString(value, column,
-                    facesContext);
-
-            columnValues.put(columnId, svalue);
-            columnValues.put(String.valueOf(idx), svalue);
-        }
-
-        Map results = new HashMap();
-        Iterator iterator = formatValues.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            String key = (String) entry.getKey();
-            String valueFormat = (String) entry.getValue();
-            if (valueFormat == null) {
-                String labelColumnId = comboGridComponent.getLabelColumnId();
-                if (labelColumnId != null) {
-                    valueFormat = "{" + labelColumnId + "}";
-                } else {
-                    valueFormat = "{0}";
-                }
-            }
-            results.put(key, formatMessage(valueFormat, columnValues));
-        }
-        return results;
-
-    }
-
-    private String formatMessage(String message, Map parameters) {
-        StringAppender ret = new StringAppender(message.length()
-                + parameters.size() * 8);
-
-        int pos = 0;
-        for (; pos < message.length();) {
-            int idx = message.indexOf('{', pos);
-            int idx2 = message.indexOf('\'', pos);
-
-            if (idx2 < 0 && idx < 0) {
-                ret.append(message, pos, message.length() - pos);
-
-                return ret.toString();
-            }
-
-            if (idx2 < 0 || (idx >= 0 && idx < idx2)) {
-                idx2 = message.indexOf('}', idx);
-                if (idx2 < 0) {
-                    throw new FacesException("Invalid expression \"" + message
-                            + "\".");
-                }
-
-                ret.append(message, pos, idx - pos);
-
-                String p = message.substring(idx + 1, idx2);
-
-                if (p.length() > 0 && Character.isDigit(p.charAt(0))) {
-                    int num = Integer.parseInt(p);
-                    if (num >= 0 && num < parameters.size()) {
-                        ret
-                                .append((String) parameters.get(String
-                                        .valueOf(num)));
-                    }
-
-                } else if (parameters.containsKey(p)) {
-                    ret.append((String) parameters.get(p));
-                }
-
-                pos = idx2 + 1;
-                continue;
-            }
-
-            ret.append(message, pos, idx2 - pos);
-
-            idx = message.indexOf('\'', idx2 + 1);
-            if (idx < 0) {
-                throw new Error("Invalid expression \"" + parameters + "\".");
-            }
-            pos = idx + 1;
-
-            if (idx == idx2 + 1) {
-                ret.append('\'');
-
-            } else {
-                ret.append(message, idx2 + 1, idx - idx2 - 1);
-
-                if (message.charAt(pos) == '\'') {
-                    ret.append('\'');
-                }
-            }
-        }
-
-        return ret.toString();
-    }
-
-    protected UIColumn getColumn(ComboGridComponent comboGridComponent,
-            String valueColumnId) {
-
-        if (valueColumnId == null) {
-            return null;
-        }
-
-        IColumnIterator columnIterator = comboGridComponent.listColumns();
-        for (; columnIterator.hasNext();) {
-            UIColumn column = columnIterator.next();
-            if (valueColumnId.equals(column.getId()) == false) {
-                continue;
-            }
-
-            return column;
-        }
-
-        return null;
-    }
-
     protected IHtmlWriter writeIdAttribute(IHtmlWriter htmlWriter)
             throws WriterException {
         IHtmlComponentRenderContext componentRenderContext = htmlWriter
@@ -803,11 +531,6 @@ public class ComboGridRenderer extends DataGridRenderer implements
         return htmlWriter;
     }
 
-    protected void encodeJsBodyRows(IJavaScriptWriter jsWriter,
-            AbstractGridRenderContext tableContext) {
-        // On génère rien
-    }
-
     protected void encodeJsHeader(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
 
@@ -818,24 +541,6 @@ public class ComboGridRenderer extends DataGridRenderer implements
             jsWriter.writeMethodCall("f_setGridInnerHTML").writeString(
                     htmlContent).writeln(");");
         }
-    }
-
-    protected void encodeBodyTableEnd(IHtmlWriter htmlWriter,
-            AbstractGridRenderContext gridRenderContext) throws WriterException {
-        // On ferme pas les DIV
-    }
-
-    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
-        if (isDataGridRenderer(htmlWriter)) {
-            return super.getComponentStyleClassName(htmlWriter);
-        }
-
-        return getJavaScriptClassName();
-    }
-
-    protected boolean isDataGridRenderer(IHtmlWriter htmlWriter) {
-        return Boolean.TRUE.equals(htmlWriter.getComponentRenderContext()
-                .getAttribute(GRID_HTML_CONTENT));
     }
 
     public AbstractGridRenderContext createTableContext(
@@ -860,175 +565,9 @@ public class ComboGridRenderer extends DataGridRenderer implements
         return tableContext;
     }
 
-    protected UIColumn getRowValueColumn(IGridComponent dg) {
-        ComboGridComponent dataGridComponent = (ComboGridComponent) dg;
-
-        String valueColumnId = dataGridComponent.getValueColumnId();
-        if (valueColumnId != null) {
-            for (IColumnIterator it = dg.listColumns(); it.hasNext();) {
-                UIColumn column = it.next();
-                if (valueColumnId.equals(column.getId()) == false) {
-                    continue;
-                }
-
-                return column;
-            }
-
-            throw new FacesException("Can not find column '" + valueColumnId
-                    + "'.");
-        }
-
-        return null;
-    }
-
-    protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
-            AbstractGridRenderContext gridRenderContext) throws WriterException {
-        encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES
-                | GENERATE_CELL_TEXT | GENERATE_CELL_WIDTH);
-    }
-
-    public void encodeRowByKey(IJavaScriptWriter jsWriter,
-            ComboGridRenderContext tableContext) throws WriterException {
-
-        FacesContext facesContext = jsWriter.getFacesContext();
-        ComboGridComponent comboGridComponent = (ComboGridComponent) tableContext
-                .getGridComponent();
-
-        DataModel dataModel = tableContext.getDataModel();
-
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel).setComponent(comboGridComponent);
-        }
-
-        IFilterProperties filtersMap = tableContext.getFiltersMap();
-        if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
-
-                filtredDataModel.setFilter(filtersMap);
-                tableContext.updateRowCount();
-
-            } else {
-                dataModel = FilteredDataModel.filter(dataModel, filtersMap);
-                tableContext.updateRowCount();
-            }
-
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
-
-            filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
-            tableContext.updateRowCount();
-        }
-
-        Map columnValues = new HashMap();
-        List colValues = new ArrayList();
-
-        String rowId = null;
-
-        comboGridComponent.setRowIndex(0);
-        try {
-            if (comboGridComponent.isRowAvailable() == false) {
-                // No result
-                jsWriter.writeMethodCall("fa_valueSelected").write(");");
-                return;
-            }
-
-            UIColumn rowValueColumn = tableContext.getRowValueColumn();
-
-            if (rowValueColumn != null) {
-                Object value = ((ValueHolder) rowValueColumn).getValue();
-
-                rowId = convertValue(facesContext, rowValueColumn, value);
-            }
-
-            IColumnIterator it = comboGridComponent.listColumns();
-            for (int idx = 0; it.hasNext(); idx++) {
-                UIColumn column = it.next();
-                if ((column instanceof ValueHolder) == false) {
-                    continue;
-                }
-
-                String columnId = column.getId();
-                if (columnId == null) {
-                    continue;
-                }
-
-                Object value = ((ValueHolder) column).getValue();
-                String svalue = ValuesTools.convertValueToString(value, column,
-                        facesContext);
-
-                columnValues.put(columnId, svalue);
-                columnValues.put(String.valueOf(idx), svalue);
-                colValues.add(columnId);
-            }
-
-        } finally {
-            comboGridComponent.setRowIndex(-1);
-        }
-
-        String valueFormat = comboGridComponent.getValueFormat(facesContext);
-        if (valueFormat == null) {
-            String labelColumnId = comboGridComponent.getLabelColumnId();
-            if (labelColumnId != null) {
-                valueFormat = "{" + labelColumnId + "}";
-            } else {
-                valueFormat = "{0}";
-            }
-        }
-
-        jsWriter.writeMethodCall("fa_valueSelected").writeString(rowId).write(
-                ',').writeString(formatMessage(valueFormat, columnValues))
-                .write(',');
-
-        IObjectLiteralWriter objWriter = jsWriter.writeObjectLiteral(false);
-        for (Iterator it = colValues.iterator(); it.hasNext();) {
-            String colId = (String) it.next();
-
-            objWriter.writeProperty(colId).writeString(
-                    (String) columnValues.get(colId));
-        }
-
-        objWriter.end().writeln(");");
-    }
-
-    protected void decode(IRequestContext context, UIComponent component,
-            IComponentData componentData) {
-        super.decode(context, component, componentData);
-
-        ComboGridComponent comboGridComponent = (ComboGridComponent) component;
-
-        FacesContext facesContext = context.getFacesContext();
-
-        Object convertedSelectedValue = null;
-        String selectedValue = componentData.getStringProperty("selected");
-        if (selectedValue != null) {
-            UIComponent converterComponent = getColumn(comboGridComponent,
-                    comboGridComponent.getValueColumnId(facesContext));
-
-            convertedSelectedValue = ValuesTools.convertStringToValue(
-                    facesContext, converterComponent, selectedValue, false);
-        }
-
-        Object old = comboGridComponent.getSelectedValue(facesContext);
-
-        if (convertedSelectedValue != old
-                && (old == null || old.equals(convertedSelectedValue) == false)) {
-            comboGridComponent.setSelectedValue(convertedSelectedValue);
-
-            component.queueEvent(new PropertyChangeEvent(component,
-                    Properties.SELECTED_VALUE, old, convertedSelectedValue));
-        }
-    }
-
     public String computeSubInputClientId(IRenderContext renderContext,
             UIComponent component, String clientId) {
         return clientId + INPUT_ID_SUFFIX;
-    }
-
-    protected void addUnlockProperties(Set unlockedProperties) {
-        super.addUnlockProperties(unlockedProperties);
-
-        unlockedProperties.add("selectedValue");
     }
 
     /**
