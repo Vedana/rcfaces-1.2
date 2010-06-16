@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.internal.service;
 
+import java.io.IOException;
+
 import javax.faces.context.FacesContext;
 
 /**
@@ -13,5 +15,6 @@ public interface IService {
 
     void initialize(FacesContext facesContext);
 
-    void service(FacesContext facesContext, String commandId);
+    void service(FacesContext facesContext, String commandId)
+            throws IOException;
 }

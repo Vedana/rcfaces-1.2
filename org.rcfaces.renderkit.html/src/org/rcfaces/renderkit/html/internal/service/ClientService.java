@@ -64,7 +64,8 @@ public class ClientService extends AbstractClientService {
 
     private static final String CLIENT_SERVICE_VERSION = "1.0.0";
 
-    public void service(FacesContext facesContext, String commandId) {
+    public void service(FacesContext facesContext, String commandId)
+            throws IOException {
 
         try {
             if ("client.newService".equals(commandId)) {
@@ -88,7 +89,7 @@ public class ClientService extends AbstractClientService {
         }
     }
 
-    private void createOperation(FacesContext facesContext) {
+    private void createOperation(FacesContext facesContext) throws IOException {
         ExternalContext externalContext = facesContext.getExternalContext();
         Map requestHeader = externalContext.getRequestHeaderMap();
 
@@ -261,7 +262,7 @@ public class ClientService extends AbstractClientService {
 
     protected void sendResponse(FacesContext facesContext, Object ret,
             IProgressMonitor progressMonitor, IProcessContext processContext,
-            UIComponent component) {
+            UIComponent component) throws IOException {
         HttpServletResponse response = (HttpServletResponse) facesContext
                 .getExternalContext().getResponse();
 
@@ -298,9 +299,17 @@ public class ClientService extends AbstractClientService {
         AbstractHtmlService
                 .setCameliaResponse(response, CLIENT_SERVICE_VERSION);
 
+        PrintWriter pw;
         try {
-            PrintWriter pw = response.getWriter();
+            pw = response.getWriter();
 
+        } catch (IOException ex) {
+            LOG.error("Can not open writer !", ex);
+
+            throw ex;
+        }
+
+        try {
             if (buffer != null) {
                 pw.print(buffer);
 
@@ -318,6 +327,15 @@ public class ClientService extends AbstractClientService {
 
         } catch (IOException ex) {
             LOG.error("Can not send response !", ex);
+
+            throw ex;
+        }
+
+        try {
+            pw.flush();
+
+        } catch (RuntimeException ex) {
+            LOG.error("Can not flush writer !", ex);
         }
 
         facesContext.responseComplete();

@@ -3,6 +3,7 @@
  */
 package org.rcfaces.core.internal.config;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -147,6 +148,10 @@ public class ServicesRegistryImpl extends AbstractRenderKitRegistryImpl
 
         try {
             service.service(facesContext, commandId);
+
+        } catch (IOException ex) {
+            LOG.error("Call of service '" + commandId
+                    + "' throw an IO exception !", ex);
 
         } catch (RuntimeException ex) {
             LOG.error("Call of service '" + commandId
