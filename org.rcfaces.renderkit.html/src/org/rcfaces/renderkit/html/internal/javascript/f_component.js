@@ -705,7 +705,9 @@ var __members = {
 		}
 		this._hasInitListeners=undefined;
 		
-		this.f_fireEvent(f_event.INIT);
+		//this.f_fireEvent(f_event.INIT);
+		
+		this.f_getClass().f_getClassLoader().f_fireInitListener(this);
 	},
 	f_serialize: function() {
 		f_core.Assert(this.fa_componentUpdated, "f_component.f_serialize: Method fa_componentUpdated not called for component '"+this.id+"/"+this._kclass+"'.");

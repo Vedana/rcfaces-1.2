@@ -239,6 +239,7 @@ f_classLoader.prototype = {
 			document.body.onmouseover=null;
 		}
 		
+		this._onFireInits=undefined; // List<String>
 		this._onCompleteIds=undefined; // List<String>
 		this._onMessageIds=undefined; // List<String>
 		this._onInitComponentListeners=undefined; // List<function>
@@ -748,6 +749,11 @@ f_classLoader.prototype = {
 		if (onCompleteIds) {
 			this.f_verifyOnComplete();
 		}
+		
+		var onFireInits=this._onFireInits;
+		if (onFireInits) {
+			this.f_verifyOnFireInits();
+		}
 	},
 	/**
 	 * @method private
@@ -877,6 +883,40 @@ f_classLoader.prototype = {
 		
 		this._initializeIds(onCompleteIds);
 	},
+	/**
+	 * @method hidden final
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	f_verifyOnFireInits: function(form) {
+		var onFireInits=this._onFireInits;
+		if (!onFireInits) {
+			return;
+		}
+		this._onFireInits=undefined;
+		
+		f_core.Info(f_classLoader, "f_verifyOnFireInits: fire init for "+onFireInits.length+" components.");
+		
+		for(var i=0;i<onFireInits.length;i++) {
+			var componentId=onFireInits[i];
+						
+			var component=document.getElementById(componentId);
+			if (!component) {
+				f_core.Error(f_classLoader,"f_verifyOnFireInits["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
+				continue;
+			}
+			
+			try {
+				component.f_fireEvent(f_event.INIT);
+				
+			} catch (ex) {
+				f_core.Error(f_classLoader, "f_verifyOnFireInits: Callback throw an exception.", ex);
+			}			
+		}
+
+		f_core.Info(f_classLoader, "f_verifyOnFireInits: fire init DONE");
+	},
+	
 	/**
 	 * @method private
 	 * @param String[] ids
@@ -1543,7 +1583,7 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method hidden
-	 * @param optional boolean serializeState
+	 * @param optional Boolean serializeState
 	 * @param optional HTMLElement... garbagedComponents parent elements to garbage ...
 	 * @return String serialized state
 	 */
@@ -1767,7 +1807,7 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isDocumentCompleted: function() {
 		return this._documentCompleted;
@@ -1775,7 +1815,7 @@ f_classLoader.prototype = {
 	
 	/**
 	 * @method hidden
-	 * @param function listener
+	 * @param Function listener
 	 * @return void
 	 */
 	f_addOnInitComponentListener: function(listener) {
@@ -1791,7 +1831,7 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden
-	 * @param function listener
+	 * @param Function listener
 	 * @return void
 	 */
 	f_removeOnInitComponentListener: function(listener) {
@@ -1802,6 +1842,20 @@ f_classLoader.prototype = {
 			return;
 		}
 		onInitComponentListeners.f_removeElement(listener);
+	},
+	
+	/**
+	 * @method hidden
+	 * @param f_component component
+	 * @return Boolean
+	 */
+	f_fireInitListener: function(component) {
+		
+		if (window._rcfacesWindowInitialized) {
+			return this.f_fireEvent(f_event.INIT);
+		}
+		
+		
 	},
 	
 	toString: function() {
