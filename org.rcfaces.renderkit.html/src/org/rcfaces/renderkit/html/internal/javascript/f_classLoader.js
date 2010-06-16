@@ -897,10 +897,11 @@ f_classLoader.prototype = {
 		
 		f_core.Info(f_classLoader, "f_verifyOnFireInits: fire init for "+onFireInits.length+" components.");
 		
+		var doc=this.f_getDocument();
 		for(var i=0;i<onFireInits.length;i++) {
 			var componentId=onFireInits[i];
 						
-			var component=document.getElementById(componentId);
+			var component=doc.getElementById(componentId);
 			if (!component) {
 				f_core.Error(f_classLoader,"f_verifyOnFireInits["+i+"/"+ids.length+"]: Can not find component '"+componentId+"'.");
 				continue;
@@ -1852,10 +1853,17 @@ f_classLoader.prototype = {
 	f_fireInitListener: function(component) {
 		
 		if (window._rcfacesWindowInitialized) {
-			return this.f_fireEvent(f_event.INIT);
+			return component.f_fireEvent(f_event.INIT);
+		}		
+
+		var onFireInits=this._onFireInits;
+		if (!onFireInits) {
+			onFireInits=new Array();
+			
+			this._onFireInits=onFireInits;
 		}
 		
-		
+		onFireInits.push(component.id);		
 	},
 	
 	toString: function() {
