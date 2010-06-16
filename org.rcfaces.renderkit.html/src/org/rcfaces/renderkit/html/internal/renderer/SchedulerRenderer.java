@@ -574,10 +574,10 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                         }
 
                         String clientDataName = pc.getName(facesContext);
-
-                        if (clientDataName != null) {
+                        if (clientDataName == null) {
                             continue;
                         }
+
                         String clientDataValue = pc.getValue(facesContext);
 
                         clientDatas.put(clientDataName, clientDataValue);
