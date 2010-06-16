@@ -1945,8 +1945,6 @@
 				return GridTools.COMBO_GRID_VALUE_TYPE;
 			</code>
 		</method>
-	
-		<capability id="ISelectionEventCapability" />
 
 		<capability id="IAdditionalInformationEventCapability" />
 		<capability id="IAdditionalInformationValuesCapability" onlyValueBinding="true" />
@@ -2152,6 +2150,8 @@
 	
 		<capability id="IEmptyMessageCapability" />
 		<capability id="IEmptyDataMessageCapability" />
+	
+		<capability id="ISelectionEventCapability" />
 
 		<capability id="IDisabledCapability" />
 		<capability id="IRequiredCapability" />
