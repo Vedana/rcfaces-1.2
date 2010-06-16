@@ -53,11 +53,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression hiddenMode;
 	private ValueExpression propertyChangeListeners;
-	private ValueExpression rows;
-	private ValueExpression margins;
-	private ValueExpression var;
-	private ValueExpression first;
 	private ValueExpression value;
+	private ValueExpression margins;
+	private ValueExpression rows;
+	private ValueExpression first;
+	private ValueExpression var;
 	private ValueExpression saveCompleteState;
 	public final void setWidth(ValueExpression width) {
 		this.width = width;
@@ -199,24 +199,24 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setRows(ValueExpression rows) {
-		this.rows = rows;
+	public final void setValue(ValueExpression value) {
+		this.value = value;
 	}
 
 	public final void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
-	public final void setVar(ValueExpression var) {
-		this.var = var;
+	public final void setRows(ValueExpression rows) {
+		this.rows = rows;
 	}
 
 	public final void setFirst(ValueExpression first) {
 		this.first = first;
 	}
 
-	public final void setValue(ValueExpression value) {
-		this.value = value;
+	public final void setVar(ValueExpression var) {
+		this.var = var;
 	}
 
 	public final void setSaveCompleteState(ValueExpression saveCompleteState) {
@@ -247,11 +247,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  marginTop='"+marginTop+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
-			LOG.debug("  rows='"+rows+"'");
-			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  var='"+var+"'");
-			LOG.debug("  first='"+first+"'");
 			LOG.debug("  value='"+value+"'");
+			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  rows='"+rows+"'");
+			LOG.debug("  first='"+first+"'");
+			LOG.debug("  var='"+var+"'");
 		}
 		if ((uiComponent instanceof AbstractDataComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -515,12 +515,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PROPERTY_CHANGE_LISTENER_TYPE, propertyChangeListeners);
 		}
 
-		if (rows != null) {
-			if (rows.isLiteralText()==false) {
-				component.setValueExpression(Properties.ROWS, rows);
+		if (value != null) {
+			if (value.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE, value);
 
 			} else {
-				component.setRows(getInt(rows.getExpressionString()));
+				component.setValue(value.getExpressionString());
 			}
 		}
 
@@ -531,12 +531,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 				component.setMargins(margins.getExpressionString());
 		}
 
-		if (var != null) {
-			if (var.isLiteralText()==false) {
-				component.setValueExpression(Properties.VAR, var);
+		if (rows != null) {
+			if (rows.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROWS, rows);
 
 			} else {
-				component.setVar(var.getExpressionString());
+				component.setRows(getInt(rows.getExpressionString()));
 			}
 		}
 
@@ -549,12 +549,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (value != null) {
-			if (value.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE, value);
+		if (var != null) {
+			if (var.isLiteralText()==false) {
+				component.setValueExpression(Properties.VAR, var);
 
 			} else {
-				component.setValue(value.getExpressionString());
+				component.setVar(var.getExpressionString());
 			}
 		}
 
@@ -604,11 +604,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		waiRole = null;
 		hiddenMode = null;
 		propertyChangeListeners = null;
-		rows = null;
-		margins = null;
-		var = null;
-		first = null;
 		value = null;
+		margins = null;
+		rows = null;
+		first = null;
+		var = null;
 		saveCompleteState = null;
 
 		super.release();

@@ -151,6 +151,13 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 			
 	}
 
+	public List getPeriodClientData() {
+
+
+				return ComponentIterators.list(this, PeriodClientDataComponent.class);
+			
+	}
+
 	public java.lang.String getWidth() {
 		return getWidth(null);
 	}

@@ -1893,6 +1893,10 @@ A boolean value indicating wether the component should be get the focus when a m
 		<component-class>org.rcfaces.core.component.SchedulerColumnComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.periodClientData</component-type>
+		<component-class>org.rcfaces.core.component.PeriodClientDataComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.selectItemsIterator</component-type>
 		<component-class>org.rcfaces.core.component.SelectItemsIteratorComponent</component-class>
 	</component>

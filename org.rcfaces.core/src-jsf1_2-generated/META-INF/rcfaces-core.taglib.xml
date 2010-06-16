@@ -699,6 +699,13 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>periodClientData</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.periodClientData</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>selectItemsIterator</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.selectItemsIterator</component-type>
