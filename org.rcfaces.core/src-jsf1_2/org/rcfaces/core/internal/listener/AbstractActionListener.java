@@ -280,14 +280,14 @@ abstract class AbstractActionListener implements StateHolder,
             FacesContext facesContext) {
         return facesContext.getApplication().getExpressionFactory()
                 .createMethodExpression(facesContext.getELContext(),
-                        expression, null, FACES_PARAMETERS);
+                        expression, null, listParameterClasses());
     }
 
     private MethodExpression getFacesArgumentsMethodExpression(
             FacesContext facesContext) {
         return facesContext.getApplication().getExpressionFactory()
                 .createMethodExpression(facesContext.getELContext(),
-                        expression, null, listParameterClasses());
+                        expression, null, FACES_PARAMETERS);
     }
 
     private MethodExpression getNoArgsMethodExpression(FacesContext facesContext) {
@@ -432,7 +432,8 @@ abstract class AbstractActionListener implements StateHolder,
 
             MethodInfo methodInfo = speciedMethodExpression
                     .getMethodInfo(elContext);
-            // On provoque la recherche d'info pour vérifier que la méthode existe :-)
+            // On provoque la recherche d'info pour vérifier que la méthode
+            // existe :-)
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Method expression for '" + expression
