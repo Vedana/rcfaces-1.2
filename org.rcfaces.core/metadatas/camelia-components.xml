@@ -4176,6 +4176,13 @@ Dans le cas d'un mode period !
 			</code>
 		</method>
 		
+		<method id="getPeriodClientData" returnType="java.util.List">
+			<import>org.rcfaces.core.internal.util.ComponentIterators</import>
+			<code>
+				return ComponentIterators.list(this, PeriodClientDataComponent.class);
+			</code>
+		</method>
+		
 	
 	</component>
 	
@@ -4230,6 +4237,12 @@ Dans le cas d'un mode period !
 			</code>
 		</method>
 	</component>
+		
+	
+	<component id="periodClientData" extends="cameliaBase" render="false">
+		<attribute id="name" type="java.lang.String"/>
+		<attribute id="value" type="java.lang.String"/>
+	</component>			
 		
 	<component id="selectItemsIterator" extends="cameliaItems" render="false">
 	
