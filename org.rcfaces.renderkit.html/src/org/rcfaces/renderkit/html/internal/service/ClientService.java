@@ -308,7 +308,7 @@ public class ClientService extends AbstractClientService {
                 // C'est un document ... on serialize !
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Serialize xml document to stream !");
+                    LOG.debug("Serialize xml document into stream !");
                 }
 
                 RcfacesContext.getInstance(facesContext)
@@ -331,21 +331,49 @@ public class ClientService extends AbstractClientService {
                     .getDocumentBuilderProvider();
 
             try {
-                return documentBuilderProvider.parse(new StringReader(
-                        parameterString));
+                Document document = documentBuilderProvider
+                        .parse(new StringReader(parameterString));
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Deserialize XML type parameter '"
+                            + parameterString + "' => " + document);
+                }
+
+                return document;
 
             } catch (IOException e) {
+                LOG.error("Can not parse xml document from service !", e);
+
                 throw new FacesException(
                         "Can not parse xml document from service !", e);
             }
         }
 
         if ("object".equals(type)) {
-            return HtmlTools.decodeParametersToMap(processContext, component,
-                    parameterString, "&", null);
+            Map ret = HtmlTools.decodeParametersToMap(processContext,
+                    component, parameterString, "&", null);
 
-        } else if ("null".equals(type)) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Deserialize OBJECT type parameter '"
+                        + parameterString + "' => " + ret);
+            }
+
+            return ret;
+        }
+
+        if ("null".equals(type)) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Deserialize NULL type parameter '" + parameterString
+                        + "' => " + null);
+            }
+
             return null;
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Deserialize default type parameter '" + parameterString
+                    + "' => " + parameterString);
         }
 
         return parameterString;
