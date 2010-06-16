@@ -888,7 +888,7 @@ public class JavaScriptCollectorRenderContext extends
 
             if (first) {
                 first = false;
-                jsWriter.writeCall(cameliaClassLoader, "f_initIds");
+                jsWriter.writeCall(cameliaClassLoader, "f_initOnComplete").write('[');
 
             } else {
                 jsWriter.write(',');
@@ -898,7 +898,7 @@ public class JavaScriptCollectorRenderContext extends
         }
 
         if (first == false) {
-            jsWriter.writeln(");");
+            jsWriter.writeln("]);");
         }
 
         if (others != null) {
