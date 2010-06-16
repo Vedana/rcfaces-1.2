@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ServiceComponent;
 import org.rcfaces.core.event.IServiceEventListener;
 import org.rcfaces.core.event.ServiceEvent;
@@ -23,6 +25,9 @@ import org.rcfaces.core.progressMonitor.SubProgressMonitor;
  */
 public class ClientServiceRegistryImpl implements IClientServiceRegistry {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(ClientServiceRegistryImpl.class);
 
     private final Map clientServicesByRequestId = new HashMap(32);
 
@@ -65,13 +70,25 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
             serviceEventListener.processServiceEvent(event);
 
             event.endListener(i);
-            
-            ApplicationException applicationException=event.getApplicationException();
-            if (applicationException!=null) {
+
+            ApplicationException applicationException = event
+                    .getApplicationException();
+            if (applicationException != null) {
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Throw application exception.",
+                            applicationException);
+                }
+
                 throw applicationException;
             }
 
             returnValue = event.getReturnValue();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Return value of event ='" + returnValue + "'.");
+            }
+
             if (returnValue != null) {
                 break;
             }
@@ -221,6 +238,11 @@ public class ClientServiceRegistryImpl implements IClientServiceRegistry {
         }
 
         public void setReturnValue(Object ret) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Set return value to '" + ret + "'.");
+            }
+
             this.returnValue = ret;
         }
 

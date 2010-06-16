@@ -42,6 +42,10 @@ public abstract class AbstractReturnValueActionListener extends
             MethodExpression binding, FacesEvent event, Object ret) {
         // Pas de traitement de retour !
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Process return value '" + ret + "'.");
+        }
+
         if (ret == null) {
             return;
         }

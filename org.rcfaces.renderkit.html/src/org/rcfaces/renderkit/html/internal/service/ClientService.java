@@ -287,6 +287,11 @@ public class ClientService extends AbstractClientService {
             buffer = String.valueOf(ret);
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Prepare response: contentType='" + type + "' buffer='"
+                    + buffer + "'");
+        }
+
         response.setContentType(contenType + "; charset="
                 + AbstractHtmlService.RESPONSE_CHARSET);
         response.setHeader(CAMELIA_CONTENT_TYPE, type);
@@ -301,6 +306,10 @@ public class ClientService extends AbstractClientService {
 
             } else if (type.equals("xml")) {
                 // C'est un document ... on serialize !
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Serialize xml document to stream !");
+                }
 
                 RcfacesContext.getInstance(facesContext)
                         .getDocumentBuilderProvider().serialize(pw,
