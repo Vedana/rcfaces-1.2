@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ComboGridComponent;
+import org.rcfaces.core.component.KeyEntryComponent;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.renderkit.html.internal.Constants;
@@ -31,8 +31,8 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
-import org.rcfaces.renderkit.html.internal.renderer.ComboGridRenderer;
-import org.rcfaces.renderkit.html.internal.renderer.ComboGridRenderer.ComboGridRenderContext;
+import org.rcfaces.renderkit.html.internal.renderer.KeyEntryRenderer;
+import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer.DataGridRenderContext;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 public class ComboGridKeyService extends AbstractHtmlService {
@@ -96,7 +96,7 @@ public class ComboGridKeyService extends AbstractHtmlService {
 
             UIComponent component = localizedComponent.getComponent();
 
-            if ((component instanceof ComboGridComponent) == false) {
+            if ((component instanceof KeyEntryComponent) == false) {
                 sendJsError(facesContext, componentClientId,
                         INVALID_PARAMETER_SERVICE_ERROR,
                         "Component is invalid. (not an ComboGridComponent)",
@@ -104,9 +104,9 @@ public class ComboGridKeyService extends AbstractHtmlService {
                 return;
             }
 
-            ComboGridComponent comboGridComponent = (ComboGridComponent) component;
+            KeyEntryComponent comboGridComponent = (KeyEntryComponent) component;
 
-            ComboGridRenderer comboGridRenderer = getComboGridRenderer(
+            KeyEntryRenderer comboGridRenderer = getComboGridRenderer(
                     facesContext, comboGridComponent);
             if (comboGridRenderer == null) {
                 sendJsError(facesContext, componentClientId,
@@ -133,8 +133,8 @@ public class ComboGridKeyService extends AbstractHtmlService {
                     printWriter = response.getWriter();
 
                 } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+                    ConfiguredHttpServlet.setGzipContentEncoding(
+                            (HttpServletResponse) response, true);
 
                     OutputStream outputStream = response.getOutputStream();
 
@@ -174,21 +174,21 @@ public class ComboGridKeyService extends AbstractHtmlService {
 
     }
 
-    private ComboGridRenderer getComboGridRenderer(FacesContext facesContext,
-            ComboGridComponent component) {
+    private KeyEntryRenderer getComboGridRenderer(FacesContext facesContext,
+            KeyEntryComponent component) {
 
         Renderer renderer = getRenderer(facesContext, component);
 
-        if ((renderer instanceof ComboGridRenderer) == false) {
+        if ((renderer instanceof KeyEntryRenderer) == false) {
             return null;
         }
 
-        return (ComboGridRenderer) renderer;
+        return (KeyEntryRenderer) renderer;
     }
 
     private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            ComboGridComponent comboGridComponent,
-            ComboGridRenderer comboGridRenderer, String filterExpression,
+            KeyEntryComponent comboGridComponent,
+            KeyEntryRenderer comboGridRenderer, String filterExpression,
             String componentClientId, String rowKey) throws IOException {
 
         IProcessContext processContext = HtmlProcessContextImpl
@@ -206,7 +206,7 @@ public class ComboGridKeyService extends AbstractHtmlService {
         IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
                 pw, RESPONSE_CHARSET, comboGridComponent, componentClientId);
 
-        ComboGridRenderer.ComboGridRenderContext tableContext = (ComboGridRenderContext) comboGridRenderer
+        DataGridRenderContext tableContext = comboGridRenderer
                 .createTableContext(processContext, jsWriter
                         .getJavaScriptRenderContext(), comboGridComponent, 0,
                         -1, null, filterExpression, null, null);

@@ -5,7 +5,7 @@
 
 /**
  * 
- * @class f_keyEntry extends f_textEntry, fa_commands, fa_readOnly, fa_editable, fa_clientValidatorParameters
+ * @class f_keyEntry extends f_textEntry, fa_commands, fa_readOnly, fa_editable, fa_clientValidatorParameters, fa_filterProperties
  * @author Olivier Oeuillot
  * @version $Revision$ $Date$
  */
@@ -16,11 +16,6 @@ var __statics = {
 	 * @field private static final number
 	 */
 	_UNLIMITED_TEXT_SIZE: 999999,
-	
-	/**
-	 * @field private static final String
-	 */
-	_INPUT_ID_SUFFIX: "::input",
 
 	/**
 	 * @field private static final number
@@ -72,7 +67,7 @@ var __members = {
 		this._valueFormat=f_core.GetAttribute(this, "v:valueFormat");
 		this._forLabel=f_core.GetAttribute(this, "v:forLabel");
 		this._valueFormatLabel=f_core.GetAttribute(this, "v:valueFormatLabel");
-		this._noValueFormatLabel=f_core.GetAttribute(this, "v:noValueFormatLabel");
+		this._noValueFormatLabel=f_core.GetAttribute(this, "v:noValueFormatLabel", "");
 		
 		this._filtred=true;
 		
@@ -229,11 +224,8 @@ var __members = {
 		if (this._keyErrored) {
 			csuffix+="_error";
 		}
-		
+	
 		var componentClassName=this.f_computeStyleClass(csuffix);
-		if (this.className!=componentClassName) {
-			this.className=componentClassName;
-		}
 
 		// Le champ INPUT
 
@@ -252,21 +244,22 @@ var __members = {
 		}	
 		
 		var input=this.f_getInput();
-		if (!input) {
+		if (!input || this==input) {
+			componentClassName+=" "+className;
+			
+			if (this.className!=componentClassName) {
+				this.className=componentClassName;
+			}
 			return;
 		}
-		
+
+		if (this.className!=componentClassName) {
+			this.className=componentClassName;
+		}
+
 		if (input.className!=className) {
 			input.className=className;
 		}		
-	},
-	/**
-	 * @method private
-	 * @param f_event evt
-	 * @return boolean
-	 */
-	f_initializeInput: function() {
-		return this.ownerDocument.getElementById(this.id+f_keyEntry._INPUT_ID_SUFFIX);
 	},
 	/**
 	 * @method protected
@@ -434,7 +427,7 @@ var __members = {
 			this._selectedValue="";
 			this._cancelVerification();
 			if(this._forLabel){
-				var labelComponent = f_core.GetElementById(this._forLabel,document);
+				var labelComponent = f_core.GetElementById(this._forLabel);
 				if (labelComponent) {
 					labelComponent.f_setText(this._noValueFormatLabel);
 				}
@@ -449,7 +442,7 @@ var __members = {
 		this._selectedValue=value;
 		this._inputValue=value;
 		if(this._forLabel){
-			var labelComponent = f_core.GetElementById(this._forLabel,document);
+			var labelComponent = f_core.GetElementById(this._forLabel);
 			if (labelComponent) {
 				labelComponent.f_setText(f_core.FormatMessage(this._valueFormatLabel,rowValues));
 			}
@@ -541,6 +534,13 @@ var __members = {
 		this._inputValue=inputValue;
 		if (inputValue && !this._selectedValue && this.f_isEditable() && !this.f_isReadOnly()) {
 			this._verifyKey(inputValue);
+		}
+		
+		if (!inputValue && this._forLabel){
+			var labelComponent = f_core.GetElementById(this._forLabel);
+			if (labelComponent) {
+				labelComponent.f_setText(this._noValueFormatLabel);
+			}
 		}
 		
 		if (!inputValue && this._emptyMessage) {
@@ -792,12 +792,17 @@ var __members = {
 	 * @method hidden
 	 */
 	f_setInteractiveShow: function(interactiveComponentId) {		
+	},
+	
+	fa_cancelFilterRequest: function() {
+	},
+	fa_updateFilterProperties: function() {		
 	}
 }
 
 new f_class("f_keyEntry", {
 	extend: f_textEntry,
-	aspects: [ fa_commands, fa_readOnly, fa_editable, fa_clientValidatorParameters ],
+	aspects: [ fa_commands, fa_readOnly, fa_editable, fa_clientValidatorParameters, fa_filterProperties ],
 	statics: __statics,
 	members: __members
 });

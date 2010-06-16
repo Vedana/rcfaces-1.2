@@ -4,7 +4,7 @@
 
 /**
  * 
- * @aspect public abstract fa_dataGridPopup extends fa_filterProperties
+ * @aspect public abstract fa_dataGridPopup 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -888,12 +888,6 @@ var __members = {
 
 		// Filtrer la valeur
 		this.f_openDataGridPopup(null, text);
-	},
-	
-
-	fa_cancelFilterRequest: function() {
-	},
-	fa_updateFilterProperties: function() {		
 	},
 
 	/**

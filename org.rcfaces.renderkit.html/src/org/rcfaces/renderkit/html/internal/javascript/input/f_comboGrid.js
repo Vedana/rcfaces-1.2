@@ -11,6 +11,11 @@
  */
  
 var __statics = {
+	
+	/**
+	 * @field private static final String
+	 */
+	_INPUT_ID_SUFFIX: "::input",
 
 	/**
 	 * @field private static final String
@@ -148,7 +153,14 @@ var __members = {
 		
 		this.f_super(arguments);
 	},
-
+	/**
+	 * @method private
+	 * @param f_event evt
+	 * @return boolean
+	 */
+	f_initializeInput: function() {
+		return this.ownerDocument.getElementById(this.id+f_comboGrid._INPUT_ID_SUFFIX);
+	},
 	
 	/**
 	 * @method private

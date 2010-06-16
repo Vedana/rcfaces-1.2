@@ -280,7 +280,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         htmlWriter.endComponent();
     }
 
-    protected final boolean needAjaxJavaScriptClasses(IHtmlWriter writer,
+    protected boolean needAjaxJavaScriptClasses(IHtmlWriter writer,
             IGridComponent dataGridComponent) {
         return true;
     }
@@ -510,7 +510,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         return ret.toString();
     }
 
-    protected final UIColumn getColumn(KeyEntryComponent comboGridComponent,
+    protected UIColumn getColumn(KeyEntryComponent comboGridComponent,
             String valueColumnId) {
 
         if (valueColumnId == null) {
@@ -557,17 +557,17 @@ public class KeyEntryRenderer extends DataGridRenderer {
         return htmlWriter;
     }
 
-    protected final void encodeJsBodyRows(IJavaScriptWriter jsWriter,
+    protected void encodeJsBodyRows(IJavaScriptWriter jsWriter,
             AbstractGridRenderContext tableContext) {
         // On génère rien
     }
 
-    protected final void encodeBodyTableEnd(IHtmlWriter htmlWriter,
+    protected void encodeBodyTableEnd(IHtmlWriter htmlWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
         // On ferme pas les DIV
     }
 
-    public final String getComponentStyleClassName(IHtmlWriter htmlWriter) {
+    public String getComponentStyleClassName(IHtmlWriter htmlWriter) {
         if (isDataGridRenderer(htmlWriter)) {
             return super.getComponentStyleClassName(htmlWriter);
         }
@@ -575,12 +575,12 @@ public class KeyEntryRenderer extends DataGridRenderer {
         return getJavaScriptClassName();
     }
 
-    protected final boolean isDataGridRenderer(IHtmlWriter htmlWriter) {
+    protected boolean isDataGridRenderer(IHtmlWriter htmlWriter) {
         return Boolean.TRUE.equals(htmlWriter.getComponentRenderContext()
                 .getAttribute(GRID_HTML_CONTENT));
     }
 
-    protected final UIColumn getRowValueColumn(IGridComponent dg) {
+    protected UIColumn getRowValueColumn(IGridComponent dg) {
         KeyEntryComponent dataGridComponent = (KeyEntryComponent) dg;
 
         String valueColumnId = dataGridComponent.getValueColumnId();
@@ -601,13 +601,11 @@ public class KeyEntryRenderer extends DataGridRenderer {
         return null;
     }
 
-    protected final void encodeJsColumns(IJavaScriptWriter htmlWriter,
+    protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
             AbstractGridRenderContext gridRenderContext) throws WriterException {
-        encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES
-                | GENERATE_CELL_TEXT | GENERATE_CELL_WIDTH);
     }
 
-    public final void encodeRowByKey(IJavaScriptWriter jsWriter,
+    public void encodeRowByKey(IJavaScriptWriter jsWriter,
             DataGridRenderContext tableContext) throws WriterException {
 
         FacesContext facesContext = jsWriter.getFacesContext();
@@ -711,7 +709,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         objWriter.end().writeln(");");
     }
 
-    protected final void decode(IRequestContext context, UIComponent component,
+    protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {
         super.decode(context, component, componentData);
 
@@ -740,7 +738,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
     }
 
-    protected final void addUnlockProperties(Set unlockedProperties) {
+    protected void addUnlockProperties(Set unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
         unlockedProperties.add("selectedValue");

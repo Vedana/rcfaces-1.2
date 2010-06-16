@@ -570,6 +570,12 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         return clientId + INPUT_ID_SUFFIX;
     }
 
+    protected void encodeJsColumns(IJavaScriptWriter htmlWriter,
+            AbstractGridRenderContext gridRenderContext) throws WriterException {
+        encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES
+                | GENERATE_CELL_TEXT | GENERATE_CELL_WIDTH);
+    }
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
