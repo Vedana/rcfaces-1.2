@@ -53,8 +53,11 @@
 .f_scheduler_column_header {
 	border-right: 0;
 }
+.f_scheduler_row_header_label {
+	margin: 0 5px 0 5px;
+}
 
-.f_scheduler_column_header LABEL {
+.f_scheduler_column_header_label {
 	margin: 0 5px 0 5px;
 	vertical-align: middle;
 	background-color: transparent;

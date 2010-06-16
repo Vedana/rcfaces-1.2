@@ -29,15 +29,16 @@ var __statics = {
 			return false;
 		}
 		
-		var period = this._period;
+		var divNode = this;
+		var period = divNode._period;
 		if(!period._selectable){
 			return false;
 		}
-		if(period._hover == true){
+		if(divNode._hover == true){
 			return false;
 		}
-		period._hover=true;
-		scheduler.fa_updateItemStyle(period);
+		divNode._hover=true;
+		scheduler.fa_updateElementStyle(divNode);
 		return true;
 	},
 
@@ -54,13 +55,40 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		var period = this._period;
+		var divNode = this;
+		//var period = divNode._period;
 
-		if(period._hover == false){
+		if(divNode._hover == false){
 			return false;
 		}
-		period._hover=false;
-		scheduler.fa_updateItemStyle(period);
+		divNode._hover=false;
+		scheduler.fa_updateElementStyle(divNode);
+		return true;
+	},
+	
+	/**
+	 * @method private static 
+	 * @param Event
+	 * @return boolean
+	 * @context object:scheduler
+	 */
+	_OnPeriodMouseDown: function(evt) {
+		var scheduler=this._scheduler;
+		if (!evt) {
+			evt=f_core.GetJsEvent(this);
+		}
+		if (scheduler.f_getEventLocked(evt)) {
+			return false;
+		}
+		var divNode = this;
+		var period = divNode._period;
+		if(!period._selectable){
+			return false;
+		}
+		
+		var selection=fa_selectionManager.ComputeMouseSelection(evt);
+		scheduler.f_moveCursor(divNode, true, evt, selection);
+		
 		return true;
 	}
 
@@ -70,19 +98,18 @@ var __members = {
 
 	f_scheduler : function() {
 		this.f_super(arguments);
+		this._selectionCardinality=fa_cardinality.OPTIONAL_CARDINALITY;
 	},
 
 	f_finalize : function() {
 
 		this.f_super(arguments);
-		// this._dateBegin=undefined;
-		// this._top=undefined;
-		// this._left=undefined;
-		// this._minPerPx=undefined;
-		// this._columnWidth=undefined;
+		
 	},
 
 	f_addPeriod : function(item) {
+		item._begin = f_core.DeserializeDate(item._begin);
+		item._end = f_core.DeserializeDate(item._end);
 		this.f_addItem(this, item);
 	},
 
@@ -111,17 +138,17 @@ var __members = {
 			if (!period._begin || !period._end) {
 				continue;
 			}
-			var begin = f_core.DeserializeDate(period._begin);
-			var end = f_core.DeserializeDate(period._end);
+			var begin = period._begin;
+			var end = period._end;
 			var periodeDay = begin.getDay();
 			if (begin.getDate() >= dateBegin.getDate()
 					&& begin.getDate() <= (dateBegin.getDate() + (columnNumber - 1))) {
 
-				var minutesPerdiodBegin = period._minutesBegin;
+				var minutesPerdiodBegin = begin.getHours()*60+begin.getMinutes();
 				if (minutesPerdiodBegin < minutesDayBegin){
 					minutesPerdiodBegin = minutesDayBegin;
 				}
-				var minutesPerdiodEnd = period._minutesEnd;
+				var minutesPerdiodEnd = end.getHours()*60+end.getMinutes();
 				if (minutesPerdiodEnd > minutesDayEnd){
 					minutesPerdiodEnd = minutesDayEnd;
 				}
@@ -144,21 +171,21 @@ var __members = {
 					cssTop : top + "px",
 					cssLeft : left + "px",
 					cssWidth : width + "px",
-					cssHeight : height + "px"
-
+					cssHeight : height + "px",
+					title : period._toolTip
 				});
 				period._divNode = divNode;
 				
 				
 				var labelNode = f_core.CreateElement(divNode, "label", {
-					textnode : period._label
+					textnode : period._label,
+					className : period._periodStyle+"_label"
 
 				});
 				period._labelNode = labelNode;
 				divNode._period = period;
 				divNode._scheduler = this;
-				//divNode.onmousedown=  f_setSelection(fa_getElementValue(period), true);
-				//divNode.onmouseup=f_scheduler._OnPeriodMouseUp;
+				divNode.onmousedown= f_scheduler._OnPeriodMouseDown;
 				divNode.onmouseover=f_scheduler._OnPeriodMouseOver;
 				divNode.onmouseout=f_scheduler._OnPeriodMouseOut;
 			}
@@ -166,55 +193,117 @@ var __members = {
 
 	},
 	
+	
+	/**
+	 * @method public
+	 * @param Object
+	 * @return Date
+	 */
+	f_getItemDateBegin: function(period) {
+		return   period._begin;
+	},
+	
+	/**
+	 * @method public
+	 * @param Object
+	 * @return Date
+	 */
+	f_getItemDateEnd: function(period) {
+		return period._end;
+	},
+	
 	/**
 	 * @method abstract protected
 	 * @return void
 	 */
-	fa_updateItemStyle: function(period) {
+	fa_showElement: function(divNode){
+	
+	},
+	
+	/**
+	 * @method abstract protected
+	 * @return boolean
+	 */
+	
+	fa_isElementDisabled: function(divNode) {
+		return false;
+	},
+	
+	
+	/**
+	 * @method abstract protected
+	 * @return void
+	 */
+	fa_updateElementStyle: function(divNode) {
+		var period = divNode._period;
 		var style = f_scheduler._PERIOD_STYLE;
 		var periodStyle;
 		if (period._periodStyle){
 			periodStyle  = period._periodStyle;
 		}
-		if(period._hover){
+		if (periodStyle) {
+			style += " "+periodStyle;
+		}
+		if(divNode._hover){
 			style += " "+style+"_over"; 
 			if (periodStyle){
 				periodStyle += " "+periodStyle+"_over";
 			}
 		}
 		
-		if (periodStyle) {
-			style += " "+periodStyle;
+		if (divNode.className!=style) {
+			divNode.className=style;
 		}
 		
-		
-//		var component=this.f_getUIItem(period);
-//		
-//		if (component.className!=style) {
-//			component.className=style;
-//		}
-		
 	},
-	
 	
 	/**
-	 * @method protected abstract
+	 * @method abstract protected
+	 * @return item
+	 */
+	fa_getElementItem: function(divNode) {
+		return divNode._period;
+	},
+	
+	/**
+	 * @method abstract protected
 	 * @return void
 	 */
-	f_setProperty:function(period) {
-		
+	fa_updateItemStyle: function(period) {
+		this.fa_updateElmentStyle(period._divNode);
 	},
+	
 	/**
 	 * @method protected abstract
 	 * @return void
 	 */
 
-	fa_destroyItems : function() {
-		this._items = undefined;
+	fa_destroyItems : function(items) {
+		for(var i=0;i<items.length;i++) {
+			var item=items[i];
+			this.f_destroyItem(item);
+		}
+	},	
+	/**
+	 * @method protected
+	 * @param Object uiItem
+	 * @return void
+	 */
+	 f_destroyItem: function(item) {
+		var component=item._divNode;
+		item._divNode=undefined;
+		item._labelNode= undefined;
+		component.onmouseover=null;		
+		component.onmouseout=null;
+		component.onmousedown=null;
+		component._period = undefined;
+		component._scheduler = undefined;
+	
+		f_core.VerifyProperties(component);
 	},
 	
-	fa_isElementSelected:  function(period) {
-		return period._selected;
+	fa_isElementSelected:  function(divNode) {
+		return divNode._selected;
 	},
 	
 	/**
@@ -223,18 +312,34 @@ var __members = {
 	 * @param boolean selected
 	 * @return void 
 	 */
-	fa_setElementSelected:  function(period, selected) {
-		period._selected = selected;
+	fa_setElementSelected:  function(divNode, selected) {
+		divNode._selected = selected;
 	},
-	
 	
 	/**
 	 * @method protected abstract
 	 * @param any element
 	 * @return Object 
 	 */
-	fa_getElementValue: function(period) {
-		return period._value;
+	fa_getElementValue: function(divNode) {
+		return divNode._period._value;
+	},
+	
+	f_setDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.SELECTION: 
+			return;
+		}
+		
+		this.f_super(arguments, type, target);
+	},
+	f_clearDomEvent: function(type, target) {
+		switch(type) {
+		case f_event.SELECTION: 
+			return;
+		}
+		
+		this.f_super(arguments, type, target);
 	}
 
 }

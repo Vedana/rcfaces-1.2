@@ -129,6 +129,28 @@ var __statics = {
 				
 				ret+=(d>9)?(d):("0"+d);
 				break;
+				
+			case "h":
+				var h = date.getHours();
+				if (nb<2) { // d
+					ret+=h;
+					break;
+				}
+				
+				ret+=(h>9)?(h):("0"+h);
+				
+				break;
+				
+			case "m":
+				var m = date.getMinutes();
+				if (nb<2) { // d
+					ret+=m;
+					break;
+				}
+				
+				ret+=(m>9)?(m):("0"+m);
+				
+				break;
 	
 			case "E":
 				var e=date.getDay();

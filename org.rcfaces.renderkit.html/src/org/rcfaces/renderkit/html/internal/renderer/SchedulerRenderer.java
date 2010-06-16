@@ -21,6 +21,7 @@ import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.Time;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
@@ -299,9 +300,19 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			htmlWriter.writeClass(getRowHeaderClassName(htmlWriter));
 
 			htmlWriter.startElement(IHtmlWriter.LABEL);
-			htmlWriter.writeText(String.valueOf(hourBegin / 60) + "h30");
+			htmlWriter.writeClass(getRowHeaderClassName(htmlWriter)+"_label");
+			String hourLab = String.valueOf(hourBegin/ 60);
+			if (hourBegin/60 < 10 ){
+				hourLab = "0"+hourBegin/60;
+			}
+			htmlWriter.writeText(hourLab+ "h30");
 			htmlWriter.endElement(IHtmlWriter.LABEL);
-
+			
+			htmlWriter.startElement(IHtmlWriter.IMG);
+			htmlWriter.writeClass("pe_sheduler_quart");
+			htmlWriter.writeSrc(computeBlankImageURL(htmlWriter));
+			htmlWriter.endElement(IHtmlWriter.IMG);
+			
 			htmlWriter.endElement(IHtmlWriter.DIV);
 
 			hourBegin += 30;
@@ -331,7 +342,12 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			}
 
 			htmlWriter.startElement(IHtmlWriter.LABEL);
-			htmlWriter.writeText(String.valueOf(hourBegin / 60 + i) + "h00");
+			htmlWriter.writeClass(getRowHeaderClassName(htmlWriter)+"_label");
+			String hourLab = String.valueOf(hourBegin/ 60 +i);
+			if ((hourBegin/60 +i) < 10 ){
+				hourLab = "0"+(hourBegin/60+i);
+			}
+			htmlWriter.writeText(hourLab+ "h00");
 			htmlWriter.endElement(IHtmlWriter.LABEL);
 			htmlWriter.endElement(IHtmlWriter.DIV);
 		}
@@ -347,7 +363,12 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			htmlWriter.writeClass(getRowHeaderClassName(htmlWriter));
 
 			htmlWriter.startElement(IHtmlWriter.LABEL);
-			htmlWriter.writeText(String.valueOf(hourEnd / 60) + "h00");
+			htmlWriter.writeClass(getRowHeaderClassName(htmlWriter)+"_label");
+			String hourLab = String.valueOf(hourBegin/ 60 +i);
+			if ((hourBegin/60+i) < 10 ){
+				hourLab = "0"+(hourBegin/60+i);
+			}
+			htmlWriter.writeText(hourLab+ "h00");
 			htmlWriter.endElement(IHtmlWriter.LABEL);
 
 			htmlWriter.endElement(IHtmlWriter.DIV);
@@ -415,6 +436,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			htmlWriter.writeStyle().writeHeightPx(getNorthHeight());
 			htmlWriter.writeStyle().writeLeftPx((int) (columnWidth * i));
 			htmlWriter.startElement(IHtmlWriter.LABEL);
+			if (secondStyle != null)
+			htmlWriter.writeClass(secondStyle+"_label");
 			String label = ((SchedulerColumnComponent) schedulerColumnList
 					.get(i)).getText();
 			// Date dateBegin = schedulerComponent.getDateBegin(facesContext);
@@ -511,15 +534,9 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 				objectLiteralWriter.writeSymbol("_begin").writeString(
 						convertDate(componentCalendar, periodBegin, false));
 				componentCalendar.setTime(periodBegin);
-				objectLiteralWriter.writeSymbol("_minutesBegin").writeInt(
-						componentCalendar.get(Calendar.HOUR_OF_DAY) * 60
-								+ componentCalendar.get(Calendar.MINUTE));
 				objectLiteralWriter.writeSymbol("_end").writeString(
 						convertDate(componentCalendar, periodEnd, false));
 				componentCalendar.setTime(periodEnd);
-				objectLiteralWriter.writeSymbol("_minutesEnd").writeInt(
-						componentCalendar.get(Calendar.HOUR_OF_DAY) * 60
-								+ componentCalendar.get(Calendar.MINUTE));
 				objectLiteralWriter.writeSymbol("_selectable").writeBoolean(selectable);
 				
 				objectLiteralWriter.end();
@@ -581,6 +598,15 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 		HtmlTools.formatDate(date, sb, calendar, onlyDate);
 
 		return sb.toString();
+	}
+	
+	private String computeBlankImageURL(IHtmlWriter writer) {
+
+		IHtmlRenderContext htmlRenderContext = writer
+				.getHtmlComponentRenderContext().getHtmlRenderContext();
+
+		return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
+				AbstractCssRenderer.BLANK_IMAGE_URL, true);
 	}
 
 }

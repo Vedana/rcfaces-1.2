@@ -69,6 +69,7 @@
 		<file name="f_waitingShell.css" />
 		<file name="f_columnSortDialog.css" />
 		<file name="f_columnSortConfigurator.css" />
+		<file name="f_scheduler.css" />
 		<file name="f_shell.css" />
 		<file name="f_shellManager.css" />
 		<file name="f_shellDecorator.css" />
