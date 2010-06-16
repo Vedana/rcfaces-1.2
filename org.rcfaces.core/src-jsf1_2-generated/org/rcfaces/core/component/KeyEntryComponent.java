@@ -7,6 +7,7 @@ import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Arrays;
 import org.rcfaces.core.internal.tools.GridTools;
 import java.util.Set;
@@ -27,6 +28,7 @@ import org.rcfaces.core.component.capability.IRequiredCapability;
 public class KeyEntryComponent extends AbstractGridComponent implements 
 	IEmptyMessageCapability,
 	IEmptyDataMessageCapability,
+	ISelectionEventCapability,
 	IDisabledCapability,
 	IRequiredCapability,
 	IReadOnlyCapability,
@@ -42,7 +44,7 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"editable","emptyDataMessage","suggestionDelayMs","required","disabled","valueFormatLabel","selectedValue","maxTextLength","valueColumnId","rowIndexVar","rowCountVar","filterProperties","valueFormat","border","forLabel","forceValidation","readOnly","labelColumnId","suggestionMinChars","emptyMessage","noValueFormatLabel"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","editable","emptyDataMessage","suggestionDelayMs","required","disabled","valueFormatLabel","selectedValue","maxTextLength","valueColumnId","rowIndexVar","rowCountVar","filterProperties","valueFormat","border","forLabel","forceValidation","readOnly","labelColumnId","suggestionMinChars","emptyMessage","noValueFormatLabel"}));
 	}
 
 	public KeyEntryComponent() {
@@ -114,6 +116,18 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 
 	public void setEmptyDataMessage(java.lang.String emptyDataMessage) {
 		engine.setProperty(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
+	}
+
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
 	public boolean isDisabled() {

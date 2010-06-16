@@ -44,10 +44,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression initListeners;
-	private ValueExpression showSummary;
-	private ValueExpression margins;
-	private ValueExpression showDetail;
 	private ValueExpression forVal;
+	private ValueExpression showDetail;
+	private ValueExpression margins;
+	private ValueExpression showSummary;
 	public final void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
@@ -152,20 +152,20 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
-	public final void setShowSummary(ValueExpression showSummary) {
-		this.showSummary = showSummary;
-	}
-
-	public final void setMargins(ValueExpression margins) {
-		this.margins = margins;
+	public final void setFor(ValueExpression forVal) {
+		this.forVal = forVal;
 	}
 
 	public final void setShowDetail(ValueExpression showDetail) {
 		this.showDetail = showDetail;
 	}
 
-	public final void setFor(ValueExpression forVal) {
-		this.forVal = forVal;
+	public final void setMargins(ValueExpression margins) {
+		this.margins = margins;
+	}
+
+	public final void setShowSummary(ValueExpression showSummary) {
+		this.showSummary = showSummary;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -190,10 +190,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
-			LOG.debug("  showSummary='"+showSummary+"'");
-			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  showDetail='"+showDetail+"'");
 			LOG.debug("  forVal='"+forVal+"'");
+			LOG.debug("  showDetail='"+showDetail+"'");
+			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  showSummary='"+showSummary+"'");
 		}
 		if ((uiComponent instanceof AbstractMessageComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -411,20 +411,13 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
-		if (showSummary != null) {
-			if (showSummary.isLiteralText()==false) {
-				component.setValueExpression(Properties.SHOW_SUMMARY, showSummary);
+		if (forVal != null) {
+			if (forVal.isLiteralText()==false) {
+				component.setValueExpression(Properties.FOR, forVal);
 
 			} else {
-				component.setShowSummary(getBool(showSummary.getExpressionString()));
+				component.setFor(forVal.getExpressionString());
 			}
-		}
-
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
 		}
 
 		if (showDetail != null) {
@@ -436,12 +429,19 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (forVal != null) {
-			if (forVal.isLiteralText()==false) {
-				component.setValueExpression(Properties.FOR, forVal);
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins.getExpressionString());
+		}
+
+		if (showSummary != null) {
+			if (showSummary.isLiteralText()==false) {
+				component.setValueExpression(Properties.SHOW_SUMMARY, showSummary);
 
 			} else {
-				component.setFor(forVal.getExpressionString());
+				component.setShowSummary(getBool(showSummary.getExpressionString()));
 			}
 		}
 	}
@@ -473,10 +473,10 @@ public abstract class AbstractMessageTag extends CameliaTag implements Tag {
 		waiRole = null;
 		propertyChangeListeners = null;
 		initListeners = null;
-		showSummary = null;
-		margins = null;
-		showDetail = null;
 		forVal = null;
+		showDetail = null;
+		margins = null;
+		showSummary = null;
 
 		super.release();
 	}

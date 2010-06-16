@@ -24,13 +24,12 @@ import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapabi
 import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.Set;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.model.ISortedComponent;
@@ -38,7 +37,6 @@ import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.ComboColumnComponent;
 
 public class ComboGridComponent extends KeyEntryComponent implements 
-	ISelectionEventCapability,
 	IAdditionalInformationEventCapability,
 	IAdditionalInformationValuesCapability,
 	IClientAdditionalInformationFullStateCapability,
@@ -59,7 +57,7 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(KeyEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","selectionListener","paged","searchFieldVisible","pagerStyleClass","clientAdditionalInformationFullState","message","additionalInformationCardinality","rowStyleClass","headerVisible","additionalInformationValues","pagerLookId","manyResultsMessage","oneResultMessage","filterProperties","popupWidth","zeroResultMessage","additionalInformationListener","gridStyleClass","popupStyleClass","gridLookId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","paged","searchFieldVisible","pagerStyleClass","clientAdditionalInformationFullState","message","additionalInformationCardinality","rowStyleClass","headerVisible","additionalInformationValues","pagerLookId","manyResultsMessage","oneResultMessage","filterProperties","popupWidth","zeroResultMessage","additionalInformationListener","gridStyleClass","popupStyleClass","gridLookId"}));
 	}
 
 	public ComboGridComponent() {
@@ -251,18 +249,6 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 				AdditionalInformationTools.hideAll(null, this);
 			
-	}
-
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
 	}
 
 	public final void addAdditionalInformationListener(org.rcfaces.core.event.IAdditionalInformationListener listener) {

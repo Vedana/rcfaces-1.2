@@ -6239,12 +6239,14 @@ Executed when a component's property is changed (by javascript).
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the current value of the component.
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
-			<name>value</name>
+			<name>rows</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.Object</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6259,14 +6261,14 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
-			<name>rows</name>
+			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>int</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -6281,14 +6283,12 @@ A number identifying the row to be displayed at the top of the component.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+A string value holding the current value of the component.
 ]]></description>
-			<name>var</name>
+			<name>value</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>java.lang.Object</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7141,12 +7141,14 @@ Executed when a component's property is changed (by javascript).
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the current value of the component.
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
-			<name>value</name>
+			<name>rows</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.Object</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7161,14 +7163,14 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
-			<name>rows</name>
+			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>int</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7183,14 +7185,12 @@ A number identifying the row to be displayed at the top of the component.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+A string value holding the current value of the component.
 ]]></description>
-			<name>var</name>
+			<name>value</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>java.lang.Object</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7850,12 +7850,12 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
-			<name>margins</name>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7865,6 +7865,16 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -7884,16 +7894,6 @@ An int value specifying the number of rows to display, starting with the one ide
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string containing the message shown when there is no result.
 ]]></description>
 			<name>emptyMessage</name>
@@ -7905,6 +7905,19 @@ A string containing the message shown when there is no result.
 		<attribute>
 			<name>emptyDataMessage</name>
 			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the component is selected.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>selectionListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
 			</deferred-value>
@@ -8071,19 +8084,6 @@ A string value specifying the name of the variable receiving the index of the cu
 		<attribute>
 			<name>noValueFormatLabel</name>
 			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-Executed when the component is selected.
-		A string that represent a javascript expression to evaluate and eventually a server action to execute.
-		the two parts are separated by a semi-column.
-		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
-		The server action is represented by a binding.
-]]></description>
-			<name>selectionListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
 			</deferred-value>
@@ -8755,12 +8755,12 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
+A number identifying the row to be displayed at the top of the component.
 ]]></description>
-			<name>margins</name>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -8770,6 +8770,16 @@ A string value holding the name of a request-scope attribute under which the mod
           also the current value of the "rowData" property) will be exposed.
 ]]></description>
 			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the margins for the component (compliant to CSS margin).
+]]></description>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -8789,16 +8799,6 @@ An int value specifying the number of rows to display, starting with the one ide
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string containing the message shown when there is no result.
 ]]></description>
 			<name>emptyMessage</name>
@@ -8810,6 +8810,19 @@ A string containing the message shown when there is no result.
 		<attribute>
 			<name>emptyDataMessage</name>
 			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Executed when the component is selected.
+		A string that represent a javascript expression to evaluate and eventually a server action to execute.
+		the two parts are separated by a semi-column.
+		If the javascript evaluation return false (by using the return keyword) the server action is not executed.
+		The server action is represented by a binding.
+]]></description>
+			<name>selectionListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
 			</deferred-value>
@@ -9406,12 +9419,14 @@ Executed when a component's property is changed (by javascript).
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the current value of the component.
+An int value specifying the number of rows to display, starting with the one identified by the
+          "first" property.  If this value is set to zero, all available rows in
+          the underlying data model will be displayed.
 ]]></description>
-			<name>value</name>
+			<name>rows</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.Object</type>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -9426,14 +9441,14 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-An int value specifying the number of rows to display, starting with the one identified by the
-          "first" property.  If this value is set to zero, all available rows in
-          the underlying data model will be displayed.
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
 ]]></description>
-			<name>rows</name>
+			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>int</type>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -9448,14 +9463,12 @@ A number identifying the row to be displayed at the top of the component.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
+A string value holding the current value of the component.
 ]]></description>
-			<name>var</name>
+			<name>value</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
-				<type>java.lang.String</type>
+				<type>java.lang.Object</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -23894,20 +23907,9 @@ Executed when the component is intialized.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
+A component's id that express the link between the two components.
 ]]></description>
-			<name>showSummary</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value specifying the margins for the component (compliant to CSS margin).
-]]></description>
-			<name>margins</name>
+			<name>for</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -23926,12 +23928,23 @@ A boolean value indicating whether the summary portion of displayed messages
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A component's id that express the link between the two components.
+A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
-			<name>for</name>
+			<name>margins</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+]]></description>
+			<name>showSummary</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -25075,6 +25088,17 @@ Executed when the component is intialized.
 		<attribute>
 			<description><![CDATA[
 A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+]]></description>
+			<name>showSummary</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "true".
 ]]></description>
 			<name>showDetail</name>
@@ -25098,17 +25122,6 @@ A string value specifying the margins for the component (compliant to CSS margin
 A boolean value indicating if the component specific messages should be shown or not.
 ]]></description>
 			<name>globalOnly</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "false".
-]]></description>
-			<name>showSummary</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>

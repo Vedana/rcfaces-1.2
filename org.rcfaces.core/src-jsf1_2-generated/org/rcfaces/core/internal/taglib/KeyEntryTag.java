@@ -20,6 +20,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 
 	private ValueExpression emptyMessage;
 	private ValueExpression emptyDataMessage;
+	private ValueExpression selectionListeners;
 	private ValueExpression disabled;
 	private ValueExpression required;
 	private ValueExpression readOnly;
@@ -49,6 +50,10 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 
 	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
 		this.emptyDataMessage = emptyDataMessage;
+	}
+
+	public final void setSelectionListener(ValueExpression selectionListeners) {
+		this.selectionListeners = selectionListeners;
 	}
 
 	public final void setDisabled(ValueExpression disabled) {
@@ -182,6 +187,10 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 			} else {
 				component.setEmptyDataMessage(emptyDataMessage.getExpressionString());
 			}
+		}
+
+		if (selectionListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
 		}
 
 		if (disabled != null) {
@@ -355,6 +364,7 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 	public void release() {
 		emptyMessage = null;
 		emptyDataMessage = null;
+		selectionListeners = null;
 		disabled = null;
 		required = null;
 		readOnly = null;

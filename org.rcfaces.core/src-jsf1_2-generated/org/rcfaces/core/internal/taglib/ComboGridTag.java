@@ -18,7 +18,6 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ComboGridTag.class);
 
-	private ValueExpression selectionListeners;
 	private ValueExpression additionalInformationListeners;
 	private ValueExpression additionalInformationValues;
 	private ValueExpression clientAdditionalInformationFullState;
@@ -40,10 +39,6 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 	private ValueExpression searchFieldVisible;
 	public String getComponentType() {
 		return ComboGridComponent.COMPONENT_TYPE;
-	}
-
-	public final void setSelectionListener(ValueExpression selectionListeners) {
-		this.selectionListeners = selectionListeners;
 	}
 
 	public final void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
@@ -157,10 +152,6 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 
 		ComboGridComponent component = (ComboGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
-
-		if (selectionListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-		}
 
 		if (additionalInformationListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ADDITIONAL_INFORMATION_LISTENER_TYPE, additionalInformationListeners);
@@ -325,7 +316,6 @@ public class ComboGridTag extends KeyEntryTag implements Tag {
 	}
 
 	public void release() {
-		selectionListeners = null;
 		additionalInformationListeners = null;
 		additionalInformationValues = null;
 		clientAdditionalInformationFullState = null;
