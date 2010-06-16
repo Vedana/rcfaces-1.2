@@ -239,6 +239,8 @@ f_classLoader.prototype = {
 			document.body.onmouseover=null;
 		}
 		
+		this._onCompleteIds=undefined; // List<String>
+		this._onMessageIds=undefined; // List<String>
 		this._onInitComponentListeners=undefined; // List<function>
 		this._visibleListeners=undefined; // List<f_component>
 		this._documentCompleteObjects=undefined; // List<Object>
@@ -572,172 +574,179 @@ f_classLoader.prototype = {
 	 * @return void
 	 */
 	f_initializeObjects: function() {
-		if (this._interactiveMode || window._rcfacesDisableInitSearch) {
+		if (this._interactiveMode) {
 			return;
 		}
 	
 		if (this._exiting) {
 			throw "This classloader is exiting ... [initializeObjects]";
 		}
-	
-		var root=this._window.document.body;
-		
-		var lazys=root.getElementsByTagName("v:init");
-		
-		f_core.Debug(f_classLoader, "f_initializeObjects: "+lazys.length+" lazy object(s) found !"+
-			((this._lazyIndex)?"(Current index="+this._lazyIndex+")":""));
-		
-		if (!lazys.length) {
-			return;
-		}
-	
-		var index=this._lazyIndex;
-		if (index===undefined) {
-			index=0;
-		}
-		
-		var components=new Array;
-		
-		var evaluations=new Object;
-		
-		for(;index<lazys.length;) {
-			var component=lazys[index++];
-			
-			this._lazyIndex=index;
-			
-			var requires=f_core.GetAttribute(component, "requiresBundle");
-			if (requires) {
-				var args=requires.split(";");
-				
-				this.f_requiresBundle.apply(args);
-			}
-			
-			var rid=f_core.GetAttribute(component, "rid");
-			if (rid) {
-				components.push(rid, component);
-				continue;
-			}
-			
-			var clz=f_core.GetAttribute(component, "v:class");
-			if (clz) {
-				components.push(component, component);
-				continue;
-			}
-			
-			var fct=f_core.GetAttribute(component, "v:function");
-			if (fct) {
-				var evaluatedFunction=evaluations[fct];
-				if (!evaluatedFunction) {
-					try {
-						evaluatedFunction=f_core.WindowScopeEval(fct)
-	
-					} catch (x) {
-						f_core.Error(f_classLoader, "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
-						continue;
-					}
 
-					if (typeof(evaluatedFunction)!="function") {
-						f_core.Error(f_classLoader, "f_initializeObjects: Invalid type of function '"+fct+"': "+evaluatedFunction);
+		if (!window._rcfacesDisableInitSearch) {
+			var root=this._window.document.body;
+			
+			var lazys=root.getElementsByTagName("v:init");
+			
+			f_core.Debug(f_classLoader, "f_initializeObjects: "+lazys.length+" lazy object(s) found !"+
+				((this._lazyIndex)?"(Current index="+this._lazyIndex+")":""));
+			
+			if (!lazys.length) {
+				return;
+			}
+		
+			var index=this._lazyIndex;
+			if (index===undefined) {
+				index=0;
+			}
+			
+			var components=new Array;
+			
+			var evaluations=new Object;
+			
+			for(;index<lazys.length;) {
+				var component=lazys[index++];
+				
+				this._lazyIndex=index;
+				
+				var requires=f_core.GetAttribute(component, "requiresBundle");
+				if (requires) {
+					var args=requires.split(";");
+					
+					this.f_requiresBundle.apply(args);
+				}
+				
+				var rid=f_core.GetAttribute(component, "rid");
+				if (rid) {
+					components.push(rid, component);
+					continue;
+				}
+				
+				var clz=f_core.GetAttribute(component, "v:class");
+				if (clz) {
+					components.push(component, component);
+					continue;
+				}
+				
+				var fct=f_core.GetAttribute(component, "v:function");
+				if (fct) {
+					var evaluatedFunction=evaluations[fct];
+					if (!evaluatedFunction) {
+						try {
+							evaluatedFunction=f_core.WindowScopeEval(fct)
+		
+						} catch (x) {
+							f_core.Error(f_classLoader, "f_initializeObjects: Failed to evaluate function '"+fct+"'.", x);					
+							continue;
+						}
+	
+						if (typeof(evaluatedFunction)!="function") {
+							f_core.Error(f_classLoader, "f_initializeObjects: Invalid type of function '"+fct+"': "+evaluatedFunction);
+							continue;
+						}
+						
+						evaluations[fct]=evaluatedFunction;
+					}
+									
+					components.push(evaluatedFunction, component);
+					continue;
+				}
+				
+				// C'est donc le frere !
+				var prev=component.previousSibling;
+				for(;prev;prev=prev.previousSibling) {
+					if (prev.nodeType!=f_core.ELEMENT_NODE || !prev.tagName) {
 						continue;
 					}
 					
-					evaluations[fct]=evaluatedFunction;
+					if (prev.tagName.toLowerCase()=="script") {
+						// C'est le cas du premier tag INIT !
+						// ou de requires JS !
+						continue;
+					}
+					
+					var clz=f_core.GetAttribute(prev, "v:class");
+					if (!clz) {
+						f_core.Warn(f_classLoader, "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
+						continue;
+					}
+		
+					break;
 				}
-								
-				components.push(evaluatedFunction, component);
-				continue;
-			}
-			
-			// C'est donc le frere !
-			var prev=component.previousSibling;
-			for(;prev;prev=prev.previousSibling) {
-				if (prev.nodeType!=f_core.ELEMENT_NODE || !prev.tagName) {
+				
+				if (prev) {				
+					components.push(prev, prev);
 					continue;
 				}
 				
-				if (prev.tagName.toLowerCase()=="script") {
-					// C'est le cas du premier tag INIT !
-					// ou de requires JS !
+				var path="";
+				for(var p=component;p;p=p.parentNode) {
+					if (path.length>0) {
+						path=" > "+path;
+					}
+					
+					if (!p.tagName) {
+						continue;
+					}
+					path=p.tagName+((p.id)?("#"+p.id):"")+path;
+				}
+		
+				f_core.Error(f_classLoader, "f_initializeObjects: Unknown lazy component path='"+path+"'.");
+			}
+			
+			var onInitComponentListeners=this._onInitComponentListeners;
+			
+			for(var i=0;i<components.length;) {
+				var obj=components[i++];
+				var node=components[i++];
+			
+				var o;
+				if (typeof(obj)=="function") {
+					try {
+						o = obj.call(this, node);
+					
+					} catch (x) {
+						f_core.Error(f_classLoader, "f_initializeObjects: Failed to initialize object by function '"+obj+"'.", x);
+						continue;
+					}
+		
+				} else {
+					try {
+						o=this.f_init(obj);
+						
+					} catch (x) {
+						f_core.Error(f_classLoader, "f_initializeObjects: Failed to initialize object '"+obj.id+"'.", x);
+						continue;
+					}
+				}
+										
+				if (!o) {
 					continue;
 				}
 				
-				var clz=f_core.GetAttribute(prev, "v:class");
-				if (!clz) {
-					f_core.Warn(f_classLoader, "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
-					continue;
+				var clientDatas=f_core.ParseDataAttribute(node);
+				if (clientDatas) {
+					o._clientDatas=clientDatas;
 				}
-	
-				break;
-			}
+					
+				var completeComponent=o.f_completeComponent;
+				if (typeof(completeComponent)=="function") {
+					try {
+						completeComponent.call(o);
 			
-			if (prev) {				
-				components.push(prev, prev);
-				continue;
-			}
-			
-			var path="";
-			for(var p=component;p;p=p.parentNode) {
-				if (path.length>0) {
-					path=" > "+path;
+					} catch (x) {
+						f_core.Error(f_classLoader, "f_initializeObjects: f_completeComponent throws exception for component '"+o.id+"'.", x);
+					}
 				}
 				
-				if (!p.tagName) {
-					continue;
+				if (onInitComponentListeners) {
+					this._callOnInitComponentListeners(onInitComponentListeners, o);
 				}
-				path=p.tagName+((p.id)?("#"+p.id):"")+path;
 			}
-	
-			f_core.Error(f_classLoader, "f_initializeObjects: Unknown lazy component path='"+path+"'.");
 		}
 		
-		var onInitComponentListeners=this._onInitComponentListeners;
-		
-		for(var i=0;i<components.length;) {
-			var obj=components[i++];
-			var node=components[i++];
-		
-			var o;
-			if (typeof(obj)=="function") {
-				try {
-					o = obj.call(this, node);
-				
-				} catch (x) {
-					f_core.Error(f_classLoader, "f_initializeObjects: Failed to initialize object by function '"+obj+"'.", x);
-					continue;
-				}
-	
-			} else {
-				try {
-					o=this.f_init(obj);
-					
-				} catch (x) {
-					f_core.Error(f_classLoader, "f_initializeObjects: Failed to initialize object '"+obj.id+"'.", x);
-					continue;
-				}
-			}
-									
-			if (!o) {
-				continue;
-			}
-			
-			var clientDatas=f_core.ParseDataAttribute(node);
-			if (clientDatas) {
-				o._clientDatas=clientDatas;
-			}
-				
-			var completeComponent=o.f_completeComponent;
-			if (typeof(completeComponent)=="function") {
-				try {
-					completeComponent.call(o);
-		
-				} catch (x) {
-					f_core.Error(f_classLoader, "f_initializeObjects: f_completeComponent throws exception for component '"+o.id+"'.", x);
-				}
-			}
-			
-			if (onInitComponentListeners) {
-				this._callOnInitComponentListeners(onInitComponentListeners, o);
-			}
+		var onCompleteIds=this._onCompleteIds;
+		if (onCompleteIds) {
+			this.f_verifyOnComplete();
 		}
 	},
 	/**
@@ -775,10 +784,8 @@ f_classLoader.prototype = {
 	 * @param String... ids
 	 * @return void
 	 */
-	f_initIds: function(ids) {
+	f_initOnComplete: function(ids) {
 		 
-		// var onInitComponentListeners=this._onInitComponentListeners;    // A voir ....
-		
 		if (f_core.IsDebugEnabled(f_classLoader)) {
 			var idsLog="";
 			for(var i=0;i<arguments.length;i++) {
@@ -789,21 +796,33 @@ f_classLoader.prototype = {
 				idsLog+=arguments[i];
 			}	
 			
-			f_core.Debug(f_classLoader, "f_initIds: ("+arguments.length+" components) ids="+idsLog);
+			f_core.Debug(f_classLoader, "f_initOnComplete: ("+arguments.length+" components) ids="+idsLog);
+		}
+
+		var onCompleteIds=this._onCompleteIds;
+		if (!onCompleteIds) {
+			onCompleteIds=ids;
+			
+			this._onCompleteIds=onCompleteIds;
+			return;
 		}
 		
+		onCompleteIds.push.apply(onCompleteIds, ids);		
+
+		/*
+		var onInitComponentListeners=this._onInitComponentListeners;
+
 		for(var i=0;i<arguments.length;i++) {
-			var obj=this.f_init(arguments[i], false, true);
+			var obj=this.f_init(arguments[i], false, false);
 			if (!obj) {
 				continue;
-			}
+			}			
 			
-			/* Pas sure !
 			if (onInitComponentListeners) {
 				this._callOnInitComponentListeners(onInitComponentListeners, obj);
 			}
-			*/			
 		}
+		*/
 	},
 	/**
 	 * @method hidden final
@@ -841,6 +860,22 @@ f_classLoader.prototype = {
 		f_core.Info(f_classLoader, "f_verifyOnMessage: initialize "+onMessageIds.length+" components.");
 		
 		this._initializeIds(onMessageIds);
+	},
+	/**
+	 * @method hidden final
+	 * @param HTMLFormElement form
+	 * @return void
+	 */
+	f_verifyOnComplete: function(form) {
+		var onCompleteIds=this._onCompleteIds;
+		if (!onCompleteIds) {
+			return;
+		}
+		this._onCompleteIds=undefined;
+		
+		f_core.Info(f_classLoader, "f_verifyOnComplete: initialize "+onCompleteIds.length+" components.");
+		
+		this._initializeIds(onCompleteIds);
 	},
 	/**
 	 * @method private
