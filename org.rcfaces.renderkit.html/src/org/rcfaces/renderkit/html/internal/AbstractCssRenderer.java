@@ -430,4 +430,13 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             IHtmlComponentRenderContext htmlComponentContext) {
         return true;
     }
+    
+    protected final String computeBlankImageURL(IHtmlWriter writer) {
+
+        IHtmlRenderContext htmlRenderContext = writer
+                .getHtmlComponentRenderContext().getHtmlRenderContext();
+
+        return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
+                AbstractCssRenderer.BLANK_IMAGE_URL, true);
+    }
 }

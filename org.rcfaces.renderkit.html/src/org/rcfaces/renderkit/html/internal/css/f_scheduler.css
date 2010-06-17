@@ -93,3 +93,36 @@
 .f_scheduler_cell_last_column{
 	border-right: 1px solid #666666;
 }
+
+.f_scheduler_primaryTick {
+	position: absolute;
+	background: transparent url("scheduler/row_header_primaryTick.gif") right no-repeat;
+	width: 9px;
+	height: 1px;
+	right: 0;
+}
+
+.f_scheduler_secondaryTick {
+	position: absolute;
+	background: transparent url("scheduler/row_header_secondaryTick.gif") right no-repeat;
+	right: 0;
+	width: 5px;
+	height: 1px;
+}
+
+.f_scheduler_primaryTick_label,
+.f_scheduler_secondaryTick_label {
+	position: absolute;
+	padding-right: 8px;
+	font-size : 5px;
+	color : #999999;
+	right: 0;
+	width: 5px;
+	height: 1px;
+}
+
+.f_scheduler_primaryTick_label {
+	font-size : 8px;
+	padding-right: 20px;
+	padding-top: 15px;
+}

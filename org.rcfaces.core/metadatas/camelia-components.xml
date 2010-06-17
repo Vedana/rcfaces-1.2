@@ -4149,7 +4149,9 @@ Dans le cas d'un mode period !
 			</code>
 		</method>
 		
-		
+		<attribute id="primaryTick" type="int" />
+		<attribute id="secondaryTick" type="int" />
+		<attribute id="showPrimaryTickLabel" type="boolean" />
 		<attribute id="periods" type="java.lang.Object"/>
 		<attribute id="periodBegin" type="java.util.Date"/>
 		<method id="setPeriodBegin(String)" />
