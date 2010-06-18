@@ -130,7 +130,7 @@ var __statics = {
 				ret+=(d>9)?(d):("0"+d);
 				break;
 				
-			case "h":
+			case "H":
 				var h = date.getHours();
 				if (nb<2) { // d
 					ret+=h;
@@ -138,6 +138,49 @@ var __statics = {
 				}
 				
 				ret+=(h>9)?(h):("0"+h);
+				
+				break;
+				
+			case "k":
+				var h = ((date.getHours()+23) % 24)+1;
+				if (nb<2) { // d
+					ret+=h;
+					break;
+				}
+				
+				ret+=(h>9)?(h):("0"+h);
+				
+				break;
+				
+			case "K":
+				var h = (date.getHours() % 12);
+				if (nb<2) { // d
+					ret+=h;
+					break;
+				}
+				
+				ret+=(h>9)?(h):("0"+h);
+				
+				break;
+				
+			case "h":
+				var h = ((date.getHours()+11) % 12)+1;
+				if (nb<2) { // d
+					ret+=h;
+					break;
+				}
+				
+				ret+=(h>9)?(h):("0"+h);
+				
+				break;
+				
+			case "a":
+				var h = date.getHours();
+				if (h<1 || h>12) {
+					ret+="PM";
+					break;
+				}
+				ret+="AM";
 				
 				break;
 				
