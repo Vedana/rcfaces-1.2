@@ -30,6 +30,9 @@ public class SchedulerTag extends CameliaTag implements Tag {
 	private ValueExpression dateBegin;
 	private ValueExpression hourBegin;
 	private ValueExpression hourEnd;
+	private ValueExpression primaryTick;
+	private ValueExpression secondaryTick;
+	private ValueExpression showPrimaryTickLabel;
 	private ValueExpression periods;
 	private ValueExpression periodBegin;
 	private ValueExpression periodEnd;
@@ -91,6 +94,18 @@ public class SchedulerTag extends CameliaTag implements Tag {
 		this.hourEnd = hourEnd;
 	}
 
+	public final void setPrimaryTick(ValueExpression primaryTick) {
+		this.primaryTick = primaryTick;
+	}
+
+	public final void setSecondaryTick(ValueExpression secondaryTick) {
+		this.secondaryTick = secondaryTick;
+	}
+
+	public final void setShowPrimaryTickLabel(ValueExpression showPrimaryTickLabel) {
+		this.showPrimaryTickLabel = showPrimaryTickLabel;
+	}
+
 	public final void setPeriods(ValueExpression periods) {
 		this.periods = periods;
 	}
@@ -143,6 +158,9 @@ public class SchedulerTag extends CameliaTag implements Tag {
 			LOG.debug("  dateBegin='"+dateBegin+"'");
 			LOG.debug("  hourBegin='"+hourBegin+"'");
 			LOG.debug("  hourEnd='"+hourEnd+"'");
+			LOG.debug("  primaryTick='"+primaryTick+"'");
+			LOG.debug("  secondaryTick='"+secondaryTick+"'");
+			LOG.debug("  showPrimaryTickLabel='"+showPrimaryTickLabel+"'");
 			LOG.debug("  periods='"+periods+"'");
 			LOG.debug("  periodBegin='"+periodBegin+"'");
 			LOG.debug("  periodEnd='"+periodEnd+"'");
@@ -268,6 +286,33 @@ public class SchedulerTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (primaryTick != null) {
+			if (primaryTick.isLiteralText()==false) {
+				component.setValueExpression(Properties.PRIMARY_TICK, primaryTick);
+
+			} else {
+				component.setPrimaryTick(getInt(primaryTick.getExpressionString()));
+			}
+		}
+
+		if (secondaryTick != null) {
+			if (secondaryTick.isLiteralText()==false) {
+				component.setValueExpression(Properties.SECONDARY_TICK, secondaryTick);
+
+			} else {
+				component.setSecondaryTick(getInt(secondaryTick.getExpressionString()));
+			}
+		}
+
+		if (showPrimaryTickLabel != null) {
+			if (showPrimaryTickLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.SHOW_PRIMARY_TICK_LABEL, showPrimaryTickLabel);
+
+			} else {
+				component.setShowPrimaryTickLabel(getBool(showPrimaryTickLabel.getExpressionString()));
+			}
+		}
+
 		if (periods != null) {
 			if (periods.isLiteralText()==false) {
 				component.setValueExpression(Properties.PERIODS, periods);
@@ -363,6 +408,9 @@ public class SchedulerTag extends CameliaTag implements Tag {
 		dateBegin = null;
 		hourBegin = null;
 		hourEnd = null;
+		primaryTick = null;
+		secondaryTick = null;
+		showPrimaryTickLabel = null;
 		periods = null;
 		periodBegin = null;
 		periodEnd = null;

@@ -45,7 +45,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalScrollPosition","selectionListener","var","periodEnd","width","periodLabel","horizontalScrollPosition","periodSelectable","literalTimeZone","styleClass","literalLocale","height","periodStyle","immediate","periodBegin","hourEnd","periods","hourBegin","dateBegin","periodValue","periodToolTip"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalScrollPosition","selectionListener","var","periodEnd","width","primaryTick","periodLabel","horizontalScrollPosition","periodSelectable","literalTimeZone","styleClass","literalLocale","height","periodStyle","immediate","periodBegin","hourEnd","periods","hourBegin","dateBegin","showPrimaryTickLabel","secondaryTick","periodValue","periodToolTip"}));
 	}
 
 	public SchedulerComponent() {
@@ -408,6 +408,66 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isHourEndSetted() {
 		return engine.isPropertySetted(Properties.HOUR_END);
+	}
+
+	public int getPrimaryTick() {
+		return getPrimaryTick(null);
+	}
+
+	public int getPrimaryTick(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.PRIMARY_TICK, 0, facesContext);
+	}
+
+	public void setPrimaryTick(int primaryTick) {
+		engine.setProperty(Properties.PRIMARY_TICK, primaryTick);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "primaryTick" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPrimaryTickSetted() {
+		return engine.isPropertySetted(Properties.PRIMARY_TICK);
+	}
+
+	public int getSecondaryTick() {
+		return getSecondaryTick(null);
+	}
+
+	public int getSecondaryTick(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SECONDARY_TICK, 0, facesContext);
+	}
+
+	public void setSecondaryTick(int secondaryTick) {
+		engine.setProperty(Properties.SECONDARY_TICK, secondaryTick);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "secondaryTick" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSecondaryTickSetted() {
+		return engine.isPropertySetted(Properties.SECONDARY_TICK);
+	}
+
+	public boolean isShowPrimaryTickLabel() {
+		return isShowPrimaryTickLabel(null);
+	}
+
+	public boolean isShowPrimaryTickLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_PRIMARY_TICK_LABEL, false, facesContext);
+	}
+
+	public void setShowPrimaryTickLabel(boolean showPrimaryTickLabel) {
+		engine.setProperty(Properties.SHOW_PRIMARY_TICK_LABEL, showPrimaryTickLabel);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showPrimaryTickLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isShowPrimaryTickLabelSetted() {
+		return engine.isPropertySetted(Properties.SHOW_PRIMARY_TICK_LABEL);
 	}
 
 	public Object getPeriods() {
