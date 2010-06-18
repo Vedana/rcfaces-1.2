@@ -71,7 +71,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         }
 
         boolean closable = component.isClosable(facesContext);
-        if (closable == false) {
+        if (closable == true) {
             htmlWriter.writeAttribute("v:closable", closable);
         }
 
