@@ -125,4 +125,6 @@ public interface ICssWriter {
     ICssWriter writeBackgroundColor(String backgroundColor);
 
     ICssWriter writePadding(String padding);
+
+    ICssWriter writePaddingTop(String valueOf);
 }

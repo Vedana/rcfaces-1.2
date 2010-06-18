@@ -58,6 +58,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
     protected static final String OVERFLOW = "overflow";
 
     protected static final String PADDING = "padding";
+    
+    protected static final String PADDING_TOP = "padding-top";
 
     protected static final String POSITION = "position";
 
@@ -584,6 +586,10 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
     public ICssWriter writePadding(String padding) {
         return writeProperty(PADDING, padding, null);
+    }
+    
+    public ICssWriter writePaddingTop(String padding) {
+        return writeProperty(PADDING_TOP, padding, null);
     }
 
     public ICssWriter writeURL(String url) {
