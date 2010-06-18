@@ -80,26 +80,12 @@ public class KeyEntryRenderer extends DataGridRenderer {
         boolean readOnly = comboGridComponent.isReadOnly(facesContext);
         boolean editable = comboGridComponent.isEditable(facesContext);
 
-        ICssStyleClasses cssStyleClasses = getCssStyleClasses(htmlWriter);
-
-        if (disabled) {
-            cssStyleClasses.addSuffix("_disabled");
-
-        } else if (readOnly) {
-            cssStyleClasses.addSuffix("_readOnly");
-        }
-
-        if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
-            cssStyleClasses.addSuffix("_errored");
-        }
-
         htmlWriter.startElement(IHtmlWriter.INPUT);
 
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
 
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
 
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
@@ -154,6 +140,21 @@ public class KeyEntryRenderer extends DataGridRenderer {
                 }
             }
         }
+
+        ICssStyleClasses cssStyleClasses = getCssStyleClasses(htmlWriter);
+
+        if (disabled) {
+            cssStyleClasses.addSuffix("_disabled");
+
+        } else if (readOnly) {
+            cssStyleClasses.addSuffix("_readOnly");
+        }
+
+        if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
+            cssStyleClasses.addSuffix("_errored");
+        }
+
+        writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
 
         if (editable == false) {
             htmlWriter.writeAttribute("v:editable", false);

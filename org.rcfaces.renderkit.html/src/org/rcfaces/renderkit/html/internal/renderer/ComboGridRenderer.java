@@ -74,54 +74,18 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         ComboGridComponent comboGridComponent = (ComboGridComponent) componentRenderContext
                 .getComponent();
 
-        boolean disabled = comboGridComponent.isDisabled(facesContext);
-        boolean readOnly = comboGridComponent.isReadOnly(facesContext);
-        boolean editable = comboGridComponent.isEditable(facesContext);
-
-        ICssStyleClasses cssStyleClasses = getCssStyleClasses(htmlWriter);
-
-        if (disabled) {
-            cssStyleClasses.addSuffix("_disabled");
-
-        } else if (readOnly) {
-            cssStyleClasses.addSuffix("_readOnly");
-        }
-
-        if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
-            cssStyleClasses.addSuffix("_errored");
-        }
-
-        String width = comboGridComponent.getWidth(facesContext);
-
-        int colWidth = -1;
-        if (width != null) {
-            int totalWidth = computeSize(width, 0, 2);
-
-            colWidth = totalWidth - ARROW_IMAGE_WIDTH - 4;
-        }
-
-        htmlWriter.startElement(IHtmlWriter.TABLE);
-        htmlWriter.writeCellPadding(0);
-        htmlWriter.writeCellSpacing(0);
-
-        writeHtmlAttributes(htmlWriter);
-        writeJavaScriptAttributes(htmlWriter);
-        writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
-
         AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
         Map formatValues = new HashMap();
 
         String valueFormat = comboGridComponent.getValueFormat(facesContext);
         if (valueFormat != null) {
-            htmlWriter.writeAttribute("v:valueFormat", valueFormat);
             formatValues.put("valueFormat", valueFormat);
         }
 
         String valueFormatLabel = comboGridComponent
                 .getValueFormatLabel(facesContext);
         if (valueFormatLabel != null) {
-            htmlWriter.writeAttribute("v:valueFormatLabel", valueFormatLabel);
             formatValues.put("valueFormatLabel", valueFormatLabel);
         }
 
@@ -160,6 +124,48 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                     formattedValue = convertedSelectedValue;
                 }
             }
+        }
+
+        boolean disabled = comboGridComponent.isDisabled(facesContext);
+        boolean readOnly = comboGridComponent.isReadOnly(facesContext);
+        boolean editable = comboGridComponent.isEditable(facesContext);
+
+        ICssStyleClasses cssStyleClasses = getCssStyleClasses(htmlWriter);
+
+        if (disabled) {
+            cssStyleClasses.addSuffix("_disabled");
+
+        } else if (readOnly) {
+            cssStyleClasses.addSuffix("_readOnly");
+        }
+
+        if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
+            cssStyleClasses.addSuffix("_errored");
+        }
+
+        String width = comboGridComponent.getWidth(facesContext);
+
+        int colWidth = -1;
+        if (width != null) {
+            int totalWidth = computeSize(width, 0, 2);
+
+            colWidth = totalWidth - ARROW_IMAGE_WIDTH - 4;
+        }
+
+        htmlWriter.startElement(IHtmlWriter.TABLE);
+        htmlWriter.writeCellPadding(0);
+        htmlWriter.writeCellSpacing(0);
+
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
+
+        if (valueFormat != null) {
+            htmlWriter.writeAttribute("v:valueFormat", valueFormat);
+        }
+
+        if (valueFormatLabel != null) {
+            htmlWriter.writeAttribute("v:valueFormatLabel", valueFormatLabel);
         }
 
         int rows = gridRenderContext.getRows();
