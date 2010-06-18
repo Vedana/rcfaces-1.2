@@ -128,7 +128,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			}
 		}
 		if ((columnWidth > 0) == false) {
-			columnWidth = (Integer.parseInt(width) - getWestWidth())
+			columnWidth = (Double.valueOf(width).intValue() - getWestWidth())
 					/ (double) schedulerColumnList.size();
 		}
 
@@ -166,7 +166,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			hourEnd += 30 - e;
 		}
 
-		int eastHeight = Integer.parseInt(height) - getNorthHeight();
+		int eastHeight = Double.valueOf(height).intValue() - getNorthHeight();
 		double minPerPx = (double) eastHeight / (double) (hourEnd - hourBegin);
 
 		htmlWriter.writeAttribute("v:minPerPx", String.valueOf(minPerPx));
