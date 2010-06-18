@@ -34,6 +34,13 @@
 	border-color: #333333;
 }
 
+.f_scheduler_period LABEL {
+	display: block;
+	position: absolute;
+	top: 40%;
+	width: 100%;
+}
+
 .f_scheduler,
 .f_scheduler_north,
 .f_scheduler_west,
@@ -93,7 +100,6 @@
 .f_scheduler_cell_last_column{
 	border-right: 1px solid #666666;
 }
-
 .f_scheduler_primaryTick {
 	position: absolute;
 	background: transparent url("scheduler/row_header_primaryTick.gif") right no-repeat;
