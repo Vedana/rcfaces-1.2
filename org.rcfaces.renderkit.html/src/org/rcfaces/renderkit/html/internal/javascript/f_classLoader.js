@@ -832,6 +832,39 @@ f_classLoader.prototype = {
 	},
 	/**
 	 * @method hidden final
+	 * @param String... ids
+	 * @return void
+	 */
+	f_onInit: function(ids) {
+		 
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var i=0;i<arguments.length;i++) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=arguments[i];
+			}	
+			
+			f_core.Debug(f_classLoader, "f_onInit: ("+arguments.length+" components) ids="+idsLog);
+		}
+
+		var onInitComponentListeners=this._onInitComponentListeners;
+
+		for(var i=0;i<arguments.length;i++) {
+			var obj=this.f_init(arguments[i], false, true);
+			if (!obj) {
+				continue;
+			}			
+			
+			if (onInitComponentListeners) {
+				this._callOnInitComponentListeners(onInitComponentListeners, obj);
+			}
+		}
+	},
+	/**
+	 * @method hidden final
 	 * @param String[] ids
 	 * @return void
 	 */
@@ -1198,7 +1231,7 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden final
 	 * @param Object obj Object or String
-	 * @param optionam boolean ignoreNotFound
+	 * @param optional boolean ignoreNotFound
 	 * @param optional boolean callCompleteComponent
 	 * @return Object
 	 */
