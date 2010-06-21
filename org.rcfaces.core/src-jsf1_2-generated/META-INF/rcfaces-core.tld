@@ -235,6 +235,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -568,6 +575,13 @@ Executed when the component is called.
 			<name>errorListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -1404,6 +1418,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -2023,6 +2044,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -2711,6 +2739,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -3345,6 +3380,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -3922,6 +3964,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -5457,6 +5506,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -6197,6 +6253,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -7102,6 +7165,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -7813,6 +7883,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -8721,6 +8798,13 @@ A string value specifying the management of invisible state on the client.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -9377,6 +9461,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -10252,6 +10343,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -10952,6 +11050,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -11765,6 +11870,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -12477,6 +12589,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -13635,6 +13754,13 @@ A string value specifying the management of invisible state on the client.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -14302,6 +14428,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -15040,6 +15173,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -15638,6 +15778,13 @@ A string value specifying the management of invisible state on the client.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -16205,6 +16352,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -16665,6 +16819,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -17201,6 +17362,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -18089,6 +18257,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -18875,6 +19050,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -19633,6 +19815,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -20372,6 +20561,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -21171,6 +21367,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -21982,6 +22185,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -22848,6 +23058,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -23211,6 +23428,13 @@ A string value specifying the choosen look of the component.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -23420,6 +23644,13 @@ A string value specifying the choosen look of the component.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -23561,6 +23792,13 @@ A string value (as specified by CSS) for the height of the component.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -23870,6 +24108,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -24407,6 +24652,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -25050,6 +25302,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -25786,6 +26045,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -27617,6 +27883,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -28415,6 +28688,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -29178,6 +29458,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -29362,6 +29649,13 @@ Executed when the component is called.
 			<name>errorListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -30048,6 +30342,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -30934,6 +31235,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -31596,6 +31904,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -32485,6 +32800,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -33108,6 +33430,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -33522,6 +33851,13 @@ Executed when the component is called.
 			<name>errorListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -34207,6 +34543,13 @@ A string value specifying the management of invisible state on the client.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -34853,6 +35196,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -35286,6 +35636,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -35896,6 +36253,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -36359,6 +36723,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -36912,6 +37283,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -37480,6 +37858,13 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -38127,6 +38512,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -38867,6 +39259,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -39584,6 +39983,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -40352,6 +40758,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -40753,6 +41166,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -41148,6 +41568,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -41500,6 +41927,13 @@ Executed when the component is called.
 			<name>errorListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -42271,6 +42705,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -42909,6 +43350,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -44059,6 +44507,13 @@ Executed when the component is called.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>waiRole</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
@@ -44991,6 +45446,13 @@ Executed when the component is called.
 			<name>userEventListener</name>
 			<deferred-value>
 				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<name>ariaLevel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>

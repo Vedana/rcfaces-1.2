@@ -21,6 +21,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression userEventListeners;
 	private ValueExpression errorListeners;
+	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression marginBottom;
 	private ValueExpression marginLeft;
@@ -58,6 +59,10 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 	public final void setErrorListener(ValueExpression errorListeners) {
 		this.errorListeners = errorListeners;
+	}
+
+	public final void setAriaLevel(ValueExpression ariaLevel) {
+		this.ariaLevel = ariaLevel;
 	}
 
 	public final void setWaiRole(ValueExpression waiRole) {
@@ -157,6 +162,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 			if (AdditionalInformationComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
+			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
 			LOG.debug("  marginLeft='"+marginLeft+"'");
@@ -199,6 +205,15 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 
 		if (errorListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+		}
+
+		if (ariaLevel != null) {
+			if (ariaLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
+
+			} else {
+				component.setAriaLevel(getInt(ariaLevel.getExpressionString()));
+			}
 		}
 
 		if (waiRole != null) {
@@ -391,6 +406,7 @@ public class AdditionalInformationTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		userEventListeners = null;
 		errorListeners = null;
+		ariaLevel = null;
 		waiRole = null;
 		marginBottom = null;
 		marginLeft = null;

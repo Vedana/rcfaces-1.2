@@ -12,4 +12,8 @@ public interface IWAIRoleCapability {
     String getWaiRole();
 
     void setWaiRole(String role);
+    
+    int getAriaLevel();
+    
+    void setAriaLevel(int ariaLevel);
 }

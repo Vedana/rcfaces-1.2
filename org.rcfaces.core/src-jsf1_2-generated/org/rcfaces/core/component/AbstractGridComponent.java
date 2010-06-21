@@ -84,7 +84,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 private transient String var;
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","partialRendering","visible","y","lookId","marginLeft","marginTop","tabIndex","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","ariaLevel","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","helpURL","marginBottom","partialRendering","visible","y","lookId","marginLeft","marginTop","tabIndex","errorListener","backgroundColor","x"}));
 	}
 
 
@@ -980,6 +980,29 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 
 	public void setHiddenMode(int hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public int getAriaLevel() {
+		return getAriaLevel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLevel() getAriaLevel()} for more details
+	 */
+	public int getAriaLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ARIA_LEVEL,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLevelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LEVEL);
+	}
+
+	public void setAriaLevel(int ariaLevel) {
+		engine.setProperty(Properties.ARIA_LEVEL, ariaLevel);
 	}
 
 	public java.lang.String getWaiRole() {

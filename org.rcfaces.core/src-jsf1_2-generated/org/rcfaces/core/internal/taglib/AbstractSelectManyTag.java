@@ -58,6 +58,7 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 	private ValueExpression immediate;
 	private ValueExpression userEventListeners;
 	private ValueExpression hiddenMode;
+	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression accessKey;
@@ -223,6 +224,10 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 		this.hiddenMode = hiddenMode;
 	}
 
+	public final void setAriaLevel(ValueExpression ariaLevel) {
+		this.ariaLevel = ariaLevel;
+	}
+
 	public final void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
@@ -274,6 +279,7 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
 			LOG.debug("  margins='"+margins+"'");
@@ -595,6 +601,15 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (ariaLevel != null) {
+			if (ariaLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
+
+			} else {
+				component.setAriaLevel(getInt(ariaLevel.getExpressionString()));
+			}
+		}
+
 		if (waiRole != null) {
 			if (waiRole.isLiteralText()==false) {
 				component.setValueExpression(Properties.WAI_ROLE, waiRole);
@@ -675,6 +690,7 @@ public abstract class AbstractSelectManyTag extends CameliaTag implements Tag {
 		immediate = null;
 		userEventListeners = null;
 		hiddenMode = null;
+		ariaLevel = null;
 		waiRole = null;
 		propertyChangeListeners = null;
 		accessKey = null;

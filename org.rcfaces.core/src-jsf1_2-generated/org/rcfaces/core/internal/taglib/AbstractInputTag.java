@@ -57,6 +57,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private ValueExpression textAlignment;
 	private ValueExpression immediate;
 	private ValueExpression userEventListeners;
+	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression hiddenMode;
 	private ValueExpression propertyChangeListeners;
@@ -220,6 +221,10 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		this.userEventListeners = userEventListeners;
 	}
 
+	public final void setAriaLevel(ValueExpression ariaLevel) {
+		this.ariaLevel = ariaLevel;
+	}
+
 	public final void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
@@ -278,6 +283,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			LOG.debug("  partialRendering='"+partialRendering+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  immediate='"+immediate+"'");
+			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
@@ -591,6 +597,15 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
+		if (ariaLevel != null) {
+			if (ariaLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
+
+			} else {
+				component.setAriaLevel(getInt(ariaLevel.getExpressionString()));
+			}
+		}
+
 		if (waiRole != null) {
 			if (waiRole.isLiteralText()==false) {
 				component.setValueExpression(Properties.WAI_ROLE, waiRole);
@@ -688,6 +703,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		textAlignment = null;
 		immediate = null;
 		userEventListeners = null;
+		ariaLevel = null;
 		waiRole = null;
 		hiddenMode = null;
 		propertyChangeListeners = null;

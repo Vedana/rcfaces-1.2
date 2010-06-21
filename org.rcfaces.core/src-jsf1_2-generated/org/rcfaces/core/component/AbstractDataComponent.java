@@ -83,7 +83,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","foregroundColor","helpMessage","styleClass","sortListener","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","value","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","marginBottom","helpURL","partialRendering","visible","y","marginLeft","lookId","marginTop","backgroundColor","errorListener","tabIndex","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","foregroundColor","helpMessage","styleClass","sortListener","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","ariaLevel","value","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","marginBottom","helpURL","partialRendering","visible","y","marginLeft","lookId","marginTop","backgroundColor","errorListener","tabIndex","x"}));
 	}
 
 
@@ -938,6 +938,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public final javax.faces.event.FacesListener [] listUserEventListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IUserEventListener.class);
+	}
+
+	public int getAriaLevel() {
+		return getAriaLevel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLevel() getAriaLevel()} for more details
+	 */
+	public int getAriaLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ARIA_LEVEL,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLevelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LEVEL);
+	}
+
+	public void setAriaLevel(int ariaLevel) {
+		engine.setProperty(Properties.ARIA_LEVEL, ariaLevel);
 	}
 
 	public java.lang.String getWaiRole() {

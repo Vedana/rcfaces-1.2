@@ -50,6 +50,7 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression marginTop;
 	private ValueExpression sortListeners;
 	private ValueExpression userEventListeners;
+	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression hiddenMode;
 	private ValueExpression propertyChangeListeners;
@@ -187,6 +188,10 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.userEventListeners = userEventListeners;
 	}
 
+	public final void setAriaLevel(ValueExpression ariaLevel) {
+		this.ariaLevel = ariaLevel;
+	}
+
 	public final void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
@@ -245,6 +250,7 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  marginLeft='"+marginLeft+"'");
 			LOG.debug("  marginRight='"+marginRight+"'");
 			LOG.debug("  marginTop='"+marginTop+"'");
+			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  value='"+value+"'");
@@ -493,6 +499,15 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.USER_EVENT_LISTENER_TYPE, userEventListeners);
 		}
 
+		if (ariaLevel != null) {
+			if (ariaLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
+
+			} else {
+				component.setAriaLevel(getInt(ariaLevel.getExpressionString()));
+			}
+		}
+
 		if (waiRole != null) {
 			if (waiRole.isLiteralText()==false) {
 				component.setValueExpression(Properties.WAI_ROLE, waiRole);
@@ -601,6 +616,7 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		marginTop = null;
 		sortListeners = null;
 		userEventListeners = null;
+		ariaLevel = null;
 		waiRole = null;
 		hiddenMode = null;
 		propertyChangeListeners = null;

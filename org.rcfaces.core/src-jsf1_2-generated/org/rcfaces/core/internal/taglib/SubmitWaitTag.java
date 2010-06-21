@@ -23,6 +23,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 	private ValueExpression styleClass;
 	private ValueExpression width;
 	private ValueExpression height;
+	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression lookId;
 	private ValueExpression backgroundMode;
@@ -50,6 +51,10 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		this.height = height;
 	}
 
+	public final void setAriaLevel(ValueExpression ariaLevel) {
+		this.ariaLevel = ariaLevel;
+	}
+
 	public final void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
@@ -72,6 +77,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
+			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  lookId='"+lookId+"'");
 			LOG.debug("  backgroundMode='"+backgroundMode+"'");
@@ -133,6 +139,15 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (ariaLevel != null) {
+			if (ariaLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
+
+			} else {
+				component.setAriaLevel(getInt(ariaLevel.getExpressionString()));
+			}
+		}
+
 		if (waiRole != null) {
 			if (waiRole.isLiteralText()==false) {
 				component.setValueExpression(Properties.WAI_ROLE, waiRole);
@@ -167,6 +182,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		styleClass = null;
 		width = null;
 		height = null;
+		ariaLevel = null;
 		waiRole = null;
 		lookId = null;
 		backgroundMode = null;

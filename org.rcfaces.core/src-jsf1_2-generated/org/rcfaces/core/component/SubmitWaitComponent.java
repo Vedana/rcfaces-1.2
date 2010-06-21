@@ -34,7 +34,7 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","width","text","imageURL","height","waiRole","lookId","backgroundMode"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"ariaLevel","styleClass","width","text","imageURL","height","waiRole","lookId","backgroundMode"}));
 	}
 
 	public SubmitWaitComponent() {
@@ -173,6 +173,29 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	public void setHeight(java.lang.String height) {
 		engine.setProperty(Properties.HEIGHT, height);
+	}
+
+	public int getAriaLevel() {
+		return getAriaLevel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLevel() getAriaLevel()} for more details
+	 */
+	public int getAriaLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ARIA_LEVEL,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLevelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LEVEL);
+	}
+
+	public void setAriaLevel(int ariaLevel) {
+		engine.setProperty(Properties.ARIA_LEVEL, ariaLevel);
 	}
 
 	public java.lang.String getWaiRole() {

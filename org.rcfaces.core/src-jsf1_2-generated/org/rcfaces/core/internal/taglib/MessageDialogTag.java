@@ -30,6 +30,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 	private ValueExpression height;
 	private ValueExpression hiddenMode;
 	private ValueExpression lookId;
+	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression selectionListeners;
 	private ValueExpression userEventListeners;
@@ -89,6 +90,10 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		this.lookId = lookId;
 	}
 
+	public final void setAriaLevel(ValueExpression ariaLevel) {
+		this.ariaLevel = ariaLevel;
+	}
+
 	public final void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
@@ -133,6 +138,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  title='"+title+"'");
 			LOG.debug("  defaultValue='"+defaultValue+"'");
@@ -252,6 +258,15 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (ariaLevel != null) {
+			if (ariaLevel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
+
+			} else {
+				component.setAriaLevel(getInt(ariaLevel.getExpressionString()));
+			}
+		}
+
 		if (waiRole != null) {
 			if (waiRole.isLiteralText()==false) {
 				component.setValueExpression(Properties.WAI_ROLE, waiRole);
@@ -319,6 +334,7 @@ public class MessageDialogTag extends CameliaTag implements Tag {
 		height = null;
 		hiddenMode = null;
 		lookId = null;
+		ariaLevel = null;
 		waiRole = null;
 		selectionListeners = null;
 		userEventListeners = null;

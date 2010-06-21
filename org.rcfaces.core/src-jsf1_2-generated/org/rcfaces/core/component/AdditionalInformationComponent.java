@@ -56,7 +56,7 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","scopeSaveValue","marginRight","foregroundColor","loadListener","styleClass","height","backgroundImageVerticalRepeat","margins","initListener","backgroundImageURL","propertyChangeListener","mouseOutListener","waiRole","mouseOverListener","userEventListener","backgroundImageVerticalPosition","marginBottom","scopeVar","backgroundImageHorizontalPosition","backgroundImageHorizontalRepeat","marginLeft","lookId","marginTop","backgroundColor","errorListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","scopeSaveValue","marginRight","foregroundColor","loadListener","styleClass","height","backgroundImageVerticalRepeat","margins","initListener","backgroundImageURL","propertyChangeListener","mouseOutListener","ariaLevel","waiRole","mouseOverListener","userEventListener","backgroundImageVerticalPosition","marginBottom","scopeVar","backgroundImageHorizontalPosition","backgroundImageHorizontalRepeat","marginLeft","lookId","marginTop","backgroundColor","errorListener"}));
 	}
 
 	public AdditionalInformationComponent() {
@@ -109,6 +109,29 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	public final javax.faces.event.FacesListener [] listErrorListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public int getAriaLevel() {
+		return getAriaLevel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLevel() getAriaLevel()} for more details
+	 */
+	public int getAriaLevel(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ARIA_LEVEL,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLevel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLevelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LEVEL);
+	}
+
+	public void setAriaLevel(int ariaLevel) {
+		engine.setProperty(Properties.ARIA_LEVEL, ariaLevel);
 	}
 
 	public java.lang.String getWaiRole() {
