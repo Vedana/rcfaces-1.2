@@ -674,6 +674,9 @@ var __members = {
 			} catch (x) {
 				f_core.Error(f_shell, "f_shell.f_close: Exception when calling return value '"+returnValue+"'.", x);			
 			}
+			
+		} else if (returnValue===false) {
+			this.f_cancelNextShell();
 		}
 	},
 	
