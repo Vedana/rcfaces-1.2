@@ -12,6 +12,8 @@ import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.PeriodClientDataComponent;
 import org.rcfaces.core.component.SchedulerColumnComponent;
 import org.rcfaces.core.component.SchedulerComponent;
@@ -76,6 +78,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 	private static final String PERIODS_ID_SUFFIX = ""
 			+ UINamingContainer.SEPARATOR_CHAR
 			+ UINamingContainer.SEPARATOR_CHAR + "periods";
+	
+	private static final Log LOG = LogFactory.getLog(SchedulerRenderer.class);
 
 	protected String getJavaScriptClassName() {
 		return JavaScriptClasses.SCHEDULER;
@@ -589,7 +593,22 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 
 				Date periodBegin = schedulerComponent
 						.getPeriodBegin(facesContext);
+				componentCalendar.setTime(periodBegin);
+				periodBegin = formatDate(componentCalendar);	
+				
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Scheduler Periode dateBegin ='" + componentCalendar.get(Calendar.HOUR_OF_DAY)+"h"+
+							componentCalendar.get(Calendar.MINUTE), null);
+				}
+				
 				Date periodEnd = schedulerComponent.getPeriodEnd(facesContext);
+				componentCalendar.setTime(periodEnd);
+				periodEnd = formatDate(componentCalendar);	
+				
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Scheduler Periode dateEnd ='" + componentCalendar.get(Calendar.HOUR_OF_DAY)+"h"+
+							componentCalendar.get(Calendar.MINUTE), null);
+				}
 
 				String periodStyle = schedulerComponent.getPeriodStyle();
 
@@ -616,12 +635,14 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 							.writeString(periodStyle);
 				}
 
+				componentCalendar.setTime(periodBegin);
 				objectLiteralWriter.writeSymbol("_begin").writeString(
 						convertDate(componentCalendar, periodBegin, false));
-				componentCalendar.setTime(periodBegin);
+				
+				componentCalendar.setTime(periodEnd);
 				objectLiteralWriter.writeSymbol("_end").writeString(
 						convertDate(componentCalendar, periodEnd, false));
-				componentCalendar.setTime(periodEnd);
+				
 				objectLiteralWriter.writeSymbol("_selectable").writeBoolean(
 						selectable);
 
@@ -665,6 +686,19 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			periods.setRowIndex(-1);
 			requestMap.put(var, oldValue);
 		}
+	}
+	
+	private Date formatDate(Calendar componentCalendar) {
+		if(componentCalendar.getTime() != null) {
+			if(componentCalendar.get(Calendar.SECOND) != 0){
+				componentCalendar.set(Calendar.SECOND,0);
+			}
+			if(componentCalendar.get(Calendar.MILLISECOND) != 0){
+				componentCalendar.set(Calendar.MILLISECOND,0);
+			}
+			return componentCalendar.getTime();
+		}
+		return null;
 	}
 
 	protected int getNorthHeight() {
