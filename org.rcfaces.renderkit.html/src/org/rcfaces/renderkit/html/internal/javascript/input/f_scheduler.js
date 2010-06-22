@@ -144,10 +144,16 @@ var __members = {
 			if (begin.getDate() >= dateBegin.getDate()
 					&& begin.getDate() <= (dateBegin.getDate() + (columnNumber - 1))) {
 
+				
+				f_core.Debug(f_scheduler, "f_scheduler  periodBegin "+
+						begin.getHours()+"h" +begin.getMinutes());
 				var minutesPerdiodBegin = begin.getHours()*60+begin.getMinutes();
 				if (minutesPerdiodBegin < minutesDayBegin){
 					minutesPerdiodBegin = minutesDayBegin;
 				}
+				
+				f_core.Debug(f_scheduler, "f_scheduler periodEnd "+
+						end.getHours()+"h" +end.getMinutes());
 				var minutesPerdiodEnd = end.getHours()*60+end.getMinutes();
 				if (minutesPerdiodEnd > minutesDayEnd){
 					minutesPerdiodEnd = minutesDayEnd;
