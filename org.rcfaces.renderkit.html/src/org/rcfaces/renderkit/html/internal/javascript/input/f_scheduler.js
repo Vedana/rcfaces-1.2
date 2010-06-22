@@ -281,10 +281,9 @@ var __members = {
 	},
 	
 	/**
-	 * @method protected abstract
+	 * @method protected
 	 * @return void
 	 */
-
 	fa_destroyItems : function(items) {
 		for(var i=0;i<items.length;i++) {
 			var item=items[i];
@@ -293,20 +292,24 @@ var __members = {
 	},	
 	/**
 	 * @method protected
-	 * @param Object uiItem
+	 * @param Object item
 	 * @return void
 	 */
 	 f_destroyItem: function(item) {
-		var component=item._divNode;
-		item._divNode=undefined;
 		item._labelNode= undefined;
-		component.onmouseover=null;		
-		component.onmouseout=null;
-		component.onmousedown=null;
-		component._period = undefined;
-		component._scheduler = undefined;
-	
-		f_core.VerifyProperties(component);
+
+		var component=item._divNode;
+		if (component) {
+			item._divNode=undefined;
+			component._period = undefined;
+			component._scheduler = undefined;
+
+			component.onmouseover=null;		
+			component.onmouseout=null;
+			component.onmousedown=null;
+		
+			f_core.VerifyProperties(component);
+		}
 	},
 	
 	fa_isElementSelected:  function(divNode) {
