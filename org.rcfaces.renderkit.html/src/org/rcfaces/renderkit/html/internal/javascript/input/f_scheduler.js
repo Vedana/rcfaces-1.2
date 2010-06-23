@@ -158,11 +158,11 @@ var __members = {
 				if (minutesPerdiodEnd > minutesDayEnd){
 					minutesPerdiodEnd = minutesDayEnd;
 				}
-				var top = (minutesPerdiodBegin - minutesDayBegin) * minPerPx;
+				var top = parseInt((minutesPerdiodBegin - minutesDayBegin) * minPerPx);
 
 				var left = columnWidth * (periodeDay - dayBegin);
-				var height = (minutesPerdiodEnd - minutesPerdiodBegin)
-						* minPerPx - 1;
+				var height = parseInt((minutesPerdiodEnd - minutesPerdiodBegin)
+						* minPerPx - 1);
 				var width = (columnWidth - 1);
 				if (periodeDay - dayBegin == columnNumber - 1) {
 					width -= 1;
