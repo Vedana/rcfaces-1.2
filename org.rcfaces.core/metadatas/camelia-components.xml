@@ -721,7 +721,7 @@
 			<code>
 				return engine.getValue(Properties.VALUE, context);
 			</code>
-		</method> -->
+		</method>-->
 		
 <!--		<propertyValue>text</propertyValue> -->
 	</component>
@@ -940,7 +940,7 @@
 
 		<attribute id="value" type="java.lang.Object" writeComponent="false"/>
 		
-		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/> -->
+		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/>-->
 
 		<method id="setConverter(String)"/>
 		<method id="setConverter(javax.faces.context.FacesContext, String)"/>
@@ -1013,7 +1013,7 @@
 
 		<attribute id="value" type="java.lang.Object" writeComponent="false"/>
 		
-		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/> -->
+		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/>-->
 
 		<method id="setConverter(String)"/>
 		<method id="setConverter(javax.faces.context.FacesContext, String)"/>
@@ -2787,7 +2787,7 @@ Dans le cas d'un mode period !
 			ListTools.deselect(this, item);
 			</code>
 		</method>
-		************************************************************* -->
+		*************************************************************-->
 		
 	</component>
 
@@ -3356,7 +3356,7 @@ Dans le cas d'un mode period !
 		<implements id="javax.faces.component.NamingContainer" />
 <!-- 	<capability id="IPrependIdCapability" default="true" /> -->
 		
-<!--	<method id="getContainerClientId(javax.faces.context.FacesContext)" /> -->		
+<!--	<method id="getContainerClientId(javax.faces.context.FacesContext)" />-->		
 	</component>
 
 	<component id="text" extends="abstractOutput" textBodyContent="true">
@@ -4151,7 +4151,9 @@ Dans le cas d'un mode period !
 		
 		<attribute id="primaryTick" type="int" />
 		<attribute id="secondaryTick" type="int" />
-		<attribute id="showPrimaryTickLabel" type="boolean" />
+		<attribute id="showPrimaryTickLabel" type="boolean" default="true" />
+		<attribute id="showSecondaryTickLabel" type="boolean" default="false" />
+		
 		<attribute id="periods" type="java.lang.Object"/>
 		<attribute id="periodBegin" type="java.util.Date"/>
 		<method id="setPeriodBegin(String)" />
