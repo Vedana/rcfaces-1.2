@@ -121,7 +121,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 				.valueOf(schedulerColumnList.size()));
 
 		String width = schedulerComponent.getWidth(facesContext);
-		double columnWidth = 0;
+		int columnWidth = 0;
 		if (width == null) {
 			columnWidth = DEFAULT_COLUMN_WIDTH;
 			if (schedulerColumnList.size() > 0) {
@@ -132,8 +132,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			}
 		}
 		if ((columnWidth > 0) == false) {
-			columnWidth = (Double.valueOf(width).intValue() - getWestWidth())
-					/ (double) schedulerColumnList.size();
+			columnWidth = (int) ((Double.valueOf(width).intValue() - getWestWidth())
+					/ (double) schedulerColumnList.size());
 		}
 
 		String newWidth = AbstractCssRenderer.computeSizeInPixel(width, 0, 0);
@@ -340,9 +340,9 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			if (secondaryTick != 0) {
 				double nbTick = 30 / secondaryTick;
 				for (int i = 1; i < nbTick; i++) {
-					writeTick(htmlWriter, 30, minPerPx, nbTick, i,
+					writeTick(htmlWriter, 30, minPerPx, nbTick, i, 0,
 							secondaryTick, 30,
-							getsecondaryTickClassName(htmlWriter));
+							getsecondaryTickClassName(htmlWriter),schedulerComponent.isShowSecondaryTickLabel(facesContext));
 				}
 			}
 			htmlWriter.endElement(IHtmlWriter.DIV);
@@ -385,17 +385,23 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			if (primaryTick != 0) {
 				double nbTick = 60 / primaryTick;
 				for (int j = 1; j < nbTick; j++) {
-					writeTick(htmlWriter, 60, minPerPx, nbTick, j, primaryTick,
-							0, getPrimaryTickClassName(htmlWriter));
+					writeTick(htmlWriter, 60, minPerPx, nbTick, j, 0, primaryTick,
+							0, getPrimaryTickClassName(htmlWriter),schedulerComponent.isShowPrimaryTickLabel(facesContext));
 				}
 			}
 
 			if (secondaryTick != 0) {
 				double nbTick = 60 / secondaryTick;
-				for (int j = 1; j < nbTick; j++) {
-					if (primaryTick != 0 && (secondaryTick*j)%primaryTick !=0){
-						writeTick(htmlWriter, 60, minPerPx, nbTick, j,secondaryTick,
-							0, getsecondaryTickClassName(htmlWriter));
+					if (primaryTick != 0 ){
+						int nbPrimary = 60 /primaryTick;
+						int nbSecondInPrimaray = primaryTick /secondaryTick;
+						for (int j = 0; j < nbPrimary; j++) {
+							for (int k = 1; k <=nbSecondInPrimaray; k++) {
+								
+								if((j*primaryTick+k*secondaryTick)%primaryTick!=0 ){
+								writeTick(htmlWriter, 60/nbPrimary, minPerPx, nbSecondInPrimaray, k,1,secondaryTick,
+									j*primaryTick, getsecondaryTickClassName(htmlWriter),schedulerComponent.isShowSecondaryTickLabel(facesContext));
+								}}
 					}
 				}
 			}
@@ -425,8 +431,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			if (secondaryTick != 0) {
 				double nbTick = 30 / secondaryTick;
 				for (int j = 1; j < nbTick; j++) {
-					writeTick(htmlWriter, 30, minPerPx, nbTick, j,secondaryTick,
-							0, getsecondaryTickClassName(htmlWriter));
+					writeTick(htmlWriter, 30, minPerPx, nbTick, j,0,secondaryTick,
+							0, getsecondaryTickClassName(htmlWriter),schedulerComponent.isShowSecondaryTickLabel(facesContext));
 
 				}
 			}
@@ -439,29 +445,35 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 	}
 
 	private void writeTick(IHtmlWriter htmlWriter, int nbMinutes,
-			double minPerPx, double nbTick, int index, int typeTick, int begin,
-			String style) throws WriterException {
+			double minPerPx, double nbTick, int index, int indexInPrimary,int typeTick, int begin,
+			String style, boolean writeLabel) throws WriterException {
 		htmlWriter.startElement(IHtmlWriter.IMG);
 		htmlWriter.writeStyle().writeTop(
-				String.valueOf(((nbMinutes * minPerPx) / nbTick) * index - 1)
+				String.valueOf((((nbMinutes * minPerPx) / nbTick) * index - 1) + begin*minPerPx*indexInPrimary)
 						+ "px");
 		htmlWriter.writeClass(style);
 		htmlWriter.writeSrc(computeBlankImageURL(htmlWriter));
 		htmlWriter.endElement(IHtmlWriter.IMG);
 		
-		if (typeTick != 15) {
-			htmlWriter.startElement(IHtmlWriter.LABEL);
-			htmlWriter.writeStyle()
-					.writeHeightPx(
-							(int) ((nbMinutes * minPerPx) / (nbTick - 1))
-									* (index + 1)
-									- (int) ((nbMinutes * minPerPx) / (nbTick - 1))
-									* index);
-			htmlWriter.writeStyle().writeTopPx(
+		if (writeLabel) {
+			int height = 
+				(int) ((nbMinutes * minPerPx) / (nbTick - 1))
+				* (index + 1)
+				- (int) ((nbMinutes * minPerPx) / (nbTick - 1))
+				* index;
+			
+			htmlWriter.startElement(IHtmlWriter.DIV);
+			htmlWriter.writeStyle().writeTopPx( (int) (begin*minPerPx*indexInPrimary) +
 					(int) ((nbMinutes * minPerPx) / (nbTick - 1)) * (index - 1));
+			htmlWriter.writeStyle().writeHeightPx(height);
+	
+			htmlWriter.writeClass(style + "_div_label");
+			htmlWriter.startElement(IHtmlWriter.LABEL);
+			htmlWriter.writeStyle().writeHeightPx(height);
 			htmlWriter.writeClass(style + "_label");
 			htmlWriter.writeText(String.valueOf(begin + index * typeTick));
 			htmlWriter.endElement(IHtmlWriter.LABEL);
+			htmlWriter.endElement(IHtmlWriter.DIV);
 		}
 	}
 
@@ -609,7 +621,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 					LOG.debug("Scheduler Periode dateEnd ='" + componentCalendar.get(Calendar.HOUR_OF_DAY)+"h"+
 							componentCalendar.get(Calendar.MINUTE), null);
 				}
-
+				
 				String periodStyle = schedulerComponent.getPeriodStyle();
 
 				boolean selectable = schedulerComponent
@@ -634,7 +646,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 					objectLiteralWriter.writeSymbol("_periodStyle")
 							.writeString(periodStyle);
 				}
-
+				
 				componentCalendar.setTime(periodBegin);
 				objectLiteralWriter.writeSymbol("_begin").writeString(
 						convertDate(componentCalendar, periodBegin, false));
@@ -687,7 +699,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 			requestMap.put(var, oldValue);
 		}
 	}
-	
+
 	private Date formatDate(Calendar componentCalendar) {
 		if(componentCalendar.getTime() != null) {
 			if(componentCalendar.get(Calendar.SECOND) != 0){
@@ -700,7 +712,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 		}
 		return null;
 	}
-
+	
 	protected int getNorthHeight() {
 		return NORTH_HEIGHT;
 	}
