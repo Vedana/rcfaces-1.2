@@ -35,10 +35,16 @@
 }
 
 .f_scheduler_period LABEL {
+	display: table-cell;
+	position: relative;
+	vertical-align:middle;
+	width: 100%;
+}
+
+.f_scheduler_period_div_label {
 	display: block;
 	position: absolute;
-	top: 40%;
-	width: 100%;
+	text-align: center;
 }
 
 .f_scheduler,

@@ -172,19 +172,31 @@ var __members = {
 				if (period._periodStyle){
 					style +=" "+period._periodStyle;
 				}
-				var divNode = f_core.CreateElement(div, "div", {
+				
+				var divNode = f_core.CreateElement(div, "a",{
 					className : style,
 					cssTop : top + "px",
 					cssLeft : left + "px",
 					cssWidth : width + "px",
 					cssHeight : height + "px",
+					href : "javascript:void(0)",
 					title : period._toolTip
+					
+					
+				});
+				var divNode2 = f_core.CreateElement(divNode, "div", {
+					className : f_scheduler._PERIOD_STYLE+"_div_lab",
+					cssWidth : width + "px",
+					cssHeight : height + "px"
+					
 				});
 				period._divNode = divNode;
 				
 				
-				var labelNode = f_core.CreateElement(divNode, "label", {
+				var labelNode = f_core.CreateElement(divNode2, "label", {
 					textnode : period._label,
+					cssWidth : width + "px",
+					cssHeight : height + "px",
 					className : period._periodStyle+"_label"
 
 				});
@@ -252,9 +264,9 @@ var __members = {
 			style += " "+periodStyle;
 		}
 		if(divNode._hover){
-			style += " "+style+"_over"; 
+			style += " "+f_scheduler._PERIOD_STYLE+"_over"; 
 			if (periodStyle){
-				periodStyle += " "+periodStyle+"_over";
+				style += " "+periodStyle+"_over";
 			}
 		}
 		
