@@ -162,7 +162,7 @@ var __members = {
 
 				var left = columnWidth * (periodeDay - dayBegin);
 				var height = (minutesPerdiodEnd - minutesPerdiodBegin)
-						* minPerPxs;
+						* minPerPx;
 				var width = (columnWidth - 1);
 				if (periodeDay - dayBegin == columnNumber - 1) {
 					width -= 1;
