@@ -132,6 +132,9 @@ var __members = {
 		var div = this.ownerDocument.getElementById(this.id + "::periods");
 
 		var items = this._items;
+		items.sort(function(p1	,p2){
+			return p1._begin.getTime()-p2._begin.getTime();
+		});
 		for ( var i = 0; i < items.length; i++) {
 			var period = items[i];
 
@@ -173,7 +176,11 @@ var __members = {
 					style +=" "+period._periodStyle;
 				}
 				
-				var divNode = f_core.CreateElement(div, "a",{
+				var divNode = undefined;
+				
+				if(period._selectable) {
+				
+				 divNode = f_core.CreateElement(div, "a",{
 					className : style,
 					cssTop : top + "px",
 					cssLeft : left + "px",
@@ -181,17 +188,27 @@ var __members = {
 					cssHeight : height + "px",
 					href : "javascript:void(0)",
 					title : period._toolTip
-					
-					
 				});
+				 
+				} else {
+					 divNode = f_core.CreateElement(div, "div",{
+						className : style,
+						cssTop : top + "px",
+						cssLeft : left + "px",
+						cssWidth : width + "px",
+						cssHeight : height + "px",
+						title : period._toolTip
+					 });
+				}
+				
 				var divNode2 = f_core.CreateElement(divNode, "div", {
 					className : f_scheduler._PERIOD_STYLE+"_div_lab",
 					cssWidth : width + "px",
 					cssHeight : height + "px"
 					
 				});
-				period._divNode = divNode;
 				
+				period._divNode = divNode;
 				
 				var labelNode = f_core.CreateElement(divNode2, "label", {
 					textnode : period._label,
@@ -203,12 +220,13 @@ var __members = {
 				period._labelNode = labelNode;
 				divNode._period = period;
 				divNode._scheduler = this;
-				divNode.onmousedown= f_scheduler._OnPeriodMouseDown;
+				divNode.onclick = f_scheduler._OnPeriodMouseDown;
 				divNode.onmouseover=f_scheduler._OnPeriodMouseOver;
+				divNode.onfocus =f_scheduler._OnPeriodMouseOver;
 				divNode.onmouseout=f_scheduler._OnPeriodMouseOut;
+				divNode.onblur=f_scheduler._OnPeriodMouseOut;
 			}
 		}
-
 		return this.f_super(arguments);
 	},
 	
@@ -318,7 +336,10 @@ var __members = {
 
 			component.onmouseover=null;		
 			component.onmouseout=null;
-			component.onmousedown=null;
+			component.onclick=null;
+			component.onfocus=null;
+			component.onblur=null;
+			component.onkeypress=null;
 		
 			f_core.VerifyProperties(component);
 		}
