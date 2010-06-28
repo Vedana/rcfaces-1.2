@@ -756,7 +756,7 @@ public class TextEntryRenderer extends AbstractInputRenderer {
             ITaskDescriptor behaviorTaskDescriptor = validatorDescriptor
                     .getBehaviorTask();
             if (behaviorTaskDescriptor != null) {
-                IBehaviorTask behaviorTask = (IBehaviorTask) checkerTaskDescriptor
+                IBehaviorTask behaviorTask = (IBehaviorTask) behaviorTaskDescriptor
                         .getServerTask();
 
                 if (behaviorTask != null) {
@@ -894,47 +894,50 @@ public class TextEntryRenderer extends AbstractInputRenderer {
 
             int i = 0;
 
-            for (; i < cParameters.length; i++) {
-                IParameter parameter = cParameters[i];
+            if (cParameters != null) {
+                for (; i < cParameters.length; i++) {
+                    IParameter parameter = cParameters[i];
 
-                String name;
-                if (i < vParameters.length) {
-                    name = vParameters[i].getName();
+                    String name;
+                    if (i < vParameters.length) {
+                        name = vParameters[i].getName();
 
-                } else {
-                    name = parameter.getName();
+                    } else {
+                        name = parameter.getName();
+                    }
+
+                    if (ALLOCATE_VALIDATOR_PARAMETERS) {
+                        name = jsWriter.allocateString(name);
+                    }
+                    params.add(name);
+
+                    String value = parameter.getValue();
+                    // Value peut etre null !
+                    if (ALLOCATE_VALIDATOR_PARAMETERS) {
+                        value = jsWriter.allocateString(value);
+                    }
+                    params.add(value);
                 }
-
-                if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    name = jsWriter.allocateString(name);
-                }
-                params.add(name);
-
-                String value = parameter.getValue();
-                // Value peut etre null !
-                if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    value = jsWriter.allocateString(value);
-                }
-                params.add(value);
             }
 
-            for (; i < vParameters.length; i++) {
-                IParameter parameter = vParameters[i];
+            if (vParameters != null) {
+                for (; i < vParameters.length; i++) {
+                    IParameter parameter = vParameters[i];
 
-                String name = parameter.getName();
-                if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    name = jsWriter.allocateString(name);
-                }
-                params.add(name);
+                    String name = parameter.getName();
+                    if (ALLOCATE_VALIDATOR_PARAMETERS) {
+                        name = jsWriter.allocateString(name);
+                    }
+                    params.add(name);
 
-                String value = parameter.getValue();
-                // Value peut etre null !
-                if (ALLOCATE_VALIDATOR_PARAMETERS) {
-                    value = jsWriter.allocateString(value);
+                    String value = parameter.getValue();
+                    // Value peut etre null !
+                    if (ALLOCATE_VALIDATOR_PARAMETERS) {
+                        value = jsWriter.allocateString(value);
+                    }
+                    params.add(value);
                 }
-                params.add(value);
             }
-
         }
 
         jsWriter.write("var validator=").writeCall("f_clientValidator",
