@@ -130,8 +130,11 @@ var __statics = {
 	 * @context object:validator
 	 */
 	Filter_card : function(validator, keyCode, keyChar) {
-		return f_clientValidator.Filter_generic(validator, /[0-9\.]/, keyCode,
-				keyChar);
+		var exp = "[0-9\.";
+		var sup = validator.f_getParameter("card.otherChars");
+		exp += f_vb._BuildEscaped(sup) + "]";
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp),
+				keyCode, keyChar);
 	},
 
 	/**
@@ -146,7 +149,10 @@ var __statics = {
 	 * @context object:validator
 	 */
 	Filter_code : function(validator, keyCode, keyChar) {
-		return f_clientValidator.Filter_generic(validator, /[0-9a-zA-Z]/,
+		var exp = "[0-9a-zA-Z";
+		var sup = validator.f_getParameter("code.otherChars");
+		exp += f_vb._BuildEscaped(sup) + "]";
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp),
 				keyCode, keyChar);
 	},
 
@@ -189,8 +195,11 @@ var __statics = {
 	 * @context object:validator
 	 */
 	Filter_digit : function(validator, keyCode, keyChar) {
-		return f_clientValidator.Filter_generic(validator, /[0-9]/, keyCode,
-				keyChar);
+		var exp = "[0-9";
+		var sup = validator.f_getParameter("digit.otherChars");
+		exp += f_vb._BuildEscaped(sup) + "]";
+		return f_clientValidator.Filter_generic(validator, new RegExp(exp),
+				keyCode, keyChar);
 	},
 
 	/**
