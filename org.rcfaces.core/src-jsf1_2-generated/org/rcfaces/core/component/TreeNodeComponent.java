@@ -291,7 +291,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	 * See {@link #getDropEffects() getDropEffects()} for more details
 	 */
 	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
+		return engine.getIntProperty(Properties.DROP_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
 	}
 
 	/**

@@ -45,7 +45,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"verticalScrollPosition","selectionListener","var","periodEnd","width","primaryTick","periodLabel","horizontalScrollPosition","periodSelectable","literalTimeZone","styleClass","literalLocale","height","periodStyle","immediate","periodBegin","hourEnd","periods","hourBegin","dateBegin","showPrimaryTickLabel","secondaryTick","periodValue","periodToolTip"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","width","periodLabel","horizontalScrollPosition","styleClass","height","periods","dateBegin","showPrimaryTickLabel","periodToolTip","verticalScrollPosition","var","primaryTick","periodEnd","periodSelectable","literalTimeZone","literalLocale","immediate","periodStyle","periodBegin","hourEnd","hourBegin","secondaryTick","periodValue","showSecondaryTickLabel"}));
 	}
 
 	public SchedulerComponent() {
@@ -455,7 +455,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	}
 
 	public boolean isShowPrimaryTickLabel(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.SHOW_PRIMARY_TICK_LABEL, false, facesContext);
+		return engine.getBoolProperty(Properties.SHOW_PRIMARY_TICK_LABEL, true, facesContext);
 	}
 
 	public void setShowPrimaryTickLabel(boolean showPrimaryTickLabel) {
@@ -468,6 +468,26 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isShowPrimaryTickLabelSetted() {
 		return engine.isPropertySetted(Properties.SHOW_PRIMARY_TICK_LABEL);
+	}
+
+	public boolean isShowSecondaryTickLabel() {
+		return isShowSecondaryTickLabel(null);
+	}
+
+	public boolean isShowSecondaryTickLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SHOW_SECONDARY_TICK_LABEL, false, facesContext);
+	}
+
+	public void setShowSecondaryTickLabel(boolean showSecondaryTickLabel) {
+		engine.setProperty(Properties.SHOW_SECONDARY_TICK_LABEL, showSecondaryTickLabel);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showSecondaryTickLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isShowSecondaryTickLabelSetted() {
+		return engine.isPropertySetted(Properties.SHOW_SECONDARY_TICK_LABEL);
 	}
 
 	public Object getPeriods() {

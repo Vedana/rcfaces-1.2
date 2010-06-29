@@ -46333,6 +46333,13 @@ Executed when the component is selected.
 			</deferred-value>
 		</attribute>
 		<attribute>
+			<name>showSecondaryTickLabel</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
 			<name>periods</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
