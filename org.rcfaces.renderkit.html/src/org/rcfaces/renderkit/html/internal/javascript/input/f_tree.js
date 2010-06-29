@@ -5,7 +5,7 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
@@ -184,6 +184,9 @@ var __statics = {
 					position: f_popup.MOUSE_POSITION
 				});
 			}
+			
+		} else if (tree._dragAndDropEngine){
+			tree._dragNode(li, evt);
 		}
 
 		return f_core.CancelJsEvent(evt);
@@ -591,6 +594,11 @@ var __members = {
 		this.onclick=f_core.CancelJsEventHandler;
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._performKeyDown);
+		
+		if (this.f_isDraggable()) {
+			this._dragAndDropEngine= f_dragAndDropEngine.Create(this);
+		}
+	
 	},
 	f_finalize: function() {
 //		this._showValue=undefined; // String
@@ -608,6 +616,8 @@ var __members = {
 //		this._lastKey=undefined; // char
 
 //		this._focus=undefined;   // boolean
+		
+		this._dragAndDropEngine=undefined;
 		
 		this._nodes=undefined;  
 		this._container=undefined; // object
@@ -3347,12 +3357,107 @@ var __members = {
 		this.f_refreshContent();
 		
 		return false;
+	},
+	/**
+	 * @method private
+	 * @param HTMLElement li
+	 * @param Event jsEvent
+	 * @return Boolean
+	 */
+	_dragNode: function(li, jsEvent) {
+		var dnd=this._dragAndDropEngine;
+		if (!dnd) {
+			return false;
+		}
+		
+		var dragTypes=undefined;
+		var dragEffects=undefined;
+		var node=li._node;
+		
+		for(var n=node;n && (dragTypes===undefined || dragEffects===undefined);n=n._parentTreeNode) {
+			if (dragTypes===undefined) {
+				dragTypes=n._dragTypes;
+			}
+			if (dragEffects===undefined) {
+				dragEffects=n._dragEffects;
+			}
+		}
+		
+		f_core.Debug(f_tree, "_dragNode: dragEffects=0x"+dragEffects+" dragTypes='"+dragTypes+"'");
+		
+		if (!dragEffects || !dragTypes) {
+			return false;
+		}
+		
+		var ret=dnd.f_start(jsEvent, node, node._value, li, dragEffects, dragTypes);
+
+		f_core.Debug(f_tree, "_dragNode: start returns '"+ret+"'");
+		
+		return ret;
+	},
+	f_queryDropInfos: function(jsEvent, element) {
+		var node=null;
+		var nodeElement=null;
+		
+		for(;element;element=element.parentNode) {
+			if (element._body) {
+				// Racine de l'arbre
+				node=this;
+				nodeElement=this;
+				break;
+			}
+			
+			var li=element._node;
+			if (!li) {
+				continue;
+			}			
+
+			if (!element._tree) { // On est tombé sous un sous element de noeud
+				nodeElement=li;
+
+				li=li._node;
+				
+			} else {
+				nodeElement=element;				
+			}			
+			
+			node=li;
+			break;
+		}
+		
+		if (!node) {
+			return null;
+		}
+		
+		var dropTypes=undefined;
+		var dropEffects=undefined;
+		
+		for(var n=node;n && (dropTypes===undefined || dropEffects===undefined);n=n._parentTreeNode) {
+			if (dropTypes===undefined) {
+				dropTypes=n._dropTypes;
+			}
+			if (dropEffects===undefined) {
+				dropEffects=n._dropEffects;
+			}
+		}
+		
+		if (!dropTypes || !dropEffects) {
+			return null;
+		}		
+		
+		return {
+			item: node,
+			itemValue: node._value,
+			targetItemElement: nodeElement,
+			dropTypes: dropTypes,
+			dropEffects: dropEffects		
+		};
 	}
 }
 
 new f_class("f_tree", {
 	extend: f_component,
-	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties ],
+	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable ],
 	members: __members,
 	statics: __statics
 });

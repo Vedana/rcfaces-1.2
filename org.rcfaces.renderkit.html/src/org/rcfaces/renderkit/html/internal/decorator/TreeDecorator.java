@@ -46,7 +46,6 @@ import org.rcfaces.core.item.ITreeNode;
 import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.item.TreeNode;
 import org.rcfaces.core.lang.OrderedSet;
-import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.HtmlValuesTools;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -752,25 +751,30 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
         private final Integer draggableEffects;
 
-        private final String draggableTypes;
+        private final String serializedDraggableTypes;
+
+        private final String[] dragDropTypes;
 
         public DragDropItemState(UIComponent component,
-                Integer draggableEffects, String draggableTypes) {
+                Integer draggableEffects, String serializedDraggableTypes,
+                String[] dragDropTypes) {
 
             this.component = component;
             this.draggleItem = null;
             this.draggableEffects = draggableEffects;
-            this.draggableTypes = draggableTypes;
+            this.serializedDraggableTypes = serializedDraggableTypes;
+            this.dragDropTypes = dragDropTypes;
         }
 
         public DragDropItemState(SelectItem draggleItem,
-                Integer draggableEffects, String draggableTypes) {
+                Integer draggableEffects, String draggableTypes,
+                String[] dragDropTypes) {
 
             this.component = null;
             this.draggleItem = draggleItem;
             this.draggableEffects = draggableEffects;
-            this.draggableTypes = draggableTypes;
-
+            this.serializedDraggableTypes = draggableTypes;
+            this.dragDropTypes = dragDropTypes;
         }
 
         public SelectItem getDragDropItem() {
@@ -782,7 +786,11 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         }
 
         public String getSerializedDragDropTypes() {
-            return draggableTypes;
+            return serializedDraggableTypes;
+        }
+
+        public String[] getDragDropTypes() {
+            return dragDropTypes;
         }
     }
 
@@ -809,7 +817,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             String serializedDragTypes = serializeDragType(dragDropTypes);
 
             dragDropSelectItemStates.add(new DragDropItemState(component,
-                    dragEffects, serializedDragTypes));
+                    dragEffects, serializedDragTypes, dragDropTypes));
 
             selectItemLastDragDropInfos.add(serializedDragTypes);
             selectItemLastDragDropInfos.add(dragEffects);
@@ -834,6 +842,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
 
             Integer dragDropEffects = null;
             String serializedDragDropTypes = null;
+            String dragDropTypes[] = null;
             boolean effectsFound = false;
             boolean typesFound = false;
 
@@ -844,9 +853,9 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                     effectsFound = true;
                 }
 
-                String ts[] = getDragDropTypes(selectItem, selectItem);
-                if (ts != null) {
-                    serializedDragDropTypes = serializeDragType(ts);
+                dragDropTypes = getDragDropTypes(selectItem, selectItem);
+                if (dragDropTypes != null) {
+                    serializedDragDropTypes = serializeDragType(dragDropTypes);
                     typesFound = true;
                 }
             }
@@ -866,6 +875,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                         effectsFound = true;
                     }
                     if (typesFound == false) {
+                        dragDropTypes = draggableItemState.getDragDropTypes();
                         serializedDragDropTypes = draggableItemState
                                 .getSerializedDragDropTypes();
                         typesFound = true;
@@ -883,33 +893,46 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 }
 
                 if (typesFound == false) {
-                    String ts[] = getDragDropTypes(draggableItem, selectItem);
-                    if (ts != null) {
-                        serializedDragDropTypes = serializeDragType(ts);
+                    dragDropTypes = getDragDropTypes(draggableItem, selectItem);
+                    if (dragDropTypes != null) {
+                        serializedDragDropTypes = serializeDragType(dragDropTypes);
                         typesFound = true;
                     }
                 }
             }
 
             if (isDragDropItem(selectItem)) {
-                dragDropSelectItemStates.add(new DragDropItemState(selectItem,
-                        dragDropEffects, serializedDragDropTypes));
+                dragDropSelectItemStates
+                        .add(new DragDropItemState(selectItem, dragDropEffects,
+                                serializedDragDropTypes, dragDropTypes));
             }
 
             int depth = selectItemLastDragDropInfos.size();
 
-            if (typesFound && serializedDragDropTypes != null) {
-                if (depth == 0
-                        || serializedDragDropTypes
+            if (typesFound && serializedDragDropTypes != null
+                    && dragDropTypes != null) {
+                if (depth > 0
+                        && serializedDragDropTypes
                                 .equals(selectItemLastDragDropInfos
                                         .get(depth - 2)) == false) {
-                    objectLiteralWriter.writeSymbol(getDragDropTypesSymbol())
-                            .writeString(serializedDragDropTypes);
+                    IJavaScriptWriter locWriter = objectLiteralWriter
+                            .writeSymbol(getDragDropTypesSymbol()).write('[');
+
+                    for (int i = 0; i < dragDropTypes.length; i++) {
+                        if (i > 0) {
+                            locWriter.write(',');
+                        }
+
+                        locWriter.writeString(dragDropTypes[i]);
+                    }
+
+                    locWriter.write(']');
                 }
             }
+
             if (effectsFound && dragDropEffects != null) {
-                if (depth == 0
-                        || dragDropEffects.equals(selectItemLastDragDropInfos
+                if (depth > 0
+                        && dragDropEffects.equals(selectItemLastDragDropInfos
                                 .get(depth - 1)) == false) {
                     objectLiteralWriter.writeSymbol(getDragDropEffectsSymbol())
                             .writeInt(dragDropEffects.intValue());
@@ -928,7 +951,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                 return "";
             }
             if (dragDropTypes.length == 1) {
-                return dragDropTypes[0];
+                return "[" + dragDropTypes[0] + "]";
             }
 
             if (cachedDragDropTypes != null
@@ -939,8 +962,10 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             StringAppender sb = new StringAppender(dragDropTypes[0],
                     dragDropTypes.length * 128);
 
-            for (int i = 1; i < dragDropTypes.length; i++) {
-                sb.append(HtmlTools.LIST_SEPARATORS);
+            for (int i = 0; i < dragDropTypes.length; i++) {
+                if (i > 0) {
+                    sb.append(',');
+                }
                 sb.append(dragDropTypes[i]);
             }
 

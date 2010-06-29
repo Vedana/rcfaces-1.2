@@ -164,7 +164,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             }
             htmlWriter.writeAttribute("v:dropEffects", dropEffects);
 
-            String dropTypes[] = treeComponent.getDragTypes(facesContext);
+            String dropTypes[] = treeComponent.getDropTypes(facesContext);
             if (dropTypes != null && dropTypes.length > 0) {
                 StringAppender sa = new StringAppender(dropTypes.length * 32);
 
@@ -268,6 +268,12 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TREE,
                     "ajax");
         }
+
+        if (treeComponent.isDraggable(facesContext)
+                || treeComponent.isDroppable(facesContext)) {
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.TREE,
+                    "dnd");
+        }
     }
 
     /*
@@ -306,6 +312,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         if (treeComponent.isBorder(facesContext) == false) {
             cssWriter.writeBorderStyle(ICssWriter.NONE);
         }
+
     }
 
     protected IComponentDecorator createComponentDecorator(

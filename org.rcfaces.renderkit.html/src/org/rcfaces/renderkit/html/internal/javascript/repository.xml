@@ -249,6 +249,17 @@
 			</class>
 		</file>
 		
+		<file name="aspect/fa_droppable.js">
+			<class name="fa_droppable">
+				<required-class name="f_aspect" />
+			</class>
+		</file>
+		
+		<file name="aspect/fa_draggable.js">
+			<class name="fa_draggable">
+				<required-class name="f_aspect" />
+			</class>
+		</file>		
 		
 	</module>
 	
@@ -1210,11 +1221,18 @@
 				<required-class name="fa_scrollPositions" />
 				<required-class name="fa_overStyleClass" />
 				<required-class name="fa_filterProperties" />
+				<required-class name="fa_droppable" />
+				<required-class name="fa_draggable" />
+				
 				<required-class name="f_imageRepository" />
 				<required-class name="f_error" />
+				
 				<required-class id="menu" name="f_menu" />
+				
 				<required-class id="ajax" name="f_httpRequest" />
 				<required-class id="ajax" name="f_waiting" />
+				
+				<required-class id="dnd" name="f_dragAndDropEngine" />
 			</class>
 		</file>
 	</module>
@@ -1574,6 +1592,24 @@
 			</class>
 			
 		 </file>
+	</module>
+
+	<module id="dragAndDrop">
+		 <file name="f_dndEvent.js">
+			<class name="f_dndEvent">
+				<required-class name="f_core" />
+			</class>
+			
+		 </file>
+		 <file name="f_dragAndDropEngine.js">
+			<class name="f_dragAndDropEngine">
+				<required-class name="f_dndEvent" />
+				<required-class name="fa_draggable" />
+				<required-class name="fa_droppable" />
+			</class>
+			
+		 </file>
+		
 	</module>
 
 <!-- 

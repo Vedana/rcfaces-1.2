@@ -2679,7 +2679,10 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @param HTLMElement elt
+	 * @param String claz
+	 * @param String css
+	 * @return Boolean
 	 */
 	_InstanceOf: function(elt, claz, css) {
 		if (css) {
@@ -2703,12 +2706,23 @@ var f_core = {
 			return null;
 		}
 		var kclass=elt._kclass;
-		if (kclass && kclass._name==claz) {
+		if (kclass && (kclass._name==claz || claz=="*")) {
 			return elt;
 		}
-		if (elt.nodeType==f_core.ELEMENT_NODE && f_core.GetAttribute(elt, "v:class")==claz) {
+		
+		if (elt.nodeType!=f_core.ELEMENT_NODE) {
+			return null;
+		}
+						
+		var cl=f_core.GetAttribute(elt, "v:class");
+		if (!cl) {
+			return null;
+		}
+		
+		if (cl==claz || claz=="*") {
 			return f_classLoader.Get(window).f_init(elt, false, true);
 		}
+		
 		return null;
 	},
 	/**
@@ -2767,6 +2781,8 @@ var f_core = {
 	 * @return HTMLElement
 	 */
 	GetChildByClass: function(elt,claz,css) {
+		f_core.Assert(elt && elt.nodeType==f_core.ELEMENT_NODE, "f_core.GetParentByClass: Element parameter is not a valid node ! ("+elt+")");
+
 		var stack=[elt];		
 		for(;stack.length;) {
 			var n=stack.pop();
@@ -2788,6 +2804,33 @@ var f_core = {
 				}
 				
 				stack.push(n);
+			}
+		}
+		
+		return null;
+	},
+	
+	/**
+	 * Find a parent with a specified class.
+	 *
+	 * @method hidden static
+	 * @param HTMLElement elt Start node.
+	 * @param optional String claz Class name.
+	 * @param hidden boolean css Search Css class.
+	 * @return HTMLElement
+	 */
+	GetParentByClass: function(elt,claz,css) {
+		f_core.Assert(elt && elt.nodeType==f_core.ELEMENT_NODE, "f_core.GetParentByClass: Element parameter is not a valid node ! ("+elt+")");
+
+		if (!claz) {
+			claz="*";
+		}
+		
+		for(;elt && elt.nodeType==f_core.ELEMENT_NODE;elt=elt.parentNode) {
+			
+			var comp = f_core._InstanceOf(elt, claz, css);
+			if (comp) {
+				return comp;
 			}
 		}
 		
@@ -2911,7 +2954,7 @@ var f_core = {
 	GetNumberAttribute: function(element, attributeName, defaultValue) {
 		f_core.Assert(defaultValue===undefined || typeof(defaultValue)=="number", "f_core.GetNumberAttribute: defaultValue parameter is invalid. ("+defaultValue+")");
 
-		var value=f_core.GetAttribute(element, attributeName)
+		var value=f_core.GetAttribute(element, attributeName);
 		if (value) {
 			return parseInt(value, 10);
 		}
