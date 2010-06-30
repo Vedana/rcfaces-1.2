@@ -2460,6 +2460,8 @@ Dans le cas d'un mode period !
 
 	<component id="expandBar" extends="abstractOutput">
 		<implements id="org.rcfaces.core.internal.capability.IAsyncRenderComponent" />
+		
+		<capability id="IExpandEventCapability" />
 
 		<capability id="IAsyncRenderModeCapability" />
 		<capability id="IFontCapability" />

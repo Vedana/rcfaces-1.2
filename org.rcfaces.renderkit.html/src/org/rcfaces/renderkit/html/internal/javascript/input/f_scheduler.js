@@ -13,8 +13,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
-	 * @param Event
-	 *            evt
+	 * @param Event event
 	 * @return boolean
 	 * @context object:scheduler
 	 */
@@ -44,8 +43,7 @@ var __statics = {
 
 	/**
 	 * @method private static
-	 * @param Event
-	 *            evt
+	 * @param Event evt
 	 * @return boolean
 	 * @context object:scheduler
 	 */
@@ -106,15 +104,23 @@ var __members = {
 		this.f_super(arguments);
 		
 	},
-
-	f_addPeriod : function(item) {
+	
+	 /**
+	 * @method public 
+	 * @param Object item
+	 * @return void
+	 */
+	f_addPeriod: function(item) {
 		item._begin = f_core.DeserializeDate(item._begin);
 		item._end = f_core.DeserializeDate(item._end);
 		this.f_addItem(this, item);
 	},
 
-	f_update : function() {
-
+	 /**
+	 * @method protected 
+	 * @return void
+	 */
+	f_update: function() {
 		var columnNumber = f_core.GetNumberAttribute(this, "v:columnNumber");
 		var dateBegin = f_core.GetAttribute(this, "v:dateBegin");
 		if (dateBegin) {
@@ -233,7 +239,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @param Object
+	 * @param Object period
 	 * @return Date
 	 */
 	f_getItemDateBegin: function(period) {
@@ -242,7 +248,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @param Object
+	 * @param Object period 
 	 * @return Date
 	 */
 	f_getItemDateEnd: function(period) {
@@ -250,7 +256,7 @@ var __members = {
 	},
 	
 	/**
-	 * @method abstract protected
+	 * @method protected
 	 * @return void
 	 */
 	fa_showElement: function(divNode){
@@ -258,8 +264,8 @@ var __members = {
 	},
 	
 	/**
-	 * @method abstract protected
-	 * @return boolean
+	 * @method protected
+	 * @return Boolean
 	 */
 	
 	fa_isElementDisabled: function(divNode) {
@@ -268,7 +274,7 @@ var __members = {
 	
 	
 	/**
-	 * @method abstract protected
+	 * @method protected
 	 * @return void
 	 */
 	fa_updateElementStyle: function(divNode) {
@@ -295,7 +301,7 @@ var __members = {
 	},
 	
 	/**
-	 * @method abstract protected
+	 * @method protected
 	 * @return item
 	 */
 	fa_getElementItem: function(divNode) {
@@ -303,7 +309,7 @@ var __members = {
 	},
 	
 	/**
-	 * @method abstract protected
+	 * @method protected
 	 * @return void
 	 */
 	fa_updateItemStyle: function(period) {
@@ -350,9 +356,9 @@ var __members = {
 	},
 	
 	/**
-	 * @method protected abstract
+	 * @method protected
 	 * @param any element
-	 * @param boolean selected
+	 * @param Boolean selected
 	 * @return void 
 	 */
 	fa_setElementSelected:  function(divNode, selected) {
@@ -360,7 +366,7 @@ var __members = {
 	},
 	
 	/**
-	 * @method protected abstract
+	 * @method protected
 	 * @param any element
 	 * @return Object 
 	 */
@@ -376,6 +382,7 @@ var __members = {
 		
 		this.f_super(arguments, type, target);
 	},
+	
 	f_clearDomEvent: function(type, target) {
 		switch(type) {
 		case f_event.SELECTION: 

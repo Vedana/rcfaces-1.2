@@ -97,6 +97,16 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 .getSelectedValue(facesContext);
         String valueColumnId = comboGridComponent
                 .getValueColumnId(facesContext);
+        
+        if (valueColumnId != null) {
+            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
+        }
+
+        String labelColumnId = comboGridComponent
+                .getLabelColumnId(facesContext);
+        if (labelColumnId != null) {
+            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
+        }
 
         if (selectedValue != null) {
             UIComponent converterComponent = getColumn(comboGridComponent,
@@ -115,6 +125,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                             .get("valueFormat");
                     formattedValueLabel = (String) formattedValues
                             .get("valueFormatLabel");
+                }else if (labelColumnId != null) {
+                	
                 }
 
                 if (formattedValue == null) {
@@ -286,16 +298,6 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 .isForceValidation(facesContext);
         if (forceValidation == true) {
             htmlWriter.writeAttribute("v:forceValidation", forceValidation);
-        }
-
-        if (valueColumnId != null) {
-            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
-        }
-
-        String labelColumnId = comboGridComponent
-                .getLabelColumnId(facesContext);
-        if (labelColumnId != null) {
-            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
         }
 
         boolean headerVisible = gridRenderContext.isHeaderVisible();

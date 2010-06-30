@@ -427,20 +427,25 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         Map results = new HashMap();
+        String labelColumnId = comboGridComponent.getLabelColumnId();
+        if (formatValues.size() > 0) {
         Iterator iterator = formatValues.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            String key = (String) entry.getKey();
-            String valueFormat = (String) entry.getValue();
-            if (valueFormat == null) {
-                String labelColumnId = comboGridComponent.getLabelColumnId();
-                if (labelColumnId != null) {
-                    valueFormat = "{" + labelColumnId + "}";
-                } else {
-                    valueFormat = "{0}";
-                }
-            }
-            results.put(key, formatMessage(valueFormat, columnValues));
+	        while (iterator.hasNext()) {
+	            Map.Entry entry = (Map.Entry) iterator.next();
+	            String key = (String) entry.getKey();
+	            String valueFormat = (String) entry.getValue();
+	            if (valueFormat == null) {
+	                
+	                if (labelColumnId != null) {
+	                    valueFormat = "{" + labelColumnId + "}";
+	                } else {
+	                    valueFormat = "{0}";
+	                }
+	            }
+	            results.put(key, formatMessage(valueFormat, columnValues));
+	        }
+        }else if (labelColumnId !=  null) {
+        	results.put("valueFormat", formatMessage("{" + labelColumnId + "}", columnValues));
         }
         return results;
 

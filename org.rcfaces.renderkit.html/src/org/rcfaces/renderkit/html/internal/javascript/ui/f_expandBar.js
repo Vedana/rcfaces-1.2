@@ -81,7 +81,7 @@ var __statics = {
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);
 		}
-		
+	
 		expandBar.f_fireEvent(f_event.SELECTION, evt);
 		
 		return true;
@@ -252,9 +252,10 @@ var __members = {
 	},
 	/** 
 	 * @method private
-	 * @return boolean
+	 * @param f_event event
+	 * @return Boolean
 	 */
-	_onSelect: function() {
+	_onSelect: function(event) {
 		if (!this._focus)  {
 			this.f_setFocus();
 		}
@@ -262,11 +263,15 @@ var __members = {
 		if (this.f_isReadOnly() || this.f_isDisabled()) {
 			return false;
 		}
-		
+		if (this.f_fireEvent(f_event.EXPAND,event.f_getJsEvent()) === false ){
+			return false;
+		}
 		this.f_setCollapsed(!this.f_isCollapsed());
-		
-		return false;
+		return true;
 	},	
+	
+	
+	
 	/**
 	 * @method public
 	 * @return void
@@ -298,7 +303,7 @@ var __members = {
 			return false;
 		}
 
-		var ret=this.f_fireEvent(f_event.SELECTION, evt);
+		var ret=this.f_fireEvent(f_event.EXPAND, evt);
 		
 		this.f_setFocus();
 		

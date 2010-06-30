@@ -31,6 +31,11 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 
+/**
+ * @author jbmeslin@vedana.com
+ * @version $Revision: 1.0
+ */
+
 public class SchedulerRenderer extends AbstractCssRenderer {
 
 	public static final int DEFAULT_WIDTH = 548;
