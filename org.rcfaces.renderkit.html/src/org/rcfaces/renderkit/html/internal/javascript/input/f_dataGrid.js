@@ -1823,6 +1823,29 @@ var __members = {
 		}
 		
 		return false;
+	},
+	
+	/**
+	 * @method public
+	 */
+	f_checkAllPage: function() {
+		var elts = this.fa_listVisibleElements();
+		for(var i=0;i<elts.length;i++) {
+			var element=elts[i];
+			if(!this.fa_isElementChecked(element)) {
+				//this.fa_setElementChecked(element,true);
+				this._checkElement(element,true,true);
+				this.fa_updateElementCheck(element, true);
+			}
+		}
+	},
+	
+	/**
+	 * @method public
+	 */
+	f_uncheckAll: function() {
+		this._uncheckAllElements();
+		
 	}
 }
 

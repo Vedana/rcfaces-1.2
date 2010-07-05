@@ -5941,9 +5941,36 @@ var __members = {
 			height = oldbody - difference;
 			scrollBody.style.height = height + "px";
 		}
+	},
+	
+	/**
+	 * select all rows in the current page
+	 * @method public
+	 * @return void
+	 */
+	f_selectAllPage: function() {
+		var first = this.f_getFirst();
+		var last = 1;
+		if(this.f_getRowCount() > 0){
+			last = this.f_getRowCount();
+		}else if(this._rows) {
+			last = this._rows;
+		} 
+		this._selectRange(this.f_getRow(first),
+				this.f_getRow(first+last-1),
+				fa_selectionManager.RANGE_SELECTION);
+	},
+	
+	/**
+	 * unSelect all rows in the current page
+	 * @method public
+	 * @return void
+	 */
+	f_unselectAll: function() {
+		this.f_setSelection([]);
 	}
 
-}
+};
 
 new f_class("f_grid", {
 	extend : f_component,

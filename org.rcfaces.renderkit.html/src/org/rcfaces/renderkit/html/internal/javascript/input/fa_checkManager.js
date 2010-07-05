@@ -112,7 +112,7 @@ var __members = {
 	 * @param Array<T> l
 	 * @param Boolean appendSelection
 	 * @param Boolean show
-	 * @param Array<Object> elements
+	 * @param optional Array<Object> elements
 	 * @return Boolean
 	 */
 	_checkElementsRange: function(l, appendSelection, show, elements) {
