@@ -2172,7 +2172,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 
 
 /**
- * @method hidden static
+ * @method public static
  * @param Window win
  * @return f_classLoader
  * @context window:window

@@ -31,9 +31,12 @@ public class DragDropEffectsConverter extends AbstractConverter {
     private static final Map EFFECTS = new HashMap(8);
     static {
         EFFECTS.put("NONE", new Integer(IDragAndDropEffects.NONE_DND_EFFECT));
+        EFFECTS.put("DEFAULT", new Integer(
+                IDragAndDropEffects.DEFAULT_DND_EFFECT));
         EFFECTS.put("COPY", new Integer(IDragAndDropEffects.COPY_DND_EFFECT));
         EFFECTS.put("LINK", new Integer(IDragAndDropEffects.LINK_DND_EFFECT));
         EFFECTS.put("MOVE", new Integer(IDragAndDropEffects.MOVE_DND_EFFECT));
+        EFFECTS.put("ANY", new Integer(IDragAndDropEffects.ANY_DND_EFFECT));
         EFFECTS.put("UNKNOWN", new Integer(
                 IDragAndDropEffects.UNKNOWN_DND_EFFECT));
     }

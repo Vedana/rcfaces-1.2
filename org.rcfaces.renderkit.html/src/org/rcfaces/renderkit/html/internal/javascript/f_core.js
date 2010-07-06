@@ -1491,6 +1491,9 @@ var f_core = {
 	},
 	/**
 	 * @method static hidden
+	 * @param HTMLElement component
+	 * @param String text
+	 * @param optional String accessKey
 	 * @return void
 	 */
 	SetTextNode: function(component, text, accessKey) {

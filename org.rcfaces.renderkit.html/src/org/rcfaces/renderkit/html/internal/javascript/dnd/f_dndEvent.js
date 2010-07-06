@@ -11,6 +11,33 @@
  */
  
 var __statics = {
+
+
+	/**
+	 * @field public static Number
+	 */
+    NONE_DND_EFFECT: 0x00,
+
+	/**
+	 * @field public static Number
+	 */
+    DEFAULT_DND_EFFECT: 0x01,
+
+	/**
+	 * @field public static Number
+	 */
+    COPY_DND_EFFECT: 0x02,
+
+	/**
+	 * @field public static Number
+	 */
+	LINK_DND_EFFECT: 0x04,
+
+	/**
+	 * @field public static Number
+	 */
+    MOVE_DND_EFFECT: 0x08,
+
 	/**
 	 * @field public static String
 	 */
@@ -184,8 +211,8 @@ var __members = {
 	 * @method public
 	 * @return Number
 	 */
-	f_getEffects: function() {
-		return this._detail._effects;
+	f_getEffect: function() {
+		return this._detail._effect;
 	},
 	/**
 	 * @method public

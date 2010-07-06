@@ -79,6 +79,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
         extensions.put("jpg", "image/jpeg");
         extensions.put("jpeg", "image/jpg");
         extensions.put("png", "image/png");
+        extensions.put("cur", "image/x-win-bitmap");
     }
 
     private static Set useFilterExtensions = new HashSet();

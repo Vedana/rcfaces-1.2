@@ -11,7 +11,16 @@
  */
  
 var __statics = {
-	
+
+	/**
+	 * @field private static final Number
+	 */
+	_AUTO_SCROLL_SIZE: 20,
+
+	/**
+	 * @field private static final Number
+	 */
+	_DND_AUTO_OPEN_NODE_MS: 800,
 	
 	/**
 	 * @field private static final String
@@ -498,7 +507,7 @@ var __statics = {
  
 		return true;
 	}
-}
+};
 
 var __members = {
 	
@@ -624,6 +633,8 @@ var __members = {
 // 		this._opened=undefined;  // boolean
 //		this._interactive=undefined; // boolean
 
+		this.f_releaseDropInfos();
+		
 		var cfocus=this._cfocus;
 		if (cfocus) {
 			this._cfocus=undefined;
@@ -3322,6 +3333,19 @@ var __members = {
 		}
 		return li._node._styleClass;
 	},
+	
+	/**
+	 * @method public
+	 * @param Object nodeOrValue
+	 * @return String
+	 */
+	f_getItemLabel: function(nodeOrValue) {
+		var li=this._searchComponentByNodeOrValue(nodeOrValue);
+		if (!li){
+			return undefined;
+		}
+		return li._node._label;
+	},
 	/**
 	 * @method public
 	 * @param Object nodeOrValue
@@ -3395,9 +3419,60 @@ var __members = {
 		
 		return ret;
 	},
-	f_queryDropInfos: function(jsEvent, element) {
+	f_queryDropInfos: function(dragAndDropEngine, jsEvent, element) {
 		var node=null;
 		var nodeElement=null;
+		
+		if (this.offsetHeight-this.clientHeight>2) { // @TODO Retire les BORDS 
+			// Scrollable ... il faut surveiller le haut et le bas !
+			
+			var scrollIntervalId=this._scrollIntervalId;
+			if (!scrollIntervalId) {
+				var self=this;
+				
+				var treePosition=f_core.GetAbsolutePosition(this);
+							
+				this._scrollIntervalId=f_core.GetWindow(document).setInterval(function() {
+					var pos=dragAndDropEngine.f_getLastMousePosition();
+					if (!pos) {
+						return;
+					}
+					
+					var dy=pos.y-treePosition.y;
+					var dy2=treePosition.y+self.offsetHeight-pos.y;
+					
+					if (self.offsetWidth-self.clientWidth>2) {
+						// Ajout du scroll horizontal en bas ...
+						
+						dy2-=(self.offsetHeight-self.clientHeight);
+					}
+					
+					//document.title="dy2="+dy2+"  dd="+(this.offsetHeight-this.clientHeight);
+					
+					if (dy>=0 && dy<=f_tree._AUTO_SCROLL_SIZE) {
+						var st=self.scrollTop;
+						if (st>0) {
+							st-=f_tree._AUTO_SCROLL_SIZE;
+							if (st<0) {
+								st=0;
+							}
+							
+							self.scrollTop=st;
+						}
+						
+					} else if (dy2>=0 && dy2<=f_tree._AUTO_SCROLL_SIZE) {
+						var st=self.scrollTop;
+						st+=f_tree._AUTO_SCROLL_SIZE;
+						if (st<0) {
+							st=0;
+						}
+						
+						self.scrollTop=st;
+					}
+					
+				}, 200);	
+			}
+		}
 		
 		for(;element;element=element.parentNode) {
 			if (element._body) {
@@ -3429,6 +3504,32 @@ var __members = {
 			return null;
 		}
 		
+		var startTimer=false;
+		if (this._userExpandable && node._container && !node._opened && node._value) {
+			if (node!=this._dndTimerItem) { 
+				startTimer=true;
+				this._dndTimerItem=node;
+			}
+		}
+		
+		if (startTimer) {
+			this.f_releaseDropInfos();
+			
+			this._dndTimerItemValue=node._value;
+			var self=this;
+			this._dndTimerId=f_core.GetWindow(document).setTimeout(function() {
+				self.f_openNode(self._dndTimerItemValue);
+				self.f_releaseDropInfos();
+				self = null;
+				
+			}, f_tree._DND_AUTO_OPEN_NODE_MS);
+		}		
+		
+		if (node._disabled) {
+			return null;
+		}
+		
+		
 		var dropTypes=undefined;
 		var dropEffects=undefined;
 		
@@ -3452,8 +3553,25 @@ var __members = {
 			dropTypes: dropTypes,
 			dropEffects: dropEffects		
 		};
+	},
+	f_releaseDropInfos: function() {
+		var dndTimerId=this._dndTimerId;
+		if (dndTimerId) {
+			this._dndTimerId=undefined;
+			this._dndTimerItem=undefined;
+			this._dndTimerItemValue=undefined;
+			
+			window.clearTimeout(dndTimerId);
+		}
+	
+		var scrollIntervalId=this._scrollIntervalId;
+		if (scrollIntervalId) {
+			this._scrollIntervalId=undefined;
+			
+			window.clearInterval(scrollIntervalId);
+		}
 	}
-}
+};
 
 new f_class("f_tree", {
 	extend: f_component,

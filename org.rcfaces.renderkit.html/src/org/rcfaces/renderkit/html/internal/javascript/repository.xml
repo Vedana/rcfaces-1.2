@@ -1595,21 +1595,50 @@
 	</module>
 
 	<module id="dragAndDrop">
-		 <file name="f_dndEvent.js">
+		 <file name="dnd/f_dndEvent.js">
 			<class name="f_dndEvent">
 				<required-class name="f_core" />
 			</class>
 			
 		 </file>
-		 <file name="f_dragAndDropEngine.js">
+		 <file name="dnd/f_dragAndDropEngine.js">
 			<class name="f_dragAndDropEngine">
+				<required-class name="f_object" />
 				<required-class name="f_dndEvent" />
 				<required-class name="fa_draggable" />
 				<required-class name="fa_droppable" />
 			</class>
 			
 		 </file>
-		
+		 <file name="dnd/f_dragAndDropInfo.js">
+			<class name="f_dragAndDropInfo">
+				<required-class name="f_dragAndDropEngine" />
+				<required-class name="f_object" />
+			</class>
+			
+		 </file>
+		 <file name="dnd/f_cursorDnDInfo.js">
+			<class name="f_cursorDnDInfo">
+				<required-class name="f_dragAndDropInfo" />
+			</class>
+			
+		 </file>
+		 <file name="dnd/f_abstractElementDnDInfo.js">
+			<class name="f_abstractElementDnDInfo">
+				<required-class name="f_dragAndDropInfo" />
+			</class>			
+		 </file>
+		 <file name="dnd/f_popupDnDInfo.js">
+			<class name="f_popupDnDInfo">
+				<required-class name="f_abstractElementDnDInfo" />
+			</class>			
+		 </file>
+		 <file name="dnd/f_iconDnDInfo.js">
+			<class name="f_iconDnDInfo">
+				<required-class name="f_abstractElementDnDInfo" />
+			</class>			
+		 </file>
+			
 	</module>
 
 <!-- 

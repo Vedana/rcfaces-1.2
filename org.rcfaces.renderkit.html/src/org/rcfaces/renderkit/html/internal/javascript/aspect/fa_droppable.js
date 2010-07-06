@@ -41,12 +41,20 @@ var __members = {
 	
 	/**
 	 * @method public abstract
+	 * @param f_dragAndDropEngine dragAndDropEngine
 	 * @param Event jsEvent
 	 * @param HTMLElement child element
 	 * @return Object
 	 */
-	f_queryDropInfos: f_class.ABSTRACT
-}
+	f_queryDropInfos: f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param f_dragAndDropEngine dragAndDropEngine
+	 * @return void
+	 */
+	f_releaseDropInfos: f_class.ABSTRACT
+};
 
 new f_aspect("fa_droppable", {
 	members: __members

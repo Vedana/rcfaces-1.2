@@ -17,6 +17,12 @@ var __statics = {
 	 */	
 	_Current: undefined,
 	
+	
+	/**
+	 * @field private static final String[]
+	 */	
+	_DefaultDragAndDropInfos: ["popup" ],
+	
 	/**
 	 * 
 	 * @method hidden static
@@ -85,6 +91,41 @@ var __statics = {
 	 },
 	 /**
 	  * @method private static
+	  * @param Event evt
+	  * @return Boolean
+	  * @context event:evt
+	  */
+	 _KeyDownUp: function(evt) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		try {
+			var current=f_dragAndDropEngine._Current;
+	
+			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current);
+	
+			if (!current) {
+				return;
+			}	
+			
+			if (evt.keyCode==f_key.VK_ESCAPE) {
+				return f_dragAndDropEngine._DragStop();				
+			}
+			
+			switch(evt.keyCode) {
+			case f_key.VK_SHIFT:
+			case f_key.VK_CONTROL:
+			case f_key.VK_ALT:
+				return current._modifyEffect(evt);
+			}
+			
+		} catch (x) {
+			f_core.Error(f_dragAndDropEngine, "_KeyDown/_KeyUp: exception", x);
+		}
+	 },
+	 /**
+	  * @method private static
 	  * @return Boolean
 	  */
 	 _Exit: function() {
@@ -136,11 +177,37 @@ var __statics = {
 		
 		return types;		
 	},
-	 /**
-	  * @method public static
-	  */
+	
+	/**
+	 * @method public static
+	 * @param String name
+	 * @param Function constructor
+	 * @return void
+	 */
+	RegisterDragAndDropPopup: function(name, constructor) {
+		var infos=f_dragAndDropEngine._DragAndDropInfos;
+		if (!infos) {
+			infos=new Object;
+			f_dragAndDropEngine._DragAndDropInfos = infos;
+		}
+		infos[name]=constructor;
+	},
+	/**
+	 * @method public static
+	 * @param String... name
+	 * @return void
+	 */
+	SetDefaultDragAndDropPopup: function(name) {
+		
+		f_dragAndDropEngine._DefaultDragAndDropInfos=f_core.PushArguments(null, name);
+	},
+	/**
+	 * @method public static
+	 */
 	Finalizer: function() {
 		 f_dragAndDropEngine._Current = undefined;
+		 f_dragAndDropEngine._DragAndDropInfos=undefined;
+		 f_dragAndDropEngine._DefaultDragAndDropInfos = undefined; // String[]
 	}
 }
 
@@ -176,10 +243,50 @@ var __members = {
 	 */
 	_initialized: undefined,
 		
-	f_dragAndDropEngine: function(sourceComponent) {
+	/**
+	 * @constructor 
+	 * @param f_component sourceComponent
+	 * @param String[] dragAndDropPopupNames
+	 */
+	f_dragAndDropEngine: function(sourceComponent, names) {
 		this.f_super(arguments);
 
 		this._sourceComponent=sourceComponent;
+		this._dragAndDropInfoNames=names;
+	},
+	/**
+	 * @method public
+	 * @param String... name
+	 * @return f_dragAndDropInfo Las drag and drop info popup instance.
+	 */
+	f_addDragAndDropInfoByName: function(name) {
+		var infos=f_dragAndDropEngine._DragAndDropInfos;
+		if (!infos) {
+			return null;
+		}
+		
+		for(var i=0;i<arguments.length;i++) {
+			var name=arguments[i];
+			
+			var cb=infos[name];
+			if (!cb) {
+				continue;
+			}
+			
+			var dndInfo=cb(this);
+			if (!dndInfo) {
+				continue;
+			}
+			
+			var old=this._dragAndDropInfo;
+			if (old) {
+				dndInfo.f_setParent(old);
+			}
+			
+			this._dragAndDropInfo=dndInfo;
+		}
+		
+		return this._dragAndDropInfo;
 	},
 	/**
 	 * @method public
@@ -220,6 +327,9 @@ var __members = {
 	f_finalize: function() {
 		this._sourceComponent=undefined;
 		this._clearFields();
+		// this._lastEffectsInfo=undefined; // Number
+		// this._lastTypesInfo=undefined; // String[]
+		// this._dragAndDropInfoNames=undefined; // String[]
 		
 		this.f_super(arguments);
 	},
@@ -242,8 +352,28 @@ var __members = {
 		this._targetDragEffects=undefined;
 		this._targetDragTypes=undefined;			
 		
-		this._currentDropEffects=undefined;
+		this._additionalTargetInformations=undefined;
+		this._additionalSourceInformations=undefined;
+		
+		this._lastEffectInfo=undefined;
+		this._lastTypesInfo=undefined;
+		
+		this._currentDropEffect=undefined;
 		this._currentDropTypes=undefined;
+		
+		this._lastMousePosition=undefined;
+		
+		var queryDropInfosCall=this._queryDropInfosCall;
+		if (queryDropInfosCall) {
+			this._queryDropInfosCall=undefined;
+			
+			try {
+				queryDropInfosCall.f_releaseDropInfos(this);
+						
+			} catch (x) {
+				f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_releaseDropInfos throws exception", x); 
+			}
+		}
 	},
 	
 	/**
@@ -279,6 +409,8 @@ var __members = {
 
 		f_core.AddEventListener(doc, "mousemove", f_dragAndDropEngine._DragMove, doc);
 		f_core.AddEventListener(doc, "mouseup", f_dragAndDropEngine._DragStop, doc);
+		f_core.AddEventListener(doc, "keydown", f_dragAndDropEngine._KeyDownUp, doc);
+		f_core.AddEventListener(doc, "keyup", f_dragAndDropEngine._KeyDownUp, doc);
 		
 		return true;
 	},
@@ -293,14 +425,25 @@ var __members = {
 		
 		f_core.RemoveEventListener(doc, "mousemove", f_dragAndDropEngine._DragMove, doc);
 		f_core.RemoveEventListener(doc, "mouseup", f_dragAndDropEngine._DragStop, doc);
-
-		
+		f_core.RemoveEventListener(doc, "keydown", f_dragAndDropEngine._KeyDownUp, doc);
+		f_core.RemoveEventListener(doc, "keyup", f_dragAndDropEngine._KeyDownUp, doc);
+	
 		if (this._dragLock) {
 			this._dragLock=false;
 			
 			f_event.ExitEventLock(f_event.DND_LOCK);
 		}
-		
+
+		var dndInfo=this._dragAndDropInfo;
+		if (dndInfo) {
+			try {
+				dndInfo.f_end();
+				
+			} catch (x) {
+				f_core.Error(f_dragAndDropEngine, "_exit: call f_end of dndInfo throws exception", x); 
+			}
+		}
+
 		this._clearFields();
 	},	
 	
@@ -368,7 +511,7 @@ var __members = {
 		if (this._started) {
 			return false;
 		}
-		
+				
 		var req = {
 			_sourceItem: this._sourceItem,
 			_sourceItemValue: this._sourceItemValue,
@@ -391,6 +534,27 @@ var __members = {
 			f_event.EnterEventLock(f_event.DND_LOCK);
 		}
 		
+		var dndInfo=this._dragAndDropInfo;
+		if (!dndInfo) {
+			var names=this._dragAndDropInfoNames;
+			if (names===undefined) {
+				names=f_dragAndDropEngine._DefaultDragAndDropInfos;
+			}
+			if (names) {
+				this.f_addDragAndDropInfoByName.apply(this, names);
+			}
+		}
+		
+		var dndInfo=this._dragAndDropInfo;
+		if (dndInfo) {
+			try {
+				dndInfo.f_start();
+				
+			} catch (x) {
+				f_core.Error(f_dragAndDropEngine, "_dragStart: call f_start of dndInfo throws exception", x); 
+			}
+		}
+	
 		// Affichage du phantom !		
 		
 		return true;
@@ -409,7 +573,7 @@ var __members = {
 		this._started=undefined;
 		
 		var targetComponent=this._targetComponent;
-		if (!targetComponent || !this._currentDropEffects) {
+		if (!targetComponent || !this._currentDropEffect) {
 			
 			var req = {
 				_sourceItem: this._sourceItem,
@@ -435,7 +599,7 @@ var __members = {
 			_sourceItemValue: this._sourceItemValue,
 			_sourceComponent: this._sourceComponent,
 
-			_effects: this._currentDropEffects,
+			_effect: this._currentDropEffect,
 			_types: this._currentDropTypes
 		};
 		
@@ -464,12 +628,13 @@ var __members = {
 	},
 	
 	_dragMove: function(jsEvent) {
-		
+
+		var eventPos = f_core.GetJsEventPosition(jsEvent);
+		this._lastMousePosition=eventPos;
+
 		if (!this._started) {
 
 			f_core.Debug(f_dragAndDropEngine, "_dragMove: Test start drag");
-
-			var eventPos = f_core.GetJsEventPosition(jsEvent);
 			
 			var ipos=this._initialMousePosition;
 			
@@ -485,6 +650,16 @@ var __members = {
 
 			if (this._dragStart()===false) {
 				return false;
+			}
+		}
+
+		var dndInfo=this._dragAndDropInfo;
+		if (dndInfo) {
+			try {
+				dndInfo.f_move(eventPos.x, eventPos.y);
+				
+			} catch (x) {
+				f_core.Error(f_dragAndDropEngine, "_dragMove: call f_move of dndInfo throws exception", x); 
 			}
 		}
 		
@@ -518,12 +693,14 @@ var __members = {
 			return this._cancelTarget(jsEvent);
 		}
 		
-		var dropInfos=dropComponent.f_queryDropInfos(jsEvent, dropElement);
+		this._queryDropInfosCall=dropComponent;
+		
+		var dropInfos=dropComponent.f_queryDropInfos(this, jsEvent, dropElement);
 		if (!dropInfos) {
 			// La target ne trouve rien ...
 
 			f_core.Debug(f_dragAndDropEngine, "_dragMove: no dropInfos for component '"+dropComponent+"', dropElement='"+dropElement+"'");
-			return this._cancelTarget(jsEvent);
+			return this._cancelTarget(jsEvent, false);
 		}
 		
 		if (this._sourceComponent==dropComponent && this._sourceItemValue==dropInfos.itemValue) {
@@ -546,6 +723,7 @@ var __members = {
 		this._targetItemElement = dropInfos.itemElement;
 		this._targetDropTypes = dropInfos.dropTypes;
 		this._targetDropEffects = dropInfos.dropEffects;		
+		this._additionalTargetInformations=undefined;
 	
 		f_core.Debug(f_dragAndDropEngine, "_dragMove: new target targetComponent='"+this._targetComponent+"' targetItem='"+this._targetItem+"' targetItemValue='"+this._targetItemValue+"' targetItemElement='"+this._targetItemElement+"' targetDropEffects='"+this._targetDropEffects+"' this._targetDropTypes='"+this._targetDropTypes+"'");
 
@@ -556,7 +734,7 @@ var __members = {
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */
-	_cancelTarget: function(jsEvent) {
+	_cancelTarget: function(jsEvent, releaseDrop) {
 		var target=this._targetComponent;
 		f_core.Debug(f_dragAndDropEngine, "_cancelTarget: target='"+target+"'.");
 
@@ -572,30 +750,121 @@ var __members = {
 
 			_sourceItem: this._sourceItem,
 			_sourceItemValue: this._sourceItemValue,
-			_sourceComponent: this._sourceComponent,
+			_sourceComponent: this._sourceComponent
 		};
 		
 		this.f_fireEventToTarget(f_dndEvent.DRAG_OVER_CANCELED_STAGE, jsEvent, req);		
 			
 		this.f_fireEventToTarget(f_dndEvent.DROP_OVER_CANCELED_STAGE, jsEvent, req);
 
+		this._additionalTargetInformations=undefined;
 		this._targetComponent=undefined;
 		this._targetItem=undefined;
 		this._targetItemValue=undefined;
 		this._targetItemElement = undefined;
 		this._targetDropTypes = undefined;
 		this._targetDropEffects = undefined;		
+			
+		if (releaseDrop!==false) {
+			var queryDropInfosCall=this._queryDropInfosCall;
+			if (queryDropInfosCall) {
+				this._queryDropInfosCall=undefined;
+				
+				try {
+					queryDropInfosCall.f_releaseDropInfos(this);
+							
+				} catch (x) {
+					f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_releaseDropInfos throws exception", x); 
+				}
+			}
+		}
 		
 		this._computeDragAndDrop(jsEvent);
 		return false;
 	},
+	/**
+	 * @method private
+	 * @param Event jsEvent
+	 * @return Boolean
+	 */
+	_modifyEffect: function(jsEvent) {
+		if (!this._targetDropEffects) {
+			return true;
+		}
+		
+		var newEffect=this._computeEffect(jsEvent);
+		if (newEffect==this._currentDropEffect) {
+			return true;
+		}
+		
+		this._computeDragAndDrop(jsEvent);
+		return true;
+	},
+	/**
+	 * @method private
+	 * @param Event jsEvent
+	 * @return Number Effect
+	 */
+	_computeEffect: function(jsEvent) {
+		var targetEffects=this._targetDropEffects;
+		var sourceEffects=this._sourceDragEffects;
+
+		var effects=targetEffects & sourceEffects;
+	
+		var effect=f_dndEvent.NONE_DND_EFFECT;
+		if (effects) {
+			if (jsEvent) {
+				if ((jsEvent.shiftKey || jsEvent.ctrlKey) && jsEvent.altKey && (effects & f_dndEvent.MOVE_DND_EFFECT)) {
+					// ALT + (SHIFT || CTRL) => MOVE
+					effect=f_dndEvent.MOVE_DND_EFFECT;
+	
+				} else if (jsEvent.shiftKey && jsEvent.ctrlKey && (effects & f_dndEvent.LINK_DND_EFFECT)) {
+					// CTRL + SHIFT => LINK
+					effect=f_dndEvent.LINK_DND_EFFECT;
+	
+				} else if (jsEvent.altKey && (effects & f_dndEvent.LINK_DND_EFFECT)) {
+					effect=f_dndEvent.LINK_DND_EFFECT;
+					
+				} else if (jsEvent.ctrlKey && (effects & f_dndEvent.COPY_DND_EFFECT)) {
+					effect=f_dndEvent.COPY_DND_EFFECT;
+					
+				} else if (jsEvent.shiftKey && (effects & f_dndEvent.MOVE_DND_EFFECT)) {
+					effect=f_dndEvent.MOVE_DND_EFFECT;
+				}
+			}
+			
+			if (!effect) {
+				if (effects & f_dndEvent.DEFAULT_DND_EFFECT) {
+					effect=f_dndEvent.DEFAULT_DND_EFFECT;
+				
+				} else if (effects & f_dndEvent.LINK_DND_EFFECT) {
+					effect=f_dndEvent.LINK_DND_EFFECT;
+				
+				} else if (effects & f_dndEvent.MOVE_DND_EFFECT) {
+					effect=f_dndEvent.MOVE_DND_EFFECT;
+					
+				} else if (effects & f_dndEvent.COPY_DND_EFFECT) {
+					effect=f_dndEvent.COPY_DND_EFFECT;
+				}				
+			}
+		}
+		
+		f_core.Debug(f_dragAndDropEngine, "_computeEffect: targetEffects=0x"+targetEffects.toString(16)+" sourceEffects=0x"+sourceEffects.toString(16)+" effects=0x"+effects.toString(16)+" computedEffect=0x"+effect.toString(16)+" ");
+		
+		return effect;
+	},
+	/**
+	 * @method private
+	 * @param Event jsEvent
+	 * @return Boolean
+	 */
 	_computeDragAndDrop: function(jsEvent) {
-		this._currentDropEffects=0;			
+		this._currentDropEffect=0;			
 		this._currentDropTypes=null;			
 
 		if (!this._targetComponent) {
 			f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: target='"+this._targetComponent+"'.");
-			
+
 			this._updateDnDMask();			
 			return;
 		}
@@ -639,20 +908,16 @@ var __members = {
 			this._updateDnDMask();			
 			return;
 		}
-		
-		var targetEffects=this._targetDropEffects;
-		var sourceEffects=this._sourceDragEffects;
-
-		var effects=targetEffects & sourceEffects;
 	
-		f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: targetEffects=0x"+targetEffects.toString(16)+" sourceEffects=0x"+sourceEffects.toString(16)+" effects=0x"+effects.toString(16));
+		var effect=this._computeEffect(jsEvent);
 
-		if (!effects) {
+		if (!effect) {
 			this._updateDnDMask();	
 			
 			return;
 		}
 		
+		this._additionalTargetInformations=null;
 		
 		var req = {
 			_targetItem: this._targetItem,
@@ -663,9 +928,9 @@ var __members = {
 			_sourceItemValue: this._sourceItemValue,
 			_sourceComponent: this._sourceComponent,
 
-			_effects: effects,
+			_effect: effect,
 			_types: selectedTypes
-		}
+		};
 		
 		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_OVER_STAGE, jsEvent, req);
 		if (ret===false) {
@@ -681,23 +946,71 @@ var __members = {
 			return;
 		}
 		
-		this._currentDropEffects=effects;
+		this._currentDropEffect=effect;
 		this._currentDropTypes=selectedTypes;
+		this._lastEffectInfo=undefined;
+		this._lastTypesInfo=undefined;
     
 		this._updateDnDMask();			
 		
 		return true;
 	},
+	/**
+	 * @method private
+	 * @return void
+	 */
 	_updateDnDMask: function() {
+		var effect=this._currentDropEffect;
+		var types=this._currentDropTypes;
+
+		var dndInfo=this._dragAndDropInfo;
+		if (dndInfo) {
+			this._lastEffectInfo=effect;
+			this._lastTypesInfo=types;
+			
+			try {
+				dndInfo.f_updateTarget(types, effect, this._targetComponent, this._targetItem, this._targetItemValue, this._additionalTargetInformations);
+				
+			} catch (x) {
+				f_core.Error(f_dragAndDropEngine, "_updateDnDMask: call f_updateTarget of dndInfo throws exception", x); 
+			}
+		}
 		
 	},
-	f_fillDragInfo: function() {
+	/**
+	 * @method public
+	 * @param Map<String, Object> infos
+	 * @return void
+	 */
+	f_setTargetAdditionnalInformations: function(infos) {
+		this._additionalTargetInformations=infos;
 	},
-	f_getTargetItem: function() {
-		return this._targetItem;
+	/**
+	 * @method public
+	 * @param Map<String, Object> infos
+	 * @return void
+	 */
+	f_setSourceAdditionnalInformations: function(infos) {
+		this._additionalSourceInformations=infos;
 	},
-	f_getTargetItemValue: function() {
-		return this._targetItemValue;
+	/**
+	 * @method public
+	 * @return Map<String, Object> infos
+	 */
+	f_getSourceAdditionnalInformations: function() {
+		return this._additionalSourceInformations;
+	},
+	f_getSourceItem: function() {
+		return this._sourceItem;
+	},
+	f_getSourceItemValue: function() {
+		return this._sourceItemValue;
+	},
+	f_getSourceComponent: function() {
+		return this._sourceComponent;
+	},
+	f_getLastMousePosition: function() {
+		return this._lastMousePosition;
 	}
 }
 

@@ -136,7 +136,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             int dragEffects = treeComponent.getDragEffects(facesContext);
 
             if (dragEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                dragEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
+                dragEffects = IDragAndDropEffects.NONE_DND_EFFECT;
             }
             htmlWriter.writeAttribute("v:dragEffects", dragEffects);
 
@@ -160,7 +160,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             int dropEffects = treeComponent.getDropEffects(facesContext);
 
             if (dropEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                dropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
+                dropEffects = IDragAndDropEffects.NONE_DND_EFFECT;
             }
             htmlWriter.writeAttribute("v:dropEffects", dropEffects);
 
