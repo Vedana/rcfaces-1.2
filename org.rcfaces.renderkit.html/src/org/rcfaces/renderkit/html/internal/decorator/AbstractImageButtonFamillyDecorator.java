@@ -247,7 +247,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             }
             
             if (tabIndex != null) {
-             	writer.writeAttribute("v:tabIndex", tabIndex);
+             	writer.writeAttribute("v:tabIndex", tabIndex.intValue());
             }
 
             if (borderType != null) {
