@@ -107,6 +107,21 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
 
     IHtmlWriter writeAutoComplete(String mode) throws WriterException;
     
+    IHtmlWriter writeAriaDisabled(boolean disabled) throws WriterException;
+    
+    IHtmlWriter writeAriaSelected(boolean selected) throws WriterException;
+    
+    IHtmlWriter writeAriaExpanded(boolean expanded) throws WriterException;
+    
+    IHtmlWriter writeAriaLabelledBy(String clientId) throws WriterException;
+    
+    IHtmlWriter writeAriaActivedescendant(String clientId) throws WriterException;
+    
+    IHtmlWriter writeAriaControls(String[] listId) throws WriterException;
+    
+    IHtmlWriter writeAriaLevel(int level) throws WriterException;
+    
+    
     // IHtmlWriter writeAttributeNS(String ns, String name, String value)throws
     // WriterException;
 }

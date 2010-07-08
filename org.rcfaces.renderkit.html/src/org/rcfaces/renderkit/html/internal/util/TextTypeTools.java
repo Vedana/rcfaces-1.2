@@ -54,9 +54,9 @@ public class TextTypeTools {
         HTML_TYPES.put("header5", "h5");
         HTML_TYPES.put("header6", "h6");
 
-        HTML_TYPES.put("ul", "unorderedlist");
-        HTML_TYPES.put("li", "listitem");
-        HTML_TYPES.put("ol", "orderedlist");
+        HTML_TYPES.put("unorderedlist", IHtmlWriter.UL);
+        HTML_TYPES.put("listitem", IHtmlWriter.LI);
+        HTML_TYPES.put("orderedlist", "ol");
 
         Collection c = HTML_TYPES.values();
         String values[] = (String[]) c.toArray(new String[c.size()]);

@@ -5,7 +5,7 @@
 /**
  * f_imageButton class
  *
- * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate, fa_value
+ * @class f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */ 
@@ -35,7 +35,12 @@ var __statics = {
 	/**
 	 * @field private static final String
 	 */	  
-	_TEXT_ID_SUFFIX: "::text"
+	_TEXT_ID_SUFFIX: "::text",
+		
+	/**
+	 * @field private static final String
+	 */	  
+	_LINK_ID_SUFFIX: "::a"
 }
  
 var __members = {
@@ -52,11 +57,6 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
 		
 		this.f_addEventListener(f_imageButton.SELECTION_POST, this.f_imageButtonSelectEnd);
-		
-		this._tabIndex=this.tabIndex;
-		if (this.tabIndex == -1 && this._eventComponent && this._eventComponent.tabIndex) {
-			this._tabIndex=this._eventComponent.tabIndex;
-		}
 		
 		if (this.f_isDisabled()) {
 			this.fa_updateDisabled(true); // Pas d'update de l'image car le composant n'a pas enocre été updaté
@@ -131,6 +131,10 @@ var __members = {
 			// Il faut recuperer le click pour empecher le submit !
 			image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
 			break;
+			
+		case "ul" :
+			eventComponent=this.ownerDocument.getElementById(this.id+f_imageButton._LINK_ID_SUFFIX);
+			break;
 
 		default:
 			image=this.ownerDocument.getElementById(this.id+f_imageButton._IMAGE_ID_SUFFIX);
@@ -145,7 +149,7 @@ var __members = {
 					}
 				}
 				
-				var tabIndex=f_core.GetAttribute(this, "tabIndex");
+				var tabIndex=f_core.GetAttribute(this, "v:tabIndex");
 				if (!tabIndex) {
 					tabIndex=0;
 				}
@@ -495,13 +499,13 @@ var __members = {
 	},
 	fa_updateDisabled: function(disabled) {
 		var cmp=this.f_getEventElement();
-
+		fa_aria.SetElementAriaDisabled(cmp, disabled);
 		if (disabled) {
 			cmp.tabIndex=-1;
 			cmp.hideFocus=true;
 			
 		} else {
-			cmp.tabIndex=this._tabIndex;
+			cmp.tabIndex=this.fa_getTabIndex();
 			cmp.hideFocus=false;
 		}
 
@@ -643,7 +647,7 @@ var __members = {
 
 new f_class("f_imageButton", {
 	extend: f_component, 
-	aspects: [ fa_readOnly, fa_disabled, fa_borderType, fa_images, fa_immediate, fa_value ],
+	aspects: [ fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria ],
 	statics: __statics,
 	members: __members
 });

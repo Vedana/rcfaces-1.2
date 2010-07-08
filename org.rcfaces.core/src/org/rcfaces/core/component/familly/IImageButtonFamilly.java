@@ -14,6 +14,7 @@ import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.capability.ITextPositionCapability;
 
@@ -24,7 +25,7 @@ import org.rcfaces.core.component.capability.ITextPositionCapability;
 public interface IImageButtonFamilly extends IImageCapability,
         IStatesImageCapability, IBorderCapability, IBorderTypeCapability,
         ITextCapability, ISelectionEventCapability, IReadOnlyCapability,
-        IDisabledCapability, ITextPositionCapability, IImageSizeCapability {
+        IDisabledCapability, ITextPositionCapability, IImageSizeCapability, ITabIndexCapability {
 
     String getImageURL(FacesContext facesContext);
 
@@ -41,6 +42,8 @@ public interface IImageButtonFamilly extends IImageCapability,
     String getSelectedImageURL(FacesContext facesContext);
 
     String getDisabledImageURL(FacesContext facesContext);
+    
+    Integer getTabIndex(FacesContext facesContext);
 
     String getText(FacesContext facesContext);
 

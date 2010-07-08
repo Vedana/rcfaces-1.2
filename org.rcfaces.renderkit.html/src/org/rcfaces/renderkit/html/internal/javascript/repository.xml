@@ -261,6 +261,17 @@
 			</class>
 		</file>		
 		
+		<file name="aspect/fa_tabIndex.js">
+			<class name="fa_tabIndex">
+				<required-class name="f_aspect" />
+			</class>
+		</file>	
+		
+		<file name="aspect/fa_aria.js">
+			<class name="fa_aria">
+			</class>
+		</file>		
+		
 	</module>
 	
 <!-- Components -->
@@ -329,7 +340,8 @@
 				<required-class name="f_component" /> 
 				<required-class name="fa_focusStyleClass" />
 				<required-class name="fa_message" />
-
+				<required-class name="fa_tabIndex"/>
+				
 				<required-style name="f_input.css" />
 			</class>
 		</file>
@@ -420,7 +432,9 @@
 				<required-class name="fa_images" />
 				<required-class name="fa_immediate" />
 				<required-class name="fa_value" />
-
+				<required-class name="fa_tabIndex" />
+				<required-class name="fa_aria" />
+				
 				<required-style name="f_imageButton.css" />
 			</class>
 		</file>

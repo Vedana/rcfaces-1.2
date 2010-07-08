@@ -113,6 +113,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
     protected Integer tabIndex = null;
 
     protected String alternateText;
+    
+    protected boolean disabled;
 
     public AbstractImageButtonFamillyDecorator(
             IImageButtonFamilly imageButtonFamilly) {
@@ -166,11 +168,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 alternateText = ((IAlternateTextCapability) imageButtonFamilly)
                         .getAlternateText();
             }
-
-            if (imageButtonFamilly instanceof ITabIndexCapability) {
-                tabIndex = ((ITabIndexCapability) imageButtonFamilly)
-                        .getTabIndex();
-            }
+            tabIndex = imageButtonFamilly.getTabIndex(facesContext);
+        
 
             if (htmlBorderWriter == null && (text != null)) {
                 IBorderRenderersRegistry borderRendererRegistry = RcfacesContext
@@ -182,7 +181,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                                 null, NONE_BORDER_ID);
             }
 
-            boolean disabled = imageButtonFamilly.isDisabled(facesContext);
+            disabled = imageButtonFamilly.isDisabled(facesContext);
 
             boolean selected = false;
             if (imageButtonFamilly instanceof ISelectedCapability) {
@@ -246,6 +245,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                         width, height, tableHorizontalSpan, tableVerticalSpan,
                         disabled, selected);
             }
+            
+            if (tabIndex != null) {
+             	writer.writeAttribute("v:tabIndex", tabIndex);
+            }
 
             if (borderType != null) {
                 writer.writeAttribute("v:borderType", borderType);
@@ -258,7 +261,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             } else if (selected) {
                 cssStyleClasses.addSuffix("_selected");
             }
-
+            writer.writeAriaDisabled(disabled);
             writeAttributes(cssStyleClasses);
 
             if (cssStyleClasses != null) {
@@ -420,9 +423,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     private void writeInputAttributes(IHtmlWriter writer)
             throws WriterException {
-        if (tabIndex != null) {
-            writer.writeTabIndex(tabIndex.intValue());
-        }
+		 if (tabIndex != null) {
+		     writer.writeTabIndex(tabIndex.intValue());
+		 }
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
@@ -648,7 +651,9 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         String inputElement = getInputElement();
         writer.startElement(inputElement);
         writeInputAttributes(writer);
-
+        writer.writeAriaDisabled(disabled);
+        writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
+        
         if (IHtmlWriter.INPUT.equals(inputElement)) {
             writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
 

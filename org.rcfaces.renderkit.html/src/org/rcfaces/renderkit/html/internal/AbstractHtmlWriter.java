@@ -629,7 +629,52 @@ public abstract class AbstractHtmlWriter extends
         return this;
     }
 
-    public void addSubFocusableComponent(String subComponentClientId) {
+    public IHtmlWriter writeAriaActivedescendant(String clientId)
+			throws WriterException {
+    	writeAttribute("aria-activedescendant", clientId);
+		return this;
+	}
+
+	public IHtmlWriter writeAriaControls(String[] listId)
+			throws WriterException {
+		String list=listId[0];
+		for (int i = 1; i < listId.length; i++) {
+			list += " "+listId[i]; 
+		}
+		writeAttribute("aria-controls", list);
+		return this;
+	}
+
+	public IHtmlWriter writeAriaDisabled(boolean disabled)
+			throws WriterException {
+		writeAttribute("aria-disabled", disabled);
+		return this;
+	}
+
+	public IHtmlWriter writeAriaExpanded(boolean expanded)
+			throws WriterException {
+		writeAttribute("aria-expanded", expanded);
+		return this;
+	}
+
+	public IHtmlWriter writeAriaLabelledBy(String clientId)
+			throws WriterException {
+		writeAttribute("aria-labelledby", clientId);
+		return this;
+	}
+
+	public IHtmlWriter writeAriaLevel(int level) throws WriterException {
+		writeAttribute("aria-level", level);
+		return this;
+	}
+
+	public IHtmlWriter writeAriaSelected(boolean selected)
+			throws WriterException {
+		writeAttribute("aria-selected", selected);
+		return this;
+	}
+
+	public void addSubFocusableComponent(String subComponentClientId) {
         if (subComponents == null) {
             subComponents = new HashSet(4);
 

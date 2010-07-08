@@ -104,7 +104,6 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
 
         if (component instanceof ITextCapability) {
             ITextCapability textCapability = (ITextCapability) component;
-
             String text = componentData.getStringProperty("text");
             if (text != null) {
                 String old = textCapability.getText();
@@ -168,6 +167,8 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
             if (imageButtonFamilly.isDisabled(facesContext)) {
                 writer.writeAttribute("v:disabled", true);
             }
+            
+            
 
             if (imageButtonFamilly.isReadOnly(facesContext)) {
                 writer.writeAttribute("v:readOnly", true);

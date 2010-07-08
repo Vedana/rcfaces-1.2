@@ -5,7 +5,7 @@
 /**
  * f_input class.
  *
- * @class f_input extends f_component, fa_message, fa_focusStyleClass
+ * @class f_input extends f_component, fa_message, fa_tabIndex, fa_focusStyleClass
  * @author Olivier Oeuillot (latest modification by $Author$) & Joel Merlin
  * @version $Revision$ $Date$
  */
@@ -237,6 +237,11 @@ var __members = {
 	 */
 	f_updateDisabled: function(disabled) {
 		this.f_updateStyleClass();
+		if (disabled) {
+			this.getInput().tabIndex=-1;
+		} else {
+			this.getInput().tabIndex=this.fa_getTabIndex();
+		}
 	},
 	/**
 	 * Returns the read only state.
@@ -493,7 +498,7 @@ var __members = {
 
 new f_class("f_input", {
 	extend: f_component, 
-	aspects: [ fa_message, fa_focusStyleClass ],
+	aspects: [ fa_message, fa_focusStyleClass, fa_tabIndex],
 	members: __members,
 	statics: __statics
 });

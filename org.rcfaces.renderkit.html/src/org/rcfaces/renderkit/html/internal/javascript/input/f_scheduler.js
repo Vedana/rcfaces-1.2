@@ -297,7 +297,6 @@ var __members = {
 		if (divNode.className!=style) {
 			divNode.className=style;
 		}
-		
 	},
 	
 	/**
@@ -363,6 +362,7 @@ var __members = {
 	 */
 	fa_setElementSelected:  function(divNode, selected) {
 		divNode._selected = selected;
+		fa_aria.SetElementAriaSelected(divNode, selected);
 	},
 	
 	/**
