@@ -60,14 +60,20 @@ public class TextRenderer extends AbstractCssRenderer {
         writeCssAttributes(htmlWriter);
         writeTextDirection(htmlWriter, textComponent);
 
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        int ariaLevel = textComponent.getAriaLevel(componentRenderContext
+                .getFacesContext());
+        if (ariaLevel > 0) {
+            htmlWriter.writeAriaLevel(ariaLevel);
+        }
+
         if (ac != null) {
             // On peut pas calculer la véritable ID car le composant est peut
             // etre pas encore présent.
             // On considere que nous sommes dans le même namingContainer que le
             // for ! (si un namespace separator n'est pas spécifié dans l'id)
-
-            IComponentRenderContext componentRenderContext = htmlWriter
-                    .getComponentRenderContext();
 
             IRenderContext renderContext = componentRenderContext
                     .getRenderContext();

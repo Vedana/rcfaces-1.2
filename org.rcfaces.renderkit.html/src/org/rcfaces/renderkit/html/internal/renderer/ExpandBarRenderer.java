@@ -328,6 +328,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeClass(cssStyleClasses.constructClassName());
         writeTextDirection(htmlWriter, expandBarComponent);
 
+        int ariaLevel = expandBarComponent.getAriaLevel(facesContext);
+        if (ariaLevel > 0) {
+            htmlWriter.writeAriaLevel(ariaLevel);
+        }
+
         String text = (String) htmlWriter.getComponentRenderContext()
                 .getAttribute(TITLE_TEXT_ATTRIBUTE);
         if (text != null) {
