@@ -27,6 +27,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression dragTypes;
 	private ValueExpression draggable;
 	private ValueExpression dropListeners;
+	private ValueExpression dropCompleteListeners;
 	private ValueExpression dropEffects;
 	private ValueExpression dropTypes;
 	private ValueExpression droppable;
@@ -57,10 +58,16 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression clientCheckFullState;
 	private ValueExpression headerVisible;
 	private ValueExpression cursorValue;
+	private ValueExpression rowDragTypes;
+	private ValueExpression rowDragEffects;
+	private ValueExpression rowDropTypes;
+	private ValueExpression rowDropEffects;
 	private ValueExpression rowValueColumnId;
+	private ValueExpression rowLabelColumnId;
 	private ValueExpression rowCountVar;
 	private ValueExpression rowIndexVar;
 	private ValueExpression cellTextWrap;
+	private ValueExpression bodyDroppable;
 	private ValueExpression actionListeners;
 	private ValueExpression action;
 	public String getComponentType() {
@@ -101,6 +108,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 	public final void setDropListener(ValueExpression dropListeners) {
 		this.dropListeners = dropListeners;
+	}
+
+	public final void setDropCompleteListener(ValueExpression dropCompleteListeners) {
+		this.dropCompleteListeners = dropCompleteListeners;
 	}
 
 	public final void setDropEffects(ValueExpression dropEffects) {
@@ -223,8 +234,28 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.cursorValue = cursorValue;
 	}
 
+	public final void setRowDragTypes(ValueExpression rowDragTypes) {
+		this.rowDragTypes = rowDragTypes;
+	}
+
+	public final void setRowDragEffects(ValueExpression rowDragEffects) {
+		this.rowDragEffects = rowDragEffects;
+	}
+
+	public final void setRowDropTypes(ValueExpression rowDropTypes) {
+		this.rowDropTypes = rowDropTypes;
+	}
+
+	public final void setRowDropEffects(ValueExpression rowDropEffects) {
+		this.rowDropEffects = rowDropEffects;
+	}
+
 	public final void setRowValueColumnId(ValueExpression rowValueColumnId) {
 		this.rowValueColumnId = rowValueColumnId;
+	}
+
+	public final void setRowLabelColumnId(ValueExpression rowLabelColumnId) {
+		this.rowLabelColumnId = rowLabelColumnId;
 	}
 
 	public final void setRowCountVar(ValueExpression rowCountVar) {
@@ -237,6 +268,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 	public final void setCellTextWrap(ValueExpression cellTextWrap) {
 		this.cellTextWrap = cellTextWrap;
+	}
+
+	public final void setBodyDroppable(ValueExpression bodyDroppable) {
+		this.bodyDroppable = bodyDroppable;
 	}
 
 	public final void setAction(ValueExpression action) {
@@ -284,10 +319,16 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
+			LOG.debug("  rowDragTypes='"+rowDragTypes+"'");
+			LOG.debug("  rowDragEffects='"+rowDragEffects+"'");
+			LOG.debug("  rowDropTypes='"+rowDropTypes+"'");
+			LOG.debug("  rowDropEffects='"+rowDropEffects+"'");
 			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
+			LOG.debug("  rowLabelColumnId='"+rowLabelColumnId+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  cellTextWrap='"+cellTextWrap+"'");
+			LOG.debug("  bodyDroppable='"+bodyDroppable+"'");
 			LOG.debug("  action='"+action+"'");
 			LOG.debug("  actionListeners='"+actionListeners+"'");
 		}
@@ -362,6 +403,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 		if (dropListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DROP_LISTENER_TYPE, dropListeners);
+		}
+
+		if (dropCompleteListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DROP_COMPLETE_LISTENER_TYPE, dropCompleteListeners);
 		}
 
 		if (dropEffects != null) {
@@ -599,12 +644,57 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (rowDragTypes != null) {
+			if (rowDragTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_DRAG_TYPES, rowDragTypes);
+
+			} else {
+				component.setRowDragTypes(rowDragTypes.getExpressionString());
+			}
+		}
+
+		if (rowDragEffects != null) {
+			if (rowDragEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_DRAG_EFFECTS, rowDragEffects);
+
+			} else {
+				component.setRowDragEffects(rowDragEffects.getExpressionString());
+			}
+		}
+
+		if (rowDropTypes != null) {
+			if (rowDropTypes.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_DROP_TYPES, rowDropTypes);
+
+			} else {
+				component.setRowDropTypes(rowDropTypes.getExpressionString());
+			}
+		}
+
+		if (rowDropEffects != null) {
+			if (rowDropEffects.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_DROP_EFFECTS, rowDropEffects);
+
+			} else {
+				component.setRowDropEffects(rowDropEffects.getExpressionString());
+			}
+		}
+
 		if (rowValueColumnId != null) {
 			if (rowValueColumnId.isLiteralText()==false) {
 				component.setValueExpression(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
 
 			} else {
 				component.setRowValueColumnId(rowValueColumnId.getExpressionString());
+			}
+		}
+
+		if (rowLabelColumnId != null) {
+			if (rowLabelColumnId.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROW_LABEL_COLUMN_ID, rowLabelColumnId);
+
+			} else {
+				component.setRowLabelColumnId(rowLabelColumnId.getExpressionString());
 			}
 		}
 
@@ -631,6 +721,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (bodyDroppable != null) {
+			if (bodyDroppable.isLiteralText()==false) {
+				component.setValueExpression(Properties.BODY_DROPPABLE, bodyDroppable);
+
+			} else {
+				component.setBodyDroppable(getBool(bodyDroppable.getExpressionString()));
+			}
+		}
+
 		if (action != null) {
 			ListenersTools1_2.parseAction(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, action);
 		}
@@ -650,6 +749,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		dragTypes = null;
 		draggable = null;
 		dropListeners = null;
+		dropCompleteListeners = null;
 		dropEffects = null;
 		dropTypes = null;
 		droppable = null;
@@ -680,10 +780,16 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		clientCheckFullState = null;
 		headerVisible = null;
 		cursorValue = null;
+		rowDragTypes = null;
+		rowDragEffects = null;
+		rowDropTypes = null;
+		rowDropEffects = null;
 		rowValueColumnId = null;
+		rowLabelColumnId = null;
 		rowCountVar = null;
 		rowIndexVar = null;
 		cellTextWrap = null;
+		bodyDroppable = null;
 		action = null;
 		actionListeners = null;
 

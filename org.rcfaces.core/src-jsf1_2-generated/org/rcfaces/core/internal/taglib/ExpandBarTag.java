@@ -18,6 +18,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(ExpandBarTag.class);
 
+	private ValueExpression expandListeners;
 	private ValueExpression asyncRenderMode;
 	private ValueExpression fontBold;
 	private ValueExpression fontItalic;
@@ -47,6 +48,10 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	private ValueExpression userExpandable;
 	public String getComponentType() {
 		return ExpandBarComponent.COMPONENT_TYPE;
+	}
+
+	public final void setExpandListener(ValueExpression expandListeners) {
+		this.expandListeners = expandListeners;
 	}
 
 	public final void setAsyncRenderMode(ValueExpression asyncRenderMode) {
@@ -197,6 +202,10 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 
 		ExpandBarComponent component = (ExpandBarComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
+
+		if (expandListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.EXPAND_LISTENER_TYPE, expandListeners);
+		}
 
 		if (asyncRenderMode != null) {
 			if (asyncRenderMode.isLiteralText()==false) {
@@ -423,6 +432,7 @@ public class ExpandBarTag extends AbstractOutputTag implements Tag {
 	}
 
 	public void release() {
+		expandListeners = null;
 		asyncRenderMode = null;
 		fontBold = null;
 		fontItalic = null;

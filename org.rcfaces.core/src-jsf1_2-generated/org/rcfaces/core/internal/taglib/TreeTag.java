@@ -34,6 +34,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression dragTypes;
 	private ValueExpression draggable;
 	private ValueExpression dropListeners;
+	private ValueExpression dropCompleteListeners;
 	private ValueExpression dropEffects;
 	private ValueExpression dropTypes;
 	private ValueExpression droppable;
@@ -59,6 +60,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression defaultExpandedLeafImageURL;
 	private ValueExpression defaultDisabledLeafImageURL;
 	private ValueExpression hideRootExpandSign;
+	private ValueExpression bodyDroppable;
 	private ValueExpression cursorValue;
 	private ValueExpression expansionUseValue;
 	public String getComponentType() {
@@ -127,6 +129,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setDropListener(ValueExpression dropListeners) {
 		this.dropListeners = dropListeners;
+	}
+
+	public final void setDropCompleteListener(ValueExpression dropCompleteListeners) {
+		this.dropCompleteListeners = dropCompleteListeners;
 	}
 
 	public final void setDropEffects(ValueExpression dropEffects) {
@@ -229,6 +235,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.hideRootExpandSign = hideRootExpandSign;
 	}
 
+	public final void setBodyDroppable(ValueExpression bodyDroppable) {
+		this.bodyDroppable = bodyDroppable;
+	}
+
 	public final void setCursorValue(ValueExpression cursorValue) {
 		this.cursorValue = cursorValue;
 	}
@@ -276,6 +286,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  defaultExpandedLeafImageURL='"+defaultExpandedLeafImageURL+"'");
 			LOG.debug("  defaultDisabledLeafImageURL='"+defaultDisabledLeafImageURL+"'");
 			LOG.debug("  hideRootExpandSign='"+hideRootExpandSign+"'");
+			LOG.debug("  bodyDroppable='"+bodyDroppable+"'");
 			LOG.debug("  cursorValue='"+cursorValue+"'");
 			LOG.debug("  expansionUseValue='"+expansionUseValue+"'");
 		}
@@ -408,6 +419,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 		if (dropListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DROP_LISTENER_TYPE, dropListeners);
+		}
+
+		if (dropCompleteListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DROP_COMPLETE_LISTENER_TYPE, dropCompleteListeners);
 		}
 
 		if (dropEffects != null) {
@@ -610,6 +625,15 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (bodyDroppable != null) {
+			if (bodyDroppable.isLiteralText()==false) {
+				component.setValueExpression(Properties.BODY_DROPPABLE, bodyDroppable);
+
+			} else {
+				component.setBodyDroppable(getBool(bodyDroppable.getExpressionString()));
+			}
+		}
+
 		if (cursorValue != null) {
 			if (cursorValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.CURSOR_VALUE, cursorValue);
@@ -646,6 +670,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		dragTypes = null;
 		draggable = null;
 		dropListeners = null;
+		dropCompleteListeners = null;
 		dropEffects = null;
 		dropTypes = null;
 		droppable = null;
@@ -671,6 +696,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		defaultExpandedLeafImageURL = null;
 		defaultDisabledLeafImageURL = null;
 		hideRootExpandSign = null;
+		bodyDroppable = null;
 		cursorValue = null;
 		expansionUseValue = null;
 

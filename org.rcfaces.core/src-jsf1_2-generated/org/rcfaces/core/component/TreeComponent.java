@@ -45,6 +45,7 @@ import javax.faces.component.UISelectItem;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import java.lang.String;
@@ -93,6 +94,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	IDragEventCapability,
 	IDraggableCapability,
 	IDropEventCapability,
+	IDropCompleteEventCapability,
 	IDroppableCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
@@ -117,7 +119,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","draggable","selectable","defaultExpandedLeafImageURL","loadListener","showValue","expandListener","filterProperties","checkable","defaultSelectedImageURL","droppable","checkedValues","defaultLeafImageURL","defaultExpandedImageURL","border","checkCardinality","defaultDisabledLeafImageURL","defaultDisabledImageURL","verticalScrollPosition","dragListener","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","dropEffects","dropListener","cursorValue","clientCheckFullState","overStyleClass","dragEffects","expandable","dragTypes","clientSelectionFullState","dropTypes","preloadedLevelDepth","checkListener","selectionCardinality","readOnly","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","draggable","selectable","defaultExpandedLeafImageURL","loadListener","showValue","expandListener","filterProperties","dropCompleteListener","checkable","defaultSelectedImageURL","droppable","checkedValues","defaultLeafImageURL","defaultExpandedImageURL","border","checkCardinality","defaultDisabledLeafImageURL","defaultDisabledImageURL","verticalScrollPosition","dragListener","bodyDroppable","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","dropEffects","dropListener","cursorValue","clientCheckFullState","overStyleClass","dragEffects","expandable","dragTypes","clientSelectionFullState","dropTypes","preloadedLevelDepth","checkListener","selectionCardinality","readOnly","selectedValues"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -746,6 +748,18 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	public final javax.faces.event.FacesListener [] listDropListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IDropListener.class);
+	}
+
+	public final void addDropCompleteListener(org.rcfaces.core.event.IDropCompleteListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDropCompleteListener(org.rcfaces.core.event.IDropCompleteListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDropCompleteListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDropCompleteListener.class);
 	}
 
 	public int getDropEffects() {
@@ -1433,6 +1447,26 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public boolean isHideRootExpandSignSetted() {
 		return engine.isPropertySetted(Properties.HIDE_ROOT_EXPAND_SIGN);
+	}
+
+	public boolean isBodyDroppable() {
+		return isBodyDroppable(null);
+	}
+
+	public boolean isBodyDroppable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.BODY_DROPPABLE, false, facesContext);
+	}
+
+	public void setBodyDroppable(boolean bodyDroppable) {
+		engine.setProperty(Properties.BODY_DROPPABLE, bodyDroppable);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bodyDroppable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isBodyDroppableSetted() {
+		return engine.isPropertySetted(Properties.BODY_DROPPABLE);
 	}
 
 	public Object getCursorValue() {

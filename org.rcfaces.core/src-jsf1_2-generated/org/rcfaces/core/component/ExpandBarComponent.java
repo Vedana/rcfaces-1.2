@@ -20,6 +20,7 @@ import java.lang.String;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IExpandEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import java.util.Set;
@@ -47,6 +48,7 @@ import org.rcfaces.core.component.capability.IReadOnlyCapability;
  * </p>
  */
 public class ExpandBarComponent extends AbstractOutputComponent implements 
+	IExpandEventCapability,
 	IAsyncRenderModeCapability,
 	IFontCapability,
 	IDisabledCapability,
@@ -72,7 +74,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","border","blurListener","fontName","focusListener","asyncRenderMode","collapseEffect","disabled","accessKey","groupName","fontItalic","overStyleClass","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","userExpandable","readOnly","tabIndex"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","expandListener","border","blurListener","fontName","focusListener","collapseEffect","asyncRenderMode","disabled","accessKey","groupName","fontItalic","overStyleClass","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","userExpandable","readOnly","tabIndex"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -90,6 +92,18 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 			setAsyncRenderMode(((Integer)AsyncRenderModeConverter.SINGLETON.getAsObject(null, this, asyncRenderMode)).intValue());
 		
+	}
+
+	public final void addExpandListener(org.rcfaces.core.event.IExpandListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeExpandListener(org.rcfaces.core.event.IExpandListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listExpandListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IExpandListener.class);
 	}
 
 	public int getAsyncRenderMode() {

@@ -13,8 +13,9 @@ import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.internal.converter.DragDropTypesConverter;
 import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.internal.capability.IDraggableGridComponent;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.AbstractDataComponent;
@@ -43,6 +44,7 @@ import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.lang.provider.ICursorProvider;
@@ -56,9 +58,10 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
 import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
 import java.lang.String;
@@ -71,8 +74,8 @@ import java.util.Set;
 import java.util.HashSet;
 import javax.faces.component.UIComponent;
 import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
 import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.model.ISortedComponent;
@@ -105,6 +108,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IDragEventCapability,
 	IDraggableCapability,
 	IDropEventCapability,
+	IDropCompleteEventCapability,
 	IDroppableCapability,
 	ICheckEventCapability,
 	ICheckableCapability,
@@ -137,8 +141,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 	ICheckRangeComponent,
 	ISelectionRangeComponent,
 	ISortedComponentsCapability,
+	IDraggableGridComponent,
 	IAdditionalInformationRangeComponent,
 	IGridComponent,
+	IDroppableGridComponent,
 	IComponentValueTypeCapability,
 	ISortedChildrenCapability {
 
@@ -148,7 +154,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","rowValueColumnId","horizontalScrollPosition","clientAdditionalInformationFullState","doubleClickListener","preferences","draggable","rowIndexVar","selectable","additionalInformationValues","showValue","loadListener","filterProperties","checkable","droppable","checkedValues","additionalInformationListener","checkCardinality","border","cellTextWrap","verticalScrollPosition","paged","dragListener","emptyDataMessage","dropEffects","required","disabled","dropListener","cursorValue","additionalInformationCardinality","clientCheckFullState","rowStyleClass","headerVisible","keySearchColumnId","dragEffects","rowCountVar","dragTypes","clientSelectionFullState","dropTypes","checkListener","readOnly","selectionCardinality","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"horizontalScrollPosition","clientAdditionalInformationFullState","preferences","draggable","rowIndexVar","additionalInformationValues","selectable","loadListener","rowDropTypes","filterProperties","dropCompleteListener","additionalInformationListener","checkCardinality","cellTextWrap","paged","dragListener","bodyDroppable","dropListener","disabled","additionalInformationCardinality","cursorValue","rowLabelColumnId","clientCheckFullState","rowStyleClass","keySearchColumnId","headerVisible","dragEffects","dragTypes","rowDropEffects","selectionCardinality","readOnly","selectedValues","selectionListener","rowValueColumnId","doubleClickListener","showValue","checkable","checkedValues","droppable","border","rowDragTypes","verticalScrollPosition","emptyDataMessage","required","dropEffects","rowDragEffects","rowCountVar","dropTypes","clientSelectionFullState","checkListener"}));
 	}
 
 	public DataGridComponent() {
@@ -213,6 +219,34 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 
 			setDropTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dropTypes));
+		
+	}
+
+	public void setRowDragTypes(String dragTypes) {
+
+
+			setRowDragTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dragTypes));
+		
+	}
+
+	public void setRowDragEffects(String dragEffects) {
+
+
+			setRowDragEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dragEffects)).intValue());
+		
+	}
+
+	public void setRowDropTypes(String dropTypes) {
+
+
+			setRowDropTypes((String[])DragDropTypesConverter.SINGLETON.getAsObject(null, this, dropTypes));
+		
+	}
+
+	public void setRowDropEffects(String dropEffects) {
+
+
+			setRowDropEffects(((Integer)DragDropEffectsConverter.SINGLETON.getAsObject(null, this, dropEffects)).intValue());
 		
 	}
 
@@ -831,6 +865,18 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public final javax.faces.event.FacesListener [] listDropListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IDropListener.class);
+	}
+
+	public final void addDropCompleteListener(org.rcfaces.core.event.IDropCompleteListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeDropCompleteListener(org.rcfaces.core.event.IDropCompleteListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listDropCompleteListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IDropCompleteListener.class);
 	}
 
 	public int getDropEffects() {
@@ -1502,6 +1548,86 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.CURSOR_VALUE, cursorValue);
 	}
 
+	public String[] getRowDragTypes() {
+		return getRowDragTypes(null);
+	}
+
+	public String[] getRowDragTypes(javax.faces.context.FacesContext facesContext) {
+		return (String[])engine.getValue(Properties.ROW_DRAG_TYPES, facesContext);
+	}
+
+	public void setRowDragTypes(String[] rowDragTypes) {
+		engine.setProperty(Properties.ROW_DRAG_TYPES, rowDragTypes);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowDragTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowDragTypesSetted() {
+		return engine.isPropertySetted(Properties.ROW_DRAG_TYPES);
+	}
+
+	public int getRowDragEffects() {
+		return getRowDragEffects(null);
+	}
+
+	public int getRowDragEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROW_DRAG_EFFECTS, 0, facesContext);
+	}
+
+	public void setRowDragEffects(int rowDragEffects) {
+		engine.setProperty(Properties.ROW_DRAG_EFFECTS, rowDragEffects);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowDragEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowDragEffectsSetted() {
+		return engine.isPropertySetted(Properties.ROW_DRAG_EFFECTS);
+	}
+
+	public String[] getRowDropTypes() {
+		return getRowDropTypes(null);
+	}
+
+	public String[] getRowDropTypes(javax.faces.context.FacesContext facesContext) {
+		return (String[])engine.getValue(Properties.ROW_DROP_TYPES, facesContext);
+	}
+
+	public void setRowDropTypes(String[] rowDropTypes) {
+		engine.setProperty(Properties.ROW_DROP_TYPES, rowDropTypes);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowDropTypes" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowDropTypesSetted() {
+		return engine.isPropertySetted(Properties.ROW_DROP_TYPES);
+	}
+
+	public int getRowDropEffects() {
+		return getRowDropEffects(null);
+	}
+
+	public int getRowDropEffects(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROW_DROP_EFFECTS, 0, facesContext);
+	}
+
+	public void setRowDropEffects(int rowDropEffects) {
+		engine.setProperty(Properties.ROW_DROP_EFFECTS, rowDropEffects);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowDropEffects" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowDropEffectsSetted() {
+		return engine.isPropertySetted(Properties.ROW_DROP_EFFECTS);
+	}
+
 	/**
 	 * Returns the id for the column containing the key for the row.
 	 * @return column id
@@ -1536,6 +1662,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isRowValueColumnIdSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_COLUMN_ID);
+	}
+
+	public String getRowLabelColumnId() {
+		return getRowLabelColumnId(null);
+	}
+
+	public String getRowLabelColumnId(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ROW_LABEL_COLUMN_ID, facesContext);
+	}
+
+	public void setRowLabelColumnId(String rowLabelColumnId) {
+		engine.setProperty(Properties.ROW_LABEL_COLUMN_ID, rowLabelColumnId);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rowLabelColumnId" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowLabelColumnIdSetted() {
+		return engine.isPropertySetted(Properties.ROW_LABEL_COLUMN_ID);
 	}
 
 	/**
@@ -1628,6 +1774,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isCellTextWrapSetted() {
 		return engine.isPropertySetted(Properties.CELL_TEXT_WRAP);
+	}
+
+	public boolean isBodyDroppable() {
+		return isBodyDroppable(null);
+	}
+
+	public boolean isBodyDroppable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.BODY_DROPPABLE, false, facesContext);
+	}
+
+	public void setBodyDroppable(boolean bodyDroppable) {
+		engine.setProperty(Properties.BODY_DROPPABLE, bodyDroppable);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bodyDroppable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isBodyDroppableSetted() {
+		return engine.isPropertySetted(Properties.BODY_DROPPABLE);
 	}
 
 	protected Set getCameliaFields() {

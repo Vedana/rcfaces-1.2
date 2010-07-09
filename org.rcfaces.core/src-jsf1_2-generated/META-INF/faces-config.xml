@@ -218,10 +218,30 @@ A string specifying the message to display when there is no row to display.
 		<component-type>org.rcfaces.core.dataGrid</component-type>
 		<component-class>org.rcfaces.core.component.DataGridComponent</component-class>
 		<attribute>
+			<attribute-name>rowDragTypes</attribute-name>
+			<attribute-class>java.lang.String[]</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>rowDragEffects</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>rowDropTypes</attribute-name>
+			<attribute-class>java.lang.String[]</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>rowDropEffects</attribute-name>
+			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 An id for the column containing the key for the row.
 ]]></description>
 			<attribute-name>rowValueColumnId</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>rowLabelColumnId</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 		<attribute>
@@ -240,6 +260,10 @@ A string value specifying the name of the variable receiving the index of the cu
 		</attribute>
 		<attribute>
 			<attribute-name>cellTextWrap</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>bodyDroppable</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
 	</component>
@@ -1837,6 +1861,10 @@ An url string pointing to the default image for a disabled leaf.
 A boolean value indicating wether the expand sign should be visible for the topmost node.
 ]]></description>
 			<attribute-name>hideRootExpandSign</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>bodyDroppable</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
 		<attribute>
