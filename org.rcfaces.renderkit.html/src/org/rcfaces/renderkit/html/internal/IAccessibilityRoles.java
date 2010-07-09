@@ -12,30 +12,30 @@ public interface IAccessibilityRoles {
 
     String WAI_ROLE = "wairole:";
 
-    String BUTTON = WAI_ROLE + "button";
+    String BUTTON = "button";
 
-    String CHECK_BOX = WAI_ROLE + "checkbox";
+    String CHECK_BOX = "checkbox";
 
-    String CHECK_BOX_3_STATE = WAI_ROLE + "checkboxtristate";
+    String CHECK_BOX_3_STATE = "checkboxtristate";
 
-    String GRID = WAI_ROLE + "grid";
+    String GRID = "grid";
 
-    String PROGRESS_BAR = WAI_ROLE + "progressbar";
+    String PROGRESS_BAR = "progressbar";
 
-    String RADIO = WAI_ROLE + "radio";
+    String RADIO = "radio";
 
-    String SPIN_BUTTON = WAI_ROLE + "spinbutton";
+    String SPIN_BUTTON = "spinbutton";
 
-    String TAB = WAI_ROLE + "tab";
+    String TAB = "tab";
 
-    String TAB_CONTENT = WAI_ROLE + "tabcontent";
+    String TAB_CONTENT = "tabcontent";
 
-    String TAB_PANEL = WAI_ROLE + "tabpanel";
+    String TAB_PANEL = "tabpanel";
 
-    String TEXT_FIELD = WAI_ROLE + "textfield";
+    String TEXT_FIELD = "textfield";
 
-    String TOOLBAR = WAI_ROLE + "toolbar";
+    String TOOLBAR = "toolbar";
 
-    String TREE = WAI_ROLE + "tree";
+    String TREE = "tree";
 
 }
