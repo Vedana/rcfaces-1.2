@@ -81,7 +81,7 @@ var __statics = {
 				return;
 			}	
 			
-			current._dragStop(evt);
+			current._dragStop(evt, false);
 			
 			return f_dragAndDropEngine._Exit();
 			
@@ -103,25 +103,57 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current);
+			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current+" keyCode="+evt.keyCode);
 	
 			if (!current) {
 				return;
 			}	
 			
 			if (evt.keyCode==f_key.VK_ESCAPE) {
-				return f_dragAndDropEngine._DragStop();				
+				
+				current._dragStop(evt, true);
+				
+				return f_dragAndDropEngine._Exit();
 			}
 			
 			switch(evt.keyCode) {
 			case f_key.VK_SHIFT:
 			case f_key.VK_CONTROL:
 			case f_key.VK_ALT:
-				return current._modifyEffect(evt);
+				current._modifyEffect(evt);
+				return true;
 			}
 			
 		} catch (x) {
 			f_core.Error(f_dragAndDropEngine, "_KeyDown/_KeyUp: exception", x);
+		}
+	 },
+	 /**
+	  * @method private static
+	  * @param Event evt
+	  * @return Boolean
+	  * @context event:evt
+	  */
+	 _FocusExit: function(evt) {
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		try {
+			var current=f_dragAndDropEngine._Current;
+	
+			f_core.Info(f_dragAndDropEngine, "_FocusExit: focus ! current="+current);
+	
+			if (!current) {
+				return;
+			}	
+			
+			current._dragStop(evt, true);
+			
+			return f_dragAndDropEngine._Exit();
+			
+		} catch (x) {
+			f_core.Error(f_dragAndDropEngine, "_FocusExit: exception", x);
 		}
 	 },
 	 /**
@@ -254,6 +286,29 @@ var __members = {
 		this._sourceComponent=sourceComponent;
 		this._dragAndDropInfoNames=names;
 	},
+	
+	/** 
+	 * @method public
+	 */
+	f_finalize: function() {
+
+		this._elementOver=undefined;
+		var timerId=this._elementOverTimerId;
+		if (timerId) {
+			this._elementOverTimerId=undefined;
+			
+			f_core.GetWindow(this._sourceComponent).clearTimeout(timerId);
+		}
+
+		this._sourceComponent=undefined;
+		this._clearFields();
+		// this._lastEffectsInfo=undefined; // Number
+		// this._lastTypesInfo=undefined; // String[]
+		// this._dragAndDropInfoNames=undefined; // String[]
+
+		
+		this.f_super(arguments);
+	},
 	/**
 	 * @method public
 	 * @param String... name
@@ -320,19 +375,6 @@ var __members = {
 		
 		return true;
 	},
-	
-	/** 
-	 * @method public
-	 */
-	f_finalize: function() {
-		this._sourceComponent=undefined;
-		this._clearFields();
-		// this._lastEffectsInfo=undefined; // Number
-		// this._lastTypesInfo=undefined; // String[]
-		// this._dragAndDropInfoNames=undefined; // String[]
-		
-		this.f_super(arguments);
-	},
 
 	/** 
 	 * @method protected
@@ -363,17 +405,7 @@ var __members = {
 		
 		this._lastMousePosition=undefined;
 		
-		var queryDropInfosCall=this._queryDropInfosCall;
-		if (queryDropInfosCall) {
-			this._queryDropInfosCall=undefined;
-			
-			try {
-				queryDropInfosCall.f_releaseDropInfos(this);
-						
-			} catch (x) {
-				f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_releaseDropInfos throws exception", x); 
-			}
-		}
+		this._releaseDropInfos();
 	},
 	
 	/**
@@ -382,14 +414,8 @@ var __members = {
 	 */
 	_install: function(jsEvent) {	
 		f_dragAndDropEngine._Exit();
-				
-		var req = {
-			_sourceItem: this._sourceItem,
-			_sourceItemValue: this._sourceItemValue,
-			_sourceComponent: this._sourceComponent
-		};
 
-		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_INIT_STAGE, jsEvent, req);
+		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_INIT_STAGE, jsEvent);
 		
 		f_core.Debug(f_dragAndDropEngine, "_install: DRAG_INIT_STAGE event returns '"+ret+"'.");
 		
@@ -411,7 +437,9 @@ var __members = {
 		f_core.AddEventListener(doc, "mouseup", f_dragAndDropEngine._DragStop, doc);
 		f_core.AddEventListener(doc, "keydown", f_dragAndDropEngine._KeyDownUp, doc);
 		f_core.AddEventListener(doc, "keyup", f_dragAndDropEngine._KeyDownUp, doc);
-		
+		f_core.AddEventListener(doc, "focus", f_dragAndDropEngine._FocusExit, doc);
+		f_core.AddEventListener(doc, "blur", f_dragAndDropEngine._FocusExit, doc);
+			
 		return true;
 	},
 	/**
@@ -421,13 +449,17 @@ var __members = {
 	_exit: function(js) {
 		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
 
+		this._releaseDropInfos(true);
+		
 		var doc=this._sourceComponent.ownerDocument;
 		
 		f_core.RemoveEventListener(doc, "mousemove", f_dragAndDropEngine._DragMove, doc);
 		f_core.RemoveEventListener(doc, "mouseup", f_dragAndDropEngine._DragStop, doc);
 		f_core.RemoveEventListener(doc, "keydown", f_dragAndDropEngine._KeyDownUp, doc);
 		f_core.RemoveEventListener(doc, "keyup", f_dragAndDropEngine._KeyDownUp, doc);
-	
+		f_core.RemoveEventListener(doc, "focus", f_dragAndDropEngine._FocusExit, doc);
+		f_core.RemoveEventListener(doc, "blur", f_dragAndDropEngine._FocusExit, doc);
+		
 		if (this._dragLock) {
 			this._dragLock=false;
 			
@@ -451,24 +483,24 @@ var __members = {
 	 * @method hidden
 	 * @param String stage
 	 * @param Event jsEvent
-	 * @param any itemValue
+	 * @param String[] types
+	 * @param Number effect
+	 * @return Boolean
 	 */
-	f_fireEventToSource: function(stage, jsEvent, detail) {
-		f_core.Debug(f_dragAndDropEngine, "f_fireEventToSource: prepare event source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' detail='"+detail+"' returns "+ret);
-		
+	f_fireEventToSource: function(stage, jsEvent, types, effect) {
+		//f_core.Debug(f_dragAndDropEngine, "f_fireEventToSource: prepare event source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' returns "+ret);
+
 		var ret;
 		try {
-			ret=this._sourceComponent.f_fireEvent(f_event.DRAG, jsEvent, this, detail, null, stage);
-
+			ret=f_dndEvent.FireEvent(this._sourceComponent, f_event.DRAG, jsEvent, this, stage, this._targetItem, this._targetItemValue, this._targetComponent, effect, types);
 			
 		} catch (x) {
-			f_core.Error(f_dragAndDropEngine, "f_fireEventToSource: fire to source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' detail='"+detail+"' throws exception", x);
+			f_core.Error(f_dragAndDropEngine, "f_fireEventToSource: fire to source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' throws exception", x);
 			
 			throw x;
 		}
-
 		
-		f_core.Debug(f_dragAndDropEngine, "f_fireEventToSource: fire to source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' detail='"+detail+"' returns '"+ret+"'");
+		//f_core.Debug(f_dragAndDropEngine, "f_fireEventToSource: fire to source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' returns '"+ret+"'");
 		
 		return ret;
 	},
@@ -479,23 +511,24 @@ var __members = {
 	 * @param String stage
 	 * @param Event jsEvent
 	 * @param any itemValue
+	 * @param String[] types
+	 * @param Number effect
+	 * @return Boolean
 	 */
-	f_fireEventToTarget: function(stage, jsEvent, detail) {
-		f_core.Debug(f_dragAndDropEngine, "f_fireEventToTarget: prepare event source ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' detail='"+detail+"' returns "+ret);
+	f_fireEventToTarget: function(stage, jsEvent, types, effect) {
+		//f_core.Debug(f_dragAndDropEngine, "f_fireEventToTarget: prepare event source ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' returns "+ret);
 		
 		var ret;
 		try {
-			ret=this._targetComponent.f_fireEvent(f_event.DROP, jsEvent, this, detail, null, stage);
-
-			
+			ret=f_dndEvent.FireEvent(this._targetComponent, f_event.DROP, jsEvent, this, stage, this._targetItem, this._targetItemValue, this._targetComponent, effect, types);
+		
 		} catch (x) {
-			f_core.Error(f_dragAndDropEngine, "f_fireEventToTarget: fire to target ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' detail='"+detail+"' throws exception", x);
+			f_core.Error(f_dragAndDropEngine, "f_fireEventToTarget: fire to target ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' throws exception", x);
 			
 			throw x;
 		}
 
-		
-		f_core.Debug(f_dragAndDropEngine, "f_fireEventToTarget: fire to target ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' detail='"+detail+"' returns '"+ret+"'");
+		//f_core.Debug(f_dragAndDropEngine, "f_fireEventToTarget: fire to target ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' returns '"+ret+"'");
 		
 		return ret;
 	},
@@ -511,14 +544,8 @@ var __members = {
 		if (this._started) {
 			return false;
 		}
-				
-		var req = {
-			_sourceItem: this._sourceItem,
-			_sourceItemValue: this._sourceItemValue,
-			_sourceComponent: this._sourceComponent			
-		};
 
-		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_START_STAGE, jsEvent, req);
+		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_START_STAGE, jsEvent);
 		
 		f_core.Debug(f_dragAndDropEngine, "_startDrag: DRAG_START_STAGE event returns '"+ret+"'.");
 		
@@ -563,7 +590,7 @@ var __members = {
 	 * @method private
 	 * @return Boolean
 	 */
-	_dragStop: function(jsEvent) {
+	_dragStop: function(jsEvent, cancel) {
 		f_core.Debug(f_dragAndDropEngine, "_dragStop: Drag stop started='"+this._started+"'.")
 		
 		if (!this._started) {
@@ -573,60 +600,54 @@ var __members = {
 		this._started=undefined;
 		
 		var targetComponent=this._targetComponent;
-		if (!targetComponent || !this._currentDropEffect) {
+		if (!targetComponent || !this._currentDropEffect || cancel) {
 			
-			var req = {
-				_sourceItem: this._sourceItem,
-				_sourceItemValue: this._sourceItemValue,
-				_sourceComponent: this._sourceComponent
-			};
-
-			this.f_fireEventToSource(f_dndEvent.DRAG_ABORTED_STAGE, jsEvent, req);
+			this.f_fireEventToSource(f_dndEvent.DRAG_ABORTED_STAGE, jsEvent);
 			
 			return false;
 		}
 		
 		var targetItemValue=this._targetItemValue;
+		var types=this._currentDropTypes;
+		var effect=this._currentDropEffect;
 		
 		var canceled=false;
 				
-		var req = {
-			_targetItem: this._targetItem,
-			_targetItemValue: targetItemValue,
-			_targetComponent: targetComponent,
-
-			_sourceItem: this._sourceItem,
-			_sourceItemValue: this._sourceItemValue,
-			_sourceComponent: this._sourceComponent,
-
-			_effect: this._currentDropEffect,
-			_types: this._currentDropTypes
-		};
-		
-		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_REQUEST_STAGE, jsEvent, req);
+		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_REQUEST_STAGE, jsEvent, types, effect);
 		if (ret===false) {
 			canceled=true;
 			
 		} else {
-			var ret=this.f_fireEventToTarget(f_dndEvent.DROP_REQUEST_STAGE, jsEvent, req);
+			var ret=this.f_fireEventToTarget(f_dndEvent.DROP_REQUEST_STAGE, jsEvent, types, effect);
 			if (ret===false) {
 				canceled=true;
 			}
 		}
 				
 		if (canceled) {		
-			this.f_fireEventToSource(f_dndEvent.DRAG_CANCELED_STAGE, jsEvent, req);
-			this.f_fireEventToTarget(f_dndEvent.DROP_CANCELED_STAGE, jsEvent, req);
+			this.f_fireEventToSource(f_dndEvent.DRAG_CANCELED_STAGE, jsEvent);
+			this.f_fireEventToTarget(f_dndEvent.DROP_CANCELED_STAGE, jsEvent);
 			return false;
 		}
 				
-		this.f_fireEventToSource(f_dndEvent.DRAG_COMPLETE_STAGE, jsEvent, req);
+		this.f_fireEventToSource(f_dndEvent.DRAG_COMPLETE_STAGE, jsEvent, types, effect);
 		
-		this.f_fireEventToTarget(f_dndEvent.DROP_COMPLETE_STAGE, jsEvent, req);
+		this.f_fireEventToTarget(f_dndEvent.DROP_COMPLETE_STAGE, jsEvent, types, effect);
 		
+		try {
+			f_dndEvent.FireEvent(this._targetComponent, f_event.DROP_COMPLETE, jsEvent, this, null, this._targetItem, this._targetItemValue, this._targetComponent, effect, types, true);
+		
+		} catch (x) {
+			f_core.Error(f_dragAndDropEngine, "_dragStop: fire DROP_COMPLETE throws exception: jsEvent='"+jsEvent+"' detail='"+req+"'.", x);
+		}
+
 		return true;
 	},
-	
+	/**
+	 * @method private
+	 * @param Event jsEvent
+	 * @return Boolean
+	 */
 	_dragMove: function(jsEvent) {
 
 		var eventPos = f_core.GetJsEventPosition(jsEvent);
@@ -652,7 +673,7 @@ var __members = {
 				return false;
 			}
 		}
-
+		
 		var dndInfo=this._dragAndDropInfo;
 		if (dndInfo) {
 			try {
@@ -679,18 +700,79 @@ var __members = {
 		var dropComponent=f_core.GetParentByClass(dropElement);
 		//f_core.Debug(f_dragAndDropEngine, "_dragMove: DropComponent="+dropComponent);
 		
-		if (!dropComponent || !dropComponent.f_isDroppable) {
+		if (!dropComponent) {
 			// Target definie ... on abandonne target
 
 			f_core.Debug(f_dragAndDropEngine, "_dragMove: invalid dropComponent '"+dropComponent+"' (dropElement='"+dropElement+"')");
 			return this._cancelTarget(jsEvent);
 		}
+			
+		var startTimer=false;
+		var endTimer=false;
+		var overTimerId=this._elementOverTimerId;
+		if (dropComponent.fa_findAutoOpenElement) {
+			var elementOver=dropComponent.fa_findAutoOpenElement(dropElement);
+			var old=this._elementOver;
+			this._elementOver=elementOver;
 		
-		if (!dropComponent.f_isDroppable()) {
+			if (elementOver && old && dropComponent.fa_isSameAutoOpenElement(elementOver, old)) {
+				// On continue
+			
+			} else if (elementOver && old) {
+				// Un autre, on relance le timer
+				endTimer=true;
+				startTimer=true;
+			
+			} else if (elementOver) {
+				startTimer=true;
+				
+			} else if (old) {
+				endTimer=true;
+			}
+
+			f_core.Debug(f_dragAndDropEngine, "_dragMove: elementOver="+(elementOver?elementOver._value:null)+" / "+(old?old._value:null)+" start="+startTimer+" end="+endTimer);
+					
+		} else if (overTimerId) {
+			endTimer=true;
+		}
+		
+		if (endTimer) {
+			this._elementOverTimerId=undefined;
+			f_core.GetWindow(this._sourceComponent).clearTimeout(overTimerId);
+		}
+		
+		if (startTimer) {
+			var self=this;
+			var _dropComponent=dropComponent;
+			
+			overTimerId=f_core.GetWindow(this._sourceComponent).setTimeout(function() {
+				
+				if (window._rcfacesExiting) {
+					return false;
+				}
+				try {
+					var elementOver=self._elementOver;
+					
+					self._elementOverTimerId=undefined;
+					self._elementOver=undefined;
+					
+					_dropComponent.fa_performAutoOpenElement(elementOver);
+					
+				} catch (x) {
+					f_core.Error(f_dragAndDropEngine, "_dragMove: auto open timeout throws exception", x); 
+				}
+				
+			}, 500);
+			
+			this._elementOverTimerId=overTimerId;
+		}
+		
+		
+		if (!dropComponent.f_isDroppable || !dropComponent.f_isDroppable()) {
 			// Target definie ... on abandonne target
 
 			f_core.Debug(f_dragAndDropEngine, "_dragMove: component is not droppable '"+dropComponent+"' (dropElement='"+dropElement+"')");
-			return this._cancelTarget(jsEvent);
+			return this._cancelTarget(jsEvent, true, false);
 		}
 		
 		this._queryDropInfosCall=dropComponent;
@@ -700,22 +782,22 @@ var __members = {
 			// La target ne trouve rien ...
 
 			f_core.Debug(f_dragAndDropEngine, "_dragMove: no dropInfos for component '"+dropComponent+"', dropElement='"+dropElement+"'");
-			return this._cancelTarget(jsEvent, false);
+			return this._cancelTarget(jsEvent, false, false);
 		}
 		
 		if (this._sourceComponent==dropComponent && this._sourceItemValue==dropInfos.itemValue) {
-			// Pas de changement !
+			// On peut pas copier sur soi-même !
 			f_core.Debug(f_dragAndDropEngine, "_dragMove: same item as source !");
 			return;
 		}
-		
+	
 		if (this._targetComponent==dropComponent && this._targetItemValue==dropInfos.itemValue) {
 			// Pas de changement !
 			f_core.Debug(f_dragAndDropEngine, "_dragMove: same item as target !");
 			return;
 		}
 		
-		this._cancelTarget(jsEvent);
+		this._cancelTarget(jsEvent, true, false);
 		
 		this._targetComponent=dropComponent;
 		this._targetItem=dropInfos.item;
@@ -724,9 +806,17 @@ var __members = {
 		this._targetDropTypes = dropInfos.dropTypes;
 		this._targetDropEffects = dropInfos.dropEffects;		
 		this._additionalTargetInformations=undefined;
+		this._dropInfos=dropInfos;
 	
 		f_core.Debug(f_dragAndDropEngine, "_dragMove: new target targetComponent='"+this._targetComponent+"' targetItem='"+this._targetItem+"' targetItemValue='"+this._targetItemValue+"' targetItemElement='"+this._targetItemElement+"' targetDropEffects='"+this._targetDropEffects+"' this._targetDropTypes='"+this._targetDropTypes+"'");
 
+		try {
+			dropComponent.f_overDropInfos(this, dropInfos);
+					
+		} catch (x) {
+			f_core.Error(f_dragAndDropEngine, "_dragMove: call f_overDropInfos throws exception", x); 
+		}				
+		
 		return this._computeDragAndDrop(jsEvent);
 	},
 	/**
@@ -734,28 +824,17 @@ var __members = {
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */
-	_cancelTarget: function(jsEvent, releaseDrop) {
+	_cancelTarget: function(jsEvent, releaseDrop, clearTimer) {
 		var target=this._targetComponent;
 		f_core.Debug(f_dragAndDropEngine, "_cancelTarget: target='"+target+"'.");
 
 		if (!target) {
 			this._computeDragAndDrop(jsEvent);
 			return false;
-		}
-			
-		var req = {
-			_targetItem: this._targetItem,
-			_targetItemValue: this._targetItemValue,
-			_targetComponent: this._targetComponent,
-
-			_sourceItem: this._sourceItem,
-			_sourceItemValue: this._sourceItemValue,
-			_sourceComponent: this._sourceComponent
-		};
+		}		
 		
-		this.f_fireEventToTarget(f_dndEvent.DRAG_OVER_CANCELED_STAGE, jsEvent, req);		
-			
-		this.f_fireEventToTarget(f_dndEvent.DROP_OVER_CANCELED_STAGE, jsEvent, req);
+		this.f_fireEventToSource(f_dndEvent.DRAG_OVER_CANCELED_STAGE, jsEvent);			
+		this.f_fireEventToTarget(f_dndEvent.DROP_OVER_CANCELED_STAGE, jsEvent);
 
 		this._additionalTargetInformations=undefined;
 		this._targetComponent=undefined;
@@ -764,23 +843,56 @@ var __members = {
 		this._targetItemElement = undefined;
 		this._targetDropTypes = undefined;
 		this._targetDropEffects = undefined;		
-			
-		if (releaseDrop!==false) {
-			var queryDropInfosCall=this._queryDropInfosCall;
-			if (queryDropInfosCall) {
-				this._queryDropInfosCall=undefined;
+		
+		this._releaseDropInfos(releaseDrop);
+		
+		if (clearTimer!==false) {
+			var timerId=this._elementOverTimerId;
+			if (timerId) {
+				this._elementOverTimerId=undefined;
 				
-				try {
-					queryDropInfosCall.f_releaseDropInfos(this);
-							
-				} catch (x) {
-					f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_releaseDropInfos throws exception", x); 
-				}
+				f_core.Debug(f_dragAndDropEngine, "f_clearFields: clear timeout #"+timerId);
+				
+				f_core.GetWindow(this._sourceComponent).clearTimeout(timerId);
 			}
 		}
 		
 		this._computeDragAndDrop(jsEvent);
 		return false;
+	},
+	/**
+	 * @method private
+	 * @param Boolean
+	 * @return void
+	 */
+	_releaseDropInfos: function(releaseDrop) {
+		var queryDropInfosCall=this._queryDropInfosCall;
+		if (!queryDropInfosCall) {
+			return;
+		}
+		
+		var dropInfos=this._dropInfos;;
+		if (dropInfos) {
+			this._dropInfos=undefined;
+			
+			try {
+				queryDropInfosCall.f_outDropInfos(this, dropInfos);
+						
+			} catch (x) {
+				f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_outDropInfos throws exception", x); 
+			}				
+		}
+		
+		if (releaseDrop!==false) {
+			this._queryDropInfosCall=undefined;
+
+			try {
+				queryDropInfosCall.f_releaseDropInfos(this);
+						
+			} catch (x) {
+				f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_releaseDropInfos throws exception", x); 
+			}
+		}
 	},
 	/**
 	 * @method private
@@ -849,7 +961,7 @@ var __members = {
 			}
 		}
 		
-		f_core.Debug(f_dragAndDropEngine, "_computeEffect: targetEffects=0x"+targetEffects.toString(16)+" sourceEffects=0x"+sourceEffects.toString(16)+" effects=0x"+effects.toString(16)+" computedEffect=0x"+effect.toString(16)+" ");
+	//	f_core.Debug(f_dragAndDropEngine, "_computeEffect: targetEffects=0x"+targetEffects.toString(16)+" sourceEffects=0x"+sourceEffects.toString(16)+" effects=0x"+effects.toString(16)+" computedEffect=0x"+effect.toString(16)+" ");
 		
 		return effect;
 	},
@@ -872,7 +984,7 @@ var __members = {
 		var targetTypes=this._targetDropTypes;
 		var sourceTypes=this._sourceDragTypes;
 
-		f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match types target='"+targetTypes+"', source='"+sourceTypes+"'.");
+	//	f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match types target='"+targetTypes+"', source='"+sourceTypes+"'.");
 		
 		var selectedTypes=new Array();		
 
@@ -902,7 +1014,7 @@ var __members = {
 			}
 		}
 			
-		f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match result = "+selectedTypes);
+	//	f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match result = "+selectedTypes);
 	
 		if (!selectedTypes.length) {
 			this._updateDnDMask();			
@@ -918,29 +1030,16 @@ var __members = {
 		}
 		
 		this._additionalTargetInformations=null;
-		
-		var req = {
-			_targetItem: this._targetItem,
-			_targetItemValue: this._targetItemValue,
-			_targetComponent: this._targetComponent,
-
-			_sourceItem: this._sourceItem,
-			_sourceItemValue: this._sourceItemValue,
-			_sourceComponent: this._sourceComponent,
-
-			_effect: effect,
-			_types: selectedTypes
-		};
-		
-		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_OVER_STAGE, jsEvent, req);
+			
+		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_OVER_STAGE, jsEvent, selectedTypes, effect);
 		if (ret===false) {
 			this._updateDnDMask();			
 			return;
 		}
 		
-		ret=this.f_fireEventToTarget(f_dndEvent.DROP_OVER_STAGE, jsEvent, req);
+		ret=this.f_fireEventToTarget(f_dndEvent.DROP_OVER_STAGE, jsEvent, selectedTypes, effect);
 		if (ret===false) {			
-			this.f_fireEventToSource(f_dndEvent.DRAG_OVER_CANCELED_STAGE, jsEvent, req);
+			this.f_fireEventToSource(f_dndEvent.DRAG_OVER_CANCELED_STAGE, jsEvent);
 
 			this._updateDnDMask();
 			return;

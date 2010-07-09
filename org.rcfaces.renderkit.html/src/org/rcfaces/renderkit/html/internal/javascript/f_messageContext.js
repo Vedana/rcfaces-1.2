@@ -159,7 +159,8 @@ var __statics = {
 			
 			var component=f_core.GetElementByClientId(clientId);
 			if (!component) {
-				f_core.Error("Can not find component '"+clientId+"' to attach "+messages.length+" message(s) !");
+				// ca peut arriver a cause du focus sur un composant non visible !
+				// f_core.Error("Can not find component '"+clientId+"' to attach "+messages.length+" message(s) !");
 				continue;
 			}
 			

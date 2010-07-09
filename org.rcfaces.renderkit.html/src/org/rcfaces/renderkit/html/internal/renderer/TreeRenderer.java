@@ -178,6 +178,10 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
                 htmlWriter.writeAttribute("v:dropTypes", sa.toString());
             }
+
+            if (treeComponent.isBodyDroppable(facesContext)) {
+                htmlWriter.writeAttribute("v:bodyDroppable", true);
+            }
         }
 
         htmlWriter.startElement(IHtmlWriter.A);

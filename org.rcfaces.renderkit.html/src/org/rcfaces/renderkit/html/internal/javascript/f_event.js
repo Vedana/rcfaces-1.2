@@ -28,13 +28,16 @@ var __members = {
 	 *            fa_selectionProvider selectionProvider
 	 * @param optional
 	 *            any detail
+	 * @param optional String serializedValue
 	 */
 	f_event : function(component, type, jsEvent, item, value,
-			selectionProvider, detail) {
+			selectionProvider, detail, serializedValue) {
 		f_core.Assert(typeof (type) == "string",
 				"f_event.f_event: Bad type of event '" + type + "'");
-		f_core.Assert(component && (component.tagName || component._kclass),
+		f_core.Assert(component && (component.nodeType==f_core.ELEMENT_NODE || component._kclass),
 				"f_event.f_event: Bad component '" + component + "'.");
+		f_core.Assert(serializedValue===undefined || typeof(serializedValue)=="string",
+				"f_event.f_event: Bad serializedValue type '" + serializedValue + "'.");
 
 		this._type = type;
 		this._component = component;
@@ -43,6 +46,7 @@ var __members = {
 		this._value = value;
 		this._selectionProvider = selectionProvider;
 		this._detail = detail;
+		this._serializedValue=serializedValue;
 	},
 
 	/**
@@ -56,6 +60,7 @@ var __members = {
 		this._item = undefined; // any
 		this._value = undefined; // any
 		this._detail = undefined; // any
+		// this._serializedValue=undefined; // String
 		this._selectionProvider = undefined; // fa_selectionProvider
 	},
 
@@ -121,6 +126,24 @@ var __members = {
 		f_core.Assert(arguments.length == 0,
 				"f_event.f_getValue: Invalid number of parameter");
 
+		return this._value;
+	},
+
+	/**
+	 * Returns the value of the item associated to the event.
+	 * 
+	 * @method hidden
+	 * @return any The value of the item associated to the event.
+	 */
+	f_getSerializedValue : function() {
+		f_core.Assert(arguments.length == 0,
+				"f_event.f_getSerializedValue: Invalid number of parameter");
+
+		var s=this._serializedValue;
+		if (s!==undefined) {
+			return s;
+		}
+		
 		return this._value;
 	},
 
@@ -348,6 +371,13 @@ var __statics = {
 	 * @field public static final String
 	 */
 	DROP : "drop",
+
+	/**
+	 * Drop complete event name.
+	 * 
+	 * @field public static final String
+	 */
+	DROP_COMPLETE : "dropComplete",
 
 	/**
 	 * Error event name.

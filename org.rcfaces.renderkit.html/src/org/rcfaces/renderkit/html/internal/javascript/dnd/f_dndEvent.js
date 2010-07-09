@@ -116,6 +116,54 @@ var __statics = {
 	 */
 	As: function(event) {
 		return new f_dndEvent(event);
+	},
+	/**
+	 * @method hidden static
+	 * @param f_component component
+	 * @param String eventType
+	 * @param Event jsEvent
+	 * @param f_dragAndDropEngine engine
+	 * @param Object value
+	 * @param optional String stage
+	 * @param optional Boolean serialize
+	 * @return Boolean
+	 */
+	FireEvent: function(component, eventType, jsEvent, engine, stage, targetItem, targetItemValue, targetComponent, effect, types, serialize) {
+
+		var serializedValue;
+		if (serialize) {
+			serializedValue=f_core.EncodeObject({
+				targetItemValue: targetItemValue,
+
+				sourceItemValue: engine.f_getSourceItemValue(),
+				sourceComponent: engine.f_getSourceComponent(),
+
+				effect: effect,
+				types: types,
+			});
+		}
+
+		var value = {
+				_targetItem: targetItem,
+				_targetItemValue: targetItemValue,
+				_targetComponent: targetComponent,
+
+				_effect: effect,
+				_types: types,
+				
+				_engine: engine,
+				
+				_stage: stage
+		};
+
+		var event=new f_event(component, eventType, jsEvent, null, value, null, null, serializedValue);
+		
+		try {			
+			return component.f_fireEvent(event);
+			
+		} finally {
+			f_classLoader.Destroy(event);
+		}
 	}
 };
 
@@ -141,9 +189,11 @@ var __members = {
 	 * @param f_event event
 	 */
 	f_dndEvent: function(event) {
-		this._detail=event.f_getValue();
-		this._engine=event.f_getItem();
-		this._stage=event.f_getDetail();
+		var detail=event.f_getValue();
+		
+		this._detail=detail;
+		this._engine=detail._engine;
+		this._stage=detail._stage;
 	},
 
 	/**
@@ -175,7 +225,7 @@ var __members = {
 	 * @return f_component
 	 */
 	f_getSourceComponent: function() {
-		return this._detail._sourceComponent;
+		return this.f_getDragAndDropEngine().f_getSourceComponent();
 	},
 
 	/**
@@ -183,7 +233,7 @@ var __members = {
 	 * @return any
 	 */
 	f_getSourceItem: function() {
-		return this._detail._sourceItem;
+		return this.f_getDragAndDropEngine().f_getSourceItem();
 	},
 
 	/**
@@ -191,7 +241,7 @@ var __members = {
 	 * @return String
 	 */
 	f_getSourceItemValue: function() {
-		return this._detail._sourceItemValue;
+		return this.f_getDragAndDropEngine().f_getSourceItemValue();
 	},
 	/**
 	 * @method public

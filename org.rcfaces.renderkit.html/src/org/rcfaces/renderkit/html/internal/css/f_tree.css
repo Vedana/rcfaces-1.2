@@ -131,7 +131,12 @@
 	position: absolute;
 	width: 0;
 	height: 0;
+
+	-moz-outline-style: none;
+	outline-style: none;
+
 	-moz-outline-width: 0;
+	outline-width: 0;
 }
 
 .f_tree_waiting {

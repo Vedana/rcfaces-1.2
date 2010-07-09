@@ -4,6 +4,7 @@
 package org.rcfaces.renderkit.html.internal;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -17,6 +18,7 @@ import org.rcfaces.core.event.CheckEvent;
 import org.rcfaces.core.event.ClientValueChangeEvent;
 import org.rcfaces.core.event.CloseEvent;
 import org.rcfaces.core.event.DoubleClickEvent;
+import org.rcfaces.core.event.DropCompleteEvent;
 import org.rcfaces.core.event.ExpandEvent;
 import org.rcfaces.core.event.FocusEvent;
 import org.rcfaces.core.event.KeyDownEvent;
@@ -347,7 +349,7 @@ public class EventDecoders {
                         queueEvent(component, event);
                     }
                 });
-        
+
         EVENT_DECODERS.put(JavaScriptClasses.EVENT_EXPAND,
                 new AbstractEventDecoder() {
                     private static final String REVISION = "$Revision$";
@@ -355,13 +357,44 @@ public class EventDecoders {
                     public void decodeEvent(IRequestContext requestContext,
                             UIComponent component, IEventData eventData,
                             IEventObjectDecoder eventObjectDecoder) {
-                        // @XXX A Completer avec les noms des 
+                        // @XXX A Completer avec les noms des
 
                         FacesEvent event = new ExpandEvent(component);
                         queueEvent(component, event);
                     }
                 });
-        
+
+        EVENT_DECODERS.put(JavaScriptClasses.EVENT_DROP_COMPLETE,
+                new AbstractEventDecoder() {
+                    private static final String REVISION = "$Revision$";
+
+                    public void decodeEvent(IRequestContext requestContext,
+                            UIComponent component, IEventData eventData,
+                            IEventObjectDecoder eventObjectDecoder) {
+
+                        String value = eventData.getEventValue();
+
+                        Map map = HtmlTools.decodeParametersToMap(
+                                requestContext.getProcessContext(), component,
+                                value, "&", null);
+
+                        Object targetItem = map.get("targetItemValue");
+                        UIComponent sourceComponent = (UIComponent) map
+                                .get("sourceComponent");
+                        Object sourceItem = map.get("sourceItemValue");
+                        int effect = ((Number) map.get("effect")).intValue();
+                        String types[] = null;
+                        List l = (List) map.get("types");
+                        if (l != null) {
+                            types = (String[]) l.toArray(new String[l.size()]);
+                        }
+
+                        FacesEvent event = new DropCompleteEvent(component,
+                                targetItem, sourceComponent, sourceItem,
+                                effect, types);
+                        queueEvent(component, event);
+                    }
+                });
     }
 
     public static IEventDecoder get(String eventName) {

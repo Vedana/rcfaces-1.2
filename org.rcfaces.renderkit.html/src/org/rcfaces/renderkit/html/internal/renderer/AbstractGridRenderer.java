@@ -33,6 +33,9 @@ import org.rcfaces.core.component.capability.IAutoFilterCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.component.capability.ICardinality;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
+import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
@@ -61,6 +64,7 @@ import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
@@ -307,6 +311,14 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                             "f_columnSortDialog", null);
                 }
             }
+        }
+
+        if (((dataGridComponent instanceof IDraggableCapability) && ((IDraggableCapability) dataGridComponent)
+                .isDraggable())
+                || ((dataGridComponent instanceof IDroppableCapability) && ((IDroppableCapability) dataGridComponent)
+                        .isDroppable())) {
+            javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.GRID,
+                    "dnd");
         }
     }
 
@@ -687,6 +699,46 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (getSortPadding() != SORT_PADDING) {
             htmlWriter.writeAttribute("v:sortPadding", getSortPadding());
+        }
+
+        if (gridRenderContext.isDraggable()) {
+            IDraggableCapability draggableCapability = (IDraggableCapability) gridComponent;
+
+            int dragEffects = draggableCapability.getDragEffects();
+
+            if (dragEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
+                dragEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+            }
+            htmlWriter.writeAttribute("v:dragEffects", dragEffects);
+
+            String dragTypes[] = draggableCapability.getDragTypes();
+            if (dragTypes != null && dragTypes.length > 0) {
+                htmlWriter.writeAttribute("v:dragTypes", HtmlTools
+                        .serializeDnDTypes(dragTypes));
+            }
+        }
+
+        if (gridRenderContext.isDroppable()) {
+            IDroppableCapability droppableCapability = (IDroppableCapability) gridComponent;
+
+            int dropEffects = droppableCapability.getDropEffects();
+
+            if (dropEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
+                dropEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+            }
+            htmlWriter.writeAttribute("v:dropEffects", dropEffects);
+
+            String dropTypes[] = droppableCapability.getDropTypes();
+            if (dropTypes != null && dropTypes.length > 0) {
+                htmlWriter.writeAttribute("v:dropTypes", HtmlTools
+                        .serializeDnDTypes(dropTypes));
+            }
+
+            if (gridComponent instanceof IDroppableGridComponent) {
+                if (((IDroppableGridComponent) gridComponent).isBodyDroppable()) {
+                    htmlWriter.writeAttribute("v:bodyDroppable", true);
+                }
+            }
         }
 
         writeGridComponentAttributes(htmlWriter, gridRenderContext,

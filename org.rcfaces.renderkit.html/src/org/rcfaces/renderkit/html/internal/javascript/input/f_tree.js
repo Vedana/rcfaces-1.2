@@ -5,22 +5,18 @@
 /**
  * f_tree
  *
- * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable
+ * @class f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen
  * @author olivier Oeuillot
  * @version $REVISION: $
  */
  
 var __statics = {
 
-	/**
-	 * @field private static final Number
-	 */
-	_AUTO_SCROLL_SIZE: 20,
 
 	/**
 	 * @field private static final Number
 	 */
-	_DND_AUTO_OPEN_NODE_MS: 800,
+	_DND_AUTO_OPEN_NODE_MS: 500,
 	
 	/**
 	 * @field private static final String
@@ -607,7 +603,10 @@ var __members = {
 		if (this.f_isDraggable()) {
 			this._dragAndDropEngine= f_dragAndDropEngine.Create(this);
 		}
-	
+
+		if (this.f_isDroppable()) {
+			this._bodyDroppable=f_core.GetBooleanAttribute(this, "v:bodyDroppable", false);
+		}
 	},
 	f_finalize: function() {
 //		this._showValue=undefined; // String
@@ -627,13 +626,13 @@ var __members = {
 //		this._focus=undefined;   // boolean
 		
 		this._dragAndDropEngine=undefined;
+		this._targetDragAndDropEngine=undefined;
+		this._lastRemovedTitleElement=undefined;
 		
 		this._nodes=undefined;  
 		this._container=undefined; // object
 // 		this._opened=undefined;  // boolean
 //		this._interactive=undefined; // boolean
-
-		this.f_releaseDropInfos();
 		
 		var cfocus=this._cfocus;
 		if (cfocus) {
@@ -954,9 +953,6 @@ var __members = {
 			li._tree=this;
 			li._className="f_tree_parent";
 			li.className=li._className;
-			if (node._tooltip) {
-				li.title=node._tooltip;
-			}
 			
 			this._nodesList.push(li);
 			
@@ -977,6 +973,10 @@ var __members = {
 				onclick: f_core.CancelJsEventHandler,
 				ondblclick: f_tree._DivNode_dblClick
 			});
+
+			if (this._lastRemovedTitleElement!=li && node._tooltip) {
+				divNode.title=node._tooltip;
+			}
 
 			li._divNode=divNode;
 			
@@ -2782,8 +2782,8 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any value Value of the node.
-	 * @param optional boolean append Append mode.
-	 * @param optional boolean show Node must be show after the selection.
+	 * @param optional Boolean append Append mode.
+	 * @param optional Boolean show Node must be show after the selection.
 	 * @param optional hidden Event jsEvent Javascript event associated to this action.
 	 * @return boolean <code>true</code> if success.
 	 */
@@ -2799,14 +2799,14 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any value Value of the node
-	 * @param optional boolean show Node must be show after the selection.
+	 * @param optional Boolean show Node must be show after the selection.
 	 * @param optional hidden Event jsEvent Javascript event associated to this action.
 	 * @return boolean <code>true</code> if success !
 	 */
 	f_check: function(value, show, jsEvent) {
 		var li=this._searchComponentByNodeOrValue(value);
 		
-		return this.fa_performElementCheck(li, true, jsEvent, true);
+		return this.fa_performElementCheck(li, show, jsEvent, true);
 	},
 	/**
 	 * Uncheck a node.
@@ -2814,7 +2814,7 @@ var __members = {
 	 * @method public
 	 * @param any value Value of the node
 	 * @param optional hidden Event jsEvent Javascript event associated to this action.
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	f_uncheck: function(value, jsEvent) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2826,7 +2826,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return boolean <code>true</code> if the node is checked.
+	 * @return Boolean <code>true</code> if the node is checked.
 	 */
 	f_getChecked: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2838,7 +2838,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return boolean <code>true</code> if the node is expanded. (open)
+	 * @return Boolean <code>true</code> if the node is expanded. (open)
 	 */
 	f_isOpened: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2850,7 +2850,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return boolean <code>true</code> if the node is selected.
+	 * @return Boolean <code>true</code> if the node is selected.
 	 */
 	f_isSelected: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -3335,6 +3335,8 @@ var __members = {
 	},
 	
 	/**
+	 * Returns label of a node
+	 * 
 	 * @method public
 	 * @param Object nodeOrValue
 	 * @return String
@@ -3345,6 +3347,17 @@ var __members = {
 			return undefined;
 		}
 		return li._node._label;
+	},
+	/**
+	 * Returns label of a node
+	 *
+	 * @method public
+	 * @param any value
+	 * @return String
+	 * @see #f_getItemLabel(nodeOrValue)
+	 */
+	f_getElementLabel: function(value) {
+		return this.f_getItemLabel(value);
 	},
 	/**
 	 * @method public
@@ -3419,60 +3432,15 @@ var __members = {
 		
 		return ret;
 	},
-	f_queryDropInfos: function(dragAndDropEngine, jsEvent, element) {
+	/**
+	 * @method private
+	 * @param HTMLElement element
+	 * @return Object
+	 */
+	_findNodeFromElement: function(element) {
+		
 		var node=null;
 		var nodeElement=null;
-		
-		if (this.offsetHeight-this.clientHeight>2) { // @TODO Retire les BORDS 
-			// Scrollable ... il faut surveiller le haut et le bas !
-			
-			var scrollIntervalId=this._scrollIntervalId;
-			if (!scrollIntervalId) {
-				var self=this;
-				
-				var treePosition=f_core.GetAbsolutePosition(this);
-							
-				this._scrollIntervalId=f_core.GetWindow(document).setInterval(function() {
-					var pos=dragAndDropEngine.f_getLastMousePosition();
-					if (!pos) {
-						return;
-					}
-					
-					var dy=pos.y-treePosition.y;
-					var dy2=treePosition.y+self.offsetHeight-pos.y;
-					
-					if (self.offsetWidth-self.clientWidth>2) {
-						// Ajout du scroll horizontal en bas ...
-						
-						dy2-=(self.offsetHeight-self.clientHeight);
-					}
-					
-					//document.title="dy2="+dy2+"  dd="+(this.offsetHeight-this.clientHeight);
-					
-					if (dy>=0 && dy<=f_tree._AUTO_SCROLL_SIZE) {
-						var st=self.scrollTop;
-						if (st>0) {
-							st-=f_tree._AUTO_SCROLL_SIZE;
-							if (st<0) {
-								st=0;
-							}
-							
-							self.scrollTop=st;
-						}
-						
-					} else if (dy2>=0 && dy2<=f_tree._AUTO_SCROLL_SIZE) {
-						var st=self.scrollTop;
-						st+=f_tree._AUTO_SCROLL_SIZE;
-						if (st<0) {
-							st=0;
-						}
-						
-						self.scrollTop=st;
-					}
-					
-				}, 200);	
-			}
-		}
 		
 		for(;element;element=element.parentNode) {
 			if (element._body) {
@@ -3503,32 +3471,33 @@ var __members = {
 		if (!node) {
 			return null;
 		}
-		
-		var startTimer=false;
-		if (this._userExpandable && node._container && !node._opened && node._value) {
-			if (node!=this._dndTimerItem) { 
-				startTimer=true;
-				this._dndTimerItem=node;
-			}
+
+		return {
+			_node: node,
+			_value: node._value,
+			_nodeElement: nodeElement
+		};
+	},
+	f_queryDropInfos: function(dragAndDropEngine, jsEvent, element) {
+		this._targetDragAndDropEngine=dragAndDropEngine;
+
+		this.fa_installAutoScroll();
+
+		var node=null;
+		var found=this._findNodeFromElement(element);
+		if (!found) {
+			return null;
 		}
 		
-		if (startTimer) {
-			this.f_releaseDropInfos();
-			
-			this._dndTimerItemValue=node._value;
-			var self=this;
-			this._dndTimerId=f_core.GetWindow(document).setTimeout(function() {
-				self.f_openNode(self._dndTimerItemValue);
-				self.f_releaseDropInfos();
-				self = null;
-				
-			}, f_tree._DND_AUTO_OPEN_NODE_MS);
-		}		
+		node=found._node;
+		
+		if (this._bodyDroppable!==true && node==this) {
+			return null;
+		}
 		
 		if (node._disabled) {
 			return null;
 		}
-		
 		
 		var dropTypes=undefined;
 		var dropEffects=undefined;
@@ -3548,34 +3517,82 @@ var __members = {
 		
 		return {
 			item: node,
-			itemValue: node._value,
-			targetItemElement: nodeElement,
+			itemValue: found._value,
+			targetItemElement: found._nodeElement,
 			dropTypes: dropTypes,
 			dropEffects: dropEffects		
 		};
 	},
+	f_overDropInfos: function(dragAndDropEngine, infos) {
+		var node=infos.item;
+		var element=infos.targetItemElement;
+		
+		if (node._tooltip) {
+			this._lastRemovedTitleElement=element;
+			element._divNode.title=null;
+		}
+		
+		element._over=true;		
+		this.fa_updateElementStyle(element);			
+	},
+	f_outDropInfos: function(dragAndDropEngine, infos) {
+		this._lastRemovedTitleElement=undefined;
+
+		var node=infos.item;
+		var element=infos.targetItemElement;
+		
+		if (node._tooltip) {
+			element._divNode.title=node._tooltip;
+		}
+		
+		element._over=false;		
+		this.fa_updateElementStyle(element);			
+	},
 	f_releaseDropInfos: function() {
-		var dndTimerId=this._dndTimerId;
-		if (dndTimerId) {
-			this._dndTimerId=undefined;
-			this._dndTimerItem=undefined;
-			this._dndTimerItemValue=undefined;
-			
-			window.clearTimeout(dndTimerId);
-		}
+		this._targetDragAndDropEngine=undefined;
+
+		this.fa_uninstallAutoScroll();
+	},
+	fa_getLastMousePosition: function() {
+		return this._targetDragAndDropEngine.f_getLastMousePosition();
+	},
 	
-		var scrollIntervalId=this._scrollIntervalId;
-		if (scrollIntervalId) {
-			this._scrollIntervalId=undefined;
-			
-			window.clearInterval(scrollIntervalId);
+	fa_getScrollableContainer: function() {
+		return this;
+	},
+	fa_findAutoOpenElement: function(htmlElement) {
+		if (!this._userExpandable) {
+			return null;
 		}
+
+		var found= this._findNodeFromElement(htmlElement);
+		if (!found) {
+			f_core.Debug(f_tree, "fa_findAutoOpenElement: can not found any component");
+
+			return null;
+		}
+		
+		var node=found._node;
+
+		f_core.Debug(f_tree, "fa_findAutoOpenElement: node="+node+" value='"+node._value+"' container='"+node._container+"' open='"+node._opened+"'.");
+
+		if (node._container && !node._opened && found._value!==undefined) {
+			return found;
+		}
+		
+		return null;
+	},
+	fa_performAutoOpenElement: function(element) {
+		this.f_openNode(element._value);		
+	},
+	fa_isSameAutoOpenElement: function(elt1, elt2) {
+		return elt1._value===elt2._value;
 	}
 };
 
 new f_class("f_tree", {
 	extend: f_component,
-	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable ],
+	aspects: [ fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen ],
 	members: __members,
 	statics: __statics
 });

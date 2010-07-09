@@ -182,8 +182,8 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_ERROR_CST = "f_event.ERROR";
 
-     public static final String EVENT_EXPAND = "expand";
-    
+    public static final String EVENT_EXPAND = "expand";
+
     public static final String EVENT_EXPAND_CST = "f_event.EXPAND";
 
     public static final String EVENT_VALUE_CHANGE = "change";
@@ -242,6 +242,10 @@ public final class JavaScriptClasses {
 
     public static final String EVENT_DROP_CST = "f_event.DROP";
 
+    public static final String EVENT_DROP_COMPLETE = "dropComplete";
+
+    public static final String EVENT_DROP_COMPLETE_CST = "f_event.DROP_COMPLETE";
+
     // public static final String EVENT_MENU = "menu";
 
     public static final String EVENT_MENU_CST = "f_event.MENU";
@@ -271,6 +275,8 @@ public final class JavaScriptClasses {
     public static final String EVENT_DRAG_ATTRIBUTE = "drag";
 
     public static final String EVENT_DROP_ATTRIBUTE = "drop";
+
+    public static final String EVENT_DROP_COMPLETE_ATTRIBUTE = "dropComplete";
 
     public static final String EVENT_ERROR_ATTRIBUTE = "error";
 

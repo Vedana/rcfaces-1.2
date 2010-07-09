@@ -44,6 +44,7 @@
 }
 
 .f_elementDnDInfo_1 .f_popupDnDInfo_effect {
+	display: none;
 }
 
 .f_elementDnDInfo_2 .f_popupDnDInfo_effect {

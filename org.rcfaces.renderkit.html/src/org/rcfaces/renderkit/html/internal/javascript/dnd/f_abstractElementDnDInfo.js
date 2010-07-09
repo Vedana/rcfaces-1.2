@@ -178,29 +178,32 @@ var __members = {
 		var ph=cursorElement.offsetHeight;
 		
 		var screenSizes = f_core.GetViewSize(null, cursorElement.ownerDocument);
+		var screenPositions = f_core.GetScrollOffsets(null, cursorElement.ownerDocument);
 
+		var sx=screenPositions.x;
+		var sy=screenPositions.y;
 		var sw=screenSizes.width;
 		var sh=screenSizes.height;		
 		
 		var px=this._positionX+this._mouseDeltaX;
 		var py=this._positionY+this._mouseDeltaY;
 		
-		if (px+pw>sw) {
+		if (px+pw>sx+sw) {
 			// Positionne à droite
 			
 			px=this._positionX-pw;
-			if (px<0) {
-				px=0;
-			}
-		} 
+		}
+		if (px<sx) {
+			px=sx;
+		}
 		
-		if (py+ph>sh) {
+		if (py+ph>sy+sh) {
 			// Positionne en haut
 			
 			py=this._positionY-ph;
-			if (py<0) {
-				py=0;
-			}
+		}
+		if (py<sy) {
+			py=sy;
 		}
 		
 		if (this._oldX!==px || this._oldY!==py) {
@@ -281,7 +284,7 @@ var __members = {
 			}
 		}
 		
-		if (targetItemValue) {
+		if (targetItemValue!==undefined && targetItemValue!==null) {
 			if (targetComponent.f_getItemClientData) {
 				var txt=targetComponent.f_getItemClientData(targetItemValue, key);
 				
@@ -289,8 +292,8 @@ var __members = {
 					return txt;
 				}
 			}
-			if (searchText && targetComponent.f_getItemLabel) {
-				var txt=targetComponent.f_getItemLabel(targetItemValue);
+			if (searchText && targetComponent.f_getElementLabel) {
+				var txt=targetComponent.f_getElementLabel(targetItemValue);
 				if (txt) {
 					return txt;
 				}

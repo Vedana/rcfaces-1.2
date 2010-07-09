@@ -15,6 +15,7 @@ import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IDragEventCapability;
+import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IDropEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IExpandEventCapability;
@@ -66,7 +67,7 @@ public final class ListenerTools {
         public String getExpandEventName() {
             return JavaScriptClasses.EVENT_EXPAND_CST;
         }
-        
+
         public String getMenuEventName() {
             return JavaScriptClasses.EVENT_MENU_CST;
         }
@@ -151,6 +152,10 @@ public final class ListenerTools {
             return JavaScriptClasses.EVENT_DROP_CST;
         }
 
+        public String getDropCompleteEventName() {
+            return JavaScriptClasses.EVENT_DROP_COMPLETE_CST;
+        }
+
     };
 
     /**
@@ -175,7 +180,7 @@ public final class ListenerTools {
         public String getExpandEventName() {
             return JavaScriptClasses.EVENT_EXPAND_ATTRIBUTE;
         }
-        
+
         public String getMenuEventName() {
             return JavaScriptClasses.EVENT_MENU_ATTRIBUTE;
         }
@@ -258,6 +263,10 @@ public final class ListenerTools {
 
         public String getDropEventName() {
             return JavaScriptClasses.EVENT_DROP_ATTRIBUTE;
+        }
+
+        public String getDropCompleteEventName() {
+            return JavaScriptClasses.EVENT_DROP_COMPLETE_ATTRIBUTE;
         }
 
     };
@@ -509,7 +518,7 @@ public final class ListenerTools {
         }
 
         if (component instanceof IExpandEventCapability) {
-        	IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
+            IExpandEventCapability expandEventCapability = (IExpandEventCapability) component;
 
             FacesListener fls[] = expandEventCapability.listExpandListeners();
             if (fls.length > 0) {
@@ -557,6 +566,20 @@ public final class ListenerTools {
                 }
 
                 map.put(nameSpace.getDropEventName(), fls);
+            }
+        }
+
+        if (component instanceof IDropCompleteEventCapability) {
+            IDropCompleteEventCapability closeListenerCapability = (IDropCompleteEventCapability) component;
+
+            FacesListener fls[] = closeListenerCapability
+                    .listDropCompleteListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getDropCompleteEventName(), fls);
             }
         }
 
@@ -609,7 +632,7 @@ public final class ListenerTools {
 
         String getErrorEventName();
 
-         String getExpandEventName();
+        String getExpandEventName();
 
         String getFocusEventName();
 
@@ -648,6 +671,8 @@ public final class ListenerTools {
         String getDragEventName();
 
         String getDropEventName();
+
+        String getDropCompleteEventName();
     }
 
 }

@@ -105,6 +105,11 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         writeCssAttributes(htmlWriter);
 
+        int ariaLevel = expandBarComponent.getAriaLevel(facesContext);
+        if (ariaLevel > 0) {
+            htmlWriter.writeAriaLevel(ariaLevel);
+        }
+        
         String normalText = expandBarComponent.getText(facesContext);
         if (normalText != null) {
             normalText = ParamUtils.formatMessage(expandBarComponent,
@@ -327,11 +332,6 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         }
         htmlWriter.writeClass(cssStyleClasses.constructClassName());
         writeTextDirection(htmlWriter, expandBarComponent);
-
-        int ariaLevel = expandBarComponent.getAriaLevel(facesContext);
-        if (ariaLevel > 0) {
-            htmlWriter.writeAriaLevel(ariaLevel);
-        }
 
         String text = (String) htmlWriter.getComponentRenderContext()
                 .getAttribute(TITLE_TEXT_ATTRIBUTE);

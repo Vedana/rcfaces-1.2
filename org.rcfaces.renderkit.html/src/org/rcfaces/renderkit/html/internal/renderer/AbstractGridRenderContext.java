@@ -29,6 +29,8 @@ import org.rcfaces.core.component.capability.IClientAdditionalInformationFullSta
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.capability.IDroppableCapability;
 import org.rcfaces.core.component.capability.IFilterCapability;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
@@ -212,6 +214,10 @@ public abstract class AbstractGridRenderContext {
 
     private String sortManager;
 
+    private boolean isDraggable;
+
+    private boolean isDroppable;
+
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
@@ -233,6 +239,14 @@ public abstract class AbstractGridRenderContext {
         if (gridComponent instanceof ISortManagerCapability) {
             sortManager = ((ISortManagerCapability) gridComponent)
                     .getSortManager();
+        }
+
+        if (gridComponent instanceof IDraggableCapability) {
+            isDraggable = ((IDraggableCapability) gridComponent).isDraggable();
+        }
+
+        if (gridComponent instanceof IDroppableCapability) {
+            isDroppable = ((IDroppableCapability) gridComponent).isDroppable();
         }
 
         initialize(checkTitleImages);
@@ -1119,5 +1133,14 @@ public abstract class AbstractGridRenderContext {
         }
         return columnWidthsInPixel[columnIndex];
     }
+
+    public boolean isDraggable() {
+        return isDraggable;
+    }
+
+    public boolean isDroppable() {
+        return isDroppable;
+    }
+    
 
 }

@@ -1262,69 +1262,78 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
+	 * @param HTMLFormElement form
+	 * @param String name1
+	 * @param String... val1
+	 * @return void
 	 */
-	SetInputHidden: function(form, name, val) {
+	SetInputHidden: function(form, name1, val1) {
 		f_core.Assert(form && form.tagName.toLowerCase()=="form", "f_core.SetInputHidden: Invalid form component ! "+form);
-		f_core.Assert(name, "f_core.SetInputHidden: Invalid name of hidden input ! ("+name+")");
-		
-		if (val!==null && val!==undefined) {
-			switch (typeof(val)) {
-			case "string":
-				break;
-	
-			case "boolean":
-			case "number":
-				val=String(val);
-				break;
-				
-			case "object":
-				if (val instanceof Date) {
-					val=String(val);
-					break;
-				}
-			
-			default:
-				f_core.Error(f_core, "SetInputHidden: Can not set an input hidden '"+name+"' with value '"+val+"'.");
-			}
-		}
 		
 		var inputs=f_core.GetElementsByTagName(form, "input");
-				
-		for(var i=0;i<inputs.length;i++) {
-			var input=inputs[i];
+
+		for(var j=1;j<arguments.length;) {
+			var name=arguments[j++];
+			var val=arguments[j++];
+
+			f_core.Assert(name, "f_core.SetInputHidden: Invalid name of hidden input ! ("+name+")");
 			
-			if (input.name!=name) {
+			if (val!==null && val!==undefined) {
+				switch (typeof(val)) {
+				case "string":
+					break;
+		
+				case "boolean":
+				case "number":
+					val=String(val);
+					break;
+					
+				case "object":
+					if (val instanceof Date) {
+						val=String(val);
+						break;
+					}
+				
+				default:
+					f_core.Error(f_core, "SetInputHidden: Can not set an input hidden '"+name+"' with value '"+val+"'.");
+				}
+			}
+			
+			var found=false;
+			for(var i=0;i<inputs.length;i++) {
+				var input=inputs[i];
+				
+				if (input.name!=name) {
+					continue;
+				}
+				
+				f_core.Assert(input.type && input.type.toUpperCase()=="HIDDEN", "f_core.SetInputHidden: Input type is not hidden !");
+				
+				if (val===null) {
+					input.parentNode.removeChild(input);
+					found=true;
+					break;
+				}
+				
+				input.value=val;
+				found=true;
+				break;
+			}
+			
+			if (found || val===null || val===undefined) {
+				// Trouvé ou il est vide : on laisse tomber ...
 				continue;
 			}
 			
-			f_core.Assert(input.type && input.type.toUpperCase()=="HIDDEN", "f_core.SetInputHidden: Input type is not hidden !");
+			var input = form.ownerDocument.createElement("input");
 			
-			if (val===null) {
-				input.parentNode.removeChild(input);
-				return;
-			}
-			
-			input.value=val;
-
-			return;
+			// Il faut specifier les caracteristiques avant le appendChild !
+			input.type = "hidden";
+			input.value = val;
+			input.name = name;
+	
+			form.appendChild(input);
 		}
-		
-		if (val===null || val===undefined) {
-			// Il est vide : on laisse tomber ...
-			return;
-		}
-		
-		var input = form.ownerDocument.createElement("input");
-		
-		// Il faut specifier les caracteristiques avant le appendChild !
-		input.type = "hidden";
-		input.value = val;
-		input.name = name;
-
-		form.appendChild(input);
-
-		return input;
-
 	},
 	/**
 	 * @method hidden static
@@ -1884,28 +1893,34 @@ var f_core = {
 				type = event.f_getType();
 			}
 	
-			// On les effectent quand meme, car cela peut etre le 2eme submit !
-			f_core.SetInputHidden(form, f_core._COMPONENT, id);
-			f_core.SetInputHidden(form, f_core._EVENT, type);
+			var eventValue=null;
+			var eventItem=null;
+			var eventDetail=null;
+			var eventEncodedValue=null;
 			
-			var eventValue=(event)?event.f_getValue():null;
-			f_core.SetInputHidden(form, f_core._VALUE, eventValue);
-			
-			var typeValue=typeof(eventValue);
-			if (typeValue!="undefined" && typeValue!="string" && eventValue!==null) {
-				var encodedValue=f_core.EncodePrimitive(eventValue);
+			if (event) {
+				eventValue=event.f_getSerializedValue();
+				eventDetail=event.f_getDetail();
 				
-				f_core.SetInputHidden(form, f_core._OBJECT_VALUE, encodedValue);
+				var typeValue=typeof(eventValue);
+				if (typeValue!="undefined" && typeValue!="string" && eventValue!==null) {
+					eventEncodedValue=f_core.EncodePrimitive(eventValue);
+				}
+			
+				eventItem=event.f_getItem();
+				if (eventItem) {
+					eventItem=f_core._ConvertItem(eventItem);
+				}
 			}
-		
-			var eventItem=(event)?event.f_getItem():null;
-			if (eventItem) {
-				eventItem=f_core._ConvertItem(eventItem);
-			}
-			f_core.SetInputHidden(form, f_core._ITEM, eventItem);
-
-			var eventDetail=(event)?event.f_getDetail():null;
-			f_core.SetInputHidden(form, f_core._DETAIL, eventDetail);
+			
+			// On les effectent quand meme, car cela peut etre le 2eme submit !
+			f_core.SetInputHidden(form, 
+					f_core._COMPONENT, id, 
+					f_core._EVENT, type,
+					f_core._VALUE, eventValue, 
+					f_core._ITEM, eventItem, 
+					f_core._DETAIL, eventDetail,
+					f_core._OBJECT_VALUE, eventEncodedValue);
 	
 			// Keep the previous for further restore
 			if (url) {
@@ -4207,8 +4222,12 @@ var f_core = {
 			d.push("P");
 			v=f_period.Serialize(v);
 
+		} else if (v.nodeType==f_core.ELEMENT_NODE) {
+			d.push("C");
+			v=v.id;
+			
 		} else {
-			f_core.Error(f_core, "EncodeObject: Can not serialize '"+v+"'.");
+			f_core.Error(f_core, "_EncodeField: Can not serialize '"+v+"'.");
 			return;
 		}
 		

@@ -1061,6 +1061,8 @@
 	
 	<component id="dataGrid" extends="abstractData">
 		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.IDraggableGridComponent" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.IDroppableGridComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ISelectionRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ICheckRangeComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent" importMethods="false" />
@@ -1080,13 +1082,25 @@
 		<capability id="IDragEventCapability" />
 		<capability id="IDraggableCapability" />
 		<capability id="IDropEventCapability" />
+		<capability id="IDropCompleteEventCapability" />
 		<capability id="IDroppableCapability" />
 		<method id="setDragEffects(String)" />	
 		<method id="setDragTypes(String)" />
 		<method id="setDropEffects(String)" />
 		<method id="setDropTypes(String)" />
-	
+		
+		<attribute id="rowDragTypes" type="java.lang.String[]" />
+		<method id="setRowDragTypes(String)" />
 
+		<attribute id="rowDragEffects" type="int" />
+		<method id="setRowDragEffects(String)" />
+		
+		<attribute id="rowDropTypes" type="java.lang.String[]" />
+		<method id="setRowDropTypes(String)" />
+		
+		<attribute id="rowDropEffects" type="int" />
+		<method id="setRowDropEffects(String)" />
+	
 		<capability id="ICheckEventCapability" />
 		<capability id="ICheckableCapability" />
 		<capability id="ICheckCardinalityCapability" />
@@ -1126,11 +1140,15 @@
 		<capability id="org.rcfaces.core.lang.provider.ICursorProvider"/>
 
 		<attribute id="rowValueColumnId" type="java.lang.String" />
+		<attribute id="rowLabelColumnId" type="java.lang.String"/>
 
 		<attribute id="rowCountVar" type="java.lang.String" noValueBinding="true"/>
 		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
 
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
+		
+		<attribute id="bodyDroppable" type="boolean" default="false"/>
+
 				
 		<action id="action" type="selection" default="true"/>
 		
@@ -3709,6 +3727,7 @@ Dans le cas d'un mode period !
 		<capability id="IDraggableCapability" />
 		<!--  capability id="IDraggableItemsCapability" /-->
 		<capability id="IDropEventCapability" />
+		<capability id="IDropCompleteEventCapability" />
 		<capability id="IDroppableCapability" />
 		<!-- capability id="IDroppableItemsCapability" /-->
 		<method id="setDragEffects(String)" />	
@@ -3745,6 +3764,8 @@ Dans le cas d'un mode period !
 		<attribute id="defaultDisabledLeafImageURL" type="java.lang.String" />
 		
 		<attribute id="hideRootExpandSign" type="boolean" default="false"/>
+		
+		<attribute id="bodyDroppable" type="boolean" default="false"/>
 
 		<attribute id="cursorValue" type="java.lang.Object" />
 

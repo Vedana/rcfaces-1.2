@@ -27,6 +27,7 @@ import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
@@ -37,6 +38,8 @@ import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.internal.capability.IDraggableGridComponent;
+import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.ISelectionComponent;
 import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
@@ -1038,6 +1041,26 @@ public class DataGridRenderer extends AbstractGridRenderer {
             designerData = (String[]) dataGridComponent.getRowData();
         }
 
+        boolean draggableRows = false;
+        if (tableContext.isDraggable()) {
+            if (dataGridComponent instanceof IDraggableGridComponent) {
+                IDraggableGridComponent ggd = (IDraggableGridComponent) dataGridComponent;
+
+                draggableRows = ggd.isRowDragEffectsSetted()
+                        || ggd.isRowDragTypesSetted();
+            }
+        }
+
+        boolean droppableRows = false;
+        if (tableContext.isDroppable()) {
+            if (dataGridComponent instanceof IDroppableGridComponent) {
+                IDroppableGridComponent ggd = (IDroppableGridComponent) dataGridComponent;
+
+                droppableRows = ggd.isRowDropEffectsSetted()
+                        || ggd.isRowDropTypesSetted();
+            }
+        }
+
         for (int i = 0; i < columnNumber; i++) {
             UIColumn dc = dcs[i];
 
@@ -1208,6 +1231,52 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (trClassName != null) {
                 objectLiteralWriter.writeSymbol("_styleClass").write(
                         trClassName);
+            }
+
+            if (draggableRows) {
+                IDraggableGridComponent dgc = (IDraggableGridComponent) dataGridComponent;
+
+                if (dgc.isRowDragTypesSetted()) {
+                    String[] types = dgc.getRowDragTypes();
+                    if (types != null && types.length > 0) {
+                        objectLiteralWriter
+                                .writeSymbol("_dragTypes")
+                                .writeString(HtmlTools.serializeDnDTypes(types));
+                    }
+                }
+                if (dgc.isRowDragEffectsSetted()) {
+                    int effects = dgc.getRowDragEffects();
+
+                    if (effects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
+                        effects = IDragAndDropEffects.NONE_DND_EFFECT;
+                    }
+
+                    objectLiteralWriter.writeSymbol("_dragEffects").writeInt(
+                            effects);
+                }
+            }
+
+            if (droppableRows) {
+                IDroppableGridComponent dgc = (IDroppableGridComponent) dataGridComponent;
+
+                if (dgc.isRowDropTypesSetted()) {
+                    String[] types = dgc.getRowDropTypes();
+                    if (types != null && types.length > 0) {
+                        objectLiteralWriter
+                                .writeSymbol("_dropTypes")
+                                .writeString(HtmlTools.serializeDnDTypes(types));
+                    }
+                }
+                if (dgc.isRowDropEffectsSetted()) {
+                    int effects = dgc.getRowDropEffects();
+
+                    if (effects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
+                        effects = IDragAndDropEffects.NONE_DND_EFFECT;
+                    }
+
+                    objectLiteralWriter.writeSymbol("_dropEffects").writeInt(
+                            effects);
+                }
             }
 
             objectLiteralWriter.end();
@@ -1431,7 +1500,15 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (clientShowValue != null) {
                 htmlWriter.writeAttribute("v:showValue", clientShowValue);
             }
+        }
 
+        if (dg instanceof DataGridComponent) {
+            String columnId = ((DataGridComponent) dg)
+                    .getRowLabelColumnId(facesContext);
+
+            if (columnId != null) {
+                htmlWriter.writeAttribute("v:rowLabelColumnId", columnId);
+            }
         }
     }
 

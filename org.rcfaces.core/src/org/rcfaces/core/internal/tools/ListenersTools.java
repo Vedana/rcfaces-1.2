@@ -16,6 +16,7 @@ import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IDragEventCapability;
+import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
 import org.rcfaces.core.component.capability.IDropEventCapability;
 import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IExpandEventCapability;
@@ -49,7 +50,8 @@ import org.rcfaces.core.internal.listener.CloseScriptListener;
 import org.rcfaces.core.internal.listener.DoubleClickActionListener;
 import org.rcfaces.core.internal.listener.DoubleClickScriptListener;
 import org.rcfaces.core.internal.listener.DragScriptListener;
-import org.rcfaces.core.internal.listener.DropActionListener;
+import org.rcfaces.core.internal.listener.DropCompleteActionListener;
+import org.rcfaces.core.internal.listener.DropCompleteScriptListener;
 import org.rcfaces.core.internal.listener.DropScriptListener;
 import org.rcfaces.core.internal.listener.ErrorActionListener;
 import org.rcfaces.core.internal.listener.ErrorScriptListener;
@@ -178,11 +180,30 @@ public class ListenersTools {
         public IServerActionListener addActionListener(UIComponent component,
                 Application application, String expression,
                 boolean partialRendering) {
-            IDropEventCapability selectEventCapability = (IDropEventCapability) component;
+            throw new UnsupportedListenerTypeException("drop");
+        }
+    };
 
-            DropActionListener dropActionListener = new DropActionListener(
+    public static final IListenerType DROP_COMPLETE_LISTENER_TYPE = new AbstractListenerType() {
+        private static final String REVISION = "$Revision$";
+
+        public void addScriptListener(UIComponent component, String scriptType,
+                String command) {
+            IDropCompleteEventCapability selectEventCapability = (IDropCompleteEventCapability) component;
+
+            selectEventCapability
+                    .addDropCompleteListener(new DropCompleteScriptListener(
+                            scriptType, command));
+        }
+
+        public IServerActionListener addActionListener(UIComponent component,
+                Application application, String expression,
+                boolean partialRendering) {
+            IDropCompleteEventCapability selectEventCapability = (IDropCompleteEventCapability) component;
+
+            DropCompleteActionListener dropActionListener = new DropCompleteActionListener(
                     expression, partialRendering);
-            selectEventCapability.addDropListener(dropActionListener);
+            selectEventCapability.addDropCompleteListener(dropActionListener);
 
             return dropActionListener;
         }

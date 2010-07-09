@@ -6,7 +6,7 @@
  * 
  * @class public abstract f_grid extends f_component, fa_disabled,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
- *        fa_scrollPositions, fa_additionalInformationManager
+ *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -293,6 +293,9 @@ var __statics = {
 						position : f_popup.MOUSE_POSITION
 					});
 				}
+				
+			} else if (dataGrid._dragAndDropEngine) {
+				dataGrid._dragRow(this, evt);
 			}
 
 			return f_core.CancelJsEvent(evt);
@@ -1393,310 +1396,310 @@ var __statics = {
 		}
 
 		var w = column._col.offsetWidth + dw;
-
-		// document.title="W="+w+"/"+dw;
-
-	if (w < column._minWidth) {
-		w = column._minWidth;
-	}
-	if (w > column._maxWidth) {
-		w = column._maxWidth;
-	}
-
-	dw = w - column._col.offsetWidth;
-
-	if (dw == 0) {
-		return;
-	}
-
-	/*
-	 * var labelStyle=column._label.style; if (w<8) { if
-	 * (labelStyle.display!="none") { labelStyle.display="none"; } } else if
-	 * (labelStyle.display!="block") { labelStyle.display="block"; }
-	 * 
-	 * if (w<24) { if (column._ascendingOrder!==undefined &&
-	 * !column._restoreClass) { column._restoreClass=column._label.className;
-	 * column._label.className="f_grid_ttext"; }
-	 *  } else if (column._restoreClass) {
-	 * column._label.className=column._restoreClass;
-	 * column._restoreClass=undefined; }
-	 */
-
-	var tcol = column._tcol;
-	var col = column._col;
-	var head = column._head;
-	var tableOffsetWidth = dataGrid._table.offsetWidth;
-
-	var twidth = 0;
-	if (column._ascendingOrder !== undefined) {
-		twidth -= this._sortPadding;
-	}
-
-	if (false && f_core.IsInternetExplorer()) {
-		// AVANT !
-		if (tableOffsetWidth) {
-			dataGrid._table.style.width = (tableOffsetWidth + dw) + "px";
+	
+			// document.title="W="+w+"/"+dw;
+	
+		if (w < column._minWidth) {
+			w = column._minWidth;
 		}
-
-		col.style.width = w + "px";
-		head.style.width = w + "px";
-
-		var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
-		if (bw < 0) {
-			bw = 0;
+		if (w > column._maxWidth) {
+			w = column._maxWidth;
 		}
-		column._box.style.width = bw + "px";
-
-		var lw = bw + twidth;
-		if (lw < 0) {
-			lw = 0;
+	
+		dw = w - column._col.offsetWidth;
+	
+		if (dw == 0) {
+			return;
 		}
-		column._label.style.width = lw + "px";
-
-	} else {
-		if (tcol) {
-			// tcol.style.width=w+"px";
+	
+		/*
+		 * var labelStyle=column._label.style; if (w<8) { if
+		 * (labelStyle.display!="none") { labelStyle.display="none"; } } else if
+		 * (labelStyle.display!="block") { labelStyle.display="block"; }
+		 * 
+		 * if (w<24) { if (column._ascendingOrder!==undefined &&
+		 * !column._restoreClass) { column._restoreClass=column._label.className;
+		 * column._label.className="f_grid_ttext"; }
+		 *  } else if (column._restoreClass) {
+		 * column._label.className=column._restoreClass;
+		 * column._restoreClass=undefined; }
+		 */
+	
+		var tcol = column._tcol;
+		var col = column._col;
+		var head = column._head;
+		var tableOffsetWidth = dataGrid._table.offsetWidth;
+	
+		var twidth = 0;
+		if (column._ascendingOrder !== undefined) {
+			twidth -= this._sortPadding;
 		}
-
-		var cellMargin = 0;
-
-		col.style.width = w + "px";
-		head.style.width = (w - cellMargin) + "px";
-		column._box.style.width = (w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING)
-				+ "px";
-		column._label.style.width = (w - f_grid._TEXT_RIGHT_PADDING
-				- f_grid._TEXT_LEFT_PADDING + twidth)
-				+ "px";
-
-		var totalCols = 0;
-		var columns = dataGrid._columns;
-		for ( var i = 0; i < columns.length; i++) {
-			var cl = columns[i];
-
-			if (!cl._visibility) {
-				continue;
+	
+		if (false && f_core.IsInternetExplorer()) {
+			// AVANT !
+			if (tableOffsetWidth) {
+				dataGrid._table.style.width = (tableOffsetWidth + dw) + "px";
 			}
-
-			f_core.Assert(cl._col, "f_grid._DragCursorMove: Invalid column '"
-					+ cl + "'.");
-
-			totalCols += parseInt(cl._col.style.width, 10);
+	
+			col.style.width = w + "px";
+			head.style.width = w + "px";
+	
+			var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
+			if (bw < 0) {
+				bw = 0;
+			}
+			column._box.style.width = bw + "px";
+	
+			var lw = bw + twidth;
+			if (lw < 0) {
+				lw = 0;
+			}
+			column._label.style.width = lw + "px";
+	
+		} else {
+			if (tcol) {
+				// tcol.style.width=w+"px";
+			}
+	
+			var cellMargin = 0;
+	
+			col.style.width = w + "px";
+			head.style.width = (w - cellMargin) + "px";
+			column._box.style.width = (w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING)
+					+ "px";
+			column._label.style.width = (w - f_grid._TEXT_RIGHT_PADDING
+					- f_grid._TEXT_LEFT_PADDING + twidth)
+					+ "px";
+	
+			var totalCols = 0;
+			var columns = dataGrid._columns;
+			for ( var i = 0; i < columns.length; i++) {
+				var cl = columns[i];
+	
+				if (!cl._visibility) {
+					continue;
+				}
+	
+				f_core.Assert(cl._col, "f_grid._DragCursorMove: Invalid column '"
+						+ cl + "'.");
+	
+				totalCols += parseInt(cl._col.style.width, 10);
+			}
+	
+			dataGrid._table.style.width = (totalCols) + "px";
 		}
-
-		dataGrid._table.style.width = (totalCols) + "px";
-	}
-
-	// window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels
-	// ";
-
-	if (dataGrid._scrollTitle.scrollLeft > 0) {
-		dataGrid._dragTimerId = f_core.GetWindow(doc).setTimeout(
-				f_grid._DragMoveTimer, f_grid._DRAG_TIMER);
-	}
-},
-/**
- * @method private static
- * @param Event
- *            evt
- * @return boolean
- * @context object:dataGrid
- * @context event:evt
- */
-_TitleCursorDragStop : function(evt) {
-	var column = f_grid._DragColumn;
-	if (!column) {
-		// Cela peut survenir si les stops sont enchainés ....
-	return false;
-}
-
-var dataGrid = column._dataGrid;
-
-var doc = dataGrid.ownerDocument;
-
-if (dataGrid._dragTimerId) {
-	f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
-	dataGrid._dragTimerId = undefined;
-}
-
-f_core.RemoveEventListener(doc, "mousemove", f_grid._TitleCursorDragMove,
-		dataGrid);
-f_core.RemoveEventListener(doc, "mouseup", f_grid._TitleCursorDragStop,
-		dataGrid);
-
-doc.body.style.cursor = f_grid._DragOldCursor;
-f_grid._DragOldCursor = undefined;
-
-var ths = dataGrid._title.getElementsByTagName("th");
-for ( var i = 0; i < ths.length; i++) {
-	ths[i].style.cursor = ths[i].oldCursorStyle;
-	ths[i].oldCursorStyle = undefined;
-}
-
-column._restoreClass = undefined;
-
-f_grid._DragColumn = undefined;
-dataGrid._dragDeltaX = undefined;
-dataGrid._dragOriginX = undefined;
-dataGrid._dragMousePosition = undefined;
-
-return true;
-},
-/**
- * @method private static
- * @param Event
- *            evt
- * @return boolean
- * @context object:dataGrid
- */
-_SortIndication_onmouseover : function(evt) {
-var dataGrid = this._dataGrid;
-
-if (!evt) {
-	evt = f_core.GetJsEvent(this);
-}
-
-if (dataGrid.f_getEventLocked(evt, false)) {
-	return false;
-}
-
-if (this._over) {
-	return true;
-}
-
-this._over = true;
-
-dataGrid._updateSortManager();
-
-return true;
-},
-/**
- * @method private static
- * @param Event
- *            evt
- * @return boolean
- * @context object:dataGrid
- */
-_SortIndication_onmouseout : function(evt) {
-var dataGrid = this._dataGrid;
-
-if (!evt) {
-	evt = f_core.GetJsEvent(this);
-}
-
-if (!this._over && !this._selected) {
-	return true;
-}
-
-this._over = undefined;
-this._selected = undefined;
-
-dataGrid._updateSortManager();
-
-return true;
-},
-/**
- * @method private static
- * @param Event
- *            evt
- * @return boolean
- * @context object:dataGrid
- */
-_SortIndication_onmousedown : function(evt) {
-var dataGrid = this._dataGrid;
-
-if (!evt) {
-	evt = f_core.GetJsEvent(this);
-}
-
-if (this._selected) {
-	return true;
-}
-
-this._selected = true;
-
-dataGrid._updateSortManager();
-
-return true;
-},
-/**
- * @method private static
- * @param Event
- *            evt
- * @return boolean
- * @context object:dataGrid
- */
-_SortIndication_onmouseup : function(evt) {
-var dataGrid = this._dataGrid;
-
-if (!evt) {
-	evt = f_core.GetJsEvent(this);
-}
-
-if (!this._selected) {
-	return true;
-}
-
-this._selected = undefined;
-
-dataGrid._updateSortManager();
-
-dataGrid.f_showSortManager(evt);
-
-return true;
-
-},
-
-/**
- * @method hidden static
- * @param String
- *            text1
- * @param String
- *            text2
- * @return number
- */
-Sort_Server : function(text1, text2) {
-// Pas d'implementation, car la fonction est filtrée avant !
-	return 0;
-},
-/**
- * @method public static
- * @param String
- *            name
- * @param Function
- *            callback
- * @return void
- */
-RegisterSortManager : function(name, callback) {
-	var sortManagers = f_grid._SortManagers;
-	if (!sortManagers) {
-		sortManagers = new Object;
-		f_grid._SortManagers = sortManagers;
-	}
-
-	sortManagers[name] = callback;
-},
-Finalizer : function() {
-	f_grid._SortManagers = undefined;
-},
-/**
- * @method private static
- * @param HTMLTableElement
- *            table
- * @return HTMLTableColElement[]
- */
-_ListCols : function(table) {
-	var l = new Array;
-	for ( var node = table.firstChild; node; node = node.nextSibling) {
-		if (node.tagName.toLowerCase() != "col") {
-			break;
+	
+		// window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels
+		// ";
+	
+		if (dataGrid._scrollTitle.scrollLeft > 0) {
+			dataGrid._dragTimerId = f_core.GetWindow(doc).setTimeout(
+					f_grid._DragMoveTimer, f_grid._DRAG_TIMER);
 		}
-
-		l.push(node);
+	},
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 * @context event:evt
+	 */
+	_TitleCursorDragStop : function(evt) {
+		var column = f_grid._DragColumn;
+		if (!column) {
+				// Cela peut survenir si les stops sont enchainés ....
+			return false;
+		}
+		
+		var dataGrid = column._dataGrid;
+		
+		var doc = dataGrid.ownerDocument;
+		
+		if (dataGrid._dragTimerId) {
+			f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
+			dataGrid._dragTimerId = undefined;
+		}
+		
+		f_core.RemoveEventListener(doc, "mousemove", f_grid._TitleCursorDragMove,
+				dataGrid);
+		f_core.RemoveEventListener(doc, "mouseup", f_grid._TitleCursorDragStop,
+				dataGrid);
+		
+		doc.body.style.cursor = f_grid._DragOldCursor;
+		f_grid._DragOldCursor = undefined;
+		
+		var ths = dataGrid._title.getElementsByTagName("th");
+		for ( var i = 0; i < ths.length; i++) {
+			ths[i].style.cursor = ths[i].oldCursorStyle;
+			ths[i].oldCursorStyle = undefined;
+		}
+		
+		column._restoreClass = undefined;
+		
+		f_grid._DragColumn = undefined;
+		dataGrid._dragDeltaX = undefined;
+		dataGrid._dragOriginX = undefined;
+		dataGrid._dragMousePosition = undefined;
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onmouseover : function(evt) {
+		var dataGrid = this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (dataGrid.f_getEventLocked(evt, false)) {
+			return false;
+		}
+		
+		if (this._over) {
+			return true;
+		}
+		
+		this._over = true;
+		
+		dataGrid._updateSortManager();
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onmouseout : function(evt) {
+		var dataGrid = this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (!this._over && !this._selected) {
+			return true;
+		}
+		
+		this._over = undefined;
+		this._selected = undefined;
+		
+		dataGrid._updateSortManager();
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onmousedown : function(evt) {
+		var dataGrid = this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (this._selected) {
+			return true;
+		}
+		
+		this._selected = true;
+		
+		dataGrid._updateSortManager();
+		
+		return true;
+	},
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return boolean
+	 * @context object:dataGrid
+	 */
+	_SortIndication_onmouseup : function(evt) {
+		var dataGrid = this._dataGrid;
+		
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+		
+		if (!this._selected) {
+			return true;
+		}
+		
+		this._selected = undefined;
+		
+		dataGrid._updateSortManager();
+		
+		dataGrid.f_showSortManager(evt);
+		
+		return true;
+	
+	},
+	
+	/**
+	 * @method hidden static
+	 * @param String
+	 *            text1
+	 * @param String
+	 *            text2
+	 * @return number
+	 */
+	Sort_Server : function(text1, text2) {
+	// Pas d'implementation, car la fonction est filtrée avant !
+		return 0;
+	},
+	/**
+	 * @method public static
+	 * @param String
+	 *            name
+	 * @param Function
+	 *            callback
+	 * @return void
+	 */
+	RegisterSortManager : function(name, callback) {
+		var sortManagers = f_grid._SortManagers;
+		if (!sortManagers) {
+			sortManagers = new Object;
+			f_grid._SortManagers = sortManagers;
+		}
+	
+		sortManagers[name] = callback;
+	},
+	Finalizer : function() {
+		f_grid._SortManagers = undefined;
+	},
+	/**
+	 * @method private static
+	 * @param HTMLTableElement
+	 *            table
+	 * @return HTMLTableColElement[]
+	 */
+	_ListCols : function(table) {
+		var l = new Array;
+		for ( var node = table.firstChild; node; node = node.nextSibling) {
+			if (node.tagName.toLowerCase() != "col") {
+				break;
+			}
+	
+			l.push(node);
+		}
+	
+		return l;
 	}
-
-	return l;
-}
-}
+};
 
 var __members = {
 	/**
@@ -1758,6 +1761,16 @@ var __members = {
 		} else {
 			this._rowStyleClasses = this.f_getDefaultRowStyleClasses();
 		}
+
+		
+		if (this.f_isDraggable()) {
+			this._dragAndDropEngine= f_dragAndDropEngine.Create(this);
+		}
+
+		if (this.f_isDroppable()) {
+			this._bodyDroppable=f_core.GetBooleanAttribute(this, "v:bodyDroppable", false);
+		}
+		
 
 		this._sortPadding = f_core.GetNumberAttribute(this, "v:sortPadding",
 				f_grid._SORT_PADDING);
@@ -1878,7 +1891,7 @@ var __members = {
 					}
 
 					return true;
-				}
+				};
 
 				focus.onbeforedeactivate = onbeforedeactivate;
 
@@ -1935,7 +1948,11 @@ var __members = {
 			sortIndicator.onmousedown = null;
 			sortIndicator.onmouseup = null;
 		}
-
+		
+		this._dragAndDropEngine=undefined;
+		this._targetDragAndDropEngine=undefined;
+		
+		// this._bodyDroppable=undefined; Boolean
 		// this._sortPadding=undefined; // Number
 		// this._serializedIndexes=undefined; // number[]
 		// this._keySearchColumnIndex=undefined; // number
@@ -5968,15 +5985,175 @@ var __members = {
 	 */
 	f_unselectAll: function() {
 		this.f_setSelection([]);
-	}
+	},
+	/**
+	 * @method private
+	 * @param HTMLElement li
+	 * @param Event jsEvent
+	 * @return Boolean
+	 */
+	_dragRow: function(row, jsEvent) {
+		var dnd=this._dragAndDropEngine;
+		if (!dnd) {
+			return false;
+		}
+		
+		var dragTypes=row._dragTypes;
+		if (dragTypes===undefined) {
+			dragTypes=this._dragTypes;
+		}
+		
+		var dragEffects=row._dragEffects;
+		if (dragEffects===undefined) {
+			dragEffects=this._dragEffects;
+		}
+		
+		f_core.Debug(f_grid, "_dragRow: dragEffects=0x"+dragEffects+" dragTypes='"+dragTypes+"'");
+		
+		if (!dragEffects || !dragTypes) {
+			return false;
+		}
+		
+		var rowValue=this.fa_getElementValue(row);
+		
+		var ret=dnd.f_start(jsEvent, row, rowValue, row, dragEffects, dragTypes);
 
+		f_core.Debug(f_grid, "_dragRow: start returns '"+ret+"'");
+		
+		return ret;
+	},
+	f_queryDropInfos: function(dragAndDropEngine, jsEvent, element) {
+		this._targetDragAndDropEngine=dragAndDropEngine;
+		
+		if (this._scrollBody) {
+			this.fa_installAutoScroll();
+		}
+
+		var found=this._findRowByHTMLElement(element);
+		if (!found) {
+			return null;
+		}
+		
+		var row=found._row;
+		var rowElement=found._rowElement;
+		
+		if (this._bodyDroppable!==true && row==this) {
+			return null;
+		}
+
+		var dropTypes=row._dropTypes;
+		if (dropTypes===undefined) {
+			dropTypes=this._dropTypes;
+		}
+		
+		var dropEffects=row._dropEffects;
+		if (dropEffects===undefined) {
+			dropEffects=this._dropEffects;
+		}
+		
+		if (!dropTypes || !dropEffects) {
+			return null;
+		}
+		
+		var rowValue=this.fa_getElementValue(row);
+		
+		return {
+			item: row,
+			itemValue: rowValue,
+			targetItemElement: rowElement,
+			dropTypes: dropTypes,
+			dropEffects: dropEffects		
+		};
+	},
+	f_overDropInfos: function(dragAndDropEngine, infos) {
+		var row=infos.item;
+		
+		row._over = true;
+		this.fa_updateElementStyle(row);	
+	},
+	f_outDropInfos: function(dragAndDropEngine, infos) {
+		var row=infos.item;
+		
+		row._over = false;
+		this.fa_updateElementStyle(row);	
+	},
+	f_releaseDropInfos: function() {
+		this._targetDragAndDropEngine=undefined;
+
+		this.fa_uninstallAutoScroll();
+	},
+	fa_getLastMousePosition: function() {
+		return this._targetDragAndDropEngine.f_getLastMousePosition();
+	},
+	
+	fa_getScrollableContainer: function() {
+		return this._scrollBody;
+	},
+	fa_findAutoOpenElement: function(htmlElement) {
+		// Recherche un additional !
+		
+		if (!this._additionalInformations) {
+			return null;
+		}
+		
+		var found=this._findRowByHTMLElement(htmlElement);
+		if (!found) {
+			return null;
+		}
+		
+		var row=found._row;		
+		if (row==this || !this.f_hasAdditionalElement(row) || this.fa_isAdditionalElementVisible(row)) {
+			return null;
+		}		
+		
+		return row;
+	},
+	fa_performAutoOpenElement: function(row) {		
+		this.fa_performElementAdditionalInformation(row, true);
+	},
+	fa_isSameAutoOpenElement: function(elt1, elt2) {
+		return elt1._rowIndex==elt2._rowIndex;
+	},
+	/**
+	 * @method private
+	 * @param HTMLElement element
+	 * @return Object
+	 */
+	_findRowByHTMLElement: function(element) {
+		var row=null;
+		var rowElement=null;
+			
+		for(;element;element=element.parentNode) {
+			if (element._rows) {
+				// Racine de l'arbre
+				row=this;
+				rowElement=this;
+				break;
+			}
+			
+			if (element._dataGrid==this && element._rowIndex!==undefined) {
+				row=element;
+				rowElement=element;
+				break;
+			}
+		}
+		
+		if (!row) {
+			return null;
+		}
+		
+		return {
+			_row: row,
+			_rowElement: rowElement
+		};
+	}
 };
 
 new f_class("f_grid", {
 	extend : f_component,
 	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions,
-			fa_additionalInformationManager ],
+			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen ],
 	statics : __statics,
 	members : __members
 });

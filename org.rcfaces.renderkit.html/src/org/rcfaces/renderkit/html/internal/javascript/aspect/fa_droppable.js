@@ -53,7 +53,23 @@ var __members = {
 	 * @param f_dragAndDropEngine dragAndDropEngine
 	 * @return void
 	 */
-	f_releaseDropInfos: f_class.ABSTRACT
+	f_releaseDropInfos: f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param f_dragAndDropEngine dragAndDropEngine
+	 * @param Object item
+	 * @return void
+	 */
+	f_overDropInfos:  f_class.ABSTRACT,	
+	
+	/**
+	 * @method public abstract
+	 * @param f_dragAndDropEngine dragAndDropEngine
+	 * @param Object item
+	 * @return void
+	 */
+	f_outDropInfos:  f_class.ABSTRACT
 };
 
 new f_aspect("fa_droppable", {

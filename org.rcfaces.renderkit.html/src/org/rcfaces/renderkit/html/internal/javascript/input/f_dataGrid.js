@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_dataGrid extends f_grid, fa_readOnly, fa_checkManager
+ * @class public f_dataGrid extends f_grid, fa_readOnly, fa_checkManager, fa_droppable, fa_draggable, fa_autoOpen
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -293,6 +293,7 @@ var __members = {
 	 
 		this._addRowFragment=undefined; // HtmlDocumentFragment
 		
+		// this._labelColumnId=undefined; // String
 		// this._gridUpdadeServiceId=undefined; // String
 		// this._serviceGridId=undefined; // String
 		
@@ -1839,19 +1840,75 @@ var __members = {
 			}
 		}
 	},
-	
 	/**
 	 * @method public
 	 */
 	f_uncheckAll: function() {
 		this._uncheckAllElements();
+	},
+	/**
+	 * Returns label of a row
+	 * 
+	 * @method public
+	 * @param any rowValue Value of row
+	 * @return String
+	 */
+	f_getElementLabel: function(rowValue) {
+		var labelColumnId=this._labelColumnId;
+		if (labelColumnId===undefined) {
+			labelColumnId=f_core.GetAttribute(this, "v:rowLabelColumnId", null);
+			
+			this._labelColumnId=labelColumnId;
+		}
 		
+		if (!labelColumnId) {
+			return null;
+		}
+		
+		return this.f_getCellValue(rowValue, labelColumnId);
+	},
+	f_overDropInfos: function(dragAndDropEngine, infos) {
+		var row=infos.item;
+		
+		var cells=row._cells;
+		if (cells) {
+			for(var i=0;i<cells.length;i++) {
+				var cell=cells[i];
+				var title=cell.title;			
+				if (!title) {
+					continue;
+				}
+				
+				cell._toolTipText=title;
+				cell.title=null;
+			}
+		}
+		
+		this.f_super(arguments, dragAndDropEngine, infos);
+	},
+	f_outDropInfos: function(dragAndDropEngine, infos) {
+		var row=infos.item;
+		
+		var cells=row._cells;
+		if (cells) {
+			for(var i=0;i<cells.length;i++) {
+				var cell=cells[i];
+				var title=cell._toolTipText;
+				if (!title) {
+					continue;
+				}
+				
+				cell.title=title;
+			}
+		}
+		
+		this.f_super(arguments, dragAndDropEngine, infos);
 	}
-}
+};
 
 new f_class("f_dataGrid", {
 	extend: f_grid,
-	aspects: [fa_readOnly, fa_checkManager],
+	aspects: [fa_readOnly, fa_checkManager, fa_droppable, fa_draggable],
 	statics: __statics,
 	members: __members
 });
