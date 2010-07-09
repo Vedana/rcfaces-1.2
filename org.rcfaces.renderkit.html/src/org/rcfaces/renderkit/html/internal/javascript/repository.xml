@@ -1638,6 +1638,8 @@
 		 <file name="dnd/f_dragAndDropEngine.js">
 			<class name="f_dragAndDropEngine">
 				<required-class name="f_object" />
+				<required-class name="fa_autoScroll" />
+
 				<required-class name="f_dndEvent" />
 				<required-class name="fa_draggable" />
 				<required-class name="fa_droppable" />
