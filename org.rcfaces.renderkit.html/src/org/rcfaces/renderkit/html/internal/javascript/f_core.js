@@ -3595,9 +3595,6 @@ var f_core = {
 				values.height=win.innerHeight;
 			}
 			
-//			values.width-=f_core.ComputeBorderLength(body, "left")+f_core.ComputeBorderLength(body, "right");
-//			values.height-=f_core.ComputeBorderLength(body, "top")+f_core.ComputeBorderLength(body, "bottom");
-			
 			return values;
 		}
 					

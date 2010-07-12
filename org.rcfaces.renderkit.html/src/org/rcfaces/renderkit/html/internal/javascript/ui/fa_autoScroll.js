@@ -12,9 +12,9 @@
 
 var __statics = {
 	/**
-	 * @field private static final Number
+	 * @field protected static final Number
 	 */
-	_AUTO_SCROLL_SIZE: 20,
+	AUTO_SCROLL_SIZE: 20,
 	
 	/**
 	 * @field private static final Number
@@ -42,8 +42,10 @@ var __members = {
 			return;
 		}
 
-
 		var scrollableComponent=this.fa_getScrollableContainer();
+		if (!scrollableComponent) {
+			return;
+		}
 		
 		if (!this.fa_isContainerAutoScroll(scrollableComponent)) {
 			return;
@@ -53,7 +55,7 @@ var __members = {
 	
 		var self=this;
 
-		this._autoScrollIntervalId=f_core.GetWindow(this).setInterval(function() {
+		this._autoScrollIntervalId=f_core.GetWindow(scrollableComponent).setInterval(function() {
 			if (window._rcfacesExiting) {
 				return false;
 			}
@@ -81,13 +83,17 @@ var __members = {
 	fa_uninstallAutoScroll: function() {
 		
 		var scrollIntervalId=this._autoScrollIntervalId;
-		if (scrollIntervalId) {
-			this._autoScrollIntervalId=undefined;
-	
+		if (!scrollIntervalId) {
+			return;
+		}
+		
+		this._autoScrollIntervalId=undefined;
+
 //			document.title="Clear auto scroll";
 
-			f_core.GetWindow(this).clearInterval(scrollIntervalId);
-		}
+		var scrollableComponent=this.fa_getScrollableContainer();
+		
+		f_core.GetWindow(scrollableComponent).clearInterval(scrollIntervalId);
 	},
 	
 
@@ -124,10 +130,10 @@ var __members = {
 		
 //		document.title="dy2="+dy2+"  dd="+(scrollableComponent.offsetHeight-scrollableComponent.clientHeight+" td="+new Date().getTime());
 		
-		if (dy>=0 && dy<=fa_autoScroll._AUTO_SCROLL_SIZE) {
+		if (dy>=0 && dy<=fa_autoScroll.AUTO_SCROLL_SIZE) {
 			var st=scrollableComponent.scrollTop;
 			if (st>0) {
-				st-=fa_autoScroll._AUTO_SCROLL_SIZE;
+				st-=fa_autoScroll.AUTO_SCROLL_SIZE;
 				if (st<0) {
 					st=0;
 				}
@@ -139,9 +145,9 @@ var __members = {
 				}
 			}
 			
-		} else if (dy2>=0 && dy2<=fa_autoScroll._AUTO_SCROLL_SIZE) {
+		} else if (dy2>=0 && dy2<=fa_autoScroll.AUTO_SCROLL_SIZE) {
 			var st=scrollableComponent.scrollTop;
-			st+=fa_autoScroll._AUTO_SCROLL_SIZE;
+			st+=fa_autoScroll.AUTO_SCROLL_SIZE;
 			if (st<0) {
 				st=0;
 			}

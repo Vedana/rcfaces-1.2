@@ -444,7 +444,7 @@ var __members = {
 		f_core.AddEventListener(doc, "focus", f_dragAndDropEngine._FocusExit, doc);
 		f_core.AddEventListener(doc, "blur", f_dragAndDropEngine._FocusExit, doc);
 	
-		//this.fa_installAutoScroll();
+		this.fa_installAutoScroll();
 		
 		return true;
 	},
@@ -457,7 +457,7 @@ var __members = {
 
 		this._releaseDropInfos(true);
 		
-		//this.fa_uninstallAutoScroll();
+		this.fa_uninstallAutoScroll();
 		
 		var doc=this._sourceComponent.ownerDocument;
 	
@@ -1200,6 +1200,9 @@ var __members = {
 		}
 		
 		this._dragMove(event);
+	},
+	fa_autoScrollPerformed: function() {
+		this.f_updateMousePosition();
 	}
 };
 
