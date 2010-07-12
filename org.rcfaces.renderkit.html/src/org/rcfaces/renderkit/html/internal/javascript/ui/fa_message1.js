@@ -144,7 +144,7 @@ var __members = {
 		
 		this.fa_updateMessages();
 	}
-}
+};
 
 new f_aspect("fa_message1", {
 	extend: [ fa_messageText ],

@@ -247,6 +247,11 @@
 	background-color: #a2a2a2;
 }
 
+.f_grid_row_normal_dndOver {
+	background-color: #c2c282;	
+	color: HighlightText;
+}
+
 .f_grid_row_even_normal,
 .f_grid_row_odd_normal,
 .f_grid_row_selected_focus,

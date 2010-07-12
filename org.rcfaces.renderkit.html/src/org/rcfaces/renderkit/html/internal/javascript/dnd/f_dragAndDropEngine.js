@@ -5,7 +5,7 @@
 /**
  * f_dragAndDropEngine class
  *
- * @class public f_dragAndDropEngine extends f_object
+ * @class public f_dragAndDropEngine extends f_object, fa_screenAutoScroll
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -21,7 +21,7 @@ var __statics = {
 	/**
 	 * @field private static final String[]
 	 */	
-	_DefaultDragAndDropInfos: ["popup" ],
+	_DefaultDragAndDropInfos: ["popup", "icon" ],
 	
 	/**
 	 * 
@@ -49,7 +49,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-			f_core.Debug(f_dragAndDropEngine, "_DragMove: drag move ! current="+current);
+//			f_core.Debug(f_dragAndDropEngine, "_DragMove: drag move ! current="+current);
 	
 			if (!current) {
 				return;
@@ -75,7 +75,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-			f_core.Debug(f_dragAndDropEngine, "_DragStop: stop drag ! current="+current);
+//			f_core.Debug(f_dragAndDropEngine, "_DragStop: stop drag ! current="+current);
 	
 			if (!current) {
 				return;
@@ -103,7 +103,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current+" keyCode="+evt.keyCode);
+//			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current+" keyCode="+evt.keyCode);
 	
 			if (!current) {
 				return;
@@ -142,7 +142,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-			f_core.Info(f_dragAndDropEngine, "_FocusExit: focus ! current="+current);
+//			f_core.Info(f_dragAndDropEngine, "_FocusExit: focus ! current="+current);
 	
 			if (!current) {
 				return;
@@ -165,11 +165,11 @@ var __statics = {
 		
 		if (!current) {
 
-			f_core.Debug(f_dragAndDropEngine, "_Exit: nothing to clear");
+//			f_core.Debug(f_dragAndDropEngine, "_Exit: nothing to clear");
 			return;
 		}	
 		
-		f_core.Debug(f_dragAndDropEngine, "_Exit: exit dnd engine ! current="+current);
+//		f_core.Debug(f_dragAndDropEngine, "_Exit: exit dnd engine ! current="+current);
 		
 		f_dragAndDropEngine._Current=undefined;
 
@@ -291,7 +291,6 @@ var __members = {
 	 * @method public
 	 */
 	f_finalize: function() {
-
 		this._elementOver=undefined;
 		var timerId=this._elementOverTimerId;
 		if (timerId) {
@@ -354,7 +353,7 @@ var __members = {
 	 * @return Boolean
 	 */
 	f_start: function(jsEvent, sourceItem, sourceItemValue, sourceItemElement, sourceDragEffects, sourceDragTypes) {	
-		f_core.Debug(f_dragAndDropEngine, "f_dragAndDropEngine: sourceComponent='"+this._sourceComponent+"' sourceItem='"+sourceItem+"' sourceItemValue='"+sourceItemValue+"' sourceItemElement='"+sourceItemElement+"' sourceDragEffects='"+sourceDragEffects+"' sourceDragTypes='"+sourceDragTypes+"'");
+//		f_core.Debug(f_dragAndDropEngine, "f_dragAndDropEngine: sourceComponent='"+this._sourceComponent+"' sourceItem='"+sourceItem+"' sourceItemValue='"+sourceItemValue+"' sourceItemElement='"+sourceItemElement+"' sourceDragEffects='"+sourceDragEffects+"' sourceDragTypes='"+sourceDragTypes+"'");
 
 		this._sourceItem=sourceItem;
 		this._sourceItemValue=sourceItemValue;
@@ -404,8 +403,13 @@ var __members = {
 		this._currentDropTypes=undefined;
 		
 		this._lastMousePosition=undefined;
+		this._lastShiftKey=undefined;
+		this._lastAltKey=undefined;
+		this._lastCtrlKey=undefined;
+		this._lastMetaKey=undefined;
 		
-		this._releaseDropInfos();
+		
+		this._releaseDropInfos(true);
 	},
 	
 	/**
@@ -417,7 +421,7 @@ var __members = {
 
 		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_INIT_STAGE, jsEvent);
 		
-		f_core.Debug(f_dragAndDropEngine, "_install: DRAG_INIT_STAGE event returns '"+ret+"'.");
+//		f_core.Debug(f_dragAndDropEngine, "_install: DRAG_INIT_STAGE event returns '"+ret+"'.");
 		
 		if (ret===false) {
 			return false;
@@ -439,7 +443,9 @@ var __members = {
 		f_core.AddEventListener(doc, "keyup", f_dragAndDropEngine._KeyDownUp, doc);
 		f_core.AddEventListener(doc, "focus", f_dragAndDropEngine._FocusExit, doc);
 		f_core.AddEventListener(doc, "blur", f_dragAndDropEngine._FocusExit, doc);
-			
+	
+		//this.fa_installAutoScroll();
+		
 		return true;
 	},
 	/**
@@ -447,12 +453,14 @@ var __members = {
 	 * @return Boolean
 	 */
 	_exit: function(js) {
-		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
+//		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
 
 		this._releaseDropInfos(true);
 		
-		var doc=this._sourceComponent.ownerDocument;
+		//this.fa_uninstallAutoScroll();
 		
+		var doc=this._sourceComponent.ownerDocument;
+	
 		f_core.RemoveEventListener(doc, "mousemove", f_dragAndDropEngine._DragMove, doc);
 		f_core.RemoveEventListener(doc, "mouseup", f_dragAndDropEngine._DragStop, doc);
 		f_core.RemoveEventListener(doc, "keydown", f_dragAndDropEngine._KeyDownUp, doc);
@@ -539,7 +547,7 @@ var __members = {
 	 * @return Boolean
 	 */
 	_dragStart: function(jsEvent) {
-		f_core.Debug(f_dragAndDropEngine, "_startDrag: started="+this._started);
+//		f_core.Debug(f_dragAndDropEngine, "_startDrag: started="+this._started);
 
 		if (this._started) {
 			return false;
@@ -591,7 +599,7 @@ var __members = {
 	 * @return Boolean
 	 */
 	_dragStop: function(jsEvent, cancel) {
-		f_core.Debug(f_dragAndDropEngine, "_dragStop: Drag stop started='"+this._started+"'.")
+//		f_core.Debug(f_dragAndDropEngine, "_dragStop: Drag stop started='"+this._started+"'.")
 		
 		if (!this._started) {
 			return;
@@ -638,7 +646,7 @@ var __members = {
 			f_dndEvent.FireEvent(this._targetComponent, f_event.DROP_COMPLETE, jsEvent, this, null, this._targetItem, this._targetItemValue, this._targetComponent, effect, types, true);
 		
 		} catch (x) {
-			f_core.Error(f_dragAndDropEngine, "_dragStop: fire DROP_COMPLETE throws exception: jsEvent='"+jsEvent+"' detail='"+req+"'.", x);
+			f_core.Error(f_dragAndDropEngine, "_dragStop: fire DROP_COMPLETE throws exception: jsEvent='"+jsEvent+"'.", x);
 		}
 
 		return true;
@@ -652,22 +660,29 @@ var __members = {
 
 		var eventPos = f_core.GetJsEventPosition(jsEvent);
 		this._lastMousePosition=eventPos;
+		
+		this._lastShiftKey=jsEvent.shiftKey;
+		this._lastAltKey=jsEvent.altKey;
+		this._lastCtrlKey=jsEvent.ctrlKey;
+		this._lastMetaKey=jsEvent.metaKey;
+		this._lastClientX=jsEvent.clientX;
+		this._lastClientY=jsEvent.clientY;
 
 		if (!this._started) {
 
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: Test start drag");
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: Test start drag");
 			
 			var ipos=this._initialMousePosition;
 			
 			var l=Math.sqrt(Math.pow(ipos.x-eventPos.x, 2)+Math.pow(ipos.y-eventPos.y, 2));
 
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: move '"+l+"' pixels.");
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: move '"+l+"' pixels.");
 
 			if (l<5) {
 				return false;
 			}
 	
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: Start drag");
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: Start drag");
 
 			if (this._dragStart()===false) {
 				return false;
@@ -688,22 +703,31 @@ var __members = {
 		if (!dropElement) {
 			dropElement=jsEvent.target;
 		}
+		
+		var de=f_core.SearchComponentByAbsolutePosition(eventPos.x, eventPos.y);
+		dropElement=(de.length)?de[de.length-1]:null; 
 	
 		//f_core.Debug(f_dragAndDropEngine, "_dragMove: DropElement="+dropElement);
 		
 		if (!dropElement || dropElement.nodeType!=f_core.ELEMENT_NODE) {
 
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: invalid dropElement '"+dropElement+"'");
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: invalid dropElement '"+dropElement+"'");
 			return this._cancelTarget(jsEvent);
 		}
 		
 		var dropComponent=f_core.GetParentByClass(dropElement);
 		//f_core.Debug(f_dragAndDropEngine, "_dragMove: DropComponent="+dropComponent);
 		
+		
+		var queryDropInfosCall=this._queryDropInfosCall;
+		if (this._targetComponent && !this._verifyParent(this._targetComponent, dropComponent)) {
+			this._releaseDropInfos(true);
+		}
+		
 		if (!dropComponent) {
 			// Target definie ... on abandonne target
 
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: invalid dropComponent '"+dropComponent+"' (dropElement='"+dropElement+"')");
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: invalid dropComponent '"+dropComponent+"' (dropElement='"+dropElement+"')");
 			return this._cancelTarget(jsEvent);
 		}
 			
@@ -730,7 +754,7 @@ var __members = {
 				endTimer=true;
 			}
 
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: elementOver="+(elementOver?elementOver._value:null)+" / "+(old?old._value:null)+" start="+startTimer+" end="+endTimer);
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: elementOver="+(elementOver?elementOver._value:null)+" / "+(old?old._value:null)+" start="+startTimer+" end="+endTimer);
 					
 		} else if (overTimerId) {
 			endTimer=true;
@@ -771,8 +795,8 @@ var __members = {
 		if (!dropComponent.f_isDroppable || !dropComponent.f_isDroppable()) {
 			// Target definie ... on abandonne target
 
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: component is not droppable '"+dropComponent+"' (dropElement='"+dropElement+"')");
-			return this._cancelTarget(jsEvent, true, false);
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: component is not droppable '"+dropComponent+"' (dropElement='"+dropElement+"')");
+			return this._cancelTarget(jsEvent, false);
 		}
 		
 		this._queryDropInfosCall=dropComponent;
@@ -781,23 +805,23 @@ var __members = {
 		if (!dropInfos) {
 			// La target ne trouve rien ...
 
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: no dropInfos for component '"+dropComponent+"', dropElement='"+dropElement+"'");
-			return this._cancelTarget(jsEvent, false, false);
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: no dropInfos for component '"+dropComponent+"', dropElement='"+dropElement+"'");
+			return this._cancelTarget(jsEvent, false);
 		}
 		
 		if (this._sourceComponent==dropComponent && this._sourceItemValue==dropInfos.itemValue) {
 			// On peut pas copier sur soi-même !
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: same item as source !");
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: same item as source !");
 			return;
 		}
 	
 		if (this._targetComponent==dropComponent && this._targetItemValue==dropInfos.itemValue) {
 			// Pas de changement !
-			f_core.Debug(f_dragAndDropEngine, "_dragMove: same item as target !");
+//			f_core.Debug(f_dragAndDropEngine, "_dragMove: same item as target !");
 			return;
 		}
 		
-		this._cancelTarget(jsEvent, true, false);
+		this._cancelTarget(jsEvent, false);
 		
 		this._targetComponent=dropComponent;
 		this._targetItem=dropInfos.item;
@@ -808,7 +832,7 @@ var __members = {
 		this._additionalTargetInformations=undefined;
 		this._dropInfos=dropInfos;
 	
-		f_core.Debug(f_dragAndDropEngine, "_dragMove: new target targetComponent='"+this._targetComponent+"' targetItem='"+this._targetItem+"' targetItemValue='"+this._targetItemValue+"' targetItemElement='"+this._targetItemElement+"' targetDropEffects='"+this._targetDropEffects+"' this._targetDropTypes='"+this._targetDropTypes+"'");
+//		f_core.Debug(f_dragAndDropEngine, "_dragMove: new target targetComponent='"+this._targetComponent+"' targetItem='"+this._targetItem+"' targetItemValue='"+this._targetItemValue+"' targetItemElement='"+this._targetItemElement+"' targetDropEffects='"+this._targetDropEffects+"' this._targetDropTypes='"+this._targetDropTypes+"'");
 
 		try {
 			dropComponent.f_overDropInfos(this, dropInfos);
@@ -821,12 +845,25 @@ var __members = {
 	},
 	/**
 	 * @method private
+	 * @return Boolean
+	 */
+	_verifyParent: function(parent, child) {
+		if (parent==child) {
+			return true;
+		}
+		
+		for(;child && child!=parent;child=child.parentNode);
+		
+		return !!child;
+	},
+	/**
+	 * @method private
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */
-	_cancelTarget: function(jsEvent, releaseDrop, clearTimer) {
+	_cancelTarget: function(jsEvent, clearTimer) {
 		var target=this._targetComponent;
-		f_core.Debug(f_dragAndDropEngine, "_cancelTarget: target='"+target+"'.");
+//		f_core.Debug(f_dragAndDropEngine, "_cancelTarget: target='"+target+"'.");
 
 		if (!target) {
 			this._computeDragAndDrop(jsEvent);
@@ -844,14 +881,14 @@ var __members = {
 		this._targetDropTypes = undefined;
 		this._targetDropEffects = undefined;		
 		
-		this._releaseDropInfos(releaseDrop);
+		this._releaseDropInfos(false);
 		
 		if (clearTimer!==false) {
 			var timerId=this._elementOverTimerId;
 			if (timerId) {
 				this._elementOverTimerId=undefined;
 				
-				f_core.Debug(f_dragAndDropEngine, "f_clearFields: clear timeout #"+timerId);
+//				f_core.Debug(f_dragAndDropEngine, "_cancelTarget: clear timeout #"+timerId);
 				
 				f_core.GetWindow(this._sourceComponent).clearTimeout(timerId);
 			}
@@ -879,18 +916,18 @@ var __members = {
 				queryDropInfosCall.f_outDropInfos(this, dropInfos);
 						
 			} catch (x) {
-				f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_outDropInfos throws exception", x); 
+				f_core.Error(f_dragAndDropEngine, "_releaseDropInfos: call f_outDropInfos throws exception", x); 
 			}				
 		}
 		
-		if (releaseDrop!==false) {
+		if (releaseDrop===true) {
 			this._queryDropInfosCall=undefined;
 
 			try {
 				queryDropInfosCall.f_releaseDropInfos(this);
 						
 			} catch (x) {
-				f_core.Error(f_dragAndDropEngine, "f_clearFields: call f_releaseDropInfos throws exception", x); 
+				f_core.Error(f_dragAndDropEngine, "_releaseDropInfos: call f_releaseDropInfos throws exception", x); 
 			}
 		}
 	},
@@ -900,10 +937,16 @@ var __members = {
 	 * @return Boolean
 	 */
 	_modifyEffect: function(jsEvent) {
+
+		this._lastShiftKey=jsEvent.shiftKey;
+		this._lastAltKey=jsEvent.altKey;
+		this._lastCtrlKey=jsEvent.ctrlKey;
+		this._lastMetaKey=jsEvent.metaKey;
+
 		if (!this._targetDropEffects) {
 			return true;
 		}
-		
+				
 		var newEffect=this._computeEffect(jsEvent);
 		if (newEffect==this._currentDropEffect) {
 			return true;
@@ -975,7 +1018,7 @@ var __members = {
 		this._currentDropTypes=null;			
 
 		if (!this._targetComponent) {
-			f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: target='"+this._targetComponent+"'.");
+//			f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: target='"+this._targetComponent+"'.");
 
 			this._updateDnDMask();			
 			return;
@@ -1110,11 +1153,59 @@ var __members = {
 	},
 	f_getLastMousePosition: function() {
 		return this._lastMousePosition;
+	},
+	fa_getLastMousePosition: function() {
+		return this._lastMousePosition;
+	},
+	fa_getScrollableContainer: function() {
+		return document.body;
+	},
+	f_updateMousePosition: function() {
+		
+		var event;
+		
+		if (f_core.IsInternetExplorer()) {
+			var event = document.createEventObject();
+			event.detail = 0;
+			event.screenX = this._lastClientX;
+			event.screenY = this._lastClientY;
+			event.clientX = this._lastClientX;
+			event.clientY = this._lastClientY;
+			event.ctrlKey = this._lastCtrlKey;
+			event.altKey = this._lastAltKey;
+			event.shiftKey = this._lastShiftKey;
+			event.metaKey = this._lastMetaKey;
+			event.button = 0;
+			event.relatedTarget = document.body;
+
+		} else {
+			
+			event=document.createEvent("MouseEvents");		
+			
+			event.initMouseEvent("move", 
+					true, 
+					true, 
+					window, 
+					0, 
+					this._lastClientX, 
+					this._lastClientY, 
+					this._lastClientX, 
+					this._lastClientY, 
+					this._lastCtrlKey, 
+					this._lastAltKey, 
+					this._lastShiftKey, 
+					this._lastMetaKey,
+					0, 
+					document.body);		
+		}
+		
+		this._dragMove(event);
 	}
-}
+};
 
 new f_class("f_dragAndDropEngine", {
 	extend: f_object,
+	aspects: [ fa_screenAutoScroll ],
 	statics: __statics,
 	members: __members
 });

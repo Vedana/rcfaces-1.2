@@ -1880,7 +1880,7 @@ var __members = {
 				}
 				
 				cell._toolTipText=title;
-				cell.title=null;
+				cell.removeAttribute("title");
 			}
 		}
 		

@@ -11,7 +11,17 @@
  */
 
 var __statics = {
-			
+
+	/**
+	 * @field static final Number
+	 */
+	_DEFAULT_IMAGE_WIDTH: 32,
+		
+	/**
+	 * @field static final Number
+	 */
+	_DEFAULT_IMAGE_HEIGHT: 32,
+	
 	/**
 	 * @field static final String
 	 */
@@ -45,9 +55,22 @@ var __statics = {
 };
 
 var __members = {
+		
+	/**
+	 * @field private Number
+	 */
+	_imageWidth: undefined,
+	
+	/**
+	 * @field private Number
+	 */
+	_imageHeight: undefined,
 				
 	f_iconDnDInfo: function(dragAndDropEngine) {
 		this.f_super(arguments, dragAndDropEngine);
+		
+		this._imageWidth=f_iconDnDInfo._DEFAULT_IMAGE_WIDTH;
+		this._imageHeight=f_iconDnDInfo._DEFAULT_IMAGE_HEIGHT;
 	},
 		
 	f_finalize: function() {
@@ -63,10 +86,10 @@ var __members = {
 	},	
 	f_fillElement: function(imgElement) {
 		imgElement.style.display="none";
-		imgElement.width=32;
-		imgElement.height=32;
+		imgElement.width=this._imageWidth;
+		imgElement.height=this._imageHeight;
 
-		this.f_setOffsetPosition(-imgElement.width/2, -imgElement.height/2);
+		this.f_setOffsetPosition(-this._imageWidth/2, -this._imageHeight/2);
 	},
 	f_updateTarget: function(types, effect, targetComponent, targetItem, targetItemValue, targetAdditionalInformations) {
 		this.f_super(arguments, types, effect, targetComponent, targetItem, targetItemValue, targetAdditionalInformations);
@@ -85,6 +108,7 @@ var __members = {
 			imgElement.style.display="none";			
 			return;
 		}
+		
 		if (imgElement.src!=imageURL) {
 			imgElement.src=imageURL;
 		}
@@ -96,8 +120,10 @@ var __members = {
 			imageWidth="";
 		}
 		
-		if (imgElement.width!=imageWidth) {
-			imgElement.width=parseInt(imageWidth);
+		if (imageWidth && this._imageWidth!=imageWidth) {
+			this._imageWidth=parseInt(imageWidth);
+			imgElement.width=this._imageWidth;
+				
 			updatePos=true;
 		}
 		
@@ -106,13 +132,14 @@ var __members = {
 			imageHeight="";
 		}
 		
-		if (imgElement.height!=imageHeight) {
-			imgElement.height=parseInt(imageHeight);
+		if (imageHeight && this._imageHeight!=imageHeight) {
+			this._imageHeight=parseInt(imageHeight);
+			imgElement.height=this._imageHeight;
 			updatePos=true;
 		}
 		
 		if (updatePos) {
-			this.f_setOffsetPosition(-imgElement.width/2, -imgElement.height/2);
+			this.f_setOffsetPosition(-this._imageWidth/2, -this._imageHeight/2);
 		}
 		
 		

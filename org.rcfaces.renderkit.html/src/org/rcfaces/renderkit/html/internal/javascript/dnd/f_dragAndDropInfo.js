@@ -65,7 +65,7 @@ var __members = {
 	 * @return void
 	 */
 	f_updateTarget: function(types, effect, targetComponent, targetItem, targetItemValue, infos) {
-		f_core.Debug(f_dragAndDropInfo, "f_updateTarget: types="+types+" effect="+effect+" targetComponent='"+targetComponent+"' targetItem='"+targetItem+"' targetItemValue='"+targetItemValue+"'");
+	//	f_core.Debug(f_dragAndDropInfo, "f_updateTarget: types="+types+" effect="+effect+" targetComponent='"+targetComponent+"' targetItem='"+targetItem+"' targetItemValue='"+targetItemValue+"'");
 
 		if (this._dragAndDropInfoParent) {
 			this._dragAndDropInfoParent.f_updateTarget(types, effect, targetComponent, targetItem, targetItemValue, infos);
@@ -79,7 +79,7 @@ var __members = {
 	 * @return void
 	 */
 	f_move: function(newPositionX, newPositionY) {
-		f_core.Debug(f_dragAndDropInfo, "f_move: newPositionX="+newPositionX+" newPositionY="+newPositionY);
+	//	f_core.Debug(f_dragAndDropInfo, "f_move: newPositionX="+newPositionX+" newPositionY="+newPositionY);
 
 		if (this._dragAndDropInfoParent) {
 			this._dragAndDropInfoParent.f_move(newPositionX, newPositionY);
@@ -91,7 +91,7 @@ var __members = {
 	 * @return void
 	 */
 	f_end: function() {
-		f_core.Debug(f_dragAndDropInfo, "f_end: calling ...");
+	//	f_core.Debug(f_dragAndDropInfo, "f_end: calling ...");
 		
 		if (this._dragAndDropInfoParent) {
 			this._dragAndDropInfoParent.f_end();

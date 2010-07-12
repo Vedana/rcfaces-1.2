@@ -76,6 +76,8 @@ var __members = {
 		
 		body.insertBefore(cursor, null); //body.firstChild);
 		
+		f_core.SetIgnoreInSearch(cursor);
+	
 		return cursor;
 	},
 	/**
@@ -212,7 +214,7 @@ var __members = {
 			
 			cursorElement.style.left=px+"px";
 			cursorElement.style.top=py+"px";		
-			cursorElement.style.display="block";
+			//cursorElement.style.display="block";
 		}
 	},
 	/**

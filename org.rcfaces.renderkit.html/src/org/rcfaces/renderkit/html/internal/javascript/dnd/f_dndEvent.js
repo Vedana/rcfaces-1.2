@@ -139,7 +139,7 @@ var __statics = {
 				sourceComponent: engine.f_getSourceComponent(),
 
 				effect: effect,
-				types: types,
+				types: types
 			});
 		}
 

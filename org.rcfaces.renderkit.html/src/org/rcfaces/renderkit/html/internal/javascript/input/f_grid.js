@@ -2813,7 +2813,15 @@ var __members = {
 			cl += " " + rowClassName + suffix;
 		}
 
-		if (row._over) {
+		if (row._dndOver) {
+			suffix += "_dndOver";
+
+			cl += " f_grid_row" + suffix;
+			if (rowClassName) {
+				cl += " " + rowClassName + suffix;
+			}
+			
+		} else if (row._over) {
 			suffix += "_over";
 
 			cl += " f_grid_row" + suffix;
@@ -6068,13 +6076,13 @@ var __members = {
 	f_overDropInfos: function(dragAndDropEngine, infos) {
 		var row=infos.item;
 		
-		row._over = true;
+		row._dndOver = true;
 		this.fa_updateElementStyle(row);	
 	},
 	f_outDropInfos: function(dragAndDropEngine, infos) {
 		var row=infos.item;
 		
-		row._over = false;
+		row._dndOver = false;
 		this.fa_updateElementStyle(row);	
 	},
 	f_releaseDropInfos: function() {
@@ -6146,6 +6154,12 @@ var __members = {
 			_row: row,
 			_rowElement: rowElement
 		};
+	},
+	
+	fa_autoScrollPerformed: function() {
+		if (this._targetDragAndDropEngine) {
+			this._targetDragAndDropEngine.f_updateMousePosition();
+		}
 	}
 };
 

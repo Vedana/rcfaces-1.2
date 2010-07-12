@@ -73,9 +73,9 @@
 
 
 .f_iconDnDInfo {
-	opacity: 0.75;
-   -ms-filter: "alpha(opacity=75)"; /* IE 8 */
-    filter : alpha(opacity=75); /* IE < 8 */
+	opacity: 0.50;
+   -ms-filter: "alpha(opacity=50)"; /* IE 8 */
+    filter : alpha(opacity=50); /* IE < 8 */
 }
 
 

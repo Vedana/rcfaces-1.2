@@ -1540,7 +1540,7 @@ var __members = {
 	
 		if (node._disabled) {
 			if (!node._container) {
-				suffixDivNode+="_leaf"
+				suffixDivNode+="_leaf";
 			}	
 			
 			suffixLabel+="_disabled";
@@ -1548,13 +1548,16 @@ var __members = {
 		
 		} else {
 			if (node._opened) {
-				suffixDivNode+="_opened"
+				suffixDivNode+="_opened";
 				
 			} else if (!node._container) {
-				suffixDivNode+="_leaf"
+				suffixDivNode+="_leaf";
 			}	
 		
-			if (li._over) {
+			if (li._dndOver) {
+				suffixDivNode+="_dndOver";
+				
+			} else if (li._over) {
 				suffixDivNode+="_hover";
 			}
 
@@ -3461,7 +3464,9 @@ var __members = {
 				li=li._node;
 				
 			} else {
-				nodeElement=element;				
+				// On ne prend pas l'element même !		
+				//nodeElement=element;	 	
+				continue;
 			}			
 			
 			node=li;
@@ -3529,10 +3534,10 @@ var __members = {
 		
 		if (node._tooltip) {
 			this._lastRemovedTitleElement=element;
-			element._divNode.title=null;
+			element._divNode.removeAttribute("title");
 		}
 		
-		element._over=true;		
+		element._dndOver=true;		
 		this.fa_updateElementStyle(element);			
 	},
 	f_outDropInfos: function(dragAndDropEngine, infos) {
@@ -3545,7 +3550,7 @@ var __members = {
 			element._divNode.title=node._tooltip;
 		}
 		
-		element._over=false;		
+		element._dndOver=false;		
 		this.fa_updateElementStyle(element);			
 	},
 	f_releaseDropInfos: function() {
@@ -3556,6 +3561,13 @@ var __members = {
 	fa_getLastMousePosition: function() {
 		return this._targetDragAndDropEngine.f_getLastMousePosition();
 	},
+	
+	fa_autoScrollPerformed: function() {
+		if (this._targetDragAndDropEngine) {
+			this._targetDragAndDropEngine.f_updateMousePosition();
+		}
+	},
+
 	
 	fa_getScrollableContainer: function() {
 		return this;

@@ -86,6 +86,13 @@
 	color: #008;
 }
 
+.f_tree_depth_dndOver .f_tree_label, 
+.f_tree_depth_opened_dndOver .f_tree_label, 
+.f_tree_depth_leaf_dndOver .f_tree_label {
+	background-color: #c2c282;	
+	color: HighlightText;
+}
+
 .f_tree_command,
 .f_tree_image {
 	margin: 0 2px 0 0;

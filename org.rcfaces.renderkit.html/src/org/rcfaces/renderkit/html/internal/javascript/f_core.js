@@ -3107,7 +3107,7 @@ var f_core = {
 		var curTop = 0;
 		var curLeft= 0;
 		
-		var gecko=f_core.IsGecko();
+		//var gecko=f_core.IsGecko();
 		
 	//	f_core.Debug(f_core, "Get absolutePos of '"+component.id+"'.");
 		var offsetParent=component.offsetParent;
@@ -3118,7 +3118,7 @@ var f_core = {
 			var documentElement=doc.documentElement;
 		
 			for (;;) {
-				curTop += component.offsetTop 
+				curTop += component.offsetTop;
 				curLeft += component.offsetLeft;
 				
 				if (!offsetParent) {
@@ -3134,12 +3134,6 @@ var f_core = {
 				if (component!=body && component!=documentElement) {
 					curTop -= component.scrollTop;
 					curLeft -= component.scrollLeft;
-			
-					//if (gecko) {
-						// C'est dans l'offsetTop
-						// curTop+=f_core.ComputeBorderLength(component, "top")		
-						// curLeft+=f_core.ComputeBorderLength(component, "left")
-					//}		
 				}
 								
 			//	f_core.Debug(f_core, " Sub absolutePos of '"+component.id+"' x="+component.offsetLeft+" y="+component.offsetTop+"  totX="+curLeft+" totY="+curTop);
@@ -3159,6 +3153,106 @@ var f_core = {
 		//f_core.Debug(f_core, "  End absolutePos x="+curLeft+" y="+curTop);
 		return { x: curLeft, y: curTop };
 	},
+	/**
+	 * @method hidden
+	 * @return 
+	 */
+	SetIgnoreInSearch: function(component) {
+		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.SetIgnoreInSearch: Invalid component parameter '"+component+"'.");
+
+		component._scbap_ignore=true;
+	},
+	/**
+	 * Returns component under absolute position.
+	 *
+	 * @method hidden static
+	 * @param Number x
+	 * @param Number y
+	 * @param optional component
+	 * @return HTMLElement 
+	 */
+	SearchComponentByAbsolutePosition: function(x, y, component) {
+		f_core.Assert(typeof(x)=="number", "f_core.SearchComponentByAbsolutePosition: Invalid x parameter '"+x+"'.");
+		f_core.Assert(typeof(y)=="number", "f_core.SearchComponentByAbsolutePosition: Invalid y parameter '"+y+"'.");
+
+		var result=[];
+		
+		if (!component) {
+			component=document.body;
+		}
+		
+		var timeStamp=new Date().getTime();
+		
+		var parents=[component];
+		component._scbap_t=timeStamp;
+		component._scbap_x=0;
+		component._scbap_y=0;
+
+		for(;parents.length;) {
+			var parent=parents.shift();
+			
+			var nodes=parent.childNodes;
+			var nbNodes=nodes.length;
+			for(var i=0;i<nbNodes;i++) {
+				var node=nodes[i];
+				
+				if (node.nodeType!=f_core.ELEMENT_NODE) {
+					continue;
+				}
+				
+				var cw=node.offsetWidth;
+				var ch=node.offsetHeight;
+				if (!cw || !ch) {
+					continue;
+				}
+				
+				if (node._scbap_ignore) {
+					continue;
+				}
+
+				var op=node.offsetParent;
+				if (op._scbap_t!=timeStamp) {
+					var op2=op.offsetParent;
+
+					op._scbap_t=timeStamp;
+					
+					var x2=op2._scbap_x+op.offsetLeft;
+					var y2=op2._scbap_y+op.offsetTop;
+					
+					for(var ns=op;ns!=op2;ns=ns.parentNode) {
+						x2-=ns.scrollLeft;
+						y2-=ns.scrollTop;
+					}
+					
+					op._scbap_x=x2;
+					op._scbap_y=y2;
+				}
+				
+				var cx=op._scbap_x+node.offsetLeft;
+				var cy=op._scbap_y+node.offsetTop;
+				
+				for(var ns=node.parentNode;ns!=op;ns=ns.parentNode) {
+					cx-=ns.scrollLeft;
+					cy-=ns.scrollTop;
+				}
+				
+				// Alors dedans ?
+				if (x<cx || x>cx+cw || y<cy || y>cy+ch) {
+					continue;
+				}
+				
+				result.push(node);
+				
+				if (!node.firstChild) {
+					continue;
+				}
+				
+				parents.push(node);
+			}
+		}
+		
+		return result;
+	},	
 	/**
 	 * @method hidden static
 	 * @param optional String version
@@ -3770,7 +3864,7 @@ var f_core = {
 	 * @return number[]
 	 */
 	GetJsEventPosition: function(event, doc) {
-		f_core.Assert(event && event.type, "f_core.GetJsEventPosition: Invalid event parameter '"+event+"'.");
+		f_core.Assert(event, "f_core.GetJsEventPosition: Invalid event parameter '"+event+"'.");
 	
 		if (!doc) {
 			var target=event.relatedTarget;
@@ -3783,7 +3877,6 @@ var f_core = {
 					
 				} else if (target.nodeType==f_core.ELEMENT_NODE) {
 					doc=target.ownerDocument;
-	//				alert("Get doc: "+doc);
 				}
 			}
 			
@@ -4210,7 +4303,7 @@ var f_core = {
 			d.push("D");
 			v=f_core.SerializeDate(v);
 			
-		} else if (v instanceof Document) {
+		} else if (window.Document && (v instanceof Document)) {
 			d.push("X");
 			v=f_xml.Serialize(v);
 			
