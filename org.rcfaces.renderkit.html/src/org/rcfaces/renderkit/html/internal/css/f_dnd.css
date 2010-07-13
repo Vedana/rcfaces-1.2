@@ -20,6 +20,7 @@
 
 .f_popupDnDInfo {
 	z-index: 5010;
+	white-space: nowrap;
 }
 
 .f_popupDnDInfo_border {
