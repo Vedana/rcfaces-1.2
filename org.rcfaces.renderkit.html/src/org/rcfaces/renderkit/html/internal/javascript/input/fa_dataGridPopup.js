@@ -62,6 +62,7 @@ var __statics = {
 					body.style.position="relative";
 					body.style.width=dataGridPopup._popupWidth+"px";
 				//	body.style.height=dataGridPopup._popupHeight+"px";
+					body.setAttribute("role", "combobox");
 	
 					f_core.AppendChild(pdoc.body, body);
 
@@ -86,6 +87,7 @@ var __statics = {
 			popup.className=popupClassName;
 			popup.style.width=dataGridPopup._popupWidth+"px";
 			popup.style.height=dataGridPopup._popupHeight+"px";
+			popup.setAttribute("role", "combobox");
 
 			popup.onclick=f_core.CancelJsEventHandlerTrue;
 			popup.onmousedown=f_core.CancelJsEventHandlerTrue;
@@ -509,6 +511,7 @@ var __members = {
 				className: "fa_dataGridPopup_input",
 				name: "searchValue",
 				type: "text",
+				role: "textbox",
 				// He oui ! cela semble marcher sur tous les browsers ! (meme Gecko !?)		
 				autocomplete: "off"
 			});
@@ -543,6 +546,8 @@ var __members = {
 			dataGridStyleClass);
 		
 		this._dataGrid=dataGrid;
+		
+		dataGrid.setAttribute("role", "listbox");
 		
 		if (hasPager) {
 
