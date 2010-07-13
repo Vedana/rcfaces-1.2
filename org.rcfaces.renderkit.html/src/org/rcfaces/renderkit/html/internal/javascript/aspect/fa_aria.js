@@ -7,28 +7,31 @@
  */
 
 var __statics = {
+		
+		/** 
+		 * @field public static final String
+		 */
+		ARIA_ACTIVEDESCENDANT:		"aria-activedescendant",
 	
 		/** 
-		 * @field private static final String
+		 * @field public static final String
 		 */
-		_ARIA_DISABLED:		"aria-disabled",
+		ARIA_DISABLED:		"aria-disabled",
 		
 		/** 
-		 * @field private static final String
+		 * @field public static final String
 		 */
-		_ARIA_SELECTED:		"aria-selected",
+		ARIA_EXPANDED:		"aria-expanded",
 		
 		/** 
-		 * @field private static final String
+		 * @field public static final String
 		 */
-		_ARIA_EXPANDED:		"aria-expanded",
+		ARIA_LABELLEDBY:		"aria-labelledby",
 		
 		/** 
-		 * @field private static final String
+		 * @field public static final String
 		 */
-		_ARIA_ACTIVEDESCENDANT:		"aria-activedescendant",
-		
-		
+		ARIA_SELECTED:		"aria-selected",
 		/**
 		 * @method public static
 		 * @param HTMLElement element HTML.
@@ -37,7 +40,7 @@ var __statics = {
 		 */
 		SetElementAriaDisabled: function(element, disabled) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaDisabled: invalid element parameter ("+element+")." );
-			element.setAttribute(fa_aria._ARIA_DISABLED, disabled);
+			element.setAttribute(fa_aria.ARIA_DISABLED, disabled);
 		},
 		
 		/**
@@ -47,7 +50,8 @@ var __statics = {
 		 * @return void.
 		 */
 		SetElementAriaExpanded: function(element, expanded) {
-			element.setAttribute(fa_aria._ARIA_EXPANDED, expanded);
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaExpanded: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_EXPANDED, expanded);
 		},
 		
 		/**
@@ -57,7 +61,8 @@ var __statics = {
 		 * @return void.
 		 */
 		SetElementAriaSelected: function(element, selected) {
-			element.setAttribute(fa_aria._ARIA_SELECTED, selected);
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaSelected: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_SELECTED, selected);
 		},
 		
 		/**
@@ -67,7 +72,19 @@ var __statics = {
 		 * @return void.
 		 */
 		SetElementAriaActiveDescendant: function(element, activeId) {
-			element.setAttribute(fa_aria._ARIA_ACTIVEDESCENDANT, activeId);
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaActiveDescendant: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_ACTIVEDESCENDANT, activeId);
+		},
+		
+		/**
+		 * @method public static
+		 * @param HTMLElement element HTML.
+		 * @param String labelId .
+		 * @return void.
+		 */
+		SetElementAriaLabelledBy: function(element, labelId) {
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaLabelledBy: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_LABELLEDBY, labelId);
 		}
 		
 };

@@ -4,35 +4,35 @@
 
 /**
  * Aspect Menu
- *
- * @aspect public abstract fa_menuCore extends fa_groupName, fa_items
+ * 
+ * @aspect public abstract fa_menuCore extends fa_groupName, fa_items, fa_aria
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
 
 var __statics = {
 	
-	/** 
+	/**
 	 * @field private static final number
 	 */
 	_ITEM_IMAGE_WIDTH: 18,
 	
-	/** 
+	/**
 	 * @field private static final number
 	 */
 	_ITEM_IMAGE_HEIGHT: 18,
 	
-	/** 
+	/**
 	 * @field private static final String
 	 */
 	_BLANK_IMAGE_URL: "/menu/blank.gif",
 	
-	/** 
+	/**
 	 * @field private static number
 	 */
 	_ItemIds: 0,
 	
-	/** 
+	/**
 	 * @method private static
 	 * @return String
 	 * @context none
@@ -42,8 +42,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @param Event evt
-	 * @return boolean 
+	 * @param Event
+	 *            evt
+	 * @return boolean
 	 * @context object:menu
 	 */
 	_MenuItem_mouseOver: function(evt) {
@@ -66,15 +67,16 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @param Event evt
-	 * @return boolean 
+	 * @param Event
+	 *            evt
+	 * @return boolean
 	 * @context object:menu
 	 */
 	_MenuItem_mouseOut: function(evt) {
 		var item=this._item;
 		var menu=item._menu;
 
-// Pas bloqué !			if (f_core.GetJsEventLocked(false)) return false;
+// Pas bloqué ! if (f_core.GetJsEventLocked(false)) return false;
 
 		f_core.Debug(fa_menuCore, "_MenuItem_mouseOut: menu="+menu+" item="+item);
 
@@ -88,8 +90,9 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @param Event evt
-	 * @return boolean 
+	 * @param Event
+	 *            evt
+	 * @return boolean
 	 * @context object:menu
 	 */
 	_MenuItem_mouseDown: function(evt) {
@@ -110,20 +113,23 @@ var __statics = {
 	},
 	
 	/**
-	 * @method private static 
+	 * @method private static
 	 */
 	_SeparatorItem_click: f_core.CancelJsEventHandler,
 	
 	/**
-	 * @method private static 
+	 * @method private static
 	 */
 	_MenuItem_click: f_core.CancelJsEventHandler,
 	
 	/**
 	 * @method hidden static final
-	 * @param fa_menuCore menu
-	 * @param Object menuItem
-	 * @param Event evt
+	 * @param fa_menuCore
+	 *            menu
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            evt
 	 * @return boolean
 	 */
 	OnKeyDown: function(menu, evt) {
@@ -177,12 +183,12 @@ var __statics = {
 			break;
 
 		case f_key.VK_HOME: // HOME
-// @TODO		menu.f_nextMenuItemLevel(menuItem, evt);
+// @TODO menu.f_nextMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 			
 		case f_key.VK_END: // END
-// @TODO			menu.f_previousMenuItemLevel(menuItem, evt);
+// @TODO menu.f_previousMenuItemLevel(menuItem, evt);
 			cancel=true;
 			break;
 
@@ -255,17 +261,28 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Object parentItem Parent object or <code>null</code>
-	 * @param String id Identifier of the item. (can be <code>null</code>)
-	 * @param String groupName Group name of the item.
-	 * @param String label Label of the item.
-	 * @param optional String value
-	 * @param optional boolean checked
-	 * @param optional String accessKey
-	 * @param optional String tooltip
-	 * @param optional boolean disabled
-	 * @param optional boolean visible
-	 * @param optional String acceleratorKey
+	 * @param Object
+	 *            parentItem Parent object or <code>null</code>
+	 * @param String
+	 *            id Identifier of the item. (can be <code>null</code>)
+	 * @param String
+	 *            groupName Group name of the item.
+	 * @param String
+	 *            label Label of the item.
+	 * @param optional
+	 *            String value
+	 * @param optional
+	 *            boolean checked
+	 * @param optional
+	 *            String accessKey
+	 * @param optional
+	 *            String tooltip
+	 * @param optional
+	 *            boolean disabled
+	 * @param optional
+	 *            boolean visible
+	 * @param optional
+	 *            String acceleratorKey
 	 * @return Object
 	 */
 	f_appendRadioItem: function(parentItem, id, groupName, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
@@ -285,16 +302,26 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Object parentItem Parent object or <code>null</code>
-	 * @param String id Identifier of the item. (can be <code>null</code>)
-	 * @param String label Label of the item.
-	 * @param optional String value
-	 * @param optional boolean checked
-	 * @param optional String accessKey
-	 * @param optional String tooltip
-	 * @param optional boolean disabled
-	 * @param optional boolean visible
-	 * @param optional String acceleratorKey
+	 * @param Object
+	 *            parentItem Parent object or <code>null</code>
+	 * @param String
+	 *            id Identifier of the item. (can be <code>null</code>)
+	 * @param String
+	 *            label Label of the item.
+	 * @param optional
+	 *            String value
+	 * @param optional
+	 *            boolean checked
+	 * @param optional
+	 *            String accessKey
+	 * @param optional
+	 *            String tooltip
+	 * @param optional
+	 *            boolean disabled
+	 * @param optional
+	 *            boolean visible
+	 * @param optional
+	 *            String acceleratorKey
 	 * @return Object
 	 */
 	f_appendCheckItem: function(parentItem, id, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
@@ -308,27 +335,13 @@ var __members = {
 		return item;
 	},
 	/**
-	 * Properties:
-	 *  _value: value
-	 *  _label: label
-	 *  _description: description
-	 *  _disabled: disabled
-	 *  _groupName: groupName
-	 *  _type: type
-	 *  _checked: checked
-	 *  _accessKey: accessKey
-	 *  _visible: visible
-	 *  at: acceleratorKey
-	 *  st: styleClass
-	 *  re: removeAllWhenShow
-	 *  me: menuItemListeners
-	 *  img: image 
-	 *  imge: image expanded
-	 *  imgd: image disabled
-	 *  imgh: image hover
-	 *  imgs: image selected
+	 * Properties: _value: value _label: label _description: description
+	 * _disabled: disabled _groupName: groupName _type: type _checked: checked
+	 * _accessKey: accessKey _visible: visible at: acceleratorKey st: styleClass
+	 * re: removeAllWhenShow me: menuItemListeners img: image imge: image
+	 * expanded imgd: image disabled imgh: image hover imgs: image selected
 	 * 
-	 *
+	 * 
 	 * @method hidden
 	 * @return Object
 	 */
@@ -384,15 +397,24 @@ var __members = {
 	 * Add an item to a component.
 	 * 
 	 * @method public
-	 * @param Object parentItem Parent object or <code>null</code>
-	 * @param String id Identifier of the item. (can be <code>null</code>)
-	 * @param String label Label of the item.
-	 * @param optional String value Value of the item.
-	 * @param optional String accessKey Access key of the item.
-	 * @param optional String tooltip
-	 * @param optional boolean disabled
-	 * @param optional boolean visible
-	 * @param optional String acceleratorKey
+	 * @param Object
+	 *            parentItem Parent object or <code>null</code>
+	 * @param String
+	 *            id Identifier of the item. (can be <code>null</code>)
+	 * @param String
+	 *            label Label of the item.
+	 * @param optional
+	 *            String value Value of the item.
+	 * @param optional
+	 *            String accessKey Access key of the item.
+	 * @param optional
+	 *            String tooltip
+	 * @param optional
+	 *            boolean disabled
+	 * @param optional
+	 *            boolean visible
+	 * @param optional
+	 *            String acceleratorKey
 	 * @return Object
 	 */
 	f_appendItem: function(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey) {
@@ -442,8 +464,9 @@ var __members = {
 		return menuItem;
 	},
 	/**
-	 * @method public 
-	 * @param Object parentItem Parent object or <code>null</code>
+	 * @method public
+	 * @param Object
+	 *            parentItem Parent object or <code>null</code>
 	 * @return Object
 	 */
 	f_appendSeparatorItem: function(parentItem) {
@@ -477,7 +500,7 @@ var __members = {
 		f_core.Debug(fa_menuCore, "Set item image size to width="+this._itemImageWidth+" height="+this._itemImageHeight+".");
 	},
 	/**
-	 * @method protected 
+	 * @method protected
 	 */
 	f_createPopup: function(container, parentItem) {
 		var popupObject;
@@ -519,7 +542,7 @@ var __members = {
 		
 		uiPopup.id=this.fa_getMenuScopeName(parentItem);
 		uiPopup._item=parentItem;
-		
+		uiPopup.setAttribute("role", "listBox");
 		if (!this._itemImageWidth) {
 			this._itemImageWidth=fa_menuCore._ITEM_IMAGE_WIDTH;
 		}
@@ -579,7 +602,8 @@ var __members = {
 				sep=true;
 							
 			default:
-				uiItem.role="menuitem";
+				uiItem.role="listItem";
+				uiItem.setAttribute("role", "listItem");
 				break;
 			}
 			
@@ -590,6 +614,7 @@ var __members = {
 			uiItem.className="f_menu_item";
 			
 			var image=doc.createElement("img");
+			// image.setAttribute("role", "listItem");
 			image.align="middle";
 			image.valign="middle";
 			image.border=0;
@@ -597,12 +622,15 @@ var __members = {
 			image.height=this._itemImageHeight;
 			image.src=this._blankMenuImageURL;
 			image.className="f_menu_item_image";
+			fa_aria.SetElementAriaLabelledBy(image,this.fa_getMenuScopeName(parentItem)+"::label");
 			uiItem._icon=image;
 			
 			f_core.AppendChild(uiItem, image);
 			
 			var div=doc.createElement("label");
 			div.className="f_menu_item_text";
+			div.setAttribute("role", "button");
+			div.id = this.fa_getMenuScopeName(parentItem)+"::label";
 			
 			var accessKey=item._accessKey;
 			if (accessKey) {
@@ -657,7 +685,8 @@ var __members = {
 
 		var mi=this._uiMenuPopups[menuItem];
 			
-//		f_core.Debug(fa_menuCore, "fa_menuCore.f_getUIPopup: For popup '"+menuItem+"' => "+mi);
+// f_core.Debug(fa_menuCore, "fa_menuCore.f_getUIPopup: For popup '"+menuItem+"'
+// => "+mi);
 		return mi;
 	},
 	/**
@@ -670,7 +699,7 @@ var __members = {
 		return this.f_getUIPopup(menuItem)!=null;
 	},	 
 	/**
-	 * @method protected 
+	 * @method protected
 	 * @return boolean
 	 */
 	f_uiGetSelectedItem: function(menuItem) {
@@ -684,9 +713,11 @@ var __members = {
 		return popup._selectedMenuItem;
 	},
 	/**
-	 * @method protected 
-	 * @param Object menuItem
-	 * @param Event jsEvent
+	 * @method protected
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            jsEvent
 	 * @return void
 	 */
 	f_accessKeyMenuItem: function(menuItem, jsEvent) {
@@ -727,7 +758,7 @@ var __members = {
 	},
 	/**
 	 * @method protected final
-	 * @return void 
+	 * @return void
 	 */	 
 	f_uiSelectItem: function(menuItem) {
 		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiSelectItem: Invalid menuItem parameter ("+menuItem+")");
@@ -761,7 +792,7 @@ var __members = {
 	},
 	/**
 	 * @method protected final
-	 * @return void 
+	 * @return void
 	 */	 
 	f_uiDeselectItem: function(menuItem) {
 		f_core.Assert(typeof(menuItem)=="object" && !menuItem.nodeType && menuItem._menu, "fa_menuCore.f_uiDeselectItem: Invalid menuItem parameter ("+menuItem+")");
@@ -784,8 +815,10 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param Object menuItem
-	 * @param Event evt
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            evt
 	 * @return void
 	 */
 	f_nextMenuItem: function(menuItem, evt) {
@@ -825,8 +858,10 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param Object menuItem
-	 * @param Event evt
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            evt
 	 * @return void
 	 */
 	f_previousMenuItem: function(menuItem, evt) {
@@ -862,8 +897,10 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param Object menuItem
-	 * @param Event jsEvent
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            jsEvent
 	 * @return void
 	 */
 	f_nextMenuItemLevel: function(menuItem, jsEvent) {
@@ -885,8 +922,10 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param Object menuItem
-	 * @param Event evt
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            evt
 	 * @return void
 	 */
 	f_previousMenuItemLevel: function(menuItem, evt) {
@@ -896,11 +935,13 @@ var __members = {
 		this.f_closeUIPopup(parent);
 	},
 	/**
-	 * Selection de l'item par une touche !  (item root)
+	 * Selection de l'item par une touche ! (item root)
 	 * 
 	 * @method protected
-	 * @param Object menuItem
-	 * @param Event jsEvent
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            jsEvent
 	 * @return void
 	 */
 	f_keySelectMenuItem: function(menuItem, jsEvent) {
@@ -916,7 +957,7 @@ var __members = {
 			return;
 		}
 
-		// a t-il  un popup ?
+		// a t-il un popup ?
 		// (cas d'un menubar)
 		if (!this.f_hasVisibleItemChildren(menuItem)) {
 			// Non ...
@@ -933,7 +974,7 @@ var __members = {
 			return;
 		}
 		
-		// pas d'enfants		
+		// pas d'enfants
 		this.f_closeUIPopup(menuItem);
 
 		// Appel de la callback de selection
@@ -944,8 +985,10 @@ var __members = {
 	 * Fermeture du menu par une touche !
 	 * 
 	 * @method protected
-	 * @param Object menuItem
-	 * @param Event evt
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            evt
 	 * @return void
 	 */
 	f_keyCloseMenuItem: function(menuItem, evt) {	
@@ -965,7 +1008,8 @@ var __members = {
 	 * Returns parent of item.
 	 * 
 	 * @method protected final
-	 * @param Object menuItem
+	 * @param Object
+	 *            menuItem
 	 * @return Object its parent.
 	 */
 	f_getParentItem: function(item) {
@@ -976,10 +1020,14 @@ var __members = {
 	 * Gestion du OVER d'un menuItem
 	 * 
 	 * @method protected final
-	 * @param Object menuItem
-	 * @param boolean open
-	 * @param Event evt
-	 * @param boolean autoSelect
+	 * @param Object
+	 *            menuItem
+	 * @param boolean
+	 *            open
+	 * @param Event
+	 *            evt
+	 * @param boolean
+	 *            autoSelect
 	 * @return void
 	 */
 	f_menuItem_over: function(menuItem, open, evt, autoSelect) {
@@ -1003,11 +1051,9 @@ var __members = {
 				
 		this.f_uiSelectItem(menuItem);
 
-/* On accepte les disabled over !
-		if (open && menuItem._disabled ) {
-			return;
-		}
-	*/	
+/*
+ * On accepte les disabled over ! if (open && menuItem._disabled ) { return; }
+ */	
 
 		if (this.f_isItemDisabled(menuItem)) {
 			return;
@@ -1021,7 +1067,8 @@ var __members = {
 	 * Gestion du OUT d'un menuItem
 	 * 
 	 * @method private
-	 * @param Object menuItem
+	 * @param Object
+	 *            menuItem
 	 * @return void
 	 */
 	_menuItem_out: function(menuItem) {
@@ -1035,8 +1082,10 @@ var __members = {
 	 * Gestion du MOUSE BUTTON d'un menuItem
 	 * 
 	 * @method protected final
-	 * @param Object menuItem
-	 * @param Event jsEvent
+	 * @param Object
+	 *            menuItem
+	 * @param Event
+	 *            jsEvent
 	 * @return void
 	 */
 	f_menuItem_select: function(menuItem, jsEvent) {
@@ -1083,7 +1132,9 @@ var __members = {
 	
 		var disabled=this.f_isItemDisabled(item);
 
-//		f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: item="+item+" uiItem="+uiItem.id+" over="+selected+" disabled="+disabled+" selectedParentItem="+selectedParentItem);
+// f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: item="+item+"
+// uiItem="+uiItem.id+" over="+selected+" disabled="+disabled+"
+// selectedParentItem="+selectedParentItem);
 
 		var suffix="";
 		var imageURL=item._imageURL;
@@ -1092,23 +1143,30 @@ var __members = {
 		if (this.f_hasVisibleItemChildren(item)) {
 			var popupOpened=this.f_uiIsPopupOpened(item);
 
-//			f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: popupOpened="+popupOpened+" over="+selected);
+// f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: popupOpened="+popupOpened+"
+// over="+selected);
 			
 			if (popupOpened || selected) {
 				suffix+="_selected";
-	
+				fa_aria.SetElementAriaSelected(uiItem,true);
 			} else {
 				suffix+="_popup";
+				
 			}
-
+			
+			if(!selected){
+				uiItem.removeAttributre(fa_aria.ARIA_SELECTED);
+			}
+			
 			if (disabled) {
 				suffix+="_disabled";
-			
+				fa_aria.SetElementAriaDisabled(uiItem,true);
 				var disabledImageURL=item._disabledImageURL;
 				if (disabledImageURL) {
 					imageURL=disabledImageURL;
 				}
 			} else {
+				uiItem.removeAttributre(fa_aria.ARIA_DISABLED);
 				var expandedImageURL=item._expandedImageURL;
 				if (expandedImageURL) {
 					imageURL=expandedImageURL;
@@ -1117,9 +1175,10 @@ var __members = {
 				
 		} else if (disabled) {
 			suffix+="_disabled";
-			
+			fa_aria.SetElementAriaDisabled(uiItem,true);
 			if (selected) {
-				suffix+="_hover";			
+				suffix+="_hover";	
+				fa_aria.SetElementAriaActiveDescendant(parent._component,uiItem.id);
 			}
 			
 			var disabledImageURL=item._disabledImageURL;
@@ -1129,7 +1188,7 @@ var __members = {
 	
 		} else if (selected) {
 			suffix+="_hover";
-			
+			fa_aria.SetElementAriaActiveDescendant(parent._component,uiItem.id);
 			var hoverImageURL=item._hoverImageURL;
 			if (hoverImageURL) {
 				imageURL=hoverImageURL;
@@ -1157,7 +1216,7 @@ var __members = {
 			}
 		}
 	
-//		f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: className="+className);
+// f_core.Debug(fa_menuCore, "f_uiUpdateItemStyle: className="+className);
 		
 		if (uiItem.className!=className) {
 			uiItem.className=className;	
@@ -1202,9 +1261,12 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param Object item
-	 * @param any value
-	 * @param Event jsEvent
+	 * @param Object
+	 *            item
+	 * @param any
+	 *            value
+	 * @param Event
+	 *            jsEvent
 	 * @return void
 	 */
 	f_performItemSelect: function(item, value, jsEvent) {		
@@ -1235,7 +1297,8 @@ var __members = {
 	 * Returns the label of the item.
 	 * 
 	 * @method public
-	 * @param any item The value of the item, or the item object.
+	 * @param any
+	 *            item The value of the item, or the item object.
 	 * @return String The label.
 	 */
 	f_getItemLabel: function(item) {
@@ -1247,10 +1310,12 @@ var __members = {
 	},
 	/**
 	 * Set the label of the item.
-	 *
+	 * 
 	 * @method public
-	 * @param any item The value of the item, or the item object.
-	 * @param String label Label of the item.
+	 * @param any
+	 *            item The value of the item, or the item object.
+	 * @param String
+	 *            label Label of the item.
 	 * @return void
 	 */
 	f_setItemLabel: function(item, label) {
@@ -1265,7 +1330,8 @@ var __members = {
 	 * Returns a list of items
 	 * 
 	 * @method public
-	 * @param Object item
+	 * @param Object
+	 *            item
 	 * @return Object
 	 */
 	f_getCheckedItemInGroup: function(item) {
@@ -1277,7 +1343,8 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Object item
+	 * @param Object
+	 *            item
 	 * @return Object[]
 	 */
 	f_listAllInGroup: function(item) {
@@ -1285,9 +1352,10 @@ var __members = {
 	},
 	/**
 	 * Remove all items
-	 *
+	 * 
 	 * @method public
-	 * @param Object menuItem
+	 * @param Object
+	 *            menuItem
 	 * @return void
 	 */
 	f_removeAllItems: function(menuItem) {
@@ -1304,21 +1372,23 @@ var __members = {
 	fa_destroyItems: function(items) {
 	},	
 	/**
-	 * @method private 
+	 * @method private
 	 * @return boolean
 	 */
 	_preparePopup: function(menuItem) {
 		f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"'");
 	
 		if (this.f_getUIPopup(menuItem)) {
-//			f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is already opened !");
+// f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is
+// already opened !");
 			return false;
 		}
 			
 		// Efface tout si necessaire !
 		if (menuItem._removeAllWhenShow) {
 			// Effaces tous les items !
-//			f_core.Debug(fa_menuCore, "_preparePopup: Remove all items of '"+menuItem+"'.");
+// f_core.Debug(fa_menuCore, "_preparePopup: Remove all items of
+// '"+menuItem+"'.");
 
 			this.f_removeAllItems(menuItem);
 		}
@@ -1345,8 +1415,9 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param Object menuItem
-	 * @return HTMLElement 
+	 * @param Object
+	 *            menuItem
+	 * @return HTMLElement
 	 */
 	_getPopupContainer: function(menuItem) {
 		var parent=this.f_getParentItem(menuItem);
@@ -1381,9 +1452,12 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @param Event jsEvent
-	 * @param optional Object positionInfos
-	 * @param optional number autoSelect
+	 * @param Event
+	 *            jsEvent
+	 * @param optional
+	 *            Object positionInfos
+	 * @param optional
+	 *            number autoSelect
 	 * @return boolean
 	 */
 	f_open: function(jsEvent, positionInfos, autoSelect) {
@@ -1512,8 +1586,10 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param Object menuItem
-	 * @param optional Object popup
+	 * @param Object
+	 *            menuItem
+	 * @param optional
+	 *            Object popup
 	 * @return void
 	 */
 	f_closeUIPopup: function(menuItem, popup) {
@@ -1589,7 +1665,8 @@ var __members = {
 		}
 		
 		delete this._uiMenuPopups[menuItem];
-//		f_core.Debug(fa_menuCore, "f_closeUIPopup: remove one popup="+popup+" menuItem="+menuItem);
+// f_core.Debug(fa_menuCore, "f_closeUIPopup: remove one popup="+popup+"
+// menuItem="+menuItem);
 
 		if (f_popup.Ie_enablePopup()) {		
 			f_popup.Ie_releasePopup(popupObject);
@@ -1658,7 +1735,8 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
-	 * @param Object parent
+	 * @param Object
+	 *            parent
 	 * @return boolean
 	 */
 	fa_isRootMenuItem: f_class.ABSTRACT,
@@ -1670,4 +1748,7 @@ var __members = {
 	fa_getPopupCallbacks: f_class.ABSTRACT
 }
 
-new f_aspect("fa_menuCore", __statics, __members, fa_groupName, fa_items);
+new f_aspect("fa_menuCore",
+		__statics, 
+		__members,
+		fa_groupName, fa_items, fa_aria);

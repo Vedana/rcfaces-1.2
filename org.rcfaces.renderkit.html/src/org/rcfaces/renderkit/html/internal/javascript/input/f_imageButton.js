@@ -499,14 +499,15 @@ var __members = {
 	},
 	fa_updateDisabled: function(disabled) {
 		var cmp=this.f_getEventElement();
-		fa_aria.SetElementAriaDisabled(cmp, disabled);
 		if (disabled) {
 			cmp.tabIndex=-1;
 			cmp.hideFocus=true;
+			fa_aria.SetElementAriaDisabled(cmp, disabled);
 			
 		} else {
 			cmp.tabIndex=this.fa_getTabIndex();
 			cmp.hideFocus=false;
+			cmp.removeAttribute(fa_aria.ARIA_DISABLED);
 		}
 
 		if (!this.fa_componentUpdated) {

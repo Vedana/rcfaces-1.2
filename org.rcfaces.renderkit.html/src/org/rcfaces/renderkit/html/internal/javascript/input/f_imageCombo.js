@@ -56,6 +56,7 @@ var __members = {
 		f_core.Debug(f_imageCombo, "f_imageButtonSelect: evt="+evt);
 		if (!this._focus)  {
 			this.f_setFocus();
+			
 		}
 
 		if (this.f_isReadOnly() || this.f_isDisabled()) {

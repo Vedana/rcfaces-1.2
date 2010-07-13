@@ -53,7 +53,7 @@ var __statics = {
 		var properties= { 
 			id: dataGridPopupId,
 			"v:nc": "true", 
-			role: "wairole:grid", 
+			role: "grid", 
 			className: sc, 
 			"v:asyncRender": "true", 
 			"v:filtred": "true",

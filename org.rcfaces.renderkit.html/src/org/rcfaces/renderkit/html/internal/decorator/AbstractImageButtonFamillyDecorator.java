@@ -261,7 +261,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             } else if (selected) {
                 cssStyleClasses.addSuffix("_selected");
             }
-            writer.writeAriaDisabled(disabled);
+           
             writeAttributes(cssStyleClasses);
 
             if (cssStyleClasses != null) {
@@ -300,7 +300,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                                         selectedSrc);
                     }
                 }
-
+                writer.writeAriaDisabled(disabled);
             } else {
                 if (selectedImageAccessor != null) {
                     String selectedImageURL = selectedImageAccessor.resolveURL(
@@ -331,6 +331,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                                 disabledImageURL);
                     }
                 }
+                
             }
 
             if (hoverImageAccessor != null) {

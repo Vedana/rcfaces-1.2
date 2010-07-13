@@ -75,6 +75,7 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 		String cardClassName = getCardStyleClass(facesContext, cardComponent);
 
 		boolean selected = isCardSelected(cardComponent);
+		
 
 		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
@@ -151,6 +152,9 @@ public class CardRenderer extends AbstractCssRenderer implements IAsyncRenderer 
 			cssWriter.writeDisplay(ICssWriter.NONE);
 		}
 
+		if (selected) {
+			htmlWriter.writeAriaSelected(selected);
+		}
 		writeCardSizes(htmlWriter, cardComponent);
 
 		String textAlignement = cardComponent.getTextAlignment(facesContext);

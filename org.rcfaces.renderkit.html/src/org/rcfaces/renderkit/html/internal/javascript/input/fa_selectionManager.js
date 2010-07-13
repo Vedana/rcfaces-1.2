@@ -593,6 +593,7 @@ var __members = {
 				
 				// On deselectionne tout !
 				this._deselectAllElements();
+				break;
 
 			} else if (selection & fa_selectionManager.EXCLUSIVE_SELECTION) {
 				// On deselectionne tout !

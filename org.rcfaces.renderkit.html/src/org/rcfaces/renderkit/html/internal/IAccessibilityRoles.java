@@ -12,6 +12,8 @@ public interface IAccessibilityRoles {
 
     String WAI_ROLE = "wairole:";
 
+	String ALERT = "alert";
+    
     String BUTTON = "button";
 
     String CHECK_BOX = "checkbox";
@@ -19,6 +21,10 @@ public interface IAccessibilityRoles {
     String CHECK_BOX_3_STATE = "checkboxtristate";
 
     String GRID = "grid";
+    
+    String MENU = "menu";
+    
+    String PRESENTATION = "presentation";
 
     String PROGRESS_BAR = "progressbar";
 
@@ -27,8 +33,10 @@ public interface IAccessibilityRoles {
     String SPIN_BUTTON = "spinbutton";
 
     String TAB = "tab";
-
+    
     String TAB_CONTENT = "tabcontent";
+    
+    String TAB_LIST =  "tablist";
 
     String TAB_PANEL = "tabpanel";
 
@@ -37,5 +45,4 @@ public interface IAccessibilityRoles {
     String TOOLBAR = "toolbar";
 
     String TREE = "tree";
-
 }
