@@ -1680,6 +1680,11 @@ var __members = {
 			command.className=className;
 		}
 	},
+	/**
+	 * @method private
+	 * @param Object node
+	 * @return String
+	 */
 	_searchNodeImageURL: function(node) {
 		var imageURL;
 		
@@ -3382,6 +3387,21 @@ var __members = {
 		return li._node._label;
 	},
 	/**
+	 * Returns image of a node
+	 * 
+	 * @method public
+	 * @param Object nodeOrValue
+	 * @return String url of an image
+	 */
+	f_getItemImage: function(nodeOrValue) {
+		var li=this._searchComponentByNodeOrValue(nodeOrValue);
+		if (!li){
+			return undefined;
+		}
+		return this._searchNodeImageURL(li._node);
+	},
+
+	/**
 	 * Returns label of a node
 	 *
 	 * @method public
@@ -3594,13 +3614,11 @@ var __members = {
 		return this._targetDragAndDropEngine.f_getLastMousePosition();
 	},
 
-fa_autoScrollPerformed: function() {
+	fa_autoScrollPerformed: function() {
 		if (this._targetDragAndDropEngine) {
 			this._targetDragAndDropEngine.f_updateMousePosition();
 		}
 	},
-
-	
 	fa_getScrollableContainer: function() {
 		return this;
 	},

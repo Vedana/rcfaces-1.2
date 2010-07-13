@@ -77,23 +77,10 @@ var __members = {
 			
 		this.f_super(arguments);
 	},
-	/**
-	 * @method protected
-	 * @return String
-	 */
-	f_getMainElementType: function() {
-		return "img";
-	},	
-	f_fillElement: function(imgElement) {
-		imgElement.style.display="none";
-		imgElement.width=this._imageWidth;
-		imgElement.height=this._imageHeight;
-
-		this.f_setOffsetPosition(-this._imageWidth/2, -this._imageHeight/2);
-	},
-	f_updateTarget: function(types, effect, targetComponent, targetItem, targetItemValue, targetAdditionalInformations) {
-		this.f_super(arguments, types, effect, targetComponent, targetItem, targetItemValue, targetAdditionalInformations);
 	
+	f_start: function() {
+		this.f_super(arguments);
+				
 		var imgElement=this.f_getCursorElement();
 
 		var engine=this.f_getDragAndDropEngine();
@@ -103,7 +90,13 @@ var __members = {
 		var sourceItemValue=engine.f_getSourceItemValue();
 		var sourceComponent=engine.f_getSourceComponent();
 		
-		var imageURL=this.f_getItemProperty(f_iconDnDInfo.DND_SOURCE_IMAGE, false, sourceComponent, sourceItem, sourceItemValue, sourceAdditionalInfos);		
+		var imageURL=this.f_getItemProperty(f_iconDnDInfo.DND_SOURCE_IMAGE, false, sourceComponent, sourceItem, sourceItemValue, sourceAdditionalInfos);
+		if (!imageURL) {
+			if (sourceComponent.f_getItemImage) {
+				imageURL=sourceComponent.f_getItemImage(sourceItemValue);
+			}
+		}
+		
 		if (!imageURL) {
 			imgElement.style.display="none";			
 			return;
@@ -143,7 +136,21 @@ var __members = {
 		}
 		
 		
-		imgElement.style.display="block";			
+		imgElement.style.display="block";					
+	},
+	/**
+	 * @method protected
+	 * @return String
+	 */
+	f_getMainElementType: function() {
+		return "img";
+	},	
+	f_fillElement: function(imgElement) {
+		imgElement.style.display="none";
+		imgElement.width=this._imageWidth;
+		imgElement.height=this._imageHeight;
+
+		this.f_setOffsetPosition(-this._imageWidth/2, -this._imageHeight/2);
 	},
 	f_getCursorClassName: function() {
 		return f_iconDnDInfo._CLASSNAME;

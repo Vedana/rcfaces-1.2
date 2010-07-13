@@ -54,6 +54,12 @@ var __members = {
 		this.f_super(arguments);
 	},
 	
+	f_start: function() {
+		this._showBorder=false;
+		
+		this.f_super(arguments);
+	},
+	
 	f_fillElement: function(element) {
 		this._effectElement=f_core.CreateElement(element, "img", {
 			className: "f_popupDnDInfo_effect",
