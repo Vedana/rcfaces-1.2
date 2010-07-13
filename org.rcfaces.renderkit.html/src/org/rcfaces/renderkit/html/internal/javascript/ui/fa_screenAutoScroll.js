@@ -41,7 +41,9 @@ var __members = {
 		var viewSize=f_core.GetViewSize(null, scrollableComponent.ownerDocument);
 		
 		var documentSize=f_core.GetDocumentSize(null, scrollableComponent.ownerDocument);
-		
+
+		//document.title="scrollOffset="+scrollOffsets.x+"/"+scrollOffsets.y+"  viewSize="+viewSize.width+"/"+viewSize.height+"  documentSize="+documentSize.width+"/"+documentSize.height+" mousePosition="+mousePosition.x+"/"+mousePosition.y+"  dt="+new Date().getTime();
+
 		var nx=scrollOffsets.x;
 		var ny=scrollOffsets.y;
 
@@ -53,7 +55,7 @@ var __members = {
 				ny=0;
 			}		
 			
-			mousePosition.y-=scrollOffsets.y-ny;
+			mousePosition.y+=ny-scrollOffsets.y;
 		
 		} else if (documentSize.height>viewSize.height && mousePosition.y>viewSize.height+scrollOffsets.y-dt) {
 			ny=mousePosition.y+dt-viewSize.height;
@@ -67,12 +69,21 @@ var __members = {
 		
 		
 		if (scrollOffsets.x && mousePosition.x-scrollOffsets.x<dt) {
-			var nx=mousePosition.x-dt;
-			if (nxy<0) {
+			nx=mousePosition.x-dt;
+			if (nx<0) {
 				nx=0;
 			}		
 			
 			mousePosition.x-=scrollOffsets.x-nx;
+			
+		} else if (documentSize.width>viewSize.width && mousePosition.x>viewSize.width+scrollOffsets.x-dt) {
+			nx=mousePosition.x+dt-viewSize.width;
+			
+			if (nx>documentSize.width-viewSize.width) {
+				nx=documentSize.width-viewSize.width;
+			}
+						
+			mousePosition.x+=nx-scrollOffsets.x;
 		}
 		
 		if (nx!=scrollOffsets.x || ny!=scrollOffsets.y) {

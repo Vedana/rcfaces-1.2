@@ -3729,7 +3729,7 @@ var f_core = {
 		}
 		
 		var docElement=doc.documentElement;
-		if (docElement && docElement.clientWidth) {
+		if (false && docElement && docElement.clientWidth) {
 			// Firefox et IE en mode docType strict
 
 			values.width=docElement.scrollWidth;
