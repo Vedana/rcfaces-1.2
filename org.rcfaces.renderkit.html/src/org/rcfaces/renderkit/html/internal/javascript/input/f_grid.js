@@ -1396,107 +1396,107 @@ var __statics = {
 		}
 
 		var w = column._col.offsetWidth + dw;
-	
-			// document.title="W="+w+"/"+dw;
-	
-		if (w < column._minWidth) {
-			w = column._minWidth;
+
+		// document.title="W="+w+"/"+dw;
+
+	if (w < column._minWidth) {
+		w = column._minWidth;
+	}
+	if (w > column._maxWidth) {
+		w = column._maxWidth;
+	}
+
+	dw = w - column._col.offsetWidth;
+
+	if (dw == 0) {
+		return;
+	}
+
+	/*
+	 * var labelStyle=column._label.style; if (w<8) { if
+	 * (labelStyle.display!="none") { labelStyle.display="none"; } } else if
+	 * (labelStyle.display!="block") { labelStyle.display="block"; }
+	 * 
+	 * if (w<24) { if (column._ascendingOrder!==undefined &&
+	 * !column._restoreClass) { column._restoreClass=column._label.className;
+	 * column._label.className="f_grid_ttext"; }
+	 *  } else if (column._restoreClass) {
+	 * column._label.className=column._restoreClass;
+	 * column._restoreClass=undefined; }
+	 */
+
+	var tcol = column._tcol;
+	var col = column._col;
+	var head = column._head;
+	var tableOffsetWidth = dataGrid._table.offsetWidth;
+
+	var twidth = 0;
+	if (column._ascendingOrder !== undefined) {
+		twidth -= this._sortPadding;
+	}
+
+	if (false && f_core.IsInternetExplorer()) {
+		// AVANT !
+		if (tableOffsetWidth) {
+			dataGrid._table.style.width = (tableOffsetWidth + dw) + "px";
 		}
-		if (w > column._maxWidth) {
-			w = column._maxWidth;
+
+		col.style.width = w + "px";
+		head.style.width = w + "px";
+
+		var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
+		if (bw < 0) {
+			bw = 0;
 		}
-	
-		dw = w - column._col.offsetWidth;
-	
-		if (dw == 0) {
-			return;
+		column._box.style.width = bw + "px";
+
+		var lw = bw + twidth;
+		if (lw < 0) {
+			lw = 0;
 		}
-	
-		/*
-		 * var labelStyle=column._label.style; if (w<8) { if
-		 * (labelStyle.display!="none") { labelStyle.display="none"; } } else if
-		 * (labelStyle.display!="block") { labelStyle.display="block"; }
-		 * 
-		 * if (w<24) { if (column._ascendingOrder!==undefined &&
-		 * !column._restoreClass) { column._restoreClass=column._label.className;
-		 * column._label.className="f_grid_ttext"; }
-		 *  } else if (column._restoreClass) {
-		 * column._label.className=column._restoreClass;
-		 * column._restoreClass=undefined; }
-		 */
-	
-		var tcol = column._tcol;
-		var col = column._col;
-		var head = column._head;
-		var tableOffsetWidth = dataGrid._table.offsetWidth;
-	
-		var twidth = 0;
-		if (column._ascendingOrder !== undefined) {
-			twidth -= this._sortPadding;
+		column._label.style.width = lw + "px";
+
+	} else {
+		if (tcol) {
+			// tcol.style.width=w+"px";
 		}
-	
-		if (false && f_core.IsInternetExplorer()) {
-			// AVANT !
-			if (tableOffsetWidth) {
-				dataGrid._table.style.width = (tableOffsetWidth + dw) + "px";
+
+		var cellMargin = 0;
+
+		col.style.width = w + "px";
+		head.style.width = (w - cellMargin) + "px";
+		column._box.style.width = (w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING)
+				+ "px";
+		column._label.style.width = (w - f_grid._TEXT_RIGHT_PADDING
+				- f_grid._TEXT_LEFT_PADDING + twidth)
+				+ "px";
+
+		var totalCols = 0;
+		var columns = dataGrid._columns;
+		for ( var i = 0; i < columns.length; i++) {
+			var cl = columns[i];
+
+			if (!cl._visibility) {
+				continue;
 			}
-	
-			col.style.width = w + "px";
-			head.style.width = w + "px";
-	
-			var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
-			if (bw < 0) {
-				bw = 0;
-			}
-			column._box.style.width = bw + "px";
-	
-			var lw = bw + twidth;
-			if (lw < 0) {
-				lw = 0;
-			}
-			column._label.style.width = lw + "px";
-	
-		} else {
-			if (tcol) {
-				// tcol.style.width=w+"px";
-			}
-	
-			var cellMargin = 0;
-	
-			col.style.width = w + "px";
-			head.style.width = (w - cellMargin) + "px";
-			column._box.style.width = (w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING)
-					+ "px";
-			column._label.style.width = (w - f_grid._TEXT_RIGHT_PADDING
-					- f_grid._TEXT_LEFT_PADDING + twidth)
-					+ "px";
-	
-			var totalCols = 0;
-			var columns = dataGrid._columns;
-			for ( var i = 0; i < columns.length; i++) {
-				var cl = columns[i];
-	
-				if (!cl._visibility) {
-					continue;
-				}
-	
-				f_core.Assert(cl._col, "f_grid._DragCursorMove: Invalid column '"
-						+ cl + "'.");
-	
-				totalCols += parseInt(cl._col.style.width, 10);
-			}
-	
-			dataGrid._table.style.width = (totalCols) + "px";
+
+			f_core.Assert(cl._col, "f_grid._DragCursorMove: Invalid column '"
+					+ cl + "'.");
+
+			totalCols += parseInt(cl._col.style.width, 10);
 		}
-	
-		// window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels
-		// ";
-	
-		if (dataGrid._scrollTitle.scrollLeft > 0) {
-			dataGrid._dragTimerId = f_core.GetWindow(doc).setTimeout(
-					f_grid._DragMoveTimer, f_grid._DRAG_TIMER);
-		}
-	},
+
+		dataGrid._table.style.width = (totalCols) + "px";
+	}
+
+	// window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels
+	// ";
+
+	if (dataGrid._scrollTitle.scrollLeft > 0) {
+		dataGrid._dragTimerId = f_core.GetWindow(doc).setTimeout(
+				f_grid._DragMoveTimer, f_grid._DRAG_TIMER);
+	}
+},
 	/**
 	 * @method private static
 	 * @param Event
@@ -1508,10 +1508,10 @@ var __statics = {
 	_TitleCursorDragStop : function(evt) {
 		var column = f_grid._DragColumn;
 		if (!column) {
-				// Cela peut survenir si les stops sont enchainés ....
-			return false;
-		}
-		
+			// Cela peut survenir si les stops sont enchainés ....
+		return false;
+	}
+	
 		var dataGrid = column._dataGrid;
 		
 		var doc = dataGrid.ownerDocument;
@@ -1552,25 +1552,25 @@ var __statics = {
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmouseover : function(evt) {
-		var dataGrid = this._dataGrid;
-		
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (dataGrid.f_getEventLocked(evt, false)) {
-			return false;
-		}
-		
-		if (this._over) {
-			return true;
-		}
-		
-		this._over = true;
-		
-		dataGrid._updateSortManager();
-		
+	var dataGrid = this._dataGrid;
+	
+	if (!evt) {
+		evt = f_core.GetJsEvent(this);
+	}
+	
+	if (dataGrid.f_getEventLocked(evt, false)) {
+		return false;
+	}
+	
+	if (this._over) {
 		return true;
+	}
+	
+	this._over = true;
+	
+	dataGrid._updateSortManager();
+	
+	return true;
 	},
 	/**
 	 * @method private static
@@ -1580,22 +1580,22 @@ var __statics = {
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmouseout : function(evt) {
-		var dataGrid = this._dataGrid;
-		
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (!this._over && !this._selected) {
-			return true;
-		}
-		
-		this._over = undefined;
-		this._selected = undefined;
-		
-		dataGrid._updateSortManager();
-		
+	var dataGrid = this._dataGrid;
+	
+	if (!evt) {
+		evt = f_core.GetJsEvent(this);
+	}
+	
+	if (!this._over && !this._selected) {
 		return true;
+	}
+	
+	this._over = undefined;
+	this._selected = undefined;
+	
+	dataGrid._updateSortManager();
+	
+	return true;
 	},
 	/**
 	 * @method private static
@@ -1605,21 +1605,21 @@ var __statics = {
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmousedown : function(evt) {
-		var dataGrid = this._dataGrid;
-		
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (this._selected) {
-			return true;
-		}
-		
-		this._selected = true;
-		
-		dataGrid._updateSortManager();
-		
+	var dataGrid = this._dataGrid;
+	
+	if (!evt) {
+		evt = f_core.GetJsEvent(this);
+	}
+	
+	if (this._selected) {
 		return true;
+	}
+	
+	this._selected = true;
+	
+	dataGrid._updateSortManager();
+	
+	return true;
 	},
 	/**
 	 * @method private static
@@ -1629,23 +1629,23 @@ var __statics = {
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmouseup : function(evt) {
-		var dataGrid = this._dataGrid;
-		
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-		
-		if (!this._selected) {
-			return true;
-		}
-		
-		this._selected = undefined;
-		
-		dataGrid._updateSortManager();
-		
-		dataGrid.f_showSortManager(evt);
-		
+	var dataGrid = this._dataGrid;
+	
+	if (!evt) {
+		evt = f_core.GetJsEvent(this);
+	}
+	
+	if (!this._selected) {
 		return true;
+	}
+	
+	this._selected = undefined;
+	
+	dataGrid._updateSortManager();
+	
+	dataGrid.f_showSortManager(evt);
+	
+	return true;
 	
 	},
 	
@@ -1698,6 +1698,13 @@ var __statics = {
 		}
 	
 		return l;
+	},
+	
+	GetGridFromComponent: function(component) {
+		while (!component._dataGrid && component){
+			component = component.parentNode;
+		}
+		return component._dataGrid;
 	}
 };
 
@@ -1948,7 +1955,7 @@ var __members = {
 			sortIndicator.onmousedown = null;
 			sortIndicator.onmouseup = null;
 		}
-		
+
 		this._dragAndDropEngine=undefined;
 		this._targetDragAndDropEngine=undefined;
 		
@@ -2791,10 +2798,11 @@ var __members = {
 
 		} else if (row._selected) {
 			// Pas de classe avec parité !
-
+			fa_aria.SetElementAriaSelected(row, true);
 			suffix = "_selected";
 			if (this._focus) {
 				suffix += "_focus";
+				fa_aria.SetElementAriaActiveDescendant(this, row.id);
 			}
 
 		} else if (this._selectable) {
@@ -4669,6 +4677,18 @@ var __members = {
 
 		this.f_sortClientSide(methods, ascendings, tdIndexes);
 	},
+	
+	f_getRowValueFromCommponent: function(component){
+		while ((!component._rowIndex && component)){
+			if(component._rowIndex == 0) {
+				break;
+			}
+			component = component.parentNode;
+		}
+		return component._rowIndex;
+		
+	},
+	
 	/**
 	 * Select a row
 	 * 
@@ -5994,7 +6014,7 @@ var __members = {
 	f_unselectAll: function() {
 		this.f_setSelection([]);
 	},
-	/**
+/**
 	 * @method private
 	 * @param HTMLElement li
 	 * @param Event jsEvent

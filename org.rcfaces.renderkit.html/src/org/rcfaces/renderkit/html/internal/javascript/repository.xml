@@ -564,6 +564,7 @@
 				<required-class name="fa_items" />
 				<required-class name="f_event" />
 				<required-class name="f_popup" />
+				<required-class name="fa_aria" />
 			</class>
 		</file>
 		<file name="input/f_menuBase.js">	

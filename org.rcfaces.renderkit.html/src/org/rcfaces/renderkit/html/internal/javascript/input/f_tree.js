@@ -603,7 +603,7 @@ var __members = {
 		if (this.f_isDraggable()) {
 			this._dragAndDropEngine= f_dragAndDropEngine.Create(this);
 		}
-
+	
 		if (this.f_isDroppable()) {
 			this._bodyDroppable=f_core.GetBooleanAttribute(this, "v:bodyDroppable", false);
 		}
@@ -633,7 +633,7 @@ var __members = {
 		this._container=undefined; // object
 // 		this._opened=undefined;  // boolean
 //		this._interactive=undefined; // boolean
-		
+
 		var cfocus=this._cfocus;
 		if (cfocus) {
 			this._cfocus=undefined;
@@ -944,6 +944,7 @@ var __members = {
 		
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
+			node._depth=depth;
 			
 			var li=doc.createElement("li");
 			f_core.AppendChild(fragment, li); // Evite les fuites memoires
@@ -974,10 +975,6 @@ var __members = {
 				ondblclick: f_tree._DivNode_dblClick
 			});
 
-			if (this._lastRemovedTitleElement!=li && node._tooltip) {
-				divNode.title=node._tooltip;
-			}
-
 			li._divNode=divNode;
 			
 			var d=depth;
@@ -994,8 +991,9 @@ var __members = {
 						onmouseup: f_core.CancelJsEventHandler,
 						onclick: f_core.CancelJsEventHandler
 					});
-
+					
 					this._updateCommandStyle(li);
+					fa_aria.SetElementAriaLabelledBy(li._command,this.id+"::node"+nodeIdx+"::label");
 				}
 				if (depth==1 && this._hideRootExpandSign) {
 					d=0;
@@ -1045,6 +1043,7 @@ var __members = {
 			
 			li._label=f_core.CreateElement(span, "label", {
 				className: "f_tree_label",
+				id: this.id+"::node"+nodeIdx+"::label",
 				textNode: (node._label)?node._label:null,
 				_node: li				
 			});	
@@ -1134,7 +1133,7 @@ var __members = {
 			return false;
 		}
 		node._opened=false;
-
+		li._divNode.removeAttribute(fa_aria.AriaExpanded);
 		if (!this._collapsedValues) {
 			this._collapsedValues=new Array;
 		}
@@ -1200,7 +1199,7 @@ var __members = {
 			return false;
 		}
 		node._opened=true;
-
+		fa_aria.SetElementAriaExpanded(li._divNode, true);
 		if (!this._expandedValues) {
 			this._expandedValues=new Array;
 		}
@@ -1563,13 +1562,15 @@ var __members = {
 
 			if (node._selected) {
 				suffixLabel+="_selected";
-
+				
 				if (this._focus) {
 					suffixLabel+="_focus";
+					fa_aria.SetElementAriaActiveDescendant(this, li._divNode.id);
 				}
 			
 			} else if (this._focus && li==cursor) {
 				suffixLabel+="_focus";
+				fa_aria.SetElementAriaActiveDescendant(this, li._divNode.id);
 			}
 			
 			if (li._labelOver) {
@@ -2687,7 +2688,7 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_searchComponentByNodeOrValue: function(nodeOrValue, cache) {
+	_searchComponentByNodeOrValue: function(nodeOrValue, cache, throwError) {
 		f_core.Assert(nodeOrValue!==undefined, "f_tree._searchComponentByNodeOrValue: Value parameter is null ! ("+nodeOrValue+")");
 		
 		if (cache && typeof(nodeOrValue)=="string") {
@@ -2728,7 +2729,9 @@ var __members = {
 					return li;
 				}
 			}
-			
+			if (!throwError) {
+				return undefined;
+			}
 			throw new Error("Can not find node with value '"+nodeOrValue+"'.");
 		}
 
@@ -2744,6 +2747,9 @@ var __members = {
 			return li;
 		}
 		
+		if (!throwError) {
+			return undefined;
+		}
 		throw new Error("Can not find node with value '"+nodeOrValue+"'.");
 	},
 	/**
@@ -3317,11 +3323,35 @@ var __members = {
 	 * @return String
 	 */
 	f_getItemDepth: function(nodeOrValue) {
-		var li=this._searchComponentByNodeOrValue(nodeOrValue);
-		if (!li){
-			return undefined;
+		if (nodeOrValue._depth) {
+			return nodeOrValue._depth;
 		}
-		return li._depth;
+		
+		var li=this._searchComponentByNodeOrValue(nodeOrValue, undefined, false);
+		if (li){
+			return li._depth;
+		}
+			
+		var node=this._searchNodeByValue(nodeOrValue);
+		if (!node) {
+			return -1;
+		}
+		
+		return node._depth;
+	},
+	_searchNodeByValue: function(value) {
+		var s = [ this ];
+		for(;s.length;) {
+			var n=s.shift();
+			
+			if (n._value==value) {
+				return n;
+			}
+			
+			if (n._nodes) {
+				s.push.apply(s, n._nodes);
+			}
+		}
 	},
 	
 	/**
@@ -3362,6 +3392,8 @@ var __members = {
 	f_getElementLabel: function(value) {
 		return this.f_getItemLabel(value);
 	},
+	
+	
 	/**
 	 * @method public
 	 * @param Object nodeOrValue
@@ -3456,23 +3488,23 @@ var __members = {
 			var li=element._node;
 			if (!li) {
 				continue;
-			}			
-
+					}
+					
 			if (!element._tree) { // On est tombé sous un sous element de noeud
 				nodeElement=li;
-
+					
 				li=li._node;
-				
+						
 			} else {
 				// On ne prend pas l'element même !		
 				//nodeElement=element;	 	
 				continue;
-			}			
-			
+					}
+					
 			node=li;
 			break;
 		}
-		
+					
 		if (!node) {
 			return null;
 		}
@@ -3492,21 +3524,21 @@ var __members = {
 		var found=this._findNodeFromElement(element);
 		if (!found) {
 			return null;
-		}
-		
+							}
+							
 		node=found._node;
 		
 		if (this._bodyDroppable!==true && node==this) {
 			return null;
-		}
-		
+						}
+						
 		if (node._disabled) {
 			return null;
 		}
-		
+						
 		var dropTypes=undefined;
 		var dropEffects=undefined;
-		
+					
 		for(var n=node;n && (dropTypes===undefined || dropEffects===undefined);n=n._parentTreeNode) {
 			if (dropTypes===undefined) {
 				dropTypes=n._dropTypes;
@@ -3519,7 +3551,7 @@ var __members = {
 		if (!dropTypes || !dropEffects) {
 			return null;
 		}		
-		
+
 		return {
 			item: node,
 			itemValue: found._value,
@@ -3531,18 +3563,18 @@ var __members = {
 	f_overDropInfos: function(dragAndDropEngine, infos) {
 		var node=infos.item;
 		var element=infos.targetItemElement;
-		
+
 		if (node._tooltip) {
 			this._lastRemovedTitleElement=element;
 			element._divNode.removeAttribute("title");
 		}
-		
+				
 		element._dndOver=true;		
 		this.fa_updateElementStyle(element);			
 	},
 	f_outDropInfos: function(dragAndDropEngine, infos) {
 		this._lastRemovedTitleElement=undefined;
-
+			
 		var node=infos.item;
 		var element=infos.targetItemElement;
 		
@@ -3555,14 +3587,14 @@ var __members = {
 	},
 	f_releaseDropInfos: function() {
 		this._targetDragAndDropEngine=undefined;
-
+		
 		this.fa_uninstallAutoScroll();
 	},
 	fa_getLastMousePosition: function() {
 		return this._targetDragAndDropEngine.f_getLastMousePosition();
 	},
-	
-	fa_autoScrollPerformed: function() {
+
+fa_autoScrollPerformed: function() {
 		if (this._targetDragAndDropEngine) {
 			this._targetDragAndDropEngine.f_updateMousePosition();
 		}
