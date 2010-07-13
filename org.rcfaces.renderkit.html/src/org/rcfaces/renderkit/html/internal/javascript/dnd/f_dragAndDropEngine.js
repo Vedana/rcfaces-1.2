@@ -241,7 +241,7 @@ var __statics = {
 		 f_dragAndDropEngine._DragAndDropInfos=undefined;
 		 f_dragAndDropEngine._DefaultDragAndDropInfos = undefined; // String[]
 	}
-}
+};
 
 var __members = {
 		
@@ -450,9 +450,9 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @return Boolean
+	 * @return void
 	 */
-	_exit: function(js) {
+	_exit: function() {
 //		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
 
 		this._releaseDropInfos(true);
@@ -908,7 +908,7 @@ var __members = {
 			return;
 		}
 		
-		var dropInfos=this._dropInfos;;
+		var dropInfos=this._dropInfos;
 		if (dropInfos) {
 			this._dropInfos=undefined;
 			

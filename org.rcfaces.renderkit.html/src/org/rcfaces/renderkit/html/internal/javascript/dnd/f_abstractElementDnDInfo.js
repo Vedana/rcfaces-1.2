@@ -158,9 +158,7 @@ var __members = {
 		this._positionX=newPositionX;
 		this._positionY=newPositionY;
 		
-		var cursorElement=this.f_getCursorElement();
-		
-		this.f_updateCursorPosition(cursorElement);
+		this.f_updateCursorPosition();
 	},
 	
 	/**
@@ -169,12 +167,32 @@ var __members = {
 	 * @return void
 	 */
 	f_updateCursorPosition: function(cursorElement) {
+
 		if (!cursorElement) {
 			cursorElement=this.f_getCursorElement();
 			if (!cursorElement) {
 				return;
 			}
 		}
+		
+		var self=this;
+		f_core.GetWindow(cursorElement).setTimeout(function() {
+			
+			if (window._rcfacesExiting) {
+				return false;
+			}
+			
+			self._updateCursorPosition(cursorElement);
+			self=null;
+		}, 10);
+	},
+
+	/**
+	 * @method private
+	 * @param HTMLElement cursorElement
+	 * @return void
+	 */
+	_updateCursorPosition: function(cursorElement) {
 		
 		var pw=cursorElement.offsetWidth;
 		var ph=cursorElement.offsetHeight;
@@ -231,6 +249,8 @@ var __members = {
 		var cl=this.f_computeCursorStyle(effect);
 		
 		cursorElement.className=cl;
+	
+		this.f_updateCursorPosition();
 	},
 	/**
 	 * @method protected
