@@ -39,6 +39,7 @@ import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.AbstractHtmlRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
@@ -246,6 +247,8 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                         disabled, selected);
             }
             
+            
+            
             if (tabIndex != null) {
              	writer.writeAttribute("v:tabIndex", tabIndex.intValue());
             }
@@ -274,7 +277,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             if (imageAccessor != null) {
                 imageSrc = imageAccessor.resolveURL(facesContext, null, null);
             }
-
+            
             if (disabled) {
                 if (disabledImageAccessor != null) {
                     if (imageSrc != null) {
@@ -300,7 +303,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                                         selectedSrc);
                     }
                 }
-                writer.writeAriaDisabled(disabled);
             } else {
                 if (selectedImageAccessor != null) {
                     String selectedImageURL = selectedImageAccessor.resolveURL(
@@ -372,6 +374,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                 // writer.writeAlign("baseline");
             }
 
+            
             /*
              * Le javascript s'occupe de ca ! if (button == false &&
              * imageJavascript == false) { writer.writeAttribute("href", IHtmlWriter.JAVASCRIPT_VOID); }
@@ -418,7 +421,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         super.encodeContainerEnd(writer, renderer);
     }
 
-    protected String getMainStyleClassName() {
+    protected String getInputRole() {
+    	return IAccessibilityRoles.BUTTON;
+	}
+
+	protected String getMainStyleClassName() {
         return null;
     }
 
@@ -652,7 +659,10 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         String inputElement = getInputElement();
         writer.startElement(inputElement);
         writeInputAttributes(writer);
-        writer.writeAriaDisabled(disabled);
+        writer.writeRole(getInputRole());
+        if (disabled) {
+        	writer.writeAriaDisabled(disabled);
+        }
         writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
         
         if (IHtmlWriter.INPUT.equals(inputElement)) {

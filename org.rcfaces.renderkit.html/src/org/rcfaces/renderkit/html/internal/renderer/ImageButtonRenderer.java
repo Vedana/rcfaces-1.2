@@ -38,7 +38,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_BUTTON;
     }
-
+    
     protected boolean hasComponenDecoratorSupport() {
         return true;
     }
@@ -118,7 +118,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
     }
 
     protected String getWAIRole() {
-        return IAccessibilityRoles.BUTTON;
+        return IAccessibilityRoles.PRESENTATION;
     }
 
     protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer, UIComponent component) throws WriterException {

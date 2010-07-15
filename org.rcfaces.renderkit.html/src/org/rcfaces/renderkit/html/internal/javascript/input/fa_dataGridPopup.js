@@ -167,6 +167,8 @@ var __statics = {
 					case f_key.VK_PAGE_UP:
 					case f_key.VK_END:
 					case f_key.VK_HOME:
+					case f_key.VK_SHIFT:
+					case f_key.VK_CONTROL:	
 						dataGridPopup._dataGrid.f_fireEvent(f_event.KEYUP, jsEvent);
 						return false;
 					}

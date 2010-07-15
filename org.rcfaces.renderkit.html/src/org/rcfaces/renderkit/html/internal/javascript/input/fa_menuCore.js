@@ -1138,7 +1138,13 @@ var __members = {
 		var suffix="";
 		var imageURL=item._imageURL;
 		var itemStyleClass=this.f_getItemStyleClass(item);
-		
+
+		var eventComponent;
+		var parentComponent = parent._component; 
+		if (parentComponent) {
+			eventComponent = parentComponent.f_getEventElement();
+		}
+			
 		if (this.f_hasVisibleItemChildren(item)) {
 			var popupOpened=this.f_uiIsPopupOpened(item);
 
@@ -1177,7 +1183,9 @@ var __members = {
 			fa_aria.SetElementAriaDisabled(uiItem,true);
 			if (selected) {
 				suffix+="_hover";	
-			//	fa_aria.SetElementAriaActiveDescendant(parent._component._eventComponent,uiItem.id);
+				if (eventComponent){
+					fa_aria.SetElementAriaActiveDescendant(eventComponent,uiItem.id);
+				}	
 			}
 			
 			var disabledImageURL=item._disabledImageURL;
@@ -1187,7 +1195,9 @@ var __members = {
 	
 		} else if (selected) {
 			suffix+="_hover";
-			//fa_aria.SetElementAriaActiveDescendant(parent._component._eventComponent,uiItem.id);
+			if (eventComponent){
+				fa_aria.SetElementAriaActiveDescendant(eventComponent,uiItem.id);
+			}	
 			var hoverImageURL=item._hoverImageURL;
 			if (hoverImageURL) {
 				imageURL=hoverImageURL;

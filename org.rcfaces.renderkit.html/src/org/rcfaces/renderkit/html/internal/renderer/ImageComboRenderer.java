@@ -12,6 +12,7 @@ import org.rcfaces.core.component.ImageComboComponent;
 import org.rcfaces.core.component.capability.IShowDropDownMarkCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
@@ -32,9 +33,6 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         return JavaScriptClasses.IMAGE_COMBO;
     }
     
-    protected String getWAIRole() {
-    	return null;
-    }
 
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
@@ -106,6 +104,9 @@ public class ImageComboRenderer extends ImageButtonRenderer {
             showDropDownMark = isShowDropDownMark(imageButtonFamilly);
         }
 
+        
+        
+        
         protected void writeEndRow(int nextRowCount) throws WriterException {
             if (firstLine == false || showDropDownMark == false) {
                 super.writeEndRow(nextRowCount);
@@ -156,6 +157,10 @@ public class ImageComboRenderer extends ImageButtonRenderer {
         protected String getComboImageVerticalAlignment() {
             return ImageComboRenderer.this
                     .getComboImageVerticalAlignment(writer);
+        }
+
+        protected String getInputRole() {
+        	return IAccessibilityRoles.LISTBOX;
         }
     }
 

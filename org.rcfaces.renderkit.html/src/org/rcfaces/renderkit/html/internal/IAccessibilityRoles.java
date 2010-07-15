@@ -22,6 +22,8 @@ public interface IAccessibilityRoles {
 
     String GRID = "grid";
     
+    String LISTBOX = "listbox";
+    
     String MENU = "menu";
     
     String PRESENTATION = "presentation";
@@ -45,4 +47,6 @@ public interface IAccessibilityRoles {
     String TOOLBAR = "toolbar";
 
     String TREE = "tree";
+
+	
 }
