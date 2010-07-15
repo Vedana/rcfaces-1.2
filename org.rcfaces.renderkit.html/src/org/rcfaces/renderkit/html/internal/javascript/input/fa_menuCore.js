@@ -542,7 +542,7 @@ var __members = {
 		
 		uiPopup.id=this.fa_getMenuScopeName(parentItem);
 		uiPopup._item=parentItem;
-		uiPopup.setAttribute("role", "listBox");
+		
 		if (!this._itemImageWidth) {
 			this._itemImageWidth=fa_menuCore._ITEM_IMAGE_WIDTH;
 		}
@@ -629,7 +629,6 @@ var __members = {
 			
 			var div=doc.createElement("label");
 			div.className="f_menu_item_text";
-			div.setAttribute("role", "button");
 			div.id = this.fa_getMenuScopeName(parentItem)+"::label";
 			
 			var accessKey=item._accessKey;
@@ -1178,7 +1177,7 @@ var __members = {
 			fa_aria.SetElementAriaDisabled(uiItem,true);
 			if (selected) {
 				suffix+="_hover";	
-				fa_aria.SetElementAriaActiveDescendant(parent._component,uiItem.id);
+			//	fa_aria.SetElementAriaActiveDescendant(parent._component._eventComponent,uiItem.id);
 			}
 			
 			var disabledImageURL=item._disabledImageURL;
@@ -1188,7 +1187,7 @@ var __members = {
 	
 		} else if (selected) {
 			suffix+="_hover";
-			fa_aria.SetElementAriaActiveDescendant(parent._component,uiItem.id);
+			//fa_aria.SetElementAriaActiveDescendant(parent._component._eventComponent,uiItem.id);
 			var hoverImageURL=item._hoverImageURL;
 			if (hoverImageURL) {
 				imageURL=hoverImageURL;

@@ -976,6 +976,8 @@ var __members = {
 			});
 
 			li._divNode=divNode;
+			fa_aria.SetElementAriaLabelledBy(divNode,this.id+"::node"+nodeIdx+"::label");
+			fa_aria.SetElementAriaLevel(divNode,depth+1);
 			
 			var d=depth;
 			if (this._userExpandable) {
@@ -993,7 +995,7 @@ var __members = {
 					});
 					
 					this._updateCommandStyle(li);
-					fa_aria.SetElementAriaLabelledBy(li._command,this.id+"::node"+nodeIdx+"::label");
+					
 				}
 				if (depth==1 && this._hideRootExpandSign) {
 					d=0;
@@ -1565,12 +1567,12 @@ var __members = {
 				
 				if (this._focus) {
 					suffixLabel+="_focus";
-					fa_aria.SetElementAriaActiveDescendant(this, li._divNode.id);
+					fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
 				}
 			
 			} else if (this._focus && li==cursor) {
 				suffixLabel+="_focus";
-				fa_aria.SetElementAriaActiveDescendant(this, li._divNode.id);
+				fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
 			}
 			
 			if (li._labelOver) {

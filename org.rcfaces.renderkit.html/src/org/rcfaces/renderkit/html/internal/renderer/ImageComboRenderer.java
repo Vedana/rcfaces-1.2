@@ -31,6 +31,10 @@ public class ImageComboRenderer extends ImageButtonRenderer {
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_COMBO;
     }
+    
+    protected String getWAIRole() {
+    	return null;
+    }
 
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {

@@ -69,7 +69,6 @@ public class MessagesRenderer extends AbstractCssRenderer {
         htmlWriter.getJavaScriptEnableMode().enableOnMessage();
     }
     
-    @Override
     protected String getWAIRole() {
     	return IAccessibilityRoles.ALERT;
     }

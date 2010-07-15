@@ -31,6 +31,11 @@ var __statics = {
 		/** 
 		 * @field public static final String
 		 */
+		ARIA_LEVEL:		"aria-level",
+		
+		/** 
+		 * @field public static final String
+		 */
 		ARIA_SELECTED:		"aria-selected",
 		/**
 		 * @method public static
@@ -85,6 +90,11 @@ var __statics = {
 		SetElementAriaLabelledBy: function(element, labelId) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaLabelledBy: invalid element parameter ("+element+")." );
 			element.setAttribute(fa_aria.ARIA_LABELLEDBY, labelId);
+		},
+		
+		SetElementAriaLevel: function(element, level) {
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaLevel: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_LEVEL, level);
 		}
 		
 };

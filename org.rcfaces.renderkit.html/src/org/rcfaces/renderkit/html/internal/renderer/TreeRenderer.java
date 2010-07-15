@@ -195,7 +195,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         } else {
             htmlWriter.writeTabIndex(0);
         }
-
+        htmlWriter.writeRole(IAccessibilityRoles.TREE);
         htmlWriter.endElement(IHtmlWriter.A);
 
         htmlWriter.startElement(IHtmlWriter.UL);
@@ -205,7 +205,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
     }
 
     protected String getWAIRole() {
-        return IAccessibilityRoles.TREE;
+        return null;
     }
 
     protected void addUnlockProperties(Set unlockedProperties) {
