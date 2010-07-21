@@ -471,6 +471,13 @@ var __statics = {
 	MOUSEUP : "mouseup",
 
 	/**
+	 * Pre Selection event name.
+	 * 
+	 * @field public static final String
+	 */
+	PRE_SELECTION : "preSelection",
+	
+	/**
 	 * Property Change event name.
 	 * 
 	 * @field public static final String

@@ -205,8 +205,19 @@ var __members = {
 		f_core.Debug(fa_selectionManager, "f_moveCursor: Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
-			if (this.f_performElementSelection(element, show, evt, selection)) {
-				show=false;
+			var item=this.fa_getElementItem(element); 
+			var elementValue=this.fa_getElementValue(element); 
+			var detail=0;
+			if (selection & fa_selectionManager.ACTIVATE_SELECTION) {
+				detail|=f_event.ACTIVATE_DETAIL;
+			}
+			if (selection) {
+				detail|=1;
+			} 
+		if (this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)) { 
+				if (this.f_performElementSelection(element, show, evt, selection)) {
+					show=false;
+				}
 			}
 		}
 		
@@ -718,6 +729,13 @@ var __members = {
 		this._selectElementsRange(selection, show);
 		
 		this.fa_fireSelectionChangedEvent();
+	},
+	/**
+	 * @method protected
+	 */
+	fa_firePreSelectionChangedEvent: function(evt, detail, item, elementValue) {
+		
+		return this.f_fireEvent(f_event.PRE_SELECTION, evt, item, elementValue, this, detail);
 	},
 	/**
 	 * @method protected

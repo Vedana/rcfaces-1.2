@@ -36,6 +36,7 @@ var __statics = {
 			mouseOver: f_event.MOUSEOVER,
 			mouseOut: f_event.MOUSEOUT,
 			mouseUp: f_event.MOUSEUP,
+			preSelection: f_event.PRE_SELECTION,
 			propertyChange: f_event.PROPERTY_CHANGE,
 			selection: f_event.SELECTION,
 			sort: f_event.SORT,
@@ -81,6 +82,7 @@ var __statics = {
 		cb[f_event.MOUSEOUT]={_dom: "onmouseout", _lock: false  }; 
 		cb[f_event.MOUSEOVER]={_dom: "onmouseover", _lock: false  }; 
 		cb[f_event.MOUSEUP]={_dom: "onmouseup", _lock: false  }; 
+		cb[f_event.PRE_SELECTION]=null;
 		cb[f_event.PROPERTY_CHANGE]=noLock;
 		cb[f_event.RESET]="reset";
 		cb[f_event.SELECTION]={_dom: "onclick" };
