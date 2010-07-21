@@ -5996,10 +5996,15 @@ var __members = {
 	f_selectAllPage: function() {
 		var first = this.f_getFirst();
 		var last = 1;
-		if(this.f_getRowCount() > 0){
+		var rowCount = this.f_getRowCount();
+		var rows = -1;
+		if(this._rows) {
+			rows = this._rows;
+		}
+		if( rowCount > 0 && ((rows > 0 && rowCount < rows)) || rows < 0){
 			last = this.f_getRowCount();
-		}else if(this._rows) {
-			last = this._rows;
+		}else if(rows > 0) {
+			last = rows;
 		} 
 		this._selectRange(this.f_getRow(first),
 				this.f_getRow(first+last-1),
