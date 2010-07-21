@@ -205,19 +205,8 @@ var __members = {
 		f_core.Debug(fa_selectionManager, "f_moveCursor: Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
-			var item=this.fa_getElementItem(element); 
-			var elementValue=this.fa_getElementValue(element); 
-			var detail=0;
-			if (selection & fa_selectionManager.ACTIVATE_SELECTION) {
-				detail|=f_event.ACTIVATE_DETAIL;
-			}
-			if (selection) {
-				detail|=1;
-			} 
-		if (this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)) { 
-				if (this.f_performElementSelection(element, show, evt, selection)) {
-					show=false;
-				}
+			if (this.f_performElementSelection(element, show, evt, selection)) {
+				show=false;
 			}
 		}
 		
@@ -546,7 +535,17 @@ var __members = {
 		
 		var elementSelected=this.fa_isElementSelected(element);
 		var elementValue=this.fa_getElementValue(element);
+		var detail=0;
+		if (selection & fa_selectionManager.ACTIVATE_SELECTION) {
+			detail|=f_event.ACTIVATE_DETAIL;
+		}
+		if (selection) {	
+			detail|=1;
+		}
 		
+		if (!this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)) {
+			return false;
+		}
 		switch(cardinality) {
 		case fa_cardinality.ONE_CARDINALITY:
 			if (elementSelected) {
@@ -568,7 +567,6 @@ var __members = {
 			
 			// On deselectionne tout: 1 seul doit rester selectionner 
 			this._deselectAllElements();
-				
 			this._selectElement(element, elementValue, show);
 			break;
 			
@@ -616,14 +614,6 @@ var __members = {
 			break;
 		}
 		
-		var detail=0;
-		if (selection & fa_selectionManager.ACTIVATE_SELECTION) {
-			detail|=f_event.ACTIVATE_DETAIL;
-		}
-		if (selection) {	
-			detail|=1;
-		}
-	
 		var item=this.fa_getElementItem(element);
 	
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
