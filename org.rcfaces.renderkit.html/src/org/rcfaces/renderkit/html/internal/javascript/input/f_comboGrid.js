@@ -30,6 +30,9 @@ var __statics = {
 	 */
 	_OnButtonMouseDown: function(evt) {
 		var comboGrid=this._comboGrid;
+		if(evt.timeStamp - fa_dataGridPopup.LAST_OUTSIDE < 100){
+			return false;
+		}
 		
 		if (!evt) {
 			evt = f_core.GetJsEvent(this);

@@ -11,6 +11,10 @@
 
 var __statics = {
 	/** 
+	 * @field public static Number 
+	 */
+	LAST_OUTSIDE: 0,
+	/** 
 	 * @field private static final boolean 
 	 */
 	_DONT_RELEASE_POPUP: false,
@@ -690,7 +694,7 @@ var __members = {
 	 */
 	_clickOutside: function(jsEvent) {
 		f_core.Debug(fa_dataGridPopup, "_clickOutside: popup click outside");
-		
+		fa_dataGridPopup.LAST_OUTSIDE = jsEvent.timeStamp;
 		this.f_closeDataGridPopup(jsEvent);
 		return false;	
 	},
