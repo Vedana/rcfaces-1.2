@@ -691,6 +691,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
@@ -775,6 +776,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addDragListener(org.rcfaces.core.event.IDragListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
@@ -856,6 +858,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addDropListener(org.rcfaces.core.event.IDropListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
@@ -868,6 +871,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addDropCompleteListener(org.rcfaces.core.event.IDropCompleteListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
@@ -949,6 +953,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addCheckListener(org.rcfaces.core.event.ICheckListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
@@ -1033,6 +1038,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addAdditionalInformationListener(org.rcfaces.core.event.IAdditionalInformationListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
@@ -1121,6 +1127,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addDoubleClickListener(org.rcfaces.core.event.IDoubleClickListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
@@ -1133,6 +1140,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	}
 
 	public final void addLoadListener(org.rcfaces.core.event.ILoadListener listener) {
+		removeFacesListener(listener);
 		addFacesListener(listener);
 	}
 
