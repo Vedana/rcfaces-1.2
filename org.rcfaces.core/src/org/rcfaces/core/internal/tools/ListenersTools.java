@@ -325,6 +325,8 @@ public class ListenersTools {
             DoubleClickActionListener doubleClickActionListener = new DoubleClickActionListener(
                     expression, partialRendering);
             doubleClickEventCapability
+            	.removeDoubleClickListener(doubleClickActionListener);
+            doubleClickEventCapability
                     .addDoubleClickListener(doubleClickActionListener);
 
             return doubleClickActionListener;
@@ -350,6 +352,7 @@ public class ListenersTools {
 
             SelectionActionListener selectionActionListener = new SelectionActionListener(
                     expression, partialRendering);
+            selectEventCapability.removeSelectionListener(selectionActionListener);
             selectEventCapability.addSelectionListener(selectionActionListener);
 
             return selectionActionListener;
