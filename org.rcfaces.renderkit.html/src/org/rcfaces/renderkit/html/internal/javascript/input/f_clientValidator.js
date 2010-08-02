@@ -308,7 +308,7 @@ var __statics = {
 				// Gestion du maxTextLength
 				if (component.f_getMaxTextLength) {
 					var max = component.f_getMaxTextLength();
-					if (max >= 0 && value.length > max) {
+					if (max >= 0 && value.length >= max) {
 						return true;
 					}
 				}
