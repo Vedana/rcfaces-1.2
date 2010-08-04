@@ -547,14 +547,6 @@ var __members = {
 			return false;
 		}
 		switch(cardinality) {
-		case fa_cardinality.ONE_CARDINALITY:
-			if (elementSelected) {
-				// On ne peut pas deselectionner un élément déjà selectionné
-				return false;
-			}
-			
-			// On continue ....
-			
 		case fa_cardinality.OPTIONAL_CARDINALITY:
 			if (elementSelected) {
 				// Deselection seulement !
@@ -564,6 +556,15 @@ var __members = {
 				}
 				break;
 			}
+			
+			// On continue ....
+			
+		case fa_cardinality.ONE_CARDINALITY:
+			// Fred : mais il faut quand même provoquer le selected
+//			if (elementSelected) {
+				// On ne peut pas deselectionner un élément déjà selectionné
+				//return false;
+//			}
 			
 			// On deselectionne tout: 1 seul doit rester selectionner 
 			this._deselectAllElements();
