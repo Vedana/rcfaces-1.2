@@ -1092,6 +1092,9 @@ var __members = {
 		if (!domFragment) {
 			container.appendChild(fragment);
 		}
+		if (this._cursor) {
+			this._cursor.scrollIntoView(true);
+		}
 	},
 	/**
 	 * Close a node.
