@@ -1700,6 +1700,14 @@ var __statics = {
 		return l;
 	},
 	
+	/**
+	 *Return the current ComponetGrid
+	 *
+	 *@method public static 
+	 *@param f_component
+	 *
+	 *@return f_grid
+	 */
 	GetGridFromComponent: function(component) {
 		while (!component._dataGrid && component){
 			component = component.parentNode;
