@@ -4686,6 +4686,15 @@ var __members = {
 		this.f_sortClientSide(methods, ascendings, tdIndexes);
 	},
 	
+	
+	/**
+	 * Return the current row value
+	 * 
+	 * @methode public
+	 * @param f_component
+	 * 
+	 * return Number
+	 */
 	f_getRowValueFromCommponent: function(component){
 		while ((!component._rowIndex && component)){
 			if(component._rowIndex == 0) {
