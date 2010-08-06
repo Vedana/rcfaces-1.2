@@ -2163,6 +2163,17 @@
 		
 	</component>
 	
+	<component id="keyLabel" extends="abstractOutput">
+
+		<capability id="IFilterCapability"/>
+
+		<attribute id="selectedStyleClass" type="java.lang.String"/>
+		<attribute id="parentsStyleClass" type="java.lang.String"/>
+		<attribute id="showParents" type="boolean"/>		
+		
+		<method id="setFilterProperties(String)" returnType="void" />
+	</component>
+	
 	<component id="keyEntry" extends="abstractGrid">
 		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />
 	

@@ -52,6 +52,8 @@ public final class JavaScriptClasses {
 
     public static final String FIELD_SET = "f_fieldSet";
 
+    public static final String FILTRED_COMPONENT = "f_filtredComponent";
+
     public static final String FOCUS_MANAGER = "f_focusManager";
 
     public static final String GRID = "f_grid";
@@ -87,6 +89,8 @@ public final class JavaScriptClasses {
     public static final String ITEMS_LIST = "f_itemsList";
 
     public static final String KEY_ENTRY = "f_keyEntry";
+
+    public static final String KEY_LABEL = "f_keyLabel";
 
     public static final String LINE_BREAK = "f_lineBreak";
 

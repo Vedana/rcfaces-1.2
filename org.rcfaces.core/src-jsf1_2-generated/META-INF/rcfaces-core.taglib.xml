@@ -120,6 +120,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>keyLabel</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.keyLabel</component-type>
+			<renderer-type>org.rcfaces.core.keyLabel</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>keyEntry</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.keyEntry</component-type>

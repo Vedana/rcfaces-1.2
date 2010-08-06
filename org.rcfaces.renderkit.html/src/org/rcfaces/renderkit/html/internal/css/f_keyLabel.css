@@ -1,0 +1,45 @@
+/*
+ * $Id$
+ */
+
+/**
+ *
+ * @class f_keyLabel
+ *
+ * @author Olivier Oeuillot (latest modification by $Author$)
+ * @version $Revision$ $Date$ 
+ */
+ 
+.f_keyLabel,
+.f_keyLabel_item {
+	-moz-box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	
+	display: inline;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+}
+
+.f_keyLabel {
+	display: block;
+}
+
+.f_keyLabel_item {
+	background: transparent url("keyLabel/separator.gif") left center no-repeat;
+	padding-left: 10px;
+
+	white-space: nowrap;
+	display: block;
+}
+
+.f_keyLabel_item_first {
+	background: none;
+	padding-left: 0;
+}
+
+.f_keyLabel_item_last {
+}
+ 

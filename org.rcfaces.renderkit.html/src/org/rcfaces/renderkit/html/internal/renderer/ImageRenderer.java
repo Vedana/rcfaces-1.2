@@ -123,7 +123,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                 FILTRED_CONTENT_PROPERTY)) {
 
             javaScriptRenderContext.appendRequiredClass(
-                    JavaScriptClasses.IMAGE, "filter");
+                    JavaScriptClasses.FILTRED_COMPONENT, "filter");
         }
     }
 }

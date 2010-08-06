@@ -337,6 +337,17 @@
 
 <!-- CORE Module components (pas obligatoire !) -->
 	<module id="basicComponent" defaultCoreModule="true">
+		<file name="ui/f_filtredComponent.js">
+			<class name="f_filtredComponent">
+				<required-class name="f_component" />
+				<required-class name="fa_filterProperties"/>
+				<required-class name="fa_commands" />
+
+				<required-class id="filter" name="f_httpRequest" />
+				<required-class id="filter" name="f_waiting" />
+			</class>
+		</file>
+
 		<file name="ui/f_text.js">
 			<class name="f_text">
 				<required-class name="f_component" />
@@ -819,11 +830,7 @@
 	<module id="image">
 		<file name="ui/f_image.js">
 			<class name="f_image">
-				<required-class name="f_component" />
-				<required-class name="fa_filterProperties"/>
-				<required-class name="fa_commands" />
-				<required-class id="filter" name="f_httpRequest" />
-				<required-class id="filter" name="f_waiting" />
+				<required-class name="f_filtredComponent" />
 
 				<required-style name="f_image.css" />
 			</class>
@@ -857,6 +864,14 @@
 				<required-class name="fa_selectionProvider"/>
 
 				<required-style name="f_list.css" />
+			</class>
+		</file>
+		
+		<file name="ui/f_keyLabel.js">
+			<class name="f_keyLabel">
+				<required-class name="f_filtredComponent" />
+
+				<required-style name="f_keyLabel.css" />
 			</class>
 		</file>
 	</module>

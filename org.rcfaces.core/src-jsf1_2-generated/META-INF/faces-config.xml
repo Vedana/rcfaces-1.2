@@ -301,6 +301,10 @@ A string value specifying the name of the variable receiving the index of the cu
 		<component-class>org.rcfaces.core.component.ComboGridComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.keyLabel</component-type>
+		<component-class>org.rcfaces.core.component.KeyLabelComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.keyEntry</component-type>
 		<component-class>org.rcfaces.core.component.KeyEntryComponent</component-class>
 	</component>

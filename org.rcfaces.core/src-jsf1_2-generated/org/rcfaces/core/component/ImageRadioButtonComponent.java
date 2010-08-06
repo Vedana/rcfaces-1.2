@@ -38,7 +38,7 @@ public class ImageRadioButtonComponent extends RadioButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(RadioButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition","tabIndex"}));
 	}
 
 	public ImageRadioButtonComponent() {
