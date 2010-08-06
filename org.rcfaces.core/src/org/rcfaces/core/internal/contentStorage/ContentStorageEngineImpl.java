@@ -228,18 +228,23 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
                     resolvedContent = (IResolvedContent) wrappedData;
 
                 } else {
+
+                    AdaptationParameters parametrizedAdaptation = new AdaptationParameters(
+                            contentModel, generationInformation,
+                            generatedInformation);
+
                     try {
                         if (wrappedData instanceof IAdaptable) {
                             resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
                                     .getAdapter(IResolvedContent.class,
-                                            contentModel);
+                                            parametrizedAdaptation);
                         }
 
                         if (resolvedContent == null) {
                             resolvedContent = (IResolvedContent) adapterManager
                                     .getAdapter(wrappedData,
                                             IResolvedContent.class,
-                                            contentModel);
+                                            parametrizedAdaptation);
                         }
                     } catch (Exception ex) {
                         LOG.error(

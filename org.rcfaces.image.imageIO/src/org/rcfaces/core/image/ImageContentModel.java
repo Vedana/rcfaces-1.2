@@ -54,7 +54,15 @@ public class ImageContentModel extends BasicContentModel implements
     }
 
     public Object getWrappedData() {
-        return getBufferedImage();
+        Object prev = super.getWrappedData();
+        if (prev != null) {
+            return prev;
+        }
+
+        prev = getBufferedImage();
+        setWrappedData(prev);
+
+        return prev;
     }
 
     protected BufferedImage getBufferedImage() {
