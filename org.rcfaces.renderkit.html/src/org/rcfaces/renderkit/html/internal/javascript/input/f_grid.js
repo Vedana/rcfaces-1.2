@@ -4690,7 +4690,7 @@ var __members = {
 	/**
 	 * Return the current row value
 	 * 
-	 * @methode public
+	 * @method public
 	 * @param f_component
 	 * 
 	 * return Number
