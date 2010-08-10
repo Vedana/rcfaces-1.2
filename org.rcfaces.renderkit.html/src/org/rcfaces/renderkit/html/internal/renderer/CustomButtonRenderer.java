@@ -9,6 +9,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.CustomButtonComponent;
 import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -32,6 +34,9 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public class CustomButtonRenderer extends AbstractCssRenderer {
     private static final String REVISION = "$Revision$";
+
+    private static final Log LOG = LogFactory
+            .getLog(CustomButtonRenderer.class);
 
     private static final String BORDER_RENDERER = "camelia.customButton.borderRenderer";
 
@@ -104,8 +109,8 @@ public class CustomButtonRenderer extends AbstractCssRenderer {
         }
         /*
          * Le javascript s'occupe de ca ! if (button == false && imageJavascript
-         * == false) { htmlWriter.writeAttribute("href", IHtmlWriter.JAVASCRIPT_VOID);
-         * }
+         * == false) { htmlWriter.writeAttribute("href",
+         * IHtmlWriter.JAVASCRIPT_VOID); }
          */
 
         htmlWriter.enableJavaScript();
