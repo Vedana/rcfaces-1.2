@@ -5,9 +5,6 @@ package org.rcfaces.jfreechart.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.resource.ClassLoaderResourceLoaderFactory;
-import org.rcfaces.core.internal.resource.IResourceLoaderFactory;
-import org.rcfaces.core.internal.resource.IncludeResourceLoaderFactory;
 
 /**
  * 
@@ -19,9 +16,7 @@ public class Constants {
 
     private static final Log LOG = LogFactory.getLog(Constants.class);
 
-    private static final boolean USE_INCLUDE_IMAGE_LOADER_FACTORY = true;
-
-    private static final String RCFACES_IMAGEIO_VERSION_SYSTEM_PARAMETER = "rcfaces.imageIO.version";
+    private static final String RCFACES_JFREECHART_VERSION_SYSTEM_PARAMETER = "rcfaces.jfreechart.version";
 
     private static final String BUILDER_VERSION = null;
 
@@ -37,43 +32,22 @@ public class Constants {
         CONSTANT_PREFIX = name;
     }
 
-    private static final IResourceLoaderFactory DESIGNER_IMAGE_LOADER_FACTORY = new ClassLoaderResourceLoaderFactory();
-
-    private static final IResourceLoaderFactory IMAGE_LOADER_FACTORY;
-
     static {
         if (BUILDER_VERSION != null) {
             version = BUILDER_VERSION;
 
         } else {
             version = org.rcfaces.core.internal.Constants.searchVersion(
-                    Constants.class, RCFACES_IMAGEIO_VERSION_SYSTEM_PARAMETER,
+                    Constants.class,
+                    RCFACES_JFREECHART_VERSION_SYSTEM_PARAMETER,
                     "RCFaces ImageIO");
         }
 
-        LOG.info("RCFaces imageIO version='" + version + "'");
-
-        if (USE_INCLUDE_IMAGE_LOADER_FACTORY) {
-            IMAGE_LOADER_FACTORY = new IncludeResourceLoaderFactory();
-
-        } else {
-            IMAGE_LOADER_FACTORY = DESIGNER_IMAGE_LOADER_FACTORY;
-        }
-
-        LOG.info("USE_INCLUDE_IMAGE_LOADER_FACTORY="
-                + USE_INCLUDE_IMAGE_LOADER_FACTORY + " ("
-                + IMAGE_LOADER_FACTORY.getName() + ")");
+        LOG.info("RCFaces jfreeChart version='" + version + "'");
     }
 
     public static final String getPackagePrefix() {
         return CONSTANT_PREFIX;
     }
 
-    public static final IResourceLoaderFactory getImageLoaderFactory() {
-        return IMAGE_LOADER_FACTORY;
-    }
-
-    public static final IResourceLoaderFactory getDesignerImageLoaderFactory() {
-        return DESIGNER_IMAGE_LOADER_FACTORY;
-    }
 }

@@ -3,10 +3,8 @@
  */
 package org.rcfaces.jfreechart.renderer;
 
-import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -17,8 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jfree.ui.Drawable;
 import org.rcfaces.core.component.capability.IImageFormatCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.image.GeneratedImageInformation;
-import org.rcfaces.core.image.GenerationImageInformation;
 import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
@@ -27,6 +23,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IContentModel;
+import org.rcfaces.jfreechart.util.ColorNameConverter;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlElements;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -64,51 +61,27 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
         ISizeCapability sizeCapability = (ISizeCapability) component;
 
         // get pie values
-        int _chartWidth = computeSize(sizeCapability.getWidth(), -1, 0);
-        int _chartHeight = computeSize(sizeCapability.getHeight(), -1, 0);
+        int chartWidth = computeSize(sizeCapability.getWidth(), -1, 0);
+        int chartHeight = computeSize(sizeCapability.getHeight(), -1, 0);
 
-        if (_chartWidth < 0 || _chartHeight < 0) {
+        if (chartWidth < 0 || chartHeight < 0) {
             Point point = getDefaultChartSize(componentContext);
             if (point == null) {
                 throw new FacesException("Invalid chart size !");
             }
 
-            _chartWidth = point.x;
-            _chartHeight = point.y;
+            chartWidth = point.x;
+            chartHeight = point.y;
         }
 
-        final int chartWidth = _chartWidth;
-        final int chartHeight = _chartHeight;
-
-        final Drawable drawble = createChart(componentContext, chartWidth,
+        Drawable drawable = createChart(componentContext, chartWidth,
                 chartHeight);
 
-        IContentModel contentModel = new ChartContentModel() {
+        IContentModel contentModel = new ChartContentModel();
 
-            @Override
-            protected BufferedImage getBufferedImage() {
+        GenerationChartInformation generationInformation = new GenerationChartInformation();
 
-                final BufferedImage bufferedImage = new BufferedImage(
-                        chartWidth, chartHeight, BufferedImage.TYPE_INT_RGB);
-
-                Graphics2D g = bufferedImage.createGraphics();
-
-                try {
-                    drawble.draw(g, new Rectangle(0, 0, bufferedImage
-                            .getWidth(), bufferedImage.getHeight()));
-
-                } finally {
-                    g.dispose();
-                }
-
-                setWrappedData(bufferedImage);
-
-                return bufferedImage;
-            }
-        };
-
-        GenerationImageInformation generationInformation = new GenerationImageInformation();
-
+        generationInformation.setDrawable(drawable);
         generationInformation.setComponent(componentContext);
         generationInformation.setImageWidth(chartWidth);
         generationInformation.setImageHeight(chartHeight);
@@ -129,7 +102,12 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
         generationInformation.setAttribute(
                 IImageContentModel.ENCODER_MIME_TYPE_PROPERTY, mimeType);
 
-        GeneratedImageInformation generatedImageInformations = new GeneratedImageInformation();
+        generationInformation
+                .setAttribute(
+                        IContentModel.AUTO_GENERATE_RESOURCE_KEY_PROPERTY,
+                        Boolean.TRUE);
+
+        GeneratedChartInformation generatedImageInformations = new GeneratedChartInformation();
 
         IContentAccessor contentAccessor = ContentAccessorFactory
                 .createFromWebResource(facesContext, contentModel,
@@ -166,7 +144,6 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
         }
 
         htmlWriter.endElement(IHtmlElements.IMG);
-
     }
 
     protected Point getDefaultChartSize(IComponentRenderContext componentContext) {
@@ -180,4 +157,10 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
     protected String getDefaultImageFormat() {
         return DEFAULT_IMAGE_MIME_TYPE;
     }
+
+    protected static Color convertColorName(String colorName) {
+        return (Color) ColorNameConverter.SINGLETON.getAsObject(null, null,
+                colorName);
+    }
+
 }
