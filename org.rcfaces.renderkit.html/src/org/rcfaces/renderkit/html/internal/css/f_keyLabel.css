@@ -17,14 +17,13 @@
 	margin: 0;
 	border: 0;
 	
-	display: inline;
+	display: block;
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
 }
 
 .f_keyLabel {
-	display: block;
 }
 
 .f_keyLabel_item {
@@ -32,7 +31,7 @@
 	padding-left: 10px;
 
 	white-space: nowrap;
-	display: block;
+	float: left;
 }
 
 .f_keyLabel_item_first {
