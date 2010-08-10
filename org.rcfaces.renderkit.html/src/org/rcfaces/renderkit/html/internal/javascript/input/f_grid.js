@@ -4695,14 +4695,13 @@ var __members = {
 	 * 
 	 * return Number
 	 */
-	f_getRowValueFromCommponent: function(component){
-		while ((!component._rowIndex && component)){
+	f_getRowValueFromCommponent: function(component){while ((!component._rowIndex && component)){
 			if(component._rowIndex == 0) {
 				break;
 			}
 			component = component.parentNode;
 		}
-		return component._rowIndex;
+		return component._index;
 		
 	},
 	
