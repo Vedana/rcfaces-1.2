@@ -37,6 +37,7 @@
 		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
 		<property name="build-imageIO" location="${basedir}/../org.rcfaces.image.imageIO" />
 		<property name="build-svg" location="${basedir}/../org.rcfaces.renderkit.svg" />
+		<property name="build-jfreechart" location="${basedir}/../org.rcfaces.jfreechart" />
 
 		<property name="metadas.xml.core" location="${build-core}/metadatas" />
 		<property name="metadas.xml.html" location="${build-html}/metadatas" />
@@ -300,6 +301,9 @@
 		<property name="rcfaces-imageIO.jar" value="${build.path}/rcfaces-imageIO-jsf${jsf.version}.jar" />
 		<property name="rcfaces-imageIO-src.jar" value="${build.path}/rcfaces-imageIO-src-jsf${jsf.version}.jar" />		
 
+		<property name="rcfaces-jfreechart.jar" value="${build.path}/rcfaces-jfreechart-jsf${jsf.version}.jar" />
+		<property name="rcfaces-jfreechart-src.jar" value="${build.path}/rcfaces-jfreechart-src-jsf${jsf.version}.jar" />		
+
 		<property name="rcfaces-javadoc.zip" value="${build.path}/rcfaces-javadoc-jsf${jsf.version}.zip" />
 
 		<mkdir dir="${build.path}" />
@@ -316,6 +320,9 @@
 
 		<mkdir dir="${build.version.path}/src-imageIO" />
 		<mkdir dir="${build.version.path}/bin-imageIO" />
+
+		<mkdir dir="${build.version.path}/src-jfreechart" />
+		<mkdir dir="${build.version.path}/bin-jfreechart" />
 
 		<mkdir dir="${build.version.path}/src-svg" />
 		<mkdir dir="${build.version.path}/bin-svg" />
@@ -341,6 +348,13 @@
 
 		<copy todir="${build.version.path}/src-imageIO">
 			<fileset dir="${build-imageIO}/src">
+				<exclude name="**/*.db" />
+				<exclude name="**/*_" />
+			</fileset>
+		</copy>
+
+		<copy todir="${build.version.path}/src-jfreechart">
+			<fileset dir="${build-jfreechart}/src">
 				<exclude name="**/*.db" />
 				<exclude name="**/*_" />
 			</fileset>
@@ -488,6 +502,17 @@
 			<param name="pass.classpathId" value="imageIO-classPathId"/>
 		</antcall>
 
+		<path id="jfreechart-classPathId">
+			<path path="${build.version.path}/bin-core" />
+			<path path="${build.version.path}/bin-html" />
+			<path path="${build.version.path}/bin-imageIO" />
+		</path>
+
+		<antcall target="jfreechart_pass2">
+			<param name="pass.build" value="${build-jfreechart}"/>
+			<param name="pass.classpathId" value="jfreechart-classPathId"/>
+		</antcall>
+
 		<path id="svg-classPathId">
 			<path path="${build.version.path}/bin-core" />
 			<path path="${build.version.path}/bin-html" />
@@ -616,6 +641,68 @@
 		<delete file="${rcfaces-imageIO-src.jar}" failonerror="false" />
 		<jar destfile="${rcfaces-imageIO-src.jar}" index="true" manifest="${build.version.path}/src-imageIO/META-INF/MANIFEST.MF">
 			<fileset dir="${build.version.path}/src-imageIO">
+			</fileset>
+		</jar>
+	</target>
+
+
+	<!-- ############# JFREECHART ################# -->
+	
+	<target name="jfreechart_pass2">
+
+		<replace file="${build.version.path}/src-jfreechart/org/rcfaces/jfreechart/internal/Constants.java"
+			token="String BUILDER_VERSION = null" 
+			value="String BUILDER_VERSION = &quot;${version}.${minorRelease}.${integrationVersion}&quot;" />
+
+		<javac taskname="Build jfreechart" srcdir="${build.version.path}/src-jfreechart" debug="true" destdir="${build.version.path}/bin-jfreechart" optimize="no" target="${java.target}" encoding="utf-8">
+			<classpath>
+				<fileset dir="${build-core}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${build-core}/lib/jsf${jsf.version}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${pass.build}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<path refid="${pass.classpathId}"/>
+			</classpath>
+		</javac>
+	
+		<mkdir dir="${build.version.path}/bin-jfreechart/META-INF"/>
+		
+		<!--
+		<copy file="${build.version.path}/src-jfreechart/META-INF/rcfaces-config.xml" 
+			  todir="${build.version.path}/bin-jfreechart/META-INF" />
+		-->
+		
+		<manifest file="${build.version.path}/bin-jfreechart/META-INF/MANIFEST.MF" mode="update">
+			<attribute name="Specification-Version" value="${version}" />
+			<attribute name="Implementation-Version" value="${version}.${minorRelease}.${integrationVersion}" />
+			<attribute name="Build-Date" value="${TODAY}" />
+			<attribute name="JSF-Version" value="${jsf.version.manifest}" />
+			<section name="org.rcfaces.jfreechart">
+			</section>
+		</manifest>
+
+		<copy file="${build.version.path}/bin-jfreechart/META-INF/MANIFEST.MF" 
+			  toDir="${build.version.path}/src-jfreechart/META-INF" overwrite="true" />
+	
+		<copy todir="${build.version.path}/bin-jfreechart">
+			<fileset dir="${build.version.path}/src-jfreechart">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<delete file="${rcfaces-jfreechart.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-jfreechart.jar}" index="true" manifest="${build.version.path}/bin-jfreechart/META-INF/MANIFEST.MF">
+			<fileset dir="${build.version.path}/bin-jfreechart">
+			</fileset>
+		</jar>
+	
+		<delete file="${rcfaces-jfreechart-src.jar}" failonerror="false" />
+		<jar destfile="${rcfaces-jfreechart-src.jar}" index="true" manifest="${build.version.path}/src-jfreechart/META-INF/MANIFEST.MF">
+			<fileset dir="${build.version.path}/src-jfreechart">
 			</fileset>
 		</jar>
 	</target>
@@ -825,14 +912,16 @@
 	<target name="sloop">
 		<property name="build-core" location="${basedir}/../org.rcfaces.core" />
 		<property name="build-html" location="${basedir}/../org.rcfaces.renderkit.html" />
-		<property name="spool.workspace" location="k:/camelia/workspace" />
+		<property name="spool.workspace" location="/data/products/rcfaces/Builder/camelia" />
 
 		<!--
 		<delete dir="${spool.workspace}" failonerror="false" />		
 		<mkdir dir="${spool.workspace}"/>
-		--> 
 
-		<copy todir="${spool.workspace}" verbose="true" preservelastmodified="false">
+		<scp todir="${ssh.user}@cvs.vedana.com:/data/products/rcfaces/Builder/camelia/workspace"  verbose="true" keyfile="${ssh.keyfile}" passphrase="${ssh.passphrase}" knownhosts="C:\Users\oeuillot\ssh\known_hosts">
+		-->  
+
+		<copy todir="k:/camelia/workspace" verbose="true">
 			<fileset dir="${build-core}/..">
 				<include name="org.rcfaces.core/src/**" />
 				<include name="org.rcfaces.core/src-jsf1_2/**" />
@@ -855,6 +944,11 @@
 				<include name="org.rcfaces.image.imageIO/META-INF/**" />
 				<include name="org.rcfaces.image.imageIO/lib/**" />
 				<include name="org.rcfaces.image.imageIO/metadatas/**" />
+
+				<include name="org.rcfaces.jfreechart/src/**" />
+				<include name="org.rcfaces.jfreechart/META-INF/**" />
+				<include name="org.rcfaces.jfreechart/lib/**" />
+				<include name="org.rcfaces.jfreechart/metadatas/**" />
 
 				<include name="org.rcfaces.packager/lib*/**" />
 				<include name="org.rcfaces.packager/*.xml" />
