@@ -85,6 +85,8 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
         private final long lastModificationDate;
 
+        private final boolean useEtagAsResourceKey;
+
         private String etag;
 
         private String hashCode;
@@ -93,10 +95,12 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
         private transient File file;
 
-        public FileResolvedContent(String contentType, String suffix, File file) {
+        public FileResolvedContent(String contentType, String suffix,
+                File file, boolean useEtagAsResourceKey) {
             this.file = file;
             this.contentType = contentType;
             this.suffix = suffix;
+            this.useEtagAsResourceKey = useEtagAsResourceKey;
 
             this.length = (int) file.length();
             this.lastModificationDate = file.lastModified();
@@ -112,6 +116,15 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
         public String getURLSuffix() {
             return suffix;
+        }
+
+        @Override
+        public String getResourceKey() {
+            if (useEtagAsResourceKey) {
+                return getETag();
+            }
+            
+            return super.getResourceKey();
         }
 
         public InputStream getInputStream() throws IOException {

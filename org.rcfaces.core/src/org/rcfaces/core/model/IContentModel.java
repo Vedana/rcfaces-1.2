@@ -21,6 +21,8 @@ public interface IContentModel {
 
     String RESPONSE_URL_SUFFIX_PROPERTY = "org.rcfaces.response.SUFFIX";
 
+    String AUTO_GENERATE_RESOURCE_KEY_PROPERTY = "org.rcfaces.source.AUTO_GENERATE_RESOURCE_KEY";
+
     void setInformations(IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation);
 

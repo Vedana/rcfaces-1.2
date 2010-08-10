@@ -25,8 +25,8 @@ import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.image.ImageContentModel;
 import org.rcfaces.core.internal.content.ContentAdapterFactory;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
-import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.contentStorage.AdaptationParameters;
+import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.images.operation.GIFConversionImageOperation;
 import org.rcfaces.core.internal.images.operation.ICOConversionImageOperation;
 import org.rcfaces.core.internal.images.operation.JPEGConversionImageOperation;
@@ -159,6 +159,15 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
                     .get(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
         }
 
+        boolean useEtagAsResourceKey = false;
+        if (generationResourceInformation != null) {
+            Object b = generationResourceInformation
+                    .getAttribute(IContentModel.AUTO_GENERATE_RESOURCE_KEY_PROPERTY);
+            if (b != null) {
+                useEtagAsResourceKey = Boolean.TRUE.equals(b);
+            }
+        }
+
         IOException ex = null;
 
         Iterator it = ImageIO.getImageWritersByMIMEType(mimeType);
@@ -167,7 +176,7 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
 
             try {
                 return writeBufferedImage(imageWriter, image, imageWriteParam,
-                        mimeType, responseSuffix);
+                        mimeType, responseSuffix, useEtagAsResourceKey);
 
             } catch (IOException e) {
                 ex = e;
@@ -184,7 +193,8 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
 
                 try {
                     return writeBufferedImage(imageWriter, image,
-                            imageWriteParam, mimeType, responseSuffix);
+                            imageWriteParam, mimeType, responseSuffix,
+                            useEtagAsResourceKey);
 
                 } catch (IOException e) {
                     if (ex == null) {
@@ -212,7 +222,7 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
 
     private IResolvedContent writeBufferedImage(ImageWriter imageWriter,
             Object image, ImageWriteParam imageWriteParam, String contentType,
-            String suffix) throws IOException {
+            String suffix, boolean useEtagAsResourceKey) throws IOException {
 
         if (suffix == null) {
             suffix = getSuffixByMimeType(contentType);
@@ -254,6 +264,7 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
             fout.close();
         }
 
-        return new FileResolvedContent(contentType, suffix, file);
+        return new FileResolvedContent(contentType, suffix, file,
+                useEtagAsResourceKey);
     }
 }
