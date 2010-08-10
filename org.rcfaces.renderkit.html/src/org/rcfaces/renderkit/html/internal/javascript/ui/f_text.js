@@ -52,7 +52,7 @@ var __members = {
 		
 		return false;
 	}	
-}
+};
 
 new f_class("f_text", {
 	extend: f_component,
