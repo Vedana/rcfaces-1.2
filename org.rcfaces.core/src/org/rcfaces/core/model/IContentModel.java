@@ -13,15 +13,7 @@ import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
  */
 public interface IContentModel {
 
-    String RESPONSE_EXPIRATION_PROPERTY = "org.rfcaces.response.EXPIRATION";
-
-    String SOURCE_MIME_TYPE_PROPERTY = "org.rcfaces.source.MIME_TYPE";
-
-    String RESPONSE_MIME_TYPE_PROPERTY = "org.rcfaces.response.MIME_TYPE";
-
-    String RESPONSE_URL_SUFFIX_PROPERTY = "org.rcfaces.response.SUFFIX";
-
-    String AUTO_GENERATE_RESOURCE_KEY_PROPERTY = "org.rcfaces.source.AUTO_GENERATE_RESOURCE_KEY";
+    // String RESPONSE_EXPIRATION_PROPERTY = "org.rfcaces.response.EXPIRATION";
 
     void setInformations(IGenerationResourceInformation generationInformation,
             IGeneratedResourceInformation generatedInformation);

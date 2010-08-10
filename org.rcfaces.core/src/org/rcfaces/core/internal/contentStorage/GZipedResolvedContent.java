@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
+import org.rcfaces.core.internal.util.MessageDigestSelector;
 
 /**
  * 
@@ -153,14 +154,8 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
 
         MessageDigest hashMessageDigest = null;
         if (Constants.HASH_SUPPORT) {
-            try {
-                hashMessageDigest = MessageDigest
-                        .getInstance(Constants.HASH_DIGEST_ALGORITHM);
-
-            } catch (NoSuchAlgorithmException ex) {
-                LOG.error("Can not find algorithm '"
-                        + Constants.HASH_DIGEST_ALGORITHM + "'.", ex);
-            }
+            hashMessageDigest = MessageDigestSelector
+                    .getInstance(Constants.HASH_DIGEST_ALGORITHMS);
         }
 
         try {
@@ -206,7 +201,7 @@ public class GZipedResolvedContent implements IGzippedResolvedContent,
             if (hashMessageDigest != null) {
                 byte hashDigest[] = hashMessageDigest.digest();
 
-                hash = Base64.encodeBytes(hashDigest);
+                hash = Base64.encodeBytes(hashDigest, Base64.DONT_BREAK_LINES);
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Hashcode for file '" + getResourceKey() + "' = "

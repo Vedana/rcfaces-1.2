@@ -70,9 +70,10 @@ public class CssOperationContentModel extends
     public CssOperationContentModel(String resourceURL, String versionId,
             String operationId, String filterParametersToParse,
             IStyleOperation styleOperation, ICssParser cssParser,
-            IResourceVersionHandler resourceVersionHandler) {
+            IResourceVersionHandler resourceVersionHandler,
+            String specifiedResourceKey) {
         super(resourceURL, versionId, operationId, filterParametersToParse,
-                styleOperation);
+                styleOperation, specifiedResourceKey);
 
         this.cssParser = cssParser;
         this.resourceVersionHandler = resourceVersionHandler;

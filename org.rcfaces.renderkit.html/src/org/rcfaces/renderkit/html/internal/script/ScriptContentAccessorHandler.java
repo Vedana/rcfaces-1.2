@@ -248,7 +248,7 @@ public class ScriptContentAccessorHandler extends
 
         IContentModel contentModel = new ScriptOperationContentModel(
                 resourceURL, versionId, operationId, parameters,
-                scriptOperation);
+                scriptOperation, null);
 
         if (generatedResourceInformationRef[0] == null) {
             generatedResourceInformationRef[0] = new BasicGeneratedResourceInformation();

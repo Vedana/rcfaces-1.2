@@ -15,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jfree.ui.Drawable;
 import org.rcfaces.core.component.capability.IImageFormatCapability;
 import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -99,15 +98,18 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
             mimeType = DEFAULT_IMAGE_MIME_TYPE;
         }
 
-        generationInformation.setAttribute(
-                IImageContentModel.ENCODER_MIME_TYPE_PROPERTY, mimeType);
+        generationInformation.setResponseMimeType(mimeType);
 
         generationInformation
-                .setAttribute(
-                        IContentModel.AUTO_GENERATE_RESOURCE_KEY_PROPERTY,
-                        Boolean.TRUE);
+                .setComputeResourceKeyFromGenerationInformation(true);
+
+        generationInformation
+                .setProcessAtRequest(processChartAtRequest(componentContext));
 
         GeneratedChartInformation generatedImageInformations = new GeneratedChartInformation();
+
+        updateGenerationInformations(htmlWriter, drawable,
+                generationInformation, generatedImageInformations);
 
         IContentAccessor contentAccessor = ContentAccessorFactory
                 .createFromWebResource(facesContext, contentModel,
@@ -146,6 +148,12 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
         htmlWriter.endElement(IHtmlElements.IMG);
     }
 
+    protected void updateGenerationInformations(IHtmlWriter htmlWriter,
+            Drawable drawable,
+            GenerationChartInformation generationInformation,
+            GeneratedChartInformation generatedImageInformations) {
+    }
+
     protected Point getDefaultChartSize(IComponentRenderContext componentContext) {
         return null;
     }
@@ -161,6 +169,11 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
     protected static Color convertColorName(String colorName) {
         return (Color) ColorNameConverter.SINGLETON.getAsObject(null, null,
                 colorName);
+    }
+
+    protected boolean processChartAtRequest(
+            IComponentRenderContext componentRenderContext) {
+        return false;
     }
 
 }

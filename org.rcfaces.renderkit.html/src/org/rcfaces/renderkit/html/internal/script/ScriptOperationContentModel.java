@@ -44,9 +44,9 @@ public class ScriptOperationContentModel extends
 
     public ScriptOperationContentModel(String resourceURL, String versionId,
             String operationId, String filterParametersToParse,
-            IScriptOperation scriptOperation) {
+            IScriptOperation scriptOperation, String specifiedResourceKey) {
         super(resourceURL, versionId, operationId, filterParametersToParse,
-                scriptOperation);
+                scriptOperation, specifiedResourceKey);
     }
 
     public void setInformations(

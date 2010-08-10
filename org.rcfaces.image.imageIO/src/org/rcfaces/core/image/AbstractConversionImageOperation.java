@@ -38,23 +38,25 @@ public abstract class AbstractConversionImageOperation extends
     public void setCompressionQuality(
             IGenerationResourceInformation imageInformation, float quality) {
 
-        imageInformation.setAttribute(IImageContentModel.COMPRESSION_QUALITY,
-                new Float(quality));
+        imageInformation.setAttribute(
+                IGenerationImageInformation.COMPRESSION_QUALITY, new Float(
+                        quality));
     }
 
     public void setCompressionMode(
             IGenerationResourceInformation imageInformation, int mode) {
 
-        imageInformation.setAttribute(IImageContentModel.COMPRESSION_MODE,
-                new Integer(mode));
+        imageInformation
+                .setAttribute(IGenerationImageInformation.COMPRESSION_MODE,
+                        new Integer(mode));
     }
 
     public void setCompressionType(
             IGenerationResourceInformation imageInformation,
             String compressionType) {
 
-        imageInformation.setAttribute(IImageContentModel.COMPRESSION_TYPE,
-                compressionType);
+        imageInformation.setAttribute(
+                IGenerationImageInformation.COMPRESSION_TYPE, compressionType);
     }
 
     public void setProgressiveMode(
@@ -62,8 +64,8 @@ public abstract class AbstractConversionImageOperation extends
             boolean progressiveMode) {
 
         imageInformation.setAttribute(
-                IImageContentModel.COMPRESSION_PROGRESSIVE_MODE, Boolean
-                        .valueOf(progressiveMode));
+                IGenerationImageInformation.COMPRESSION_PROGRESSIVE_MODE,
+                Boolean.valueOf(progressiveMode));
     }
 
     public void prepare(IImageOperationContentModel imageOperationContentModel,
@@ -82,7 +84,9 @@ public abstract class AbstractConversionImageOperation extends
                 setCompressionQuality(generationInformation, quality);
 
             } catch (NumberFormatException ex) {
-                LOG.error(ex);
+                LOG.error(
+                        "Can not change qualityValue '" + qualityValue + "'.",
+                        ex);
             }
         }
     }

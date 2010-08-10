@@ -316,7 +316,7 @@ public class StyleContentAccessorHandler extends
 
         IContentModel contentModel = new CssOperationContentModel(resourceURL,
                 versionId, operationId, parameters, styleOperation, cssParser,
-                resourceVersionHandler);
+                resourceVersionHandler, null);
 
         if (generatedResourceInformationRef[0] == null) {
             generatedResourceInformationRef[0] = new BasicGeneratedResourceInformation();

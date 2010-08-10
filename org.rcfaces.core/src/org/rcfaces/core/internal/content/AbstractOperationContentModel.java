@@ -126,14 +126,17 @@ public abstract class AbstractOperationContentModel extends BasicContentModel
 
     private final String versionId;
 
+    private final String specifiedResourceKey;
+
     public AbstractOperationContentModel(String resourceURL, String versionId,
             String operationId, String filterParametersToParse,
-            IBufferOperation bufferOperation) {
+            IBufferOperation bufferOperation, String specifiedResourceKey) {
         this.resourceURL = resourceURL;
         this.operationId = operationId;
         this.filterParametersToParse = filterParametersToParse;
         this.bufferOperation = bufferOperation;
         this.versionId = versionId;
+        this.specifiedResourceKey = specifiedResourceKey;
 
         setWrappedData(this);
     }

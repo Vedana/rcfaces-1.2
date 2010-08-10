@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -24,9 +24,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.ByteBufferOutputStream;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
 import org.rcfaces.core.internal.util.IncludeHttpServletRequest;
 import org.rcfaces.core.internal.util.IncludeHttpServletResponse;
+import org.rcfaces.core.internal.util.MessageDigestSelector;
 
 /**
  * 
@@ -63,6 +65,14 @@ public class HashCodeTools {
         } else if (content instanceof String) {
             try {
                 buffer = ((String) content).getBytes("UTF-8");
+
+            } catch (UnsupportedEncodingException e) {
+                throw new FacesException(e);
+            }
+
+        } else if (content instanceof StringAppender) {
+            try {
+                buffer = ((StringAppender) content).getBytes("UTF-8");
 
             } catch (UnsupportedEncodingException e) {
                 throw new FacesException(e);
@@ -112,45 +122,33 @@ public class HashCodeTools {
                     .debug("Compute HashCode of buffer (size="
                             + buffer.length
                             + ") using '"
-                            + org.rcfaces.core.internal.Constants.RESOURCE_VERSION_DIGEST_ALGORITHM
+                            + Arrays
+                                    .asList(Constants.RESOURCE_VERSION_DIGEST_ALGORITHMS)
                             + " algorithm (maxHashCodeSize=" + maxHashCodeSize
                             + ")");
         }
 
-        try {
-            MessageDigest messageDigest = MessageDigest
-                    .getInstance(org.rcfaces.core.internal.Constants.RESOURCE_VERSION_DIGEST_ALGORITHM);
+        MessageDigest messageDigest = MessageDigestSelector
+                .getInstance(Constants.RESOURCE_VERSION_DIGEST_ALGORITHMS);
 
-            byte digest[] = messageDigest.digest(buffer);
+        byte digest[] = messageDigest.digest(buffer);
 
-            String etag = Base64.encodeBytes(digest);
+        String etag = Base64.encodeBytes(digest, Base64.DONT_BREAK_LINES);
 
-            if (maxHashCodeSize == 0) {
-                maxHashCodeSize = Constants.VERSIONED_URI_HASHCODE_MAX_SIZE;
-            }
-            if (maxHashCodeSize > 0 && etag.length() > maxHashCodeSize) {
-                etag = etag.substring(0, maxHashCodeSize);
-            }
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Compute ETag from url '" + url + "' = '" + etag
-                        + "'.");
-            }
-
-            etag += ":" + buffer.length;
-
-            return etag;
-
-        } catch (NoSuchAlgorithmException ex) {
-            LOG
-                    .error(
-                            "Can not find algorithm '"
-                                    + org.rcfaces.core.internal.Constants.RESOURCE_VERSION_DIGEST_ALGORITHM
-                                    + "'.", ex);
-
-            return null;
+        if (maxHashCodeSize == 0) {
+            maxHashCodeSize = Constants.VERSIONED_URI_HASHCODE_MAX_SIZE;
+        }
+        if (maxHashCodeSize > 0 && etag.length() > maxHashCodeSize) {
+            etag = etag.substring(0, maxHashCodeSize);
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Compute ETag from url '" + url + "' = '" + etag + "'.");
+        }
+
+        etag += ":" + buffer.length;
+
+        return etag;
     }
 
     private static byte[] loadContentFromURL(URL content) {

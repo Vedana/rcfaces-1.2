@@ -9,10 +9,12 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -21,9 +23,11 @@ import javax.imageio.stream.ImageOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.image.IImageContentModel;
+import org.rcfaces.core.image.IGenerationImageInformation;
 import org.rcfaces.core.image.ImageContentModel;
 import org.rcfaces.core.internal.content.ContentAdapterFactory;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
+import org.rcfaces.core.internal.contentAccessor.IGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
 import org.rcfaces.core.internal.contentStorage.AdaptationParameters;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
@@ -32,7 +36,6 @@ import org.rcfaces.core.internal.images.operation.ICOConversionImageOperation;
 import org.rcfaces.core.internal.images.operation.JPEGConversionImageOperation;
 import org.rcfaces.core.internal.images.operation.PNGConversionImageOperation;
 import org.rcfaces.core.lang.IAdaptable;
-import org.rcfaces.core.model.IContentModel;
 
 /**
  * 
@@ -48,6 +51,10 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
 
     private static final String INDEX_DEFAULT_MIME_TYPE = GIFConversionImageOperation.MIME_TYPE;
 
+    private static final String TEMP_PREFIX = "adaptedImage_";
+
+    private static final String IMAGE_TEMP_FOLDER_PARAMETER = "org.rcfaces.images.TEMP_FOLDER";
+
     static {
         GIFConversionImageOperation.fillSuffixByMimeType(suffixByMimeType);
 
@@ -56,6 +63,27 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         PNGConversionImageOperation.fillSuffixByMimeType(suffixByMimeType);
 
         ICOConversionImageOperation.fillSuffixByMimeType(suffixByMimeType);
+    }
+
+    private File tempFolder;
+
+    public ImageAdapterFactory() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if (facesContext != null) {
+            String imageTempFolder = facesContext.getExternalContext()
+                    .getInitParameter(IMAGE_TEMP_FOLDER_PARAMETER);
+            if (imageTempFolder != null) {
+                tempFolder = new File(imageTempFolder);
+                if (tempFolder.mkdirs() == false) {
+                    LOG.error("Can not create temp folder '" + imageTempFolder
+                            + "', ignore it.");
+                } else {
+                    LOG.info("Set image temp folder to '"
+                            + tempFolder.getAbsolutePath() + "'.");
+                }
+            }
+        }
     }
 
     public Object getAdapter(Object adaptableObject, Class adapterType,
@@ -77,13 +105,31 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         return super.getAdapter(adaptableObject, adapterType, parameter);
     }
 
+    @Override
+    protected File getTempFolder() {
+        if (tempFolder != null) {
+            return tempFolder;
+        }
+        return super.getTempFolder();
+    }
+
+    @Override
+    protected String getTempPrefix() {
+        return TEMP_PREFIX;
+    }
+
     private IResolvedContent adaptBufferedImage(Object image,
             Object adapterParameters) {
 
         IGenerationResourceInformation generationResourceInformation = null;
+        IGeneratedResourceInformation generatedResourceInformation = null;
+
         if (adapterParameters instanceof AdaptationParameters) {
-            generationResourceInformation = ((AdaptationParameters) adapterParameters)
+            AdaptationParameters ap = (AdaptationParameters) adapterParameters;
+
+            generationResourceInformation = ap
                     .getGenerationResourceInformation();
+            generatedResourceInformation = ap.getGeneratedResourceInformation();
         }
 
         Map adapterParametersMap = null;
@@ -103,38 +149,67 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
             defaultMimeType = getDefaultContentType(((RenderedImage[]) image)[0]);
         }
 
-        String mimeType = null;
+        String encoderMimeType = null;
+        String encoderSuffix = null;
+        String responseMimeType = null;
+        String responseSuffix = null;
 
-        if (mimeType == null && generationResourceInformation != null) {
-            mimeType = (String) generationResourceInformation
-                    .getAttribute(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY);
-        }
-
-        if (mimeType == null && adapterParametersMap != null) {
-            mimeType = (String) adapterParametersMap
-                    .get(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY);
-        }
-
-        if (mimeType == null) {
-            String suffix = null;
-
-            if (suffix == null && generationResourceInformation != null) {
-                suffix = (String) generationResourceInformation
-                        .getAttribute(IImageContentModel.ENCODER_SUFFIX_PROPERTY);
+        if (generationResourceInformation != null) {
+            if (generationResourceInformation instanceof IGenerationImageInformation) {
+                if (encoderMimeType == null) {
+                    encoderMimeType = ((IGenerationImageInformation) generationResourceInformation)
+                            .getEncoderMimeType();
+                }
+                if (encoderSuffix == null) {
+                    encoderSuffix = ((IGenerationImageInformation) generationResourceInformation)
+                            .getEncoderSuffix();
+                }
             }
-
-            if (suffix == null && adapterParametersMap != null) {
-                suffix = (String) adapterParametersMap
-                        .get(IImageContentModel.ENCODER_SUFFIX_PROPERTY);
+            if (responseMimeType == null) {
+                responseMimeType = generationResourceInformation
+                        .getResponseMimeType();
             }
-
-            if (suffix != null) {
-                mimeType = fileNameMap.getContentTypeFor("x." + suffix);
+            if (responseSuffix == null) {
+                responseSuffix = generationResourceInformation
+                        .getResponseSuffix();
             }
         }
 
-        if (mimeType == null) {
-            mimeType = defaultMimeType;
+        if (adapterParametersMap != null) {
+            if (encoderMimeType == null) {
+                encoderMimeType = (String) adapterParametersMap
+                        .get(IGenerationImageInformation.ENCODER_MIME_TYPE_PROPERTY);
+            }
+            if (encoderSuffix == null) {
+                encoderSuffix = (String) adapterParametersMap
+                        .get(IGenerationImageInformation.ENCODER_SUFFIX_PROPERTY);
+            }
+
+            if (responseMimeType == null) {
+                responseMimeType = (String) adapterParametersMap
+                        .get(IGenerationResourceInformation.RESPONSE_MIME_TYPE_PROPERTY);
+            }
+            if (responseSuffix == null) {
+                responseSuffix = (String) adapterParametersMap
+                        .get(IGeneratedResourceInformation.RESPONSE_URL_SUFFIX_PROPERTY);
+            }
+        }
+
+        if (responseMimeType != null && encoderMimeType == null) {
+            encoderMimeType = responseMimeType;
+        }
+
+        if (responseSuffix != null && encoderSuffix == null) {
+            encoderSuffix = responseSuffix;
+        }
+
+        if (encoderMimeType == null && encoderSuffix != null) {
+            encoderMimeType = fileNameMap.getContentTypeFor("x."
+                    + encoderSuffix);
+        }
+
+        if (encoderMimeType == null) {
+            encoderMimeType = defaultMimeType;
         }
 
         ImageWriteParam imageWriteParam = null;
@@ -148,35 +223,44 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
                     .get(ImageContentModel.IMAGE_WRITE_PARAM_PROPERTY);
         }
 
-        String responseSuffix = null;
-        if (responseSuffix == null && generationResourceInformation != null) {
-            responseSuffix = (String) generationResourceInformation
-                    .getAttribute(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
-        }
-
-        if (responseSuffix == null && adapterParametersMap != null) {
-            responseSuffix = (String) adapterParametersMap
-                    .get(IContentModel.RESPONSE_URL_SUFFIX_PROPERTY);
-        }
-
-        boolean useEtagAsResourceKey = false;
+        String specifiedResourceKey = null;
         if (generationResourceInformation != null) {
-            Object b = generationResourceInformation
-                    .getAttribute(IContentModel.AUTO_GENERATE_RESOURCE_KEY_PROPERTY);
-            if (b != null) {
-                useEtagAsResourceKey = Boolean.TRUE.equals(b);
+            if (generationResourceInformation
+                    .getComputeResourceKeyFromGenerationInformation()) {
+                specifiedResourceKey = BasicGenerationResourceInformation
+                        .generateResourceKeyFromGenerationInformation(generationResourceInformation);
+            }
+        }
+
+        long responseLastModifiedDate = -1;
+
+        if (responseLastModifiedDate < 0
+                && generationResourceInformation != null) {
+            responseLastModifiedDate = generationResourceInformation
+                    .getResponseLastModified();
+        }
+
+        if (responseLastModifiedDate <= 0 && adapterParametersMap != null) {
+            Object l = adapterParametersMap
+                    .get(IGenerationResourceInformation.RESPONSE_LAST_MODIFIED_PROPERTY);
+            if (l instanceof Long) {
+                responseLastModifiedDate = ((Long) l).longValue();
+
+            } else if (l instanceof Date) {
+                responseLastModifiedDate = ((Date) l).getTime();
             }
         }
 
         IOException ex = null;
 
-        Iterator it = ImageIO.getImageWritersByMIMEType(mimeType);
+        Iterator it = ImageIO.getImageWritersByMIMEType(encoderMimeType);
         if (it.hasNext()) {
             ImageWriter imageWriter = (ImageWriter) it.next();
 
             try {
                 return writeBufferedImage(imageWriter, image, imageWriteParam,
-                        mimeType, responseSuffix, useEtagAsResourceKey);
+                        encoderMimeType, encoderSuffix, specifiedResourceKey,
+                        responseLastModifiedDate);
 
             } catch (IOException e) {
                 ex = e;
@@ -186,15 +270,15 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
             }
         }
 
-        if (mimeType.equals(defaultMimeType) == false) {
+        if (encoderMimeType.equals(defaultMimeType) == false) {
             it = ImageIO.getImageWritersByMIMEType(defaultMimeType);
             if (it.hasNext()) {
                 ImageWriter imageWriter = (ImageWriter) it.next();
 
                 try {
                     return writeBufferedImage(imageWriter, image,
-                            imageWriteParam, mimeType, responseSuffix,
-                            useEtagAsResourceKey);
+                            imageWriteParam, encoderMimeType, encoderSuffix,
+                            specifiedResourceKey, responseLastModifiedDate);
 
                 } catch (IOException e) {
                     if (ex == null) {
@@ -207,8 +291,8 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
             }
         }
 
-        throw new FacesException("Unsupported image mime type '" + mimeType
-                + "'.", ex);
+        throw new FacesException("Unsupported image mime type '"
+                + encoderMimeType + "'.", ex);
     }
 
     private String getDefaultContentType(RenderedImage image) {
@@ -222,7 +306,8 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
 
     private IResolvedContent writeBufferedImage(ImageWriter imageWriter,
             Object image, ImageWriteParam imageWriteParam, String contentType,
-            String suffix, boolean useEtagAsResourceKey) throws IOException {
+            String suffix, String specifiedResourceKey, long lastModifiedDate)
+            throws IOException {
 
         if (suffix == null) {
             suffix = getSuffixByMimeType(contentType);
@@ -265,6 +350,6 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         }
 
         return new FileResolvedContent(contentType, suffix, file,
-                useEtagAsResourceKey);
+                specifiedResourceKey, lastModifiedDate);
     }
 }

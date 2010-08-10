@@ -41,9 +41,10 @@ public abstract class AbstractBufferOperationContentModel extends
 
     public AbstractBufferOperationContentModel(String resourceURL,
             String versionId, String operationId,
-            String filterParametersToParse, IBufferOperation styleOperation) {
+            String filterParametersToParse, IBufferOperation styleOperation,
+            String specifiedResourceKey) {
         super(resourceURL, versionId, operationId, filterParametersToParse,
-                styleOperation);
+                styleOperation, specifiedResourceKey);
     }
 
     protected IResourceLoaderFactory getResourceLoaderFactory(

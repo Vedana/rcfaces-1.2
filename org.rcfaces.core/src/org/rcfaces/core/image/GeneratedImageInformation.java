@@ -3,6 +3,8 @@
  */
 package org.rcfaces.core.image;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 
 /**
@@ -14,12 +16,15 @@ public class GeneratedImageInformation extends
         BasicGeneratedResourceInformation implements IGeneratedImageInformation {
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory
+            .getLog(GeneratedImageInformation.class);
+
     public GeneratedImageInformation() {
         super();
     }
 
     public final int getImageHeight() {
-        Integer i = (Integer) getAttribute(IImageContentModel.HEIGHT_PROPERTY);
+        Integer i = (Integer) getAttribute(HEIGHT_PROPERTY);
         if (i == null) {
             return 0;
         }
@@ -28,12 +33,11 @@ public class GeneratedImageInformation extends
     }
 
     public final void setImageHeight(int imageHeight) {
-        setAttribute(IImageContentModel.HEIGHT_PROPERTY, new Integer(
-                imageHeight));
+        setAttribute(HEIGHT_PROPERTY, new Integer(imageHeight));
     }
 
     public final int getImageWidth() {
-        Integer i = (Integer) getAttribute(IImageContentModel.WIDTH_PROPERTY);
+        Integer i = (Integer) getAttribute(WIDTH_PROPERTY);
         if (i == null) {
             return 0;
         }
@@ -42,15 +46,15 @@ public class GeneratedImageInformation extends
     }
 
     public final void setImageWidth(int imageWidth) {
-        setAttribute(IImageContentModel.WIDTH_PROPERTY, new Integer(imageWidth));
+        setAttribute(WIDTH_PROPERTY, new Integer(imageWidth));
     }
 
     public final String getEncoderMimeType() {
-        return (String) getAttribute(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY);
+        return (String) getAttribute(ENCODER_MIME_TYPE_PROPERTY);
     }
 
     public final void setEncoderMimeType(String contentType) {
-        setAttribute(IImageContentModel.ENCODER_MIME_TYPE_PROPERTY, contentType);
+        setAttribute(ENCODER_MIME_TYPE_PROPERTY, contentType);
     }
 
 }

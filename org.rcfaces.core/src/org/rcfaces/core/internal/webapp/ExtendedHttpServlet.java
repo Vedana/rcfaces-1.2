@@ -6,7 +6,6 @@ package org.rcfaces.core.internal.webapp;
 
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
+import org.rcfaces.core.internal.util.MessageDigestSelector;
 
 /**
  * 
@@ -144,53 +144,37 @@ public class ExtendedHttpServlet extends HttpServlet {
     }
 
     public static final String computeETag(byte[] buffer) {
-        try {
-            MessageDigest messageDigest = MessageDigest
-                    .getInstance(Constants.ETAG_DIGEST_ALGORITHM);
+        MessageDigest messageDigest = MessageDigestSelector
+                .getInstance(Constants.ETAG_DIGEST_ALGORITHMS);
 
-            byte digest[] = messageDigest.digest(buffer);
+        byte digest[] = messageDigest.digest(buffer);
 
-            StringAppender sb = new StringAppender(digest.length * 2 + 16);
-            sb.append("\"rcfaces:");
-            for (int i = 0; i < digest.length; i++) {
-                int v = digest[i] & 0xff;
-                if (v < 16) {
-                    sb.append('0');
-                }
-                sb.append(Integer.toHexString(v));
+        StringAppender sb = new StringAppender(digest.length * 2 + 16);
+        sb.append("\"rcfaces:");
+        for (int i = 0; i < digest.length; i++) {
+            int v = digest[i] & 0xff;
+            if (v < 16) {
+                sb.append('0');
             }
-
-            sb.append(':');
-            sb.append(Integer.toHexString(buffer.length));
-
-            sb.append('\"');
-            return sb.toString();
-
-        } catch (NoSuchAlgorithmException ex) {
-            LOG.error("Can not find algorithm '"
-                    + Constants.ETAG_DIGEST_ALGORITHM + "'.", ex);
-
-            return null;
+            sb.append(Integer.toHexString(v));
         }
+
+        sb.append(':');
+        sb.append(Integer.toHexString(buffer.length));
+
+        sb.append('\"');
+        return sb.toString();
     }
 
     public static final String computeHash(byte[] buffer) {
+        MessageDigest messageDigest = MessageDigestSelector
+                .getInstance(Constants.HASH_DIGEST_ALGORITHMS);
 
-        try {
-            MessageDigest messageDigest = MessageDigest
-                    .getInstance(Constants.HASH_DIGEST_ALGORITHM);
+        // messageDigest.update(buffer);
+        byte digest[] = messageDigest.digest(buffer);
 
-            // messageDigest.update(buffer);
-            byte digest[] = messageDigest.digest(buffer);
+        return Base64.encodeBytes(digest, Base64.DONT_BREAK_LINES);
 
-            return Base64.encodeBytes(digest);
-
-        } catch (NoSuchAlgorithmException ex) {
-            LOG.error("Can not find algorithm '"
-                    + Constants.HASH_DIGEST_ALGORITHM + "'.", ex);
-
-            return null;
-        }
     }
 
     public static final Date parseHttpDate(String date) throws ParseException {
@@ -243,10 +227,11 @@ public class ExtendedHttpServlet extends HttpServlet {
     public static final void setNoCache(HttpServletResponse response) {
         // Set standard HTTP/1.0 no-cache header.
         response.setHeader(HTTP_PRAGMA, "no-cache");
-        
+
         // Set standard HTTP/1.1 no-cache headers.
-        response.setHeader(HTTP_CACHE_CONTROL, "no-cache, no-store, must-revalidate");
-        
+        response.setHeader(HTTP_CACHE_CONTROL,
+                "no-cache, no-store, must-revalidate");
+
         // Set IE extended HTTP/1.1 no-cache headers (use addHeader)
         response.addHeader(HTTP_CACHE_CONTROL, "post-check=0, pre-check=0");
 

@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +23,7 @@ import org.rcfaces.core.internal.contentStorage.AbstractResolvedContent;
 import org.rcfaces.core.internal.contentStorage.IResolvedContent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
+import org.rcfaces.core.internal.util.MessageDigestSelector;
 import org.rcfaces.core.lang.IAdapterFactory;
 
 /**
@@ -44,6 +44,12 @@ public class ContentAdapterFactory implements IAdapterFactory {
     protected static final FileNameMap fileNameMap = URLConnection
             .getFileNameMap();
 
+    private static final long startTimeMillis = System.currentTimeMillis();
+
+    private final Object tempFileCounterLock = new Object();
+
+    private long tempFileCounter;
+
     public Object getAdapter(Object adaptableObject, Class adapterType,
             Object parameter) {
 
@@ -60,10 +66,41 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
     public File createTempFile(String contentType, String suffix)
             throws IOException {
-        File file = File.createTempFile(TEMP_PREFIX, "." + suffix);
+        File file = null;
+
+        File tempFolder = getTempFolder();
+        if (tempFolder != null) {
+
+            for (;;) {
+                long id;
+                synchronized (tempFileCounterLock) {
+                    id = tempFileCounter++;
+                }
+
+                file = new File(tempFolder, getTempPrefix() + startTimeMillis
+                        + "_" + id + "." + suffix);
+
+                if (file.createNewFile()) {
+                    break;
+                }
+            }
+        }
+
+        if (file == null) {
+            file = File.createTempFile(getTempPrefix(), "." + suffix);
+        }
+
         file.deleteOnExit();
 
         return file;
+    }
+
+    protected String getTempPrefix() {
+        return TEMP_PREFIX;
+    }
+
+    protected File getTempFolder() {
+        return null;
     }
 
     /**
@@ -85,7 +122,7 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
         private final long lastModificationDate;
 
-        private final boolean useEtagAsResourceKey;
+        private final String specifiedResourceKey;
 
         private String etag;
 
@@ -96,14 +133,14 @@ public class ContentAdapterFactory implements IAdapterFactory {
         private transient File file;
 
         public FileResolvedContent(String contentType, String suffix,
-                File file, boolean useEtagAsResourceKey) {
+                File file, String specifiedResourceKey, long lastModifiedDate) {
             this.file = file;
             this.contentType = contentType;
             this.suffix = suffix;
-            this.useEtagAsResourceKey = useEtagAsResourceKey;
+            this.specifiedResourceKey = specifiedResourceKey;
 
             this.length = (int) file.length();
-            this.lastModificationDate = file.lastModified();
+            this.lastModificationDate = lastModifiedDate;
 
             if (Constants.ETAG_SUPPORT || Constants.HASH_SUPPORT) {
                 computeHashCodes();
@@ -120,10 +157,10 @@ public class ContentAdapterFactory implements IAdapterFactory {
 
         @Override
         public String getResourceKey() {
-            if (useEtagAsResourceKey) {
-                return getETag();
+            if (specifiedResourceKey == null) {
+                return specifiedResourceKey;
             }
-            
+
             return super.getResourceKey();
         }
 
@@ -169,25 +206,13 @@ public class ContentAdapterFactory implements IAdapterFactory {
             MessageDigest hashMessageDigest = null;
 
             if (Constants.ETAG_SUPPORT) {
-                try {
-                    etagMessageDigest = MessageDigest
-                            .getInstance(Constants.ETAG_DIGEST_ALGORITHM);
-
-                } catch (NoSuchAlgorithmException ex) {
-                    LOG.error("Can not find algorithm '"
-                            + Constants.HASH_DIGEST_ALGORITHM + "'.", ex);
-                }
+                etagMessageDigest = MessageDigestSelector
+                        .getInstance(Constants.ETAG_DIGEST_ALGORITHMS);
             }
 
             if (Constants.HASH_SUPPORT) {
-                try {
-                    hashMessageDigest = MessageDigest
-                            .getInstance(Constants.HASH_DIGEST_ALGORITHM);
-
-                } catch (NoSuchAlgorithmException ex) {
-                    LOG.error("Can not find algorithm '"
-                            + Constants.HASH_DIGEST_ALGORITHM + "'.", ex);
-                }
+                hashMessageDigest = MessageDigestSelector
+                        .getInstance(Constants.HASH_DIGEST_ALGORITHMS);
             }
 
             if (hashMessageDigest == null && etagMessageDigest == null) {
@@ -250,7 +275,8 @@ public class ContentAdapterFactory implements IAdapterFactory {
                 if (hashMessageDigest != null) {
                     byte hashDigest[] = hashMessageDigest.digest();
 
-                    hashCode = Base64.encodeBytes(hashDigest);
+                    hashCode = Base64.encodeBytes(hashDigest,
+                            Base64.DONT_BREAK_LINES);
 
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Hashcode for file '" + file + "' = "

@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.adapter.IAdapterManager;
+import org.rcfaces.core.internal.content.ContentAdapterFactory;
 import org.rcfaces.core.internal.contentAccessor.BasicContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.BasicGeneratedResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
@@ -97,6 +98,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             IGeneratedResourceInformation generatedInformation,
             IGenerationResourceInformation generationInformation) {
 
+        boolean modified = false;
         if (generatedInformation == null) {
             generatedInformation = new BasicGeneratedResourceInformation();
         }
@@ -174,11 +176,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         generatedInformation.setProcessingAtRequest(generationInformation
                 .isProcessAtRequest());
-        contentModel.setInformations(generationInformation, // On met les
-                // informations pour
-                // le
-                // checkNotModified
-                // ()
+        contentModel.setInformations(generationInformation,
                 generatedInformation);
 
         IResolvedContent resolvedContent = null;
@@ -217,7 +215,26 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
             if (generatedInformation.isProcessingAtRequest()) {
                 // On verra plus tard (dans la servlet)
-                resolvedContent = new ResolvedContentAtRequest(contentModel);
+
+                String specifiedSuffix = generationInformation
+                        .getResponseSuffix();
+                String specifiedContentType = generationInformation
+                        .getResponseMimeType();
+
+                String specifiedResourceKey = null;
+                if (generationInformation
+                        .getComputeResourceKeyFromGenerationInformation()) {
+                    specifiedResourceKey = BasicGenerationResourceInformation
+                            .generateResourceKeyFromGenerationInformation(generationInformation);
+                }
+
+                long specifiedLastModificationDate = generationInformation
+                        .getResponseLastModified();
+
+                resolvedContent = new ResolvedContentAtRequest(contentModel,
+                        specifiedContentType, specifiedSuffix,
+                        specifiedLastModificationDate, specifiedResourceKey,
+                        generationInformation);
 
             } else {
                 Object wrappedData = contentModel.getWrappedData();
@@ -355,17 +372,58 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         private transient boolean errorState;
 
-        public ResolvedContentAtRequest(IContentModel contentModel) {
+        private final String specifiedContentType;
+
+        private final String specifiedURLSuffix;
+
+        private final long specifiedLastModificationDate;
+
+        private final String specifiedResourceKey;
+
+        private final IGenerationResourceInformation generationInformation;
+
+        public ResolvedContentAtRequest(IContentModel contentModel,
+                String specifiedContentType, String specifiedURLSuffix,
+                long specifiedLastModificationDate,
+                String specifiedResourceKey,
+                IGenerationResourceInformation generationInformation) {
             this.contentModel = contentModel;
+
+            if (specifiedURLSuffix == null && specifiedContentType != null) {
+                specifiedURLSuffix = ContentAdapterFactory
+                        .getSuffixByMimeType(specifiedContentType);
+            }
+
+            this.specifiedURLSuffix = specifiedURLSuffix;
+            this.specifiedContentType = specifiedContentType;
+            this.specifiedLastModificationDate = specifiedLastModificationDate;
+            this.specifiedResourceKey = specifiedResourceKey;
+            this.generationInformation = generationInformation;
         }
 
         public String getContentType() {
             // Le contentType peut changer ...
-            return getResolvedContent().getContentType();
+            if (isContentResolved()) {
+                return getResolvedContent().getContentType();
+            }
+
+            return specifiedContentType;
+        }
+
+        protected boolean isContentResolved() {
+            if (errorState) {
+                return false;
+            }
+
+            return resolvedContent != null;
         }
 
         public String getURLSuffix() {
-            return getResolvedContent().getURLSuffix();
+            if (isContentResolved()) {
+                return getResolvedContent().getURLSuffix();
+            }
+
+            return specifiedURLSuffix;
         }
 
         public InputStream getInputStream() throws IOException {
@@ -373,7 +431,11 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         public long getModificationDate() {
-            return getResolvedContent().getModificationDate();
+            if (isContentResolved()) {
+                return getResolvedContent().getModificationDate();
+            }
+
+            return specifiedLastModificationDate;
         }
 
         public int getLength() {
@@ -382,6 +444,11 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
         public void appendHashInformations(StringAppender sa) {
             // Il faut les infos du content model ???
+
+            if (specifiedResourceKey != null) {
+                // Pas besoin d'informations complementaires
+                return;
+            }
 
             getResolvedContent().appendHashInformations(sa);
         }
@@ -398,9 +465,13 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
             try {
                 Object wrappedData = contentModel.getWrappedData();
 
+                AdaptationParameters parametrizedAdaptation = new AdaptationParameters(
+                        contentModel, generationInformation, null);
+
                 if (wrappedData instanceof IAdaptable) {
                     resolvedContent = (IResolvedContent) ((IAdaptable) wrappedData)
-                            .getAdapter(IResolvedContent.class, contentModel);
+                            .getAdapter(IResolvedContent.class,
+                                    parametrizedAdaptation);
 
                     if (resolvedContent != null) {
                         return resolvedContent;
@@ -412,7 +483,7 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
 
                 resolvedContent = (IResolvedContent) rcfacesContext
                         .getAdapterManager().getAdapter(wrappedData,
-                                IResolvedContent.class, contentModel);
+                                IResolvedContent.class, parametrizedAdaptation);
 
                 if (resolvedContent != null) {
                     return resolvedContent;
@@ -449,8 +520,12 @@ public class ContentStorageEngineImpl extends AbstractProvider implements
         }
 
         public String getResourceKey() {
-            if (isProcessAtRequest()) {
+            if (isContentResolved() == false && isProcessAtRequest()) {
                 // C'est traité sur la requete !
+
+                if (specifiedResourceKey != null) {
+                    return specifiedResourceKey;
+                }
 
                 if (contentModel instanceof IResourceKey) {
                     // L'objet peut tout de même savoir sa clef ???

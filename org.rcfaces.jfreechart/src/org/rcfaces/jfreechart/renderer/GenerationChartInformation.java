@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 import javax.faces.FacesException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jfree.ui.Drawable;
 import org.rcfaces.core.image.GenerationImageInformation;
 import org.rcfaces.core.internal.lang.StringAppender;
@@ -17,6 +19,9 @@ import org.rcfaces.core.internal.lang.StringAppender;
  * @version $Revision$ $Date$
  */
 public class GenerationChartInformation extends GenerationImageInformation {
+
+    private static final Log LOG = LogFactory
+            .getLog(GenerationChartInformation.class);
 
     private static final String CHART_DRAWABLE_ATTRIBUTE = "org.rcfaces.jfreechart.DRAWABLE";
 
@@ -42,5 +47,4 @@ public class GenerationChartInformation extends GenerationImageInformation {
 
         super.appendToKey(sa, propertyName, value);
     }
-
 }

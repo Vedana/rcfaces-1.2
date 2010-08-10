@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,15 +16,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.faces.FacesException;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.util.Base64;
+import org.rcfaces.core.internal.util.MessageDigestSelector;
 import org.rcfaces.core.internal.util.StateHolderTools;
 
 /**
@@ -179,27 +179,13 @@ public class AbstractInformation implements StateHolder,
 
             byte result[] = byos.toByteArray();
 
-            MessageDigest messageDigest;
-            try {
-                messageDigest = MessageDigest.getInstance("SHA-256");
-
-            } catch (NoSuchAlgorithmException e) {
-                LOG.debug("SHA-256 not supported, try SHA-1.", e);
-
-                try {
-                    messageDigest = MessageDigest.getInstance("SHA-1");
-
-                } catch (NoSuchAlgorithmException e2) {
-                    LOG.error(e2);
-
-                    throw new FacesException(
-                            "Can not find messageDigest to participe to key", e);
-                }
-            }
+            MessageDigest messageDigest = MessageDigestSelector
+                    .getInstance(Constants.SERIALISATION_HASH_ALGORITHMS);
 
             byte digested[] = messageDigest.digest(result);
 
-            String hashCode = Base64.encodeBytes(digested);
+            String hashCode = Base64.encodeBytes(digested,
+                    Base64.DONT_BREAK_LINES);
 
             StringAppender hc = new StringAppender(hashCode, 16);
             hc.append(':').append(result.length);

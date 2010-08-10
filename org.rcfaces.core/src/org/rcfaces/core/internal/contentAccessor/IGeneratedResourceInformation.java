@@ -13,6 +13,13 @@ import org.rcfaces.core.lang.IContentFamily;
  * @version $Revision$ $Date$
  */
 public interface IGeneratedResourceInformation extends StateHolder {
+
+    String RESPONSE_MIME_TYPE_PROPERTY = "org.rcfaces.response.MIME_TYPE";
+
+    String RESPONSE_URL_SUFFIX_PROPERTY = "org.rcfaces.response.SUFFIX";
+
+    String SOURCE_MIME_TYPE_PROPERTY = "org.rcfaces.source.MIME_TYPE";
+
     Object setAttribute(String attributeName, Object attributeValue);
 
     Object getAttribute(String attributeName);

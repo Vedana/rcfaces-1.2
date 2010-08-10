@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.image.IGeneratedImageInformation;
+import org.rcfaces.core.image.IGenerationImageInformation;
 import org.rcfaces.core.image.IImageContentModel;
 import org.rcfaces.core.image.IImageIOOperation;
 import org.rcfaces.core.image.IImageOperation;
@@ -61,9 +62,9 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
 
     public ImageOperationContentModel(String resourceURL, String versionId,
             String operationId, String filterParametersToParse,
-            IBufferOperation bufferOperation) {
+            IBufferOperation bufferOperation, String specifiedResourceKey) {
         super(resourceURL, versionId, operationId, filterParametersToParse,
-                bufferOperation);
+                bufferOperation, specifiedResourceKey);
     }
 
     public void setInformations(
@@ -169,14 +170,6 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
             generatedImageInformation.setResponseMimeType(responseMimeType);
         }
 
-        if (generatedImageInformation.getResponseSuffix() == null) {
-            String suffix = ContentAdapterFactory
-                    .getSuffixByMimeType(responseMimeType);
-            if (suffix != null) {
-                generatedImageInformation.setResponseSuffix(suffix);
-            }
-        }
-
         Iterator it = ImageIO.getImageWritersByMIMEType(encoderMimeType);
         if (it.hasNext() == false) {
             LOG.error("Can not write image for mime type '" + encoderMimeType
@@ -247,27 +240,27 @@ public class ImageOperationContentModel extends AbstractOperationContentModel
             ImageWriteParam imageWriteParam) {
 
         Integer compressionMode = (Integer) generationInformation
-                .getAttribute(IImageContentModel.COMPRESSION_MODE);
+                .getAttribute(IGenerationImageInformation.COMPRESSION_MODE);
         if (compressionMode != null) {
             imageWriteParam.setCompressionMode(compressionMode.intValue());
         }
 
         Float quality = (Float) generationInformation
-                .getAttribute(IImageContentModel.COMPRESSION_QUALITY);
+                .getAttribute(IGenerationImageInformation.COMPRESSION_QUALITY);
         if (quality != null) {
             imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
             imageWriteParam.setCompressionQuality(quality.floatValue());
         }
 
         String compressionType = (String) generationInformation
-                .getAttribute(IImageContentModel.COMPRESSION_TYPE);
+                .getAttribute(IGenerationImageInformation.COMPRESSION_TYPE);
         if (compressionType != null) {
             imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
             imageWriteParam.setCompressionType(compressionType);
         }
 
         Boolean progressiveMode = (Boolean) generationInformation
-                .getAttribute(IImageContentModel.COMPRESSION_PROGRESSIVE_MODE);
+                .getAttribute(IGenerationImageInformation.COMPRESSION_PROGRESSIVE_MODE);
         if (progressiveMode != null) {
             imageWriteParam
                     .setProgressiveMode((progressiveMode.booleanValue()) ? ImageWriteParam.MODE_COPY_FROM_METADATA

@@ -27,6 +27,7 @@ import org.rcfaces.core.image.IGeneratedImageInformation;
 import org.rcfaces.core.image.IImageOperation;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.RcfacesContext;
+import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IContentPath;
 import org.rcfaces.core.internal.contentAccessor.IFiltredContentAccessor;
@@ -492,8 +493,16 @@ public class ImageContentAccessorHandlerImpl extends
             }
         }
 
+        String specifiedResourceKey = null;
+        if (generationInformation
+                .getComputeResourceKeyFromGenerationInformation()) {
+            specifiedResourceKey = BasicGenerationResourceInformation
+                    .generateResourceKeyFromGenerationInformation(generationInformation);
+        }
+
         ImageOperationContentModel imageOperationContentModel = new ImageOperationContentModel(
-                resourceURL, versionId, operationId, parameters, imageOperation);
+                resourceURL, versionId, operationId, parameters,
+                imageOperation, specifiedResourceKey);
 
         if (imageOperation != null) {
             imageOperation.prepare(imageOperationContentModel,

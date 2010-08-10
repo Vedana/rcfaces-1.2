@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 
 import javax.faces.FacesException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jfree.ui.Drawable;
 import org.rcfaces.core.image.ImageContentModel;
 
@@ -19,10 +21,12 @@ import org.rcfaces.core.image.ImageContentModel;
  */
 public class ChartContentModel extends ImageContentModel {
 
+    private static final Log LOG = LogFactory.getLog(ChartContentModel.class);
+
     @Override
     protected BufferedImage getBufferedImage() {
 
-        GenerationChartInformation chartInformation = (GenerationChartInformation) generatedInformation;
+        GenerationChartInformation chartInformation = (GenerationChartInformation) generationInformation;
 
         BufferedImage bufferedImage = new BufferedImage(chartInformation
                 .getImageWidth(), chartInformation.getImageHeight(),
@@ -33,6 +37,12 @@ public class ChartContentModel extends ImageContentModel {
             throw new FacesException("Drawable is NULL !");
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Start generating jfreechart '" + drawable + "'");
+        }
+
+        long t = System.currentTimeMillis();
+
         Graphics2D g = bufferedImage.createGraphics();
 
         try {
@@ -41,6 +51,11 @@ public class ChartContentModel extends ImageContentModel {
 
         } finally {
             g.dispose();
+        }
+
+        t = System.currentTimeMillis() - t;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Jfreechart generated '" + drawable + "' (" + t + " ms)");
         }
 
         return bufferedImage;

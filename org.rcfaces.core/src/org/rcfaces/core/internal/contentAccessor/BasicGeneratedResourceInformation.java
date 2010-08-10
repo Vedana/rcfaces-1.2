@@ -8,8 +8,9 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.lang.IContentFamily;
-import org.rcfaces.core.model.IContentModel;
 
 /**
  * 
@@ -20,11 +21,12 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
         implements IGeneratedResourceInformation {
     private static final String REVISION = "$Revision$";
 
+    private static final Log LOG = LogFactory
+            .getLog(BasicGeneratedResourceInformation.class);
+
     private static final String FILTRED_MODEL_PROPERTY = "org.rcfaces.response.FILTRED_MODEL";
 
     private static final String PROCESSED_AT_REQUEST_PROPERTY = "org.rcfaces.response.PROCESSED_AT_REQUEST";
-
-    private static final String RESOURCE_SUFFIX_PROPERTY = "org.rcfaces.response.RESOURCE_SUFFIX";
 
     private IContentFamily contentFamily;
 
@@ -32,19 +34,19 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
     }
 
     public final String getResponseMimeType() {
-        return (String) getAttribute(IContentModel.RESPONSE_MIME_TYPE_PROPERTY);
+        return (String) getAttribute(RESPONSE_MIME_TYPE_PROPERTY);
     }
 
     public final void setResponseMimeType(String contentType) {
-        setAttribute(IContentModel.RESPONSE_MIME_TYPE_PROPERTY, contentType);
+        setAttribute(RESPONSE_MIME_TYPE_PROPERTY, contentType);
     }
 
     public final String getSourceMimeType() {
-        return (String) getAttribute(IContentModel.SOURCE_MIME_TYPE_PROPERTY);
+        return (String) getAttribute(SOURCE_MIME_TYPE_PROPERTY);
     }
 
     public final void setSourceMimeType(String contentType) {
-        setAttribute(IContentModel.SOURCE_MIME_TYPE_PROPERTY, contentType);
+        setAttribute(SOURCE_MIME_TYPE_PROPERTY, contentType);
     }
 
     public boolean isFiltredModel() {
@@ -87,11 +89,11 @@ public class BasicGeneratedResourceInformation extends AbstractInformation
     }
 
     public String getResponseSuffix() {
-        return (String) getAttribute(RESOURCE_SUFFIX_PROPERTY);
+        return (String) getAttribute(RESPONSE_URL_SUFFIX_PROPERTY);
     }
 
     public void setResponseSuffix(String suffix) {
-        setAttribute(RESOURCE_SUFFIX_PROPERTY, suffix);
+        setAttribute(RESPONSE_URL_SUFFIX_PROPERTY, suffix);
     }
 
     public void restoreState(FacesContext context, Object state) {

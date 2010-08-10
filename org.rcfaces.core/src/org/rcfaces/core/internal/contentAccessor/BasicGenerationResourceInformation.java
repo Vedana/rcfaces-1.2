@@ -3,11 +3,17 @@
  */
 package org.rcfaces.core.internal.contentAccessor;
 
+import java.util.Date;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
+import org.rcfaces.core.internal.version.HashCodeTools;
 import org.rcfaces.core.model.IFilterProperties;
 
 /**
@@ -17,6 +23,9 @@ import org.rcfaces.core.model.IFilterProperties;
  */
 public class BasicGenerationResourceInformation extends AbstractInformation
         implements IGenerationResourceInformation {
+
+    private static final Log LOG = LogFactory
+            .getLog(BasicGenerationResourceInformation.class);
 
     private static final String COMPONENT_CLIENT_ID_PROPERTY = "org.rcfaces.org.COMPONENT_CLIENT_ID_PROPERTY";
 
@@ -117,6 +126,63 @@ public class BasicGenerationResourceInformation extends AbstractInformation
 
     public final void setProcessAtRequest(boolean processAtRequest) {
         this.processAtRequest = processAtRequest;
+    }
+
+    public String getResponseSuffix() {
+        return (String) getAttribute(RESPONSE_URL_SUFFIX_PROPERTY);
+    }
+
+    public void setResponseSuffix(String suffix) {
+        setAttribute(RESPONSE_URL_SUFFIX_PROPERTY, suffix);
+    }
+
+    public final String getResponseMimeType() {
+        return (String) getAttribute(RESPONSE_MIME_TYPE_PROPERTY);
+    }
+
+    public final void setResponseMimeType(String contentType) {
+        setAttribute(RESPONSE_MIME_TYPE_PROPERTY, contentType);
+    }
+
+    public void setResponseLastModified(long l) {
+        setAttribute(RESPONSE_LAST_MODIFIED_PROPERTY, new Long(l));
+    }
+
+    public void setResponseLastModified(Date d) {
+        setAttribute(RESPONSE_LAST_MODIFIED_PROPERTY, d);
+    }
+
+    public long getResponseLastModified() {
+        Object l = getAttribute(RESPONSE_LAST_MODIFIED_PROPERTY);
+
+        if (l instanceof Long) {
+            return ((Long) l).longValue();
+        }
+
+        if (l instanceof Date) {
+            return ((Date) l).getTime();
+        }
+
+        return -1;
+    }
+
+    public void setComputeResourceKeyFromGenerationInformation(boolean b) {
+        setAttribute(COMPUTE_RESOURCE_KEY_FROM_GENERATION_INFORMATION, Boolean
+                .valueOf(b));
+    }
+
+    public boolean getComputeResourceKeyFromGenerationInformation() {
+        return Boolean.TRUE
+                .equals(getAttribute(COMPUTE_RESOURCE_KEY_FROM_GENERATION_INFORMATION));
+    }
+
+    public static String generateResourceKeyFromGenerationInformation(
+            IGenerationResourceInformation generationInformation) {
+
+        StringAppender sa = new StringAppender(16000);
+        ((IResourceKeyParticipant) generationInformation).participeKey(sa);
+
+        return HashCodeTools.compute(null, "#resourceKey", sa, 0);
     }
 
 }

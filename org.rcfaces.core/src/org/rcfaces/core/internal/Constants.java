@@ -6,6 +6,7 @@ package org.rcfaces.core.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Locale;
@@ -84,7 +85,7 @@ public class Constants {
 
     public static final long DEFAULT_VERSIONED_EXPIRATION_DELAY = Delay.YEAR;
 
-    public static final int VERSIONED_URI_HASHCODE_MAX_SIZE = 16;
+    public static final int VERSIONED_URI_HASHCODE_MAX_SIZE = 64;
 
     private static final String RCFACES_VERSION_SYSTEM_PARAMETER = "rcfaces.core.version";
 
@@ -95,11 +96,16 @@ public class Constants {
 
     public static final boolean CLIENT_LOCALE_SUPPORT_DEFAULT_VALUE = true;
 
-    public static final String RESOURCE_VERSION_DIGEST_ALGORITHM = "SHA-1";
+    public static final String[] RESOURCE_VERSION_DIGEST_ALGORITHMS = {
+            "SHA-512", "SHA-256", "SHA-1" };
 
-    public static final String ETAG_DIGEST_ALGORITHM = "SHA-1";
+    public static final String[] ETAG_DIGEST_ALGORITHMS = { "SHA-512",
+            "SHA-256", "SHA-1" };
 
-    public static final String HASH_DIGEST_ALGORITHM = "MD5";
+    public static final String[] SERIALISATION_HASH_ALGORITHMS = { "SHA-512",
+            "SHA-256", "SHA-1" };
+
+    public static final String[] HASH_DIGEST_ALGORITHMS = { "MD5" };
 
     public static final boolean BASIC_CONTENT_WEAK_CACHE_ENABLED = true;
 
@@ -172,11 +178,14 @@ public class Constants {
 
         LOG.info("COMPACTED_PROPERTY_NAME=" + COMPACTED_PROPERTY_NAME);
 
-        LOG.info("ETAG_SUPPORT=" + ETAG_SUPPORT + " (algorithm: "
-                + ETAG_DIGEST_ALGORITHM + ")");
+        LOG.info("ETAG_SUPPORT=" + ETAG_SUPPORT + " (algorithms: "
+                + Arrays.asList(ETAG_DIGEST_ALGORITHMS) + ")");
 
-        LOG.info("HASH_SUPPORT=" + HASH_SUPPORT + " (algorithm: "
-                + HASH_DIGEST_ALGORITHM + ")");
+        LOG.info("HASH_SUPPORT=" + HASH_SUPPORT + " (algorithms: "
+                + Arrays.asList(HASH_DIGEST_ALGORITHMS) + ")");
+
+        LOG.info("SERIALISATION_HASH_ALGORITHMS="
+                + Arrays.asList(SERIALISATION_HASH_ALGORITHMS));
 
         LOG.info("GZIP_SUPPORT_DEFAULT_VALUE=" + GZIP_SUPPORT_DEFAULT_VALUE);
 
