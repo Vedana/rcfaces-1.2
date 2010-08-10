@@ -37,12 +37,17 @@ public class TextRenderer extends AbstractCssRenderer {
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        // En dernier car les clientDatas / converter ne sont peut �tre pas
-        // encore positionn�s !
-        TextComponent textComponent = (TextComponent) writer
-                .getComponentRenderContext().getComponent();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        // En dernier (encodeEnd) car les clientDatas / converter ne sont peut
+        // être pas
+        // encore positionnés !
+        TextComponent textComponent = (TextComponent) componentRenderContext
+                .getComponent();
 
         String element = null;
         String ac = textComponent.getFor();
@@ -59,9 +64,6 @@ public class TextRenderer extends AbstractCssRenderer {
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
         writeTextDirection(htmlWriter, textComponent);
-
-        IComponentRenderContext componentRenderContext = htmlWriter
-                .getComponentRenderContext();
 
         int ariaLevel = textComponent.getAriaLevel(componentRenderContext
                 .getFacesContext());
