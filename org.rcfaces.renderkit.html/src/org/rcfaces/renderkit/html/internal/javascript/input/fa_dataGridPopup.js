@@ -11,10 +11,6 @@
 
 var __statics = {
 	/** 
-	 * @field public static Number 
-	 */
-	LAST_OUTSIDE: 0,
-	/** 
 	 * @field private static final boolean 
 	 */
 	_DONT_RELEASE_POPUP: false,
@@ -28,6 +24,11 @@ var __statics = {
 	 * @field private static final String 
 	 */
 	_DEFAULT_VALUE_FORMAT: "{0}",
+
+	/** 
+	 * @field protected static Number 
+	 */
+	LAST_OUTSIDE: 0,
 	
 	/**
 	 * @method private static
