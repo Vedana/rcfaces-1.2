@@ -3,7 +3,13 @@
  */
 package org.rcfaces.core.internal.contentAccessor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.faces.FacesException;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
@@ -18,6 +25,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.lang.StringAppender;
+import org.rcfaces.core.internal.util.Base64;
 import org.rcfaces.core.internal.util.StateHolderTools;
 
 /**
@@ -32,6 +40,8 @@ public class AbstractInformation implements StateHolder,
     private static final Log LOG = LogFactory.getLog(AbstractInformation.class);
 
     private static final int INITIAL_KEY_SIZE = 4096;
+
+    private static final int INITIAL_SERIALIZATION_SIZE = 16000;
 
     private Map attributes;
 
@@ -147,6 +157,63 @@ public class AbstractInformation implements StateHolder,
 
     protected void appendToKey(StringAppender sa, String propertyName,
             Object value) {
+        LOG.debug("Ignore key '" + propertyName + "'.");
+    }
+
+    protected boolean participeSerializableHashCode(StringAppender sa,
+            String propertyName, Serializable serializable) {
+
+        if (serializable == null) {
+            participeValue(sa, propertyName, null);
+            return true;
+        }
+
+        try {
+            ByteArrayOutputStream byos = new ByteArrayOutputStream(
+                    INITIAL_SERIALIZATION_SIZE);
+            ObjectOutputStream oos = new ObjectOutputStream(byos);
+
+            oos.writeObject(serializable);
+
+            oos.close();
+
+            byte result[] = byos.toByteArray();
+
+            MessageDigest messageDigest;
+            try {
+                messageDigest = MessageDigest.getInstance("SHA-256");
+
+            } catch (NoSuchAlgorithmException e) {
+                LOG.debug("SHA-256 not supported, try SHA-1.", e);
+
+                try {
+                    messageDigest = MessageDigest.getInstance("SHA-1");
+
+                } catch (NoSuchAlgorithmException e2) {
+                    LOG.error(e2);
+
+                    throw new FacesException(
+                            "Can not find messageDigest to participe to key", e);
+                }
+            }
+
+            byte digested[] = messageDigest.digest(result);
+
+            String hashCode = Base64.encodeBytes(digested);
+
+            StringAppender hc = new StringAppender(hashCode, 16);
+            hc.append(':').append(result.length);
+
+            participeValue(sa, propertyName, hc);
+
+            return true;
+
+        } catch (IOException ex) {
+            LOG.error("Can not compute hashcode of serializable "
+                    + serializable, ex);
+        }
+
+        return false;
     }
 
     public void participeKey(StringAppender sa) {
@@ -173,6 +240,12 @@ public class AbstractInformation implements StateHolder,
                 || (value instanceof Boolean)) {
             sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR).append(
                     String.valueOf(value));
+            return;
+        }
+
+        if (value instanceof StringAppender) {
+            sa.append(IResourceKeyParticipant.RESOURCE_KEY_SEPARATOR).append(
+                    (StringAppender) value);
             return;
         }
 
