@@ -2861,7 +2861,9 @@ var __members = {
 	 */
 	f_isOpened: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
-
+		if (!li) {
+			return false;
+		}
 		return !!li._node._opened;
 	},
 	/**
