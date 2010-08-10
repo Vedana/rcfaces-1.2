@@ -267,6 +267,11 @@ A string value sprecifying the charset associated to the "src" files.
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.keyLabel</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.KeyLabelRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.keyEntry</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.KeyEntryRenderer</renderer-class>
 		</renderer>
