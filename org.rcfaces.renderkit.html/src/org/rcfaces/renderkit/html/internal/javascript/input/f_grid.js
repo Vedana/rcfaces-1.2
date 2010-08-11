@@ -4688,21 +4688,23 @@ var __members = {
 	
 	
 	/**
-	 * Return the current row value
+	 * Return the value of the row which contains the specified component.
 	 * 
 	 * @method public
-	 * @param f_component
+	 * @param f_component Component or HTMLElement 
 	 * 
-	 * return Number
+	 * @return Object Value of the row
 	 */
-	f_getRowValueFromCommponent: function(component){while ((!component._rowIndex && component)){
-			if(component._rowIndex == 0) {
-				break;
-			}
+	f_getRowValueFromCommponent: function(component){
+		while (component && typeof(component._rowIndex)!="number") {
 			component = component.parentNode;
 		}
-		return component._index;
 		
+		if (!component) {
+			return null;
+		}
+		
+		return component._index;
 	},
 	
 	/**
