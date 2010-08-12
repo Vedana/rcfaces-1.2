@@ -49,6 +49,8 @@ public final class JavaScriptClasses {
     public static final String DATE_ENTRY = "f_dateEntry";
 
     public static final String EXPAND_BAR = "f_expandBar";
+    
+    public static final String EXTERNAL_BOX = "f_externalBox";
 
     public static final String FIELD_SET = "f_fieldSet";
 

@@ -56,6 +56,10 @@ var __statics = {
 	 * @field hidden static final
 	 */
 	COLUMN_WIDTHS:			"columnWidths",
+	/**
+	 * @field hidden static final
+	 */
+	CONTENT_URL:			"contentURL",
 	
 	/**
 	 * @field hidden static final

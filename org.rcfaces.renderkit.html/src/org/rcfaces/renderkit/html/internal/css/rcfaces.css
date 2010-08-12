@@ -70,6 +70,7 @@
 @import url(f_shellManager.css);					//module:dialog
 @import url(f_shellDecorator.css);					//module:dialog
 @import url(f_dialog.css);					//module:dialog
+@import url(f_externalBox.css);					//module:externalBox
 @import url(fa_dataGridPopup.css);					//module:dialog
 @import url(f_popup.css);					//module:popup
 @import url(f_progressMonitorDialog.css);			//module:progressBar

@@ -699,6 +699,18 @@
 		<attribute id="verticalScroll" type="boolean" />
 		
 	</component>
+	
+	
+	<component id="externalBox" extends="abstractOutput">
+		<capability id="ILoadEventCapability" />
+		<capability id="IOverStyleClassCapability" />
+		
+		<attribute id="scrolling" type="java.lang.String" />
+		<attribute id="contentURL" type="java.lang.String" />
+		
+		<propertyValue>contentURL</propertyValue>
+		
+	</component>
 
 	<component id="button" extends="abstractCommand">
 		<capability id="ITextCapability" />

@@ -444,6 +444,11 @@
 				<required-class name="f_component" />
 			</class>
 		</file>
+		<file name="ui/f_externalBox.js">
+			<class name="f_externalBox">
+				<required-class name="f_component" />
+			</class>
+		</file>
 	</module>
 	<module id="extraButton">
 		<file name="input/f_imageButton.js">
