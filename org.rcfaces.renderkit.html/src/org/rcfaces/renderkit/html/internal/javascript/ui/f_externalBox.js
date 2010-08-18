@@ -9,14 +9,14 @@
 var __statics = {
 		
 	/**
-	 * @field private static final String
+	 * @field public static final Number
 	 */
-	_FIRST_LOAD: "1",
+	FIRST_LOAD: 1,
 	
 	/**
-	 * @field private static final String
+	 * @field public static final Number
 	 */
-	_INTERNAL_LOAD: "0",	
+	NEXT_LOAD: 0,	
 		
 	/**
 	 * @method private static
@@ -32,10 +32,10 @@ var __statics = {
 		if (externalBox._firstLoad) {
 			externalBox._firstLoad = false;
 			event = new f_event(externalBox, f_event.LOAD, evt, null, null,
-					null, f_externalBox._FIRST_LOAD);
+					null, f_externalBox.FIRST_LOAD);
 		} else {
 			event = new f_event(externalBox, f_event.LOAD, evt, null, null,
-					null, f_externalBox._INTERNAL_LOAD);
+					null, f_externalBox.NEXT_LOAD);
 		}
 		externalBox.f_fireEvent(event);
 	}

@@ -7,7 +7,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.ExternalBoxComponent;
-import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
@@ -18,7 +17,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
-import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
