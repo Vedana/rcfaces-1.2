@@ -761,7 +761,7 @@ var __members = {
 	 * @return Object 
 	 */
 	fa_getElementValue: f_class.ABSTRACT
-}
+};
 
 new f_aspect("fa_selectionManager", {
 	extend: [ fa_itemsManager, fa_selectionProvider, fa_clientFullState],
