@@ -543,9 +543,10 @@ var __members = {
 			detail|=1;
 		}
 		
-		if (!this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)) {
+		if (this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
 			return false;
 		}
+		
 		switch(cardinality) {
 		case fa_cardinality.OPTIONAL_CARDINALITY:
 			if (elementSelected) {
@@ -723,6 +724,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @return Boolean
 	 */
 	fa_firePreSelectionChangedEvent: function(evt, detail, item, elementValue) {
 		
@@ -730,16 +732,17 @@ var __members = {
 	},
 	/**
 	 * @method protected
+	 * @return Boolean
 	 */
 	fa_fireSelectionChangedEvent: function(evt, detail, item, elementValue) {
 		
-		this.f_fireEvent(f_event.SELECTION, evt, item, elementValue, this, detail);
+		return this.f_fireEvent(f_event.SELECTION, evt, item, elementValue, this, detail);
 	},
 
 	/**
 	 * @method protected abstract
 	 * @param any element
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isElementSelected: f_class.ABSTRACT,
 	
