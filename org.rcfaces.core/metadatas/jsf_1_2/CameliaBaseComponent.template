@@ -311,7 +311,6 @@ ${FIELDS}
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
-				this.getParent().getChildren().clear();
 				processEngineValidators(context);
 			}
 	       
