@@ -9,14 +9,14 @@
 
 	<path id="commons.classpath">
 		<fileset dir="lib">
-			<argument value="*.jar" />
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
 	<path id="generator.classpath">
 		<pathelement location="${generator.classpath.dir}" />
 		<fileset dir="lib-generator">
-			<argument value="*.jar" />
+			<include name="*.jar" />
 			<exclude name="generator.jar" />
 		</fileset>
 		<path refid="commons.classpath"/>
@@ -194,13 +194,13 @@
 		<mkdir dir="${buildNumber.path}" />
 		<copy todir="${buildNumber.path}">
 			<fileset dir="${dist}/last">
-				<argument value="*.jar" />
+				<include name="*.jar" />
 			</fileset>
 			<mapper type="glob" from="*.jar" to="*${integration.suffix}.jar" />
 		</copy>
 		<copy todir="${buildNumber.path}">
 			<fileset dir="${dist}/last">
-				<argument value="*.zip" />
+				<include name="*.zip" />
 			</fileset>
 			<mapper type="glob" from="*.zip" to="*${integration.suffix}.zip" />
 		</copy>
@@ -248,7 +248,7 @@
 		
 		<unzip dest="${build}/jsdoc-bootstap" src="lib-doc/jsdoc.jar">
 			<patternset>
-				<argument value="com/vedana/js/doc/camelia/*.js"/>
+				<include name="com/vedana/js/doc/camelia/*.js"/>
 			</patternset>
 		</unzip>
 		
@@ -329,12 +329,12 @@
 
 		<copy todir="${build.version.path}/src-core">
 			<fileset dir="${build-core}/src">
-				<argument value="**/*.java" />
-				<argument value="**/*.properties" />
-				<argument value="**/*.xml" />
+				<include name="**/*.java" />
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
 			</fileset>
 			<fileset dir="${build-core}/src-jsf${jsf.version}">
-				<argument value="**/*.java" />
+				<include name="**/*.java" />
 			</fileset>
 		</copy>
 
@@ -372,10 +372,10 @@
 		<path id="generated.classpath">
 			<path location="${build.version.path}/bin-bootstrap" />
 			<fileset dir="${build-core}/lib">
-				<argument value="*.jar" />
+				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${build-core}/lib/jsf${jsf.version}">
-				<argument value="*.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</path>
 
@@ -420,10 +420,10 @@
 
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 			</classpath>
 			<src path="${build.version.path}/src-core" />
@@ -433,11 +433,11 @@
 			<src path="${build.version.path}/src-svg" />
 			<src path="${build.version.path}/src-svg-bootstrap" />
 
-			<argument value="org/rcfaces/**/component/**" />
-			<argument value="org/rcfaces/**/capability/**" />
-			<argument value="org/rcfaces/**/manager/**" />
-			<argument value="org/rcfaces/**/event/**" />
-			<argument value="org/rcfaces/**/model/**" />
+			<include name="org/rcfaces/**/component/**" />
+			<include name="org/rcfaces/**/capability/**" />
+			<include name="org/rcfaces/**/manager/**" />
+			<include name="org/rcfaces/**/event/**" />
+			<include name="org/rcfaces/**/model/**" />
 		</javac>
 
 		<echo message="Call generator ${generator.classname}" />
@@ -539,10 +539,10 @@
 		<javac taskname="Build core" srcdir="${build.version.path}/src-core" debug="true" destdir="${build.version.path}/bin-core" optimize="no" target="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</javac>
@@ -594,13 +594,13 @@
 		<javac taskname="Build imageIO" srcdir="${build.version.path}/src-imageIO" debug="true" destdir="${build.version.path}/bin-imageIO" optimize="no" target="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${pass.build}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<path refid="${pass.classpathId}"/>
 			</classpath>
@@ -657,13 +657,13 @@
 		<javac taskname="Build jfreechart" srcdir="${build.version.path}/src-jfreechart" debug="true" destdir="${build.version.path}/bin-jfreechart" optimize="no" target="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${pass.build}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<path refid="${pass.classpathId}"/>
 			</classpath>
@@ -737,13 +737,13 @@
 		<javac srcdir="${build.version.path}/src-${pass.type}" debug="true" destdir="${build.version.path}/bin-${pass.type}" optimize="no" target="${java.target}" encoding="utf-8">
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${pass.build}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<path refid="${pass.classpathId}"/>
 			</classpath>
@@ -854,10 +854,10 @@
 		<javadoc access="public" encoding="utf-8" author="false" destdir="${build.version.path}/javadoc" doctitle="Rich Client Faces Components" nodeprecated="true" nodeprecatedlist="true" noindex="false" nonavbar="false" notree="false" packagenames="org.rcfaces.core.component.capability,org.rcfaces.core.converter,org.rcfaces.core.component.familly,org.rcfaces.core.component,org.rcfaces.core.component.iterator,org.rcfaces.core.event,org.rcfaces.core.util,org.rcfaces.core.model,org.rcfaces.core.preference,org.rcfaces.core.provider,org.rcfaces.core.progressMonitor,org.rcfaces.core.image,org.rcfaces.core.item,org.rcfaces.core.lang,org.rcfaces.core.lang.provider" source="${java.target}" sourcepath="${build.version.path}/src-core" splitindex="true" use="false" version="false">
 			<classpath>
 				<fileset dir="${build-core}/lib">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${build-core}/lib/jsf${jsf.version}">
-					<argument value="*.jar" />
+					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</javadoc>
@@ -921,37 +921,37 @@
 		<scp todir="${ssh.user}@cvs.vedana.com:/data/products/rcfaces/Builder/camelia/workspace"  verbose="true" keyfile="${ssh.keyfile}" passphrase="${ssh.passphrase}" knownhosts="C:\Users\oeuillot\ssh\known_hosts">
 		-->  
 
-		<copy todir="k:/camelia/workspace" verbose="true" preservelastmodified="true">
+		<copy todir="k:/camelia/workspace" verbose="true">
 			<fileset dir="${build-core}/..">
-				<argument value="org.rcfaces.core/src/**" />
-				<argument value="org.rcfaces.core/src-jsf1_2/**" />
-				<argument value="org.rcfaces.core/metadatas/**" />
-				<argument value="org.rcfaces.core/META-INF/**" />
-				<argument value="org.rcfaces.core/lib/**" />
+				<include name="org.rcfaces.core/src/**" />
+				<include name="org.rcfaces.core/src-jsf1_2/**" />
+				<include name="org.rcfaces.core/metadatas/**" />
+				<include name="org.rcfaces.core/META-INF/**" />
+				<include name="org.rcfaces.core/lib/**" />
 
-				<argument value="org.rcfaces.renderkit.html/src/**" />
-				<argument value="org.rcfaces.renderkit.html/src-jsf1_2/**" />
-				<argument value="org.rcfaces.renderkit.html/META-INF/**" />
-				<argument value="org.rcfaces.renderkit.html/lib/**" />
-				<argument value="org.rcfaces.renderkit.html/metadatas/**" />
+				<include name="org.rcfaces.renderkit.html/src/**" />
+				<include name="org.rcfaces.renderkit.html/src-jsf1_2/**" />
+				<include name="org.rcfaces.renderkit.html/META-INF/**" />
+				<include name="org.rcfaces.renderkit.html/lib/**" />
+				<include name="org.rcfaces.renderkit.html/metadatas/**" />
 
-				<argument value="org.rcfaces.renderkit.svg/src/**" />
-				<argument value="org.rcfaces.renderkit.svg/META-INF/**" />
-				<argument value="org.rcfaces.renderkit.svg/lib/**" />
-				<argument value="org.rcfaces.renderkit.svg/metadatas/**" />
+				<include name="org.rcfaces.renderkit.svg/src/**" />
+				<include name="org.rcfaces.renderkit.svg/META-INF/**" />
+				<include name="org.rcfaces.renderkit.svg/lib/**" />
+				<include name="org.rcfaces.renderkit.svg/metadatas/**" />
 
-				<argument value="org.rcfaces.image.imageIO/src/**" />
-				<argument value="org.rcfaces.image.imageIO/META-INF/**" />
-				<argument value="org.rcfaces.image.imageIO/lib/**" />
-				<argument value="org.rcfaces.image.imageIO/metadatas/**" />
+				<include name="org.rcfaces.image.imageIO/src/**" />
+				<include name="org.rcfaces.image.imageIO/META-INF/**" />
+				<include name="org.rcfaces.image.imageIO/lib/**" />
+				<include name="org.rcfaces.image.imageIO/metadatas/**" />
 
-				<argument value="org.rcfaces.jfreechart/src/**" />
-				<argument value="org.rcfaces.jfreechart/META-INF/**" />
-				<argument value="org.rcfaces.jfreechart/lib/**" />
-				<argument value="org.rcfaces.jfreechart/metadatas/**" />
+				<include name="org.rcfaces.jfreechart/src/**" />
+				<include name="org.rcfaces.jfreechart/META-INF/**" />
+				<include name="org.rcfaces.jfreechart/lib/**" />
+				<include name="org.rcfaces.jfreechart/metadatas/**" />
 
-				<argument value="org.rcfaces.packager/lib*/**" />
-				<argument value="org.rcfaces.packager/*.xml" />
+				<include name="org.rcfaces.packager/lib*/**" />
+				<include name="org.rcfaces.packager/*.xml" />
 			</fileset>
 		</copy>
 
@@ -959,9 +959,10 @@
 
 	<target name="cvsco">
 
-		<cvs dest="workspace-cvs" cvsroot="/data/cvs/camelia">
+		<cvs dest=".." cvsroot="/data/cvs/camelia">
 			<commandline>
 				<argument value="co"/>
+				<argument value="-R"/>
 
 				<argument value="org.rcfaces.core/src" />
 				<argument value="org.rcfaces.core/src-jsf1_2" />
@@ -993,7 +994,6 @@
 				<argument value="org.rcfaces.packager/lib" />
 				<argument value="org.rcfaces.packager/lib-doc" />
 				<argument value="org.rcfaces.packager/lib-generator" />
-				<argument value="org.rcfaces.packager/build-package.xml" />
 			</commandline>
 		</cvs>
 
