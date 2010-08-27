@@ -1093,7 +1093,7 @@ var __members = {
 			container.appendChild(fragment);
 		}
 		if (this._cursor) {
-			this._cursor.scrollIntoView(true);
+//			this._cursor.scrollIntoView(true);
 		}
 	},
 	/**
