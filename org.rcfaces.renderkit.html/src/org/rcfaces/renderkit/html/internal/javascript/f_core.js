@@ -4267,7 +4267,7 @@ var f_core = {
 					d.push(',');
 				}
 					
-				arguments.callee(d, v[i]);
+				arguments.callee.call(this, d, v[i]);
 			}
 			
 			d.push("]");
@@ -5934,7 +5934,7 @@ var f_core = {
 			
 					var frames=win.frames;		
 					for(var i=0;i<frames.length;i++) {
-						msg+=arguments.callee(frames[i], index+(i+1));
+						msg+=arguments.callee.call(frames[i], index+(i+1));
 					}
 					
 					return msg;					
