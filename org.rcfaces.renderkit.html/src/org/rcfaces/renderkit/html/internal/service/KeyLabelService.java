@@ -267,7 +267,7 @@ public class KeyLabelService extends AbstractHtmlService {
 
         IObjectLiteralWriter ow = jsWriter.writeObjectLiteral(true);
 
-        ow.writeProperty("_label").writeString(label);
+        ow.writeSymbol("_label").writeString(label);
 
         if (label.equals(value) == false) {
 
@@ -275,12 +275,12 @@ public class KeyLabelService extends AbstractHtmlService {
                     jsWriter.getFacesContext());
 
             if (svalue != null) {
-                ow.writeProperty("_value").writeString(svalue);
+                ow.writeSymbol("_value").writeString(svalue);
             }
         }
 
         if (selectItem.isDisabled()) {
-            ow.writeProperty("_disabled").writeBoolean(true);
+            ow.writeSymbol("_disabled").writeBoolean(true);
         }
 
         if (selectItem instanceof IStyleClassItem) {
@@ -288,12 +288,12 @@ public class KeyLabelService extends AbstractHtmlService {
 
             String stc = sc.getStyleClass();
             if (stc != null) {
-                ow.writeProperty("_styleClass").writeString(stc);
+                ow.writeSymbol("_styleClass").writeString(stc);
             }
         }
 
         if (computedStyleClass != null) {
-            ow.writeProperty("_computedStyleClass").writeString(
+            ow.writeSymbol("_computedStyleClass").writeString(
                     computedStyleClass);
         }
 
