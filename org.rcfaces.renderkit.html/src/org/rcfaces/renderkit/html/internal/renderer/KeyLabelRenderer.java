@@ -106,7 +106,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
 
         SelectItem items[] = convertValue(keyLabelComponent, value, null);
 
-        if (items == null) {
+        if (items == null || items.length == 0) {
             LOG.debug("Convert value returns NULL or empty array");
 
         } else if (showParents == false) {
