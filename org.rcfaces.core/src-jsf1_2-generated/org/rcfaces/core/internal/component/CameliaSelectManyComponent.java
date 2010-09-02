@@ -315,7 +315,6 @@ public abstract class CameliaSelectManyComponent extends javax.faces.component.U
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
-				
 				processEngineValidators(context);
 			}
 	       

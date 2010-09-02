@@ -45,6 +45,7 @@ import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 
 /**
@@ -72,6 +73,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	IPartialRenderingCapability,
 	IMarginCapability,
 	ISortEventCapability,
+	IImmediateCapability,
 	IUserEventCapability,
 	IWAIRoleCapability,
 	IHiddenModeCapability,
@@ -83,7 +85,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","foregroundColor","helpMessage","styleClass","sortListener","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","ariaLevel","value","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","marginBottom","helpURL","partialRendering","visible","y","marginLeft","lookId","marginTop","backgroundColor","errorListener","tabIndex","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","keyPressListener","marginRight","hiddenMode","foregroundColor","helpMessage","styleClass","sortListener","height","margins","initListener","sortManager","propertyChangeListener","mouseOutListener","blurListener","resetListener","keyDownListener","var","ariaLevel","value","rows","focusListener","waiRole","keyUpListener","first","mouseOverListener","toolTipText","userEventListener","marginBottom","helpURL","partialRendering","immediate","visible","y","marginLeft","lookId","marginTop","backgroundColor","errorListener","tabIndex","x"}));
 	}
 
 
@@ -926,6 +928,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public final javax.faces.event.FacesListener [] listSortListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ISortListener.class);
+	}
+
+	public boolean isImmediate() {
+		return isImmediate(null);
+	}
+
+	/**
+	 * See {@link #isImmediate() isImmediate()} for more details
+	 */
+	public boolean isImmediate(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.IMMEDIATE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "immediate" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isImmediateSetted() {
+		return engine.isPropertySetted(Properties.IMMEDIATE);
+	}
+
+	public void setImmediate(boolean immediate) {
+		engine.setProperty(Properties.IMMEDIATE, immediate);
 	}
 
 	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {

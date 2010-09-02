@@ -311,7 +311,6 @@ public abstract class CameliaItemsComponent extends javax.faces.component.UISele
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
-				
 				processEngineValidators(context);
 			}
 	       

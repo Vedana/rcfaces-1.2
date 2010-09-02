@@ -322,7 +322,6 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
-				
 				processEngineValidators(context);
 			}
 	       

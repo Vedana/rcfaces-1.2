@@ -311,7 +311,6 @@ public abstract class CameliaColumnComponent extends javax.faces.component.UICol
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
-				
 				processEngineValidators(context);
 			}
 	       

@@ -311,7 +311,6 @@ public abstract class CameliaItemComponent extends javax.faces.component.UISelec
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
-				
 				processEngineValidators(context);
 			}
 	       

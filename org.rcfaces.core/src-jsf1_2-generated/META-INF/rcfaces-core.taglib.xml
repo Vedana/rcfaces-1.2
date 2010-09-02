@@ -27,6 +27,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>externalBox</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.externalBox</component-type>
+			<renderer-type>org.rcfaces.core.externalBox</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>button</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.button</component-type>

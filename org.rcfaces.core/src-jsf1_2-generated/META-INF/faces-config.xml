@@ -74,6 +74,10 @@ A boolean value indicating wether the vertical scroll is shown.
 		</attribute>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.externalBox</component-type>
+		<component-class>org.rcfaces.core.component.ExternalBoxComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
       <p>The button Component has the following capabilities :

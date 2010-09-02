@@ -222,6 +222,11 @@ A string value sprecifying the charset associated to the "src" files.
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.externalBox</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ExternalBoxRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.button</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ButtonRenderer</renderer-class>
 		</renderer>
