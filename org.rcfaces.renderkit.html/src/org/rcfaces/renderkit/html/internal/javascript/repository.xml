@@ -1168,6 +1168,7 @@
 				<required-class name="fa_scrollPositions" />
 				<required-class name="fa_autoScroll" />
 				<required-class name="fa_autoOpen" />
+				<required-class name="fa_immediate" />
 
 				<required-class id="menu" name="f_menu" />
 				
