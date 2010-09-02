@@ -54,12 +54,13 @@ var __members = {
 	 * @return void
 	 */
 	f_finalize : function() {
-		// this._type = undefined; // string
+		// this._type = undefined; // String
 		this._component = undefined; // component
-		this._jsEvent = undefined; // jsEvent
+		this._jsEvent = undefined; // JsEvent
 		this._item = undefined; // any
 		this._value = undefined; // any
 		this._detail = undefined; // any
+		// this._immediate = undefined; // Boolean
 		// this._serializedValue=undefined; // String
 		this._selectionProvider = undefined; // fa_selectionProvider
 	},
@@ -239,20 +240,24 @@ var __members = {
 
 		return false;
 	},
-
 	/**
-	 * @method hidden
+	 * @method public
+	 * @return Boolean
+	 */
+	f_isImmediate: function() {
+		return this._immediate;
+	},
+	/**
+	 * @method public
+	 * @param Boolean immediate
 	 * @return void
 	 */
-	f_finalize : function() {
-		// this._type = undefined; // string
-		this._component = undefined; // component
-		this._jsEvent = undefined; // jsEvent
-		this._item = undefined; // any
-		this._value = undefined; // any
-		this._detail = undefined; // any
-		this._selectionProvider = undefined; // fa_selectionProvider
+	f_setImmediate: function(immediate) {
+		f_core.Assert(immediate===undefined || typeof(immediate)=="Boolean", "f_event.f_setImmediate: Invalid immediate parameter ("+immediate+").");
+		
+		this._immediate=immediate;
 	},
+
 
 	/**
 	 * @method public
@@ -261,7 +266,7 @@ var __members = {
 	toString : function() {
 		return "[f_event type='" + this._type + "' component='"
 				+ this._component + "' value='" + this._value + "' item='"
-				+ this._item + "' detail='" + this._detail + "' jsEvent='"
+				+ this._item + "' detail='" + this._detail + "' immediate='"+this._immediate+"' jsEvent='"
 				+ this._jsEvent + "']";
 	}
 }
@@ -879,7 +884,8 @@ var __statics = {
 
 		return f_event._EvtLock;
 	}
-}
+};
+
 new f_class("f_event", {
 	statics : __statics,
 	members : __members,

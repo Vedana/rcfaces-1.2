@@ -1718,29 +1718,38 @@ var f_core = {
 				f_core.InitializeForm(form); 
 			}
 			
-			var component=win.f_event.GetComponent();
-			
-			var immediate;
-			if (win.f_event.GetType()==f_event.ERROR) {
-				f_core.Debug(f_core, "_OnSubmit: Event is an Error, bypass check validation !");
-
-				immediate=true;
+			var currentEvent=win.f_event.GetEvent();
+			if (currentEvent) {						
+				var immediate=currentEvent.f_isImmediate();
 				
-			} else if (component) {			
-				f_core.Debug(f_core, "_OnSubmit: Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"', call checkListeners="+ f_env.GetCheckValidation());
+				if (immediate===undefined) {
+					var component=currentEvent.f_getComponent();
+					f_core.Debug(f_core, "_OnSubmit: Component which performs submit event is '"+((component)?component.id:"**UNKNOWN**")+"'");
+
+					if (currentEvent.f_getType()==f_event.ERROR) {
+						f_core.Debug(f_core, "_OnSubmit: Event is an Error, bypass check validation !");
 		
-				var immediateFunction=component.f_isImmediate;
-				if (typeof(immediateFunction)=="function") {
-					immediate=immediateFunction.call(component);
-		
-					f_core.Debug(f_core, "_OnSubmit: Test immediate property of '"+component.id+"' = "+immediate);
+						immediate=true;
+						
+					} else if (component) {			
+				
+						var immediateFunction=component.f_isImmediate;
+						if (typeof(immediateFunction)=="function") {
+							immediate=immediateFunction.call(component);
+				
+							f_core.Debug(f_core, "_OnSubmit: Test immediate property of '"+component.id+"' = "+immediate);
+						}
+					}
+				} else {
+					f_core.Debug(f_core, "_OnSubmit: Immediate setted in event = "+immediate);
 				}
 			}
 			
-					
 			f_classLoader.Get(win).f_verifyOnSubmit();		
 			
 			if (immediate!==true && f_env.GetCheckValidation()) {
+				f_core.Debug(f_core, "_OnSubmit: Call checkListeners="+ f_env.GetCheckValidation());
+				
 				var valid;
 				try {
 					valid = f_core._CallFormCheckListeners(form);
