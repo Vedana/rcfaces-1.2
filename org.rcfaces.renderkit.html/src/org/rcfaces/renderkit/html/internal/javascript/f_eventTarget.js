@@ -91,7 +91,7 @@ var __statics = {
 		cb[f_event.SUGGESTION]=null;
 		cb[f_event.USER]=noLock;
 	}
-}
+};
 
 var __members = {
 	
@@ -211,7 +211,7 @@ var __members = {
 			return;					
 		}
 	}
-}
+};
 
 new f_class("f_eventTarget", {
 	extend: f_object,
