@@ -4,6 +4,7 @@
 	<property name="build" value="${basedir}/build" />
 	<property name="java.target" value="1.5" />
 	<property name="integration.type" value="I" />
+	<property name="cvstag" value="HEAD" />
 
 	<property name="generator.classpath.dir" value="lib-generator/generator.jar" />
 
@@ -958,11 +959,15 @@
 	</target>
 
 	<target name="cvsco">
+		
+		<echo message="Utilise le tag CVS '${cvstag}' ." />
 
 		<cvs dest=".." cvsroot="/data/cvs/camelia">
 			<commandline>
 				<argument value="co"/>
 				<argument value="-R"/>
+				<argument value="-r"/>
+				<argument value="${cvstag}"/>
 
 				<argument value="org.rcfaces.core/src" />
 				<argument value="org.rcfaces.core/src-jsf1_2" />
@@ -996,6 +1001,16 @@
 				<argument value="org.rcfaces.packager/lib-generator" />
 			</commandline>
 		</cvs>
+
+	</target>
+	
+	<target name="makebuildid">
+
+		<tstamp>
+			<format property="build.number" pattern="yyyyMMddHHmm" locale="fr" />
+		</tstamp>
+		
+		<echo message="BuildId:   M${build.number}" />
 
 	</target>
 
