@@ -49,6 +49,11 @@ public class ChartContentModel extends ImageContentModel {
             drawable.draw(g, new Rectangle(0, 0, bufferedImage.getWidth(),
                     bufferedImage.getHeight()));
 
+        } catch (Throwable th) {
+            LOG.error("Can not draw chart", th);
+
+            throw new FacesException("Can not draw chart", th);
+
         } finally {
             g.dispose();
         }
