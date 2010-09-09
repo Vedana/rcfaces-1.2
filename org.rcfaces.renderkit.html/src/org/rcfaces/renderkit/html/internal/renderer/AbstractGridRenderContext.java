@@ -502,6 +502,8 @@ public abstract class AbstractGridRenderContext {
                                         + columnId
                                         + ", idw=" + idw + ", dw='" + dw + "')");
 
+                        // Fred if dw = 0 should this be triggered ?
+                        // See f_grid.js 2198
                         throw new FacesException(
                                 "You must specify a width for a resizable column ! (#"
                                         + i + ", columnId=" + columnId
@@ -896,6 +898,11 @@ public abstract class AbstractGridRenderContext {
 
     public final int getFirst() {
         return first;
+    }
+    
+    public final void resetFirst() {
+    	first = 0;
+    	gridComponent.setFirst(0);
     }
 
     public final boolean isPaged() {

@@ -2202,11 +2202,15 @@ var __members = {
 					continue;
 				}
 
-				if (v) {
-					v += ",";
-				}
+				// Palliatif de Fred pour pb ie
+				// See AbstractGridRenderContext.java 506
+				if (col._col.offsetWidth > 0) {
+					if (v) {
+						v += ",";
+					}
 
-				v += col._col.offsetWidth;
+					v += col._col.offsetWidth;
+				}
 			}
 			this.f_setProperty(f_prop.COLUMN_WIDTHS, v);
 		}
