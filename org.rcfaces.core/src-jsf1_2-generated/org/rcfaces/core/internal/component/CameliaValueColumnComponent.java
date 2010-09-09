@@ -32,6 +32,7 @@ import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.capability.IComponentEngine;
+import org.rcfaces.core.internal.capability.IComponentLifeCycle;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
 import org.rcfaces.core.internal.capability.IStateChildrenList;
 import org.rcfaces.core.internal.component.CameliaComponents;
@@ -51,7 +52,7 @@ import org.rcfaces.core.event.ValidationEvent;
  * @author Olivier Oeuillot
  */
 public abstract class CameliaValueColumnComponent extends javax.faces.component.UIColumn implements
-		IRCFacesComponent, IContainerManager, ITransientAttributesManager, IConvertValueHolder {
+		IRCFacesComponent, IContainerManager, IComponentLifeCycle, ITransientAttributesManager, IConvertValueHolder {
 	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(CameliaValueColumnComponent.class);
@@ -90,6 +91,7 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
 	        }
 	    }
 	    
+	    constructPhase(state.getFacesContext());	    
     }
  
     protected boolean isTemplateComponent(IInitializationState state) {
@@ -511,7 +513,7 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
    public void queueEvent(FacesEvent e) {
 // Un keyPress doit pouvoir activer l'immediate !
 // Oui mais le code d'appel ne fait r�f�rence qu'a des ActionEvent
-		if (e instanceof ActionEvent) {
+		if ((e instanceof ActionEvent) && e.getComponent()==this) {
 	   		if (this instanceof IImmediateCapability) {
 	   			IImmediateCapability immediateCapability=(IImmediateCapability)this;
 	   			
@@ -533,6 +535,27 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
     		removeFacesListener(fcs[i]);
     	}
     }
+    
+    public void constructPhase(FacesContext facesContext) {
+    }
+    
+    public void initializePhase(FacesContext facesContext, boolean reused) {
+        if (reused) {
+			clearListeners();
+        }
+    }
+
+    public void decodePhase(FacesContext facesContext) {
+    }
+
+    public void validationPhase(FacesContext facesContext) {
+    }
+
+    public void updatePhase(FacesContext facesContext) {
+    }
+
+    public void renderPhase(FacesContext facesContext) {
+    }    
 	
 	public String toString() {
 		String name=getClass().getName();
