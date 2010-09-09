@@ -5488,6 +5488,10 @@ var f_core = {
 			}
 			
 			var name=input.name;
+			if (!name) {
+				continue;
+			}
+			
 			var value=input.value;
 			f_core.Debug("f_core", "AddFacesHiddenInputParameters: Add parameter name='"+name+"' value='"+value+"'.");
 		
