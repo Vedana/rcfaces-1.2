@@ -55,6 +55,7 @@ var __members = {
 		this.f_insertEventListenerFirst(f_event.SELECTION, this.f_imageButtonSelect);
 		this.f_insertEventListenerFirst(f_event.MOUSEDOWN, this._onMouseDown);
 		this.f_insertEventListenerFirst(f_event.MOUSEUP, this._onMouseUp);
+		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onKeyDown);
 		
 		this.f_addEventListener(f_imageButton.SELECTION_POST, this.f_imageButtonSelectEnd);
 		
@@ -313,6 +314,22 @@ var __members = {
 		return true;
 	},
 
+	/**
+	 * @method private
+	 * @param f_event event
+	 * @return boolean
+	 */
+	_onKeyDown: function(event) {
+		var evt = event.f_getJsEvent();
+		if (this.f_getEventLocked(evt, false)) {
+			return false;
+		}
+		if (evt.keyCode == 32 && !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
+			return this.f_fireEvent(f_event.SELECTION);
+		}
+		return true;
+	},
+	
 	/**
 	 * @method private
 	 * @return boolean
