@@ -195,6 +195,11 @@ var __statics = {
 		var jsEvent = event.f_getJsEvent();
 		var keyCode = jsEvent.keyCode;
 		var charCode = jsEvent.charCode;
+		
+		if (jsEvent.altKey ^ jsEvent.ctrlKey) {
+			// ignore les touches combinees
+			return true;
+		}
 
 		var validator=this._validator;
 		
@@ -287,6 +292,7 @@ var __statics = {
 			// initKeyEvent() : Un trou de sécurité ??? ! 
 			// C'était pourtant bien pratique !
 			// bref, comme d'ab ... on bidouille ...
+			// Fred : exact de la bidouille
 			if (f_core.IsGeckoDisableDispatchKeyEvent()) {
 				var input=component._input;
 				
@@ -298,6 +304,14 @@ var __statics = {
 				var selectionEnd=input.selectionEnd;
 				
 				var value=input.value;
+				
+				// Gestion du maxTextLength
+				if (component.f_getMaxTextLength) {
+					var max = component.f_getMaxTextLength();
+					if (max >= 0 && value.length >= max) {
+						return true;
+					}
+				}
 				
 				input.value = value.substring(0, selectionStart)+ ch + value.substring(selectionEnd);
 									
