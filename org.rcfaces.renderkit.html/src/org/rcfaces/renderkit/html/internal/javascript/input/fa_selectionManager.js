@@ -543,6 +543,8 @@ var __members = {
 			detail|=1;
 		}
 		
+		var item=this.fa_getElementItem(element);
+
 		if (this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
 			return false;
 		}
@@ -613,8 +615,6 @@ var __members = {
 			this._selectElement(element, elementValue, show);
 			break;
 		}
-		
-		var item=this.fa_getElementItem(element);
 	
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		

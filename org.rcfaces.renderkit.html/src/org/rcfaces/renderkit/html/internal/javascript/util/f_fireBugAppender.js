@@ -50,11 +50,12 @@ var __statics={
 	 * @return void
 	 */
 	Assert: function(test, message) {
-		if (window.console) {
-			window.console.assert(test, message);
+		var console=window.console;
+		if (console) {
+			console.assert(test, message);
 		
 			if (!test) {
-				window.console.trace();
+				console.trace();
 			}
 			return;
 		}
@@ -124,8 +125,12 @@ var __members = {
 		
 		param.unshift(message);
 		method.apply(console, param);
+		
+		if (event.exception) {
+			console.exception("Exception of previous message", event.exception);
+		}
 	}
-}
+};
 
 new f_class("f_fireBugAppender", {
 	extend: f_object,
