@@ -1093,7 +1093,7 @@ var __members = {
 			container.appendChild(fragment);
 		}
 		if (this._cursor) {
-//			this._cursor.scrollIntoView(true);
+			 this.fa_showElement(this._cursor); 
 		}
 	},
 	/**
@@ -1517,7 +1517,19 @@ var __members = {
 			this.scrollTop=item.offsetTop;
 
 		} else if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
-			this.scrollTop=item.offsetTop+item.offsetHeight-this.clientHeight;
+			var itemHeight = item.offsetHeight; 
+			if (itemHeight == 0){ // possible sur certain arbre
+				if (item.nextSibling) {
+					itemHeight = item.nextSibling.offsetTop - item.offsetTop ;
+				} else if (item.parentNode){
+					var parent = item.parentNode;
+					while (parent.offsetTop != 0){
+						parent = parent.parentNode;
+					}
+					itemHeight = parent.offsetTop+parent.offsetHeight;
+				}
+			}
+			this.scrollTop=item.offsetTop+itemHeight-this.clientHeight;
 		}
 		
 		var itemNode=item.firstChild; // Div du noeud
