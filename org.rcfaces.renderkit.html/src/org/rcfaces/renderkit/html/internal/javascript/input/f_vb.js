@@ -1186,6 +1186,16 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 */
+	Formatter_date : function(validator, inVal) {
+		var dateObject = validator.f_getObject();
+		var format = validator.f_getParameter("date.format");
+		return f_dateFormat.FormatDate(dateObject, format);
+	},
+	
+	/**
+	 * @method public static
+	 * @context object:validator
+	 */
 	Formatter_num : function(validator, inVal) {
 		var sTmp = inVal;
 		var decimal = validator.f_getIntParameter("num.decimal", -1);
