@@ -74,10 +74,6 @@ A boolean value indicating wether the vertical scroll is shown.
 		</attribute>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.externalBox</component-type>
-		<component-class>org.rcfaces.core.component.ExternalBoxComponent</component-class>
-	</component>
-	<component>
 		<description><![CDATA[
 <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
       <p>The button Component has the following capabilities :
@@ -303,10 +299,6 @@ A string value specifying the name of the variable receiving the index of the cu
 	<component>
 		<component-type>org.rcfaces.core.comboGrid</component-type>
 		<component-class>org.rcfaces.core.component.ComboGridComponent</component-class>
-	</component>
-	<component>
-		<component-type>org.rcfaces.core.keyLabel</component-type>
-		<component-class>org.rcfaces.core.component.KeyLabelComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.keyEntry</component-type>

@@ -314,6 +314,7 @@ public abstract class CameliaDataComponent extends org.rcfaces.core.internal.com
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
+				
 				processEngineValidators(context);
 			}
 	       

@@ -311,6 +311,7 @@ public abstract class CameliaBaseComponent extends javax.faces.component.UICompo
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
+				
 				processEngineValidators(context);
 			}
 	       

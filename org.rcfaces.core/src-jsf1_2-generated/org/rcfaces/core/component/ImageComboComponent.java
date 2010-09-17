@@ -41,7 +41,7 @@ public class ImageComboComponent extends AbstractMenuComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractMenuComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","popupRowNumber","showDropDownMark","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition","tabIndex"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","popupRowNumber","showDropDownMark","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition"}));
 	}
 
 	public ImageComboComponent() {

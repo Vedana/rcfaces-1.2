@@ -315,6 +315,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
+				
 				processEngineValidators(context);
 			}
 	       

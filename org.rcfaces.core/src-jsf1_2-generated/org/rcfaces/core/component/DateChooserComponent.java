@@ -50,7 +50,7 @@ public class DateChooserComponent extends AbstractCalendarComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCalendarComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","calendarLayout","valueChangeListener","homeDate","defaultSelectedDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","popupStyleClass","textPosition","tabIndex","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","calendarLayout","valueChangeListener","homeDate","defaultSelectedDate","homeDateLabel","text","imageWidth","selectedImageURL","border","forValueFormat","borderType","readOnly","popupStyleClass","textPosition","for"}));
 	}
 
 	public DateChooserComponent() {

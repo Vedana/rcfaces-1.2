@@ -311,6 +311,7 @@ public abstract class CameliaMessageComponent extends javax.faces.component.UIMe
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
+				
 				processEngineValidators(context);
 			}
 	       

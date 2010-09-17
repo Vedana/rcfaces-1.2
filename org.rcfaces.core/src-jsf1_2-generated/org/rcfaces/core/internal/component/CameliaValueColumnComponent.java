@@ -313,6 +313,7 @@ public abstract class CameliaValueColumnComponent extends javax.faces.component.
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
+				
 				processEngineValidators(context);
 			}
 	       

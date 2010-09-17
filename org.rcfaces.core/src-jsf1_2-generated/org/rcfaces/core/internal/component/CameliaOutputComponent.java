@@ -316,6 +316,7 @@ public abstract class CameliaOutputComponent extends javax.faces.component.UIOut
 				if (ComponentTools.hasValidationServerListeners(getFacesListeners(IValidationListener.class))) {
 					this.broadcast(new ValidationEvent(this));
 				}
+				
 				processEngineValidators(context);
 			}
 	       
