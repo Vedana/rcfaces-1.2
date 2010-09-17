@@ -68,7 +68,7 @@ var __statics= {
 	 */
 	_Id: 0
 	
-}
+};
 
 var __members={
 
@@ -183,7 +183,7 @@ var __members={
 	
 			var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
 			if (!cameliaServiceVersion) {
-				var errorMessage="Not a service response !"
+				var errorMessage="Not a service response !";
 				this.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
 				throw new Error(errorMessage);
 			}
@@ -525,7 +525,7 @@ var __members={
 	 */
 	fa_cancelFilterRequest: function() {
 	}
-}
+};
  
 new f_class("f_service", {
 	extend: f_object,
