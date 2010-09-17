@@ -339,7 +339,10 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 if (configurationVersion == null) {
                     configurationVersion = getParameter(CONFIGURATION_VERSION_PARAMETER);
                 }
-
+                if (configurationVersion!=null && configurationVersion.length()==0){
+                     throw new ServletException("Context-Param : org.rcfaces.renderkit.html.CONFIGURATION_VERSION can not be an empty string");
+                }
+  
                 if (configurationVersion == null) {
                     if (DEFAULT_MODULE_NAME.equals(moduleName)) {
                         configurationVersion = Constants.getBuildId();
@@ -349,11 +352,7 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 if (configurationVersion == null && lastModified > 0) {
                     configurationVersion = "." + lastModified;
                 }
-                
-                if (configurationVersion.equals("")){
-                	 throw new ServletException("Context-Param : org.rcfaces.renderkit.html.CONFIGURATION_VERSION can not be an empty string");
-                }
-                
+
                 LOG.info("Set module '" + moduleName + "' version to '"
                         + configurationVersion + "' for servlet '"
                         + getServletName() + "'.");
