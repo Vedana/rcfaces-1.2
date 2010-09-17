@@ -9,6 +9,18 @@
  */
  
  var __members = {
+		 
+	 /**
+	 * Returns the idenfiant of the component.
+	 * 
+	 * @method public
+	 * @return String Identifier
+	 */
+	f_getId: function() {
+		return this.id;
+	},
+		 
+		 
 	/**
 	 * Returns the value.
 	 *
