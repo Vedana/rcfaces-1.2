@@ -349,7 +349,11 @@ public class StylesheetsServlet extends HtmlModulesServlet {
                 if (configurationVersion == null && lastModified > 0) {
                     configurationVersion = "." + lastModified;
                 }
-
+                
+                if (configurationVersion.equals("")){
+                	 throw new ServletException("Context-Param : org.rcfaces.renderkit.html.CONFIGURATION_VERSION can not be an empty string");
+                }
+                
                 LOG.info("Set module '" + moduleName + "' version to '"
                         + configurationVersion + "' for servlet '"
                         + getServletName() + "'.");

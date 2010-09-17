@@ -1181,6 +1181,16 @@ var __statics = {
 		return inVal.replace(re, (l == 15) ? "$1 $2 $3 $4 $5 $6 $7"
 				: "$1 $2 $3 $4 $5 $6");
 	},
+	
+	/**
+	 * @method public static
+	 * @context object:validator
+	 */
+	Formatter_date : function(validator, inVal) {
+		var dateObject = validator.f_getObject();
+		var format = validator.f_getParameter("date.format");
+		return f_dateFormat.FormatDate(dateObject, format);
+	},
 
 	/**
 	 * @method public static

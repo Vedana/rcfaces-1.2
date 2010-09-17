@@ -340,7 +340,7 @@ var __members = {
 			value=String(value);
 
 		} else if (typeof(value)!="string") {
-			f_core.Error(f_input, "f_setValue: Invalid value: "+value);
+			f_core.Error(f_input, "f_setValue: Invalid value: "+value + " (typeof=" + typeof(value) +")");
 			return false;
 		}
 
