@@ -5489,6 +5489,7 @@ var f_core = {
 			
 			var name=input.name;
 			if (!name) {
+				f_core.Debug("f_core", "AddFacesHiddenInputParameters: Parameter name is an empty string, ignore it.");
 				continue;
 			}
 			
