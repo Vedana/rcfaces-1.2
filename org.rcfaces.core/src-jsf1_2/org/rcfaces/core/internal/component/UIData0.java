@@ -551,7 +551,11 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
 			}
 
 			if (null == value) {
-				return rows;
+				if(rows == null){
+					return 0;
+				}else {
+					return rows.intValue();
+				}
 			}
 			return (value.intValue());
 		} else {
