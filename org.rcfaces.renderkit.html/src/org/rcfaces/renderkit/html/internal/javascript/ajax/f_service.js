@@ -14,57 +14,57 @@ var __statics= {
 	_CAMELIA_CONTENT_TYPE: "X-Camelia-Content-Type",
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	INIT_STATE: 0,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	REQUESTING_STATE: 1,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	LOADING_STATE: 10,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	LOADED_STATE: 20,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ERRORED_STATE: 21,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_TOTAL_WORK_PROGRESS_MONITOR: 20,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_INIT_PROGRESS_MONITOR: 1,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_LOADING_PROGRESS_MONITOR: 1,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_LOADED_PROGRESS_MONITOR: 1,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_RUN_PROGRESS_MONITOR: 17,
 
 	/**
-	 * @field private static number
+	 * @field private static Number
 	 */
 	_Id: 0
 	
@@ -252,7 +252,7 @@ var __members={
 			type="string";
 			params=new Object;
 			params.type=type;
-			params.string=String(parameter);
+			params.data=String(parameter);
 		}
 	
 		if (!type) {
