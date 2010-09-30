@@ -1741,7 +1741,7 @@ var __members = {
 				}
 			}
 			
-			if (this.f_leafImageURL) {	
+			if (this.this._defaultLeafImageURL) {	
 				return this._defaultLeafImageURL;
 			}
 		}
