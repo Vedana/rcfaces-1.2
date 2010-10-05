@@ -95,18 +95,13 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         String convertedSelectedValue = null;
         Object selectedValue = comboGridComponent
                 .getSelectedValue(facesContext);
+        
         String valueColumnId = comboGridComponent
                 .getValueColumnId(facesContext);
         
-        if (valueColumnId != null) {
-            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
-        }
 
         String labelColumnId = comboGridComponent
                 .getLabelColumnId(facesContext);
-        if (labelColumnId != null) {
-            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
-        }
 
         if (selectedValue != null) {
             UIComponent converterComponent = getColumn(comboGridComponent,
@@ -172,6 +167,14 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
 
+        if (valueColumnId != null) {
+            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
+        }
+        
+        if (labelColumnId != null) {
+            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
+        }
+        
         if (valueFormat != null) {
             htmlWriter.writeAttribute("v:valueFormat", valueFormat);
         }
