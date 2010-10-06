@@ -197,7 +197,7 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         }
         htmlWriter.writeRole(IAccessibilityRoles.TREE);
         htmlWriter.endElement(IHtmlWriter.A);
-
+        
         htmlWriter.startElement(IHtmlWriter.UL);
         htmlWriter.writeId(componentContext.getComponentClientId()
                 + BODY_ID_SUFFIX);
