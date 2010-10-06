@@ -92,10 +92,10 @@ var __members = {
 
 		this._gridStyleClass=f_core.GetNumberAttribute(this, "v:gridStyleClass", 0);
 
-		this._foceValidation=f_core.GetBooleanAttribute(this, "v:forceValidation", false);
+		this._forceValidation=f_core.GetBooleanAttribute(this, "v:forceValidation", false);
 		
-		if(this._foceValidation) {
-			this._installcheckListener();
+		if(this._forceValidation) {
+			this._installCheckListener();
 		}
 		
 		this.f_getInput().onbeforedeactivate=f_keyEntry._OnBeforeDeactivate;
@@ -132,7 +132,7 @@ var __members = {
 		// this._readOnly=undefined; // boolean 
 		// this._maxTextLength=undefined; // number
 		// this._emptyMessageShown=undefined; boolean
-		// this._foceValidation=undefined; boolean
+		// this._forceValidation=undefined; boolean
 		// this._required=undefined; boolean
 		
 		var request=this._verifyRequest;
@@ -161,13 +161,15 @@ var __members = {
 	 * @method private
 	 * @return void
 	 */
-	_installcheckListener: function() {
+	_installCheckListener: function() {
 		var keyEntry=this;
 		var checkListeners={
 				
 			f_performCheckValue: function(event) {
 				if (keyEntry._inputValue) {
-					if(keyEntry._foceValidation && keyEntry._keyErrored) {
+					if(keyEntry._forceValidation && keyEntry._keyErrored) {
+						// Message ...
+						
 						return false;
 					}
 					return true;
@@ -786,7 +788,7 @@ var __members = {
 			return;
 		}
 		
-		this._installcheckListener();
+		this._installCheckListener();
 	},
 	/**
 	 * @method hidden
