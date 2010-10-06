@@ -1010,14 +1010,15 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
          * htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
          */
         boolean first = true;
+        int columnHeaderIndex = 0;
         for (int i = 0; i < columns.length; i++) {
             if (tableContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
                 continue;
             }
-
+            
             UIColumn column = columns[i];
 
-            encodeFixedTitleCol(htmlWriter, tableContext, column, first, i);
+            encodeFixedTitleCol(htmlWriter, tableContext, column, first, i, ++columnHeaderIndex);
             first = false;
         }
 
@@ -1076,7 +1077,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private void encodeFixedTitleCol(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, UIColumn column,
-            boolean first, int columnIndex) throws WriterException {
+            boolean first, int columnIndex, int columnHeaderIndex) throws WriterException {
 
         /*
          * htmlWriter.startElement(IHtmlWriter.LI);
@@ -1094,7 +1095,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
          * htmlWriter.writeTitle(toolTip); } }
          */
 
-        encodeTitleCell(htmlWriter, tableContext, column, columnIndex);
+        encodeTitleCell(htmlWriter, tableContext, column, columnIndex, columnHeaderIndex);
 
         /*
          * htmlWriter.endElement(IHtmlWriter.LI);
@@ -1442,8 +1443,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected void encodeTitleCell(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, UIColumn column,
-            int columnIndex) throws WriterException {
+            int columnIndex, int columnHeaderIndex) throws WriterException {
         htmlWriter.startElement(IHtmlWriter.LI);
+        
+        htmlWriter.writeRole(IAccessibilityRoles.COLUMNHEADER);
+        // au propre
+        htmlWriter.writeId(getDataTableId(htmlWriter)+":columnHeader:"+columnHeaderIndex);
+        
         String thClassName = getTitleCellClassName(htmlWriter, column,
                 columnIndex == 0, tableContext.isDisabled());
         htmlWriter.writeClass(thClassName);

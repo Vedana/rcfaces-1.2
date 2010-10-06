@@ -941,7 +941,7 @@ var __members = {
 		if (!this._nodeIdx) {
 			this._nodeIdx=1;
 		}
-		
+	 	
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
 			node._depth=depth;
@@ -977,7 +977,12 @@ var __members = {
 
 			li._divNode=divNode;
 			fa_aria.SetElementAriaLabelledBy(divNode,this.id+"::node"+nodeIdx+"::label");
-			fa_aria.SetElementAriaLevel(divNode,depth+1);
+			var dTmp = depth +1;
+			
+			var pos = i+1;
+			fa_aria.SetElementAriaSetsize(divNode, nodes.length);
+			fa_aria.SetElementAriaPosinset(divNode, pos);
+			fa_aria.SetElementAriaLevel(divNode, dTmp);
 			
 			var d=depth;
 			if (this._userExpandable) {
@@ -1204,7 +1209,7 @@ var __members = {
 			return false;
 		}
 		node._opened=true;
-		fa_aria.SetElementAriaExpanded(li._divNode, true);
+		
 		if (!this._expandedValues) {
 			this._expandedValues=new Array;
 		}
@@ -1565,6 +1570,10 @@ var __members = {
 		} else {
 			if (node._opened) {
 				suffixDivNode+="_opened";
+				fa_aria.SetElementAriaExpanded(li._divNode, true);
+				
+			} else if (node._container && !node._opened) {
+				fa_aria.SetElementAriaExpanded(li._divNode, false);
 				
 			} else if (!node._container) {
 				suffixDivNode+="_leaf";
