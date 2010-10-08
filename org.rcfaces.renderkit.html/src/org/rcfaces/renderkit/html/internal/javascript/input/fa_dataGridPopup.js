@@ -241,9 +241,12 @@ var __statics = {
 			return;
 		}
 		
-		if (dataGridPopup._ariaInput._role) {
-			dataGridPopup._ariaInput.setAttribute("role", "textbox");
-			dataGridPopup._ariaInput._role = false;
+		if(dataGridPopup._ariaInput){
+			dataGridPopup._ariaInput.removeAttribute("aria-activedescendant");
+			if (dataGridPopup._ariaInput._role) {
+				dataGridPopup._ariaInput.setAttribute("role", "textbox");
+				dataGridPopup._ariaInput._role = false;
+			}
 		}
 		
 		dataGridPopup._popupOpened=undefined;

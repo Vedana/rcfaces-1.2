@@ -2812,8 +2812,8 @@ var __members = {
 				suffix += "_focus";
 				if (this._serviceGridId){
 					var dataGridPopup = f_core.GetElementByClientId(this._serviceGridId);
-					if (dataGridPopup._searchInput){
-						fa_aria.SetElementAriaActiveDescendant(dataGridPopup._searchInput, row.id);
+					if (dataGridPopup._ariaInput){
+						fa_aria.SetElementAriaActiveDescendant(dataGridPopup._ariaInput, row.id);
 					}else {
 						fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
 					}
