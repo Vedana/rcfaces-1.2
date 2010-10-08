@@ -941,7 +941,7 @@ var __members = {
 		if (!this._nodeIdx) {
 			this._nodeIdx=1;
 		}
-		
+	 	
 		for(var i=0;i<nodes.length;i++) {
 			var node=nodes[i];
 			node._depth=depth;
@@ -977,7 +977,12 @@ var __members = {
 
 			li._divNode=divNode;
 			fa_aria.SetElementAriaLabelledBy(divNode,this.id+"::node"+nodeIdx+"::label");
-			fa_aria.SetElementAriaLevel(divNode,depth+1);
+			var dTmp = depth +1;
+			
+			var pos = i+1;
+			fa_aria.SetElementAriaSetsize(divNode, nodes.length);
+			fa_aria.SetElementAriaPosinset(divNode, pos);
+			fa_aria.SetElementAriaLevel(divNode, dTmp);
 			
 			var d=depth;
 			if (this._userExpandable) {
@@ -1093,7 +1098,7 @@ var __members = {
 			container.appendChild(fragment);
 		}
 		if (this._cursor) {
-//			this._cursor.scrollIntoView(true);
+			 this.fa_showElement(this._cursor); 
 		}
 	},
 	/**
@@ -1204,7 +1209,7 @@ var __members = {
 			return false;
 		}
 		node._opened=true;
-		fa_aria.SetElementAriaExpanded(li._divNode, true);
+		
 		if (!this._expandedValues) {
 			this._expandedValues=new Array;
 		}
@@ -1517,7 +1522,19 @@ var __members = {
 			this.scrollTop=item.offsetTop;
 
 		} else if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
-			this.scrollTop=item.offsetTop+item.offsetHeight-this.clientHeight;
+			var itemHeight = item.offsetHeight; 
+			if (itemHeight == 0){ // possible sur certain arbre
+				if (item.nextSibling) {
+					itemHeight = item.nextSibling.offsetTop - item.offsetTop ;
+				} else if (item.parentNode){
+					var parent = item.parentNode;
+					while (parent.offsetTop != 0){
+						parent = parent.parentNode;
+					}
+					itemHeight = parent.offsetTop+parent.offsetHeight;
+				}
+			}
+			this.scrollTop=item.offsetTop+itemHeight-this.clientHeight;
 		}
 		
 		var itemNode=item.firstChild; // Div du noeud
@@ -1553,6 +1570,10 @@ var __members = {
 		} else {
 			if (node._opened) {
 				suffixDivNode+="_opened";
+				fa_aria.SetElementAriaExpanded(li._divNode, true);
+				
+			} else if (node._container && !node._opened) {
+				fa_aria.SetElementAriaExpanded(li._divNode, false);
 				
 			} else if (!node._container) {
 				suffixDivNode+="_leaf";

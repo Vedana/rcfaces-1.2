@@ -19,6 +19,10 @@ public interface IAccessibilityRoles {
     String CHECK_BOX = "checkbox";
 
     String CHECK_BOX_3_STATE = "checkboxtristate";
+    
+    String COLUMNHEADER = "columnheader"; 
+    
+    String COMBOBOX = "combobox"; 
 
     String GRID = "grid";
     
@@ -42,11 +46,15 @@ public interface IAccessibilityRoles {
 
     String TAB_PANEL = "tabpanel";
 
+    String TEXTBOX = "textbox";
+    
     String TEXT_FIELD = "textfield";
 
     String TOOLBAR = "toolbar";
 
     String TREE = "tree";
+
+	
 
 	
 }

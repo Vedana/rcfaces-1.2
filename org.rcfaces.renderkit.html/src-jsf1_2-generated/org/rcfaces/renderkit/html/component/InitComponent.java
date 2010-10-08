@@ -1,20 +1,20 @@
 package org.rcfaces.renderkit.html.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
 import java.util.TimeZone;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.capability.IPageConfigurator;
-import java.util.Locale;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import java.lang.String;
 import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.Locale;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 
 /**
  * <p><b>Mandatory</b>.</p>
@@ -30,7 +30,7 @@ public class InitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disableContextMenu","waiRolesNS","title","clientMessageIdFilter","clientValidation","userAgentVary","base","literalTimeZone","renderBaseTag","disabledCookiesPageURL","literalLocale","domain","disabledScriptPageURL","invalidBrowserPageURL","favoriteImageURL","disabledIEImageBar","disableCache"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"clientMessageIdFilter","userAgentVary","disabledCookiesPageURL","invalidBrowserPageURL","waiRolesNS","clientValidation","title","literalLocale","favoriteImageURL","disabledScriptPageURL","literalTimeZone","base","domain","disableCache","disabledIEImageBar","renderBaseTag","disableContextMenu"}));
 	}
 
 	public InitComponent() {
