@@ -1,5 +1,6 @@
-#Fri Feb 26 10:57:08 CET 2010
+#Tue Jun 22 09:49:17 CEST 2010
 eclipse.preferences.version=1
+encoding//src/org/rcfaces/renderkit/html/internal/AbstractCalendarRenderer.java=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/css/f_border_flat.css=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/css/f_dataGrid.css=UTF-8
 encoding//src/org/rcfaces/renderkit/html/internal/css/f_dateChooser.css=UTF-8

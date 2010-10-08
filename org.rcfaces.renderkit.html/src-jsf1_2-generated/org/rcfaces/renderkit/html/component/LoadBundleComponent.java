@@ -2,12 +2,12 @@ package org.rcfaces.renderkit.html.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
+import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
 
 public class LoadBundleComponent extends CameliaBaseComponent {
 
@@ -17,7 +17,7 @@ public class LoadBundleComponent extends CameliaBaseComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"override","baseName","serverScope","bundleName","side"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"side","override","baseName","serverScope","bundleName"}));
 	}
 
 	public LoadBundleComponent() {
