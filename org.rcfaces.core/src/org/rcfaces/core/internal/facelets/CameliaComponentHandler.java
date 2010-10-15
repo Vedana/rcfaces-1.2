@@ -194,6 +194,9 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         ATTRIBUTES_METADATA.put("valueChangeListener",
                 new ListenerAttributeMetaData(
                         ListenersTools.VALUE_CHANGE_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("expandListener",
+                new ListenerAttributeMetaData(
+                        ListenersTools.EXPAND_LISTENER_TYPE));
 
         ATTRIBUTES_METADATA.put("action", new IAttributeMetaData() {
             private static final String REVISION = "$Revision$";
