@@ -4906,6 +4906,8 @@ var __members = {
 			if (f_core.IsGecko()) {
 				scrollBody.addEventListener("DOMMouseScroll",
 						f_grid._Link_onmousewheel, false);
+			} else {
+				scrollBody.onmousewheel = f_grid._Link_onmousewheel;
 			}
 		}
 	},
