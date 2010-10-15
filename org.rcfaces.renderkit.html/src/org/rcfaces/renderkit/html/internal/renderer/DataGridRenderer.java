@@ -1443,6 +1443,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
 
+    	super.writeGridComponentAttributes(htmlWriter, tableContext, dg);
+    	
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 

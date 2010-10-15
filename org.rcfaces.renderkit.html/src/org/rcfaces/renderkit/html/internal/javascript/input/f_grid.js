@@ -1839,6 +1839,7 @@ var __members = {
 				focus.onkeypress = f_grid._Link_onkeypress;
 				focus.onkeyup = f_grid._Link_onkeyup;
 				focus._dataGrid = this;
+				focus.tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
 				this._cfocus = focus;
 
 			} else {
