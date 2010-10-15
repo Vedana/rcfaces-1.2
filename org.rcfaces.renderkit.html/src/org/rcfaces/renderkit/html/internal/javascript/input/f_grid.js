@@ -1845,6 +1845,7 @@ var __members = {
 			} else {
 				this.onfocus = f_grid._Link_onfocus;
 				this.onblur = f_grid._Link_onblur;
+				this.tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
 				this._cfocus = this;
 				this._dataGrid = this;
 			}
@@ -1862,12 +1863,7 @@ var __members = {
 			focus.onkeyup = f_grid._Link_onkeyup;
 			focus.href = f_core.JAVASCRIPT_VOID;
 			focus._dataGrid = this;
-
-			if (this.tabIndex) {
-				focus.tabIndex = this.tabIndex;
-			} else {
-				focus.tabIndex = 0;
-			}
+			focus.tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
 
 			// this.tabIndex=-1;
 
