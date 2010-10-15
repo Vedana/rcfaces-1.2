@@ -920,11 +920,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     	if (dg instanceof ITabIndexCapability) {
     		ITabIndexCapability tic = (ITabIndexCapability) dg;
     		Integer tabIndex = tic.getTabIndex();
-    		int index = 0;
     		if (tabIndex != null) {
-    			index = tabIndex.intValue();
+        		htmlWriter.writeAttribute("v:tabIndex", tabIndex.intValue());
     		}
-    		htmlWriter.writeAttribute("v:tabIndex", index);
     	}
 
     }

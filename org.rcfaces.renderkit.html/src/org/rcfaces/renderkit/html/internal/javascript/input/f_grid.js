@@ -1827,6 +1827,7 @@ var __members = {
 			f_core.AppendChild(sortIndicator, img);
 		}
 
+		var tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
 		var focus;
 		if (f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
@@ -1839,13 +1840,13 @@ var __members = {
 				focus.onkeypress = f_grid._Link_onkeypress;
 				focus.onkeyup = f_grid._Link_onkeyup;
 				focus._dataGrid = this;
-				focus.tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
+				focus.tabIndex = tabIndex;
 				this._cfocus = focus;
 
 			} else {
 				this.onfocus = f_grid._Link_onfocus;
 				this.onblur = f_grid._Link_onblur;
-				this.tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
+				this.tabIndex = tabIndex;
 				this._cfocus = this;
 				this._dataGrid = this;
 			}
@@ -1863,7 +1864,7 @@ var __members = {
 			focus.onkeyup = f_grid._Link_onkeyup;
 			focus.href = f_core.JAVASCRIPT_VOID;
 			focus._dataGrid = this;
-			focus.tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
+			focus.tabIndex = tabIndex;
 
 			// this.tabIndex=-1;
 
