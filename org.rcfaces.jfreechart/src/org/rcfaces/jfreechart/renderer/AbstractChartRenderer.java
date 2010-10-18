@@ -73,17 +73,8 @@ public abstract class AbstractChartRenderer extends AbstractCssRenderer {
             chartHeight = point.y;
         }
 
-        Drawable drawable;
-
-        try {
-            drawable = createChart(componentContext, chartWidth, chartHeight);
-
-        } catch (Throwable th) {
-            LOG.error("Can not create chart '" + component.getId() + "'.", th);
-
-            throw new FacesException("Can not create chart '"
-                    + component.getId() + "'.", th);
-        }
+        Drawable drawable = createChart(componentContext, chartWidth,
+                chartHeight);
 
         IContentModel contentModel = new ChartContentModel();
 
