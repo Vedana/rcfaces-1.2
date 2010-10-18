@@ -3780,6 +3780,7 @@ Dans le cas d'un mode period !
 		<attribute id="defaultImageURL" type="java.lang.String" />
 		<attribute id="defaultSelectedImageURL" type="java.lang.String" />
 		<attribute id="defaultExpandedImageURL" type="java.lang.String" />
+		<attribute id="defaultCollapsedImageURL" type="java.lang.String" />
 		<attribute id="defaultDisabledImageURL" type="java.lang.String" />
 		
 		<attribute id="defaultLeafImageURL" type="java.lang.String" />
