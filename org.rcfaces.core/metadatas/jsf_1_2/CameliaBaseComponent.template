@@ -569,24 +569,28 @@ ${FIELDS}
     
     public boolean confirmListenerAppend(FacesContext facesContext, Class facesListenerClass){
     	
-    	RcfacesContext rcfacesContext =  RcfacesContext.getInstance(facesContext);
-    	int faceletListenerMode =  rcfacesContext.getListenerManagerStrategy();
-    	
-    	FacesListener fcs[]=getFacesListeners(facesListenerClass);
-    	
-    	switch (faceletListenerMode) {
-			case IListenerStrategy.ADD_IF_NEW:
-				return fcs.length>0 == false;
-			case IListenerStrategy.CLEAN_BY_CLASS: 
-				if(fcs.length>0) {
-					for(int i=0;i<fcs.length;i++) {
-	    				removeFacesListener(fcs[i]);
-	    			}
-	    		}
-	    		return true;
-			default:
-				return true;
-			}	
+    	RcfacesContext rcfacesContext = RcfacesContext
+				.getInstance(facesContext);
+		int faceletListenerMode = rcfacesContext.getListenerManagerStrategy();
+
+		if (((IListenerStrategy.ADD_IF_NEW | IListenerStrategy.CLEAN_BY_CLASS) & faceletListenerMode) == 0) {
+			return true;
+		}
+
+		FacesListener fcs[] = getFacesListeners(facesListenerClass);
+		if ((IListenerStrategy.ADD_IF_NEW & faceletListenerMode) > 0) {
+			return fcs.length == 0;
+		}
+
+		if ((IListenerStrategy.CLEAN_BY_CLASS & faceletListenerMode) > 0) {
+			for (int i = 0; i < fcs.length; i++) {
+				removeFacesListener(fcs[i]);
+			}
+
+			return true;
+		}
+
+		return true;
     } 
 	
 	public String toString() {
