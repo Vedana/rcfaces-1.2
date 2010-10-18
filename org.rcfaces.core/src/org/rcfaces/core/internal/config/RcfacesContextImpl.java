@@ -460,8 +460,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
         LOG.debug("Set application version to '" + applicationVersion + "'.");
 
-        String strategyName = (String) applicationMap
-                .get(LISTENER_MANAGER_STRATEGY_PARAMETER);
+        String strategyName = facesContext.getExternalContext()
+                .getInitParameter(LISTENER_MANAGER_STRATEGY_PARAMETER);
 
         if (strategyName != null) {
             Integer convertedStartegy = ((Integer) StrategyListenerConverter.SINGLETON
