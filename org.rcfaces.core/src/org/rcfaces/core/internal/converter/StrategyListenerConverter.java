@@ -18,7 +18,7 @@ public class StrategyListenerConverter extends AbstractConverter {
 
     public static final Converter SINGLETON = new StrategyListenerConverter();
 
-    private final static int DEFAULT= 0x01;
+    private final static int DEFAULT= 0x00;
     
     private final static int CLEAN_ALL= 0x02;
     

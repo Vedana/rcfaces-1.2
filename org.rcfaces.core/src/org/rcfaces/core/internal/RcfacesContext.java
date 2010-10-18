@@ -227,6 +227,8 @@ public abstract class RcfacesContext {
     public abstract String getApplicationVersion();
 
     public abstract boolean isDesignerMode();
+    
+    public abstract String getListenerManagerStrategy();
 
     public abstract IServicesRegistry getServicesRegistry();
 

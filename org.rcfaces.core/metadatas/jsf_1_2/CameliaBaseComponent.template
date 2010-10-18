@@ -544,9 +544,9 @@ ${FIELDS}
     public void initializePhase(FacesContext facesContext,  boolean reused) {
         if (reused) {
         
-        	int faceletListenerMode =  ((Integer) StrategyListenerConverter.SINGLETON
-     		.getAsObject(facesContext, this,facesContext.getExternalContext()
-        		.getInitParameter(RcfacesContext.LISTENER_MANAGER_STRATEGY_PARAMETER))).intValue();
+        	RcfacesContext rcfacesContext =  RcfacesContext.getInstance(facesContext);
+    		int faceletListenerMode =  ((Integer) StrategyListenerConverter.SINGLETON
+     		.getAsObject(facesContext, this, rcfacesContext.getListenerManagerStrategy())).intValue();
         		
         	switch (faceletListenerMode) {
 			case IListenerStrategy.CLEAN_ALL:
@@ -569,9 +569,11 @@ ${FIELDS}
     }   
     
     public boolean confirmListenerAppend(FacesContext facesContext, Class facesListenerClass){
+    	RcfacesContext.
+    	
+    	RcfacesContext rcfacesContext =  RcfacesContext.getInstance(facesContext);
     	int faceletListenerMode =  ((Integer) StrategyListenerConverter.SINGLETON
-     		.getAsObject(facesContext, this,facesContext.getExternalContext()
-        		.getInitParameter(RcfacesContext.LISTENER_MANAGER_STRATEGY_PARAMETER))).intValue();
+     		.getAsObject(facesContext, this, rcfacesContext.getListenerManagerStrategy())).intValue();
     	
     	FacesListener fcs[]=getFacesListeners(facesListenerClass);
     	

@@ -109,6 +109,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
     private transient IResourceProxyHandler resourceProxyHandler;
 
     private transient String applicationVersion;
+    
+    private transient String listenerManagerStrategy;
 
     private transient IAdapterManager adapterManager;
 
@@ -354,7 +356,10 @@ public class RcfacesContextImpl extends RcfacesContext implements
                 }
             }
         }
-
+        
+        
+       
+        
         loadConfigurations(digester, urls);
 
         loadProvidersConfiguration(facesContext, urls);
@@ -455,6 +460,12 @@ public class RcfacesContextImpl extends RcfacesContext implements
                 .get(APPLICATION_VERSION_PROPERTY);
 
         LOG.debug("Set application version to '" + applicationVersion + "'.");
+        
+        
+        listenerManagerStrategy =  facesContext.getExternalContext().
+        	getInitParameter(LISTENER_MANAGER_STRATEGY_PARAMETER);
+        
+        LOG.debug("Set listener manager stategy to '" + listenerManagerStrategy + "'.");
 
         LOG.debug("Initialize all configs: done.");
     }
@@ -553,4 +564,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
     public void setRepositoryManager(IRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
+
+	public String getListenerManagerStrategy() {
+		return listenerManagerStrategy;
+	}
 }

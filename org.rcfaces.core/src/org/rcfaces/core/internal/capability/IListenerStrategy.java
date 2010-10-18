@@ -9,7 +9,7 @@ public interface IListenerStrategy {
 	/**
 	 * DEFAULT : append listener without control
 	 */
-	int DEFAULT = 0x01;
+	int DEFAULT = 0x00;
 	
 	/**
 	 * ClEAN_ALL : remove all faces listener during the initialize phase of lyfe cycle. Used in facelet
