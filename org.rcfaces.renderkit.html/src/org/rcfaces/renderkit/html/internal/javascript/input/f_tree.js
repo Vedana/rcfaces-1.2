@@ -666,6 +666,7 @@ var __members = {
 
 //		this._defaultImageURL=undefined; // string
 //		this._defaultExpandedImageURL=undefined; // string
+//		this._defaultCollapsedImageURL=undefined; // string
 //		this._defaultSelectedImageURL=undefined; // string
 //		this._defaultDisabledImageURL=undefined; // string
 		
@@ -1751,6 +1752,11 @@ var __members = {
 			if (imageURL) { 
 				return imageURL;
 			}
+		} else {
+			imageURL=this._defaultCollapsedImageURL;
+			if (imageURL) { 
+				return imageURL;
+			}
 		}
 		
 		if (node._selected) {
@@ -2777,6 +2783,9 @@ var __members = {
 
 		url=arguments[i++];
 		if (url) this._defaultExpandedImageURL=url;
+		
+		url=arguments[i++];
+		if (url) this._defaultCollapsedImageURL=url;
 
 		url=arguments[i++];
 		if (url) this._defaultSelectedImageURL=url;

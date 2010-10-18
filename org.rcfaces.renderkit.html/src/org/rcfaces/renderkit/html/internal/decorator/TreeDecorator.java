@@ -123,7 +123,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         FacesContext facesContext = javaScriptWriter.getFacesContext();
 
         boolean write = false;
-        String urls[] = new String[8];
+        String urls[] = new String[9];
 
         String defaultImageURL = treeComponent.getDefaultImageURL(facesContext);
         if (defaultImageURL != null) {
@@ -148,35 +148,46 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             // javaScriptWriter.allocateString(defaultExpandedImageURL);
         }
 
+        String defaultCollapsedImageURL = treeComponent
+				.getDefaultCollapsedImageURL(facesContext);
+		if (defaultCollapsedImageURL != null) {
+			urls[2] = allocateImage(javaScriptWriter, defaultCollapsedImageURL);
+			if (urls[2] != null) {
+			    write = true;
+			}
+			// urls[2] =
+			// javaScriptWriter.allocateString(defaultCollapsedImageURL);
+		}
+
         String defaultSelectedImageURL = treeComponent
                 .getDefaultSelectedImageURL(facesContext);
         if (defaultSelectedImageURL != null) {
-            urls[2] = allocateImage(javaScriptWriter, defaultSelectedImageURL);
-            if (urls[2] != null) {
+            urls[3] = allocateImage(javaScriptWriter, defaultSelectedImageURL);
+            if (urls[3] != null) {
                 write = true;
             }
 
-            // urls[2] =
+            // urls[3] =
             // javaScriptWriter.allocateString(defaultSelectedImageURL);
         }
 
         String defaultDisabledImageURL = treeComponent
                 .getDefaultDisabledImageURL(facesContext);
         if (defaultDisabledImageURL != null) {
-            urls[3] = allocateImage(javaScriptWriter, defaultDisabledImageURL);
-            if (urls[3] != null) {
+            urls[4] = allocateImage(javaScriptWriter, defaultDisabledImageURL);
+            if (urls[4] != null) {
                 write = true;
             }
-            // urls[3] =
+            // urls[4] =
             // javaScriptWriter.allocateString(defaultDisabledImageURL);
         }
 
         String defaultLeafImageURL = treeComponent
                 .getDefaultLeafImageURL(facesContext);
         if (defaultLeafImageURL != null) {
-            urls[4] = allocateImage(javaScriptWriter, defaultLeafImageURL);
-            // urls[4] = javaScriptWriter.allocateString(defaultLeafImageURL);
-            if (urls[4] != null) {
+            urls[5] = allocateImage(javaScriptWriter, defaultLeafImageURL);
+            // urls[5] = javaScriptWriter.allocateString(defaultLeafImageURL);
+            if (urls[5] != null) {
                 write = true;
             }
         }
@@ -184,36 +195,36 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         String defaultExpandedLeafImageURL = treeComponent
                 .getDefaultExpandedLeafImageURL(facesContext);
         if (defaultExpandedLeafImageURL != null) {
-            urls[5] = allocateImage(javaScriptWriter,
+            urls[6] = allocateImage(javaScriptWriter,
                     defaultExpandedLeafImageURL);
-            if (urls[5] != null) {
+            if (urls[6] != null) {
                 write = true;
             }
-            // urls[5] =
+            // urls[6] =
             // javaScriptWriter.allocateString(defaultExpandedLeafImageURL);
         }
 
         String defaultSelectedLeafImageURL = treeComponent
                 .getDefaultSelectedLeafImageURL(facesContext);
         if (defaultSelectedLeafImageURL != null) {
-            urls[6] = allocateImage(javaScriptWriter,
+            urls[7] = allocateImage(javaScriptWriter,
                     defaultSelectedLeafImageURL);
-            if (urls[6] != null) {
+            if (urls[7] != null) {
                 write = true;
             }
-            // urls[6] =
+            // urls[7] =
             // javaScriptWriter.allocateString(defaultSelectedLeafImageURL);
         }
 
         String defaultDisabledLeafImageURL = treeComponent
                 .getDefaultDisabledLeafImageURL(facesContext);
         if (defaultDisabledLeafImageURL != null) {
-            urls[7] = allocateImage(javaScriptWriter,
+            urls[8] = allocateImage(javaScriptWriter,
                     defaultDisabledLeafImageURL);
-            if (urls[7] != null) {
+            if (urls[8] != null) {
                 write = true;
             }
-            // urls[7] =
+            // urls[8] =
             // javaScriptWriter.allocateString(defaultDisabledLeafImageURL);
         }
 
