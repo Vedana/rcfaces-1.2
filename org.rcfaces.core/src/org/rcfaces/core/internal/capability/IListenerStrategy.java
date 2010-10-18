@@ -17,7 +17,12 @@ public interface IListenerStrategy {
 	int CLEAN_ALL = 0x02;
 	
 	/**
-	 * CLEAN_BYCLASS : do not add faces listener if already one exist for this class  
+	 * CLEAN_BYCLASS : clean listener before adding new.
 	 */
-	int CLEAN_BYCLASS = 0x04;
+	int CLEAN_BY_CLASS = 0x04;
+	
+	/**
+	 *  CLEAN_BYCLASS : do not add faces listener if already one exist for this class 
+	 */
+	int ADD_IF_NEW = 0x08;
 }

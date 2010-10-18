@@ -573,9 +573,18 @@ ${FIELDS}
      		.getAsObject(facesContext, this,facesContext.getExternalContext()
         		.getInitParameter(RcfacesContext.LISTENER_MANAGER_STRATEGY_PARAMETER))).intValue();
     	
+    	FacesListener fcs[]=getFacesListeners(facesListenerClass);
+    	
     	switch (faceletListenerMode) {
-			case IListenerStrategy.CLEAN_BYCLASS:
-				return getFacesListeners(facesListenerClass).length>0;
+			case IListenerStrategy.ADD_IF_NEW:
+				return fcs.length>0 == false;
+			case IListenerStrategy.CLEAN_BY_CLASS: 
+				if(fcs.length>0) {
+					for(int i=0;i<fcs.length;i++) {
+	    				removeFacesListener(fcs[i]);
+	    			}
+	    		}
+	    		return true;
 			default:
 				return true;
 			}	
