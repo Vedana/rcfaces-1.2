@@ -42,6 +42,7 @@ import org.rcfaces.core.internal.contentProxy.IResourceProxyHandler;
 import org.rcfaces.core.internal.contentProxy.ResourceProxyHandlerImpl;
 import org.rcfaces.core.internal.contentStorage.ContentStorageAccessorHandler;
 import org.rcfaces.core.internal.contentStorage.IContentStorageEngine;
+import org.rcfaces.core.internal.converter.StrategyListenerConverter;
 import org.rcfaces.core.internal.documentBuilder.IDocumentBuilderProvider;
 import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.repository.IRepositoryManager;
@@ -110,7 +111,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
     private transient String applicationVersion;
     
-    private transient String listenerManagerStrategy;
+    private transient int listenerManagerStrategy;
 
     private transient IAdapterManager adapterManager;
 
@@ -461,11 +462,14 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
         LOG.debug("Set application version to '" + applicationVersion + "'.");
         
+        String strategyName = facesContext.getExternalContext().
+     	getInitParameter(LISTENER_MANAGER_STRATEGY_PARAMETER);
         
-        listenerManagerStrategy =  facesContext.getExternalContext().
-        	getInitParameter(LISTENER_MANAGER_STRATEGY_PARAMETER);
+        listenerManagerStrategy =  ((Integer) StrategyListenerConverter.SINGLETON
+         		.getAsObject(facesContext, null, strategyName)).intValue();
+       
         
-        LOG.debug("Set listener manager stategy to '" + listenerManagerStrategy + "'.");
+        LOG.debug("Set listener manager stategy to '" + strategyName + "'.");
 
         LOG.debug("Initialize all configs: done.");
     }
@@ -565,7 +569,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
         this.repositoryManager = repositoryManager;
     }
 
-	public String getListenerManagerStrategy() {
+	public int getListenerManagerStrategy() {
 		return listenerManagerStrategy;
 	}
 }
