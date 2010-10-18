@@ -460,15 +460,25 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
 		LOG.debug("Set application version to '" + applicationVersion + "'.");
 
-		
 		String strategyName = facesContext.getExternalContext()
 				.getInitParameter(LISTENER_MANAGER_STRATEGY_PARAMETER);
 
-		if(strategyName != null) {
-			listenerManagerStrategy = ((Integer) StrategyListenerConverter.SINGLETON
-				.getAsObject(facesContext, null, strategyName)).intValue();
+		if (strategyName != null) {
 
-			LOG.debug("Set listener manager stategy to '" + strategyName + "'.");
+			Integer convertedStartegy = ((Integer) StrategyListenerConverter.SINGLETON
+					.getAsObject(facesContext, null, strategyName));
+
+			if (convertedStartegy == null) {
+				throw new IllegalArgumentException("Listener manager stategy: "
+						+ strategyName
+						+ " is not a strategy. See IListenerStrategy");
+			}
+
+			listenerManagerStrategy = convertedStartegy.intValue();
+
+			LOG
+					.debug("Set listener manager stategy to '" + strategyName
+							+ "'.");
 		}
 
 		LOG.debug("Initialize all configs: done.");

@@ -544,14 +544,14 @@ ${FIELDS}
     public void initializePhase(FacesContext facesContext,  boolean reused) {
         if (reused) {
         
-       		RcfacesContext rcfacesContext =  RcfacesContext.getInstance(facesContext);
-    		int faceletListenerMode =  rcfacesContext.getListenerManagerStrategy();
-        		
-        	switch (faceletListenerMode) {
-			case IListenerStrategy.CLEAN_ALL:
-					clearListeners();
-				break;
-			}	
+       		RcfacesContext rcfacesContext = RcfacesContext
+					.getInstance(facesContext);
+			int faceletListenerMode = rcfacesContext
+					.getListenerManagerStrategy();
+
+			if ((IListenerStrategy.CLEAN_ALL & faceletListenerMode) > 0) {
+				clearListeners();
+			}
         }
     }
 

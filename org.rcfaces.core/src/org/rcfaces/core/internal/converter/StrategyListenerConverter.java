@@ -41,9 +41,6 @@ public class StrategyListenerConverter extends AbstractConverter {
         }
         
         Integer strategy = (Integer)  STRATEGY.get(value.trim().toUpperCase());
-        if (strategy == null){
-        	return DEFAULT;
-        }
         
         return strategy;
     }
