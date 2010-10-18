@@ -1,34 +1,34 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ICollapsableCapability;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.component.capability.IExpandEventCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
-import java.util.Set;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IExpandEventCapability;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.component.capability.ICollapsableCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * <p>The expandBar Component is a container that can be collapsed to show only a title bar. Expand Bars can be managed by group : only one element of the group is expanded.</p>
@@ -74,7 +74,7 @@ public class ExpandBarComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","fontUnderline","scopeValue","scopeSaveValue","fontSize","loadListener","expandListener","border","blurListener","fontName","focusListener","collapseEffect","asyncRenderMode","disabled","accessKey","groupName","fontItalic","overStyleClass","textDirection","fontBold","text","scopeVar","textAlignment","collapsed","collapsedText","userExpandable","readOnly","tabIndex"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","groupName","blurListener","collapsedText","tabIndex","userExpandable","focusListener","overStyleClass","loadListener","selectionListener","collapseEffect","scopeValue","border","text","expandListener","fontBold","fontSize","asyncRenderMode","collapsed","textDirection","fontItalic","scopeSaveValue","readOnly","fontUnderline","scopeVar","textAlignment","disabled"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 

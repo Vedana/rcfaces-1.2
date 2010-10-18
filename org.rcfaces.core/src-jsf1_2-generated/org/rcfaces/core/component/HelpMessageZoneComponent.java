@@ -2,16 +2,16 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import java.util.Set;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IFontCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * <p>The helpMessageZone Component is a placeholder for help messages. The messages are shown when the pointer hover a component and this component has a "helpMessage" property.</p>
@@ -39,7 +39,7 @@ public class HelpMessageZoneComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","textAlignment","fontSize","fontName","fontItalic","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","fontItalic","text","fontUnderline","textAlignment","fontBold","fontSize","textDirection"}));
 	}
 
 	public HelpMessageZoneComponent() {

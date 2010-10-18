@@ -1,13 +1,13 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-import java.util.Arrays;
 import javax.faces.component.NamingContainer;
-import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.TabComponent;
+import org.apache.commons.logging.Log;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
 
 public class TabNamingContainerComponent extends TabComponent implements 
 	NamingContainer {

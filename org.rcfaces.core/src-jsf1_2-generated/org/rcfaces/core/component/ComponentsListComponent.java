@@ -1,22 +1,22 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import java.lang.String;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IMenuCapability;
 
 /**
  * Shows the components for each data with pagination.
@@ -34,7 +34,7 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"rowCountVar","verticalScrollPosition","showValue","horizontalScrollPosition","columnStyleClass","border","borderType","rowStyleClass","columnNumber","rowIndexVar"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showValue","columnStyleClass","verticalScrollPosition","borderType","horizontalScrollPosition","rowStyleClass","rowCountVar","border","rowIndexVar","columnNumber"}));
 	}
 
 	public ComponentsListComponent() {
@@ -46,17 +46,17 @@ public class ComponentsListComponent extends AbstractDataComponent implements
 		setId(componentId);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

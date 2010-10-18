@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
+import org.rcfaces.core.component.capability.IToolTipCapability;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.rcfaces.core.component.AbstractItemComponent;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IToolTipCapability;
-import java.util.Set;
 import java.util.HashSet;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.AbstractItemComponent;
 
 public class SelectItemComponent extends AbstractItemComponent implements 
 	IToolTipCapability {

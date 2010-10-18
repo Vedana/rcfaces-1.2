@@ -1,14 +1,14 @@
 package org.rcfaces.core.component;
 
+import javax.faces.component.NamingContainer;
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.ToolFolderComponent;
 import org.apache.commons.logging.Log;
-import java.util.Arrays;
-import javax.faces.component.NamingContainer;
-import java.util.Set;
 import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.ToolFolderComponent;
 
 public class TextEditorToolFolderComponent extends ToolFolderComponent implements 
 	NamingContainer {
@@ -19,7 +19,7 @@ public class TextEditorToolFolderComponent extends ToolFolderComponent implement
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ToolFolderComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontSizes","fontNames","itemTypes","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontSizes","for","itemTypes","fontNames"}));
 	}
 
 	public TextEditorToolFolderComponent() {

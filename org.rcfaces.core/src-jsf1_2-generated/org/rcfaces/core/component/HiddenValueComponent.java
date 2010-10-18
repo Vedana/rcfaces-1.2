@@ -1,30 +1,30 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IValueLockedCapability;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
-import org.apache.commons.logging.LogFactory;
-import java.lang.Object;
-import java.util.Arrays;
-import java.util.Collections;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import java.lang.String;
-import javax.el.ValueExpression;
 import java.util.Map;
-import javax.faces.context.FacesContext;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import java.util.Collections;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IValueLockedCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import java.lang.Object;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import java.util.Arrays;
 
 /**
  * <p>The hiddenValue Component is a non-visual component. It is equivalent to and Input hidden type HTML tag.</p>
@@ -43,8 +43,8 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 	IValueLockedCapability,
 	IValidationEventCapability,
 	IUserEventCapability,
-	IServerDataManager,
-	IClientDataManager {
+	IClientDataManager,
+	IServerDataManager {
 
 	private static final Log LOG = LogFactory.getLog(HiddenValueComponent.class);
 
@@ -52,7 +52,7 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"validationListener","immediate","propertyChangeListener","userEventListener","valueLocked"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","userEventListener","valueLocked","propertyChangeListener","validationListener"}));
 	}
 
 	public HiddenValueComponent() {
@@ -64,6 +64,15 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		setId(componentId);
 	}
 
+	public void setClientData(String name, ValueExpression value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public String setClientData(String name, String value) {
 
 
@@ -73,10 +82,10 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public void setClientData(String name, ValueExpression value) {
+	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -88,15 +97,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public void setServerData(String name, ValueExpression value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -179,13 +179,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		
 	}
 
-	public Map getClientDataMap() {
-
-
-		return getClientDataMap(null);
-		
-	}
-
 	public int getClientDataCount() {
 
 
@@ -195,13 +188,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		 }
 		 
 		 return dataMapAccessor.getDataCount();
-		
-	}
-
-	public String getClientData(String name) {
-
-
-		 return getClientData(name, null);
 		
 	}
 
@@ -221,6 +207,46 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
+
+	public String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public Map getClientDataMap() {
+
+
+		return getClientDataMap(null);
+		
+	}
+
+	public String[] listServerDataKeys() {
+
+
+			return listServerDataKeys(null);
+		
+	}
+
+	public Map getServerDataMap() {
+
+
+		return getServerDataMap(null);
+		
+	}
+
+	public int getServerDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
 		
 	}
 
@@ -245,32 +271,6 @@ public class HiddenValueComponent extends CameliaInputComponent implements
 		}
             
 		return dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public Map getServerDataMap() {
-
-
-		return getServerDataMap(null);
-		
-	}
-
-	public int getServerDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-            
-		return dataMapAccessor.getDataCount();
-		
-	}
-
-	public String[] listServerDataKeys() {
-
-
-			return listServerDataKeys(null);
 		
 	}
 

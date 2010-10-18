@@ -1,23 +1,23 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.convert.Converter;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.TextEntryComponent;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.TextEntryComponent;
+import org.rcfaces.core.component.capability.IMaxResultNumberCapability;
+import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.model.IFilterProperties;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
 
 /**
  * <p>The suggestTextEntry is a <a href="/comps/textEntryCOmponent.html">textEntry Component</a> with an autosuggestion feature that shows in the form of a dropdown list.</p>
@@ -44,7 +44,7 @@ public class SuggestTextEntryComponent extends TextEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(TextEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"caseSensitive","suggestionDelayMs","filterProperties","moreResultsMessage","suggestionConverter","suggestionListener","suggestionValue","forceProposal","maxResultNumber","orderedItems","menuListener","suggestionMinChars"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"filterProperties","suggestionListener","suggestionConverter","suggestionMinChars","menuListener","maxResultNumber","orderedItems","caseSensitive","suggestionDelayMs","suggestionValue","forceProposal","moreResultsMessage"}));
 	}
 
 	public SuggestTextEntryComponent() {

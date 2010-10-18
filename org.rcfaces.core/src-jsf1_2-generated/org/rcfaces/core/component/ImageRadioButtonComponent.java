@@ -1,20 +1,20 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
 import org.rcfaces.core.component.RadioButtonComponent;
-import javax.el.ValueExpression;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import javax.faces.convert.Converter;
+import javax.el.ValueExpression;
 import java.util.HashSet;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
 import org.apache.commons.logging.Log;
+import java.util.Set;
+import java.util.Arrays;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The imageRadioButton Component is a <a href="/comps/radioButtonComponent.html">radioButton Component</a> with an image instead of the rounded box.</p>
@@ -38,7 +38,7 @@ public class ImageRadioButtonComponent extends RadioButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(RadioButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition","tabIndex"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","tabIndex","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 
 	public ImageRadioButtonComponent() {
@@ -241,17 +241,17 @@ public class ImageRadioButtonComponent extends RadioButtonComponent implements
 		engine.setProperty(Properties.IMAGE_WIDTH, imageWidth);
 	}
 
-	public IContentAccessors getImageAccessors() {
-
-
-			return getImageAccessors(null);
-		
-	}
-
 	public IContentAccessors getImageAccessors(FacesContext facesContext) {
 
 
 			return ImageAccessorTools.createImageAccessors(facesContext, this, engine);
+		
+	}
+
+	public IContentAccessors getImageAccessors() {
+
+
+			return getImageAccessors(null);
 		
 	}
 

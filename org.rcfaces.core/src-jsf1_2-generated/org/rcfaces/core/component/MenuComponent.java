@@ -1,23 +1,23 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.capability.ICheckComponent;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
-import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.capability.ICheckComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.component.CameliaSelectManyComponent;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.internal.tools.CheckTools;
 
@@ -41,8 +41,8 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	ICheckEventCapability,
 	ICheckedValuesCapability,
 	ICheckComponent,
-	IComponentValueTypeCapability,
-	IMenuComponent {
+	IMenuComponent,
+	IComponentValueTypeCapability {
 
 	private static final Log LOG = LogFactory.getLog(MenuComponent.class);
 
@@ -50,7 +50,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","menuId","converter","checkedValues","checkListener","preloadedLevelDepth","removeAllWhenShown","menuListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkedValues","checkListener","selectionListener","preloadedLevelDepth","converter","removeAllWhenShown","menuListener","menuId"}));
 	}
 
 	public MenuComponent() {
@@ -200,6 +200,13 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
+	public Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues(), getValue());
+		
+	}
+
 	public int getCheckedValuesCount() {
 
 
@@ -211,13 +218,6 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
-		
-	}
-
-	public Object getFirstCheckedValue() {
-
-
-			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 

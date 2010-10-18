@@ -1,29 +1,29 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IInputTypeCapability;
 import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import javax.faces.convert.Converter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.lang.String;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.component.capability.ITextPositionCapability;
-import org.rcfaces.core.internal.converter.InputTypeConverter;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.component.ToolFolderComponent;
-import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ITextPositionCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.UIImageItemComponent;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <b>EXPERIMENTAL</b>
@@ -46,7 +46,7 @@ public class ToolItemComponent extends UIImageItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","imageHeight","width","inputType","imageWidth","immediate","accessKey","borderType","lookId","groupName","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"immediate","lookId","imageHeight","accessKey","groupName","textPosition","borderType","styleClass","width","inputType","imageWidth"}));
 	}
 
 	public ToolItemComponent() {

@@ -1,17 +1,17 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-import java.util.Arrays;
-import org.rcfaces.core.component.AbstractOutputComponent;
-import java.util.Set;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.model.IFilterProperties;
+import java.util.Arrays;
+import java.util.Set;
 
 public class KeyLabelComponent extends AbstractOutputComponent implements 
 	IFilterCapability {
@@ -22,7 +22,7 @@ public class KeyLabelComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectedStyleClass","filterProperties","parentsStyleClass","showParents"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"parentsStyleClass","selectedStyleClass","filterProperties","showParents"}));
 	}
 
 	public KeyLabelComponent() {

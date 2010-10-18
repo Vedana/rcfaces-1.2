@@ -1,22 +1,22 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import javax.el.ValueExpression;
+import org.rcfaces.core.component.ButtonComponent;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import java.util.Set;
+import javax.faces.convert.Converter;
+import javax.el.ValueExpression;
 import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.converter.TextPositionConverter;
-import org.rcfaces.core.component.ButtonComponent;
 import org.apache.commons.logging.Log;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.component.familly.IImageButtonFamilly;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.converter.TextPositionConverter;
 
 /**
  * <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
@@ -42,7 +42,7 @@ public class ImageButtonComponent extends ButtonComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ButtonComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","hoverImageURL","imageHeight","imageURL","disabledImageURL","disabled","text","imageWidth","selectedImageURL","border","borderType","readOnly","textPosition","tabIndex"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","imageHeight","text","borderType","textPosition","hoverImageURL","tabIndex","selectedImageURL","selectionListener","readOnly","border","imageURL","disabled","imageWidth"}));
 	}
 
 	public ImageButtonComponent() {

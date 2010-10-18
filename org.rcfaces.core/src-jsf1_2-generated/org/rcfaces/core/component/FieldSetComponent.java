@@ -1,27 +1,27 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.apache.commons.logging.LogFactory;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.IBorderTypeCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.IImageCapability;
 
 /**
  * <p>The fieldSet Component is a container with a title (text and/or picture).</p>
@@ -59,7 +59,7 @@ public class FieldSetComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontUnderline","imageHeight","scopeValue","imageURL","verticalAlignment","scopeSaveValue","fontSize","overStyleClass","fontItalic","textDirection","fontBold","text","scopeVar","textAlignment","imageWidth","borderType","fontName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","fontName","text","borderType","fontBold","overStyleClass","fontSize","textDirection","scopeSaveValue","fontItalic","verticalAlignment","fontUnderline","scopeVar","textAlignment","scopeValue","imageURL","imageWidth"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 

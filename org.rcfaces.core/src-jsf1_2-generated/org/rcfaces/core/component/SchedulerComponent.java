@@ -1,33 +1,33 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.converter.LiteralTimeConverter;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.lang.Time;
 import java.util.TimeZone;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IHeightCapability;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import java.util.List;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IWidthCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.internal.util.ComponentIterators;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.Locale;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.util.List;
 import java.lang.String;
+import java.util.Date;
+import org.rcfaces.core.component.capability.IHeightCapability;
+import org.rcfaces.core.lang.Time;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Date;
-import org.rcfaces.core.component.capability.IWidthCapability;
-import java.util.Set;
 import java.util.HashSet;
-import java.util.Locale;
-import org.rcfaces.core.internal.util.ComponentIterators;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
-import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.internal.converter.LiteralTimeConverter;
+import java.util.Arrays;
 
 public class SchedulerComponent extends CameliaBaseComponent implements 
 	IWidthCapability,
@@ -45,7 +45,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","width","periodLabel","horizontalScrollPosition","styleClass","height","periods","dateBegin","showPrimaryTickLabel","periodToolTip","verticalScrollPosition","var","primaryTick","periodEnd","periodSelectable","literalTimeZone","literalLocale","immediate","periodStyle","periodBegin","hourEnd","hourBegin","secondaryTick","periodValue","showSecondaryTickLabel"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hourBegin","secondaryTick","periods","var","selectionListener","literalLocale","height","periodStyle","verticalScrollPosition","showSecondaryTickLabel","periodEnd","periodToolTip","literalTimeZone","hourEnd","periodSelectable","periodLabel","primaryTick","periodValue","styleClass","width","showPrimaryTickLabel","dateBegin","horizontalScrollPosition","immediate","periodBegin"}));
 	}
 
 	public SchedulerComponent() {

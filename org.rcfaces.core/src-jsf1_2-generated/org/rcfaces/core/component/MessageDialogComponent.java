@@ -2,32 +2,32 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.component.capability.IDialogPriorityCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
-import java.lang.String;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.component.CameliaInputComponent;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IDialogPriorityCapability;
+import org.rcfaces.core.internal.component.CameliaInputComponent;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 public class MessageDialogComponent extends CameliaInputComponent implements 
 	IImageCapability,
@@ -52,7 +52,7 @@ public class MessageDialogComponent extends CameliaInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","ariaLevel","imageURL","width","defaultValue","validationListener","title","waiRole","hiddenMode","userEventListener","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","text","userEventListener","visible","styleClass","width","dialogPriority","textDirection","ariaLevel","selectionListener","immediate","title","height","hiddenMode","defaultValue","waiRole","imageURL","validationListener"}));
 	}
 
 	public MessageDialogComponent() {

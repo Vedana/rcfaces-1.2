@@ -74,10 +74,6 @@ A boolean value indicating wether the vertical scroll is shown.
 		</attribute>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.externalBox</component-type>
-		<component-class>org.rcfaces.core.component.ExternalBoxComponent</component-class>
-	</component>
-	<component>
 		<description><![CDATA[
 <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
       <p>The button Component has the following capabilities :
@@ -222,30 +218,10 @@ A string specifying the message to display when there is no row to display.
 		<component-type>org.rcfaces.core.dataGrid</component-type>
 		<component-class>org.rcfaces.core.component.DataGridComponent</component-class>
 		<attribute>
-			<attribute-name>rowDragTypes</attribute-name>
-			<attribute-class>java.lang.String[]</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>rowDragEffects</attribute-name>
-			<attribute-class>int</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>rowDropTypes</attribute-name>
-			<attribute-class>java.lang.String[]</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>rowDropEffects</attribute-name>
-			<attribute-class>int</attribute-class>
-		</attribute>
-		<attribute>
 			<description><![CDATA[
 An id for the column containing the key for the row.
 ]]></description>
 			<attribute-name>rowValueColumnId</attribute-name>
-			<attribute-class>java.lang.String</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>rowLabelColumnId</attribute-name>
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 		<attribute>
@@ -264,10 +240,6 @@ A string value specifying the name of the variable receiving the index of the cu
 		</attribute>
 		<attribute>
 			<attribute-name>cellTextWrap</attribute-name>
-			<attribute-class>boolean</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>bodyDroppable</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
 	</component>
@@ -303,14 +275,6 @@ A string value specifying the name of the variable receiving the index of the cu
 	<component>
 		<component-type>org.rcfaces.core.comboGrid</component-type>
 		<component-class>org.rcfaces.core.component.ComboGridComponent</component-class>
-	</component>
-	<component>
-		<component-type>org.rcfaces.core.keyLabel</component-type>
-		<component-class>org.rcfaces.core.component.KeyLabelComponent</component-class>
-	</component>
-	<component>
-		<component-type>org.rcfaces.core.keyEntry</component-type>
-		<component-class>org.rcfaces.core.component.KeyEntryComponent</component-class>
 	</component>
 	<component>
 		<description><![CDATA[
@@ -1130,28 +1094,28 @@ Experimental Do not use.
 A number typed value.
 ]]></description>
 			<attribute-name>number</attribute-name>
-			<attribute-class>java.lang.Number</attribute-class>
+			<attribute-class>Number</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
 An int value specifying the lower limit for the value of the component.
 ]]></description>
 			<attribute-name>minimum</attribute-name>
-			<attribute-class>java.lang.Number</attribute-class>
+			<attribute-class>Number</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
 the default value.
 ]]></description>
 			<attribute-name>defaultNumber</attribute-name>
-			<attribute-class>java.lang.Number</attribute-class>
+			<attribute-class>Number</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
 An int value specifying the upper limit for the value of the component.
 ]]></description>
 			<attribute-name>maximum</attribute-name>
-			<attribute-class>java.lang.Number</attribute-class>
+			<attribute-class>Number</attribute-class>
 		</attribute>
 	</component>
 	<component>
@@ -1527,10 +1491,6 @@ An element belonging to a <a href="/comps/tabbedPaneComponent.html">tabbedPane C
 		<component-class>org.rcfaces.core.component.TabComponent</component-class>
 	</component>
 	<component>
-		<component-type>org.rcfaces.core.tabNamingContainer</component-type>
-		<component-class>org.rcfaces.core.component.TabNamingContainerComponent</component-class>
-	</component>
-	<component>
 		<description><![CDATA[
 <p>The text Component is a placeholder for displaying text.</p>
       <p>The text Component has the following capabilities :
@@ -1830,10 +1790,6 @@ An url string pointing to the default image for an expanded node.
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 		<attribute>
-			<attribute-name>defaultCollapsedImageURL</attribute-name>
-			<attribute-class>java.lang.String</attribute-class>
-		</attribute>
-		<attribute>
 			<description><![CDATA[
 An url string pointing to the default image for the disabled state.
 ]]></description>
@@ -1873,10 +1829,6 @@ An url string pointing to the default image for a disabled leaf.
 A boolean value indicating wether the expand sign should be visible for the topmost node.
 ]]></description>
 			<attribute-name>hideRootExpandSign</attribute-name>
-			<attribute-class>boolean</attribute-class>
-		</attribute>
-		<attribute>
-			<attribute-name>bodyDroppable</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
 		<attribute>
@@ -1923,18 +1875,6 @@ A boolean value indicating wether the component should be get the focus when a m
 			<attribute-name>setFocusIfMessage</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
-	</component>
-	<component>
-		<component-type>org.rcfaces.core.scheduler</component-type>
-		<component-class>org.rcfaces.core.component.SchedulerComponent</component-class>
-	</component>
-	<component>
-		<component-type>org.rcfaces.core.schedulerColumn</component-type>
-		<component-class>org.rcfaces.core.component.SchedulerColumnComponent</component-class>
-	</component>
-	<component>
-		<component-type>org.rcfaces.core.periodClientData</component-type>
-		<component-class>org.rcfaces.core.component.PeriodClientDataComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.selectItemsIterator</component-type>

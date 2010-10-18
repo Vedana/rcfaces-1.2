@@ -1,88 +1,87 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.component.capability.IDraggableCapability;
-import org.rcfaces.core.internal.tools.SortTools;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.component.capability.IDragEventCapability;
-import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
-import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.internal.converter.DragDropTypesConverter;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.internal.capability.IDraggableGridComponent;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.component.AbstractDataComponent;
-import org.rcfaces.core.internal.tools.CollectionTools;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
-import org.rcfaces.core.internal.converter.ClientFullStateConverter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.rcfaces.core.internal.tools.SelectionTools;
-import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
-import org.rcfaces.core.component.capability.IDroppableCapability;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
-import org.rcfaces.core.component.capability.IDragAndDropEffects;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
-import org.rcfaces.core.component.iterator.IDataColumnIterator;
-import org.rcfaces.core.component.DataColumnComponent;
-import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
-import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISelectedValuesCapability;
-import org.rcfaces.core.internal.capability.IDroppableGridComponent;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.lang.provider.ICursorProvider;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
-import org.rcfaces.core.component.capability.IDropEventCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
-import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.internal.capability.ICheckRangeComponent;
-import java.lang.String;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
-import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.capability.IPreferencesSettings;
-import java.util.Set;
-import java.util.HashSet;
 import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectableCapability;
-import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
-import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.model.ISortedComponent;
-import org.rcfaces.core.component.capability.IPagedCapability;
-import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
-import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
+import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
+import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.capability.IDraggableGridComponent;
+import org.rcfaces.core.component.capability.IDragEventCapability;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.component.capability.IDroppableCapability;
+import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
+import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
+import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
+import org.rcfaces.core.lang.provider.ICursorProvider;
+import org.rcfaces.core.component.capability.IPagedCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
+import org.rcfaces.core.internal.tools.SortTools;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.converter.DragDropTypesConverter;
+import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
+import java.util.Set;
+import org.rcfaces.core.component.iterator.IDataColumnIterator;
+import org.rcfaces.core.internal.capability.IDroppableGridComponent;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
+import org.rcfaces.core.component.DataColumnComponent;
+import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.component.capability.IDropEventCapability;
+import java.lang.String;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
+import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.internal.tools.CollectionTools;
 
 /**
  * <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
@@ -137,16 +136,16 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IClientCheckFullStateCapability,
 	IHeaderVisibilityCapability,
 	ICursorProvider,
-	IOrderedChildrenCapability,
-	ICheckRangeComponent,
-	ISelectionRangeComponent,
-	ISortedComponentsCapability,
-	IDraggableGridComponent,
-	IAdditionalInformationRangeComponent,
 	IGridComponent,
 	IDroppableGridComponent,
+	IOrderedChildrenCapability,
+	ISortedChildrenCapability,
 	IComponentValueTypeCapability,
-	ISortedChildrenCapability {
+	ISelectionRangeComponent,
+	ICheckRangeComponent,
+	ISortedComponentsCapability,
+	IAdditionalInformationRangeComponent,
+	IDraggableGridComponent {
 
 	private static final Log LOG = LogFactory.getLog(DataGridComponent.class);
 
@@ -154,7 +153,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"horizontalScrollPosition","clientAdditionalInformationFullState","preferences","draggable","rowIndexVar","additionalInformationValues","selectable","loadListener","rowDropTypes","filterProperties","dropCompleteListener","additionalInformationListener","checkCardinality","cellTextWrap","paged","dragListener","bodyDroppable","dropListener","disabled","additionalInformationCardinality","cursorValue","rowLabelColumnId","clientCheckFullState","rowStyleClass","keySearchColumnId","headerVisible","dragEffects","dragTypes","rowDropEffects","selectionCardinality","readOnly","selectedValues","selectionListener","rowValueColumnId","doubleClickListener","showValue","checkable","checkedValues","droppable","border","rowDragTypes","verticalScrollPosition","emptyDataMessage","required","dropEffects","rowDragEffects","rowCountVar","dropTypes","clientSelectionFullState","checkListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","selectionCardinality","droppable","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -166,13 +165,6 @@ public class DataGridComponent extends AbstractDataComponent implements
 		setId(componentId);
 	}
 
-	public void setSortedChildren(UIComponent[] components) {
-
-
-				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, components);
-			
-	}
-
 	public UIComponent[] getSortedChildren() {
 
 
@@ -180,10 +172,10 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
-	public UIComponent[] getOrderedChildren() {
+	public void setSortedChildren(UIComponent[] components) {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, DataColumnComponent.class);
+				SortTools.setSortedChildren(null, this, engine, DataColumnComponent.class, components);
 			
 	}
 
@@ -191,6 +183,13 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 
 				OrderTools.setOrderedChildren(null, this, engine, DataColumnComponent.class, components);
+			
+	}
+
+	public UIComponent[] getOrderedChildren() {
+
+
+				return OrderTools.getOrderedChildren(null, this, engine, DataColumnComponent.class);
 			
 	}
 
@@ -794,7 +793,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * See {@link #getDragEffects() getDragEffects()} for more details
 	 */
 	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,0, facesContext);
 	}
 
 	/**
@@ -887,7 +886,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * See {@link #getDropEffects() getDropEffects()} for more details
 	 */
 	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DROP_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
 	}
 
 	/**
@@ -1282,17 +1281,17 @@ public class DataGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.DISABLED, disabled);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

@@ -2,39 +2,39 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
-import org.rcfaces.core.component.capability.IPartialRenderingCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import java.util.Collections;
-import java.util.Arrays;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
-import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import java.util.Collections;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IHelpCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.capability.IMarginCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -57,16 +57,25 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	IHiddenModeCapability,
 	ILookAndFeelCapability,
 	IStyleClassCapability,
-	IServerDataManager,
-	IClientDataManager {
+	IClientDataManager,
+	IServerDataManager {
 
 	private static final Log LOG = LogFactory.getLog(AbstractBasicComponent.class);
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"width","unlockedClientAttributeNames","marginRight","hiddenMode","helpMessage","foregroundColor","styleClass","height","margins","propertyChangeListener","ariaLevel","waiRole","toolTipText","userEventListener","marginBottom","helpURL","partialRendering","y","visible","marginLeft","lookId","marginTop","errorListener","backgroundColor","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","waiRole","foregroundColor","lookId","userEventListener","helpMessage","marginTop","width","marginRight","styleClass","partialRendering","marginBottom","unlockedClientAttributeNames","toolTipText","y","x","margins"}));
 	}
 
+
+	public void setClientData(String name, ValueExpression value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
 
 	public String setClientData(String name, String value) {
 
@@ -77,10 +86,10 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		
 	}
 
-	public void setClientData(String name, ValueExpression value) {
+	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -92,15 +101,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public void setServerData(String name, ValueExpression value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -254,13 +254,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		engine.setProperty(Properties.PARTIAL_RENDERING, partialRendering);
 	}
 
-	public Map getClientDataMap() {
-
-
-		return getClientDataMap(null);
-		
-	}
-
 	public int getClientDataCount() {
 
 
@@ -270,13 +263,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		 }
 		 
 		 return dataMapAccessor.getDataCount();
-		
-	}
-
-	public String getClientData(String name) {
-
-
-		 return getClientData(name, null);
 		
 	}
 
@@ -296,6 +282,46 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
+
+	public String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public Map getClientDataMap() {
+
+
+		return getClientDataMap(null);
+		
+	}
+
+	public String[] listServerDataKeys() {
+
+
+			return listServerDataKeys(null);
+		
+	}
+
+	public Map getServerDataMap() {
+
+
+		return getServerDataMap(null);
+		
+	}
+
+	public int getServerDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
 		
 	}
 
@@ -320,32 +346,6 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 		}
             
 		return dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public Map getServerDataMap() {
-
-
-		return getServerDataMap(null);
-		
-	}
-
-	public int getServerDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-            
-		return dataMapAccessor.getDataCount();
-		
-	}
-
-	public String[] listServerDataKeys() {
-
-
-			return listServerDataKeys(null);
 		
 	}
 

@@ -1,27 +1,27 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import org.rcfaces.core.component.SelectItemComponent;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.FacesException;
 import java.util.TimeZone;
-import java.util.Date;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Locale;
-import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
+import java.util.Date;
+import org.rcfaces.core.component.SelectItemComponent;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import javax.faces.FacesException;
+import javax.el.ValueExpression;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
+import java.util.Locale;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * An item specialized for date values.
@@ -39,7 +39,7 @@ public class DateItemComponent extends SelectItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(SelectItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","literalTimeZone","styleClass","literalLocale","text","date"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"literalLocale","text","menuPopupId","literalTimeZone","styleClass","date"}));
 	}
 
 	public DateItemComponent() {

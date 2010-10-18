@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.component.UIViewRoot;
-import org.rcfaces.core.component.DataGridComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.DataGridComponent;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public class DataGridTag extends AbstractDataTag implements Tag {
 
@@ -379,17 +379,12 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.DRAG_EFFECTS, dragEffects);
 
 			} else {
-				component.setDragEffects(dragEffects.getExpressionString());
+				component.setDragEffects(getInt(dragEffects.getExpressionString()));
 			}
 		}
 
 		if (dragTypes != null) {
-			if (dragTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DRAG_TYPES, dragTypes);
-
-			} else {
-				component.setDragTypes(dragTypes.getExpressionString());
-			}
 		}
 
 		if (draggable != null) {
@@ -414,17 +409,12 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.DROP_EFFECTS, dropEffects);
 
 			} else {
-				component.setDropEffects(dropEffects.getExpressionString());
+				component.setDropEffects(getInt(dropEffects.getExpressionString()));
 			}
 		}
 
 		if (dropTypes != null) {
-			if (dropTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DROP_TYPES, dropTypes);
-
-			} else {
-				component.setDropTypes(dropTypes.getExpressionString());
-			}
 		}
 
 		if (droppable != null) {
@@ -658,7 +648,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.ROW_DRAG_EFFECTS, rowDragEffects);
 
 			} else {
-				component.setRowDragEffects(rowDragEffects.getExpressionString());
+				component.setRowDragEffects(getInt(rowDragEffects.getExpressionString()));
 			}
 		}
 
@@ -676,7 +666,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.ROW_DROP_EFFECTS, rowDropEffects);
 
 			} else {
-				component.setRowDropEffects(rowDropEffects.getExpressionString());
+				component.setRowDropEffects(getInt(rowDropEffects.getExpressionString()));
 			}
 		}
 

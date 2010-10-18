@@ -19,14 +19,14 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.lang.String;
+import javax.faces.event.FacesListener;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.internal.capability.IConvertValueHolder;
 import java.lang.Object;
-import javax.faces.event.ValueChangeEvent;
-import java.util.Arrays;
-import javax.faces.event.FacesListener;
 import java.util.HashSet;
+import java.lang.String;
+import java.util.Arrays;
+import javax.faces.event.ValueChangeEvent;
 import org.rcfaces.core.internal.capability.ISubmittedExternalValue;
 
 
@@ -37,15 +37,19 @@ import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.RcfacesContext;
+
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.IComponentLifeCycle;
+import org.rcfaces.core.internal.capability.IListenerStrategy;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
 import org.rcfaces.core.internal.capability.IStateChildrenList;
 import org.rcfaces.core.internal.component.CameliaComponents;
 import org.rcfaces.core.internal.component.RestoreViewPhaseListener;
 import org.rcfaces.core.internal.component.IFactory;
 import org.rcfaces.core.internal.component.IInitializationState;
+import org.rcfaces.core.internal.converter.StrategyListenerConverter;
 import org.rcfaces.core.internal.manager.IContainerManager;
 import org.rcfaces.core.internal.manager.ITransientAttributesManager;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
@@ -64,7 +68,7 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
 
 	private static final Log LOG = LogFactory.getLog(CameliaInputComponent.class);
 
-	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"value","converter"}));
+	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(Arrays.asList(new String[] {"converter","value"}));
 
 	protected transient IComponentEngine engine;
 
@@ -548,9 +552,17 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
     public void constructPhase(FacesContext facesContext) {
     }
     
-    public void initializePhase(FacesContext facesContext, boolean reused) {
+    public void initializePhase(FacesContext facesContext,  boolean reused) {
         if (reused) {
-			clearListeners();
+        
+       		RcfacesContext rcfacesContext = RcfacesContext
+					.getInstance(facesContext);
+			int faceletListenerMode = rcfacesContext
+					.getListenerManagerStrategy();
+
+			if ((IListenerStrategy.CLEAN_ALL & faceletListenerMode) > 0) {
+				clearListeners();
+			}
         }
     }
 
@@ -564,7 +576,33 @@ public abstract class CameliaInputComponent extends javax.faces.component.UIInpu
     }
 
     public void renderPhase(FacesContext facesContext) {
-    }    
+    }   
+    
+    public boolean confirmListenerAppend(FacesContext facesContext, Class facesListenerClass){
+    	
+    	RcfacesContext rcfacesContext = RcfacesContext
+				.getInstance(facesContext);
+		int faceletListenerMode = rcfacesContext.getListenerManagerStrategy();
+
+		if (((IListenerStrategy.ADD_IF_NEW | IListenerStrategy.CLEAN_BY_CLASS) & faceletListenerMode) == 0) {
+			return true;
+		}
+
+		FacesListener fcs[] = getFacesListeners(facesListenerClass);
+		if ((IListenerStrategy.ADD_IF_NEW & faceletListenerMode) > 0) {
+			return fcs.length == 0;
+		}
+
+		if ((IListenerStrategy.CLEAN_BY_CLASS & faceletListenerMode) > 0) {
+			for (int i = 0; i < fcs.length; i++) {
+				removeFacesListener(fcs[i]);
+			}
+
+			return true;
+		}
+
+		return true;
+    } 
 	
 	public String toString() {
 		String name=getClass().getName();

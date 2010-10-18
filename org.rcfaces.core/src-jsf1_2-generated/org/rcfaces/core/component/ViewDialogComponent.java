@@ -2,31 +2,31 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.component.capability.IDialogPriorityCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
-import java.lang.String;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
-import org.rcfaces.core.component.capability.IClosableCapability;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.component.CameliaOutputComponent;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IDialogPriorityCapability;
+import org.rcfaces.core.component.capability.IClosableCapability;
+import org.rcfaces.core.component.capability.IImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.internal.component.CameliaOutputComponent;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 public class ViewDialogComponent extends CameliaOutputComponent implements 
 	IImageCapability,
@@ -50,7 +50,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"ariaLevel","shellDecoratorName","imageURL","width","waiRole","closable","hiddenMode","textDirection","styleClass","text","height","dialogPriority","immediate","visible","lookId","closeListener","viewURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","closeListener","text","shellDecoratorName","visible","styleClass","width","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","imageURL","waiRole"}));
 	}
 
 	public ViewDialogComponent() {

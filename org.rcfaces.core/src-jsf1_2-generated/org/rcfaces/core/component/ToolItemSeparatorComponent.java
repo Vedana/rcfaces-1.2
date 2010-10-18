@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractSeparatorComponent;
-import org.rcfaces.core.component.ToolFolderComponent;
+import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.Set;
 import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.ToolFolderComponent;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
 
 /**
  * <b>EXPERIMENTAL</b>

@@ -1,15 +1,15 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
-import java.util.Arrays;
+import javax.el.ValueExpression;
+import org.apache.commons.logging.Log;
+import java.util.HashSet;
 import org.rcfaces.core.component.AbstractOutputComponent;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
 import java.util.Set;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
-import java.util.HashSet;
 
 public class ExternalBoxComponent extends AbstractOutputComponent implements 
 	ILoadEventCapability,
@@ -21,7 +21,7 @@ public class ExternalBoxComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"loadListener","contentURL","scrolling","overStyleClass"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scrolling","overStyleClass","contentURL","loadListener"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="contentURL";
 

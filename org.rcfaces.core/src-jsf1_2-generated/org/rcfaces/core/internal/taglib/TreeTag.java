@@ -1,17 +1,17 @@
 package org.rcfaces.core.internal.taglib;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
-import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.Log;
-import javax.faces.component.UIViewRoot;
 import org.rcfaces.core.component.TreeComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import org.rcfaces.core.internal.component.Properties;
+import javax.el.ValueExpression;
+import javax.faces.component.UIViewRoot;
+import org.apache.commons.logging.Log;
+import javax.servlet.jsp.tagext.Tag;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
 
 public class TreeTag extends AbstractInputTag implements Tag {
 
@@ -54,6 +54,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression defaultImageURL;
 	private ValueExpression defaultSelectedImageURL;
 	private ValueExpression defaultExpandedImageURL;
+	private ValueExpression defaultCollapsedImageURL;
 	private ValueExpression defaultDisabledImageURL;
 	private ValueExpression defaultLeafImageURL;
 	private ValueExpression defaultSelectedLeafImageURL;
@@ -211,6 +212,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		this.defaultExpandedImageURL = defaultExpandedImageURL;
 	}
 
+	public final void setDefaultCollapsedImageURL(ValueExpression defaultCollapsedImageURL) {
+		this.defaultCollapsedImageURL = defaultCollapsedImageURL;
+	}
+
 	public final void setDefaultDisabledImageURL(ValueExpression defaultDisabledImageURL) {
 		this.defaultDisabledImageURL = defaultDisabledImageURL;
 	}
@@ -280,6 +285,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			LOG.debug("  defaultImageURL='"+defaultImageURL+"'");
 			LOG.debug("  defaultSelectedImageURL='"+defaultSelectedImageURL+"'");
 			LOG.debug("  defaultExpandedImageURL='"+defaultExpandedImageURL+"'");
+			LOG.debug("  defaultCollapsedImageURL='"+defaultCollapsedImageURL+"'");
 			LOG.debug("  defaultDisabledImageURL='"+defaultDisabledImageURL+"'");
 			LOG.debug("  defaultLeafImageURL='"+defaultLeafImageURL+"'");
 			LOG.debug("  defaultSelectedLeafImageURL='"+defaultSelectedLeafImageURL+"'");
@@ -395,17 +401,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.DRAG_EFFECTS, dragEffects);
 
 			} else {
-				component.setDragEffects(dragEffects.getExpressionString());
+				component.setDragEffects(getInt(dragEffects.getExpressionString()));
 			}
 		}
 
 		if (dragTypes != null) {
-			if (dragTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DRAG_TYPES, dragTypes);
-
-			} else {
-				component.setDragTypes(dragTypes.getExpressionString());
-			}
 		}
 
 		if (draggable != null) {
@@ -430,17 +431,12 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.DROP_EFFECTS, dropEffects);
 
 			} else {
-				component.setDropEffects(dropEffects.getExpressionString());
+				component.setDropEffects(getInt(dropEffects.getExpressionString()));
 			}
 		}
 
 		if (dropTypes != null) {
-			if (dropTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DROP_TYPES, dropTypes);
-
-			} else {
-				component.setDropTypes(dropTypes.getExpressionString());
-			}
 		}
 
 		if (droppable != null) {
@@ -571,6 +567,15 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			}
 		}
 
+		if (defaultCollapsedImageURL != null) {
+			if (defaultCollapsedImageURL.isLiteralText()==false) {
+				component.setValueExpression(Properties.DEFAULT_COLLAPSED_IMAGE_URL, defaultCollapsedImageURL);
+
+			} else {
+				component.setDefaultCollapsedImageURL(defaultCollapsedImageURL.getExpressionString());
+			}
+		}
+
 		if (defaultDisabledImageURL != null) {
 			if (defaultDisabledImageURL.isLiteralText()==false) {
 				component.setValueExpression(Properties.DEFAULT_DISABLED_IMAGE_URL, defaultDisabledImageURL);
@@ -690,6 +695,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		defaultImageURL = null;
 		defaultSelectedImageURL = null;
 		defaultExpandedImageURL = null;
+		defaultCollapsedImageURL = null;
 		defaultDisabledImageURL = null;
 		defaultLeafImageURL = null;
 		defaultSelectedLeafImageURL = null;

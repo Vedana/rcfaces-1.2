@@ -2,12 +2,12 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.ComboComponent;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.component.ComboComponent;
 import org.rcfaces.core.component.capability.IForCapability;
 
 public class TextEditorComboComponent extends ComboComponent implements 
@@ -19,7 +19,7 @@ public class TextEditorComboComponent extends ComboComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ComboComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"type","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"for","type"}));
 	}
 
 	public TextEditorComboComponent() {

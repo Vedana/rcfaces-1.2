@@ -1,19 +1,19 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractCommandComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import java.util.Set;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
 
 /**
  * <p>The button Component is equivalent to the standard HTML tag &lt;BUTTON&gt;.</p>
@@ -42,7 +42,7 @@ public class ButtonComponent extends AbstractCommandComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","alternateText","text","readOnly","focusStyleClass","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","selectionListener","text","readOnly","alternateText","textDirection"}));
 	}
 
 	public ButtonComponent() {

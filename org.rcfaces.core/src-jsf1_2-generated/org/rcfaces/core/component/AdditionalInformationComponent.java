@@ -1,35 +1,35 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IHeightCapability;
-import org.rcfaces.core.internal.component.CameliaColumnComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import java.lang.String;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
-import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IAdditionalInformationContainer;
+import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
+import org.rcfaces.core.component.capability.IUserEventCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.component.IMenuComponent;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IBackgroundImageCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IHeightCapability;
+import org.rcfaces.core.internal.component.CameliaColumnComponent;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IMarginCapability;
 
 public class AdditionalInformationComponent extends CameliaColumnComponent implements 
 	IPropertyChangeEventCapability,
@@ -56,7 +56,7 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"scopeValue","scopeSaveValue","marginRight","foregroundColor","loadListener","styleClass","height","backgroundImageVerticalRepeat","margins","initListener","backgroundImageURL","propertyChangeListener","mouseOutListener","ariaLevel","waiRole","mouseOverListener","userEventListener","backgroundImageVerticalPosition","marginBottom","scopeVar","backgroundImageHorizontalPosition","backgroundImageHorizontalRepeat","marginLeft","lookId","marginTop","backgroundColor","errorListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundColor","marginLeft","errorListener","backgroundImageVerticalPosition","propertyChangeListener","backgroundImageHorizontalPosition","loadListener","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","foregroundColor","waiRole","mouseOutListener","lookId","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
 	}
 
 	public AdditionalInformationComponent() {
@@ -527,17 +527,17 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

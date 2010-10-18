@@ -1,20 +1,20 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.component.capability.ITypedComponentCapability;
-import java.util.Arrays;
-import java.util.Set;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
+import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.AbstractOutputComponent;
+import java.util.Set;
+import java.util.Arrays;
 import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
 
 /**
  * <p>The text Component is a placeholder for displaying text.</p>
@@ -46,7 +46,7 @@ public class TextComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontBold","fontUnderline","text","type","textAlignment","fontSize","accessKey","fontName","fontItalic","for","textDirection"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","fontName","fontItalic","text","fontUnderline","for","textAlignment","fontBold","type","fontSize","textDirection"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 

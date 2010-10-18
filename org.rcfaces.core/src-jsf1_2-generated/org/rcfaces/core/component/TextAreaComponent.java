@@ -1,29 +1,29 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
-import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * <p>The textAreaEntry Component is based on the standard HTML tag &lt;TEXTAREA&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>
@@ -58,7 +58,7 @@ public class TextAreaComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","selectionListener","fatalStyleClass","required","maxTextLength","valueChangeListener","columnNumber","warnStyleClass","textDirection","alternateText","styleClass","text","rowNumber","infoStyleClass","readOnly","focusStyleClass","ignoreWhenFull","emptyMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","text","fatalStyleClass","styleClass","rowNumber","columnNumber","textDirection","emptyMessage","selectionListener","maxTextLength","valueChangeListener","readOnly","errorStyleClass","warnStyleClass","alternateText","infoStyleClass","ignoreWhenFull","required"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -179,17 +179,17 @@ public class TextAreaComponent extends AbstractInputComponent implements
 		return getFacesListeners(javax.faces.event.ValueChangeListener.class);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

@@ -1,24 +1,24 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import javax.faces.convert.Converter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import org.rcfaces.core.component.capability.ISelectedCapability;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.HorizontalTextPositionConverter;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.ITextCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISelectedCapability;
 import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * <p>The checkButton Component is equivalent to the &lt;INPUT TYPE="checkbox"&gt; HTML tag.</p>
@@ -50,7 +50,7 @@ public class CheckButtonComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","errorStyleClass","fatalStyleClass","warnStyleClass","textDirection","alternateText","styleClass","text","selected","infoStyleClass","readOnly","focusStyleClass","textPosition"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","text","fatalStyleClass","textPosition","styleClass","textDirection","selectionListener","selected","readOnly","errorStyleClass","warnStyleClass","alternateText","infoStyleClass"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="selected";
 

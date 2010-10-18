@@ -1,32 +1,32 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.converter.WeekDaysConverter;
-import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
 import java.util.TimeZone;
-import java.util.Arrays;
+import org.rcfaces.core.internal.converter.LiteralDateConverter;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.internal.converter.WeekDaysConverter;
+import org.rcfaces.core.lang.IAdaptable;
+import org.rcfaces.core.component.capability.IComponentLocaleCapability;
 import org.rcfaces.core.component.capability.ILiteralLocaleCapability;
-import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
-import org.rcfaces.core.component.AbstractInputComponent;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import javax.faces.FacesException;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.Locale;
+import java.util.Set;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
+import org.rcfaces.core.internal.converter.LiteralTwoDigitYearConverter;
+import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
+import java.util.Date;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.ILiteralTimeZoneCapability;
-import org.rcfaces.core.component.capability.IClientDatesStrategyCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import javax.faces.FacesException;
-import java.util.Date;
-import java.util.Set;
 import java.util.HashSet;
-import org.rcfaces.core.internal.converter.ClientDatesStrategyConverter;
-import java.util.Locale;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.internal.converter.LiteralDateConverter;
-import org.rcfaces.core.component.capability.IComponentLocaleCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.lang.IAdaptable;
+import java.util.Arrays;
+import org.rcfaces.core.component.AbstractInputComponent;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -44,7 +44,7 @@ public abstract class AbstractCalendarComponent extends AbstractInputComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalTimeZone","maxDate","cursorDate","literalLocale","componentLocale","clientDatesStrategy","componentTimeZone","readOnly","disabledWeekDays","twoDigitYearStart","minDate"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","literalLocale","cursorDate","readOnly","maxDate","componentTimeZone","componentLocale","literalTimeZone","disabledWeekDays","minDate","clientDatesStrategy","twoDigitYearStart"}));
 	}
 
 

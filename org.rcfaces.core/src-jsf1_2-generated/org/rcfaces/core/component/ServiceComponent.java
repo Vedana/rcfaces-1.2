@@ -1,36 +1,36 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.model.IFilterProperties;
-import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
-import java.lang.Object;
-import org.rcfaces.core.component.capability.IServiceEventCapability;
 import java.util.TimeZone;
-import java.util.Collections;
-import java.util.Arrays;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
-import java.lang.String;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Locale;
-import org.rcfaces.core.internal.Constants;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.internal.converter.LocaleConverter;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
-import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IComponentLocaleCapability;
+import java.util.Collections;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.component.capability.IComponentTimeZoneCapability;
+import org.rcfaces.core.component.capability.IServiceEventCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
+import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.converter.LocaleConverter;
+import java.util.Locale;
+import java.util.Set;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import java.lang.Object;
+import java.lang.String;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.model.IFilterProperties;
+import java.util.Arrays;
 
 /**
  * <p>The service Component is a non-visual component.</p>
@@ -49,8 +49,8 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	IFilterCapability,
 	IComponentLocaleCapability,
 	IComponentTimeZoneCapability,
-	IServerDataManager,
-	IClientDataManager {
+	IClientDataManager,
+	IServerDataManager {
 
 	private static final Log LOG = LogFactory.getLog(ServiceComponent.class);
 
@@ -58,7 +58,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"serviceId","filterProperties","componentLocale","enableViewState","propertyChangeListener","componentTimeZone","serviceEventListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"enableViewState","filterProperties","serviceId","componentTimeZone","componentLocale","serviceEventListener","propertyChangeListener"}));
 	}
 
 	public ServiceComponent() {
@@ -70,6 +70,15 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		setId(componentId);
 	}
 
+	public void setClientData(String name, ValueExpression value) {
+
+
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+            
+		dataMapAccessor.setData(name, value, null);
+		
+	}
+
 	public String setClientData(String name, String value) {
 
 
@@ -79,10 +88,10 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		
 	}
 
-	public void setClientData(String name, ValueExpression value) {
+	public void setServerData(String name, ValueExpression value) {
 
 
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "clientData", true);
+		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		dataMapAccessor.setData(name, value, null);
 		
@@ -94,15 +103,6 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
             
 		return dataMapAccessor.setData(name, value, null);
-		
-	}
-
-	public void setServerData(String name, ValueExpression value) {
-
-
-		IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", true);
-            
-		dataMapAccessor.setData(name, value, null);
 		
 	}
 
@@ -208,13 +208,6 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		
 	}
 
-	public Map getClientDataMap() {
-
-
-		return getClientDataMap(null);
-		
-	}
-
 	public int getClientDataCount() {
 
 
@@ -224,13 +217,6 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		 }
 		 
 		 return dataMapAccessor.getDataCount();
-		
-	}
-
-	public String getClientData(String name) {
-
-
-		 return getClientData(name, null);
 		
 	}
 
@@ -250,6 +236,46 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		}
             
 		return (String)dataMapAccessor.removeData(name, null);
+		
+	}
+
+	public String getClientData(String name) {
+
+
+		 return getClientData(name, null);
+		
+	}
+
+	public Map getClientDataMap() {
+
+
+		return getClientDataMap(null);
+		
+	}
+
+	public String[] listServerDataKeys() {
+
+
+			return listServerDataKeys(null);
+		
+	}
+
+	public Map getServerDataMap() {
+
+
+		return getServerDataMap(null);
+		
+	}
+
+	public int getServerDataCount() {
+
+
+		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
+		 if (dataMapAccessor==null) {
+		 	return 0;
+		 }
+            
+		return dataMapAccessor.getDataCount();
 		
 	}
 
@@ -274,32 +300,6 @@ public class ServiceComponent extends CameliaBaseComponent implements
 		}
             
 		return dataMapAccessor.removeData(name, null);
-		
-	}
-
-	public Map getServerDataMap() {
-
-
-		return getServerDataMap(null);
-		
-	}
-
-	public int getServerDataCount() {
-
-
-		 IDataMapAccessor dataMapAccessor=engine.getDataMapAccessor(null, "serverData", false);
-		 if (dataMapAccessor==null) {
-		 	return 0;
-		 }
-            
-		return dataMapAccessor.getDataCount();
-		
-	}
-
-	public String[] listServerDataKeys() {
-
-
-			return listServerDataKeys(null);
 		
 	}
 

@@ -1,21 +1,21 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import javax.el.ValueExpression;
 import org.rcfaces.core.component.ExpandableItemComponent;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.apache.commons.logging.LogFactory;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IAcceleratorKeyCapability;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.iterator.IMenuItemIterator;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.internal.tools.MenuTools;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IMenuEventCapability;
+import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.IMenuComponent;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IMenuEventCapability;
 
 /**
  * A menu item
@@ -33,7 +33,7 @@ public class MenuItemComponent extends ExpandableItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"styleClass","immediate","acceleratorKey","removeAllWhenShown","accessKey","menuListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"acceleratorKey","immediate","accessKey","removeAllWhenShown","menuListener","styleClass"}));
 	}
 
 	public MenuItemComponent() {

@@ -1,40 +1,40 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
-import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
-import java.util.Arrays;
-import org.rcfaces.core.internal.tools.SortTools;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IPagerMessageCapability;
-import org.rcfaces.core.component.KeyEntryComponent;
-import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
-import org.rcfaces.core.internal.tools.CollectionTools;
-import java.lang.String;
-import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
-import org.rcfaces.core.internal.converter.ClientFullStateConverter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
-import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
-import javax.faces.context.FacesContext;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import javax.faces.component.UIComponent;
-import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import org.rcfaces.core.component.capability.IPagedCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.ComboColumnComponent;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
+import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
+import java.util.Set;
+import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
+import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
+import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.component.KeyEntryComponent;
+import java.lang.String;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import org.rcfaces.core.internal.tools.CollectionTools;
+import org.rcfaces.core.component.capability.IPagerMessageCapability;
 
 public class ComboGridComponent extends KeyEntryComponent implements 
 	IAdditionalInformationEventCapability,
@@ -47,9 +47,9 @@ public class ComboGridComponent extends KeyEntryComponent implements
 	IPagedCapability,
 	IHeaderVisibilityCapability,
 	IOrderedChildrenCapability,
-	IAdditionalInformationRangeComponent,
+	ISortedChildrenCapability,
 	IComponentValueTypeCapability,
-	ISortedChildrenCapability {
+	IAdditionalInformationRangeComponent {
 
 	private static final Log LOG = LogFactory.getLog(ComboGridComponent.class);
 
@@ -57,7 +57,7 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(KeyEntryComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"popupHeight","paged","searchFieldVisible","pagerStyleClass","clientAdditionalInformationFullState","message","additionalInformationCardinality","rowStyleClass","headerVisible","additionalInformationValues","pagerLookId","manyResultsMessage","oneResultMessage","filterProperties","popupWidth","zeroResultMessage","additionalInformationListener","gridStyleClass","popupStyleClass","gridLookId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","filterProperties","clientAdditionalInformationFullState","manyResultsMessage","pagerStyleClass","rowStyleClass","zeroResultMessage","gridStyleClass","popupStyleClass","gridLookId","pagerLookId","message","searchFieldVisible","paged","additionalInformationValues","additionalInformationListener","oneResultMessage","popupHeight","additionalInformationCardinality","popupWidth"}));
 	}
 
 	public ComboGridComponent() {
@@ -69,13 +69,6 @@ public class ComboGridComponent extends KeyEntryComponent implements
 		setId(componentId);
 	}
 
-	public void setSortedChildren(UIComponent[] components) {
-
-
-				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, components);
-			
-	}
-
 	public UIComponent[] getSortedChildren() {
 
 
@@ -83,10 +76,10 @@ public class ComboGridComponent extends KeyEntryComponent implements
 			
 	}
 
-	public UIComponent[] getOrderedChildren() {
+	public void setSortedChildren(UIComponent[] components) {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, ComboColumnComponent.class);
+				SortTools.setSortedChildren(null, this, engine, ComboColumnComponent.class, components);
 			
 	}
 
@@ -94,6 +87,13 @@ public class ComboGridComponent extends KeyEntryComponent implements
 
 
 				OrderTools.setOrderedChildren(null, this, engine, ComboColumnComponent.class, components);
+			
+	}
+
+	public UIComponent[] getOrderedChildren() {
+
+
+				return OrderTools.getOrderedChildren(null, this, engine, ComboColumnComponent.class);
 			
 	}
 

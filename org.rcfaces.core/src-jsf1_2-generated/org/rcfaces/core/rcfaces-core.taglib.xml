@@ -27,14 +27,6 @@
 		</component>
 	</tag>
 	<tag>
-		<tag-name>externalBox</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.externalBox</component-type>
-			<renderer-type>org.rcfaces.core.externalBox</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
 		<tag-name>button</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.button</component-type>
@@ -124,22 +116,6 @@
 		<component>
 			<component-type>org.rcfaces.core.comboGrid</component-type>
 			<renderer-type>org.rcfaces.core.comboGrid</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
-		<tag-name>keyLabel</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.keyLabel</component-type>
-			<renderer-type>org.rcfaces.core.keyLabel</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
-		<tag-name>keyEntry</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.keyEntry</component-type>
-			<renderer-type>org.rcfaces.core.keyEntry</renderer-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>
@@ -567,14 +543,6 @@
 		</component>
 	</tag>
 	<tag>
-		<tag-name>tabNamingContainer</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.tabNamingContainer</component-type>
-			<renderer-type>org.rcfaces.core.tabNamingContainer</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
 		<tag-name>text</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.text</component-type>
@@ -696,28 +664,6 @@
 		<component>
 			<component-type>org.rcfaces.core.focusManager</component-type>
 			<renderer-type>org.rcfaces.core.focusManager</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
-		<tag-name>scheduler</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.scheduler</component-type>
-			<renderer-type>org.rcfaces.core.scheduler</renderer-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
-		<tag-name>schedulerColumn</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.schedulerColumn</component-type>
-			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
-		</component>
-	</tag>
-	<tag>
-		<tag-name>periodClientData</tag-name>
-		<component>
-			<component-type>org.rcfaces.core.periodClientData</component-type>
 			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
 		</component>
 	</tag>

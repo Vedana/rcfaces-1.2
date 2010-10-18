@@ -1,66 +1,65 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.component.capability.IDraggableCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
-import org.rcfaces.core.component.capability.IDragEventCapability;
-import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.internal.converter.DragDropTypesConverter;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.component.capability.ICheckEventCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.internal.converter.ClientFullStateConverter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ICheckedValuesCapability;
-import org.rcfaces.core.internal.tools.SelectionTools;
-import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
-import org.rcfaces.core.component.capability.IDroppableCapability;
-import org.rcfaces.core.component.capability.IExpandedValuesCapability;
-import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.rcfaces.core.component.capability.IDragAndDropEffects;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
-import org.rcfaces.core.internal.capability.ISelectionComponent;
-import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISelectedValuesCapability;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ICheckableCapability;
-import org.rcfaces.core.component.capability.IExpandableCapability;
-import org.rcfaces.core.component.capability.IDropEventCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
-import org.rcfaces.core.internal.tools.ExpansionTools;
-import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
 import javax.faces.component.UISelectItem;
-import org.rcfaces.core.internal.tools.CheckTools;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
-import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import java.lang.String;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.IExpandEventCapability;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
-import org.rcfaces.core.internal.capability.ICheckComponent;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.internal.util.ComponentIterators;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.capability.IExpandEventCapability;
+import org.rcfaces.core.internal.capability.ICheckComponent;
+import org.rcfaces.core.component.capability.IDroppableCapability;
+import org.rcfaces.core.internal.capability.ISelectionComponent;
+import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
+import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.component.capability.ICheckedValuesCapability;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
+import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.component.capability.IExpandableCapability;
+import org.rcfaces.core.component.capability.ICheckableCapability;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.ExpansionTools;
+import org.rcfaces.core.internal.converter.DragDropTypesConverter;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IExpandedValuesCapability;
+import org.rcfaces.core.component.capability.IDropEventCapability;
+import java.lang.String;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.component.capability.IPreloadedLevelDepthCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.component.AbstractInputComponent;
 
 /**
  * <p>The tree Component shows informations in an arborescent view.
@@ -109,8 +108,8 @@ public class TreeComponent extends AbstractInputComponent implements
 	IPreloadedLevelDepthCapability,
 	IExpandableCapability,
 	IExpandedValuesCapability,
-	ISelectionComponent,
 	ICheckComponent,
+	ISelectionComponent,
 	IComponentValueTypeCapability {
 
 	private static final Log LOG = LogFactory.getLog(TreeComponent.class);
@@ -119,7 +118,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","doubleClickListener","hideRootExpandSign","expandedValues","draggable","selectable","defaultExpandedLeafImageURL","loadListener","showValue","expandListener","filterProperties","dropCompleteListener","checkable","defaultSelectedImageURL","droppable","checkedValues","defaultLeafImageURL","defaultExpandedImageURL","border","checkCardinality","defaultDisabledLeafImageURL","defaultDisabledImageURL","verticalScrollPosition","dragListener","bodyDroppable","defaultSelectedLeafImageURL","expansionUseValue","defaultImageURL","required","dropEffects","dropListener","cursorValue","clientCheckFullState","overStyleClass","dragEffects","expandable","dragTypes","clientSelectionFullState","dropTypes","preloadedLevelDepth","checkListener","selectionCardinality","readOnly","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","droppable","defaultDisabledLeafImageURL","dragListener","dragTypes","checkable","checkCardinality","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","bodyDroppable","defaultCollapsedImageURL","defaultExpandedImageURL","filterProperties","defaultDisabledImageURL","defaultImageURL","dragEffects","expandListener","doubleClickListener","clientCheckFullState","selectedValues","horizontalScrollPosition","dropCompleteListener","dropTypes","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","draggable","expandable"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -543,17 +542,17 @@ public class TreeComponent extends AbstractInputComponent implements
 		engine.setProperty(Properties.READ_ONLY, readOnly);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 
@@ -677,7 +676,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * See {@link #getDragEffects() getDragEffects()} for more details
 	 */
 	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,0, facesContext);
 	}
 
 	/**
@@ -770,7 +769,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * See {@link #getDropEffects() getDropEffects()} for more details
 	 */
 	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DROP_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
 	}
 
 	/**
@@ -915,6 +914,13 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
+	public Object getFirstCheckedValue() {
+
+
+			return CheckTools.getFirst(getCheckedValues(), getValue());
+		
+	}
+
 	public int getCheckedValuesCount() {
 
 
@@ -926,13 +932,6 @@ public class TreeComponent extends AbstractInputComponent implements
 
 
 			return CheckTools.listValues(getCheckedValues(), getValue());
-		
-	}
-
-	public Object getFirstCheckedValue() {
-
-
-			return CheckTools.getFirst(getCheckedValues(), getValue());
 		
 	}
 
@@ -1159,17 +1158,17 @@ public class TreeComponent extends AbstractInputComponent implements
 		return valueExpression.getType(facesContext.getELContext());
 	}
 
-	public int getExpandedValuesCount() {
-
-
-			return ExpansionTools.getCount(this, getExpandedValues());
-		
-	}
-
 	public Object[] listExpandedValues() {
 
 
 			return ExpansionTools.listValues(this, getExpandedValues(), getValue());
+		
+	}
+
+	public int getExpandedValuesCount() {
+
+
+			return ExpansionTools.getCount(this, getExpandedValues());
 		
 	}
 
@@ -1279,6 +1278,26 @@ public class TreeComponent extends AbstractInputComponent implements
 	 */
 	public boolean isDefaultExpandedImageURLSetted() {
 		return engine.isPropertySetted(Properties.DEFAULT_EXPANDED_IMAGE_URL);
+	}
+
+	public String getDefaultCollapsedImageURL() {
+		return getDefaultCollapsedImageURL(null);
+	}
+
+	public String getDefaultCollapsedImageURL(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, facesContext);
+	}
+
+	public void setDefaultCollapsedImageURL(String defaultCollapsedImageURL) {
+		engine.setProperty(Properties.DEFAULT_COLLAPSED_IMAGE_URL, defaultCollapsedImageURL);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "defaultCollapsedImageURL" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isDefaultCollapsedImageURLSetted() {
+		return engine.isPropertySetted(Properties.DEFAULT_COLLAPSED_IMAGE_URL);
 	}
 
 	/**

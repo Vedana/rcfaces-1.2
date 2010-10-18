@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IExpandImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.apache.commons.logging.LogFactory;
-import java.util.Arrays;
-import java.util.Set;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import java.lang.String;
+import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.UIImageItemComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IExpandImageCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 public abstract class ExpandableItemComponent extends UIImageItemComponent implements 
 	IForegroundBackgroundColorCapability,
@@ -23,7 +23,7 @@ public abstract class ExpandableItemComponent extends UIImageItemComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(UIImageItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hoverImageURL","imageURL","text","expandedImageURL","disabledImageURL","selectedImageURL","foregroundColor","backgroundColor"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectedImageURL","disabledImageURL","text","backgroundColor","hoverImageURL","imageURL","expandedImageURL","foregroundColor"}));
 	}
 
 

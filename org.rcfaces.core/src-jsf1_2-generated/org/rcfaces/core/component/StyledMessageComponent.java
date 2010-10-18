@@ -2,18 +2,18 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IBackgroundImageCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IForCapability;
+import org.rcfaces.core.component.AbstractBasicComponent;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import java.util.Set;
 import java.util.Arrays;
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IForCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 
 /**
  * An englobing tag that changes the style class surronuding a component when a particular message is emitted for a component.
@@ -38,7 +38,7 @@ public class StyledMessageComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"errorStyleClass","fatalStyleClass","mouseOverListener","backgroundImageVerticalPosition","warnStyleClass","showIfMessage","styleClass","backgroundImageHorizontalPosition","backgroundImageVerticalRepeat","infoStyleClass","backgroundImageHorizontalRepeat","initListener","backgroundImageURL","border","mouseOutListener","setFocusIfMessage","for"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","fatalStyleClass","showIfMessage","for","styleClass","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","backgroundImageHorizontalPosition","setFocusIfMessage","initListener","warnStyleClass","errorStyleClass","infoStyleClass","mouseOverListener","backgroundImageURL","border","mouseOutListener"}));
 	}
 
 	public StyledMessageComponent() {

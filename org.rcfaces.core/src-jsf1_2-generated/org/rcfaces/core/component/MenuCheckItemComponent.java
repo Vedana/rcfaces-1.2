@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.MenuItemComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.MenuItemComponent;
 
 /**
  * A menu item with a check.

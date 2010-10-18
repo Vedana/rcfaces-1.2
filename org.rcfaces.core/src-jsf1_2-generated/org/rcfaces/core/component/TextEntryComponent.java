@@ -1,40 +1,40 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
-import java.lang.Object;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IMenuCapability;
-import org.rcfaces.core.internal.tools.ClientValidatorTools;
+import java.util.Map;
 import java.util.Collections;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import java.util.HashMap;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.internal.Constants;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import java.lang.Object;
+import java.lang.String;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.tools.ClientValidatorTools;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
 import org.rcfaces.core.component.capability.IAutoTabCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.ITextCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IClientValidationCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import java.lang.String;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.util.HashMap;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
 import org.rcfaces.core.internal.manager.IValidationParameters;
-import org.rcfaces.core.internal.Constants;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.tools.MenuTools;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.IClientValidationCapability;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * <p>The textEntry Component is based on the standard HTML tag &lt;INPUT TYPE="text"&gt;.</p>
@@ -72,7 +72,7 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","clientValidator","errorStyleClass","autoCompletion","fatalStyleClass","required","maxTextLength","valueChangeListener","columnNumber","warnStyleClass","textDirection","alternateText","styleClass","text","infoStyleClass","readOnly","focusStyleClass","autoTab","emptyMessage"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"autoTab","focusStyleClass","text","fatalStyleClass","clientValidator","styleClass","columnNumber","textDirection","emptyMessage","selectionListener","maxTextLength","valueChangeListener","autoCompletion","readOnly","errorStyleClass","warnStyleClass","alternateText","infoStyleClass","required"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="text";
 
@@ -83,6 +83,13 @@ public class TextEntryComponent extends AbstractInputComponent implements
 	public TextEntryComponent(String componentId) {
 		this();
 		setId(componentId);
+	}
+
+	public int getValidationParametersCount() {
+
+		 
+		 return getValidationParametersCount(null);
+		
 	}
 
 	public boolean isClientSideValidationParameter(String name) {
@@ -99,10 +106,10 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public String setValidationParameter(String name, String value, boolean client) {
+	public void setValidationParameter(String name, ValueExpression value, boolean client) {
 
 
-		return (String)setValidationParameterData(name, value, client);
+		setValidationParameterData(name, value, client);
 		
 	}
 
@@ -110,6 +117,13 @@ public class TextEntryComponent extends AbstractInputComponent implements
 
 
 		 return getValidationParameter(name, null);
+		
+	}
+
+	public Map getClientValidationParametersMap() {
+
+
+		return getClientValidationParametersMap(null);
 		
 	}
 
@@ -132,24 +146,10 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		
 	}
 
-	public Map getClientValidationParametersMap() {
+	public String setValidationParameter(String name, String value, boolean client) {
 
 
-		return getClientValidationParametersMap(null);
-		
-	}
-
-	public void setValidationParameter(String name, ValueExpression value, boolean client) {
-
-
-		setValidationParameterData(name, value, client);
-		
-	}
-
-	public int getValidationParametersCount() {
-
-		 
-		 return getValidationParametersCount(null);
+		return (String)setValidationParameterData(name, value, client);
 		
 	}
 
@@ -429,17 +429,17 @@ public class TextEntryComponent extends AbstractInputComponent implements
 		return getFacesListeners(javax.faces.event.ValueChangeListener.class);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

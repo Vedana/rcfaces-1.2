@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.TextEntryComponent;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.Log;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 
 /**
  * <p>The passwordEntry Component is based on the standard HTML tag &lt;INPUT TYPE="password"&gt; and is a <a href="/comps/textEntryComponent.html">textEntry Component</a>.</p>

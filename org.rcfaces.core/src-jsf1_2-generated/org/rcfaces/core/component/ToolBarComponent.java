@@ -1,22 +1,22 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.iterator.IToolFolderIterator;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
+import org.rcfaces.core.component.familly.IContentAccessors;
 import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractBasicComponent;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.IInitEventCapability;
-import java.util.Set;
-import java.util.HashSet;
 import org.rcfaces.core.component.capability.IBorderTypeCapability;
-import org.rcfaces.core.component.AbstractBasicComponent;
-import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.internal.tools.ToolBarTools;
-import org.rcfaces.core.component.iterator.IToolFolderIterator;
+import javax.el.ValueExpression;
+import java.util.HashSet;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.internal.tools.ToolBarTools;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IInitEventCapability;
+import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 /**
  * <b>EXPERIMENTAL</b>
@@ -33,7 +33,7 @@ public class ToolBarComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"separatorImageWidth","verticalAlignment","separatorAlternateText","separatorImageHeight","controlAlternateText","controlImageURL","separatorImageURL","locked","itemPadding","initListener","controlImageWidth","borderType","controlImageHeight"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"controlImageWidth","borderType","separatorImageHeight","separatorImageWidth","initListener","verticalAlignment","separatorAlternateText","separatorImageURL","locked","controlImageHeight","itemPadding","controlImageURL","controlAlternateText"}));
 	}
 
 	public ToolBarComponent() {

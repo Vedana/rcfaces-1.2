@@ -1,12 +1,12 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.TextComponent;
 import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.TextComponent;
 import org.apache.commons.logging.Log;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 
 /**
  * <p>The styledText Component is a placeholder for displaying "enhanced" text. It accepts any HTML tags. it's a <A href="/comps/textComponent.html">text Component</A></p>

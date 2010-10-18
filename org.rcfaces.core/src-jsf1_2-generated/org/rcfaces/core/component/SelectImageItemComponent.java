@@ -1,18 +1,18 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.component.CameliaItemComponent;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.IImageCapability;
 import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import java.util.Arrays;
-import java.util.Set;
+import org.rcfaces.core.internal.component.CameliaItemComponent;
+import javax.el.ValueExpression;
 import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.IImageCapability;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 
 /**
  * A select item (member of a selectable list) that shows an image.
@@ -27,7 +27,7 @@ public class SelectImageItemComponent extends CameliaItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemDescription","imageURL","itemLabel","itemDisabled","itemValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"itemDescription","itemLabel","itemValue","imageURL","itemDisabled"}));
 	}
 
 	public SelectImageItemComponent() {

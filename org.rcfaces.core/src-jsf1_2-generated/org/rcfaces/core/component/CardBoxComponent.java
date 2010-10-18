@@ -1,25 +1,25 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
+import org.rcfaces.core.component.iterator.ICardIterator;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
+import org.rcfaces.core.internal.tools.CardBoxTools;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.CardComponent;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IPreferencesSettings;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IVariableScopeCapability;
-import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
-import org.rcfaces.core.component.iterator.ICardIterator;
-import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.AbstractInputComponent;
-import org.apache.commons.logging.Log;
 import javax.faces.event.PhaseId;
-import org.rcfaces.core.internal.tools.CardBoxTools;
+import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import javax.el.ValueExpression;
+import org.rcfaces.core.internal.converter.AsyncDecodeModeConverter;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.CardComponent;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IVariableScopeCapability;
+import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 
 /**
@@ -47,7 +47,7 @@ public class CardBoxComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeValue","scopeVar","scopeSaveValue","asyncRenderMode","asyncDecodeMode","preferences"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","scopeSaveValue","scopeVar","scopeValue","asyncDecodeMode","asyncRenderMode","preferences"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 

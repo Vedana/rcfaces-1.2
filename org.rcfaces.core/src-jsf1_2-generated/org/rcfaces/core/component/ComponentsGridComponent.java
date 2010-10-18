@@ -1,62 +1,62 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.component.ComponentsColumnComponent;
-import java.util.Arrays;
-import org.rcfaces.core.internal.tools.SortTools;
-import org.rcfaces.core.internal.tools.GridTools;
-import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
-import org.rcfaces.core.component.capability.ILoadEventCapability;
-import org.rcfaces.core.component.capability.IScrollableCapability;
-import org.rcfaces.core.internal.tools.OrderTools;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.component.AbstractDataComponent;
-import org.rcfaces.core.internal.tools.AdditionalInformationTools;
-import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
-import org.rcfaces.core.internal.converter.ClientFullStateConverter;
-import javax.el.ValueExpression;
-import org.rcfaces.core.internal.tools.SelectionTools;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
-import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
+import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.ISelectedValuesCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.capability.ISelectableCapability;
+import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.component.capability.ILoadEventCapability;
+import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
+import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.IMenuComponent;
+import org.rcfaces.core.component.capability.ISortedChildrenCapability;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
-import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
-import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
-import org.rcfaces.core.component.IMenuComponent;
-import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
-import org.rcfaces.core.component.capability.IRowStyleClassCapability;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import java.lang.String;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
-import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
-import org.rcfaces.core.component.capability.ISortedChildrenCapability;
-import javax.faces.context.FacesContext;
-import org.rcfaces.core.internal.capability.IPreferencesSettings;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.ISelectableCapability;
-import javax.faces.component.UIComponent;
-import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
-import org.rcfaces.core.internal.capability.IGridComponent;
-import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
-import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IScrollableCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
+import org.rcfaces.core.internal.tools.AdditionalInformationTools;
+import org.rcfaces.core.internal.tools.OrderTools;
+import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
+import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.capability.IPreferencesSettings;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
+import org.rcfaces.core.component.capability.IMenuCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
+import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
+import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.IPagedCapability;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.IRowStyleClassCapability;
+import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.internal.tools.SortTools;
+import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
+import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
+import java.lang.String;
+import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
+import javax.faces.convert.Converter;
+import javax.el.ValueExpression;
+import java.util.HashSet;
 import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
+import org.rcfaces.core.component.ComponentsColumnComponent;
 
 /**
  * Reserved for future use
@@ -83,13 +83,13 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	IPreferencesSettings,
 	IPagedCapability,
 	IHeaderVisibilityCapability,
+	IGridComponent,
 	IOrderedChildrenCapability,
+	ISortedChildrenCapability,
+	IComponentValueTypeCapability,
 	ISelectionRangeComponent,
 	ISortedComponentsCapability,
-	IAdditionalInformationRangeComponent,
-	IGridComponent,
-	IComponentValueTypeCapability,
-	ISortedChildrenCapability {
+	IAdditionalInformationRangeComponent {
 
 	private static final Log LOG = LogFactory.getLog(ComponentsGridComponent.class);
 
@@ -97,7 +97,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","horizontalScrollPosition","clientAdditionalInformationFullState","doubleClickListener","preferences","rowIndexVar","additionalInformationValues","selectable","loadListener","showValue","additionalInformationListener","border","verticalScrollPosition","rowValueConverter","paged","emptyDataMessage","required","additionalInformationCardinality","rowStyleClass","headerVisible","rowCountVar","clientSelectionFullState","selectionCardinality","rowValue","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -109,13 +109,6 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		setId(componentId);
 	}
 
-	public void setSortedChildren(UIComponent[] components) {
-
-
-				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, components);
-			
-	}
-
 	public UIComponent[] getSortedChildren() {
 
 
@@ -123,10 +116,10 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 			
 	}
 
-	public UIComponent[] getOrderedChildren() {
+	public void setSortedChildren(UIComponent[] components) {
 
 
-				return OrderTools.getOrderedChildren(null, this, engine, ComponentsColumnComponent.class);
+				SortTools.setSortedChildren(null, this, engine, ComponentsColumnComponent.class, components);
 			
 	}
 
@@ -134,6 +127,13 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 
 				OrderTools.setOrderedChildren(null, this, engine, ComponentsColumnComponent.class, components);
+			
+	}
+
+	public UIComponent[] getOrderedChildren() {
+
+
+				return OrderTools.getOrderedChildren(null, this, engine, ComponentsColumnComponent.class);
 			
 	}
 
@@ -777,17 +777,17 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 		engine.setProperty(Properties.EMPTY_DATA_MESSAGE, emptyDataMessage);
 	}
 
-	public IMenuComponent getMenu(String menuId) {
-
-
-		return MenuTools.getMenu(this, menuId);
-		
-	}
-
 	public IMenuComponent getMenu() {
 
 
 		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
 		
 	}
 

@@ -1,29 +1,29 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.component.AbstractGridComponent;
-import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.IEditableCapability;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.AbstractGridComponent;
+import org.rcfaces.core.component.iterator.IColumnIterator;
+import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
+import org.rcfaces.core.component.capability.IBorderCapability;
+import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IEmptyMessageCapability;
+import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.internal.capability.IGridComponent;
+import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import java.util.Arrays;
-import org.rcfaces.core.internal.tools.GridTools;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
-import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IEmptyMessageCapability;
-import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.component.capability.IFilterCapability;
+import java.util.HashSet;
 import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.iterator.IColumnIterator;
-import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
-import org.rcfaces.core.component.capability.IEditableCapability;
-import org.rcfaces.core.component.capability.IBorderCapability;
-import org.rcfaces.core.component.capability.IReadOnlyCapability;
-import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.IMaxTextLengthCapability;
+import org.rcfaces.core.model.IFilterProperties;
+import java.util.Set;
+import java.util.Arrays;
 
 public class KeyEntryComponent extends AbstractGridComponent implements 
 	IEmptyMessageCapability,
@@ -44,7 +44,7 @@ public class KeyEntryComponent extends AbstractGridComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","editable","emptyDataMessage","suggestionDelayMs","required","disabled","valueFormatLabel","selectedValue","maxTextLength","valueColumnId","rowIndexVar","rowCountVar","filterProperties","valueFormat","border","forLabel","forceValidation","readOnly","labelColumnId","suggestionMinChars","emptyMessage","noValueFormatLabel"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"noValueFormatLabel","filterProperties","suggestionMinChars","valueFormat","rowCountVar","valueFormatLabel","emptyDataMessage","forceValidation","editable","emptyMessage","selectionListener","maxTextLength","readOnly","labelColumnId","forLabel","suggestionDelayMs","selectedValue","valueColumnId","required","border","rowIndexVar","disabled"}));
 	}
 
 	public KeyEntryComponent() {

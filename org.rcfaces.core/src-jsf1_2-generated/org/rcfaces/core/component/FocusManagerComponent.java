@@ -2,12 +2,12 @@ package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-import java.util.Arrays;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
+import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * <p>The focusManager Component is a non-visual component.</p>

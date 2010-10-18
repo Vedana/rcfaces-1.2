@@ -1,27 +1,26 @@
 package org.rcfaces.core.component;
 
-import java.lang.String;
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IRadioGroupCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.ExpandableItemComponent;
-import org.rcfaces.core.component.capability.IDraggableCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
-import org.rcfaces.core.component.capability.IDroppableCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.TreeComponent;
-import java.util.HashSet;
-import org.rcfaces.core.internal.tools.TreeTools;
-import org.rcfaces.core.internal.converter.DragDropTypesConverter;
+import org.rcfaces.core.component.ExpandableItemComponent;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IInputTypeCapability;
-import org.rcfaces.core.component.capability.IDragAndDropEffects;
-import org.rcfaces.core.internal.converter.InputTypeConverter;
+import org.rcfaces.core.component.capability.IRadioGroupCapability;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.internal.tools.TreeTools;
+import org.rcfaces.core.component.capability.IDraggableCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.TreeComponent;
+import javax.el.ValueExpression;
+import org.rcfaces.core.internal.converter.InputTypeConverter;
+import java.util.HashSet;
 import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.capability.IDroppableCapability;
+import org.rcfaces.core.internal.converter.DragDropTypesConverter;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Set;
+import java.util.Arrays;
 
 /**
  * A node belonging to a tree.
@@ -40,7 +39,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ExpandableItemComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"menuPopupId","dragTypes","styleClass","dropTypes","inputType","dropEffects","droppable","groupName","draggable","dragEffects"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"droppable","groupName","dragTypes","menuPopupId","dragEffects","inputType","styleClass","dropEffects","dropTypes","draggable"}));
 	}
 
 	public TreeNodeComponent() {
@@ -222,7 +221,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	 * See {@link #getDragEffects() getDragEffects()} for more details
 	 */
 	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,0, facesContext);
 	}
 
 	/**
@@ -291,7 +290,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	 * See {@link #getDropEffects() getDropEffects()} for more details
 	 */
 	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DROP_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
+		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
 	}
 
 	/**

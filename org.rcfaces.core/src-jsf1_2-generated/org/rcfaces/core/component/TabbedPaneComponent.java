@@ -1,20 +1,20 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IShowValueCapability;
-import org.rcfaces.core.internal.tools.TabbedPaneTools;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.TabComponent;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.ICloseEventCapability;
-import org.rcfaces.core.component.CardBoxComponent;
 import org.rcfaces.core.component.capability.IClosableCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.ICloseEventCapability;
+import org.rcfaces.core.internal.tools.TabbedPaneTools;
+import org.rcfaces.core.component.capability.IShowValueCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.TabComponent;
+import javax.el.ValueExpression;
+import java.util.HashSet;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.component.iterator.ITabIterator;
+import org.rcfaces.core.component.CardBoxComponent;
+import java.util.Set;
+import java.util.Arrays;
 
 /**
  * <p>The tabbedPane Component provides a way to show more information on a single page. It can download the data asynchronously via AJAX.</p>
@@ -40,7 +40,7 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardBoxComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showValue","closable","closeListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closeListener","showValue","closable"}));
 	}
 
 	public TabbedPaneComponent() {
