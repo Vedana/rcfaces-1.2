@@ -74,6 +74,9 @@ public abstract class RcfacesContext {
             .getPackagePrefix()
             + ".CONFIG_FILES";
 
+    public static final String LISTENER_MANAGER_STRATEGY_PARAMETER = Constants
+    	.getPackagePrefix()+ ".LISTENER_MANAGER_STRATEGY";
+  
     public static final String APPLICATION_VERSION_PROPERTY = "org.rcfaces.core.internal.APPLICATION_VERSION";
 
     private static final Lifecycle EMPTY_LIFECYCLE = new Lifecycle() {

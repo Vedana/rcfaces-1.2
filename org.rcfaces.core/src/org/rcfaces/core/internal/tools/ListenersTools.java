@@ -8,6 +8,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,9 +35,37 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IServiceEventCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
+import org.rcfaces.core.event.IAdditionalInformationListener;
+import org.rcfaces.core.event.IBlurListener;
+import org.rcfaces.core.event.ICheckListener;
+import org.rcfaces.core.event.ICloseListener;
+import org.rcfaces.core.event.IDoubleClickListener;
+import org.rcfaces.core.event.IDragListener;
+import org.rcfaces.core.event.IDropCompleteListener;
+import org.rcfaces.core.event.IDropListener;
+import org.rcfaces.core.event.IExpandListener;
+import org.rcfaces.core.event.IFocusListener;
+import org.rcfaces.core.event.IInitListener;
+import org.rcfaces.core.event.IKeyDownListener;
+import org.rcfaces.core.event.IKeyPressListener;
+import org.rcfaces.core.event.IKeyUpListener;
+import org.rcfaces.core.event.ILoadListener;
+import org.rcfaces.core.event.IMenuListener;
+import org.rcfaces.core.event.IMouseOutListener;
+import org.rcfaces.core.event.IMouseOverListener;
+import org.rcfaces.core.event.IPropertyChangeListener;
+import org.rcfaces.core.event.IResetListener;
+import org.rcfaces.core.event.ISelectionListener;
+import org.rcfaces.core.event.IServiceEventListener;
+import org.rcfaces.core.event.ISortListener;
+import org.rcfaces.core.event.ISuggestionListener;
+import org.rcfaces.core.event.IUserEventListener;
+import org.rcfaces.core.event.IValidationListener;
+import org.rcfaces.core.internal.capability.IComponentLifeCycle;
 import org.rcfaces.core.internal.listener.AdditionalInformationActionListener;
 import org.rcfaces.core.internal.listener.AdditionalInformationScriptListener;
 import org.rcfaces.core.internal.listener.BlurActionListener;
@@ -111,6 +140,8 @@ public class ListenersTools {
 
         void addScriptListener(UIComponent component, String scriptType,
                 String expression);
+        
+        Class getListenerClass();
 
         // void clearListeners(UIComponent component);
     }
@@ -129,6 +160,7 @@ public class ListenersTools {
 
         public void addScriptListener(UIComponent component, String scriptType,
                 String command) {
+        	
             IFocusBlurEventCapability focusBlurEventCapability = (IFocusBlurEventCapability) component;
 
             focusBlurEventCapability.addBlurListener(new BlurScriptListener(
@@ -146,6 +178,10 @@ public class ListenersTools {
 
             return blurActionListener;
         }
+
+		public Class getListenerClass() {
+			return IBlurListener.class;
+		}
     };
 
     public static final IListenerType DRAG_LISTENER_TYPE = new AbstractListenerType() {
@@ -164,6 +200,10 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("drag");
         }
+
+		public Class getListenerClass() {
+			return IDragListener.class;
+		}
     };
 
     public static final IListenerType DROP_LISTENER_TYPE = new AbstractListenerType() {
@@ -182,6 +222,10 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("drop");
         }
+
+		public Class getListenerClass() {
+			return IDropListener.class;
+		}
     };
 
     public static final IListenerType DROP_COMPLETE_LISTENER_TYPE = new AbstractListenerType() {
@@ -207,6 +251,10 @@ public class ListenersTools {
 
             return dropActionListener;
         }
+        
+        public Class getListenerClass() {
+			return IDropCompleteListener.class;
+		}
     };
 
     public static final IListenerType FOCUS_LISTENER_TYPE = new AbstractListenerType() {
@@ -231,6 +279,10 @@ public class ListenersTools {
 
             return focusActionListener;
         }
+        
+        public Class getListenerClass() {
+			return IFocusListener.class;
+		}
     };
 
     public static final IListenerType LOAD_LISTENER_TYPE = new AbstractListenerType() {
@@ -255,6 +307,10 @@ public class ListenersTools {
 
             return loadActionListener;
         }
+        
+        public Class getListenerClass() {
+			return ILoadListener.class;
+		}
     };
 
     public static final IListenerType EXPAND_LISTENER_TYPE = new AbstractListenerType() {
@@ -279,6 +335,10 @@ public class ListenersTools {
 
             return expandActionListener;
         }
+        
+        public Class getListenerClass() {
+			return IExpandListener.class;
+		}
     };
 
     public static final IListenerType ERROR_LISTENER_TYPE = new AbstractListenerType() {
@@ -303,6 +363,10 @@ public class ListenersTools {
 
             return errorActionListener;
         }
+        
+        public Class getListenerClass() {
+			return IDropListener.class;
+		}
     };
 
     public static final IListenerType DOUBLE_CLICK_LISTENER_TYPE = new AbstractListenerType() {
@@ -329,6 +393,9 @@ public class ListenersTools {
 
             return doubleClickActionListener;
         }
+        public Class getListenerClass() {
+			return IDoubleClickListener.class;
+		}
     };
 
     public static final IListenerType SELECTION_LISTENER_TYPE = new AbstractListenerType() {
@@ -354,6 +421,9 @@ public class ListenersTools {
 
             return selectionActionListener;
         }
+        public Class getListenerClass() {
+			return ISelectionListener.class;
+		}
     };
 
     public static final IListenerType ADDITIONAL_INFORMATION_LISTENER_TYPE = new AbstractListenerType() {
@@ -380,7 +450,11 @@ public class ListenersTools {
 
             return additionalInformationActionListener;
         }
+        public Class getListenerClass() {
+			return IAdditionalInformationListener.class;
+		}
     };
+    
 
     public static final IListenerType CHECK_LISTENER_TYPE = new AbstractListenerType() {
         private static final String REVISION = "$Revision$";
@@ -404,6 +478,9 @@ public class ListenersTools {
 
             return checkActionListener;
         }
+        public Class getListenerClass() {
+			return ICheckListener.class;
+		}
     };
 
     public static final IListenerType CLOSE_LISTENER_TYPE = new AbstractListenerType() {
@@ -428,6 +505,10 @@ public class ListenersTools {
 
             return closeActionListener;
         }
+        
+        public Class getListenerClass() {
+			return ICloseListener.class;
+		}
     };
 
     public static final IListenerType VALUE_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
@@ -453,6 +534,10 @@ public class ListenersTools {
 
             return changeActionListener;
         }
+        
+        public Class getListenerClass() {
+			return ValueChangeListener.class;
+		}
     };
 
     public static final IListenerType SUGGESTION_LISTENER_TYPE = new AbstractListenerType() {
@@ -479,6 +564,10 @@ public class ListenersTools {
 
             return suggestionActionListener;
         }
+        
+        public Class getListenerClass() {
+			return ISuggestionListener.class;
+		}
     };
 
     public static final IListenerType PROPERTY_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
@@ -505,6 +594,9 @@ public class ListenersTools {
 
             return propertyChangeActionListener;
         }
+        public Class getListenerClass() {
+			return IPropertyChangeListener.class;
+		}
     };
 
     public static final IListenerType KEY_PRESS_LISTENER_TYPE = new AbstractListenerType() {
@@ -529,6 +621,10 @@ public class ListenersTools {
 
             return keyPressActionListener;
         }
+        
+        public Class getListenerClass() {
+			return IKeyPressListener.class;
+		}
     };
 
     public static final IListenerType KEY_DOWN_LISTENER_TYPE = new AbstractListenerType() {
@@ -547,6 +643,10 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("keyDown");
         }
+        
+        public Class getListenerClass() {
+			return IKeyDownListener.class;
+		}
     };
 
     public static final IListenerType KEY_UP_LISTENER_TYPE = new AbstractListenerType() {
@@ -565,6 +665,10 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("keyUp");
         }
+        
+        public Class getListenerClass() {
+			return IKeyUpListener.class;
+		}
     };
 
     public static final IListenerType INIT_LISTENER_TYPE = new AbstractListenerType() {
@@ -583,6 +687,9 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("init");
         }
+        public Class getListenerClass() {
+			return IInitListener.class;
+		}
     };
 
     public static final IListenerType MOUSE_OUT_LISTENER_TYPE = new AbstractListenerType() {
@@ -602,6 +709,10 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("mouseOut");
         }
+        
+        public Class getListenerClass() {
+			return IMouseOutListener.class;
+		}
     };
 
     public static final IListenerType MOUSE_OVER_LISTENER_TYPE = new AbstractListenerType() {
@@ -621,6 +732,10 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("mouseOver");
         }
+        
+        public Class getListenerClass() {
+			return IMouseOverListener.class;
+		}
     };
 
     public static final IListenerType SORT_LISTENER_TYPE = new AbstractListenerType() {
@@ -646,6 +761,10 @@ public class ListenersTools {
 
             return sortActionListener;
         }
+        
+        public Class getListenerClass() {
+			return ISortListener.class;
+		}
     };
 
     public static final IListenerType RESET_LISTENER_TYPE = new AbstractListenerType() {
@@ -671,6 +790,10 @@ public class ListenersTools {
 
             return resetActionListener;
         }
+        
+        public Class getListenerClass() {
+			return IResetListener.class;
+		}
     };
 
     public static final IListenerType VALIDATION_LISTENER_TYPE = new AbstractListenerType() {
@@ -697,6 +820,10 @@ public class ListenersTools {
 
             return validationActionListener;
         }
+        
+        public Class getListenerClass() {
+			return IValidationListener.class;
+		}
     };
 
     public static final IListenerType MENU_LISTENER_TYPE = new AbstractListenerType() {
@@ -715,6 +842,10 @@ public class ListenersTools {
                 boolean partialRendering) {
             throw new UnsupportedListenerTypeException("menuListener");
         }
+        
+        public Class getListenerClass() {
+			return IMenuListener.class;
+		}
     };
 
     public static final IListenerType USER_EVENT_LISTENER_TYPE = new AbstractListenerType() {
@@ -741,6 +872,9 @@ public class ListenersTools {
 
             return userEventActionListener;
         }
+        public Class getListenerClass() {
+			return IUserEventListener.class;
+		}
     };
 
     public static final IListenerType SERVICE_EVENT_LISTENER_TYPE = new AbstractListenerType() {
@@ -768,6 +902,9 @@ public class ListenersTools {
 
             return serviceEventActionListener;
         }
+        public Class getListenerClass() {
+			return IServiceEventListener.class;
+		}
     };
 
     private static final String PARTIAL_RENDERING_PREFIX = "ppr:";
@@ -793,6 +930,10 @@ public class ListenersTools {
         if (expression.length() < 1) {
             return;
         }
+        
+        
+        
+        
         /*
          * if (defaultAction && (component instanceof UICommand)) { UICommand
          * command = (UICommand) component;
@@ -937,7 +1078,15 @@ public class ListenersTools {
                     LOG.debug("Add server listener to component '"
                             + component.getId() + "' : " + s);
                 }
-
+                
+                if (component instanceof IComponentLifeCycle) {
+                    IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
+                    
+                    if(!componentLifeCycle.confirmListenerAppend(facesContext, listenerType.getListenerClass())){
+                    	return;
+                    }
+                }
+                
                 IServerActionListener serverActionListener = listenerType
                         .addActionListener(component, facesContext
                                 .getApplication(), actionExpression,
@@ -958,8 +1107,16 @@ public class ListenersTools {
             LOG.debug("Add script listener (type=" + scriptType
                     + ") to component '" + component.getId() + "' : " + s);
         }
-
-        listenerType.addScriptListener(component, scriptType, s);
+        if (component instanceof IComponentLifeCycle && listeners.contains("return false") == false ) {
+            IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
+            
+            if(componentLifeCycle.confirmListenerAppend(facesContext, listenerType.getListenerClass())){
+            	listenerType.addScriptListener(component, scriptType, s);
+            }
+        }else {
+        	listenerType.addScriptListener(component, scriptType, s);
+        }
+        
     }
 
     protected static boolean isForwardReference(String s) {

@@ -22,4 +22,7 @@ public interface IComponentLifeCycle {
     void updatePhase(FacesContext facesContext);
 
     void renderPhase(FacesContext facesContext);
+    
+    boolean confirmListenerAppend(FacesContext facesContext, Class facesListenerClass);
+   
 }
