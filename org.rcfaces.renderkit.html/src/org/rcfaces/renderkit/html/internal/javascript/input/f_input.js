@@ -238,9 +238,9 @@ var __members = {
 	f_updateDisabled: function(disabled) {
 		this.f_updateStyleClass();
 		if (disabled) {
-			this.getInput().tabIndex=-1;
+			this.f_getInput().tabIndex=-1;
 		} else {
-			this.getInput().tabIndex=this.fa_getTabIndex();
+			this.f_getInput().tabIndex=this.fa_getTabIndex();
 		}
 	},
 	/**

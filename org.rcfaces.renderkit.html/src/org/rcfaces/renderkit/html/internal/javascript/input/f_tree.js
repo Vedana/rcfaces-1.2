@@ -2706,6 +2706,9 @@ var __members = {
 		}
 		
 		if (this._cfocus) {
+			if(this._cursor){ //ff3.5.x
+				this._cfocus.style.top=this.scrollTop+"px";
+			}
 			this._cfocus.focus();
 			return;
 		}
