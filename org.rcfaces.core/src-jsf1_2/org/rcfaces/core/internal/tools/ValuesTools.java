@@ -190,17 +190,23 @@ public class ValuesTools extends CollectionTools {
             return value;
         }
 
-        Converter converter = null;
-
-        if (component instanceof IConvertValueHolder) {
-            converter = ((IConvertValueHolder) component).getConverter();
-
-        } else if (component instanceof ValueHolder) {
-            converter = ((ValueHolder) component).getConverter();
-        }
+        Converter converter = getConverter(component);
 
         return convertStringToValue(context, component, converter, value,
                 "value", testValue);
+    }
+    
+    public static Converter getConverter(UIComponent component) {
+
+        if (component instanceof IConvertValueHolder) {
+           return ((IConvertValueHolder) component).getConverter();
+        } 
+        
+        if (component instanceof ValueHolder) {
+            return ((ValueHolder) component).getConverter();
+        }
+   	
+        return null;
     }
 
     public static Object convertStringToValue(FacesContext context,
