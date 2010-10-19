@@ -677,6 +677,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         	if (rowCount < 0 || first <= rowCount) {
                 htmlWriter.writeAttribute("v:first", first);
         	} else {
+        		// reset First to 0 if rowCount is smaller than first
         		gridRenderContext.resetFirst();
         	}
         }
