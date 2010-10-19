@@ -493,7 +493,7 @@ var __statics = {
 			jsEvent = f_core.GetJsEvent(this);
 		}
 
-		if (f_event.GetEventLocked(jsEvent)) {
+		if (f_event.GetEventLocked(jsEvent, false)) {
 			return f_core.CancelJsEvent(jsEvent);
 		}
 
