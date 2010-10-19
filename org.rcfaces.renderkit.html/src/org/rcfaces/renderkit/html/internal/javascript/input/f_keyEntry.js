@@ -437,7 +437,7 @@ var __members = {
 			return;
 		}
 		
-		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+		if (this.f_fireEvent(f_event.PRE_SELECTION, null, rowValues, value)===false) {
 			return;
 		}
 		
@@ -452,6 +452,7 @@ var __members = {
 					labelComponent.f_setText(this._noValueFormatLabel);
 				}
 			}
+			this.f_fireEvent(f_event.SELECTION, null, null, null);
 			return;
 		}
 		
@@ -461,7 +462,8 @@ var __members = {
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
 		this._inputValue=value;
-		if(this._forLabel){
+		
+		if (this._forLabel){
 			var labelComponent = f_core.GetElementById(this._forLabel);
 			if (labelComponent) {
 				labelComponent.f_setText(f_core.FormatMessage(this._valueFormatLabel,rowValues));
@@ -475,6 +477,10 @@ var __members = {
 
 		} else {
 			input.value=this._formattedValue;
+		}
+		
+		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+			return;
 		}
 		
 		if (focusNext===false) {		

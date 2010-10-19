@@ -912,6 +912,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
+        if (dg instanceof ITabIndexCapability) {
+    		ITabIndexCapability tic = (ITabIndexCapability) dg;
+    		Integer tabIndex = tic.getTabIndex();
+    		if (tabIndex != null) {
+        		htmlWriter.writeAttribute("v:tabIndex", tabIndex.intValue());
+    		}
+    	}
 
     }
 
@@ -2354,5 +2361,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         jsWriter.writeln("]);");
+    }
+    
+    protected IHtmlWriter writeTabIndex(IHtmlWriter writer,
+    		ITabIndexCapability tabIndexCapability) throws WriterException {
+    	// Do nothing : check the v:tabIndex attribute
+    	return writer;
     }
 }
