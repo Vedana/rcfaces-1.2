@@ -12,9 +12,30 @@ public class ExpandEvent extends ActionEvent {
 	private static final long serialVersionUID = -8338479464413940009L;
 	private static final String REVISION = "$Revision$";
    
+	private final int detail;
+	
+	private String value;
 
-    public ExpandEvent(UIComponent component) {
-        super(component);
+    private Object item;
+	
+    public ExpandEvent(UIComponent component, String value, Object item, int detail) {
+    	super(component);
+    	
+    	this.detail = detail;
+    	this.value = value;
+    	this.item = item;
+    }
+
+    public int getDetail() {
+        return detail;
+    }
+
+    public Object getItem() {
+        return item;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     /*

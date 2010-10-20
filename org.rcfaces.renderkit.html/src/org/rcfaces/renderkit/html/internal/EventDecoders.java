@@ -357,9 +357,9 @@ public class EventDecoders {
                     public void decodeEvent(IRequestContext requestContext,
                             UIComponent component, IEventData eventData,
                             IEventObjectDecoder eventObjectDecoder) {
-                        // @XXX A Completer avec les noms des
-
-                        FacesEvent event = new ExpandEvent(component);
+                        FacesEvent event = new ExpandEvent(component,
+                                eventData.getEventValue(), eventData.getEventItem(), eventData
+                                        .getEventDetail());
                         queueEvent(component, event);
                     }
                 });
