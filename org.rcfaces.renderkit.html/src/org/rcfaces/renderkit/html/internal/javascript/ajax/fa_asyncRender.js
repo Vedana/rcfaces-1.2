@@ -38,7 +38,7 @@ var __members = {
 		}
 		
 		var component = this;
-		var waitSubmit = function () {
+		function waitSubmit() {
  			if (window._rcfacesExiting) {
  				return false;
  			}
@@ -54,7 +54,7 @@ var __members = {
 		this._interactive=undefined;
 		window.setTimeout(waitSubmit, 12);		
 		
-		var callAsync = function () {
+		function callAsync() {
  			if (window._rcfacesExiting) {
  				return false;
  			}
