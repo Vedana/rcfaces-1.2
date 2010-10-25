@@ -421,6 +421,10 @@ var __members = {
 		row._index=arguments[idx++];
 		row.id=this.id+"::row"+rowIdx;
 		
+		if(this._useInPopup){ // pour aria a revoir
+			row.setAttribute("role", "option");
+		}
+		
 		if (f_core.IsInternetExplorer()) {
 			row.tabIndex=-1; // Pas sous FF car le TR devient focusable
 		}
