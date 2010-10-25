@@ -28,7 +28,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param boolean synch Wait preparation if necessery.
+	 * @param boolean synch Wait preparation if necessary.
 	 * @param optional Function parent Function returns parent node.
 	 * @return boolean <code>true</code> if component is prepared !
 	 */
@@ -38,7 +38,9 @@ var __members = {
 		}
 		
 		var component = this;
-		function waitSubmit() {
+		
+		this._interactive=undefined;
+		window.setTimeout(function(){
  			if (window._rcfacesExiting) {
  				return false;
  			}
@@ -47,156 +49,158 @@ var __members = {
  			if (lock) {
  				return;
  			}
- 			
- 			callAsync();
-		};
+ 			component._callAsyncRender(parent);
+		}, 12);		
 		
-		this._interactive=undefined;
-		window.setTimeout(waitSubmit, 12);		
+		return false;
+	},
+	
+	/**
+	 * @method private
+	 * @param component.
+	 * @return void
+	 */
+	_callAsyncRender: function(parent) {
+		if (window._rcfacesExiting) {
+			return;
+		}
+		var component = this;
+		var url=f_env.GetViewURI();
+		var request=new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
 		
-		function callAsync() {
- 			if (window._rcfacesExiting) {
- 				return false;
- 			}
-			var url=f_env.GetViewURI();
-			var request=new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
+		if (!parent) {
+			if (typeof(component.fa_getInteractiveParent)=="function") {
+				parent=component.fa_getInteractiveParent();
+			}
 			
 			if (!parent) {
-				if (typeof(component.fa_getInteractiveParent)=="function") {
-					parent=component.fa_getInteractiveParent();
-				}
+				parent=component;
+			}
+		}
+		
+		if (!component.style.height || component.offsetHeight<f_waiting.HEIGHT) {
+			component._removeStyleHeight=true;
+			component.style.height=f_waiting.HEIGHT+"px";
+		}
+		
+		request.f_setListener({
+	 		onInit: function(request) {
+	 			var waiting=component._intWaiting;
+	 			if (!waiting) {	
+	 				waiting=f_waiting.Create(parent);
+	 				component._intWaiting=waiting;
+	 			}
+	 			
+	 			waiting.f_setText(f_waiting.GetLoadingMessage());
+	 			waiting.f_show();
+	 		},
+			/* *
+			 * @method public
+			 */
+	 		onError: function(request, status, text) {
+				component._intLoading=false;		
 				
-				if (!parent) {
-					parent=component;
+	 			var waiting=component._intWaiting;
+				if (waiting) {
+					waiting.f_hide();
 				}
-			}
-			
-			if (!component.style.height || component.offsetHeight<f_waiting.HEIGHT) {
-				component._removeStyleHeight=true;
-				component.style.height=f_waiting.HEIGHT+"px";
-			}
-			
-			request.f_setListener({
-		 		onInit: function(request) {
-		 			var waiting=component._intWaiting;
-		 			if (!waiting) {	
-		 				waiting=f_waiting.Create(parent);
-		 				component._intWaiting=waiting;
-		 			}
-		 			
-		 			waiting.f_setText(f_waiting.GetLoadingMessage());
-		 			waiting.f_show();
-		 		},
-				/* *
-				 * @method public
-				 */
-		 		onError: function(request, status, text) {
-					component._intLoading=false;		
+				f_core.Info(fa_asyncRender, "f_prepare.onError: Bad status: "+status);
+				
+				component.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
+	 		},
+			/* *
+			 * @method public
+			 */
+	 		onProgress: function(request, content, length, contentType) {
+	 			var waiting=component._intWaiting;
+				if (waiting) {
+					waiting.f_setText(f_waiting.GetReceivingMessage());
+				}	 			
+	 		},
+			/* *
+			 * @method public
+			 */
+	 		onLoad: function(request, content, contentType) {			
+				if (component._removeStyleHeight) {
+					component._removeStyleHeight=null;
+					if (component.style.height==f_waiting.HEIGHT+"px") {
+						component.style.height="auto";
+					}
+				}
+	
+
+	 			var waiting=component._intWaiting;
+				try {
+					if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+						component.f_performAsyncErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+						return;
+					}
+
+					var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+					if (!cameliaServiceVersion) {
+						component.f_performAsyncErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+						return;					
+					}
 					
-		 			var waiting=component._intWaiting;
+					var ret=request.f_getResponse();
+					//	alert("Ret="+ret);
+
+					var responseContentType=request.f_getResponseContentType().toLowerCase();
+					if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
+						var code=f_error.ComputeApplicationErrorCode(request);
+				
+				 		component.f_performErrorEvent(request, code, content);
+						return;
+					}
+				
+					if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
+						try {
+							f_core.WindowScopeEval(ret);
+							
+						} catch (x) {
+				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+						}
+						
+						component.fa_contentLoaded(ret, responseContentType, parent);
+						return;
+					}
+					
+					if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)>=0) {
+						if (waiting) {
+							waiting.f_hide();
+							waiting.f_close();
+							waiting=null;
+						}
+						
+						try {
+							component.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+ret);
+							
+							component.fa_contentLoaded(ret, responseContentType, parent);
+						} catch (x) {
+				 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
+						}
+						return;
+					}
+					
+				 	component.f_performAsyncErrorEvent(request, f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR, "Unsupported content type: "+responseContentType);
+					
+				} finally {				
+					component._intLoading=false;
+
 					if (waiting) {
 						waiting.f_hide();
 					}
-					f_core.Info(fa_asyncRender, "f_prepare.onError: Bad status: "+status);
-					
-					component.f_performAsyncErrorEvent(request, f_error.HTTP_ERROR, text);
-		 		},
-				/* *
-				 * @method public
-				 */
-		 		onProgress: function(request, content, length, contentType) {
-		 			var waiting=component._intWaiting;
-					if (waiting) {
-						waiting.f_setText(f_waiting.GetReceivingMessage());
-					}	 			
-		 		},
-				/* *
-				 * @method public
-				 */
-		 		onLoad: function(request, content, contentType) {			
-					if (component._removeStyleHeight) {
-						component._removeStyleHeight=null;
-						if (component.style.height==f_waiting.HEIGHT+"px") {
-							component.style.height="auto";
-						}
-					}
-		
-	
-		 			var waiting=component._intWaiting;
-					try {
-						if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
-							component.f_performAsyncErrorEvent(request, f_error.INVALID_RESPONSE_ASYNC_RENDER_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
-							return;
-						}
-	
-						var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
-						if (!cameliaServiceVersion) {
-							component.f_performAsyncErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
-							return;					
-						}
-						
-						var ret=request.f_getResponse();
-						//	alert("Ret="+ret);
-	
-						var responseContentType=request.f_getResponseContentType().toLowerCase();
-						if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
-							var code=f_error.ComputeApplicationErrorCode(request);
-					
-					 		component.f_performErrorEvent(request, code, content);
-							return;
-						}
-					
-						if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)>=0) {
-							try {
-								f_core.WindowScopeEval(ret);
-								
-							} catch (x) {
-					 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
-							}
-							
-							component.fa_contentLoaded(ret, responseContentType, parent);
-							return;
-						}
-						
-						if (responseContentType.indexOf(f_httpRequest.TEXT_HTML_MIME_TYPE)>=0) {
-							if (waiting) {
-								waiting.f_hide();
-								waiting.f_close();
-								waiting=null;
-							}
-							
-							try {
-								component.f_getClass().f_getClassLoader().f_loadContent(component, component, component.innerHTML+ret);
-								
-								component.fa_contentLoaded(ret, responseContentType, parent);
-							} catch (x) {
-					 			component.f_performAsyncErrorEvent(x, f_error.RESPONSE_EVALUATION_ASYNC_RENDER_ERROR, "Evaluation exception");
-							}
-							return;
-						}
-						
-					 	component.f_performAsyncErrorEvent(request, f_error.RESPONSE_TYPE_ASYNC_RENDER_ERROR, "Unsupported content type: "+responseContentType);
-						
-					} finally {				
-						component._intLoading=false;
-	
-						if (waiting) {
-							waiting.f_hide();
-						}
-					}
-		 		}			
-			});
-	
-			component._intLoading=true;
-			request.f_setRequestHeader("X-Camelia", "asyncRender.request");
-	
-			var	param={
-				id: component.id
-			};
-			request.f_doFormRequest(param);
+				}
+	 		}			
+		});
+
+		component._intLoading=true;
+		request.f_setRequestHeader("X-Camelia", "asyncRender.request");
+
+		var	param={
+			id: component.id
 		};
-		
-		return false;
+		request.f_doFormRequest(param);
 	},
 	/**
 	 * @method protected
