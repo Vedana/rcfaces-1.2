@@ -3,7 +3,7 @@
  */
 
 /**
- * @class public f_cardBox extends f_component, fa_immediate
+ * @class public f_cardBox extends f_component
  *
  * @author olivier Oeuillot
  * @version $REVISION: $
@@ -287,6 +287,5 @@ var __members={
  
 new f_class("f_cardBox", {
 	extend: f_component,
-	aspects: [fa_immediate],
 	members: __members
 });
