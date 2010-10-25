@@ -602,8 +602,7 @@ var __members = {
 				sep=true;
 							
 			default:
-				uiItem.role="listItem";
-				uiItem.setAttribute("role", "listItem");
+				uiItem.setAttribute("role", "option");
 				break;
 			}
 			

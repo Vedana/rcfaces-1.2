@@ -44,10 +44,12 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         FacesContext facesContext = componentRenderContext.getFacesContext();
         ViewDialogComponent component = (ViewDialogComponent) componentRenderContext
                 .getComponent();
-
+                
+        boolean designMode = componentRenderContext.getRenderContext().getProcessContext().isDesignerMode();
+        
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        if (component.isVisible(facesContext)) {
+        if (component.isVisible(facesContext) && designMode == false) {
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
 
