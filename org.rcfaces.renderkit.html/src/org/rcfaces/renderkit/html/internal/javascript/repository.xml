@@ -899,7 +899,6 @@
 		<file name="ui/f_cardBox.js">
 			<class name="f_cardBox">
 				<required-class name="f_component" />
-				<required-class name="fa_immediate" />
 				
 				<required-style name="f_cardBox.css" />
 			</class>
