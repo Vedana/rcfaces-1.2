@@ -92,10 +92,10 @@ var __members = {
 
 		this._gridStyleClass=f_core.GetNumberAttribute(this, "v:gridStyleClass", 0);
 
-		this._foceValidation=f_core.GetBooleanAttribute(this, "v:forceValidation", false);
+		this._forceValidation=f_core.GetBooleanAttribute(this, "v:forceValidation", false);
 		
-		if(this._foceValidation) {
-			this._installcheckListener();
+		if(this._forceValidation) {
+			this._installCheckListener();
 		}
 		
 		this.f_getInput().onbeforedeactivate=f_keyEntry._OnBeforeDeactivate;
@@ -132,7 +132,7 @@ var __members = {
 		// this._readOnly=undefined; // boolean 
 		// this._maxTextLength=undefined; // number
 		// this._emptyMessageShown=undefined; boolean
-		// this._foceValidation=undefined; boolean
+		// this._forceValidation=undefined; boolean
 		// this._required=undefined; boolean
 		
 		var request=this._verifyRequest;
@@ -145,7 +145,9 @@ var __members = {
 		this.f_super(arguments);
 	},
 	f_serialize: function() {
-		this.f_setProperty(f_prop.SELECTED, this._selectedValue);
+		if (!this._keyErrored) {
+			this.f_setProperty(f_prop.SELECTED, this._selectedValue);
+		}
 		
 		if (this._emptyMessageShown) {	
 			input=this.f_getInput();
@@ -154,6 +156,8 @@ var __members = {
 		}
 		
 		this.f_super(arguments);	
+		
+		this.f_setProperty(f_prop.TEXT, this._inputValue);
 	},
 	
 	
@@ -161,13 +165,29 @@ var __members = {
 	 * @method private
 	 * @return void
 	 */
-	_installcheckListener: function() {
+	_installCheckListener: function() {
 		var keyEntry=this;
 		var checkListeners={
 				
 			f_performCheckValue: function(event) {
 				if (keyEntry._inputValue) {
-					if(keyEntry._foceValidation && keyEntry._keyErrored) {
+					if(keyEntry._forceValidation && keyEntry._keyErrored) {
+						var summary=keyEntry.f_getClientValidatorParameter("INVALIDKEY_ERROR_SUMMARY");
+						var detail=keyEntry.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
+						
+						if (!summary) {
+							var resourceBundle=f_resourceBundle.Get(f_keyEntry);
+							summary=resourceBundle.f_formatParams("INVALIDKEY_ERROR_SUMMARY");
+							//detail=resourceBundle.f_formatParams("REQUIRED_ERROR_DETAIL");
+							
+							if (!summary) {	
+								summary=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_INVALID", null, "Invalid value.");
+							}
+						}
+							
+						var messageContext=f_messageContext.Get(keyEntry);	
+						messageContext.f_addMessage(keyEntry, f_messageObject.SEVERITY_ERROR, summary, detail);
+						
 						return false;
 					}
 					return true;
@@ -417,7 +437,7 @@ var __members = {
 			return;
 		}
 		
-		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+		if (this.f_fireEvent(f_event.PRE_SELECTION, null, rowValues, value)===false) {
 			return;
 		}
 		
@@ -432,6 +452,7 @@ var __members = {
 					labelComponent.f_setText(this._noValueFormatLabel);
 				}
 			}
+			this.f_fireEvent(f_event.SELECTION, null, null, null);
 			return;
 		}
 		
@@ -441,7 +462,8 @@ var __members = {
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
 		this._inputValue=value;
-		if(this._forLabel){
+		
+		if (this._forLabel){
 			var labelComponent = f_core.GetElementById(this._forLabel);
 			if (labelComponent) {
 				labelComponent.f_setText(f_core.FormatMessage(this._valueFormatLabel,rowValues));
@@ -455,6 +477,10 @@ var __members = {
 
 		} else {
 			input.value=this._formattedValue;
+		}
+		
+		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+			return;
 		}
 		
 		if (focusNext===false) {		
@@ -786,7 +812,7 @@ var __members = {
 			return;
 		}
 		
-		this._installcheckListener();
+		this._installCheckListener();
 	},
 	/**
 	 * @method hidden
