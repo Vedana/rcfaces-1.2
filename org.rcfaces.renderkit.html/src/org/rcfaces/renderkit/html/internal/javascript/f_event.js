@@ -701,7 +701,7 @@ var __statics = {
 		var currentLock = f_event._EvtLock;
 
 		if (mask) {
-			currentLock &= ~mask;
+			currentLock &= mask;
 		}
 
 		if (!currentLock) {
@@ -839,7 +839,7 @@ var __statics = {
 				}
 			}
 
-			f_core.Debug(f_event, "Popup event ALERT:\n" + s);
+			f_core.Info(f_event, "Popup event ALERT:\n" + s, new Error());
 		}
 
 		alert(s);
