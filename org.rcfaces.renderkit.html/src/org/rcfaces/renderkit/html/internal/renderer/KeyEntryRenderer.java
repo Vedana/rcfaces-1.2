@@ -68,7 +68,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
 	}
 
 	protected String getWAIRole() {
-		return IAccessibilityRoles.PRESENTATION;
+		return IAccessibilityRoles.TEXTBOX;
 	}
 
 	protected void encodeGrid(IHtmlWriter htmlWriter) throws WriterException {
@@ -737,6 +737,13 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
 			convertedSelectedValue = ValuesTools.convertStringToValue(
 					facesContext, converterComponent, selectedValue, false);
+
+		} else if (comboGridComponent.isForceValidation(facesContext)==false) {
+			// Verifier qu'il n'y a pas de converter
+			if (ValuesTools.getConverter(comboGridComponent)==null) {
+				convertedSelectedValue=componentData.getStringProperty("text");
+			}
+			
 		}
 
 		Object old = comboGridComponent.getSelectedValue(facesContext);

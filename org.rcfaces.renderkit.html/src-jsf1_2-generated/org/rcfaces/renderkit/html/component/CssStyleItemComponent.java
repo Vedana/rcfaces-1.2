@@ -2,13 +2,13 @@ package org.rcfaces.renderkit.html.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.FileItemComponent;
-import org.apache.commons.logging.Log;
 import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
+import org.apache.commons.logging.Log;
+import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
+import org.rcfaces.core.component.FileItemComponent;
 
 public class CssStyleItemComponent extends FileItemComponent implements 
 	IUserAgentVaryCapability {
