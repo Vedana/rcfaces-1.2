@@ -1827,6 +1827,7 @@ var __members = {
 			f_core.AppendChild(sortIndicator, img);
 		}
 
+		var tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
 		var focus;
 		if (f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
@@ -1839,11 +1840,13 @@ var __members = {
 				focus.onkeypress = f_grid._Link_onkeypress;
 				focus.onkeyup = f_grid._Link_onkeyup;
 				focus._dataGrid = this;
+				focus.tabIndex = tabIndex;
 				this._cfocus = focus;
 
 			} else {
 				this.onfocus = f_grid._Link_onfocus;
 				this.onblur = f_grid._Link_onblur;
+				this.tabIndex = tabIndex;
 				this._cfocus = this;
 				this._dataGrid = this;
 			}
@@ -1861,12 +1864,7 @@ var __members = {
 			focus.onkeyup = f_grid._Link_onkeyup;
 			focus.href = f_core.JAVASCRIPT_VOID;
 			focus._dataGrid = this;
-
-			if (this.tabIndex) {
-				focus.tabIndex = this.tabIndex;
-			} else {
-				focus.tabIndex = 0;
-			}
+			focus.tabIndex = tabIndex;
 
 			// this.tabIndex=-1;
 
@@ -2088,7 +2086,7 @@ var __members = {
 			scrollBody.onmouseup = null;
 			scrollBody.onclick = null;
 			scrollBody.onbeforeactivate = null;
-
+			
 			scrollBody._dataGrid = undefined; // f_dataGrid
 
 			if (scrollBody != this) {
@@ -2202,11 +2200,15 @@ var __members = {
 					continue;
 				}
 
-				if (v) {
-					v += ",";
-				}
+				// Palliatif de Fred pour pb ie
+				// See AbstractGridRenderContext.java 506
+				if (col._col.offsetWidth > 0) {
+					if (v) {
+						v += ",";
+					}
 
-				v += col._col.offsetWidth;
+					v += col._col.offsetWidth;
+				}
 			}
 			this.f_setProperty(f_prop.COLUMN_WIDTHS, v);
 		}
@@ -2810,7 +2812,16 @@ var __members = {
 			suffix = "_selected";
 			if (this._focus) {
 				suffix += "_focus";
-				fa_aria.SetElementAriaActiveDescendant(this, row.id);
+				if (this._serviceGridId){
+					var dataGridPopup = f_core.GetElementByClientId(this._serviceGridId);
+					if (dataGridPopup._ariaInput){
+						fa_aria.SetElementAriaActiveDescendant(dataGridPopup._ariaInput, row.id);
+					}else {
+						fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+					}
+				}else {
+					fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+				}
 			}
 
 		} else if (this._selectable) {
@@ -4905,6 +4916,8 @@ var __members = {
 			if (f_core.IsGecko()) {
 				scrollBody.addEventListener("DOMMouseScroll",
 						f_grid._Link_onmousewheel, false);
+			} else {
+				scrollBody.onmousewheel = f_grid._Link_onmousewheel;
 			}
 		}
 	},

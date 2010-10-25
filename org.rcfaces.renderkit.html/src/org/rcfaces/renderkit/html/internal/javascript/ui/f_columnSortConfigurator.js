@@ -456,6 +456,10 @@ var __members = {
 	     	f_core.Debug(f_columnSortConfigurator, "f_buttonOnClick: sorting "+(colsSorted.length/3)+" cols");
 			
      		var delayedSort = function () {
+     			if (window._rcfacesExiting) {
+     				return false;
+     			}
+
      			if (!colsSorted.length) {
      				grid.f_clearSort();
      				return;
