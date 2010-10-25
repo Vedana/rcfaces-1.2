@@ -457,7 +457,7 @@ var __members = {
 			
      		var delayedSort = function () {
      			if (window._rcfacesExiting) {
-     				return false;
+     				return;
      			}
 
      			if (!colsSorted.length) {

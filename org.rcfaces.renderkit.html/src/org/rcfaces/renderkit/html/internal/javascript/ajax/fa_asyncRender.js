@@ -36,26 +36,23 @@ var __members = {
 		if (!this._interactive) {
 			return true;
 		}
-		var component= this;
+		
+		var component = this;
 		var waitSubmit = function () {
  			if (window._rcfacesExiting) {
  				return false;
  			}
- 			var lock = f_event.GetEventLocked(null, false, f_event.SUBMIT_LOCK);
- 			
- 			if(lock){
- 				callAsync();
- 			}else {
+
+ 			var lock = f_event.GetEventLocked(null, false, f_event.SUBMIT_LOCK); 			
+ 			if (lock) {
  				return;
  			}
  			
+ 			callAsync();
 		};
 		
 		this._interactive=undefined;
-		window.setTimeout(waitSubmit, 12);
-		
-		
-		
+		window.setTimeout(waitSubmit, 12);		
 		
 		var callAsync = function () {
  			if (window._rcfacesExiting) {
@@ -190,14 +187,15 @@ var __members = {
 		 		}			
 			});
 	
-			this._intLoading=true;
+			component._intLoading=true;
 			request.f_setRequestHeader("X-Camelia", "asyncRender.request");
 	
 			var	param={
-				id: this.id
+				id: component.id
 			};
 			request.f_doFormRequest(param);
-		}
+		};
+		
 		return false;
 	},
 	/**

@@ -2086,6 +2086,7 @@ var __members = {
 			scrollBody.onmouseup = null;
 			scrollBody.onclick = null;
 			scrollBody.onbeforeactivate = null;
+			scrollBody.onmousewheel = null;
 			
 			scrollBody._dataGrid = undefined; // f_dataGrid
 
