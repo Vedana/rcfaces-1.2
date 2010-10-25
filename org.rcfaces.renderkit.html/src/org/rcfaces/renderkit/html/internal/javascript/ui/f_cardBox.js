@@ -283,7 +283,7 @@ var __members={
 		
 		return ret;
 	}
-}
+};
  
 new f_class("f_cardBox", {
 	extend: f_component,

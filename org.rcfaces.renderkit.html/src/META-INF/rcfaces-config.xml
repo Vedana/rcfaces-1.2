@@ -489,6 +489,7 @@
  *
  * @param	date.sepSign	Liste des séparateurs autorisés
  * @param	date.pivot		Valeur servant de pivot
+ * @param	date.auto		Ajoute la date du jour si vide et requis
  * @see		CAMELIA.date
  * @example	clientValidator="date('/-.','90')"
  */
@@ -496,6 +497,7 @@
 	<clientValidator id="date">
 		<parameter name="date.sepSign" value="/-." />
 		<parameter name="date.pivot" value="90" />
+		<parameter name="date.auto" value="true" />
 		<filter call="f_vb.Filter_dat" class="org.rcfaces.core.internal.validator.impl.DateFilter" />
 		<translator call="f_vb.Translator_date" class="org.rcfaces.core.internal.validator.impl.DateTranslator" />
 		<checker call="f_vb.Checker_dat" class="org.rcfaces.core.internal.validator.impl.DateChecker" />
@@ -530,6 +532,7 @@
  *
  * @param	date.sepSign	Liste des séparateurs autorisés
  * @param	date.pivot		Valeur servant de pivot
+ * @param	date.auto		Ajoute la date du jour si vide et requis
  * @see		F.date
  * @example	clientValidator="date_msa('/-.','90')"
  */
@@ -537,6 +540,7 @@
 	<clientValidator id="date_msa">
 		<parameter name="date.sepSign" value="/-." />
 		<parameter name="date.pivot" value="90" />
+		<parameter name="date.auto" value="true" />
 		<filter call="f_vb.Filter_dat" class="org.rcfaces.core.internal.validator.impl.DateFilter"/>
 		<translator call="f_vb.Translator_date" class="org.rcfaces.core.internal.validator.impl.DateTranslator" />
 		<checker call="f_vb.Checker_dat_msa" />
@@ -596,13 +600,14 @@
  *		HH:MM
  *
  * @param	hour.sepSign	Liste des séparateurs autorisés
+ * @param	date.auto		Ajoute la date du jour si vide et requis
  * @see		CAMELIA.hour
  * @example	clientValidator="hour(':. ')"
  */
 -->
 	<clientValidator id="hour">
 		<parameter name="hour.sepSign" value=":. " />
-
+		<parameter name="date.auto" value="true" />
 		<filter call="f_vb.Filter_hour" xxclass="org.rcfaces.core.internal.validator.impl.HourFilter" />
 		<checker call="f_vb.Checker_hour" xxclass="org.rcfaces.core.internal.validator.impl.HourTranslator" />
 		<converter object="f_vb.Converter_hour" xxclass="org.rcfaces.core.internal.validator.impl.HourChecker"/>

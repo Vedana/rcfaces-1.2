@@ -2,14 +2,14 @@ package org.rcfaces.renderkit.html.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
-import java.util.Arrays;
-import org.rcfaces.core.component.capability.ITextCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import java.util.Set;
+import org.rcfaces.renderkit.html.component.capability.IUserAgentVaryCapability;
+import org.apache.commons.logging.Log;
 import java.util.HashSet;
+import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import java.util.Set;
+import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
  * Css style
@@ -24,7 +24,7 @@ public class CssStyleComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"userAgent","text","mergeStyles","requiredSets","requiredModules","srcCharSet","src"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"srcCharSet","requiredModules","text","requiredSets","userAgent","mergeStyles","src"}));
 	}
 
 	public CssStyleComponent() {

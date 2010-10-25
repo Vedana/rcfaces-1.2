@@ -1164,4 +1164,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             return rowValueSetted;
         }
     }
+    
+    protected String getWAIRole() {
+    	return null;
+    }
 }
