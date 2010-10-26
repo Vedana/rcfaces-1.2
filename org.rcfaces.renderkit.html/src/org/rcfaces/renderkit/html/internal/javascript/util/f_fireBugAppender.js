@@ -41,7 +41,7 @@ var __statics={
 		}
 		
 		f_fireBugAppender._oldAssert=f_core.Assert;
-		f_core.Assert=f_fireBugAppender.Assert;
+		//f_core.Assert=f_fireBugAppender.Assert;
 	},
 	/**
 	 * @method public static 

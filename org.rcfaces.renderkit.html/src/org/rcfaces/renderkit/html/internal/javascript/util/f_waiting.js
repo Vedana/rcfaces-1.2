@@ -114,13 +114,13 @@ var __statics = {
 		}
 
 		node._inlineMode=inlineMode;
-		node._parentElement=parentElement;
 		
 		if (!message) {
 			message=f_waiting.GetLoadingMessage();
 		}
 		
 		f_core.AppendChild(node, doc.createTextNode(message));
+		node._parentElement=parentElement;
 		
 		if (parentElement.tagName.toLowerCase()=="select") {
 			parentElement=parentElement.parentNode;
@@ -334,7 +334,7 @@ var __statics = {
 		
 		return imageURL;
 	 }
-} 
+};
 
 var __members = {
 	
@@ -369,10 +369,11 @@ var __members = {
 		// this._text=undefined; // string
 		// this._waitStep=undefined; // number
 		
-		var parent=this._parentElement;
-		if (parent) {
-			this._parentElement=undefined; // HtmlElement
-			parent.removeChild(this);
+		this._parentElement=undefined;
+		
+		var parentNode=this.parentNode;
+		if (parentNode) {
+			parentNode.removeChild(this);
 		}
 		
 		// this._parentElementOldCursor=undefined; // string
