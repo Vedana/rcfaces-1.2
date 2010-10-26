@@ -60,6 +60,13 @@ var __members = {
 	},
 	/**
 	 * @method hidden
+	 * @return f_component
+	 */
+	f_getFocusHandler: function() {
+		return this._cardBox;
+	},
+	/**
+	 * @method hidden
 	 * @return HTMLElement
 	 */
 	fa_getInteractiveParent: function() {
