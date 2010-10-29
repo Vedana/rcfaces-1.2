@@ -1197,7 +1197,10 @@ var __statics = {
 			return "";
 		}
 		var format = validator.f_getParameter("date.format");
-		return f_dateFormat.FormatDate(dateObject, format);
+		var sTmp = f_dateFormat.FormatDate(dateObject, format);
+		validator.f_setInputValue(sTmp);
+		//validator.f_setOutputValue(sTmp);
+		return sTmp;
 	},
 	
 	/**
