@@ -509,8 +509,10 @@ var __statics = {
 	 */
 	Checker_dat : function(validator, inVal) {
 
+		var auto = validator.f_getBoolParameter("date.auto", false);
+		
 		// Deal with empty string and required attribute
-		if (!inVal && !(validator.f_getComponent().f_isRequired())) {
+		if ((!inVal && !validator.f_getComponent().f_isRequired()) || !inVal && !auto ) {
 			validator.f_setObject(null);
 			return inVal;
 		}
@@ -619,8 +621,10 @@ var __statics = {
 		var sTmp = inVal;
 		var l; // ,p
 
+		var auto = validator.f_getBoolParameter("date.auto", false);
+		
 		// Deal with empty string and required attribute
-		if (!inVal && !(validator.f_getComponent().f_isRequired())) {
+		if ((!inVal && !validator.f_getComponent().f_isRequired()) || !inVal && !auto ) {
 			validator.f_setObject(null);
 			return inVal;
 		}
@@ -910,9 +914,10 @@ var __statics = {
 	 * @context object:validator
 	 */
 	Checker_hour : function(validator, inVal) {
-
+		var auto = validator.f_getBoolParameter("date.auto", false);
+		
 		// Deal with empty string and required attribute
-		if (!inVal && !(validator.f_getComponent().f_isRequired())) {
+		if ((!inVal && !validator.f_getComponent().f_isRequired()) || !inVal && !auto ) {
 			validator.f_setObject(null);
 			return inVal;
 		}
@@ -1182,6 +1187,22 @@ var __statics = {
 				: "$1 $2 $3 $4 $5 $6");
 	},
 
+	/**
+	 * @method public static
+	 * @context object:validator
+	 */
+	Formatter_date : function(validator, inVal) {
+		var dateObject = validator.f_getObject();
+		if (!dateObject) {
+			return "";
+		}
+		var format = validator.f_getParameter("date.format");
+		var sTmp = f_dateFormat.FormatDate(dateObject, format);
+		validator.f_setInputValue(sTmp);
+		//validator.f_setOutputValue(sTmp);
+		return sTmp;
+	},
+	
 	/**
 	 * @method public static
 	 * @context object:validator
