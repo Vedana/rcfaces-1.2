@@ -73,9 +73,9 @@ public class ExternalBoxRenderer extends AbstractCssRenderer implements
 
 			src = contentAccessor.resolveURL(facesContext, null, null);
 			htmlWriter.writeAttribute("v:contentURL", src);
-		}
-		if (component.isVisible()) {
-			htmlWriter.writeSrc(src);
+			if (component.isVisible()) {
+				htmlWriter.writeSrc(src);
+			}
 		}
 		htmlWriter.getJavaScriptEnableMode().enableOnInit();
 		htmlWriter.endElement(IHtmlWriter.IFRAME);
