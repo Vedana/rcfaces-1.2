@@ -534,7 +534,7 @@ var __members = {
 		}
 		
 		if (sendEvent!==false) {
-			if (this.f_fireEvent(f_event.SELECTION, evt, ccard, ccard.f_getValue())===false) {
+			if (this.f_fireEvent(f_event.PRE_SELECTION, evt, ccard, ccard.f_getValue())===false) {
 				return false;
 			}
 		}
@@ -554,6 +554,10 @@ var __members = {
 		this.f_updateCardStyle(tab);
 		
 		this.f_setProperty(f_prop.SELECTED, tab._id);
+		
+		if (sendEvent!==false) {
+			this.f_fireEvent(f_event.SELECTION, evt, ccard, ccard.f_getValue());
+		}
 		
 		return true;
 	},
