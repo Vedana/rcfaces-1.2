@@ -104,7 +104,7 @@ var __members = {
 	fa_isContainerAutoScroll: function(scrollableComponent) {
 		
 		if (scrollableComponent.offsetWidth-scrollableComponent.clientWidth<2) { // @TODO Retire les BORDS
-			return flase;
+			return false;
 		}
 		
 		return true;
