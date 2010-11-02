@@ -1248,7 +1248,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     int effects = dgc.getRowDragEffects();
 
                     if (effects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                        effects = IDragAndDropEffects.NONE_DND_EFFECT;
+                        effects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
                     }
 
                     objectLiteralWriter.writeSymbol("_dragEffects").writeInt(
@@ -1271,7 +1271,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     int effects = dgc.getRowDropEffects();
 
                     if (effects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                        effects = IDragAndDropEffects.NONE_DND_EFFECT;
+                        effects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
                     }
 
                     objectLiteralWriter.writeSymbol("_dropEffects").writeInt(

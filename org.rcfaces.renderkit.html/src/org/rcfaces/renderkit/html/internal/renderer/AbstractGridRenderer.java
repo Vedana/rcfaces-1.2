@@ -713,7 +713,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             int dragEffects = draggableCapability.getDragEffects();
 
             if (dragEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                dragEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+                dragEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
             htmlWriter.writeAttribute("v:dragEffects", dragEffects);
 
@@ -721,6 +721,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (dragTypes != null && dragTypes.length > 0) {
                 htmlWriter.writeAttribute("v:dragTypes", HtmlTools
                         .serializeDnDTypes(dragTypes));
+            }else {
+            	htmlWriter.writeAttribute("v:dragTypes","x-RCFaces/row");
             }
         }
 
@@ -730,7 +732,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             int dropEffects = droppableCapability.getDropEffects();
 
             if (dropEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                dropEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+                dropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
             htmlWriter.writeAttribute("v:dropEffects", dropEffects);
 
@@ -738,6 +740,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (dropTypes != null && dropTypes.length > 0) {
                 htmlWriter.writeAttribute("v:dropTypes", HtmlTools
                         .serializeDnDTypes(dropTypes));
+            }else {
+            	htmlWriter.writeAttribute("v:dropTypes","x-RCFaces/row");
             }
 
             if (gridComponent instanceof IDroppableGridComponent) {
@@ -1023,6 +1027,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
          * htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
          */
         boolean first = true;
+          int columnHeaderIndex = 0;
         for (int i = 0; i < columns.length; i++) {
             if (tableContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
                 continue;
@@ -1030,7 +1035,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             UIColumn column = columns[i];
 
-            encodeFixedTitleCol(htmlWriter, tableContext, column, first, i);
+            encodeFixedTitleCol(htmlWriter, tableContext, column, first, i, ++columnHeaderIndex);
             first = false;
         }
 
@@ -1089,7 +1094,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private void encodeFixedTitleCol(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, UIColumn column,
-            boolean first, int columnIndex) throws WriterException {
+            boolean first, int columnIndex, int columnHeaderIndex) throws WriterException {
 
         /*
          * htmlWriter.startElement(IHtmlWriter.LI);
@@ -1107,7 +1112,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
          * htmlWriter.writeTitle(toolTip); } }
          */
 
-        encodeTitleCell(htmlWriter, tableContext, column, columnIndex);
+        encodeTitleCell(htmlWriter, tableContext, column, columnIndex, columnHeaderIndex);
 
         /*
          * htmlWriter.endElement(IHtmlWriter.LI);
@@ -1455,8 +1460,14 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected void encodeTitleCell(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, UIColumn column,
-            int columnIndex) throws WriterException {
+            int columnIndex, int columnHeaderIndex) throws WriterException {
         htmlWriter.startElement(IHtmlWriter.LI);
+       
+        htmlWriter.writeRole(IAccessibilityRoles.COLUMNHEADER);
+        // au propre
+        htmlWriter.writeId(getDataTableId(htmlWriter)+":columnHeader:"+columnHeaderIndex);
+        
+        
         String thClassName = getTitleCellClassName(htmlWriter, column,
                 columnIndex == 0, tableContext.isDisabled());
         htmlWriter.writeClass(thClassName);
@@ -1980,6 +1991,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         if (ret == null) {
             ret = new String[values.length];
+        }
+
+        if (values == null) {
+            return ret;
         }
 
         for (int i = 0; i < values.length; i++) {

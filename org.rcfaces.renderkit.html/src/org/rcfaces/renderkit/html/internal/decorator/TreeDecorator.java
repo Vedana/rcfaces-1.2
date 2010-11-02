@@ -821,7 +821,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             selectItemLastDragDropInfos = new ArrayList(8);
 
             if (dragDropEffects < 0) {
-                dragDropEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+                dragDropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
 
             Integer dragEffects = new Integer(dragDropEffects);

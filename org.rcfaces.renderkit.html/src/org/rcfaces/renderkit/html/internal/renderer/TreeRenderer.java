@@ -27,6 +27,7 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
+import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
@@ -136,23 +137,16 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             int dragEffects = treeComponent.getDragEffects(facesContext);
 
             if (dragEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                dragEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+                dragEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
             htmlWriter.writeAttribute("v:dragEffects", dragEffects);
 
             String dragTypes[] = treeComponent.getDragTypes(facesContext);
             if (dragTypes != null && dragTypes.length > 0) {
-                StringAppender sa = new StringAppender(dragTypes.length * 32);
-
-                for (int i = 0; i < dragTypes.length; i++) {
-                    if (sa.length() > 0) {
-                        sa.append(',');
-                    }
-
-                    sa.append(dragTypes[i]);
-                }
-
-                htmlWriter.writeAttribute("v:dragTypes", sa.toString());
+                htmlWriter.writeAttribute("v:dragTypes",HtmlTools
+                        .serializeDnDTypes(dragTypes));
+            }else {
+            	htmlWriter.writeAttribute("v:dragTypes", "x-RCFaces/treeNode");
             }
         }
 
@@ -160,23 +154,16 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             int dropEffects = treeComponent.getDropEffects(facesContext);
 
             if (dropEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
-                dropEffects = IDragAndDropEffects.NONE_DND_EFFECT;
+                dropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
             htmlWriter.writeAttribute("v:dropEffects", dropEffects);
 
             String dropTypes[] = treeComponent.getDropTypes(facesContext);
             if (dropTypes != null && dropTypes.length > 0) {
-                StringAppender sa = new StringAppender(dropTypes.length * 32);
-
-                for (int i = 0; i < dropTypes.length; i++) {
-                    if (sa.length() > 0) {
-                        sa.append(',');
-                    }
-
-                    sa.append(dropTypes[i]);
-                }
-
-                htmlWriter.writeAttribute("v:dropTypes", sa.toString());
+            	htmlWriter.writeAttribute("v:dropTypes", HtmlTools
+                        .serializeDnDTypes(dropTypes));
+            }else {
+            	htmlWriter.writeAttribute("v:dropTypes", "*/*");
             }
 
             if (treeComponent.isBodyDroppable(facesContext)) {

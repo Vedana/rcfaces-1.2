@@ -109,7 +109,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 
 		htmlWriter.startElement(IHtmlWriter.DIV);
 
-		writeCoreAttributes(htmlWriter);
+		writeHtmlAttributes(htmlWriter);
 		writeJavaScriptAttributes(htmlWriter);
 		writeCssAttributes(htmlWriter);
 		Date dateBegin = schedulerComponent.getDateBegin(facesContext);
