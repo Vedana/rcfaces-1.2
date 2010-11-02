@@ -28,7 +28,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param boolean synch Wait preparation if necessery.
+	 * @param boolean synch Wait preparation if necessary.
 	 * @param optional Function parent Function returns parent node.
 	 * @return boolean <code>true</code> if component is prepared !
 	 */
@@ -36,14 +36,40 @@ var __members = {
 		if (!this._interactive) {
 			return true;
 		}
-		this._interactive=undefined;
+		var component = this;
 		
+		this._interactive=undefined;
+		window.setTimeout(function(){
+ 			if (window._rcfacesExiting) {
+ 				return false;
+ 			}
+
+ 			var lock = f_event.GetEventLocked(null, false, f_event.SUBMIT_LOCK); 			
+ 			if (lock) {
+ 				return;
+ 			}
+ 			component._callAsyncRender(parent);
+		}, 12);		
+		
+		return false;
+	},
+	
+	/**
+	 * @method private
+	 * @param component.
+	 * @return void
+	 */
+	_callAsyncRender: function(parent) {
+		if (window._rcfacesExiting) {
+			return;
+		}
+		var component = this;
 		var url=f_env.GetViewURI();
-		var request=new f_httpRequest(this, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
-		var component=this;
+		var request=new f_httpRequest(component, url, f_httpRequest.TEXT_HTML_MIME_TYPE);
+		
 		if (!parent) {
-			if (typeof(this.fa_getInteractiveParent)=="function") {
-				parent=this.fa_getInteractiveParent();
+			if (typeof(component.fa_getInteractiveParent)=="function") {
+				parent=component.fa_getInteractiveParent();
 			}
 			
 			if (!parent) {
@@ -167,16 +193,15 @@ var __members = {
 	 		}			
 		});
 
-		this._intLoading=true;
+		component._intLoading=true;
 		request.f_setRequestHeader("X-Camelia", "asyncRender.request");
 
 		var	param={
-			id: this.id
+			id: component.id
 		};
 		request.f_doFormRequest(param);
-		
-		return false;
 	},
+
 	/**
 	 * @method protected
 	 */
