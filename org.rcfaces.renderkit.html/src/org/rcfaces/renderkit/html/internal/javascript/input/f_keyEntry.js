@@ -145,15 +145,18 @@ var __members = {
 		this.f_super(arguments);
 	},
 	f_serialize: function() {
-		this.f_setProperty(f_prop.SELECTED, this._selectedValue);
-		
+		if (!this._keyErrored) {
+			this.f_setProperty(f_prop.SELECTED, this._selectedValue);
+		}
 		if (this._emptyMessageShown) {	
 			input=this.f_getInput();
 			
 			input.value="";
 		}
 		
-		this.f_super(arguments);	
+		this.f_super(arguments);
+		
+		this.f_setProperty(f_prop.TEXT, this._inputValue);	
 	},
 	
 	
@@ -168,7 +171,22 @@ var __members = {
 			f_performCheckValue: function(event) {
 				if (keyEntry._inputValue) {
 					if(keyEntry._forceValidation && keyEntry._keyErrored) {
-						// Message ...
+						var summary=keyEntry.f_getClientValidatorParameter("INVALIDKEY_ERROR_SUMMARY");
+						var detail=keyEntry.f_getClientValidatorParameter("REQUIRED_ERROR_DETAIL");
+						
+						if (!summary) {
+							var resourceBundle=f_resourceBundle.Get(f_keyEntry);
+							summary=resourceBundle.f_formatParams("INVALIDKEY_ERROR_SUMMARY");
+							//detail=resourceBundle.f_formatParams("REQUIRED_ERROR_DETAIL");
+							
+							if (!summary) {	
+								summary=f_locale.Get().f_formatMessageParams("javax_faces_component_UIInput_INVALID", null, "Invalid value.");
+							}
+						}
+							
+						var messageContext=f_messageContext.Get(keyEntry);	
+						messageContext.f_addMessage(keyEntry, f_messageObject.SEVERITY_ERROR, summary, detail);
+						
 						
 						return false;
 					}
@@ -419,7 +437,7 @@ var __members = {
 			return;
 		}
 		
-		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+		if (this.f_fireEvent(f_event.PRE_SELECTION, null, rowValues, value)===false) {
 			return;
 		}
 		
@@ -434,6 +452,7 @@ var __members = {
 					labelComponent.f_setText(this._noValueFormatLabel);
 				}
 			}
+			this.f_fireEvent(f_event.SELECTION, null, null, null);		
 			return;
 		}
 		
@@ -457,6 +476,10 @@ var __members = {
 
 		} else {
 			input.value=this._formattedValue;
+		}
+		
+		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+			return;
 		}
 		
 		if (focusNext===false) {		
