@@ -21,7 +21,7 @@ var __statics = {
 	/**
 	 * @field private static final String[]
 	 */	
-	_DefaultDragAndDropInfos: ["popup", "icon" ],
+	_DefaultDragAndDropInfos: ["popup" ],
 	
 	/**
 	 * 
@@ -495,12 +495,13 @@ var __members = {
 	 * @param Number effect
 	 * @return Boolean
 	 */
-	f_fireEventToSource: function(stage, jsEvent, types, effect) {
+	f_fireEventToSource: function(stage, jsEvent, types, effect, modifiedDetail) {
 		//f_core.Debug(f_dragAndDropEngine, "f_fireEventToSource: prepare event source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' returns "+ret);
 
 		var ret;
+		
 		try {
-			ret=f_dndEvent.FireEvent(this._sourceComponent, f_event.DRAG, jsEvent, this, stage, this._targetItem, this._targetItemValue, this._targetComponent, effect, types);
+			ret=f_dndEvent.FireEvent(this._sourceComponent, f_event.DRAG, jsEvent, this, stage, this._targetItem, this._targetItemValue, this._targetComponent, effect, types, modifiedDetail);
 			
 		} catch (x) {
 			f_core.Error(f_dragAndDropEngine, "f_fireEventToSource: fire to source ("+this._sourceComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' throws exception", x);
@@ -523,12 +524,12 @@ var __members = {
 	 * @param Number effect
 	 * @return Boolean
 	 */
-	f_fireEventToTarget: function(stage, jsEvent, types, effect) {
+	f_fireEventToTarget: function(stage, jsEvent, types, effect, modifiedDetail) {
 		//f_core.Debug(f_dragAndDropEngine, "f_fireEventToTarget: prepare event source ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' returns "+ret);
 		
 		var ret;
 		try {
-			ret=f_dndEvent.FireEvent(this._targetComponent, f_event.DROP, jsEvent, this, stage, this._targetItem, this._targetItemValue, this._targetComponent, effect, types);
+			ret=f_dndEvent.FireEvent(this._targetComponent, f_event.DROP, jsEvent, this, stage, this._targetItem, this._targetItemValue, this._targetComponent, effect, types, modifiedDetail);
 		
 		} catch (x) {
 			f_core.Error(f_dragAndDropEngine, "f_fireEventToTarget: fire to target ("+this._targetComponent+") '"+stage+"' jsEvent='"+jsEvent+"' effect='"+effect+"' throws exception", x);
@@ -1073,19 +1074,34 @@ var __members = {
 		}
 		
 		this._additionalTargetInformations=null;
-			
-		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_OVER_STAGE, jsEvent, selectedTypes, effect);
+		var modifiedDetail = new Object();
+		var ret=this.f_fireEventToSource(f_dndEvent.DRAG_OVER_STAGE, jsEvent, selectedTypes, effect, modifiedDetail);
 		if (ret===false) {
 			this._updateDnDMask();			
 			return;
 		}
 		
-		ret=this.f_fireEventToTarget(f_dndEvent.DROP_OVER_STAGE, jsEvent, selectedTypes, effect);
+		if(modifiedDetail._effect !== undefined){
+			effect = modifiedDetail._effect;
+		}
+		if(modifiedDetail._types !== undefined){
+			selectedTypes = modifiedDetail._types;
+		}
+		
+		modifiedDetail = new Object();
+		ret=this.f_fireEventToTarget(f_dndEvent.DROP_OVER_STAGE, jsEvent, selectedTypes, effect, modifiedDetail);
 		if (ret===false) {			
 			this.f_fireEventToSource(f_dndEvent.DRAG_OVER_CANCELED_STAGE, jsEvent);
 
 			this._updateDnDMask();
 			return;
+		}
+		
+		if(modifiedDetail._effect !== undefined){
+			effect = modifiedDetail._effect;
+		}
+		if(modifiedDetail._types !== undefined){
+			selectedTypes = modifiedDetail._types;
 		}
 		
 		this._currentDropEffect=effect;

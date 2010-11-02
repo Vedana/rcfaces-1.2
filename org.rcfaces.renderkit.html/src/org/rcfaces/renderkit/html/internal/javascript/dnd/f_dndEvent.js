@@ -128,7 +128,7 @@ var __statics = {
 	 * @param optional Boolean serialize
 	 * @return Boolean
 	 */
-	FireEvent: function(component, eventType, jsEvent, engine, stage, targetItem, targetItemValue, targetComponent, effect, types, serialize) {
+	FireEvent: function(component, eventType, jsEvent, engine, stage, targetItem, targetItemValue, targetComponent, effect, types, modifiedDetail, serialize) {
 
 		var serializedValue;
 		if (serialize) {
@@ -153,7 +153,9 @@ var __statics = {
 				
 				_engine: engine,
 				
-				_stage: stage
+				_stage: stage,
+				
+				_modifiedDetail: modifiedDetail  
 		};
 
 		var event=new f_event(component, eventType, jsEvent, null, value, null, null, serializedValue);
@@ -194,6 +196,7 @@ var __members = {
 		this._detail=detail;
 		this._engine=detail._engine;
 		this._stage=detail._stage;
+		this._modifiedDetail=detail._modifiedDetail;
 	},
 
 	/**
@@ -266,11 +269,39 @@ var __members = {
 	},
 	/**
 	 * @method public
+	 * @param Number effect
+	 * @return void
+	 */
+	f_setEffect :function(effect){
+		f_core.Assert(typeof(effect)=="Number", "f_dndEvent.f_setEffect:" +
+				" Invalid effect parameter ("+effect+" (typeof=" + typeof(effect) +")");
+		this._modifiedDetail._effect = effect;
+		f_core.Debug(f_dndEvent, "f_setEffect: change effect="+types+ "during stage : " +
+				this.f_getStage() +" targetComponent="+this.f_getTargetComponent());
+	},
+	
+	/**
+	 * @method public
 	 * @return String[]
 	 */
 	f_getTypes: function() {
 		return this._detail._types;
+	},
+	/**
+	 * @method public
+	 * @param String[] types
+	 * @return void
+	 */
+	f_setTypes :function(types){
+		f_core.Assert(typeof(types)=="String[]", "f_dndEvent.f_setTypes:" +
+				" Invalid types parameter ("+types+" (typeof=" + typeof(types) +")");
+		f_core.Assert();
+		this._modifiedDetail._types = types;
+		f_core.Debug(f_dndEvent, "f_setTypes: change types="+types+ "during stage : " +
+				this.f_getStage() +" targetComponent="+this.f_getTargetComponent());
 	}
+	
+	
 };
 
 new f_class("f_dndEvent", {
