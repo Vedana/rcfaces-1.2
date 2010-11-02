@@ -247,13 +247,6 @@ A string value specifying the margin size for the component's top (compliant to 
 			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>partialRendering</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
 			<description><![CDATA[
 A color value (as specified by CSS) for the background.
 ]]></description>
@@ -312,13 +305,6 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>ariaLevel</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -736,13 +722,6 @@ A string value specifying the margin size for the component's top (compliant to 
 			</deferred-value>
 		</attribute>
 		<attribute>
-			<name>partialRendering</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
 			<description><![CDATA[
 A color value (as specified by CSS) for the background.
 ]]></description>
@@ -801,13 +780,6 @@ A string value specifying the management of invisible state on the client.
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<name>ariaLevel</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
