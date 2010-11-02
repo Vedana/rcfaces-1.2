@@ -29,6 +29,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 	private ValueExpression filterProperties;
 	private ValueExpression loadListeners;
 	private ValueExpression expandListeners;
+	private ValueExpression preSelectionListeners;
 	private ValueExpression dragListeners;
 	private ValueExpression dragEffects;
 	private ValueExpression dragTypes;
@@ -110,6 +111,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 
 	public final void setExpandListener(ValueExpression expandListeners) {
 		this.expandListeners = expandListeners;
+	}
+
+	public final void setPreSelectionListener(ValueExpression preSelectionListeners) {
+		this.preSelectionListeners = preSelectionListeners;
 	}
 
 	public final void setDragListener(ValueExpression dragListeners) {
@@ -392,6 +397,10 @@ public class TreeTag extends AbstractInputTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.EXPAND_LISTENER_TYPE, expandListeners);
 		}
 
+		if (preSelectionListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PRE_SELECTION_LISTENER_TYPE, preSelectionListeners);
+		}
+
 		if (dragListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DRAG_LISTENER_TYPE, dragListeners);
 		}
@@ -401,12 +410,17 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.DRAG_EFFECTS, dragEffects);
 
 			} else {
-				component.setDragEffects(getInt(dragEffects.getExpressionString()));
+				component.setDragEffects(dragEffects.getExpressionString());
 			}
 		}
 
 		if (dragTypes != null) {
+			if (dragTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DRAG_TYPES, dragTypes);
+
+			} else {
+				component.setDragTypes(dragTypes.getExpressionString());
+			}
 		}
 
 		if (draggable != null) {
@@ -431,12 +445,17 @@ public class TreeTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.DROP_EFFECTS, dropEffects);
 
 			} else {
-				component.setDropEffects(getInt(dropEffects.getExpressionString()));
+				component.setDropEffects(dropEffects.getExpressionString());
 			}
 		}
 
 		if (dropTypes != null) {
+			if (dropTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DROP_TYPES, dropTypes);
+
+			} else {
+				component.setDropTypes(dropTypes.getExpressionString());
+			}
 		}
 
 		if (droppable != null) {
@@ -670,6 +689,7 @@ public class TreeTag extends AbstractInputTag implements Tag {
 		filterProperties = null;
 		loadListeners = null;
 		expandListeners = null;
+		preSelectionListeners = null;
 		dragListeners = null;
 		dragEffects = null;
 		dragTypes = null;

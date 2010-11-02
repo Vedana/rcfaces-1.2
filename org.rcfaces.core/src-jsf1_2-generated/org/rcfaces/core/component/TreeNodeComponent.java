@@ -12,6 +12,7 @@ import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.component.capability.IDraggableCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TreeComponent;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import javax.el.ValueExpression;
 import org.rcfaces.core.internal.converter.InputTypeConverter;
 import java.util.HashSet;
@@ -221,7 +222,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	 * See {@link #getDragEffects() getDragEffects()} for more details
 	 */
 	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DRAG_EFFECTS,0, facesContext);
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
 	}
 
 	/**
@@ -290,7 +291,7 @@ public class TreeNodeComponent extends ExpandableItemComponent implements
 	 * See {@link #getDropEffects() getDropEffects()} for more details
 	 */
 	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
+		return engine.getIntProperty(Properties.DROP_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
 	}
 
 	/**

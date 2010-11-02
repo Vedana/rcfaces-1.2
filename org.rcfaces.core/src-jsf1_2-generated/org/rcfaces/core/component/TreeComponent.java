@@ -1,8 +1,8 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
-import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
+import org.rcfaces.core.internal.component.Properties;
 import javax.faces.component.UISelectItem;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
 import org.rcfaces.core.component.capability.ISelectableCapability;
@@ -10,6 +10,7 @@ import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IBorderCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
+import org.rcfaces.core.component.capability.IPreSelectionEventCapability;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.IDragEventCapability;
@@ -41,6 +42,7 @@ import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.internal.tools.TreeTools;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.IExpandableCapability;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
@@ -90,6 +92,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	IFilterCapability,
 	ILoadEventCapability,
 	IExpandEventCapability,
+	IPreSelectionEventCapability,
 	IDragEventCapability,
 	IDraggableCapability,
 	IDropEventCapability,
@@ -118,7 +121,7 @@ public class TreeComponent extends AbstractInputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","droppable","defaultDisabledLeafImageURL","dragListener","dragTypes","checkable","checkCardinality","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","bodyDroppable","defaultCollapsedImageURL","defaultExpandedImageURL","filterProperties","defaultDisabledImageURL","defaultImageURL","dragEffects","expandListener","doubleClickListener","clientCheckFullState","selectedValues","horizontalScrollPosition","dropCompleteListener","dropTypes","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","draggable","expandable"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkListener","preloadedLevelDepth","selectionCardinality","droppable","defaultDisabledLeafImageURL","dragListener","dragTypes","checkable","checkCardinality","dropListener","dropEffects","overStyleClass","loadListener","checkedValues","selectionListener","defaultLeafImageURL","showValue","verticalScrollPosition","defaultSelectedLeafImageURL","cursorValue","border","required","clientSelectionFullState","preSelectionListener","bodyDroppable","defaultCollapsedImageURL","defaultExpandedImageURL","filterProperties","defaultDisabledImageURL","defaultImageURL","dragEffects","clientCheckFullState","expandListener","doubleClickListener","selectedValues","horizontalScrollPosition","dropCompleteListener","dropTypes","expansionUseValue","readOnly","selectable","expandedValues","hideRootExpandSign","defaultSelectedImageURL","defaultExpandedLeafImageURL","draggable","expandable"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="value";
 
@@ -656,6 +659,18 @@ public class TreeComponent extends AbstractInputComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IExpandListener.class);
 	}
 
+	public final void addPreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removePreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listPreSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IPreSelectionListener.class);
+	}
+
 	public final void addDragListener(org.rcfaces.core.event.IDragListener listener) {
 		addFacesListener(listener);
 	}
@@ -676,7 +691,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * See {@link #getDragEffects() getDragEffects()} for more details
 	 */
 	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DRAG_EFFECTS,0, facesContext);
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
 	}
 
 	/**
@@ -769,7 +784,7 @@ public class TreeComponent extends AbstractInputComponent implements
 	 * See {@link #getDropEffects() getDropEffects()} for more details
 	 */
 	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
+		return engine.getIntProperty(Properties.DROP_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
 	}
 
 	/**

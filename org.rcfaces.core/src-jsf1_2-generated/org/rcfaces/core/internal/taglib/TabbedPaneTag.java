@@ -20,6 +20,7 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 
 	private ValueExpression closeListeners;
 	private ValueExpression closable;
+	private ValueExpression preSelectionListeners;
 	private ValueExpression showValue;
 	public String getComponentType() {
 		return TabbedPaneComponent.COMPONENT_TYPE;
@@ -31,6 +32,10 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 
 	public final void setClosable(ValueExpression closable) {
 		this.closable = closable;
+	}
+
+	public final void setPreSelectionListener(ValueExpression preSelectionListeners) {
+		this.preSelectionListeners = preSelectionListeners;
 	}
 
 	public final void setShowValue(ValueExpression showValue) {
@@ -70,6 +75,10 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 			}
 		}
 
+		if (preSelectionListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.PRE_SELECTION_LISTENER_TYPE, preSelectionListeners);
+		}
+
 		if (showValue != null) {
 			if (showValue.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_VALUE, showValue);
@@ -83,6 +92,7 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 	public void release() {
 		closeListeners = null;
 		closable = null;
+		preSelectionListeners = null;
 		showValue = null;
 
 		super.release();

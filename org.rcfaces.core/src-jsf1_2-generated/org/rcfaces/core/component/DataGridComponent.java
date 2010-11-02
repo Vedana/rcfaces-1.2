@@ -34,8 +34,8 @@ import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.AbstractDataComponent;
+import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
@@ -57,6 +57,7 @@ import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.internal.tools.GridTools;
+import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
 import org.rcfaces.core.component.capability.IRowStyleClassCapability;
@@ -793,7 +794,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * See {@link #getDragEffects() getDragEffects()} for more details
 	 */
 	public int getDragEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DRAG_EFFECTS,0, facesContext);
+		return engine.getIntProperty(Properties.DRAG_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
 	}
 
 	/**
@@ -886,7 +887,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 * See {@link #getDropEffects() getDropEffects()} for more details
 	 */
 	public int getDropEffects(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.DROP_EFFECTS,0, facesContext);
+		return engine.getIntProperty(Properties.DROP_EFFECTS,IDragAndDropEffects.UNKNOWN_DND_EFFECT, facesContext);
 	}
 
 	/**

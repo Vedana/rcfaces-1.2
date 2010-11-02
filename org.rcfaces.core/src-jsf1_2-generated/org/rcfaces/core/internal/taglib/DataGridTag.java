@@ -379,12 +379,17 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.DRAG_EFFECTS, dragEffects);
 
 			} else {
-				component.setDragEffects(getInt(dragEffects.getExpressionString()));
+				component.setDragEffects(dragEffects.getExpressionString());
 			}
 		}
 
 		if (dragTypes != null) {
+			if (dragTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DRAG_TYPES, dragTypes);
+
+			} else {
+				component.setDragTypes(dragTypes.getExpressionString());
+			}
 		}
 
 		if (draggable != null) {
@@ -409,12 +414,17 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.DROP_EFFECTS, dropEffects);
 
 			} else {
-				component.setDropEffects(getInt(dropEffects.getExpressionString()));
+				component.setDropEffects(dropEffects.getExpressionString());
 			}
 		}
 
 		if (dropTypes != null) {
+			if (dropTypes.isLiteralText()==false) {
 				component.setValueExpression(Properties.DROP_TYPES, dropTypes);
+
+			} else {
+				component.setDropTypes(dropTypes.getExpressionString());
+			}
 		}
 
 		if (droppable != null) {
@@ -648,7 +658,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.ROW_DRAG_EFFECTS, rowDragEffects);
 
 			} else {
-				component.setRowDragEffects(getInt(rowDragEffects.getExpressionString()));
+				component.setRowDragEffects(rowDragEffects.getExpressionString());
 			}
 		}
 
@@ -666,7 +676,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 				component.setValueExpression(Properties.ROW_DROP_EFFECTS, rowDropEffects);
 
 			} else {
-				component.setRowDropEffects(getInt(rowDropEffects.getExpressionString()));
+				component.setRowDropEffects(rowDropEffects.getExpressionString());
 			}
 		}
 

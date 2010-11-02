@@ -5,6 +5,7 @@ import org.rcfaces.core.component.capability.IClosableCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
 import org.rcfaces.core.internal.tools.TabbedPaneTools;
+import org.rcfaces.core.component.capability.IPreSelectionEventCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.TabComponent;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 public class TabbedPaneComponent extends CardBoxComponent implements 
 	ICloseEventCapability,
 	IClosableCapability,
+	IPreSelectionEventCapability,
 	IShowValueCapability {
 
 	private static final Log LOG = LogFactory.getLog(TabbedPaneComponent.class);
@@ -40,7 +42,7 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CardBoxComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closeListener","showValue","closable"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closeListener","showValue","closable","preSelectionListener"}));
 	}
 
 	public TabbedPaneComponent() {
@@ -113,6 +115,18 @@ public class TabbedPaneComponent extends CardBoxComponent implements
 
 	public void setClosable(boolean closable) {
 		engine.setProperty(Properties.CLOSABLE, closable);
+	}
+
+	public final void addPreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removePreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listPreSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IPreSelectionListener.class);
 	}
 
 	public java.lang.Object getShowValue() {
