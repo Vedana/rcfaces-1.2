@@ -90,7 +90,7 @@ var __statics = {
 		return true;
 	}
 
-}
+};
 
 var __members = {
 
@@ -100,9 +100,7 @@ var __members = {
 	},
 
 	f_finalize : function() {
-
 		this.f_super(arguments);
-		
 	},
 	
 	 /**
@@ -121,13 +119,20 @@ var __members = {
 	 * @return void
 	 */
 	f_update: function() {
+		var items = this._items;
+		
+		if(!items) {
+			return;
+		}
+	
 		var columnNumber = f_core.GetNumberAttribute(this, "v:columnNumber");
 		var dateBegin = f_core.GetAttribute(this, "v:dateBegin");
 		if (dateBegin) {
 			dateBegin = f_core.DeserializeDate(dateBegin);
 		}
 		var dayBegin = dateBegin.getDay();
-
+		var dateEnd =  new Date(dateBegin.getTime());
+		dateEnd.setTime(dateEnd.getTime()+ (columnNumber * 24 * 3600 * 1000));
 		var minutesDayBegin = f_core.GetNumberAttribute(this,
 				"v:minutesDayBegin");
 		var minutesDayEnd = f_core.GetNumberAttribute(this, "v:minutesDayEnd");
@@ -137,7 +142,7 @@ var __members = {
 
 		var div = this.ownerDocument.getElementById(this.id + "::periods");
 
-		var items = this._items;
+		
 		items.sort(function(p1	,p2){
 			return p1._begin.getTime()-p2._begin.getTime();
 		});
@@ -150,8 +155,8 @@ var __members = {
 			var begin = period._begin;
 			var end = period._end;
 			var periodeDay = begin.getDay();
-			if (begin.getDate() >= dateBegin.getDate()
-					&& begin.getDate() <= (dateBegin.getDate() + (columnNumber - 1))) {
+			if (end.getTime() >= dateBegin.getTime()
+					&& begin.getTime() <= dateEnd.getTime()) {
 
 				
 				f_core.Debug(f_scheduler, "f_scheduler  periodBegin "+
