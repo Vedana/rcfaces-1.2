@@ -27,6 +27,7 @@ import org.rcfaces.core.component.capability.IKeyUpEventCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IPreSelectionEventCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IResetEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
@@ -94,6 +95,10 @@ public final class ListenerTools {
 
         public String getMouseOverEventName() {
             return JavaScriptClasses.EVENT_MOUSEOVER_CST;
+        }
+        
+        public String getPreSelectionEventName() {
+            return JavaScriptClasses.EVENT_PRE_SELECTION_CST;
         }
 
         public String getKeyDownEventName() {
@@ -207,6 +212,10 @@ public final class ListenerTools {
 
         public String getMouseOverEventName() {
             return JavaScriptClasses.EVENT_MOUSEOVER_ATTRIBUTE;
+        }
+        
+        public String getPreSelectionEventName() {
+            return JavaScriptClasses.EVENT_PRE_SELECTION_ATTRIBUTE;
         }
 
         public String getKeyDownEventName() {
@@ -371,6 +380,20 @@ public final class ListenerTools {
                 }
 
                 map.put(nameSpace.getMouseOverEventName(), fls);
+            }
+        }
+        
+        if (component instanceof IPreSelectionEventCapability) {
+        	IPreSelectionEventCapability preSelectionEventCapability =
+        			(IPreSelectionEventCapability) component;
+
+            FacesListener fls[] = preSelectionEventCapability.listPreSelectionListeners();
+            if (fls.length > 0) {
+                if (map == null) {
+                    map = new HashMap(4);
+                }
+
+                map.put(nameSpace.getPreSelectionEventName(), fls);
             }
         }
 
@@ -651,6 +674,8 @@ public final class ListenerTools {
         String getMouseOutEventName();
 
         String getMouseOverEventName();
+        
+        String getPreSelectionEventName();
 
         String getSuggestionEventName();
 

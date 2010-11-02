@@ -3350,6 +3350,7 @@ Dans le cas d'un mode period !
 	<component id="tabbedPane" extends="cardBox">
 		<capability id="ICloseEventCapability" />
 		<capability id="IClosableCapability" />
+		<capability id="IPreSelectionEventCapability" />
 		
 		<!-- Affiche le titre de l'onglet -->
 		<capability id="IShowValueCapability"/>
@@ -3746,6 +3747,7 @@ Dans le cas d'un mode period !
 
 		<capability id="ILoadEventCapability" />
 		<capability id="IExpandEventCapability" />
+		<capability id="IPreSelectionEventCapability" />
 
 		<capability id="IDragEventCapability" />
 		<capability id="IDraggableCapability" />

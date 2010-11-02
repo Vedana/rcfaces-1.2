@@ -219,6 +219,10 @@ public final class JavaScriptClasses {
     public static final String EVENT_MOUSEOVER = "mouseover";
 
     public static final String EVENT_MOUSEOVER_CST = "f_event.MOUSEOVER";
+    
+    public static final String EVENT_PRE_SELECTION = "preSelection";
+    
+    public static final String EVENT_PRE_SELECTION_CST = "f_event.PRE_SELECTION";
 
     public static final String EVENT_RESET = "reset";
 
@@ -301,6 +305,8 @@ public final class JavaScriptClasses {
     public static final String EVENT_MOUSEOUT_ATTRIBUTE = "mouseOut";
 
     public static final String EVENT_MOUSEOVER_ATTRIBUTE = "mouseOver";
+    
+    public static final String EVENT_PRE_SELECTION_ATTRIBUTE = "preSelection";
 
     public static final String EVENT_SORT_ATTRIBUTE = "sort";
 

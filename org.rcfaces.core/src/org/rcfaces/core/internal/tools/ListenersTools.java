@@ -29,6 +29,7 @@ import org.rcfaces.core.component.capability.IKeyUpEventCapability;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 import org.rcfaces.core.component.capability.IMenuEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IPreSelectionEventCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.component.capability.IResetEventCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
@@ -57,6 +58,7 @@ import org.rcfaces.core.event.ILoadListener;
 import org.rcfaces.core.event.IMenuListener;
 import org.rcfaces.core.event.IMouseOutListener;
 import org.rcfaces.core.event.IMouseOverListener;
+import org.rcfaces.core.event.IPreSelectionListener;
 import org.rcfaces.core.event.IPropertyChangeListener;
 import org.rcfaces.core.event.IResetListener;
 import org.rcfaces.core.event.ISelectionListener;
@@ -99,6 +101,7 @@ import org.rcfaces.core.internal.listener.LoadScriptListener;
 import org.rcfaces.core.internal.listener.MenuScriptListener;
 import org.rcfaces.core.internal.listener.MouseOutScriptListener;
 import org.rcfaces.core.internal.listener.MouseOverScriptListener;
+import org.rcfaces.core.internal.listener.PreSelectionScriptListener;
 import org.rcfaces.core.internal.listener.PropertyChangeActionListener;
 import org.rcfaces.core.internal.listener.PropertyChangeScriptListener;
 import org.rcfaces.core.internal.listener.ResetActionListener;
@@ -740,6 +743,29 @@ public class ListenersTools {
 
 		public Class getListenerClass() {
 			return IMouseOverListener.class;
+		}
+	};
+	
+	public static final IListenerType PRE_SELECTION_LISTENER_TYPE = new AbstractListenerType() {
+		private static final String REVISION = "$Revision$";
+
+		public void addScriptListener(UIComponent component, String scriptType,
+				String command) {
+			IPreSelectionEventCapability preSelectionEventCapability = (IPreSelectionEventCapability) component;
+
+			preSelectionEventCapability
+					.addPreSelectionListener(new PreSelectionScriptListener(
+							scriptType, command));
+		}
+
+		public IServerActionListener addActionListener(UIComponent component,
+				Application application, String expression,
+				boolean partialRendering) {
+			throw new UnsupportedListenerTypeException("preSelection");
+		}
+
+		public Class getListenerClass() {
+			return IPreSelectionListener.class;
 		}
 	};
 

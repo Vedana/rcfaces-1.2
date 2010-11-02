@@ -701,7 +701,7 @@ var __statics = {
 		var currentLock = f_event._EvtLock;
 
 		if (mask) {
-			currentLock &= ~mask;
+			currentLock &= mask;
 		}
 
 		if (!currentLock) {

@@ -135,6 +135,8 @@ public class EventsRenderer {
                 JavaScriptClasses.EVENT_KEYUP_ATTRIBUTE,
                 ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
+                JavaScriptClasses.EVENT_PRE_SELECTION, ONFOCUS_JAVASCRIPT_ENABLE);
+        ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_SELECTION, ONFOCUS_JAVASCRIPT_ENABLE);
         ENABLE_JAVASCRIPT_BY_LISTENER_TYPE.put(
                 JavaScriptClasses.EVENT_DBLCLICK, ONFOCUS_JAVASCRIPT_ENABLE);
