@@ -31,12 +31,23 @@ var __statics = {
 		/** 
 		 * @field public static final String
 		 */
+		 ARIA_POSEINSET:		"aria-posinset",
+		
+		/** 
+		 * @field public static final String
+		 */
 		ARIA_LEVEL:		"aria-level",
 		
 		/** 
 		 * @field public static final String
 		 */
 		ARIA_SELECTED:		"aria-selected",
+		
+		/** 
+		 * @field public static final String
+		 */
+		ARIA_SETSIZE:		"aria-setsize",
+		
 		/**
 		 * @method public static
 		 * @param HTMLElement element HTML.
@@ -92,9 +103,37 @@ var __statics = {
 			element.setAttribute(fa_aria.ARIA_LABELLEDBY, labelId);
 		},
 		
+		/**
+		 * @method public static
+		 * @param HTMLElement element HTML.
+		 * @param Number level .
+		 * @return void.
+		 */
 		SetElementAriaLevel: function(element, level) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaLevel: invalid element parameter ("+element+")." );
 			element.setAttribute(fa_aria.ARIA_LEVEL, level);
+		},
+		
+		/**
+		 * @method public static
+		 * @param HTMLElement element HTML.
+		 * @param Number position .
+		 * @return void.
+		 */
+		SetElementAriaPosinset: function(element, posinset) {
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaPosinset: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_POSEINSET, posinset);
+		},
+		
+		/**
+		 * @method public static
+		 * @param HTMLElement element HTML.
+		 * @param Number size.
+		 * @return void.
+		 */
+		SetElementAriaSetsize: function(element, size) {
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaSetsize: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_SETSIZE, size);
 		}
 		
 };

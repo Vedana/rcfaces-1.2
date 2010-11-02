@@ -2813,7 +2813,16 @@ var __members = {
 			suffix = "_selected";
 			if (this._focus) {
 				suffix += "_focus";
-				fa_aria.SetElementAriaActiveDescendant(this, row.id);
+				if (this._serviceGridId){
+					var dataGridPopup = f_core.GetElementByClientId(this._serviceGridId);
+					if (dataGridPopup._ariaInput){
+						fa_aria.SetElementAriaActiveDescendant(dataGridPopup._ariaInput, row.id);
+					}else {
+						fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+					}
+				}else {
+					fa_aria.SetElementAriaActiveDescendant(this._scrollBody, row.id);
+				}
 			}
 
 		} else if (this._selectable) {

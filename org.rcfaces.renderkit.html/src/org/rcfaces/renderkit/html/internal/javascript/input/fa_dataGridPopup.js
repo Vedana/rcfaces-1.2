@@ -67,7 +67,7 @@ var __statics = {
 					body.style.position="relative";
 					body.style.width=dataGridPopup._popupWidth+"px";
 				//	body.style.height=dataGridPopup._popupHeight+"px";
-					body.setAttribute("role", "combobox");
+				//	body.setAttribute("role", "combobox");
 	
 					f_core.AppendChild(pdoc.body, body);
 
@@ -92,7 +92,7 @@ var __statics = {
 			popup.className=popupClassName;
 			popup.style.width=dataGridPopup._popupWidth+"px";
 			popup.style.height=dataGridPopup._popupHeight+"px";
-			popup.setAttribute("role", "combobox");
+			//popup.setAttribute("role", "combobox");
 
 			popup.onclick=f_core.CancelJsEventHandlerTrue;
 			popup.onmousedown=f_core.CancelJsEventHandlerTrue;
@@ -217,6 +217,10 @@ var __statics = {
 			
 			if (dataGridPopup._searchInput) {
 				dataGridPopup._searchInput.focus();
+			}else if (dataGridPopup._input) {
+				dataGridPopup._ariaInput = dataGridPopup._input;
+				dataGridPopup._ariaInput._role = true;
+				dataGridPopup._ariaInput.setAttribute("role", "listbox");
 			}
 		}
 	
@@ -236,6 +240,15 @@ var __statics = {
 		if (!dataGridPopup._popupOpened) {
 			return;
 		}
+		
+		if(dataGridPopup._ariaInput){
+			dataGridPopup._ariaInput.removeAttribute("aria-activedescendant");
+			if (dataGridPopup._ariaInput._role) {
+				dataGridPopup._ariaInput.setAttribute("role", "textbox");
+				dataGridPopup._ariaInput._role = false;
+			}
+		}
+		
 		dataGridPopup._popupOpened=undefined;
 
 		f_popup.UnregisterWindowClick(dataGridPopup);		
@@ -405,6 +418,10 @@ var __members = {
 				f_core.VerifyProperties(searchInput);
 			}
 			
+			if(this._ariaInput){
+				this._ariaInput = undefined // HtmlInputElement
+			}
+			
 			var searchIcon=this._searchIcon;
 			if (searchIcon) {
 				this._searchIcon=undefined; // HtmlImageElement
@@ -518,13 +535,15 @@ var __members = {
 				className: "fa_dataGridPopup_input",
 				name: "searchValue",
 				type: "text",
-				role: "textbox",
+				role: "listbox",
 				// He oui ! cela semble marcher sur tous les browsers ! (meme Gecko !?)		
 				autocomplete: "off"
 			});
 			this._searchInput=input;
 			input._dataGridPopup=this;
 			input.onkeyup=fa_dataGridPopup._SearchSuggest_onkeyup;
+			this._ariaInput = input;
+			this._ariaInput.setAttribute("role","listbox");
 		}
 		
 		this._lastValue="";
@@ -552,10 +571,10 @@ var __members = {
 			cheight,
 			dataGridStyleClass);
 		
+		dataGrid._useInPopup = true;
+		dataGrid.removeAttribute("role");
 		this._dataGrid=dataGrid;
-		
-		dataGrid.setAttribute("role", "listbox");
-		
+	
 		if (hasPager) {
 
 			if (!f_core.GetAttribute(this, "v:message")) {				

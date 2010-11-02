@@ -31,6 +31,7 @@ import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
@@ -442,6 +443,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         }
 
         htmlWriter.writeType(IHtmlWriter.TEXT_INPUT_TYPE);
+        htmlWriter.writeRole(IAccessibilityRoles.TEXTBOX);
 
         htmlWriter.writeId(componentRenderContext.getComponentClientId()
                 + INPUT_ID_SUFFIX);
@@ -582,6 +584,10 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             AbstractGridRenderContext gridRenderContext) throws WriterException {
         encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES
                 | GENERATE_CELL_TEXT | GENERATE_CELL_WIDTH);
+    }
+    
+     protected String getWAIRole() {
+    	return IAccessibilityRoles.COMBOBOX;
     }
 
     /**

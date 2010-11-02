@@ -529,7 +529,11 @@ var __members = {
 		this._showValue=f_core.GetAttribute(this, "v:showValue");
 		
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
-	
+		
+		if(this.f_isDroppable()) {
+			this.f_addEventListener(f_event.DRAG, this._treeDropListener);
+		}
+		
 		this._body=this;
 		if (this.tagName.toUpperCase()!="UL") {
 			var container=this.ownerDocument.getElementById(this.id+"::body");
@@ -978,7 +982,12 @@ var __members = {
 
 			li._divNode=divNode;
 			fa_aria.SetElementAriaLabelledBy(divNode,this.id+"::node"+nodeIdx+"::label");
-			fa_aria.SetElementAriaLevel(divNode,depth+1);
+			var dTmp = depth +1;
+			
+			var pos = i+1;
+			fa_aria.SetElementAriaSetsize(divNode, nodes.length);
+			fa_aria.SetElementAriaPosinset(divNode, pos);
+			fa_aria.SetElementAriaLevel(divNode, dTmp);
 			
 			var d=depth;
 			if (this._userExpandable) {
@@ -1094,7 +1103,7 @@ var __members = {
 			container.appendChild(fragment);
 		}
 		if (this._cursor) {
-//			this._cursor.scrollIntoView(true);
+ 			this.fa_showElement(this._cursor); 
 		}
 	},
 	/**
@@ -1205,7 +1214,7 @@ var __members = {
 			return false;
 		}
 		node._opened=true;
-		fa_aria.SetElementAriaExpanded(li._divNode, true);
+		
 		if (!this._expandedValues) {
 			this._expandedValues=new Array;
 		}
@@ -1518,7 +1527,19 @@ var __members = {
 			this.scrollTop=item.offsetTop;
 
 		} else if (item.offsetTop+item._label.offsetHeight-this.scrollTop>this.clientHeight) {			
-			this.scrollTop=item.offsetTop+item.offsetHeight-this.clientHeight;
+			var itemHeight = item.offsetHeight; 
+			if (itemHeight == 0){ // possible sur certain arbre
+				if (item.nextSibling) {
+					itemHeight = item.nextSibling.offsetTop - item.offsetTop ;
+				} else if (item.parentNode){
+					var parent = item.parentNode;
+					while (parent.offsetTop != 0){
+						parent = parent.parentNode;
+					}
+					itemHeight = parent.offsetTop+parent.offsetHeight;
+				}
+			}
+			this.scrollTop=item.offsetTop+itemHeight-this.clientHeight;
 		}
 		
 		var itemNode=item.firstChild; // Div du noeud
@@ -1554,8 +1575,12 @@ var __members = {
 		} else {
 			if (node._opened) {
 				suffixDivNode+="_opened";
+				fa_aria.SetElementAriaExpanded(li._divNode, true);
 				
-			} else if (!node._container) {
+			} else if (node._container && !node._opened) {
+				fa_aria.SetElementAriaExpanded(li._divNode, false);
+				
+			}  else if (!node._container) {
 				suffixDivNode+="_leaf";
 			}	
 		
@@ -2016,6 +2041,17 @@ var __members = {
 		}
 		return node;
 	},
+	
+	/**
+	 * @method public
+	 * @param node
+	 * @return node
+	 */
+	f_getParentNode: function(node) {
+		return this._getParentNode(node);
+	},
+	
+	
 	/**
 	 * @method public
 	 * @param any value Value of the node, or the node object
@@ -2691,6 +2727,9 @@ var __members = {
 		}
 		
 		if (this._cfocus) {
+			if(this._cursor){ //ff3.5.x
+				this._cfocus.style.top=this.scrollTop+"px";
+			}
 			this._cfocus.focus();
 			return;
 		}
@@ -3466,6 +3505,34 @@ var __members = {
 		
 		return false;
 	},
+	
+	/**
+	 * @method private
+	 * @param f_event drag event
+	 * @return void
+	 */
+	_treeDropListener: function(event) {
+		var dndEvent = f_dndEvent.As(event);
+		if(dndEvent.f_getSourceComponent() 
+				!=  dndEvent.f_getTargetComponent()) {
+			return;
+		}
+		switch(dndEvent.f_getStage()) {
+		case f_dndEvent.DRAG_OVER_STAGE: 
+			// interdit le drop dans un noeud fils
+			var itemSource = dndEvent.f_getSourceItem();
+			var itemTarget = dndEvent.f_getTargetItem();
+			while(itemTarget._depth != 0){
+				itemTarget = this._getParentNode(itemTarget);
+				if(itemTarget == itemSource){
+					dndEvent.f_setEffect(f_dndEvent.NONE_DND_EFFECT);
+					break;
+				}
+			}	
+			break;
+		}
+	},
+	
 	/**
 	 * @method private
 	 * @param HTMLElement li
