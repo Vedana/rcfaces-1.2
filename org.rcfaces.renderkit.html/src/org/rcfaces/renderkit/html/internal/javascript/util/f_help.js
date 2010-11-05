@@ -161,7 +161,7 @@ var __statics = {
 		return true;
 	},
 	/**
-	 * @method private static
+	 * @method hidden static
 	 */
 	_Open: function(elt) {
 		var url=null;

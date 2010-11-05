@@ -5498,7 +5498,7 @@ var __members = {
 							f_classLoader.Destroy(waiting);
 						}
 
-						f_grid.Info(f_grid,
+						f_core.Info(f_grid,
 								"f_showAdditionalContent.onError: Bad status: "
 										+ status);
 

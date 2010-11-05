@@ -1559,6 +1559,10 @@ var __members = {
 		var suffixDivNode="";
 		var cursor=this._cursor;
 	
+		if(!cursor){
+			this._cfocus.removeAttribute("aria-activedescendant");
+		}
+		
 		if (node._disabled) {
 			if (!node._container) {
 				suffixDivNode+="_leaf";
@@ -1566,7 +1570,10 @@ var __members = {
 			
 			suffixLabel+="_disabled";
 			suffixDivNode+="_disabled";
-		
+			
+			if(li==cursor){
+				fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
+			}
 		} else {
 			if (node._opened) {
 				suffixDivNode+="_opened";
