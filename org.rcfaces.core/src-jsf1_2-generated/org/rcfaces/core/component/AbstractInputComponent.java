@@ -92,7 +92,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","blurListener","fontName","visible","backgroundColor","marginLeft","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","valueLocked","keyDownListener","hiddenMode","mouseOverListener","waiRole","foregroundColor","mouseOutListener","validationListener","lookId","userEventListener","helpMessage","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","fontBold","fontSize","initListener","immediate","unlockedClientAttributeNames","marginBottom","fontItalic","fontUnderline","textAlignment","toolTipText","y","disabled","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","blurListener","fontName","visible","backgroundColor","marginLeft","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","valueLocked","keyDownListener","hiddenMode","mouseOverListener","waiRole","foregroundColor","mouseOutListener","validationListener","lookId","userEventListener","helpMessage","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","fontBold","fontSize","ariaLabel","initListener","immediate","unlockedClientAttributeNames","marginBottom","fontItalic","fontUnderline","textAlignment","toolTipText","y","disabled","margins","x"}));
 	}
 
 
@@ -1089,6 +1089,29 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	public void setAccessKey(java.lang.String accessKey) {
 		engine.setProperty(Properties.ACCESS_KEY, accessKey);
+	}
+
+	public java.lang.String getAriaLabel() {
+		return getAriaLabel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLabel() getAriaLabel()} for more details
+	 */
+	public java.lang.String getAriaLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ARIA_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLabelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LABEL);
+	}
+
+	public void setAriaLabel(java.lang.String ariaLabel) {
+		engine.setProperty(Properties.ARIA_LABEL, ariaLabel);
 	}
 
 	public int getAriaLevel() {

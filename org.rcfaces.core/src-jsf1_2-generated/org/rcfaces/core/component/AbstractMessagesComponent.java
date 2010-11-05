@@ -71,7 +71,7 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessagesComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","globalOnly","visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","mouseOverListener","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","styleClass","marginRight","width","partialRendering","showDetail","initListener","marginBottom","unlockedClientAttributeNames","toolTipText","y","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"globalOnly","showSummary","visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","mouseOverListener","foregroundColor","waiRole","mouseOutListener","lookId","helpMessage","userEventListener","marginTop","styleClass","marginRight","width","partialRendering","showDetail","ariaLabel","initListener","marginBottom","unlockedClientAttributeNames","toolTipText","y","margins","x"}));
 	}
 
 
@@ -680,6 +680,29 @@ public abstract class AbstractMessagesComponent extends CameliaMessagesComponent
 
 	public final javax.faces.event.FacesListener [] listErrorListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public java.lang.String getAriaLabel() {
+		return getAriaLabel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLabel() getAriaLabel()} for more details
+	 */
+	public java.lang.String getAriaLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ARIA_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLabelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LABEL);
+	}
+
+	public void setAriaLabel(java.lang.String ariaLabel) {
+		engine.setProperty(Properties.ARIA_LABEL, ariaLabel);
 	}
 
 	public int getAriaLevel() {

@@ -84,7 +84,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 private transient String var;
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","marginLeft","backgroundColor","var","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","mouseOutListener","waiRole","foregroundColor","lookId","helpMessage","userEventListener","marginTop","marginRight","styleClass","width","keyUpListener","partialRendering","keyPressListener","resetListener","rows","initListener","unlockedClientAttributeNames","marginBottom","toolTipText","first","sortManager","y","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","marginLeft","backgroundColor","var","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","mouseOutListener","waiRole","foregroundColor","lookId","helpMessage","userEventListener","marginTop","marginRight","styleClass","width","keyUpListener","partialRendering","keyPressListener","resetListener","ariaLabel","rows","initListener","unlockedClientAttributeNames","marginBottom","toolTipText","first","sortManager","y","margins","x"}));
 	}
 
 
@@ -816,6 +816,29 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
+	public java.lang.String getAriaLabel() {
+		return getAriaLabel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLabel() getAriaLabel()} for more details
+	 */
+	public java.lang.String getAriaLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ARIA_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLabelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LABEL);
+	}
+
+	public void setAriaLabel(java.lang.String ariaLabel) {
+		engine.setProperty(Properties.ARIA_LABEL, ariaLabel);
+	}
+
 	public int getAriaLevel() {
 		return getAriaLevel(null);
 	}
@@ -1052,6 +1075,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		
 	}
 
+	public int getRows() {
+		return getRows(null);
+	}
+
+	public int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	}
+
+	public void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
+	}
+
 	public int getFirst() {
 		return getFirst(null);
 	}
@@ -1091,26 +1134,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isVarSetted() {
 		return engine.isPropertySetted(Properties.VAR);
-	}
-
-	public int getRows() {
-		return getRows(null);
-	}
-
-	public int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
-	}
-
-	public void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	protected Set getCameliaFields() {

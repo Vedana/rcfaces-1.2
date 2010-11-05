@@ -64,7 +64,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","waiRole","foregroundColor","lookId","userEventListener","helpMessage","marginTop","width","marginRight","styleClass","partialRendering","marginBottom","unlockedClientAttributeNames","toolTipText","y","x","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","waiRole","foregroundColor","lookId","userEventListener","helpMessage","marginTop","width","marginRight","styleClass","partialRendering","ariaLabel","marginBottom","unlockedClientAttributeNames","toolTipText","y","margins","x"}));
 	}
 
 
@@ -383,6 +383,29 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	public final javax.faces.event.FacesListener [] listErrorListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public java.lang.String getAriaLabel() {
+		return getAriaLabel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLabel() getAriaLabel()} for more details
+	 */
+	public java.lang.String getAriaLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ARIA_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLabelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LABEL);
+	}
+
+	public void setAriaLabel(java.lang.String ariaLabel) {
+		engine.setProperty(Properties.ARIA_LABEL, ariaLabel);
 	}
 
 	public int getAriaLevel() {

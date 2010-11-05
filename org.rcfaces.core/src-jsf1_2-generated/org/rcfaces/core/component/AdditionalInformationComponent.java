@@ -56,7 +56,7 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundColor","marginLeft","errorListener","backgroundImageVerticalPosition","propertyChangeListener","backgroundImageHorizontalPosition","loadListener","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","foregroundColor","waiRole","mouseOutListener","lookId","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundColor","marginLeft","errorListener","backgroundImageVerticalPosition","propertyChangeListener","backgroundImageHorizontalPosition","loadListener","ariaLevel","height","mouseOverListener","scopeValue","backgroundImageURL","foregroundColor","waiRole","mouseOutListener","lookId","backgroundImageVerticalRepeat","userEventListener","marginTop","marginRight","styleClass","backgroundImageHorizontalRepeat","ariaLabel","initListener","marginBottom","scopeSaveValue","scopeVar","margins"}));
 	}
 
 	public AdditionalInformationComponent() {
@@ -109,6 +109,29 @@ public class AdditionalInformationComponent extends CameliaColumnComponent imple
 
 	public final javax.faces.event.FacesListener [] listErrorListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
+	}
+
+	public java.lang.String getAriaLabel() {
+		return getAriaLabel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLabel() getAriaLabel()} for more details
+	 */
+	public java.lang.String getAriaLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ARIA_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLabelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LABEL);
+	}
+
+	public void setAriaLabel(java.lang.String ariaLabel) {
+		engine.setProperty(Properties.ARIA_LABEL, ariaLabel);
 	}
 
 	public int getAriaLevel() {

@@ -23,6 +23,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 	private ValueExpression styleClass;
 	private ValueExpression width;
 	private ValueExpression height;
+	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression lookId;
@@ -51,6 +52,10 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		this.height = height;
 	}
 
+	public final void setAriaLabel(ValueExpression ariaLabel) {
+		this.ariaLabel = ariaLabel;
+	}
+
 	public final void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
@@ -77,6 +82,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			LOG.debug("  styleClass='"+styleClass+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
+			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  lookId='"+lookId+"'");
@@ -139,6 +145,15 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (ariaLabel != null) {
+			if (ariaLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LABEL, ariaLabel);
+
+			} else {
+				component.setAriaLabel(ariaLabel.getExpressionString());
+			}
+		}
+
 		if (ariaLevel != null) {
 			if (ariaLevel.isLiteralText()==false) {
 				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
@@ -182,6 +197,7 @@ public class SubmitWaitTag extends CameliaTag implements Tag {
 		styleClass = null;
 		width = null;
 		height = null;
+		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
 		lookId = null;

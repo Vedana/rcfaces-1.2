@@ -28,6 +28,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 	private ValueExpression height;
 	private ValueExpression hiddenMode;
 	private ValueExpression lookId;
+	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression closeListeners;
@@ -81,6 +82,10 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		this.lookId = lookId;
 	}
 
+	public final void setAriaLabel(ValueExpression ariaLabel) {
+		this.ariaLabel = ariaLabel;
+	}
+
 	public final void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
@@ -132,6 +137,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  lookId='"+lookId+"'");
+			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  closable='"+closable+"'");
@@ -241,6 +247,15 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (ariaLabel != null) {
+			if (ariaLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LABEL, ariaLabel);
+
+			} else {
+				component.setAriaLabel(ariaLabel.getExpressionString());
+			}
+		}
+
 		if (ariaLevel != null) {
 			if (ariaLevel.isLiteralText()==false) {
 				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
@@ -329,6 +344,7 @@ public class ViewDialogTag extends CameliaTag implements Tag {
 		height = null;
 		hiddenMode = null;
 		lookId = null;
+		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
 		closeListeners = null;

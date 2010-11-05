@@ -34,7 +34,7 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"ariaLevel","lookId","text","height","width","styleClass","backgroundMode","waiRole","imageURL"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"ariaLevel","lookId","text","height","width","styleClass","backgroundMode","ariaLabel","waiRole","imageURL"}));
 	}
 
 	public SubmitWaitComponent() {
@@ -173,6 +173,29 @@ public class SubmitWaitComponent extends CameliaBaseComponent implements
 
 	public void setHeight(java.lang.String height) {
 		engine.setProperty(Properties.HEIGHT, height);
+	}
+
+	public java.lang.String getAriaLabel() {
+		return getAriaLabel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLabel() getAriaLabel()} for more details
+	 */
+	public java.lang.String getAriaLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ARIA_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLabelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LABEL);
+	}
+
+	public void setAriaLabel(java.lang.String ariaLabel) {
+		engine.setProperty(Properties.ARIA_LABEL, ariaLabel);
 	}
 
 	public int getAriaLevel() {

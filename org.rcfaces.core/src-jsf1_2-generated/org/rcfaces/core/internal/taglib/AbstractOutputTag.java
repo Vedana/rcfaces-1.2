@@ -37,6 +37,7 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 	private ValueExpression foregroundColor;
 	private ValueExpression visible;
 	private ValueExpression errorListeners;
+	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression mouseOutListeners;
@@ -125,6 +126,10 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		this.errorListeners = errorListeners;
 	}
 
+	public final void setAriaLabel(ValueExpression ariaLabel) {
+		this.ariaLabel = ariaLabel;
+	}
+
 	public final void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
@@ -192,6 +197,7 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			LOG.debug("  backgroundColor='"+backgroundColor+"'");
 			LOG.debug("  foregroundColor='"+foregroundColor+"'");
 			LOG.debug("  visible='"+visible+"'");
+			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
@@ -372,6 +378,15 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
 		}
 
+		if (ariaLabel != null) {
+			if (ariaLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LABEL, ariaLabel);
+
+			} else {
+				component.setAriaLabel(ariaLabel.getExpressionString());
+			}
+		}
+
 		if (ariaLevel != null) {
 			if (ariaLevel.isLiteralText()==false) {
 				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
@@ -479,6 +494,7 @@ public abstract class AbstractOutputTag extends CameliaTag implements Tag {
 		foregroundColor = null;
 		visible = null;
 		errorListeners = null;
+		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
 		mouseOutListeners = null;

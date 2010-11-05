@@ -56,6 +56,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 	private ValueExpression height;
 	private ValueExpression textAlignment;
 	private ValueExpression accessKey;
+	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression initListeners;
@@ -217,6 +218,10 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		this.accessKey = accessKey;
 	}
 
+	public final void setAriaLabel(ValueExpression ariaLabel) {
+		this.ariaLabel = ariaLabel;
+	}
+
 	public final void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
@@ -282,6 +287,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  textAlignment='"+textAlignment+"'");
 			LOG.debug("  accessKey='"+accessKey+"'");
+			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
@@ -588,6 +594,15 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (ariaLabel != null) {
+			if (ariaLabel.isLiteralText()==false) {
+				component.setValueExpression(Properties.ARIA_LABEL, ariaLabel);
+
+			} else {
+				component.setAriaLabel(ariaLabel.getExpressionString());
+			}
+		}
+
 		if (ariaLevel != null) {
 			if (ariaLevel.isLiteralText()==false) {
 				component.setValueExpression(Properties.ARIA_LEVEL, ariaLevel);
@@ -702,6 +717,7 @@ public abstract class AbstractInputTag extends CameliaTag implements Tag {
 		height = null;
 		textAlignment = null;
 		accessKey = null;
+		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
 		initListeners = null;

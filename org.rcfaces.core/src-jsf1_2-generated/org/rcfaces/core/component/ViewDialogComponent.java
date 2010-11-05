@@ -50,7 +50,7 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"lookId","closeListener","text","shellDecoratorName","visible","styleClass","width","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","imageURL","waiRole"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"closeListener","lookId","text","shellDecoratorName","visible","styleClass","width","ariaLabel","dialogPriority","textDirection","ariaLevel","immediate","height","closable","hiddenMode","viewURL","imageURL","waiRole"}));
 	}
 
 	public ViewDialogComponent() {
@@ -329,6 +329,29 @@ public class ViewDialogComponent extends CameliaOutputComponent implements
 
 	public void setLookId(java.lang.String lookId) {
 		engine.setProperty(Properties.LOOK_ID, lookId);
+	}
+
+	public java.lang.String getAriaLabel() {
+		return getAriaLabel(null);
+	}
+
+	/**
+	 * See {@link #getAriaLabel() getAriaLabel()} for more details
+	 */
+	public java.lang.String getAriaLabel(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ARIA_LABEL, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "ariaLabel" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAriaLabelSetted() {
+		return engine.isPropertySetted(Properties.ARIA_LABEL);
+	}
+
+	public void setAriaLabel(java.lang.String ariaLabel) {
+		engine.setProperty(Properties.ARIA_LABEL, ariaLabel);
 	}
 
 	public int getAriaLevel() {
