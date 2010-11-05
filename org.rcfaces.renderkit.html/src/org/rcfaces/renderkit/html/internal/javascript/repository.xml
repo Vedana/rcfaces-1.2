@@ -1170,7 +1170,8 @@
 				<required-class name="fa_autoScroll" />
 				<required-class name="fa_autoOpen" />
 				<required-class name="fa_immediate" />
-
+				<required-class name="fa_aria" />
+		
 				<required-class id="menu" name="f_menu" />
 				
 				<required-class id="ajax" name="f_httpRequest" />

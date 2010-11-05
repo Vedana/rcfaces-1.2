@@ -6,7 +6,7 @@
  * 
  * @class public abstract f_grid extends f_component, fa_disabled, fa_immediate,
  *        fa_pagedComponent, fa_subMenu, fa_commands, fa_selectionManager<String[]>,
- *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll
+ *        fa_scrollPositions, fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_aria
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -6231,7 +6231,7 @@ new f_class("f_grid", {
 	extend : f_component,
 	aspects : [ fa_disabled, fa_pagedComponent, fa_subMenu, fa_commands,
 			fa_selectionManager, fa_scrollPositions, fa_immediate,
-			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen ],
+			fa_additionalInformationManager, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen, fa_aria ],
 	statics : __statics,
 	members : __members
 });
