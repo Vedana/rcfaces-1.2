@@ -16,4 +16,8 @@ public interface IWAIRoleCapability {
     int getAriaLevel();
     
     void setAriaLevel(int ariaLevel);
+    
+    String getAriaLabel();
+    
+    void setAriaLabel(String ariaLabel);
 }

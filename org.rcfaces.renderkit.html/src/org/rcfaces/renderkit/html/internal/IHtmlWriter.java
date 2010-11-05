@@ -113,6 +113,8 @@ public interface IHtmlWriter extends ISgmlWriter, IHtmlElements {
     
     IHtmlWriter writeAriaExpanded(boolean expanded) throws WriterException;
     
+    IHtmlWriter writeAriaLabel(String ariaLabel) throws WriterException;
+    
     IHtmlWriter writeAriaLabelledBy(String clientId) throws WriterException;
     
     IHtmlWriter writeAriaActivedescendant(String clientId) throws WriterException;
