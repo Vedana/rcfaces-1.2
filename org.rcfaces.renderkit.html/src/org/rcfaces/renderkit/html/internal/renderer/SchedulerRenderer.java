@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.PeriodClientDataComponent;
 import org.rcfaces.core.component.SchedulerColumnComponent;
 import org.rcfaces.core.component.SchedulerComponent;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -775,5 +776,13 @@ public class SchedulerRenderer extends AbstractCssRenderer {
 
 		return sb.toString();
 	}
-
+	
+	protected IHtmlWriter writeTabIndex(IHtmlWriter writer,
+			ITabIndexCapability tabIndexCapability) throws WriterException {
+		Integer tabIndex = tabIndexCapability.getTabIndex();
+		if(tabIndex != null) {
+			writer.writeAttribute("v:tabIndex", tabIndex);
+		}
+		return writer;
+	}
 }

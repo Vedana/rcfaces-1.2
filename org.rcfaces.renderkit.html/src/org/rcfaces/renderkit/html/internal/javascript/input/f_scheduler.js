@@ -126,6 +126,7 @@ var __members = {
 		}
 	
 		var columnNumber = f_core.GetNumberAttribute(this, "v:columnNumber");
+		var tabIndex = f_core.GetNumberAttribute(this, "v:tabIndex");
 		var dateBegin = f_core.GetAttribute(this, "v:dateBegin");
 		if (dateBegin) {
 			dateBegin = f_core.DeserializeDate(dateBegin);
@@ -200,6 +201,10 @@ var __members = {
 					href : "javascript:void(0)",
 					title : period._toolTip
 				});
+				 
+				 if(tabIndex){
+					 divNode.tabIndex =tabIndex;
+				 }
 				 
 				} else {
 					 divNode = f_core.CreateElement(div, "div",{

@@ -4166,6 +4166,7 @@ Dans le cas d'un mode period !
 		<capability id="ILiteralLocaleCapability" />
 		<capability id="ILiteralTimeZoneCapability" />
 		<capability id="IStyleClassCapability"/>
+		<capability id="ITabIndexCapability"/>
 		
 		<capability id="IImmediateCapability" forceComponent="true"/>
 		
