@@ -668,6 +668,13 @@ public abstract class AbstractHtmlWriter extends
         writeAttribute("aria-expanded", expanded);
         return this;
     }
+    
+    public IHtmlWriter writeAriaLabel(String ariaLabel)
+    		throws WriterException {
+    	writeAttribute("aria-label", ariaLabel);
+    	return this;
+    }
+    
 
     public IHtmlWriter writeAriaLabelledBy(String clientId)
             throws WriterException {

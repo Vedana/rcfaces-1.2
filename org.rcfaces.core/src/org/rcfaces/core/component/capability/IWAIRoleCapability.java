@@ -9,6 +9,7 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface IWAIRoleCapability {
+	
     String getWaiRole();
 
     void setWaiRole(String role);
@@ -16,4 +17,8 @@ public interface IWAIRoleCapability {
     int getAriaLevel();
     
     void setAriaLevel(int ariaLevel);
+    
+    String getAriaLabel();
+    
+    void setAriaLabel(String ariaLabel);
 }

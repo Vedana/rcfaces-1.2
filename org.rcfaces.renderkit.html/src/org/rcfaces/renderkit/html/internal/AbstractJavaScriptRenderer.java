@@ -384,15 +384,15 @@ public abstract class AbstractJavaScriptRenderer extends
         return false;
     }
 
-    protected final IHtmlWriter writeHelp(IHtmlWriter writer,
-            IHelpCapability helpComponent) {
-        if ((helpComponent.getHelpURL() != null)
-                || (helpComponent.getHelpMessage() != null)) {
-            // writer.enableJavaScript(); // ????
-        }
-
-        return writer;
-    }
+//    protected final IHtmlWriter writeHelp(IHtmlWriter writer,
+//            IHelpCapability helpComponent) {
+//        if ((helpComponent.getHelpURL() != null)
+//                || (helpComponent.getHelpMessage() != null)) {
+//            // writer.enableJavaScript(); // ????
+//        }
+//
+//        return writer;
+//    }
 
     protected final void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
 

@@ -169,6 +169,17 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
         return writer;
     }
+    
+    protected IHtmlWriter writeAriaLabel(IHtmlWriter writer,
+            IWAIRoleCapability component) throws WriterException {
+       
+    	String ariaLabel = component.getAriaLabel();
+    	if(ariaLabel != null) {
+    		writer.writeAriaLabel(ariaLabel);
+    	}
+
+        return writer;
+    }
 
     protected IHtmlWriter writeFocusStyleClass(IHtmlWriter writer,
             IFocusStyleClassCapability component) throws WriterException {
@@ -321,6 +332,11 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             writeFocusStyleClass(writer, (IFocusStyleClassCapability) component);
         }
 
+        if (component instanceof IWAIRoleCapability) {
+           writeAriaLabel(writer ,(IWAIRoleCapability) component);
+        }
+
+        
         if (component instanceof NamingContainer) {
             boolean writeNamingContainer = true;
 
