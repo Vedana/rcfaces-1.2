@@ -1137,7 +1137,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Map<String, Object> infos
+	 * @param Map infos
 	 * @return void
 	 */
 	f_setTargetAdditionnalInformations: function(infos) {
@@ -1145,7 +1145,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param Map<String, Object> infos
+	 * @param Map infos
 	 * @return void
 	 */
 	f_setSourceAdditionnalInformations: function(infos) {
@@ -1153,7 +1153,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return Map<String, Object> infos
+	 * @return Map infos
 	 */
 	f_getSourceAdditionnalInformations: function() {
 		return this._additionalSourceInformations;
