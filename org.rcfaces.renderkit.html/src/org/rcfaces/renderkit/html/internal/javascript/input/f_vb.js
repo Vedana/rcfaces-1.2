@@ -624,7 +624,7 @@ var __statics = {
 		var auto = validator.f_getBoolParameter("date.auto", false);
 		
 		// Deal with empty string and required attribute
-		if ((!inVal && !validator.f_getComponent().f_isRequired()) || !inVal && !auto ) {
+		if (!inVal && (!validator.f_getComponent().f_isRequired() || !auto)) {
 			validator.f_setObject(null);
 			return inVal;
 		}
@@ -918,7 +918,7 @@ var __statics = {
 		var auto = validator.f_getBoolParameter("date.auto", false);
 		
 		// Deal with empty string and required attribute
-		if ((!inVal && !validator.f_getComponent().f_isRequired()) || !inVal && !auto ) {
+		if (!inVal && (!validator.f_getComponent().f_isRequired() || !auto)) {
 			validator.f_setObject(null);
 			return inVal;
 		}
@@ -1190,13 +1190,14 @@ var __statics = {
 	
 	/**
 	 * @method public static
+	 * @return String
 	 * @context object:validator
 	 */
 	Formatter_date : function(validator, inVal) {
 		var dateObject = validator.f_getObject();
 		if (!dateObject) {
 			return "";
-		}
+		}		
 		var format = validator.f_getParameter("date.format");
 		var sTmp = f_dateFormat.FormatDate(dateObject, format);
 		validator.f_setInputValue(sTmp);
