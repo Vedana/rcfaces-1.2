@@ -1564,6 +1564,10 @@ var __members = {
 		var suffixDivNode="";
 		var cursor=this._cursor;
 	
+		if(!cursor){
+			this._cfocus.removeAttribute("aria-activedescendant");
+		}
+	
 		if (node._disabled) {
 			if (!node._container) {
 				suffixDivNode+="_leaf";
@@ -1571,6 +1575,10 @@ var __members = {
 			
 			suffixLabel+="_disabled";
 			suffixDivNode+="_disabled";
+			
+			if(li==cursor){
+				fa_aria.SetElementAriaActiveDescendant(this._cfocus, li._divNode.id);
+			}
 		
 		} else {
 			if (node._opened) {
@@ -1580,7 +1588,7 @@ var __members = {
 			} else if (node._container && !node._opened) {
 				fa_aria.SetElementAriaExpanded(li._divNode, false);
 				
-			}  else if (!node._container) {
+			} else if (!node._container) {
 				suffixDivNode+="_leaf";
 			}	
 		
@@ -3513,8 +3521,12 @@ var __members = {
 	 */
 	_treeDropListener: function(event) {
 		var dndEvent = f_dndEvent.As(event);
+		var targetComponent = dndEvent.f_getTargetComponent();
+		if(!targetComponent) {
+			return;
+		}
 		if(dndEvent.f_getSourceComponent() 
-				!=  dndEvent.f_getTargetComponent()) {
+				!= targetComponent) {
 			return;
 		}
 		switch(dndEvent.f_getStage()) {

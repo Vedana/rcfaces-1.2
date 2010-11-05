@@ -3283,6 +3283,13 @@ var __members = {
 
 		return false;
 	},
+	
+	/**
+	 * Refresh the structure of the grid.
+	 * 
+	 * @method public
+	 * @return void
+	 */
 	f_refreshContent : function() {
 		if (!this._interactive) {
 			return false;
@@ -5498,7 +5505,7 @@ var __members = {
 							f_classLoader.Destroy(waiting);
 						}
 
-						f_grid.Info(f_grid,
+						f_core.Info(f_grid,
 								"f_showAdditionalContent.onError: Bad status: "
 										+ status);
 

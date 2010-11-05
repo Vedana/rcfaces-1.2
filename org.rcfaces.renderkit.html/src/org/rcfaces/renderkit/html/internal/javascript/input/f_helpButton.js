@@ -43,7 +43,7 @@ var __members = {
 			this.f_setHoverImageURL(h);
 		}
 		
-		this.f_addEventListener(f_event.SELECT, function() {
+		this.f_addEventListener(f_event.SELECTION, function() {
 			f_help._Open(this);
 			return false;		
 		});
