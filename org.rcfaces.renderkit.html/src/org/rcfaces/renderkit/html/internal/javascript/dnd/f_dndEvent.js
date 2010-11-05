@@ -275,9 +275,9 @@ var __members = {
 	f_setEffect :function(effect){
 		f_core.Assert(typeof(effect)=="Number", "f_dndEvent.f_setEffect:" +
 				" Invalid effect parameter ("+effect+" (typeof=" + typeof(effect) +")");
-		if(!this._modifiedDetail){
-			throw new Error("f_dndEvent.f_setEffect : " +
-					"this._modifiedDetail is undefined. Impossible set effect : "+effect);
+
+		if (!this._modifiedDetail){
+			throw new Error("Impossible to change effect : "+effect);
 		}
 		
 		this._modifiedDetail._effect = effect;
@@ -302,9 +302,8 @@ var __members = {
 		f_core.Assert(typeof(types)=="String[]", "f_dndEvent.f_setTypes:" +
 				" Invalid types parameter ("+types+" (typeof=" + typeof(types) +")");
 		
-		if(!this._modifiedDetail){
-			throw new Error("f_dndEvent.f_setTypes : " +
-					"this._modifiedDetail is undefined. Impossible set types : "+types);
+		if (!this._modifiedDetail) {
+			throw new Error("Impossible to change types : "+types);
 		}
 		
 		this._modifiedDetail._types = types;
