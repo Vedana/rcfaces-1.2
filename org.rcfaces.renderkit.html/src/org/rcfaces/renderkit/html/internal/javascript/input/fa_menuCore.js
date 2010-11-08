@@ -1140,7 +1140,7 @@ var __members = {
 
 		var eventComponent;
 		var parentComponent = parent._component; 
-		if (parentComponent) {
+		if (parentComponent && parentComponent.f_getEventElement) {
 			eventComponent = parentComponent.f_getEventElement();
 		}
 			
