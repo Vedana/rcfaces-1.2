@@ -12,22 +12,22 @@
 var __statics = {
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	OPTIONAL_CARDINALITY: 1,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ZEROMANY_CARDINALITY: 2,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ONE_CARDINALITY: 3,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ONEMANY_CARDINALITY: 4
 }

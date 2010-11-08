@@ -21,7 +21,7 @@ var __members = {
 	},
 	/**
 	 * @method public 
-	 * @param hidden boolean byIndex Returns the index of the item if setted to <code>true</code>.
+	 * @param hidden Boolean byIndex Returns the index of the item if setted to <code>true</code>.
 	 * @return Object Value of the selected item. (or <code>null</code>)
 	 */
 	f_getValue: function(byIndex) {
@@ -39,9 +39,9 @@ var __members = {
 	/**
 	 * @method public 
 	 * @param String val Value associated to an item. (if val is a number, val specifies the index of the item)
-	 * @param hidden boolean byIndex Select the item by index instead of value.
-	 * @param hidden boolean deselectOther Deselect not specified items.
-	 * @return boolean True is success. (Item has been found !)
+	 * @param hidden Boolean byIndex Select the item by index instead of value.
+	 * @param hidden Boolean deselectOther Deselect not specified items.
+	 * @return Boolean True is success. (Item has been found !)
 	 */
 	f_setValue: function(val, byIndex, deselectOther) {
 		var items = this.options;

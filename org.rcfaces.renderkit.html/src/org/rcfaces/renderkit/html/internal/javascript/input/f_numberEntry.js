@@ -37,7 +37,7 @@ var __members={
 	/**
 	 * @method public
 	 * @param optional hidden number numberType Type of number. (min, max, default)
-	 * @return number
+	 * @return Number
 	 */
 	f_getNumber: function(numberType) {
 		var raddix=-1;
@@ -91,7 +91,7 @@ var __members={
 	},
 	/**
 	 * @method public
-	 * @param number num
+	 * @param Number num
 	 * @return void
 	 */
 	f_setNumber: function(num) {
@@ -129,7 +129,7 @@ var __members={
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getMinNumber: function() {
 		var minNumber=this._minNumber;
@@ -155,7 +155,7 @@ var __members={
 
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getMaxNumber: function() {
 		var maxNumber=this._maxNumber;

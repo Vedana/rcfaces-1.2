@@ -113,7 +113,7 @@ var __statics = {
 	 * @method hidden static final 
 	 * @param HTMLElement component
 	 * @param String id <b>(The naming separator is ':')</b>
-	 * @param boolean sibling
+	 * @param Boolean sibling
 	 * @return String Identifier (The naming separator might not be ':')
 	 */
 	ComputeComponentId: function(component, id, sibling) {

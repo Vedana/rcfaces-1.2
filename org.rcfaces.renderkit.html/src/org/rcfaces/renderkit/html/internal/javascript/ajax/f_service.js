@@ -97,7 +97,7 @@ var __members={
 	/**
 	 * @method public
 	 * @param String requestId Request identifier. (returned by f_asyncCall() )
-	 * @return number State of the request, or -1 if the request is unknown !
+	 * @return Number State of the request, or -1 if the request is unknown !
 	 * @see #f_asyncCall
 	 */
 	f_getRequestState: function(requestId) {
@@ -132,7 +132,7 @@ var __members={
 	 * @param function resultCallback Callback which will be called, when the result has been received.
 	 * @param any parameter Parameters of the request.
 	 * @param optional f_progressMonitor progressMonitor Progress monitor associated to the call.
-	 * @param optional number contentSizePercent
+	 * @param optional Number contentSizePercent
 	 * @return String Request identifier.
 	 */
 	f_asyncCall: function(resultCallback, parameter, progressMonitor, contentSizePercent) {

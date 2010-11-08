@@ -12,142 +12,142 @@
 var __statics = {
 
 	/**
-	 * @field private static final boolean
+	 * @field private static final Boolean
 	 */
 	_COMPUTE_TOOLTIP: true,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_HOME_DELTA: -999999,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_END_DELTA:   999999,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_PAGE_UP_DELTA: -999990,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_PAGE_DOWN_DELTA:   999990,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DAY_SELECTION_DETAIL: 0x01,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	WEEK_SELECTION_DETAIL: 0x02,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DAYOFWEEK_SELECTION_DETAIL: 0x03,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	MONTH_SELECTION_DETAIL: 0x04,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	YEAR_SELECTION_DETAIL: 0x05,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DATE_MODE: 0,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	PERIOD_MODE: 1,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	YEAR_CURSOR_LAYOUT: 0x1,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	MONTH_LIST_LAYOUT: 0x2,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	MONTH_CURSOR_LAYOUT: 0x4,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	DAY_LIST_LAYOUT: 0x8,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	HOME_DATE_LAYOUT: 0x10,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	UNIT_CURSOR_LAYOUT: 0x20,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	SELECT_DAY_LAYOUT: 0x40,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	SELECT_WEEK_LAYOUT: 0x80,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_UNIT: 0,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_WEEK_UNIT: 0,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DAY_UNIT: 1,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DAYOFWEEK_UNIT: 2,  // Passe au lundi suivant ...
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_MONTH_UNIT: 3,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_YEAR_UNIT: 4,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_WEEKDAY_UNIT: 5, // Passe du lundi au mardi
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DAY_MILLIS: 86400000,  // Un jour en millis
 
@@ -1460,7 +1460,7 @@ var __members = {
 	*/
 	/**
 	 * @method public
-	 * @param number disabledWeekDays
+	 * @param Number disabledWeekDays
 	 * @return void
 	 */
 	f_setDisabledWeekDays: function(disabledWeekDays) {
@@ -3157,7 +3157,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getMode: function() {
 		return this._mode;

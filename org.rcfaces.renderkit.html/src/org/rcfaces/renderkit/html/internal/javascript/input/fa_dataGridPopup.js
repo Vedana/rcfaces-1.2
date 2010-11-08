@@ -34,8 +34,8 @@ var __statics = {
 	 * @method private static
 	 * @param Object dataGridPopup
 	 * @param Object position
-	 * @param number offsetX
-	 * @param number offsetY
+	 * @param Number offsetX
+	 * @param Number offsetY
 	 * @param function callbackWhenReady
 	 * @return void
 	 */
@@ -662,7 +662,7 @@ var __members = {
 	 * @method hidden
 	 * @param optional Event jsEvent
 	 * @param optional String text
-	 * @param optional number autoSelect
+	 * @param optional Number autoSelect
 	 * @return boolean Returns <code>true</code> if success.
 	 */
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
@@ -735,7 +735,7 @@ var __members = {
 	
 	/**
 	 * @method hidden
-	 * @param number autoSelection
+	 * @param Number autoSelection
 	 * @return void
 	 */
 	f_changeSelection: function(autoSelection) {

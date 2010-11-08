@@ -162,7 +162,7 @@ var __members = {
 	 * Returns index of first row.
 	 *
 	 * @method public
-	 * @return number
+	 * @return Number
 	 * @javaReturnType int
 	 */
 	f_getFirst: function() {
@@ -172,7 +172,7 @@ var __members = {
 	 * Returns number of row.
 	 *
 	 * @method public
-	 * @return number
+	 * @return Number
 	 * @javaReturnType int
 	 */
 	f_getMaxRows: function() {
@@ -182,7 +182,8 @@ var __members = {
 	 * List rows.
 	 *
 	 * @method public
-	 * @return int
+	 * @return Number
+	 * @javaReturnType int
 	 */
 	f_getRows: function() {
 		return this._rows;
@@ -191,7 +192,7 @@ var __members = {
 	 * Returns number of dowloaded rows.
 	 *
 	 * @method public
-	 * @return number
+	 * @return Number
 	 * @javaReturnType int
 	 */
 	f_getRowCount: function() {

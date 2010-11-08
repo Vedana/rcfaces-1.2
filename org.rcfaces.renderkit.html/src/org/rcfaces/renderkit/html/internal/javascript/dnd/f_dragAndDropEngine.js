@@ -348,7 +348,7 @@ var __members = {
 	 * @param Object item
 	 * @param any itemValue
 	 * @param HTMLElement itemComponent
-	 * @param int dragEffects
+	 * @param Number dragEffects
 	 * @param Array dragTypes
 	 * @return Boolean
 	 */

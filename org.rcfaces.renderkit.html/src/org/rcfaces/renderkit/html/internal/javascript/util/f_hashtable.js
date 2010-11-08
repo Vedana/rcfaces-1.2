@@ -15,7 +15,7 @@ var __members = {
  	_underlyingHash: undefined,
  	
  	/**
-	 * @field private number
+	 * @field private Number
 	 */
  	_count: undefined,
 
@@ -175,7 +175,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getSize: function() {
 		return this._count;

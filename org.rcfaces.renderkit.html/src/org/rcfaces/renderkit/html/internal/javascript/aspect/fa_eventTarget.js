@@ -14,7 +14,7 @@ var __statics = {
 	/**
 	 * Last event identifier (for debug)
 	 * 
-	 * @field private static number
+	 * @field private static Number
 	 */
 	_EventId : undefined,
 	/**
@@ -113,7 +113,7 @@ var __members = {
 	 * @param optional
 	 *            boolean showAlert
 	 * @param optional
-	 *            number event type mask
+	 *            Number event type mask
 	 * @return boolean
 	 */
 	f_getEventLocked : function(jsEvent, showAlert, mask) {
@@ -160,7 +160,7 @@ var __members = {
 	 * @param optional
 	 *            any value
 	 * @param optional
-	 *            fa_selectionProvider<? extends Object> selectionProvider
+	 *            fa_selectionProvider selectionProvider
 	 * @param optional
 	 *            any detail
 	 * @param optional
@@ -478,7 +478,7 @@ var __members = {
 	 * @method protected final
 	 * @param String
 	 *            type Name of the type of event.
-	 * @param boolean
+	 * @param Boolean
 	 *            value Boolean value or undefined.
 	 * @return void
 	 */

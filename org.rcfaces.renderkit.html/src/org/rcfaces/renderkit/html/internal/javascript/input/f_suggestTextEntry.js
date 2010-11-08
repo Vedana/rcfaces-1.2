@@ -12,17 +12,17 @@
 
 var __statics = {
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_ROWS_NUMBER: 5,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_SUGGESTION_DELAY_MS: 300,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_SUGGESTION_MIN_CHARS: 0,
 	
@@ -126,14 +126,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getMaxResultNumber: function() {
 		return this._maxResultNumber;
 	},
 	/**
 	 * @method public
-	 * @param number maxResultNumber
+	 * @param Number maxResultNumber
 	 * @return void
 	 */
 	f_setMaxResultNumber: function(maxResultNumber) {
@@ -145,14 +145,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getSuggestionDelayMs: function() {
 		return this._suggestionDelayMs;
 	},
 	/**
 	 * @method public
-	 * @param number suggestionDelayMs
+	 * @param Number suggestionDelayMs
 	 * @return void
 	 */
 	f_setSuggestionDelayMs: function(suggestionDelayMs) {
@@ -615,7 +615,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event jsEvt
-	 * @param optional number autoSelect
+	 * @param optional Number autoSelect
 	 * @return void
 	 */
 	_showPopup: function(jsEvt, autoSelect) {

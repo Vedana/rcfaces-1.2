@@ -10,27 +10,27 @@
 
 var __statics = {
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	COOKIE_STORAGE_TYPE: 1,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	FLASH_STORAGE_TYPE: 2,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	USER_DATA_STORAGE_TYPE: 4,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DOM_STORAGE_TYPE: 8,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	SERVER_STORAGE_STYPE: 16,
 	
@@ -46,7 +46,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @param optional number... types
+	 * @param optional Number... types
 	 * @return f_clientStorage
 	 */
 	Get: function(types) {
@@ -176,7 +176,7 @@ var __statics = {
 var __members = {
 	/**
 	 * @method public abstract
-	 * @return number
+	 * @return Number
 	 * @see #f_clientStorage.COOKIE_STORAGE_TYPE
 	 * @see #f_clientStorage.FLASH_STORAGE_TYPE
 	 * @see #f_clientStorage.USER_DATA_STORAGE_TYPE
@@ -201,7 +201,7 @@ var __members = {
 	
 	/**
 	 * @method public abstract
-	 * @return number Size or (-1 if unknown)
+	 * @return Number Size or (-1 if unknown)
 	 */
 	f_getStorageMaxSize: f_class.ABSTRACT
 }

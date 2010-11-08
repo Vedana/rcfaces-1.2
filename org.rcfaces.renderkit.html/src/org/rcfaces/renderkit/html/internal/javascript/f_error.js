@@ -23,84 +23,84 @@ var __statics = {
 	ERROR_CODE_PROPERTY_NAME: "X-Camelia-Error-Code",
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ERROR_TYPE_MASK: 0xFF000000,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	HTTP_ERROR: 0x1000000,
 		
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	SERVICE_ERROR: 0x2000000,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     INVALID_PARAMETER_SERVICE_ERROR: 0x2000001,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     SESSION_EXPIRED_SERVICE_ERROR: 0x2000002,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     RESPONSE_TYPE_SERVICE_ERROR: 0x2000003,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     INVALID_RESPONSE_SERVICE_ERROR: 0x2000004,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	RESPONSE_EVALUATION_SERVICE_ERROR: 0x2000005,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	INVALID_SERVICE_RESPONSE_ERROR: 0x2000006,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	INTERNAL_SERVICE_RESPONSE_ERROR: 0x2000007,
 		
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ASYNC_RENDER_ERROR: 0x3000000,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     RESPONSE_TYPE_ASYNC_RENDER_ERROR: 0x3000001,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     INVALID_RESPONSE_ASYNC_RENDER_ERROR: 0x3000002,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	RESPONSE_EVALUATION_ASYNC_RENDER_ERROR: 0x3000004,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	APPLICATION_ERROR: 0x0000000,
 
 	/**
 	 * @method hidden static
 	 * @param f_component component
-	 * @param number messageCode
+	 * @param Number messageCode
 	 * @param String message
 	 * @param any param
 	 * @return boolean
@@ -194,7 +194,7 @@ var __statics = {
 	/**
 	 * @method hidden static
 	 * @param f_httpRequest request
-	 * @return number
+	 * @return Number
 	 */
 	ComputeApplicationErrorCode: function(request) {
 		var code=f_error.APPLICATION_ERROR;

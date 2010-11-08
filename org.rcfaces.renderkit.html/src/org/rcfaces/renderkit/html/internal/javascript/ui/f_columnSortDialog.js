@@ -31,7 +31,7 @@ var __statics = {
 	/**
 	 * Style constant for application modal behavior
 	 * 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	APPLY_BUTTON_STYLE: 1<<20,
 	
@@ -299,7 +299,7 @@ var __members = {
 	 * @method private
 	 * @param HTMLElement parent
 	 * @param String name
-	 * @param number sort
+	 * @param Number sort
 	 * @return HTMLElement table with radios
 	 */
 	_createTableRadio: function(parent, name, selectComp, _radios) {

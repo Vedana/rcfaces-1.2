@@ -69,7 +69,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number Ascending:1 Descending:-1 not-sorted:0
+	 * @return Number Ascending:1 Descending:-1 not-sorted:0
 	 */
 	f_getColumnOrderState: function() {
 		if (this._ascendingOrder===true) {

@@ -3,7 +3,7 @@
  * TabIndex value.
  *
  * @aspect abstract fa_tabIndex
- * @author jb.meslin@vedana.com )
+ * @author jb.meslin
  * @version $Revision$ $Date$
  */
 var __members = {

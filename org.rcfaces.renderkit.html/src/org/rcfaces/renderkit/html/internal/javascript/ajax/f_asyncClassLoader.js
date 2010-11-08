@@ -15,7 +15,7 @@
  * @param HTMLElement component
  * @param HTMLElement htmlNode
  * @param String content
- * @param boolean processScripts
+ * @param Boolean processScripts
  * @return void
  */
 f_classLoader.prototype.f_loadContent = function(component, htmlNode, content, processScripts) {
@@ -344,7 +344,7 @@ f_classLoader.prototype.f_processScripts = function(component, htmlNode, scripts
 
 /**
  * @method private
- * @param boolean interactiveMode
+ * @param Boolean interactiveMode
  * @return void
  */
 f_classLoader.prototype._asyncPostLoad=function(interactiveMode) {

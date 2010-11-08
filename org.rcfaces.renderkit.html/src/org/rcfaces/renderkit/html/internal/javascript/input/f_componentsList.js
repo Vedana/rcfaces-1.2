@@ -107,10 +107,10 @@ var __members = {
 	 * Specify the index of the first row which starts the grid.
 	 *
 	 * @method public
-	 * @param number index
-	 * @param optional number cursorIndex The cursor index. (can be undefined)
+	 * @param Number index
+	 * @param optional Number cursorIndex The cursor index. (can be undefined)
 	 * @param optional hidden Event jsEvent
-	 * @return boolean Returns <code>false</code>.
+	 * @return Boolean Returns <code>false</code>.
 	 */
 	f_setFirst: function(index, cursorIndex, jsEvent) {
 		//var oldFirst=this._first;

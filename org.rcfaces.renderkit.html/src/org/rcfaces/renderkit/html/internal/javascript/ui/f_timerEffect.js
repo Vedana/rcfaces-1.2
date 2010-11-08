@@ -57,14 +57,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getStepMs: function() {	
 		return 100;
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getStep: function() {
 		return 0.1;

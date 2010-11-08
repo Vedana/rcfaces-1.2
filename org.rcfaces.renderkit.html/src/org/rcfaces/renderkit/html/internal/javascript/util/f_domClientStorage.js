@@ -11,7 +11,7 @@
 var __statics = {
 		
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_STORAGE_MAX_SIZE: 5242880,
 	

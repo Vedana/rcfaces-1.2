@@ -21,17 +21,17 @@ var __statics = {
 	_DOWN_ID_SUFFIX: "::down",
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_STEP: 1,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_START_DELAY: 500,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_REPETITION_DELAY: 100,
 	
@@ -426,7 +426,7 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @return number Minimum value or <code>null</code>.
+	 * @return Number Minimum value or <code>null</code>.
 	 */
 	f_getMinimum: function() {
 		var minimum=this._minimum;
@@ -440,7 +440,7 @@ var __members = {
 	},
 	/*
 	 * @method public
-	 * @param number minimum Minimum value.
+	 * @param Number minimum Minimum value.
 	 * @return void
 	 *
 	f_setMinimum: function(minimum) {
@@ -458,7 +458,7 @@ var __members = {
 	*/
 	/**
 	 * @method public
-	 * @return number Maximum value or <code>null</code>.
+	 * @return Number Maximum value or <code>null</code>.
 	 */
 	f_getMaximum: function() {
 		var maximum=this._maximum;
@@ -472,7 +472,7 @@ var __members = {
 	},
 	/*
 	 * @method public
-	 * @param number maximum Maximum value.
+	 * @param Number maximum Maximum value.
 	 * @return void
 	 *
 	f_setMaximum: function(maximum) {
@@ -490,7 +490,7 @@ var __members = {
 	*/
 	/**
 	 * @method public
-	 * @return number Maximum value or <code>null</code>.
+	 * @return Number Maximum value or <code>null</code>.
 	 */
 	f_getStep: function() {
 		var step=this._step;
@@ -501,7 +501,7 @@ var __members = {
 	},
 	/*
 	 * @method public
-	 * @param number step Step value.
+	 * @param Number step Step value.
 	 * @return void
 	 *
 	f_setStep: function(step) {

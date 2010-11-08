@@ -31,7 +31,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param boolean set
+	 * @param Boolean set
 	 * @return void
 	 */
 	f_setRequired: function(set) {

@@ -12,7 +12,7 @@
 var __statics = {
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_MAX_COLUMN_NUMBER: 3,
 	
@@ -173,7 +173,7 @@ var __members = {
 	_grid: undefined,
 	
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_maxColumnNumber: undefined,
 
@@ -602,7 +602,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param number i
+	 * @param Number i
 	 * @return void
 	 */
 	f_updateRadioButtons: function(i) {		

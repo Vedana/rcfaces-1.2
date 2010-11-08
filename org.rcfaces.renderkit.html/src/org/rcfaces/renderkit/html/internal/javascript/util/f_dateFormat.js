@@ -12,7 +12,7 @@
 
 var __statics = {
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_TWO_DIGIT_YEAR_START: 1960,
 	
@@ -388,12 +388,12 @@ var __statics = {
 	
 	/**
 	 * @method public static final
-	 * @param number year
-	 * @param number month
-	 * @param number date
+	 * @param Number year
+	 * @param Number month
+	 * @param Number date
 	 * @param optional Date twoDigitYearStart
 	 * @param optional f_locale locale
-	 * @return number
+	 * @return Number
 	 */
 	ResolveYear: function(year, month, date, twoDigitYearStart, locale) {
 		f_core.Assert(typeof(year)=="number", "f_dateFormat.ResolveYear: Invalid year parameter '"+year+"'.");

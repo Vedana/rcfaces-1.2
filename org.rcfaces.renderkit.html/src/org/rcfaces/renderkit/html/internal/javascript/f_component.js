@@ -14,22 +14,22 @@
 var __statics = {
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	HIDDEN_MODE_SERVER: 1,
 
 	/**
-	 * @field public static final number 
+	 * @field public static final Number 
 	 */
 	HIDDEN_MODE_PHANTOM: 2,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	HIDDEN_MODE_IGNORE: 4,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DEFAULT_HIDDEN_MODE: 4,
 	
@@ -149,7 +149,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getX: function() {
 		return this._getSize(this.style.left);
@@ -157,7 +157,7 @@ var __members = {
 	
 	/**
 	 * @method private
-	 * @return number
+	 * @return Number
 	 */
 	_getSize: function(size) {
 		if (!size) {
@@ -168,7 +168,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param number x
+	 * @param Number x
 	 * @return void
 	 */
 	f_setX: function(x) {
@@ -179,14 +179,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getY: function() {
 		return this._getSize(this.style.top);
 	},
 	/**
 	 * @method public
-	 * @param number y
+	 * @param Number y
 	 * @return void
 	 */
 	f_setY: function(y) {
@@ -199,7 +199,7 @@ var __members = {
 	 * Returns the width of the component.
 	 *
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getWidth: function() {
 		return this._getSize(this.style.width);
@@ -208,7 +208,7 @@ var __members = {
 	 * Set the width of the component
 	 *
 	 * @method public
-	 * @param number width Width of the component.
+	 * @param Number width Width of the component.
 	 * @return void
 	 */
 	f_setWidth: function(width) {
@@ -221,7 +221,7 @@ var __members = {
 	 * Returns the height of the component.
 	 *
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getHeight: function() {
 		return this._getSize(this.style.height);
@@ -230,7 +230,7 @@ var __members = {
 	 * Set the height of the component.
 	 * 
 	 * @method public
-	 * @param number height Height of the component.
+	 * @param Number height Height of the component.
 	 * @return void
 	 */
 	f_setHeight: function(height) {
@@ -354,7 +354,7 @@ var __members = {
 	 * marking it visible may not actually cause it to be displayed.
 	 *
 	 * @method public
-	 * @param boolean visible the new visibility state
+	 * @param Boolean visible the new visibility state
 	 * @return void
 	 */
 	f_setVisible: function(visible) {
@@ -425,7 +425,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 * @see f_component#DEFAULT_HIDDEN_MODE f_component.DEFAULT_HIDDEN_MODE
 	 * @see f_component#HIDDEN_MODE_IGNORE f_component.HIDDEN_MODE_IGNORE
 	 * @see f_component#HIDDEN_MODE_PHANTOM f_component.HIDDEN_MODE_PHANTOM
@@ -618,9 +618,9 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional boolean scroll Scroll into view to show the component.
+	 * @param optional Boolean scroll Scroll into view to show the component.
 	 *		(<code>true</code> align on top, <code>false</code> align on bottom)
-	 * @return boolean if the component can be shown.
+	 * @return Boolean if the component can be shown.
 	 */	 
 	f_show: function(scroll) {
 		if (!this.f_parentShow()) {

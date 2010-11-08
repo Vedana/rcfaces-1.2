@@ -45,7 +45,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getMaxTextLength: function() {
 		return this.f_getInput().maxLength;

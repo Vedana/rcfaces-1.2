@@ -13,7 +13,7 @@
 var __statics = {
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_MIN_WIDTH: 128,
 	
@@ -76,7 +76,7 @@ var __members = {
 	 * Returns the index of the first selected value.
 	 *
 	 * @method public
-	 * @return number Index of the first selected value.
+	 * @return Number Index of the first selected value.
 	 */
 	f_getSelectedIndex: function() {
 		return this.f_getValue(true);
@@ -85,7 +85,7 @@ var __members = {
 	 * Specify selection by the index of the selected value.
 	 *
 	 * @method public
-	 * @param number idx Index of the first selected value.
+	 * @param Number idx Index of the first selected value.
 	 * @return void
 	 */
 	f_setSelectedIndex: function(idx) {
@@ -95,7 +95,7 @@ var __members = {
 	 * Returns the value of item specified by an index.
 	 *
 	 * @method public
-	 * @param number idx Index of the item.
+	 * @param Number idx Index of the item.
 	 * @return String Value of the item.
 	 */
 	f_getValueFromIndex: function(idx) {
@@ -115,7 +115,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param String... value
-	 * @return number Number of removed items.
+	 * @return Number Number of removed items.
 	 */
 	f_clear: function(value) {		
 		var cnt=0;
@@ -147,7 +147,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any[] values List of values whose specified items.
-	 * @return number Number of removed items.
+	 * @return Number Number of removed items.
 	 */
 	f_clearArray: function(values) {
 		f_core.Assert(values instanceof Array, "f_abstractList.f_clearArray: Invalid values parameter '"+values+"'.");
@@ -158,7 +158,7 @@ var __members = {
 	 * Remove all items.
 	 * 
 	 * @method public
-	 * @return number Number of removed rows.
+	 * @return Number Number of removed rows.
 	 */
 	f_clearAll: function() {
 		var input=this.f_getInput();
@@ -182,7 +182,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param String val Value of the item
-	 * @return number Index of the item.
+	 * @return Number Index of the item.
 	 */
 	f_getIndexFromValue: function(val) {
 		var items = this.options;
@@ -425,7 +425,7 @@ var __members = {
 	 * Append an item.
 	 *
 	 * @method public
-	 * @param boolean parent
+	 * @param Boolean parent
 	 * @param String label
 	 * @param String value
 	 * @param optional boolean selected

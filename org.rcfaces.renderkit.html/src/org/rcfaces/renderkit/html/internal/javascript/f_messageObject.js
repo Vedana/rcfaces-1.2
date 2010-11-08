@@ -16,7 +16,7 @@ var __statics = {
 	 * <p>Message severity level indicating an informational message
      * rather than an error.</p>
      *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
    	SEVERITY_INFO:  0,
 
@@ -24,7 +24,7 @@ var __statics = {
  	 * <p>Message severity level indicating that an error might have
      * occurred.</p>
      *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     SEVERITY_WARN:  1,
 
@@ -32,7 +32,7 @@ var __statics = {
 	 * <p>Message severity level indicating that an error has
      * occurred.</p>
      *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     SEVERITY_ERROR: 2,
 
@@ -40,7 +40,7 @@ var __statics = {
 	 * <p>Message severity level indicating that a serious error has
      * occurred.</p>
      *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     SEVERITY_FATAL: 3,
     
@@ -73,7 +73,7 @@ var __statics = {
 var __members = {
 	
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_severity: undefined,
 	
@@ -97,7 +97,7 @@ var __members = {
      * initial values.</p>
 	 *
 	 * @method public
-	 * @param optional number severity the severity
+	 * @param optional Number severity the severity
 	 * @param optional String summary Localized summary message text
 	 * @param optional String detail Localized detail message text
 	 * @param optional Object clientDatas Client datas.
@@ -140,7 +140,7 @@ var __members = {
 	 *  <p>Return the severity level.</p>
 	 *
 	 * @method public 
-	 * @return number Severity level
+	 * @return Number Severity level
 	 * @see #SEVERITY_INFO
 	 * @see #SEVERITY_WARN
 	 * @see #SEVERITY_ERROR

@@ -278,27 +278,27 @@ var __statics = {
 	_LOCK_MESSAGE : "Window has been locked.",
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	SUBMIT_LOCK : 1,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	MODAL_LOCK : 2,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	POPUP_LOCK : 4,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	DND_LOCK : 8,
 
 	/**
-	 * @field private static number
+	 * @field private static Number
 	 */
 	_EvtLock : 0,
 
@@ -532,17 +532,17 @@ var __statics = {
 	USER : "user",
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ACTIVATE_DETAIL : 0x100,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	RESET_DETAIL : 0x200,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	IMMEDIATE_DETAIL : 0x400,
 

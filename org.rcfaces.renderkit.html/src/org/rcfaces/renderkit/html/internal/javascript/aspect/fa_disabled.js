@@ -69,7 +69,7 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
-	 * @param boolean set
+	 * @param Boolean set
 	 * @return void
 	 */
 	fa_updateDisabled: f_class.ABSTRACT,

@@ -210,7 +210,7 @@ var __members = {
 		}
 	},
 	/**
-	 * @protected
+	 * @method protected
 	 * @overrided
 	 */
 	f_computeStyleClass: function(postSuffix) {
@@ -264,7 +264,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param boolean show If possible, show the selection.
+	 * @param Boolean show If possible, show the selection.
 	 * @return void
 	 */
 	f_selectAll: function(show) {
@@ -305,7 +305,7 @@ var __members = {
 	},
 	/**
 	 * @method public abstract
-	 * @return number
+	 * @return Number
 	 */
 	f_getMaxTextLength: f_class.ABSTRACT
 	

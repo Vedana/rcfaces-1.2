@@ -28,7 +28,7 @@ var __statics = {
 	INSTANCE_DECORATOR: "instance",
 	
 	/**
-	 * @field private static number
+	 * @field private static Number
 	 */
 	_ShellIdentifier: 0,
 	
@@ -239,7 +239,7 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static 
-	 * @param number shellIdentifier
+	 * @param Number shellIdentifier
 	 * @return f_shell
 	 */
 	GetShellFromIdentifier: function(shellIdentifier) {
@@ -328,8 +328,8 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional number width
-	 * @param optional number height
+	 * @param optional Number width
+	 * @param optional Number height
 	 * @return Object
 	 */
 	f_computeTrim: function(width, height) {
@@ -406,13 +406,13 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @reutrn void
+	 * @return void
 	 */
 	f_showShell: f_class.ABSTRACT,
 	
 	/**
 	 * @method public
-	 * @reutrn void
+	 * @return void
 	 */
 	f_hideShell: f_class.ABSTRACT,
 
@@ -530,10 +530,10 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param f_shell shell
-	 * @param number x
-	 * @param number y
-	 * @param number width
-	 * @param number height
+	 * @param Number x
+	 * @param Number y
+	 * @param Number width
+	 * @param Number height
 	 * @return void
 	 */
 	f_setShellBounds: f_class.ABSTRACT,

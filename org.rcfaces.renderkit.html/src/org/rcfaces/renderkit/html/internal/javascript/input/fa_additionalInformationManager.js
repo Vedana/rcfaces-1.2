@@ -13,12 +13,12 @@
 var __members = {
 	
 	/**
-	 * @field protected boolean
+	 * @field protected Boolean
 	 */
 	_additionalInformations: undefined,
 	
 	/**
-	 * @field protected number
+	 * @field protected Number
 	 */
 	_additionalInformationCardinality: undefined,
 	
@@ -114,7 +114,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param HTMLElement element
-	 * @param boolean shown
+	 * @param Boolean shown
 	 * @return boolean
 	 */
 	fa_updateElementAdditionalInformations: function(element, shown) {

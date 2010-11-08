@@ -29,17 +29,17 @@ var __statics = {
 	_BODY_MENU_ID: "#body",
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_SEARCH_KEY_DELAY: 400,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_COMMAND_IMAGE_WIDTH: 16,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_COMMAND_IMAGE_HEIGHT: 16,
 
@@ -1450,7 +1450,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param number parentDepth
+	 * @param Number parentDepth
 	 * @param HTMLElement container
 	 * @return void
 	 */
@@ -1913,7 +1913,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Array args
-	 * @param number atts
+	 * @param Number atts
 	 * @param Object node
 	 * @return void
 	 */
@@ -2262,7 +2262,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event evt
-	 * @param number selection
+	 * @param Number selection
 	 * @eturn void
 	 */
 	_lastTreeNode: function(evt, selection) {
@@ -2276,7 +2276,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event evt
-	 * @param number selection
+	 * @param Number selection
 	 * @eturn void
 	 */
 	_nextPageTreeNode: function(evt, selection) {		
@@ -2323,7 +2323,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event evt
-	 * @param number selection
+	 * @param Number selection
 	 * @eturn void
 	 */
 	_firstTreeNode: function(evt, selection) {		
@@ -2337,7 +2337,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event evt
-	 * @param number selection
+	 * @param Number selection
 	 * @eturn void
 	 */
 	_previousTreeNode: function(evt, selection) {
@@ -2370,7 +2370,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event evt
-	 * @param number selection
+	 * @param Number selection
 	 * @eturn void
 	 */
 	_previousPageTreeNode: function(evt, selection) {		
@@ -2529,9 +2529,9 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param number code Keycode
+	 * @param Number code Keycode
 	 * @param Event evt
-	 * @param boolean selection
+	 * @param Boolean selection
 	 * @return boolean Success
 	 */
 	_searchTreeNode: function(code, evt, selection) {
@@ -2560,9 +2560,9 @@ var __members = {
 	/**
 	 * @method private
 	 * @param String key
-	 * @param boolean next
+	 * @param Boolean next
 	 * @param Event evt
-	 * @param boolean selection
+	 * @param Boolean selection
 	 * @return boolean Success
 	 */
 	_searchTreeNodeByText: function(key, next, evt, selection) {

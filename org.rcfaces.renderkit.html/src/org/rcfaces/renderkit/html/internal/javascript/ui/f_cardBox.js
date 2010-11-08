@@ -131,7 +131,7 @@ var __members={
 	/**
 	 * @method public
 	 * @param f_card cardComponent Card to select. (or a string as the identifier of the card)
-	 * @param boolean setFocus Set focus if possible !
+	 * @param Boolean setFocus Set focus if possible !
 	 * @return boolean
 	 */
 	f_selectCard: function(cardComponent, setFocus) {

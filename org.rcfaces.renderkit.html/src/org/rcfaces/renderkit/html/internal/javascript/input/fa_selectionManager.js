@@ -12,27 +12,27 @@
 var __statics = {
 
 	/** 
-	 * @field hidden static final number 
+	 * @field hidden static final Number 
 	 */
 	EXCLUSIVE_SELECTION: 1,
 
 	/** 
-	 * @field hidden static final number 
+	 * @field hidden static final Number 
 	 */
 	APPEND_SELECTION: 2,
 
 	/** 
-	 * @field hidden static final number 
+	 * @field hidden static final Number 
 	 */
 	RANGE_SELECTION: 4,
 
 	/** 
-	 * @field hidden static final number 
+	 * @field hidden static final Number 
 	 */
 	ACTIVATE_SELECTION: 8,
 
 	/** 
-	 * @field hidden static final number 
+	 * @field hidden static final Number 
 	 */
 	STARTRANGE_SELECTION: 16,
 
@@ -261,7 +261,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param HTMLElement element
-	 * @param boolean selected
+	 * @param Boolean selected
 	 * @return boolean
 	 */
 	f_updateElementSelection: function(element, selected) {
@@ -509,9 +509,9 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param Object element
-	 * @param boolean show
+	 * @param Boolean show
 	 * @param Event evt
-	 * @param number selection Mask of type of selection
+	 * @param Number selection Mask of type of selection
 	 * @return boolean
 	 */
 	f_performElementSelection: function(element, show, evt, selection) {
@@ -747,7 +747,7 @@ var __members = {
 	/**
 	 * @method protected abstract
 	 * @param any element
-	 * @param boolean selected
+	 * @param Boolean selected
 	 * @return void 
 	 */
 	fa_setElementSelected: f_class.ABSTRACT,

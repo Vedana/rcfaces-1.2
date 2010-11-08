@@ -311,7 +311,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @return item
+	 * @return Object item
 	 */
 	fa_getElementItem: function(divNode) {
 		return divNode._period;

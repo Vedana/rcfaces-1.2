@@ -125,7 +125,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getHours: function() {
 		return this._hours;
@@ -133,7 +133,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getMinutes: function() {
 		return this._minutes;
@@ -141,7 +141,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getSeconds: function() {
 		return this._seconds;
@@ -149,7 +149,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getMilliseconds: function() {
 		return this._millis;
@@ -173,7 +173,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getTime: function() {
 		return ((((this._hours*60)+ this._minutes)*60)+ this._seconds)*1000+ this._millis;

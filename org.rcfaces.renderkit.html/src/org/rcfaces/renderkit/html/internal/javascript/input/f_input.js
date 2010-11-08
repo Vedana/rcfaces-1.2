@@ -223,7 +223,7 @@ var __members = {
 	 * Set the disabled state of this component.
 	 *
 	 * @method public
-	 * @param boolean disabled Set disabled state.
+	 * @param Boolean disabled Set disabled state.
 	 * @return void
 	 */
 	f_setDisabled: function(disabled) {
@@ -254,7 +254,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param boolean set Set Read-only.
+	 * @param Boolean set Set Read-only.
 	 * @return void
 	 */
 	f_setReadOnly: function(set) {

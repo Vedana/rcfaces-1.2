@@ -13,12 +13,12 @@
 var __statics = {
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_ITEM_IMAGE_WIDTH: 18,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_ITEM_IMAGE_HEIGHT: 18,
 	
@@ -28,7 +28,7 @@ var __statics = {
 	_BLANK_IMAGE_URL: "/menu/blank.gif",
 	
 	/**
-	 * @field private static number
+	 * @field private static Number
 	 */
 	_ItemIds: 0,
 	
@@ -1020,11 +1020,11 @@ var __members = {
 	 * @method protected final
 	 * @param Object
 	 *            menuItem
-	 * @param boolean
+	 * @param Boolean
 	 *            open
 	 * @param Event
 	 *            evt
-	 * @param boolean
+	 * @param Boolean
 	 *            autoSelect
 	 * @return void
 	 */

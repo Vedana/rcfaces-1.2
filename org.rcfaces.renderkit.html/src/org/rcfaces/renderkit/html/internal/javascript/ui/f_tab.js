@@ -129,7 +129,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param boolean disabled
+	 * @param Boolean disabled
 	 * @return void
 	 */
 	f_setDisabled: function(disabled) {

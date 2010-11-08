@@ -15,21 +15,21 @@ var __statics = {
 	/**
 	 * Short form.
 	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	SHORT: 0,
 
 	/**
 	 * Medium form.
 	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	MEDIUM: 1,
 
 	/**
 	 * Long form.
 	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	LONG: 2,
 
@@ -58,7 +58,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static final
-	 * @param number idx
+	 * @param Number idx
 	 * @return String
 	 */
 	_GetLocaleNamePart: function(idx) {
@@ -121,8 +121,8 @@ var __members = {
 	},
 	/**
 	 * @method public 
-	 * @param number n Month number (0 to 11)
-	 * @param number form  Form of name (SHORT, MEDIUM, LONG)
+	 * @param Number n Month number (0 to 11)
+	 * @param Number form  Form of name (SHORT, MEDIUM, LONG)
 	 * @return String
 	 * @see #LONG
 	 * @see #SHORT
@@ -152,8 +152,8 @@ var __members = {
 	},
 	/**
 	 * @method public 
-	 * @param number n Day number (0 to 6)
-	 * @param number form  Form of name (SHORT, MEDIUM, LONG)
+	 * @param Number n Day number (0 to 6)
+	 * @param Number form  Form of name (SHORT, MEDIUM, LONG)
 	 * @return String
 	 * @see #LONG
 	 * @see #SHORT
@@ -185,7 +185,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getFirstDayOfWeek: function() {
 		f_core.Assert(typeof(this._firstDayOfWeek)=="number", "f_locale.f_getFirstDayOfWeek: Invalid first day of week ! ("+this._firstDayOfWeek+")")
@@ -193,7 +193,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getTwoDigitYearStart: function() {
 		f_core.Assert(this._twoDigitYearStart instanceof Date, "f_locale.f_getTwoDigitYearStart: Invalid two digit year start ! ("+this._twoDigitYearStart+")")
@@ -201,7 +201,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional number form Form of date (SHORT, MEDIUM, LONG)
+	 * @param optional Number form Form of date (SHORT, MEDIUM, LONG)
 	 * @return String
 	 * @see #LONG
 	 * @see #SHORT

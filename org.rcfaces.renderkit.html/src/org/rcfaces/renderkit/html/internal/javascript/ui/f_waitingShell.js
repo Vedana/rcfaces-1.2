@@ -44,8 +44,8 @@ var __members = {
 	 * @method public
 	 * @param optional String imageURL
 	 * @param optional String text
-	 * @param optional number width
-	 * @param optional number height
+	 * @param optional Number width
+	 * @param optional Number height
 	 * @param optional boolean showOnSubmit
 	 * @param optional String backgroundMode
 	 */

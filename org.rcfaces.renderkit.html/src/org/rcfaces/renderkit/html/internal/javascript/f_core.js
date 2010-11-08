@@ -48,7 +48,7 @@ var f_core = {
 	_DETAIL:			"VFC_DETAIL",
 		
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_FOCUS_TIMEOUT_DELAY: 50,
 		
@@ -58,37 +58,37 @@ var f_core = {
 	_REPORT_ERROR_URL: "/frameSetAppender/reportError.html",
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	ELEMENT_NODE: 1,
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	TEXT_NODE: 3,
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	CDATA_SECTION_NODE: 4,
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	DOCUMENT_NODE: 9,
 		
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	DOCUMENT_FRAGMENT: 11,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_RCFACES_EXITING: 1,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_RCFACES_EXITED: 2,
 
@@ -135,7 +135,7 @@ var f_core = {
 	/**
 	 * Numero du bouton qui déclanche les popups. (Cela dépend de l'OS !)
 	 *
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_POPUP_BUTTON: 2,
 
@@ -145,7 +145,7 @@ var f_core = {
 	JAVASCRIPT_VOID: "javascript:void(0)",
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_CLEAN_UP_ON_SUBMIT_DELAY: 20,
 	
@@ -236,7 +236,7 @@ var f_core = {
 	 * Throws a message if the expression is true.
 	 *
 	 * @method public static
-	 * @param boolean expr Expression.
+	 * @param Boolean expr Expression.
 	 * @param String message The message.
 	 * @return void
 	 */
@@ -254,7 +254,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @param number level
+	 * @param Number level
 	 * @param String name
 	 * @param String message
 	 * @param optional Error exception
@@ -679,7 +679,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @param boolean designerMode
+	 * @param Boolean designerMode
 	 * @return void
 	 */
 	SetDesignerMode: function(designerMode) {
@@ -907,7 +907,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @param boolean timeEnd
+	 * @param Boolean timeEnd
 	 * @param String name of profile point.
 	 * @param optional any date Date of profile point. (Can be 'Date' or numer)
 	 * @return void
@@ -2261,7 +2261,7 @@ var f_core = {
 	 * @method hidden static
 	 * @param Window win
 	 * @param Object parameters
-	 * @param boolean modal
+	 * @param Boolean modal
 	 * @return Window
 	 */
 	OpenWindow: function(win, parameters, modal) {
@@ -2975,8 +2975,8 @@ var f_core = {
 	 * @method hidden static
 	 * @param Element element
 	 * @param String attributeName
-	 * @param optional number defaultValue
-	 * @return number
+	 * @param optional Number defaultValue
+	 * @return Number
 	 */
 	GetNumberAttribute: function(element, attributeName, defaultValue) {
 		f_core.Assert(defaultValue===undefined || typeof(defaultValue)=="number", "f_core.GetNumberAttribute: defaultValue parameter is invalid. ("+defaultValue+")");
@@ -3617,7 +3617,7 @@ var f_core = {
 	 * @method static
 	 * @param HTMLElement component
 	 * @param String... side
-	 * @return number
+	 * @return Number
 	 */
 	ComputeBorderLength: function(component, side) {
 		return f_core.ComputeCssLengths(component, f_core._BORDER_LENGTHS, arguments);
@@ -3626,7 +3626,7 @@ var f_core = {
 	 * @method static
 	 * @param HTMLElement component
 	 * @param String... side
-	 * @return number
+	 * @return Number
 	 */
 	ComputeContentBoxBorderLength: function(component, side) {
 		return f_core.ComputeCssLengths(component, f_core._CONTENT_LENGTHS, arguments);
@@ -3636,7 +3636,7 @@ var f_core = {
 	 * @param HTMLElement component
 	 * @param String[] properties
 	 * @param String[] side
-	 * @return number
+	 * @return Number
 	 */
 	ComputeCssLengths: function(component, properties, args) {	
 		var length=0;
@@ -3760,8 +3760,8 @@ var f_core = {
 	 * @method hidden static 
 	 * @param Document targetDocument
 	 * @param Document sourceDocument
-	 * @param optional number startIndex Index of the first styleSheets
-	 * @param optional number length
+	 * @param optional Number startIndex Index of the first styleSheets
+	 * @param optional Number length
 	 * @return void
 	 */
 	CopyStyleSheets: function(targetDocument, sourceDocument, startIndex, length) {
@@ -3867,7 +3867,7 @@ var f_core = {
 	 * @method hidden static 
 	 * @param Event event
 	 * @param optional HTMLDocument doc
-	 * @return number[]
+	 * @return Number[]
 	 */
 	GetJsEventPosition: function(event, doc) {
 		f_core.Assert(event, "f_core.GetJsEventPosition: Invalid event parameter '"+event+"'.");
@@ -4059,7 +4059,7 @@ var f_core = {
 	/**
 	 * @method public static 
 	 * @param HTMLElement component
-	 * @param boolean asyncMode
+	 * @param Boolean asyncMode
 	 * @return boolean <code>true</code> is success !
 	 */
 	SetFocus: function(component, asyncMode) {
@@ -4869,7 +4869,7 @@ var f_core = {
 	 *
 	 * @method hidden static 
 	 * @param HTMLElement component
-	 * @return number[] Can return <code>null</ocde> if the current selected component is not the same as the parameter component.
+	 * @return Number[] Can return <code>null</ocde> if the current selected component is not the same as the parameter component.
 	 */
 	GetTextSelection: function(component) {
 		f_core.Assert(component && component.tagName, "f_core.GetTextSelection: Invalid component !");
@@ -4951,8 +4951,8 @@ var f_core = {
 	 *
 	 * @method hidden static 
 	 * @param HTMLElement component
-	 * @param number start
-	 * @param optional number end
+	 * @param Number start
+	 * @param optional Number end
 	 * @return void
 	 */
 	SelectText: function(component, start, end) {		
@@ -5470,7 +5470,7 @@ var f_core = {
 	 * @param HTMLFormElement form
 	 * @param String pattern
 	 * @param any data
-	 * @param boolean onlyOne
+	 * @param Boolean onlyOne
 	 * @return any
 	 */
 	AddFacesHiddenInputParameters: function(form, acceptFunction, data, onlyOne) {
@@ -5542,8 +5542,8 @@ var f_core = {
 	 * @method hidden static 
 	 * @param Array dest
 	 * @param Array args
-	 * @param optional number index
-	 * @param optional number length
+	 * @param optional Number index
+	 * @param optional Number length
 	 * @return Array
 	 */
 	PushArguments: function(dest, args, index, length) {
@@ -5632,7 +5632,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param HTMLElement component Html component.
-	 * @param number opacity Value between 0 (hidden) and 1 (visible)
+	 * @param Number opacity Value between 0 (hidden) and 1 (visible)
 	 * @return void
 	 */
 	SetOpacity: function(component, opacity) {
@@ -5683,7 +5683,7 @@ var f_core = {
 	/**
 	 * @method static hidden
 	 * @param String componentClientId 
-	 * @param number messageCode
+	 * @param Number messageCode
 	 * @param String message
 	 * @param String messageDetail
 	 * @return boolean

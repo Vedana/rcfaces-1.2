@@ -179,7 +179,7 @@ var __statics = {
 	CREATED_STATUS: 0x00,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	OPENING_STATUS: 0x10,
 	
@@ -284,7 +284,7 @@ var __members = {
      * initial values.</p>
 	 *
 	 * @method public
-	 * @param optional number style the style of control to construct
+	 * @param optional Number style the style of control to construct
 	 * @param optional Function drawingFunction
 	 * @param optional Function returnValueFunction
 	 */
@@ -380,7 +380,7 @@ var __members = {
 	 *  <p>Return the priority.</p>
 	 *
 	 * @method public 
-	 * @return number priority
+	 * @return Number priority
 	 */
 	f_getPriority: function() {
 		return this._priority;
@@ -390,7 +390,7 @@ var __members = {
 	 *  <p>Sets the priority.</p>
 	 *
 	 * @method public 
-	 * @param number priority
+	 * @param Number priority
 	 * @return void
 	 */
 	f_setPriority: function(priority) {
@@ -403,7 +403,7 @@ var __members = {
 	 *  <p>Return the style of the shell.</p>
 	 *
 	 * @method public 
-	 * @return number The style
+	 * @return Number The style
 	 */
 	f_getStyle: function() {
 		return this._style;
@@ -446,7 +446,7 @@ var __members = {
 	 *  <p>Sets Height.</p>
 	 *
 	 * @method public 
-	 * @param number height
+	 * @param Number height
 	 * @return void
 	 */
 	f_setHeight: function(height) {
@@ -459,7 +459,7 @@ var __members = {
 	 *  <p>Return the width.</p>
 	 *
 	 * @method public 
-	 * @return number width
+	 * @return Number width
 	 */
 	f_getWidth: function() {
 		return this._width;
@@ -468,7 +468,7 @@ var __members = {
 	 *  <p>Sets width.</p>
 	 *
 	 * @method public 
-	 * @param number width
+	 * @param Number width
 	 * @return void
 	 */
 	f_setWidth: function(width) {
@@ -556,7 +556,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param boolean firstTime
+	 * @param Boolean firstTime
 	 * @return void
 	 */
 	f_setFocus: function(firstTime) {
@@ -615,7 +615,7 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @param optional function returnValueFunction
+	 * @param optional Function returnValue
 	 * @return void
 	 */
 	f_close: function(returnValue) {
@@ -682,7 +682,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @reurn void
+	 * @return void
 	 */
 	f_cancelNextShell: function() {
 		this._showNextShell=false;
@@ -782,14 +782,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getStatus: function() {
 		return this._shellStatus;
 	},
 	/**
 	 * @method hidden
-	 * @param number status
+	 * @param Number status
 	 * @return void
 	 */
 	f_setStatus: function(status) {

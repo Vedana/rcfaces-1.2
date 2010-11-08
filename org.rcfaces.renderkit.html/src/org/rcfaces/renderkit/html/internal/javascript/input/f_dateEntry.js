@@ -92,7 +92,7 @@ var __members={
 	},
 	/**
 	 * @method public
-	 * @param optional hidden number dateType Type of date. (min, max, default)
+	 * @param optional hidden Number dateType Type of date. (min, max, default)
 	 * @return Date
 	 */
 	f_getDate: function(dateType) {		

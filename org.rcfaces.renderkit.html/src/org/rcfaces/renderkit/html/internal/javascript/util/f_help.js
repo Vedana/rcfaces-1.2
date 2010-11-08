@@ -18,22 +18,22 @@ var __statics = {
 	
 	// Default is 800x600 resolution, 4/3 screen, centered
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_X: 100,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_Y: 100,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_W: 600,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_H: 450,
 

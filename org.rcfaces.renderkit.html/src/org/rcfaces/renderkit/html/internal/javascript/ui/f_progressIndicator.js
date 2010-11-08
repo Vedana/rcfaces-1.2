@@ -13,7 +13,7 @@
 var __statics = {
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	PROGRESS_MAX: 1000
 }
@@ -52,7 +52,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param number value
+	 * @param Number value
 	 * @param String nextTaskName
 	 * @param String subTaskName
 	 * @return void

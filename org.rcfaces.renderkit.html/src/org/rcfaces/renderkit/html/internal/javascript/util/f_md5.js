@@ -16,7 +16,7 @@ var __statics = {
 	/**
 	 * bits per input character. 8 - ASCII; 16 - Unicode
 	 *
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_CHRSZ: 8,
 	
@@ -287,7 +287,7 @@ var __members = {
 	/**
 	 * hex output format. 0 - lowercase; 1 - uppercase
 	 * 
-	 * @field private number
+	 * @field private Number
 	 */
 	_hexcase: undefined,
 	

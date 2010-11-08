@@ -12,7 +12,7 @@
 
 var __statics={
 	/** 
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_TIMER: 500,
 	

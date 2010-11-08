@@ -12,17 +12,17 @@
 var __statics = {
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_STEP: 0.3,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_FIRST_STEP: 3,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_STEP_MS: 100,
 
@@ -37,58 +37,58 @@ var __statics = {
 	_WAITING_ERROR_IMAGE_URL: "/waiting/error.gif",
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	WIDTH: 100,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	HEIGHT: 24,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	LEFT: 1,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	CENTER: 2,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	RIGHT: 3,
 
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	TOP: 4,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	MIDDLE: 8,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	BOTTOM: 12,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_ALIGNMENT: 10,
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	WAIT_IMAGE_WIDTH: 16,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	WAIT_IMAGE_HEIGHT: 16,
 	
@@ -451,7 +451,7 @@ var __members = {
 	
 	/**
 	 * @method private
-	 * @param number level
+	 * @param Number level
 	 * @param optional boolean immediately
 	 * @return void
 	 */

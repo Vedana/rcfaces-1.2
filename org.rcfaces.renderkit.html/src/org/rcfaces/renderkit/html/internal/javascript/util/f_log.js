@@ -12,28 +12,28 @@
 var __statics = {
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */	
 	_DEFAULT: 0,
 
  	/**
  	 * Fatal level.
  	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
  	FATAL: 0,
 
  	/**
  	 * Error level.
  	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	ERROR: 1,
 
  	/**
  	 * War, level.
  	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	WARN: 2,
 
@@ -41,7 +41,7 @@ var __statics = {
  	/**
  	 * Info level.
  	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
   	INFO: 3,
 
@@ -49,7 +49,7 @@ var __statics = {
  	/**
  	 * Debug level.
  	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	DEBUG: 4,
 
@@ -57,7 +57,7 @@ var __statics = {
  	/**
  	 * Trace level.
  	 *
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	TRACE: 5,
 
@@ -221,7 +221,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param String name
-	 * @param optional number level
+	 * @param optional Number level
 	 */
 	f_log: function(name, level) {
 		this.f_super(arguments);

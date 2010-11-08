@@ -72,7 +72,7 @@ var __statics = {
 	},
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_BUTTONS_UPDATE_TIMER: 500,
 	
@@ -464,7 +464,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional number range
+	 * @param optional Number range
 	 * @return void
 	 */
 	f_toggleBold: function(range) {
@@ -472,7 +472,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional number range
+	 * @param optional Number range
 	 * @return void
 	 */
 	f_toggleItalic: function(range) {
@@ -480,7 +480,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional number range
+	 * @param optional Number range
 	 * @return void
 	 */
 	f_toggleUnderline: function(range) {
@@ -489,7 +489,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param String command
-	 * @param optional number range
+	 * @param optional Number range
 	 * @param optional param
 	 * @return void
 	 */

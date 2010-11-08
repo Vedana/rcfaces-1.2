@@ -16,7 +16,7 @@ var __statics = {
 	 * should not have any effect.
 	 *
 	 * @see #SubProgressMonitor(IProgressMonitor,int,int)
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	SUPPRESS_SUBTASK_LABEL: 2,
 	
@@ -25,7 +25,7 @@ var __statics = {
 	 * should be prepended to the subtask label.
 	 *
 	 * @see #SubProgressMonitor(IProgressMonitor,int,int)
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	PREPEND_MAIN_LABEL_TO_SUBTASK: 4
 }
@@ -104,7 +104,7 @@ var __members = {
 	 * always use the method </code>worked(int)</code>.
 	 * 
 	 * @method protected
-	 * @param number work the amount of work done
+	 * @param Number work the amount of work done
 	 * @return void
 	 */
 	f_internalWorked: function(work) {

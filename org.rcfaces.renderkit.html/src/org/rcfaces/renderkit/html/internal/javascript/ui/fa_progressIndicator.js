@@ -12,7 +12,7 @@
  
 var __statics = {
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_UPDATE_DELAY: 200
 }
@@ -181,7 +181,7 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
-	 * @param number value
+	 * @param Number value
 	 * @param String taskName
 	 * @param String subTaskName
 	 * @return void

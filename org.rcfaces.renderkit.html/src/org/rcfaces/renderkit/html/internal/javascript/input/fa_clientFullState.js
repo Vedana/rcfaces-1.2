@@ -12,17 +12,17 @@
 var __statics = {
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     NONE_CLIENT_FULL_STATE: 0,
 
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     ONEWAY_CLIENT_FULL_STATE: 1,
 
  	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     TWOWAYS_CLIENT_FULL_STATE: 2
 }

@@ -111,7 +111,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @param boolean enable
+	 * @param Boolean enable
 	 * @return void
 	 */
 	f_setCatchOnlyPopupKeys: function(enable) {

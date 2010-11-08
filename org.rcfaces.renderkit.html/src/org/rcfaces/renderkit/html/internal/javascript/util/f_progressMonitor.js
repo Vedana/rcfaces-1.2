@@ -13,7 +13,7 @@
 var __statics = {
 	/** 
 	 * Constant indicating an unknown amount of work.
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	UNKNOWN: -1
 }
@@ -33,7 +33,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param String name the name (or description) of the main task
-	 * @param number totalWork the total number of work units into which
+	 * @param Number totalWork the total number of work units into which
 	 *  the main task is been subdivided. If the value is <code>UNKNOWN</code> 
 	 *  the implementation is free to indicate progress in a way which 
 	 *  doesn't require the total number of work units in advance.
@@ -59,7 +59,7 @@ var __members = {
 	 * always use the method </code>worked(int)</code>.
 	 * 
 	 * @method protected
-	 * @param number work the amount of work done
+	 * @param Number work the amount of work done
 	 * @return void
 	 */
 	f_internalWorked: function(work) {
@@ -121,7 +121,7 @@ var __members = {
 	 * to date.
 	 *
 	 * @method public
-	 * @param number work the number of work units just completed
+	 * @param Number work the number of work units just completed
 	 * @return void
 	 */
 	f_worked: function(work) {

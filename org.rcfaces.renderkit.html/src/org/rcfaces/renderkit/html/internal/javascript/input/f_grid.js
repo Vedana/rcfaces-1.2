@@ -49,32 +49,32 @@ var __statics = {
 	_DEFAULT_ROW_STYLE_CLASSES : [ "f_grid_row_odd", "f_grid_row_even" ],
 
 	/**
-	 * @field protected static final number
+	 * @field protected static final Number
 	 */
 	IMAGE_WIDTH : 16,
 
 	/**
-	 * @field protected static final number
+	 * @field protected static final Number
 	 */
 	IMAGE_HEIGHT : 16,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_CURSOR_WIDTH : 8,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_COLUMN_MIN_WIDTH : 4,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_COLUMN_MAX_WIDTH : 640,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DRAG_TIMER : 50,
 
@@ -99,32 +99,32 @@ var __statics = {
 	_HEAD_MENU_ID : "#head",
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_TEXT_RIGHT_PADDING : 4,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_TEXT_LEFT_PADDING : 4,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_SORT_PADDING : 18,
 
 	/**
-	 * @field protected static final number
+	 * @field protected static final Number
 	 */
 	FULL_WAITING : 0,
 
 	/**
-	 * @field protected static final number
+	 * @field protected static final Number
 	 */
 	END_WAITING : 1,
 
 	/**
-	 * @field protected static final number
+	 * @field protected static final Number
 	 */
 	ROWS_WAITING : 2,
 
@@ -1655,7 +1655,7 @@ var __statics = {
 	 *            text1
 	 * @param String
 	 *            text2
-	 * @return number
+	 * @return Number
 	 */
 	Sort_Server : function(text1, text2) {
 	// Pas d'implementation, car la fonction est filtrée avant !
@@ -1717,7 +1717,7 @@ var __statics = {
 
 var __members = {
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_additionalInformationCount : 0,
 
@@ -1731,7 +1731,7 @@ var __members = {
 	/**
 	 * Spécifie l'index de la colonne quand il faut rechercher un token
 	 * 
-	 * @field protected number
+	 * @field protected Number
 	 */
 	_keySearchColumnIndex : undefined,
 
@@ -2236,11 +2236,11 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param number
+	 * @param Number
 	 *            first
-	 * @param number
+	 * @param Number
 	 *            rows
-	 * @return number[]
+	 * @return Number[]
 	 */
 	f_addSerializedIndexes : function(nStart, nLength) {
 
@@ -2666,7 +2666,7 @@ var __members = {
 	 * @method public
 	 * @param f_gridColumn
 	 *            column
-	 * @return number Ascending:1 Descending:-1 not-sorted:0
+	 * @return Number Ascending:1 Descending:-1 not-sorted:0
 	 * @deprecated Use column.f_getColumnOrderState()
 	 */
 	f_getColumnOrderState : function(column) {
@@ -3161,7 +3161,7 @@ var __members = {
 	 * Returns the index of the row associated to the specified value.
 	 * 
 	 * @method public @param any rowValue Value of the row, or a row object.
-	 * @return number Index of the row or <code>-1</code> if not found.
+	 * @return Number Index of the row or <code>-1</code> if not found.
 	 * 
 	 * f_rowIndexOf: function(rowValue) { var rows=this._tbody.rows; if (!rows ||
 	 * rows.length<1) { return -1; }
@@ -3247,9 +3247,9 @@ var __members = {
 	 * Specify the index of the first row which starts the grid.
 	 * 
 	 * @method public
-	 * @param number
+	 * @param Number
 	 *            index
-	 * @param number
+	 * @param Number
 	 *            cursorIndex The cursor index. (can be undefined)
 	 * @param hidden
 	 *            boolean selection New cursor position
@@ -3649,11 +3649,11 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param number
+	 * @param Number
 	 *            code Keycode
 	 * @param Event
 	 *            evt
-	 * @param boolean
+	 * @param Boolean
 	 *            selection
 	 * @return boolean Success
 	 */
@@ -3750,7 +3750,7 @@ var __members = {
 	 * @method private
 	 * @param Event
 	 *            evt
-	 * @param boolean
+	 * @param Boolean
 	 *            selection
 	 * @return void
 	 */
@@ -4125,7 +4125,7 @@ var __members = {
 	 * @method private
 	 * @param Event
 	 *            evt
-	 * @param boolean
+	 * @param Boolean
 	 *            selection
 	 * @return void
 	 */
@@ -4164,7 +4164,7 @@ var __members = {
 	 * @method private
 	 * @param Event
 	 *            evt
-	 * @param boolean
+	 * @param Boolean
 	 *            selection
 	 * @return void
 	 */
@@ -4709,7 +4709,7 @@ var __members = {
 	 * Return the value of the row which contains the specified component.
 	 * 
 	 * @method public
-	 * @param f_component Component or HTMLElement 
+	 * @param f_component component Component or HTMLElement 
 	 * @return Object Value of the row
 	 */
 	f_getRowValueFromCommponent: function(component){
@@ -5332,9 +5332,9 @@ var __members = {
 	 * @method protected
 	 * @param Object
 	 *            row
-	 * @param boolean
+	 * @param Boolean
 	 *            additional
-	 * @param boolean
+	 * @param Boolean
 	 *            animated
 	 * @return void
 	 */
@@ -5373,7 +5373,7 @@ var __members = {
 	 * @method protected
 	 * @param HTMLTableRowElement
 	 *            row
-	 * @param boolean
+	 * @param Boolean
 	 *            animated
 	 * @return void
 	 */
@@ -5650,7 +5650,7 @@ var __members = {
 	 * @method protected
 	 * @param HTMLTableRowElement
 	 *            row
-	 * @param boolean
+	 * @param Boolean
 	 *            animated
 	 * @return void
 	 */
@@ -5894,7 +5894,7 @@ var __members = {
 	 * @method public
 	 * @param any[]
 	 *            rowValues List of values whose specified rows.
-	 * @return number Number of removed rows.
+	 * @return Number Number of removed rows.
 	 */
 	f_clearArray : function(rowValues) {
 		f_core.Assert(rowValues instanceof Array,
@@ -5906,7 +5906,7 @@ var __members = {
 	/**
 	 * 
 	 * @method public
-	 * @return number Number of removed rows.
+	 * @return Number Number of removed rows.
 	 */
 	f_clearAll : function() {
 		var visibleElements = this.fa_listVisibleElements();
@@ -5951,7 +5951,7 @@ var __members = {
 	 * @method public abstract
 	 * @param any...
 	 *            rowValue1 The value of the row to remove
-	 * @return number Number of removed rows.
+	 * @return Number Number of removed rows.
 	 */
 	f_clear : f_class.ABSTRACT,
 
@@ -5970,7 +5970,7 @@ var __members = {
 	 * 
 	 * @override
 	 * @method public
-	 * @param number
+	 * @param Number
 	 *            width Width of the component.
 	 * @return void
 	 */
@@ -6005,7 +6005,7 @@ var __members = {
 	 * 
 	 * @override
 	 * @method public
-	 * @param number
+	 * @param Number
 	 *            height Height of the component.
 	 * @return void
 	 */

@@ -13,8 +13,8 @@
 var __members = {
 	/**
 	 * @method public
-	 * @param number start
-	 * @param number length
+	 * @param Number start
+	 * @param Number length
 	 * @param hidden String text
 	 */
 	f_textSelection: function(start, length, text) {
@@ -24,14 +24,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getStart: function() {
 		return this._start;
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getLength: function() {
 		return this._length;

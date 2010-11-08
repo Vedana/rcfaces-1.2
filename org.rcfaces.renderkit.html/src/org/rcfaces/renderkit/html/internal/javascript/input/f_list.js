@@ -78,14 +78,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number[] Returns indexes of the selected values.
+	 * @return Number[] Returns indexes of the selected values.
 	 */
 	f_getSelectedIndexes: function() {
 		return this.f_getValue(true);
 	},
 	/**
 	 * @method public
-	 * @param number[] val Indexes of values to select.
+	 * @param Number[] val Indexes of values to select.
 	 * @return void
 	 */
 	f_setSelectedIndexes: function(val) {
@@ -100,7 +100,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param boolean set
+	 * @param Boolean set
 	 * @return void
 	 */
 	f_setMultiple: function(set) {

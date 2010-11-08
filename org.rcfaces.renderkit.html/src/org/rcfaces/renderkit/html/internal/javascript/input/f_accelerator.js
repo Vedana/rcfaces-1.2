@@ -197,14 +197,14 @@ var __members={
 	},
 	/**
 	 * @method hidden
-	 * @return number
+	 * @return Number
 	 */
 	f_getVirtualKeys: function() {
 		return this._virtualKeys;
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getKeyFlags: function() {
 		return this._keyFlags;

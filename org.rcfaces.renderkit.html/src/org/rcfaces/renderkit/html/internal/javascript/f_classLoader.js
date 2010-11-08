@@ -479,7 +479,7 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden final
 	 * @param Object object
-	 * @param boolean systemClass
+	 * @param Boolean systemClass
 	 * @return void
 	 */
 	_newInstance: function(object, systemClass) {
@@ -2056,7 +2056,7 @@ f_classLoader._SerializeInputs=function(component) {
  * @method hidden static
  * @param Object parameters
  * @param HTMLElement component
- * @param boolean updateInputs
+ * @param Boolean updateInputs
  * @return void
  */
 f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInputs) {

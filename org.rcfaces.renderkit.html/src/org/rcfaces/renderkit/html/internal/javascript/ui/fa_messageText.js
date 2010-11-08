@@ -32,7 +32,7 @@ var __members = {
 	},
 	/* PAS DE MODIF
 	 * @method public 
-	 * @param boolean showSummary
+	 * @param Boolean showSummary
 	 * @return void
 	 *
 	f_setShowSummary: function(showSummary) {
@@ -67,7 +67,7 @@ var __members = {
 	},
 	/*  Pas de MODIF
 	 * @method public 
-	 * @param boolean showDetail
+	 * @param Boolean showDetail
 	 * @return void
 	 *
 	f_setShowDetail: function(showDetail) {

@@ -13,17 +13,17 @@
 var __statics = {
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_UNLIMITED_TEXT_SIZE: 999999,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_SUGGESTION_DELAY_MS: 300,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_DEFAULT_SUGGESTION_MIN_CHARS: 0,
 
@@ -776,14 +776,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getSuggestionMinChars: function() {
 		return this._suggestionMinChars;
 	},
 	/**
 	 * @method protected
-	 * @return number
+	 * @return Number
 	 */
 	f_getSuggestionDelayMs: function() {
 		return this._suggestionDelayMs;

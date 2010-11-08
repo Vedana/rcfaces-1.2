@@ -176,7 +176,7 @@ var __statics = {
 var __members = {
 	
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	 _stopOnSeverity: 2, // 2=SEVERITY_ERROR
 	
@@ -493,7 +493,7 @@ var __members = {
 	 * @method public
 	 *
 	 * @param HTMLElement component Component to add the message, or an array of components.
-	 * @param number severity
+	 * @param Number severity
 	 * @param String summary
 	 * @param optional String detail
 	 * @param hidden optional boolean performEvent
@@ -534,7 +534,7 @@ var __members = {
 	
 	/**
 	 * @method private
-	 * @param boolean performEvent 
+	 * @param Boolean performEvent 
 	 * @param optional HTMLElement[] components (or an id)
 	 * @return boolean Returns <code>true</code> if some messages have been removed.
 	 */
@@ -641,7 +641,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param number level Level of severity
+	 * @param Number level Level of severity
 	 * @return void
 	 * @see f_messageObject#SEVERITY_INFO
 	 * @see f_messageObject#SEVERITY_WARN
@@ -655,7 +655,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return number The level of severity
+	 * @return Number The level of severity
 	 * @see f_messageObject#SEVERITY_INFO
 	 * @see f_messageObject#SEVERITY_WARN
 	 * @see f_messageObject#SEVERITY_ERROR

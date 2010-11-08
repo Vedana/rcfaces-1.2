@@ -129,7 +129,7 @@ var __members = {
 	 * @param f_component targetComponent
 	 * @param any targetItem
 	 * @param Object targetItemValue
-	 * @param Map<String, Object> targetAdditionalInformations
+	 * @param Map targetAdditionalInformations
 	 * @return void
 	 */
 	f_updateTarget: function(types, effect, targetComponent, targetItem, targetItemValue, targetAdditionalInformations) {

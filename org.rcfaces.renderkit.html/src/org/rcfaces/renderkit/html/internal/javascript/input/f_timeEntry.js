@@ -28,7 +28,7 @@ var __members={
 
 	/**
 	 * @method public
-	 * @param optional hidden number timeType Type of time. (min, max, default)
+	 * @param optional hidden Number timeType Type of time. (min, max, default)
 	 * @return f_time
 	 */
 	f_getTime: function(timeType) {

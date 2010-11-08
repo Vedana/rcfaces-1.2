@@ -137,9 +137,9 @@ var __statics = {
 	
 	/**
 	 * @method hidden static
-	 * @param optional number major
-	 * @param optional number minor
-	 * @param optional number revision
+	 * @param optional Number major
+	 * @param optional Number minor
+	 * @param optional Number revision
 	 * @return boolean 
 	 */
 	RequiresVersion: function(major, minor, revision) {

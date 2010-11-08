@@ -65,7 +65,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -84,7 +84,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -103,7 +103,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -122,7 +122,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -141,7 +141,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -160,7 +160,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -176,7 +176,7 @@ var __statics = {
 	},
 
 	/*
-	 * @method public static @param f_clientValidator validator @param number
+	 * @method public static @param f_clientValidator validator @param Number
 	 * keyCode @param String keyChar @return boolean @context object:validator
 	 * 
 	 * Filter_date: function(validator, keyCode, keyChar) { return
@@ -187,7 +187,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -206,7 +206,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -222,7 +222,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -241,7 +241,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -257,7 +257,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -273,7 +273,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -289,7 +289,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -305,7 +305,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -321,7 +321,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -351,7 +351,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -367,7 +367,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -383,7 +383,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar
@@ -399,7 +399,7 @@ var __statics = {
 	 * @method public static
 	 * @param f_clientValidator
 	 *            validator
-	 * @param number
+	 * @param Number
 	 *            keyCode
 	 * @param String
 	 *            keyChar

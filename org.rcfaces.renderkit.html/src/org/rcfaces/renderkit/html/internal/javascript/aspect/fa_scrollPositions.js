@@ -12,12 +12,12 @@
 var __members = {
 
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_initialHorizontalScrollPosition: undefined,
 
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_initialVerticalScrollPosition: undefined,
 
@@ -68,7 +68,7 @@ var __members = {
 	 * Returns an integer value specifying the position of the vertical scroolbar (Browser dependant).
 	 * 
 	 * @method public 
-	 * @return number vertical scroll position
+	 * @return Number vertical scroll position
 	 */
 	f_getVerticalScrollPosition: function() {
 		var body=this.fa_getScrolledComponent();
@@ -82,7 +82,7 @@ var __members = {
 	 * Sets an integer value specifying the position of the vertical scroolbar (Browser dependant).
 	 * 
 	 * @method public 
-	 * @param number position vertical scroll position
+	 * @param Number position vertical scroll position
 	 * @return void
 	 */
 	f_setVerticalScrollPosition: function(position) {
@@ -104,7 +104,7 @@ var __members = {
 	 * Returns an integer value specifying the position of the horizontal scroolbar (browser dependant).
 	 *
 	 * @method public 
-	 * @return number horizontal scroll position 
+	 * @return Number horizontal scroll position 
 	 */
 	f_getHorizontalScrollPosition: function() {
 		var body=this.fa_getScrolledComponent();
@@ -118,7 +118,7 @@ var __members = {
 	 * Sets an integer value specifying the position of the horizontal scroolbar (browser dependant).
 	 *
 	 * @method public 
-	 * @param number position horizontal scroll position 
+	 * @param Number position horizontal scroll position 
 	 * @return void
 	 */
 	f_setHorizontalScrollPosition: function(position) {

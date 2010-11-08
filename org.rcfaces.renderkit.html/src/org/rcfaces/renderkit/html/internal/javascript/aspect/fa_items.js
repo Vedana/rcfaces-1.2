@@ -12,37 +12,37 @@
 var __statics = {
 
 	/** 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	AS_PUSH_BUTTON: 1,
 
 	/** 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	AS_CHECK_BUTTON: 2,
 
 	/** 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	AS_DROP_DOWN_MENU: 4,
 
 	/** 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	AS_RADIO_BUTTON: 8,
 
 	/** 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	AS_SUBMIT_BUTTON: 16,
 
 	/** 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	AS_RESET_BUTTON: 32,
 
 	/** 
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	AS_SEPARATOR: 64
 }
@@ -370,7 +370,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param String item Value of the item or the item object.
-	 * @return boolean The visibility state of the item.
+	 * @return Boolean The visibility state of the item.
 	 */
 	f_isItemVisible: function(item) {
 		if (item===null || typeof(item)!="object") {
@@ -384,7 +384,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param String item Value of the item, or the item object.
-	 * @param boolean visible Visibility state.
+	 * @param Boolean visible Visibility state.
 	 * @return void
 	 */
 	f_setItemVisible: function(item, visible) {
@@ -419,7 +419,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param String item Value of the item, or the item object.
-	 * @return boolean The check state.
+	 * @return Boolean The check state.
 	 */
 	f_isItemChecked: function(item) {
 		if (typeof(item)!="object") {
@@ -431,7 +431,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String item Value of the item, or the item object.
-	 * @param boolean checked
+	 * @param Boolean checked
 	 * @return void
 	 */
 	f_setItemChecked: function(item, checked) {
@@ -501,7 +501,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param String value Value of an item.
-	 * @param hidden boolean assertIfNotFound 
+	 * @param hidden Boolean assertIfNotFound 
 	 * @return Object Item associated with the value.
 	 */
 	f_getItemByValue: function(value, assertIfNotFound) {
@@ -696,7 +696,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return number
+	 * @return Number
 	 */
 	f_getInputType: function(item) {
 		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_getInputType: Invalid item object. ("+item+")");

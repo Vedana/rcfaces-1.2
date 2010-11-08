@@ -12,27 +12,27 @@
 var __statics = {
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     SHORT_LAYOUT: 1,
 
  	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     MEDIUM_LAYOUT: 2,
 
  	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     LONG_LAYOUT: 3,
 
  	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     FULL_LAYOUT: 4,
 
  	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
     DEFAULT_LAYOUT: 2
 }

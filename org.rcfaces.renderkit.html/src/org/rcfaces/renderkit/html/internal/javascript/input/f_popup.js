@@ -11,48 +11,48 @@
 var __statics = {
 	 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	IE_POPUP_POPUP_TYPE: 0,
 	 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	IE_FRAME_POPUP_TYPE: 1,
 	 
 
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	MOUSE_POSITION:0, 
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	MIDDLE_COMPONENT: 1,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	BOTTOM_COMPONENT: 2,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	LEFT_COMPONENT: 4,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	BOTTOM_LEFT_COMPONENT: 8,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	RIGHT_COMPONENT: 16,
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	BOTTOM_RIGHT_COMPONENT: 32,
 	
@@ -192,7 +192,7 @@ var __statics = {
 	/**
 	 * @method hidden static
 	 * @param Document doc
-	 * @param number type
+	 * @param Number type
 	 * @param function readyFunction
 	 * @return HTMLElement
 	 */
@@ -1240,7 +1240,7 @@ var __statics = {
 var __prototype = {
 	
 	/**
-	 * @field private number
+	 * @field private Number
 	 */
 	_mode: undefined,
 	

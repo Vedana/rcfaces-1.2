@@ -120,9 +120,9 @@ var __statics = {
 		 * @param Number position
 		 * @return void
 		 */
-		SetElementAriaPosinset: function(element, posinset) {
+		SetElementAriaPosinset: function(element, position) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaPosinset: invalid element parameter ("+element+")." );
-			element.setAttribute(fa_aria.ARIA_POSEINSET, posinset);
+			element.setAttribute(fa_aria.ARIA_POSEINSET, position);
 		},
 		
 		/**

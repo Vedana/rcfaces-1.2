@@ -188,7 +188,7 @@ var __members = {
 	},
 	/**
 	 * @method public 
-	 * @param boolean set
+	 * @param Boolean set
 	 * @return void
 	 */
 	f_setSelected: function(set) {

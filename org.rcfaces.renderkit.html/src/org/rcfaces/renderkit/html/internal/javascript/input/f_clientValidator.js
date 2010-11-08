@@ -13,32 +13,32 @@
 var __statics = {
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	SUCCESS: 0,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	FILTER: 1,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	TRANSLATOR: 2,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	CHECKER: 3,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	FORMATTER: 4,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	BEHAVIOR: 5,
 
@@ -395,7 +395,7 @@ var __statics = {
 	 * @context object:validator
 	 * @param f_clientValidator val 
 	 * @param RegExp expr
-	 * @param number keyCode
+	 * @param Number keyCode
 	 * @param String keyChar
 	 * @return boolean
 	 */
@@ -410,9 +410,9 @@ var __statics = {
 	 * @context object:validator
 	 * @param f_clientValidator val 
 	 * @param RegExp expr
-	 * @param number keyCode
+	 * @param Number keyCode
 	 * @param String keyChar
-	 * @return number
+	 * @return Number
 	 */
 	Translator_generic: function(validator, expr, keyCode, keyChar) {
 		return keyCode;
@@ -425,9 +425,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_msg: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, false);
@@ -436,9 +436,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_msg_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, false);
@@ -447,9 +447,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_msg_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
@@ -458,9 +458,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_msg_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, false, true);
@@ -469,9 +469,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_color: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, false);
@@ -480,9 +480,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_color_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, true, true);
@@ -491,9 +491,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_focus: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, true);
@@ -502,9 +502,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_null: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, false, false, false);
@@ -513,9 +513,9 @@ var __statics = {
 	 * @method public static
 	 * @context object:validator
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Error_default: function(validator, type, error) {
 		return f_clientValidator.Error_generic(validator, type, error, true, true, true);
@@ -523,11 +523,11 @@ var __statics = {
 	/**
 	 * @method hidden static 
 	 * @param f_clientValidator validator
-	 * @param number type
+	 * @param Number type
 	 * @param f_messageObject error
-	 * @param boolean useMessage
-	 * @param boolean useColor
-	 * @param boolean useFocus
+	 * @param Boolean useMessage
+	 * @param Boolean useColor
+	 * @param Boolean useFocus
 	 * @return boolean
 	 * @context object:validator
 	 */
@@ -915,7 +915,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param number keyCode
+	 * @param Number keyCode
 	 * @param String keyChar
 	 * @param optional Object cache
 	 * @return boolean
@@ -971,9 +971,9 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param number keyCode
+	 * @param Number keyCode
 	 * @param String keyChar
-	 * @return number
+	 * @return Number
 	 */
 	_applyTranslators: function(keyCode, keyChar, cache) {
 		var translators=this._translators;
@@ -1092,7 +1092,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param String curVal Current value
-	 * @param boolean check Check mode
+	 * @param Boolean check Check mode
 	 * @return boolean
 	 */
 	_applyAutoCheck: function(curVal, check) {
@@ -1441,7 +1441,7 @@ var __members = {
 	 * @method public final
 	 * @param String summary
 	 * @param String detail
-	 * @param number severity
+	 * @param Number severity
 	 */
 	f_setLastError: function(summary, detail, severity) {
 		f_core.Debug(f_clientValidator, "f_setLastError: summary='"+summary+"' detail='"+detail+"' severity='"+severity+"'.");

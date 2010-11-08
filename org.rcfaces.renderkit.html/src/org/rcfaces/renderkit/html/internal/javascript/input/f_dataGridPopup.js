@@ -11,7 +11,7 @@
 
 var __statics = {
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_TITLE_HEIGHT: 19,
 	
@@ -249,7 +249,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @param number autoSelect
+	 * @param Number autoSelect
 	 * @return void
 	 */
 	f_performAutoSelection: function(autoSelect) {
@@ -285,7 +285,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @param number autoSelect
+	 * @param Number autoSelect
 	 * @return void
 	 */
 	f_setAutoSelection: function(autoSelect) {

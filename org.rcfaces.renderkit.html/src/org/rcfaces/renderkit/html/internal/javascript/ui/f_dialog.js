@@ -29,7 +29,7 @@ var __members = {
      * initial values.</p>
 	 *
 	 * @method public
-	 * @param number style the style of control to construct
+	 * @param Number style the style of control to construct
 	 */
 	f_dialog: function(style) {
 		this.f_super(arguments, style | f_shell.COPY_STYLESHEET);

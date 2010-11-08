@@ -12,27 +12,27 @@
 
 var __statics = {
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_BORDER_SIZE: 20,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_ANIM_SIZE: 75,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_OVER_DELAY: 40,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_ANIMATION_DELAY: 2000,
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_NEXT_ANIMATION_DELAY: 50,
 	
@@ -40,8 +40,8 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @param HTMLElement parent
-	 * @param number width
-	 * @param number height
+	 * @param Number width
+	 * @param Number height
 	 * @param optional String styleClass
 	 * @return f_progressBar
 	 */
@@ -187,7 +187,7 @@ var __members = {
 	 * Returns the minimum value.
 	 *
 	 * @method public
-	 * @return number Minimum value
+	 * @return Number Minimum value
 	 */
 	f_getMin: function() {
 		return this._min;
@@ -196,7 +196,7 @@ var __members = {
 	 * Set the minimum value.
 	 *
 	 * @method public
-	 * @param number min The minimum value to set.
+	 * @param Number min The minimum value to set.
 	 * @return void
 	 */
 	f_setMin: function(min) {
@@ -212,7 +212,7 @@ var __members = {
 	 * Returns the maximum value.
 	 *
 	 * @method public
-	 * @return number Maximum value
+	 * @return Number Maximum value
 	 */
 	f_getMax: function() {
 		return this._max;
@@ -221,7 +221,7 @@ var __members = {
 	 * Set the maximum value.
 	 *
 	 * @method public
-	 * @param number max The maximum value to set.
+	 * @param Number max The maximum value to set.
 	 * @return void
 	 */
 	f_setMax: function(max) {
@@ -236,7 +236,7 @@ var __members = {
 	 * Returns the value of the progression.
 	 *
 	 * @method public
-	 * @return number Value of the progression
+	 * @return Number Value of the progression
 	 */
 	f_getValue: function() {
 		return this._value;
@@ -245,7 +245,7 @@ var __members = {
 	 * Set the value of the progression.
 	 *
 	 * @method public
-	 * @param number value The value of the progression.
+	 * @param Number value The value of the progression.
 	 * @return void
 	 */
 	f_setValue: function(value) {
@@ -260,7 +260,7 @@ var __members = {
 	 * Set the indeterminate state.
 	 *
 	 * @method public
-	 * @param boolean indeterminate State of indeterminate.
+	 * @param Boolean indeterminate State of indeterminate.
 	 * @return void
 	 */
 	f_setIndeterminate: function(indeterminate) {

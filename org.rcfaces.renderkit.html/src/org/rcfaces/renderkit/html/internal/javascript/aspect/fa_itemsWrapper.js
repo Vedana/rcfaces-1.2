@@ -102,7 +102,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isItemDisabled: function(item) {		
 		return this._getItemsWrapper().f_isItemDisabled(item);
@@ -110,7 +110,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param boolean disabled
+	 * @param Boolean disabled
 	 * @return void
 	 */
 	f_setItemDisabled: function(item, disabled) {
@@ -119,7 +119,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item Item to verify visibility. (This parameter can be a String as the value of the item !)
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isItemVisible: function(item) {
 		return this._getItemsWrapper().f_isItemVisible(item);
@@ -127,7 +127,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param boolean visible
+	 * @param Boolean visible
 	 * @return void
 	 */
 	f_setItemVisible: function(item, visible) {
@@ -136,7 +136,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item Item to check. (This parameter can be a String as the value of the item !)
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isItemChecked: function(item) {
 		return this._getItemsWrapper().f_isItemChecked(item);
@@ -144,7 +144,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @param boolean checked
+	 * @param Boolean checked
 	 * @return void
 	 */
 	f_setItemChecked: function(item, checked) {
@@ -193,7 +193,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_hasItemChildren: function(item) {
 		return this._getItemsWrapper().f_hasItemChildren(item);

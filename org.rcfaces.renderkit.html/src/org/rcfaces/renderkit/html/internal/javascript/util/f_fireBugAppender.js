@@ -45,7 +45,7 @@ var __statics={
 	},
 	/**
 	 * @method public static 
-	 * @param boolean test
+	 * @param Boolean test
 	 * @param String message
 	 * @return void
 	 */

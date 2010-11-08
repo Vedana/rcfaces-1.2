@@ -128,7 +128,7 @@ var __members = {
 	},
 	/**
 	 * @method protected final
-	 * @param number severity
+	 * @param Number severity
 	 * @return String style class name.
 	 */
 	f_getStyleClassFromSeverity: function(severity) {

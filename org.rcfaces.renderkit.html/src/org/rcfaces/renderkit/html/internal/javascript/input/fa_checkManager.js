@@ -444,7 +444,7 @@ var __members = {
 
 	/**
 	 * @method public abstract
-	 * @param any[] An array of values
+	 * @param any[] checkedValues An array of values
 	 * @return void
 	 */
 	f_setCheckedValues: function(checkedValues, show) {

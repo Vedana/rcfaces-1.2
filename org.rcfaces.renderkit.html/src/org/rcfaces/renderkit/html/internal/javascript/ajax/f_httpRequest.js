@@ -52,7 +52,7 @@ var __statics = {
 	ANY_MIME_TYPE: "*/*",
 		
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	OK_STATUS: 200,
 	
@@ -134,7 +134,7 @@ var __members = {
 	 * Returns the code associated to the status of the response.
 	 *
 	 * @method public
-	 * @return number
+	 * @return Number
 	 */
 	f_getStatus: function() {
 		var request=this._request;

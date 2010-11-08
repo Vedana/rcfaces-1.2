@@ -14,12 +14,12 @@
 var __statics = {
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	 _IMAGE_OBJECT_MAX_NUMBER: 2,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	 _ASYNC_IMAGE_OBJECT_TIMER: 100,	
 
@@ -34,7 +34,7 @@ var __statics = {
 	 _ImagesObjectPool: undefined,
 
 	/**
-	 * @field private static number
+	 * @field private static Number
 	 */
 	 _ImagesObjectCount: 0,
 
@@ -167,7 +167,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Image imageObject
-	 * @param boolean status of image loading
+	 * @param Boolean status of image loading
 	 * @return void
 	 */
 	_NextImage: function(imageObject, status) {

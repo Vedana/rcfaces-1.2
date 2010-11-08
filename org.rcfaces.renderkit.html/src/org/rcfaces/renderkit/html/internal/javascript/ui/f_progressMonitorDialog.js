@@ -14,22 +14,22 @@ var __statics = {
 	
 	
 	/**
-	 * @field public static final number
+	 * @field public static final Number
 	 */
 	REMAINING_TIME: 0x0001,
 	 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_WAITING_TIMER: 1,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_COMPUTE_TIMER: 2,
 
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_TERMINATE_TIMER: 3,
 	
@@ -45,22 +45,22 @@ var __statics = {
 	},
 	
 	/** 
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_AUTO_CLOSE_DIALOG_TIMER_MILLIS: 2000,
 
 	/** 
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_COMPUTE_TIMER_MILLIS: 2000,
 	
 	/** 
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_COMPUTE_INTERVAL_MILLIS: 2000,
 	
 	/** 
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_UPDATE_TIME_INTERVAL_MILLIS: 1000,
 	
@@ -258,7 +258,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param number value
+	 * @param Number value
 	 * @param String nextTaskName
 	 * @param String subTaskName
 	 * @return void
@@ -392,7 +392,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param function runFunction
-	 * @param boolean cancelable
+	 * @param Boolean cancelable
 	 * @return void
 	 */
 	f_run: function(runFunction, cancelable) {

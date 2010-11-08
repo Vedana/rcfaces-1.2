@@ -11,12 +11,12 @@
  */
 var __statics = {
 	/** 
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_STEP_MS: 50,
 
 	/** 
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_STEP: 0.3,
 

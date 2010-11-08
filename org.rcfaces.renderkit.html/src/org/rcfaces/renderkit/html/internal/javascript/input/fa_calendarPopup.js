@@ -349,14 +349,14 @@ var __statics = {
 		
 		return new Date();
 	}
-}
+};
 
 var __members={
 
-		/**
-		 * @field private
-		 */
-		_defaultSelectedDate: undefined,
+	/**
+	 * @field private
+	 */
+	_defaultSelectedDate: undefined,
 		
 	fa_calendarPopup: function() {
 
@@ -521,7 +521,7 @@ var __members={
 	},
 	/**
 	 * @method public
-	 * @param Date defaultSelectedDate
+	 * @param Date date
 	 * @return void
 	 */
 	f_setDefaultSelectedDate: function(date) {
@@ -548,7 +548,7 @@ var __members={
 	/**
 	 * @method public
 	 * @param Date selection
-	 * @param optional boolean showSelection
+	 * @param optional Boolean showSelection
 	 * @return void
 	 * @override
 	 */

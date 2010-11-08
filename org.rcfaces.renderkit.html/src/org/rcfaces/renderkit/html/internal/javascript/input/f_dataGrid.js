@@ -12,7 +12,7 @@
 var __statics = {
 	
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_SEARCH_KEY_DELAY: 400,
 	
@@ -154,7 +154,7 @@ var __statics = {
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
-	 * @return number
+	 * @return Number
 	 */
 	Sort_Alpha: function(text1, text2) {
 		text1=(text1)?text1:"";
@@ -169,7 +169,7 @@ var __statics = {
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
-	 * @return number
+	 * @return Number
 	 */
 	Sort_AlphaIgnoreCase: function(text1, text2) {
 		text1=(text1)?text1.toLowerCase():"";
@@ -184,7 +184,7 @@ var __statics = {
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
-	 * @return number
+	 * @return Number
 	 */
 	Sort_Integer: function(text1, text2) {
 		var val1 = parseInt(text1, 10);
@@ -198,7 +198,7 @@ var __statics = {
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
-	 * @return number
+	 * @return Number
 	 */
 	Sort_Number: function(text1, text2) {
 		var val1 = parseFloat(text1);
@@ -212,7 +212,7 @@ var __statics = {
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
-	 * @return number
+	 * @return Number
 	 */
 	Sort_Date: function(text1, text2) {
 		if (text1=="") {
@@ -241,7 +241,7 @@ var __statics = {
 	 * @method hidden static
 	 * @param String text1
 	 * @param String text2
-	 * @return number
+	 * @return Number
 	 */
 	Sort_Time: function(text1, text2) {
 		if (text1=="") {
@@ -729,7 +729,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any... rowValue1 The value of the row to remove
-	 * @return number Number of removed rows.
+	 * @return Number Number of removed rows.
 	 */
 	f_clear: function(rowValue1) {
 		f_core.Assert(this._rows==0, "f_dataGrid.f_clear: All rows of the DataGrid must be loaded (attribute rows=0)");
@@ -900,7 +900,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any rowValue Row value, row object or the index of row the into table.
-	 * @param number columnIndex Index of the column.
+	 * @param Number columnIndex Index of the column.
 	 * @return String
 	 */
 	f_getCellValue: function(rowValue, columnIndex) {	
@@ -1406,8 +1406,8 @@ var __members = {
 	 * Specify the image of a cell.
 	 * 
 	 * @method public
-	 * @param number row
-	 * @param number columnIndex
+	 * @param Number row
+	 * @param Number columnIndex
 	 * @param String imageURL 
 	 * @return void
 	 */
@@ -1579,7 +1579,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any rowValue Value associated to the row
-	 * @param boolean show Show the checked row.
+	 * @param Boolean show Show the checked row.
 	 * @param hidden optional Event jsEvent
 	 * @return boolean Returns <code>true</code> if check has successed.
 	 */
@@ -1718,9 +1718,9 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param number code Keycode
+	 * @param Number code Keycode
 	 * @param Event evt
-	 * @param boolean selection
+	 * @param Boolean selection
 	 * @return boolean Success
 	 */
 	f_searchRowNode: function(code, evt, selection) {
@@ -1750,9 +1750,9 @@ var __members = {
 	/**
 	 * @method private
 	 * @param String key Complete text to search
-	 * @param boolean next  Skip the current row
+	 * @param Boolean next  Skip the current row
 	 * @param Event evt
-	 * @param boolean selection
+	 * @param Boolean selection
 	 * @return boolean Success
 	 */
 	_searchRowNodeByText: function(key, next, evt, selection) {

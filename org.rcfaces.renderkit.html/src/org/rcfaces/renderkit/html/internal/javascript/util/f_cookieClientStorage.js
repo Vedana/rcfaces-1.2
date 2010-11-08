@@ -15,7 +15,7 @@ var __statics = {
 	_COOKIE_PREFIX: "_CM_",
 		
 	/**
-	 * @field private static final number
+	 * @field private static final Number
 	 */
 	_STORAGE_MAX_SIZE: 4096
 }

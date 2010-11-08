@@ -32,7 +32,7 @@ Array.prototype.f_removeElement=function(element) {
  * Removes the first occurrence in this list of the specified elements.
  *
  * @method hidden f_removeElements
- * @return number Number of removed element.
+ * @return Number Number of removed element.
  */
 Array.prototype.f_removeElements=function() {
 	var cnt=0;
@@ -70,7 +70,7 @@ Array.prototype.f_addElement=function(element) {
  * Adds the specified element to the list if the list does not contain the element.
  *
  * @method hidden f_addElements
- * @return number Number of added elements.
+ * @return Number Number of added elements.
  */
 Array.prototype.f_addElements=function() {
 	var cnt=0;

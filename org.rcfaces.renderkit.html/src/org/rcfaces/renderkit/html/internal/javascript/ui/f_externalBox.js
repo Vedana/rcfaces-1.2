@@ -66,7 +66,7 @@ var __members = {
 	 * to be displayed.
 	 * 
 	 * @method public
-	 * @param boolean
+	 * @param Boolean
 	 *            visible the new visibility state
 	 * @return void
 	 */

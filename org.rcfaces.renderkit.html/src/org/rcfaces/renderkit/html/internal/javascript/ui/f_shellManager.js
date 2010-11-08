@@ -748,10 +748,10 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param f_shell shell
-	 * @param number x
-	 * @param number y
-	 * @param number width
-	 * @param number height
+	 * @param Number x
+	 * @param Number y
+	 * @param Number width
+	 * @param Number height
 	 * @return void
 	 */
 	f_setShellBounds: function(shell, x, y, width, height) {

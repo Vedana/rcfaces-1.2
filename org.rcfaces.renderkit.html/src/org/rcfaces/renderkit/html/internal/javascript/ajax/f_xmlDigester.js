@@ -21,17 +21,17 @@ var __statics = {
 	_PARAMS_STACK_NAME: "_--params--_",
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	BEGIN_MODE: 0,
 
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	BODY_MODE: 1,
 	
 	/**
-	 * @field hidden static final number
+	 * @field hidden static final Number
 	 */
 	END_MODE: 2,
 	
@@ -515,7 +515,7 @@ var __members = {
 	 * Return the n'th object down the parameters stack, where 0 is the top element and [getCount()-1] is the bottom element. If the specified index is out of range, return null.
 	 * 
 	 * @method public
-	 * @param optional number index Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
+	 * @param optional Number index Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
 	 * @return any 
 	 */
 	f_peekParams: function(index) {
@@ -526,7 +526,7 @@ var __members = {
 	 * Return the n'th object down the stack, where 0 is the top element and [getCount()-1] is the bottom element. If the specified index is out of range, return null.
 	 * 
 	 * @method public
-	 * @param optional number index Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
+	 * @param optional Number index Index of the desired element, where 0 is the top of the stack, 1 is the next element down, and so on.
 	 * @param optional String name Name of stack
 	 * @return any
 	 */
@@ -575,7 +575,7 @@ var __members = {
      * 
      * @method public
      * @param optional String name The name of the stack whose depth should be evaluated.
-     * @return number The depth of the stack.
+     * @return Number The depth of the stack.
      */
 	f_getCount: function(name) {		
 		var stack=this._getStack(name);
