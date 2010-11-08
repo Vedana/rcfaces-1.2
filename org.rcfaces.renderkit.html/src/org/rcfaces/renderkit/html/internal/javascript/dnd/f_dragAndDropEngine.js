@@ -276,7 +276,7 @@ var __members = {
 	_initialized: undefined,
 		
 	/**
-	 * @constructor 
+	 * @method 
 	 * @param f_component sourceComponent
 	 * @param String[] dragAndDropPopupNames
 	 */
@@ -345,11 +345,11 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Event jsEvent
-	 * @param Object item
-	 * @param any itemValue
-	 * @param HTMLElement itemComponent
-	 * @param Number dragEffects
-	 * @param Array dragTypes
+	 * @param Object sourceItem
+	 * @param any sourceItemValue
+	 * @param HTMLElement sourceItemElement
+	 * @param Number sourceDragEffects
+	 * @param Array sourceDragTypes
 	 * @return Boolean
 	 */
 	f_start: function(jsEvent, sourceItem, sourceItemValue, sourceItemElement, sourceDragEffects, sourceDragTypes) {	
@@ -493,6 +493,7 @@ var __members = {
 	 * @param Event jsEvent
 	 * @param String[] types
 	 * @param Number effect
+	 * @param Object modifiedDetail
 	 * @return Boolean
 	 */
 	f_fireEventToSource: function(stage, jsEvent, types, effect, modifiedDetail) {
@@ -522,6 +523,7 @@ var __members = {
 	 * @param any itemValue
 	 * @param String[] types
 	 * @param Number effect
+	 * @param Object modifiedDetail
 	 * @return Boolean
 	 */
 	f_fireEventToTarget: function(stage, jsEvent, types, effect, modifiedDetail) {

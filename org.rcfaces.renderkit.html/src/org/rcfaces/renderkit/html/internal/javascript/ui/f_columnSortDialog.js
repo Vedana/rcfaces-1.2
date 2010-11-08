@@ -50,7 +50,7 @@ var __statics = {
 	 */
 	_SORT_MANAGER_NAME: "dialog",
 
-    /**
+    /*
      * <p>js listener example</p>
      * dans le tag : SelectionListener="return ListenerExample(event);"
      *
@@ -64,6 +64,10 @@ var __statics = {
     },
     */
  
+	/**
+	 * @method public static
+	 * @return void
+	 */
 	Initializer: function() {
 		f_grid.RegisterSortManager(f_columnSortDialog._SORT_MANAGER_NAME, function(event) {
 			var grid=event.f_getComponent();
