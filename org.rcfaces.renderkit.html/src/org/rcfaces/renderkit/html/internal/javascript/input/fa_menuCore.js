@@ -1159,7 +1159,7 @@ var __members = {
 			}
 			
 			if(!selected){
-				uiItem.removeAttributre(fa_aria.ARIA_SELECTED);
+				uiItem.removeAttribute(fa_aria.ARIA_SELECTED);
 			}
 			
 			if (disabled) {
@@ -1170,7 +1170,7 @@ var __members = {
 					imageURL=disabledImageURL;
 				}
 			} else {
-				uiItem.removeAttributre(fa_aria.ARIA_DISABLED);
+				uiItem.removeAttribute(fa_aria.ARIA_DISABLED);
 				var expandedImageURL=item._expandedImageURL;
 				if (expandedImageURL) {
 					imageURL=expandedImageURL;
