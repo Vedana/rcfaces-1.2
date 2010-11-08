@@ -282,7 +282,7 @@ var __members = {
 		
 		this._modifiedDetail._effect = effect;
 		
-		f_core.Debug(f_dndEvent, "f_setEffect: change effect="+types+ "during stage : " +
+		f_core.Debug(f_dndEvent, "f_setEffect: change effect="+effect+ "during stage : " +
 				this.f_getStage() +" targetComponent="+this.f_getTargetComponent());
 	},
 	
