@@ -11,7 +11,7 @@
 var __members = {
 
 	/**
-	 * @field private boolean
+	 * @field private Boolean
 	 */
 	_over: undefined,
 	
@@ -60,7 +60,7 @@ var __members = {
 	},
 	/** 
 	 * @method hidden
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isMouseOver: function() {
 		return this._over;

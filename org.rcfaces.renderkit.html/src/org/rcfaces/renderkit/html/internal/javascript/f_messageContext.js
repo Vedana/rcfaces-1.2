@@ -247,7 +247,7 @@ var __members = {
 
 	/**
 	 * @method hidden
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	f_performCheckPost: function(event) {
 		// Methode appelée lors du check de la form !
@@ -297,7 +297,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param Function listener
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	f_addMessageListener: function(listener) {
 		var l=this._listeners;
@@ -310,7 +310,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param Function listener
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	f_removeMessageListener: function(listener) {
 		var l=this._listeners;
@@ -326,7 +326,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @param optional boolean withComponentOnly to return only messages associated to a component
+	 * @return optional Boolean withComponentOnly to return only messages associated to a component
 	 * @return string[]
 	 */
 	f_listComponentIdsWithMessages: function(withComponentOnly) {
@@ -356,7 +356,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param optional String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
-	 * @param optional boolean globalOnly
+	 * @return optional Boolean globalOnly
 	 * @return f_messageObject[]
 	 */
 	f_listMessages: function(componentId, globalOnly) {
@@ -404,7 +404,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String componentId Identifiant of component, or an array of identifiants.  (<code>null</code> specified ALL messages)
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_containsMessagesFor: function(componentId) {
 		f_core.Assert(typeof(componentId)=="string", "f_messageContext.f_containsMessagesFor: Component parameter must be an id !");
@@ -431,7 +431,7 @@ var __members = {
 	 *
 	 * @param HTMLElement component componentOrId Component to add the message. (If the parameter is an ID, the naming container separator might not be ":")
 	 * @param f_messageObject message
-	 * @param hidden optional boolean performEvent
+	 * @param hidden optional Boolean performEvent
 	 * @return void
 	 */
 	f_addMessageObject: function(component, message, performEvent) {	
@@ -496,7 +496,7 @@ var __members = {
 	 * @param Number severity
 	 * @param String summary
 	 * @param optional String detail
-	 * @param hidden optional boolean performEvent
+	 * @param hidden optional Boolean performEvent
 	 * @return f_messageObject
 	 */
 	f_addMessage: function(component, severity, summary, detail) {
@@ -526,7 +526,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param optional HTMLElement... component (or an id)
-	 * @return boolean Returns <code>true</code> if some messages have been removed.
+	 * @return Boolean Returns <code>true</code> if some messages have been removed.
 	 */
 	f_clearMessages: function(component) {
 		return this._clearMessages(true, arguments);
@@ -536,7 +536,7 @@ var __members = {
 	 * @method private
 	 * @param Boolean performEvent 
 	 * @param optional HTMLElement[] components (or an id)
-	 * @return boolean Returns <code>true</code> if some messages have been removed.
+	 * @return Boolean Returns <code>true</code> if some messages have been removed.
 	 */
 	_clearMessages: function(performEvent, components) {
 	

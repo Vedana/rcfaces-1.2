@@ -296,7 +296,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isItemDisabled: function(item) {		
 		if (item===null || typeof(item)!="object") {
@@ -310,7 +310,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param String item Value of the item, or the item object.
-	 * @param optional boolean disabled Disable state to set.
+	 * @param optional Boolean disabled Disable state to set.
 	 * @return void
 	 */
 	f_setItemDisabled: function(item, disabled) {
@@ -681,7 +681,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_hasItemChildren: function(item) {
 		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");
@@ -706,7 +706,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object item
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_hasVisibleItemChildren: function(item) {
 		f_core.Assert(item!==null && typeof(item)=="object", "fa_items.f_hasItemChildren: Invalid item object. ("+item+")");

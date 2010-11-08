@@ -120,7 +120,7 @@ var __members={
 	*/
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_performKeyEvent: function(jsEvent) {
 		
@@ -150,7 +150,7 @@ var __members={
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_forListener: function(event) {
 		var forComponent=this._forComponentId;
@@ -225,7 +225,7 @@ var __members={
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isIgnoreEditableComponent: function() {
 		return this._ignoreEditableComponent;

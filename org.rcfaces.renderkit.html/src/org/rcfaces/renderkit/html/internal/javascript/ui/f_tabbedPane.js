@@ -25,7 +25,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tabbedPane
 	 */
 	_TabbedPane_onresize: function(evt) {
@@ -46,7 +46,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tabbedPane
 	 */
 	_TabbedPane_click: function(evt) {
@@ -70,7 +70,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tabbedPane
 	 */
 	_TabbedPane_focus: function(evt) {
@@ -90,7 +90,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tabbedPane
 	 */
 	_TabbedPane_keyPress: function(evt) {
@@ -119,7 +119,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tabbedPane
 	 */
 	_TabbedPane_keyDown: function(evt) {
@@ -182,7 +182,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tabbedPane
 	 */
 	_TabbedPane_mouseover: function(evt) {
@@ -204,7 +204,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tabbedPane
 	 */
 	_TabbedPane_mouseout: function(evt) {
@@ -483,8 +483,8 @@ var __members = {
 	/**
 	 * @method public
 	 * @param f_tab tab Tab to select
-	 * @param optional boolean setFocus Set focus if possible !
-	 * @return boolean
+	 * @return optional Boolean setFocus Set focus if possible !
+	 * @return Boolean
 	 */
 	f_selectCard: function(tab, setFocus) {
 		f_core.Assert(typeof(tab)=="object" && tab, "f_tabbedPane.f_selectCard: Invalid parameter 'tab' ("+tab+")");
@@ -500,8 +500,8 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param String value
-	 * @param optional boolean setFocus  Set focus if possible !
-	 * @return boolean <code>true</code> if success.
+	 * @return optional Boolean setFocus  Set focus if possible !
+	 * @return Boolean <code>true</code> if success.
 	 */
 	f_setValue: function(value, setFocus) {
 		f_core.Assert(typeof(value)=="string" || value===null, "f_tabbedPane.f_setValue: Invalid parameter 'value' ("+value+")");

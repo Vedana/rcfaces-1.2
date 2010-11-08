@@ -15,7 +15,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:textArea
 	 */
 	_VerifyMaxTextLength: function(event) {
@@ -48,7 +48,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:this
 	 */
 	_MaxTextLengthKeyPress: function(event) {
@@ -147,7 +147,7 @@ var __statics = {
 	 * @method private static
 	 * @param f_textArea textArea
 	 * @param String insertedText
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_ChangeText: function(textArea, insertedText) {
 		var input=textArea.f_getInput();

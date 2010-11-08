@@ -15,7 +15,7 @@ var __statics = {
 	 * 
 	 * @method hidden static
 	 * @param f_event event 
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:this
 	 */
 	 DefaultSubmit: function(event) {

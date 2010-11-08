@@ -14,7 +14,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:customButton
 	 */
 	_MouseDown: function(evt) {
@@ -33,7 +33,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:customButton
 	 */
 	_MouseUp: function(evt) {

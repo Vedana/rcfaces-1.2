@@ -73,7 +73,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_CheckSelect: function(evt) {
@@ -123,7 +123,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_AdditionalInformationSelect: function(evt) {
@@ -794,7 +794,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any rowValue Row value, a row object, or the index of row into the table.
-	 * @param optional boolean onlyVisible Key only visible columns.
+	 * @return optional Boolean onlyVisible Key only visible columns.
 	 * @return String[] 
 	 */
 	f_getRowValues: function(rowValue, onlyVisible) {
@@ -846,7 +846,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any rowValue Row value, a row object, or the index of the row into the table.
-	 * @param optional boolean onlyVisible Keey only visible columns.
+	 * @return optional Boolean onlyVisible Keey only visible columns.
 	 * @return Object
 	 */
 	f_getRowValuesSet: function(rowValue, onlyVisible) {
@@ -1581,7 +1581,7 @@ var __members = {
 	 * @param any rowValue Value associated to the row
 	 * @param Boolean show Show the checked row.
 	 * @param hidden optional Event jsEvent
-	 * @return boolean Returns <code>true</code> if check has successed.
+	 * @return Boolean Returns <code>true</code> if check has successed.
 	 */
 	f_checkRow: function(rowValue, show, jsEvent) {
 		var row=this.f_getRowByValue(rowValue, true);
@@ -1598,7 +1598,7 @@ var __members = {
 	 * @method public
 	 * @param any rowValue Value associated to the row
 	 * @param hidden optional Event jsEvent
-	 * @return boolean Returns <code>true</code> if uncheck has successed.
+	 * @return Boolean Returns <code>true</code> if uncheck has successed.
 	 */
 	f_uncheckRow: function(rowValue, jsEvent) {
 		var row=this.f_getRowByValue(rowValue, true);
@@ -1615,7 +1615,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any rowValue Value associated to the row, or a row object.
-	 * @return boolean The checked state of the row
+	 * @return Boolean The checked state of the row
 	 */
 	f_getChecked: function(rowValue) {
 		var row=this.f_getRowByValue(rowValue, true);
@@ -1624,7 +1624,7 @@ var __members = {
 	},	
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isElementChecked: function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase()=="tr", "f_dataGrid.fa_isElementChecked: Invalid element parameter ! ("+row+")");
@@ -1721,7 +1721,7 @@ var __members = {
 	 * @param Number code Keycode
 	 * @param Event evt
 	 * @param Boolean selection
-	 * @return boolean Success
+	 * @return Boolean Success
 	 */
 	f_searchRowNode: function(code, evt, selection) {
 			
@@ -1753,7 +1753,7 @@ var __members = {
 	 * @param Boolean next  Skip the current row
 	 * @param Event evt
 	 * @param Boolean selection
-	 * @return boolean Success
+	 * @return Boolean Success
 	 */
 	_searchRowNodeByText: function(key, next, evt, selection) {
 		var tr=this._cursor;

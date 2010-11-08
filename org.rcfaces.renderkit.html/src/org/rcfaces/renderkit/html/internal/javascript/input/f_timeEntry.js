@@ -191,7 +191,7 @@ var __members={
 	/**
 	 * @method hidden
 	 * @param f_event event
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	f_performCheckValue: function(event) {		
 		var messageContext=f_messageContext.Get(this);

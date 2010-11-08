@@ -15,7 +15,7 @@
  *
  * @method hidden f_removeElement
  * @param Object element Object to be removed.
- * @return boolean <code>true</code> if success.
+ * @return Boolean <code>true</code> if success.
  */
 Array.prototype.f_removeElement=function(element) {
 	for(var i=0;i<this.length;i++) {
@@ -91,7 +91,7 @@ Array.prototype.f_addElements=function() {
  *
  * @method hidden f_contains
  * @param any element Element whose presence in this array is to be tested.
- * @return boolean <tt>true</tt> if this collection contains the specified element
+ * @return Boolean <tt>true</tt> if this collection contains the specified element
  */
 Array.prototype.f_contains=function(element) {
 	for(var i=0;i<this.length;i++) {

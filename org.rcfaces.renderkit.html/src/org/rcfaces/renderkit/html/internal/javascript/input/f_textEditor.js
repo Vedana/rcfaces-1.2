@@ -165,7 +165,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_OnFocus: function(evt) {
@@ -189,7 +189,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_OnBlur: function(evt) {

@@ -262,7 +262,7 @@ var __members = {
 	 * @method protected
 	 * @param HTMLElement element
 	 * @param Boolean selected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_updateElementSelection: function(element, selected) {
 		// Suivant l'état enregistré, on recalcule l'état !
@@ -512,7 +512,7 @@ var __members = {
 	 * @param Boolean show
 	 * @param Event evt
 	 * @param Number selection Mask of type of selection
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_performElementSelection: function(element, show, evt, selection) {
 		var cardinality=this._selectionCardinality;
@@ -700,7 +700,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param T selection The new selection.
-	 * @param optional boolean show Show the first new selected element.
+	 * @return optional Boolean show Show the first new selected element.
 	 * @return void
 	 */
 	f_setSelection: function(selection, show) {

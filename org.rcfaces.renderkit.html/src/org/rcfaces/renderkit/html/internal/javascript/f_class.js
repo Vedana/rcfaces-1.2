@@ -22,7 +22,7 @@
 var __statics = {
 	
 	/**
-	 * @field hidden static final boolean
+	 * @field hidden static final Boolean
 	 */
 	PROFILE_COMPONENT: false,
 	
@@ -53,7 +53,7 @@ var __statics = {
 
 
 	/**
-	 * @field private static final boolean
+	 * @field private static final Boolean
 	 */
 	_CLEAN_METHODS: true,
 	
@@ -656,7 +656,7 @@ var __statics = {
 	 * @method hidden static
 	 * @param String className
 	 * @param optional String requiredClassErrorMessage
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsClassDefined: function(className, requiredClassErrorMessage) {
 		f_core.Assert(typeof(className)=="string" && className.length, "f_class.IsClassDefined: Invalid className parameter ("+className+")");

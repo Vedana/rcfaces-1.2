@@ -19,7 +19,7 @@ var __statics = {
      /**
      * @method private static
      * @param Event evt the event
-     * @return boolean
+     * @return Boolean
      * @context object:base
      */
     _OnClick: function(evt) {
@@ -47,7 +47,7 @@ var __statics = {
      /**
      * @method private static
      * @param Event evt the event
-     * @return boolean
+     * @return Boolean
      * @context object:base
      */
     _SelectOnChange: function(evt) {

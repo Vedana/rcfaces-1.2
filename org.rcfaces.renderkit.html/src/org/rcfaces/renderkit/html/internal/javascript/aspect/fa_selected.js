@@ -20,7 +20,7 @@ var __members = {
 	 * Retourne <code>true</code> si le composant est désactivé.
 	 *
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isSelected: function() {
 		if (this._selected===undefined) {
@@ -35,7 +35,7 @@ var __members = {
 	 * Spécifie si le composant est selectionné.
 	 *
 	 * @method public
-	 * @param optional boolean set <code>true</code> pour selectionner le composant.
+	 * @param optional Boolean set <code>true</code> pour selectionner le composant.
 	 * @return void
 	 */
 	f_setSelected: function(set) {
@@ -57,7 +57,7 @@ var __members = {
 	
 	/**
 	 * @method hidden
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_getInitialSelection: function() {
 		if (this._initialSelection===undefined) {

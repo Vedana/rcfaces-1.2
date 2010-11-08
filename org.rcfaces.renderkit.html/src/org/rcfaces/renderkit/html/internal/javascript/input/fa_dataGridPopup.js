@@ -11,7 +11,7 @@
 
 var __statics = {
 	/** 
-	 * @field private static final boolean 
+	 * @field private static final Boolean 
 	 */
 	_DONT_RELEASE_POPUP: false,
 	
@@ -287,7 +287,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event jsEvent
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGridPopup
 	 */
 	_SearchSuggest_onkeyup: function(jsEvent) {
@@ -307,7 +307,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event jsEvent
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGridPopup
 	 */
 	_SearchButton_onclick: function(jsEvent) {
@@ -663,7 +663,7 @@ var __members = {
 	 * @param optional Event jsEvent
 	 * @param optional String text
 	 * @param optional Number autoSelect
-	 * @return boolean Returns <code>true</code> if success.
+	 * @return Boolean Returns <code>true</code> if success.
 	 */
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
 		f_core.Debug(fa_dataGridPopup, "f_openDataGridPopup: jsEvent="+jsEvent+" text='"+text+"' autoSelect="+autoSelect);
@@ -710,7 +710,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_clickOutside: function(jsEvent) {
 		f_core.Debug(fa_dataGridPopup, "_clickOutside: popup click outside");
@@ -720,7 +720,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isDataGridPopupOpened: function() {
 		return this._popupOpened;
@@ -827,7 +827,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event jsEvt
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	_onSearchSuggest: function(jsEvt) {
 		f_core.Debug(fa_dataGridPopup, "_onSearchSuggest: Charcode ("+jsEvt.keyCode+")");
@@ -926,7 +926,7 @@ var __members = {
 	 * @param String value
 	 * @param String label
 	 * @param Object rowValues values of row
-	 * @param optional boolean focusNext
+	 * @return optional Boolean focusNext
 	 * @return void
 	 */	
 	fa_valueSelected: f_class.ABSTRACT

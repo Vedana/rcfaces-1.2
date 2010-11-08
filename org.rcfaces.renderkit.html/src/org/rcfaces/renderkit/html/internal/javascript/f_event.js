@@ -229,7 +229,7 @@ var __members = {
 	 * Prevent the default process of the event.
 	 * 
 	 * @method public
-	 * @return boolean <code>false</code> value.
+	 * @return Boolean <code>false</code> value.
 	 */
 	f_preventDefault : function() {
 		var evt = this._jsEvent;
@@ -253,7 +253,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setImmediate: function(immediate) {
-		f_core.Assert(immediate===undefined || typeof(immediate)=="Boolean", "f_event.f_setImmediate: Invalid immediate parameter ("+immediate+").");
+		f_core.Assert(immediate===undefined || typeof(immediate)=="boolean", "f_event.f_setImmediate: Invalid immediate parameter ("+immediate+").");
 		
 		this._immediate=immediate;
 	},
@@ -678,7 +678,7 @@ var __statics = {
 	 *            boolean showAlert
 	 * @param optional
 	 *            number mask
-	 * @return boolean Returns <code>true</code> if lock is setted !
+	 * @return Boolean Returns <code>true</code> if lock is setted !
 	 * @dontInline f_popup
 	 */
 	GetEventLocked : function(jsEvent, showAlert, mask) {

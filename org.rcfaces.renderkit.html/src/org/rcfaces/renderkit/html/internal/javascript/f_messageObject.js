@@ -193,7 +193,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param f_messageObject message object
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_equals: function(message) {
 		if (this==message) {

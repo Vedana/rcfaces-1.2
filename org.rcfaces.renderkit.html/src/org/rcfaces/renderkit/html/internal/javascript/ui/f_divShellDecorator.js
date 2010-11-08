@@ -185,7 +185,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param Object target
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isIntoShell: function(target) {
 

@@ -41,7 +41,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String text The text.
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_setValue: function(text) {
 		if (typeof(text)=="string") {

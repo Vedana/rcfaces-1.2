@@ -45,7 +45,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:expandBar
 	 */
 	_OnHeadOver: function(evt) {
@@ -59,7 +59,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:expandBar
 	 */
 	_OnHeadOut: function(evt) {
@@ -72,7 +72,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:expandBar
 	 */
 	_OnHeadClick: function(evt) {
@@ -537,7 +537,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */	 
 	f_parentShow: function() {
 		this.f_setCollapsed(false);

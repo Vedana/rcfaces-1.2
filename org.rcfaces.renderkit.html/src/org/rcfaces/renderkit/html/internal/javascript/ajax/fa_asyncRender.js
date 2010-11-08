@@ -30,7 +30,7 @@ var __members = {
 	 * @method public
 	 * @param Boolean synch Wait preparation if necessary.
 	 * @param optional Function parent Function returns parent node.
-	 * @return boolean <code>true</code> if component is prepared !
+	 * @return Boolean <code>true</code> if component is prepared !
 	 */
 	f_prepare: function(synch, parent) {
 		if (!this._interactive) {

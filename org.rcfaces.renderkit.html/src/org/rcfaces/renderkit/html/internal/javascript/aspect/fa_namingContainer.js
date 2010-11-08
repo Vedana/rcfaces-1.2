@@ -43,8 +43,8 @@ var __statics = {
 	 * @method public static final 
 	 * @param HTMLElement component
 	 * @param String id
-	 * @param hidden optional boolean sibling
-	 * @param hidden optional boolean doNotInitialize
+	 * @param hidden optional Boolean sibling
+	 * @param hidden optional Boolean doNotInitialize
 	 * @return HTMLElement
 	 */
 	FindComponent: function(component, id, sibling, doNotInitialize) {

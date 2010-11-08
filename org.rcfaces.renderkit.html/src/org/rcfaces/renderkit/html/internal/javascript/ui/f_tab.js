@@ -152,7 +152,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isDisabled: function() {
 		return this._disabled;
@@ -192,7 +192,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */	 
 	f_parentShow: function() {
 		if (this.f_isDisabled()) {
@@ -205,7 +205,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_forceChildVisibility: function(component) {
 		return false;

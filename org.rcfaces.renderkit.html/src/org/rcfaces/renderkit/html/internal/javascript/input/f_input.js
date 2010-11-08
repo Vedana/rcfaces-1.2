@@ -214,7 +214,7 @@ var __members = {
 	 * Returns the disabled state. 
 	 *
 	 * @method public
-	 * @return boolean Returns <code>true</code> if the input is disabled.
+	 * @return Boolean Returns <code>true</code> if the input is disabled.
 	 */
 	f_isDisabled: function() {
 		return this.f_getInput().disabled;
@@ -247,7 +247,7 @@ var __members = {
 	 * Returns the read only state.
 	 * 
 	 * @method public
-	 * @return boolean Returns <code>true</code> if the component is in read only mode.
+	 * @return Boolean Returns <code>true</code> if the component is in read only mode.
 	 */
 	f_isReadOnly: function() {
 		return (this.f_getInput().readOnly == true);
@@ -326,7 +326,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param Object value
-	 * @return boolean If value is recognized.
+	 * @return Boolean If value is recognized.
 	 */
 	f_setValue: function(value) {
 		var validator=this._validator;
@@ -369,7 +369,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean Returns <code>true</code> if value of the component has been validated.
+	 * @return Boolean Returns <code>true</code> if value of the component has been validated.
 	 */
 	f_isValid: function() {
 		try {
@@ -387,7 +387,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean Returns <code>true</code> if value of the component has been validated.
+	 * @return Boolean Returns <code>true</code> if value of the component has been validated.
 	 */
 	f_validValue: function() {
 		var validator=this._validator;

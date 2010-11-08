@@ -63,7 +63,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:spinner
 	 */
 	_OnSpinnerButtonOver: function(evt) {
@@ -94,7 +94,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:spinner
 	 */
 	_OnSpinnerButtonOut: function() {
@@ -114,7 +114,7 @@ var __statics = {
 	
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:spinner
 	 */
 	_OnSpinnerButtonDown: function(evt) {

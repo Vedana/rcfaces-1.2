@@ -12,12 +12,12 @@
 var __members = {
 /*
 	f_finalize: function() {
-		this._immediate=undefined;  // boolean
+		this._immediate=undefined;  // Boolean
 	},
 	*/
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isImmediate: function() {
 		if (this._immediate===undefined) {
@@ -29,7 +29,7 @@ var __members = {
 	},
 	/**
 	 * @method hidden
-	 * @param optional boolean set
+	 * @param optional Boolean set
 	 * @return void
 	 */
 	f_setImmediate: function(set) {

@@ -12,7 +12,7 @@
 var __members = {
 
 	/**
-	 * @field protected boolean
+	 * @field protected Boolean
 	 */
 	_loading: undefined,
 
@@ -22,7 +22,7 @@ var __members = {
 	_nextCommand: undefined,
 
 	f_finalize: function() {
-//		this._loading=undefined; // boolean
+//		this._loading=undefined; // Boolean
 		this._nextCommand=undefined; // function
 	},
 	/**
@@ -52,7 +52,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_processNextCommand: function() {
 		var nextCommand=this._nextCommand;

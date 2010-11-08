@@ -118,7 +118,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String url
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_setImageURL: function(url) {
 		if (this.f_getImageURL()==url) {
@@ -143,7 +143,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String url
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_setSelectedImageURL: function(url) {
 		if (this.f_getSelectedImageURL()==url) {
@@ -168,7 +168,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String url
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_setDisabledImageURL: function(url) {
 		if (this.f_getDisabledImageURL()==url) {
@@ -193,7 +193,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param String url
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_setHoverImageURL: function(url) {
 		if (this.f_getHoverImageURL()==url) {
@@ -218,7 +218,7 @@ var __members = {
 
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_hasOverImageURL: function() {
 		if (this._imageURL!==undefined) {

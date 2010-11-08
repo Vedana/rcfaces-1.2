@@ -140,7 +140,7 @@ var __statics = {
 	 * @param optional Number major
 	 * @param optional Number minor
 	 * @param optional Number revision
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	RequiresVersion: function(major, minor, revision) {
 		var version=f_flashObject.GetVersion();

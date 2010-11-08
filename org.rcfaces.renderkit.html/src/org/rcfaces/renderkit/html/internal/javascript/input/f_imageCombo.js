@@ -26,7 +26,7 @@ var __members = {
 	/** 
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onKeyDown: function(event) {
 		var code=event.f_getJsEvent().keyCode;
@@ -50,7 +50,7 @@ var __members = {
 	/** 
 	 * @method protected
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_imageButtonSelect: function(evt) {
 		f_core.Debug(f_imageCombo, "f_imageButtonSelect: evt="+evt);

@@ -29,7 +29,7 @@ var __statics = {
 
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_OnBeforeDeactivate: function(evt) {
@@ -284,7 +284,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_onCancelDown: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
@@ -327,7 +327,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_onSuggest: function(evt) {
 		var jsEvt=evt.f_getJsEvent();

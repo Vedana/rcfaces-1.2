@@ -24,7 +24,7 @@ var __members = {
 	 *
 	 * @method public abstract
 	 * @param T selection An Object, an array of Object, it depends of the type of component.
-	 * @param optional boolean show
+	 * @return optional Boolean show
 	 * @return void
 	 */
 	f_setSelection: f_class.ABSTRACT

@@ -12,14 +12,14 @@
 var __members = {
 /*
 	f_finalize: function() {
-		// this._draggable=undefined;  // boolean
+		// this._draggable=undefined;  // Boolean
 	},
 	*/
 	/**
 	 * Returns the disable state.
 	 *
 	 * @method public
-	 * @return boolean <code>true</code> if the component is disabled.
+	 * @return Boolean <code>true</code> if the component is disabled.
 	 */
 	f_isDraggable: function() {
 		if (this._draggable===undefined) {

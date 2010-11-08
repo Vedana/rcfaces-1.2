@@ -12,12 +12,12 @@
 var __members = {
 /*
 	f_finalize: function() {
-		// this._collapsed=undefined; // boolean
+		// this._collapsed=undefined; // Boolean
 	},
 	*/
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isCollapsed: function() {
 		if (this._collapsed===undefined) {
@@ -29,7 +29,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional boolean set
+	 * @param optional Boolean set
 	 * @return void
 	 */
 	f_setCollapsed: function(set) {

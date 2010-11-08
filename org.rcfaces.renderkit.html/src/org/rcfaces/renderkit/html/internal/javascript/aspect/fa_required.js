@@ -17,7 +17,7 @@ var __members = {
 	*/
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isRequired: function() {
 		var required=this._required;

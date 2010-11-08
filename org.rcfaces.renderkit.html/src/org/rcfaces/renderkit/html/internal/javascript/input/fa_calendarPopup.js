@@ -431,7 +431,7 @@ var __members={
 	/**
 	 * @method public
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_openCalendarPopup: function(event) {
 		f_core.Debug(fa_calendarPopup, "f_openCalendarPopup: "+event+" detail="+event.f_getDetail());
@@ -501,7 +501,7 @@ var __members={
 	/**
 	 * @method private
 	 * @param Event jsEvt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_clickOutside: function(jsEvt) {
 		f_core.Debug(fa_calendarPopup, "_clickOutside: popup click outside");

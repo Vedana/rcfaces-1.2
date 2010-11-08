@@ -111,10 +111,10 @@ var __members = {
 	 * @param Event
 	 *            jsEvent
 	 * @param optional
-	 *            boolean showAlert
+	 *            Boolean showAlert
 	 * @param optional
-	 *            Number event type mask
-	 * @return boolean
+	 *            Number mask type mask
+	 * @return Boolean
 	 */
 	f_getEventLocked : function(jsEvent, showAlert, mask) {
 

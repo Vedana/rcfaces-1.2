@@ -12,12 +12,12 @@
 var __members = {
 	/*
 	f_finalize: function() {
-		// this._editable=undefined; //boolean
+		// this._editable=undefined; //Boolean
 	},
 	*/
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isEditable: function() {
 		if (this._editable===undefined) {
@@ -29,7 +29,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional boolean set
+	 * @param optional Boolean set
 	 * @return void
 	 */
 	f_setEditable: function(set) {

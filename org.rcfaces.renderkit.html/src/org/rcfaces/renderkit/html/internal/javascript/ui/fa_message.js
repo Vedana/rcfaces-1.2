@@ -40,7 +40,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_hasSeverityClassName: function() {
 

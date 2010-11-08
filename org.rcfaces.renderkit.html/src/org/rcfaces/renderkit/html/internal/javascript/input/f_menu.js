@@ -73,7 +73,7 @@ var __members = {
 	},
 	/** 
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isReadOnly: function() {
 		var component=this._parentComponent;
@@ -93,7 +93,7 @@ var __members = {
 	},
 	/** 
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isOpened: function() {
 		return this.f_uiIsPopupOpened(this);
@@ -120,7 +120,7 @@ var __members = {
 	
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_filterKey: function(phase, evt) {
 		f_core.Debug(f_menu, "_filterKey: key '"+evt.keyCode+"' catchOnlyPopupKeys="+this._catchOnlyPopupKeys);

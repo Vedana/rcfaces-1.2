@@ -259,7 +259,7 @@ var f_core = {
 	 * @param String message
 	 * @param optional Error exception
 	 * @param optional Window win
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_AddLog: function(level, name, message, exception, win) {
 		if (!win) {
@@ -454,7 +454,7 @@ var f_core = {
 	 *
 	 * @method public static
 	 * @param String name Log name.
-	 * @return boolean <code>true</code> if debug logging  is enabled.
+	 * @return Boolean <code>true</code> if debug logging  is enabled.
 	 */
 	IsDebugEnabled: function(name) {
 		if (typeof(name)!="string" && name.f_getName) {
@@ -490,7 +490,7 @@ var f_core = {
 	 *
 	 * @method public static
 	 * @param String name Log name.
-	 * @return boolean <code>true</code> if debug logging  is enabled.
+	 * @return Boolean <code>true</code> if debug logging  is enabled.
 	 */
 	IsTraceEnabled: function(name) {
 		if (typeof(name)!="string" && name.f_getName) {
@@ -526,7 +526,7 @@ var f_core = {
  	 *
 	 * @method public static
 	 * @param String name Log name.
-	 * @return boolean <code>true</code> if info logging  is enabled.
+	 * @return Boolean <code>true</code> if info logging  is enabled.
 	 */
 	IsInfoEnabled: function(name) {
 		if (typeof(name)!="string" && name.f_getName) {
@@ -559,7 +559,7 @@ var f_core = {
  	 *
 	 * @method public static
 	 * @param String name Log name.
-	 * @return boolean <code>true</code> if info logging  is enabled.
+	 * @return Boolean <code>true</code> if info logging  is enabled.
 	 */
 	IsWarnEnabled: function(name) {
 		if (typeof(name)!="string" && name.f_getName) {
@@ -617,7 +617,7 @@ var f_core = {
  	 *
 	 * @method public static
 	 * @param String name Log name.
-	 * @return boolean <code>true</code> if error logging  is enabled.
+	 * @return Boolean <code>true</code> if error logging  is enabled.
 	 */
 	IsErrorEnabled: function(name) {
 		if (typeof(name)!="string" && name.f_getName) {
@@ -632,7 +632,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @param optional boolean cleanUpOnSubmit
+	 * @return optional Boolean cleanUpOnSubmit
 	 * @return void
 	 */
 	SetCleanUpOnSubmit: function(cleanUpOnSubmit) {
@@ -645,7 +645,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @param optional boolean debugMode  
+	 * @return optional Boolean debugMode  
 	 * @return void
 	 */
 	SetDebugMode: function(debugMode) {
@@ -1152,7 +1152,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param Window win
-	 * @param optional boolean asyncExit
+	 * @return optional Boolean asyncExit
 	 * @return void
 	 * @context window:win
 	 */
@@ -1599,7 +1599,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_OnReset: function(evt) {
@@ -1802,7 +1802,7 @@ var f_core = {
 	/**
 	 * @method private static
 	 * @param Event jsEvent
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:jsEvent
 	 */
 	_SystemSubmit: function(jsEvent) {
@@ -1810,7 +1810,7 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_Submit: function(form, elt, event, url, target, createWindowParameters, closeWindow, modal) {
 		f_core.Assert(createWindowParameters===undefined || createWindowParameters===null || typeof(createWindowParameters)=="object", "f_core._Submit: createWindowParameters parameter must be undefined or an object.");
@@ -2202,7 +2202,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @return boolean <code>true</code> if the child window lock the current window.
+	 * @return Boolean <code>true</code> if the child window lock the current window.
 	 */
 	VerifyModalWindow: function() {
 		var modalWindow=f_core._cameliaModalWindow;
@@ -2357,7 +2357,7 @@ var f_core = {
 	/**
 	 * @method public static
 	 * @param HTMLElement component
-	 * @return boolean
+	 * @return Boolean
 	 */
 	ValidateForm: function(component) {
 		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.ValidateForm: Invalid component parameter '"+component+"'");
@@ -2371,7 +2371,7 @@ var f_core = {
 	/**
 	 * @method private static
 	 * @param HTMLFormElement form
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_CallFormCheckListeners: function(form, afterReset) {
 		var checkListeners=form._checkListeners;
@@ -2428,7 +2428,7 @@ var f_core = {
 				/**
 				 * @method hidden
 				 * @param f_event event
-				 * @return boolean 
+				 * @return Boolean 
 				 */
 				f_performCheckValue: function(event) {
 					var detail=event.f_getDetail();
@@ -2506,7 +2506,7 @@ var f_core = {
 	 * @method private static
 	 * @param HTMLFormElement form
 	 * @param Event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_CallFormResetListeners: function(form, event) {
 		var resetListeners=form._resetListeners;
@@ -2529,7 +2529,7 @@ var f_core = {
 	 * @method hidden static hidden
 	 * @param HTMLElement component 
 	 * @param optional Object listener
-	 * @param optional boolean first
+	 * @return optional Boolean first
 	 * @return void
 	 */
 	AddCheckListener: function(component, listener, first) {
@@ -2556,7 +2556,7 @@ var f_core = {
 	 * @method hidden static hidden
 	 * @param HTMLElement component 
 	 * @param Object listener
-	 * @return boolean
+	 * @return Boolean
 	 */
 	RemoveCheckListener: function(component, listener) {
 		var form=f_core.GetParentForm(component);
@@ -2606,7 +2606,7 @@ var f_core = {
 	/**
 	 * @method public static
 	 * @param f_event event
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	SubmitEvent: function(event) {
 		return f_core._Submit(null, null, event);
@@ -2618,9 +2618,9 @@ var f_core = {
 	 * @param optional HTMLElement elt
 	 * @param optional f_event event 
 	 * @param optional Object createWindowParameters
-	 * @param optional boolean closeWindow
-	 * @param optional boolean modal
-	 * @return boolean <code>true</code> if success.
+	 * @return optional Boolean closeWindow
+	 * @return optional Boolean modal
+	 * @return Boolean <code>true</code> if success.
 	 */
 	Submit: function(url, dest, elt, event, createWindowParameters, closeWindow, modal) {
 		if (!event && (url instanceof f_event)) {
@@ -2635,9 +2635,9 @@ var f_core = {
 	 * @method public static
 	 * @param optional String dest Window name.
 	 * @param optional Object createWindowParameters
-	 * @param optional boolean modal
+	 * @return optional Boolean modal
 	 * @param optional f_event event Event if any.
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	SubmitOpenWindow: function(dest, createWindowParameters, modal, event) {
 		return f_core._Submit(null, null, event, null, dest, createWindowParameters, null, modal);
@@ -2649,7 +2649,7 @@ var f_core = {
 	 * @param optional String dest Window name.
 	 * @param optional Object createWindowParameters
 	 * @param optional f_event event Event if any.
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	SubmitModalDialog: function(dest, createWindowParameters, event) {
 		if (!createWindowParameters) {
@@ -2664,7 +2664,7 @@ var f_core = {
 	 *
 	 * @method public static
 	 * @param optional f_event event 
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	SubmitCloseWindow: function(event) {
 		return f_core._Submit(null, null, event, null, null, null, true);
@@ -2887,7 +2887,7 @@ var f_core = {
 	 * @method public static
 	 * @param String id  The identifier of the component. (naming separator might not be is ':')
 	 * @param optional HTMLDocument document
-	 * @param hidden optional boolean noCompleteComponent
+	 * @param hidden optional Boolean noCompleteComponent
 	 * @deprecated Replaced by f_core.GetElementByClientId() .
 	 * @return HTMLElement
 	 */
@@ -2900,7 +2900,7 @@ var f_core = {
 	 * @method public static
 	 * @param String id  The identifier of the component. (naming separator might not be is ':')
 	 * @param optional HTMLDocument doc Document.
-	 * @param hidden optional boolean noCompleteComponent Dont complete component !
+	 * @param hidden optional Boolean noCompleteComponent Dont complete component !
 	 * @return HTMLElement
 	 */
 	GetElementByClientId: function(id, doc, noCompleteComponent) {
@@ -2992,8 +2992,8 @@ var f_core = {
 	 * @method hidden static
 	 * @param Element element
 	 * @param String attributeName
-	 * @param optional boolean defaultValue
-	 * @return boolean
+	 * @return optional Boolean defaultValue
+	 * @return Boolean
 	 */
 	GetBooleanAttribute: function(element, attributeName, defaultValue) {
 		f_core.Assert(defaultValue===undefined || typeof(defaultValue)=="boolean", "f_core.GetBooleanAttribute: defaultValue parameter is invalid. ("+defaultValue+")");
@@ -3010,7 +3010,7 @@ var f_core = {
 	 *
 	 * @method hidden static
 	 * @param f_component component
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsComponentVisible: function(component) {
 		f_core.Assert(component, "f_core.IsComponentVisible: Component is null !");
@@ -3042,7 +3042,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param HTMLElement component
-	 * @return boolean
+	 * @return Boolean
 	 */
 	ForceComponentVisibility: function(component) {
 		if (f_core.IsComponentVisible(component)) {
@@ -3265,7 +3265,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param optional String version
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	IsGecko: function(version) {
 		if (!f_core._browser) {
@@ -3287,7 +3287,7 @@ var f_core = {
 	},
 	/**
 	 * @method hidden static
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsGeckoDisableDispatchKeyEvent: function() {
 		if (!f_core.IsGecko()) {
@@ -3306,7 +3306,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param optional String version
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsInternetExplorer: function(version) {
 		if (!f_core._browser) {
@@ -3325,14 +3325,14 @@ var f_core = {
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_ReturnsAlwaysFalse: function () {
 		return false;
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_SearchBrowser: function() {
 		var agt=window.navigator.userAgent.toLowerCase();
@@ -3474,7 +3474,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param Event evt Javascript event
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	CancelJsEventHandler: function(evt) {
@@ -3491,7 +3491,7 @@ var f_core = {
 	/**
 	 * @method hidden static 
 	 * @param Event evt Javascript event
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	CancelJsEventHandlerTrue: function(evt) {
@@ -3510,7 +3510,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	CancelJsEvent: function(evt) {
@@ -3909,7 +3909,7 @@ var f_core = {
 	 * @method hidden static 
 	 * @param HTMLElement component
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsComponentInside: function(component, event) {			
 		f_core.Assert(component && component.nodeType==f_core.ELEMENT_NODE, "f_core.IsComponentInside: Invalid component parameter '"+component+"'.");
@@ -4060,7 +4060,7 @@ var f_core = {
 	 * @method public static 
 	 * @param HTMLElement component
 	 * @param Boolean asyncMode
-	 * @return boolean <code>true</code> is success !
+	 * @return Boolean <code>true</code> is success !
 	 */
 	SetFocus: function(component, asyncMode) {
 		f_core.Assert(component, "f_core.SetFocus: Component is NULL");
@@ -4175,7 +4175,7 @@ var f_core = {
 	 * @method hidden static
 	 * @param HTMLElement component
 	 * @param Function listener
-	 * @return boolean
+	 * @return Boolean
 	 */
 	AddResizeEventListener: function(component, listener) {
 		if (f_core.IsInternetExplorer()) {
@@ -4199,7 +4199,7 @@ var f_core = {
 	 * @method hidden static
 	 * @param HTMLElement component
 	 * @param Function listener
-	 * @return boolean Returns <code>true</code> if success.
+	 * @return Boolean Returns <code>true</code> if success.
 	 */
 	RemoveResizeEventListener: function(component, listener) {
 		if (f_core.IsInternetExplorer()) {
@@ -4775,7 +4775,7 @@ var f_core = {
 	 * @param String cookieName
 	 * @param optional String cookieValue Value to associate with cookie, or <code>null</code> to delete cookie !
 	 * @param optional HTMLDocument doc Html document
-	 * @return boolean Returns <code>true</code> if success.
+	 * @return Boolean Returns <code>true</code> if success.
 	 */
 	SetCookieValue: function(cookieName, cookieValue, doc) {
 		f_core.Assert(typeof(cookieName)=="string", "f_core.SetCookieValue: Bad cookieName ! ("+cookieName+")");
@@ -4812,7 +4812,7 @@ var f_core = {
 	/** 
 	 * @method public static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsAppendMode: function(evt) {
 		return evt.ctrlKey;
@@ -4820,7 +4820,7 @@ var f_core = {
 	/** 
 	 * @method public static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsAppendRangeMode: function(evt) {
 		return evt.shiftKey;
@@ -4844,7 +4844,7 @@ var f_core = {
 	 * @method hidden static 
 	 * @param String effectName Name of effect
 	 * @param HTMLElement body Component which be applied the effect.
-	 * @param optional boolean reverse Inverse of the effect
+	 * @return optional Boolean reverse Inverse of the effect
 	 * @return f_effect An f_effect object. 
 	 */
 	CreateEffectByName: function(effectName, body, callback) {
@@ -5686,7 +5686,7 @@ var f_core = {
 	 * @param Number messageCode
 	 * @param String message
 	 * @param String messageDetail
-	 * @return boolean
+	 * @return Boolean
 	 */
 	PerformErrorEvent: function(componentClientId, messageCode, message, messageDetail) {
 		if (!componentClientId) {
@@ -5879,7 +5879,7 @@ var f_core = {
 	/**
 	 * @method hidden static
 	 * @param HTMLElement component
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsComponentEditable: function(component) {
 		var tagName=component.tagName;

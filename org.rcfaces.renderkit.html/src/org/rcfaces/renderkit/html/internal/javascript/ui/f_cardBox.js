@@ -132,7 +132,7 @@ var __members={
 	 * @method public
 	 * @param f_card cardComponent Card to select. (or a string as the identifier of the card)
 	 * @param Boolean setFocus Set focus if possible !
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_selectCard: function(cardComponent, setFocus) {
 		if (typeof(cardComponent)=="string") {
@@ -183,7 +183,7 @@ var __members={
 	 * 
 	 * @method public
 	 * @param String value
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	f_setValue: function(value) {
 		var card=this.f_getCardByValue(value);
@@ -222,7 +222,7 @@ var __members={
 	},
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_selectCard: function(card) {		
 		f_core.Assert(card && card._cardBox==this , "f_cardBox._selectCard: Invalid card object ("+card+")");

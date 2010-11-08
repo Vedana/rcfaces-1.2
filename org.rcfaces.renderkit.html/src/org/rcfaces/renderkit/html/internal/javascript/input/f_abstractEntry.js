@@ -162,7 +162,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_performMenuMouseDown: function(event) {		
 		var evt=event.f_getJsEvent();
@@ -239,7 +239,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param f_textSelection selection An object which defines fields 'start' and 'end'
-	 * @param optional boolean show If possible, show the selection.
+	 * @return optional Boolean show If possible, show the selection.
 	 * @return void
 	 */
 	f_setSelection: function(selection, show) {

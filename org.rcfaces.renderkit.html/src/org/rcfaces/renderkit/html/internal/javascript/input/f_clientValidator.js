@@ -146,7 +146,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:this
 	 */
 	_OnFocus: function(evt) {
@@ -165,7 +165,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:this
 	 */
 	_OnBlur: function(evt) {
@@ -187,8 +187,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @param f_event evt
-	 * @return boolean
+	 * @param f_event event
+	 * @return Boolean
 	 * @context object:this
 	 */
 	_OnKeyPress: function(event) {
@@ -397,7 +397,7 @@ var __statics = {
 	 * @param RegExp expr
 	 * @param Number keyCode
 	 * @param String keyChar
-	 * @return boolean
+	 * @return Boolean
 	 */
 	Filter_generic: function(val,expr,keyCode,keyChar) {
 		f_core.Assert(expr instanceof RegExp, "f_clientValidator.Filter_generic: Not a regular expression. '"+expr+"'.");
@@ -408,7 +408,7 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @context object:validator
-	 * @param f_clientValidator val 
+	 * @param f_clientValidator validator 
 	 * @param RegExp expr
 	 * @param Number keyCode
 	 * @param String keyChar
@@ -528,7 +528,7 @@ var __statics = {
 	 * @param Boolean useMessage
 	 * @param Boolean useColor
 	 * @param Boolean useFocus
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:validator
 	 */
 	Error_generic: function(validator, type, error, useMessage, useColor, useFocus) {
@@ -606,7 +606,8 @@ var __members = {
 	 * @method public
 	 * @param f_textEntry component
 	 * @param optional Object parameters
-	 * @param optional boolean parseComponentAttributes
+	 * @return optional Boolean parseComponentAttributes
+	 * @return void
 	 */
 	f_clientValidator: function(component, parameters, parseComponentAttributes) {
 		f_core.Assert(component.nodeType, "f_clientValidator(): Invalid component parameter ("+component+")");
@@ -688,7 +689,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param f_event event
-	 * @return boolean 
+	 * @return Boolean 
 	 */
 	f_performCheckValue: function(event) {
 		if (this._checked) {
@@ -730,7 +731,7 @@ var __members = {
 	 * 
 	 * @method hidden
 	 * @param String value
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_updateValue: function(value) {	
 /*		if (value===undefined) {
@@ -918,7 +919,7 @@ var __members = {
 	 * @param Number keyCode
 	 * @param String keyChar
 	 * @param optional Object cache
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_applyFilters: function(keyCode, keyChar, cache) {
 		var filters=this._filters;
@@ -973,6 +974,7 @@ var __members = {
 	 * @method private
 	 * @param Number keyCode
 	 * @param String keyChar
+	 * @param Object cache
 	 * @return Number
 	 */
 	_applyTranslators: function(keyCode, keyChar, cache) {
@@ -1093,7 +1095,7 @@ var __members = {
 	 * @method private
 	 * @param String curVal Current value
 	 * @param Boolean check Check mode
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_applyAutoCheck: function(curVal, check) {
 		var bRet = true;
@@ -1442,6 +1444,7 @@ var __members = {
 	 * @param String summary
 	 * @param String detail
 	 * @param Number severity
+	 * @return void
 	 */
 	f_setLastError: function(summary, detail, severity) {
 		f_core.Debug(f_clientValidator, "f_setLastError: summary='"+summary+"' detail='"+detail+"' severity='"+severity+"'.");
@@ -1619,7 +1622,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param optional String internalValue
+	 * @param optional String component
 	 * @return void
 	 */
 	f_parseComponentAttributes: function(component) {

@@ -128,7 +128,7 @@ var __members = {
 	 * has been requested.
 	 *
 	 * @method public
-	 * @return boolean <code>true</code> if cancellation has been requested,
+	 * @return Boolean <code>true</code> if cancellation has been requested,
 	 *    and <code>false</code> otherwise
 	 * @see #setCanceled(boolean)
 	 */

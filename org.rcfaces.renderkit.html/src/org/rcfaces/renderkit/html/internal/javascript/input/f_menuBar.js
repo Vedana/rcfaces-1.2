@@ -15,7 +15,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menuBar
 	 */
 	_MenuBarItem_mouseOver: function(evt) {
@@ -37,7 +37,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menuBar
 	 */
 	_MenuBarItem_mouseOut: function(evt) {
@@ -57,7 +57,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menuBar
 	 */
 	_MenuBarItemInput_click: function(evt) {
@@ -103,7 +103,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menuBar
 	 */
 	_MenuBarItem_keyDown: function(evt) {
@@ -125,7 +125,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menuBar
 	 */
 	_MenuBarItem_focus: function(evt) {
@@ -173,7 +173,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menuBar
 	 */
 	_MenuBarItem_blur: function(evt) {
@@ -899,7 +899,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param Object popupDocument
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isPopupLock: function(popupDocument) {
 		var menuItem=this.f_uiGetSelectedItem(this);

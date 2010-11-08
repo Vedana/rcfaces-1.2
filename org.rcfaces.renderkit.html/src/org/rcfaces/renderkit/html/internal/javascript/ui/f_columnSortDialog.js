@@ -56,7 +56,7 @@ var __statics = {
      *
      * @method public static
      * @param f_event evt
-     * @return boolean
+     * @return Boolean
      *
     ListenerExample: function(evt) {
     	var value = evt.f_getValue();

@@ -297,7 +297,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_performElementCheck: function(element, show, evt, checked) {
 		var cardinality=this._checkCardinality;
@@ -468,7 +468,7 @@ var __members = {
 	/**
 	 * @method protected abstract
 	 * @param Object element
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isElementChecked: f_class.ABSTRACT,
 	

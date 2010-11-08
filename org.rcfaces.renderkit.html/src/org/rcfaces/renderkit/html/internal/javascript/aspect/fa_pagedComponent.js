@@ -202,7 +202,7 @@ var __members = {
 	 * Returns <code>true</code> if the component is paged
 	 *
 	 * @method public
-	 * @return boolean <code>true</code> if the component is paged.
+	 * @return Boolean <code>true</code> if the component is paged.
 	 */
 	f_isPaged: function() {
 		return this._paged;

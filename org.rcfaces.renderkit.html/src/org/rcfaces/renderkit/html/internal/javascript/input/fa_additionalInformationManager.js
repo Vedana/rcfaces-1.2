@@ -115,7 +115,7 @@ var __members = {
 	 * @method protected
 	 * @param HTMLElement element
 	 * @param Boolean shown
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_updateElementAdditionalInformations: function(element, shown) {
 		// Suivant l'état enregistré, on recalcule l'état !
@@ -161,7 +161,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_hideAdditionalElement: function(element, value) {
 		if (!this.fa_isAdditionalElementVisible(element)) {
@@ -321,7 +321,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_performElementAdditionalInformation: function(element, show, evt, additional) {
 		var cardinality=this._additionalInformationCardinality;
@@ -443,7 +443,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isAdditionalElementValueVisible: function(value, defaultValue) {
 		var selected=defaultValue;
@@ -471,7 +471,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param Object[] additional The new additional.
-	 * @param optional boolean show Show the first new shown element.
+	 * @return optional Boolean show Show the first new shown element.
 	 * @return void
 	 */
 	f_expandAdditionalInformations: function(additional, show) {

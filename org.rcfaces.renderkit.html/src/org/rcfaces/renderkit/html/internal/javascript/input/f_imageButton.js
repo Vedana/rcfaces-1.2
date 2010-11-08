@@ -181,7 +181,7 @@ var __members = {
 	 * 
 	 * @method protected
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_imageButtonSelect: function(event) {
 		f_core.Debug(f_imageButton, "f_imageButtonSelect: focus="+this._focus);
@@ -204,7 +204,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param optional boolean update
+	 * @return optional Boolean update
 	 * @return void
 	 */
 	f_clearMouseDownState: function(update) {
@@ -222,7 +222,7 @@ var __members = {
 	 * 
 	 * @method protected
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_performImageSelection: function(event) {
 		return true;
@@ -232,7 +232,7 @@ var __members = {
 	 * 
 	 * @method protected
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_imageButtonSelectEnd: function(event) {
 		return true;
@@ -240,7 +240,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onMouseDown: function(event) {
 		f_core.Debug(f_imageButton, "_onMouseDown: mouse down on imageButton '"+this.id+"'.");
@@ -264,7 +264,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onMouseUp: function() {
 		f_core.Debug(f_imageButton, "_onMouseUp: mouse up on imageButton '"+this.id+"'.");
@@ -282,7 +282,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onMouseOver: function(event) {
 		if (this.f_getEventLocked(event.f_getJsEvent(), false)) {
@@ -299,7 +299,7 @@ var __members = {
 
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onMouseOut: function() {
 		if (!this._hover) {
@@ -317,7 +317,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onKeyDown: function(event) {
 		var evt = event.f_getJsEvent();
@@ -332,7 +332,7 @@ var __members = {
 	
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onFocus: function() {
 		this.f_updateLastFlatBorder();
@@ -345,7 +345,7 @@ var __members = {
 
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onBlur: function() {
 		this._focus = undefined;
@@ -450,7 +450,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_hasSelectedState: function() {
 		return this.f_isSelected && this.f_isSelected();		

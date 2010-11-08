@@ -17,7 +17,7 @@ var __statics = {
 	
 	/**
 	 * @method hidden static
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsSupported: function() {
 		return true;

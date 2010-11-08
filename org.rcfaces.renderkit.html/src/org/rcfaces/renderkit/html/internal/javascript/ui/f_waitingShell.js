@@ -46,7 +46,7 @@ var __members = {
 	 * @param optional String text
 	 * @param optional Number width
 	 * @param optional Number height
-	 * @param optional boolean showOnSubmit
+	 * @return optional Boolean showOnSubmit
 	 * @param optional String backgroundMode
 	 */
 	f_waitingShell: function(imageURL, text, width, height, showOnSubmit, backgroundMode) {

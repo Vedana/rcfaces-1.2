@@ -14,7 +14,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_performImageSelection: function(event) {
 		this.f_setSelected(!this.f_isSelected());
@@ -47,7 +47,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param Object value
-	 * @return boolean If value is recognized.
+	 * @return Boolean If value is recognized.
 	 */
 	f_setValue: function(value) {
 		this.f_setSelected(!!value);

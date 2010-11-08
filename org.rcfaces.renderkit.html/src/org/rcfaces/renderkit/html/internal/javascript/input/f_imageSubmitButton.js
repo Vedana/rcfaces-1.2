@@ -13,7 +13,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_imageButtonSelectEnd: function(event) {	
 		/*	

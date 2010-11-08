@@ -57,7 +57,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isSelected: function() {
 		var input=this.f_getInput();
@@ -151,7 +151,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param Object value
-	 * @return boolean If value is recognized.
+	 * @return Boolean If value is recognized.
 	 */
 	f_setValue: function(value) {
 		this.f_setSelected(!!value);

@@ -481,7 +481,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context document:this
 	 */
 	_Gecko_OnContextMenu: function(evt) {
@@ -495,7 +495,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context document:this
 	 */
 	_Gecko_OnMouseDown: function(evt) {

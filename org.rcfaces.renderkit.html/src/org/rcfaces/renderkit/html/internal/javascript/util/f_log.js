@@ -169,7 +169,7 @@ var __statics = {
 	},
 	/**
 	 * @method private static
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_CallAppenders: function(event) {
 		var appenders=f_log._Appenders;
@@ -246,7 +246,7 @@ var __members = {
 	 * @param String message The message.
 	 * @param optional Error exception
 	 * @param optional Window window Window which was performed the log.
-	 * @return boolean <code>true</code> if log has been processed.
+	 * @return Boolean <code>true</code> if log has been processed.
 	 */
 	f_fatal: function(message, exception, window) {
 		return this._log(f_log.FATAL, message, exception, window);
@@ -256,7 +256,7 @@ var __members = {
 	 * @param String message The message.
 	 * @param optional Error exception
 	 * @param optional Window window Window which was performed the log.
-	 * @return boolean <code>true</code> if log has been processed.
+	 * @return Boolean <code>true</code> if log has been processed.
 	 */
 	f_error: function(message, exception, window) {
 		return this._log(f_log.ERROR, message, exception, window);
@@ -266,7 +266,7 @@ var __members = {
 	 * @param String message The message.
 	 * @param optional Error exception
 	 * @param optional Window window Window which was performed the log.
-	 * @return boolean <code>true</code> if log has been processed.
+	 * @return Boolean <code>true</code> if log has been processed.
 	 */
 	f_warn: function(message, exception, window) {
 		return this._log(f_log.WARN, message, exception, window);
@@ -276,7 +276,7 @@ var __members = {
 	 * @param String message The message.
 	 * @param optional Error exception
 	 * @param optional Window window Window which was performed the log.
-	 * @return boolean <code>true</code> if log has been processed.
+	 * @return Boolean <code>true</code> if log has been processed.
 	 */
 	f_info: function(message, exception, window) {
 		return this._log(f_log.INFO, message, exception, window);
@@ -286,7 +286,7 @@ var __members = {
 	 * @param String message The message.
 	 * @param optional Error exception
 	 * @param optional Window window Window which was performed the log.
-	 * @return boolean <code>true</code> if log has been processed.
+	 * @return Boolean <code>true</code> if log has been processed.
 	 */
 	f_debug: function(message, exception, window) {
 		return this._log(f_log.DEBUG, message, exception, window);
@@ -296,7 +296,7 @@ var __members = {
 	 * @param String message The message.
 	 * @param optional Error exception
 	 * @param optional Window window Window which was performed the log.
-	 * @return boolean <code>true</code> if log has been processed.
+	 * @return Boolean <code>true</code> if log has been processed.
 	 */
 	f_trace: function(message, exception, window) {
 		return this._log(f_log.TRACE, message, exception, window);
@@ -323,42 +323,42 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isFatalEnabled: function() {
 		return (this._level>=f_log.FATAL);
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isErrorEnabled: function() {
 		return (this._level>=f_log.ERROR);
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isWarnEnabled: function() {
 		return (this._level>=f_log.WARN);
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isInfoEnabled: function() {
 		return (this._level>=f_log.INFO);
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isDebugEnabled: function() {
 		return (this._level>=f_log.DEBUG);
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isTraceEnabled: function() {
 		return (this._level>=f_log.TRACE);

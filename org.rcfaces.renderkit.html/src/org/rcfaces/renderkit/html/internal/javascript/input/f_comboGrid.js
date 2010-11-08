@@ -25,7 +25,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:comboGrid
 	 */
 	_OnButtonMouseDown: function(evt) {
@@ -52,7 +52,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:comboGrid
 	 */
 	_OnButtonMouseUp: function(evt) {
@@ -69,7 +69,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:comboGrid
 	 */
 	_OnButtonMouseOver: function(evt) {
@@ -94,7 +94,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:comboGrid
 	 */
 	_OnButtonMouseOut: function(evt) {
@@ -158,8 +158,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_initializeInput: function() {
 		return this.ownerDocument.getElementById(this.id+f_comboGrid._INPUT_ID_SUFFIX);
@@ -252,7 +251,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param Event jsEvent
-	 * @param optional boolean autoSelect
+	 * @param optional Boolean autoSelect
 	 * @return void
 	 */
 	f_openPopup: function(jsEvent, autoSelect) {
@@ -289,7 +288,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_onCancelDown: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
@@ -316,7 +315,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_onSuggest: function(evt) {
 		var jsEvt=evt.f_getJsEvent();

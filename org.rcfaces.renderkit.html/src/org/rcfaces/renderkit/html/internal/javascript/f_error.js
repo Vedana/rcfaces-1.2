@@ -103,7 +103,7 @@ var __statics = {
 	 * @param Number messageCode
 	 * @param String message
 	 * @param any param
-	 * @return boolean
+	 * @return Boolean
 	 */
 	PerformErrorEvent: function(component, messageCode, message, param) {
 

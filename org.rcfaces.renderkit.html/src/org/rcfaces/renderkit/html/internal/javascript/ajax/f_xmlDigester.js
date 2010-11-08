@@ -564,7 +564,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param optional String name The name of the stack whose emptiness should be evaluated.
-	 * @return boolean <code>true</code> if the given stack if empty 
+	 * @return Boolean <code>true</code> if the given stack if empty 
 	 */
 	f_isEmpty: function(name) {
 		return this.f_getCount(name)==0;

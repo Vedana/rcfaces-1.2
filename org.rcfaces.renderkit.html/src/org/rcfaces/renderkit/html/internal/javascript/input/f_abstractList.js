@@ -20,7 +20,7 @@ var __statics = {
 	/**
 	 * @method private static final
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:combo
 	 */
 	_OnChange: function(evt) {
@@ -428,8 +428,8 @@ var __members = {
 	 * @param Boolean parent
 	 * @param String label
 	 * @param String value
-	 * @param optional boolean selected
-	 * @param optional boolean disabled
+	 * @param optional Boolean selected
+	 * @param optional Boolean disabled
 	 * @param optional String description
 	 * @return Object New item.
 	 */
@@ -480,7 +480,7 @@ var __members = {
 	 * Returns the disabled state of an item 
 	 * @method public
 	 * @param String itemValue Value of the item or the item object.
-	 * @return boolean Disable state.
+	 * @return Boolean Disable state.
 	 */
 	f_isItemDisabled: function(itemValue) {
 		var item=this.f_getItemByValue(itemValue);

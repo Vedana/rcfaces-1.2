@@ -82,8 +82,8 @@ var __members = {
 		this.f_cancelRequest();
 		
 		// this._requestHeaders=undefined; // Map<String,String>
-		// this._ready = undefined; // boolean
-		//this._noLog=noLog; // boolean
+		// this._ready = undefined; // Boolean
+		//this._noLog=noLog; // Boolean
 		this._listener= undefined; // Function
 		this._component = undefined; // any ?
 	},
@@ -124,7 +124,7 @@ var __members = {
 	 * Returns ready state.
 	 *
 	 * @method public
-	 * @return boolean Ready state.
+	 * @return Boolean Ready state.
 	 */
 	f_getReady: function() {
 		return this._ready;
@@ -193,7 +193,7 @@ var __members = {
 	 * Returns <code>true</code> if the response is a Xml document.
 	 *
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isXmlResponse: function() {
 		return typeof(this._responseXML)=="object";
@@ -595,7 +595,7 @@ var __members = {
 	 * listener enregistré pour la gestion des évènements de la requête
 	 *
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onReadyStateChange: function() {
 		var req = this._request;

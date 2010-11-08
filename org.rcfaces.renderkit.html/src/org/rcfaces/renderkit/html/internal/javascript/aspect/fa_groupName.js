@@ -15,7 +15,7 @@ var __statics = {
 	 * @method private static 
 	 * @param f_component component
 	 * @param String groupName
-	 * @param optional boolean create
+	 * @return optional Boolean create
 	 * @return f_component[]	 
 	ListGroupFromComponent: function(component, groupName, create) {
 		return null;
@@ -101,7 +101,7 @@ var __members = {
 	/**
 	 * @method protected
 	 * @param String groupName
-	 * @param optional boolean create
+	 * @return optional Boolean create
 	 * @return f_component[]
 	 */
 	f_listGroup: function(groupName, create) {
@@ -212,7 +212,7 @@ var __members = {
 	
 	/**
 	 * @method protected abstract
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isNativeRadioElement: f_class.OPTIONAL_ABSTRACT
 }

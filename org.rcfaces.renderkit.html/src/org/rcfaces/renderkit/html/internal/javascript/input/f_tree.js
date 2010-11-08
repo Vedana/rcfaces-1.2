@@ -46,7 +46,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt 
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_NodeLabel_mouseOver: function(evt) {
@@ -71,7 +71,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_NodeLabel_mouseOut: function(evt) {
@@ -91,7 +91,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_DivNode_mouseOver: function(evt) {
@@ -117,7 +117,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_DivNode_mouseOut: function(evt) {
@@ -138,7 +138,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_DivNode_dblClick: function(evt) {
@@ -160,8 +160,8 @@ var __statics = {
 	},
 	/**
 	 * @method private static 
-	 * @param Event
-	 * @return boolean
+	 * @param Event evt
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_DivNode_mouseDown: function(evt) {
@@ -199,7 +199,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_BodyMouseDown: function(evt) {
@@ -243,7 +243,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_Command_mouseDown: function(evt) {
@@ -279,7 +279,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_Link_bodyOnfocus: function(evt) {
@@ -300,7 +300,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_Link_onfocus: function(evt) {
@@ -363,7 +363,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean 
+	 * @return Boolean 
 	 * @context object:tree
 	 */
 	_Link_onblur: function(evt) {
@@ -399,7 +399,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_Link_onkeydown: function(evt) {
@@ -423,7 +423,7 @@ var __statics = {
 	/**
 	 * @method private static 
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:tree
 	 */
 	_Link_onkeyup: function(evt) {
@@ -1112,7 +1112,7 @@ var __members = {
 	 * @method public
 	 * @param any value Value of the node, or the node object.
 	 * @param optional hidden Event evt Javascript event
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	f_closeNode: function(value, evt) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -1124,8 +1124,8 @@ var __members = {
 	 * @method protected
 	 * @param Object node 
 	 * @param optional Event evt Javascript event.
-	 * @param hidden li
-	 * @return boolean <code>true</code> if success ...
+	 * @param hidden Object li
+	 * @return Boolean <code>true</code> if success ...
 	 */
 	_userCloseNode: function(node, evt, li) {
 		var item = li;
@@ -1140,8 +1140,8 @@ var __members = {
 	 * @method protected
 	 * @param Object node TreeNode
 	 * @param optional Event evt Javascript event
-	 * @param hidden li 
-	 * @return boolean <code>true</code> if success.
+	 * @param hidden Object li 
+	 * @return Boolean <code>true</code> if success.
 	 */
 	_closeNode: function(node, evt, li) {
 		if (!node._opened || !node._container) {
@@ -1172,7 +1172,7 @@ var __members = {
 	 * @method public
 	 * @param any value Value of the node, or the node object
 	 * @param optional hidden Event evt Javascript event
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	f_openNode: function(value, evt) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -1186,8 +1186,8 @@ var __members = {
 	 * @method protected
 	 * @param Object node 
 	 * @param optional Event evt Javascript event.
-	 * @param hidden li
-	 * @return boolean <code>true</code> if success ...
+	 * @param hidden Object li
+	 * @return Boolean <code>true</code> if success ...
 	 */
 	_userOpenNode: function(node, evt, li) {
 		var item = li;
@@ -1201,8 +1201,8 @@ var __members = {
 	 * @method protected
 	 * @param Object node 
 	 * @param optional Event evt Javascript event.
-	 * @param hidden li
-	 * @return boolean <code>true</code> if success ...
+	 * @param hidden Object li
+	 * @return Boolean <code>true</code> if success ...
 	 */
 	_openNode: function(node, evt, li) {
 		if (!node._container) {
@@ -1508,7 +1508,7 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param any value Value of the node, or the node object
-	 * @return boolean <code>true</code> if the node was found.
+	 * @return Boolean <code>true</code> if the node was found.
 	 */
 	f_showNode: function(value) {
 		var item=this._searchComponentByNodeOrValue(value);
@@ -1874,7 +1874,7 @@ var __members = {
 	 * @param String label
 	 * @param String value
 	 * @param optional String tooltip
-	 * @param optional boolean disabled
+	 * @return optional Boolean disabled
 	 * @return Object The created node.
 	 */
 	f_appendNode: function(parent, label, value, tooltip, disabled) {
@@ -2036,8 +2036,8 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param node
-	 * @return node
+	 * @param Object node
+	 * @return Object node
 	 */
 	_getParentNode: function(node) {
 		if (node) {
@@ -2052,8 +2052,8 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @param node
-	 * @return node
+	 * @param Object node
+	 * @return Object node
 	 */
 	f_getParentNode: function(node) {
 		return this._getParentNode(node);
@@ -2063,7 +2063,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param any value Value of the node, or the node object
-	 * @return boolean <code>true</code> if the node was found.
+	 * @return Boolean <code>true</code> if the node was found.
 	 */
 	f_revealAndSelectNode: function(value) {
 		var item=this._searchComponentByNodeOrValue(value);
@@ -2079,7 +2079,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param any value Value of the node, or the node object
-	 * @return boolean <code>true</code> if the node was found.
+	 * @return Boolean <code>true</code> if the node was found.
 	 */
 	f_revealNode: function(value) {
 		var item=this._searchComponentByNodeOrValue(value);
@@ -2106,7 +2106,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event cevt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_performKeyDown: function(cevt) {
 		var evt=cevt.f_getJsEvent();
@@ -2532,7 +2532,7 @@ var __members = {
 	 * @param Number code Keycode
 	 * @param Event evt
 	 * @param Boolean selection
-	 * @return boolean Success
+	 * @return Boolean Success
 	 */
 	_searchTreeNode: function(code, evt, selection) {
 		var key=String.fromCharCode(code).toUpperCase();
@@ -2563,7 +2563,7 @@ var __members = {
 	 * @param Boolean next
 	 * @param Event evt
 	 * @param Boolean selection
-	 * @return boolean Success
+	 * @return Boolean Success
 	 */
 	_searchTreeNodeByText: function(key, next, evt, selection) {
 		var lis=this.fa_listVisibleElements();
@@ -2643,7 +2643,7 @@ var __members = {
 	 * @method public
 	 * @param function callback
 	 * @param optional any value The value of a node or an element object (Use cursor value if not specified)
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_mapHierarchicalValues: function(callback, value) {
 		f_core.Assert(typeof(callback)=="function", "f_tree.f_mapHierarchicalValues: Invalid callback parameter '"+callback+"'.");
@@ -2860,7 +2860,7 @@ var __members = {
 	 * @param optional Boolean append Append mode.
 	 * @param optional Boolean show Node must be show after the selection.
 	 * @param optional hidden Event jsEvent Javascript event associated to this action.
-	 * @return boolean <code>true</code> if success.
+	 * @return Boolean <code>true</code> if success.
 	 */
 	f_select: function(value, append, show, jsEvent) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2876,7 +2876,7 @@ var __members = {
 	 * @param any value Value of the node
 	 * @param optional Boolean show Node must be show after the selection.
 	 * @param optional hidden Event jsEvent Javascript event associated to this action.
-	 * @return boolean <code>true</code> if success !
+	 * @return Boolean <code>true</code> if success !
 	 */
 	f_check: function(value, show, jsEvent) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2939,7 +2939,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isNodeDisabled: function(value) {
 		var li=this._searchComponentByNodeOrValue(value);
@@ -2951,7 +2951,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param any value Value of the node, or the node object.
-	 * @param optional boolean disabled State to set.
+	 * @return optional Boolean disabled State to set.
 	 * @return void
 	 */
 	f_setNodeDisabled: function(value, disabled) {
@@ -3516,7 +3516,7 @@ var __members = {
 	
 	/**
 	 * @method private
-	 * @param f_event drag event
+	 * @param f_event event drag event
 	 * @return void
 	 */
 	_treeDropListener: function(event) {

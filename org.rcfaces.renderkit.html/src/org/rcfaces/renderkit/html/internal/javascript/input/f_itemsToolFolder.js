@@ -13,7 +13,7 @@
 var __statics = {
 				
 	/**
-	 * @field private static final boolean
+	 * @field private static final Boolean
 	 */
 	_LAZY_INITIALIZATIONS: false,
 	
@@ -238,7 +238,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onInitComponentListener: function(component) {
 		var lazyComponents=this._lazyComponents;
@@ -285,7 +285,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_itemOnSelect: function(event) {
 		var itemValue; // Rechercher l'item
@@ -328,7 +328,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_itemMenuOnSelect: function(event) {
 		var itemValue=event.f_getValue(); // Rechercher l'item
@@ -418,7 +418,7 @@ var __members = {
 	 * @method public
 	 * @param String value Value of the item.
 	 * @param String label Label to set.
-	 * @return boolean <code>true</code> if success, <code>false</code> otherwise.
+	 * @return Boolean <code>true</code> if success, <code>false</code> otherwise.
 	 * /
 	f_setItemLabel: function(value, label) {
 		f_core.Assert(typeof(label)=="string", "f_itemsToolFolder.f_setItemLabel: Invalid label parameter. ("+label+")");

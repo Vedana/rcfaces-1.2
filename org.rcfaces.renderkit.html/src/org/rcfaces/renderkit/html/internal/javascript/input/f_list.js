@@ -93,7 +93,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isMultiple: function() {
 		return (this.multiple == true);

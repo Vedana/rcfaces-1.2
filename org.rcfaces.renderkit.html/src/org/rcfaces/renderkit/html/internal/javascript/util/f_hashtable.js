@@ -168,7 +168,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isEmpty: function() {
 		return !this._count;

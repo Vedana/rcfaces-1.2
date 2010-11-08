@@ -381,9 +381,8 @@ f_classLoader.prototype._asyncPostLoad=function(interactiveMode) {
 
 /**
  * @method private
- * @param Document doc
  * @param String bundleName
- * @return boolean
+ * @return Boolean
  */
 f_classLoader.prototype._asyncLoadBundle=function(bundleName) {		
 	

@@ -21,7 +21,7 @@ var __members = {
 
 	/**
 	 * @method public 
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isShowSummary: function() {
 		if (this._showSummary===undefined) {
@@ -56,7 +56,7 @@ var __members = {
 	*/
 	/**
 	 * @method public 
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isShowDetail: function() {
 		if (this._showDetail===undefined) {

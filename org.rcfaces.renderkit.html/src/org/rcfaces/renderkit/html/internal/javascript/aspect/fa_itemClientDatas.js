@@ -100,7 +100,7 @@ var __members = {
 	 * 
 	 * @method public abstract
 	 * @param String value Value of an item.
-	 * @param hidden boolean assertIfNotFound 
+	 * @param hidden Boolean assertIfNotFound 
 	 * @return Object Item associated with the value.
 	 */
 	f_getItemByValue: f_class.ABSTRACT

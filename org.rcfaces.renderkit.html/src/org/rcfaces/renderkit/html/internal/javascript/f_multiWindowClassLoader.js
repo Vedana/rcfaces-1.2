@@ -38,7 +38,7 @@ f_multiWindowClassLoader.f_getName=function() {
 }
 
 /**
- * @field private static final boolean
+ * @field private static final Boolean
  */
 f_multiWindowClassLoader._PROFILE_CLONE_CLASS=false;
 

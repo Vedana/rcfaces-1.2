@@ -272,7 +272,7 @@ var __members = {
 	 * Returns the indeterminate state.
 	 *
 	 * @method public
-	 * @return boolean State of indeterminate.
+	 * @return Boolean State of indeterminate.
 	 */
 	f_isIndeterminate: function() {
 		return this._indeterminate;

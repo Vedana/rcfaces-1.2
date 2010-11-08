@@ -81,7 +81,7 @@ var __statics = {
      *
      * @method private static
      * @param Event evt
-     * @return boolean
+     * @return Boolean
      * @context event:evt
      */
 	_OnFocus: function(evt) {
@@ -191,7 +191,7 @@ var __statics = {
 	 * @method public static
 	 * @param Object object A f_event object or a component (rcfaces or html)
 	 * @param any returnValue
-	 * @return boolean Returns <code>true</code> if the shell is found.
+	 * @return Boolean Returns <code>true</code> if the shell is found.
 	 */
 	CloseShell: function(object, returnValue) {
 		if (object instanceof f_event) {
@@ -608,7 +608,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param optional f_shell shell
-	 * @param optional boolean showNextShell
+	 * @return optional Boolean showNextShell
 	 * @return void
 	 */
 	f_closeShell: function(shell, showNextShell) {

@@ -540,7 +540,7 @@ var __members = {
 	/**
 	 * @method hidden
 	 * @param Object target
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isIntoShell: f_class.ABSTRACT,
 	/**
@@ -575,7 +575,7 @@ var __members = {
 	 * @method private
 	 * @param Object button
 	 * @param Event jsEvent
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_performTitleButton: function(button, jsEvent) {
 		var shell=this._shell;

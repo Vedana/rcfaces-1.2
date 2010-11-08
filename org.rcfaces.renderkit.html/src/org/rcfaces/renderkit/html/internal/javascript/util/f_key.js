@@ -211,7 +211,7 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @param Number code Key code.
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsPrintable: function(code) {
 		if (f_key.IsLetterOrDigit(code) ||
@@ -228,7 +228,7 @@ var __statics = {
 	/**
 	 * @method public static
 	 * @param Number code Key code.
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsLetterOrDigit: function(code) {
 		if ((code >= 48 && code <= 57) ||	// keyboard digits
@@ -353,7 +353,7 @@ var __statics = {
 	 * @param HTMLElement component (or String)
 	 * @param function method
 	 * @param Object parameter
-	 * @return boolean
+	 * @return Boolean
 	 */
 	AddKeyHandler: function(scopeName, keyName, component, method, parameter) {
 		var scope=f_key._GetScopeByName(scopeName);
@@ -464,7 +464,7 @@ var __statics = {
 	},
 	/**
 	 * @method hidden static 
-	 * @return boolean
+	 * @return Boolean
 	 */
 	RemoveScope: function(scopeName) {
 		f_core.Assert(f_key._Scopes, "f_key.RemoveScope: No scopes defined.");
@@ -592,7 +592,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @event Event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_IsComponentEditable: function(evt) {
 		var target;
@@ -791,7 +791,7 @@ var __statics = {
 	/**
 	 * @method hidden static
 	 * @param Number keyCode
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsModifierKey: function(keyCode) {
 		if (keyCode==f_key.VK_SHIFT || 

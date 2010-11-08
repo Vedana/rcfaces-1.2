@@ -121,7 +121,7 @@ var __members={
 	 * @method hidden
 	 * @param String id
 	 * @param optional String focusId
-	 * @param optional boolean setFocusIfMessage
+	 * @return optional Boolean setFocusIfMessage
 	 * @return void
 	 */
 	f_initialize: function(id, focusId, setFocusIfMessage) {
@@ -251,8 +251,8 @@ var __members={
 	/**
 	 * @method public
 	 * @param String focus Focus clientId, or a component. 
-	 * @param optional boolean async Set focus in async mode.
-	 * @return boolean
+	 * @return optional Boolean async Set focus in async mode.
+	 * @return Boolean
 	 */
 	f_setFocus: function(focus, async) {
 		f_core.Assert(typeof(focus)=="string" || (focus && focus.nodeType==f_core.ELEMENT_NODE), "f_focusManager.f_setFocus: Focus component parameter is not invalid ("+focus+").");

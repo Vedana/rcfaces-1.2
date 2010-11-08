@@ -12,7 +12,7 @@
 var __members = {
 	
 	/**
-	 * @field private boolean
+	 * @field private Boolean
 	 */
 	 _noPropertyUpdates: undefined,
 	 

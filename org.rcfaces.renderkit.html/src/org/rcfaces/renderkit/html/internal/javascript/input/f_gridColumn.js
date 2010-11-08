@@ -52,14 +52,14 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isVisible: function() {
 		return this._visibility;
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isSortable: function() {
 		if (this._method) {

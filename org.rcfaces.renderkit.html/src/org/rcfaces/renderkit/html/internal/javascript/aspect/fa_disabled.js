@@ -12,15 +12,15 @@
 var __members = {
 /*
 	f_finalize: function() {
-		// this._disabled=undefined;  // boolean
-		// this._initialDisabled=undefined; // boolean
+		// this._disabled=undefined;  // Boolean
+		// this._initialDisabled=undefined; // Boolean
 	},
 	*/
 	/**
 	 * Returns the disable state.
 	 *
 	 * @method public
-	 * @return boolean <code>true</code> if the component is disabled.
+	 * @return Boolean <code>true</code> if the component is disabled.
 	 */
 	f_isDisabled: function() {
 		if (this._disabled===undefined) {
@@ -35,7 +35,7 @@ var __members = {
 	 * Set the disabled state.
 	 *
 	 * @method public
-	 * @param optional boolean set <code>true</code> to disable the component
+	 * @param optional Boolean set <code>true</code> to disable the component
 	 * @return void
 	 */
 	f_setDisabled: function(set) {
@@ -57,7 +57,7 @@ var __members = {
 
 	/**
 	 * @method hidden
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_getInitialDisabled: function() {
 		if (this._initialDisabled===undefined) {

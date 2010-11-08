@@ -165,7 +165,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onCancelDown: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
@@ -185,7 +185,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onSuggest: function(evt) {
 		var jsEvt=evt.f_getJsEvent();
@@ -769,7 +769,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Array ret
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_filterProposals: function(ret, text) {
 	

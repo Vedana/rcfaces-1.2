@@ -31,7 +31,7 @@ var __statics = {
     /**
      * @method private static
      * @param Event evt the event
-     * @return boolean
+     * @return Boolean
      * @context object:messageBox
      */
     _OnClick: function(evt) {
@@ -61,7 +61,7 @@ var __statics = {
      *
      * @method public static
      * @param f_event evt
-     * @return boolean
+     * @return Boolean
      *
     ListenerExample: function(evt) {
     	// var value = evt.f_getValue();
@@ -197,8 +197,8 @@ var __members = {
 	 * @method public 
 	 * @param String value the value of the action
 	 * @param String text the text displayed for the action
-	 * @param optional boolean disabled true if the button must be disabled
-	 * @param optional boolean submitButton true if the button is the default value for the messageDialog
+	 * @return optional Boolean disabled true if the button must be disabled
+	 * @return optional Boolean submitButton true if the button is the default value for the messageDialog
 	 * @return void
 	 */
 	f_addAction: function(value, text, disabled, submitButton) {

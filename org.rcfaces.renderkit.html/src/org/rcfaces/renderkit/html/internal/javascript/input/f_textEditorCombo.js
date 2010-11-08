@@ -41,7 +41,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_onSelection: function(event) {
 		var type=this._type;

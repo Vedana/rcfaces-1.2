@@ -79,7 +79,7 @@ var __statics = {
 	_DRAG_TIMER : 50,
 
 	/**
-	 * @field protected static final boolean
+	 * @field protected static final Boolean
 	 */
 	USE_BACKGROUND_IMAGE : false,
 
@@ -142,7 +142,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	RowMouseOver : function(evt) {
@@ -180,7 +180,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	RowMouseOut : function(evt) {
@@ -207,7 +207,7 @@ var __statics = {
 	 *            eventObject
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	GetRowFromEvent : function(eventObject, evt) {
@@ -251,7 +251,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	RowMouseDown : function(evt) {
@@ -308,7 +308,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	VerifyTarget : function(evt) {
@@ -375,7 +375,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	FiltredCancelJsEventHandler : function(evt) {
@@ -395,7 +395,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	RowMouseDblClick : function(evt) {
@@ -427,7 +427,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_BodyMouseDown : function(evt) {
@@ -476,6 +476,7 @@ var __statics = {
 	 * @method protected static
 	 * @param HTMLTableElement
 	 *            element
+	 * @param optional Boolean assertIfNotFound
 	 * @return HTMLTableRowElement
 	 */
 	GetFirstRow : function(element, assertIfNotFound) {
@@ -541,7 +542,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Link_onfocus : function(evt) {
@@ -621,7 +622,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Link_onblur : function(evt) {
@@ -665,7 +666,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Link_onkeypress : function(evt) {
@@ -701,7 +702,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Link_onkeydown : function(evt) {
@@ -735,7 +736,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Link_onkeyup : function(evt) {
@@ -767,7 +768,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Link_onmousewheel : function(evt) {
@@ -805,7 +806,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Title_onMouseOver : function(evt) {
@@ -853,7 +854,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Title_onMouseOut : function(evt) {
@@ -896,7 +897,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_Title_onMouseDown : function(evt) {
@@ -946,7 +947,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:column
 	 */
 	_Title_onKeyDown : function(evt) {
@@ -1070,7 +1071,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:column
 	 */
 	_Title_onFocus : function(evt) {
@@ -1122,7 +1123,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:column
 	 */
 	_Title_onBlur : function(evt) {
@@ -1148,7 +1149,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:column
 	 */
 	_Title_onClick : function(evt) {
@@ -1180,7 +1181,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:column
 	 */
 	_Title_onMouseUp : function(evt) {
@@ -1229,7 +1230,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_OnScroll : function(evt) {
@@ -1256,7 +1257,7 @@ var __statics = {
 	 * @method protected static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	GotFocus : function(evt) {
@@ -1287,7 +1288,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_TitleCursorMouseDown : function(evt) {
@@ -1335,7 +1336,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context event:evt
 	 */
 	_TitleCursorDragMove : function(evt) {
@@ -1501,7 +1502,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 * @context event:evt
 	 */
@@ -1548,7 +1549,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmouseover : function(evt) {
@@ -1576,7 +1577,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmouseout : function(evt) {
@@ -1601,7 +1602,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmousedown : function(evt) {
@@ -1625,7 +1626,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:dataGrid
 	 */
 	_SortIndication_onmouseup : function(evt) {
@@ -1704,7 +1705,7 @@ var __statics = {
 	 *Return the current ComponetGrid
 	 *
 	 *@method public static 
-	 *@param f_component
+	 *@param f_component component
 	 *@return f_grid
 	 */
 	GetGridFromComponent: function(component) {
@@ -1724,7 +1725,7 @@ var __members = {
 	/**
 	 * Active la recherche par les touches
 	 * 
-	 * @field protected boolean
+	 * @field protected Boolean
 	 */
 	_keyRowSearch : undefined,
 
@@ -1970,29 +1971,29 @@ var __members = {
 		// this._keySearchColumnIndex=undefined; // number
 
 		// this._showValue=undefined; // String
-		// this._headerVisible=undefined; // boolean
-		// this._sb=undefined; // boolean
+		// this._headerVisible=undefined; // Boolean
+		// this._sb=undefined; // Boolean
 		// this._cellStyleClass=undefined; // String
 		// this._rowStyleClass=undefined; // String
-		// this._emptyDataMessageShown=undefined; // boolean
+		// this._emptyDataMessageShown=undefined; // Boolean
 
-		// this._showCursor=undefined; // boolean
+		// this._showCursor=undefined; // Boolean
 		// this._sortManager=undefined; // String
 
 		// this._endRowIndex=undefined; // number
 		this._shadowRows = undefined; // HtmlTRElement[]
 		// this._waitingMode=undefined; // number
 		// this._visibleColumnsCount=undefined; // number
-		// this._titleLayout=undefined; // boolean
-		// this._documentComplete=undefined; // boolean
+		// this._titleLayout=undefined; // Boolean
+		// this._documentComplete=undefined; // Boolean
 
 		// this._blankImageURL=undefined; // string
 		// this._columnsStyleClass=undefined; // string
 		// this._waitingIndex=undefined; // number
 		// this._waitingSelection=undefined; // number
 
-		// this._partialWaiting=undefined; // boolean
-		// this._loading=undefined; // boolean
+		// this._partialWaiting=undefined; // Boolean
+		// this._loading=undefined; // Boolean
 		// this._emptyDataMessage=undefined; // String
 		this._emptyDataMessageLabel = undefined; // HTMLElement
 
@@ -2004,7 +2005,7 @@ var __members = {
 		}
 
 		this._waitingRow = undefined; // HTMLTableRowElement
-		// this._waitingLoading=undefined; // boolean
+		// this._waitingLoading=undefined; // Boolean
 
 		var pagedWaiting = this._pagedWaiting;
 		if (pagedWaiting) {
@@ -2014,9 +2015,9 @@ var __members = {
 		}
 
 		this._currentSorts = undefined; // HTMLTableColElement
-		// this._columnCanBeSorted=undefined; // boolean
+		// this._columnCanBeSorted=undefined; // Boolean
 
-		// this._createFakeTH=undefined; // boolean
+		// this._createFakeTH=undefined; // Boolean
 
 		// this._oldHeight=undefined; // string
 		// this._oldHeightStyle=undefined; // string
@@ -2124,8 +2125,8 @@ var __members = {
 
 		// this._cursor=undefined; // fait dans f_releaseRows()
 
-		// this._initSort=undefined; // boolean
-		// this._resizable=undefined; // boolean
+		// this._initSort=undefined; // Boolean
+		// this._resizable=undefined; // Boolean
 
 		this.f_super(arguments);
 	},
@@ -2788,7 +2789,7 @@ var __members = {
 	 * @method public
 	 * @param Object
 	 *            row
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isRowSelected : function(row) {
 		return !!row._selected;
@@ -3117,7 +3118,7 @@ var __members = {
 	 * @param any
 	 *            value Value of the row, or a row object.
 	 * @param hidden
-	 *            boolean Throws error if row is not found.
+	 *            Boolean throwError Throws error if row is not found.
 	 * @return Object row associated or <code>null</code>.
 	 */
 	f_getRowByValue : function(value, throwError) {
@@ -3252,11 +3253,11 @@ var __members = {
 	 * @param Number
 	 *            cursorIndex The cursor index. (can be undefined)
 	 * @param hidden
-	 *            boolean selection New cursor position
+	 *            Boolean selection New cursor position
 	 * @param hidden
-	 *            boolean ignoreInteractive Change the position only (no server
+	 *            Boolean ignoreInteractive Change the position only (no server
 	 *            call)
-	 * @return boolean Returns <code>false</code>.
+	 * @return Boolean Returns <code>false</code>.
 	 */
 	f_setFirst : function(index, cursorIndex, selection, ignoreInteractive) {
 		// var oldFirst=this._first;
@@ -3390,13 +3391,13 @@ var __members = {
 			column._dataGrid = undefined; // f_grid
 			// column._id=undefined; // String
 			column._method = undefined; // function
-			// column._visibility=undefined; // boolean
+			// column._visibility=undefined; // Boolean
 			// column._cellStyle=undefined; // String
 			// column._cellToolTipText=undefined; // String
-			// column._autoFilter=undefined; // boolean
-			// column._ascendingOrder=undefined; // boolean
+			// column._autoFilter=undefined; // Boolean
+			// column._ascendingOrder=undefined; // Boolean
 
-			// column._cellImage=undefined; // boolean
+			// column._cellImage=undefined; // Boolean
 			// column._defaultCellImageURL=undefined; // String
 
 			// Les colonnes sont devenus des objets
@@ -3422,8 +3423,6 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @param HtmlTRElement[]
-	 *            rows
 	 * @return void
 	 */
 	f_releaseRow : function() {
@@ -3462,7 +3461,7 @@ var __members = {
 				f_core.VerifyProperties(input);
 			}
 
-			// row._additional=undefined; // boolean
+			// row._additional=undefined; // Boolean
 			// row._additionalContent=undefined; // String
 
 			var additionalRow = row._additionalRow;
@@ -3472,7 +3471,7 @@ var __members = {
 				additionalRow._parentNode = undefined; // HTMLRowElement
 				additionalRow._row = undefined; // HtmlRowElement
 				additionalRow._dataGrid = undefined; // f_grid
-				// additionalRow._additionalBody=undefined; // boolean
+				// additionalRow._additionalBody=undefined; // Boolean
 				additionalRow._waiting = undefined; // f_waiting
 			}
 			// 			
@@ -3482,9 +3481,9 @@ var __members = {
 			row._dataGrid = undefined; // f_grid
 			// row._index=undefined; // string
 			// // row._cellsStyleClass=undefined; // string
-			// row._selected=undefined; // boolean
+			// row._selected=undefined; // Boolean
 			row._cellImages = undefined; // HTMLImageELement[]
-			// row._hasCursor=undefined; // boolean
+			// row._hasCursor=undefined; // Boolean
 			// row._rowIndex=undefined; // number
 
 			row.onmousedown = null;
@@ -3529,7 +3528,7 @@ var __members = {
 	 * @method private
 	 * @param f_event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_performKeyDown : function(evt) {
 		var jsEvent = evt.f_getJsEvent();
@@ -3540,7 +3539,7 @@ var __members = {
 	 * @method protected
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_performKeyDown : function(evt) {
 		var cancel = false;
@@ -3655,7 +3654,7 @@ var __members = {
 	 *            evt
 	 * @param Boolean
 	 *            selection
-	 * @return boolean Success
+	 * @return Boolean Success
 	 */
 	f_searchRowNode : function(code, evt, selection) {
 		return false;
@@ -4230,13 +4229,13 @@ var __members = {
 	 * @param f_gridColumn
 	 *            col Column to sort
 	 * @param optional
-	 *            boolean ascending Sort ascending.
+	 *            Boolean ascending Sort ascending.
 	 * @param optional
-	 *            boolean append Append the sort.
+	 *            Boolean append Append the sort.
 	 * @param optional
 	 *            f_gridColumn col2 Column 2
 	 * @param optional
-	 *            boolean ascending2 Sort ascending2.
+	 *            Boolean ascending2 Sort ascending2.
 	 * @return void
 	 */
 	f_setColumnSort : function(col, ascending, append, col2, ascending2) {
@@ -4496,7 +4495,7 @@ var __members = {
 	 * @param Object
 	 *            column
 	 * @param optional
-	 *            number size
+	 *            Number swidth
 	 * @return void
 	 */
 	_updateTitleCellBody : function(column, swidth) {
@@ -4568,7 +4567,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_verifyWaitingPosition : function(evt) {
 		var scrollBody = this._scrollBody;
@@ -4627,7 +4626,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param optional
-	 *            boolean userSort
+	 *            Boolean userSort
 	 * @return void
 	 */
 	_sortTable : function(userSort) {
@@ -4731,12 +4730,12 @@ var __members = {
 	 * @param any
 	 *            rowValue Value associated to the row
 	 * @param optional
-	 *            boolean append Inclusive or Exclusive selection
+	 *            Boolean append Inclusive or Exclusive selection
 	 * @param optional
-	 *            boolean show Show the selected row.
+	 *            Boolean show Show the selected row.
 	 * @param optional
 	 *            hidden Event jsEvent
-	 * @return boolean Returns <code>true</code> if success.
+	 * @return Boolean Returns <code>true</code> if success.
 	 */
 	f_selectRow : function(rowValue, append, show, jsEvent) {
 		var row = this.f_getRowByValue(rowValue, true);
@@ -4756,10 +4755,10 @@ var __members = {
 	 * @param any
 	 *            rowValue Value associated to the row
 	 * @param optional
-	 *            boolean show Show the deselected row.
+	 *            Boolean show Show the deselected row.
 	 * @param optional
 	 *            hidden Event jsEvent
-	 * @return boolean Returns <code>true</code> if success.
+	 * @return Boolean Returns <code>true</code> if success.
 	 */
 	f_deselectRow : function(rowValue, show, jsEvent) {
 		var row = this.f_getRowByValue(rowValue, true);
@@ -4777,7 +4776,7 @@ var __members = {
 	 * @method public
 	 * @param any
 	 *            rowValue Value associated to the row, or a row object.
-	 * @return boolean The checked state of the row
+	 * @return Boolean The checked state of the row
 	 */
 	f_isSelected : function(rowValue) {
 		var row = this.f_getRowByValue(rowValue, true);
@@ -5244,7 +5243,7 @@ var __members = {
 	 * @method public
 	 * @param any
 	 *            rowValue Value associated to the row
-	 * @return boolean Return <code>true</code> if the row associated to the
+	 * @return Boolean Return <code>true</code> if the row associated to the
 	 *         rowValue is found.
 	 */
 	f_showRow : function(rowValue) {
@@ -5265,7 +5264,7 @@ var __members = {
 
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_hasElementAdditionalInformation : function(rowValue) {
 		if (!this._additionalInformations) {
@@ -5319,7 +5318,7 @@ var __members = {
 	 * @method protected
 	 * @param Object
 	 *            row
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isAdditionalElementVisible : function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
@@ -5360,7 +5359,7 @@ var __members = {
 	 * @method protected
 	 * @param Object
 	 *            row
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_hasAdditionalElement : function(row) {
 		f_core.Assert(row && row.tagName.toLowerCase() == "tr",
@@ -5373,7 +5372,7 @@ var __members = {
 	 * @method protected
 	 * @param HTMLTableRowElement
 	 *            row
-	 * @param Boolean
+	 * @param Boolean animated
 	 *            animated
 	 * @return void
 	 */
@@ -6058,7 +6057,7 @@ var __members = {
 	},
 /**
 	 * @method private
-	 * @param HTMLElement li
+	 * @param HTMLElement row
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */

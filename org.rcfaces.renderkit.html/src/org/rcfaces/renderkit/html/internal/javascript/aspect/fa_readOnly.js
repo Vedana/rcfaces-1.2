@@ -12,12 +12,12 @@
 var __members = {
 /*
 	f_finalize: function() {
-		// this._readOnly=undefined; //boolean
+		// this._readOnly=undefined; //Boolean
 	},
 	*/
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isReadOnly: function() {
 		if (this._readOnly===undefined) {
@@ -29,7 +29,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @param optional boolean set
+	 * @param optional Boolean set
 	 * @return void
 	 */
 	f_setReadOnly: function(set) {

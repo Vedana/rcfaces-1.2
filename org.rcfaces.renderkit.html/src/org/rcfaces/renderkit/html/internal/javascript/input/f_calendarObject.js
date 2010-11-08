@@ -280,7 +280,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnHomeDateClick: function(evt) {
@@ -307,7 +307,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnDayClick: function(evt) {
@@ -332,7 +332,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnDayKey: function(evt) {
@@ -529,7 +529,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnMonthClick: function(evt) {
@@ -554,7 +554,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnMonthKey: function(evt) {
@@ -675,7 +675,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnYearClick: function(evt) {
@@ -702,7 +702,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnYearKey: function(evt) {
@@ -758,7 +758,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnWeekClick: function(evt) {
@@ -789,7 +789,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnWeekKey: function(evt) {
@@ -878,7 +878,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnWeekDayClick: function(evt) {
@@ -904,7 +904,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnWeekDayKey: function(evt) {
@@ -963,7 +963,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnNextUnitClick: function(evt) {
@@ -984,7 +984,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnPrevUnitClick: function(evt) {
@@ -1004,7 +1004,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnUnitKey: function(evt) {
@@ -1049,7 +1049,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnNextYearClick: function(evt) {
@@ -1069,7 +1069,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnPrevYearClick: function(evt) {
@@ -1089,7 +1089,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnNextMonthClick: function(evt) {
@@ -1109,7 +1109,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:calendar
 	 */
 	_OnPrevMonthClick: function(evt) {
@@ -1524,7 +1524,7 @@ var __members = {
 	/**
 	 * @method public
 	 * @param any selection
-	 * @param optional boolean showSelection
+	 * @return optional Boolean showSelection
 	 * @return void
 	 */
 	f_setSelection: function(selection, showSelection) {

@@ -55,7 +55,7 @@ var __members = {
 	 *
 	 * @method public
 	 * @param Object value
-	 * @return boolean If value is recognized.
+	 * @return Boolean If value is recognized.
 	 */
 	f_setValue: function(value) {
 		if (typeof(value)=="string") {
@@ -70,7 +70,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean Returns <code>true</code> if auto tab facility is enabled.
+	 * @return Boolean Returns <code>true</code> if auto tab facility is enabled.
 	 */
 	f_isAutoTab: function() {
 		var autoTab=this._autoTab;
@@ -116,7 +116,7 @@ var __members = {
 	},
 	/**
 	 * @method public
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isAutoCompletion: function() {
 		var input=this.f_getInput();
@@ -125,7 +125,7 @@ var __members = {
 	},
 	/*
 	 * @method public
-	 * @param optional boolean complete
+	 * @return optional Boolean complete
 	 * @return void
 	 *
 	f_setAutoCompletion: function(complete) {

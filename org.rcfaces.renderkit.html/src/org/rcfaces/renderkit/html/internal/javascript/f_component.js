@@ -38,7 +38,7 @@ var __statics = {
 	 * @param HTMLElement parent
 	 * @param String label
 	 * @param optional String accessKey
-	 * @param optional boolean removeText
+	 * @return optional Boolean removeText
 	 * @return HTMLElement Underlined zone component
 	 */
 	AddLabelWithAccessKey: function(parent, label, accessKey, removeText) {
@@ -313,7 +313,7 @@ var __members = {
 	 * this method may still indicate that it is considered visible even though it may not actually be showing.
 	 *
 	 * @method public final
-	 * @return boolean the receiver's visibility state
+	 * @return Boolean the receiver's visibility state
 	 */
 	f_getVisible: function() {
 		var visible=this._visible;
@@ -338,7 +338,7 @@ var __members = {
 	 * Otherwise, <code>false</code> is returned.
 	 *
 	 * @method public final
-	 * @return boolean the receiver's visibility state
+	 * @return Boolean the receiver's visibility state
 	 */
 	f_isVisible: function() {
 		if (!this.f_getVisible()) {
@@ -636,7 +636,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */	 
 	f_parentShow: function() {
 		var parent=f_core.GetParentComponent(this);

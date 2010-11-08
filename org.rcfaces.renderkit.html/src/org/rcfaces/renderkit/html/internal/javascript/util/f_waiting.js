@@ -434,7 +434,7 @@ var __members = {
 	
 	/**
 	 * @method public
-	 * @param optional boolean immediately
+	 * @return optional Boolean immediately
 	 * @return void
 	 */
 	f_hide: function(immediately) {
@@ -452,7 +452,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param Number level
-	 * @param optional boolean immediately
+	 * @return optional Boolean immediately
 	 * @return void
 	 */
 	_installTimer: function(level, immediately) {

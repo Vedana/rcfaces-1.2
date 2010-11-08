@@ -235,7 +235,7 @@ var __statics = {
 	
 	/**
 	 * @method hidden static 
-	 * @return boolean
+	 * @return Boolean
 	 */
 	GetCancelExternalSubmit: function() {
 		return f_env.Get(f_env._CANCEL_EXTERNAL_SUBMIT, false);
@@ -251,7 +251,7 @@ var __statics = {
 	
 	/**
 	 * @method hidden static 
-	 * @return boolean
+	 * @return Boolean
 	 */
 	IsSubmitUntilPageCompleteLocked: function() {
 		return f_env._LockSubmitUntilPageComplete;
@@ -272,7 +272,7 @@ var __statics = {
 	
 	/**
 	 * @method hidden static 
-	 * @return boolean
+	 * @return Boolean
 	 */
 	GetCheckValidation: function() {
 		return (f_env._ClientValidationDisabled!==true);

@@ -61,7 +61,7 @@ var __members = {
 	/**
 	 * @method private
 	 * @param f_event event
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_performMenuMouseDown: function(event) {		
 		var jsEvent=event.f_getJsEvent();

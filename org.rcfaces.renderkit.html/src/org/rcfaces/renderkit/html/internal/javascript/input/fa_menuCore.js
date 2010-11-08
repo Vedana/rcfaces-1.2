@@ -44,7 +44,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menu
 	 */
 	_MenuItem_mouseOver: function(evt) {
@@ -69,7 +69,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menu
 	 */
 	_MenuItem_mouseOut: function(evt) {
@@ -92,7 +92,7 @@ var __statics = {
 	 * @method private static
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:menu
 	 */
 	_MenuItem_mouseDown: function(evt) {
@@ -130,7 +130,7 @@ var __statics = {
 	 *            menuItem
 	 * @param Event
 	 *            evt
-	 * @return boolean
+	 * @return Boolean
 	 */
 	OnKeyDown: function(menu, evt) {
 		f_core.Assert(evt, "Event is null !");
@@ -689,7 +689,7 @@ var __members = {
 	},
 	/**
 	 * @method protected final
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_uiIsPopupOpened: function(menuItem) {
 		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_uiIsPopupOpened: Invalid menuItem parameter ("+menuItem+")");
@@ -698,7 +698,7 @@ var __members = {
 	},	 
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_uiGetSelectedItem: function(menuItem) {
 		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_uiGetSelectedItem: Invalid menuItem parameter ("+menuItem+")");
@@ -1381,7 +1381,7 @@ var __members = {
 	},	
 	/**
 	 * @method private
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_preparePopup: function(menuItem) {
 		f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"'");
@@ -1466,7 +1466,7 @@ var __members = {
 	 *            Object positionInfos
 	 * @param optional
 	 *            number autoSelect
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_open: function(jsEvent, positionInfos, autoSelect) {
 		f_core.Debug(fa_menuCore, "f_open: Open menu "+this+".");
@@ -1484,7 +1484,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_openUIPopup: function(menuItem, jsEvent, autoSelect, positionInfos) {
 
@@ -1745,7 +1745,7 @@ var __members = {
 	 * @method protected abstract
 	 * @param Object
 	 *            parent
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isRootMenuItem: f_class.ABSTRACT,
 

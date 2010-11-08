@@ -137,7 +137,7 @@ var __members = {
 	 * Select the radio button by its RadioValue.
 	 * @method public
 	 * @param String value radioValue of the button 
-	 * @return boolean <code>true</code> if the button has been found.
+	 * @return Boolean <code>true</code> if the button has been found.
 	 */
 	f_setValue: function(value) {
 		if (this.f_mapIntoGroup(this.f_getGroupName(), function(item) {
@@ -176,7 +176,7 @@ var __members = {
 	},
 	/**
 	 * @method public 
-	 * @return boolean
+	 * @return Boolean
 	 */
 	f_isSelected: function() {
 		var input=this.f_getInput();
@@ -243,7 +243,7 @@ var __members = {
 	},
 	/**
 	 * @method protected
-	 * @return boolean
+	 * @return Boolean
 	 */
 	fa_isNativeRadioElement: function() {
 		return true;

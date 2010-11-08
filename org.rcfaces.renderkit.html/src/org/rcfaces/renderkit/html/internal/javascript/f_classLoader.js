@@ -543,7 +543,7 @@ f_classLoader.prototype = {
 	/**
 	 * @method private
 	 * @param String bundleName
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_loadBundle: function(bundleName) {
 	
@@ -759,7 +759,7 @@ f_classLoader.prototype = {
 	 * @method private
 	 * @param function[] listeners 
 	 * @param f_object component
-	 * @return boolean
+	 * @return Boolean
 	 */
 	_callOnInitComponentListeners: function(listeners, component) {
 		
@@ -1231,8 +1231,8 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden final
 	 * @param Object obj Object or String
-	 * @param optional boolean ignoreNotFound
-	 * @param optional boolean callCompleteComponent
+	 * @return optional Boolean ignoreNotFound
+	 * @return optional Boolean callCompleteComponent
 	 * @return Object
 	 */
 	f_init: function(obj, ignoreNotFound, callCompleteComponent) {
@@ -1914,7 +1914,7 @@ f_classLoader.prototype = {
 f_classLoader._LOOK="~";
 
 /**
- * @field private static final boolean
+ * @field private static final Boolean
  */
 f_classLoader._ProfileInitializer=false;
 
