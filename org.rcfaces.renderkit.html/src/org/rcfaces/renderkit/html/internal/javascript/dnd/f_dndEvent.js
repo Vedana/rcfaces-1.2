@@ -273,7 +273,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setEffect :function(effect){
-		f_core.Assert(typeof(effect)=="Number", "f_dndEvent.f_setEffect:" +
+		f_core.Assert(typeof(effect)=="number", "f_dndEvent.f_setEffect:" +
 				" Invalid effect parameter ("+effect+" (typeof=" + typeof(effect) +")");
 
 		if (!this._modifiedDetail){
@@ -299,7 +299,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setTypes :function(types){
-		f_core.Assert(typeof(types)=="String[]", "f_dndEvent.f_setTypes:" +
+		f_core.Assert(typeof(types)=="string[]", "f_dndEvent.f_setTypes:" +
 				" Invalid types parameter ("+types+" (typeof=" + typeof(types) +")");
 		
 		if (!this._modifiedDetail) {
