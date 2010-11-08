@@ -13,8 +13,8 @@ var __statics = {
 	
 	/**
 	 * @method private static
-	 * @param Event event
-	 * @return boolean
+	 * @param Event evt
+	 * @return Boolean 
 	 * @context object:scheduler
 	 */
 	_OnPeriodMouseOver : function(evt) {
@@ -44,7 +44,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 * @param Event evt
-	 * @return boolean
+	 * @return Boolean
 	 * @context object:scheduler
 	 */
 	_OnPeriodMouseOut : function(evt) {
@@ -66,8 +66,8 @@ var __statics = {
 	
 	/**
 	 * @method private static 
-	 * @param Event
-	 * @return boolean
+	 * @param Event evt
+	 * @return Boolean
 	 * @context object:scheduler
 	 */
 	_OnPeriodMouseDown: function(evt) {
@@ -366,7 +366,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param any element
+	 * @param any divNode
 	 * @param Boolean selected
 	 * @return void 
 	 */
@@ -377,7 +377,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @param any element
+	 * @param any divNode
 	 * @return Object 
 	 */
 	fa_getElementValue: function(divNode) {
