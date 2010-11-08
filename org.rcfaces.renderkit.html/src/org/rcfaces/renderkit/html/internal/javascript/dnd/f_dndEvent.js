@@ -299,7 +299,7 @@ var __members = {
 	 * @return void
 	 */
 	f_setTypes :function(types){
-		f_core.Assert(typeof(types)=="string[]", "f_dndEvent.f_setTypes:" +
+		f_core.Assert(typeof(types)=="object", "f_dndEvent.f_setTypes:" +
 				" Invalid types parameter ("+types+" (typeof=" + typeof(types) +")");
 		
 		if (!this._modifiedDetail) {
