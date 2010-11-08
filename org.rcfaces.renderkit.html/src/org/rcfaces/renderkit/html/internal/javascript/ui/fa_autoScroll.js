@@ -174,7 +174,7 @@ var __members = {
 	
 	/**
 	 * @method protected
-	 * @return boid 
+	 * @return void 
 	 */
 	fa_autoScrollPerformed: f_class.OPTIONAL_ABSTRACT
 };

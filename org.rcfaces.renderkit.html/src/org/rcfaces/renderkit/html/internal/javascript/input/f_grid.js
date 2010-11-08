@@ -1705,7 +1705,6 @@ var __statics = {
 	 *
 	 *@method public static 
 	 *@param f_component
-	 *
 	 *@return f_grid
 	 */
 	GetGridFromComponent: function(component) {
@@ -3288,7 +3287,7 @@ var __members = {
 	 * Refresh the structure of the grid.
 	 * 
 	 * @method public
-	 * @return void
+	 * @return Boolean
 	 */
 	f_refreshContent : function() {
 		if (!this._interactive) {
@@ -4711,7 +4710,6 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param f_component Component or HTMLElement 
-	 * 
 	 * @return Object Value of the row
 	 */
 	f_getRowValueFromCommponent: function(component){
