@@ -259,6 +259,14 @@ var __statics = {
 		}
 		
 		var node=li._node;
+		
+		if(tree._cursor){
+			var oldCursor = tree._cursor;
+			tree._cursor = li;
+			tree.fa_updateElementStyle(oldCursor); 
+		} else {
+			tree._cursor = li;
+		}
 
 		if (!tree._focus) {
 			tree.f_setFocus();
@@ -1530,7 +1538,7 @@ var __members = {
 			var itemHeight = item.offsetHeight; 
 			if (itemHeight == 0){ // possible sur certain arbre
 				if (item.nextSibling) {
-					itemHeight = item.nextSibling.offsetTop - item.offsetTop ;
+					itemHeight = (item.nextSibling.offsetTop - item.offsetTop)*2 ;
 				} else if (item.parentNode){
 					var parent = item.parentNode;
 					while (parent.offsetTop != 0){
@@ -2453,6 +2461,9 @@ var __members = {
 		var cursorNode=cursorLi._node;
 		
 		if (cursorNode._container && cursorNode._opened) {
+			if(!cursorNode._nodes){
+				return;
+			}
 			var nodes=cursorNode._nodes;
 			if (!nodes && !nodes.length) {
 				return;
