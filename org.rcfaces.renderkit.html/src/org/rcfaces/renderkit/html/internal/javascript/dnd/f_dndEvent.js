@@ -111,7 +111,7 @@ var __statics = {
 	 * Convert a f_event event to a f_dndEvent event to get more informations.
 	 * 
 	 * @method public static
-	 * @param f_event event;
+	 * @param f_event event
 	 * @return f_dndEvent
 	 */
 	As: function(event) {
