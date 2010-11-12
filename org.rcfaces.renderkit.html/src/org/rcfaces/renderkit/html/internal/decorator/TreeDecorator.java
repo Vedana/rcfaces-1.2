@@ -149,15 +149,15 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
         }
 
         String defaultCollapsedImageURL = treeComponent
-				.getDefaultCollapsedImageURL(facesContext);
-		if (defaultCollapsedImageURL != null) {
-			urls[2] = allocateImage(javaScriptWriter, defaultCollapsedImageURL);
-			if (urls[2] != null) {
-			    write = true;
-			}
-			// urls[2] =
-			// javaScriptWriter.allocateString(defaultCollapsedImageURL);
-		}
+                .getDefaultCollapsedImageURL(facesContext);
+        if (defaultCollapsedImageURL != null) {
+            urls[2] = allocateImage(javaScriptWriter, defaultCollapsedImageURL);
+            if (urls[2] != null) {
+                write = true;
+            }
+            // urls[2] =
+            // javaScriptWriter.allocateString(defaultCollapsedImageURL);
+        }
 
         String defaultSelectedImageURL = treeComponent
                 .getDefaultSelectedImageURL(facesContext);
@@ -388,16 +388,17 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
             parentVarId = javaScriptWriter.getComponentVarName();
         }
 
-        javaScriptWriter.write('=').writeMethodCall("f_appendNode2").write(
-                parentVarId).write(',');
+        javaScriptWriter.write('=').writeMethodCall("f_appendNode2")
+                .write(parentVarId).write(',');
 
         IObjectLiteralWriter objectLiteralWriter = javaScriptWriter
                 .writeObjectLiteral(false);
 
         Object selectItemValue = selectItem.getValue();
 
-        String value = convertItemValue(javaScriptWriter
-                .getHtmlComponentRenderContext(), selectItemValue);
+        String value = convertItemValue(
+                javaScriptWriter.getHtmlComponentRenderContext(),
+                selectItemValue);
         if (value != null) {
             objectLiteralWriter.writeSymbol("_value").writeString(value);
         }
