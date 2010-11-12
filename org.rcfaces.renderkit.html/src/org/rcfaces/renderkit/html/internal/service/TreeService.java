@@ -30,13 +30,14 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
+import org.rcfaces.core.item.IVisibleItem;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SelectItemsContext;
 import org.rcfaces.renderkit.html.internal.renderer.TreeRenderer;
@@ -245,12 +246,13 @@ public class TreeService extends AbstractHtmlService {
         String waitingVarId = jsWriter.getJavaScriptRenderContext()
                 .allocateVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(treeId).writeln(
-                ", document);");
+        jsWriter.write("var ").write(varId).write('=')
+                .writeCall("f_core", "GetElementByClientId")
+                .writeString(treeId).writeln(", document);");
 
-        jsWriter.write("var ").write(waitingVarId).write('=').writeMethodCall(
-                "f_getWaitingNode").write(waitingId).writeln(");");
+        jsWriter.write("var ").write(waitingVarId).write('=')
+                .writeMethodCall("f_getWaitingNode").write(waitingId)
+                .writeln(");");
 
         // Le varName a utiliser est celui du waitingVarId !
         // Car les noeuds sont encod�s par rapport � un parent nomm� par le
@@ -273,8 +275,8 @@ public class TreeService extends AbstractHtmlService {
          */
 
         // treeRenderer.encodeJsTransactionalRows(jsWriter, treeRenderContext);
-        jsWriter.writeMethodCall("f_clearWaiting").write(waitingId).writeln(
-                ");");
+        jsWriter.writeMethodCall("f_clearWaiting").write(waitingId)
+                .writeln(");");
 
         if (LOG.isTraceEnabled()) {
             pw.flush();
@@ -319,6 +321,12 @@ public class TreeService extends AbstractHtmlService {
 
         public void encodeNodeInit(UIComponent component, SelectItem selectItem) {
 
+            if (selectItem instanceof IVisibleItem) {
+                if (((IVisibleItem) selectItem).isVisible() == false) {
+                    return;
+                }
+            }
+
             SelectItemsContext context = getContext();
             if (LOG_TREE) {
                 System.out.println("Init>" + context.getDepth() + "  "
@@ -337,6 +345,12 @@ public class TreeService extends AbstractHtmlService {
         public int encodeNodeBegin(UIComponent component,
                 SelectItem selectItem, boolean hasChild, boolean isVisible)
                 throws WriterException {
+
+            if (selectItem instanceof IVisibleItem) {
+                if (((IVisibleItem) selectItem).isVisible() == false) {
+                    return SKIP_NODE;
+                }
+            }
 
             int depth = getContext().getDepth() - 1;
             if (depth >= 0 && depth < indexes.length) {
