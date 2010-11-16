@@ -39,10 +39,11 @@ public class TextEditorToolFolderRenderer extends ToolFolderRenderer {
     private static final Log LOG = LogFactory
             .getLog(TextEditorToolFolderRenderer.class);
 
-    private static final String DEFAULT_ITEM_TYPES = ITextEditorButtonType.CUT
-            + ", " + ITextEditorButtonType.COPY + ", "
-            + ITextEditorButtonType.PASTE + ", " + SEPARATOR + ","
-            + ITextEditorButtonType.UNDO + ", " + ITextEditorButtonType.REDO
+    private static final String DEFAULT_ITEM_TYPES = 
+    		//ITextEditorButtonType.CUT
+            //+ ", " + ITextEditorButtonType.COPY + ", "
+            //+ ITextEditorButtonType.PASTE + ", " + SEPARATOR + ","
+            ITextEditorButtonType.UNDO + ", " + ITextEditorButtonType.REDO
             + ", " + SEPARATOR + "," + ITextEditorButtonType.FONT_NAME + ", "
             + ITextEditorButtonType.FONT_SIZE + ", " + SEPARATOR + ", "
             + ITextEditorButtonType.BOLD + ", " + ITextEditorButtonType.ITALIC
