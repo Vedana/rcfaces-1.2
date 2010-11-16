@@ -98,16 +98,9 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 .getSelectedValue(facesContext);
         String valueColumnId = comboGridComponent
                 .getValueColumnId(facesContext);
-        
-        if (valueColumnId != null) {
-            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
-        }
 
         String labelColumnId = comboGridComponent
                 .getLabelColumnId(facesContext);
-        if (labelColumnId != null) {
-            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
-        }
 
         if (selectedValue != null) {
             UIComponent converterComponent = getColumn(comboGridComponent,
@@ -126,8 +119,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                             .get("valueFormat");
                     formattedValueLabel = (String) formattedValues
                             .get("valueFormatLabel");
-                }else if (labelColumnId != null) {
-                	
+                } else if (labelColumnId != null) {
+
                 }
 
                 if (formattedValue == null) {
@@ -172,6 +165,14 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
+
+        if (valueColumnId != null) {
+            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
+        }
+
+        if (labelColumnId != null) {
+            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
+        }
 
         if (valueFormat != null) {
             htmlWriter.writeAttribute("v:valueFormat", valueFormat);
@@ -457,15 +458,15 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         FacesContext facesContext = componentRenderContext.getFacesContext();
 
         if (componentRenderContext.containsAttribute(INPUT_ERRORED_PROPERTY)) {
-            sa.append(' ').append(getMainStyleClassName()).append(
-                    "_input_errored");
+            sa.append(' ').append(getMainStyleClassName())
+                    .append("_input_errored");
 
         } else if ((formattedValue == null || formattedValue.length() == 0)) {
             emptyMessage = comboGridComponent.getEmptyMessage(facesContext);
 
             if (emptyMessage != null) {
-                sa.append(' ').append(getMainStyleClassName()).append(
-                        "_input_empty_message");
+                sa.append(' ').append(getMainStyleClassName())
+                        .append("_input_empty_message");
 
                 htmlWriter.writeAttribute("v:emptyMessage", true);
             }
@@ -523,8 +524,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             return super.writeIdAttribute(htmlWriter);
         }
 
-        StringAppender id = new StringAppender(componentRenderContext
-                .getComponentClientId(), 16);
+        StringAppender id = new StringAppender(
+                componentRenderContext.getComponentClientId(), 16);
 
         String separator = componentRenderContext.getRenderContext()
                 .getProcessContext().getNamingSeparator();
@@ -548,8 +549,8 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 .removeAttribute(GRID_HTML_CONTENT);
 
         if (htmlContent != null) {
-            jsWriter.writeMethodCall("f_setGridInnerHTML").writeString(
-                    htmlContent).writeln(");");
+            jsWriter.writeMethodCall("f_setGridInnerHTML")
+                    .writeString(htmlContent).writeln(");");
         }
     }
 
@@ -585,9 +586,9 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         encodeJsColumns(htmlWriter, gridRenderContext, GENERATE_CELL_IMAGES
                 | GENERATE_CELL_TEXT | GENERATE_CELL_WIDTH);
     }
-    
-     protected String getWAIRole() {
-    	return IAccessibilityRoles.COMBOBOX;
+
+    protected String getWAIRole() {
+        return IAccessibilityRoles.COMBOBOX;
     }
 
     /**
