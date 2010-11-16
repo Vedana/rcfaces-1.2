@@ -196,8 +196,8 @@ public abstract class AbstractHtmlWriter extends
             value = values[0];
 
         } else {
-            StringAppender sa = new StringAppender((values.length + separator
-                    .length()) * 32);
+            StringAppender sa = new StringAppender(
+                    (values.length + separator.length()) * 32);
             for (int i = 0; i < values.length; i++) {
                 if (i > 0) {
                     sa.append(separator);
@@ -269,11 +269,12 @@ public abstract class AbstractHtmlWriter extends
             if (tagStack == null) {
                 tagStack = new Stack();
 
-                getFacesContext().getExternalContext().getRequestMap().put(
-                        TAG_STACK_PROPERTY, tagStack);
+                getFacesContext().getExternalContext().getRequestMap()
+                        .put(TAG_STACK_PROPERTY, tagStack);
             }
 
             tagStack.push(name);
+            tagStack.push(component);
         }
 
         try {
@@ -300,11 +301,13 @@ public abstract class AbstractHtmlWriter extends
                 throw new IllegalStateException("Tag stack is empty !");
             }
 
+            UIComponent poppedComponent = (UIComponent) tagStack.pop();
             String current = (String) tagStack.pop();
 
             if (current.equals(name) == false) {
                 throw new IllegalStateException("Invalid close of tag '" + name
-                        + "' current='" + current + "' !");
+                        + "' current='" + current + "' poped component='"
+                        + poppedComponent + "'!");
             }
         }
 
@@ -668,13 +671,11 @@ public abstract class AbstractHtmlWriter extends
         writeAttribute("aria-expanded", expanded);
         return this;
     }
-    
-    public IHtmlWriter writeAriaLabel(String ariaLabel)
-    		throws WriterException {
-    	writeAttribute("aria-label", ariaLabel);
-    	return this;
+
+    public IHtmlWriter writeAriaLabel(String ariaLabel) throws WriterException {
+        writeAttribute("aria-label", ariaLabel);
+        return this;
     }
-    
 
     public IHtmlWriter writeAriaLabelledBy(String clientId)
             throws WriterException {
