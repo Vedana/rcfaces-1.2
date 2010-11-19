@@ -1853,7 +1853,11 @@ var f_core = {
 	
 			// Get form form element parent if not given
 			if (!form && elt) {
-				form = f_core.GetParentForm(elt);
+				var htmlElt = elt;
+				if (htmlElt.nodeType != f_core.ELEMENT_NODE && htmlElt.f_getOwnerComponent) {
+					htmlElt = htmlElt.f_getOwnerComponent();
+				}
+				form = f_core.GetParentForm(htmlElt);
 			}
 			if (!form) {
 				var ex=new Error("Can not find form !");
