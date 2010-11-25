@@ -268,11 +268,7 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
 				throw new FacesException(e);
 			}
 			if (null == value) {
-				if(first == null){
-					return 0;
-				}else {
-					return first.intValue();
-				}
+				return first;
 			}
 			return (value.intValue());
 		} else {
@@ -555,11 +551,7 @@ public class UIData0 extends UIComponentBase implements NamingContainer {
 			}
 
 			if (null == value) {
-				if(rows == null){
-					return 0;
-				}else {
-					return rows.intValue();
-				}
+				return rows;
 			}
 			return (value.intValue());
 		} else {
