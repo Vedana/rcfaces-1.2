@@ -3,7 +3,6 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
-import java.io.CharArrayWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,9 +24,9 @@ import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.contentAccessor.BasicGenerationResourceInformation;
 import org.rcfaces.core.internal.contentAccessor.ContentAccessorFactory;
 import org.rcfaces.core.internal.contentAccessor.ICompositeContentAccessorHandler;
+import org.rcfaces.core.internal.contentAccessor.ICompositeContentAccessorHandler.ICompositeURLDescriptor;
 import org.rcfaces.core.internal.contentAccessor.IContentAccessor;
 import org.rcfaces.core.internal.contentAccessor.IGenerationResourceInformation;
-import org.rcfaces.core.internal.contentAccessor.ICompositeContentAccessorHandler.ICompositeURLDescriptor;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.repository.IRepository;
@@ -50,6 +49,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptEnableModeImpl;
+import org.rcfaces.renderkit.html.internal.util.LazyCharArrayWriter;
 
 /**
  * 
@@ -197,7 +197,7 @@ public class JavaScriptCollectorRenderContext extends
             final IJavaScriptComponentRenderer javaScriptComponent)
             throws WriterException {
 
-        final CharArrayWriter bufferedWriter = new CharArrayWriter(8000);
+        final LazyCharArrayWriter bufferedWriter = new LazyCharArrayWriter(8000);
         components.add(bufferedWriter);
 
         IJavaScriptWriter javaScriptWriter = new AbstractJavaScriptWriter() {
@@ -223,10 +223,8 @@ public class JavaScriptCollectorRenderContext extends
                         .allocateString(string, ret);
                 if (ret[0] == false) {
                     if (LOG.isDebugEnabled()) {
-                        LOG
-                                .debug("String '" + string
-                                        + "' is already setted to var '"
-                                        + varId + "'.");
+                        LOG.debug("String '" + string
+                                + "' is already setted to var '" + varId + "'.");
                     }
 
                     return varId;
@@ -606,8 +604,15 @@ public class JavaScriptCollectorRenderContext extends
                     }
                 }
 
-                CharArrayWriter writer = (CharArrayWriter) object;
+                LazyCharArrayWriter writer = (LazyCharArrayWriter) object;
+                if (writer.size() == 0) {
+                    writer.reset();
+                    continue;
+                }
+
                 String buffer = writer.toString().trim();
+                writer.reset();
+
                 if (buffer.length() < 1) {
                     continue;
                 }
@@ -812,10 +817,9 @@ public class JavaScriptCollectorRenderContext extends
                     }
                 }
             } else {
-                LOG
-                        .debug("Script operation '"
-                                + ICompositeContentAccessorHandler.COMPOSITE_OPERATION_ID
-                                + "' is not supported !");
+                LOG.debug("Script operation '"
+                        + ICompositeContentAccessorHandler.COMPOSITE_OPERATION_ID
+                        + "' is not supported !");
             }
         }
 
@@ -1008,18 +1012,23 @@ public class JavaScriptCollectorRenderContext extends
         }
 
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj) {
                 return true;
-            if (obj == null)
+            }
+            if (obj == null) {
                 return false;
-            if (getClass() != obj.getClass())
+            }
+            if (getClass() != obj.getClass()) {
                 return false;
+            }
             final ComponentId other = (ComponentId) obj;
             if (clientId == null) {
-                if (other.clientId != null)
+                if (other.clientId != null) {
                     return false;
-            } else if (!clientId.equals(other.clientId))
+                }
+            } else if (!clientId.equals(other.clientId)) {
                 return false;
+            }
             return true;
         }
     }
