@@ -763,7 +763,7 @@
 		<propertyValue>selected</propertyValue>
 	</component>
 
-	<component id="checkButton3States" extends="abstractInput">
+	<!--<component id="checkButton3States" extends="abstractInput">
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="IHorizontalTextPositionCapability" />
@@ -797,7 +797,7 @@
 		<propertyValue>selectedState</propertyValue>
 	</component>
 
-	<component id="combo" extends="abstractInput">
+	--><component id="combo" extends="abstractInput">
 		<capability id="ISelectionEventCapability" />
 		<capability id="IRequiredCapability" />
 		<capability id="IFocusStyleClassCapability" />
@@ -2640,14 +2640,14 @@ Dans le cas d'un mode period !
 	<component id="imageSubmitButton" extends="imageButton">
 	</component>	
 	
-	<component id="helpMessageZone" extends="abstractOutput">
+	<!--<component id="helpMessageZone" extends="abstractOutput">
 		<capability id="ITextCapability" />
 		<capability id="ITextDirectionCapability" />
 		<capability id="IFontCapability" />
 		<capability id="ITextAlignmentCapability" />
 	</component>	
 
-	<component id="hyperLink" extends="button">
+	--><component id="hyperLink" extends="button">
 		<implements id="org.rcfaces.core.internal.capability.IConvertValueHolder" />
 			
 		<method id="setConverter(String)"/>
@@ -3140,7 +3140,7 @@ Dans le cas d'un mode period !
 		<attribute id="indeterminate" type="boolean" />		
 	</component>
 
-	<component id="progressIndicator" extends="abstractBasic">
+	<!--<component id="progressIndicator" extends="abstractBasic">
 		<implements id="javax.faces.component.NamingContainer" />
 		<template>
 			<import>org.rcfaces.core.component.ProgressBarComponent</import>
@@ -3156,7 +3156,7 @@ Dans le cas d'un mode period !
 		<attribute id="indeterminate" type="boolean" />		
 	</component>
 
-	<component id="suggestTextEntry" extends="textEntry">
+	--><component id="suggestTextEntry" extends="textEntry">
 		<capability id="IFilterCapability"/>
 		<capability id="IMaxResultNumberCapability"/>
 		<capability id="ISuggestionEventCapability" />
