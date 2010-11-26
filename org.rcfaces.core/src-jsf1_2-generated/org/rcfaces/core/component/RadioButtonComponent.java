@@ -38,14 +38,39 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <p>The radioButton Component is based on the standard HTML tag &lt;INPUT TYPE="radio"&gt;. It can interoperate automatically with other radioButtons from the same group.</p>
  * <p>The radioButton Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text &amp; font</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>ITextCapability</li>
+ * <li>ITextDirectionCapability</li>
+ * <li>IHorizontalTextPositionCapability</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>IReadOnlyCapability</li>
+ * <li>IAlternateTextCapability</li>
+ * <li>ISeverityStyleClassCapability</li>
+ * <li>IFocusStyleClassCapability</li>
+ * <li>ISelectedCapability</li>
+ * <li>IRadioValueCapability</li>
+ * <li>IRequiredCapability</li>
+ * <li>IValidationParameters</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/radioButtonComponent.html">radioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_radioButton.html">f_radioButton</a> javascript class. f_radioButton extends f_checkButton, fa_groupName, fa_required, fa_clientValidatorParameters</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_radioButton</td>
+ * <td width="50%">Defines styles for the wrapper element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class RadioButtonComponent extends AbstractInputComponent implements 
 	ITextCapability,

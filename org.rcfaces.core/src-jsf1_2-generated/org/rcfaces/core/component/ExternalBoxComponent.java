@@ -11,6 +11,38 @@ import java.util.Arrays;
 import java.util.Set;
 import org.rcfaces.core.component.capability.ILoadEventCapability;
 
+/**
+ * <p>The externalBox Component is a container based on the standard HTML tag &lt;IFrame&gt;.  .</p>
+ * <p>The externalBox Component has the following capabilities :
+ * <ul>
+ * <li>ILoadEventCapability</li>
+ * <li>IOverStyleClassCapability</li>
+ * </ul>
+ * </p>
+ * 
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/"ExternalBox"Component.html">externalBox</a> renderer is link to the <a href="/jsdocs/index.html?f_externalBox.html" target="_blank">f_externalBox</a> javascript class. f_externalBox extends f_component</p>
+ * 
+ * <p>Table of component style classes : </p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_externalBox</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper Frame element</td>
+ * </tr>
+ * 
+ * 
+ * </tbody>
+ * </table>
+ */
 public class ExternalBoxComponent extends AbstractOutputComponent implements 
 	ILoadEventCapability,
 	IOverStyleClassCapability {
