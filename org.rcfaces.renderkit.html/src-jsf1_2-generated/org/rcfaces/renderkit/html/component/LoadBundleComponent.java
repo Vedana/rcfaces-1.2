@@ -9,6 +9,9 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
 
+/**
+ * Loads a property bundle on the client side.
+ */
 public class LoadBundleComponent extends CameliaBaseComponent {
 
 	private static final Log LOG = LogFactory.getLog(LoadBundleComponent.class);

@@ -8,6 +8,11 @@
 <p><b>Mandatory</b>.</p>
 		<p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
 		<p>It <b>must</b> be the first tag for a page.</p>
+		 <p>The ImageSubmitButton Component has the following capabilities :
+      	<ul>
+        	 <li>IPageConfigurator</li>
+     	 </ul>
+     	 </p>
 ]]></description>
 		<name>init</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.InitTag</tag-class>
@@ -196,7 +201,16 @@ A boolean value specifying if the HTML BASE tag must be generated.
 	</tag>
 	<tag>
 		<description><![CDATA[
-Specifies includes and required javascript classes.
+<p>Specifies includes and required javascript classes.<p>
+		<p>The JavaScript Component has the following attributes :
+      	<ul>
+        	<li>src</li>
+        	<li>requiredClasses</li>
+			<li>requiredFiles</li>
+			<li>requiredModules</li>
+			<li>requiredSets</li>
+     	 </ul>
+     	 </p>
 ]]></description>
 		<name>javaScript</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.JavaScriptTag</tag-class>
@@ -404,6 +418,9 @@ A string value sprecifying the charset associated to the "src" files.
 		</attribute>
 	</tag>
 	<tag>
+		<description><![CDATA[
+Loads a property bundle on the client side.
+]]></description>
 		<name>loadBundle</name>
 		<tag-class>org.rcfaces.renderkit.html.internal.taglib.LoadBundleTag</tag-class>
 		<tei-class>org.rcfaces.core.internal.taglib.CameliaTagExtraInfo</tei-class>
