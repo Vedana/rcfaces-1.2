@@ -8,11 +8,12 @@
  * @class f_spinner extends f_textEntry, fa_spinner
  */
 var __members = {
-	/*
+	
 	f_spinner: function() {
 		this.f_super(arguments);
+		this._input = f_core.GetElementByClientId(this.id+"::input");
 	},
-	*/
+	
 	/*
 	f_finalize: function() {
 		
