@@ -6,6 +6,11 @@
 <p><b>Mandatory</b>.</p>
 		<p>It holds the included javascript and css files. It is responsible for initializing RCFaces javascript engine.</p>
 		<p>It <b>must</b> be the first tag for a page.</p>
+		 <p>The ImageSubmitButton Component has the following capabilities :
+      	<ul>
+        	 <li>IPageConfigurator</li>
+     	 </ul>
+     	 </p>
 ]]></description>
 		<component-type>org.rcfaces.html.init</component-type>
 		<component-class>org.rcfaces.renderkit.html.component.InitComponent</component-class>
@@ -110,7 +115,16 @@ A boolean value specifying if the HTML BASE tag must be generated.
 	</component>
 	<component>
 		<description><![CDATA[
-Specifies includes and required javascript classes.
+<p>Specifies includes and required javascript classes.<p>
+		<p>The JavaScript Component has the following attributes :
+      	<ul>
+        	<li>src</li>
+        	<li>requiredClasses</li>
+			<li>requiredFiles</li>
+			<li>requiredModules</li>
+			<li>requiredSets</li>
+     	 </ul>
+     	 </p>
 ]]></description>
 		<component-type>org.rcfaces.html.javaScript</component-type>
 		<component-class>org.rcfaces.renderkit.html.component.JavaScriptComponent</component-class>
@@ -185,8 +199,38 @@ A string value sprecifying the charset associated to the "src" files.
 		</attribute>
 	</component>
 	<component>
+		<description><![CDATA[
+Loads a property bundle on the client side.
+]]></description>
 		<component-type>org.rcfaces.html.loadBundle</component-type>
 		<component-class>org.rcfaces.renderkit.html.component.LoadBundleComponent</component-class>
+		<attribute>
+			<description><![CDATA[
+A string value specifying the name to be used on the client side to access the resource bundle.
+]]></description>
+			<attribute-name>bundleName</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+Base name of the resource bundle to be loaded.
+		A string indicating the fully qualified name of a resources bundle (property file).
+]]></description>
+			<attribute-name>baseName</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>side</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>serverScope</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>override</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<component-type>org.rcfaces.html.nameSpace</component-type>
@@ -234,11 +278,6 @@ A string value sprecifying the charset associated to the "src" files.
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.checkButton</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CheckButtonRenderer</renderer-class>
-		</renderer>
-		<renderer>
-			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.core.checkButton3States</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CheckButton3StatesRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
@@ -319,11 +358,6 @@ A string value sprecifying the charset associated to the "src" files.
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.imageSubmitButton</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ImageSubmitButtonRenderer</renderer-class>
-		</renderer>
-		<renderer>
-			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.core.helpMessageZone</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.HelpMessageZoneRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
@@ -434,11 +468,6 @@ A string value sprecifying the charset associated to the "src" files.
 			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.progressBar</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ProgressBarRenderer</renderer-class>
-		</renderer>
-		<renderer>
-			<component-family>rcfaces</component-family>
-			<renderer-type>org.rcfaces.core.progressIndicator</renderer-type>
-			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.ProgressIndicatorRenderer</renderer-class>
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>

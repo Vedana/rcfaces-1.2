@@ -12,7 +12,16 @@ import java.util.Set;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
- * Specifies includes and required javascript classes.
+ * <p>Specifies includes and required javascript classes.<p>
+ * <p>The JavaScript Component has the following attributes :
+ * <ul>
+ * <li>src</li>
+ * <li>requiredClasses</li>
+ * <li>requiredFiles</li>
+ * <li>requiredModules</li>
+ * <li>requiredSets</li>
+ * </ul>
+ * </p>
  */
 public class JavaScriptComponent extends CameliaBaseComponent implements 
 	ITextCapability,
