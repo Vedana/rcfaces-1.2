@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<rcfaces-services>
-	<service>
-		<service-id>org.rcfaces.css.CSS_PARSER</service-id>
-		<service-class>org.rcfaces.css.internal.CssSteadyStateParser</service-class>
-	</service>
-</rcfaces-services>
