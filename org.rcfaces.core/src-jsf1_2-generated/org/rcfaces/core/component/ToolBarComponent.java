@@ -19,7 +19,33 @@ import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
 
 /**
- * <b>EXPERIMENTAL</b>
+ * <p>The toolBar component allows developers to easily add toolbars containing diffenrent components </p>
+ * 
+ * <p>The toolBar Component has the following capabilities :
+ * <ul>
+ * <li>IInitEventCapability</li>
+ * <li>IVerticalAlignmentCapability</li>
+ * <li>IBorderTypeCapability</li>
+ * <li>IImageAccessorsCapability </li>
+ * </ul>
+ * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ToolBarComponent.html">toolBar</a> renderer is linked to the <a href="/jsdoc/index.html?f_toolBar.html">f_toolBar</a> javascript class. f_toolBar extends f_component</p>
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_toolBar</td>
+ * <td width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * </tbody>
+ * </table>
  */
 public class ToolBarComponent extends AbstractBasicComponent implements 
 	IInitEventCapability,

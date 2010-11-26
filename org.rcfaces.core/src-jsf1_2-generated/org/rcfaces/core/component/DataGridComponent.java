@@ -88,17 +88,82 @@ import org.rcfaces.core.internal.tools.CollectionTools;
  * <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
  * <p>The dataGrid Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; images</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
- * <li>Contextual actions in cell, row or table scope</li>
- * <li>...</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>ISelectableCapability</li>
+ * <li>ISelectionCardinalityCapability</li>
+ * <li>ISelectedValuesCapability</li>
+ * <li>IDragEventCapability</li>
+ * <li>IDraggableCapability</li>
+ * <li>IDropEventCapability</li>
+ * <li>IDropCompleteEventCapability</li>
+ * <li>IDroppableCapability</li>
+ * <li>ICheckEventCapability</li>
+ * <li>ICheckableCapability</li>
+ * <li>ICheckCardinalityCapability</li>
+ * <li>ICheckedValuesCapability</li>
+ * <li>IAdditionalInformationEventCapability</li>
+ * <li>IAdditionalInformationValuesCapability</li>
+ * <li>IClientAdditionalInformationFullStateCapability</li>
+ * <li>IAdditionalInformationCardinalityCapability</li>
+ * <li>IDoubleClickEventCapability</li>
+ * <li>ILoadEventCapability</li>
+ * <li>IRequiredCapability</li>
+ * <li>IRowStyleClassCapability</li>
+ * <li>IEmptyDataMessageCapability</li>
+ * <li>IReadOnlyCapability</li>
+ * <li>IDisabledCapability</li>
+ * <li>IMenuCapability</li>
+ * <li>IScrollableCapability</li>
+ * <li>IFilterCapability</li>
+ * <li>IShowValueCapability</li>
+ * <li>IPreferencesSettings</li>
+ * <li>IPagedCapability</li>
+ * <li>IClientSelectionFullStateCapability</li>
+ * <li>IClientCheckFullStateCapability</li>
+ * <li>IHeaderVisibilityCapability</li>
+ * <li>ICursorProvider</li>
+ * <li>IGridComponent</li>
+ * <li>IDroppableGridComponent</li>
+ * <li>IOrderedChildrenCapability</li>
+ * <li>ISortedChildrenCapability</li>
+ * <li>IComponentValueTypeCapability</li>
+ * <li>ISelectionRangeComponent</li>
+ * <li>ICheckRangeComponent</li>
+ * <li>ISortedComponentsCapability</li>
+ * <li>IAdditionalInformationRangeComponent</li>
+ * <li>IDraggableGridComponent</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/DataGridComponent.html">dataGridComponent</a> renderer is link to the <a href="/jsdocs/index.html?f_dataGrid.html" target="_blank">f_dataGrid</a> javascript class. f_dataGrid extends f_grid, fa_readOnly, fa_checkManager, fa_droppable, fa_draggable, fa_autoOpen</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_dataGrid</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_grid_dataTitle_scroll</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the header of colums.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_grid_dataBody_scroll</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the body.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_grid_sortManager</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the pop-up od the sort manager.</td>
+ * </tr>
+ * </tbody>
+ * </table>
  */
 public class DataGridComponent extends AbstractDataComponent implements 
 	ISelectionEventCapability,

@@ -20,6 +20,7 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import java.util.List;
 import java.lang.String;
 import java.util.Date;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.component.capability.IHeightCapability;
 import org.rcfaces.core.lang.Time;
 import javax.el.ValueExpression;
@@ -29,6 +30,41 @@ import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.internal.converter.LiteralTimeConverter;
 import java.util.Arrays;
 
+/**
+ * <p>The scheduler Component shows a planning</p>
+ * <p>The scheduler Component has the following capabilities :
+ * <ul>
+ * <li>IWidthCapability</li>
+ * <li>IHeightCapability</li>
+ * <li>IScrollableCapability</li>
+ * <li>ILiteralLocaleCapability</li>
+ * <li>ILiteralTimeZoneCapability</li>
+ * <li>IStyleClassCapability</li>
+ * <li>ITabIndexCapability</li>
+ * <li>IImmediateCapability</li>
+ * <li>ISelectionEventCapability </li>
+ * </ul>
+ * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_scheduler</td>
+ * <td width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
+ */
 public class SchedulerComponent extends CameliaBaseComponent implements 
 	IWidthCapability,
 	IHeightCapability,
@@ -36,6 +72,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	ILiteralLocaleCapability,
 	ILiteralTimeZoneCapability,
 	IStyleClassCapability,
+	ITabIndexCapability,
 	IImmediateCapability,
 	ISelectionEventCapability {
 
@@ -45,7 +82,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hourBegin","secondaryTick","periods","var","selectionListener","literalLocale","height","periodStyle","verticalScrollPosition","showSecondaryTickLabel","periodEnd","periodToolTip","literalTimeZone","hourEnd","periodSelectable","periodLabel","primaryTick","periodValue","styleClass","width","showPrimaryTickLabel","dateBegin","horizontalScrollPosition","immediate","periodBegin"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hourBegin","secondaryTick","periods","var","tabIndex","selectionListener","literalLocale","height","periodStyle","verticalScrollPosition","showSecondaryTickLabel","periodEnd","periodToolTip","literalTimeZone","hourEnd","periodSelectable","periodLabel","primaryTick","periodValue","styleClass","width","showPrimaryTickLabel","dateBegin","horizontalScrollPosition","immediate","periodBegin"}));
 	}
 
 	public SchedulerComponent() {
@@ -317,6 +354,29 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	public void setStyleClass(java.lang.String styleClass) {
 		engine.setProperty(Properties.STYLE_CLASS, styleClass);
+	}
+
+	public java.lang.Integer getTabIndex() {
+		return getTabIndex(null);
+	}
+
+	/**
+	 * See {@link #getTabIndex() getTabIndex()} for more details
+	 */
+	public java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntegerProperty(Properties.TAB_INDEX, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "tabIndex" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTabIndexSetted() {
+		return engine.isPropertySetted(Properties.TAB_INDEX);
+	}
+
+	public void setTabIndex(java.lang.Integer tabIndex) {
+		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
 	public boolean isImmediate() {

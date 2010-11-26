@@ -24,6 +24,42 @@ import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 
+/**
+ * <p>The textEditorToolFolder component allows developers to easily add toolbars containing diffenrent components </p>
+ * 
+ * <p>The textEditorToolFolder Component has the following capabilities :
+ * <ul>
+ * <li>IRequiredCapability</li>
+ * <li>ITextCapability</li>
+ * <li>ITextDirectionCapability</li>
+ * <li>IEmptyMessageCapability</li>
+ * <li>IReadOnlyCapability</li>
+ * <li>IValueChangeEventCapability</li>
+ * <li>IMenuCapability</li>
+ * <li>IFocusStyleClassCapability</li>
+ * <li>ISeverityStyleClassCapability</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>IAlternateTextCapability</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEditor.html">f_textEditor</a> javascript class. f_textEditor extends f_component</p>
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_textEditor</td>
+ * <td width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * </tbody>
+ * </table>
+ */
 public class TextEditorComponent extends AbstractInputComponent implements 
 	IRequiredCapability,
 	ITextCapability,

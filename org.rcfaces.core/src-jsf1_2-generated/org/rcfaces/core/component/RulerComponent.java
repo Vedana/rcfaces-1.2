@@ -27,12 +27,36 @@ import org.rcfaces.core.component.capability.IMarginCapability;
  * <p>It is used often when simple HTML is not desirable : for example if a part of a page is loaded via AJAX it might be easier to have only a jsf tree memory represantation.</p>
  * <p>The ruler Component has the following capability :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Visibility</li>
- * <li>Margin</li>
+ * <li>IPositionCapability</li>
+ * <li>IMarginCapability</li>
+ * <li>ISizeCapability</li>
+ * <li>IVisibilityCapability</li>
+ * <li>IHiddenModeCapability</li>
+ * <li>ILookAndFeelCapability</li>
+ * <li>IOrientationCapability</li>
+ * <li>IForegroundBackgroundColorCapability
+ * <li>IAlignmentCapability</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdoc/index.html?f_ruler.html">f_ruler</a> javascript class. f_ruler extends f_component</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_ruler</td>
+ * <td width="50%">Defines styles for the HR element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class RulerComponent extends CameliaBaseComponent implements 
 	IPositionCapability,

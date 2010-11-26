@@ -18,10 +18,15 @@ import org.rcfaces.core.internal.component.CameliaCommandComponent;
  * <p>It allows to associate an accelerator key to an action or another component.</p>
  * <p>The accelerator Component has the following capabilities :
  * <ul>
- * <li>Key pressed</li>
- * <li>Association to another component</li>
+ * <li>IKeyPressEventCapability</li>
+ * <li>IImmediateCapability</li>
+ * <li>IValidationEventCapability</li>
+ * <li>IForCapability</li>
  * </ul>
  * </p>
+ * 
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdoc/index.html?f_accelerator.html">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
  */
 public class AcceleratorComponent extends CameliaCommandComponent implements 
 	IKeyPressEventCapability,

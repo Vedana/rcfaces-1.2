@@ -37,9 +37,19 @@ import java.util.Arrays;
  * <p>It allows to (synchronously or asynchronously) call AJAX services from the client.</p>
  * <p>The service Component has the following capability :
  * <ul>
- * <li>Property changed Event handling</li>
+ * <li>IClientDataCapability</li>
+ * <li>IServerDataCapability</li>
+ * <li>IPropertyChangeEventCapability</li>
+ * <li>IServiceEventCapability</li>
+ * <li>IFilterCapability</li>
+ * <li>IComponentLocaleCapability</li>
+ * <li>IComponentTimeZoneCapability</li>
+ * <li>IClientDataManager</li>
+ * <li>IServerDataManager </li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ServiceComponent.html">service</a> renderer is linked to the <a href="/jsdoc/index.html?f_service.html">f_service</a> javascript class. f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands</p>
  */
 public class ServiceComponent extends CameliaBaseComponent implements 
 	IClientDataCapability,

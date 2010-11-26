@@ -14,15 +14,27 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * <p>The messages Component is a placeholder for error messages (several messages can be shown simultaneously).</p>
  * <p>The messages Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; image</li>
- * <li>Margin</li>
- * <li>Help</li>
- * <li>Visibility</li>
- * <li>Events Handling</li>
+ * <li>ISeverityStyleClassCapability</li>
  * </ul>
  * </p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_messages</td>
+ * <td width="50%">Defines styles for the wrapper  element</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class MessagesComponent extends AbstractMessagesComponent implements 
 	ISeverityStyleClassCapability {

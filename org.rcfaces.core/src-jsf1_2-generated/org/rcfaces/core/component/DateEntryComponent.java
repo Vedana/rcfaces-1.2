@@ -28,16 +28,45 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * <p>The dateEntry Component is a specialized <a href="/comps/textEntryComponent.html">textEntry Component</a>. it sports auto-completion related to the validity of the numbers entered as a date.</p>
  * <p>The dateEntry Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; separators</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
- * <li>Calendar functions</li>
+ * <li>PIRequiredCapability</li>
+ * <li>IAutoTabCapability</li>
+ * <li>IValueChangeEventCapability</li>
+ * <li>IFocusStyleClassCapability</li>
+ * <li>ISeverityStyleClassCapability</li>
+ * <li>IDateFormatCapability</li>
+ * <li>IValidationParameters</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/DateEntryComponent.html">dateEntry</a> renderer is link to the <a href="/jsdocs/index.html?f_dateEntry.html" target="_blank">f_dateEntry</a> javascript class. f_dateEntry extends f_compositeNumEntry, fa_calendarPopup</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_dateEntry</td>
+ * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_dateEntry_dd</td>
+ * <td id="ermvsh" width="50%">Defines styles for day INPUT element.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_dateEntry_MM</td>
+ * <td id="ermvsh" width="50%">Defines styles for month INPUT element.</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_dateEntry_yyyy</td>
+ * <td id="ermvsh" width="50%">Defines styles for years INPUT element.</td>
+ * </tr>
+ * </tbody>
+ * </table>
  */
 public class DateEntryComponent extends AbstractCalendarComponent implements 
 	IRequiredCapability,

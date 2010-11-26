@@ -14,16 +14,51 @@ import org.rcfaces.core.component.capability.IForCapability;
  * <p>The helpButton Component is an <A href="/comps/imageButtonComponent.html">ImageButton</A>. It opens a new page showing the url specified in the "helpUrl" property of a component linked by the "for" property.</p>
  * <p>The helpButton Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; image</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
- * <li>Association with another component</li>
+ * <li>IForCapability</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/HelpButtonComponent.html">helpButton</a> renderer is link to the <a href="/jsdocs/index.html?f_helpButton.html" target="_blank">f_helpButton</a> javascript class. f_helpButton extends f_imageButton</p>
+ * 
+ * 
+ * <p>Table of component style classes : </p>
+ * 
+ * <table border="1" cellpadding="3" cellspacing="0"  width="100%">
+ * <tbody >
+ * <tr  style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">
+ * Style Name
+ * </td>
+ * <td bgcolor="#eeeeee"  width="50%">
+ * Description
+ * </td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff"  width="33%">
+ * f_helpButton
+ * </td>
+ * <td width="50%">
+ * Defines styles for the wrapper DIV element
+ * </td>
+ * </tr>
+ * <tr style="text-align:left">
+ * <td bgcolor="#ffffff"  width="33%">
+ * f_helpButton_ctext
+ * </td>
+ * <tdwidth="50%">
+ * Defines styles for the button Text
+ * </td>
+ * </tr>
+ * <tr " style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">
+ * f_helpButton_cimage
+ * </td>
+ * <td id="w9jqh-" width="50%">
+ * Defines styles for the button Image
+ * </td>
+ * </tr>
+ * </tbody>
+ * </table>
  */
 public class HelpButtonComponent extends ImageButtonComponent implements 
 	IForCapability {

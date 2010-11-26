@@ -69,16 +69,76 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * It allows contextual menus ...</p>
  * <p>The tree Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; images</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
- * <li>Contextual actions in node or tree scope</li>
+ * <li>IDoubleClickEventCapability</li>
+ * <li>IRequiredCapability</li>
+ * <li>IScrollableCapability</li>
+ * <li>IBorderCapability</li>
+ * <li>IReadOnlyCapability</li>
+ * <li>IMenuCapability</li>
+ * <li>IShowValueCapability</li>
+ * <li>IOverStyleClassCapability</li>
+ * <li>IFilterCapability</li>
+ * <li>ILoadEventCapability</li>
+ * <li>IExpandEventCapability</li>
+ * <li>IPreSelectionEventCapability</li>
+ * <li>IDragEventCapability</li>
+ * <li>IDraggableCapability</li>
+ * <li>IDropEventCapability</li>
+ * <li>IDropCompleteEventCapability</li>
+ * <li>IDroppableCapability</li>
+ * <li>ICheckableCapability</li>
+ * <li>ICheckCardinalityCapability</li>
+ * <li>ICheckEventCapability</li>
+ * <li>ICheckedValuesCapability</li>
+ * <li>IClientCheckFullStateCapability</li>
+ * <li>ISelectableCapability</li>
+ * <li><li>ISelectionCardinalityCapability</li>
+ * <li>ISelectionEventCapability</li>
+ * <li>ISelectedValuesCapability</li>
+ * <li>IClientSelectionFullStateCapability</li>
+ * <li>IPreloadedLevelDepthCapability</li>
+ * <li>IExpandableCapability</li>
+ * <li>IExpandedValuesCapability</li>
+ * <li>ICheckComponent</li>
+ * <li>ISelectionComponent</li>
+ * <li>IComponentValueTypeCapability</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdoc/index.html?f_tree.html">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
+ * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_tree</td>
+ * <td width="50%">Defines styles for the wrapper DIV element</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_tree_body</td>
+ * <td width="50%">Defines styles for the wrapper UL element</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_tree_parent</td>
+ * <td width="50%">Defines styles for the wrapper LI element of the parent nodes</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_tree_depth</td>
+ * <td width="50%">Defines styles for the DIV element of the depth node</td>
+ * </tr>
+ * <tr  style="text-align:left">
+ * <td bgcolor="#ffffff" width="33%">f_tree_node</td>
+ * <td width="50%">Defines styles for the DIV element of the node</td>
+ * </tr>
+ * 
+ * </tbody>
+ * </table>
  */
 public class TreeComponent extends AbstractInputComponent implements 
 	IDoubleClickEventCapability,

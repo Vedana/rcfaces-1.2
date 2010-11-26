@@ -31,9 +31,19 @@ import java.util.Arrays;
  * <p>It allows to access and store value on the client and on the server while keeping it concealed. The clientData Component can also be used.</p>
  * <p>The hiddenValue Component has the following capability :
  * <ul>
- * <li>Property changed Event handling</li>
+ * <li>IClientDataCapability</li>
+ * <li>IServerDataCapability</li>
+ * <li>IPropertyChangeEventCapability</li>
+ * <li>IImmediateCapability</li>
+ * <li>IValueLockedCapability</li>
+ * <li>IValidationEventCapability</li>
+ * <li>IUserEventCapability</li>
+ * <li>IClientDataManager</li>
+ * <li>IServerDataManager</li>
  * </ul>
  * </p>
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/HiddenValueComponent.html">hiddenValue</a> renderer is link to the <a href="/jsdocs/index.html?f_hiddenValue.html" target="_blank">f_hiddenValue</a> javascript class. f_hiddenValue extends f_eventTarget, fa_serializable, fa_clientData</p>
  */
 public class HiddenValueComponent extends CameliaInputComponent implements 
 	IClientDataCapability,
