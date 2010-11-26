@@ -112,46 +112,36 @@ public abstract class CameliaTag extends UIComponentELTag {
 
     protected void setProperties(UIComponent component) {
 
-        super.setProperties(component);
-    }
-
-    protected UIComponent createComponent(FacesContext facesContext,
-            String newId) throws JspException {
-
         if (myBinding == null) {
-            UIComponent component = super.createComponent(facesContext, newId);
-
             if (component instanceof IComponentLifeCycle) {
                 IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
 
-                componentLifeCycle.initializePhase(facesContext, false);
+                componentLifeCycle.initializePhase(getFacesContext(), false);
             }
 
             if (debugEnabled) {
-                LOG.debug("Create component for id '" + newId + "' returns '"
+                LOG.debug("Create component for id '" + getId() + "' returns '"
                         + component + "'.");
             }
 
-            return component;
+            return;
         }
 
         Object bindingValue = myBinding.getValue(getELContext());
 
-        UIComponent component = super.createComponent(facesContext, newId);
-
         if (component instanceof IComponentLifeCycle) {
             IComponentLifeCycle componentLifeCycle = (IComponentLifeCycle) component;
 
-            componentLifeCycle.initializePhase(facesContext,
+            componentLifeCycle.initializePhase(getFacesContext(),
                     bindingValue != null);
         }
 
         if (debugEnabled) {
-            LOG.debug("Create component for id '" + newId + "' returns '"
+            LOG.debug("Create component for id '" + getId() + "' returns '"
                     + component + "'.");
         }
 
-        return component;
+        super.setProperties(component);
     }
 
     public void setBinding(ValueExpression binding) throws JspException {
