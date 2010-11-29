@@ -192,12 +192,13 @@ public class JavaScriptCollectorRenderContext extends
         flushComponents(htmlWriter, false);
     }
 
+    @Override
     protected IJavaScriptWriter createJavaScriptWriter(
             final IHtmlWriter writer,
             final IJavaScriptComponentRenderer javaScriptComponent)
             throws WriterException {
 
-        final LazyCharArrayWriter bufferedWriter = new LazyCharArrayWriter(8000);
+        final LazyCharArrayWriter bufferedWriter = new LazyCharArrayWriter(256);
         components.add(bufferedWriter);
 
         IJavaScriptWriter javaScriptWriter = new AbstractJavaScriptWriter() {
@@ -207,6 +208,7 @@ public class JavaScriptCollectorRenderContext extends
 
             private boolean initialized;
 
+            @Override
             protected String convertSymbol(String className, String memberName) {
                 return JavaScriptCollectorRenderContext.this.convertSymbol(
                         className, memberName);
@@ -357,6 +359,7 @@ public class JavaScriptCollectorRenderContext extends
                 return "UTF-8";
             }
 
+            @Override
             protected void isInitialized() throws WriterException {
                 if (initialized) {
                     return;
@@ -396,6 +399,7 @@ public class JavaScriptCollectorRenderContext extends
      * super.addWaitingRequiredClassName(clazz); }
      */
 
+    @Override
     public boolean isRequiresPending() {
         return false;
     }
