@@ -46,7 +46,7 @@ import java.util.Arrays;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -54,7 +54,7 @@ import java.util.Arrays;
  * 
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee" width="50%">Description</td>
  * </tr>
  * 
  * <tr  style="text-align:left">

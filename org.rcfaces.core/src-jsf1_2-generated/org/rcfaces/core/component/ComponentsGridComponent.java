@@ -90,7 +90,7 @@ import org.rcfaces.core.component.ComponentsColumnComponent;
  * <li>ISelectionRangeComponent</li>
  * <li>ISortedComponentsCapability</li>
  * <li>IAdditionalInformationRangeComponent</li>
- * 
+ * </ul></p>
  * 
  * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComponentsGridComponent.html"> componentsGrid </a> renderer is link to the <a href="/jsdocs/index.html?f_componentsGrid.html" target="_blank">f_componentsGrid</a> javascript class. f_componentsGrid extends f_grid</p>
  * 
@@ -100,7 +100,7 @@ import org.rcfaces.core.component.ComponentsColumnComponent;
  * 
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee"  width="50%">Description</td>
  * </tr>
  * 
  * <tr  style="text-align:left">

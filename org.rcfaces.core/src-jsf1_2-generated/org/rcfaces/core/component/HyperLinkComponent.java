@@ -34,10 +34,10 @@ import javax.faces.context.FacesContext;
  * <tbody >
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee"  width="50%">Description</td>
  * </tr>
  * <tr id="pwsif0" style="text-align:left">
- * <td bgcolor="#ffffff"  width="33%">f_hyperLink</font></td>
+ * <td bgcolor="#ffffff"  width="33%">f_hyperLink</td>
  * <td  width="50%">Defines styles for the wrapper element of the component</td>
  * </tr>
  * </tbody>

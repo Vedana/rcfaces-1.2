@@ -34,7 +34,7 @@ import org.rcfaces.core.internal.converter.HiddenModeConverter;
  * 
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee"  width="50%">Description</td>
  * </tr>
  * 
  * <tr  style="text-align:left">

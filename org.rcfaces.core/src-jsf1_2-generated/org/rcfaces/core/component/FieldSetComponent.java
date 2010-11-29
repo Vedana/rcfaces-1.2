@@ -50,7 +50,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <tbody >
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee"  width="50%">Description</td>
  * </tr>
  * <tr style="text-align:left">
  * <td bgcolor="#ffffff" width="33%">f_fieldSet

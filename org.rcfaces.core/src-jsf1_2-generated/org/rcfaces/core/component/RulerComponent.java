@@ -34,7 +34,7 @@ import org.rcfaces.core.component.capability.IMarginCapability;
  * <li>IHiddenModeCapability</li>
  * <li>ILookAndFeelCapability</li>
  * <li>IOrientationCapability</li>
- * <li>IForegroundBackgroundColorCapability
+ * <li>IForegroundBackgroundColorCapability</li>
  * <li>IAlignmentCapability</li>
  * </ul>
  * </p>
@@ -47,7 +47,7 @@ import org.rcfaces.core.component.capability.IMarginCapability;
  * 
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee"  width="50%">Description</td>
  * </tr>
  * 
  * <tr  style="text-align:left">

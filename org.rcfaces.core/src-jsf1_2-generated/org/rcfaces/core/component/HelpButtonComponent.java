@@ -45,15 +45,15 @@ import org.rcfaces.core.component.capability.IForCapability;
  * <td bgcolor="#ffffff"  width="33%">
  * f_helpButton_ctext
  * </td>
- * <tdwidth="50%">
+ * <td width="50%">
  * Defines styles for the button Text
  * </td>
  * </tr>
- * <tr " style="text-align:left">
+ * <tr style="text-align:left">
  * <td bgcolor="#ffffff" width="33%">
  * f_helpButton_cimage
  * </td>
- * <td id="w9jqh-" width="50%">
+ * <td width="50%">
  * Defines styles for the button Image
  * </td>
  * </tr>

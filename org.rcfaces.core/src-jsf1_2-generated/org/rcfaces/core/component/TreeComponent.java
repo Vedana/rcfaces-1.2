@@ -92,7 +92,7 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * <li>ICheckedValuesCapability</li>
  * <li>IClientCheckFullStateCapability</li>
  * <li>ISelectableCapability</li>
- * <li><li>ISelectionCardinalityCapability</li>
+ * <li>ISelectionCardinalityCapability</li>
  * <li>ISelectionEventCapability</li>
  * <li>ISelectedValuesCapability</li>
  * <li>IClientSelectionFullStateCapability</li>
@@ -113,7 +113,7 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * 
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee"  width="50%">Description</td>
  * </tr>
  * 
  * <tr  style="text-align:left">

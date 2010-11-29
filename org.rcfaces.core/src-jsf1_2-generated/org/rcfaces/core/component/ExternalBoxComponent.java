@@ -21,7 +21,7 @@ import org.rcfaces.core.component.capability.ILoadEventCapability;
  * </p>
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/"ExternalBox"Component.html">externalBox</a> renderer is link to the <a href="/jsdocs/index.html?f_externalBox.html" target="_blank">f_externalBox</a> javascript class. f_externalBox extends f_component</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ExternalBoxComponent.html">externalBox</a> renderer is link to the <a href="/jsdocs/index.html?f_externalBox.html" target="_blank">f_externalBox</a> javascript class. f_externalBox extends f_component</p>
  * 
  * <p>Table of component style classes : </p>
  * 
@@ -31,7 +31,7 @@ import org.rcfaces.core.component.capability.ILoadEventCapability;
  * 
  * <tr style="text-align:left">
  * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" " width="50%">Description</td>
+ * <td bgcolor="#eeeeee"  width="50%">Description</td>
  * </tr>
  * 
  * <tr  style="text-align:left">
