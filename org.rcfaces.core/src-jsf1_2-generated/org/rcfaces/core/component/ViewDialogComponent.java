@@ -50,7 +50,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdoc/index.html?f_viewDialog.html">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdoc/index.html?f_viewDialog.html" target="_blank">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>

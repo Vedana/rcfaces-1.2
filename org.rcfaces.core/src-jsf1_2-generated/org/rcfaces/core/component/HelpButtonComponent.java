@@ -36,7 +36,9 @@ import org.rcfaces.core.component.capability.IForCapability;
  * <tr  style="text-align:left">
  * <td bgcolor="#ffffff"  width="33%">
  * f_helpButton
- * </td>
+ * </td>The server reported an error while performing the "cvs commit" command.
+ * org.rcfaces.core: cvs commit: sticky tag `1.3' for file `metadatas/camelia-doc.xml' is not a branch
+ * org.rcfaces.core: cvs [commit aborted]: correct above errors first!
  * <td width="50%">
  * Defines styles for the wrapper DIV element
  * </td>

@@ -17,7 +17,7 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * <li>ISeverityStyleClassCapability</li>
  * </ul>
  * </p>
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdoc/index.html?f_messages.html" target="_blank">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

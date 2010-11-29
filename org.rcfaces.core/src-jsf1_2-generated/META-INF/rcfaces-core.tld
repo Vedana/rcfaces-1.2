@@ -17,7 +17,7 @@
       </p>
       
         
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdoc/index.html?f_accelerator.html">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdoc/index.html?f_accelerator.html" target="_blank">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
 ]]></description>
 		<name>accelerator</name>
 		<tag-class>org.rcfaces.core.internal.taglib.AcceleratorTag</tag-class>
@@ -507,7 +507,7 @@ A string value specifying the margins for the component (compliant to CSS margin
       </ul>
       </p>
       
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdoc/index.html?f_box.html">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdoc/index.html?f_box.html" target="_blank">f_box</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
       
      <p>Table of component style classes : </p>
 
@@ -1454,7 +1454,7 @@ Executed when the component is fully loaded (similar to init for AJAX).
       </ul>
       </p>
       
-	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdoc/index.html?f_box.html">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ButtonComponent.html">button</a> renderer is linked to the <a href="/jsdoc/index.html?f_button.html" target="_blank">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -2796,7 +2796,7 @@ A boolean value indicating wether the component is selected.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdoc/index.html?f_combo.html">f_button</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdoc/index.html?f_combo.html" target="_blank">f_combo</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -5342,7 +5342,7 @@ A string value holding the current value of the component.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdoc/index.html?f_pager.html">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdoc/index.html?f_pager.html" target="_blank">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -10545,7 +10545,7 @@ The date value. (format : according the the declared locale)
       </p>
       
        
-	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdoc/index.html?f_calendar.html">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
+	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdoc/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
 
        <p> Table of the main component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -14898,7 +14898,10 @@ Description
 <tr  style="text-align:left">
 <td bgcolor="#ffffff"  width="33%">
 f_helpButton
-</td>
+</td>The server reported an error while performing the "cvs commit" command.
+  org.rcfaces.core: cvs commit: sticky tag `1.3' for file `metadatas/camelia-doc.xml' is not a branch
+  org.rcfaces.core: cvs [commit aborted]: correct above errors first!
+
 <td width="50%">
 Defines styles for the wrapper DIV element
 </td>
@@ -15677,7 +15680,7 @@ A component's id that express the link between the two components.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageSubmitButton.html">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageSubmitButton.html" target="_blank">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -17073,7 +17076,7 @@ The converter id to use. as specified in faces-config.xml.
       
       
         
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdoc/index.html?f_image.html">f_image</a> javascript class. f_image extends f_filtredComponent</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdoc/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -17512,7 +17515,7 @@ A binded object that hold the filters to use on the server side. This property i
       </p>
       
          
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageButton.html">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -18416,7 +18419,7 @@ Executed when the component is called.
       </p>
       
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCheckButton.html">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCheckButton.html" target="_blank">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -19293,7 +19296,7 @@ Executed when the component is selected.
       
       
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCombo.html">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCombo.html" target="_blank">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -20104,7 +20107,7 @@ Experimental : do not use!
       </ul>
       </p>
       
-        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImagePagerButtonComponent.html">imagePagerButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imagePagerButton.html">f_imagePagerButton</a> javascript class. f_imagePagerButton extends f_imageButton, fa_pager</p>
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImagePagerButtonComponent.html">imagePagerButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imagePagerButton.html" target="_blank">f_imagePagerButton</a> javascript class. f_imagePagerButton extends f_imageButton, fa_pager</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -21678,7 +21681,7 @@ A string value specifying the type of data (Java) to convert to or from.
       </ul>
       </p>
       
-	<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageRadioButton.html">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
+	<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageRadioButton.html" target="_blank">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -22576,7 +22579,7 @@ Executed when the component is selected.
       </ul>
       </p>
       
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageResetButtonComponent.html">imageResetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageResetButton.html">f_imageResetButton</a> javascript class. f_imageResetButton extends f_imageButton</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageResetButtonComponent.html">imageResetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageResetButton.html" target="_blank">f_imageResetButton</a> javascript class. f_imageResetButton extends f_imageButton</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -23348,7 +23351,7 @@ Executed when the component is selected.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -23463,7 +23466,7 @@ A boolean value indicating whether or not this component should be rendered
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ListComponent.html">list</a> renderer is linked to the <a href="/jsdoc/index.html?f_list.html">f_list</a> javascript class. f_list extends f_abstractList, fa_selectionProvider<String[]></p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ListComponent.html">list</a> renderer is linked to the <a href="/jsdoc/index.html?f_list.html" target="_blank">f_list</a> javascript class. f_list extends f_abstractList, fa_selectionProvider<String[]></p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -24413,7 +24416,7 @@ A string value specifying the title for the document.
 		</ul>
 	</p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdoc/index.html?f_viewDialog.html">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>     
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdoc/index.html?f_viewDialog.html" target="_blank">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>     
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
@@ -24797,7 +24800,7 @@ A string value specifying the choosen look of the component.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html" target="_blank">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
       
       
        <p> Table of component style classes: </p>
@@ -26012,7 +26015,7 @@ A boolean value indicating wether the component should be get the focus when a m
         <li>ISeverityStyleClassCapability</li>
       </ul>
       </p>
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdoc/index.html?f_messages.html" target="_blank">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
       
          <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -26480,7 +26483,7 @@ A boolean value indicating wether the component should be shown when a message i
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MenuComponent.html">menu</a> renderer is linked to the <a href="/jsdoc/index.html?f_menu.html">f_menu</a> javascript class. f_menu extends f_menuBase</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MenuComponent.html">menu</a> renderer is linked to the <a href="/jsdoc/index.html?f_menu.html" target="_blank">f_menu</a> javascript class. f_menu extends f_menuBase</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -29259,7 +29262,7 @@ An int value specifying the upper limit for the value of the component.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PasswordEntrykComponent.html">passwordEntry</a> renderer is linked to the <a href="/jsdoc/index.html?f_passwordEntry.html">f_passwordEntry</a> javascript class. f_passwordEntry extends f_textEntry</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PasswordEntrykComponent.html">passwordEntry</a> renderer is linked to the <a href="/jsdoc/index.html?f_passwordEntry.html" target="_blank">f_passwordEntry</a> javascript class. f_passwordEntry extends f_textEntry</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -30055,7 +30058,7 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ProgressBarComponent.html">progressBar</a> renderer is linked to the <a href="/jsdoc/index.html?f_progressBar.html">f_progressBar</a> javascript class. f_progressBar extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ProgressBarComponent.html">progressBar</a> renderer is linked to the <a href="/jsdoc/index.html?f_progressBar.html" target="_blank">f_progressBar</a> javascript class. f_progressBar extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -30655,7 +30658,7 @@ A boolean value indicating wether the value is not determinated.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_suggestTextEntry.html">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -31577,7 +31580,7 @@ A string specifying a converter id or a binding to a converter object. This conv
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/radioButtonComponent.html">radioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_radioButton.html">f_radioButton</a> javascript class. f_radioButton extends f_checkButton, fa_groupName, fa_required, fa_clientValidatorParameters</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/radioButtonComponent.html">radioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_radioButton.html" target="_blank">f_radioButton</a> javascript class. f_radioButton extends f_checkButton, fa_groupName, fa_required, fa_clientValidatorParameters</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -32318,7 +32321,7 @@ A boolean value indicating that the user is required to provide a submitted
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_resetButton.html">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_resetButton.html" target="_blank">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -32934,7 +32937,7 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdoc/index.html?f_ruler.html">f_ruler</a> javascript class. f_ruler extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdoc/index.html?f_ruler.html" target="_blank">f_ruler</a> javascript class. f_ruler extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -33261,7 +33264,7 @@ A string value specifying the name of a variable representing a shortcut to a bi
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SubmitButtonComponent.html">submitButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_submitButton.html">f_submitButton</a> javascript class. f_submitButton extends f_button</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SubmitButtonComponent.html">submitButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_submitButton.html" target="_blank">f_submitButton</a> javascript class. f_submitButton extends f_button</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -33874,7 +33877,7 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SpinnerComponent.html">spinner</a> renderer is linked to the <a href="/jsdoc/index.html?f_spinner.html">f_spinner</a> javascript class. f_spinner extends f_textEntry, fa_spinner</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SpinnerComponent.html">spinner</a> renderer is linked to the <a href="/jsdoc/index.html?f_spinner.html" target="_blank">f_spinner</a> javascript class. f_spinner extends f_textEntry, fa_spinner</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -35203,7 +35206,7 @@ A boolean value indicating wether the component should be get the focus when a m
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/StyledTextComponent.html">styledText</a> renderer is linked to the <a href="/jsdoc/index.html?f_styledText.html">f_styledText</a> javascript class. f_lineBreak extends f_text</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/StyledTextComponent.html">styledText</a> renderer is linked to the <a href="/jsdoc/index.html?f_styledText.html" target="_blank">f_styledText</a> javascript class. f_lineBreak extends f_text</p>
 ]]></description>
 		<name>styledText</name>
 		<tag-class>org.rcfaces.core.internal.taglib.StyledTextTag</tag-class>
@@ -35695,7 +35698,7 @@ A string value specifying the type of data (Java) to convert to or from.
       </ul>
       </p>
       
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdoc/index.html?f_cardBox.html">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdoc/index.html?f_cardBox.html" target="_blank">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -36788,7 +36791,7 @@ Executed when the component is fully loaded (similar to init for AJAX).
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TabbedPaneComponent.html">tabbedPane</a> renderer is linked to the <a href="/jsdoc/index.html?f_tabbedPane.html">f_tabbedPane</a> javascript class. f_tabbedPane extends f_cardBox</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TabbedPaneComponent.html">tabbedPane</a> renderer is linked to the <a href="/jsdoc/index.html?f_tabbedPane.html" target="_blank">f_tabbedPane</a> javascript class. f_tabbedPane extends f_cardBox</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -38623,7 +38626,7 @@ A string that indicates the alphanumeric key used to execute an action from the 
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextComponent.html">text</a> renderer is linked to the <a href="/jsdoc/index.html?f_text.html">f_text</a> javascript class. f_text extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextComponent.html">text</a> renderer is linked to the <a href="/jsdoc/index.html?f_text.html" target="_blank">f_text</a> javascript class. f_text extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -39139,7 +39142,7 @@ A string value specifying the type of data (Java) to convert to or from.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_textArea.html" target="_blank">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -39928,7 +39931,7 @@ Executed when the the component is activated by the user.
 		</ul>
 	</p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEditor.html">f_textEditor</a> javascript class. f_textEditor extends f_component</p>     
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEditor.html" target="_blank">f_textEditor</a> javascript class. f_textEditor extends f_component</p>     
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
@@ -40688,7 +40691,7 @@ Executed when the the component is activated by the user.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEntryComponent.html">textEntry</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEntry.html">f_textEntry</a> javascript class. f_textEntry extends f_abstractEntry</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEntryComponent.html">textEntry</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEntry.html" target="_blank">f_textEntry</a> javascript class. f_textEntry extends f_abstractEntry</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -42292,7 +42295,7 @@ An int value specifying the step used for the millisecond field when increasing/
 		</ul>
 	</p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ToolBarComponent.html">toolBar</a> renderer is linked to the <a href="/jsdoc/index.html?f_toolBar.html">f_toolBar</a> javascript class. f_toolBar extends f_component</p>     
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ToolBarComponent.html">toolBar</a> renderer is linked to the <a href="/jsdoc/index.html?f_toolBar.html" target="_blank">f_toolBar</a> javascript class. f_toolBar extends f_component</p>     
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
@@ -45328,7 +45331,7 @@ A string value holding a comma separated list of the client modifiable propertie
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdoc/index.html?f_tree.html">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdoc/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -47546,7 +47549,7 @@ A boolean value indicating wether the component should be get the focus when a m
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html" target="_blank">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -48354,7 +48357,7 @@ Executed when a component's property is changed (by javascript).
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ServiceComponent.html">service</a> renderer is linked to the <a href="/jsdoc/index.html?f_service.html">f_service</a> javascript class. f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ServiceComponent.html">service</a> renderer is linked to the <a href="/jsdoc/index.html?f_service.html" target="_blank">f_service</a> javascript class. f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands</p>
 ]]></description>
 		<name>service</name>
 		<tag-class>org.rcfaces.core.internal.taglib.ServiceTag</tag-class>

@@ -44,7 +44,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_textArea.html" target="_blank">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

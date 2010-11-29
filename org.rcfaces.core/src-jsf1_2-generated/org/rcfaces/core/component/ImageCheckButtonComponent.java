@@ -25,7 +25,7 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * </p>
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCheckButton.html">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCheckButton.html" target="_blank">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

@@ -20,7 +20,7 @@ import org.rcfaces.core.component.capability.IMultipleSelectCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ListComponent.html">list</a> renderer is linked to the <a href="/jsdoc/index.html?f_list.html">f_list</a> javascript class. f_list extends f_abstractList, fa_selectionProvider<String[]></p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ListComponent.html">list</a> renderer is linked to the <a href="/jsdoc/index.html?f_list.html" target="_blank">f_list</a> javascript class. f_list extends f_abstractList, fa_selectionProvider<String[]></p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

@@ -26,7 +26,7 @@ import org.rcfaces.core.internal.converter.HiddenModeConverter;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

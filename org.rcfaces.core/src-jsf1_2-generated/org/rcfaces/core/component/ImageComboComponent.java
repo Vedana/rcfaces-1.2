@@ -29,7 +29,7 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * 
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCombo.html">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCombo.html" target="_blank">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

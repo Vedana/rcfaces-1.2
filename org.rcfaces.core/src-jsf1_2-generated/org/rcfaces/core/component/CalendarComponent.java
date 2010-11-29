@@ -35,7 +35,7 @@ import java.util.Arrays;
  * </p>
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdoc/index.html?f_calendar.html">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdoc/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
  * <p> Table of the main component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>

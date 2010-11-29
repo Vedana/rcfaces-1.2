@@ -24,7 +24,7 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageRadioButton.html">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageRadioButton.html" target="_blank">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

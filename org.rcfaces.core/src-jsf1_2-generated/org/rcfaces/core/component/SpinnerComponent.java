@@ -23,7 +23,7 @@ import java.util.Set;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SpinnerComponent.html">spinner</a> renderer is linked to the <a href="/jsdoc/index.html?f_spinner.html">f_spinner</a> javascript class. f_spinner extends f_textEntry, fa_spinner</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SpinnerComponent.html">spinner</a> renderer is linked to the <a href="/jsdoc/index.html?f_spinner.html" target="_blank">f_spinner</a> javascript class. f_spinner extends f_textEntry, fa_spinner</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

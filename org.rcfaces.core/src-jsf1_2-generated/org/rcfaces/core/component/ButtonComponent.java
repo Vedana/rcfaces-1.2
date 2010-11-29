@@ -28,7 +28,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdoc/index.html?f_box.html">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ButtonComponent.html">button</a> renderer is linked to the <a href="/jsdoc/index.html?f_button.html" target="_blank">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

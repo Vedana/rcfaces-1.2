@@ -29,7 +29,7 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdoc/index.html?f_combo.html">f_button</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdoc/index.html?f_combo.html" target="_blank">f_combo</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

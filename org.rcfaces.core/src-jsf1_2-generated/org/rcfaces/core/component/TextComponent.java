@@ -30,7 +30,7 @@ import org.rcfaces.core.component.capability.IFontCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextComponent.html">text</a> renderer is linked to the <a href="/jsdoc/index.html?f_text.html">f_text</a> javascript class. f_text extends f_component</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextComponent.html">text</a> renderer is linked to the <a href="/jsdoc/index.html?f_text.html" target="_blank">f_text</a> javascript class. f_text extends f_component</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

@@ -29,7 +29,7 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html" target="_blank">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
  * 
  * 
  * <p> Table of component style classes: </p>

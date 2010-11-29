@@ -28,7 +28,7 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * </p>
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageButton.html">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

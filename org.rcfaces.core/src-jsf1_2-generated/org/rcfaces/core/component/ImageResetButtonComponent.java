@@ -16,7 +16,7 @@ import java.util.Set;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageResetButtonComponent.html">imageResetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageResetButton.html">f_imageResetButton</a> javascript class. f_imageResetButton extends f_imageButton</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageResetButtonComponent.html">imageResetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageResetButton.html" target="_blank">f_imageResetButton</a> javascript class. f_imageResetButton extends f_imageButton</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

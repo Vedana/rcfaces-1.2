@@ -105,7 +105,7 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdoc/index.html?f_tree.html">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdoc/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

@@ -33,7 +33,7 @@ import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
  * 
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdoc/index.html?f_image.html">f_image</a> javascript class. f_image extends f_filtredComponent</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdoc/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

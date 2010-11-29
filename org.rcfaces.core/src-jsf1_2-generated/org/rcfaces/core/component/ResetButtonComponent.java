@@ -21,7 +21,7 @@ import java.util.Set;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_resetButton.html">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_resetButton.html" target="_blank">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

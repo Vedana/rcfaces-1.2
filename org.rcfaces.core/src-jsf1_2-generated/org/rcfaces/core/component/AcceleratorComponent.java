@@ -26,7 +26,7 @@ import org.rcfaces.core.internal.component.CameliaCommandComponent;
  * </p>
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdoc/index.html?f_accelerator.html">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdoc/index.html?f_accelerator.html" target="_blank">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
  */
 public class AcceleratorComponent extends CameliaCommandComponent implements 
 	IKeyPressEventCapability,

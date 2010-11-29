@@ -34,7 +34,7 @@ import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdoc/index.html?f_cardBox.html">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdoc/index.html?f_cardBox.html" target="_blank">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

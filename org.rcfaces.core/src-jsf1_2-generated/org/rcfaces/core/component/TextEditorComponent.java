@@ -43,7 +43,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEditor.html">f_textEditor</a> javascript class. f_textEditor extends f_component</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEditor.html" target="_blank">f_textEditor</a> javascript class. f_textEditor extends f_component</p>
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>

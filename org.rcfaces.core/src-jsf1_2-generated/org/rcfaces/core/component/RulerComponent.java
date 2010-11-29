@@ -39,7 +39,7 @@ import org.rcfaces.core.component.capability.IMarginCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdoc/index.html?f_ruler.html">f_ruler</a> javascript class. f_ruler extends f_component</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdoc/index.html?f_ruler.html" target="_blank">f_ruler</a> javascript class. f_ruler extends f_component</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

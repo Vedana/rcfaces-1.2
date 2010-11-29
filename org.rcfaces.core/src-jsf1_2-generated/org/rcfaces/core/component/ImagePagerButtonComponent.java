@@ -29,7 +29,7 @@ import org.rcfaces.core.component.capability.IForCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImagePagerButtonComponent.html">imagePagerButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imagePagerButton.html">f_imagePagerButton</a> javascript class. f_imagePagerButton extends f_imageButton, fa_pager</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImagePagerButtonComponent.html">imagePagerButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imagePagerButton.html" target="_blank">f_imagePagerButton</a> javascript class. f_imagePagerButton extends f_imageButton, fa_pager</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">

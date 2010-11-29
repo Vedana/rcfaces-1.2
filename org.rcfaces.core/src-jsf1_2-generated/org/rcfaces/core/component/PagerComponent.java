@@ -32,7 +32,7 @@ import org.rcfaces.core.component.capability.IPagerMessageCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdoc/index.html?f_pager.html">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdoc/index.html?f_pager.html" target="_blank">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
