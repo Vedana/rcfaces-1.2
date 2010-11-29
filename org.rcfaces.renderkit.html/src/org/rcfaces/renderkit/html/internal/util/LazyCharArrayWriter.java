@@ -5,7 +5,6 @@ package org.rcfaces.renderkit.html.internal.util;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 
 public class LazyCharArrayWriter extends Writer {
 
@@ -37,27 +36,39 @@ public class LazyCharArrayWriter extends Writer {
         this.initialSize = initialSize;
     }
 
-    protected void initialize(int count) {
+    protected void initialize(int len) {
         if (buf != null) {
+            int newcount = count + len;
+            if (newcount <= buf.length) {
+                return;
+            }
+
+            char newbuf[] = new char[newcount + Math.max(len, 16)];
+            System.arraycopy(buf, 0, newbuf, 0, count);
+            buf = newbuf;
+
             return;
         }
 
-        if (initialSize > count) {
-            count = initialSize;
+        if (initialSize > len) {
+            len = initialSize;
         }
 
-        buf = new char[count];
+        buf = new char[len];
     }
 
     /**
      * Writes a character to the buffer.
      */
+    @Override
     public void write(int c) {
         initialize(1);
 
         int newcount = count + 1;
         if (newcount > buf.length) {
-            buf = Arrays.copyOf(buf, Math.max(buf.length << 1, newcount));
+            char newbuf[] = new char[Math.max(buf.length << 1, newcount)];
+            System.arraycopy(buf, 0, newbuf, 0, count);
+            buf = newbuf;
         }
         buf[count] = (char) c;
         count = newcount;
@@ -73,24 +84,21 @@ public class LazyCharArrayWriter extends Writer {
      * @param len
      *            the number of chars that are written
      */
+    @Override
     public void write(char c[], int off, int len) {
         if ((off < 0) || (off > c.length) || (len < 0)
                 || ((off + len) > c.length) || ((off + len) < 0)) {
             throw new IndexOutOfBoundsException();
         }
 
-        if (len == 0) {
+        if (len < 1) {
             return;
         }
 
         initialize(len);
 
-        int newcount = count + len;
-        if (newcount > buf.length) {
-            buf = Arrays.copyOf(buf, Math.max(buf.length << 1, newcount));
-        }
         System.arraycopy(c, off, buf, count, len);
-        count = newcount;
+        count += len;
     }
 
     /**
@@ -103,16 +111,17 @@ public class LazyCharArrayWriter extends Writer {
      * @param len
      *            Number of characters to be written
      */
+    @Override
     public void write(String str, int off, int len) {
+
+        if (len < 1) {
+            return;
+        }
 
         initialize(len);
 
-        int newcount = count + len;
-        if (newcount > buf.length) {
-            buf = Arrays.copyOf(buf, Math.max(buf.length << 1, newcount));
-        }
         str.getChars(off, off + len, buf, count);
-        count = newcount;
+        count += len;
 
     }
 
@@ -155,6 +164,7 @@ public class LazyCharArrayWriter extends Writer {
      * 
      * @since 1.5
      */
+    @Override
     public Writer append(CharSequence csq) {
         String s = (csq == null ? "null" : csq.toString());
         write(s, 0, s.length());
@@ -195,6 +205,7 @@ public class LazyCharArrayWriter extends Writer {
      * 
      * @since 1.5
      */
+    @Override
     public Writer append(CharSequence csq, int start, int end) {
         String s = (csq == null ? "null" : csq).subSequence(start, end)
                 .toString();
@@ -220,6 +231,7 @@ public class LazyCharArrayWriter extends Writer {
      * 
      * @since 1.5
      */
+    @Override
     public Writer append(char c) {
         write(c);
         return this;
@@ -239,11 +251,14 @@ public class LazyCharArrayWriter extends Writer {
      * 
      * @return an array of chars copied from the input data.
      */
-    public char toCharArray()[] {
+    public char[] toCharArray() {
         if (count == 0) {
             return new char[0];
         }
-        return Arrays.copyOf(buf, count);
+
+        char newbuf[] = new char[count];
+        System.arraycopy(buf, 0, newbuf, 0, count);
+        return newbuf;
     }
 
     /**
@@ -260,6 +275,7 @@ public class LazyCharArrayWriter extends Writer {
      * 
      * @return the string.
      */
+    @Override
     public String toString() {
         if (count == 0) {
             return "";
@@ -270,6 +286,7 @@ public class LazyCharArrayWriter extends Writer {
     /**
      * Flush the stream.
      */
+    @Override
     public void flush() {
     }
 
@@ -278,6 +295,7 @@ public class LazyCharArrayWriter extends Writer {
      * contents might still be required. Note: Invoking this method in this
      * class will have no effect.
      */
+    @Override
     public void close() {
     }
 }
