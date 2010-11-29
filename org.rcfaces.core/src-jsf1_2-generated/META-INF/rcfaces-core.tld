@@ -1029,7 +1029,7 @@ A boolean value indicating wether the vertical scroll is shown.
      </p>
      
      
-        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/"ExternalBox"Component.html">externalBox</a> renderer is link to the <a href="/jsdocs/index.html?f_externalBox.html" target="_blank">f_externalBox</a> javascript class. f_externalBox extends f_component</p>
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ExternalBoxComponent.html">externalBox</a> renderer is link to the <a href="/jsdocs/index.html?f_externalBox.html" target="_blank">f_externalBox</a> javascript class. f_externalBox extends f_component</p>
 		
 
     <p>Table of component style classes : </p>
@@ -1040,7 +1040,7 @@ A boolean value indicating wether the vertical scroll is shown.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -1462,7 +1462,7 @@ Executed when the component is fully loaded (similar to init for AJAX).
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -2078,7 +2078,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -2804,7 +2804,7 @@ A boolean value indicating wether the component is selected.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -5350,7 +5350,7 @@ A string value holding the current value of the component.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -5881,7 +5881,7 @@ A string specifying the message to display when there is no row to display.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -6351,31 +6351,9 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 			<name>margins</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -6398,6 +6376,28 @@ An int value specifying the number of rows to display, starting with the one ide
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
@@ -6909,7 +6909,7 @@ Executed when the the component is activated by the user.
 		<li>ISelectionRangeComponent</li>
 		<li>ISortedComponentsCapability</li>
 		<li>IAdditionalInformationRangeComponent</li>	
-		
+		</ul></p>
 		
 		<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComponentsGridComponent.html"> componentsGrid </a> renderer is link to the <a href="/jsdocs/index.html?f_componentsGrid.html" target="_blank">f_componentsGrid</a> javascript class. f_componentsGrid extends f_grid</p>
 		
@@ -6919,7 +6919,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -7377,31 +7377,9 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 			<name>margins</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -7424,6 +7402,28 @@ An int value specifying the number of rows to display, starting with the one ide
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
@@ -7703,7 +7703,7 @@ A string value specifying the name of the variable receiving the index of the cu
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -8147,31 +8147,9 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 			<name>margins</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -8187,6 +8165,28 @@ An int value specifying the number of rows to display, starting with the one ide
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -9452,31 +9452,9 @@ A string value specifying the management of invisible state on the client.
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 			<name>margins</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -9492,6 +9470,28 @@ An int value specifying the number of rows to display, starting with the one ide
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
 			</deferred-value>
 		</attribute>
 		<attribute>
@@ -9713,7 +9713,7 @@ A string value specifying the name of the variable receiving the index of the cu
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -10175,31 +10175,9 @@ A boolean value indicating that this component's value must be
 		</attribute>
 		<attribute>
 			<description><![CDATA[
-A number identifying the row to be displayed at the top of the component.
-]]></description>
-			<name>first</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>int</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
 A string value specifying the margins for the component (compliant to CSS margin).
 ]]></description>
 			<name>margins</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>java.lang.String</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A string value holding the name of a request-scope attribute under which the model data for the
-          row selected by the current value of the "rowIndex" property (i.e.
-          also the current value of the "rowData" property) will be exposed.
-]]></description>
-			<name>var</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>java.lang.String</type>
@@ -10222,6 +10200,28 @@ An int value specifying the number of rows to display, starting with the one ide
           the underlying data model will be displayed.
 ]]></description>
 			<name>rows</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>int</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A string value holding the name of a request-scope attribute under which the model data for the
+          row selected by the current value of the "rowIndex" property (i.e.
+          also the current value of the "rowData" property) will be exposed.
+]]></description>
+			<name>var</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>java.lang.String</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
+A number identifying the row to be displayed at the top of the component.
+]]></description>
+			<name>first</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>int</type>
@@ -10553,7 +10553,7 @@ The date value. (format : according the the declared locale)
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -11301,7 +11301,7 @@ A string specifying the selection mode :
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -12151,7 +12151,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -13097,7 +13097,7 @@ A string specifying the label associated with the home button.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -14302,7 +14302,7 @@ A boolean value indicating whether or not this component should be rendered
 <tbody >
 	<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		<tr style="text-align:left">
 		<td bgcolor="#ffffff" width="33%">f_fieldSet
@@ -14907,15 +14907,15 @@ Defines styles for the wrapper DIV element
 <td bgcolor="#ffffff"  width="33%">
 f_helpButton_ctext
 </td>
-<tdwidth="50%">
+<td width="50%">
 Defines styles for the button Text
 </td>
 </tr>
-<tr " style="text-align:left">
+<tr style="text-align:left">
 <td bgcolor="#ffffff" width="33%">
 f_helpButton_cimage
 </td>
-<td id="w9jqh-" width="50%">
+<td width="50%">
 Defines styles for the button Image
 </td>
 </tr>
@@ -15685,7 +15685,7 @@ A component's id that express the link between the two components.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -16461,10 +16461,10 @@ Executed when the component is selected.
 	<tbody >
 	<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 	<tr id="pwsif0" style="text-align:left">
-		<td bgcolor="#ffffff"  width="33%">f_hyperLink</font></td>
+		<td bgcolor="#ffffff"  width="33%">f_hyperLink</td>
 		<td  width="50%">Defines styles for the wrapper element of the component</td>
 	</tr>
       </tbody>
@@ -17081,7 +17081,7 @@ The converter id to use. as specified in faces-config.xml.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -17520,7 +17520,7 @@ A binded object that hold the filters to use on the server side. This property i
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -18424,7 +18424,7 @@ Executed when the component is called.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -19301,7 +19301,7 @@ Executed when the component is selected.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -20112,7 +20112,7 @@ Experimental : do not use!
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -21686,7 +21686,7 @@ A string value specifying the type of data (Java) to convert to or from.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -22584,7 +22584,7 @@ Executed when the component is selected.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -23356,7 +23356,7 @@ Executed when the component is selected.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -23471,7 +23471,7 @@ A boolean value indicating whether or not this component should be rendered
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -24420,7 +24420,7 @@ A string value specifying the title for the document.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -24806,7 +24806,7 @@ A string value specifying the choosen look of the component.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -25156,6 +25156,17 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+]]></description>
+			<name>showDetail</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A component's id that express the link between the two components.
 ]]></description>
 			<name>for</name>
@@ -25170,17 +25181,6 @@ A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "false".
 ]]></description>
 			<name>showSummary</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
-]]></description>
-			<name>showDetail</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
@@ -26020,7 +26020,7 @@ A boolean value indicating wether the component should be get the focus when a m
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -26359,6 +26359,17 @@ A string value specifying the margins for the component (compliant to CSS margin
 		</attribute>
 		<attribute>
 			<description><![CDATA[
+A boolean value indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+]]></description>
+			<name>showDetail</name>
+			<rtexprvalue>false</rtexprvalue>
+			<deferred-value>
+				<type>boolean</type>
+			</deferred-value>
+		</attribute>
+		<attribute>
+			<description><![CDATA[
 A boolean value indicating if the component specific messages should be shown or not.
 ]]></description>
 			<name>globalOnly</name>
@@ -26373,17 +26384,6 @@ A boolean value indicating whether the summary portion of displayed messages
           should be included.  Default value is "false".
 ]]></description>
 			<name>showSummary</name>
-			<rtexprvalue>false</rtexprvalue>
-			<deferred-value>
-				<type>boolean</type>
-			</deferred-value>
-		</attribute>
-		<attribute>
-			<description><![CDATA[
-A boolean value indicating whether the summary portion of displayed messages
-          should be included.  Default value is "true".
-]]></description>
-			<name>showDetail</name>
 			<rtexprvalue>false</rtexprvalue>
 			<deferred-value>
 				<type>boolean</type>
@@ -26488,7 +26488,7 @@ A boolean value indicating wether the component should be shown when a message i
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -29267,7 +29267,7 @@ An int value specifying the upper limit for the value of the component.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -30063,7 +30063,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -30663,7 +30663,7 @@ A boolean value indicating wether the value is not determinated.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -31585,7 +31585,7 @@ A string specifying a converter id or a binding to a converter object. This conv
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -32326,7 +32326,7 @@ A boolean value indicating that the user is required to provide a submitted
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -32929,7 +32929,7 @@ Executed when the the component is activated by the user.
 	<li>IHiddenModeCapability</li>
 	<li>ILookAndFeelCapability</li>
 	<li>IOrientationCapability</li>
-	<li>IForegroundBackgroundColorCapability
+	<li>IForegroundBackgroundColorCapability</li>
 	<li>IAlignmentCapability</li>
       </ul>
       </p>
@@ -32942,7 +32942,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -33269,7 +33269,7 @@ A string value specifying the name of a variable representing a shortcut to a bi
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -33882,7 +33882,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -35703,7 +35703,7 @@ A string value specifying the type of data (Java) to convert to or from.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -36796,7 +36796,7 @@ Executed when the component is fully loaded (similar to init for AJAX).
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -38631,7 +38631,7 @@ A string that indicates the alphanumeric key used to execute an action from the 
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -39147,7 +39147,7 @@ A string value specifying the type of data (Java) to convert to or from.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -39935,7 +39935,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee" e"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -40696,7 +40696,7 @@ Executed when the the component is activated by the user.
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -42299,7 +42299,7 @@ An int value specifying the step used for the millisecond field when increasing/
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -45315,7 +45315,7 @@ A string value holding a comma separated list of the client modifiable propertie
 		<li>ICheckedValuesCapability</li>
 		<li>IClientCheckFullStateCapability</li>
 		<li>ISelectableCapability</li>
-		<li><li>ISelectionCardinalityCapability</li>
+		<li>ISelectionCardinalityCapability</li>
 		<li>ISelectionEventCapability</li>
 		<li>ISelectedValuesCapability</li>
 		<li>IClientSelectionFullStateCapability</li>
@@ -45336,7 +45336,7 @@ A string value holding a comma separated list of the client modifiable propertie
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee"  width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
@@ -47546,7 +47546,7 @@ A boolean value indicating wether the component should be get the focus when a m
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
@@ -47554,7 +47554,7 @@ A boolean value indicating wether the component should be get the focus when a m
 		
 		<tr style="text-align:left">
 			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" " width="50%">Description</td>
+			<td bgcolor="#eeeeee" width="50%">Description</td>
 		</tr>
 		
 		<tr  style="text-align:left">
