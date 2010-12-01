@@ -123,7 +123,7 @@ public abstract class CameliaTag extends UIComponentELTag {
                 LOG.debug("Create component for id '" + getId() + "' returns '"
                         + component + "'.");
             }
-
+            super.setProperties(component);
             return;
         }
 
