@@ -49,18 +49,18 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody >
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * <tr style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_fieldSet
+ * <td width="33%">f_fieldSet
  * </td>
  * <td width="50%">
  * Defines styles for the wrapper DIV element
  * </td>
  * </tr>
  * <tr style="text-align:left">
- * <td bgcolor="#ffffff"  width="33%">
+ * <td  width="33%">
  * f_fieldSet_cellBody
  * </td>
  * <td width="50%">
@@ -68,7 +68,7 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * </td>
  * </tr>
  * <tr style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">
+ * <td width="33%">
  * fb_rounded
  * </td>
  * <td width="50%">

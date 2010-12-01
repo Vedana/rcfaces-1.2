@@ -30,19 +30,19 @@ import org.rcfaces.core.internal.tools.ComponentTools;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdocs/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_suggestTextEntry</td>
+ * <td width="33%">f_suggestTextEntry</td>
  * <td width="50%">Defines styles for the wrapper element</td>
  * </tr>
  * 

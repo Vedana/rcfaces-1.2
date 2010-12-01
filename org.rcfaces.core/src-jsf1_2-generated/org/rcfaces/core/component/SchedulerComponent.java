@@ -46,19 +46,19 @@ import java.util.Arrays;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html" target="_blank">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdocs/index.html?f_scheduler.html" target="_blank">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th  width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_scheduler</td>
+ * <td width="33%">f_scheduler</td>
  * <td width="50%">Defines styles for the wrapper DIV element</td>
  * </tr>
  * 

@@ -23,7 +23,7 @@ import java.util.Set;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/StyledTextComponent.html">styledText</a> renderer is linked to the <a href="/jsdoc/index.html?f_styledText.html" target="_blank">f_styledText</a> javascript class. f_lineBreak extends f_text</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/StyledTextComponent.html">styledText</a> renderer is linked to the <a href="/jsdocs/index.html?f_styledText.html" target="_blank">f_styledText</a> javascript class. f_lineBreak extends f_text</p>
  */
 public class StyledTextComponent extends TextComponent {
 

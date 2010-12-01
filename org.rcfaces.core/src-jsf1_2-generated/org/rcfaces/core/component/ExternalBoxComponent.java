@@ -30,12 +30,12 @@ import org.rcfaces.core.component.capability.ILoadEventCapability;
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_externalBox</td>
+ * <td width="33%">f_externalBox</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper Frame element</td>
  * </tr>
  * 

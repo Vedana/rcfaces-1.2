@@ -105,35 +105,35 @@ import org.rcfaces.core.component.AbstractInputComponent;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdoc/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdocs/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_tree</td>
+ * <td width="33%">f_tree</td>
  * <td width="50%">Defines styles for the wrapper DIV element</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_tree_body</td>
+ * <td width="33%">f_tree_body</td>
  * <td width="50%">Defines styles for the wrapper UL element</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_tree_parent</td>
+ * <td width="33%">f_tree_parent</td>
  * <td width="50%">Defines styles for the wrapper LI element of the parent nodes</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_tree_depth</td>
+ * <td width="33%">f_tree_depth</td>
  * <td width="50%">Defines styles for the DIV element of the depth node</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_tree_node</td>
+ * <td width="33%">f_tree_node</td>
  * <td width="50%">Defines styles for the DIV element of the node</td>
  * </tr>
  * 

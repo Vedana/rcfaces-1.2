@@ -32,36 +32,36 @@ import org.rcfaces.core.component.capability.IPagerMessageCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdoc/index.html?f_pager.html" target="_blank">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdocs/index.html?f_pager.html" target="_blank">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_pager</td>
+ * <td width="33%">f_pager</td>
  * <td width="50%">Defines styles for the wrapper DIV element</td>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_pager_button_first</td>
+ * <td width="33%">f_pager_button_first</td>
  * <td width="50%">Defines styles for the wrapper SPAN element</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_pager_button_next</td>
+ * <td width="33%">f_pager_button_next</td>
  * <td width="50%">Defines styles for the wrapper SPAN element</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_pager_button_last</td>
+ * <td width="33%">f_pager_button_last</td>
  * <td width="50%">Defines styles for the wrapper SPAN element</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_pager_button_prev</td>
+ * <td width="33%">f_pager_button_prev</td>
  * <td width="50%">Defines styles for the wrapper SPAN element</td>
  * </tr>
  * 

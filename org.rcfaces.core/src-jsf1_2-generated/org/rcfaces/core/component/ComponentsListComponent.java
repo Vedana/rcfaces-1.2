@@ -38,16 +38,16 @@ import org.rcfaces.core.component.capability.IMenuCapability;
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_componentslist</td>
+ * <td width="33%">f_componentslist</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element. Contains a Table</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_componentslist_cell</td>
+ * <td width="33%">f_componentslist_cell</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper TD element for the row.</td>
  * </tr>
  * </tbody>

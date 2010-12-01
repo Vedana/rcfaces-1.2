@@ -34,7 +34,7 @@ import org.rcfaces.core.component.capability.IForCapability;
  * </td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff"  width="33%">
+ * <td  width="33%">
  * f_helpButton
  * </td>The server reported an error while performing the "cvs commit" command.
  * org.rcfaces.core: cvs commit: sticky tag `1.3' for file `metadatas/camelia-doc.xml' is not a branch
@@ -44,7 +44,7 @@ import org.rcfaces.core.component.capability.IForCapability;
  * </td>
  * </tr>
  * <tr style="text-align:left">
- * <td bgcolor="#ffffff"  width="33%">
+ * <td  width="33%">
  * f_helpButton_ctext
  * </td>
  * <td width="50%">
@@ -52,7 +52,7 @@ import org.rcfaces.core.component.capability.IForCapability;
  * </td>
  * </tr>
  * <tr style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">
+ * <td width="33%">
  * f_helpButton_cimage
  * </td>
  * <td width="50%">

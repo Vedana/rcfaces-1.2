@@ -35,30 +35,30 @@ import java.util.Arrays;
  * </p>
  * 
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdoc/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdocs/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
  * <p> Table of the main component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_calendar_yearCursor</td>
+ * <td width="33%">f_calendar_yearCursor</td>
  * <td width="50%">Defines styles for the wrapper Table element used to change years of the calendar. Contains other style</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_calendar_monthList</td>
+ * <td width="33%">f_calendar_monthList</td>
  * <td width="50%">Defines styles for the wrapper Table element the element containing the  months of year  </td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_calendar_dayList</td>
+ * <td width="33%">f_calendar_dayList</td>
  * <td width="50%">Defines styles for the wrapper Table element the element containing the day list of year  </td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_calendar_day</td>
+ * <td width="33%">f_calendar_day</td>
  * <td width="50%">Defines styles for the A element</td>
  * </tr>
  * 

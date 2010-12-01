@@ -4186,7 +4186,7 @@ Experimental:		A string value specifying the type of input to show radio button 
       </p>
       
         
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdoc/index.html?f_accelerator.html" target="_blank">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/AcceleratorComponent.html">accelerator</a> renderer is linked to the <a href="/jsdocs/index.html?f_accelerator.html" target="_blank">f_accelerator</a> javascript class. f_accelerator extends f_object, fa_immediate, fa_eventTarget</p>
       
 ]]></doc>
 		<family>Non Visual</family>
@@ -4210,22 +4210,21 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<li>ITypedComponentCapability</li>
 		<li>IOverStyleClassCapability</li>
 		<li>IScrollableCapability</li>
-
       </ul>
       </p>
       
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdoc/index.html?f_box.html" target="_blank">f_box</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdocs/index.html?f_box.html" target="_blank">f_box</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
       
      <p>Table of component style classes : </p>
 
 	<table border="1" cellpadding="3" cellspacing="0" width="100%">
 	<tbody>
 	<tr style="text-align:left">
-		<td bgcolor="#eeeeee" width="33%">Style Name</td>
-		<td bgcolor="#eeeeee" width="50%">Description</td>
+		<th  width="33%">Style Name</th>
+		<th  width="50%">Description</th>
 	</tr>
 	<tr style="text-align:left">
-		<td bgcolor="#ffffff" width="33%">f_box</td>
+		<td width="33%">f_box</td>
 		<td width="50%">Defines styles for the wrapper element of the component</td>
 	</tr>
       </tbody>
@@ -4250,19 +4249,19 @@ Experimental:		A string value specifying the type of input to show radio button 
       </ul>
       </p>
       
-	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ButtonComponent.html">button</a> renderer is linked to the <a href="/jsdoc/index.html?f_button.html" target="_blank">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ButtonComponent.html">button</a> renderer is linked to the <a href="/jsdocs/index.html?f_button.html" target="_blank">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_button</td>
+			<td width="33%">f_button</td>
 			<td width="50%">Defines styles for the wrapper Input element</td>
 		</tr>
 		
@@ -4294,31 +4293,31 @@ Experimental:		A string value specifying the type of input to show radio button 
       </p>
       
        
-	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdoc/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
+	  <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CalendarComponent.html">calendar</a> renderer is linked to the <a href="/jsdocs/index.html?f_calendar.html" target="_blank">f_calendar</a> javascript class. f_calendar extends f_component, fa_readOnly, fa_disabled, fa_itemsWrapper</p>
 
        <p> Table of the main component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_calendar_yearCursor</td>
+			<td width="33%">f_calendar_yearCursor</td>
 			<td width="50%">Defines styles for the wrapper Table element used to change years of the calendar. Contains other style</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_calendar_monthList</td>
+			<td width="33%">f_calendar_monthList</td>
 			<td width="50%">Defines styles for the wrapper Table element the element containing the  months of year  </td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_calendar_dayList</td>
+			<td width="33%">f_calendar_dayList</td>
 			<td width="50%">Defines styles for the wrapper Table element the element containing the day list of year  </td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_calendar_day</td>
+			<td width="33%">f_calendar_day</td>
 			<td width="50%">Defines styles for the A element</td>
 		</tr>
 		
@@ -4352,24 +4351,24 @@ Experimental:		A string value specifying the type of input to show radio button 
       </ul>
       </p>
       
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdoc/index.html?f_cardBox.html" target="_blank">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CardBoxComponent.html">cardBox</a> renderer is linked to the <a href="/jsdocs/index.html?f_cardBox.html" target="_blank">f_cardBox</a> javascript class. f_cardBox extends f_component, fa_immediateu</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_cardBox</td>
+			<td width="33%">f_cardBox</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_cardBox_card</td>
+			<td width="33%">f_cardBox_card</td>
 			<td width="50%">Defines styles for the wrapper DIV element for each <a href="/apidocs/index.html?org/rcfaces/core/component/CardComponent.html">card</a></td>
 		</tr>
 		
@@ -4400,29 +4399,29 @@ Experimental:		A string value specifying the type of input to show radio button 
       </p>
       
       
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CheckButtonComponent.html">checkButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_checkButton">f_checkButton</a> javascript class. f_checkButton extends f_button</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/CheckButtonComponent.html">checkButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_checkButton">f_checkButton</a> javascript class. f_checkButton extends f_button</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_checkButton</td>
+			<td width="33%">f_checkButton</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_checkButton_input</td>
+			<td width="33%">f_checkButton_input</td>
 			<td width="50%">Defines styles for the wrapper Input button element </td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_checkButton_text</td>
+			<td width="33%">f_checkButton_text</td>
 			<td width="50%">Defines styles for the wrapper Span element containing the text </td>
 		</tr>
 		
@@ -4452,19 +4451,19 @@ Experimental:		A string value specifying the type of input to show radio button 
       </p>
       
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdoc/index.html?f_box.html" target="_blank">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdocs/index.html?f_box.html" target="_blank">f_button</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_button</td>
+			<td width="33%">f_button</td>
 			<td width="50%">Defines styles for the wrapper Input element</td>
 		</tr>
 		
@@ -4497,19 +4496,19 @@ Experimental:		A string value specifying the type of input to show radio button 
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdoc/index.html?f_combo.html" target="_blank">f_combo</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ComboComponent.html">comboComponent</a> renderer is linked to the <a href="/jsdocs/index.html?f_combo.html" target="_blank">f_combo</a> javascript class. f_combo extends f_abstractList, fa_selectionProvider</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_combo</td>
+			<td width="33%">f_combo</td>
 			<td width="50%">Defines styles for the wrapper Select element</td>
 		</tr>
 		
@@ -4550,20 +4549,20 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_comboGrid</td>
+			<td width="33%">f_comboGrid</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper Table element</td>
 		</tr>
 		<tr style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_comboGrid_input</td>
+			<td width="33%">f_comboGrid_input</td>
 			<td width="50%">Defines styles for the Input Text</td>
 		</tr>
 		<tr style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_comboGrid_popup</td>
+			<td width="33%">f_comboGrid_popup</td>
 			<td width="50%">Defines styles for the wrapper DIV elment of the pop-up. Contains fa_dataGridPopup styles</td>
 		</tr>
 		
@@ -4619,12 +4618,12 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_componentsGrid</td>
+			<td width="33%">f_componentsGrid</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element. Contains f_grid styles.</td>
 		</tr>
 		</tbody>
@@ -4658,16 +4657,16 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_componentslist</td>
+			<td width="33%">f_componentslist</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element. Contains a Table</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_componentslist_cell</td>
+			<td width="33%">f_componentslist_cell</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper TD element for the row.</td>
 		</tr>
 		</tbody>
@@ -4811,24 +4810,24 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dataGrid</td>
+			<td width="33%">f_dataGrid</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_grid_dataTitle_scroll</td>
+			<td width="33%">f_grid_dataTitle_scroll</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the header of colums.</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_grid_dataBody_scroll</td>
+			<td width="33%">f_grid_dataBody_scroll</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the body.</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_grid_sortManager</td>
+			<td width="33%">f_grid_sortManager</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the pop-up od the sort manager.</td>
 		</tr>
 		</tbody>
@@ -4858,20 +4857,20 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dateChooser</td>
+			<td width="33%">f_dateChooser</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dateChooser_image</td>
+			<td width="33%">f_dateChooser_image</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper IMG element for the calendar icone  .</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dateChooser_popup</td>
+			<td width="33%">f_dateChooser_popup</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the calendar pop-up.</td>
 		</tr>
 		</tbody>
@@ -4904,24 +4903,24 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dateEntry</td>
+			<td width="33%">f_dateEntry</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dateEntry_dd</td>
+			<td width="33%">f_dateEntry_dd</td>
 			<td id="ermvsh" width="50%">Defines styles for day INPUT element.</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dateEntry_MM</td>
+			<td width="33%">f_dateEntry_MM</td>
 			<td id="ermvsh" width="50%">Defines styles for month INPUT element.</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_dateEntry_yyyy</td>
+			<td width="33%">f_dateEntry_yyyy</td>
 			<td id="ermvsh" width="50%">Defines styles for years INPUT element.</td>
 		</tr>
 		</tbody>
@@ -4975,20 +4974,20 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_expandBar</td>
+			<td width="33%">f_expandBar</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper UL element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_expandBar_head</td>
+			<td width="33%">f_expandBar_head</td>
 			<td id="ermvsh" width="50%">Defines styles for the LI element for the title.</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_expandBar_body</td>
+			<td width="33%">f_expandBar_body</td>
 			<td id="ermvsh" width="50%">Defines styles for the element for the body.</td>
 		</tr>
 		
@@ -5022,12 +5021,12 @@ Experimental:		A string value specifying the type of input to show radio button 
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_externalBox</td>
+			<td width="33%">f_externalBox</td>
 			<td id="ermvsh" width="50%">Defines styles for the wrapper Frame element</td>
 		</tr>
 		
@@ -5071,18 +5070,18 @@ Experimental:		A string value specifying the type of input to show radio button 
     <table border="1" cellpadding="3" cellspacing="0" width="100%">
 <tbody >
 	<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		<tr style="text-align:left">
-		<td bgcolor="#ffffff" width="33%">f_fieldSet
+		<td width="33%">f_fieldSet
 		</td>
 		<td width="50%">
 		Defines styles for the wrapper DIV element
 		</td>
 		</tr>
 		<tr style="text-align:left">
-		<td bgcolor="#ffffff"  width="33%">
+		<td  width="33%">
 		f_fieldSet_cellBody
 		</td>
 		<td width="50%">
@@ -5090,7 +5089,7 @@ Experimental:		A string value specifying the type of input to show radio button 
 		</td>
 		</tr>
 		<tr style="text-align:left">
-		<td bgcolor="#ffffff" width="33%">
+		<td width="33%">
 		fb_rounded
 		</td>
 		<td width="50%">
@@ -5142,7 +5141,7 @@ Description
 </td>
 </tr>
 <tr  style="text-align:left">
-<td bgcolor="#ffffff"  width="33%">
+<td  width="33%">
 f_helpButton
 </td>The server reported an error while performing the "cvs commit" command.
   org.rcfaces.core: cvs commit: sticky tag `1.3' for file `metadatas/camelia-doc.xml' is not a branch
@@ -5153,7 +5152,7 @@ Defines styles for the wrapper DIV element
 </td>
 </tr>
 <tr style="text-align:left">
-<td bgcolor="#ffffff"  width="33%">
+<td  width="33%">
 f_helpButton_ctext
 </td>
 <td width="50%">
@@ -5161,7 +5160,7 @@ Defines styles for the button Text
 </td>
 </tr>
 <tr style="text-align:left">
-<td bgcolor="#ffffff" width="33%">
+<td width="33%">
 f_helpButton_cimage
 </td>
 <td width="50%">
@@ -5243,11 +5242,11 @@ Defines styles for the button Image
 	<table border="1" cellpadding="3" cellspacing="0" width="100%">
 	<tbody >
 	<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 	<tr id="pwsif0" style="text-align:left">
-		<td bgcolor="#ffffff"  width="33%">f_hyperLink</td>
+		<td  width="33%">f_hyperLink</td>
 		<td  width="50%">Defines styles for the wrapper element of the component</td>
 	</tr>
       </tbody>
@@ -5273,19 +5272,19 @@ Defines styles for the button Image
       
       
         
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdoc/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdocs/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_image</td>
+			<td width="33%">f_image</td>
 			<td width="50%">Defines styles for the wrapper IMG element</td>
 		</tr>
 		
@@ -5309,29 +5308,29 @@ Defines styles for the button Image
       </p>
       
          
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageButton</td>
+			<td width="33%">f_imageButton</td>
 			<td width="50%">Defines styles for the wrapper IMG element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageButton_text</td>
+			<td width="33%">f_imageButton_text</td>
 			<td width="50%">Defines styles for the wrapper SPAN element for text</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageButton_image</td>
+			<td width="33%">f_imageButton_image</td>
 			<td width="50%">Defines styles for the wrapper IMG element</td>
 		</tr>
 		
@@ -5354,24 +5353,24 @@ Defines styles for the button Image
       </p>
       
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCheckButton.html" target="_blank">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageCheckButtonComponent.html">imageCheckButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageCheckButton.html" target="_blank">f_imageCheckButton</a> javascript class. f_imageCheckButton extends f_imageButton, fa_selected</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageCheckButton</td>
+			<td width="33%">f_imageCheckButton</td>
 			<td width="50%">Defines styles for the wrapper A element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageCheckButton_image</td>
+			<td width="33%">f_imageCheckButton_image</td>
 			<td width="50%">Defines styles for the  IMG element</td>
 		</tr>
 		
@@ -5394,33 +5393,33 @@ Defines styles for the button Image
       
       
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageCombo.html" target="_blank">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComboComponent.html">imageCombo</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageCombo.html" target="_blank">f_imageCombo</a> javascript class. f_imageCombo extends f_imageButton, fa_subMenu, fa_itemsWrapper</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageCombo</td>
+			<td width="33%">f_imageCombo</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageCheckButton_ctext</td>
+			<td width="33%">f_imageCheckButton_ctext</td>
 			<td width="50%">Defines styles for the  Text element of the combo</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageCheckButton_cimage</td>
+			<td width="33%">f_imageCheckButton_cimage</td>
 			<td width="50%">Defines styles for the IMG element of the combo</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_menu_popup</td>
+			<td width="33%">f_menu_popup</td>
 			<td width="50%">Defines styles for the pop-up element of the combo</td>
 		</tr>
 		
@@ -5453,29 +5452,29 @@ Defines styles for the button Image
       </ul>
       </p>
       
-        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImagePagerButtonComponent.html">imagePagerButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imagePagerButton.html" target="_blank">f_imagePagerButton</a> javascript class. f_imagePagerButton extends f_imageButton, fa_pager</p>
+        <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImagePagerButtonComponent.html">imagePagerButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imagePagerButton.html" target="_blank">f_imagePagerButton</a> javascript class. f_imagePagerButton extends f_imageButton, fa_pager</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imagePagerButton</td>
+			<td width="33%">f_imagePagerButton</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imagePagerButton_text</td>
+			<td width="33%">f_imagePagerButton_text</td>
 			<td width="50%">Defines styles for the SPAN element of the button</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imagePagerButton_image</td>
+			<td width="33%">f_imagePagerButton_image</td>
 			<td width="50%">Defines styles for the A and IMG elements of the button</td>
 		</tr>
 		
@@ -5497,24 +5496,24 @@ Defines styles for the button Image
       </ul>
       </p>
       
-	<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageRadioButton.html" target="_blank">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
+	<p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageRadioButtonComponent.html">imageRadioButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageRadioButton.html" target="_blank">f_imageRadioButton</a> javascript class. f_imageRadioButton extends f_imageCheckButton, fa_groupName, fa_required</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageRadioButton</td>
+			<td width="33%">f_imageRadioButton</td>
 			<td width="50%">Defines styles for the wrapper A element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageRadioButton_image</td>
+			<td width="33%">f_imageRadioButton_image</td>
 			<td width="50%">Defines styles for the  IMG element</td>
 		</tr>
 		
@@ -5536,24 +5535,24 @@ Defines styles for the button Image
       </ul>
       </p>
       
-      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageResetButtonComponent.html">imageResetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageResetButton.html" target="_blank">f_imageResetButton</a> javascript class. f_imageResetButton extends f_imageButton</p>
+      <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageResetButtonComponent.html">imageResetButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageResetButton.html" target="_blank">f_imageResetButton</a> javascript class. f_imageResetButton extends f_imageButton</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageResetButton</td>
+			<td width="33%">f_imageResetButton</td>
 			<td width="50%">Defines styles for the wrapper A element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageResetButton_image</td>
+			<td width="33%">f_imageResetButton_image</td>
 			<td width="50%">Defines styles for the  IMG element</td>
 		</tr>
 		
@@ -5574,24 +5573,24 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageSubmitButton.html" target="_blank">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageSubmitButton.html" target="_blank">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageSubmitButton</td>
+			<td width="33%">f_imageSubmitButton</td>
 			<td width="50%">Defines styles for the wrapper A element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageSubmitButton_image</td>
+			<td width="33%">f_imageSubmitButton_image</td>
 			<td width="50%">Defines styles for the IMG element</td>
 		</tr>
 		
@@ -5651,19 +5650,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdocs/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_lineBreak</td>
+			<td width="33%">f_lineBreak</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -5686,19 +5685,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ListComponent.html">list</a> renderer is linked to the <a href="/jsdoc/index.html?f_list.html" target="_blank">f_list</a> javascript class. f_list extends f_abstractList, fa_selectionProvider<String[]></p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ListComponent.html">list</a> renderer is linked to the <a href="/jsdocs/index.html?f_list.html" target="_blank">f_list</a> javascript class. f_list extends f_abstractList, fa_selectionProvider<String[]></p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_list</td>
+			<td width="33%">f_list</td>
 			<td width="50%">Defines styles for the wrapper SELECT element</td>
 		</tr>
 		
@@ -5733,19 +5732,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MenuComponent.html">menu</a> renderer is linked to the <a href="/jsdoc/index.html?f_menu.html" target="_blank">f_menu</a> javascript class. f_menu extends f_menuBase</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MenuComponent.html">menu</a> renderer is linked to the <a href="/jsdocs/index.html?f_menu.html" target="_blank">f_menu</a> javascript class. f_menu extends f_menuBase</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_menu</td>
+			<td width="33%">f_menu</td>
 			<td width="50%">Defines styles for the wrapper UL element. Coantains f_grid_popup and f_menu_item styles</td>
 		</tr>
 		
@@ -5809,7 +5808,7 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html" target="_blank">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdocs/index.html?f_message.html" target="_blank">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
       
       
        <p> Table of component style classes: </p>
@@ -5817,22 +5816,22 @@ Defines styles for the button Image
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_message</td>
+			<td width="33%">f_message</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_message_summary</td>
+			<td width="33%">f_message_summary</td>
 			<td width="50%">Defines styles for the summary error message</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_message_detail</td>
+			<td width="33%">f_message_detail</td>
 			<td width="50%">Defines styles for the detail error message</td>
 		</tr>
 	
@@ -5858,19 +5857,19 @@ Defines styles for the button Image
       </p>
       
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageFieldSetComponent.html">messageFieldSet</a> renderer is linked to the <a href="/jsdoc/index.html?f_messageFieldSet.html" target="_blank">f_messageFieldSet</a> javascript class. f_messageFieldSet extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageFieldSetComponent.html">messageFieldSet</a> renderer is linked to the <a href="/jsdocs/index.html?f_messageFieldSet.html" target="_blank">f_messageFieldSet</a> javascript class. f_messageFieldSet extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_messageFieldSet</td>
+			<td width="33%">f_messageFieldSet</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -5889,19 +5888,19 @@ Defines styles for the button Image
         <li>ISeverityStyleClassCapability</li>
       </ul>
       </p>
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdoc/index.html?f_messages.html" target="_blank">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessagesComponent.html">messages</a> renderer is linked to the <a href="/jsdocs/index.html?f_messages.html" target="_blank">f_messages</a> javascript class. f_messages extends  f_component, fa_messageText</p>
       
          <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_messages</td>
+			<td width="33%">f_messages</td>
 			<td width="50%">Defines styles for the wrapper  element</td>
 		</tr>
 		
@@ -5941,36 +5940,36 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdoc/index.html?f_pager.html" target="_blank">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PagerComponent.html">pager</a> renderer is linked to the <a href="/jsdocs/index.html?f_pager.html" target="_blank">f_pager</a> javascript class. f_pager extends f_component, fa_pager</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_pager</td>
+			<td width="33%">f_pager</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_pager_button_first</td>
+			<td width="33%">f_pager_button_first</td>
 			<td width="50%">Defines styles for the wrapper SPAN element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_pager_button_next</td>
+			<td width="33%">f_pager_button_next</td>
 			<td width="50%">Defines styles for the wrapper SPAN element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_pager_button_last</td>
+			<td width="33%">f_pager_button_last</td>
 			<td width="50%">Defines styles for the wrapper SPAN element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_pager_button_prev</td>
+			<td width="33%">f_pager_button_prev</td>
 			<td width="50%">Defines styles for the wrapper SPAN element</td>
 		</tr>
 		
@@ -5995,19 +5994,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PasswordEntrykComponent.html">passwordEntry</a> renderer is linked to the <a href="/jsdoc/index.html?f_passwordEntry.html" target="_blank">f_passwordEntry</a> javascript class. f_passwordEntry extends f_textEntry</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/PasswordEntrykComponent.html">passwordEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_passwordEntry.html" target="_blank">f_passwordEntry</a> javascript class. f_passwordEntry extends f_textEntry</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_passwordEntry</td>
+			<td width="33%">f_passwordEntry</td>
 			<td width="50%">Defines styles for the INPUT element</td>
 		</tr>
 		
@@ -6032,19 +6031,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ProgressBarComponent.html">progressBar</a> renderer is linked to the <a href="/jsdoc/index.html?f_progressBar.html" target="_blank">f_progressBar</a> javascript class. f_progressBar extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ProgressBarComponent.html">progressBar</a> renderer is linked to the <a href="/jsdocs/index.html?f_progressBar.html" target="_blank">f_progressBar</a> javascript class. f_progressBar extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_progressBar</td>
+			<td width="33%">f_progressBar</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
@@ -6069,19 +6068,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/LineBreakComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdocs/index.html?f_lineBreak.html" target="_blank">f_lineBreak</a> javascript class. f_lineBreak extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_lineBreak</td>
+			<td width="33%">f_lineBreak</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -6112,19 +6111,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/radioButtonComponent.html">radioButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_radioButton.html" target="_blank">f_radioButton</a> javascript class. f_radioButton extends f_checkButton, fa_groupName, fa_required, fa_clientValidatorParameters</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/radioButtonComponent.html">radioButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_radioButton.html" target="_blank">f_radioButton</a> javascript class. f_radioButton extends f_checkButton, fa_groupName, fa_required, fa_clientValidatorParameters</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_radioButton</td>
+			<td width="33%">f_radioButton</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -6149,19 +6148,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_resetButton.html" target="_blank">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ResetButtonComponent.html">resetButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_resetButton.html" target="_blank">f_resetButton</a> javascript class. f_resetButton extends f_button</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_resetButton</td>
+			<td width="33%">f_resetButton</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -6190,19 +6189,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdoc/index.html?f_ruler.html" target="_blank">f_ruler</a> javascript class. f_ruler extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/RulerComponent.html">ruler</a> renderer is linked to the <a href="/jsdocs/index.html?f_ruler.html" target="_blank">f_ruler</a> javascript class. f_ruler extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_ruler</td>
+			<td width="33%">f_ruler</td>
 			<td width="50%">Defines styles for the HR element</td>
 		</tr>
 		
@@ -6247,7 +6246,7 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ServiceComponent.html">service</a> renderer is linked to the <a href="/jsdoc/index.html?f_service.html" target="_blank">f_service</a> javascript class. f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ServiceComponent.html">service</a> renderer is linked to the <a href="/jsdocs/index.html?f_service.html" target="_blank">f_service</a> javascript class. f_service extends f_object, fa_serializable, fa_eventTarget, fa_filterProperties, fa_commands</p>
       
     
 ]]></doc>
@@ -6270,32 +6269,32 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SpinnerComponent.html">spinner</a> renderer is linked to the <a href="/jsdoc/index.html?f_spinner.html" target="_blank">f_spinner</a> javascript class. f_spinner extends f_textEntry, fa_spinner</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SpinnerComponent.html">spinner</a> renderer is linked to the <a href="/jsdocs/index.html?f_spinner.html" target="_blank">f_spinner</a> javascript class. f_spinner extends f_textEntry, fa_spinner</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_spinner</td>
+			<td width="33%">f_spinner</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_spinner_input</td>
+			<td width="33%">f_spinner_input</td>
 			<td width="50%">Defines styles for the INPUT element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_spinner_up</td>
+			<td width="33%">f_spinner_up</td>
 			<td width="50%">Defines styles for the IMG element of the up button</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_spinner_down</td>
+			<td width="33%">f_spinner_down</td>
 			<td width="50%">Defines styles for the IMG elemen of the down button</td>
 		</tr>
 		
@@ -6336,7 +6335,7 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/StyledTextComponent.html">styledText</a> renderer is linked to the <a href="/jsdoc/index.html?f_styledText.html" target="_blank">f_styledText</a> javascript class. f_lineBreak extends f_text</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/StyledTextComponent.html">styledText</a> renderer is linked to the <a href="/jsdocs/index.html?f_styledText.html" target="_blank">f_styledText</a> javascript class. f_lineBreak extends f_text</p>
       
      
 ]]></doc>
@@ -6358,19 +6357,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SubmitButtonComponent.html">submitButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_submitButton.html" target="_blank">f_submitButton</a> javascript class. f_submitButton extends f_button</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SubmitButtonComponent.html">submitButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_submitButton.html" target="_blank">f_submitButton</a> javascript class. f_submitButton extends f_button</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_imageSubmitButton</td>
+			<td width="33%">f_imageSubmitButton</td>
 			<td width="50%">Defines styles for the wrapper A element</td>
 		</tr>
 				
@@ -6393,19 +6392,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdoc/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdocs/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_suggestTextEntry</td>
+			<td width="33%">f_suggestTextEntry</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -6436,31 +6435,31 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TabbedPaneComponent.html">tabbedPane</a> renderer is linked to the <a href="/jsdoc/index.html?f_tabbedPane.html" target="_blank">f_tabbedPane</a> javascript class. f_tabbedPane extends f_cardBox</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TabbedPaneComponent.html">tabbedPane</a> renderer is linked to the <a href="/jsdocs/index.html?f_tabbedPane.html" target="_blank">f_tabbedPane</a> javascript class. f_tabbedPane extends f_cardBox</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tabbedPane</td>
+			<td width="33%">f_tabbedPane</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tabbedPane_title</td>
+			<td width="33%">f_tabbedPane_title</td>
 			<td width="50%">Defines styles for the TABLE element </td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tabbedPane_content</td>
+			<td width="33%">f_tabbedPane_content</td>
 			<td width="50%">Defines styles for the DIV element</td>
 		</tr>
 			<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tabbedPane_tab</td>
+			<td width="33%">f_tabbedPane_tab</td>
 			<td width="50%">Defines styles for the DIV element</td>
 		</tr>
 		
@@ -6486,19 +6485,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextComponent.html">text</a> renderer is linked to the <a href="/jsdoc/index.html?f_text.html" target="_blank">f_text</a> javascript class. f_text extends f_component</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextComponent.html">text</a> renderer is linked to the <a href="/jsdocs/index.html?f_text.html" target="_blank">f_text</a> javascript class. f_text extends f_component</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_text</td>
+			<td width="33%">f_text</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -6529,19 +6528,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdoc/index.html?f_textArea.html" target="_blank">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextAreaComponent.html">textArea</a> renderer is linked to the <a href="/jsdocs/index.html?f_textArea.html" target="_blank">f_textArea</a> javascript class. f_textArea extends f_abstractEntry</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_textArea</td>
+			<td width="33%">f_textArea</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -6569,19 +6568,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdoc/index.html?f_scheduler.html" target="_blank">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SchedulerComponent.html">scheduler</a> renderer is linked to the <a href="/jsdocs/index.html?f_scheduler.html" target="_blank">f_scheduler</a> javascript class. f_scheduler extends f_component, fa_items, fa_selectionManager</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th  width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_scheduler</td>
+			<td width="33%">f_scheduler</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		
@@ -6596,7 +6595,7 @@ Defines styles for the button Image
 	<componentDoc id="textEditor">
 		<doc><![CDATA[ 
 		
-		 <p>The textEditorToolFolder component allows developers to easily add toolbars containing diffenrent components </p>
+		 <p>The textEditorToolFolder component is a container allowing to edit text and have a specific toolBar </p>
  
 	<p>The textEditorToolFolder Component has the following capabilities : 
 		<ul>
@@ -6614,18 +6613,18 @@ Defines styles for the button Image
 		</ul>
 	</p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEditor.html" target="_blank">f_textEditor</a> javascript class. f_textEditor extends f_component</p>     
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEditorComponent.html">textEditorToolFolder</a> renderer is linked to the <a href="/jsdocs/index.html?f_textEditor.html" target="_blank">f_textEditor</a> javascript class. f_textEditor extends f_component</p>     
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee" e"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_textEditor</td>
+			<td width="33%">f_textEditor</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		</tbody>
@@ -6662,19 +6661,19 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEntryComponent.html">textEntry</a> renderer is linked to the <a href="/jsdoc/index.html?f_textEntry.html" target="_blank">f_textEntry</a> javascript class. f_textEntry extends f_abstractEntry</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TextEntryComponent.html">textEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_textEntry.html" target="_blank">f_textEntry</a> javascript class. f_textEntry extends f_abstractEntry</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_textEntry</td>
+			<td width="33%">f_textEntry</td>
 			<td width="50%">Defines styles for the wrapper element</td>
 		</tr>
 		
@@ -6719,18 +6718,18 @@ Defines styles for the button Image
 		</ul>
 	</p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ToolBarComponent.html">toolBar</a> renderer is linked to the <a href="/jsdoc/index.html?f_toolBar.html" target="_blank">f_toolBar</a> javascript class. f_toolBar extends f_component</p>     
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ToolBarComponent.html">toolBar</a> renderer is linked to the <a href="/jsdocs/index.html?f_toolBar.html" target="_blank">f_toolBar</a> javascript class. f_toolBar extends f_component</p>     
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_toolBar</td>
+			<td width="33%">f_toolBar</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		</tbody>
@@ -6808,35 +6807,35 @@ Defines styles for the button Image
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdoc/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/TreeComponent.html">tree</a> renderer is linked to the <a href="/jsdocs/index.html?f_tree.html" target="_blank">f_tree</a> javascript class. f_tree extends f_component, fa_readOnly, fa_disabled, fa_immediate, fa_subMenu, fa_selectionManager<String[]>, fa_checkManager, fa_itemClientDatas, fa_scrollPositions, fa_overStyleClass, fa_filterProperties, fa_droppable, fa_draggable, fa_autoScroll, fa_autoOpen</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tree</td>
+			<td width="33%">f_tree</td>
 			<td width="50%">Defines styles for the wrapper DIV element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tree_body</td>
+			<td width="33%">f_tree_body</td>
 			<td width="50%">Defines styles for the wrapper UL element</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tree_parent</td>
+			<td width="33%">f_tree_parent</td>
 			<td width="50%">Defines styles for the wrapper LI element of the parent nodes</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tree_depth</td>
+			<td width="33%">f_tree_depth</td>
 			<td width="50%">Defines styles for the DIV element of the depth node</td>
 		</tr>
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_tree_node</td>
+			<td width="33%">f_tree_node</td>
 			<td width="50%">Defines styles for the DIV element of the node</td>
 		</tr>
 		
@@ -6896,18 +6895,18 @@ Defines styles for the button Image
 		</ul>
 	</p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdoc/index.html?f_viewDialog.html" target="_blank">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>     
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ViewDialogComponent.html">viewDialog</a> renderer is linked to the <a href="/jsdocs/index.html?f_viewDialog.html" target="_blank">f_viewDialog</a> javascript class. f_viewDialog extends f_dialog, fa_immediate </p>     
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
 		<tbody>
 		
 		<tr style="text-align:left">
-			<td bgcolor="#eeeeee"  width="33%">Style Name</td>
-			<td bgcolor="#eeeeee"  width="50%">Description</td>
+			<th  width="33%">Style Name</th>
+			<th width="50%">Description</th>
 		</tr>
 		
 		<tr  style="text-align:left">
-			<td bgcolor="#ffffff" width="33%">f_viewDialog</td>
+			<td width="33%">f_viewDialog</td>
 			<td width="50%">Defines styles for the wrapper FRAME element</td>
 		</tr>
 		</tbody>

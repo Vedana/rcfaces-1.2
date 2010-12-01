@@ -142,24 +142,24 @@ import org.rcfaces.core.internal.tools.CollectionTools;
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_dataGrid</td>
+ * <td width="33%">f_dataGrid</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_grid_dataTitle_scroll</td>
+ * <td width="33%">f_grid_dataTitle_scroll</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the header of colums.</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_grid_dataBody_scroll</td>
+ * <td width="33%">f_grid_dataBody_scroll</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the body.</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_grid_sortManager</td>
+ * <td width="33%">f_grid_sortManager</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the pop-up od the sort manager.</td>
  * </tr>
  * </tbody>

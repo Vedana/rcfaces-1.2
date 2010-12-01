@@ -29,7 +29,7 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdoc/index.html?f_message.html" target="_blank">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/MessageComponent.html">message</a> renderer is linked to the <a href="/jsdocs/index.html?f_message.html" target="_blank">f_message</a> javascript class. f_message extends f_component, fa_message1</p>
  * 
  * 
  * <p> Table of component style classes: </p>
@@ -37,22 +37,22 @@ import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_message</td>
+ * <td width="33%">f_message</td>
  * <td width="50%">Defines styles for the wrapper DIV element</td>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_message_summary</td>
+ * <td width="33%">f_message_summary</td>
  * <td width="50%">Defines styles for the summary error message</td>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_message_detail</td>
+ * <td width="33%">f_message_detail</td>
  * <td width="50%">Defines styles for the detail error message</td>
  * </tr>
  * 

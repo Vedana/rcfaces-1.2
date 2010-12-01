@@ -16,24 +16,24 @@ import java.util.Set;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdoc/index.html?f_imageSubmitButton.html" target="_blank">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageSubmitButtonComponent.html">imageSubmitButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageSubmitButton.html" target="_blank">f_imageSubmitButton</a> javascript class. f_imageSubmitButton extends f_imageButton</p>
  * 
  * <p> Table of component style classes: </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_imageSubmitButton</td>
+ * <td width="33%">f_imageSubmitButton</td>
  * <td width="50%">Defines styles for the wrapper A element</td>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_imageSubmitButton_image</td>
+ * <td width="33%">f_imageSubmitButton_image</td>
  * <td width="50%">Defines styles for the IMG element</td>
  * </tr>
  * 

@@ -63,20 +63,20 @@ import org.rcfaces.core.component.capability.ITextCapability;
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_expandBar</td>
+ * <td width="33%">f_expandBar</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper UL element</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_expandBar_head</td>
+ * <td width="33%">f_expandBar_head</td>
  * <td id="ermvsh" width="50%">Defines styles for the LI element for the title.</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_expandBar_body</td>
+ * <td width="33%">f_expandBar_body</td>
  * <td id="ermvsh" width="50%">Defines styles for the element for the body.</td>
  * </tr>
  * 

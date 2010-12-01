@@ -41,20 +41,20 @@ import org.rcfaces.core.internal.converter.TextPositionConverter;
  * <tbody>
  * 
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * 
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_dateChooser</td>
+ * <td width="33%">f_dateChooser</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element.</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_dateChooser_image</td>
+ * <td width="33%">f_dateChooser_image</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper IMG element for the calendar icone  .</td>
  * </tr>
  * <tr  style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_dateChooser_popup</td>
+ * <td width="33%">f_dateChooser_popup</td>
  * <td id="ermvsh" width="50%">Defines styles for the wrapper DIV element for the calendar pop-up.</td>
  * </tr>
  * </tbody>

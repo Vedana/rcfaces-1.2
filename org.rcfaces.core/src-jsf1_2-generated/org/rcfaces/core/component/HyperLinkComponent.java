@@ -33,11 +33,11 @@ import javax.faces.context.FacesContext;
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody >
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee"  width="33%">Style Name</td>
- * <td bgcolor="#eeeeee"  width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
  * </tr>
  * <tr id="pwsif0" style="text-align:left">
- * <td bgcolor="#ffffff"  width="33%">f_hyperLink</td>
+ * <td  width="33%">f_hyperLink</td>
  * <td  width="50%">Defines styles for the wrapper element of the component</td>
  * </tr>
  * </tbody>

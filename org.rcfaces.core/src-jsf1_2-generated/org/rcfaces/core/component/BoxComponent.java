@@ -46,17 +46,17 @@ import org.rcfaces.core.component.capability.IMenuCapability;
  * </ul>
  * </p>
  * 
- * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdoc/index.html?f_box.html" target="_blank">f_box</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/BoxComponent.html">box</a> renderer is linked to the <a href="/jsdocs/index.html?f_box.html" target="_blank">f_box</a> javascript class. f_box extends f_component, fa_asyncRender, fa_subMenu</p>
  * 
  * <p>Table of component style classes : </p>
  * <table border="1" cellpadding="3" cellspacing="0" width="100%">
  * <tbody>
  * <tr style="text-align:left">
- * <td bgcolor="#eeeeee" width="33%">Style Name</td>
- * <td bgcolor="#eeeeee" width="50%">Description</td>
+ * <th  width="33%">Style Name</th>
+ * <th  width="50%">Description</th>
  * </tr>
  * <tr style="text-align:left">
- * <td bgcolor="#ffffff" width="33%">f_box</td>
+ * <td width="33%">f_box</td>
  * <td width="50%">Defines styles for the wrapper element of the component</td>
  * </tr>
  * </tbody>
