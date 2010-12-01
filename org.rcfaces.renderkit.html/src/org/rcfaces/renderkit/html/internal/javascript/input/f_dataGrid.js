@@ -1305,17 +1305,19 @@ var __members = {
 			}
 			
 			var rows=f_grid.ListRows(this._table);
+			var j = 0;
 			for(var i=0;i<rows.length;i++) {
 				var row=rows[i];
 				var index=row._index;
 				if (index===undefined) {
 					continue;
 				}
-				if (this._first+i==this._waitingIndex) {
+				if (this._first+j==this._waitingIndex) {
 					cursorRow=row;
 					this._waitingIndex=undefined;
 					break;
 				}
+				j++;
 			}
 			
 			if (!cursorRow) {
