@@ -618,7 +618,7 @@ public abstract class CameliaCommandComponent extends javax.faces.component.UICo
 		return s+"]";
 	}
 	
-	public void broadcast(FacesEvent event) {
+	public void XXbroadcast(FacesEvent event) {
 
 				
 				if (event instanceof ActionEvent) {

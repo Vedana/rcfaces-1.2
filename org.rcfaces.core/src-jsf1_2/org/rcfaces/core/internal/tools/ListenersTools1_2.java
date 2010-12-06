@@ -93,8 +93,10 @@ public class ListenersTools1_2 extends ListenersTools {
 			}
 
 			command.setActionExpression(vb);
-			// return;
-		} else if (BindingTools.isBindingExpression(expression) == false) {
+		 return;
+		} 
+
+		if (BindingTools.isBindingExpression(expression) == false) {
 			expression = "#[" + expression + "]";
 		}
 
