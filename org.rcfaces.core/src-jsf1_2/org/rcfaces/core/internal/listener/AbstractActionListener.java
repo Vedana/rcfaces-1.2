@@ -196,7 +196,8 @@ abstract class AbstractActionListener implements StateHolder,
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Try method expression '" + methodBinding
-                    + "' parameters='" + Arrays.asList(parameters)
+                    + "' parameters='" +  ((parameters != null)?
+                    		Arrays.asList(parameters):"null")
                     + "' event='" + event + "'");
         }
 
