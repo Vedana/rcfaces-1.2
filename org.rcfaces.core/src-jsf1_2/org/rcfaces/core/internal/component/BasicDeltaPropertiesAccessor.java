@@ -4,7 +4,6 @@
  */
 package org.rcfaces.core.internal.component;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,7 +19,6 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jasper.el.JspValueExpression;
 import org.rcfaces.core.internal.util.ClassLocator;
 import org.rcfaces.core.internal.util.StateHolderTools;
 
