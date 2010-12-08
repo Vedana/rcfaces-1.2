@@ -15,7 +15,7 @@
 			
 		
 		
-		<method id="XXbroadcast" >
+		<method id="broadcast" >
 			<parameter type="javax.faces.event.FacesEvent" name="event" />
 			<import>javax.faces.event.ValueChangeEvent</import>
 			<import>javax.faces.event.FacesListener</import>
