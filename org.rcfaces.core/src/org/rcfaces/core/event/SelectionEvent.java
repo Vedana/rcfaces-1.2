@@ -131,7 +131,6 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return mouseY;
     }
 
-    @Override
     public boolean isAppropriateListener(FacesListener listener) {
 
         if (listener instanceof ISelectionListener) {
@@ -141,7 +140,6 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return super.isAppropriateListener(listener);
     }
 
-    @Override
     public void processListener(FacesListener listener) {
         if (listener instanceof ISelectionListener) {
             ((ISelectionListener) listener).componentSelected(this);
