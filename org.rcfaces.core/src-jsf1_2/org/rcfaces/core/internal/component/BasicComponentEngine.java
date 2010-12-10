@@ -700,8 +700,8 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         if (debugEnabled) {
             LOG.debug("Process update, enableDelta=" + enableDelta);
         }
-        
-        enableDelta=false;
+
+        enableDelta = false;
 
         if (enableDelta == true) {
             throw new FacesException(
@@ -764,7 +764,6 @@ public class BasicComponentEngine extends AbstractComponentEngine {
                     forceDelta);
         }
 
-        @Override
         public IPropertiesManager copyOriginalState() {
             BasicDataAccessor copy = new BasicDataAccessor(name);
             copy.propertiesManager = copy;

@@ -11,10 +11,9 @@ import javax.faces.component.UIComponent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.capability.IComponentLifeCycle;
-import org.rcfaces.core.internal.taglib.CameliaTag;
 import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
 import org.rcfaces.core.internal.tools.ListenersTools.IListenerType;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
 
 import com.sun.facelets.FaceletContext;
 import com.sun.facelets.el.TagMethodExpression;
@@ -39,7 +38,6 @@ public class CameliaComponentHandler0 extends ComponentHandler {
         super(config);
     }
 
-    @Override
     protected UIComponent createComponent(FaceletContext ctx) {
         TagAttribute binding = getAttribute("binding");
         if (binding == null) {

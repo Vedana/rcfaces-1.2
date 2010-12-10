@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-jsf1_2"/>
+	<classpathentry kind="src" path="src-jsf1_2-generated"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jsf1_2/el-api.jar"/>
+	<classpathentry kind="lib" path="lib/jsf1_2/jsf-api.jar"/>
+	<classpathentry kind="lib" path="lib/jsf1_2/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/jsf1_2/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/commons-digester.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/jstl.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/jsf1_2/jsf-facelets.jar"/>
+	<classpathentry kind="lib" path="lib/jasper.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

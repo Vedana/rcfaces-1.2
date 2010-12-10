@@ -155,7 +155,6 @@ public class ContentAdapterFactory implements IAdapterFactory {
             return suffix;
         }
 
-        @Override
         public String getResourceKey() {
             if (specifiedResourceKey == null) {
                 return specifiedResourceKey;

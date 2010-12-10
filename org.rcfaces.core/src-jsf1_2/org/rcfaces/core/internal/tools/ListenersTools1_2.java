@@ -21,98 +21,98 @@ import org.rcfaces.core.internal.util.ForwardMethodExpression;
  * @version $Revision$ $Date$
  */
 public class ListenersTools1_2 extends ListenersTools {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(ListenersTools1_2.class);
+	private static final Log LOG = LogFactory.getLog(ListenersTools1_2.class);
 
-    private static final Class[] NO_PARAMETER = new Class[0];
+	private static final Class[] NO_PARAMETER = new Class[0];
 
-    public static void parseListener(FacesContext facesContext,
-            UIComponent component, IListenerType listenerType,
-            ValueExpression expression) {
-        parseListener(facesContext, component, listenerType, expression
-                .getExpressionString(), false, null);
-    }
+	public static void parseListener(FacesContext facesContext,
+			UIComponent component, IListenerType listenerType,
+			ValueExpression expression) {
+		parseListener(facesContext, component, listenerType, expression
+				.getExpressionString(), false, null);
+	}
 
-    public static void parseListener(FacesContext facesContext,
-            UIComponent component, IListenerType listenerType,
-            ValueExpression expression, boolean defaultAction) {
-        parseListener(facesContext, component, listenerType, expression
-                .getExpressionString(), defaultAction, null);
-    }
+	public static void parseListener(FacesContext facesContext,
+			UIComponent component, IListenerType listenerType,
+			ValueExpression expression, boolean defaultAction) {
+		parseListener(facesContext, component, listenerType, expression
+				.getExpressionString(), defaultAction, null);
+	}
 
-    public static final void parseAction(FacesContext facesContext,
-            UIComponent component, IListenerType listenerType,
-            ValueExpression expression) {
-        parseAction(facesContext, component, listenerType, expression
-                .getExpressionString(), null);
-    }
+	public static final void parseAction(FacesContext facesContext,
+			UIComponent component, IListenerType listenerType,
+			ValueExpression expression) {
+		parseAction(facesContext, component, listenerType, expression
+				.getExpressionString(), null);
+	}
 
-    public static final void parseAction(FacesContext facesContext,
-            UIComponent component, IListenerType listenerType,
-            String expression, IMethodExpressionCreator methodExpressionCreator) {
-        expression = expression.trim();
+	public static final void parseAction(FacesContext facesContext,
+			UIComponent component, IListenerType listenerType,
+			String expression, IMethodExpressionCreator methodExpressionCreator) {
+		expression = expression.trim();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("ParseAction  component='" + component
-                    + "' listenerType='" + listenerType + "' expression='"
-                    + expression + "'.");
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("ParseAction  component='" + component
+					+ "' listenerType='" + listenerType + "' expression='"
+					+ expression + "'.");
+		}
 
-        if (expression.length() < 1) {
-            return;
-        }
+		if (expression.length() < 1) {
+			return;
+		}
 
-        Application application = facesContext.getApplication();
+		Application application = facesContext.getApplication();
 
-        if (component instanceof UICommand) {
-            UICommand command = (UICommand) component;
+		if (component instanceof UICommand) {
+			UICommand command = (UICommand) component;
 
-            MethodExpression vb;
+			MethodExpression vb;
 
-            if (BindingTools.isBindingExpression(expression)) {
-                if (methodExpressionCreator != null) {
+			if (BindingTools.isBindingExpression(expression)) {
+				if (methodExpressionCreator != null) {
 
-                    vb = methodExpressionCreator.create(expression,
-                            NO_PARAMETER);
+					vb = methodExpressionCreator.create(expression,
+							NO_PARAMETER);
 
-                } else {
-                    vb = application.getExpressionFactory()
-                            .createMethodExpression(
-                                    facesContext.getELContext(), expression,
-                                    null, NO_PARAMETER);
-                }
+				} else {
+					vb = application.getExpressionFactory()
+							.createMethodExpression(
+									facesContext.getELContext(), expression,
+									null, NO_PARAMETER);
+				}
 
-            } else {
-                vb = new ForwardMethodExpression(expression);
-            }
+			} else {
+				vb = new ForwardMethodExpression(expression);
+			}
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Set command action to component '"
-                        + component.getId() + "' : " + expression);
-            }
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Set command action to component '"
+						+ component.getId() + "' : " + expression);
+			}
 
-            command.setActionExpression(vb);
-            return;
-        }
+			command.setActionExpression(vb);
+		 return;
+		} 
 
-        if (BindingTools.isBindingExpression(expression) == false) {
-            expression = "#[" + expression + "]";
-        }
+		if (BindingTools.isBindingExpression(expression) == false) {
+			expression = "#[" + expression + "]";
+		}
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Add server listener to component '" + component.getId()
-                    + "' : " + expression);
-        }
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Add server listener to component '" + component.getId()
+					+ "' : " + expression);
+		}
 
-        IServerActionListener serverActionListener = listenerType
-                .addActionListener(component, application, expression, false);
+		IServerActionListener serverActionListener = listenerType
+				.addActionListener(component, application, expression, false);
 
-        if (serverActionListener != null && methodExpressionCreator != null) {
+		if (serverActionListener != null && methodExpressionCreator != null) {
 
-            serverActionListener.createMethodExpression(facesContext,
-                    methodExpressionCreator);
-        }
+			serverActionListener.createMethodExpression(facesContext,
+					methodExpressionCreator);
+		}
 
-    }
+	}
 }

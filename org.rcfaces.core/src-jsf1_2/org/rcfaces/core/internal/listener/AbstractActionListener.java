@@ -24,8 +24,6 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.ListenersTools.IMethodExpressionCreator;
 import org.rcfaces.core.internal.util.ForwardMethodExpression;
 
-import com.sun.faces.el.ELConstants;
-
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
@@ -196,7 +194,8 @@ abstract class AbstractActionListener implements StateHolder,
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Try method expression '" + methodBinding
-                    + "' parameters='" + Arrays.asList(parameters)
+                    + "' parameters='" +  ((parameters != null)?
+                    		Arrays.asList(parameters):"null")
                     + "' event='" + event + "'");
         }
 
@@ -206,7 +205,8 @@ abstract class AbstractActionListener implements StateHolder,
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Call method expression '" + methodBinding
-                        + "' parameters='" + Arrays.asList(parameters)
+                        + "' parameters='" +  ((parameters != null)?
+                        		Arrays.asList(parameters):"null")
                         + "' event='" + event + "' returns '" + ret + "'");
             }
 
@@ -278,20 +278,26 @@ abstract class AbstractActionListener implements StateHolder,
 
     private MethodExpression getArgumentsMethodExpression(
             FacesContext facesContext) {
-        return facesContext.getApplication().getExpressionFactory()
+        return facesContext
+                .getApplication()
+                .getExpressionFactory()
                 .createMethodExpression(facesContext.getELContext(),
                         expression, null, listParameterClasses());
     }
 
     private MethodExpression getFacesArgumentsMethodExpression(
             FacesContext facesContext) {
-        return facesContext.getApplication().getExpressionFactory()
+        return facesContext
+                .getApplication()
+                .getExpressionFactory()
                 .createMethodExpression(facesContext.getELContext(),
                         expression, null, FACES_PARAMETERS);
     }
 
     private MethodExpression getNoArgsMethodExpression(FacesContext facesContext) {
-        return facesContext.getApplication().getExpressionFactory()
+        return facesContext
+                .getApplication()
+                .getExpressionFactory()
                 .createMethodExpression(facesContext.getELContext(),
                         expression, null, NO_PARAMETERS);
     }
@@ -462,11 +468,9 @@ abstract class AbstractActionListener implements StateHolder,
                     .getMethodInfo(elContext);
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Method expression for '" + expression
-                                + "' with FacesEvent parameter detected ! "
-                                + speciedMethodExpression + " methodInfo="
-                                + methodInfo);
+                LOG.debug("Method expression for '" + expression
+                        + "' with FacesEvent parameter detected ! "
+                        + speciedMethodExpression + " methodInfo=" + methodInfo);
             }
 
             return;
@@ -486,11 +490,9 @@ abstract class AbstractActionListener implements StateHolder,
                     .getMethodInfo(elContext);
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Method expression for '" + expression
-                                + "' with no parameter detected ! "
-                                + speciedMethodExpression + " methodInfo="
-                                + methodInfo);
+                LOG.debug("Method expression for '" + expression
+                        + "' with no parameter detected ! "
+                        + speciedMethodExpression + " methodInfo=" + methodInfo);
             }
 
             return;

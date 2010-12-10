@@ -116,14 +116,12 @@ public class ApplicationVersionServlet extends ConfiguredHttpServlet {
                 }
             }
 
-            @Override
             public ServletOutputStream getOutputStream() throws IOException {
                 updateExpiration();
 
                 return super.getOutputStream();
             }
 
-            @Override
             public PrintWriter getWriter() throws IOException {
                 updateExpiration();
 

@@ -131,22 +131,22 @@ public class SelectionEvent extends ActionEvent implements ITypedEvent {
         return mouseY;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.event.FacesEvent#isAppropriateListener(javax.faces.event.FacesListener)
-     */
     public boolean isAppropriateListener(FacesListener listener) {
-        return (listener instanceof ISelectionListener);
+
+        if (listener instanceof ISelectionListener) {
+            return true;
+        }
+
+        return super.isAppropriateListener(listener);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.faces.event.FacesEvent#processListener(javax.faces.event.FacesListener)
-     */
     public void processListener(FacesListener listener) {
-        ((ISelectionListener) listener).componentSelected(this);
+        if (listener instanceof ISelectionListener) {
+            ((ISelectionListener) listener).componentSelected(this);
+            return;
+        }
+
+        super.processListener(listener);
     }
 
 }

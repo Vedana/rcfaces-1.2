@@ -200,6 +200,15 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         ATTRIBUTES_METADATA.put("preSelectionListener",
                 new ListenerAttributeMetaData(
                         ListenersTools.PRE_SELECTION_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("dragListener",
+                new ListenerAttributeMetaData(
+                        ListenersTools.DRAG_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("dropListener",
+                new ListenerAttributeMetaData(
+                        ListenersTools.DROP_LISTENER_TYPE));
+        ATTRIBUTES_METADATA.put("dropCompleteListener",
+                new ListenerAttributeMetaData(
+                        ListenersTools.DROP_COMPLETE_LISTENER_TYPE));
 
         ATTRIBUTES_METADATA.put("action", new IAttributeMetaData() {
             private static final String REVISION = "$Revision$";
@@ -253,6 +262,9 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
         ATTRIBUTES_METADATA.put("maxTime", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("minTime", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("defaultTime", ENUMERATION_ATTRIBUTE_METADATA);
+
+        ATTRIBUTES_METADATA.put("dragEffects", ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("dropEffects", ENUMERATION_ATTRIBUTE_METADATA);
     }
 
     public CameliaComponentHandler(ComponentConfig config) {
