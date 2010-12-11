@@ -77,8 +77,7 @@ public class ClientBrowserFactory {
         if (userAgent == null) {
 
             if (LOG.isDebugEnabled()) {
-                LOG
-                        .debug("Get client browser from userAgent: userAgent is NULL");
+                LOG.debug("Get client browser from userAgent: userAgent is NULL");
             }
             return USER_AGENTS[IClientBrowser.UNKNOWN_BROWSER_TYPE];
         }
@@ -105,40 +104,19 @@ public class ClientBrowserFactory {
             idx = ua.indexOf("opera");
             if (idx >= 0) {
                 type = IClientBrowser.OPERA_BROWSER_TYPE;
-                int idx2 = ua.indexOf('/', idx);
-                int idx3 = ua.indexOf('(', idx);
-
-                if (idx2 > idx && idx3 > idx2) {
-                    version = ua.substring(idx2 + 1, idx3).trim();
-                }
+                version = searchVersion(ua, idx);
 
             } else {
                 idx = ua.indexOf("safari");
                 if (idx >= 0) {
                     type = IClientBrowser.SAFARI_BROWSER_TYPE;
-                    int idx2 = ua.indexOf('/', idx);
-                    int idx3 = ua.indexOf(' ', idx);
-                    if (idx3 < 0) {
-                        idx3 = ua.length();
-                    }
-
-                    if (idx2 > idx && idx3 > idx2) {
-                        version = ua.substring(idx2 + 1, idx3).trim();
-                    }
+                    version = searchVersion(ua, idx);
 
                 } else {
                     idx = ua.indexOf("firefox");
                     if (idx >= 0) {
                         type = IClientBrowser.FIREFOX_BROWSER_TYPE;
-                        int idx2 = ua.indexOf('/', idx);
-                        int idx3 = ua.indexOf(' ', idx);
-                        if (idx3 < 0) {
-                            idx3 = ua.length();
-                        }
-
-                        if (idx2 > idx && idx3 > idx2) {
-                            version = ua.substring(idx2 + 1, idx3).trim();
-                        }
+                        version = searchVersion(ua, idx);
                     }
                 }
             }
@@ -179,6 +157,40 @@ public class ClientBrowserFactory {
         }
 
         return clientBrowser;
+    }
+
+    private String searchVersion(String ua, int index) {
+        for (; index < ua.length(); index++) {
+            char ch = ua.charAt(index);
+
+            if (Character.isLetter(ch)) {
+                continue;
+            }
+
+            break;
+        }
+
+        if (index == ua.length()) {
+            return null;
+        }
+
+        if (ua.charAt(index++) != '/') {
+            return null;
+        }
+
+        int startIndex = index;
+
+        for (; index < ua.length(); index++) {
+            char ch = ua.charAt(index);
+
+            if (Character.isDigit(ch) || ch == '.') {
+                continue;
+            }
+
+            break;
+        }
+
+        return ua.substring(startIndex, index);
     }
 
     public IClientBrowser getClientBrowserById(String browserId) {
