@@ -31,10 +31,12 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.el.ValueExpression;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -78,8 +80,7 @@ public class UIData2 extends UIData0 {
 
     private transient List<int[]> decodedIndexes;
 
-    @SuppressWarnings( { "CollectionWithoutInitialCapacity" })
-    private Map<String, SavedState2> saved = new HashMap<String, SavedState2>();
+    private Map saved = new HashMap();
 
     private boolean saveCompleteState = true;
 
@@ -140,7 +141,6 @@ public class UIData2 extends UIData0 {
         return true;
     }
 
-    @Override
     public int getFirst() {
         if (iterateMode == false) {
             int first = super.getFirst();
@@ -160,7 +160,6 @@ public class UIData2 extends UIData0 {
         return iterateModeFirst;
     }
 
-    @Override
     public int getRowCount() {
         int rowCount = super.getRowCount();
 
@@ -171,7 +170,6 @@ public class UIData2 extends UIData0 {
         return rowCount;
     }
 
-    @Override
     public int getRowIndex() {
         int rowIndex = super.getRowIndex();
 
@@ -182,7 +180,6 @@ public class UIData2 extends UIData0 {
         return rowIndex;
     }
 
-    @Override
     public boolean isRowAvailable() {
         boolean rowAvailable = super.isRowAvailable();
 
@@ -193,7 +190,6 @@ public class UIData2 extends UIData0 {
         return rowAvailable;
     }
 
-    @Override
     public void setFirst(int first) {
 
         if (DEBUG_ENABLED) {
@@ -203,7 +199,6 @@ public class UIData2 extends UIData0 {
         super.setFirst(first);
     }
 
-    @Override
     public void setRows(int rows) {
 
         if (DEBUG_ENABLED) {
@@ -213,7 +208,6 @@ public class UIData2 extends UIData0 {
         super.setRows(rows);
     }
 
-    @Override
     public int getRows() {
         if (iterateMode == false) {
             int rows = super.getRows();
@@ -233,7 +227,6 @@ public class UIData2 extends UIData0 {
         return iterateModeRows;
     }
 
-    @Override
     public void setRowIndex(int rowIndex) {
         if (iterateMode == false || rowIndex < 0) {
 
@@ -280,21 +273,45 @@ public class UIData2 extends UIData0 {
         }
     }
 
-    @Override
     public void restoreState(FacesContext context, Object state) {
         Object states[] = (Object[]) state;
 
         super.restoreState(context, states[0]);
 
-        saved = (Map) states[1];
+        Object[] ss = (Object[]) states[1];
+
+        saved = new HashMap(ss.length / 2);
+        if (ss.length > 0) {
+            for (int i = 0; i < ss.length;) {
+                Object key = ss[i++];
+
+                SavedState2 ss2 = new SavedState2();
+                ss2.restoreState(context, ss[i++]);
+
+                saved.put(key, ss2);
+            }
+        }
+
     }
 
-    @Override
     public Object saveState(FacesContext context) {
         Object ret[] = new Object[2];
 
         ret[0] = super.saveState(context);
-        ret[1] = saved;
+
+        Object ss[] = new Object[saved.size() * 2];
+        ret[1] = ss;
+
+        if (ss.length > 0) {
+            int index = 0;
+            for (Iterator it = saved.entrySet().iterator(); it.hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
+
+                ss[index++] = entry.getKey();
+                ss[index++] = ((SavedState2) entry.getValue())
+                        .saveState(context);
+            }
+        }
 
         return ret;
     }
@@ -310,6 +327,7 @@ public class UIData2 extends UIData0 {
      * @param context
      *            {@link FacesContext} for the current request
      */
+
     protected void restoreDescendantState(UIComponent component,
             FacesContext context) {
 
@@ -351,6 +369,7 @@ public class UIData2 extends UIData0 {
      * @param context
      *            {@link FacesContext} for the current request
      */
+
     protected void saveDescendantState(UIComponent component,
             FacesContext context) {
 
@@ -387,11 +406,15 @@ public class UIData2 extends UIData0 {
     }
 
     // Private class to represent saved state information
-    protected static class SavedState2 implements Externalizable {
+    public static class SavedState2 implements Externalizable, StateHolder {
 
         private IComponentEngine componentEngine;
 
         private Object serializedComponentEngine;
+
+        public SavedState2() {
+
+        }
 
         public final IComponentEngine getComponentEngine(
                 FacesContext facesContext, UIComponent component) {
@@ -434,6 +457,27 @@ public class UIData2 extends UIData0 {
 
             out.writeObject(serializedComponentEngine);
         }
+
+        public Object saveState(FacesContext context) {
+            if (componentEngine != null) {
+                serializedComponentEngine = componentEngine
+                        .saveState(FacesContext.getCurrentInstance());
+            }
+
+            return serializedComponentEngine;
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+            serializedComponentEngine = state;
+        }
+
+        public boolean isTransient() {
+            return false;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+        }
+
     }
 
     public boolean decodeAdditionalInformation(
