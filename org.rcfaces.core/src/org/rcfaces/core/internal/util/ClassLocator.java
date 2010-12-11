@@ -6,6 +6,7 @@ package org.rcfaces.core.internal.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.faces.context.FacesContext;
@@ -114,7 +115,13 @@ public class ClassLocator {
         }
 
         if (context instanceof ServletContext) {
-            context = ((ServletContext) context).getClass().getClassLoader();
+            try {
+                context = ((ServletContext) context).getClass()
+                        .getClassLoader();
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Can not get classLoader of servletContext.", ex);
+            }
         }
 
         if (context instanceof ClassLoader) {
@@ -206,7 +213,27 @@ public class ClassLocator {
         }
 
         if (context instanceof ServletContext) {
-            context = ((ServletContext) context).getClass().getClassLoader();
+            try {
+                URL url = ((ServletContext) context)
+                        .getResource(resourceLocation);
+                if (url != null && testURL(url, thOrigin)) {
+                    return url;
+                }
+
+            } catch (MalformedURLException ex) {
+                LOG.debug("Malformed URL for '" + resourceLocation + "'.", ex);
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Resource not found '" + resourceLocation + "'.", ex);
+            }
+
+            try {
+                context = ((ServletContext) context).getClass()
+                        .getClassLoader();
+
+            } catch (RuntimeException ex) {
+                LOG.debug("Can not get classLoader of ServletContext", ex);
+            }
         }
 
         if (context instanceof ClassLoader) {
