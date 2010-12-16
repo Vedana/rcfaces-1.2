@@ -1697,5 +1697,12 @@
         	return null;
 		</code>	
 	</method>
+	<method id="setAlignment" returnType="void" modifier="public">
+		<parameter type="java.lang.String" name="alignment" />
+		<import>org.rcfaces.core.internal.converter.AlignmentNormalizer;</import>
+ 		<code>
+			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
+    	</code>
+	</method>
 </camelia-components>
 	
