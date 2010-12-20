@@ -4,12 +4,13 @@ import com.sun.facelets.tag.jsf.ConverterConfig;
 
 public class ShortConverterHandler extends CameliaConverterHandler {
 
-    public ShortConverterHandler(ConverterConfig config) {
-        super(config);
-    }
+	public ShortConverterHandler(ConverterConfig config) {
+		super(config);
+	}
 
-    protected String getConverterId() {
-        return "org.rcfaces.Short";
-    }
+	@Override
+	protected String getConverterId() {
+		return "org.rcfaces.Short";
+	}
 
 }

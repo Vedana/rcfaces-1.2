@@ -146,7 +146,7 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"headerVisible","selectionCardinality","clientAdditionalInformationFullState","cellTextWrap","emptyDataMessage","loadListener","selectionListener","paged","additionalInformationValues","showValue","additionalInformationListener","verticalScrollPosition","border","required","clientSelectionFullState","preferences","doubleClickListener","selectedValues","horizontalScrollPosition","rowStyleClass","rowCountVar","selectable","additionalInformationCardinality","rowValueConverter","rowIndexVar","rowValue"}));
 	}
 
 	public ComponentsGridComponent() {
@@ -1071,6 +1071,26 @@ public class ComponentsGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isRowValueConverterSetted() {
 		return engine.isPropertySetted(Properties.ROW_VALUE_CONVERTER);
+	}
+
+	public boolean isCellTextWrap() {
+		return isCellTextWrap(null);
+	}
+
+	public boolean isCellTextWrap(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.CELL_TEXT_WRAP, false, facesContext);
+	}
+
+	public void setCellTextWrap(boolean cellTextWrap) {
+		engine.setProperty(Properties.CELL_TEXT_WRAP, cellTextWrap);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "cellTextWrap" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isCellTextWrapSetted() {
+		return engine.isPropertySetted(Properties.CELL_TEXT_WRAP);
 	}
 
 	protected Set getCameliaFields() {

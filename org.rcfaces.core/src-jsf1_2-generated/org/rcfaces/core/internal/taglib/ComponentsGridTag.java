@@ -43,6 +43,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression rowIndexVar;
 	private ValueExpression rowValue;
 	private ValueExpression rowValueConverter;
+	private ValueExpression cellTextWrap;
 	public String getComponentType() {
 		return ComponentsGridComponent.COMPONENT_TYPE;
 	}
@@ -147,6 +148,10 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		this.rowValueConverter = rowValueConverter;
 	}
 
+	public final void setCellTextWrap(ValueExpression cellTextWrap) {
+		this.cellTextWrap = cellTextWrap;
+	}
+
 	protected void setProperties(UIComponent uiComponent) {
 		if (LOG.isDebugEnabled()) {
 			if (ComponentsGridComponent.COMPONENT_TYPE==getComponentType()) {
@@ -173,6 +178,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowIndexVar='"+rowIndexVar+"'");
 			LOG.debug("  rowValue='"+rowValue+"'");
 			LOG.debug("  rowValueConverter='"+rowValueConverter+"'");
+			LOG.debug("  cellTextWrap='"+cellTextWrap+"'");
 		}
 		if ((uiComponent instanceof ComponentsGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -371,6 +377,15 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 				component.setRowValueConverter(rowValueConverter.getExpressionString());
 			}
 		}
+
+		if (cellTextWrap != null) {
+			if (cellTextWrap.isLiteralText()==false) {
+				component.setValueExpression(Properties.CELL_TEXT_WRAP, cellTextWrap);
+
+			} else {
+				component.setCellTextWrap(getBool(cellTextWrap.getExpressionString()));
+			}
+		}
 	}
 
 	public void release() {
@@ -399,6 +414,7 @@ public class ComponentsGridTag extends AbstractDataTag implements Tag {
 		rowIndexVar = null;
 		rowValue = null;
 		rowValueConverter = null;
+		cellTextWrap = null;
 
 		super.release();
 	}

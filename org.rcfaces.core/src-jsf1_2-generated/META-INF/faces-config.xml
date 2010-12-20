@@ -570,6 +570,10 @@ A string value specifying the name of the variable receiving the index of the cu
 			<attribute-name>rowValueConverter</attribute-name>
 			<attribute-class>javax.faces.convert.Converter</attribute-class>
 		</attribute>
+		<attribute>
+			<attribute-name>cellTextWrap</attribute-name>
+			<attribute-class>boolean</attribute-class>
+		</attribute>
 	</component>
 	<component>
 		<description><![CDATA[
