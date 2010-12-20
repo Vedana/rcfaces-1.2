@@ -12,9 +12,7 @@
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
 
 		<tagAttribute id="value" type="java.lang.Object" generate="true"/>
-			
-		
-		
+					
 		<method id="broadcast" >
 			<parameter type="javax.faces.event.FacesEvent" name="event" />
 			<import>javax.faces.event.ValueChangeEvent</import>
@@ -1666,7 +1664,7 @@
 		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
 		<attribute id="rowValue" type="java.lang.String" onlyValueBinding="true"/>
 		<attribute id="rowValueConverter" type="javax.faces.convert.Converter"/>
-
+		<attribute id="cellTextWrap" type="boolean" default="false"/>
 		
 		<method id="getComponentValueType" returnType="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType">
 			<import>org.rcfaces.core.internal.tools.GridTools</import>

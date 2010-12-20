@@ -15,8 +15,13 @@ var __members = {
 		this.f_super(arguments);
 		
 		this._showCursor=true; // On affiche le curseur
+		this._cellWrap=f_core.GetAttribute(this, "v:cellTextWrap", false);
 		this._cellStyleClass="f_cGrid_cell";
 		this._rowStyleClass="f_cGrid_row";
+		
+		if (!!this._cellWrap) {
+			this.className+=" f_grid_noWrap";
+		}
 	},
 	/*
 	f_finalize: function() {
@@ -532,7 +537,7 @@ var __members = {
 	 * @return Object
 	 */
 	f_addRow2: function(rowId, rowProperties, cell1Properties, cell1Content) {
-		f_core.Assert(this._tbody, "f_dataGrid.f_addRow2: No table body !");
+		f_core.Assert(this._tbody, "f_componentsGrid.f_addRow2: No table body !");
 		
 		var row;
 		var firstCell;
@@ -604,6 +609,7 @@ var __members = {
 		row._cells=cells;
 		//var rowValueColumnIndex=this._rowValueColumnIndex;
 		var columns=this._columns;
+		var cellWrap=this._cellWrap;
 		for(var i=0;i<columns.length;i++) {
 			var col=columns[i];
 
@@ -642,7 +648,10 @@ var __members = {
 			this._cellsPool.push(td);
 					
 			td.valign="top";
-			td.noWrap=true;
+			if (!cellWrap) {
+				td.noWrap=true;
+			}
+
 			
 			var align=col._align;
 			if (properties) {
