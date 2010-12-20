@@ -25,6 +25,8 @@ public class HorizontalTextPositionConverter extends AbstractConverter {
     public static final Converter SINGLETON = new HorizontalTextPositionConverter();
 
     protected static final String RIGHT_POSITION_NAME = "right";
+    
+    protected static final String CENTER_POSITION_NAME = "center";
 
     protected static final String LEFT_POSITION_NAME = "left";
 
@@ -40,6 +42,9 @@ public class HorizontalTextPositionConverter extends AbstractConverter {
 
         i = new Integer(IHorizontalTextPositionCapability.RIGHT_POSITION);
         HORIZONTAL_TEXT_POSITIONS.put(RIGHT_POSITION_NAME, i);
+        
+        i = new Integer(IHorizontalTextPositionCapability.CENTER_POSITION);
+        HORIZONTAL_TEXT_POSITIONS.put(CENTER_POSITION_NAME, i);
     }
 
     protected Map getTextPositions() {

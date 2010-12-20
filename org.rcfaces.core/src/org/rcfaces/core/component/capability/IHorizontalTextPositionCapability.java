@@ -19,6 +19,8 @@ public interface IHorizontalTextPositionCapability {
     int RIGHT_POSITION = 0x08;
 
     int LEFT_POSITION = 0x10;
+    
+    int CENTER_POSITION = 0x20;
 
     int DEFAULT_POSITION = RIGHT_POSITION;
 
