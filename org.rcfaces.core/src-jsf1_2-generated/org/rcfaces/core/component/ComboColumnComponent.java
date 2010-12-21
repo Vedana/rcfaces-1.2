@@ -7,8 +7,8 @@ import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.component.ValueHolder;
 import org.rcfaces.core.component.capability.IResizableCapability;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
@@ -25,11 +25,12 @@ import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import java.lang.String;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
@@ -327,8 +328,11 @@ public class ComboColumnComponent extends CameliaValueColumnComponent implements
 		return engine.isPropertySetted(Properties.ALIGNMENT);
 	}
 
-	public void setAlignment(java.lang.String alignment) {
-		engine.setProperty(Properties.ALIGNMENT, alignment);
+	public void setAlignment(String alignment) {
+
+
+			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
+    	
 	}
 
 	public java.lang.String getBackgroundColor() {

@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.MarginTools;
+import org.rcfaces.core.internal.converter.AlignmentNormalizer;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import javax.el.ValueExpression;
@@ -460,8 +461,11 @@ public class RulerComponent extends CameliaBaseComponent implements
 		return engine.isPropertySetted(Properties.ALIGNMENT);
 	}
 
-	public void setAlignment(java.lang.String alignment) {
-		engine.setProperty(Properties.ALIGNMENT, alignment);
+	public void setAlignment(String alignment) {
+
+
+			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
+    	
 	}
 
 	protected Set getCameliaFields() {
