@@ -3717,8 +3717,11 @@ var __members = {
 		var cfocus = this._cfocus;
 		if (cfocus) {
 			if (f_core.IsGecko()) {
+				// fonctionnement de base
 				cfocus.focus();
 			} else {
+				// pour *vraiment* donner les focus sous IE
+				// genere une exception sous FF : passer par une focntion anonyme ?
 				window.setTimeout(cfocus.focus, 0);
 			}
 
