@@ -547,7 +547,6 @@ var __statics = {
 	 */
 	_Link_onfocus : function(evt) {
 		var dataGrid = this._dataGrid;
-
 		try {
 			if (dataGrid._ignoreFocus) {
 				return false;
@@ -3717,7 +3716,11 @@ var __members = {
 
 		var cfocus = this._cfocus;
 		if (cfocus) {
-			cfocus.focus();
+			if (f_core.IsGecko()) {
+				cfocus.focus();
+			} else {
+				window.setTimeout(cfocus.focus, 0);
+			}
 
 			return;
 		}
