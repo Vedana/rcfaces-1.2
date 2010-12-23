@@ -121,8 +121,11 @@ public final class GridServerSort {
 
                             rowData = data.getRowData();
                         }
-
-                        value = rowData;
+                        // Avoid crahes when compare
+                        // then WHY get the full row Data when the column value is null ?
+                        if (rowData instanceof Comparable) {
+                            value = rowData;
+                        }
                     }
 
                     datas[i].add(value);
