@@ -28,87 +28,87 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$Date: 2010/11/08
  */
 public class ExternalBoxRenderer extends AbstractCssRenderer implements
-		IAsyncRenderer {
-	private static final String REVISION = "$Revision$";
+        IAsyncRenderer {
+    private static final String REVISION = "$Revision$";
 
-	public void encodeBegin(IComponentWriter writer) throws WriterException {
-		super.encodeBegin(writer);
+    public void encodeBegin(IComponentWriter writer) throws WriterException {
+        super.encodeBegin(writer);
 
-		IComponentRenderContext componentContext = writer
-				.getComponentRenderContext();
+        IComponentRenderContext componentContext = writer
+                .getComponentRenderContext();
 
-		FacesContext facesContext = componentContext.getFacesContext();
+        FacesContext facesContext = componentContext.getFacesContext();
 
-		ExternalBoxComponent component = (ExternalBoxComponent) componentContext
-				.getComponent();
+        ExternalBoxComponent component = (ExternalBoxComponent) componentContext
+                .getComponent();
 
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		htmlWriter.startElement(IHtmlWriter.IFRAME);
+        htmlWriter.startElement(IHtmlWriter.IFRAME);
 
-		writeHtmlAttributes(htmlWriter);
-		writeJavaScriptAttributes(htmlWriter);
-		writeCssAttributes(htmlWriter);
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
 
-		String overStyleClass = component.getOverStyleClass(facesContext);
-		if (overStyleClass != null) {
-			htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+        String overStyleClass = component.getOverStyleClass(facesContext);
+        if (overStyleClass != null) {
+            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
 
-		}
+        }
 
-		String scrolling = component.getScrolling(facesContext);
-		if (scrolling != null) {
-			htmlWriter.writeAttribute("scrolling", scrolling);
-		}
+        String scrolling = component.getScrolling(facesContext);
+        if (scrolling != null) {
+            htmlWriter.writeAttribute("scrolling", scrolling);
+        }
 
-		htmlWriter.writeAttribute("name", component.getClientId(facesContext));
+        htmlWriter.writeAttribute("name", component.getClientId(facesContext));
 
-		Object value = component.getValue();
+        Object value = component.getValue();
 
-		String src = String.valueOf(value);
-		if (src != null) {
-			IContentAccessor contentAccessor = ContentAccessorFactory
-					.createFromWebResource(facesContext, src,
-							IContentFamily.JSP);
+        String src = String.valueOf(value);
+        if (src != null) {
+            IContentAccessor contentAccessor = ContentAccessorFactory
+                    .createFromWebResource(facesContext, src,
+                            IContentFamily.JSP);
 
-			src = contentAccessor.resolveURL(facesContext, null, null);
-			htmlWriter.writeAttribute("v:contentURL", src);
-			if (component.isVisible()) {
-				htmlWriter.writeSrc(src);
-			}
-		}
-		htmlWriter.getJavaScriptEnableMode().enableOnInit();
-		htmlWriter.endElement(IHtmlWriter.IFRAME);
-	}
+            src = contentAccessor.resolveURL(facesContext, null, null);
+            htmlWriter.writeURIAttribute("v:contentURL", src);
+            if (component.isVisible()) {
+                htmlWriter.writeSrc(src);
+            }
+        }
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
+        htmlWriter.endElement(IHtmlWriter.IFRAME);
+    }
 
-	protected void decode(IRequestContext context, UIComponent component,
-			IComponentData componentData) {
-		super.decode(context, component, componentData);
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
 
-		FacesContext facesContext = context.getFacesContext();
+        FacesContext facesContext = context.getFacesContext();
 
-		ExternalBoxComponent externalBoxComponent = (ExternalBoxComponent) component;
+        ExternalBoxComponent externalBoxComponent = (ExternalBoxComponent) component;
 
-		String newValue = componentData.getStringProperty("contentURL");
+        String newValue = componentData.getStringProperty("contentURL");
 
-		if (newValue != null) {
+        if (newValue != null) {
 
-			// On considere la VALUE
-			String old = externalBoxComponent.getContentURL();
+            // On considere la VALUE
+            String old = externalBoxComponent.getContentURL();
 
-			Object value = newValue;
+            Object value = newValue;
 
-			if (old != value && (old == null || old.equals(value) == false)) {
-				externalBoxComponent.setValue(value);
+            if (old != value && (old == null || old.equals(value) == false)) {
+                externalBoxComponent.setValue(value);
 
-				component.queueEvent(new PropertyChangeEvent(component,
-						Properties.VALUE, old, value));
-			}
-		}
-	}
+                component.queueEvent(new PropertyChangeEvent(component,
+                        Properties.VALUE, old, value));
+            }
+        }
+    }
 
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.EXTERNAL_BOX;
-	}
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.EXTERNAL_BOX;
+    }
 
 }

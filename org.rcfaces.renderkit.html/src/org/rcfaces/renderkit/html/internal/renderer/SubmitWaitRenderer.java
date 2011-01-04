@@ -94,7 +94,7 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
                 String imageSrc = imageAccessor.resolveURL(facesContext, null,
                         null);
                 if (imageSrc != null) {
-                    htmlWriter.writeAttribute("v:imageURL", imageSrc);
+                    htmlWriter.writeURIAttribute("v:imageURL", imageSrc);
                 }
             }
 
@@ -197,9 +197,9 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
         jsWriter.writeCall(getJavaScriptClassName(), "f_newInstance");
 
         if (constructorParameters) {
-            jsWriter.writeString(imageSrc).write(',').writeString(text).write(
-                    ',').write(width).write(',').write(height).write(',')
-                    .writeBoolean(true);
+            jsWriter.writeString(imageSrc).write(',').writeString(text)
+                    .write(',').write(width).write(',').write(height)
+                    .write(',').writeBoolean(true);
             if (backgroundMode != null) {
                 jsWriter.write(',').writeString(backgroundMode);
             }
@@ -217,17 +217,17 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
                         .writeln(");");
             }
             if (width != null) {
-                jsWriter.writeMethodCall("f_setWidth").write(width).writeln(
-                        ");");
+                jsWriter.writeMethodCall("f_setWidth").write(width)
+                        .writeln(");");
             }
 
             if (height != null) {
-                jsWriter.writeMethodCall("f_setHeight").write(height).writeln(
-                        ");");
+                jsWriter.writeMethodCall("f_setHeight").write(height)
+                        .writeln(");");
             }
             if (backgroundMode != null) {
-                jsWriter.writeMethodCall("f_setBackgroundMode").writeString(
-                        backgroundMode).writeln(");");
+                jsWriter.writeMethodCall("f_setBackgroundMode")
+                        .writeString(backgroundMode).writeln(");");
             }
 
             jsWriter.writeMethodCall("f_installShowOnSubmit").writeln(");");
@@ -245,9 +245,11 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
 
     protected IContentAccessor getDefaultImageAccessor(
             IHtmlComponentRenderContext componentRenderContext) {
-        return componentRenderContext.getHtmlRenderContext()
-                .getHtmlProcessContext().getStyleSheetContentAccessor(
-                        DEFAULT_SUBMIT_WAIT_IMAGE_URL, null);
+        return componentRenderContext
+                .getHtmlRenderContext()
+                .getHtmlProcessContext()
+                .getStyleSheetContentAccessor(DEFAULT_SUBMIT_WAIT_IMAGE_URL,
+                        null);
 
     }
 

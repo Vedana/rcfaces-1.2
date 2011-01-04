@@ -500,7 +500,7 @@ public abstract class AbstractHtmlWriter extends
     }
 
     public IHtmlWriter writeSrc(String src) throws WriterException {
-        writeAttribute("src", src);
+        writeURIAttribute("src", src);
 
         return this;
     }
@@ -573,7 +573,7 @@ public abstract class AbstractHtmlWriter extends
     }
 
     public IHtmlWriter writeHRef(String url) throws WriterException {
-        writeAttribute("href", url);
+        writeURIAttribute("href", url);
 
         return this;
     }

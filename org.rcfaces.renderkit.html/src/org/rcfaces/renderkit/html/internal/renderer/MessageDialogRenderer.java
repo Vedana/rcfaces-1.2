@@ -108,8 +108,8 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
             htmlWriter.writeAttribute("v:waiRole", chaine);
         }
         if (component.isDialogPrioritySetted()) {
-            htmlWriter.writeAttribute("v:dialogPriority", component
-                    .getDialogPriority(facesContext));
+            htmlWriter.writeAttribute("v:dialogPriority",
+                    component.getDialogPriority(facesContext));
         }
         chaine = component.getStyleClass(facesContext);
         if (chaine != null) {
@@ -130,7 +130,7 @@ public class MessageDialogRenderer extends AbstractSelectItemsRenderer {
                     String imageSrc = imageAccessor.resolveURL(facesContext,
                             null, null);
                     if (imageSrc != null) {
-                        htmlWriter.writeAttribute("v:imageURL", imageSrc);
+                        htmlWriter.writeURIAttribute("v:imageURL", imageSrc);
                     }
                 }
             }
