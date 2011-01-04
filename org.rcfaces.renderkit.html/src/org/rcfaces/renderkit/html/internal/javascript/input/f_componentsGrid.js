@@ -20,7 +20,7 @@ var __members = {
 		this._rowStyleClass="f_cGrid_row";
 		
 		if (!!this._cellWrap) {
-			this.className+=" f_grid_noWrap";
+		//	this.className+=" f_grid_noWrap";
 		}
 	},
 	/*
@@ -651,7 +651,6 @@ var __members = {
 			if (!cellWrap) {
 				td.noWrap=true;
 			}
-
 			
 			var align=col._align;
 			if (properties) {

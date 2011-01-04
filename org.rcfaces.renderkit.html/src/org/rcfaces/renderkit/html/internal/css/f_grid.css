@@ -393,3 +393,12 @@
 	line-height: 0.1;
 	font-size: 0.1px;
 }
+
+
+.f_grid_wrap .f_grid_label {
+	white-space: normal;
+}
+ 
+.f_grid_wrap .f_dataGrid_row {
+	height: auto;
+}

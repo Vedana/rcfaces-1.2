@@ -29,7 +29,6 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.ComponentsGridComponent;
-import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
@@ -92,8 +91,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     private static final boolean NOT_SUPPORTED_SERVER_SORT = false;
 
     private static final String ROWCOUNT_PROPERTY = "org.rcfaces.html.componentsGrid.ROWCOUNT";
-    
-    private static final String GRID_WRAP_CLASSNAME = "f_componentsGrid_wrap";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.COMPONENTS_GRID;
@@ -107,7 +104,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
     protected boolean serverTitleGeneration() {
         return true;
     }
-    
+
     protected ICssStyleClasses createStyleClasses(IHtmlWriter htmlWriter) {
         ICssStyleClasses cssStyleClasses = super.createStyleClasses(htmlWriter);
 
@@ -155,12 +152,12 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         if (dg instanceof ComponentsGridComponent) {
-            if (((ComponentsGridComponent) dg).isCellTextWrap(htmlWriter.getComponentRenderContext()
-                    .getFacesContext())) {
+            if (((ComponentsGridComponent) dg).isCellTextWrap(htmlWriter
+                    .getComponentRenderContext().getFacesContext())) {
                 htmlWriter.writeAttribute("v:cellTextWrap", true);
             }
         }
-        
+
         if (dg instanceof IShowValueCapability) {
             Object showValue = ((IShowValueCapability) dg).getShowValue();
             String clientShowValue = null;
@@ -240,8 +237,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         Integer rowCount = (Integer) jsWriter.getComponentRenderContext()
                 .getAttribute(ROWCOUNT_PROPERTY);
         if (rowCount != null) {
-            jsWriter.writeMethodCall("f_setRowCount").writeInt(
-                    rowCount.intValue()).writeln(");");
+            jsWriter.writeMethodCall("f_setRowCount")
+                    .writeInt(rowCount.intValue()).writeln(");");
         }
 
         encodeJsColumns(jsWriter, gridRenderContext, GENERATE_CELL_STYLE_CLASS);
@@ -746,11 +743,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             htmlWriter.startElement(IHtmlWriter.TD);
 
-            if (gridRenderContext.getComponentsGridComponent().isCellTextWrap(htmlWriter
-                    .getComponentRenderContext().getFacesContext()) == false) {
-            	htmlWriter.writeAttribute("noWrap");
+            if (gridRenderContext.getComponentsGridComponent().isCellTextWrap(
+                    htmlWriter.getComponentRenderContext().getFacesContext()) == false) {
+                htmlWriter.writeAttribute("noWrap");
 
-        	}
+            }
             String toolTip = null;
             if (defaultCellToolTipTexts != null) {
                 toolTip = defaultCellToolTipTexts[columnIndex];
@@ -793,8 +790,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     for (; st.hasMoreTokens();) {
                         String cellStyleClass = st.nextToken();
 
-                        sa.append(' ').append(cellStyleClass).append(
-                                "_selected");
+                        sa.append(' ').append(cellStyleClass)
+                                .append("_selected");
                     }
                 }
 
@@ -1089,8 +1086,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         }
 
         Object vs[] = convertStringsToValues(facesContext,
-                componentsGridComponent, (String[]) tokens
-                        .toArray(new String[tokens.size()]));
+                componentsGridComponent,
+                (String[]) tokens.toArray(new String[tokens.size()]));
 
         return Arrays.asList(vs);
     }
@@ -1194,8 +1191,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             return rowValueSetted;
         }
     }
-    
-     protected String getWAIRole() {
-    	return null;
+
+    protected String getWAIRole() {
+        return null;
     }
 }

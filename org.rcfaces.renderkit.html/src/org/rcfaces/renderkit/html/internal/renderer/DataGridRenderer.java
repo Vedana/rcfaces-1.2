@@ -88,8 +88,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
     private static final Log LOG = LogFactory.getLog(DataGridRenderer.class);
 
-    private static final String DATA_GRID_WRAP_CLASSNAME = "f_dataGrid_wrap";
-
     private static final Map SORT_ALIASES = new HashMap(8);
 
     static {
@@ -122,7 +120,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             if (((DataGridComponent) dg).isCellTextWrap(htmlWriter
                     .getComponentRenderContext().getFacesContext())) {
 
-                cssStyleClasses.addSpecificStyleClass(DATA_GRID_WRAP_CLASSNAME);
+                cssStyleClasses.addSpecificStyleClass(GRID_WRAP_CLASSNAME);
             }
         }
 
@@ -1443,8 +1441,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
 
-    	super.writeGridComponentAttributes(htmlWriter, tableContext, dg);
-    	
+        super.writeGridComponentAttributes(htmlWriter, tableContext, dg);
+
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
@@ -1748,8 +1746,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
             UIColumn rowValueColumn = getRowValueColumn(gridComponent);
             if (rowValueColumn != null) {
-                List select = HtmlValuesTools.parseValues(requestContext
-                        .getFacesContext(), rowValueColumn, true, false, value);
+                List select = HtmlValuesTools.parseValues(
+                        requestContext.getFacesContext(), rowValueColumn, true,
+                        false, value);
 
                 if (select.size() == 1) {
                     return select.get(0);

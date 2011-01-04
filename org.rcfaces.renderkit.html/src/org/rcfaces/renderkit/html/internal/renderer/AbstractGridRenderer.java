@@ -202,6 +202,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private static final int GRID_HEADER_SCROLLBAR_WIDTH = 16;
 
+    protected static final String GRID_WRAP_CLASSNAME = "f_grid_wrap";
+
     /*
      * private static final String FIXED_FAKE_CELL_ID_SUFFIX = "" +
      * UINamingContainer.SEPARATOR_CHAR + UINamingContainer.SEPARATOR_CHAR +
@@ -462,9 +464,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 // Il faut faire le tri à la main !
 
                 int sortTranslations[] = GridServerSort
-                        .computeSortedTranslation(htmlRenderContext
-                                .getFacesContext(), gridComponent, dataModel,
-                                sortedComponents);
+                        .computeSortedTranslation(
+                                htmlRenderContext.getFacesContext(),
+                                gridComponent, dataModel, sortedComponents);
 
                 if (sortTranslations != null) {
                     translatedRowIndex = sortTranslations[translatedRowIndex];
@@ -589,8 +591,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             }
         }
         if (gridRenderContext.isCheckable()) {
-            htmlWriter.writeAttribute("v:checkCardinality", gridRenderContext
-                    .getCheckCardinality());
+            htmlWriter.writeAttribute("v:checkCardinality",
+                    gridRenderContext.getCheckCardinality());
 
             if (gridRenderContext.getCheckCardinality() == ICardinality.ONEMANY_CARDINALITY) {
                 int checkedCount = ((ICheckProvider) gridComponent)
@@ -674,12 +676,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         int first = gridRenderContext.getFirst();
         if (first > 0) {
-        	if (rowCount < 0 || first <= rowCount) {
+            if (rowCount < 0 || first <= rowCount) {
                 htmlWriter.writeAttribute("v:first", first);
-        	} else {
-        		// reset First to 0 if rowCount is smaller than first
-        		gridRenderContext.resetFirst();
-        	}
+            } else {
+                // reset First to 0 if rowCount is smaller than first
+                gridRenderContext.resetFirst();
+            }
         }
 
         if (gridRenderContext.isPaged() == false) {
@@ -719,10 +721,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             String dragTypes[] = draggableCapability.getDragTypes();
             if (dragTypes != null && dragTypes.length > 0) {
-                htmlWriter.writeAttribute("v:dragTypes", HtmlTools
-                        .serializeDnDTypes(dragTypes));
-            }else {
-            	htmlWriter.writeAttribute("v:dragTypes","x-RCFaces/row");
+                htmlWriter.writeAttribute("v:dragTypes",
+                        HtmlTools.serializeDnDTypes(dragTypes));
+            } else {
+                htmlWriter.writeAttribute("v:dragTypes", "x-RCFaces/row");
             }
         }
 
@@ -738,10 +740,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             String dropTypes[] = droppableCapability.getDropTypes();
             if (dropTypes != null && dropTypes.length > 0) {
-                htmlWriter.writeAttribute("v:dropTypes", HtmlTools
-                        .serializeDnDTypes(dropTypes));
-            }else {
-            	htmlWriter.writeAttribute("v:dropTypes","x-RCFaces/row");
+                htmlWriter.writeAttribute("v:dropTypes",
+                        HtmlTools.serializeDnDTypes(dropTypes));
+            } else {
+                htmlWriter.writeAttribute("v:dropTypes", "x-RCFaces/row");
             }
 
             if (gridComponent instanceof IDroppableGridComponent) {
@@ -922,13 +924,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     protected void writeGridComponentAttributes(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, IGridComponent dg)
             throws WriterException {
-    	if (dg instanceof ITabIndexCapability) {
-    		ITabIndexCapability tic = (ITabIndexCapability) dg;
-    		Integer tabIndex = tic.getTabIndex();
-    		if (tabIndex != null) {
-        		htmlWriter.writeAttribute("v:tabIndex", tabIndex.intValue());
-    		}
-    	}
+        if (dg instanceof ITabIndexCapability) {
+            ITabIndexCapability tic = (ITabIndexCapability) dg;
+            Integer tabIndex = tic.getTabIndex();
+            if (tabIndex != null) {
+                htmlWriter.writeAttribute("v:tabIndex", tabIndex.intValue());
+            }
+        }
 
     }
 
@@ -1027,7 +1029,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
          * htmlWriter.writeClass(getTitleRowClassName(htmlWriter));
          */
         boolean first = true;
-          int columnHeaderIndex = 0;
+        int columnHeaderIndex = 0;
         for (int i = 0; i < columns.length; i++) {
             if (tableContext.getColumnState(i) != AbstractGridRenderContext.VISIBLE) {
                 continue;
@@ -1035,7 +1037,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
             UIColumn column = columns[i];
 
-            encodeFixedTitleCol(htmlWriter, tableContext, column, first, i, ++columnHeaderIndex);
+            encodeFixedTitleCol(htmlWriter, tableContext, column, first, i,
+                    ++columnHeaderIndex);
             first = false;
         }
 
@@ -1094,7 +1097,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     private void encodeFixedTitleCol(IHtmlWriter htmlWriter,
             AbstractGridRenderContext tableContext, UIColumn column,
-            boolean first, int columnIndex, int columnHeaderIndex) throws WriterException {
+            boolean first, int columnIndex, int columnHeaderIndex)
+            throws WriterException {
 
         /*
          * htmlWriter.startElement(IHtmlWriter.LI);
@@ -1112,7 +1116,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
          * htmlWriter.writeTitle(toolTip); } }
          */
 
-        encodeTitleCell(htmlWriter, tableContext, column, columnIndex, columnHeaderIndex);
+        encodeTitleCell(htmlWriter, tableContext, column, columnIndex,
+                columnHeaderIndex);
 
         /*
          * htmlWriter.endElement(IHtmlWriter.LI);
@@ -1360,8 +1365,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
     protected String getTitleDivTextId(IHtmlWriter htmlWriter, UIColumn column) {
         return column.getClientId(htmlWriter.getComponentRenderContext()
-                .getFacesContext())
-                + TITLE_TTEXT_ID_SUFFIX;
+                .getFacesContext()) + TITLE_TTEXT_ID_SUFFIX;
     }
 
     protected String getTitleDivContainerClassName(IHtmlWriter htmlWriter) {
@@ -1462,12 +1466,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             AbstractGridRenderContext tableContext, UIColumn column,
             int columnIndex, int columnHeaderIndex) throws WriterException {
         htmlWriter.startElement(IHtmlWriter.LI);
-       
+
         htmlWriter.writeRole(IAccessibilityRoles.COLUMNHEADER);
         // au propre
-        htmlWriter.writeId(getDataTableId(htmlWriter)+":columnHeader:"+columnHeaderIndex);
-        
-        
+        htmlWriter.writeId(getDataTableId(htmlWriter) + ":columnHeader:"
+                + columnHeaderIndex);
+
         String thClassName = getTitleCellClassName(htmlWriter, column,
                 columnIndex == 0, tableContext.isDisabled());
         htmlWriter.writeClass(thClassName);
@@ -2373,10 +2377,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         jsWriter.writeln("]);");
     }
-    
+
     protected IHtmlWriter writeTabIndex(IHtmlWriter writer,
-    		ITabIndexCapability tabIndexCapability) throws WriterException {
-    	// Do nothing : check the v:tabIndex attribute
-    	return writer;
+            ITabIndexCapability tabIndexCapability) throws WriterException {
+        // Do nothing : check the v:tabIndex attribute
+        return writer;
     }
 }

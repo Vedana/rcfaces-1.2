@@ -285,8 +285,9 @@ var __members = {
 		this._keyRowSearch=true;
 		this._cellWrap=f_core.GetAttribute(this, "v:cellTextWrap", false);
 		//this._noCellWrap=false;
+
 		if (!!this._cellWrap) {
-			this.className+=" f_dataGrid_noWrap";
+			// this.className+=" f_dataGrid_noWrap";
 		}
 	},
 	f_finalize: function() {
