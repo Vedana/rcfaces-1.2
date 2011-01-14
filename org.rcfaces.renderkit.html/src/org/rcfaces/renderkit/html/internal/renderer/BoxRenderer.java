@@ -11,6 +11,7 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
+import org.rcfaces.core.component.capability.ILayoutManagerCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -101,6 +102,22 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         }
 
         setAsyncRenderer(htmlWriter, boxComponent, asyncRender);
+        /*
+         * int type = boxComponent.getLayoutType(facesContext); if (type ==
+         * ILayoutManagerCapability.INHERITED_LAYOUT_TYPE) { type =
+         * AbstractLayoutProcessor
+         * .computeInheritedLayoutType(boxComponent.getParent()); }
+         * 
+         * if (type == ILayoutManagerCapability.ABSOLUTE_LAYOUT_TYPE) {
+         * manageAbsoluteLayout(htmlWriter, boxComponent, type); }
+         */
+    }
+
+    private void manageAbsoluteLayout(IHtmlWriter htmlWriter,
+            ILayoutManagerCapability layoutManager, int type) {
+
+        // Connait-on notre taille en pixel ?
+
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
