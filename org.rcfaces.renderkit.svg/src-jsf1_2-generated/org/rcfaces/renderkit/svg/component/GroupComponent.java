@@ -1,12 +1,12 @@
 package org.rcfaces.renderkit.svg.component;
 
 import org.rcfaces.core.internal.component.Properties;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import java.util.HashSet;
 import org.rcfaces.renderkit.svg.component.NodeComponent;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 
 public class GroupComponent extends NodeComponent {
 

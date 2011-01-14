@@ -56,6 +56,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
+	private ValueExpression bottom;
+	private ValueExpression left;
+	private ValueExpression right;
+	private ValueExpression top;
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression margins;
@@ -213,6 +217,22 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final void setBottom(ValueExpression bottom) {
+		this.bottom = bottom;
+	}
+
+	public final void setLeft(ValueExpression left) {
+		this.left = left;
+	}
+
+	public final void setRight(ValueExpression right) {
+		this.right = right;
+	}
+
+	public final void setTop(ValueExpression top) {
+		this.top = top;
+	}
+
 	public final void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
@@ -265,6 +285,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  left='"+left+"'");
+			LOG.debug("  right='"+right+"'");
+			LOG.debug("  top='"+top+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  margins='"+margins+"'");
 		}
@@ -582,6 +606,42 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (bottom != null) {
+			if (bottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM, bottom);
+
+			} else {
+				component.setBottom(getInt(bottom.getExpressionString()));
+			}
+		}
+
+		if (left != null) {
+			if (left.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT, left);
+
+			} else {
+				component.setLeft(getInt(left.getExpressionString()));
+			}
+		}
+
+		if (right != null) {
+			if (right.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT, right);
+
+			} else {
+				component.setRight(getInt(right.getExpressionString()));
+			}
+		}
+
+		if (top != null) {
+			if (top.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP, top);
+
+			} else {
+				component.setTop(getInt(top.getExpressionString()));
+			}
+		}
+
 		if (initListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
@@ -660,6 +720,10 @@ public abstract class AbstractCommandTag extends CameliaTag implements Tag {
 		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
+		bottom = null;
+		left = null;
+		right = null;
+		top = null;
 		initListeners = null;
 		hiddenMode = null;
 		margins = null;

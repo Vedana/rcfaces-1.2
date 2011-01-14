@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IOverStyleClassCapability;
+import org.rcfaces.core.component.capability.ILayoutManagerCapability;
 import org.rcfaces.core.internal.capability.IAsyncRenderComponent;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AbstractBasicComponent;
@@ -23,6 +24,7 @@ import org.rcfaces.core.internal.converter.AsyncRenderModeConverter;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
+import org.rcfaces.core.internal.converter.LayoutManagerTypeConverter;
 import java.util.Arrays;
 import org.rcfaces.core.internal.capability.IVariableScopeCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
@@ -68,6 +70,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 	IMouseEventCapability,
 	IInitEventCapability,
 	ILoadEventCapability,
+	ILayoutManagerCapability,
 	IMenuCapability,
 	IAsyncRenderModeCapability,
 	IAsyncDecodeModeCapability,
@@ -82,7 +85,7 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractBasicComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","overStyleClass","type","asyncDecodeMode","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"backgroundImageVerticalRepeat","horizontalScroll","backgroundImageVerticalPosition","backgroundImageHorizontalRepeat","overStyleClass","type","asyncDecodeMode","backgroundImageHorizontalPosition","loadListener","asyncRenderMode","initListener","scopeSaveValue","scopeVar","mouseOverListener","verticalScroll","scopeValue","backgroundImageURL","border","mouseOutListener","layoutType"}));
 	}
 
 	public BoxComponent() {
@@ -105,6 +108,13 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 
 			setAsyncDecodeMode(((Integer)AsyncDecodeModeConverter.SINGLETON.getAsObject(null, this, asyncDecodeMode)).intValue());
+		
+	}
+
+	public void setLayoutType(String type) {
+
+
+			setLayoutType(((Integer)LayoutManagerTypeConverter.SINGLETON.getAsObject(null, this, type)).intValue());
 		
 	}
 
@@ -292,6 +302,29 @@ public class BoxComponent extends AbstractBasicComponent implements
 
 	public final javax.faces.event.FacesListener [] listLoadListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ILoadListener.class);
+	}
+
+	public int getLayoutType() {
+		return getLayoutType(null);
+	}
+
+	/**
+	 * See {@link #getLayoutType() getLayoutType()} for more details
+	 */
+	public int getLayoutType(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.LAYOUT_TYPE,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "layoutType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLayoutTypeSetted() {
+		return engine.isPropertySetted(Properties.LAYOUT_TYPE);
+	}
+
+	public void setLayoutType(int layoutType) {
+		engine.setProperty(Properties.LAYOUT_TYPE, layoutType);
 	}
 
 	public IMenuComponent getMenu() {

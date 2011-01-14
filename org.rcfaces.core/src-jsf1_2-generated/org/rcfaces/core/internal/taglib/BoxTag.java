@@ -28,6 +28,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 	private ValueExpression mouseOverListeners;
 	private ValueExpression initListeners;
 	private ValueExpression loadListeners;
+	private ValueExpression layoutType;
 	private ValueExpression asyncRenderMode;
 	private ValueExpression asyncDecodeMode;
 	private ValueExpression scopeSaveValue;
@@ -81,6 +82,10 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		this.loadListeners = loadListeners;
 	}
 
+	public final void setLayoutType(ValueExpression layoutType) {
+		this.layoutType = layoutType;
+	}
+
 	public final void setAsyncRenderMode(ValueExpression asyncRenderMode) {
 		this.asyncRenderMode = asyncRenderMode;
 	}
@@ -128,6 +133,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 			LOG.debug("  backgroundImageVerticalPosition='"+backgroundImageVerticalPosition+"'");
 			LOG.debug("  backgroundImageVerticalRepeat='"+backgroundImageVerticalRepeat+"'");
 			LOG.debug("  border='"+border+"'");
+			LOG.debug("  layoutType='"+layoutType+"'");
 			LOG.debug("  asyncRenderMode='"+asyncRenderMode+"'");
 			LOG.debug("  asyncDecodeMode='"+asyncDecodeMode+"'");
 			LOG.debug("  scopeSaveValue='"+scopeSaveValue+"'");
@@ -218,6 +224,15 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 
 		if (loadListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.LOAD_LISTENER_TYPE, loadListeners);
+		}
+
+		if (layoutType != null) {
+			if (layoutType.isLiteralText()==false) {
+				component.setValueExpression(Properties.LAYOUT_TYPE, layoutType);
+
+			} else {
+				component.setLayoutType(layoutType.getExpressionString());
+			}
 		}
 
 		if (asyncRenderMode != null) {
@@ -313,6 +328,7 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		mouseOverListeners = null;
 		initListeners = null;
 		loadListeners = null;
+		layoutType = null;
 		asyncRenderMode = null;
 		asyncDecodeMode = null;
 		scopeSaveValue = null;

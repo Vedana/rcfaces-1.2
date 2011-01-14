@@ -2,12 +2,12 @@ package org.rcfaces.renderkit.svg.component;
 
 import org.rcfaces.core.internal.component.Properties;
 import javax.el.ValueExpression;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import java.util.HashSet;
 import org.rcfaces.renderkit.svg.component.NodeComponent;
+import org.apache.commons.logging.LogFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.HashSet;
 
 public class PathComponent extends NodeComponent {
 
@@ -17,7 +17,7 @@ public class PathComponent extends NodeComponent {
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(NodeComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"display","visibility","fontWeight","stopColor","fontSize","fontVariant","fill","textAlign","strokeLineCap","fontStyle","fillOpacity","clipRule","strokeDashArray","clipPath","textAnchor","textRendering","fillRule","strokeWidth","fontStretch","clip","opacity","writingMode","wordSpacing","fontFamily","strokeLineJoin","strokeMiterLimit","color","stopOpacity","fontSizeAdjust","textDecoration","stroke","strokeDashOffset","strokeOpacity","overflow"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"clipRule","stopOpacity","visibility","fontVariant","strokeOpacity","fillOpacity","clipPath","stroke","strokeLineJoin","textDecoration","strokeLineCap","stopColor","fillRule","writingMode","strokeDashOffset","opacity","textAlign","fontFamily","strokeWidth","clip","strokeMiterLimit","textAnchor","fill","textRendering","fontStyle","display","fontSize","strokeDashArray","fontWeight","color","overflow","fontSizeAdjust","wordSpacing","fontStretch"}));
 	}
 
 	public PathComponent() {

@@ -1,37 +1,63 @@
 package org.rcfaces.renderkit.svg.component;
 
-import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
-import org.rcfaces.core.component.capability.IDisabledCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.renderkit.svg.component.ImageComponent;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.ISelectionEventCapability;
+import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
-import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.IKeyEventCapability;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.component.capability.IFocusStyleClassCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IDisabledCapability;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import java.util.Arrays;
 
 /**
  * <p>The imageButton Component is a <a href="/comps/buttonComponent.html">button Component</a> that can show an image.</p>
  * <p>The imageButton Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Text, font &amp; image</li>
- * <li>Margin &amp; border</li>
- * <li>Help</li>
- * <li>Visibility, Read-Only, Disabled</li>
- * <li>Events Handling</li>
+ * <li>IImageButtonFamilly </li>
+ * <li>IImageAccessorsCapability </li>
  * </ul>
  * </p>
+ * 
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageButtonComponent.html">imageButton</a> renderer is linked to the <a href="/jsdocs/index.html?f_imageButton.html" target="_blank">f_imageButton</a> javascript class. f_imageButton extends f_component, fa_readOnly, fa_disabled, fa_tabIndex, fa_borderType, fa_images, fa_immediate, fa_value, fa_aria</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_imageButton</td>
+ * <td width="50%">Defines styles for the wrapper IMG element</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_imageButton_text</td>
+ * <td width="50%">Defines styles for the wrapper SPAN element for text</td>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_imageButton_image</td>
+ * <td width="50%">Defines styles for the wrapper IMG element</td>
+ * </tr>
+ * 
+ * 
+ * </tbody>
+ * </table>
  */
 public class ImageButtonComponent extends ImageComponent implements 
 	IDisabledCapability,
@@ -51,7 +77,7 @@ public class ImageButtonComponent extends ImageComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(ImageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"selectionListener","focusListener","validationListener","unlockedClientAttributeNames","keyPressListener","keyUpListener","disabled","accessKey","immediate","blurListener","focusStyleClass","tabIndex","keyDownListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"focusStyleClass","accessKey","blurListener","tabIndex","keyUpListener","focusListener","keyPressListener","unlockedClientAttributeNames","immediate","selectionListener","keyDownListener","disabled","validationListener"}));
 	}
 
 	public ImageButtonComponent() {
@@ -156,16 +182,16 @@ public class ImageButtonComponent extends ImageComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IFocusListener.class);
 	}
 
-	public final void addKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
+	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
 		addFacesListener(listener);
 	}
 
-	public final void removeKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
+	public final void removeKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
 		removeFacesListener(listener);
 	}
 
-	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
+	public final javax.faces.event.FacesListener [] listKeyUpListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
 	}
 
 	public final void addKeyDownListener(org.rcfaces.core.event.IKeyDownListener listener) {
@@ -180,16 +206,16 @@ public class ImageButtonComponent extends ImageComponent implements
 		return getFacesListeners(org.rcfaces.core.event.IKeyDownListener.class);
 	}
 
-	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
+	public final void addKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
 		addFacesListener(listener);
 	}
 
-	public final void removeKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
+	public final void removeKeyPressListener(org.rcfaces.core.event.IKeyPressListener listener) {
 		removeFacesListener(listener);
 	}
 
-	public final javax.faces.event.FacesListener [] listKeyUpListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IKeyUpListener.class);
+	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
 	}
 
 	public final void addValidationListener(org.rcfaces.core.event.IValidationListener listener) {

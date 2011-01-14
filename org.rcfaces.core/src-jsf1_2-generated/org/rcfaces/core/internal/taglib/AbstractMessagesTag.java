@@ -40,6 +40,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
+	private ValueExpression bottom;
+	private ValueExpression left;
+	private ValueExpression right;
+	private ValueExpression top;
 	private ValueExpression mouseOutListeners;
 	private ValueExpression mouseOverListeners;
 	private ValueExpression unlockedClientAttributeNames;
@@ -47,9 +51,9 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression margins;
-	private ValueExpression globalOnly;
 	private ValueExpression showSummary;
 	private ValueExpression showDetail;
+	private ValueExpression globalOnly;
 	public final void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
@@ -138,6 +142,22 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final void setBottom(ValueExpression bottom) {
+		this.bottom = bottom;
+	}
+
+	public final void setLeft(ValueExpression left) {
+		this.left = left;
+	}
+
+	public final void setRight(ValueExpression right) {
+		this.right = right;
+	}
+
+	public final void setTop(ValueExpression top) {
+		this.top = top;
+	}
+
 	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
@@ -166,16 +186,16 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		this.margins = margins;
 	}
 
-	public final void setGlobalOnly(ValueExpression globalOnly) {
-		this.globalOnly = globalOnly;
-	}
-
 	public final void setShowSummary(ValueExpression showSummary) {
 		this.showSummary = showSummary;
 	}
 
 	public final void setShowDetail(ValueExpression showDetail) {
 		this.showDetail = showDetail;
+	}
+
+	public final void setGlobalOnly(ValueExpression globalOnly) {
+		this.globalOnly = globalOnly;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -200,12 +220,16 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  left='"+left+"'");
+			LOG.debug("  right='"+right+"'");
+			LOG.debug("  top='"+top+"'");
 			LOG.debug("  unlockedClientAttributeNames='"+unlockedClientAttributeNames+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  globalOnly='"+globalOnly+"'");
 			LOG.debug("  showSummary='"+showSummary+"'");
 			LOG.debug("  showDetail='"+showDetail+"'");
+			LOG.debug("  globalOnly='"+globalOnly+"'");
 		}
 		if ((uiComponent instanceof AbstractMessagesComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -407,6 +431,42 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (bottom != null) {
+			if (bottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM, bottom);
+
+			} else {
+				component.setBottom(getInt(bottom.getExpressionString()));
+			}
+		}
+
+		if (left != null) {
+			if (left.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT, left);
+
+			} else {
+				component.setLeft(getInt(left.getExpressionString()));
+			}
+		}
+
+		if (right != null) {
+			if (right.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT, right);
+
+			} else {
+				component.setRight(getInt(right.getExpressionString()));
+			}
+		}
+
+		if (top != null) {
+			if (top.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP, top);
+
+			} else {
+				component.setTop(getInt(top.getExpressionString()));
+			}
+		}
+
 		if (mouseOutListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.MOUSE_OUT_LISTENER_TYPE, mouseOutListeners);
 		}
@@ -448,15 +508,6 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 				component.setMargins(margins.getExpressionString());
 		}
 
-		if (globalOnly != null) {
-			if (globalOnly.isLiteralText()==false) {
-				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
-
-			} else {
-				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
-			}
-		}
-
 		if (showSummary != null) {
 			if (showSummary.isLiteralText()==false) {
 				component.setValueExpression(Properties.SHOW_SUMMARY, showSummary);
@@ -472,6 +523,15 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setShowDetail(getBool(showDetail.getExpressionString()));
+			}
+		}
+
+		if (globalOnly != null) {
+			if (globalOnly.isLiteralText()==false) {
+				component.setValueExpression(Properties.GLOBAL_ONLY, globalOnly);
+
+			} else {
+				component.setGlobalOnly(getBool(globalOnly.getExpressionString()));
 			}
 		}
 	}
@@ -499,6 +559,10 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
+		bottom = null;
+		left = null;
+		right = null;
+		top = null;
 		mouseOutListeners = null;
 		mouseOverListeners = null;
 		unlockedClientAttributeNames = null;
@@ -506,9 +570,9 @@ public abstract class AbstractMessagesTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		hiddenMode = null;
 		margins = null;
-		globalOnly = null;
 		showSummary = null;
 		showDetail = null;
+		globalOnly = null;
 
 		super.release();
 	}

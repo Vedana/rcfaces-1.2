@@ -1,6 +1,7 @@
 package org.rcfaces.core.component;
 
 import org.rcfaces.core.internal.component.Properties;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import javax.faces.context.FacesContext;
@@ -8,8 +9,8 @@ import org.rcfaces.core.internal.tools.MarginTools;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.component.capability.IFontCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.component.capability.IFontCapability;
 import java.lang.Object;
 import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
@@ -81,6 +82,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 	ITextAlignmentCapability,
 	IAccessKeyCapability,
 	IWAIRoleCapability,
+	ILayoutPositionCapability,
 	IInitEventCapability,
 	IHiddenModeCapability,
 	IValueLockedCapability,
@@ -92,7 +94,7 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaInputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","blurListener","fontName","visible","backgroundColor","marginLeft","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","valueLocked","keyDownListener","hiddenMode","mouseOverListener","waiRole","foregroundColor","mouseOutListener","validationListener","lookId","userEventListener","helpMessage","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","fontBold","fontSize","ariaLabel","initListener","immediate","unlockedClientAttributeNames","marginBottom","fontItalic","fontUnderline","textAlignment","toolTipText","y","disabled","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"fontName","accessKey","visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","valueLocked","mouseOverListener","right","mouseOutListener","waiRole","validationListener","lookId","userEventListener","marginTop","styleClass","width","fontBold","fontSize","fontItalic","fontUnderline","textAlignment","bottom","toolTipText","blurListener","ariaLevel","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","initListener","marginBottom","unlockedClientAttributeNames","immediate","disabled","y","margins","x"}));
 	}
 
 
@@ -1158,6 +1160,98 @@ public abstract class AbstractInputComponent extends CameliaInputComponent imple
 
 	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public int getBottom() {
+		return getBottom(null);
+	}
+
+	/**
+	 * See {@link #getBottom() getBottom()} for more details
+	 */
+	public int getBottom(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.BOTTOM,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+	}
+
+	public void setBottom(int bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+	}
+
+	public int getLeft() {
+		return getLeft(null);
+	}
+
+	/**
+	 * See {@link #getLeft() getLeft()} for more details
+	 */
+	public int getLeft(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.LEFT,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "left" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+	}
+
+	public void setLeft(int left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public int getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public int getRight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.RIGHT,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(int right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public int getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public int getTop(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TOP,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(int top) {
+		engine.setProperty(Properties.TOP, top);
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {

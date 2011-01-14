@@ -1,18 +1,18 @@
 package org.rcfaces.renderkit.svg.internal.taglib;
 
-import javax.servlet.jsp.tagext.Tag;
-import org.rcfaces.core.internal.tools.ListenersTools;
-import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.renderkit.svg.component.ImageButtonComponent;
 import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
-import org.rcfaces.core.internal.tools.ListenersTools1_2;
+import org.rcfaces.core.internal.component.Properties;
+import org.apache.commons.logging.LogFactory;
+import javax.servlet.jsp.tagext.Tag;
 import org.rcfaces.core.internal.taglib.CameliaTag;
+import org.rcfaces.core.internal.tools.ListenersTools;
+import javax.faces.context.FacesContext;
+import javax.faces.application.Application;
+import org.rcfaces.renderkit.svg.component.ImageButtonComponent;
+import javax.el.ValueExpression;
 import org.apache.commons.logging.Log;
 import javax.faces.component.UIViewRoot;
+import org.rcfaces.core.internal.tools.ListenersTools1_2;
 
 public class ImageButtonTag extends ImageTag implements Tag {
 
@@ -24,9 +24,9 @@ public class ImageButtonTag extends ImageTag implements Tag {
 	private ValueExpression tabIndex;
 	private ValueExpression blurListeners;
 	private ValueExpression focusListeners;
-	private ValueExpression keyPressListeners;
-	private ValueExpression keyDownListeners;
 	private ValueExpression keyUpListeners;
+	private ValueExpression keyDownListeners;
+	private ValueExpression keyPressListeners;
 	private ValueExpression immediate;
 	private ValueExpression validationListeners;
 	private ValueExpression selectionListeners;
@@ -55,16 +55,16 @@ public class ImageButtonTag extends ImageTag implements Tag {
 		this.focusListeners = focusListeners;
 	}
 
-	public final void setKeyPressListener(ValueExpression keyPressListeners) {
-		this.keyPressListeners = keyPressListeners;
+	public final void setKeyUpListener(ValueExpression keyUpListeners) {
+		this.keyUpListeners = keyUpListeners;
 	}
 
 	public final void setKeyDownListener(ValueExpression keyDownListeners) {
 		this.keyDownListeners = keyDownListeners;
 	}
 
-	public final void setKeyUpListener(ValueExpression keyUpListeners) {
-		this.keyUpListeners = keyUpListeners;
+	public final void setKeyPressListener(ValueExpression keyPressListeners) {
+		this.keyPressListeners = keyPressListeners;
 	}
 
 	public final void setImmediate(ValueExpression immediate) {
@@ -142,16 +142,16 @@ public class ImageButtonTag extends ImageTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.FOCUS_LISTENER_TYPE, focusListeners);
 		}
 
-		if (keyPressListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
+		if (keyUpListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_UP_LISTENER_TYPE, keyUpListeners);
 		}
 
 		if (keyDownListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_DOWN_LISTENER_TYPE, keyDownListeners);
 		}
 
-		if (keyUpListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_UP_LISTENER_TYPE, keyUpListeners);
+		if (keyPressListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.KEY_PRESS_LISTENER_TYPE, keyPressListeners);
 		}
 
 		if (immediate != null) {
@@ -187,9 +187,9 @@ public class ImageButtonTag extends ImageTag implements Tag {
 		tabIndex = null;
 		blurListeners = null;
 		focusListeners = null;
-		keyPressListeners = null;
-		keyDownListeners = null;
 		keyUpListeners = null;
+		keyDownListeners = null;
+		keyPressListeners = null;
 		immediate = null;
 		validationListeners = null;
 		selectionListeners = null;

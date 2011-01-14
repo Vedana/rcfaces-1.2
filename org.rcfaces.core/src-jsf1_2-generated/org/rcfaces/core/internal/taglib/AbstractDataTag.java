@@ -53,13 +53,17 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression ariaLabel;
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
+	private ValueExpression bottom;
+	private ValueExpression left;
+	private ValueExpression right;
+	private ValueExpression top;
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression immediate;
-	private ValueExpression first;
+	private ValueExpression value;
 	private ValueExpression margins;
 	private ValueExpression var;
-	private ValueExpression value;
+	private ValueExpression first;
 	private ValueExpression rows;
 	private ValueExpression saveCompleteState;
 	public final void setHelpMessage(ValueExpression helpMessage) {
@@ -202,6 +206,22 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.waiRole = waiRole;
 	}
 
+	public final void setBottom(ValueExpression bottom) {
+		this.bottom = bottom;
+	}
+
+	public final void setLeft(ValueExpression left) {
+		this.left = left;
+	}
+
+	public final void setRight(ValueExpression right) {
+		this.right = right;
+	}
+
+	public final void setTop(ValueExpression top) {
+		this.top = top;
+	}
+
 	public final void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
@@ -214,8 +234,8 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.immediate = immediate;
 	}
 
-	public final void setFirst(ValueExpression first) {
-		this.first = first;
+	public final void setValue(ValueExpression value) {
+		this.value = value;
 	}
 
 	public final void setMargins(ValueExpression margins) {
@@ -226,8 +246,8 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.var = var;
 	}
 
-	public final void setValue(ValueExpression value) {
-		this.value = value;
+	public final void setFirst(ValueExpression first) {
+		this.first = first;
 	}
 
 	public final void setRows(ValueExpression rows) {
@@ -263,12 +283,16 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLabel='"+ariaLabel+"'");
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
+			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  left='"+left+"'");
+			LOG.debug("  right='"+right+"'");
+			LOG.debug("  top='"+top+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  immediate='"+immediate+"'");
-			LOG.debug("  first='"+first+"'");
+			LOG.debug("  value='"+value+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  var='"+var+"'");
-			LOG.debug("  value='"+value+"'");
+			LOG.debug("  first='"+first+"'");
 			LOG.debug("  rows='"+rows+"'");
 		}
 		if ((uiComponent instanceof AbstractDataComponent)==false) {
@@ -538,6 +562,42 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (bottom != null) {
+			if (bottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM, bottom);
+
+			} else {
+				component.setBottom(getInt(bottom.getExpressionString()));
+			}
+		}
+
+		if (left != null) {
+			if (left.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT, left);
+
+			} else {
+				component.setLeft(getInt(left.getExpressionString()));
+			}
+		}
+
+		if (right != null) {
+			if (right.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT, right);
+
+			} else {
+				component.setRight(getInt(right.getExpressionString()));
+			}
+		}
+
+		if (top != null) {
+			if (top.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP, top);
+
+			} else {
+				component.setTop(getInt(top.getExpressionString()));
+			}
+		}
+
 		if (initListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
@@ -560,12 +620,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (first != null) {
-			if (first.isLiteralText()==false) {
-				component.setValueExpression(Properties.FIRST, first);
+		if (value != null) {
+			if (value.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE, value);
 
 			} else {
-				component.setFirst(getInt(first.getExpressionString()));
+				component.setValue(value.getExpressionString());
 			}
 		}
 
@@ -585,12 +645,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (value != null) {
-			if (value.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE, value);
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
 
 			} else {
-				component.setValue(value.getExpressionString());
+				component.setFirst(getInt(first.getExpressionString()));
 			}
 		}
 
@@ -649,13 +709,17 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		ariaLabel = null;
 		ariaLevel = null;
 		waiRole = null;
+		bottom = null;
+		left = null;
+		right = null;
+		top = null;
 		initListeners = null;
 		hiddenMode = null;
 		immediate = null;
-		first = null;
+		value = null;
 		margins = null;
 		var = null;
-		value = null;
+		first = null;
 		rows = null;
 		saveCompleteState = null;
 

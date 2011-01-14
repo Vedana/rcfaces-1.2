@@ -28,6 +28,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 	private ValueExpression waiRole;
 	private ValueExpression x;
 	private ValueExpression y;
+	private ValueExpression bottom;
+	private ValueExpression left;
+	private ValueExpression right;
+	private ValueExpression top;
 	private ValueExpression width;
 	private ValueExpression height;
 	private ValueExpression marginBottom;
@@ -82,6 +86,22 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 	public final void setY(ValueExpression y) {
 		this.y = y;
+	}
+
+	public final void setBottom(ValueExpression bottom) {
+		this.bottom = bottom;
+	}
+
+	public final void setLeft(ValueExpression left) {
+		this.left = left;
+	}
+
+	public final void setRight(ValueExpression right) {
+		this.right = right;
+	}
+
+	public final void setTop(ValueExpression top) {
+		this.top = top;
 	}
 
 	public final void setWidth(ValueExpression width) {
@@ -157,6 +177,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  x='"+x+"'");
 			LOG.debug("  y='"+y+"'");
+			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  left='"+left+"'");
+			LOG.debug("  right='"+right+"'");
+			LOG.debug("  top='"+top+"'");
 			LOG.debug("  width='"+width+"'");
 			LOG.debug("  height='"+height+"'");
 			LOG.debug("  marginBottom='"+marginBottom+"'");
@@ -258,6 +282,42 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setY(y.getExpressionString());
+			}
+		}
+
+		if (bottom != null) {
+			if (bottom.isLiteralText()==false) {
+				component.setValueExpression(Properties.BOTTOM, bottom);
+
+			} else {
+				component.setBottom(getInt(bottom.getExpressionString()));
+			}
+		}
+
+		if (left != null) {
+			if (left.isLiteralText()==false) {
+				component.setValueExpression(Properties.LEFT, left);
+
+			} else {
+				component.setLeft(getInt(left.getExpressionString()));
+			}
+		}
+
+		if (right != null) {
+			if (right.isLiteralText()==false) {
+				component.setValueExpression(Properties.RIGHT, right);
+
+			} else {
+				component.setRight(getInt(right.getExpressionString()));
+			}
+		}
+
+		if (top != null) {
+			if (top.isLiteralText()==false) {
+				component.setValueExpression(Properties.TOP, top);
+
+			} else {
+				component.setTop(getInt(top.getExpressionString()));
 			}
 		}
 
@@ -415,6 +475,10 @@ public abstract class AbstractBasicTag extends CameliaTag implements Tag {
 		waiRole = null;
 		x = null;
 		y = null;
+		bottom = null;
+		left = null;
+		right = null;
+		top = null;
 		width = null;
 		height = null;
 		marginBottom = null;

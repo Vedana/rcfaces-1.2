@@ -3,6 +3,7 @@ package org.rcfaces.core.component;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import java.util.Map;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import java.util.Collections;
 import org.apache.commons.logging.LogFactory;
@@ -19,8 +20,8 @@ import org.rcfaces.core.component.capability.IPositionCapability;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
@@ -49,6 +50,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 	IErrorEventCapability,
 	IWAIRoleCapability,
 	IPositionCapability,
+	ILayoutPositionCapability,
 	ISizeCapability,
 	IMarginCapability,
 	IHelpCapability,
@@ -64,7 +66,7 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","waiRole","foregroundColor","lookId","userEventListener","helpMessage","marginTop","width","marginRight","styleClass","partialRendering","ariaLabel","marginBottom","unlockedClientAttributeNames","toolTipText","y","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","left","right","waiRole","foregroundColor","top","lookId","userEventListener","helpMessage","marginTop","styleClass","width","marginRight","partialRendering","ariaLabel","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","y","margins","x"}));
 	}
 
 
@@ -498,6 +500,98 @@ public abstract class AbstractBasicComponent extends CameliaBaseComponent implem
 
 	public void setY(java.lang.String y) {
 		engine.setProperty(Properties.Y, y);
+	}
+
+	public int getBottom() {
+		return getBottom(null);
+	}
+
+	/**
+	 * See {@link #getBottom() getBottom()} for more details
+	 */
+	public int getBottom(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.BOTTOM,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+	}
+
+	public void setBottom(int bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+	}
+
+	public int getLeft() {
+		return getLeft(null);
+	}
+
+	/**
+	 * See {@link #getLeft() getLeft()} for more details
+	 */
+	public int getLeft(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.LEFT,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "left" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+	}
+
+	public void setLeft(int left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public int getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public int getRight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.RIGHT,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(int right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public int getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public int getTop(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TOP,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(int top) {
+		engine.setProperty(Properties.TOP, top);
 	}
 
 	public java.lang.String getWidth() {

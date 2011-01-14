@@ -1,52 +1,53 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
-import java.util.Map;
+import org.rcfaces.core.component.capability.ILayoutPositionCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import java.util.Collections;
-import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.internal.manager.IClientDataManager;
-import org.rcfaces.core.component.capability.IValidationEventCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.apache.commons.logging.Log;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
-import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.component.capability.IFontCapability;
-import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
-import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.internal.tools.ComponentTools;
 import java.lang.Object;
-import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.component.capability.IPartialRenderingCapability;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import java.lang.String;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.component.capability.ITabIndexCapability;
-import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
-import org.rcfaces.core.component.capability.IMouseEventCapability;
-import org.rcfaces.core.component.capability.ITextAlignmentCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import javax.el.ValueExpression;
 import org.rcfaces.core.component.capability.IDisabledCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IClientDataCapability;
-import org.rcfaces.core.component.capability.IHelpCapability;
+import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import java.util.Map;
+import org.apache.commons.logging.LogFactory;
+import java.util.Collections;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.component.capability.IValidationEventCapability;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.internal.Constants;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
+import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.internal.component.IDataMapAccessor;
+import org.rcfaces.core.component.capability.IMouseEventCapability;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.ITextAlignmentCapability;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IClientDataCapability;
+import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.component.CameliaCommandComponent;
 
 /**
@@ -77,6 +78,7 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 	ITextAlignmentCapability,
 	IAccessKeyCapability,
 	IWAIRoleCapability,
+	ILayoutPositionCapability,
 	IInitEventCapability,
 	IHiddenModeCapability,
 	IImmediateCapability,
@@ -87,7 +89,7 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaCommandComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","blurListener","fontName","visible","backgroundColor","marginLeft","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","mouseOverListener","waiRole","foregroundColor","mouseOutListener","validationListener","lookId","userEventListener","helpMessage","marginTop","width","styleClass","marginRight","partialRendering","fontBold","fontSize","ariaLabel","initListener","immediate","unlockedClientAttributeNames","marginBottom","fontItalic","fontUnderline","textAlignment","toolTipText","y","disabled","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"accessKey","blurListener","fontName","visible","backgroundColor","marginLeft","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","mouseOverListener","left","right","waiRole","foregroundColor","mouseOutListener","top","validationListener","lookId","userEventListener","helpMessage","marginTop","width","styleClass","marginRight","partialRendering","fontBold","fontSize","ariaLabel","initListener","immediate","unlockedClientAttributeNames","marginBottom","fontItalic","fontUnderline","textAlignment","bottom","toolTipText","y","disabled","margins","x"}));
 	}
 
 
@@ -1117,6 +1119,98 @@ public abstract class AbstractCommandComponent extends CameliaCommandComponent i
 
 	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public int getBottom() {
+		return getBottom(null);
+	}
+
+	/**
+	 * See {@link #getBottom() getBottom()} for more details
+	 */
+	public int getBottom(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.BOTTOM,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "bottom" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isBottomSetted() {
+		return engine.isPropertySetted(Properties.BOTTOM);
+	}
+
+	public void setBottom(int bottom) {
+		engine.setProperty(Properties.BOTTOM, bottom);
+	}
+
+	public int getLeft() {
+		return getLeft(null);
+	}
+
+	/**
+	 * See {@link #getLeft() getLeft()} for more details
+	 */
+	public int getLeft(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.LEFT,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "left" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isLeftSetted() {
+		return engine.isPropertySetted(Properties.LEFT);
+	}
+
+	public void setLeft(int left) {
+		engine.setProperty(Properties.LEFT, left);
+	}
+
+	public int getRight() {
+		return getRight(null);
+	}
+
+	/**
+	 * See {@link #getRight() getRight()} for more details
+	 */
+	public int getRight(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.RIGHT,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "right" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isRightSetted() {
+		return engine.isPropertySetted(Properties.RIGHT);
+	}
+
+	public void setRight(int right) {
+		engine.setProperty(Properties.RIGHT, right);
+	}
+
+	public int getTop() {
+		return getTop(null);
+	}
+
+	/**
+	 * See {@link #getTop() getTop()} for more details
+	 */
+	public int getTop(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.TOP,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "top" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTopSetted() {
+		return engine.isPropertySetted(Properties.TOP);
+	}
+
+	public void setTop(int top) {
+		engine.setProperty(Properties.TOP, top);
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {

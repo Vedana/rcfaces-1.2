@@ -1,39 +1,58 @@
 package org.rcfaces.renderkit.svg.component;
 
-import java.lang.String;
-import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.internal.component.Properties;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.component.capability.IFontCapability;
-import java.util.Arrays;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IAlternateTextCapability;
-import java.util.HashSet;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
-import org.rcfaces.core.component.capability.IFilterCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.component.AbstractOutputComponent;
 import org.rcfaces.core.component.familly.IContentAccessors;
 import org.rcfaces.core.component.capability.IImageCapability;
+import java.lang.String;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.IAlternateTextCapability;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
+import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IFilterCapability;
+import java.util.HashSet;
+import org.apache.commons.logging.Log;
+import org.rcfaces.core.component.AbstractOutputComponent;
+import org.rcfaces.core.model.IFilterProperties;
+import java.util.Set;
+import java.util.Arrays;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.component.capability.IFontCapability;
 
 /**
  * <p>The image Component shows an image (it's equivalent to &lt;img .../&gt;).</p>
  * <p>The image Component has the following capabilities :
  * <ul>
- * <li>Position &amp; Size</li>
- * <li>Foreground &amp; Background Color</li>
- * <li>Image</li>
- * <li>Margin</li>
- * <li>Help</li>
- * <li>Visibility</li>
- * <li>Events Handling</li>
- * </ul>
+ * <li>IImageCapability</li>
+ * <li>IImageSizeCapability</li>
+ * <li>IAlternateTextCapability</li>
+ * <li>IFilterCapability</li>
+ * <li>IImageAccessorsCapability</li>      </ul>
  * </p>
+ * 
+ * 
+ * 
+ * <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/ImageComponent.html">image</a> renderer is linked to the <a href="/jsdocs/index.html?f_image.html" target="_blank">f_image</a> javascript class. f_image extends f_filtredComponent</p>
+ * 
+ * <p> Table of component style classes: </p>
+ * <table border="1" cellpadding="3" cellspacing="0" width="100%">
+ * <tbody>
+ * 
+ * <tr style="text-align:left">
+ * <th  width="33%">Style Name</th>
+ * <th width="50%">Description</th>
+ * </tr>
+ * 
+ * <tr  style="text-align:left">
+ * <td width="33%">f_image</td>
+ * <td width="50%">Defines styles for the wrapper IMG element</td>
+ * </tr>
+ * 
+ * 
+ * </tbody>
+ * </table>
  */
 public class ImageComponent extends AbstractOutputComponent implements 
 	IImageCapability,
@@ -49,7 +68,7 @@ public class ImageComponent extends AbstractOutputComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractOutputComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"imageHeight","fontUnderline","imageURL","fontSize","fontItalic","fontBold","alternateText","filterProperties","pixelUnitToMillimeter","imageWidth","curveFlatness","distanceTolerance","fontName"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"curveFlatness","imageHeight","fontName","filterProperties","distanceTolerance","fontBold","fontSize","pixelUnitToMillimeter","fontItalic","fontUnderline","alternateText","imageURL","imageWidth"}));
 	}
 	protected static final String CAMELIA_VALUE_ALIAS="imageURL";
 
