@@ -17,7 +17,6 @@ import javax.faces.event.FacesListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAccessKeyCapability;
-import org.rcfaces.core.component.capability.IHelpCapability;
 import org.rcfaces.core.internal.capability.IRCFacesComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
@@ -91,8 +90,8 @@ public abstract class AbstractJavaScriptRenderer extends
                 .getHtmlComponentRenderContext();
 
         componentRenderContext.getHtmlRenderContext()
-                .getJavaScriptRenderContext().initializeJavaScriptComponent(
-                        writer);
+                .getJavaScriptRenderContext()
+                .initializeJavaScriptComponent(writer);
     }
 
     public void releaseJavaScript(IJavaScriptWriter writer)
@@ -345,8 +344,8 @@ public abstract class AbstractJavaScriptRenderer extends
                         }
                     }
 
-                    EventsRenderer.encodeEventListeners(js, js
-                            .getComponentVarName(), listenersByType,
+                    EventsRenderer.encodeEventListeners(js,
+                            js.getComponentVarName(), listenersByType,
                             actionListenerType);
                 }
 
@@ -384,21 +383,21 @@ public abstract class AbstractJavaScriptRenderer extends
         return false;
     }
 
-//    protected final IHtmlWriter writeHelp(IHtmlWriter writer,
-//            IHelpCapability helpComponent) {
-//        if ((helpComponent.getHelpURL() != null)
-//                || (helpComponent.getHelpMessage() != null)) {
-//            // writer.enableJavaScript(); // ????
-//        }
-//
-//        return writer;
-//    }
+    // protected final IHtmlWriter writeHelp(IHtmlWriter writer,
+    // IHelpCapability helpComponent) {
+    // if ((helpComponent.getHelpURL() != null)
+    // || (helpComponent.getHelpMessage() != null)) {
+    // // writer.enableJavaScript(); // ????
+    // }
+    //
+    // return writer;
+    // }
 
     protected final void declareLazyJavaScriptRenderer(IHtmlWriter writer) {
 
         writer.getHtmlComponentRenderContext().getHtmlRenderContext()
-                .getJavaScriptRenderContext().declareLazyJavaScriptRenderer(
-                        writer);
+                .getJavaScriptRenderContext()
+                .declareLazyJavaScriptRenderer(writer);
     }
 
     public void addRequiredJavaScriptClassNames(IHtmlWriter writer,
@@ -432,8 +431,8 @@ public abstract class AbstractJavaScriptRenderer extends
             return null;
         }
 
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(jsClass
-                .getResourceBundleName(), locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                jsClass.getResourceBundleName(), locale);
 
         try {
             return resourceBundle.getString(key);
