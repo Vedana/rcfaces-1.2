@@ -286,6 +286,7 @@
 		<capability id="IWAIRoleCapability" />
 
 		<capability id="IPositionCapability" />
+		<capability id="ILayoutPositionCapability" />
 		<capability id="ISizeCapability" />
 		<capability id="IMarginCapability" />
 		<capability id="IHelpCapability" />
@@ -683,6 +684,8 @@
 		<capability id="IInitEventCapability" />
 		<capability id="ILoadEventCapability" />
 
+		<capability id="ILayoutManagerCapability" />
+
 		<capability id="IMenuCapability" />
 		<capability id="IAsyncRenderModeCapability" />
 		<capability id="IAsyncDecodeModeCapability" />
@@ -693,6 +696,8 @@
 
 		<method id="setAsyncRenderMode(String)" />		
 		<method id="setAsyncDecodeMode(String)" />	
+
+		<method id="setLayoutType(String)" />	
 		
 		<attribute id="horizontalScroll" type="boolean" />
 		<attribute id="verticalScroll" type="boolean" />
@@ -3230,6 +3235,7 @@ Dans le cas d'un mode period !
 
 	<component id="ruler" extends="cameliaBase">
 		<capability id="IPositionCapability" />
+		<capability id="ILayoutPositionCapability" />
 		<capability id="IMarginCapability" />
 		<capability id="ISizeCapability" />
 		<capability id="IVisibilityCapability" />
