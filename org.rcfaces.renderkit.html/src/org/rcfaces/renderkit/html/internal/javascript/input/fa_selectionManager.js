@@ -534,6 +534,9 @@ var __members = {
 //		alert("Select="+this._selectionCardinality+"/"+node._value+"/"+li._node._selected);
 		
 		var elementSelected=this.fa_isElementSelected(element);
+		if (elementSelected && f_core.IsPopupButton(evt)) {
+			return true;
+		}
 		var elementValue=this.fa_getElementValue(element);
 		var detail=0;
 		if (selection & fa_selectionManager.ACTIVATE_SELECTION) {
