@@ -3286,9 +3286,10 @@ var __members = {
 	/**
 	 * Refresh the structure of the grid.
 	 * 
+	 * @method public
+	 * 
 	 * @param Boolean fullUpdate to force rowCount and pager update
 	 * 
-	 * @method public
 	 * @return Boolean
 	 */
 	f_refreshContent : function(fullUpdate) {
