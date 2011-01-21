@@ -1,3 +1,9 @@
+fa_selectionManager:
+Gestion du click droit en cas de multisélection (f_performElementSelection)
+
+f_grid:
+Ajout d'un paramêtre à f_refreshContent (Boolean fullUpdate to force rowCount and pager update)
+ 
 ariaLabel :
 Ajout de l'attribut ariaLabel
 
