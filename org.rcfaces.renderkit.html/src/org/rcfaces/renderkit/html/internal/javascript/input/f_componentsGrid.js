@@ -28,7 +28,10 @@ var __members = {
 		this.f_super(arguments);
 	},
 	*/
-	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting) {
+	/**
+	 * @method protected
+	 */
+	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
@@ -40,7 +43,7 @@ var __members = {
 		if (length>0) {
 			params.rows=length;
 		}
-		if (this._rowCount<0) { /* && this._rows */			
+		if (fullUpdate || this._rowCount<0) { /* && this._rows */			
 	        params.unknownRowCount=true;			
 		}
 

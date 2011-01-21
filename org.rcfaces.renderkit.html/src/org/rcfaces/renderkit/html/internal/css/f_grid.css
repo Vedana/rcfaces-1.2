@@ -395,7 +395,8 @@
 }
 
 
-.f_grid_wrap .f_grid_label {
+.f_grid_wrap .f_grid_label,
+.f_grid_wrap .f_cGrid_cell {
 	white-space: normal;
 }
  

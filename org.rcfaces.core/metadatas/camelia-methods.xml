@@ -1704,5 +1704,13 @@
 			engine.setProperty(Properties.ALIGNMENT, AlignmentNormalizer.normalize(alignment));
     	</code>
 	</method>
+
+	<method id="setLayoutType">
+		<import>org.rcfaces.core.internal.converter.LayoutManagerTypeConverter</import>
+		<parameter type="String" name="type" />
+		<code>
+			setLayoutType(((Integer)LayoutManagerTypeConverter.SINGLETON.getAsObject(null, this, type)).intValue());
+		</code>
+	</method>
 </camelia-components>
 	

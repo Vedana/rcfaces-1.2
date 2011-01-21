@@ -4833,11 +4833,13 @@ var f_core = {
 	 * @method hidden static
 	 */
 	GetEvtButton: function(evt) {
-		if (evt.button!==undefined) {
-			return evt.button;
-		}
-		if (evt.which!==undefined) {
-			return evt.which;
+		if (evt) {
+			if (evt.button!==undefined) {
+				return evt.button;
+			}
+			if (evt.which!==undefined) {
+				return evt.which;
+			}
 		}
 		
 		return 0;
