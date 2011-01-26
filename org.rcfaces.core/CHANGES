@@ -1,3 +1,7 @@
+AbstractGrid:
+ajout attribut wheelSelection (boolean default:true)
+Permet de spécifier si la molette doit sélectionner ou pas
+
 CheckButton:
 Gestion du tabIndex when disabled (génération et javascript)
 ajout de v:tabIndex
