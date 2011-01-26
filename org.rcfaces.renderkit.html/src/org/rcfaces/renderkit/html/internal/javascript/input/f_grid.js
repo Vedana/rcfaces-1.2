@@ -1379,10 +1379,10 @@ var __statics = {
 
 		var dataGrid = column._dataGrid;
 
-		var eventPos = dataGrid._dragMousePosition;
+		var eventPosX = dataGrid._dragMousePosition;
 		var cursorPos = f_core.GetAbsolutePosition(column._cursor);
 
-		var dw = eventPos - cursorPos.x + dataGrid._scrollTitle.scrollLeft
+		var dw = eventPosX - cursorPos.x + dataGrid._scrollTitle.scrollLeft
 				- dataGrid._dragDeltaX;
 
 		f_grid._DragCursorMove(dataGrid, column, dw);
@@ -1472,10 +1472,10 @@ var __statics = {
 			head.style.width = w1 + "px";
 			
 			var w2=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
-			column._box.style.width = w2 + "px";
+			column._box.style.width = ((w2>0)?w2:0) + "px";
 			
 			var w3=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING + twidth;
-			column._label.style.width = w3 + "px";
+			column._label.style.width = ((w3>0)?w3:0) + "px";
 	
 			var totalCols = 0;
 			var columns = dataGrid._columns;
@@ -1815,7 +1815,7 @@ var __members = {
 			sortIndicator.onmousedown = f_grid._SortIndication_onmousedown;
 			sortIndicator.onmouseup = f_grid._SortIndication_onmouseup;
 
-			this._sortIndicator = sortIndicator
+			this._sortIndicator = sortIndicator;
 			f_core.AppendChild(this, sortIndicator);
 
 			var img = this.ownerDocument.createElement("IMG");
@@ -2347,7 +2347,7 @@ var __members = {
 			}
 
 		} else {
-			this._waitingMode = f_grid.FULL_WAITING
+			this._waitingMode = f_grid.FULL_WAITING;
 		}
 
 		f_core.Debug(f_grid, "f_update: Set waiting mode to '"
@@ -2737,7 +2737,7 @@ var __members = {
 			column._dataGrid = this;
 
 			if (column._visibility) {
-				v++
+				v++;
 			}
 
 			columns.push(column);
@@ -5016,7 +5016,7 @@ var __members = {
 			f_core
 					.Assert(label && label.nodeType == f_core.ELEMENT_NODE,
 							"f_grid.f_updateColumnsLayout: Invalid structure of header (no Label)");
-			column._label = label
+			column._label = label;
 
 			if (column._sorter) {
 				// label.onmousedown=f_grid._Title_onMouseDown;
@@ -5723,7 +5723,7 @@ var __members = {
 		var indexes = new Array;
 		var texts = new Array;
 
-		var exp = /\|/g
+		var exp = /\|/g;
 
 		for ( var i = 0; i < currentSorts.length; i++) {
 			var col = currentSorts[i];
@@ -5879,7 +5879,7 @@ var __members = {
 						continue;
 					}
 
-					var columns = this._columns
+					var columns = this._columns;
 					for ( var i = 0; i < columns.length; i++) {
 						var cl = columns[i];
 
