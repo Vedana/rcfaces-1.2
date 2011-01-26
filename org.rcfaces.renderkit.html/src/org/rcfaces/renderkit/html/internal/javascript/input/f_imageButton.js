@@ -168,6 +168,14 @@ var __members = {
 	
 	/**
 	 * 
+	 * @method protected final
+	 * @return HTMLElement
+	 */
+	f_getInput: function() {
+		return this.f_getEventElement();
+	},
+	/**
+	 * 
 	 * @method protected
 	 * @return void
 	 */
@@ -517,6 +525,8 @@ var __members = {
 	fa_updateDisabled: function(disabled) {
 		var cmp=this.f_getEventElement();
 		if (disabled) {
+			// Initialisation eventuelle
+			this.fa_getTabIndex();
 			cmp.tabIndex=-1;
 			cmp.hideFocus=true;
 			fa_aria.SetElementAriaDisabled(cmp, disabled);

@@ -238,6 +238,8 @@ var __members = {
 	f_updateDisabled: function(disabled) {
 		this.f_updateStyleClass();
 		if (disabled) {
+			// Initialisation eventuelle
+			this.fa_getTabIndex();
 			this.f_getInput().tabIndex=-1;
 		} else {
 			this.f_getInput().tabIndex=this.fa_getTabIndex();
