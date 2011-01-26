@@ -1,53 +1,54 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ILayoutPositionCapability;
-import java.util.Map;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import java.util.Collections;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.internal.manager.IClientDataManager;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.tools.MarginTools;
-import org.rcfaces.core.component.capability.IImmediateCapability;
-import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.component.capability.IServerDataCapability;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
-import org.apache.commons.logging.Log;
-import java.util.Set;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import java.lang.Object;
+import org.rcfaces.core.component.capability.IPartialRenderingCapability;
+import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.component.capability.IWAIRoleCapability;
+import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.internal.manager.IServerDataManager;
+import org.rcfaces.core.component.capability.ISizeCapability;
+import org.rcfaces.core.component.capability.IStyleClassCapability;
+import java.util.Arrays;
+import org.rcfaces.core.component.capability.IWheelSelectionCapability;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.component.capability.IMarginCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import java.util.Map;
+import org.apache.commons.logging.LogFactory;
+import java.util.Collections;
+import org.rcfaces.core.internal.manager.IClientDataManager;
+import org.rcfaces.core.component.capability.IImmediateCapability;
+import org.rcfaces.core.internal.Constants;
+import org.apache.commons.logging.Log;
+import java.util.Set;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
-import java.lang.Object;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
-import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IResetEventCapability;
-import org.rcfaces.core.component.capability.IWAIRoleCapability;
-import org.rcfaces.core.component.capability.ILookAndFeelCapability;
-import org.rcfaces.core.internal.component.CameliaDataComponent;
 import java.lang.String;
-import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.internal.component.CameliaDataComponent;
+import org.rcfaces.core.component.capability.ILookAndFeelCapability;
 import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
-import org.rcfaces.core.component.capability.IKeyEventCapability;
 import org.rcfaces.core.component.capability.ITabIndexCapability;
+import org.rcfaces.core.component.capability.IKeyEventCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
-import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.IMouseEventCapability;
-import org.rcfaces.core.component.capability.ISizeCapability;
-import javax.el.ValueExpression;
+import org.rcfaces.core.component.capability.IErrorEventCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
+import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IClientDataCapability;
 import org.rcfaces.core.component.capability.IHelpCapability;
-import org.rcfaces.core.component.capability.IStyleClassCapability;
-import java.util.Arrays;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
-import org.rcfaces.core.component.capability.IMarginCapability;
 
 /**
  * Technical component, used as a basis for building new RCFaces components.
@@ -75,6 +76,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	IStyleClassCapability,
 	ILookAndFeelCapability,
 	ISizeCapability,
+	IWheelSelectionCapability,
 	IWAIRoleCapability,
 	ILayoutPositionCapability,
 	IInitEventCapability,
@@ -944,6 +946,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.HEIGHT, height);
 	}
 
+	public boolean isWheelSelection() {
+		return isWheelSelection(null);
+	}
+
+	/**
+	 * See {@link #isWheelSelection() isWheelSelection()} for more details
+	 */
+	public boolean isWheelSelection(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.WHEEL_SELECTION, true, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "wheelSelection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isWheelSelectionSetted() {
+		return engine.isPropertySetted(Properties.WHEEL_SELECTION);
+	}
+
+	public void setWheelSelection(boolean wheelSelection) {
+		engine.setProperty(Properties.WHEEL_SELECTION, wheelSelection);
+	}
+
 	public java.lang.String getAriaLabel() {
 		return getAriaLabel(null);
 	}
@@ -1161,26 +1186,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void setImmediate(boolean immediate) {
 		engine.setProperty(Properties.IMMEDIATE, immediate);
-	}
-
-	public boolean isWheelSelection() {
-		return isWheelSelection(null);
-	}
-
-	public boolean isWheelSelection(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.WHEEL_SELECTION, true, facesContext);
-	}
-
-	public void setWheelSelection(boolean wheelSelection) {
-		engine.setProperty(Properties.WHEEL_SELECTION, wheelSelection);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "wheelSelection" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isWheelSelectionSetted() {
-		return engine.isPropertySetted(Properties.WHEEL_SELECTION);
 	}
 
 	protected Set getCameliaFields() {
