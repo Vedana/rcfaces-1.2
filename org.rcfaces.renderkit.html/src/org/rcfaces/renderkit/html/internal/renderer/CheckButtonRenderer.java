@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.component.CheckButtonComponent;
 import org.rcfaces.core.component.capability.IHorizontalTextPositionCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
+import org.rcfaces.core.component.capability.ITabIndexCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -101,6 +102,31 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
+    
+    @Override
+    protected IHtmlWriter writeTabIndex(IHtmlWriter htmlWriter,
+    		ITabIndexCapability tabIndexCapability) throws WriterException {
+    	
+    	IComponentRenderContext componentRenderContext = htmlWriter.getComponentRenderContext();
+
+    	CheckButtonComponent button = (CheckButtonComponent) componentRenderContext.getComponent();
+    	
+    	Integer index = tabIndexCapability.getTabIndex();
+        if (index == null) {
+            return htmlWriter;
+        }
+
+        int idx = index.intValue();
+        
+    	if (!button.isDisabled()) {
+    		htmlWriter.writeTabIndex(idx);
+    	} else {
+    		htmlWriter.writeTabIndex(-1);
+    		htmlWriter.writeAttribute("v:tabIndex", idx);
+    	}
+
+    	return htmlWriter;
+    }
 
     protected void writeInput(IHtmlWriter htmlWriter,
             CheckButtonComponent button, String className,
@@ -111,6 +137,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
         htmlWriter.startElement(IHtmlWriter.INPUT);
         htmlWriter.writeId(inputId);
         writeInputAttributes(htmlWriter, inputId);
+        htmlWriter.writeTabIndex(-1);
         writeChecked(htmlWriter, button);
 
         htmlWriter.addSubFocusableComponent(inputId);

@@ -155,6 +155,12 @@ var __members = {
 	 */
 	f_setValue: function(value) {
 		this.f_setSelected(!!value);
+	},
+	/**
+	 * @method protected
+	 */
+	fa_getTabIndexElement: function() {
+		return this;
 	}
 }
 

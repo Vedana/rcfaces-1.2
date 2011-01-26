@@ -22,9 +22,9 @@ var __members = {
 		if (this._tabIndex===undefined) {
 		  	this._tabIndex=f_core.GetNumberAttribute(this, "v:tabIndex", undefined);
 		  	if (this._tabIndex===undefined) {
-		  		var input = this.f_getInput();
-		  		if (input) {
-			  		this._tabIndex=f_core.GetNumberAttribute(input, "tabIndex", 0);
+		  		var elt = this.fa_getTabIndexElement();
+		  		if (elt) {
+			  		this._tabIndex=f_core.GetNumberAttribute(elt, "tabIndex", 0);
 		  		}
 		  	}
 		}
@@ -47,12 +47,21 @@ var __members = {
 		this.f_setProperty("tabIndex",set);
 		this._tabIndex = set;
 
-		var input = this.f_getInput();
-		if (input) {
-			input.tabIndex = set;
+		var elt = this.fa_getTabIndexElement();
+		if (elt) {
+			elt.tabIndex = set;
 		}
 	},
-	
+	/**
+	 * Get the element that supports the tabIndex attribute
+	 * Default : the input
+	 *
+	 * @method protected
+	 * @return HTMLElement
+	 */
+	fa_getTabIndexElement: function() {
+		return this.f_getInput();
+	},
 	/**
 	 * 
 	 * @method protected

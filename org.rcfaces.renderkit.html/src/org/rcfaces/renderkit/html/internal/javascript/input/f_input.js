@@ -233,16 +233,20 @@ var __members = {
 		this.f_setProperty(f_prop.DISABLED, disabled);
 	},
 	/**
+	 * update the component according to its disabled state
+	 * 
 	 * @method protected
+	 * @param Boolean disabled
+	 * @return void
 	 */
 	f_updateDisabled: function(disabled) {
 		this.f_updateStyleClass();
 		if (disabled) {
 			// Initialisation eventuelle
 			this.fa_getTabIndex();
-			this.f_getInput().tabIndex=-1;
+			this.fa_getTabIndexElement().tabIndex=-1;
 		} else {
-			this.f_getInput().tabIndex=this.fa_getTabIndex();
+			this.fa_getTabIndexElement().tabIndex=this.fa_getTabIndex();
 		}
 	},
 	/**

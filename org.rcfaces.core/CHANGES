@@ -1,5 +1,11 @@
+CheckButton:
+Gestion du tabIndex when disabled (génération et javascript)
+ajout de v:tabIndex
+redéfinition de fa_getTabIndexElement
+
 fa_tabIndex:
 Gestion du Get et du Set
+Ajout de fa_getTabIndexElement (input) par défaut
 
 fa_selectionManager:
 Gestion du click droit en cas de multisélection (f_performElementSelection)
