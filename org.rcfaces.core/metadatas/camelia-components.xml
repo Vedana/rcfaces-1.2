@@ -390,13 +390,12 @@
 		<capability id="ISortEventCapability" />
 		<capability id="ITabIndexCapability" />
 		<capability id="IImmediateCapability" forceComponent="true"/>
-		<capability id="IWheelSelectionCapability" />
+		<capability id="IWheelSelectionCapability" default="true" />
 
 		<attribute id="rows" type="int" writeComponent="false" />
 		<attribute id="first" type="int" writeComponent="false" />
 		<attribute id="value" type="java.lang.Object" writeComponent="false"/>
 		<attribute id="var" type="java.lang.String" writeComponent="false"/>
-		<attribute id="wheelSelection" type="boolean" default="true"/>
 
 		<method id="setValue">
 			<parameter type="javax.faces.el.ValueBinding" name="value" />
