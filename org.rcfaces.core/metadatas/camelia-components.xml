@@ -390,6 +390,7 @@
 		<capability id="ISortEventCapability" />
 		<capability id="ITabIndexCapability" />
 		<capability id="IImmediateCapability" forceComponent="true"/>
+		<capability id="IWheelSelectionCapability" />
 
 		<attribute id="rows" type="int" writeComponent="false" />
 		<attribute id="first" type="int" writeComponent="false" />
