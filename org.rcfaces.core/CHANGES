@@ -1,3 +1,6 @@
+fa_tabIndex:
+Gestion du Get et du Set
+
 fa_selectionManager:
 Gestion du click droit en cas de multisélection (f_performElementSelection)
 
