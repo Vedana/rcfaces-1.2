@@ -87,7 +87,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","backgroundColor","marginLeft","var","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","value","left","right","waiRole","mouseOutListener","foregroundColor","top","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","immediate","unlockedClientAttributeNames","marginBottom","bottom","sortListener","toolTipText","first","y","sortManager","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","backgroundColor","marginLeft","var","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","value","left","right","waiRole","mouseOutListener","foregroundColor","top","lookId","wheelSelection","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","immediate","unlockedClientAttributeNames","marginBottom","bottom","sortListener","toolTipText","first","y","sortManager","margins","x"}));
 	}
 
 
@@ -1161,6 +1161,26 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void setImmediate(boolean immediate) {
 		engine.setProperty(Properties.IMMEDIATE, immediate);
+	}
+
+	public boolean isWheelSelection() {
+		return isWheelSelection(null);
+	}
+
+	public boolean isWheelSelection(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.WHEEL_SELECTION, true, facesContext);
+	}
+
+	public void setWheelSelection(boolean wheelSelection) {
+		engine.setProperty(Properties.WHEEL_SELECTION, wheelSelection);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "wheelSelection" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isWheelSelectionSetted() {
+		return engine.isPropertySetted(Properties.WHEEL_SELECTION);
 	}
 
 	protected Set getCameliaFields() {
