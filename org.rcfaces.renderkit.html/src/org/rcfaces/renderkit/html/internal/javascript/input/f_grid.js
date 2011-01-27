@@ -4744,8 +4744,14 @@ var __members = {
 
 		this.f_setProperty(f_prop.SORT_INDEX, serial);
 
+		// Gestion du scroll horizontal sur FF
+		var scrollLeft = this._scrollBody.scrollLeft;
+		
 		if (userSort
 				&& this.f_fireEvent(f_event.SORT, null, currentSorts) === false) {
+			
+			this.f_resetScrollLeft(scrollLeft);
+
 			return;
 		}
 
@@ -4758,6 +4764,9 @@ var __members = {
 					+ "'\nrowCount=" + this._rowCount + "\nrows=" + this._rows);
 
 			this.f_setFirst(this._first);
+			
+			this.f_resetScrollLeft(scrollLeft);
+
 			return;
 		}
 
@@ -4765,9 +4774,32 @@ var __members = {
 				+ "\nascendings=" + ascendings + "\nSort=" + methods);
 
 		this.f_sortClientSide(methods, ascendings, tdIndexes);
+
+		this.f_resetScrollLeft(scrollLeft);
 	},
 	
-	
+	/**
+	 * reset the scrollLeft when a column is sorted
+	 * Firefox only
+	 * 
+	 * @method private
+	 * @param int scrollLeft  
+	 * @return void
+	 */
+	f_resetScrollLeft: function(scrollLeft){
+		if (scrollLeft == 0 || f_core.IsGecko() == false) {
+			return;
+		}
+		var _datagrid = this;
+		window.setTimeout(function() {
+			if (scrollLeft != _datagrid._scrollBody.scrollLeft) {
+				_datagrid._scrollBody.scrollLeft = scrollLeft;
+				_datagrid._scrollTitle.scrollLeft = scrollLeft;
+			}
+			_datagrid = null;
+		}, 1);
+	},
+
 	/**
 	 * Return the value of the row which contains the specified component.
 	 * 
