@@ -76,7 +76,12 @@ var __statics = {
 	/**
 	 * @field private static final Number
 	 */
-	_DRAG_TIMER : 50,
+	_DRAG_TIMER : 25,
+
+	/**
+	 * @field private static final Number
+	 */
+	_DRAG_DELTA : 5,
 
 	/**
 	 * @field protected static final Boolean
@@ -789,22 +794,22 @@ var __statics = {
 		if (!dataGrid._focus) {
 			return true;
 		}
-		
-		if (f_core.GetBooleanAttribute(dataGrid, "v:wheelSelection", true)) {
-			var wheel = evt.wheelDelta;
 
-			if (f_core.IsGecko()) {
-				wheel = -evt.detail;
-			}
-
-			if (wheel > 0) {
-				dataGrid._previousCursorRow(evt);
-
-			} else if (wheel < 0) {
-				dataGrid._nextCursorRow(evt);
-			}
-		} else {
+		if (f_core.GetBooleanAttribute(dataGrid, "v:wheelSelection", true)==false) {
 			return true;
+		}
+		
+		var wheel = evt.wheelDelta;
+
+		if (f_core.IsGecko()) {
+			wheel = -evt.detail;
+		}
+
+		if (wheel > 0) {
+			dataGrid._previousCursorRow(evt);
+
+		} else if (wheel < 0) {
+			dataGrid._nextCursorRow(evt);
 		}
 
 		return f_core.CancelJsEvent(evt);
@@ -1320,12 +1325,12 @@ var __statics = {
 		f_core.CancelJsEvent(evt);
 
 		var eventPos = f_core.GetJsEventPosition(evt, doc);
+		dataGrid._dragEventPos=eventPos;
 		var cursorPos = f_core.GetAbsolutePosition(this);
 		dataGrid._dragDeltaX = eventPos.x - cursorPos.x
 				+ dataGrid._scrollTitle.scrollLeft;
 
 		f_grid._DragColumn = column;
-		dataGrid._dragOriginX = eventPos.x;
 
 		var ths = dataGrid._title.getElementsByTagName("th");
 		// var c=this.style.cursor;
@@ -1347,27 +1352,31 @@ var __statics = {
 	 * @context event:evt
 	 */
 	_TitleCursorDragMove : function(evt) {
-		var column = f_grid._DragColumn;
-		if (!column) {
-			return false;
+		try {
+			var column = f_grid._DragColumn;
+			if (!column) {
+				return false;
+			}
+	
+			var dataGrid = column._dataGrid;
+			if (!evt) {
+				evt = f_core.GetJsEvent(this);
+			}
+	
+			var doc = dataGrid.ownerDocument;
+	
+			var eventPos = f_core.GetJsEventPosition(evt, doc);
+			var cursorPos = f_core.GetAbsolutePosition(column._cursor);
+	
+			var dw = eventPos.x - cursorPos.x + dataGrid._scrollTitle.scrollLeft
+					- dataGrid._dragDeltaX;
+	
+			f_grid._DragCursorMove(dataGrid, column, dw);
+			
+		} catch (x) {
+			f_core.Error(f_grid, "_TitleCursorDragMove: exception", x);
 		}
-
-		var dataGrid = column._dataGrid;
-		if (!evt) {
-			evt = f_core.GetJsEvent(this);
-		}
-
-		var doc = dataGrid.ownerDocument;
-
-		var eventPos = f_core.GetJsEventPosition(evt, doc);
-		var cursorPos = f_core.GetAbsolutePosition(column._cursor);
-		dataGrid._dragMousePosition = eventPos.x;
-
-		var dw = eventPos.x - cursorPos.x + dataGrid._scrollTitle.scrollLeft
-				- dataGrid._dragDeltaX;
-
-		f_grid._DragCursorMove(dataGrid, column, dw);
-
+		
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
@@ -1376,23 +1385,38 @@ var __statics = {
 	 * @context window:this
 	 */
 	_DragMoveTimer : function() {
-		var column = f_grid._DragColumn;
-		if (!column) {
-			return;
+		try {
+			var column = f_grid._DragColumn;
+			if (!column) {
+				return;
+			}
+	
+			var dataGrid = column._dataGrid;
+	
+			var dw=0;
+			if (dataGrid._dragDeltaX>0) {
+				dw=-f_grid._DRAG_DELTA;
+			} else {
+				//dw=f_grid._DRAG_DELTA;
+			}
+	
+			f_core.Debug(f_grid, "_DragMoveTimer dw='"+dw+"'");
+			
+			if (dw) {
+				f_grid._DragCursorMove(dataGrid, column, dw);
+				
+				var cursorPos = f_core.GetAbsolutePosition(f_grid._DragColumn._cursor);
+				dataGrid._dragDeltaX = dataGrid._dragEventPos.x - cursorPos.x
+						+ dataGrid._scrollTitle.scrollLeft;
+			}
+			
+		} catch (x) {
+			f_core.Error(f_grid, "_DragMoveTimer: exception", x);
 		}
-
-		var dataGrid = column._dataGrid;
-
-		var eventPosX = dataGrid._dragMousePosition;
-		var cursorPos = f_core.GetAbsolutePosition(column._cursor);
-
-		var dw = eventPosX - cursorPos.x + dataGrid._scrollTitle.scrollLeft
-				- dataGrid._dragDeltaX;
-
-		f_grid._DragCursorMove(dataGrid, column, dw);
 	},
 	/**
 	 * @method private static
+	 * @return Number
 	 */
 	_DragCursorMove : function(dataGrid, column, dw) {
 
@@ -1405,6 +1429,8 @@ var __statics = {
 
 		var w = column._col.offsetWidth + dw;
 
+		f_core.Debug(f_grid, "_DragCursorMove: dw="+dw+" w="+w+" columnOffsetWidth="+column._col.offsetWidth);
+		
 		// document.title="W="+w+"/"+dw;
 	
 		if (w < column._minWidth) {
@@ -1417,21 +1443,8 @@ var __statics = {
 		dw = w - column._col.offsetWidth;
 	
 		if (dw == 0) {
-			return;
+			return 0;
 		}
-	
-		/*
-		 * var labelStyle=column._label.style; if (w<8) { if
-		 * (labelStyle.display!="none") { labelStyle.display="none"; } } else if
-		 * (labelStyle.display!="block") { labelStyle.display="block"; }
-		 * 
-		 * if (w<24) { if (column._ascendingOrder!==undefined &&
-		 * !column._restoreClass) { column._restoreClass=column._label.className;
-		 * column._label.className="f_grid_ttext"; }
-		 *  } else if (column._restoreClass) {
-		 * column._label.className=column._restoreClass;
-		 * column._restoreClass=undefined; }
-		 */
 	
 		var tcol = column._tcol;
 		var col = column._col;
@@ -1471,9 +1484,10 @@ var __statics = {
 	
 			var cellMargin = 0;
 	
-			col.style.width = w + "px";
+			col.style.width = w + "px"; // Colonne Des données ...
+			
 			var w1=w - cellMargin;
-			head.style.width = w1 + "px";
+			head.style.width = ((w1>0)?w1:0) + "px";
 			
 			var w2=w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
 			column._box.style.width = ((w2>0)?w2:0) + "px";
@@ -1498,14 +1512,22 @@ var __statics = {
 	
 			dataGrid._table.style.width = (totalCols) + "px";
 		}
+
 	
 		// window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels
 		// ";
 	
-		if (dataGrid._scrollTitle.scrollLeft > 0) {
+		var scrollTitle=dataGrid._scrollTitle;
+		var scrollBody=dataGrid._scrollBody;
+		
+		f_core.Debug(f_grid, "_DragCursorMove: scrollLeft="+scrollBody.scrollLeft+" clientWidth="+scrollBody.clientWidth+" scrollWidth="+scrollBody.scrollWidth+" offsetWidth="+scrollBody.offsetWidth);
+		
+		if (scrollBody.scrollLeft>0 && scrollBody.scrollWidth==scrollBody.clientWidth+scrollBody.scrollLeft) {
 			dataGrid._dragTimerId = f_core.GetWindow(doc).setTimeout(
 					f_grid._DragMoveTimer, f_grid._DRAG_TIMER);
 		}
+		
+		return dw;
 	},
 	/**
 	 * @method private static
@@ -1516,41 +1538,44 @@ var __statics = {
 	 * @context event:evt
 	 */
 	_TitleCursorDragStop : function(evt) {
-		var column = f_grid._DragColumn;
-		if (!column) {
-				// Cela peut survenir si les stops sont enchainés ....
-			return false;
+		try {
+			var column = f_grid._DragColumn;
+			if (!column) {
+					// Cela peut survenir si les stops sont enchainés ....
+				return false;
+			}
+		
+			var dataGrid = column._dataGrid;
+			
+			var doc = dataGrid.ownerDocument;
+			
+			if (dataGrid._dragTimerId) {
+				f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
+				dataGrid._dragTimerId = undefined;
+			}
+			
+			f_core.RemoveEventListener(doc, "mousemove", f_grid._TitleCursorDragMove,
+					dataGrid);
+			f_core.RemoveEventListener(doc, "mouseup", f_grid._TitleCursorDragStop,
+					dataGrid);
+			
+			doc.body.style.cursor = f_grid._DragOldCursor;
+			f_grid._DragOldCursor = undefined;
+			
+			var ths = dataGrid._title.getElementsByTagName("th");
+			for ( var i = 0; i < ths.length; i++) {
+				ths[i].style.cursor = ths[i].oldCursorStyle;
+				ths[i].oldCursorStyle = undefined;
+			}
+			
+			column._restoreClass = undefined;
+			
+			f_grid._DragColumn = undefined;
+			dataGrid._dragDeltaX = undefined;
+			
+		} catch (x) {
+			f_core.Error(f_grid, "_TitleCursorDragStop: exception", x);
 		}
-	
-		var dataGrid = column._dataGrid;
-		
-		var doc = dataGrid.ownerDocument;
-		
-		if (dataGrid._dragTimerId) {
-			f_core.GetWindow(doc).clearTimeout(dataGrid._dragTimerId);
-			dataGrid._dragTimerId = undefined;
-		}
-		
-		f_core.RemoveEventListener(doc, "mousemove", f_grid._TitleCursorDragMove,
-				dataGrid);
-		f_core.RemoveEventListener(doc, "mouseup", f_grid._TitleCursorDragStop,
-				dataGrid);
-		
-		doc.body.style.cursor = f_grid._DragOldCursor;
-		f_grid._DragOldCursor = undefined;
-		
-		var ths = dataGrid._title.getElementsByTagName("th");
-		for ( var i = 0; i < ths.length; i++) {
-			ths[i].style.cursor = ths[i].oldCursorStyle;
-			ths[i].oldCursorStyle = undefined;
-		}
-		
-		column._restoreClass = undefined;
-		
-		f_grid._DragColumn = undefined;
-		dataGrid._dragDeltaX = undefined;
-		dataGrid._dragOriginX = undefined;
-		dataGrid._dragMousePosition = undefined;
 		
 		return true;
 	},
