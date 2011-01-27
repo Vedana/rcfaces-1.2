@@ -391,7 +391,7 @@
 		<capability id="ITabIndexCapability" />
 		<capability id="IImmediateCapability" forceComponent="true"/>
 		<capability id="IWheelSelectionCapability" />
-		<capability id="IShowLoadingMessageCapability" />
+		<capability id="IAlertLoadingMessageCapability" />
 
 		<attribute id="rows" type="int" writeComponent="false" />
 		<attribute id="first" type="int" writeComponent="false" />

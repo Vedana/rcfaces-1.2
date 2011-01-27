@@ -9,22 +9,22 @@ package org.rcfaces.core.component.capability;
  * @author Fred (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public interface IShowLoadingMessageCapability {
+public interface IAlertLoadingMessageCapability {
 
     /**
      * Returns a string value containing the message to show when the user attempts an action while loading
      * 
-     * @return showLoadingMessage string property
+     * @return alertLoadingMessage string property
      */
-    String getShowLoadingMessage();
+    String getAlertLoadingMessage();
 
     /**
      * Sets a string value containing the message to show when the user attempts an action while loading
      * if not set, the default value is shown
      * if set to empty string, no message is shown
      * 
-     * @param showLoadingMessage
-     *            showLoadingMessage string property
+     * @param alertLoadingMessage
+     *            alertLoadingMessage string property
      */
-    void setShowLoadingMessage(String showLoadingMessage);
+    void setAlertLoadingMessage(String alertLoadingMessage);
 }
