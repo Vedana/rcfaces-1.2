@@ -1512,13 +1512,18 @@ var __statics = {
 	
 			dataGrid._table.style.width = (totalCols) + "px";
 		}
-
-	
-		// window.status="deltaTitle="+(dataGrid._title.offsetWidth-dataGrid._table.offsetWidth)+"pixels
-		// ";
 	
 		var scrollTitle=dataGrid._scrollTitle;
 		var scrollBody=dataGrid._scrollBody;
+
+		if (scrollTitle) {
+			var scrollTitleLeft = scrollTitle.scrollLeft;
+			var scrollBodyLeft = scrollBody.scrollLeft;
+
+			if (scrollTitleLeft != scrollBodyLeft) {
+				scrollTitle.scrollLeft = scrollBodyLeft;
+			}
+		}
 		
 		f_core.Debug(f_grid, "_DragCursorMove: scrollLeft="+scrollBody.scrollLeft+" clientWidth="+scrollBody.clientWidth+" scrollWidth="+scrollBody.scrollWidth+" offsetWidth="+scrollBody.offsetWidth);
 		
