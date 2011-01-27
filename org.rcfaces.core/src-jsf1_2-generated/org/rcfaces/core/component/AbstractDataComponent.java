@@ -14,6 +14,7 @@ import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
 import org.rcfaces.core.component.capability.IWAIRoleCapability;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
+import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
 import org.rcfaces.core.internal.manager.IServerDataManager;
 import org.rcfaces.core.component.capability.ISizeCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
@@ -32,7 +33,6 @@ import org.apache.commons.logging.Log;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
-import org.rcfaces.core.component.capability.IShowLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.component.capability.IResetEventCapability;
 import java.lang.String;
@@ -68,6 +68,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	ITabIndexCapability,
 	IPropertyChangeEventCapability,
 	IServerDataCapability,
+	IAlertLoadingMessageCapability,
 	IMarginCapability,
 	IResetEventCapability,
 	IKeyEventCapability,
@@ -79,7 +80,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	ISizeCapability,
 	IWheelSelectionCapability,
 	IWAIRoleCapability,
-	IShowLoadingMessageCapability,
 	ILayoutPositionCapability,
 	IInitEventCapability,
 	IHiddenModeCapability,
@@ -91,7 +91,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","mouseOverListener","value","right","mouseOutListener","waiRole","lookId","userEventListener","wheelSelection","marginTop","styleClass","width","resetListener","rows","bottom","toolTipText","sortManager","blurListener","var","ariaLevel","showLoadingMessage","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","initListener","marginBottom","unlockedClientAttributeNames","immediate","sortListener","first","y","x","margins"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","mouseOverListener","value","right","alertLoadingMessage","mouseOutListener","waiRole","lookId","userEventListener","wheelSelection","marginTop","styleClass","width","resetListener","rows","bottom","toolTipText","sortManager","blurListener","var","ariaLevel","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","initListener","marginBottom","unlockedClientAttributeNames","immediate","sortListener","first","y","x","margins"}));
 	}
 
 
@@ -635,6 +635,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		
 	}
 
+	public java.lang.String getAlertLoadingMessage() {
+		return getAlertLoadingMessage(null);
+	}
+
+	/**
+	 * See {@link #getAlertLoadingMessage() getAlertLoadingMessage()} for more details
+	 */
+	public java.lang.String getAlertLoadingMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.ALERT_LOADING_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "alertLoadingMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isAlertLoadingMessageSetted() {
+		return engine.isPropertySetted(Properties.ALERT_LOADING_MESSAGE);
+	}
+
+	public void setAlertLoadingMessage(java.lang.String alertLoadingMessage) {
+		engine.setProperty(Properties.ALERT_LOADING_MESSAGE, alertLoadingMessage);
+	}
+
 	public java.lang.String getMarginBottom() {
 		return getMarginBottom(null);
 	}
@@ -1038,29 +1061,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
-	}
-
-	public java.lang.String getShowLoadingMessage() {
-		return getShowLoadingMessage(null);
-	}
-
-	/**
-	 * See {@link #getShowLoadingMessage() getShowLoadingMessage()} for more details
-	 */
-	public java.lang.String getShowLoadingMessage(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.SHOW_LOADING_MESSAGE, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "showLoadingMessage" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isShowLoadingMessageSetted() {
-		return engine.isPropertySetted(Properties.SHOW_LOADING_MESSAGE);
-	}
-
-	public void setShowLoadingMessage(java.lang.String showLoadingMessage) {
-		engine.setProperty(Properties.SHOW_LOADING_MESSAGE, showLoadingMessage);
 	}
 
 	public int getBottom() {
