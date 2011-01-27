@@ -1,3 +1,9 @@
+AbstractGrid et f_grid:
+Gestion de l'attribut alertLoadingMessage (utilisé pour l'affichage de boite d'alerte sur action utilisateur lorsque loading de page en cours)
+si value = "" : pas de message
+si pas déclaré : alert avec message original
+si value != "" : alert avec message = value
+
 f_grid:
 Gestion de l'attribut v:wheelSelection
 

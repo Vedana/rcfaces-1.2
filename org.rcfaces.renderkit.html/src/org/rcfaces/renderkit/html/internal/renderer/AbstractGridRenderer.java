@@ -589,11 +589,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
                 htmlWriter.writeAttribute("v:clientSelectionFullState", cfs);
             }
-            boolean wheelSelection = gridRenderContext.isWheelSelection();
-            if (wheelSelection == false) {
-            	htmlWriter.writeAttribute("v:wheelSelection", wheelSelection);
-            }
         }
+
         if (gridRenderContext.isCheckable()) {
             htmlWriter.writeAttribute("v:checkCardinality",
                     gridRenderContext.getCheckCardinality());
@@ -641,6 +638,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (((IRequiredCapability) gridComponent).isRequired()) {
                 htmlWriter.writeAttribute("v:required", true);
             }
+        }
+        
+        boolean wheelSelection = gridRenderContext.isWheelSelection();
+        if (wheelSelection == false) {
+        	htmlWriter.writeAttribute("v:wheelSelection", wheelSelection);
+        }
+
+        String alertLoadingMessage = gridRenderContext.getAlertLoadingMessage();
+        if (alertLoadingMessage != null) {
+        	htmlWriter.writeAttribute("v:alertLoadingMessage", alertLoadingMessage);
         }
 
         boolean headerVisible = gridRenderContext.isHeaderVisible();

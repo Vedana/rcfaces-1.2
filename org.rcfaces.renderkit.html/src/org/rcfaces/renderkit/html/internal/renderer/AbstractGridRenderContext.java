@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationCardinalityCapability;
+import org.rcfaces.core.component.capability.IAlertLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
@@ -220,6 +221,8 @@ public abstract class AbstractGridRenderContext {
     private boolean isDroppable;
     
     private boolean wheelSelection = true;
+    
+    private String alertLoadingMessage = null;
 
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
@@ -299,6 +302,10 @@ public abstract class AbstractGridRenderContext {
         
         if (gridComponent instanceof IWheelSelectionCapability) {
         	wheelSelection = ((IWheelSelectionCapability) gridComponent).isWheelSelection();
+        }
+        
+        if (gridComponent instanceof IAlertLoadingMessageCapability) {
+        	alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent).getAlertLoadingMessage();
         }
 
         if (gridComponent instanceof ICheckableCapability) {
@@ -1159,6 +1166,10 @@ public abstract class AbstractGridRenderContext {
     
     public boolean isWheelSelection() {
     	return wheelSelection;
+    }
+    
+    public String getAlertLoadingMessage() {
+    	return alertLoadingMessage;
     }
 
 }

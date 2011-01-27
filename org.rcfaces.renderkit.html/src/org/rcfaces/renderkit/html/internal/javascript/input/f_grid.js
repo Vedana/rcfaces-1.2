@@ -2204,13 +2204,29 @@ var __members = {
 	 */
 	f_getEventLocked : function(evt, showAlert) {
 		if (this._loading) {
-			if (showAlert !== false && this._showLoadingAlert !== false) {
-				var resourceBundle = f_resourceBundle.Get(f_grid);
+			if (showAlert !== false) {
+				if (this._showLoadingAlert === undefined) {
+					var alertLoadingMessage = f_core.GetAttribute(this, "v:alertLoadingMessage");
+					if (alertLoadingMessage === undefined) {
+						this._showLoadingAlert = true;
+					} else if (alertLoadingMessage == "") {
+						this._showLoadingAlert = false;
+					} else {
+						this._showLoadingAlert = true;
+						this._alertLoadingMessage = alertLoadingMessage;
+					}
+				}
+				
+				if (this._showLoadingAlert !== false) {
+					if (this._alertLoadingMessage === undefined) {
+						var resourceBundle = f_resourceBundle.Get(f_grid);
+						this._alertLoadingMessage = "f_grid: " + resourceBundle.f_get("EVENT_LOCKED");
+					}
+					f_core.Debug(f_grid,
+							"f_getEventLocked: popup error dialog, loading ...");
 
-				f_core.Debug(f_grid,
-						"f_getEventLocked: popup error dialog, loading ...");
-
-				alert("f_grid: " + resourceBundle.f_get("EVENT_LOCKED"));
+					alert(this._alertLoadingMessage);
+				}
 			}
 			return true;
 		}
