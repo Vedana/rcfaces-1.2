@@ -789,18 +789,22 @@ var __statics = {
 		if (!dataGrid._focus) {
 			return true;
 		}
+		
+		if (f_core.GetBooleanAttribute(dataGrid, "v:wheelSelection", true)) {
+			var wheel = evt.wheelDelta;
 
-		var wheel = evt.wheelDelta;
+			if (f_core.IsGecko()) {
+				wheel = -evt.detail;
+			}
 
-		if (f_core.IsGecko()) {
-			wheel = -evt.detail;
-		}
+			if (wheel > 0) {
+				dataGrid._previousCursorRow(evt);
 
-		if (wheel > 0) {
-			dataGrid._previousCursorRow(evt);
-
-		} else if (wheel < 0) {
-			dataGrid._nextCursorRow(evt);
+			} else if (wheel < 0) {
+				dataGrid._nextCursorRow(evt);
+			}
+		} else {
+			return true;
 		}
 
 		return f_core.CancelJsEvent(evt);

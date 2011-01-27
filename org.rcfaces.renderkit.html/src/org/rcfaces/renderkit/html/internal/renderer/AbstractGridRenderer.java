@@ -589,6 +589,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
                 htmlWriter.writeAttribute("v:clientSelectionFullState", cfs);
             }
+            boolean wheelSelection = gridRenderContext.isWheelSelection();
+            if (wheelSelection == false) {
+            	htmlWriter.writeAttribute("v:wheelSelection", wheelSelection);
+            }
         }
         if (gridRenderContext.isCheckable()) {
             htmlWriter.writeAttribute("v:checkCardinality",

@@ -47,6 +47,7 @@ import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISortManagerCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.IWheelSelectionCapability;
 import org.rcfaces.core.component.capability.IWidthCapability;
 import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.familly.IContentAccessors;
@@ -217,6 +218,8 @@ public abstract class AbstractGridRenderContext {
     private boolean isDraggable;
 
     private boolean isDroppable;
+    
+    private boolean wheelSelection = true;
 
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
@@ -291,6 +294,11 @@ public abstract class AbstractGridRenderContext {
                             .getClientSelectionFullState();
                 }
             }
+            
+        }
+        
+        if (gridComponent instanceof IWheelSelectionCapability) {
+        	wheelSelection = ((IWheelSelectionCapability) gridComponent).isWheelSelection();
         }
 
         if (gridComponent instanceof ICheckableCapability) {
@@ -1149,5 +1157,8 @@ public abstract class AbstractGridRenderContext {
         return isDroppable;
     }
     
+    public boolean isWheelSelection() {
+    	return wheelSelection;
+    }
 
 }
