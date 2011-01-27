@@ -32,6 +32,7 @@ import org.apache.commons.logging.Log;
 import java.util.Set;
 import org.rcfaces.core.component.capability.IFocusBlurEventCapability;
 import org.rcfaces.core.component.capability.IPositionCapability;
+import org.rcfaces.core.component.capability.IShowLoadingMessageCapability;
 import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.component.capability.IResetEventCapability;
 import java.lang.String;
@@ -63,13 +64,13 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	ISortManagerCapability,
 	ISortEventCapability,
 	IMouseEventCapability,
-	ITabIndexCapability,
 	IUnlockedClientAttributesCapability,
+	ITabIndexCapability,
 	IPropertyChangeEventCapability,
 	IServerDataCapability,
 	IMarginCapability,
-	IKeyEventCapability,
 	IResetEventCapability,
+	IKeyEventCapability,
 	IUserEventCapability,
 	IPositionCapability,
 	IPartialRenderingCapability,
@@ -78,6 +79,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	ISizeCapability,
 	IWheelSelectionCapability,
 	IWAIRoleCapability,
+	IShowLoadingMessageCapability,
 	ILayoutPositionCapability,
 	IInitEventCapability,
 	IHiddenModeCapability,
@@ -89,7 +91,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","backgroundColor","marginLeft","var","errorListener","tabIndex","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","value","left","right","waiRole","mouseOutListener","foregroundColor","top","lookId","wheelSelection","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","immediate","unlockedClientAttributeNames","marginBottom","bottom","sortListener","toolTipText","first","y","sortManager","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","mouseOverListener","value","right","mouseOutListener","waiRole","lookId","userEventListener","wheelSelection","marginTop","styleClass","width","resetListener","rows","bottom","toolTipText","sortManager","blurListener","var","ariaLevel","showLoadingMessage","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","initListener","marginBottom","unlockedClientAttributeNames","immediate","sortListener","first","y","x","margins"}));
 	}
 
 
@@ -525,29 +527,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		return getFacesListeners(org.rcfaces.core.event.IMouseOverListener.class);
 	}
 
-	public java.lang.Integer getTabIndex() {
-		return getTabIndex(null);
-	}
-
-	/**
-	 * See {@link #getTabIndex() getTabIndex()} for more details
-	 */
-	public java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntegerProperty(Properties.TAB_INDEX, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "tabIndex" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isTabIndexSetted() {
-		return engine.isPropertySetted(Properties.TAB_INDEX);
-	}
-
-	public void setTabIndex(java.lang.Integer tabIndex) {
-		engine.setProperty(Properties.TAB_INDEX, tabIndex);
-	}
-
 	public java.lang.String getUnlockedClientAttributeNames() {
 		return getUnlockedClientAttributeNames(null);
 	}
@@ -569,6 +548,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void setUnlockedClientAttributeNames(java.lang.String unlockedClientAttributeNames) {
 		engine.setProperty(Properties.UNLOCKED_CLIENT_ATTRIBUTE_NAMES, unlockedClientAttributeNames);
+	}
+
+	public java.lang.Integer getTabIndex() {
+		return getTabIndex(null);
+	}
+
+	/**
+	 * See {@link #getTabIndex() getTabIndex()} for more details
+	 */
+	public java.lang.Integer getTabIndex(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntegerProperty(Properties.TAB_INDEX, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "tabIndex" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isTabIndexSetted() {
+		return engine.isPropertySetted(Properties.TAB_INDEX);
+	}
+
+	public void setTabIndex(java.lang.Integer tabIndex) {
+		engine.setProperty(Properties.TAB_INDEX, tabIndex);
 	}
 
 	public final void addPropertyChangeListener(org.rcfaces.core.event.IPropertyChangeListener listener) {
@@ -725,6 +727,18 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 		engine.setProperty(Properties.MARGIN_TOP, marginTop);
 	}
 
+	public final void addResetListener(org.rcfaces.core.event.IResetListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeResetListener(org.rcfaces.core.event.IResetListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listResetListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
+	}
+
 	public final void addKeyUpListener(org.rcfaces.core.event.IKeyUpListener listener) {
 		addFacesListener(listener);
 	}
@@ -759,18 +773,6 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public final javax.faces.event.FacesListener [] listKeyPressListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IKeyPressListener.class);
-	}
-
-	public final void addResetListener(org.rcfaces.core.event.IResetListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeResetListener(org.rcfaces.core.event.IResetListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listResetListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IResetListener.class);
 	}
 
 	public final void addUserEventListener(org.rcfaces.core.event.IUserEventListener listener) {
@@ -1036,6 +1038,29 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	public void setWaiRole(java.lang.String waiRole) {
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
+	}
+
+	public java.lang.String getShowLoadingMessage() {
+		return getShowLoadingMessage(null);
+	}
+
+	/**
+	 * See {@link #getShowLoadingMessage() getShowLoadingMessage()} for more details
+	 */
+	public java.lang.String getShowLoadingMessage(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.SHOW_LOADING_MESSAGE, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "showLoadingMessage" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isShowLoadingMessageSetted() {
+		return engine.isPropertySetted(Properties.SHOW_LOADING_MESSAGE);
+	}
+
+	public void setShowLoadingMessage(java.lang.String showLoadingMessage) {
+		engine.setProperty(Properties.SHOW_LOADING_MESSAGE, showLoadingMessage);
 	}
 
 	public int getBottom() {
