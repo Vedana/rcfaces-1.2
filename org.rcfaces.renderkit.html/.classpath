@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="src-generated"/>
 	<classpathentry kind="src" path="src-jsf1_2"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.rcfaces.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.rcfaces.core"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
