@@ -1,3 +1,6 @@
+f_tree:
+Généralisation de l'affichage d'une erreur dans le chargement des noeuds en AJAX
+
 f_grid:
 Gestion de la position du scroll horizontal lors du tri d'une colonne sous FF
 
