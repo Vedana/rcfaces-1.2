@@ -1103,6 +1103,10 @@ var __statics = {
 			var _dataGrid = dataGrid;
 
 			window.setTimeout(function() {
+				if (window._rcfacesExiting) {
+	 				return false;
+	 			}
+
 				var scrollTitleLeft = _dataGrid._scrollTitle.scrollLeft;
 
 				var scrollBodyLeft = _dataGrid._scrollBody.scrollLeft;
@@ -1385,6 +1389,10 @@ var __statics = {
 	 * @context window:this
 	 */
 	_DragMoveTimer : function() {
+		if (window._rcfacesExiting) {
+			return;
+		}
+
 		try {
 			var column = f_grid._DragColumn;
 			if (!column) {
@@ -4783,7 +4791,7 @@ var __members = {
 	 * Firefox only
 	 * 
 	 * @method private
-	 * @param int scrollLeft  
+	 * @param Number scrollLeft  
 	 * @return void
 	 */
 	f_resetScrollLeft: function(scrollLeft){
@@ -4792,6 +4800,10 @@ var __members = {
 		}
 		var _datagrid = this;
 		window.setTimeout(function() {
+			if (window._rcfacesExiting) {
+ 				return;
+ 			}
+
 			if (scrollLeft != _datagrid._scrollBody.scrollLeft) {
 				_datagrid._scrollBody.scrollLeft = scrollLeft;
 				_datagrid._scrollTitle.scrollLeft = scrollLeft;
