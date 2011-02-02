@@ -241,13 +241,11 @@ var __members = {
 	 */
 	f_updateDisabled: function(disabled) {
 		this.f_updateStyleClass();
-		if (disabled) {
-			// Initialisation eventuelle
-			this.fa_getTabIndex();
-			this.fa_getTabIndexElement().tabIndex=-1;
-		} else {
-			this.fa_getTabIndexElement().tabIndex=this.fa_getTabIndex();
-		}
+		
+		var tabIndex = this.fa_getTabIndex(); // Initialisation eventuelle
+		var tabIndexElement=this.fa_getTabIndexElement();
+		
+		tabIndexElement.tabIndex=(disabled)?(-1):tabIndex;
 	},
 	/**
 	 * Returns the read only state.
