@@ -20,7 +20,6 @@ import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IRequestContext;
@@ -143,10 +142,10 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
             String dragTypes[] = treeComponent.getDragTypes(facesContext);
             if (dragTypes != null && dragTypes.length > 0) {
-                htmlWriter.writeAttribute("v:dragTypes",HtmlTools
-                        .serializeDnDTypes(dragTypes));
-            }else {
-            	htmlWriter.writeAttribute("v:dragTypes", "x-RCFaces/treeNode");
+                htmlWriter.writeAttribute("v:dragTypes",
+                        HtmlTools.serializeDnDTypes(dragTypes));
+            } else {
+                htmlWriter.writeAttribute("v:dragTypes", "x-RCFaces/treeNode");
             }
         }
 
@@ -160,10 +159,10 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
 
             String dropTypes[] = treeComponent.getDropTypes(facesContext);
             if (dropTypes != null && dropTypes.length > 0) {
-            	htmlWriter.writeAttribute("v:dropTypes", HtmlTools
-                        .serializeDnDTypes(dropTypes));
-            }else {
-            	htmlWriter.writeAttribute("v:dropTypes", "*/*");
+                htmlWriter.writeAttribute("v:dropTypes",
+                        HtmlTools.serializeDnDTypes(dropTypes));
+            } else {
+                htmlWriter.writeAttribute("v:dropTypes", "*/*");
             }
 
             if (treeComponent.isBodyDroppable(facesContext)) {
