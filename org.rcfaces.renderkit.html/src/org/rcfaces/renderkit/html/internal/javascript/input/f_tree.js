@@ -1364,16 +1364,7 @@ var __members = {
 			 * @method public
 			 */
 	 		onError: function(request, status, text) {
-	 			var label=waitingNode._label;
-				if (label) {
-					label.innerHTML="ERREUR !";
-					label.className="f_waiting_error";
-				}
-				
-				var image=waitingNode._image;
-				if (image) {
-					image.src=f_waiting.GetWaitingErrorImageURL();
-				}
+				tree._showError(waitingNode);
 				
 				f_core.Info(f_tree, "_callServer.onError: Bad status: "+status);
 				
@@ -1392,6 +1383,7 @@ var __members = {
 			 */
 	 		onLoad: function(request, content, contentType) {
 				if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+					tree._showError(waitingNode);
 					tree.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
 					return;
 				}
@@ -1400,11 +1392,13 @@ var __members = {
 				if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
 					var code=f_error.ComputeApplicationErrorCode(request);
 				
+					tree._showError(waitingNode);
 			 		tree.f_performErrorEvent(request, code, content);
 					return;
 				}
 				
 				if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+					tree._showError(waitingNode);
 		 			tree.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
 
 					return;
@@ -1419,6 +1413,7 @@ var __members = {
 					f_core.WindowScopeEval(ret);
 
 				} catch(x) {				
+					tree._showError(waitingNode);
 				 	tree.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
 				}
 	
@@ -1450,6 +1445,23 @@ var __members = {
 		request.f_doFormRequest(params);
 		
 	},
+	
+	/**
+	 * @method private
+	 */
+	_showError: function(waitingNode) {
+		var label=waitingNode._label;
+		if (label) {
+			label.innerHTML="ERREUR !";
+			label.className="f_waiting_error";
+		}
+		
+		var image=waitingNode._image;
+		if (image) {
+			image.src=f_waiting.GetWaitingErrorImageURL();
+		}
+	},
+	
 	/**
 	 * @method protected
 	 */
