@@ -788,7 +788,7 @@ var __statics = {
 		}
 
 		var s = f_env.Get("CORE_LOCK_MESSAGE");
-		if (!s) {
+		if (s===undefined) {
 			var bundle = f_resourceBundle.Get(f_event);
 			if (bundle) {
 				s = bundle.f_get("LOCK_MESSAGE");
@@ -797,6 +797,10 @@ var __statics = {
 			if (!s) {
 				s = f_event._LOCK_MESSAGE;
 			}
+		}
+		
+		if (s===null) {
+			return true;
 		}
 
 		/*
