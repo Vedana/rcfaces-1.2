@@ -265,6 +265,12 @@ public class CameliaComponentHandler extends CameliaComponentHandler0 {
 
         ATTRIBUTES_METADATA.put("dragEffects", ENUMERATION_ATTRIBUTE_METADATA);
         ATTRIBUTES_METADATA.put("dropEffects", ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("dragTypes", ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("dropTypes", ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("rowDragTypes", ENUMERATION_ATTRIBUTE_METADATA);
+        ATTRIBUTES_METADATA.put("rowDropTypes", ENUMERATION_ATTRIBUTE_METADATA);
+        
+        
     }
 
     public CameliaComponentHandler(ComponentConfig config) {
