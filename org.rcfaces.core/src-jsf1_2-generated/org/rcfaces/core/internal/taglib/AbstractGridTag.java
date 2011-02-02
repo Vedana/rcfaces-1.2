@@ -60,8 +60,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private ValueExpression hiddenMode;
 	private ValueExpression margins;
 	private ValueExpression rows;
-	private ValueExpression var;
 	private ValueExpression first;
+	private ValueExpression var;
 	private ValueExpression value;
 	public final void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
@@ -231,12 +231,12 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		this.rows = rows;
 	}
 
-	public final void setVar(ValueExpression var) {
-		this.var = var;
-	}
-
 	public final void setFirst(ValueExpression first) {
 		this.first = first;
+	}
+
+	public final void setVar(ValueExpression var) {
+		this.var = var;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -275,8 +275,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  rows='"+rows+"'");
-			LOG.debug("  var='"+var+"'");
 			LOG.debug("  first='"+first+"'");
+			LOG.debug("  var='"+var+"'");
 		}
 		if ((uiComponent instanceof AbstractGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -606,21 +606,21 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (var != null) {
-			if (var.isLiteralText()==false) {
-				component.setValueExpression(Properties.VAR, var);
-
-			} else {
-				component.setVar(var.getExpressionString());
-			}
-		}
-
 		if (first != null) {
 			if (first.isLiteralText()==false) {
 				component.setValueExpression(Properties.FIRST, first);
 
 			} else {
 				component.setFirst(getInt(first.getExpressionString()));
+			}
+		}
+
+		if (var != null) {
+			if (var.isLiteralText()==false) {
+				component.setValueExpression(Properties.VAR, var);
+
+			} else {
+				component.setVar(var.getExpressionString());
 			}
 		}
 
@@ -677,8 +677,8 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		hiddenMode = null;
 		margins = null;
 		rows = null;
-		var = null;
 		first = null;
+		var = null;
 		value = null;
 
 		super.release();

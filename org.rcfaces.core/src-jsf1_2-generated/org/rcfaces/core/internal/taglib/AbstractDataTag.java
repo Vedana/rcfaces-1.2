@@ -65,8 +65,8 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression margins;
 	private ValueExpression rows;
 	private ValueExpression var;
-	private ValueExpression value;
 	private ValueExpression first;
+	private ValueExpression value;
 	private ValueExpression saveCompleteState;
 	public final void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
@@ -256,12 +256,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.var = var;
 	}
 
-	public final void setValue(ValueExpression value) {
-		this.value = value;
-	}
-
 	public final void setFirst(ValueExpression first) {
 		this.first = first;
+	}
+
+	public final void setValue(ValueExpression value) {
+		this.value = value;
 	}
 
 	public final void setSaveCompleteState(ValueExpression saveCompleteState) {
@@ -304,8 +304,8 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  var='"+var+"'");
-			LOG.debug("  value='"+value+"'");
 			LOG.debug("  first='"+first+"'");
+			LOG.debug("  value='"+value+"'");
 		}
 		if ((uiComponent instanceof AbstractDataComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -675,21 +675,21 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (value != null) {
-			if (value.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE, value);
-
-			} else {
-				component.setValue(value.getExpressionString());
-			}
-		}
-
 		if (first != null) {
 			if (first.isLiteralText()==false) {
 				component.setValueExpression(Properties.FIRST, first);
 
 			} else {
 				component.setFirst(getInt(first.getExpressionString()));
+			}
+		}
+
+		if (value != null) {
+			if (value.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE, value);
+
+			} else {
+				component.setValue(value.getExpressionString());
 			}
 		}
 
@@ -751,8 +751,8 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		margins = null;
 		rows = null;
 		var = null;
-		value = null;
 		first = null;
+		value = null;
 		saveCompleteState = null;
 
 		super.release();
