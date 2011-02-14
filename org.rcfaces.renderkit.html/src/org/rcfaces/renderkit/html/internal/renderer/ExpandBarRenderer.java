@@ -467,4 +467,8 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                     JavaScriptClasses.EXPAND_BAR, "effect");
         }
     }
+    protected boolean useHtmlAccessKeyAttribute() {
+        return true;
+    }
+    
 }

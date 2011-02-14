@@ -8,6 +8,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.HyperLinkComponent;
+import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -72,6 +73,9 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
             if (text != null) {
                 text = ParamUtils.formatMessage(component, text);
             }
+            if (component instanceof IAccessKeyCapability) {
+            	writeAccessKey(htmlWriter,(IAccessKeyCapability) component);
+            }
 
             htmlWriter.writeText(text);
         }
@@ -97,6 +101,10 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
+    }
+   
+    protected boolean useHtmlAccessKeyAttribute() {
+    	return true;
     }
 
     protected void decode(IRequestContext context, UIComponent component,

@@ -41,6 +41,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
+import org.rcfaces.core.item.IAccessKeyItem;
 import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.lang.Time;
 import org.rcfaces.core.model.IFilterProperties;
@@ -418,14 +419,38 @@ public class HtmlTools {
         return encode;
     }
 
+    public static final boolean writeItemSpanAccessKey(IHtmlWriter writer,
+            IAccessKeyItem accessKeyItem, String text,
+            boolean escapeLF) throws WriterException {
+    	 if (text == null || text.length() < 1) {
+             return false;
+         }
+
+         String accessKey = accessKeyItem.getAccessKey();
+         return  writeAccessKey(writer,accessKey, text, escapeLF);
+    }
+    
+
     public static final boolean writeSpanAccessKey(IHtmlWriter writer,
             IAccessKeyCapability accessKeyCapability, String text,
             boolean escapeLF) throws WriterException {
+    	 if (text == null || text.length() < 1) {
+             return false;
+         }
+
+         String accessKey = accessKeyCapability.getAccessKey();
+         return  writeAccessKey(writer,accessKey, text, escapeLF);
+    }
+    
+    
+    public static final boolean writeAccessKey(IHtmlWriter writer,
+            String accessKey, String text,
+            boolean escapeLF) throws WriterException {
+    
         if (text == null || text.length() < 1) {
             return false;
         }
-
-        String accessKey = accessKeyCapability.getAccessKey();
+      
         if (accessKey == null || accessKey.length() < 1) {
             if (escapeLF) {
                 writeAndEscapeLF(writer, text, NO_ACCESS_KEY);
