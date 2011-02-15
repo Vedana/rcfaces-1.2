@@ -73,10 +73,6 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
             if (text != null) {
                 text = ParamUtils.formatMessage(component, text);
             }
-            if (component instanceof IAccessKeyCapability) {
-            	writeAccessKey(htmlWriter,(IAccessKeyCapability) component);
-            }
-
             htmlWriter.writeText(text);
         }
 
