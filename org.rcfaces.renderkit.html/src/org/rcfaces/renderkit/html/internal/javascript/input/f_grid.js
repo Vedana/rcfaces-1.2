@@ -2041,6 +2041,7 @@ var __members = {
 		// this._partialWaiting=undefined; // Boolean
 		// this._loading=undefined; // Boolean
 		// this._emptyDataMessage=undefined; // String
+		// this._refreshFullUpdateState=undefined; // Boolean
 		this._emptyDataMessageLabel = undefined; // HTMLElement
 
 		var waiting = this._waiting;
@@ -3371,12 +3372,12 @@ var __members = {
 	 * 
 	 * @method public
 	 * 
-	 * @param Boolean fullUpdate to force rowCount and pager update
+	 * @param optional Boolean fullUpdate to force rowCount and pager update
 	 * 
 	 * @return void
 	 */
 	f_setRefreshFullUpdateState: function(fullUpdate) {
-		this._refreshFullUpdateState = (fullUpdate != false);
+		this._refreshFullUpdateState = (fullUpdate !== false);
 	},
 	/**
 	 * Get the refreshFullUpdateState that force the refresh to be full
