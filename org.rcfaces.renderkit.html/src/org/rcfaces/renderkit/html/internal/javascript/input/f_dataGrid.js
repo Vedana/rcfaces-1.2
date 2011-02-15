@@ -967,7 +967,7 @@ var __members = {
 		if (length>0) {
 			params.rows=length;
 		}
-		if (fullUpdate || this._rowCount<0) { /* && this._rows */			
+		if (fullUpdate || this.f_isRefreshFullUpdateState() || this._rowCount<0) { /* && this._rows */			
 	        params.unknownRowCount=true;			
 		}
 
@@ -1043,10 +1043,12 @@ var __members = {
 
 				// Detache temporairement !
 				if (tbody.parentNode) {
-					
-					f_core.Assert(tbody.parentNode==this._table, "f_dataGrid.f_callServer: Not same parent ? ("+tbody.parentNode+")");
-					
-					this._table.removeChild(tbody);
+					// is the tbody already detached ?
+//					if (tbody.parentNode.nodeType != f_core.DOCUMENT_FRAGMENT) {
+						f_core.Assert(tbody.parentNode==this._table, "f_dataGrid.f_callServer: Not same parent ? ("+tbody.parentNode+")");
+						
+						this._table.removeChild(tbody);
+//					}
 				}
 
 				this._shadowRows=undefined;

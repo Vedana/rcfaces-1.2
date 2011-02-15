@@ -3367,6 +3367,28 @@ var __members = {
 		return true;
 	},
 	/**
+	 * Set the refreshFullUpdateState that force the refresh to be full
+	 * 
+	 * @method public
+	 * 
+	 * @param Boolean fullUpdate to force rowCount and pager update
+	 * 
+	 * @return void
+	 */
+	f_setRefreshFullUpdateState: function(fullUpdate) {
+		this._refreshFullUpdateState = (fullUpdate != false);
+	},
+	/**
+	 * Get the refreshFullUpdateState that force the refresh to be full
+	 * 
+	 * @method public
+	 * 
+	 * @return Boolean
+	 */
+	f_isRefreshFullUpdateState: function() {
+		return this._refreshFullUpdateState === true;
+	},
+	/**
 	 * @method protected
 	 */
 	f_performErrorEvent : function(param, messageCode, message) {

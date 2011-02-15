@@ -1,3 +1,6 @@
+f_grid:
+Gestion de l'attribut RefreshFullUpdateState qui permet de forcer le rafraichissement complet
+
 f_tree:
 Généralisation de l'affichage d'une erreur dans le chargement des noeuds en AJAX
 

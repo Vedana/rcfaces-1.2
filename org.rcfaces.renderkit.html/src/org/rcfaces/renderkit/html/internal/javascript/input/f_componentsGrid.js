@@ -43,7 +43,7 @@ var __members = {
 		if (length>0) {
 			params.rows=length;
 		}
-		if (fullUpdate || this._rowCount<0) { /* && this._rows */			
+		if (fullUpdate || this.f_isRefreshFullUpdateState() || this._rowCount<0) { /* && this._rows */			
 	        params.unknownRowCount=true;			
 		}
 
