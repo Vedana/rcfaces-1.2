@@ -8,7 +8,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.rcfaces.core.component.HyperLinkComponent;
-import org.rcfaces.core.component.capability.IAccessKeyCapability;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
