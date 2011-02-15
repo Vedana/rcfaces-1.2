@@ -1,3 +1,6 @@
+ExpandBarRenderer
+Gestion de l'attribut html acceskey sur l'element A du header sans utiliser l'héritage destiné au conteneur 
+
 f_grid:
 Gestion de l'attribut RefreshFullUpdateState qui permet de forcer le rafraichissement complet
 
