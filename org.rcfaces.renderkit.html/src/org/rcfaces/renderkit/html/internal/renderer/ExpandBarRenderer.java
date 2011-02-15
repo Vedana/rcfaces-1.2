@@ -295,7 +295,12 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         htmlWriter.writeWidth(getButtonImageWidth(htmlWriter));
         htmlWriter.writeHeight(getButtonImageHeight(htmlWriter));
 
-        writeAccessKey(htmlWriter, expandBarComponent);
+        String ak = expandBarComponent.getAccessKey();
+        if (ak != null && ak.length() > 0) {
+        	htmlWriter.writeAccessKey(ak);
+        	htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
+        }
+        
         writeTabIndex(htmlWriter, expandBarComponent);
 
         htmlWriter.startElement(IHtmlWriter.IMG);
@@ -467,8 +472,6 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                     JavaScriptClasses.EXPAND_BAR, "effect");
         }
     }
-    protected boolean useHtmlAccessKeyAttribute() {
-        return true;
-    }
+   
     
 }
