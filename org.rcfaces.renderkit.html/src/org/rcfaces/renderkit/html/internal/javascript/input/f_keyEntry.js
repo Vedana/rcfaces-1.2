@@ -361,7 +361,8 @@ var __members = {
 				this.f_updateInputStyle();
 			}
 				
-			if (newInput!=this._selectedValue && this._selectedValue) {
+			if (this._selectedValue && newInput!=this._selectedValue && newInput!=this._formattedValue) {
+				f_core.Debug(f_keyEntry, "f_onSuggest: value='"+this._selectedValue+"' not equals input ='"+newInput+"'");
 				this._selectedValue=null;
 	
 				this.f_fireEvent(f_event.SELECTION, jsEvt, null, null);
@@ -412,7 +413,7 @@ var __members = {
 	 */
 	f_setValue: function(value) {
 		f_core.Assert(value===null || typeof(value)=="string", "f_keyEntry.f_setValue: Invalid value parameter ("+value+").");
-		
+		f_core.Debug(f_keyEntry, "f_setValue: set input value ='"+value+"'");
 		this._selectedValue="";		
 		this._inputValue=value;
 		this._formattedValue="";
@@ -434,10 +435,12 @@ var __members = {
 		f_core.Debug(f_keyEntry, "fa_valueSelected: value='"+value+"' label='"+label+"'");
 
 		if (this.f_isReadOnly()) {
+			f_core.Debug(f_keyEntry, "fa_valueSelected: no modification readOnly");
 			return;
 		}
 		
 		if (this.f_fireEvent(f_event.PRE_SELECTION, null, rowValues, value)===false) {
+			f_core.Debug(f_keyEntry, "fa_valueSelected: preSelection cancel event");
 			return;
 		}
 		
@@ -446,6 +449,9 @@ var __members = {
 			this._formattedValue=this.f_getInput().value;
 			this._selectedValue="";
 			this._cancelVerification();
+
+			f_core.Debug(f_keyEntry, "fa_valueSelected: value is undefined  selectedValue='"+this._selectedValue+"'");
+
 			if(this._forLabel){
 				var labelComponent = f_core.GetElementById(this._forLabel);
 				if (labelComponent) {
@@ -461,6 +467,7 @@ var __members = {
 		
 		this._formattedValue=(label)?label:"";
 		this._selectedValue=value;
+		f_core.Debug(f_keyEntry, "fa_valueSelected: value is defined selectedValue='"+this._selectedValue+"'");
 		this._inputValue=value;
 		if(this._forLabel){
 			var labelComponent = f_core.GetElementById(this._forLabel);
@@ -479,12 +486,19 @@ var __members = {
 		}
 		
 		if (this.f_fireEvent(f_event.SELECTION, null, rowValues, value)===false) {
+			f_core.Debug(f_keyEntry, "fa_valueSelected: selection event returns false");
 			return;
 		}
 		
+		f_core.Debug(f_keyEntry, "fa_valueSelected: focusNext = '"+focusNext +"'");
 		if (focusNext===false) {		
 			/* Ca redonne le focus sous IE !!! (donc il doit être egal à undefined pour lors de l'appel ajax de vérification) */	
-			f_core.SelectText(input, value.length);
+			try {
+				f_core.SelectText(input, value.length);
+			}catch (ex){
+				f_core.Debug(f_keyEntry, "fa_valueSelected: throws exception ", ex);
+			}
+			
 
 		} else if (focusNext===true) {
 			var comp=f_core.GetNextFocusableComponent(this);
