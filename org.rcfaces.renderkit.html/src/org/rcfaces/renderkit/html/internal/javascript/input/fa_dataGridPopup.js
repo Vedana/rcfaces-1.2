@@ -492,6 +492,7 @@ var __members = {
 		
 		var cwidth=width;
 		var cheight=height;
+		var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
 		
 		if (showTitle) {	
 			inputHeight=20;
@@ -501,8 +502,6 @@ var __members = {
 			var tr=f_core.CreateElement(tBodyContainer, "tr", {
 			 	className: "fa_dataGridPopup_search"
 			});								
-			
-			var resourceBundle=f_resourceBundle.Get(fa_dataGridPopup);
 			
 			var search=f_core.CreateElement(tr, "td", {
 				align: "left", 

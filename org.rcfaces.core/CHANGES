@@ -1,4 +1,7 @@
-ExpandBarRenderer
+f_keyEntry.f_onSuggest: 
+Correction de la perte de la sélection en mode non éditable après une selection au clavier 
+
+ExpandBarRenderer:
 Gestion de l'attribut html acceskey sur l'element A du header sans utiliser l'héritage destiné au conteneur 
 
 f_grid:
@@ -56,7 +59,7 @@ Ajout des attributs forceValue, forLabel, valueFormatLabel et novalueFormatLabel
 Modification du checkListener
 
 f_comboGrid, f_popup, f_menuBar :
-correction du bug à l'ouverture des comboGrids:
+correction du bug à l'ouverture des comboGrids
 
 f_tree:
 Implementation de l'ExpandListener et loadListener
