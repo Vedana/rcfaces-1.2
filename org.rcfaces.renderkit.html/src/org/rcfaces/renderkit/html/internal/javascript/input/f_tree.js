@@ -3587,7 +3587,6 @@ var __members = {
 	
 	/**
 	 * @method private
-	 * @param HTMLElement li
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */
@@ -3600,7 +3599,7 @@ var __members = {
 		var selection=new Object;
 		selection._items = new Array;
 		selection._itemsValue = new Array;
-		var itemsDragTypes = new Array();
+		var itemsDragTypes = new Array;
 		var currentSelection = this._currentSelection;
 		var lastEffects = undefined;
 		for ( var i = 0; i < currentSelection.length; i++) {
@@ -3637,7 +3636,6 @@ var __members = {
 			
 			selection._items[i] = node;
 			selection._itemsValue[i] = node._value; 
-			
 		}
 		
 		if (!lastEffects) {

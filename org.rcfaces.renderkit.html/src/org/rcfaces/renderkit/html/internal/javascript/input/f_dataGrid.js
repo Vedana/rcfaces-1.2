@@ -1671,7 +1671,7 @@ var __members = {
 			
 			return 0;
 		}
-		var trs
+		
 		var body=this._table.tBodies[0];
 		f_core.Assert(body, "f_grid._sortTable: No body for data table of dataGrid !");
 		

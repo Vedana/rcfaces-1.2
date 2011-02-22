@@ -381,6 +381,9 @@ var __members = {
 		return this._dragAndDropInfo;
 	},
 	/**
+	 * @method public
+	 * @param Event jsEvent
+	 * @param Object selection
 	 * @return Boolean
 	 */
 	f_start: function(jsEvent, selection) {	

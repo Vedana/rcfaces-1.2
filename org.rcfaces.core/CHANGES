@@ -1,4 +1,4 @@
-f_dragAndDropEngne, fa_draggable, f_tree, f_grid:
+f_dragAndDropEngine, fa_draggable, f_tree, f_grid:
 Gestion du dnd avec une selection multiple  
 
 fa_selectionManager, f_tree, f_grid:

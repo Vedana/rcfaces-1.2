@@ -300,7 +300,7 @@ var __statics = {
 				}
 				
 			} else if (dataGrid._dragAndDropEngine) {
-				dataGrid._dragRow(this, evt);
+				dataGrid._dragRow(evt);
 			}
 
 			return f_core.CancelJsEvent(evt);
@@ -6247,8 +6247,8 @@ var __members = {
 		this.f_setSelection([]);
 	},
 /**
+ * 
 	 * @method private
-	 * @param HTMLElement row
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */
@@ -6261,7 +6261,7 @@ var __members = {
 		var selection=new Object;
 		selection._items = new Array;
 		selection._itemsValue = new Array;
-		var itemsDragTypes = new Array();
+		var itemsDragTypes = new Array;
 		var currentSelection = this._currentSelection;
 		var lastEffects = undefined;
 		
