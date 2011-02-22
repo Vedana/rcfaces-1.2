@@ -309,6 +309,49 @@ var __statics = {
 					+ dataGrid + "' EXITED");
 		}
 	},
+	
+	/**
+	 * @method protected static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 * @context object:dataGrid
+	 */
+	RowMouseUp : function(evt) {
+		var dataGrid = this._dataGrid;
+
+		f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '" + dataGrid
+				+ "'");
+		try {
+			if (!evt) {
+				evt = f_core.GetJsEvent(this);
+			}
+
+			if (dataGrid.f_getEventLocked(evt)) {
+				return false;
+			}
+
+			if (!f_grid.VerifyTarget(evt)) {
+				return true;
+			}
+
+			if (dataGrid.f_isDisabled()
+					|| (dataGrid.f_isReadOnly && dataGrid.f_isReadOnly())) {
+				return f_core.CancelJsEvent(evt);
+			}
+
+			var sub = f_core.IsPopupButton(evt);
+
+			var selection = fa_selectionManager.ComputeMouseSelection(evt);
+
+			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.END_PHASE);
+
+			return f_core.CancelJsEvent(evt);
+		} finally {
+			f_core.Debug(f_grid, "RowMouseUp: mouse down on row of '"
+					+ dataGrid + "' EXITED");
+		}
+	},
 	/**
 	 * @method protected static
 	 * @param Event
@@ -4978,7 +5021,24 @@ var __members = {
 		f_core.ShowComponent(row);
 	},
 
-	fa_listVisibleElements : function() {
+	fa_listVisibleElements : function(ordered) {
+		if (ordered) {
+			var body=this._table.tBodies[0];
+			f_core.Assert(body, "f_grid._sortTable: No body for data table of dataGrid !");
+			
+			var trs=new Array;
+			var childNodes=body.rows;
+			//var idx=0;
+			for(var i=0;i<childNodes.length;i++) {
+				var row=childNodes[i];
+				if (row._index===undefined) {
+					continue;
+				}
+				
+				trs.push(row);
+			}
+			return trs;
+		}
 		return this._rowsPool;
 	},
 	fa_getScrolledComponent : function() {
@@ -6192,36 +6252,113 @@ var __members = {
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */
-	_dragRow: function(row, jsEvent) {
+	_dragRow: function(jsEvent) {
 		var dnd=this._dragAndDropEngine;
 		if (!dnd) {
 			return false;
 		}
 		
-		var dragTypes=row._dragTypes;
-		if (dragTypes===undefined) {
-			dragTypes=this._dragTypes;
+		var selection=new Object;
+		selection._items = new Array;
+		selection._itemsValue = new Array;
+		var itemsDragTypes = new Array();
+		var currentSelection = this._currentSelection;
+		var lastEffects = undefined;
+		
+		for ( var i = 0; i < currentSelection.length; i++) {
+			
+			var row = currentSelection[i];
+			
+			var dragTypes=row._dragTypes;
+			if (dragTypes===undefined) {
+				dragTypes=this._dragTypes;
+			}
+			
+			var dragEffects=row._dragEffects;
+			if (dragEffects===undefined) {
+				dragEffects=this._dragEffects;
+			}
+			f_core.Debug(f_grid, "_dragRow: dragEffects=0x"+dragEffects+" dragTypes='"+dragTypes+"'");
+			
+			if (!dragEffects || !dragTypes) {
+				return false;
+			}
+			
+			if(lastEffects){
+				lastEffects = dragEffects & lastEffects;
+			}else {
+				lastEffects = dragEffects;
+			}
+			
+			if(itemsDragTypes.length){
+				itemsDragTypes = f_dragAndDropEngine.ComputeTypes(dragTypes, itemsDragTypes);
+			}else {
+				itemsDragTypes = dragTypes;
+			}
+			
+			selection._items[i] = row;
+			selection._itemsValue[i] = this.fa_getElementValue(row);; 
+		
 		}
 		
-		var dragEffects=row._dragEffects;
-		if (dragEffects===undefined) {
-			dragEffects=this._dragEffects;
+		if (!lastEffects) {
+			return false;
 		}
-		
-		f_core.Debug(f_grid, "_dragRow: dragEffects=0x"+dragEffects+" dragTypes='"+dragTypes+"'");
-		
-		if (!dragEffects || !dragTypes) {
+		if (!itemsDragTypes.length) {
 			return false;
 		}
 		
-		var rowValue=this.fa_getElementValue(row);
+		selection._dragEffects = lastEffects;
+		selection._dragTypes = itemsDragTypes;
+		selection._itemsElement = currentSelection;
+		var ret=dnd.f_start(jsEvent, selection);
 		
-		var ret=dnd.f_start(jsEvent, row, rowValue, row, dragEffects, dragTypes);
-
 		f_core.Debug(f_grid, "_dragRow: start returns '"+ret+"'");
 		
 		return ret;
 	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragItems : function(selection) {
+		return selection._items;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragItemsValue : function(selection) {
+		return selection._itemsValue;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragItemsElement : function(selection) {
+		return selection._itemsElement;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragTypes : function(selection) {
+		return selection._dragTypes;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Number
+	 */
+	f_getDragEffects : function(selection) {
+		return selection._dragEffects;
+	},
+	
+	
 	f_queryDropInfos: function(dragAndDropEngine, jsEvent, element) {
 		this._targetDragAndDropEngine=dragAndDropEngine;
 		

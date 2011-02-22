@@ -432,7 +432,7 @@ var __members = {
 		
 		if (this._selectable || this._checkable) {
 			row.onmousedown=f_grid.RowMouseDown;
-			row.onmouseup=f_core.CancelJsEventHandler;
+			row.onmouseup=f_grid.RowMouseUp;
 			row.onclick=f_core.CancelJsEventHandler;
 			row.ondblclick=f_grid.RowMouseDblClick;
 			row.onfocus=f_grid.GotFocus;
@@ -1671,21 +1671,11 @@ var __members = {
 			
 			return 0;
 		}
-		
+		var trs
 		var body=this._table.tBodies[0];
 		f_core.Assert(body, "f_grid._sortTable: No body for data table of dataGrid !");
 		
-		var trs=new Array;
-		var childNodes=body.rows;
-		//var idx=0;
-		for(var i=0;i<childNodes.length;i++) {
-			var row=childNodes[i];
-			if (row._index===undefined) {
-				continue;
-			}
-			
-			trs.push(row);
-		}
+		var trs = this.fa_listVisibleElements(true);
 		
 		trs.sort(internalSort);
 

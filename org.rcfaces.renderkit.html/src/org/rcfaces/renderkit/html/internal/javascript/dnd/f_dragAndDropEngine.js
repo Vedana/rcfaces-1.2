@@ -35,6 +35,44 @@ var __statics = {
 	
 		return engine;
 	 },
+	 
+	 /**
+	 * 
+	 * @method public static
+	 * @param  Array sourceTypes
+	 * @param  Array targetTypes
+	 * @return Array selectedTypes
+	 */
+	 ComputeTypes: function(sourceTypes , targetTypes) {
+		 var selectedTypes=new Array();		
+	
+		if (targetTypes && targetTypes.length && sourceTypes && sourceTypes.length) {
+			var ts=new Array();
+			for (var j=0;j<targetTypes.length;j++) {
+				var tt=targetTypes[j];
+				var rt=f_dragAndDropEngine._SplitTypes(tt);
+				
+				ts.push(rt);
+			}
+						
+			for(var i=0;i<sourceTypes.length;i++) {
+				var st=sourceTypes[i];
+				var st2=f_dragAndDropEngine._SplitTypes(st);
+				if (!st2) {
+					continue;
+				}
+				
+				for (var j=0;j<targetTypes.length;j++) {
+					var tt2=ts[j];
+					
+					if ((st2[0]=="*" || tt2[0]=="*" || st2[0]==tt2[0]) && (st2[1]=="*" || tt2[1]=="*" || st2[1]==tt2[1])) {
+						selectedTypes.f_addElement(targetTypes[j]); // Il faut conserver le parametre éventuel !
+					}
+				}
+			}
+		}
+		return selectedTypes;		
+	 },
 	 /**
 	  * @method private static
 	  * @param Event evt
@@ -343,24 +381,11 @@ var __members = {
 		return this._dragAndDropInfo;
 	},
 	/**
-	 * @method public
-	 * @param Event jsEvent
-	 * @param Object sourceItem
-	 * @param any sourceItemValue
-	 * @param HTMLElement sourceItemElement
-	 * @param Number sourceDragEffects
-	 * @param Array sourceDragTypes
 	 * @return Boolean
 	 */
-	f_start: function(jsEvent, sourceItem, sourceItemValue, sourceItemElement, sourceDragEffects, sourceDragTypes) {	
+	f_start: function(jsEvent, selection) {	
 //		f_core.Debug(f_dragAndDropEngine, "f_dragAndDropEngine: sourceComponent='"+this._sourceComponent+"' sourceItem='"+sourceItem+"' sourceItemValue='"+sourceItemValue+"' sourceItemElement='"+sourceItemElement+"' sourceDragEffects='"+sourceDragEffects+"' sourceDragTypes='"+sourceDragTypes+"'");
 
-		this._sourceItem=sourceItem;
-		this._sourceItemValue=sourceItemValue;
-		this._sourceItemElement = sourceItemElement;
-		this._sourceDragEffects=sourceDragEffects;
-		this._sourceDragTypes=sourceDragTypes;			
-		
 		if (this._install(jsEvent)===false) {
 
 			f_core.Debug(f_dragAndDropEngine, "f_start: install returns FALSE");
@@ -372,17 +397,26 @@ var __members = {
 
 		f_core.Debug(f_dragAndDropEngine, "f_start: installed returns TRUE");
 		
+		var srcComponent = this._sourceComponent;
+		
+		this._sourceItems= srcComponent.f_getDragItems(selection);
+		this._sourceItemsValue= srcComponent.f_getDragItemsValue(selection);
+		this._sourceItemsElement = srcComponent.f_getDragItemsValue(selection);
+		this._sourceDragEffects=  srcComponent.f_getDragEffects(selection);
+		this._sourceDragTypes= srcComponent.f_getDragTypes(selection);		
+		
 		return true;
 	},
-
+	
+	
 	/** 
 	 * @method protected
 	 * @return void
 	 */
 	_clearFields: function() {
-		this._sourceItem=undefined;
-		this._sourceItemValue=undefined;
-		this._sourceItemElement = undefined;
+		this._sourceItems=undefined;
+		this._sourceItemsValue=undefined;
+		this._sourceItemsElement = undefined;
 		this._sourceDragEffects=undefined;
 		this._sourceDragTypes=undefined;			
 
@@ -1032,34 +1066,8 @@ var __members = {
 
 	//	f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match types target='"+targetTypes+"', source='"+sourceTypes+"'.");
 		
-		var selectedTypes=new Array();		
-
-		if (targetTypes && targetTypes.length && sourceTypes && sourceTypes.length) {
-			var ts=new Array();
-			for (var j=0;j<targetTypes.length;j++) {
-				var tt=targetTypes[j];
-				var rt=f_dragAndDropEngine._SplitTypes(tt);
-				
-				ts.push(rt);
-			}
-						
-			for(var i=0;i<sourceTypes.length;i++) {
-				var st=sourceTypes[i];
-				var st2=f_dragAndDropEngine._SplitTypes(st);
-				if (!st2) {
-					continue;
-				}
-				
-				for (var j=0;j<targetTypes.length;j++) {
-					var tt2=ts[j];
-					
-					if ((st2[0]=="*" || tt2[0]=="*" || st2[0]==tt2[0]) && (st2[1]=="*" || tt2[1]=="*" || st2[1]==tt2[1])) {
-						selectedTypes.f_addElement(targetTypes[j]); // Il faut conserver le parametre éventuel !
-					}
-				}
-			}
-		}
-			
+		var selectedTypes=f_dragAndDropEngine.ComputeTypes(sourceTypes, targetTypes);
+	
 	//	f_core.Debug(f_dragAndDropEngine, "_computeDragAndDrop: match result = "+selectedTypes);
 	
 		if (!selectedTypes.length) {
@@ -1161,10 +1169,16 @@ var __members = {
 		return this._additionalSourceInformations;
 	},
 	f_getSourceItem: function() {
-		return this._sourceItem;
+		return this._sourceItems[0];
 	},
 	f_getSourceItemValue: function() {
-		return this._sourceItemValue;
+		return this._sourceItemsValue[0];
+	},
+	f_getSourceItems: function() {
+		return this._sourceItems;
+	},
+	f_getSourceItemsValue: function() {
+		return this._sourceItemsValue;
 	},
 	f_getSourceComponent: function() {
 		return this._sourceComponent;

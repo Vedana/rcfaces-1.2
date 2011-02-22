@@ -950,7 +950,7 @@ public class TreeDecorator extends AbstractSelectItemsDecorator {
                             .writeInt(dragDropEffects.intValue());
                 }
             }
-
+            
             selectItemLastDragDropInfos.add(serializedDragDropTypes);
             selectItemLastDragDropInfos.add(dragDropEffects);
         }

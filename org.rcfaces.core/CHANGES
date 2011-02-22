@@ -1,3 +1,9 @@
+f_dragAndDropEngne, fa_draggable, f_tree, f_grid:
+Gestion du dnd avec une selection multiple  
+
+fa_selectionManager, f_tree, f_grid:
+Ajouter des phases "begin" et "end" afin de dissocier les evenements mousedown et mouseup lors de la selection
+
 f_keyEntry.f_onSuggest: 
 Correction de la perte de la sélection en mode non éditable après une selection au clavier 
 

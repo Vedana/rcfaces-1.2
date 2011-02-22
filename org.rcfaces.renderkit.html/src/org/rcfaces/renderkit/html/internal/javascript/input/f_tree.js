@@ -191,9 +191,26 @@ var __statics = {
 			}
 			
 		} else if (tree._dragAndDropEngine){
-			tree._dragNode(li, evt);
+			tree._dragNode(evt);
 		}
 
+		return f_core.CancelJsEvent(evt);
+	},
+	
+	_DivNode_mouseUp: function(evt) {
+		var li=this._node;
+		var tree=li._tree;
+		if (!evt) {
+			evt=f_core.GetJsEvent(this);
+		}
+		if (tree.f_getEventLocked(evt)) {
+			return false;
+		}
+		
+		var selection=fa_selectionManager.ComputeMouseSelection(evt);
+		
+		tree.f_moveCursor(li, true, evt, selection, fa_selectionManager.END_PHASE);
+				
 		return f_core.CancelJsEvent(evt);
 	},
 	/**
@@ -983,7 +1000,7 @@ var __members = {
 				onmouseover: f_tree._DivNode_mouseOver,
 				onmouseout: f_tree._DivNode_mouseOut,
 				onmousedown: f_tree._DivNode_mouseDown,
-				onmouseup: f_core.CancelJsEventHandler,
+				onmouseup: f_tree._DivNode_mouseUp,
 				onclick: f_core.CancelJsEventHandler,
 				ondblclick: f_tree._DivNode_dblClick
 			});
@@ -3574,37 +3591,113 @@ var __members = {
 	 * @param Event jsEvent
 	 * @return Boolean
 	 */
-	_dragNode: function(li, jsEvent) {
+	_dragNode: function(jsEvent) {
 		var dnd=this._dragAndDropEngine;
 		if (!dnd) {
 			return false;
 		}
 		
-		var dragTypes=undefined;
-		var dragEffects=undefined;
-		var node=li._node;
-		
-		for(var n=node;n && (dragTypes===undefined || dragEffects===undefined);n=n._parentTreeNode) {
-			if (dragTypes===undefined) {
-				dragTypes=n._dragTypes;
+		var selection=new Object;
+		selection._items = new Array;
+		selection._itemsValue = new Array;
+		var itemsDragTypes = new Array();
+		var currentSelection = this._currentSelection;
+		var lastEffects = undefined;
+		for ( var i = 0; i < currentSelection.length; i++) {
+					
+			var dragTypes=undefined;
+			var dragEffects=undefined;
+			var node = currentSelection[i]._node;
+					
+			for(var n=node;n && (dragTypes===undefined || dragEffects===undefined);n=n._parentTreeNode) {
+				if (dragTypes===undefined) {
+					dragTypes=n._dragTypes;
+				}
+				if (dragEffects===undefined) {
+					dragEffects=n._dragEffects;
+				}
 			}
-			if (dragEffects===undefined) {
-				dragEffects=n._dragEffects;
+			f_core.Debug(f_tree, "_dragNode: dragEffects=0x"+dragEffects+" dragTypes='"+dragTypes+"'");
+			
+			if (!dragEffects || !dragTypes) {
+				return false;
 			}
+			
+			if(lastEffects){
+				lastEffects = dragEffects & lastEffects;
+			}else {
+				lastEffects = dragEffects;
+			}
+			
+			if(itemsDragTypes.length){
+				itemsDragTypes = f_dragAndDropEngine.ComputeTypes(dragTypes, itemsDragTypes);
+			}else {
+				itemsDragTypes = dragTypes;
+			}
+			
+			selection._items[i] = node;
+			selection._itemsValue[i] = node._value; 
+			
 		}
 		
-		f_core.Debug(f_tree, "_dragNode: dragEffects=0x"+dragEffects+" dragTypes='"+dragTypes+"'");
-		
-		if (!dragEffects || !dragTypes) {
+		if (!lastEffects) {
+			return false;
+		}
+		if (!itemsDragTypes.length) {
 			return false;
 		}
 		
-		var ret=dnd.f_start(jsEvent, node, node._value, li, dragEffects, dragTypes);
+		selection._dragEffects = lastEffects;
+		selection._dragTypes = itemsDragTypes;
+		selection._itemsElement = currentSelection;
+		var ret=dnd.f_start(jsEvent, selection);
 
 		f_core.Debug(f_tree, "_dragNode: start returns '"+ret+"'");
 		
 		return ret;
 	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragItems : function(selection) {
+		return selection._items;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragItemsValue : function(selection) {
+		return selection._itemsValue;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragItemsElement : function(selection) {
+		return selection._itemsElement;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Array
+	 */
+	f_getDragTypes : function(selection) {
+		return selection._dragTypes;
+	},
+	
+	/**
+	 * @method public 
+	 * @return Number
+	 */
+	f_getDragEffects : function(selection) {
+		return selection._dragEffects;
+	},
+
+	
 	/**
 	 * @method private
 	 * @param HTMLElement element

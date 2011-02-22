@@ -37,7 +37,45 @@ var __members = {
 		}
 		
 		return this._draggable;
-	}
+	},
+
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragItems : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragItemsValue : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragItemsElement : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Number
+	 */
+	f_getDragEffects : f_class.ABSTRACT,
+	
+	/**
+	 * @method public abstract
+	 * @param Object selection
+	 * @return Array
+	 */
+	f_getDragTypes : f_class.ABSTRACT
+
+
 }
 
 new f_aspect("fa_draggable", {

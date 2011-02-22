@@ -35,7 +35,18 @@ var __statics = {
 	 * @field hidden static final Number 
 	 */
 	STARTRANGE_SELECTION: 16,
+	
+	/** 
+	 * @field public static final String 
+	 */
+	BEGIN_PHASE: "begin",
+	
+	/** 
+	 * @field public static final String 
+	 */
+	END_PHASE: "end",
 
+	
 	
 	/**
 	 * @method hidden static
@@ -181,7 +192,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_moveCursor: function(element, show, evt, selection) {
+	f_moveCursor: function(element, show, evt, selection, phaseName) {
 		f_core.Assert(element && element.tagName, "fa_selectionManager.f_moveCursor: Invalid parameter to move cursor !");
 		
 		var old=this._cursor;
@@ -205,7 +216,7 @@ var __members = {
 		f_core.Debug(fa_selectionManager, "f_moveCursor: Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
-			if (this.f_performElementSelection(element, show, evt, selection)) {
+			if (this.f_performElementSelection(element, show, evt, selection, phaseName)) {
 				show=false;
 			}
 		}
@@ -317,6 +328,7 @@ var __members = {
 		}
 		
 		if (this._selectedElementValues.f_removeElement(value)) {
+			this._lastDeSelectedElement = element;
 			return true;
 		}
 		
@@ -348,7 +360,7 @@ var __members = {
 		
 		f_core.Debug(fa_selectionManager, "_selectRange: Select range from '"+this.fa_getElementValue(first)+"'=>'"+this.fa_getElementValue(last)+"' appendMode="+appendSelection);
 		
-		var elements=this.fa_listVisibleElements();
+		var elements=this.fa_listVisibleElements(true);
 		if (!elements) {
 			return;
 		}
@@ -514,7 +526,7 @@ var __members = {
 	 * @param Number selection Mask of type of selection
 	 * @return Boolean
 	 */
-	f_performElementSelection: function(element, show, evt, selection) {
+	f_performElementSelection: function(element, show, evt, selection, phaseName) {
 		var cardinality=this._selectionCardinality;
 		if (!cardinality) {
 			return false;
@@ -552,6 +564,8 @@ var __members = {
 			return false;
 		}
 		
+		
+		
 		switch(cardinality) {
 		case fa_cardinality.OPTIONAL_CARDINALITY:
 			if (elementSelected) {
@@ -588,6 +602,10 @@ var __members = {
 			// On continue ...
 
 		case fa_cardinality.ZEROMANY_CARDINALITY:
+			
+			var mouseup = (phaseName == fa_selectionManager.END_PHASE);
+			
+			var lastSelectedElement=this._lastSelectedElement;
 			if (rangeMode) {
 				var lastSelectedElement=this._lastSelectedElement;
 				if (!lastSelectedElement) {
@@ -601,18 +619,36 @@ var __members = {
 				this._selectRange(element, lastSelectedElement, (selection & fa_selectionManager.APPEND_SELECTION));
 				
 			} else if (elementSelected) {
-				if (selection & fa_selectionManager.APPEND_SELECTION) {
+				
+				
+				if (selection & fa_selectionManager.APPEND_SELECTION && !mouseup) {
 					// On est juste en ajout: pas de déselection complete !
 					this._deselectElement(element, elementValue);
 					break;
 				}
-				
-				// On deselectionne tout !
-				this._deselectAllElements();
+			 
+				var selections = this.f_getSelection();
+				if(selection & fa_selectionManager.EXCLUSIVE_SELECTION && mouseup && selections.length > 1) {
+					// On deselectionne tout !
+					this._deselectAllElements();
+				}
 		
 			} else if (selection & fa_selectionManager.EXCLUSIVE_SELECTION) {
 				// On deselectionne tout !
 				this._deselectAllElements();
+			}
+			
+			if (selection & fa_selectionManager.APPEND_SELECTION && !mouseup) {
+				break;
+			}
+			
+			if (selection & fa_selectionManager.APPEND_SELECTION && mouseup) {
+				var deselectedElement = this._lastDeSelectedElement;
+				if( deselectedElement &&  deselectedElement == element ){
+					this._lastDeSelectedElement = null;
+					break;
+				}
+				
 			}
 
 			this._selectElement(element, elementValue, show);

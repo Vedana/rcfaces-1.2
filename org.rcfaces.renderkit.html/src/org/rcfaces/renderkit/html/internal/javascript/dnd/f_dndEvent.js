@@ -246,6 +246,22 @@ var __members = {
 	f_getSourceItemValue: function() {
 		return this.f_getDragAndDropEngine().f_getSourceItemValue();
 	},
+	
+	/**
+	 * @method public
+	 * @return Array
+	 */
+	f_getSourceItems: function() {
+		return this.f_getDragAndDropEngine().f_getSourceItems();
+	},
+
+	/**
+	 * @method public
+	 * @return Array
+	 */
+	f_getSourceItemsValue: function() {
+		return this.f_getDragAndDropEngine().f_getSourceItemsValue();
+	},
 	/**
 	 * @method public
 	 * @return String
