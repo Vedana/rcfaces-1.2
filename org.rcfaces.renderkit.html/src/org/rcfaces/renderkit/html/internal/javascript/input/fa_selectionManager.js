@@ -528,6 +528,7 @@ var __members = {
 	 */
 	f_performElementSelection: function(element, show, evt, selection, phaseName) {
 		var cardinality=this._selectionCardinality;
+		var mouseup = (phaseName == fa_selectionManager.END_PHASE);
 		if (!cardinality) {
 			return false;
 		}
@@ -571,7 +572,7 @@ var __members = {
 			if (elementSelected) {
 				// Deselection seulement !
 				
-				if (selection & fa_selectionManager.APPEND_SELECTION) {
+				if (selection & fa_selectionManager.APPEND_SELECTION && !mouseup) {
 					this._deselectAllElements();
 				}
 				break;
@@ -602,8 +603,6 @@ var __members = {
 			// On continue ...
 
 		case fa_cardinality.ZEROMANY_CARDINALITY:
-			
-			var mouseup = (phaseName == fa_selectionManager.END_PHASE);
 			
 			var lastSelectedElement=this._lastSelectedElement;
 			if (rangeMode) {
