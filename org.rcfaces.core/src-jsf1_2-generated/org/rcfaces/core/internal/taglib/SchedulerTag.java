@@ -43,6 +43,7 @@ public class SchedulerTag extends CameliaTag implements Tag {
 	private ValueExpression periodSelectable;
 	private ValueExpression periodToolTip;
 	private ValueExpression periodValue;
+	private ValueExpression periodType;
 	private ValueExpression var;
 	public String getComponentType() {
 		return SchedulerComponent.COMPONENT_TYPE;
@@ -148,6 +149,10 @@ public class SchedulerTag extends CameliaTag implements Tag {
 		this.periodValue = periodValue;
 	}
 
+	public final void setPeriodType(ValueExpression periodType) {
+		this.periodType = periodType;
+	}
+
 	public final void setVar(ValueExpression var) {
 		this.var = var;
 	}
@@ -181,6 +186,7 @@ public class SchedulerTag extends CameliaTag implements Tag {
 			LOG.debug("  periodSelectable='"+periodSelectable+"'");
 			LOG.debug("  periodToolTip='"+periodToolTip+"'");
 			LOG.debug("  periodValue='"+periodValue+"'");
+			LOG.debug("  periodType='"+periodType+"'");
 			LOG.debug("  var='"+var+"'");
 		}
 		if ((uiComponent instanceof SchedulerComponent)==false) {
@@ -415,6 +421,15 @@ public class SchedulerTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (periodType != null) {
+			if (periodType.isLiteralText()==false) {
+				component.setValueExpression(Properties.PERIOD_TYPE, periodType);
+
+			} else {
+				component.setPeriodType(periodType.getExpressionString());
+			}
+		}
+
 		if (var != null) {
 			if (var.isLiteralText()==false) {
 				component.setValueExpression(Properties.VAR, var);
@@ -451,6 +466,7 @@ public class SchedulerTag extends CameliaTag implements Tag {
 		periodSelectable = null;
 		periodToolTip = null;
 		periodValue = null;
+		periodType = null;
 		var = null;
 
 		super.release();

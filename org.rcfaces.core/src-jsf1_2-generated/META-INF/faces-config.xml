@@ -3326,6 +3326,10 @@ A boolean value indicating wether the component should be get the focus when a m
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>
 		<attribute>
+			<attribute-name>periodType</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 A string value holding the name of a request-scope attribute under which the model data for the
           row selected by the current value of the "rowIndex" property (i.e.

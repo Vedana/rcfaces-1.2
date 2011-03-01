@@ -82,7 +82,7 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hourBegin","secondaryTick","periods","var","tabIndex","selectionListener","literalLocale","height","periodStyle","verticalScrollPosition","showSecondaryTickLabel","periodEnd","periodToolTip","literalTimeZone","hourEnd","periodSelectable","periodLabel","primaryTick","periodValue","styleClass","width","showPrimaryTickLabel","dateBegin","horizontalScrollPosition","immediate","periodBegin"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"hourBegin","secondaryTick","periods","var","tabIndex","selectionListener","literalLocale","height","periodStyle","verticalScrollPosition","showSecondaryTickLabel","periodEnd","periodToolTip","literalTimeZone","hourEnd","periodSelectable","periodLabel","primaryTick","periodValue","styleClass","width","showPrimaryTickLabel","dateBegin","horizontalScrollPosition","immediate","periodType","periodBegin"}));
 	}
 
 	public SchedulerComponent() {
@@ -700,6 +700,26 @@ public class SchedulerComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isPeriodValueSetted() {
 		return engine.isPropertySetted(Properties.PERIOD_VALUE);
+	}
+
+	public String getPeriodType() {
+		return getPeriodType(null);
+	}
+
+	public String getPeriodType(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.PERIOD_TYPE, facesContext);
+	}
+
+	public void setPeriodType(String periodType) {
+		engine.setProperty(Properties.PERIOD_TYPE, periodType);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "periodType" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isPeriodTypeSetted() {
+		return engine.isPropertySetted(Properties.PERIOD_TYPE);
 	}
 
 	public String getVar() {
