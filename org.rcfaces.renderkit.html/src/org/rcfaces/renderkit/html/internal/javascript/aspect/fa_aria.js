@@ -31,6 +31,11 @@ var __statics = {
 		/** 
 		 * @field public static final String
 		 */
+		ARIA_LABEL:		"aria-label",
+		
+		/** 
+		 * @field public static final String
+		 */
 		 ARIA_POSEINSET:		"aria-posinset",
 		
 		/** 
@@ -101,6 +106,17 @@ var __statics = {
 		SetElementAriaLabelledBy: function(element, labelId) {
 			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaLabelledBy: invalid element parameter ("+element+")." );
 			element.setAttribute(fa_aria.ARIA_LABELLEDBY, labelId);
+		},
+		
+		/**
+		 * @method public static
+		 * @param HTMLElement element HTML
+		 * @param String ariaLabel
+		 * @return void
+		 */
+		SetElementAriaLabel: function(element, ariaLabel) {
+			f_core.Assert(element && element.nodeType == f_core.ELEMENT_NODE, "fa_aria.SetElementAriaLabel: invalid element parameter ("+element+")." );
+			element.setAttribute(fa_aria.ARIA_LABEL, ariaLabel);
 		},
 		
 		/**

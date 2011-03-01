@@ -225,14 +225,22 @@ var __members = {
 				});
 				
 				period._divNode = divNode;
+				var type = period._periodType;
+				if (!type ){
+					type ="";
+				}
 				
+				var ariaLabel = f_dateFormat.FormatDate(begin,"EEEE dd MMM yyyy")
+					+ " de "+begin.getHours()+"h" +begin.getMinutes()
+					+ " à "+end.getHours()+"h" +end.getMinutes()+" "+type ;
 				var labelNode = f_core.CreateElement(divNode2, "label", {
-					textnode : period._label,
+					textnode : period._label, 
 					cssWidth : width + "px",
 					cssHeight : height + "px",
 					className : period._periodStyle+"_label"
 
 				});
+				fa_aria.SetElementAriaLabel(labelNode,ariaLabel);
 				period._labelNode = labelNode;
 				divNode._period = period;
 				divNode._scheduler = this;

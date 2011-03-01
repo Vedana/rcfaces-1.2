@@ -4223,6 +4223,7 @@ Dans le cas d'un mode period !
 		<attribute id="periodSelectable" type="boolean" generate="false"/>
 		<attribute id="periodToolTip" type="java.lang.String"/>
 		<attribute id="periodValue" type="java.lang.String"/>
+		<attribute id="periodType" type="java.lang.String"/>
 		
 		<attribute id="var" type="java.lang.String" />
 		

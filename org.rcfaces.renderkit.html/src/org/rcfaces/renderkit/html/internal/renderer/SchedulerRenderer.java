@@ -24,6 +24,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.lang.Time;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -566,12 +567,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
             }
             String label = ((SchedulerColumnComponent) schedulerColumnList
                     .get(i)).getText();
-            // Date dateBegin = schedulerComponent.getDateBegin(facesContext);
-            // GregorianCalendar calendar = new GregorianCalendar();
-            // calendar.setTime(dateBegin);
-            // if (label.contains("#day")){
-            // label = calendar.get(Calendar.d)
-            // }
+          
             htmlWriter.writeText(label);
             htmlWriter.endElement(IHtmlWriter.LABEL);
 
@@ -652,8 +648,9 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                             + componentCalendar.get(Calendar.MINUTE), null);
                 }
 
-                String periodStyle = schedulerComponent.getPeriodStyle();
-
+                String periodStyle = schedulerComponent.getPeriodStyle(facesContext);
+                String periodType = schedulerComponent.getPeriodType(facesContext);
+               
                 boolean selectable = schedulerComponent
                         .isPeriodSelectable(facesContext);
 
@@ -675,6 +672,10 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                 if (periodStyle != null) {
                     objectLiteralWriter.writeSymbol("_periodStyle")
                             .writeString(periodStyle);
+                }
+                if (periodType != null) {
+                    objectLiteralWriter.writeSymbol("_periodType")
+                            .writeString(periodType);
                 }
 
                 componentCalendar.setTime(periodBegin);
