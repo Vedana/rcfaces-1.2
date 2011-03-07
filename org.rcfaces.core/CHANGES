@@ -1,3 +1,9 @@
+f_popup:
+Gestion du blur décommentée
+
+scheduler:
+Ajout Aria
+
 f_dragAndDropEngine, fa_draggable, f_tree, f_grid:
 Gestion du dnd avec une selection multiple  
 

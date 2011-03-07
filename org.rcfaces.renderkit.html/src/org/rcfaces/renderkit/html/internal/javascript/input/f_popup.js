@@ -383,7 +383,7 @@ var __statics = {
 		doc.addEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);		
 		doc.addEventListener("click", f_popup._Gecko_OnClick, true);		
 		doc.addEventListener("dblclick", f_popup._Gecko_OnClick, true);		
-//		doc.addEventListener("blur", f_popup._Gecko_OnBlur, true);
+		doc.addEventListener("blur", f_popup._Gecko_OnBlur, true);
 		doc.addEventListener("focus", f_popup._Gecko_OnFocus, true);
 		doc.addEventListener("keydown", f_popup._OnKeyDownJs, true);
 		doc.addEventListener("keyup", f_popup._OnKeyUpJs, true);
@@ -646,7 +646,7 @@ var __statics = {
 	_Gecko_OnBlur: function(evt) {	
 		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
 
-/*
+/* */
 		if (!f_popup.Component) {
 			return;
 		}
@@ -656,7 +656,7 @@ var __statics = {
 		} catch (x) {
 			f_core.Error(f_popup, "exit callback throws exception", x);
 		}
-		*/	
+/*		*/	
 		return true;
 	},
 	/**
