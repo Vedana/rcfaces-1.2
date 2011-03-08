@@ -2217,7 +2217,8 @@ var __members = {
 
 		// this._initSort=undefined; // Boolean
 		// this._resizable=undefined; // Boolean
-
+		// this._sortIndexes = undefined; // String
+		
 		this.f_super(arguments);
 	},
 	f_getFocusableElement : function() {
@@ -4768,8 +4769,7 @@ var __members = {
 	},
 	/**
 	 * @method private
-	 * @param optional
-	 *            Boolean userSort
+	 * 
 	 * @return void
 	 */
 	_setSortIndexes: function() {
