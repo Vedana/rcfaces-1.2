@@ -231,8 +231,10 @@ var __members = {
 				}
 				
 				var ariaLabel = f_dateFormat.FormatDate(begin,"EEEE dd MMM yyyy")
-					+ " de "+begin.getHours()+"h" +begin.getMinutes()
-					+ " à "+end.getHours()+"h" +end.getMinutes()+" "+type ;
+					+ " "+ f_resourceBundle.Get(f_scheduler).f_get("FROM") + " "
+					+ begin.getHours()+"h" +begin.getMinutes()
+					+ " " +f_resourceBundle.Get(f_scheduler).f_get("TO") + " "
+					+end.getHours()+"h" +end.getMinutes()+" "+type ;
 				var labelNode = f_core.CreateElement(divNode2, "label", {
 					textnode : period._label, 
 					cssWidth : width + "px",
