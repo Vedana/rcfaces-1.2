@@ -2338,6 +2338,10 @@ var __members = {
 		}
 
 		this.f_setProperty(f_prop.CURSOR, cursorValue);
+		
+		if (this._sortIndexes !== undefined) {
+			this.f_setProperty(f_prop.SORT_INDEX, this._sortIndexes);	
+		}
 
 		this.f_super(arguments);
 	},
@@ -4361,6 +4365,7 @@ var __members = {
 				this._initSort = true;
 			}
 		}
+		this._setSortIndexes();
 	},
 	/**
 	 * @method public
@@ -4767,6 +4772,26 @@ var __members = {
 	 *            Boolean userSort
 	 * @return void
 	 */
+	_setSortIndexes: function() {
+		var currentSorts = this._currentSorts;
+		if (!currentSorts || !currentSorts.length) {
+			return;
+		}
+		var serial = new Array;
+
+		for ( var i = 0; i < currentSorts.length; i++) {
+			var col = currentSorts[i];
+			serial.push(col._index, col._ascendingOrder);
+		}
+
+		this._sortIndexes = serial.join(",");
+	},
+	/**
+	 * @method private
+	 * @param optional
+	 *            Boolean userSort
+	 * @return void
+	 */
 	_sortTable : function(userSort) {
 		this.f_updateSortBreadCrumbs();
 
@@ -4814,9 +4839,7 @@ var __members = {
 			serial.push(col._index, col._ascendingOrder);
 		}
 
-		serial = serial.join(",");
-
-		this.f_setProperty(f_prop.SORT_INDEX, serial);
+		this._sortIndexes = serial.join(",");
 
 		// Gestion du scroll horizontal sur FF
 		var scrollLeft = this._scrollBody.scrollLeft;
@@ -4834,7 +4857,7 @@ var __members = {
 			// Plusieurs pages !
 			// Il faut partir coté serveur !
 
-			f_core.Debug(f_grid, "_sortTable: SERVER:\nserial='" + serial
+			f_core.Debug(f_grid, "_sortTable: SERVER:\nserial='" + this._sortIndexes
 					+ "'\nrowCount=" + this._rowCount + "\nrows=" + this._rows);
 
 			this.f_setFirst(this._first);

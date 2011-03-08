@@ -47,7 +47,7 @@ var __members = {
 	        params.unknownRowCount=true;			
 		}
 
-		var orderColumnIndex=this.f_getProperty(f_prop.SORT_INDEX);
+		var orderColumnIndex=this._sortIndexes;
 		if (orderColumnIndex) {
 			params.sortIndex=orderColumnIndex;
 		}
