@@ -23,15 +23,15 @@ public class ClientDataTag extends TagSupport implements Tag {
 
     private static final long serialVersionUID = -7633749361412060360L;
 
-    private String name;
+    protected String name;
 
-    private ValueExpression value;
+    protected ValueExpression value;
 
-    public final void setName(String name) {
+    public  void setName(String name) {
         this.name = name;
     }
 
-    public final void setValue(ValueExpression value) {
+    public  void setValue(ValueExpression value) {
         this.value = value;
     }
 
@@ -61,12 +61,7 @@ public class ClientDataTag extends TagSupport implements Tag {
 
         IClientDataManager clientDataCapability = (IClientDataManager) component;
 
-        if (value.isLiteralText() == false) {
-            clientDataCapability.setClientData(name, value);
-
-        } else {
-            clientDataCapability.setClientData(name, value);
-        }
+        clientDataCapability.setClientData(name, value);
 
         return (SKIP_BODY);
 
