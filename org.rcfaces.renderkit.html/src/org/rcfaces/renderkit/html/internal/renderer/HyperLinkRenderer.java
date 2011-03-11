@@ -50,7 +50,6 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
-        writeSpecificJsAttribute(htmlWriter ,component, facesContext);
         if (disabled) {
             htmlWriter.writeDisabled();
         }
@@ -83,11 +82,6 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
 
         super.encodeEnd(writer);
     }
-
-    protected void writeSpecificJsAttribute(IHtmlWriter htmlWriter,
-			HyperLinkComponent component, FacesContext facesContext) throws WriterException {
-		// overide this method to add more attribute
-	}
 
 	/*
      * (non-Javadoc)

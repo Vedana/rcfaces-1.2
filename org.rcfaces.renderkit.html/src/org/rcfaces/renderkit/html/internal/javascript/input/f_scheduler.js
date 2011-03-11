@@ -382,7 +382,7 @@ var __members = {
 	 */
 	fa_setElementSelected:  function(divNode, selected) {
 		divNode._selected = selected;
-		fa_aria.SetElementAriaSelected(divNode, selected);
+		//fa_aria.SetElementAriaSelected(divNode, selected);
 	},
 	
 	/**
