@@ -646,7 +646,7 @@ var __statics = {
 	_Gecko_OnBlur: function(evt) {	
 		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
 
-/* */
+/* 
 		if (!f_popup.Component) {
 			return;
 		}
@@ -656,7 +656,7 @@ var __statics = {
 		} catch (x) {
 			f_core.Error(f_popup, "exit callback throws exception", x);
 		}
-/*		*/	
+		*/	
 		return true;
 	},
 	/**
