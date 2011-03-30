@@ -1,3 +1,6 @@
+AbstractImageButtonFamillyDecorator:
+input.tabIndex=-1 si disabled
+
 f_grid:
 transformation de la property SORT_INDEX en attribut pour la bonne gestion du tri lorsqu'il est initialisé sur le serveur
 

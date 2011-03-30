@@ -431,9 +431,11 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
     private void writeInputAttributes(IHtmlWriter writer)
             throws WriterException {
-		 if (tabIndex != null) {
-		     writer.writeTabIndex(tabIndex.intValue());
-		 }
+    	if (disabled) {
+    		writer.writeTabIndex(-1);
+    	} else if (tabIndex != null) {
+    		writer.writeTabIndex(tabIndex.intValue());
+    	}
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
