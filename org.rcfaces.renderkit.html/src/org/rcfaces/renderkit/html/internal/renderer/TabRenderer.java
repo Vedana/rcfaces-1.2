@@ -26,6 +26,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -55,7 +56,7 @@ public class TabRenderer extends CardRenderer implements
 
         if (CardBoxRenderer.isCardBoxJSF12_Generation(htmlRenderContext)) {
 
-            htmlWriter.writeAttribute("v:tabbedPaneId", tab.getTabbedPane()
+            htmlWriter.writeAttributeNS("tabbedPaneId", tab.getTabbedPane()
                     .getClientId(facesContext));
 
             Object value = tab.getValue();
@@ -68,27 +69,27 @@ public class TabRenderer extends CardRenderer implements
             }
 
             if (clientValue != null) {
-                htmlWriter.writeAttribute("v:value", clientValue);
+                htmlWriter.writeAttributeNS("value", clientValue);
             }
 
             if (isCardSelected(tab)) {
-                htmlWriter.writeAttribute("v:selected", true);
+                htmlWriter.writeAttributeNS("selected", true);
             }
 
             String text = tab.getText(facesContext);
             if (text != null) {
                 text = ParamUtils.formatMessage(tab, text);
 
-                htmlWriter.writeAttribute("v:text", text);
+                htmlWriter.writeAttributeNS("text", text);
             }
 
             String accessKey = tab.getAccessKey(facesContext);
             if (accessKey != null) {
-                htmlWriter.writeAttribute("v:accessKey", accessKey);
+                htmlWriter.writeAttributeNS("accessKey", accessKey);
             }
 
             if (tab.isDisabled(facesContext)) {
-                htmlWriter.writeAttribute("v:disabled", true);
+                htmlWriter.writeAttributeNS("disabled", true);
             }
 
             IContentAccessors contentAccessors = tab
@@ -101,7 +102,7 @@ public class TabRenderer extends CardRenderer implements
                         .getImageAccessor();
 
                 if (contentAccessor != null) {
-                    htmlWriter.writeURIAttribute("v:imageURL", contentAccessor
+                    htmlWriter.writeURIAttributeNS("imageURL", contentAccessor
                             .resolveURL(facesContext, null, null));
                 }
 
@@ -111,7 +112,7 @@ public class TabRenderer extends CardRenderer implements
                     contentAccessor = statesImageAccessors
                             .getDisabledImageAccessor();
                     if (contentAccessor != null) {
-                        htmlWriter.writeURIAttribute("v:disabledImageURL",
+                        htmlWriter.writeURIAttributeNS("disabledImageURL",
                                 contentAccessor.resolveURL(facesContext, null,
                                         null));
                     }
@@ -119,7 +120,7 @@ public class TabRenderer extends CardRenderer implements
                     contentAccessor = statesImageAccessors
                             .getHoverImageAccessor();
                     if (contentAccessor != null) {
-                        htmlWriter.writeURIAttribute("v:hoverImageURL",
+                        htmlWriter.writeURIAttributeNS("hoverImageURL",
                                 contentAccessor.resolveURL(facesContext, null,
                                         null));
                     }
@@ -127,7 +128,7 @@ public class TabRenderer extends CardRenderer implements
                     contentAccessor = statesImageAccessors
                             .getSelectedImageAccessor();
                     if (contentAccessor != null) {
-                        htmlWriter.writeURIAttribute("v:selectedImageURL",
+                        htmlWriter.writeURIAttributeNS("selectedImageURL",
                                 contentAccessor.resolveURL(facesContext, null,
                                         null));
                     }
@@ -294,5 +295,14 @@ public class TabRenderer extends CardRenderer implements
     public String computeSubInputClientId(IRenderContext renderContext,
             UIComponent component, String clientId) {
         return clientId + INPUT_ID_SUFFIX;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "tabbedPaneId",
+                "value", "selected", "text", "accessKey", "disabled",
+                "imageURL", "disabledImageURL", "hoverImageURL",
+                "selectedImageURL" });
     }
 }

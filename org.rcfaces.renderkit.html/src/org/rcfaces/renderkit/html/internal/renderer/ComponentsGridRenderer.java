@@ -67,6 +67,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.service.ComponentsGridService;
 import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
 
@@ -132,7 +133,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                     .getInstance(htmlWriter.getComponentRenderContext()
                             .getFacesContext());
             if (componentsGridServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", true);
+                htmlWriter.writeAttributeNS("asyncRender", true);
             }
 
             /* Si le tableau n'est pas visible ! */
@@ -143,7 +144,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             if (interactiveComponentClientId != null) {
                 // Pas de donn�es si nous sommes dans un scope interactif !
-                htmlWriter.writeAttribute("v:interactiveShow",
+                htmlWriter.writeAttributeNS("interactiveShow",
                         interactiveComponentClientId);
 
                 ((ComponentsGridRenderContext) tableContext)
@@ -154,7 +155,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         if (dg instanceof ComponentsGridComponent) {
             if (((ComponentsGridComponent) dg).isCellTextWrap(htmlWriter
                     .getComponentRenderContext().getFacesContext())) {
-                htmlWriter.writeAttribute("v:cellTextWrap", true);
+                htmlWriter.writeAttributeNS("cellTextWrap", true);
             }
         }
 
@@ -172,7 +173,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             }
 
             if (clientShowValue != null) {
-                htmlWriter.writeAttribute("v:showValue", clientShowValue);
+                htmlWriter.writeAttributeNS("showValue", clientShowValue);
             }
         }
     }
@@ -707,17 +708,17 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         htmlWriter.startElement(IHtmlWriter.TR);
 
         if (rowValue != null) {
-            htmlWriter.writeAttribute("v:rowValue", rowValue);
+            htmlWriter.writeAttributeNS("rowValue", rowValue);
         }
 
-        htmlWriter.writeAttribute("v:rowIndex", rowIndex);
+        htmlWriter.writeAttributeNS("rowIndex", rowIndex);
 
         htmlWriter.writeClass(rowClassName);
 
         htmlWriter.writeId(computeRowId(htmlWriter));
 
         if (selected && writeSelected) {
-            htmlWriter.writeAttribute("v:selected", true);
+            htmlWriter.writeAttributeNS("selected", true);
         }
 
         UIColumn columns[] = gridRenderContext.listColumns();
@@ -770,7 +771,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 if (csc != null) {
                     styleClass = csc;
 
-                    htmlWriter.writeAttribute("v:className", csc);
+                    htmlWriter.writeAttributeNS("className", csc);
                 }
             }
 
@@ -1194,5 +1195,13 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
     protected String getWAIRole() {
         return null;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "asyncRender",
+                "interactiveShow", "cellTextWrap", "showValue", "rowValue",
+                "rowIndex", "selected", "className" });
     }
 }

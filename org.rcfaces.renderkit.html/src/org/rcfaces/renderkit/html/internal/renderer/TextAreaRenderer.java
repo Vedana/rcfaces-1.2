@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractInputRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -104,7 +105,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
 
         int maxTextLength = textAreaComponent.getMaxTextLength(facesContext);
         if (maxTextLength > 0) {
-            htmlWriter.writeAttribute("v:maxTextLength", maxTextLength);
+            htmlWriter.writeAttributeNS("maxTextLength", maxTextLength);
 
             // htmlWriter.enableJavaScript(); Bof bof ... on peut le faire à la
             // génération ?
@@ -113,7 +114,7 @@ public class TextAreaRenderer extends AbstractInputRenderer {
         }
 
         if (textAreaComponent.isIgnoreWhenFull(facesContext)) {
-            htmlWriter.writeAttribute("v:ignoreWhenFull", true);
+            htmlWriter.writeAttributeNS("ignoreWhenFull", true);
         }
     }
 
@@ -174,5 +175,12 @@ public class TextAreaRenderer extends AbstractInputRenderer {
                 && textAreaComponent.isValueLocked(facesContext) == false) {
             textAreaComponent.setSubmittedExternalValue(newValue);
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "maxTextLength",
+                "ignoreWhenFull" });
     }
 }

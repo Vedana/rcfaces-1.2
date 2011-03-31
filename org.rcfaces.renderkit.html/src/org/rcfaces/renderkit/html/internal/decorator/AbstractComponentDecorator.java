@@ -16,13 +16,16 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceContributor;
 
 /**
  * 
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class AbstractComponentDecorator implements IComponentDecorator {
+public class AbstractComponentDecorator implements IComponentDecorator,
+        INamespaceContributor {
     private static final String REVISION = "$Revision$";
 
     private IComponentDecorator subWriter;
@@ -61,8 +64,8 @@ public class AbstractComponentDecorator implements IComponentDecorator {
                     subWriterDefaultUnlockedProperties = defaultUnlockedProperties;
 
                 } else {
-                    Set set = new HashSet(Arrays
-                            .asList(defaultUnlockedProperties));
+                    Set set = new HashSet(
+                            Arrays.asList(defaultUnlockedProperties));
                     set.addAll(Arrays
                             .asList(subWriterDefaultUnlockedProperties));
 
@@ -112,6 +115,10 @@ public class AbstractComponentDecorator implements IComponentDecorator {
         }
 
         this.subWriter = writer;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+
     }
 
 }

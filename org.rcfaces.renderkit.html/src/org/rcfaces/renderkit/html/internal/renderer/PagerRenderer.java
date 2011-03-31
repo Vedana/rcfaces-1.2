@@ -14,6 +14,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -53,7 +54,7 @@ public class PagerRenderer extends AbstractCssRenderer {
                     null, pagerComponent);
         }
 
-        htmlWriter.writeAttribute("v:for", forValue);
+        htmlWriter.writeAttributeNS("for", forValue);
 
         writePagerMessage(htmlWriter, pagerComponent);
 
@@ -62,11 +63,18 @@ public class PagerRenderer extends AbstractCssRenderer {
             noPagedMessage = ParamUtils.formatMessage(pagerComponent,
                     noPagedMessage);
 
-            htmlWriter.writeAttribute("v:noPagedMessage", noPagedMessage);
+            htmlWriter.writeAttributeNS("noPagedMessage", noPagedMessage);
         }
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "for",
+                "noPagedMessage" });
     }
 }

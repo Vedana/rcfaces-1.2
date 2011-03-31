@@ -112,6 +112,7 @@ import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 
 /**
@@ -572,27 +573,27 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 cardinality = IAdditionalInformationCardinalityCapability.DEFAULT_CARDINALITY;
             }
 
-            htmlWriter.writeAttribute("v:additionalInformationCardinality",
+            htmlWriter.writeAttributeNS("additionalInformationCardinality",
                     cardinality);
 
             int cfs = gridRenderContext.getClientAdditionalFullState();
             if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
-                htmlWriter.writeAttribute("v:clientAdditionalFullState", cfs);
+                htmlWriter.writeAttributeNS("clientAdditionalFullState", cfs);
             }
         }
 
         if (gridRenderContext.isSelectable()) {
-            htmlWriter.writeAttribute("v:selectionCardinality",
+            htmlWriter.writeAttributeNS("selectionCardinality",
                     gridRenderContext.getSelectionCardinality());
 
             int cfs = gridRenderContext.getClientSelectionFullState();
             if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", cfs);
+                htmlWriter.writeAttributeNS("clientSelectionFullState", cfs);
             }
         }
 
         if (gridRenderContext.isCheckable()) {
-            htmlWriter.writeAttribute("v:checkCardinality",
+            htmlWriter.writeAttributeNS("checkCardinality",
                     gridRenderContext.getCheckCardinality());
 
             if (gridRenderContext.getCheckCardinality() == ICardinality.ONEMANY_CARDINALITY) {
@@ -600,19 +601,19 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                         .getCheckedValuesCount();
 
                 if (checkedCount > 0) {
-                    htmlWriter.writeAttribute("v:checkedCount", checkedCount);
+                    htmlWriter.writeAttributeNS("checkedCount", checkedCount);
                 }
             }
 
             int cfs = gridRenderContext.getClientCheckFullState();
             if (cfs != IClientFullStateCapability.DEFAULT_CLIENT_FULL_STATE) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", cfs);
+                htmlWriter.writeAttributeNS("clientCheckFullState", cfs);
             }
         }
 
         if (gridComponent instanceof IReadOnlyCapability) {
             if (((IReadOnlyCapability) gridComponent).isReadOnly()) {
-                htmlWriter.writeAttribute("v:readOnly", true);
+                htmlWriter.writeAttributeNS("readOnly", true);
             }
         }
 
@@ -625,44 +626,45 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 emptyDataMessage = ParamUtils.formatMessage(
                         (UIComponent) gridComponent, emptyDataMessage);
 
-                htmlWriter.writeAttribute("v:emptyDataMessage",
+                htmlWriter.writeAttributeNS("emptyDataMessage",
                         emptyDataMessage);
             }
         }
 
         if (gridRenderContext.isDisabled()) {
-            htmlWriter.writeAttribute("v:disabled", true);
+            htmlWriter.writeAttributeNS("disabled", true);
         }
 
         if (gridComponent instanceof IRequiredCapability) {
             if (((IRequiredCapability) gridComponent).isRequired()) {
-                htmlWriter.writeAttribute("v:required", true);
+                htmlWriter.writeAttributeNS("required", true);
             }
         }
-        
+
         boolean wheelSelection = gridRenderContext.isWheelSelection();
         if (wheelSelection == false) {
-        	htmlWriter.writeAttribute("v:wheelSelection", wheelSelection);
+            htmlWriter.writeAttributeNS("wheelSelection", wheelSelection);
         }
 
         String alertLoadingMessage = gridRenderContext.getAlertLoadingMessage();
         if (alertLoadingMessage != null) {
-        	htmlWriter.writeAttribute("v:alertLoadingMessage", alertLoadingMessage);
+            htmlWriter.writeAttributeNS("alertLoadingMessage",
+                    alertLoadingMessage);
         }
 
         boolean headerVisible = gridRenderContext.isHeaderVisible();
         if (headerVisible == false) {
-            htmlWriter.writeAttribute("v:headerVisible", false);
+            htmlWriter.writeAttributeNS("headerVisible", false);
         }
 
         String sortManager = gridRenderContext.getSortManager();
         if (sortManager != null) {
-            htmlWriter.writeAttribute("v:sortManager", sortManager);
+            htmlWriter.writeAttributeNS("sortManager", sortManager);
         }
 
         Object dataModel = gridRenderContext.getDataModel();
         if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttribute("v:filtred", true);
+            htmlWriter.writeAttributeNS("filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
@@ -670,25 +672,25 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                         filterMap, componentRenderContext.getRenderContext()
                                 .getProcessContext(), componentRenderContext
                                 .getComponent());
-                htmlWriter.writeAttribute("v:filterExpression",
+                htmlWriter.writeAttributeNS("filterExpression",
                         filterExpression);
             }
         }
 
         int rows = gridRenderContext.getRows();
         if (rows > 0) {
-            htmlWriter.writeAttribute("v:rows", rows);
+            htmlWriter.writeAttributeNS("rows", rows);
         }
 
         int rowCount = gridRenderContext.getRowCount();
         if (rowCount >= 0) {
-            htmlWriter.writeAttribute("v:rowCount", rowCount);
+            htmlWriter.writeAttributeNS("rowCount", rowCount);
         }
 
         int first = gridRenderContext.getFirst();
         if (first > 0) {
             if (rowCount < 0 || first <= rowCount) {
-                htmlWriter.writeAttribute("v:first", first);
+                htmlWriter.writeAttributeNS("first", first);
             } else {
                 // reset First to 0 if rowCount is smaller than first
                 gridRenderContext.resetFirst();
@@ -696,7 +698,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         if (gridRenderContext.isPaged() == false) {
-            htmlWriter.writeAttribute("v:paged", false);
+            htmlWriter.writeAttributeNS("paged", false);
         }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
@@ -713,11 +715,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 sa.append(token);
             }
 
-            htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
+            htmlWriter.writeAttributeNS("rowStyleClass", sa.toString());
         }
 
         if (getSortPadding() != SORT_PADDING) {
-            htmlWriter.writeAttribute("v:sortPadding", getSortPadding());
+            htmlWriter.writeAttributeNS("sortPadding", getSortPadding());
         }
 
         if (gridRenderContext.isDraggable()) {
@@ -728,14 +730,14 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (dragEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
                 dragEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
-            htmlWriter.writeAttribute("v:dragEffects", dragEffects);
+            htmlWriter.writeAttributeNS("dragEffects", dragEffects);
 
             String dragTypes[] = draggableCapability.getDragTypes();
             if (dragTypes != null && dragTypes.length > 0) {
-                htmlWriter.writeAttribute("v:dragTypes",
+                htmlWriter.writeAttributeNS("dragTypes",
                         HtmlTools.serializeDnDTypes(dragTypes));
             } else {
-                htmlWriter.writeAttribute("v:dragTypes", "x-RCFaces/row");
+                htmlWriter.writeAttributeNS("dragTypes", "x-RCFaces/row");
             }
         }
 
@@ -747,19 +749,19 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             if (dropEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
                 dropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
-            htmlWriter.writeAttribute("v:dropEffects", dropEffects);
+            htmlWriter.writeAttributeNS("dropEffects", dropEffects);
 
             String dropTypes[] = droppableCapability.getDropTypes();
             if (dropTypes != null && dropTypes.length > 0) {
-                htmlWriter.writeAttribute("v:dropTypes",
+                htmlWriter.writeAttributeNS("dropTypes",
                         HtmlTools.serializeDnDTypes(dropTypes));
             } else {
-                htmlWriter.writeAttribute("v:dropTypes", "x-RCFaces/row");
+                htmlWriter.writeAttributeNS("dropTypes", "x-RCFaces/row");
             }
 
             if (gridComponent instanceof IDroppableGridComponent) {
                 if (((IDroppableGridComponent) gridComponent).isBodyDroppable()) {
-                    htmlWriter.writeAttribute("v:bodyDroppable", true);
+                    htmlWriter.writeAttributeNS("bodyDroppable", true);
                 }
             }
         }
@@ -802,16 +804,16 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         int totalResize = gridRenderContext.getColumnWidthTotalSize();
 
         if (resizable) {
-            htmlWriter.writeAttribute("v:resizable", true);
+            htmlWriter.writeAttributeNS("resizable", true);
         }
 
         if (gridRenderContext.hasScrollBars() == false) {
-            htmlWriter.writeAttribute("v:sb", false);
+            htmlWriter.writeAttributeNS("sb", false);
         }
 
         if (serverTitleGeneration() == false) {
             htmlWriter
-                    .writeAttribute("v:sb", gridRenderContext.hasScrollBars());
+                    .writeAttributeNS("sb", gridRenderContext.hasScrollBars());
             return;
         }
 
@@ -939,7 +941,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             ITabIndexCapability tic = (ITabIndexCapability) dg;
             Integer tabIndex = tic.getTabIndex();
             if (tabIndex != null) {
-                htmlWriter.writeAttribute("v:tabIndex", tabIndex.intValue());
+                htmlWriter.writeAttributeNS("tabIndex", tabIndex.intValue());
             }
         }
 
@@ -2394,4 +2396,22 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         // Do nothing : check the v:tabIndex attribute
         return writer;
     }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] {
+                "additionalInformationCardinality",
+                "clientAdditionalFullState", "selectionCardinality",
+                "clientSelectionFullState", "checkCardinality", "checkedCount",
+                "clientCheckFullState", "readOnly", "emptyDataMessage",
+                "disabled", "required", "wheelSelection",
+                "alertLoadingMessage", "headerVisible", "sortManager",
+                "filtred", "filterExpression", "rows", "rowCount", "first",
+                "paged", "rowStyleClass", "sortPadding", "dragEffects",
+                "dragTypes", "dragTypes", "dropEffects", "dropTypes",
+                "dropTypes", "bodyDroppable", "resizable", "sb", "sb",
+                "tabIndex" });
+    }
+
 }

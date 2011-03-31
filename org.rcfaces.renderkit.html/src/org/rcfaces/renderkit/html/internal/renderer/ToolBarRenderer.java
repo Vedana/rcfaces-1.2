@@ -23,6 +23,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -68,7 +69,7 @@ public class ToolBarRenderer extends AbstractCssRenderer {
         }
 
         if (toolBarComponent.isLocked(facesContext)) {
-            htmlWriter.writeAttribute("v:locked", true);
+            htmlWriter.writeAttributeNS("locked", true);
         }
     }
 
@@ -139,5 +140,11 @@ public class ToolBarRenderer extends AbstractCssRenderer {
 
     public boolean getDecodesChildren() {
         return true;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "locked" });
     }
 }

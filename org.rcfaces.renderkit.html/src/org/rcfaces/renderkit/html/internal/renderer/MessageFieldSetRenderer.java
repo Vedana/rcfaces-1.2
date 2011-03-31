@@ -11,6 +11,7 @@ import org.rcfaces.core.internal.component.ISeverityImageAccessors;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -40,14 +41,15 @@ public class MessageFieldSetRenderer extends FieldSetRenderer {
 
         String forValue = messageFieldSetComponent.getFor(facesContext);
         if (forValue != null) {
-            htmlWriter.writeAttribute("v:for", forValue);
+            htmlWriter.writeAttributeNS("for", forValue);
         }
 
         if (messageFieldSetComponent.isShowActiveComponentMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
+            htmlWriter.writeAttributeNS("showActiveComponentMessage", true);
         }
 
-        htmlWriter.getJavaScriptEnableMode().enableOnMessage(); // Pour les messages
+        htmlWriter.getJavaScriptEnableMode().enableOnMessage(); // Pour les
+                                                                // messages
     }
 
     /*
@@ -57,4 +59,10 @@ public class MessageFieldSetRenderer extends FieldSetRenderer {
      * JavaScriptTools.writeFirstMessage(js); }
      */
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "for",
+                "showActiveComponentMessage" });
+    }
 }

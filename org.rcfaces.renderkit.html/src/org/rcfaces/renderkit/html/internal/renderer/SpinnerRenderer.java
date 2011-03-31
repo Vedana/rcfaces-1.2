@@ -16,6 +16,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -217,32 +218,32 @@ public class SpinnerRenderer extends TextEntryRenderer implements
         if (spinnerComponent.isMinimumSetted()) {
             double minimum = spinnerComponent.getMinimum(facesContext);
 
-            htmlWriter.writeAttribute("v:minimum", String.valueOf(minimum));
+            htmlWriter.writeAttributeNS("minimum", String.valueOf(minimum));
         }
 
         if (spinnerComponent.isMaximumSetted()) {
             double maximum = spinnerComponent.getMaximum(facesContext);
 
-            htmlWriter.writeAttribute("v:maximum", String.valueOf(maximum));
+            htmlWriter.writeAttributeNS("maximum", String.valueOf(maximum));
         }
 
         /*
          * if (spinnerComponent.isDefaultValueSetted()) { double defaultValue =
          * spinnerComponent.getDefaultValue(facesContext);
          * 
-         * htmlWriter.writeAttribute("v:maximum", String.valueOf(maximum)); }
+         * htmlWriter.writeAttributeNS("maximum", String.valueOf(maximum)); }
          */
 
         if (spinnerComponent.isStepSetted()) {
             String step = spinnerComponent.getStep(facesContext);
 
             if (step != null && step.length() > 0) {
-                htmlWriter.writeAttribute("v:step", step);
+                htmlWriter.writeAttributeNS("step", step);
             }
         }
 
         if (spinnerComponent.isCycleValue(facesContext)) {
-            htmlWriter.writeAttribute("v:cycle", true);
+            htmlWriter.writeAttributeNS("cycle", true);
 
         }
     }
@@ -254,5 +255,12 @@ public class SpinnerRenderer extends TextEntryRenderer implements
     public String computeSubInputClientId(IRenderContext renderContext,
             UIComponent component, String clientId) {
         return clientId + INPUT_ID_SUFFIX;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "minimum",
+                "maximum", "maximum", "step", "cycle" });
     }
 }

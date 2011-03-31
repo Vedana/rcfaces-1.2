@@ -37,6 +37,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
 
 /**
@@ -84,7 +85,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
             ComponentsListService componentsListServer = ComponentsListService
                     .getInstance(facesContext);
             if (componentsListServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", true);
+                htmlWriter.writeAttributeNS("asyncRender", true);
             }
 
             /* Si le tableau n'est pas visible ! */
@@ -95,7 +96,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
             if (interactiveComponentClientId != null) {
                 // Pas de donn�es si nous sommes dans un scope interactif !
-                htmlWriter.writeAttribute("v:interactiveShow",
+                htmlWriter.writeAttributeNS("interactiveShow",
                         interactiveComponentClientId);
 
                 listContext.setInteractiveShow(true);
@@ -104,28 +105,28 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
 
         /*
          * if (listContext.getDataModel() instanceof IFiltredDataModel) {
-         * htmlWriter.writeAttribute("v:filtred", "true");
+         * htmlWriter.writeAttributeNS("filtred", "true");
          * 
          * IFilterProperties filterMap = listContext.getFiltersMap(); if
          * (filterMap != null && filterMap.isEmpty() == false) { String
          * filterExpression = HtmlTools .encodeFilterExpression(filterMap);
-         * htmlWriter.writeAttribute("v:filterExpression", filterExpression); }
+         * htmlWriter.writeAttributeNS("filterExpression", filterExpression); }
          * }
          */
 
         int rows = listContext.getRows();
         if (rows > 0) {
-            htmlWriter.writeAttribute("v:rows", rows);
+            htmlWriter.writeAttributeNS("rows", rows);
         }
 
         int rowCount = listContext.getRowCount();
         if (rowCount >= 0) {
-            htmlWriter.writeAttribute("v:rowCount", rowCount);
+            htmlWriter.writeAttributeNS("rowCount", rowCount);
         }
 
         int first = listContext.getFirst();
         if (first > 0) {
-            htmlWriter.writeAttribute("v:first", first);
+            htmlWriter.writeAttributeNS("first", first);
         }
 
         htmlWriter.startElement(IHtmlWriter.TABLE);
@@ -300,7 +301,7 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
                         htmlWriter.writeId(rowId);
                     }
 
-                    htmlWriter.writeAttribute("v:nc", true);
+                    htmlWriter.writeAttributeNS("nc", true);
 
                     if (rowClasses.length > 0) {
                         int rs = (processed / columnNumber) % rowClasses.length;
@@ -654,5 +655,13 @@ public class ComponentsListRenderer extends AbstractCssRenderer {
             javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.COMPONENTS_LIST, "ajax");
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "asyncRender",
+                "interactiveShow", "filtred", "filterExpression", "rows",
+                "rowCount", "first", "nc" });
     }
 }

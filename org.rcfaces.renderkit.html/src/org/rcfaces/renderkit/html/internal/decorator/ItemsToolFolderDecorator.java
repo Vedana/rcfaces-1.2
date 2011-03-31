@@ -85,6 +85,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
 
 /**
@@ -276,8 +277,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     .writeObjectLiteral(false);
 
             Object siValue = selectItem.getValue();
-            String selectItemValue = convertItemValue(javaScriptWriter
-                    .getHtmlComponentRenderContext(), siValue);
+            String selectItemValue = convertItemValue(
+                    javaScriptWriter.getHtmlComponentRenderContext(), siValue);
 
             if (selectItemValue == null) {
                 throw new FacesException(
@@ -365,8 +366,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
                     .getJavaScriptRenderContext().allocateVarName();
 
             javaScriptWriter.write("var ").write(componentVarName).write('=')
-                    .writeMethodCall("f_getItemComponent").write(
-                            selectItemVarName).writeln(");");
+                    .writeMethodCall("f_getItemComponent")
+                    .write(selectItemVarName).writeln(");");
 
             menuDecorator = pushMenuDecorator(componentVarName, itemId,
                     javaScriptWriter);
@@ -416,7 +417,7 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
         }
         htmlWriter.writeClass(sa.toString());
 
-        htmlWriter.writeAttribute("v:separator", true);
+        htmlWriter.writeAttributeNS("separator", true);
 
         allocateItemSeparator();
 
@@ -918,8 +919,8 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
 
         String parentVarId = getToolBarContext().peekVarId();
 
-        javaScriptWriter.writeMethodCall("f_appendSeparatorItem").write(
-                parentVarId).writeln(");");
+        javaScriptWriter.writeMethodCall("f_appendSeparatorItem")
+                .write(parentVarId).writeln(");");
     }
 
     protected SelectItem createSelectItem(UISelectItem component) {
@@ -1110,5 +1111,11 @@ public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
     public ItemsMenuDecorator peekMenuDecorator() {
         return (ItemsMenuDecorator) menuDecoratorStack.get(menuDecoratorStack
                 .size() - 1);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "separator" });
     }
 }

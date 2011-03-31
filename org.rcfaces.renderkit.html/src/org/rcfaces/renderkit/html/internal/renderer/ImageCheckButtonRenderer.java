@@ -15,6 +15,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -83,7 +84,13 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
             if (isSelected((ISelectedCapability) imageButtonFamilly) == false) {
                 return;
             }
-            writer.writeAttribute("v:selected", true);
+            writer.writeAttributeNS("selected", true);
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "selected" });
     }
 }

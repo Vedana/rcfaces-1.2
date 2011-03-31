@@ -77,6 +77,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.service.DataGridService;
 
 /**
@@ -1448,7 +1449,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         if (dg instanceof DataGridComponent) {
             if (((DataGridComponent) dg).isCellTextWrap(facesContext)) {
-                htmlWriter.writeAttribute("v:cellTextWrap", true);
+                htmlWriter.writeAttributeNS("cellTextWrap", true);
             }
         }
 
@@ -1456,7 +1457,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             DataGridService dataGridServer = DataGridService
                     .getInstance(facesContext);
             if (dataGridServer != null) {
-                htmlWriter.writeAttribute("v:asyncRender", true);
+                htmlWriter.writeAttributeNS("asyncRender", true);
             }
         }
 
@@ -1475,7 +1476,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
 
             if (clientCursorValue != null) {
-                htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
+                htmlWriter.writeAttributeNS("cursorValue", clientCursorValue);
             }
 
         }
@@ -1498,7 +1499,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
             }
 
             if (clientShowValue != null) {
-                htmlWriter.writeAttribute("v:showValue", clientShowValue);
+                htmlWriter.writeAttributeNS("showValue", clientShowValue);
             }
         }
 
@@ -1507,7 +1508,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                     .getRowLabelColumnId(facesContext);
 
             if (columnId != null) {
-                htmlWriter.writeAttribute("v:rowLabelColumnId", columnId);
+                htmlWriter.writeAttributeNS("rowLabelColumnId", columnId);
             }
         }
     }
@@ -1777,6 +1778,15 @@ public class DataGridRenderer extends AbstractGridRenderer {
         }
 
         return super.decodeEventObject(requestContext, component, eventData);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties
+                .addAttributes(null, new String[] { "cellTextWrap",
+                        "asyncRender", "cursorValue", "showValue",
+                        "rowLabelColumnId" });
     }
 
 }

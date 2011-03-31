@@ -28,6 +28,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRequestContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -67,7 +68,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         writeValidatorParameters(htmlWriter, radioButton);
 
         if (radioButton.isRequired()) {
-            htmlWriter.writeAttribute("v:required", true);
+            htmlWriter.writeAttributeNS("required", true);
 
             htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
         }
@@ -136,7 +137,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         /*
          * On se base sur le separator ! if (htmlWriter.isJavaScriptEnabled() ==
          * false) { // Pour le FOCUS, pour retrouver le composant parent !
-         * htmlWriter.writeAttribute("v:container", componentClientId); }
+         * htmlWriter.writeAttributeNS("container", componentClientId); }
          */
 
         String accessKey = radioButtonComponent.getAccessKey(facesContext);
@@ -155,8 +156,7 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
                 htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
                 String name = htmlWriter.getComponentRenderContext()
-                        .getComponentClientId()
-                        + "::value";
+                        .getComponentClientId() + "::value";
                 htmlWriter.writeName(name);
 
                 htmlWriter.writeValue(svalue);
@@ -339,5 +339,12 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
     public String computeSubInputClientId(IRenderContext renderContext,
             UIComponent component, String clientId) {
         return clientId + INPUT_ID_SUFFIX;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "required",
+                "container" });
     }
 }

@@ -19,6 +19,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * Renderer du composant <u:submitWait>
@@ -50,13 +51,13 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
         /*
          * String backgroundMode = component.getBackgroundMode(facesContext); if
          * (backgroundMode != null) {
-         * htmlWriter.writeAttribute("v:backgroundMode", backgroundMode); }
+         * htmlWriter.writeAttributeNS("backgroundMode", backgroundMode); }
          */
 
         if (htmlWriter.getHtmlComponentRenderContext().getHtmlRenderContext()
                 .getJavaScriptRenderContext().isCollectorMode() == false) {
 
-            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            htmlWriter.startElementNS(LAZY_INIT_TAG);
             writeHtmlAttributes(htmlWriter);
             writeJavaScriptAttributes(htmlWriter);
 
@@ -94,16 +95,16 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
                 String imageSrc = imageAccessor.resolveURL(facesContext, null,
                         null);
                 if (imageSrc != null) {
-                    htmlWriter.writeURIAttribute("v:imageURL", imageSrc);
+                    htmlWriter.writeURIAttributeNS("imageURL", imageSrc);
                 }
             }
 
             if (width != null) {
-                htmlWriter.writeAttribute("v:width", width);
+                htmlWriter.writeAttributeNS("width", width);
             }
 
             if (height != null) {
-                htmlWriter.writeAttribute("v:height", height);
+                htmlWriter.writeAttributeNS("height", height);
             }
 
             String text = submitWaitComponent.getText(facesContext);
@@ -111,10 +112,10 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
                 text = getDefaultText(htmlComponentRenderContext);
             }
             if (text != null) {
-                htmlWriter.writeAttribute("v:text", text);
+                htmlWriter.writeAttributeNS("text", text);
             }
 
-            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            htmlWriter.endElementNS(LAZY_INIT_TAG);
 
             declareLazyJavaScriptRenderer(htmlWriter);
 
@@ -270,6 +271,15 @@ public class SubmitWaitRenderer extends AbstractJavaScriptRenderer {
     protected boolean sendCompleteComponent(
             IHtmlComponentRenderContext htmlComponentContext) {
         return false;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addComponent(LAZY_INIT_TAG);
+
+        nameSpaceProperties.addAttributes(null, new String[] {
+                "backgroundMode", "imageURL", "width", "height", "text" });
     }
 
 }

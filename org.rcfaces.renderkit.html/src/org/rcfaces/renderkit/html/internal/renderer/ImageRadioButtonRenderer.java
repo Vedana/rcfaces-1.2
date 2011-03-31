@@ -19,6 +19,7 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -105,7 +106,7 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
                         .getHtmlProcessContext(),
                         (UIComponent) imageButtonFamilly, groupName);
 
-                writer.writeAttribute("v:groupName", groupName);
+                writer.writeAttributeNS("groupName", groupName);
             }
         }
 
@@ -113,5 +114,11 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
             return ImageRadioButtonRenderer.this.isSelected(
                     (ImageRadioButtonComponent) imageButtonFamilly, null);
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "groupName" });
     }
 }

@@ -33,6 +33,7 @@ import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.renderkit.html.internal.decorator.CalendarDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -90,34 +91,34 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
                 sb.setLength(0);
                 HtmlTools.formatDate(maxDate, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:maxDate", sb.toString());
+                htmlWriter.writeAttributeNS("maxDate", sb.toString());
             }
 
             if (minDate != null) {
                 sb.setLength(0);
                 HtmlTools.formatDate(minDate, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:minDate", sb.toString());
+                htmlWriter.writeAttributeNS("minDate", sb.toString());
             }
 
             if (cursorDate != null) {
                 sb.setLength(0);
                 HtmlTools.formatDate(cursorDate, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:cursorDate", sb.toString());
+                htmlWriter.writeAttributeNS("cursorDate", sb.toString());
             }
 
             if (twoDigitYearStart != null) {
                 sb.setLength(0);
                 HtmlTools.formatDate(twoDigitYearStart, sb, processContext,
                         calendarComponent, true);
-                htmlWriter.writeAttribute("v:twoDigitYearStart", sb.toString());
+                htmlWriter.writeAttributeNS("twoDigitYearStart", sb.toString());
             }
         }
 
         int wdays = calendarComponent.getDisabledWeekDays(facesContext);
         if (wdays > 0) {
-            htmlWriter.writeAttribute("v:disabledWeekDays", wdays);
+            htmlWriter.writeAttributeNS("disabledWeekDays", wdays);
         }
 
         int clientDatesStrategy = calendarComponent
@@ -125,7 +126,7 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
         if (clientDatesStrategy == IClientDatesStrategyCapability.MONTH_DATES_STRATEGY
                 || clientDatesStrategy == IClientDatesStrategyCapability.YEAR_DATES_STRATEGY) {
 
-            htmlWriter.writeAttribute("v:clientDatesStrategy",
+            htmlWriter.writeAttributeNS("clientDatesStrategy",
                     clientDatesStrategy);
         }
 
@@ -134,14 +135,14 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
 
             int layout = calendarLayout.getCalendarLayout();
             if (layout != ICalendarLayoutCapability.DEFAULT_LAYOUT) {
-                htmlWriter.writeAttribute("v:layout", layout);
+                htmlWriter.writeAttributeNS("layout", layout);
             }
         }
 
         if (calendarComponent instanceof IMultipleSelectCapability) {
             if (((IMultipleSelectCapability) calendarComponent)
                     .isMultipleSelect()) {
-                htmlWriter.writeAttribute("v:multiple", true);
+                htmlWriter.writeAttributeNS("multiple", true);
             }
         }
     }
@@ -333,8 +334,8 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
             Date ds[] = new Date[Array.getLength(value)];
 
             for (int i = 0; i < ds.length; i++) {
-                Date next = convertValueToDate(facesContext, Array
-                        .get(value, i));
+                Date next = convertValueToDate(facesContext,
+                        Array.get(value, i));
 
                 if (next == null) {
                     return null;
@@ -428,8 +429,8 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
             Period ds[] = new Period[Array.getLength(value)];
 
             for (int i = 0; i < ds.length; i++) {
-                Period next = convertValueToPeriod(facesContext, Array.get(
-                        value, i));
+                Period next = convertValueToPeriod(facesContext,
+                        Array.get(value, i));
 
                 if (next == null) {
                     return null;
@@ -465,6 +466,15 @@ public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
 
         return (Period[]) RcfacesContext.getCurrentInstance()
                 .getAdapterManager().getAdapter(value, Period[].class, null);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null,
+                new String[] { "maxDate", "minDate", "cursorDate",
+                        "twoDigitYearStart", "disabledWeekDays",
+                        "clientDatesStrategy", "layout", "multiple" });
     }
 
 }

@@ -24,7 +24,6 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.CalendarTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
-import org.rcfaces.core.lang.Period;
 import org.rcfaces.core.lang.Time;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -32,6 +31,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author jbmeslin@vedana.com
@@ -120,11 +120,11 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                 .getRenderContext().getProcessContext(), schedulerComponent,
                 false);
         if (dateBegin != null) {
-            htmlWriter.writeAttribute("v:dateBegin",
+            htmlWriter.writeAttributeNS("dateBegin",
                     convertDate(componentCalendar, dateBegin, false));
         }
 
-        htmlWriter.writeAttribute("v:columnNumber",
+        htmlWriter.writeAttributeNS("columnNumber",
                 String.valueOf(schedulerColumnList.size()));
 
         String width = schedulerComponent.getWidth(facesContext);
@@ -147,7 +147,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
         if (null != newWidth) {
             htmlWriter.writeStyle().writeWidth(newWidth);
         }
-        htmlWriter.writeAttribute("v:columnWidth", String.valueOf(columnWidth));
+        htmlWriter.writeAttributeNS("columnWidth", String.valueOf(columnWidth));
         String height = schedulerComponent.getHeight(facesContext);
         if (height == null) {
             height = String.valueOf(DEFAULT_HEIGHT);
@@ -166,9 +166,9 @@ public class SchedulerRenderer extends AbstractCssRenderer {
         int hourBegin = hbt.getHours() * 60 + hbt.getMinutes();
         int hourEnd = het.getHours() * 60 + het.getMinutes();
 
-        htmlWriter.writeAttribute("v:minutesDayBegin",
+        htmlWriter.writeAttributeNS("minutesDayBegin",
                 String.valueOf(hourBegin));
-        htmlWriter.writeAttribute("v:minutesDayEnd", String.valueOf(hourEnd));
+        htmlWriter.writeAttributeNS("minutesDayEnd", String.valueOf(hourEnd));
 
         int b = hourBegin % 30;
         hourBegin -= b;
@@ -180,7 +180,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
         int eastHeight = Double.valueOf(height).intValue() - getNorthHeight();
         double minPerPx = (double) eastHeight / (double) (hourEnd - hourBegin);
 
-        htmlWriter.writeAttribute("v:minPerPx", String.valueOf(minPerPx));
+        htmlWriter.writeAttributeNS("minPerPx", String.valueOf(minPerPx));
 
         createNorthWest(schedulerComponent, htmlWriter, facesContext);
         createNorth(schedulerComponent, htmlWriter, facesContext,
@@ -567,7 +567,7 @@ public class SchedulerRenderer extends AbstractCssRenderer {
             }
             String label = ((SchedulerColumnComponent) schedulerColumnList
                     .get(i)).getText();
-          
+
             htmlWriter.writeText(label);
             htmlWriter.endElement(IHtmlWriter.LABEL);
 
@@ -648,9 +648,11 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                             + componentCalendar.get(Calendar.MINUTE), null);
                 }
 
-                String periodStyle = schedulerComponent.getPeriodStyle(facesContext);
-                String periodType = schedulerComponent.getPeriodType(facesContext);
-               
+                String periodStyle = schedulerComponent
+                        .getPeriodStyle(facesContext);
+                String periodType = schedulerComponent
+                        .getPeriodType(facesContext);
+
                 boolean selectable = schedulerComponent
                         .isPeriodSelectable(facesContext);
 
@@ -674,8 +676,8 @@ public class SchedulerRenderer extends AbstractCssRenderer {
                             .writeString(periodStyle);
                 }
                 if (periodType != null) {
-                    objectLiteralWriter.writeSymbol("_periodType")
-                            .writeString(periodType);
+                    objectLiteralWriter.writeSymbol("_periodType").writeString(
+                            periodType);
                 }
 
                 componentCalendar.setTime(periodBegin);
@@ -807,8 +809,16 @@ public class SchedulerRenderer extends AbstractCssRenderer {
             ITabIndexCapability tabIndexCapability) throws WriterException {
         Integer tabIndex = tabIndexCapability.getTabIndex();
         if (tabIndex != null) {
-            writer.writeAttribute("v:tabIndex", tabIndex.intValue());
+            writer.writeAttributeNS("tabIndex", tabIndex.intValue());
         }
         return writer;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "dateBegin",
+                "columnNumber", "columnWidth", "minutesDayBegin",
+                "minutesDayEnd", "minPerPx", "tabIndex" });
     }
 }

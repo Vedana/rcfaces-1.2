@@ -17,12 +17,13 @@ import org.rcfaces.core.internal.renderkit.IRequestContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
 import org.rcfaces.renderkit.html.internal.EventDecoders;
-import org.rcfaces.renderkit.html.internal.IHtmlWriter;
-import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
+import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ItemsToolFolderDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -40,9 +41,9 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         public void decodeEvent(IRequestContext requestContext,
                 UIComponent component, IEventData eventData,
                 IEventObjectDecoder eventObjectDecoder) {
-            FacesEvent event = new ItemSelectionEvent(component, eventData
-                    .getEventValue(), null, eventData.getEventItem(), eventData
-                    .getEventDetail(),
+            FacesEvent event = new ItemSelectionEvent(component,
+                    eventData.getEventValue(), null, eventData.getEventItem(),
+                    eventData.getEventDetail(),
                     (eventData.getEventDetail() & IMMEDIATE_DETAIL) > 0);
 
             queueEvent(component, event);
@@ -81,10 +82,10 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         writeCssAttributes(writer);
 
         if (itemsToolFolderComponent.isDisabled(facesContext)) {
-            writer.writeAttribute("v:disabled", true);
+            writer.writeAttributeNS("disabled", true);
         }
         if (itemsToolFolderComponent.isReadOnly(facesContext)) {
-            writer.writeAttribute("v:readOnly", true);
+            writer.writeAttributeNS("readOnly", true);
         }
 
         String verticalAlignment = itemsToolFolderComponent
@@ -147,4 +148,10 @@ public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
         return new ItemsToolFolderDecorator(component);
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "disabled",
+                "readOnly" });
+    }
 }

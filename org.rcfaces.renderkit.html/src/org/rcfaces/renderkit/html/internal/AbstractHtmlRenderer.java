@@ -60,6 +60,8 @@ import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventDecoder;
 import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceContributor;
 import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 
 /**
@@ -67,7 +69,7 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
-        implements IEventObjectDecoder {
+        implements IEventObjectDecoder, INamespaceContributor {
 
     private static final String REVISION = "$Revision$";
 
@@ -155,7 +157,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     protected final IHtmlWriter writeRequired(IHtmlWriter writer,
             IRequiredCapability component) throws WriterException {
         if (component.isRequired()) {
-            writer.writeAttribute("v:required", true);
+            writer.writeAttributeNS("required", true);
         }
 
         return writer;
@@ -164,7 +166,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     protected final IHtmlWriter writeImmediate(IHtmlWriter writer,
             IImmediateCapability component) throws WriterException {
         if (component.isImmediate()) {
-            writer.writeAttribute("v:immediate", true);
+            writer.writeAttributeNS("immediate", true);
         }
 
         return writer;
@@ -188,7 +190,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             return writer;
         }
 
-        writer.writeAttribute("v:focusStyleClass", focusStyleClass);
+        writer.writeAttributeNS("focusStyleClass", focusStyleClass);
 
         return writer;
     }
@@ -216,7 +218,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             message = ParamUtils.formatMessage(
                     (UIComponent) pagerMessageCapability, message);
 
-            htmlWriter.writeAttribute("v:message", message);
+            htmlWriter.writeAttributeNS("message", message);
 
             String zeroResultMessage = pagerMessageCapability
                     .getZeroResultMessage();
@@ -225,7 +227,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                         .formatMessage((UIComponent) pagerMessageCapability,
                                 zeroResultMessage);
 
-                htmlWriter.writeAttribute("v:zeroResultMessage",
+                htmlWriter.writeAttributeNS("zeroResultMessage",
                         zeroResultMessage);
             }
 
@@ -235,7 +237,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                 oneResultMessage = ParamUtils.formatMessage(
                         (UIComponent) pagerMessageCapability, oneResultMessage);
 
-                htmlWriter.writeAttribute("v:oneResultMessage",
+                htmlWriter.writeAttributeNS("oneResultMessage",
                         oneResultMessage);
             }
 
@@ -246,7 +248,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                         (UIComponent) pagerMessageCapability,
                         manyResultsMessage);
 
-                htmlWriter.writeAttribute("v:manyResultMessage",
+                htmlWriter.writeAttributeNS("manyResultMessage",
                         manyResultsMessage);
             }
         }
@@ -268,7 +270,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
 
             String lookId = lookAndFeelCapability.getLookId();
             if (lookId != null) {
-                writer.writeAttribute("v:lookid", lookId);
+                writer.writeAttributeNS("lookid", lookId);
             }
         }
 
@@ -389,13 +391,13 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         int horizontalScrollPosition = scrollableComponent
                 .getHorizontalScrollPosition();
         if (horizontalScrollPosition > 0) {
-            writer.writeAttribute("v:hsp", horizontalScrollPosition);
+            writer.writeAttributeNS("hsp", horizontalScrollPosition);
         }
 
         int verticalScrollPosition = scrollableComponent
                 .getVerticalScrollPosition();
         if (verticalScrollPosition > 0) {
-            writer.writeAttribute("v:vsp", verticalScrollPosition);
+            writer.writeAttributeNS("vsp", verticalScrollPosition);
         }
 
         return writer;
@@ -417,7 +419,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
                     null, null);
 
             if (resolvedHelpURL != null) {
-                writer.writeAttribute("v:helpURL", resolvedHelpURL);
+                writer.writeAttributeNS("helpURL", resolvedHelpURL);
             }
         }
 
@@ -426,7 +428,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             helpMessage = ParamUtils.formatMessage((UIComponent) helpComponent,
                     helpMessage);
 
-            writer.writeAttribute("v:helpMessage", helpMessage);
+            writer.writeAttributeNS("helpMessage", helpMessage);
         }
 
         return writer;
@@ -822,7 +824,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
     protected IHtmlWriter writeNamingContainer(IHtmlWriter writer,
             NamingContainer namingContainer) throws WriterException {
 
-        writer.writeAttribute("v:nc", true);
+        writer.writeAttributeNS("nc", true);
 
         return writer;
     }
@@ -880,25 +882,25 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         String infoStyleClass = severityStyleClassCapability
                 .getInfoStyleClass();
         if (infoStyleClass != null) {
-            htmlWriter.writeAttribute("v:infoStyleClass", infoStyleClass);
+            htmlWriter.writeAttributeNS("infoStyleClass", infoStyleClass);
         }
 
         String warnStyleClass = severityStyleClassCapability
                 .getWarnStyleClass();
         if (warnStyleClass != null) {
-            htmlWriter.writeAttribute("v:warnStyleClass", warnStyleClass);
+            htmlWriter.writeAttributeNS("warnStyleClass", warnStyleClass);
         }
 
         String errorStyleClass = severityStyleClassCapability
                 .getErrorStyleClass();
         if (errorStyleClass != null) {
-            htmlWriter.writeAttribute("v:errorStyleClass", errorStyleClass);
+            htmlWriter.writeAttributeNS("errorStyleClass", errorStyleClass);
         }
 
         String fatalStyleClass = severityStyleClassCapability
                 .getFatalStyleClass();
         if (fatalStyleClass != null) {
-            htmlWriter.writeAttribute("v:fatalStyleClass", fatalStyleClass);
+            htmlWriter.writeAttributeNS("fatalStyleClass", fatalStyleClass);
         }
     }
 
@@ -929,7 +931,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String infoImageURL = infoImageAccessor.resolveURL(facesContext,
                     null, null);
             if (infoImageURL != null) {
-                htmlWriter.writeURIAttribute("v:infoImageURL", infoImageURL);
+                htmlWriter.writeURIAttributeNS("infoImageURL", infoImageURL);
             }
         }
 
@@ -937,7 +939,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String warnImageURL = warnImageAccessor.resolveURL(facesContext,
                     null, null);
             if (warnImageURL != null) {
-                htmlWriter.writeURIAttribute("v:warnImageURL", warnImageURL);
+                htmlWriter.writeURIAttributeNS("warnImageURL", warnImageURL);
             }
         }
 
@@ -945,7 +947,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String errorImageURL = errorImageAccessor.resolveURL(facesContext,
                     null, null);
             if (errorImageURL != null) {
-                htmlWriter.writeURIAttribute("v:errorImageURL", errorImageURL);
+                htmlWriter.writeURIAttributeNS("errorImageURL", errorImageURL);
             }
         }
 
@@ -953,7 +955,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             String fatalImageURL = fatalImageAccessor.resolveURL(facesContext,
                     null, null);
             if (fatalImageURL != null) {
-                htmlWriter.writeURIAttribute("v:fatalImageURL", fatalImageURL);
+                htmlWriter.writeURIAttributeNS("fatalImageURL", fatalImageURL);
             }
         }
 
@@ -986,4 +988,14 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         return null;
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+
+        nameSpaceProperties.addAttributes(null, new String[] { "required",
+                "immediate", "focusStyleClass", "message", "zeroResultMessage",
+                "oneResultMessage", "manyResultMessage", "lookid", "hsp",
+                "vsp", "helpURL", "helpMessage", "nc", "infoStyleClass",
+                "warnStyleClass", "errorStyleClass", "fatalStyleClass",
+                "infoImageURL", "warnImageURL", "errorImageURL",
+                "fatalImageURL", "data" });
+    }
 }

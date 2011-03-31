@@ -30,6 +30,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -208,7 +209,7 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
             }
         }
 
-        htmlWriter.writeAttribute("v:separator", true);
+        htmlWriter.writeAttributeNS("separator", true);
 
         if (separatorImageURL != null) {
 
@@ -260,5 +261,11 @@ public class ToolFolderRenderer extends AbstractCssRenderer {
 
     protected int getToolItemSeparatorWidth(SelectItem selectItem) {
         return ToolBarRenderer.DEFAULT_TOOL_ITEM_SEPARATOR_WIDTH;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "separator" });
     }
 }

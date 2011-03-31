@@ -20,6 +20,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptComponentRenderer;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.w3c.dom.Document;
 
 /**
@@ -144,7 +145,7 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         }
 
         if (valueMimeType != null) {
-            htmlWriter.writeAttribute("v:mimeType", valueMimeType);
+            htmlWriter.writeAttributeNS("mimeType", valueMimeType);
         }
 
         htmlWriter.endElement(IHtmlWriter.IFRAME);
@@ -155,14 +156,14 @@ public class TextEditorRenderer extends AbstractInputRenderer {
     protected void formatTextHtml(IHtmlWriter htmlWriter, Object value)
             throws WriterException {
         if (value != null) {
-            htmlWriter.writeAttribute("v:text", String.valueOf(value));
+            htmlWriter.writeAttributeNS("text", String.valueOf(value));
         }
     }
 
     protected void formatTextPlain(IHtmlWriter htmlWriter, Object value)
             throws WriterException {
         if (value != null) {
-            htmlWriter.writeAttribute("v:text", String.valueOf(value));
+            htmlWriter.writeAttributeNS("text", String.valueOf(value));
         }
     }
 
@@ -202,4 +203,10 @@ public class TextEditorRenderer extends AbstractInputRenderer {
         unlockedProperties.add(Properties.VALUE);
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "mimeType",
+                "text" });
+    }
 }

@@ -29,6 +29,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -109,7 +110,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
         if (ariaLevel > 0) {
             htmlWriter.writeAriaLevel(ariaLevel);
         }
-        
+
         String normalText = expandBarComponent.getText(facesContext);
         if (normalText != null) {
             normalText = ParamUtils.formatMessage(expandBarComponent,
@@ -125,46 +126,46 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         String text = normalText;
         if (collapsed) {
-            htmlWriter.writeAttribute("v:collapsed", true);
+            htmlWriter.writeAttributeNS("collapsed", true);
 
             if (collapsedText != null) {
                 text = collapsedText;
 
                 if (normalText != null) {
-                    htmlWriter.writeAttribute("v:text", normalText);
+                    htmlWriter.writeAttributeNS("text", normalText);
                 }
             }
         } else if (collapsedText != null) {
-            htmlWriter.writeAttribute("v:collapsedText", collapsedText);
+            htmlWriter.writeAttributeNS("collapsedText", collapsedText);
         }
 
         componentContext.setAttribute(TITLE_TEXT_ATTRIBUTE, text);
 
         String accessKey = expandBarComponent.getAccessKey(facesContext);
         if (accessKey != null && accessKey.length() > 0) {
-            htmlWriter.writeAttribute("v:accessKey", accessKey);
+            htmlWriter.writeAttributeNS("accessKey", accessKey);
         }
 
         String effect = expandBarComponent.getCollapseEffect(facesContext);
         if (effect != null) {
-            htmlWriter.writeAttribute("v:effect", effect);
+            htmlWriter.writeAttributeNS("effect", effect);
         }
 
         String groupName = expandBarComponent.getGroupName(facesContext);
         if (groupName != null && groupName.length() > 0) {
-            htmlWriter.writeAttribute("v:groupName", groupName);
+            htmlWriter.writeAttributeNS("groupName", groupName);
         }
 
         String overStyleClass = expandBarComponent
                 .getOverStyleClass(facesContext);
         if (overStyleClass != null) {
-            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+            htmlWriter.writeAttributeNS("overStyleClass", overStyleClass);
 
             htmlWriter.getJavaScriptEnableMode().enableOnOver();
         }
 
         if (expandBarComponent.isUserExpandable(facesContext) == false) {
-            htmlWriter.writeAttribute("v:userExpandable", false);
+            htmlWriter.writeAttributeNS("userExpandable", false);
         }
 
         htmlWriter.startElement(IHtmlWriter.LI);
@@ -190,7 +191,7 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                         .getAsyncRenderMode(expandBarComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    htmlWriter.writeAttribute("v:asyncRender", true);
+                    htmlWriter.writeAttributeNS("asyncRender", true);
 
                     htmlWriter.getHtmlComponentRenderContext()
                             .getHtmlRenderContext()
@@ -297,10 +298,10 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
 
         String ak = expandBarComponent.getAccessKey();
         if (ak != null && ak.length() > 0) {
-        	htmlWriter.writeAccessKey(ak);
-        	htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
+            htmlWriter.writeAccessKey(ak);
+            htmlWriter.getJavaScriptEnableMode().enableOnAccessKey();
         }
-        
+
         writeTabIndex(htmlWriter, expandBarComponent);
 
         htmlWriter.startElement(IHtmlWriter.IMG);
@@ -373,8 +374,10 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
     protected IContentAccessor getButtonImage(IHtmlWriter htmlWriter,
             boolean collapsed) {
 
-        return htmlWriter.getHtmlComponentRenderContext()
-                .getHtmlRenderContext().getHtmlProcessContext()
+        return htmlWriter
+                .getHtmlComponentRenderContext()
+                .getHtmlRenderContext()
+                .getHtmlProcessContext()
                 .getStyleSheetContentAccessor(BLANK_IMAGE_URL,
                         IContentFamily.IMAGE);
         /*
@@ -472,6 +475,13 @@ public class ExpandBarRenderer extends AbstractCssRenderer {
                     JavaScriptClasses.EXPAND_BAR, "effect");
         }
     }
-   
-    
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "collapsed",
+                "text", "collapsedText", "accessKey", "effect", "groupName",
+                "overStyleClass", "userExpandable", "asyncRender" });
+    }
+
 }

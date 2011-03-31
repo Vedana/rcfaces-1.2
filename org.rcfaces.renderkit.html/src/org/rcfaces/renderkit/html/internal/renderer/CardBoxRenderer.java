@@ -27,6 +27,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -34,155 +35,162 @@ import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
  * @version $Revision$ $Date$
  */
 public class CardBoxRenderer extends AbstractCssRenderer {
-	private static final String REVISION = "$Revision$";
+    private static final String REVISION = "$Revision$";
 
-	private static final String TABBED_PANE_JSF12_PROPERTY = "org.rcfaces.renderkit.html.TABBED_PANE_JSF1_2";
+    private static final String TABBED_PANE_JSF12_PROPERTY = "org.rcfaces.renderkit.html.TABBED_PANE_JSF1_2";
 
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.CARD_BOX;
-	}
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.CARD_BOX;
+    }
 
-	public void encodeBegin(IComponentWriter writer) throws WriterException {
+    public void encodeBegin(IComponentWriter writer) throws WriterException {
 
-		super.encodeBegin(writer);
+        super.encodeBegin(writer);
 
-		IComponentRenderContext componentRenderContext = writer
-				.getComponentRenderContext();
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
 
-		CardBoxComponent cardBoxComponent = (CardBoxComponent) componentRenderContext
-				.getComponent();
+        CardBoxComponent cardBoxComponent = (CardBoxComponent) componentRenderContext
+                .getComponent();
 
-		FacesContext facesContext = writer.getComponentRenderContext()
-				.getFacesContext();
+        FacesContext facesContext = writer.getComponentRenderContext()
+                .getFacesContext();
 
-		IComponentPreferences preference = cardBoxComponent
-				.getPreferences(facesContext);
-		if (preference != null) {
-			preference.loadPreferences(facesContext, cardBoxComponent);
-		}
+        IComponentPreferences preference = cardBoxComponent
+                .getPreferences(facesContext);
+        if (preference != null) {
+            preference.loadPreferences(facesContext, cardBoxComponent);
+        }
 
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		// htmlWriter.enableJavaScript(); // Pourquoi ?
+        // htmlWriter.enableJavaScript(); // Pourquoi ?
 
-		htmlWriter.startElement(IHtmlWriter.DIV);
+        htmlWriter.startElement(IHtmlWriter.DIV);
 
-		writeHtmlAttributes(htmlWriter);
-		writeJavaScriptAttributes(htmlWriter);
-		writeCssAttributes(htmlWriter);
+        writeHtmlAttributes(htmlWriter);
+        writeJavaScriptAttributes(htmlWriter);
+        writeCssAttributes(htmlWriter);
 
-		CardComponent cardComponent = cardBoxComponent
-				.getSelectedCard(facesContext);
-		if (cardComponent != null) {
-			IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) htmlWriter
-					.getComponentRenderContext().getRenderContext();
+        CardComponent cardComponent = cardBoxComponent
+                .getSelectedCard(facesContext);
+        if (cardComponent != null) {
+            IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) htmlWriter
+                    .getComponentRenderContext().getRenderContext();
 
-			String cardComponentId = htmlRenderContext
-					.getComponentClientId(cardComponent);
+            String cardComponentId = htmlRenderContext
+                    .getComponentClientId(cardComponent);
 
-			htmlWriter.writeAttribute("v:selectedCard", cardComponentId);
-		}
+            htmlWriter.writeAttributeNS("selectedCard", cardComponentId);
+        }
 
-		renderTabHeader(htmlWriter);
-	}
+        renderTabHeader(htmlWriter);
+    }
 
-	protected static void setCardBoxJSF12_Generation(
-			IRenderContext renderContext) {
+    protected static void setCardBoxJSF12_Generation(
+            IRenderContext renderContext) {
 
-		renderContext.setAttribute(TABBED_PANE_JSF12_PROPERTY, Boolean.TRUE);
-	}
+        renderContext.setAttribute(TABBED_PANE_JSF12_PROPERTY, Boolean.TRUE);
+    }
 
-	protected static boolean isCardBoxJSF12_Generation(
-			IRenderContext renderContext) {
-		return Boolean.TRUE.equals(renderContext
-				.getAttribute(TABBED_PANE_JSF12_PROPERTY));
-	}
+    protected static boolean isCardBoxJSF12_Generation(
+            IRenderContext renderContext) {
+        return Boolean.TRUE.equals(renderContext
+                .getAttribute(TABBED_PANE_JSF12_PROPERTY));
+    }
 
-	protected String getWAIRole() {
-		return IAccessibilityRoles.TAB_PANEL;
-	}
+    protected String getWAIRole() {
+        return IAccessibilityRoles.TAB_PANEL;
+    }
 
-	protected void encodeEnd(IComponentWriter writer) throws WriterException {
+    protected void encodeEnd(IComponentWriter writer) throws WriterException {
 
-		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-		htmlWriter.endElement(IHtmlWriter.DIV);
+        htmlWriter.endElement(IHtmlWriter.DIV);
 
-		htmlWriter.getJavaScriptEnableMode().enableOnInit();
+        htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
-		super.encodeEnd(writer);
-	}
+        super.encodeEnd(writer);
+    }
 
-	protected void encodeJavaScript(IJavaScriptWriter writer)
-			throws WriterException {
-		super.encodeJavaScript(writer);
+    protected void encodeJavaScript(IJavaScriptWriter writer)
+            throws WriterException {
+        super.encodeJavaScript(writer);
 
-		writer.writeMethodCall("f_updateCards").writeln(");");
-	}
+        writer.writeMethodCall("f_updateCards").writeln(");");
+    }
 
-	protected void renderTabHeader(IHtmlWriter writer) throws WriterException {
-	}
+    protected void renderTabHeader(IHtmlWriter writer) throws WriterException {
+    }
 
-	protected void decode(IRequestContext context, UIComponent component,
-			IComponentData componentData) {
-		super.decode(context, component, componentData);
+    protected void decode(IRequestContext context, UIComponent component,
+            IComponentData componentData) {
+        super.decode(context, component, componentData);
 
-		FacesContext facesContext = context.getFacesContext();
+        FacesContext facesContext = context.getFacesContext();
 
-		CardBoxComponent cardBoxComponent = (CardBoxComponent) component;
+        CardBoxComponent cardBoxComponent = (CardBoxComponent) component;
 
-		String selectedId = componentData
-				.getStringProperty(Properties.SELECTED);
-		if (selectedId != null) {
-			ICardIterator it = cardBoxComponent.listCards();
-			for (; it.hasNext();) {
-				CardComponent card = it.next();
+        String selectedId = componentData
+                .getStringProperty(Properties.SELECTED);
+        if (selectedId != null) {
+            ICardIterator it = cardBoxComponent.listCards();
+            for (; it.hasNext();) {
+                CardComponent card = it.next();
 
-				String cardId = context.getComponentId(card);
+                String cardId = context.getComponentId(card);
 
-				if (selectedId.equals(cardId) == false) {
-					continue;
-				}
+                if (selectedId.equals(cardId) == false) {
+                    continue;
+                }
 
-				cardBoxComponent.select(card);
-				break;
-			}
-		}
+                cardBoxComponent.select(card);
+                break;
+            }
+        }
 
-		IComponentPreferences preferences = cardBoxComponent
-				.getPreferences(facesContext);
+        IComponentPreferences preferences = cardBoxComponent
+                .getPreferences(facesContext);
 
-		if (preferences == null && cardBoxComponent.isPreferencesSetted()) {
-			preferences = new GridPreferences();
+        if (preferences == null && cardBoxComponent.isPreferencesSetted()) {
+            preferences = new GridPreferences();
 
-			cardBoxComponent.setPreferences(preferences);
-		}
+            cardBoxComponent.setPreferences(preferences);
+        }
 
-		if (preferences != null) {
-			preferences.savePreferences(facesContext, cardBoxComponent);
-		}
-	}
+        if (preferences != null) {
+            preferences.savePreferences(facesContext, cardBoxComponent);
+        }
+    }
 
-	protected void addUnlockProperties(Set unlockedProperties) {
-		super.addUnlockProperties(unlockedProperties);
+    protected void addUnlockProperties(Set unlockedProperties) {
+        super.addUnlockProperties(unlockedProperties);
 
-		unlockedProperties.add(Properties.SELECTED);
-	}
+        unlockedProperties.add(Properties.SELECTED);
+    }
 
-	protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {
-		super.writeCustomCss(writer, cssWriter);
+    protected void writeCustomCss(IHtmlWriter writer, ICssWriter cssWriter) {
+        super.writeCustomCss(writer, cssWriter);
 
-		IComponentRenderContext componentRenderContext = writer
-				.getComponentRenderContext();
+        IComponentRenderContext componentRenderContext = writer
+                .getComponentRenderContext();
 
-		FacesContext facesContext = componentRenderContext.getFacesContext();
+        FacesContext facesContext = componentRenderContext.getFacesContext();
 
-		CardBoxComponent cardBoxComponent = (CardBoxComponent) componentRenderContext
-				.getComponent();
+        CardBoxComponent cardBoxComponent = (CardBoxComponent) componentRenderContext
+                .getComponent();
 
-		if (cardBoxComponent.getWidth(facesContext) != null
-				&& cardBoxComponent.getHeight(facesContext) != null) {
-			cssWriter.writeOverflow(ICssWriter.HIDDEN);
-		}
-	}
+        if (cardBoxComponent.getWidth(facesContext) != null
+                && cardBoxComponent.getHeight(facesContext) != null) {
+            cssWriter.writeOverflow(ICssWriter.HIDDEN);
+        }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties
+                .addAttributes(null, new String[] { "selectedCard" });
+    }
 }

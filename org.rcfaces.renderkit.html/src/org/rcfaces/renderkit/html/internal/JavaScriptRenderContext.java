@@ -60,9 +60,9 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
         JavaScriptWriterImpl jsImpl = new JavaScriptWriterImpl();
 
-        jsImpl.setWriter(writer, javaScriptComponent, this, htmlProcessContext
-                .useMetaContentScriptType(), htmlProcessContext
-                .useScriptCData());
+        jsImpl.setWriter(writer, javaScriptComponent, this,
+                htmlProcessContext.useMetaContentScriptType(),
+                htmlProcessContext.useScriptCData());
 
         return jsImpl;
     }
@@ -116,15 +116,16 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
             if (isInitialized()) {
                 if (componentRenderContext.setAttribute(
                         LAZY_JAVASCRIPT_RENDERER, Boolean.TRUE) == null) {
-                    IHtmlWriter w = writer.getWriter();
+                    IHtmlWriter htmlWriter = writer.getWriter();
                     // On ecrit à la main le tag, car on ne peut pas le
                     // fermer
                     // directement dans le m�me tag !
-                    w.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+                    htmlWriter
+                            .startElementNS(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
                     if (canLazyTagUsesBrother() == false) {
-                        w.writeAttribute("rid", componentRenderContext
-                                .getComponentClientId());
+                        htmlWriter.writeAttribute("rid",
+                                componentRenderContext.getComponentClientId());
                     }
 
                     IRepository.IFile files[] = renderContext
@@ -140,18 +141,20 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
                             sb.append(files[i].getURI(locale));
                         }
 
-                        w.writeAttribute("requiresBundle", sb.toString());
+                        htmlWriter.writeAttribute("requiresBundle",
+                                sb.toString());
                     }
 
                     // Il y a des nouveaux clientDatas ?
                     if (writer.getHtmlComponentRenderContext().hasClientDatas(
                             true)) {
-                        htmlComponentRenderer.writeClientData(w,
+                        htmlComponentRenderer.writeClientData(htmlWriter,
                                 (IClientDataCapability) componentRenderContext
                                         .getComponent());
                     }
 
-                    w.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+                    htmlWriter
+                            .endElementNS(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
                 }
 
                 pushUnitializedComponent(componentRenderContext

@@ -16,6 +16,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -44,33 +45,33 @@ public class MessagesRenderer extends AbstractCssRenderer {
 
         boolean globalOnly = messagesComponent.isGlobalOnly();
         if (globalOnly) {
-            htmlWriter.writeAttribute("v:globalOnly", true);
+            htmlWriter.writeAttributeNS("globalOnly", true);
         }
 
         if (messagesComponent.isShowSummary()) {
-            htmlWriter.writeAttribute("v:showSummary", true);
+            htmlWriter.writeAttributeNS("showSummary", true);
         }
 
         if (messagesComponent.isShowDetail()) {
-            htmlWriter.writeAttribute("v:showDetail", true);
+            htmlWriter.writeAttributeNS("showDetail", true);
         }
 
         if (messagesComponent.isShowActiveComponentMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
+            htmlWriter.writeAttributeNS("showActiveComponentMessage", true);
         }
 
         int maxCount = messagesComponent.getMaxCount(facesContext);
         if (maxCount > 0) {
-            htmlWriter.writeAttribute("v:maxCount", maxCount);
+            htmlWriter.writeAttributeNS("maxCount", maxCount);
         }
 
         htmlWriter.endElement(IHtmlWriter.TABLE);
 
         htmlWriter.getJavaScriptEnableMode().enableOnMessage();
     }
-    
+
     protected String getWAIRole() {
-    	return IAccessibilityRoles.ALERT;
+        return IAccessibilityRoles.ALERT;
     }
 
     /*
@@ -127,5 +128,13 @@ public class MessagesRenderer extends AbstractCssRenderer {
          */
 
         super.decode(context, component, componentData);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "globalOnly",
+                "showSummary", "showDetail", "showActiveComponentMessage",
+                "maxCount" });
     }
 }

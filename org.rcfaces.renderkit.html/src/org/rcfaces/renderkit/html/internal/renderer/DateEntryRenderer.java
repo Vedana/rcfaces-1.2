@@ -31,6 +31,7 @@ import org.rcfaces.renderkit.html.internal.ICalendarDecoderRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -77,7 +78,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
         writeCssAttributes(htmlWriter);
 
         if (dateEntryComponent.isShowCalendarOnFocus(facesContext)) {
-            htmlWriter.writeAttribute("v:showOnFocus", true);
+            htmlWriter.writeAttributeNS("showOnFocus", true);
         }
 
         Locale componentLocale = dateEntryComponent
@@ -100,7 +101,7 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
         dateFormat = CalendarTools.normalizeFormat(componentRenderContext,
                 dateFormat);
 
-        // htmlWriter.writeAttribute("v:dateFormat", dateFormat);
+        // htmlWriter.writeAttributeNS("dateFormat", dateFormat);
 
         Date minDate = dateEntryComponent.getMinDate(facesContext);
         Date maxDate = dateEntryComponent.getMaxDate(facesContext);
@@ -110,13 +111,13 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
                 dateEntryComponent, false);
 
         if (minDate != null) {
-            htmlWriter.writeAttribute("v:minDate", convertDate(
-                    componentCalendar, minDate, true));
+            htmlWriter.writeAttributeNS("minDate",
+                    convertDate(componentCalendar, minDate, true));
         }
 
         if (maxDate != null) {
-            htmlWriter.writeAttribute("v:maxDate", convertDate(
-                    componentCalendar, maxDate, true));
+            htmlWriter.writeAttributeNS("maxDate",
+                    convertDate(componentCalendar, maxDate, true));
         }
 
         AbstractCompositeRenderer.writeClientValidatorParams(htmlWriter);
@@ -383,37 +384,39 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
 
                 String sCurValue = null;
                 if (curValue >= 0) {
-                    StringAppender s = new StringAppender(String
-                            .valueOf(curValue), nb);
+                    StringAppender s = new StringAppender(
+                            String.valueOf(curValue), nb);
                     s.insert(0, '0', nb - s.length());
 
                     sCurValue = s.toString();
                 }
 
+                String ns = htmlWriter.getRcfacesNamespace() + ":";
+
                 Map attributes = new HashMap(8);
                 if (minValue >= 0) {
-                    attributes.put("v:min", String.valueOf(minValue));
+                    attributes.put(ns + "min", String.valueOf(minValue));
                 }
 
                 if (maxValue >= 0) {
-                    attributes.put("v:max", String.valueOf(maxValue));
+                    attributes.put(ns + "max", String.valueOf(maxValue));
                 }
 
                 if (defaultValue >= 0) {
-                    attributes.put("v:defaultValue", String
-                            .valueOf(defaultValue));
+                    attributes.put(ns + "defaultValue",
+                            String.valueOf(defaultValue));
                 }
 
                 if (separators != null && separators.length() > 0) {
-                    attributes.put("v:separators", separators);
+                    attributes.put(ns + "separators", separators);
                 }
 
                 if (cycle) {
-                    attributes.put("v:cycle", "true");
+                    attributes.put(ns + "cycle", "true");
                 }
 
                 if (autoComplete) {
-                    attributes.put("v:auto", "true");
+                    attributes.put(ns + "auto", "true");
                 }
 
                 AbstractCompositeRenderer.writeSubInput(htmlWriter,
@@ -512,8 +515,8 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
 
             String newValue = componentData.getParameter(name);
             if (newValue != null) {
-                dateValue = HtmlTools.parseDate(newValue, context
-                        .getProcessContext(), dateEntryComponent, this,
+                dateValue = HtmlTools.parseDate(newValue,
+                        context.getProcessContext(), dateEntryComponent, this,
                         "internalValue");
             }
 
@@ -547,6 +550,14 @@ public class DateEntryRenderer extends AbstractCalendarRenderer implements
         }
 
         return null;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "showOnFocus",
+                "dateFormat", "minDate", "maxDate", "min", "max",
+                "defaultValue", "separators", "cycle", "auto" });
     }
 
 }

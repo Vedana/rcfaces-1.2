@@ -24,6 +24,7 @@ import org.rcfaces.renderkit.html.internal.AbstractJavaScriptRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -45,7 +46,8 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         ViewDialogComponent component = (ViewDialogComponent) componentRenderContext
                 .getComponent();
 
-        boolean designMode = componentRenderContext.getRenderContext().getProcessContext().isDesignerMode();
+        boolean designMode = componentRenderContext.getRenderContext()
+                .getProcessContext().isDesignerMode();
 
         IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
@@ -53,28 +55,28 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
         }
 
-        htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+        htmlWriter.startElementNS(LAZY_INIT_TAG);
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
 
         String width = component.getWidth(facesContext);
         if (width != null) {
-            htmlWriter.writeAttribute("v:width", width);
+            htmlWriter.writeAttributeNS("width", width);
         }
 
         String height = component.getHeight(facesContext);
         if (height != null) {
-            htmlWriter.writeAttribute("v:height", height);
+            htmlWriter.writeAttributeNS("height", height);
         }
 
         String text = component.getText(facesContext);
         if (text != null) {
-            htmlWriter.writeAttribute("v:title", text);
+            htmlWriter.writeAttributeNS("title", text);
         }
 
         boolean closable = component.isClosable(facesContext);
         if (closable == true) {
-            htmlWriter.writeAttribute("v:closable", closable);
+            htmlWriter.writeAttributeNS("closable", closable);
         }
 
         String src = component.getViewURL(facesContext);
@@ -85,7 +87,7 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
 
             src = contentAccessor.resolveURL(facesContext, null, null);
             if (src != null) {
-                htmlWriter.writeAttribute("v:viewURL", src);
+                htmlWriter.writeAttributeNS("viewURL", src);
             }
         }
 
@@ -131,23 +133,23 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
             }
 
             if (datas.length() > 0) {
-                htmlWriter.writeAttribute("v:parameter", datas.toString());
+                htmlWriter.writeAttributeNS("parameter", datas.toString());
             }
         }
 
         String shellDecorator = component.getShellDecoratorName(facesContext);
         if (shellDecorator != null) {
-            htmlWriter.writeAttribute("v:shellDecorator", shellDecorator);
+            htmlWriter.writeAttributeNS("shellDecorator", shellDecorator);
         }
 
         if (!component.isVisible(facesContext)) {
-            htmlWriter.writeAttribute("v:visible", false);
+            htmlWriter.writeAttributeNS("visible", false);
         }
         if (component.isDialogPrioritySetted()) {
-            htmlWriter.writeAttribute("v:dialogPriority", component
-                    .getDialogPriority(facesContext));
+            htmlWriter.writeAttributeNS("dialogPriority",
+                    component.getDialogPriority(facesContext));
         }
-        htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+        htmlWriter.endElementNS(LAZY_INIT_TAG);
 
         declareLazyJavaScriptRenderer(htmlWriter);
 
@@ -169,4 +171,13 @@ public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
         URLFormCodec.encode(datas, value);
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addComponent(LAZY_INIT_TAG);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "width",
+                "height", "title", "closable", "viewURL", "parameter",
+                "shellDecorator", "visible", "dialogPriority" });
+    }
 }

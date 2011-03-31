@@ -24,6 +24,7 @@ import org.rcfaces.core.internal.renderkit.IComponentWriter;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
@@ -42,7 +43,8 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
     protected abstract String getInputType(UIComponent component);
 
     /*
-     * protected void encodeEnd(IComponentWriter writer) throws WriterException {
+     * protected void encodeEnd(IComponentWriter writer) throws WriterException
+     * {
      * 
      * IHtmlWriter htmlWriter = (IHtmlWriter) writer;
      * 
@@ -72,8 +74,9 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
                 .getComponentRenderContext();
 
         // On active le javascript pour le traitement des facesMessages !
-        if (componentRenderContext.getFacesContext().getMessages(
-                componentRenderContext.getComponentClientId()).hasNext()) {
+        if (componentRenderContext.getFacesContext()
+                .getMessages(componentRenderContext.getComponentClientId())
+                .hasNext()) {
 
             // Il y a une erreur, on active le JavaScript ...
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
@@ -126,8 +129,8 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
     /*
      * Il faut ecrire l'ID de toute facon, car il peut y avoir des regles CSS !
-     * protected IWriter writeIdAttribute(IWriter writer) throws WriterException {
-     * if (isNameEqualsId()) { return writer; }
+     * protected IWriter writeIdAttribute(IWriter writer) throws WriterException
+     * { if (isNameEqualsId()) { return writer; }
      * 
      * return super.writeIdAttribute(writer); }
      */
@@ -265,6 +268,13 @@ public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
         // Meme vide ! Car c'est cet attribut qui spécifie qu'il y a un
         // validateur !
-        htmlWriter.writeAttribute("v:clientValidator", sb.toString());
+        htmlWriter.writeAttributeNS("clientValidator", sb.toString());
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null,
+                new String[] { "clientValidator" });
     }
 }

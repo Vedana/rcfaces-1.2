@@ -25,6 +25,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.border.IFieldSetBorderRenderer;
 import org.rcfaces.renderkit.html.internal.border.IHtmlBorderRenderer;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -140,8 +141,8 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
             String hs = computeSizeInPixel(height, -1, delta);
             if (hs != null) {
-                htmlWriter.writeStyle(32).writeHeight(hs).writeOverflow(
-                        ICssWriter.HIDDEN);
+                htmlWriter.writeStyle(32).writeHeight(hs)
+                        .writeOverflow(ICssWriter.HIDDEN);
             }
         }
     }
@@ -164,7 +165,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         String overStyleClass = fieldSetComponent.getOverStyleClass(htmlWriter
                 .getComponentRenderContext().getFacesContext());
         if (overStyleClass != null) {
-            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+            htmlWriter.writeAttributeNS("overStyleClass", overStyleClass);
 
             htmlWriter.getJavaScriptEnableMode().enableOnOver();
         }
@@ -196,8 +197,8 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
         return (IHtmlBorderRenderer) borderRendererRegistry.getBorderRenderer(
                 facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT,
-                fieldSetComponent.getFamily(), fieldSetComponent
-                        .getRendererType(), borderType);
+                fieldSetComponent.getFamily(),
+                fieldSetComponent.getRendererType(), borderType);
     }
 
     protected String getDefaultBorderType(FieldSetComponent fieldSetComponent) {
@@ -261,5 +262,12 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.FIELD_SET;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null,
+                new String[] { "overStyleClass" });
     }
 }

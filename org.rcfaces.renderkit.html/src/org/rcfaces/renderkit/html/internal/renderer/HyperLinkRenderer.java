@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -50,6 +51,7 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         writeHtmlAttributes(htmlWriter);
         writeJavaScriptAttributes(htmlWriter);
         writeCssAttributes(htmlWriter);
+
         if (disabled) {
             htmlWriter.writeDisabled();
         }
@@ -62,7 +64,7 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
             String convertedValue = convertValue(facesContext, component, value);
 
             if (convertedValue != null) {
-                htmlWriter.writeAttribute("v:value", convertedValue);
+                htmlWriter.writeAttributeNS("value", convertedValue);
             }
         }
 
@@ -83,7 +85,7 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
         super.encodeEnd(writer);
     }
 
-	/*
+    /*
      * (non-Javadoc)
      * 
      * @seeorg.rcfaces.core.internal.renderkit.html.AbstractHtmlRenderer#
@@ -96,9 +98,9 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
     }
-   
+
     protected boolean useHtmlAccessKeyAttribute() {
-    	return true;
+        return true;
     }
 
     protected void decode(IRequestContext context, UIComponent component,
@@ -134,5 +136,11 @@ public class HyperLinkRenderer extends AbstractCssRenderer {
                 }
             }
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "value" });
     }
 }

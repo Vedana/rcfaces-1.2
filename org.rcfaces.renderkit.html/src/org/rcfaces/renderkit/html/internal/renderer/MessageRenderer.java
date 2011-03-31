@@ -22,6 +22,7 @@ import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -35,9 +36,9 @@ public class MessageRenderer extends AbstractCssRenderer {
     private static final String DETAIL = "_detail";
 
     // private static final String STYLE_CLASS_PROPERTY = "message.style.class";
-    
+
     protected String getWAIRole() {
-    	return IAccessibilityRoles.ALERT;
+        return IAccessibilityRoles.ALERT;
     }
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
@@ -70,29 +71,28 @@ public class MessageRenderer extends AbstractCssRenderer {
         writeCssAttributes(htmlWriter);
 
         if (forValue != null) {
-            htmlWriter.writeAttribute("v:for", forValue);
+            htmlWriter.writeAttributeNS("for", forValue);
         }
 
         if (showIfMessage) {
-            htmlWriter.writeAttribute("v:showIfMessage", true);
+            htmlWriter.writeAttributeNS("showIfMessage", true);
         }
 
         /*
-        if (messageComponent.isSetFocusIfMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:setFocusIfMessage", true);
-        }
-        */
+         * if (messageComponent.isSetFocusIfMessage(facesContext)) {
+         * htmlWriter.writeAttributeNS("setFocusIfMessage", true); }
+         */
 
         if (messageComponent.isShowSummary()) {
-            htmlWriter.writeAttribute("v:showSummary", true);
+            htmlWriter.writeAttributeNS("showSummary", true);
         }
 
         if (messageComponent.isShowDetail()) {
-            htmlWriter.writeAttribute("v:showDetail", true);
+            htmlWriter.writeAttributeNS("showDetail", true);
         }
 
         if (messageComponent.isShowActiveComponentMessage(facesContext)) {
-            htmlWriter.writeAttribute("v:showActiveComponentMessage", true);
+            htmlWriter.writeAttributeNS("showActiveComponentMessage", true);
         }
 
         ISeverityImageAccessors accessors = (ISeverityImageAccessors) messageComponent
@@ -144,7 +144,8 @@ public class MessageRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
 
-        htmlWriter.getJavaScriptEnableMode().enableOnMessage(); // Pour les messages ?
+        htmlWriter.getJavaScriptEnableMode().enableOnMessage(); // Pour les
+                                                                // messages ?
     }
 
     protected String getNoMessageClassName(IHtmlWriter htmlWriter) {
@@ -198,10 +199,18 @@ public class MessageRenderer extends AbstractCssRenderer {
             messageComponent.setShowDetail(showSummary.booleanValue());
         }
         /*
-         * String forValue=componentData.getProperty("for"); if (forValue!=null) {
-         * messageComponent.setFor(forValue); }
+         * String forValue=componentData.getProperty("for"); if (forValue!=null)
+         * { messageComponent.setFor(forValue); }
          */
 
         super.decode(context, component, componentData);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "for",
+                "showIfMessage", "setFocusIfMessage", "showSummary",
+                "showDetail", "showActiveComponentMessage" });
     }
 }

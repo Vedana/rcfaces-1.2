@@ -14,6 +14,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.MenuBarDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -45,10 +46,10 @@ public class MenuBarRenderer extends AbstractSelectItemsRenderer {
         MenuBarComponent menuComponent = (MenuBarComponent) componentRenderContext
                 .getComponent();
         if (menuComponent.isDisabled(facesContext)) {
-            writer.writeAttribute("v:disabled", true);
+            writer.writeAttributeNS("disabled", true);
         }
         if (menuComponent.isReadOnly(facesContext)) {
-            writer.writeAttribute("v:readOnly", true);
+            writer.writeAttributeNS("readOnly", true);
         }
 
         // Un dummy pour eviter des sauts de pages
@@ -72,5 +73,12 @@ public class MenuBarRenderer extends AbstractSelectItemsRenderer {
     protected IComponentDecorator createComponentDecorator(
             FacesContext facesContext, UIComponent component) {
         return new MenuBarDecorator(component);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "disabled",
+                "readOnly" });
     }
 }

@@ -32,6 +32,7 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -67,17 +68,17 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
 
         String ssc = keyLabelComponent.getSelectedStyleClass(facesContext);
         if (ssc != null && ssc.length() > 0) {
-            htmlWriter.writeAttribute("v:selectedStyleClass", ssc);
+            htmlWriter.writeAttributeNS("selectedStyleClass", ssc);
         }
 
         boolean showParents = keyLabelComponent.isShowParents(facesContext);
         if (showParents) {
             String psc = keyLabelComponent.getParentsStyleClass(facesContext);
             if (psc != null && psc.length() > 0) {
-                htmlWriter.writeAttribute("v:parentsStyleClass", psc);
+                htmlWriter.writeAttributeNS("parentsStyleClass", psc);
             }
 
-            htmlWriter.writeAttribute("v:showParents", true);
+            htmlWriter.writeAttributeNS("showParents", true);
         }
 
         Object value = keyLabelComponent.getValue();
@@ -88,7 +89,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
             componentRenderContext.setAttribute(FILTRED_CONTENT_PROPERTY,
                     Boolean.TRUE);
 
-            htmlWriter.writeAttribute("v:filtred", true);
+            htmlWriter.writeAttributeNS("filtred", true);
 
             IFilterProperties filterProperties = keyLabelComponent
                     .getFilterProperties(facesContext);
@@ -98,7 +99,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
                         filterProperties, componentRenderContext
                                 .getRenderContext().getProcessContext(),
                         keyLabelComponent);
-                htmlWriter.writeAttribute("v:filterExpression",
+                htmlWriter.writeAttributeNS("filterExpression",
                         filterExpression);
             }
 
@@ -167,7 +168,7 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
             String siClass = ((IStyleClassItem) selectItem).getStyleClass();
 
             if (siClass != null && siClass.length() > 0) {
-                htmlWriter.writeAttribute("v:className", siClass);
+                htmlWriter.writeAttributeNS("className", siClass);
             }
         }
 
@@ -178,12 +179,12 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
                             .getFacesContext());
 
             if (value != null) {
-                htmlWriter.writeAttribute("v:value", value);
+                htmlWriter.writeAttributeNS("value", value);
             }
         }
 
         if (selectItem.isDisabled()) {
-            htmlWriter.writeAttribute("v:disabled", true);
+            htmlWriter.writeAttributeNS("disabled", true);
         }
     }
 
@@ -417,5 +418,14 @@ public class KeyLabelRenderer extends AbstractCssRenderer {
             javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.FILTRED_COMPONENT, "filter");
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null,
+                new String[] { "selectedStyleClass", "parentsStyleClass",
+                        "showParents", "filtred", "filterExpression",
+                        "className", "value", "disabled" });
     }
 }

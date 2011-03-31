@@ -18,6 +18,7 @@ import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -123,18 +124,25 @@ public class ImagePagerButtonRenderer extends ImageButtonRenderer {
 
             String type = button.getType(facesContext);
             if (type != null) {
-                writer.writeAttribute("v:type", type);
+                writer.writeAttributeNS("type", type);
             }
 
             String forProperty = button.getFor(facesContext);
             if (forProperty != null) {
-                writer.writeAttribute("v:for", forProperty);
+                writer.writeAttributeNS("for", forProperty);
             }
 
             boolean hideIfDisabled = button.isHideIfDisabled(facesContext);
             if (hideIfDisabled) {
-                writer.writeAttribute("v:hideIfDisabled", true);
+                writer.writeAttributeNS("hideIfDisabled", true);
             }
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "type", "for",
+                "hideIfDisabled" });
     }
 }

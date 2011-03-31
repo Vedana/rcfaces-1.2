@@ -25,6 +25,7 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.javascript.IJavaScriptRepository.IClass;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
@@ -48,7 +49,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
     // private static final String LAZY_COMPONENTS = "camelia.component.lazy";
 
-    protected static final String LAZY_INIT_TAG = "v:init";
+    public static final String LAZY_INIT_TAG = "init";
 
     // private static final String INIT_BY_NAME = "javascript.InitByName";
 
@@ -137,7 +138,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
         String javascriptClass = getJavaScriptClassName();
         if (javascriptClass != null) {
-            w.writeAttribute("v:class", javascriptClass);
+            w.writeAttributeNS("class", javascriptClass);
         }
 
         return w;
@@ -183,7 +184,7 @@ public abstract class AbstractJavaScriptRenderer extends
             appendAttributeEventForm(sa, writer, listenersByType);
 
             if (sa.length() > 0) {
-                writer.writeAttribute("v:events", sa.toString());
+                writer.writeAttributeNS("events", sa.toString());
             }
 
             if (listenersByType.containsKey(ListenerTools.ATTRIBUTE_NAME_SPACE
@@ -372,7 +373,7 @@ public abstract class AbstractJavaScriptRenderer extends
         String ak = accessKeyCapability.getAccessKey();
 
         if (ak != null && ak.length() > 0) {
-            writer.writeAttribute("v:accessKey", ak);
+            writer.writeAttributeNS("accessKey", ak);
             writer.getJavaScriptEnableMode().enableOnAccessKey();
         }
 
@@ -442,5 +443,12 @@ public abstract class AbstractJavaScriptRenderer extends
 
             return null;
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "class",
+                "events", "accessKey" });
     }
 }

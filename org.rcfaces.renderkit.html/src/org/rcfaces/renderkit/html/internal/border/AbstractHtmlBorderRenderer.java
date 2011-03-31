@@ -14,6 +14,8 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceContributor;
 import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
@@ -22,7 +24,7 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
-        implements IHtmlBorderRenderer {
+        implements IHtmlBorderRenderer, INamespaceContributor {
     private static final String REVISION = "$Revision$";
 
     public static final String TD_TEXT = "_ctext";
@@ -171,8 +173,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
         writer.startElement(IHtmlWriter.TABLE);
         writer.writeId(writer.getComponentRenderContext()
-                .getComponentClientId()
-                + BORDER_ID_SUFFIX);
+                .getComponentClientId() + BORDER_ID_SUFFIX);
 
         String className = getClassName();
         if (className != null) {
@@ -182,7 +183,7 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
             writer.writeClass(tableClassName);
 
             if (tableClassName != className) {
-                writer.writeAttribute("v:className", className);
+                writer.writeAttributeNS("className", className);
             }
         }
         writer.writeCellPadding(0);
@@ -585,6 +586,12 @@ public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
 
     protected String getComboImageVerticalAlign(IHtmlWriter writer) {
         return "center";
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+
+        nameSpaceProperties.addAttributes(null, new String[] { "className" });
+
     }
 
 }

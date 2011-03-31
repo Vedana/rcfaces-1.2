@@ -26,6 +26,7 @@ import org.rcfaces.renderkit.html.internal.ICssWriter;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -103,7 +104,7 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
 
         int mode = calendarComponent.getMode(facesContext);
         if (mode != 0) {
-            htmlWriter.writeAttribute("v:mode", mode);
+            htmlWriter.writeAttributeNS("mode", mode);
         }
 
         Object value = calendarComponent.getValue();
@@ -179,11 +180,11 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         }
 
         if (s_value != null) {
-            htmlWriter.writeAttribute("v:value", s_value);
+            htmlWriter.writeAttributeNS("value", s_value);
         }
 
         if (calendarComponent.isAutoSelection(facesContext)) {
-            htmlWriter.writeAttribute("v:autoSelection", true);
+            htmlWriter.writeAttributeNS("autoSelection", true);
         }
     }
 
@@ -216,6 +217,13 @@ public class CalendarRenderer extends AbstractCalendarRenderer {
         }
 
         calendarComponent.setSubmittedExternalValue(date);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "mode", "value",
+                "autoSelection" });
     }
 
 }

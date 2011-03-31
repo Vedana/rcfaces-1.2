@@ -567,7 +567,7 @@ public class HtmlTools {
             HtmlTools.appendData(datas, key, value);
         }
 
-        writer.writeAttribute("v:data", datas.toString());
+        writer.writeAttributeNS("data", datas.toString());
 
         return writer;
     }

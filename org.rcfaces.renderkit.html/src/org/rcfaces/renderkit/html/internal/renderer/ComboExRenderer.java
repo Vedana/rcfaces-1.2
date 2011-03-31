@@ -32,15 +32,15 @@ public class ComboExRenderer extends AbstractSelectItemsRenderer {
      * writer.writeAttribute("cellpadding", "0");
      * 
      * if (component.isDisabled(facesContext)) {
-     * writer.writeAttribute("v:disabled", "true"); } if
+     * writer.writeAttributeNS("disabled", "true"); } if
      * (component.isEditable(facesContext) == false) {
-     * writer.writeAttribute("v:editable", "false"); } if
+     * writer.writeAttributeNS("editable", "false"); } if
      * (component.isReadOnly(facesContext)) {
-     * writer.writeAttribute("v:readOnly", "true"); } if
+     * writer.writeAttributeNS("readOnly", "true"); } if
      * (component.isAutoCompletion(facesContext)) {
-     * writer.writeAttribute("v:autoCompletion", "true"); } int rowNumber =
+     * writer.writeAttributeNS("autoCompletion", "true"); } int rowNumber =
      * component.getPopupRowNumber(); if (rowNumber > 0) {
-     * writer.writeAttribute("v:popupRowNumber", rowNumber); } }
+     * writer.writeAttributeNS("popupRowNumber", rowNumber); } }
      * 
      * protected void encodeAfterDecorator(IHtmlWriter writer,
      * IComponentDecorator componentDecorator) throws WriterException {

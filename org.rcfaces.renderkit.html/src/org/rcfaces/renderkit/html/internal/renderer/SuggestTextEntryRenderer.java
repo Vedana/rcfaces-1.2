@@ -22,6 +22,7 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SuggestTextEntryDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -53,32 +54,32 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         int maxResultNumber = suggestTextEntryComponent
                 .getMaxResultNumber(facesContext);
         if (maxResultNumber > 0) {
-            htmlWriter.writeAttribute("v:maxResultNumber", maxResultNumber);
+            htmlWriter.writeAttributeNS("maxResultNumber", maxResultNumber);
         }
 
         int suggestionDelayMs = suggestTextEntryComponent
                 .getSuggestionDelayMs(facesContext);
         if (suggestionDelayMs > 0) {
-            htmlWriter.writeAttribute("v:suggestionDelayMs", suggestionDelayMs);
+            htmlWriter.writeAttributeNS("suggestionDelayMs", suggestionDelayMs);
         }
 
         int suggestionMinChars = suggestTextEntryComponent
                 .getSuggestionMinChars(facesContext);
         if (suggestionMinChars > 0) {
-            htmlWriter.writeAttribute("v:suggestionMinChars",
+            htmlWriter.writeAttributeNS("suggestionMinChars",
                     suggestionMinChars);
         }
 
         boolean caseSensitive = suggestTextEntryComponent
                 .isCaseSensitive(facesContext);
         if (caseSensitive) {
-            htmlWriter.writeAttribute("v:caseSensitive", true);
+            htmlWriter.writeAttributeNS("caseSensitive", true);
         }
 
         boolean forceProposal = suggestTextEntryComponent
                 .isForceProposal(facesContext);
         if (forceProposal) {
-            htmlWriter.writeAttribute("v:forceProposal", true);
+            htmlWriter.writeAttributeNS("forceProposal", true);
         }
 
         Object suggestionValue = suggestTextEntryComponent
@@ -86,20 +87,20 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         if (suggestionValue != null) {
             String value = ValuesTools.convertValueToString(suggestionValue,
                     suggestTextEntryComponent, facesContext);
-            htmlWriter.writeAttribute("v:suggestionValue", value);
+            htmlWriter.writeAttributeNS("suggestionValue", value);
         }
 
         String moreResultsMessage = suggestTextEntryComponent
                 .getMoreResultsMessage(facesContext);
         if (moreResultsMessage != null) {
-            htmlWriter.writeAttribute("v:moreResultsMessage",
+            htmlWriter.writeAttributeNS("moreResultsMessage",
                     moreResultsMessage);
         }
 
         boolean orderedResult = suggestTextEntryComponent
                 .isOrderedItems(facesContext);
         if (orderedResult == false) {
-            htmlWriter.writeAttribute("v:orderedResult", false);
+            htmlWriter.writeAttributeNS("orderedResult", false);
         }
 
         return htmlWriter;
@@ -201,4 +202,12 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         }
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] {
+                "maxResultNumber", "suggestionDelayMs", "suggestionMinChars",
+                "caseSensitive", "forceProposal", "suggestionValue",
+                "moreResultsMessage", "orderedResult" });
+    }
 }

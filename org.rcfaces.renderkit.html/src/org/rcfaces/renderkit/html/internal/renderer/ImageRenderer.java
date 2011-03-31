@@ -19,6 +19,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -67,7 +68,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                 componentRenderContext.setAttribute(FILTRED_CONTENT_PROPERTY,
                         Boolean.TRUE);
 
-                htmlWriter.writeAttribute("v:filtred", true);
+                htmlWriter.writeAttributeNS("filtred", true);
 
                 if (filterProperties != null
                         && filterProperties.isEmpty() == false) {
@@ -75,7 +76,7 @@ public class ImageRenderer extends AbstractCssRenderer {
                             filterProperties, componentRenderContext
                                     .getRenderContext().getProcessContext(),
                             componentRenderContext.getComponent());
-                    htmlWriter.writeAttribute("v:filterExpression",
+                    htmlWriter.writeAttributeNS("filterExpression",
                             filterExpression);
                 }
             }
@@ -83,10 +84,10 @@ public class ImageRenderer extends AbstractCssRenderer {
 
         if (url == null) {
             url = componentRenderContext.getHtmlRenderContext()
-                    .getHtmlProcessContext().getStyleSheetURI(BLANK_IMAGE_URL,
-                            true);
+                    .getHtmlProcessContext()
+                    .getStyleSheetURI(BLANK_IMAGE_URL, true);
 
-            htmlWriter.writeAttribute("v:blank", true);
+            htmlWriter.writeAttributeNS("blank", true);
         }
         htmlWriter.writeSrc(url);
 
@@ -125,5 +126,12 @@ public class ImageRenderer extends AbstractCssRenderer {
             javaScriptRenderContext.appendRequiredClass(
                     JavaScriptClasses.FILTRED_COMPONENT, "filter");
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "filtred",
+                "filterExpression", "blank" });
     }
 }

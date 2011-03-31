@@ -44,6 +44,8 @@ public abstract class AbstractHtmlWriter extends
 
     private static final String SUB_COMPONENTS_IDS_PROPERTY = "org.rcfaces.core.internal.writer.SUB_COMPONENTS_IDS";
 
+    private static final String RCFACES_NS = "v";
+
     static {
         if (VERIFY_TAG_STACK) {
             LOG.debug("Verify tags stack enabled.");
@@ -715,5 +717,59 @@ public abstract class AbstractHtmlWriter extends
 
         return (String[]) subComponents
                 .toArray(new String[subComponents.size()]);
+    }
+
+    public String getRcfacesNamespace() {
+        return RCFACES_NS;
+    }
+
+    public String computeRcfacesNamespace(String name) {
+        return RCFACES_NS + ":" + name;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, String value)
+            throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, long value)
+            throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, boolean value)
+            throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeURIAttributeNS(String name, Object value)
+            throws WriterException {
+
+        writeURIAttribute(computeRcfacesNamespace(name), value);
+        return this;
+    }
+
+    public IHtmlWriter writeAttributeNS(String name, String[] values,
+            String separator) throws WriterException {
+
+        writeAttribute(computeRcfacesNamespace(name), values, separator);
+        return this;
+    }
+
+    public IHtmlWriter startElementNS(String name) throws WriterException {
+
+        startElement(computeRcfacesNamespace(name));
+        return this;
+    }
+
+    public IHtmlWriter endElementNS(String name) throws WriterException {
+        endElement(computeRcfacesNamespace(name));
+        return this;
     }
 }

@@ -26,6 +26,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCompositeRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -89,16 +90,16 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
         timeFormat = TimeTools.normalizeTimeFormat(componentRenderContext,
                 timeFormat);
 
-        // htmlWriter.writeAttribute("v:timeFormat", timeFormat);
+        // htmlWriter.writeAttributeNS("timeFormat", timeFormat);
 
         Time minTime = timeEntryComponent.getMinTime(facesContext);
         if (minTime != null) {
-            htmlWriter.writeAttribute("v:minTime", minTime.getTime());
+            htmlWriter.writeAttributeNS("minTime", minTime.getTime());
         }
 
         Time maxTime = timeEntryComponent.getMaxTime(facesContext);
         if (maxTime != null) {
-            htmlWriter.writeAttribute("v:maxTime", maxTime.getTime());
+            htmlWriter.writeAttributeNS("maxTime", maxTime.getTime());
         }
 
         writeClientValidatorParams(htmlWriter);
@@ -328,41 +329,43 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
                 String sCurValue = null;
                 if (curValue >= 0) {
-                    StringAppender s = new StringAppender(String
-                            .valueOf(curValue), nb);
+                    StringAppender s = new StringAppender(
+                            String.valueOf(curValue), nb);
                     s.insert(0, '0', nb - s.length());
 
                     sCurValue = s.toString();
                 }
 
+                String ns = htmlWriter.getRcfacesNamespace() + ":";
+
                 Map attributes = new HashMap(8);
                 if (minValue >= 0) {
-                    attributes.put("v:min", String.valueOf(minValue));
+                    attributes.put(ns + "min", String.valueOf(minValue));
                 }
 
                 if (maxValue >= 0) {
-                    attributes.put("v:max", String.valueOf(maxValue));
+                    attributes.put(ns + "max", String.valueOf(maxValue));
                 }
 
                 if (defaultValue >= 0) {
-                    attributes.put("v:defaultValue", String
-                            .valueOf(defaultValue));
+                    attributes.put(ns + "defaultValue",
+                            String.valueOf(defaultValue));
                 }
 
                 if (step != null && step.length() > 0) {
-                    attributes.put("v:step", step);
+                    attributes.put(ns + "step", step);
                 }
 
                 if (separators != null && separators.length() > 0) {
-                    attributes.put("v:separators", separators);
+                    attributes.put(ns + "separators", separators);
                 }
 
                 if (cycle) {
-                    attributes.put("v:cycle", "true");
+                    attributes.put(ns + "cycle", "true");
                 }
 
                 if (autoComplete) {
-                    attributes.put("v:auto", "true");
+                    attributes.put(ns + "auto", "true");
                 }
 
                 // nb, sminValue, smaxValue, sdefaultValue, sCurValue,
@@ -436,5 +439,13 @@ public class TimeEntryRenderer extends AbstractCompositeRenderer {
 
     protected String getActionEventName(INameSpace nameSpace) {
         return nameSpace.getSelectionEventName();
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "timeFormat",
+                "minTime", "maxTime", "min", "max", "defaultValue", "step",
+                "separators", "cycle", "auto" });
     }
 }

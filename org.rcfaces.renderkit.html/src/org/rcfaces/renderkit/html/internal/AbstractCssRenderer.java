@@ -20,6 +20,7 @@ import org.rcfaces.core.component.capability.IStyleClassCapability;
 import org.rcfaces.core.component.capability.ITextAlignmentCapability;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.internal.renderkit.WriterException;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 
 /**
@@ -97,7 +98,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
             String sc = cssStyleClasses.constructUserStyleClasses();
             if (sc != null && sc.length() > 0) {
-                writer.writeAttribute("v:styleClass", sc);
+                writer.writeAttributeNS("styleClass", sc);
             }
         }
 
@@ -216,7 +217,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         writeCustomCss(writer, cssWriter);
 
         if (hiddenMode != DEFAULT_RENDERED_HIDDEN_MODE) {
-            writer.writeAttribute("v:hiddenMode", hiddenMode);
+            writer.writeAttributeNS("hiddenMode", hiddenMode);
         }
 
         return writer;
@@ -429,7 +430,7 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
             IHtmlComponentRenderContext htmlComponentContext) {
         return true;
     }
-    
+
     protected final String computeBlankImageURL(IHtmlWriter writer) {
 
         IHtmlRenderContext htmlRenderContext = writer
@@ -437,5 +438,12 @@ public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
 
         return htmlRenderContext.getHtmlProcessContext().getStyleSheetURI(
                 AbstractCssRenderer.BLANK_IMAGE_URL, true);
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "styleClass",
+                "hiddenMode" });
     }
 }

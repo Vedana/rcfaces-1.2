@@ -24,6 +24,10 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
+import org.rcfaces.renderkit.html.internal.layout.AbsoluteLayoutProcessor;
+import org.rcfaces.renderkit.html.internal.layout.AbstractLayoutProcessor;
+import org.rcfaces.renderkit.html.internal.layout.ILayoutProcessor;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 
 /**
@@ -73,7 +77,7 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
 
         String overStyleClass = boxComponent.getOverStyleClass(facesContext);
         if (overStyleClass != null) {
-            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+            htmlWriter.writeAttributeNS("overStyleClass", overStyleClass);
 
             htmlWriter.getJavaScriptEnableMode().enableOnOver();
         }
@@ -88,11 +92,11 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
                         .getAsyncRenderMode(boxComponent);
 
                 if (asyncRender != IAsyncRenderModeCapability.NONE_ASYNC_RENDER_MODE) {
-                    htmlWriter.writeAttribute("v:asyncRender", true);
+                    htmlWriter.writeAttributeNS("asyncRender", true);
 
                     if (boxComponent.getAsyncDecodeMode(componentRenderContext
                             .getFacesContext()) == IAsyncDecodeModeCapability.PARTIAL_ASYNC_DECODE_MODE) {
-                        htmlWriter.writeAttribute("v:asyncDecode", true);
+                        htmlWriter.writeAttributeNS("asyncDecode", true);
                     }
 
                     htmlRenderContext.pushInteractiveRenderComponent(
@@ -102,19 +106,23 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         }
 
         setAsyncRenderer(htmlWriter, boxComponent, asyncRender);
-        /*
-         * int type = boxComponent.getLayoutType(facesContext); if (type ==
-         * ILayoutManagerCapability.INHERITED_LAYOUT_TYPE) { type =
-         * AbstractLayoutProcessor
-         * .computeInheritedLayoutType(boxComponent.getParent()); }
-         * 
-         * if (type == ILayoutManagerCapability.ABSOLUTE_LAYOUT_TYPE) {
-         * manageAbsoluteLayout(htmlWriter, boxComponent, type); }
-         */
+
+        int type = boxComponent.getLayoutType(facesContext);
+        if (type == ILayoutManagerCapability.INHERITED_LAYOUT_TYPE) {
+            type = AbstractLayoutProcessor
+                    .computeInheritedLayoutType(boxComponent.getParent());
+        }
+
+        if (type == ILayoutManagerCapability.ABSOLUTE_LAYOUT_TYPE) {
+            manageAbsoluteLayout(htmlWriter, boxComponent, type,
+                    AbsoluteLayoutProcessor.getSingleton());
+        }
+
     }
 
     private void manageAbsoluteLayout(IHtmlWriter htmlWriter,
-            ILayoutManagerCapability layoutManager, int type) {
+            ILayoutManagerCapability layoutManager, int type,
+            ILayoutProcessor processor) {
 
         // Connait-on notre taille en pixel ?
 
@@ -197,5 +205,12 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
             javaScriptRenderContext.appendRequiredClass(JavaScriptClasses.BOX,
                     "menu");
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] {
+                "overStyleClass", "asyncRender", "asyncDecode" });
     }
 }

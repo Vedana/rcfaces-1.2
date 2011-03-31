@@ -37,6 +37,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -167,41 +168,41 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         writeCssAttributes(htmlWriter, cssStyleClasses, CSS_ALL_MASK);
 
         if (valueColumnId != null) {
-            htmlWriter.writeAttribute("v:valueColumnId", valueColumnId);
+            htmlWriter.writeAttributeNS("valueColumnId", valueColumnId);
         }
 
         if (labelColumnId != null) {
-            htmlWriter.writeAttribute("v:labelColumnId", labelColumnId);
+            htmlWriter.writeAttributeNS("labelColumnId", labelColumnId);
         }
 
         if (valueFormat != null) {
-            htmlWriter.writeAttribute("v:valueFormat", valueFormat);
+            htmlWriter.writeAttributeNS("valueFormat", valueFormat);
         }
 
         if (valueFormatLabel != null) {
-            htmlWriter.writeAttribute("v:valueFormatLabel", valueFormatLabel);
+            htmlWriter.writeAttributeNS("valueFormatLabel", valueFormatLabel);
         }
 
         int rows = gridRenderContext.getRows();
         if (rows > 0) {
-            htmlWriter.writeAttribute("v:rows", rows);
+            htmlWriter.writeAttributeNS("rows", rows);
         }
         if (gridRenderContext.isPaged() == false) {
-            htmlWriter.writeAttribute("v:paged", false);
+            htmlWriter.writeAttributeNS("paged", false);
         }
         if (editable == false) {
-            htmlWriter.writeAttribute("v:editable", false);
+            htmlWriter.writeAttributeNS("editable", false);
         }
         if (readOnly) {
-            htmlWriter.writeAttribute("v:readOnly", true);
+            htmlWriter.writeAttributeNS("readOnly", true);
         }
         if (disabled) {
-            htmlWriter.writeAttribute("v:disabled", true);
+            htmlWriter.writeAttributeNS("disabled", true);
         }
 
         int maxTextLength = comboGridComponent.getMaxTextLength(facesContext);
         if (maxTextLength > 0) {
-            htmlWriter.writeAttribute("v:maxTextLength", maxTextLength);
+            htmlWriter.writeAttributeNS("maxTextLength", maxTextLength);
         }
 
         String rowStyleClasses[] = gridRenderContext.getRowStyleClasses();
@@ -218,26 +219,26 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 sa.append(token);
             }
 
-            htmlWriter.writeAttribute("v:rowStyleClass", sa.toString());
+            htmlWriter.writeAttributeNS("rowStyleClass", sa.toString());
         }
 
         int suggestionDelayMs = comboGridComponent
                 .getSuggestionDelayMs(facesContext);
         if (suggestionDelayMs > 0) {
-            htmlWriter.writeAttribute("v:suggestionDelayMs", suggestionDelayMs);
+            htmlWriter.writeAttributeNS("suggestionDelayMs", suggestionDelayMs);
         }
 
         int suggestionMinChars = comboGridComponent
                 .getSuggestionMinChars(facesContext);
         if (suggestionMinChars > 0) {
-            htmlWriter.writeAttribute("v:suggestionMinChars",
+            htmlWriter.writeAttributeNS("suggestionMinChars",
                     suggestionMinChars);
         }
 
         String noValueFormatLabel = comboGridComponent
                 .getNoValueFormatLabel(facesContext);
         if (noValueFormatLabel != null) {
-            htmlWriter.writeAttribute("v:noValueFormatLabel",
+            htmlWriter.writeAttributeNS("noValueFormatLabel",
                     noValueFormatLabel);
         }
 
@@ -250,7 +251,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 comboGridComponent, ac);
 
         if (forId != null) {
-            htmlWriter.writeAttribute("v:forLabel", forId);
+            htmlWriter.writeAttributeNS("forLabel", forId);
 
             UIComponent label = facesContext.getViewRoot().findComponent(forId);
             if (null != label && label instanceof TextComponent) {
@@ -265,51 +266,51 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         String pagerStyleClass = comboGridComponent
                 .getPagerStyleClass(facesContext);
         if (pagerStyleClass != null) {
-            htmlWriter.writeAttribute("v:pagerStyleClass", pagerStyleClass);
+            htmlWriter.writeAttributeNS("pagerStyleClass", pagerStyleClass);
         }
 
         String pagerLookId = comboGridComponent.getPagerLookId(facesContext);
         if (pagerLookId != null) {
-            htmlWriter.writeAttribute("v:pagerLookId", pagerLookId);
+            htmlWriter.writeAttributeNS("pagerLookId", pagerLookId);
         }
 
         String popupStyleClass = comboGridComponent
                 .getPopupStyleClass(facesContext);
         if (popupStyleClass != null) {
-            htmlWriter.writeAttribute("v:popupStyleClass", popupStyleClass);
+            htmlWriter.writeAttributeNS("popupStyleClass", popupStyleClass);
         }
 
         String gridStyleClass = comboGridComponent
                 .getGridStyleClass(facesContext);
         if (gridStyleClass != null) {
-            htmlWriter.writeAttribute("v:gridStyleClass", gridStyleClass);
+            htmlWriter.writeAttributeNS("gridStyleClass", gridStyleClass);
         }
 
         String gridLookId = comboGridComponent.getGridLookId(facesContext);
         if (gridLookId != null) {
-            htmlWriter.writeAttribute("v:gridLookId", gridLookId);
+            htmlWriter.writeAttributeNS("gridLookId", gridLookId);
         }
 
         boolean searchField = comboGridComponent
                 .isSearchFieldVisible(facesContext);
         if (searchField == false) {
-            htmlWriter.writeAttribute("v:searchFieldVisible", searchField);
+            htmlWriter.writeAttributeNS("searchFieldVisible", searchField);
         }
 
         boolean forceValidation = comboGridComponent
                 .isForceValidation(facesContext);
         if (forceValidation == true) {
-            htmlWriter.writeAttribute("v:forceValidation", forceValidation);
+            htmlWriter.writeAttributeNS("forceValidation", forceValidation);
         }
 
         boolean headerVisible = gridRenderContext.isHeaderVisible();
         if (headerVisible == true && comboGridComponent.isHeaderVisibleSetted()) {
-            htmlWriter.writeAttribute("v:headerVisible", true);
+            htmlWriter.writeAttributeNS("headerVisible", true);
         }
 
         Object dataModel = gridRenderContext.getDataModel();
         if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttribute("v:filtred", true);
+            htmlWriter.writeAttributeNS("filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
@@ -317,19 +318,19 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                         filterMap, componentRenderContext.getRenderContext()
                                 .getProcessContext(), componentRenderContext
                                 .getComponent());
-                htmlWriter.writeAttribute("v:filterExpression",
+                htmlWriter.writeAttributeNS("filterExpression",
                         filterExpression);
             }
         }
 
         int popupWidth = gridRenderContext.getGridWidth();
         if (popupWidth > 0) {
-            htmlWriter.writeAttribute("v:popupWidth", popupWidth);
+            htmlWriter.writeAttributeNS("popupWidth", popupWidth);
         }
 
         int popupHeight = gridRenderContext.getGridHeight();
         if (popupHeight > 0) {
-            htmlWriter.writeAttribute("v:popupHeight", popupHeight);
+            htmlWriter.writeAttributeNS("popupHeight", popupHeight);
         }
 
         // if (comboGridComponent instanceof IEmptyMessageCapability) {
@@ -338,7 +339,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         if (emptyMessage != null) {
             emptyMessage = ParamUtils.formatMessage(comboGridComponent,
                     emptyMessage);
-            htmlWriter.writeAttribute("v:emptyMessage", emptyMessage);
+            htmlWriter.writeAttributeNS("emptyMessage", emptyMessage);
         }
         // }
 
@@ -349,19 +350,19 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             emptyDataMessage = ParamUtils.formatMessage(comboGridComponent,
                     emptyDataMessage);
 
-            htmlWriter.writeAttribute("v:emptyDataMessage", emptyDataMessage);
+            htmlWriter.writeAttributeNS("emptyDataMessage", emptyDataMessage);
         }
 
         if (convertedSelectedValue != null
                 && convertedSelectedValue.length() > 0) {
 
             htmlWriter
-                    .writeAttribute("v:selectedValue", convertedSelectedValue);
+                    .writeAttributeNS("selectedValue", convertedSelectedValue);
 
             if (componentRenderContext
                     .containsAttribute(INPUT_ERRORED_PROPERTY)) {
                 // La clef est inconnue !
-                htmlWriter.writeAttribute("v:invalidKey", true);
+                htmlWriter.writeAttributeNS("invalidKey", true);
             }
         }
 
@@ -468,7 +469,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                 sa.append(' ').append(getMainStyleClassName())
                         .append("_input_empty_message");
 
-                htmlWriter.writeAttribute("v:emptyMessage", true);
+                htmlWriter.writeAttributeNS("emptyMessage", true);
             }
         }
 
@@ -622,5 +623,20 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
                     .getPopupHeight();
         }
 
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "valueColumnId",
+                "labelColumnId", "valueFormat", "valueFormatLabel", "rows",
+                "paged", "editable", "readOnly", "disabled", "maxTextLength",
+                "rowStyleClass", "suggestionDelayMs", "suggestionMinChars",
+                "noValueFormatLabel", "forLabel", "pagerStyleClass",
+                "pagerLookId", "popupStyleClass", "gridStyleClass",
+                "gridLookId", "searchFieldVisible", "forceValidation",
+                "headerVisible", "filtred", "filterExpression", "popupWidth",
+                "popupHeight", "emptyMessage", "emptyDataMessage",
+                "selectedValue", "invalidKey", "emptyMessage" });
     }
 }

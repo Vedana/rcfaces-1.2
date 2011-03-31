@@ -37,6 +37,7 @@ import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ISelectItemNodeWriter;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.TreeDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -75,11 +76,11 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
                 cardinality = ICheckCardinalityCapability.DEFAULT_CARDINALITY;
             }
 
-            htmlWriter.writeAttribute("v:checkCardinality", cardinality);
+            htmlWriter.writeAttributeNS("checkCardinality", cardinality);
 
             int ccfs = treeComponent.getClientCheckFullState(facesContext);
             if (ccfs != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
-                htmlWriter.writeAttribute("v:clientCheckFullState", ccfs);
+                htmlWriter.writeAttributeNS("clientCheckFullState", ccfs);
             }
         }
 
@@ -90,25 +91,25 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
                 cardinality = ISelectionCardinalityCapability.DEFAULT_CARDINALITY;
             }
 
-            htmlWriter.writeAttribute("v:selectionCardinality", cardinality);
+            htmlWriter.writeAttributeNS("selectionCardinality", cardinality);
 
             int csfs = treeComponent.getClientSelectionFullState(facesContext);
             if (csfs != IClientFullStateCapability.NONE_CLIENT_FULL_STATE) {
-                htmlWriter.writeAttribute("v:clientSelectionFullState", csfs);
+                htmlWriter.writeAttributeNS("clientSelectionFullState", csfs);
             }
         }
 
         if (treeComponent.isExpandable(facesContext) == false) {
-            htmlWriter.writeAttribute("v:userExpandable", false);
+            htmlWriter.writeAttributeNS("userExpandable", false);
         }
 
         if (treeComponent.isHideRootExpandSign(facesContext)) {
-            htmlWriter.writeAttribute("v:hideRootExpandSign", true);
+            htmlWriter.writeAttributeNS("hideRootExpandSign", true);
         }
 
         int depthLevel = treeComponent.getPreloadedLevelDepth(facesContext);
         if (depthLevel > 0) {
-            htmlWriter.writeAttribute("v:preloadedLevelDepth", depthLevel);
+            htmlWriter.writeAttributeNS("preloadedLevelDepth", depthLevel);
         }
 
         Object cursorValue = treeComponent.getCursorValue(facesContext);
@@ -120,14 +121,14 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         }
 
         if (clientCursorValue != null) {
-            htmlWriter.writeAttribute("v:cursorValue", clientCursorValue);
+            htmlWriter.writeAttributeNS("cursorValue", clientCursorValue);
         }
 
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
         String overStyleClass = treeComponent.getOverStyleClass(facesContext);
         if (overStyleClass != null) {
-            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+            htmlWriter.writeAttributeNS("overStyleClass", overStyleClass);
 
             // htmlWriter.getJavaScriptEnableMode().enableOnOver();
         }
@@ -138,14 +139,14 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             if (dragEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
                 dragEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
-            htmlWriter.writeAttribute("v:dragEffects", dragEffects);
+            htmlWriter.writeAttributeNS("dragEffects", dragEffects);
 
             String dragTypes[] = treeComponent.getDragTypes(facesContext);
             if (dragTypes != null && dragTypes.length > 0) {
-                htmlWriter.writeAttribute("v:dragTypes",
+                htmlWriter.writeAttributeNS("dragTypes",
                         HtmlTools.serializeDnDTypes(dragTypes));
             } else {
-                htmlWriter.writeAttribute("v:dragTypes", "x-RCFaces/treeNode");
+                htmlWriter.writeAttributeNS("dragTypes", "x-RCFaces/treeNode");
             }
         }
 
@@ -155,18 +156,18 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
             if (dropEffects <= IDragAndDropEffects.UNKNOWN_DND_EFFECT) {
                 dropEffects = IDragAndDropEffects.DEFAULT_DND_EFFECT;
             }
-            htmlWriter.writeAttribute("v:dropEffects", dropEffects);
+            htmlWriter.writeAttributeNS("dropEffects", dropEffects);
 
             String dropTypes[] = treeComponent.getDropTypes(facesContext);
             if (dropTypes != null && dropTypes.length > 0) {
-                htmlWriter.writeAttribute("v:dropTypes",
+                htmlWriter.writeAttributeNS("dropTypes",
                         HtmlTools.serializeDnDTypes(dropTypes));
             } else {
-                htmlWriter.writeAttribute("v:dropTypes", "*/*");
+                htmlWriter.writeAttributeNS("dropTypes", "*/*");
             }
 
             if (treeComponent.isBodyDroppable(facesContext)) {
-                htmlWriter.writeAttribute("v:bodyDroppable", true);
+                htmlWriter.writeAttributeNS("bodyDroppable", true);
             }
         }
 
@@ -381,5 +382,17 @@ public class TreeRenderer extends AbstractSelectItemsRenderer {
         }
 
         return ret;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] {
+                "checkCardinality", "clientCheckFullState",
+                "selectionCardinality", "clientSelectionFullState",
+                "userExpandable", "hideRootExpandSign", "preloadedLevelDepth",
+                "cursorValue", "overStyleClass", "dragEffects", "dragTypes",
+                "dragTypes", "dropEffects", "dropTypes", "dropTypes",
+                "bodyDroppable" });
     }
 }

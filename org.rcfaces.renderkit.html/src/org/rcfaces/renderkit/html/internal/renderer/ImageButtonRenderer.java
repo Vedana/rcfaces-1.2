@@ -21,6 +21,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.AbstractImageButtonFamillyDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -38,7 +39,7 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_BUTTON;
     }
-    
+
     protected boolean hasComponenDecoratorSupport() {
         return true;
     }
@@ -121,10 +122,11 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
         return IAccessibilityRoles.PRESENTATION;
     }
 
-    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer, UIComponent component) throws WriterException {
-    	return writer;
+    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer,
+            UIComponent component) throws WriterException {
+        return writer;
     }
-    
+
     /**
      * 
      * @author Olivier Oeuillot (latest modification by $Author$)
@@ -158,21 +160,26 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
                 throws WriterException {
             String value = getInputValue(false);
             if (value != null) {
-                writer.writeAttribute("v:value", value);
+                writer.writeAttributeNS("value", value);
 
                 writer.getComponentRenderContext().setAttribute(
                         INTERNAL_VALUE_ATTRIBUTE, value);
             }
 
             if (imageButtonFamilly.isDisabled(facesContext)) {
-                writer.writeAttribute("v:disabled", true);
+                writer.writeAttributeNS("disabled", true);
             }
-            
-            
 
             if (imageButtonFamilly.isReadOnly(facesContext)) {
-                writer.writeAttribute("v:readOnly", true);
+                writer.writeAttributeNS("readOnly", true);
             }
         }
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "value",
+                "disabled", "readOnly" });
     }
 }

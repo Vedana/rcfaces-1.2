@@ -17,6 +17,7 @@ import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IAccessibilityRoles;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -63,91 +64,87 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
-/*
- 
-        IComponentRenderContext componentRenderContext = htmlWriter
-                .getComponentRenderContext();
-
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
-                .getRenderContext();
-       
-        String blankImageURL = htmlRenderContext.getHtmlProcessContext()
-                .getStyleSheetURI(BLANK_IMAGE_URL, true);
-
-        htmlWriter.startElement(IHtmlWriter.TABLE);
-
-        htmlWriter.writeCellPadding(0);
-        htmlWriter.writeCellSpacing(0);
-
-        htmlWriter.startElement(IHtmlWriter.COL);
-        htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
-        htmlWriter.endElement(IHtmlWriter.COL);
-
-        htmlWriter.startElement(IHtmlWriter.COL);
-        htmlWriter.writeWidth("*");
-        htmlWriter.endElement(IHtmlWriter.COL);
-
-        htmlWriter.startElement(IHtmlWriter.COL);
-        htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
-        htmlWriter.endElement(IHtmlWriter.COL);
-
-        htmlWriter.writeln();
-
-        htmlWriter.startElement(IHtmlWriter.TBODY);
-
-        htmlWriter.startElement(IHtmlWriter.TR);
-
-        htmlWriter.startElement(IHtmlWriter.TD);
-        htmlWriter.writeAttribute("class", getLeftCellClassName(htmlWriter));
-
-        htmlWriter.startElement(IHtmlWriter.IMG);
-        htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
-        htmlWriter.writeHeight(BORDER_HEIGHT);
-        htmlWriter.writeSrc(blankImageURL);
-        htmlWriter.endElement(IHtmlWriter.IMG);
-
-        htmlWriter.endElement(IHtmlWriter.TD);
-
-        htmlWriter.startElement(IHtmlWriter.TD);
-        htmlWriter.writeClass(getMidCellClassName(htmlWriter));
-        htmlWriter.writeText(ISgmlWriter.NBSP);
-        htmlWriter.endElement(IHtmlWriter.TD);
-
-        htmlWriter.startElement(IHtmlWriter.TD);
-        htmlWriter.writeClass(getRightCellClassName(htmlWriter));
-
-        htmlWriter.startElement(IHtmlWriter.IMG);
-        htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
-        htmlWriter.writeHeight(BORDER_HEIGHT);
-        htmlWriter.writeSrc(blankImageURL);
-        htmlWriter.endElement(IHtmlWriter.IMG);
-
-        htmlWriter.endElement(IHtmlWriter.TD);
-
-        htmlWriter.endElement(IHtmlWriter.TR);
-
-        htmlWriter.endElement(IHtmlWriter.TBODY);
-
-        htmlWriter.endElement(IHtmlWriter.TABLE);
-        */
+        /*
+         * 
+         * IComponentRenderContext componentRenderContext = htmlWriter
+         * .getComponentRenderContext();
+         * 
+         * IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext)
+         * componentRenderContext .getRenderContext();
+         * 
+         * String blankImageURL = htmlRenderContext.getHtmlProcessContext()
+         * .getStyleSheetURI(BLANK_IMAGE_URL, true);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.TABLE);
+         * 
+         * htmlWriter.writeCellPadding(0); htmlWriter.writeCellSpacing(0);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.COL);
+         * htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
+         * htmlWriter.endElement(IHtmlWriter.COL);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.COL); htmlWriter.writeWidth("*");
+         * htmlWriter.endElement(IHtmlWriter.COL);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.COL);
+         * htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
+         * htmlWriter.endElement(IHtmlWriter.COL);
+         * 
+         * htmlWriter.writeln();
+         * 
+         * htmlWriter.startElement(IHtmlWriter.TBODY);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.TR);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.TD);
+         * htmlWriter.writeAttribute("class", getLeftCellClassName(htmlWriter));
+         * 
+         * htmlWriter.startElement(IHtmlWriter.IMG);
+         * htmlWriter.writeWidth(BORDER_LEFT_WIDTH);
+         * htmlWriter.writeHeight(BORDER_HEIGHT);
+         * htmlWriter.writeSrc(blankImageURL);
+         * htmlWriter.endElement(IHtmlWriter.IMG);
+         * 
+         * htmlWriter.endElement(IHtmlWriter.TD);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.TD);
+         * htmlWriter.writeClass(getMidCellClassName(htmlWriter));
+         * htmlWriter.writeText(ISgmlWriter.NBSP);
+         * htmlWriter.endElement(IHtmlWriter.TD);
+         * 
+         * htmlWriter.startElement(IHtmlWriter.TD);
+         * htmlWriter.writeClass(getRightCellClassName(htmlWriter));
+         * 
+         * htmlWriter.startElement(IHtmlWriter.IMG);
+         * htmlWriter.writeWidth(BORDER_RIGHT_WIDTH);
+         * htmlWriter.writeHeight(BORDER_HEIGHT);
+         * htmlWriter.writeSrc(blankImageURL);
+         * htmlWriter.endElement(IHtmlWriter.IMG);
+         * 
+         * htmlWriter.endElement(IHtmlWriter.TD);
+         * 
+         * htmlWriter.endElement(IHtmlWriter.TR);
+         * 
+         * htmlWriter.endElement(IHtmlWriter.TBODY);
+         * 
+         * htmlWriter.endElement(IHtmlWriter.TABLE);
+         */
     }
 
     protected String getWAIRole() {
         return IAccessibilityRoles.PROGRESS_BAR;
     }
-/*
-    protected String getLeftCellClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + "_left";
-    }
 
-    protected String getRightCellClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + "_right";
-    }
-
-    protected String getMidCellClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + "_mid";
-    }
-*/
+    /*
+     * protected String getLeftCellClassName(IHtmlWriter htmlWriter) { return
+     * getMainStyleClassName() + "_left"; }
+     * 
+     * protected String getRightCellClassName(IHtmlWriter htmlWriter) { return
+     * getMainStyleClassName() + "_right"; }
+     * 
+     * protected String getMidCellClassName(IHtmlWriter htmlWriter) { return
+     * getMainStyleClassName() + "_mid"; }
+     */
     protected void writeProgressBarAttributes(IHtmlWriter htmlWriter,
             ProgressBarComponent progressBar) throws WriterException {
 
@@ -156,12 +153,12 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
 
         double minValue = progressBar.getMinimum(facesContext);
         if (minValue != 0.0) {
-            htmlWriter.writeAttribute("v:min", Double.toString(minValue));
+            htmlWriter.writeAttributeNS("min", Double.toString(minValue));
         }
 
         double maxValue = progressBar.getMaximum(facesContext);
         if (maxValue != 0.0) {
-            htmlWriter.writeAttribute("v:max", Double.toString(maxValue));
+            htmlWriter.writeAttributeNS("max", Double.toString(maxValue));
         }
 
         Object value = progressBar.getValue();
@@ -176,7 +173,7 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
             Number num = (Number) value;
 
             if (num.doubleValue() != 0.0) {
-                htmlWriter.writeAttribute("v:value", num.toString());
+                htmlWriter.writeAttributeNS("value", num.toString());
             }
         }
     }
@@ -218,6 +215,11 @@ public class ProgressBarRenderer extends AbstractCssRenderer {
             }
         }
     }
-    
-    
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "min", "max",
+                "value" });
+    }
 }

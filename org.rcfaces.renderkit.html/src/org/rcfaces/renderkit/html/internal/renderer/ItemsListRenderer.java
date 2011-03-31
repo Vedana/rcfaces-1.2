@@ -16,6 +16,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.ItemsListDecorator;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -54,10 +55,10 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
         writeCssAttributes(writer);
 
         if (itemsListComponent.isDisabled(facesContext)) {
-            writer.writeAttribute("v:disabled", true);
+            writer.writeAttributeNS("disabled", true);
         }
         if (itemsListComponent.isReadOnly(facesContext)) {
-            writer.writeAttribute("v:readOnly", true);
+            writer.writeAttributeNS("readOnly", true);
         }
 
         writer.startElement(IHtmlWriter.UL);
@@ -130,4 +131,10 @@ public class ItemsListRenderer extends AbstractSelectItemsRenderer {
         return new ItemsListDecorator(facesContext, component);
     }
 
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "disabled",
+                "readOnly" });
+    }
 }

@@ -21,6 +21,7 @@ import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -52,7 +53,7 @@ public class ExternalBoxRenderer extends AbstractCssRenderer implements
 
         String overStyleClass = component.getOverStyleClass(facesContext);
         if (overStyleClass != null) {
-            htmlWriter.writeAttribute("v:overStyleClass", overStyleClass);
+            htmlWriter.writeAttributeNS("overStyleClass", overStyleClass);
 
         }
 
@@ -72,7 +73,7 @@ public class ExternalBoxRenderer extends AbstractCssRenderer implements
                             IContentFamily.JSP);
 
             src = contentAccessor.resolveURL(facesContext, null, null);
-            htmlWriter.writeURIAttribute("v:contentURL", src);
+            htmlWriter.writeURIAttributeNS("contentURL", src);
             if (component.isVisible()) {
                 htmlWriter.writeSrc(src);
             }
@@ -109,6 +110,13 @@ public class ExternalBoxRenderer extends AbstractCssRenderer implements
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.EXTERNAL_BOX;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] {
+                "overStyleClass", "contentURL" });
     }
 
 }

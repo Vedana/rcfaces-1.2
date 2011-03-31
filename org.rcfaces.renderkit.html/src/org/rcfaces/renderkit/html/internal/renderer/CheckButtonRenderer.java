@@ -24,6 +24,7 @@ import org.rcfaces.renderkit.html.internal.HtmlTools;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.ISubInputClientIdRenderer;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 
 /**
  * 
@@ -72,7 +73,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
             IRequiredCapability requiredCapability = (IRequiredCapability) button;
 
             if (requiredCapability.isRequired()) {
-                htmlWriter.writeAttribute("v:required", true);
+                htmlWriter.writeAttributeNS("required", true);
 
                 htmlWriter.getJavaScriptEnableMode().enableOnSubmit();
             }
@@ -102,30 +103,32 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
 
         htmlWriter.getJavaScriptEnableMode().enableOnFocus();
     }
-    
+
     @Override
     protected IHtmlWriter writeTabIndex(IHtmlWriter htmlWriter,
-    		ITabIndexCapability tabIndexCapability) throws WriterException {
-    	
-    	IComponentRenderContext componentRenderContext = htmlWriter.getComponentRenderContext();
+            ITabIndexCapability tabIndexCapability) throws WriterException {
 
-    	CheckButtonComponent button = (CheckButtonComponent) componentRenderContext.getComponent();
-    	
-    	Integer index = tabIndexCapability.getTabIndex();
+        IComponentRenderContext componentRenderContext = htmlWriter
+                .getComponentRenderContext();
+
+        CheckButtonComponent button = (CheckButtonComponent) componentRenderContext
+                .getComponent();
+
+        Integer index = tabIndexCapability.getTabIndex();
         if (index == null) {
             return htmlWriter;
         }
 
         int idx = index.intValue();
-        
-    	if (button.isDisabled() == false) {
-    		htmlWriter.writeTabIndex(idx);
-    	} else {
-    		htmlWriter.writeTabIndex(-1);
-    		htmlWriter.writeAttribute("v:tabIndex", idx);
-    	}
 
-    	return htmlWriter;
+        if (button.isDisabled() == false) {
+            htmlWriter.writeTabIndex(idx);
+        } else {
+            htmlWriter.writeTabIndex(-1);
+            htmlWriter.writeAttributeNS("tabIndex", idx);
+        }
+
+        return htmlWriter;
     }
 
     protected void writeInput(IHtmlWriter htmlWriter,
@@ -154,7 +157,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
         /*
          * On se base sur le separator ! if (htmlWriter.isJavaScriptEnabled() ==
          * false) { // Pour le FOCUS, pour retrouver le composant parent !
-         * htmlWriter.writeAttribute("v:container", componentClientId); }
+         * htmlWriter.writeAttributeNS("container", componentClientId); }
          */
 
         String accessKey = button.getAccessKey(facesContext);
@@ -174,8 +177,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
                 htmlWriter.writeAutoComplete(IHtmlWriter.AUTOCOMPLETE_OFF);
 
                 String name = htmlWriter.getComponentRenderContext()
-                        .getComponentClientId()
-                        + "::value";
+                        .getComponentClientId() + "::value";
                 htmlWriter.writeName(name);
 
                 htmlWriter.writeValue("CHECKED");
@@ -287,5 +289,12 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
     public String computeSubInputClientId(IRenderContext renderContext,
             UIComponent component, String clientId) {
         return clientId + INPUT_ID_SUFFIX;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "required",
+                "tabIndex", "container" });
     }
 }

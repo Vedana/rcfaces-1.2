@@ -16,6 +16,7 @@ import org.rcfaces.renderkit.html.internal.IHtmlComponentRenderContext;
 import org.rcfaces.renderkit.html.internal.IHtmlWriter;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
+import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
 
 /**
@@ -47,42 +48,42 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
         if (htmlComponentRenderContext.getHtmlRenderContext()
                 .getJavaScriptRenderContext().isCollectorMode() == false) {
 
-            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            htmlWriter.startElementNS(LAZY_INIT_TAG);
             writeHtmlAttributes(htmlWriter);
             writeJavaScriptAttributes(htmlWriter);
 
             String forComponent = acceleratorComponent.getFor(facesContext);
             if (forComponent != null) {
-                htmlWriter.writeAttribute("v:for", forComponent);
+                htmlWriter.writeAttributeNS("for", forComponent);
             }
 
             String forItemValue = acceleratorComponent
                     .getForItemValue(facesContext);
             if (forItemValue != null) {
-                htmlWriter.writeAttribute("v:forItemValue", forItemValue);
+                htmlWriter.writeAttributeNS("forItemValue", forItemValue);
             }
 
             KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
 
             if (state.character > 0) {
-                htmlWriter.writeAttribute("v:character", String
-                        .valueOf(state.character));
+                htmlWriter.writeAttributeNS("character",
+                        String.valueOf(state.character));
             }
 
             if (state.virtualKey != null) {
-                htmlWriter.writeAttribute("v:virtualKey", state.virtualKey
-                        .intValue());
+                htmlWriter.writeAttributeNS("virtualKey",
+                        state.virtualKey.intValue());
             }
 
             if (state.keyFlags > 0) {
-                htmlWriter.writeAttribute("v:keyFlags", state.keyFlags);
+                htmlWriter.writeAttributeNS("keyFlags", state.keyFlags);
             }
 
             if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
-                htmlWriter.writeAttribute("v:ignoreEditableComponent", true);
+                htmlWriter.writeAttributeNS("ignoreEditableComponent", true);
             }
 
-            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+            htmlWriter.endElementNS(LAZY_INIT_TAG);
 
             declareLazyJavaScriptRenderer(htmlWriter);
             htmlWriter.getJavaScriptEnableMode().enableOnInit();
@@ -118,8 +119,8 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
                 .allocateVarName();
         jsWriter.setComponentVarName(varName);
 
-        jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
-                "f_newInstance");
+        jsWriter.write(varName).write('=')
+                .writeCall(getJavaScriptClassName(), "f_newInstance");
 
         int param = 0;
 
@@ -218,5 +219,15 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
     protected boolean sendCompleteComponent(
             IHtmlComponentRenderContext htmlComponentContext) {
         return false;
+    }
+
+    public void declare(INamespaceConfiguration nameSpaceProperties) {
+        super.declare(nameSpaceProperties);
+
+        nameSpaceProperties.addComponent(LAZY_INIT_TAG);
+
+        nameSpaceProperties.addAttributes(null, new String[] { "for",
+                "forItemValue", "character", "virtualKey", "keyFlags",
+                "ignoreEditableComponent" });
     }
 }
