@@ -54,15 +54,15 @@ var __members = {
 
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			if (!imageURL) {
-				imageURL=f_core.GetAttribute(this, "v:imageURL");
+				imageURL=f_core.GetAttribute(this, f_core._VNS+":imageURL");
 			}
 
 			if (!text) { 
-				text=f_core.GetAttribute(this, "v:text");
+				text=f_core.GetAttribute(this, f_core._VNS+":text");
 			}
 
 			if (showOnSubmit===undefined) {
-				showOnSubmit=f_core.GetBooleanAttribute(this, "v:visible", true);
+				showOnSubmit=f_core.GetBooleanAttribute(this, f_core._VNS+":visible", true);
 			}
 		}
 		if (imageURL) {

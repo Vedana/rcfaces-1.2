@@ -73,14 +73,14 @@ var __members = {
 		if (image) {
 			this._image=image;
 			this._imageURL=image.src;
-			this._infoImageURL=f_core.GetAttribute(this, "v:infoImageURL");
-			this._warnImageURL=f_core.GetAttribute(this, "v:warnImageURL");
-			this._errorImageURL=f_core.GetAttribute(this, "v:errorImageURL");
-			this._fatalImageURL=f_core.GetAttribute(this, "v:fatalImageURL");
+			this._infoImageURL=f_core.GetAttribute(this, f_core._VNS+":infoImageURL");
+			this._warnImageURL=f_core.GetAttribute(this, f_core._VNS+":warnImageURL");
+			this._errorImageURL=f_core.GetAttribute(this, f_core._VNS+":errorImageURL");
+			this._fatalImageURL=f_core.GetAttribute(this, f_core._VNS+":fatalImageURL");
 		}
 
-		this._showIfMessage=f_core.GetBooleanAttribute(this, "v:showIfMessage", false);
-		this._showActiveComponentMessage=f_core.GetBooleanAttribute(this, "v:showActiveComponentMessage", false);
+		this._showIfMessage=f_core.GetBooleanAttribute(this, f_core._VNS+":showIfMessage", false);
+		this._showActiveComponentMessage=f_core.GetBooleanAttribute(this, f_core._VNS+":showActiveComponentMessage", false);
 		if (this._showActiveComponentMessage && !this.f_getFor()) {
 			this.f_addFocusAndBlurListener();
 		}

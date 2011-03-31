@@ -57,6 +57,12 @@ var f_core = {
 	 */
 	_REPORT_ERROR_URL: "/frameSetAppender/reportError.html",
 	
+	
+	/**
+	 * @field private hidden final String
+	 */
+	_VNS: "v",
+	
 	/**
 	 * @field hidden static final Number
 	 */
@@ -717,7 +723,7 @@ var f_core = {
 
 		try {
 			for(var w=win;w && w.parent!=w;w=w.parent) {
-				var f=w.parent.rcfacesProfilerCB
+				var f=w.parent.rcfacesProfilerCB;
 				if (!f) {
 					f=w.parent.f_profilerCB; // Legacy !
 				}
@@ -764,7 +770,7 @@ var f_core = {
 		// Bug sous IE en LEVEL3 ... on ne peut pas compter sur le this !
 		f_core._OnExit=function() {
 			f_core.ExitWindow(win);
-		}
+		};
 	
 		f_core.AddEventListener(win, "load", f_core._OnInit);
 		f_core.AddEventListener(win, "unload", f_core._OnExit);
@@ -2745,7 +2751,7 @@ var f_core = {
 			return null;
 		}
 						
-		var cl=f_core.GetAttribute(elt, "v:class");
+		var cl=f_core.GetAttribute(elt, f_core._VNS+":class");
 		if (!cl) {
 			return null;
 		}
@@ -3002,7 +3008,7 @@ var f_core = {
 	GetBooleanAttribute: function(element, attributeName, defaultValue) {
 		f_core.Assert(defaultValue===undefined || typeof(defaultValue)=="boolean", "f_core.GetBooleanAttribute: defaultValue parameter is invalid. ("+defaultValue+")");
 
-		var value=f_core.GetAttribute(element, attributeName)
+		var value=f_core.GetAttribute(element, attributeName);
 		if (value) {
 			return (value.toLowerCase()!="false");
 		}
@@ -3397,7 +3403,7 @@ var f_core = {
 			// On coupe aprés le premier espace, ou la fin de la chaine !
 			var p1=agt.indexOf(" ",firefox);
 			if (p1<0) {
-				p1=agt.length
+				p1=agt.length;
 			}
 			
 			var version=agt.substring(firefox, p1);
@@ -4190,7 +4196,7 @@ var f_core = {
 		if (f_core.IsGecko()) {
 			listener._mainResizeCallback=function() {
 				return listener.call(component);
-			}
+			};
 		
 			window.addEventListener("resize", listener._mainResizeCallback, false);
 			
@@ -4831,15 +4837,20 @@ var f_core = {
 	},
 	/** 
 	 * @method hidden static
+	 * @param Event evt Javascript event
+	 * @return Number Index of mouse button which was pressed
 	 */
 	GetEvtButton: function(evt) {
-		if (evt) {
-			if (evt.button!==undefined) {
-				return evt.button;
-			}
-			if (evt.which!==undefined) {
-				return evt.which;
-			}
+		if (!evt) {
+			return 0;
+		}
+		
+		if (evt.button!==undefined) {
+			return evt.button;
+		}
+		
+		if (evt.which!==undefined) {
+			return evt.which;
 		}
 		
 		return 0;
@@ -5345,7 +5356,7 @@ var f_core = {
 					}
 				}
 								
-				pos=idx2+1
+				pos=idx2+1;
 				continue;
 			}
 			
@@ -5458,7 +5469,7 @@ var f_core = {
 		f_core.Debug(f_core, "UpdateAjaxParameters: Use default faces hidden input search !");
 		
 		return f_core.AddFacesHiddenInputParameters(form, function(input) {
-			return true; // Ca peut servir !!!! !f_core.GetAttribute(input, "v:class");
+			return true; // Ca peut servir !!!! !f_core.GetAttribute(input, f_core._VNS+":class");
 		}, data);
 	},
 	/**
@@ -5745,7 +5756,7 @@ var f_core = {
 		var clientData=new Object;
 		
 		if (!attributeName) {
-			attributeName="v:data";
+			attributeName=f_core._VNS+":data";
 		}
 		
 		var att=f_core.GetAttribute(node, attributeName);
@@ -5821,7 +5832,7 @@ var f_core = {
 					win.scroll(newScroll.x, newScroll.y);
 				}
 				
-				component=win.frameElement
+				component=win.frameElement;
 				if (!component) {
 					return;
 				}
@@ -5914,7 +5925,7 @@ var f_core = {
 				return contentDocument.designMode=="on";
 				
 			} catch (ex) {
-				f_core.Info("IsComponentEditable: security exception ?", ex)
+				f_core.Info("IsComponentEditable: security exception ?", ex);
 			}
 			return false;			
 		}

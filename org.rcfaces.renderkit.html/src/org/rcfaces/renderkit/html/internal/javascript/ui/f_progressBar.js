@@ -75,13 +75,13 @@ var __members = {
 		this.f_super(arguments);
 
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var smin=f_core.GetAttribute(this, "v:min");
+			var smin=f_core.GetAttribute(this, f_core._VNS+":min");
 			this._min=(smin)?parseFloat(smin):0;
 			
-			var smax=f_core.GetAttribute(this, "v:max");
+			var smax=f_core.GetAttribute(this, f_core._VNS+":max");
 			this._max=(smax)?parseFloat(smax):0;
 	
-			var svalue=f_core.GetAttribute(this, "v:value");
+			var svalue=f_core.GetAttribute(this, f_core._VNS+":value");
 			this._value=(svalue)?parseFloat(svalue):0;
 		}
 				

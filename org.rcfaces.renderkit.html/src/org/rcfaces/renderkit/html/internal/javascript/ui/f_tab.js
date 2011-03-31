@@ -15,20 +15,20 @@ var __members = {
 	f_tab: function() {
 		this.f_super(arguments);
 		
-		var tabbedPaneClientId=f_core.GetAttribute(this, "v:tabbedPaneId");
+		var tabbedPaneClientId=f_core.GetAttribute(this, f_core._VNS+":tabbedPaneId");
 		if (tabbedPaneClientId) {
 			var properties= {
 				_id:				this.id,
 				_titleGenerated:	true,
-				_value: 			f_core.GetAttribute(this, "v:value"),
-				_selected: 			f_core.GetBooleanAttribute(this, "v:selected", false),
-				_disabled: 			f_core.GetBooleanAttribute(this, "v:disabled", false),
-				_text: 				f_core.GetAttribute(this, "v:text"),
-				_accessKey: 		f_core.GetAttribute(this, "v:accessKey"),
-				_imageURL: 			f_core.GetAttribute(this, "v:imageURL"),
-				_selectedImageURL: 	f_core.GetAttribute(this, "v:selectedImageURL"),
-				_hoverImageURL: 	f_core.GetAttribute(this, "v:hoverImageURL"),
-				_disabledImageURL: 	f_core.GetAttribute(this, "v:disabledImageURL")
+				_value: 			f_core.GetAttribute(this, f_core._VNS+":value"),
+				_selected: 			f_core.GetBooleanAttribute(this, f_core._VNS+":selected", false),
+				_disabled: 			f_core.GetBooleanAttribute(this, f_core._VNS+":disabled", false),
+				_text: 				f_core.GetAttribute(this, f_core._VNS+":text"),
+				_accessKey: 		f_core.GetAttribute(this, f_core._VNS+":accessKey"),
+				_imageURL: 			f_core.GetAttribute(this, f_core._VNS+":imageURL"),
+				_selectedImageURL: 	f_core.GetAttribute(this, f_core._VNS+":selectedImageURL"),
+				_hoverImageURL: 	f_core.GetAttribute(this, f_core._VNS+":hoverImageURL"),
+				_disabledImageURL: 	f_core.GetAttribute(this, f_core._VNS+":disabledImageURL")
 			};
 			
 			var tabbedPane=f_core.GetElementByClientId(tabbedPaneClientId, this.ownerDocument, true);

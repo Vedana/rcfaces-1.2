@@ -15,7 +15,7 @@ var __members = {
 		this.f_super(arguments);
 		
 		this._showCursor=true; // On affiche le curseur
-		this._cellWrap=f_core.GetAttribute(this, "v:cellTextWrap", false);
+		this._cellWrap=f_core.GetAttribute(this, f_core._VNS+":cellTextWrap", false);
 		this._cellStyleClass="f_cGrid_cell";
 		this._rowStyleClass="f_cGrid_row";
 		
@@ -427,8 +427,8 @@ var __members = {
 			
 			//var rowIdx=this._rowsPool.length;
 			
-			row._index=f_core.GetAttribute(row, "v:rowValue");
-			row._rowIndex=f_core.GetNumberAttribute(row, "v:rowIndex");
+			row._index=f_core.GetAttribute(row, f_core._VNS+":rowValue");
+			row._rowIndex=f_core.GetNumberAttribute(row, f_core._VNS+":rowIndex");
 			if (!row.id) {
 				row.id=this.id+"::row"+i;
 			}
@@ -445,7 +445,7 @@ var __members = {
 					
 					var cell=cells[cellIdx];
 					
-					cell._cellStyleClass=f_core.GetAttribute(cell, "v:className");
+					cell._cellStyleClass=f_core.GetAttribute(cell, f_core._VNS+":className");
 				}
 			}
 			
@@ -459,7 +459,7 @@ var __members = {
 				// La ligne peut être sélectionnée	
 				
 				// Nous sommes en fullstate ?
-				if (!this._selectionFullState && f_core.GetBooleanAttribute(row, "v:selected")) {
+				if (!this._selectionFullState && f_core.GetBooleanAttribute(row, f_core._VNS+":selected")) {
 					this.f_updateElementSelection(row, true);	
 				}
 			}

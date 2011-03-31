@@ -41,26 +41,26 @@ var __members = {
 		this._filtred=true;
 		this._rowCount=0;
 		
-		this._maxResultNumber=f_core.GetNumberAttribute(this, "v:maxResultNumber", f_suggestTextEntry._DEFAULT_ROWS_NUMBER);
+		this._maxResultNumber=f_core.GetNumberAttribute(this, f_core._VNS+":maxResultNumber", f_suggestTextEntry._DEFAULT_ROWS_NUMBER);
 		
-		this._suggestionDelayMs=f_core.GetNumberAttribute(this, "v:suggestionDelayMs", f_suggestTextEntry._DEFAULT_SUGGESTION_DELAY_MS);
+		this._suggestionDelayMs=f_core.GetNumberAttribute(this, f_core._VNS+":suggestionDelayMs", f_suggestTextEntry._DEFAULT_SUGGESTION_DELAY_MS);
 		
-		this._suggestionMinChars=f_core.GetNumberAttribute(this, "v:suggestionMinChars", f_suggestTextEntry._DEFAULT_SUGGESTION_MIN_CHARS);
+		this._suggestionMinChars=f_core.GetNumberAttribute(this, f_core._VNS+":suggestionMinChars", f_suggestTextEntry._DEFAULT_SUGGESTION_MIN_CHARS);
 		
-		this._caseSensitive=f_core.GetBooleanAttribute(this, "v:caseSensitive", false);
+		this._caseSensitive=f_core.GetBooleanAttribute(this, f_core._VNS+":caseSensitive", false);
 		
-		this._forceProposal=f_core.GetBooleanAttribute(this, "v:forceProposal", false);
+		this._forceProposal=f_core.GetBooleanAttribute(this, f_core._VNS+":forceProposal", false);
 		if (this._forceProposal && this._suggestionMinChars<1) {
 			this._suggestionMinChars=1;
 		}
 		
 		// Permet d'optimiser les propositions !
-		this._orderedResult=f_core.GetAttribute(this, "v:orderedResult");
+		this._orderedResult=f_core.GetAttribute(this, f_core._VNS+":orderedResult");
 		this._orderedResult=true;
 
-		this._suggestionValue=f_core.GetAttribute(this, "v:suggestionValue");
+		this._suggestionValue=f_core.GetAttribute(this, f_core._VNS+":suggestionValue");
 		
-		this._moreResultsMessage=f_core.GetAttribute(this, "v:moreResultsMessage");
+		this._moreResultsMessage=f_core.GetAttribute(this, f_core._VNS+":moreResultsMessage");
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);

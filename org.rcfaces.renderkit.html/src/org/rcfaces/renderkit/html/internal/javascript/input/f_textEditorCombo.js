@@ -13,8 +13,8 @@ var __members = {
 	f_textEditorCombo: function() {
 		this.f_super(arguments);
 		
-		this._type=f_core.GetAttribute(this, "v:type");
-		this._for=f_core.GetAttribute(this, "v:for");
+		this._type=f_core.GetAttribute(this, f_core._VNS+":type");
+		this._for=f_core.GetAttribute(this, f_core._VNS+":for");
 		
 		this.f_addEventListener(f_event.SELECTION, this._onSelection);
 	},

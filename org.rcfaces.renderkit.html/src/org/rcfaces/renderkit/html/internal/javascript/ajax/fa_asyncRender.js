@@ -11,7 +11,7 @@
  */
 var __members = {
 	fa_asyncRender: function() {
-		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
+		this._interactive=f_core.GetBooleanAttribute(this, f_core._VNS+":asyncRender");
 	},
 	f_finalize: function() {
 //		this._interactive=undefined; // boolean
@@ -217,7 +217,7 @@ var __members = {
 	 * @return void
 	 */
 	fa_contentLoaded: function() {
-		if (f_core.GetBooleanAttribute(this, "v:asyncDecode") && !this._asyncDecoded) {
+		if (f_core.GetBooleanAttribute(this, f_core._VNS+":asyncDecode") && !this._asyncDecoded) {
 			// On ajoute un tag comme quoi le composant est a décoder !
 			
 			this._asyncDecoded=true;

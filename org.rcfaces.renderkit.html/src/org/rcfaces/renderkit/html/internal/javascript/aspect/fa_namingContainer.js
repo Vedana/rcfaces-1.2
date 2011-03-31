@@ -20,12 +20,12 @@ var __statics = {
 	/** 
 	 * @field private static final String
 	 */
-	_NAMING_CONTAINER_ATTRIBUTE:		"v:nc",
+	_NAMING_CONTAINER_ATTRIBUTE:		f_core._VNS+":nc",
 	
 	/** 
 	 * @field private static final String
 	 */
-	_NAMING_CONTAINER_COMPONENT:		"v:namingContainer",
+	_NAMING_CONTAINER_COMPONENT:		f_core._VNS+":namingContainer",
 	
 	/** 
 	 * @field private static final String

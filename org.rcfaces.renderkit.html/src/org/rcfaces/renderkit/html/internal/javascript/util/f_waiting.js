@@ -108,9 +108,9 @@ var __statics = {
 		
 		var className="f_waiting";
 		node.className=className+((inlineMode)?" f_waiting_inline":" f_waiting_absolute");
-		node.setAttribute("v:class", className);
+		node.setAttribute(f_core._VNS+":class", className);
 		if (lookId) {
-			node.setAttribute("v:lookId", lookId);
+			node.setAttribute(f_core._VNS+":lookId", lookId);
 		}
 
 		node._inlineMode=inlineMode;

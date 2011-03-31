@@ -99,7 +99,7 @@ var __members = {
 		this.f_super(arguments);
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var events=f_core.GetAttribute(this, "v:events");
+			var events=f_core.GetAttribute(this, f_core._VNS+":events");
 			if (events) {
 				this.f_initEventAtts(f_eventTarget._EVENTS, events);
 			}

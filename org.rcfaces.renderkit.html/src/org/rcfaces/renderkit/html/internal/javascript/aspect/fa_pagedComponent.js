@@ -84,20 +84,20 @@ var __statics = {
  
 var __members = {
 	fa_pagedComponent: function() {
-		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender");
+		this._interactive=f_core.GetBooleanAttribute(this, f_core._VNS+":asyncRender");
 		
-		this._interactiveShow=f_core.GetBooleanAttribute(this, "v:interactiveShow");
+		this._interactiveShow=f_core.GetBooleanAttribute(this, f_core._VNS+":interactiveShow");
 		if (this._interactiveShow && !this.f_isVisible()) {
 			this.f_getClass().f_getClassLoader().f_addVisibleComponentListener(this);
 		}
 		
-		this._rows=f_core.GetNumberAttribute(this, "v:rows", 0); // Nombre ligne a afficher
+		this._rows=f_core.GetNumberAttribute(this, f_core._VNS+":rows", 0); // Nombre ligne a afficher
 		
-		this._first=f_core.GetNumberAttribute(this, "v:first", 0);  // La premiere ligne
+		this._first=f_core.GetNumberAttribute(this, f_core._VNS+":first", 0);  // La premiere ligne
 
-		this._paged=f_core.GetBooleanAttribute(this, "v:paged", true);
+		this._paged=f_core.GetBooleanAttribute(this, f_core._VNS+":paged", true);
 
-		this._rowCount=f_core.GetNumberAttribute(this, "v:rowCount", -1); // Nombre ligne au total
+		this._rowCount=f_core.GetNumberAttribute(this, f_core._VNS+":rowCount", -1); // Nombre ligne au total
 		if (this._rowCount<0) {
 			this._maxRows=this._first+this._rows;
 		}

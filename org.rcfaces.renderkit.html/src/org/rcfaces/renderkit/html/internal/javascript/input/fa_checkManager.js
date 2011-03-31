@@ -12,12 +12,12 @@
 
 var __members = {
 	fa_checkManager: function() {
-		var v_checkCardinality=f_core.GetNumberAttribute(this, "v:checkCardinality", undefined);
+		var v_checkCardinality=f_core.GetNumberAttribute(this, f_core._VNS+":checkCardinality", undefined);
 		if (v_checkCardinality===undefined) {
 			return;
 		}
 		
-		var clientCheckFullState=f_core.GetNumberAttribute(this, "v:clientCheckFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+		var clientCheckFullState=f_core.GetNumberAttribute(this, f_core._VNS+":clientCheckFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
 		if (clientCheckFullState) {
 			this._clientCheckFullState=clientCheckFullState;
 

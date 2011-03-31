@@ -156,60 +156,60 @@ var __statics = {
 	 */
 	CreateCalendarFromComponent: function(component, layout) {
 		var className="f_calendar";
-		//f_core.GetAttribute(component, "v:className");
+		//f_core.GetAttribute(component, f_core._VNS+":className");
 		//if (!className) {
 		//	className=component.className;
 		//}
 			
 		var calendar=f_calendarObject.f_newInstance(className, component, layout);
 		
-		var maxDate=f_core.GetAttribute(component, "v:maxDate");
+		var maxDate=f_core.GetAttribute(component, f_core._VNS+":maxDate");
 		if (maxDate) {
 			calendar.f_setMaxDate(maxDate);
 		}		
 
-		var minDate=f_core.GetAttribute(component, "v:minDate");
+		var minDate=f_core.GetAttribute(component, f_core._VNS+":minDate");
 		if (minDate) {
 			calendar.f_setMinDate(minDate);
 		}
 		
-		var twoDigitYearStart=f_core.GetAttribute(component, "v:twoDigitYearStart");
+		var twoDigitYearStart=f_core.GetAttribute(component, f_core._VNS+":twoDigitYearStart");
 		if (twoDigitYearStart) {
 			calendar.f_setTwoDigitYearStart(twoDigitYearStart);
 		}
 
-		var homeDate=f_core.GetAttribute(component, "v:homeDate");
+		var homeDate=f_core.GetAttribute(component, f_core._VNS+":homeDate");
 		if (homeDate) {
-			var homeDateLabel=f_core.GetAttribute(component, "v:homeDateLabel");
+			var homeDateLabel=f_core.GetAttribute(component, f_core._VNS+":homeDateLabel");
 			
 			calendar.f_setHomeDate(homeDate, homeDateLabel);
 		}
 
-		var clientDatesStrategy=f_core.GetAttribute(component, "v:clientDatesStrategy");
+		var clientDatesStrategy=f_core.GetAttribute(component, f_core._VNS+":clientDatesStrategy");
 		if (clientDatesStrategy) {
 			calendar._clientDatesStrategy=parseInt(clientDatesStrategy, 10);
 		}
 
-		var disabledWeekDays=f_core.GetAttribute(component, "v:disabledWeekDays");
+		var disabledWeekDays=f_core.GetAttribute(component, f_core._VNS+":disabledWeekDays");
 		if (disabledWeekDays) {
 			calendar.f_setDisabledWeekDays(disabledWeekDays);
 		}
 		
-		var firstDayOfWeek=f_core.GetAttribute(component, "v:firstDayOfWeek");
+		var firstDayOfWeek=f_core.GetAttribute(component, f_core._VNS+":firstDayOfWeek");
 		if (firstDayOfWeek) {
 			calendar._firstDayOfWeek=parseInt(firstDayOfWeek, 10);
 		}
 		
-		calendar._multiple=f_core.GetBooleanAttribute(component, "v:multiple");
+		calendar._multiple=f_core.GetBooleanAttribute(component, f_core._VNS+":multiple");
 
-		var mode=f_core.GetAttribute(component, "v:mode");
+		var mode=f_core.GetAttribute(component, f_core._VNS+":mode");
 		if (mode) {
 			calendar._mode=parseInt(mode, 10);
 		}
 
-		var cursorDate=f_core.GetAttribute(component, "v:cursorDate");
+		var cursorDate=f_core.GetAttribute(component, f_core._VNS+":cursorDate");
 		
-		var date=f_core.GetAttribute(component, "v:value");
+		var date=f_core.GetAttribute(component, f_core._VNS+":value");
 		if (date) {
 			calendar.f_setSelection(date, !cursorDate);
 		}
@@ -218,7 +218,7 @@ var __statics = {
 			calendar.f_setCursorDate(cursorDate);			
 		}
 		
-		calendar._autoSelection=f_core.GetBooleanAttribute(component, "v:autoSelection");
+		calendar._autoSelection=f_core.GetBooleanAttribute(component, f_core._VNS+":autoSelection");
 		
 		return calendar;
 	},

@@ -50,10 +50,10 @@ var __members = {
 			return classSpecified;
 		}
 		
-		this._fatalStyleClass=f_core.GetAttribute(this, "v:fatalStyleClass");
-		this._errorStyleClass=f_core.GetAttribute(this, "v:errorStyleClass");
-		this._warnStyleClass=f_core.GetAttribute(this, "v:warnStyleClass");
-		this._infoStyleClass=f_core.GetAttribute(this, "v:infoStyleClass");
+		this._fatalStyleClass=f_core.GetAttribute(this, f_core._VNS+":fatalStyleClass");
+		this._errorStyleClass=f_core.GetAttribute(this, f_core._VNS+":errorStyleClass");
+		this._warnStyleClass=f_core.GetAttribute(this, f_core._VNS+":warnStyleClass");
+		this._infoStyleClass=f_core.GetAttribute(this, f_core._VNS+":infoStyleClass");
 		
 		classSpecified=this._fatalStyleClass || this._errorStyleClass || this._warnStyleClass || this._infoStyleClass;
 		this._classSpecified=classSpecified;

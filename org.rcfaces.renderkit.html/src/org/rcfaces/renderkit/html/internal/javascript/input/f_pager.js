@@ -97,7 +97,7 @@ var __statics = {
 			if (!child.tagName) {
 				continue;
 			}
-			var index=f_core.GetAttribute(child, "v:index");
+			var index=f_core.GetAttribute(child, f_core._VNS+":index");
 			if (!index) {
 				index=child._index;
 			}
@@ -206,7 +206,7 @@ var __statics = {
 			return false;
 		}
 
-		var v_index=f_core.GetAttribute(this, "v:index");		
+		var v_index=f_core.GetAttribute(this, f_core._VNS+":index");		
 		if (typeof(v_index)!="number") {
 			v_index=this._index;
 		
@@ -226,12 +226,12 @@ var __statics = {
 		
 		var properties={
 			id: refComponent.id+":pager",
-			className: "f_pager",
-			"v:for": forId
+			className: "f_pager"
 		};
+		properties[f_core._VNS+":for"]=forId;
 		
 		f_dataGridPopup.CopyProperties(properties, refComponent, 
-			"v:message", "v:zeroResultMessage", "v:oneResultMessage", "v:manyResultMessage", "v:manyResultMessage2");
+			f_core._VNS+":message", f_core._VNS+":zeroResultMessage", f_core._VNS+":oneResultMessage", f_core._VNS+":manyResultMessage", f_core._VNS+":manyResultMessage2");
 
 		
 		if (styleClass) {
@@ -253,19 +253,19 @@ var __members = {
 	f_pager: function() {
 		this.f_super(arguments);
 		
-		this._for=f_core.GetAttribute(this, "v:for");
+		this._for=f_core.GetAttribute(this, f_core._VNS+":for");
 		
 		var zeroMessage;
 		var oneMessage;
 		var manyMessage;
 		var manyMessage2;
 
-		var message=f_core.GetAttribute(this, "v:message");
+		var message=f_core.GetAttribute(this, f_core._VNS+":message");
 		if (message) {
-			zeroMessage=f_core.GetAttribute(this, "v:zeroResultMessage");
-			oneMessage=f_core.GetAttribute(this, "v:oneResultMessage");
-			manyMessage=f_core.GetAttribute(this, "v:manyResultMessage");
-			manyMessage2=f_core.GetAttribute(this, "v:manyResultMessage2");
+			zeroMessage=f_core.GetAttribute(this, f_core._VNS+":zeroResultMessage");
+			oneMessage=f_core.GetAttribute(this, f_core._VNS+":oneResultMessage");
+			manyMessage=f_core.GetAttribute(this, f_core._VNS+":manyResultMessage");
+			manyMessage2=f_core.GetAttribute(this, f_core._VNS+":manyResultMessage2");
 		
 		} else {
 			var resourceBundle=f_resourceBundle.Get(f_pager);
@@ -283,7 +283,7 @@ var __members = {
 		this._manyMessage=(manyMessage!==undefined)?manyMessage:message;
 		this._manyMessage2=(manyMessage2!==undefined)?manyMessage2:this._manyMessage;
 		
-		var noPagedMessage=f_core.GetAttribute(this, "v:noPagedMessage", null);
+		var noPagedMessage=f_core.GetAttribute(this, f_core._VNS+":noPagedMessage", null);
 		if (noPagedMessage===null) {
 			var resourceBundle=f_resourceBundle.Get(f_pager);
 			
@@ -292,13 +292,13 @@ var __members = {
 		this._noPagedMessage=noPagedMessage;
 		
 /*
-		f_core.Debug(f_pager, "Message='"+this._message+"'");
-		f_core.Debug(f_pager, "ZeroMessage='"+this._zeroMessage+"'");
-		f_core.Debug(f_pager, "OneMessage='"+this._oneMessage+"'");
-		f_core.Debug(f_pager, "ManyMessage='"+this._manyMessage+"'");
-		f_core.Debug(f_pager, "NoPagedMessage='"+this._noPagedMessage+"'");
-		f_core.Debug(f_pager, "ManyMessage2='"+this._manyMessage2+"'");
-*/
+ * f_core.Debug(f_pager, "Message='"+this._message+"'"); f_core.Debug(f_pager,
+ * "ZeroMessage='"+this._zeroMessage+"'"); f_core.Debug(f_pager,
+ * "OneMessage='"+this._oneMessage+"'"); f_core.Debug(f_pager,
+ * "ManyMessage='"+this._manyMessage+"'"); f_core.Debug(f_pager,
+ * "NoPagedMessage='"+this._noPagedMessage+"'"); f_core.Debug(f_pager,
+ * "ManyMessage2='"+this._manyMessage2+"'");
+ */
 		if (this._for) {
 			fa_pagedComponent.RegisterPager(this._for, this);
 
@@ -771,12 +771,10 @@ var __members = {
 		
 	},
 	/**
-	 * @method hidden ????
-	 * Pas utilisé !
-	f_pagedComponentUpdated: function(dataComponent) {
-		this.fa_pagedComponentInitialized(dataComponent);
-	},
-	*/
+	 * @method hidden ???? Pas utilisé ! f_pagedComponentUpdated:
+	 *         function(dataComponent) {
+	 *         this.fa_pagedComponentInitialized(dataComponent); },
+	 */
 	/**
 	 * @method private
 	 */

@@ -13,7 +13,7 @@
 
 var __members = {
 	f_update: function() {
-		if (f_core.GetBooleanAttribute(this, "v:noSelection")) {
+		if (f_core.GetBooleanAttribute(this, f_core._VNS+":noSelection")) {
 			this.selectedIndex = -1;
 		}
 		

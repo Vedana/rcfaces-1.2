@@ -539,19 +539,19 @@ var __members = {
 		
 		this._nodesList=new Array();
 
-		this._interactive=f_core.GetBooleanAttribute(this, "v:asyncRender", false);
+		this._interactive=f_core.GetBooleanAttribute(this, f_core._VNS+":asyncRender", false);
 
-		this._hideRootExpandSign=f_core.GetBooleanAttribute(this, "v:hideRootExpandSign", false);
+		this._hideRootExpandSign=f_core.GetBooleanAttribute(this, f_core._VNS+":hideRootExpandSign", false);
 				
-		this._userExpandable=f_core.GetBooleanAttribute(this, "v:userExpandable", true);
+		this._userExpandable=f_core.GetBooleanAttribute(this, f_core._VNS+":userExpandable", true);
 		
-		this._images=f_core.GetBooleanAttribute(this, "v:images");
+		this._images=f_core.GetBooleanAttribute(this, f_core._VNS+":images");
 		
-		this._preloadedLevelDepth=f_core.GetNumberAttribute(this, "v:preloadedLevelDepth");
+		this._preloadedLevelDepth=f_core.GetNumberAttribute(this, f_core._VNS+":preloadedLevelDepth");
 		
-		this._initCursorValue=f_core.GetAttribute(this, "v:cursorValue");
+		this._initCursorValue=f_core.GetAttribute(this, f_core._VNS+":cursorValue");
 
-		this._showValue=f_core.GetAttribute(this, "v:showValue");
+		this._showValue=f_core.GetAttribute(this, f_core._VNS+":showValue");
 		
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
@@ -634,7 +634,7 @@ var __members = {
 		}
 	
 		if (this.f_isDroppable()) {
-			this._bodyDroppable=f_core.GetBooleanAttribute(this, "v:bodyDroppable", false);
+			this._bodyDroppable=f_core.GetBooleanAttribute(this, f_core._VNS+":bodyDroppable", false);
 		}
 	},
 	f_finalize: function() {
@@ -2752,9 +2752,9 @@ var __members = {
 			values.unshift(value.replace(exp, " "));
 		})
 		
-		this.setAttribute("v:breadCrumbsIds", ids.join("|"));
-		this.setAttribute("v:breadCrumbsValues", values.join("|"));
-		this.setAttribute("v:breadCrumbsTexts", texts.join("|"));
+		this.setAttribute(f_core._VNS+":breadCrumbsIds", ids.join("|"));
+		this.setAttribute(f_core._VNS+":breadCrumbsValues", values.join("|"));
+		this.setAttribute(f_core._VNS+":breadCrumbsTexts", texts.join("|"));
 	},
 	/**
 	 * @method protected

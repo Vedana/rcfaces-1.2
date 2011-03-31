@@ -21,15 +21,15 @@ var __statics={
 var __members={
 
 	fa_initializeInput: function(input) {
-		input._min=f_core.GetNumberAttribute(input, "v:min");
-		input._max=f_core.GetNumberAttribute(input, "v:max");
-		input._default=f_core.GetNumberAttribute(input, "v:default");
+		input._min=f_core.GetNumberAttribute(input, f_core._VNS+":min");
+		input._max=f_core.GetNumberAttribute(input, f_core._VNS+":max");
+		input._default=f_core.GetNumberAttribute(input, f_core._VNS+":default");
 
-		input._cycle=f_core.GetBooleanAttribute(input, "v:cycle");
+		input._cycle=f_core.GetBooleanAttribute(input, f_core._VNS+":cycle");
 				
-		input._autoCompletion=f_core.GetBooleanAttribute(input, "v:auto");
+		input._autoCompletion=f_core.GetBooleanAttribute(input, f_core._VNS+":auto");
 		
-		var step=f_core.GetAttribute(input, "v:step");
+		var step=f_core.GetAttribute(input, f_core._VNS+":step");
 		if (step) {
 			input._step=step;
 		}

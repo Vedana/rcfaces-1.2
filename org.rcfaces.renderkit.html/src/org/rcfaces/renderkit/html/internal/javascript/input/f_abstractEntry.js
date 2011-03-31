@@ -15,7 +15,7 @@ var __statics = {
 	 * @field private static final String
 	 */
 	_TEXT_MENU_ID: "#text"
-}
+};
 
 var __members = {
 /*
@@ -41,9 +41,9 @@ var __members = {
 	f_initializeOnFocus: function() {
 		this.f_super(arguments);
 				
-		this._emptyMessage=f_core.GetAttribute(this, "v:emptyMessage");
+		this._emptyMessage=f_core.GetAttribute(this, f_core._VNS+":emptyMessage");
 		if (this._emptyMessage) {
-			this._emptyMessageShown=f_core.GetBooleanAttribute(this.f_getInput(), "v:emptyMessageShown");
+			this._emptyMessageShown=f_core.GetBooleanAttribute(this.f_getInput(), f_core._VNS+":emptyMessageShown");
 		}
 		
 		if (this._emptyMessage) {

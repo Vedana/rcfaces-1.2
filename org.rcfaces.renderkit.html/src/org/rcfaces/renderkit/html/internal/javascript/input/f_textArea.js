@@ -211,9 +211,9 @@ var __members = {
 	f_textArea: function() {
 		this.f_super(arguments);
 
-		this._maxTextLength=f_core.GetNumberAttribute(this, "v:maxTextLength", 0);
+		this._maxTextLength=f_core.GetNumberAttribute(this, f_core._VNS+":maxTextLength", 0);
 		if (this._maxTextLength>0) {
-			this._ignoreWhenFull=f_core.GetBooleanAttribute(this, "v:ignoreWhenFull", false);
+			this._ignoreWhenFull=f_core.GetBooleanAttribute(this, f_core._VNS+":ignoreWhenFull", false);
 
 			f_textArea._InstallMaxTextLength(this);
 			

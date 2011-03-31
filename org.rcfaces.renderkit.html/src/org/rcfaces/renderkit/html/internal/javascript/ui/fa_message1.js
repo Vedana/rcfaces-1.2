@@ -47,7 +47,7 @@ var __members = {
 			return fors;
 		}
 		
-		var s=f_core.GetAttribute(this, "v:for");
+		var s=f_core.GetAttribute(this, f_core._VNS+":for");
 		
 		fors=new Array();
 		this._fors=fors;

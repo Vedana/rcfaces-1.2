@@ -94,7 +94,7 @@ var __members = {
 
 		var doc=this.ownerDocument;
 
-		var userExpandable=f_core.GetBooleanAttribute(this, "v:userExpandable", true);
+		var userExpandable=f_core.GetBooleanAttribute(this, f_core._VNS+":userExpandable", true);
 
 		var txt=null;
 		var head=doc.getElementById(this.id+f_expandBar._HEAD_ID_SUFFIX);
@@ -130,10 +130,10 @@ var __members = {
 			this._content=doc.getElementById(this.id+f_expandBar._CONTENT_ID_SUFFIX);
 		}
 			
-		this._normalText=f_core.GetAttribute(this, "v:text", txt);
-		this._collapsedText=f_core.GetAttribute(this, "v:collapsedText", txt);
+		this._normalText=f_core.GetAttribute(this, f_core._VNS+":text", txt);
+		this._collapsedText=f_core.GetAttribute(this, f_core._VNS+":collapsedText", txt);
 	
-		var groupName=f_core.GetAttribute(this, "v:groupName");
+		var groupName=f_core.GetAttribute(this, f_core._VNS+":groupName");
 		if (groupName ) {	
 			this._groupName=groupName;
 		
@@ -431,7 +431,7 @@ var __members = {
 		var content=this._content;
 		var body=this._body;		
 		
-		effect = f_core.GetAttribute(this, "v:effect");
+		effect = f_core.GetAttribute(this, f_core._VNS+":effect");
 		if (effect) {
 			effect=f_core.CreateEffectByName(effect, content, function(value) {
 				

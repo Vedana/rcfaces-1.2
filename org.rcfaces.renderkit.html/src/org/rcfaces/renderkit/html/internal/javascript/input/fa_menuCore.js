@@ -237,8 +237,8 @@ var __members = {
 		this._menu=this;
 
 		if (this.tagName) {
-			this._itemImageWidth=f_core.GetNumberAttribute(this, "v:itemImageWidth");
-			this._itemImageHeight=f_core.GetNumberAttribute(this, "v:itemImageHeight");
+			this._itemImageWidth=f_core.GetNumberAttribute(this, f_core._VNS+":itemImageWidth");
+			this._itemImageHeight=f_core.GetNumberAttribute(this, f_core._VNS+":itemImageHeight");
 			
 			if (this._itemImageWidth || this._itemImageHeight) {
 				f_core.Debug(fa_menuCore, "fa_menuCore: Set item image width/height by tag attributes width="+this._itemImageWidth+" height="+this._itemImageHeight+".");

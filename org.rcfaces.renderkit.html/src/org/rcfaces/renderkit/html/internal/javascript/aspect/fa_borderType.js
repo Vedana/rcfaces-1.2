@@ -73,7 +73,7 @@ var __members = {
 		
 		// Appel depuis le constructor de l'objet !
 		
-		var v_borderType=f_core.GetAttribute(this, "v:borderType");
+		var v_borderType=f_core.GetAttribute(this, f_core._VNS+":borderType");
 		if (v_borderType && v_borderType!=fa_borderType.NONE_BORDER_TYPE) {
 			var border=this.ownerDocument.getElementById(this.id+fa_borderType._BORDER_ID_SUFFIX);
 			borderType=v_borderType;
@@ -82,7 +82,7 @@ var __members = {
 	//			f_core.Assert(border, "Can not find border of component '"+this.id+"' (borderType='"+v_borderType+"').");
 				this._border=border;
 				
-				var cl=f_core.GetAttribute(border, "v:className");
+				var cl=f_core.GetAttribute(border, f_core._VNS+":className");
 				if (cl) {
 					border._className=cl;
 	
@@ -90,7 +90,7 @@ var __members = {
 					border._className=border.className;
 				}
 				
-				this._flatType=f_core.GetBooleanAttribute(this, "v:flatMode", false);
+				this._flatType=f_core.GetBooleanAttribute(this, f_core._VNS+":flatMode", false);
 			}
 		} else {
 			borderType=null;

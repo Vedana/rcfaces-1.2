@@ -586,7 +586,7 @@ f_classLoader.prototype = {
 		if (!window._rcfacesDisableInitSearch) {
 			var root=this._window.document.body;
 			
-			var lazys=root.getElementsByTagName("v:init");
+			var lazys=root.getElementsByTagName(f_core._VNS+":init");
 			
 			f_core.Debug(f_classLoader, "f_initializeObjects: "+lazys.length+" lazy object(s) found !"+
 				((this._lazyIndex)?"(Current index="+this._lazyIndex+")":""));
@@ -622,13 +622,13 @@ f_classLoader.prototype = {
 					continue;
 				}
 				
-				var clz=f_core.GetAttribute(component, "v:class");
+				var clz=f_core.GetAttribute(component, f_core._VNS+":class");
 				if (clz) {
 					components.push(component, component);
 					continue;
 				}
 				
-				var fct=f_core.GetAttribute(component, "v:function");
+				var fct=f_core.GetAttribute(component, f_core._VNS+":function");
 				if (fct) {
 					var evaluatedFunction=evaluations[fct];
 					if (!evaluatedFunction) {
@@ -665,7 +665,7 @@ f_classLoader.prototype = {
 						continue;
 					}
 					
-					var clz=f_core.GetAttribute(prev, "v:class");
+					var clz=f_core.GetAttribute(prev, f_core._VNS+":class");
 					if (!clz) {
 						f_core.Warn(f_classLoader, "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
 						continue;
@@ -1097,7 +1097,7 @@ f_classLoader.prototype = {
 			delete onFocusIds[mainId];
 			
 			if (componentId!=mainId) {
-				component=component.ownerDocument.getElementById(mainId)
+				component=component.ownerDocument.getElementById(mainId);
 			}
 			
 			if (f_class.IsObjectInitialized(component)) {
@@ -1134,7 +1134,7 @@ f_classLoader.prototype = {
 				}
 
 				initFct(evt.target);
-			}, document.body)
+			}, document.body);
 		}
 	},
 	/**
@@ -1205,10 +1205,10 @@ f_classLoader.prototype = {
 			}
 			
 			if (retargetIE) {						
-				var newEvt = component.ownerDocument.createEventObject(window.event)
+				var newEvt = component.ownerDocument.createEventObject(window.event);
 		   		return component.fireEvent("onmouseover", newEvt);
 			}
-		}
+		};
 		
 		if (f_core.IsInternetExplorer()) {
 			document.body.onmouseover=function() {
@@ -1225,7 +1225,7 @@ f_classLoader.prototype = {
 				}
 
 				initFct(evt.target);
-			}, document.body)
+			}, document.body);
 		}		
 	},
 	/**
@@ -1260,7 +1260,7 @@ f_classLoader.prototype = {
 					if (obj.id) {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') has already an ID ('+obj.id+') !");
 			
-					} else if (f_core.GetAttribute(obj, "v:class")==null) {
+					} else if (f_core.GetAttribute(obj, f_core._VNS+":class")==null) {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') is not a RCFaces Component !");
 					}
 				}
@@ -1284,7 +1284,7 @@ f_classLoader.prototype = {
 		
 		f_core.Debug(f_classLoader, "f_init: Initialize object '"+obj+"' (id='"+obj.id+"') ignore='"+ignoreNotFound+"'  typeof(obj)='"+typeof(obj)+"'");
 			
-		var claz = f_core.GetAttribute(obj, "v:class");
+		var claz = f_core.GetAttribute(obj, f_core._VNS+":class");
 		if (!claz) {
 			// La classe n'est pas définie ... c'est peut etre une form !
 	
@@ -1292,7 +1292,7 @@ f_classLoader.prototype = {
 			return obj;
 		}
 	
-		var look = f_core.GetAttribute(obj, "v:lookid");
+		var look = f_core.GetAttribute(obj, f_core._VNS+":lookid");
 	
 		var cls=this.f_getClass(claz, look);
 		if (!cls) {
@@ -1905,7 +1905,7 @@ f_classLoader.prototype = {
 		}
 		return "[ClassLoader '"+this._window.location+"']";
 	}
-}
+};
 
 
 /**
@@ -1935,7 +1935,7 @@ f_classLoader._MakeClassName=function(claz, lookId) {
 	}
 	
 	return claz+f_class._LOOK+lookId;
-}
+};
 
 
 /**
@@ -1987,7 +1987,7 @@ f_classLoader.Destroy=function(objects) {
 	if (lastClassLoader) {
 		lastClassLoader._destroy(toDestroy);
 	}
-}
+};
 
 /**
  * @method private static
@@ -2079,7 +2079,7 @@ f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInp
 	for(var name in serializedInputs) {
 		parameters[name]=serializedInputs[name];
 	}	
-}
+};
 
 /**
  * @method hidden static
@@ -2167,7 +2167,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 			break;
 		}
 	}		
-}
+};
 
 
 

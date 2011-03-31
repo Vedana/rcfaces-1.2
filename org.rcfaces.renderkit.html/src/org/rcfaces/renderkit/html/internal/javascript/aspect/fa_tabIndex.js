@@ -20,7 +20,7 @@ var __members = {
 	 */
 	fa_getTabIndex: function() {
 		if (this._tabIndex===undefined) {
-		  	this._tabIndex=f_core.GetNumberAttribute(this, "v:tabIndex", undefined);
+		  	this._tabIndex=f_core.GetNumberAttribute(this, f_core._VNS+":tabIndex", undefined);
 		  	if (this._tabIndex===undefined) {
 		  		var elt = this.fa_getTabIndexElement();
 		  		if (elt) {

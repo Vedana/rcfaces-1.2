@@ -471,7 +471,7 @@ var __statics = {
 		doc.removeEventListener("mousedown", f_popup._Gecko_OnMouseDown, true);
 		doc.removeEventListener("click", f_popup._Gecko_OnClick, true);
 		doc.removeEventListener("dblclick", f_popup._Gecko_OnClick, true);
-//		document.removeEventListener("blur", f_popup._Gecko_OnBlur, true);
+		doc.removeEventListener("blur", f_popup._Gecko_OnBlur, true);
 		doc.removeEventListener("focus", f_popup._Gecko_OnFocus, true);
 		doc.removeEventListener("keydown", f_popup._OnKeyDownJs, true);
 		doc.removeEventListener("keyup", f_popup._OnKeyUpJs, true);

@@ -16,7 +16,7 @@ var __members = {
 	 */
 	fa_filterProperties: function() {
 		// Au mieux on prend l'ancien !
-		this._filtred=f_core.GetBooleanAttribute(this, "v:filtred", this._filtred); 		
+		this._filtred=f_core.GetBooleanAttribute(this, f_core._VNS+":filtred", this._filtred); 		
 	},
 	/*
 	f_finalize:  function() {
@@ -117,7 +117,7 @@ var __members = {
 			return filterProperties;
 		}
 				
-		var filterExpression=f_core.GetAttribute(this, "v:filterExpression");
+		var filterExpression=f_core.GetAttribute(this, f_core._VNS+":filterExpression");
 		filterProperties=null;
 	
 		if (filterExpression) {

@@ -306,17 +306,17 @@ var __members = {
 		this._shellManager=f_shellManager.Get();
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {			
-			var events=f_core.GetAttribute(this, "v:events");
+			var events=f_core.GetAttribute(this, f_core._VNS+":events");
 			if (events) {
 				this.f_initEventAtts(f_shell._EVENTS, events);
 			}
 
-			var shellDecoratorName = f_core.GetAttribute(this, "v:shellDecorator");
+			var shellDecoratorName = f_core.GetAttribute(this, f_core._VNS+":shellDecorator");
 			if (shellDecoratorName) {
 				this._shellDecoratorName = shellDecoratorName;
 			}
 			
-			var closable = f_core.GetBooleanAttribute(this, "v:closable");
+			var closable = f_core.GetBooleanAttribute(this, f_core._VNS+":closable");
 			if (closable === true) {
 				this._style |= f_shell.CLOSE_STYLE;
 			}

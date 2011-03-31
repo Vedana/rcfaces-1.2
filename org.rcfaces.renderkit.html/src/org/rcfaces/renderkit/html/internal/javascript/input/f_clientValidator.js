@@ -79,7 +79,7 @@ var __statics = {
 	 * @return f_clientValidator Returns the validator associated to the component or <code>null</code>.
 	 */
 	InstallValidator: function(component) {
-		var params=f_core.GetAttribute(component, "v:clientValidator", null);
+		var params=f_core.GetAttribute(component, f_core._VNS+":clientValidator", null);
 		if (params===null) { // Il peut être "" !
 			return null;
 		}
@@ -627,7 +627,7 @@ var __members = {
 		component._validator = this;
 		
 		if (false) {
-		var internalValue=f_core.GetAttribute(component, "v:internalValue", undefined);
+		var internalValue=f_core.GetAttribute(component, f_core._VNS+":internalValue", undefined);
 		
 		if (internalValue!==undefined) { //window._rcfacesLazyFocusInit /* && parameters && parameters["org.rcfaces.LAZY_FOCUS_INIT"] */) {
 			var self=this;
@@ -1626,52 +1626,52 @@ var __members = {
 	 * @return void
 	 */
 	f_parseComponentAttributes: function(component) {
-		var internalValue=f_core.GetAttribute(component, "v:internalValue");
+		var internalValue=f_core.GetAttribute(component, f_core._VNS+":internalValue");
 		this._initialValue=(internalValue)?internalValue:"";
 		
-		var filter=f_core.GetAttribute(component, "v:vFilter");
+		var filter=f_core.GetAttribute(component, f_core._VNS+":vFilter");
 		if (filter) {
 			filter=f_clientValidator._EvalFunction(filter);
 			this.f_addFilter(filter);
 		}
 		
-		var translator=f_core.GetAttribute(component, "v:vTranslator");
+		var translator=f_core.GetAttribute(component, f_core._VNS+":vTranslator");
 		if (translator) {
 			translator=f_clientValidator._EvalFunction(translator);
 			this.f_addTranslator(translator);
 		}
 
-		var checker=f_core.GetAttribute(component, "v:vChecker");
+		var checker=f_core.GetAttribute(component, f_core._VNS+":vChecker");
 		if (checker) {
 			checker=f_clientValidator._EvalFunction(checker);
 			this.f_addChecker(checker);
 		}
 
-		var formatter=f_core.GetAttribute(component, "v:vFormatter");
+		var formatter=f_core.GetAttribute(component, f_core._VNS+":vFormatter");
 		if (formatter) {
 			formatter=f_clientValidator._EvalFunction(formatter);
 			this.f_addFormatter(formatter);
 		}
 
-		var behavior=f_core.GetAttribute(component, "v:vBehavior");
+		var behavior=f_core.GetAttribute(component, f_core._VNS+":vBehavior");
 		if (behavior) {
 			behavior=f_clientValidator._EvalFunction(behavior);
 			this.f_addBehavior(behavior);
 		}
 
-		var error=f_core.GetAttribute(component, "v:vError");
+		var error=f_core.GetAttribute(component, f_core._VNS+":vError");
 		if (error) {
 			error=f_clientValidator._EvalFunction(error);
 			this.f_setOnError(error);
 		}
 
-		var checkError=f_core.GetAttribute(component, "v:vCheckError");
+		var checkError=f_core.GetAttribute(component, f_core._VNS+":vCheckError");
 		if (checkError) {
 			checkError=f_clientValidator._EvalFunction(checkError);
 			this.f_setOnCheckError(checkError);
 		}
 
-		var converter=f_core.GetAttribute(component, "v:converter");
+		var converter=f_core.GetAttribute(component, f_core._VNS+":converter");
 		if (converter) {
 			converter=f_clientValidator._EvalFunction(converter, true);
 			this.f_setConverter(converter);

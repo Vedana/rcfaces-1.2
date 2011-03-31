@@ -125,9 +125,9 @@ var __members = {
 			return;
 		}
 	
-		var columnNumber = f_core.GetNumberAttribute(this, "v:columnNumber");
-		var tabIndex = f_core.GetNumberAttribute(this, "v:tabIndex");
-		var dateBegin = f_core.GetAttribute(this, "v:dateBegin");
+		var columnNumber = f_core.GetNumberAttribute(this, f_core._VNS+":columnNumber");
+		var tabIndex = f_core.GetNumberAttribute(this, f_core._VNS+":tabIndex");
+		var dateBegin = f_core.GetAttribute(this, f_core._VNS+":dateBegin");
 		if (dateBegin) {
 			dateBegin = f_core.DeserializeDate(dateBegin);
 		}
@@ -135,11 +135,11 @@ var __members = {
 		var dateEnd =  new Date(dateBegin.getTime());
 		dateEnd.setTime(dateEnd.getTime()+ (columnNumber * 24 * 3600 * 1000));
 		var minutesDayBegin = f_core.GetNumberAttribute(this,
-				"v:minutesDayBegin");
-		var minutesDayEnd = f_core.GetNumberAttribute(this, "v:minutesDayEnd");
+				f_core._VNS+":minutesDayBegin");
+		var minutesDayEnd = f_core.GetNumberAttribute(this, f_core._VNS+":minutesDayEnd");
 
-		var minPerPx = parseFloat(f_core.GetAttribute(this, "v:minPerPx"));
-		var columnWidth = f_core.GetNumberAttribute(this, "v:columnWidth");
+		var minPerPx = parseFloat(f_core.GetAttribute(this, f_core._VNS+":minPerPx"));
+		var columnWidth = f_core.GetNumberAttribute(this, f_core._VNS+":columnWidth");
 
 		var div = this.ownerDocument.getElementById(this.id + "::periods");
 
@@ -236,7 +236,7 @@ var __members = {
 					+ " " +f_resourceBundle.Get(f_scheduler).f_get("TO") + " "
 					+end.getHours()+"h" +end.getMinutes()+" "+type ;
 				var labelNode = f_core.CreateElement(divNode2, "label", {
-					textnode : period._label, 
+					textnode : period._label,
 					cssWidth : width + "px",
 					cssHeight : height + "px",
 					className : period._periodStyle+"_label"

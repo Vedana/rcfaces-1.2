@@ -396,7 +396,7 @@ var __statics = {
 				}
 			}
 
-			if (f_core.GetAttribute(target, "v:class")) {
+			if (f_core.GetAttribute(target, f_core._VNS+":class")) {
 				// Un objet RCFACES !
 
 				f_core.Debug(f_grid, "VerifyTarget: Initialize target='"
@@ -838,7 +838,7 @@ var __statics = {
 			return true;
 		}
 
-		if (f_core.GetBooleanAttribute(dataGrid, "v:wheelSelection", true)==false) {
+		if (f_core.GetBooleanAttribute(dataGrid, f_core._VNS+":wheelSelection", true)==false) {
 			return true;
 		}
 		
@@ -1837,19 +1837,19 @@ var __members = {
 		this._cellStyleClass = "f_grid_cell";
 		this._rowStyleClass = "f_grid_row";
 
-		this._resizable = f_core.GetBooleanAttribute(this, "v:resizable");
+		this._resizable = f_core.GetBooleanAttribute(this, f_core._VNS+":resizable");
 
-		this._initCursorValue = f_core.GetAttribute(this, "v:cursorValue");
+		this._initCursorValue = f_core.GetAttribute(this, f_core._VNS+":cursorValue");
 
-		this._showValue = f_core.GetAttribute(this, "v:showValue");
+		this._showValue = f_core.GetAttribute(this, f_core._VNS+":showValue");
 
 		this._headerVisible = f_core.GetBooleanAttribute(this,
-				"v:headerVisible", true);
+				f_core._VNS+":headerVisible", true);
 
-		this._sortManager = f_core.GetAttribute(this, "v:sortManager");
+		this._sortManager = f_core.GetAttribute(this, f_core._VNS+":sortManager");
 
 		this._emptyDataMessage = f_core
-				.GetAttribute(this, "v:emptyDataMessage");
+				.GetAttribute(this, f_core._VNS+":emptyDataMessage");
 		if (this._emptyDataMessage) {
 			this._emptyDataMessageLabel = this.ownerDocument
 					.getElementById(this.id
@@ -1858,7 +1858,7 @@ var __members = {
 					"f_grid.f_grid: Label not found");
 		}
 
-		var rowStyleClass = f_core.GetAttribute(this, "v:rowStyleClass");
+		var rowStyleClass = f_core.GetAttribute(this, f_core._VNS+":rowStyleClass");
 		if (rowStyleClass) {
 			this._rowStyleClasses = rowStyleClass.split(",");
 
@@ -1872,11 +1872,11 @@ var __members = {
 		}
 
 		if (this.f_isDroppable()) {
-			this._bodyDroppable=f_core.GetBooleanAttribute(this, "v:bodyDroppable", false);
+			this._bodyDroppable=f_core.GetBooleanAttribute(this, f_core._VNS+":bodyDroppable", false);
 		}
 		
 
-		this._sortPadding = f_core.GetNumberAttribute(this, "v:sortPadding",
+		this._sortPadding = f_core.GetNumberAttribute(this, f_core._VNS+":sortPadding",
 				f_grid._SORT_PADDING);
 
 		this.f_initializeTableLayout();
@@ -1916,7 +1916,7 @@ var __members = {
 			f_core.AppendChild(sortIndicator, img);
 		}
 
-		var tabIndex = f_core.GetNumberAttribute(this, "v:tabindex", 0);
+		var tabIndex = f_core.GetNumberAttribute(this, f_core._VNS+":tabindex", 0);
 		var focus;
 		if (f_core.IsGecko()) {
 			focus = this.ownerDocument.getElementById(this.id
@@ -2259,7 +2259,7 @@ var __members = {
 		if (this._loading) {
 			if (showAlert !== false) {
 				if (this._showLoadingAlert === undefined) {
-					var alertLoadingMessage = f_core.GetAttribute(this, "v:alertLoadingMessage");
+					var alertLoadingMessage = f_core.GetAttribute(this, f_core._VNS+":alertLoadingMessage");
 					if (alertLoadingMessage === undefined) {
 						this._showLoadingAlert = true;
 					} else if (alertLoadingMessage == "") {
@@ -5347,7 +5347,7 @@ var __members = {
 		}
 
 		if (f_core.IsInternetExplorer()
-				&& !f_core.GetBooleanAttribute(this, "v:sb", true)) {
+				&& !f_core.GetBooleanAttribute(this, f_core._VNS+":sb", true)) {
 			// this._title.style.width=total+"px";
 
 			if (!body.style.width) {
@@ -5944,9 +5944,9 @@ var __members = {
 			texts.unshift(text.replace(exp, " "));
 		}
 
-		this.setAttribute("v:sortBreadCrumbsIds", ids.join("|"));
-		this.setAttribute("v:sortBreadCrumbsIndexes", indexes.join("|"));
-		this.setAttribute("v:sortBreadCrumbsTexts", texts.join("|"));
+		this.setAttribute(f_core._VNS+":sortBreadCrumbsIds", ids.join("|"));
+		this.setAttribute(f_core._VNS+":sortBreadCrumbsIndexes", indexes.join("|"));
+		this.setAttribute(f_core._VNS+":sortBreadCrumbsTexts", texts.join("|"));
 	},
 	/**
 	 * @method hidden

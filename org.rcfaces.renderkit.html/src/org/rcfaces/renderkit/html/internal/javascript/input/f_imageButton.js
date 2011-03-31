@@ -150,7 +150,7 @@ var __members = {
 					}
 				}
 				
-				var tabIndex=f_core.GetAttribute(this, "v:tabIndex");
+				var tabIndex=f_core.GetAttribute(this, f_core._VNS+":tabIndex");
 				if (!tabIndex) {
 					tabIndex=0;
 				}

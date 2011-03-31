@@ -28,7 +28,7 @@ var __members = {
 
 	 	if (clientValidatorParameters===undefined) {
 	 		clientValidatorParameters=null;
-			var params=f_core.GetAttribute(this, "v:clientValidator", null);
+			var params=f_core.GetAttribute(this, f_core._VNS+":clientValidator", null);
 			if (params) { // Il peut être "" !
 				clientValidatorParameters=f_core.ParseParameters(params);
 			}

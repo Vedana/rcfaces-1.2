@@ -55,8 +55,8 @@ var __members={
 		var instance=f_focusManager._Instance;
 			
 		if (this.nodeType==f_core.ELEMENT_NODE) {			
-			var setFocusIfMessage=f_core.GetBooleanAttribute(this, "v:setFocusIfMessage", true);
-			var focusId=f_core.GetAttribute(this, "v:focusId");
+			var setFocusIfMessage=f_core.GetBooleanAttribute(this, f_core._VNS+":setFocusIfMessage", true);
+			var focusId=f_core.GetAttribute(this, f_core._VNS+":focusId");
 			
 			if (instance) {
 				if (setFocusIfMessage===false) {

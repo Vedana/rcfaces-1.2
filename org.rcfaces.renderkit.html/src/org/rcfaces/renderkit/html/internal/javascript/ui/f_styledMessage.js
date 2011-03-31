@@ -12,7 +12,7 @@ var __members = {
 	f_styledMessage: function() {		
 		this.f_super(arguments);
 
-		this._showIfMessage=f_core.GetAttribute(this, "v:showIfMessage");
+		this._showIfMessage=f_core.GetAttribute(this, f_core._VNS+":showIfMessage");
 	},
 	
 	/*

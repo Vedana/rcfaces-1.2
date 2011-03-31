@@ -25,7 +25,7 @@ var __members = {
 	 */
 	f_isShowSummary: function() {
 		if (this._showSummary===undefined) {
-			this._showSummary=f_core.GetBooleanAttribute(this, "v:showSummary", false);
+			this._showSummary=f_core.GetBooleanAttribute(this, f_core._VNS+":showSummary", false);
 		}
 		
 		return this._showSummary;
@@ -60,7 +60,7 @@ var __members = {
 	 */
 	f_isShowDetail: function() {
 		if (this._showDetail===undefined) {
-			this._showDetail=f_core.GetBooleanAttribute(this, "v:showDetail", false);
+			this._showDetail=f_core.GetBooleanAttribute(this, f_core._VNS+":showDetail", false);
 		}
 		
 		return this._showDetail;

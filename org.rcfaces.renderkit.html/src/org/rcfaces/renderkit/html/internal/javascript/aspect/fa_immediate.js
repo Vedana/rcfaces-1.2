@@ -22,7 +22,7 @@ var __members = {
 	f_isImmediate: function() {
 		if (this._immediate===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._immediate=f_core.GetBooleanAttribute(this, "v:immediate", false);
+			this._immediate=f_core.GetBooleanAttribute(this, f_core._VNS+":immediate", false);
 		}
 		
 		return this._immediate;

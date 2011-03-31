@@ -25,7 +25,7 @@ var __members = {
 	f_isSelected: function() {
 		if (this._selected===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._selected=f_core.GetBooleanAttribute(this, "v:selected", false);
+			this._selected=f_core.GetBooleanAttribute(this, f_core._VNS+":selected", false);
 			this._initialSelection=this._selected;
 		}
 		

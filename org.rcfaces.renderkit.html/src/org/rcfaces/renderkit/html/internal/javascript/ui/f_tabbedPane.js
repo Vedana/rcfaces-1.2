@@ -274,7 +274,7 @@ var __members = {
 		// On laisse tomber, les images sont maintenant directement réferencées dans le HTML ...
 		// f_tabbedPane._PrepareImages();
 		
-		this._tabIndex=f_core.GetAttribute(this, "v:tabIndex");
+		this._tabIndex=f_core.GetAttribute(this, f_core._VNS+":tabIndex");
 	},
 	f_finalize: function() {
 		var title=this._title;

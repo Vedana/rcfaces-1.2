@@ -101,13 +101,13 @@ var __members={
 		for(var i=0;i<inputs.length;i++) {
 			var input=inputs[i];
 			
-			var separators=f_core.GetAttribute(input, "v:separators");
+			var separators=f_core.GetAttribute(input, f_core._VNS+":separators");
 			if (separators) {
 				// Ce sont les separateurs du precedant !
 				inputs[i-1]._separators=separators;
 			}
 			
-			input._type=f_core.GetAttribute(input, "v:type");
+			input._type=f_core.GetAttribute(input, f_core._VNS+":type");
 			
 			if (i+1<inputs.length) {
 				input._nextInput=inputs[i+1];

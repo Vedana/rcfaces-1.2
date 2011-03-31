@@ -13,13 +13,13 @@ var __members={
 	f_dateChooser: function() {
 		this.f_super(arguments);
 		
-		this._forComponent=f_core.GetAttribute(this, "v:for");
+		this._forComponent=f_core.GetAttribute(this, f_core._VNS+":for");
 		if (this._forComponent) {
-			this._forValueFormat=f_core.GetAttribute(this, "v:forValueFormat");
+			this._forValueFormat=f_core.GetAttribute(this, f_core._VNS+":forValueFormat");
 		}
 		
 		
-		var defaultSelectedDate=f_core.GetAttribute(this, "v:defaultSelectedDate");
+		var defaultSelectedDate=f_core.GetAttribute(this, f_core._VNS+":defaultSelectedDate");
 		if (defaultSelectedDate) {
 			this.f_setDefaultSelectedDate(f_core.DeserializeDate(defaultSelectedDate));
 		}

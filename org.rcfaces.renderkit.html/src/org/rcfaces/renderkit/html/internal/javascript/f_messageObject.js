@@ -51,15 +51,15 @@ var __statics = {
     CreateFromTag: function(tag) {
     	f_core.Assert(tag && tag.nodeType==f_core.ELEMENT_NODE, "f_messageObject.CreateFromTag: Invalid tag parameter '"+tag+"'.");
     	
-		var detail=f_core.GetAttribute(tag, "v:detail");
-		var summary=f_core.GetAttribute(tag, "v:summary");		
-		var severity=f_core.GetNumberAttribute(tag, "v:severity");	
+		var detail=f_core.GetAttribute(tag, f_core._VNS+":detail");
+		var summary=f_core.GetAttribute(tag, f_core._VNS+":summary");		
+		var severity=f_core.GetNumberAttribute(tag, f_core._VNS+":severity");	
 		
 		var clientDatas=f_core.ParseDataAttribute(tag);
 		
 		var component=null;
 		
-		var forClientId=f_core.GetAttribute(tag, "v:for");			
+		var forClientId=f_core.GetAttribute(tag, f_core._VNS+":for");			
 		if (forClientId) {
 			component=f_core.GetElementById(forClientId);
 		}

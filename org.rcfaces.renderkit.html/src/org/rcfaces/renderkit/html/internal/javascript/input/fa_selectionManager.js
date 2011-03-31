@@ -123,14 +123,14 @@ var __statics = {
 var __members = {
 	fa_selectionManager: function() {
 		if (this._selectionCardinality===undefined) {
-			var v_selectionCardinality=f_core.GetNumberAttribute(this, "v:selectionCardinality", undefined);
+			var v_selectionCardinality=f_core.GetNumberAttribute(this, f_core._VNS+":selectionCardinality", undefined);
 	
 			if (v_selectionCardinality===undefined) {
 				return;
 			}
 			this._selectionCardinality=v_selectionCardinality;
 			
-			var clientSelectionFullState=f_core.GetNumberAttribute(this, "v:clientSelectionFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
+			var clientSelectionFullState=f_core.GetNumberAttribute(this, f_core._VNS+":clientSelectionFullState", fa_clientFullState.NONE_CLIENT_FULL_STATE);
 			if (clientSelectionFullState) {
 				this._clientSelectionFullState=clientSelectionFullState;
 

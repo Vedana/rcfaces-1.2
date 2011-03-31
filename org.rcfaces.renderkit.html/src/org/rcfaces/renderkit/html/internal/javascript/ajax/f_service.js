@@ -75,7 +75,7 @@ var __members={
 	f_service: function() {
 		this.f_super(arguments);
 		
-		this._serviceId=f_core.GetAttribute(this, "v:serviceId");
+		this._serviceId=f_core.GetAttribute(this, f_core._VNS+":serviceId");
 	},
 	f_finalize: function() {
 		// this._serviceId=undefined;  // string

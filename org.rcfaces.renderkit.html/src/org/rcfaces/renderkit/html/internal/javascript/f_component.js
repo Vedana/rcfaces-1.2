@@ -98,7 +98,7 @@ var __statics = {
 	GetDefaultHiddenMode: function() {
 		return f_component.DEFAULT_HIDDEN_MODE;
 	}
-}
+};
 
 var __members = {
 
@@ -110,7 +110,7 @@ var __members = {
 		this.f_super(arguments);
 		this.fa_componentUpdated = false;
 		
-		var accessKey=f_core.GetAttribute(this, "v:accessKey");
+		var accessKey=f_core.GetAttribute(this, f_core._VNS+":accessKey");
 		if (!accessKey) {
 			accessKey=this.accessKey;
 		}
@@ -437,7 +437,7 @@ var __members = {
 			return hiddenMode;
 		}
 
-		hiddenMode=f_core.GetAttribute(this, "v:hiddenMode");
+		hiddenMode=f_core.GetAttribute(this, f_core._VNS+":hiddenMode");
 		if (hiddenMode) {
 			hiddenMode=parseInt(hiddenMode, 10);
 
@@ -445,7 +445,7 @@ var __members = {
 			hiddenMode=f_component.GetDefaultHiddenMode();
 		}
 		
-		this._hiddenMode=hiddenMode
+		this._hiddenMode=hiddenMode;
 
 		return hiddenMode;
 	},
@@ -459,7 +459,7 @@ var __members = {
 			return helpURL;
 		}
 		
-		var helpURL=f_core.GetAttribute(this, "v:helpURL", null);
+		var helpURL=f_core.GetAttribute(this, f_core._VNS+":helpURL", null);
 
 		this._helpURL=helpURL;
 		
@@ -505,7 +505,7 @@ var __members = {
 			return helpMessage;
 		}
 		
-		helpMessage=f_core.GetAttribute(this, "v:helpMessage", null);
+		helpMessage=f_core.GetAttribute(this, f_core._VNS+":helpMessage", null);
 		this._helpMessage=helpMessage;		
 		
 		return helpMessage;
@@ -566,7 +566,7 @@ var __members = {
 			return styleClass;
 		}
 		
-		styleClass=f_core.GetAttribute(this, "v:styleClass");
+		styleClass=f_core.GetAttribute(this, f_core._VNS+":styleClass");
 		if (!styleClass) {
 			styleClass=null;
 		}
@@ -838,7 +838,7 @@ var __members = {
 		
 		return s+"]";
 	}
-}
+};
 
 new f_class("f_component", {
 	extend: f_eventTarget,
