@@ -1,5 +1,18 @@
+Configuration loader:
+Mutualisation du système de chargement des configurations faces-config et rcfaces-config
+
+Namespace:
+Configuration du namespace privé RCFaces utilisé par le générateur HTML/Javascript
+
+f_popup:
+Gestion du BLUR recommenté !
+
 AbstractImageButtonFamillyDecorator:
 input.tabIndex=-1 si disabled
+
+----------------------------------------------------------------------
+- @version M
+
 
 f_grid:
 transformation de la property SORT_INDEX en attribut pour la bonne gestion du tri lorsqu'il est initialisé sur le serveur

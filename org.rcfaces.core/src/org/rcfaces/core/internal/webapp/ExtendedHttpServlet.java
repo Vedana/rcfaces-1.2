@@ -35,8 +35,6 @@ import org.rcfaces.core.internal.util.MessageDigestSelector;
  * @version $Revision$ $Date$
  */
 public class ExtendedHttpServlet extends HttpServlet {
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -8822434295699331135L;
 
     private static final Log LOG = LogFactory.getLog(ExtendedHttpServlet.class);
