@@ -97,7 +97,7 @@ var __statics = {
 			if (!child.tagName) {
 				continue;
 			}
-			var index=f_core.GetAttribute(child, f_core._VNS+":index");
+			var index=f_core.GetAttributeNS(child,"index");
 			if (!index) {
 				index=child._index;
 			}
@@ -206,7 +206,7 @@ var __statics = {
 			return false;
 		}
 
-		var v_index=f_core.GetAttribute(this, f_core._VNS+":index");		
+		var v_index=f_core.GetAttributeNS(this,"index");		
 		if (typeof(v_index)!="number") {
 			v_index=this._index;
 		
@@ -253,19 +253,19 @@ var __members = {
 	f_pager: function() {
 		this.f_super(arguments);
 		
-		this._for=f_core.GetAttribute(this, f_core._VNS+":for");
+		this._for=f_core.GetAttributeNS(this,"for");
 		
 		var zeroMessage;
 		var oneMessage;
 		var manyMessage;
 		var manyMessage2;
 
-		var message=f_core.GetAttribute(this, f_core._VNS+":message");
+		var message=f_core.GetAttributeNS(this,"message");
 		if (message) {
-			zeroMessage=f_core.GetAttribute(this, f_core._VNS+":zeroResultMessage");
-			oneMessage=f_core.GetAttribute(this, f_core._VNS+":oneResultMessage");
-			manyMessage=f_core.GetAttribute(this, f_core._VNS+":manyResultMessage");
-			manyMessage2=f_core.GetAttribute(this, f_core._VNS+":manyResultMessage2");
+			zeroMessage=f_core.GetAttributeNS(this,"zeroResultMessage");
+			oneMessage=f_core.GetAttributeNS(this,"oneResultMessage");
+			manyMessage=f_core.GetAttributeNS(this,"manyResultMessage");
+			manyMessage2=f_core.GetAttributeNS(this,"manyResultMessage2");
 		
 		} else {
 			var resourceBundle=f_resourceBundle.Get(f_pager);
@@ -283,7 +283,7 @@ var __members = {
 		this._manyMessage=(manyMessage!==undefined)?manyMessage:message;
 		this._manyMessage2=(manyMessage2!==undefined)?manyMessage2:this._manyMessage;
 		
-		var noPagedMessage=f_core.GetAttribute(this, f_core._VNS+":noPagedMessage", null);
+		var noPagedMessage=f_core.GetAttributeNS(this,"noPagedMessage", null);
 		if (noPagedMessage===null) {
 			var resourceBundle=f_resourceBundle.Get(f_pager);
 			

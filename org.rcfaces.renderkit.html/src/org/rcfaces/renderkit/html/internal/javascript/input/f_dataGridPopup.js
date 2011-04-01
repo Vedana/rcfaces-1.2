@@ -78,7 +78,7 @@ var __statics = {
 		width-=bw;
 		height-=bh;
 		
-		var headerVisible=f_core.GetBooleanAttribute(dataGridPopup, f_core._VNS+":headerVisible", false);
+		var headerVisible=f_core.GetBooleanAttributeNS(dataGridPopup,"headerVisible", false);
 		
 		var totalSize=0;
 		for(var i=0;i<columns.length;i++) {

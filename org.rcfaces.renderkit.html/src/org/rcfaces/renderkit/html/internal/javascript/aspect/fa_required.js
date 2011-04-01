@@ -23,7 +23,7 @@ var __members = {
 		var required=this._required;
 		if (required===undefined) {
 			// Appel depuis le constructor de l'objet !
-			required=f_core.GetBooleanAttribute(this, f_core._VNS+":required", false);
+			required=f_core.GetBooleanAttributeNS(this, "required", false);
 			this._required=required;
 		}
 

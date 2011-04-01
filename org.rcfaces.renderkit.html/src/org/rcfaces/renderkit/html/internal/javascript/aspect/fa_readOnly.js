@@ -22,7 +22,7 @@ var __members = {
 	f_isReadOnly: function() {
 		if (this._readOnly===undefined) {
 			// Appel depuis le constructor de l'objet !
-			this._readOnly=f_core.GetBooleanAttribute(this, f_core._VNS+":readOnly", false);
+			this._readOnly=f_core.GetBooleanAttributeNS(this, "readOnly", false);
 		}
 
 		return this._readOnly;

@@ -78,7 +78,7 @@ var __members = {
 			return autoTab;
 		}
 				
-		autoTab=!!f_core.GetBooleanAttribute(this, f_core._VNS+":autoTab");
+		autoTab=!!f_core.GetBooleanAttributeNS(this,"autoTab");
 		this._autoTab=autoTab;
 				
 		return autoTab;

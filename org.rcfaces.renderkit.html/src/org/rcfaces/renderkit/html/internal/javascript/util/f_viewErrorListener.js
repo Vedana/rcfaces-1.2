@@ -34,7 +34,7 @@ var __members = {
 		});
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
-			var events=f_core.GetAttribute(this, f_core._VNS+":events");
+			var events=f_core.GetAttributeNS(this,"events");
 			if (events) {
 				this.f_initEventAtts(f_viewErrorListener._EVENTS, events);
 			}

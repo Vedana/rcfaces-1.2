@@ -15,7 +15,7 @@ var __members = {
 	f_image: function() {
 		this.f_super(arguments);
 		
-		this._imageURL=(f_core.GetAttribute(this, f_core._VNS+":blank"))?null:this.src;
+		this._imageURL=(f_core.GetAttributeNS(this,"blank"))?null:this.src;
 	},
 
 	f_finalize: function() {

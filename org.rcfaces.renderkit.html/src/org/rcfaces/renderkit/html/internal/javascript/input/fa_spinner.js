@@ -213,7 +213,7 @@ var __members = {
 
 		var doc=this.ownerDocument;
 		
-		this._cycleValue=f_core.GetBooleanAttribute(this, f_core._VNS+":cycle", false);
+		this._cycleValue=f_core.GetBooleanAttributeNS(this,"cycle", false);
 		
 		//this._spinnerUp=f_core.GetChildByCssClass(this, "f_spinner_up"+disabledSuffix);
 		this._spinnerUp=doc.getElementById(this.id+fa_spinner._UP_ID_SUFFIX);
@@ -431,7 +431,7 @@ var __members = {
 	f_getMinimum: function() {
 		var minimum=this._minimum;
 		if (minimum===undefined) {
-			minimum=f_core.GetAttribute(this, f_core._VNS+":minimum");
+			minimum=f_core.GetAttributeNS(this,"minimum");
 			
 			minimum=(minimum)?parseFloat(minimum):null;
 			this._minimum=minimum;
@@ -463,7 +463,7 @@ var __members = {
 	f_getMaximum: function() {
 		var maximum=this._maximum;
 		if (maximum===undefined) {
-			maximum=f_core.GetAttribute(this, f_core._VNS+":maximum");
+			maximum=f_core.GetAttributeNS(this,"maximum");
 			
 			maximum=(maximum)?parseFloat(maximum):null;
 			this._maximum=maximum;
@@ -495,7 +495,7 @@ var __members = {
 	f_getStep: function() {
 		var step=this._step;
 		if (step===undefined) {
-			this._step=f_core.GetAttribute(this, f_core._VNS+":step");
+			this._step=f_core.GetAttributeNS(this,"step");
 		}
 		return step;
 	},

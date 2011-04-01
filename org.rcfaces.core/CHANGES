@@ -1,3 +1,6 @@
+f_core et al.:
+Ajout Get*AttributeNS
+
 f_dragAndDropEngine:
 Correction de pb d'accès à des variables non initialisées
 

@@ -43,7 +43,7 @@ var __members = {
 		this.f_super(arguments);
 		
 		var layout;
-		switch(f_core.GetNumberAttribute(this, f_core._VNS+":layout", f_calendar.DEFAULT_LAYOUT)) {
+		switch(f_core.GetNumberAttributeNS(this, "layout", f_calendar.DEFAULT_LAYOUT)) {
 		default:		
 			layout=f_calendarObject.YEAR_CURSOR_LAYOUT | 
 				f_calendarObject.MONTH_LIST_LAYOUT |

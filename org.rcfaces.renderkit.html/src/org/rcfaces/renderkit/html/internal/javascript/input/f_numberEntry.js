@@ -29,7 +29,7 @@ var __members={
 	},
 	*/
 	fa_initializeInput: function(input) {
-		input._forced=f_core.GetNumberAttribute(input, f_core._VNS+":auto");
+		input._forced=f_core.GetNumberAttributeNS(input,"auto");
 		if (input._forced<1) {
 			input._forced=1;
 		}
@@ -137,7 +137,7 @@ var __members={
 			return minNumber;
 		}
 		
-		minNumber=f_core.GetAttribute(this, f_core._VNS+":minNumber");
+		minNumber=f_core.GetAttributeNS(this,"minNumber");
 		if (minNumber) {
 			if (minNumber.indexOf('.')>=0) {
 				minNumber=parseFloat(minNumber);
@@ -163,7 +163,7 @@ var __members={
 			return maxNumber;
 		}
 		
-		maxNumber=f_core.GetAttribute(this, f_core._VNS+":maxNumber");
+		maxNumber=f_core.GetAttributeNS(this,"maxNumber");
 		if (maxNumber) {
 			if (maxNumber.indexOf('.')>=0) {
 				maxNumber=parseFloat(maxNumber);

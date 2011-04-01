@@ -24,12 +24,12 @@ var __members = {
 	f_isDroppable: function() {
 		if (this._droppable===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var dropEffects=f_core.GetNumberAttribute(this, f_core._VNS+":dropEffects");
+			var dropEffects=f_core.GetNumberAttributeNS(this, "dropEffects");
 			
 		  	this._droppable=(dropEffects!==undefined);
 		  	if (this._droppable) {
 		  		this._dropEffects=dropEffects;
-		  		var ds=f_core.GetAttribute(this, f_core._VNS+":dropTypes");
+		  		var ds=f_core.GetAttributeNS(this, "dropTypes");
 		  		if (ds) {
 		  			this._dropTypes=ds.split(",");
 		  		}		  		

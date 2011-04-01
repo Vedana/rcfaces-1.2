@@ -216,7 +216,7 @@ var __members = {
 	f_textEditor: function() {
 		this.f_super(arguments);
 		
-		var mimeType=f_core.GetAttribute(this, f_core._VNS+":mimeType");
+		var mimeType=f_core.GetAttributeNS(this,"mimeType");
 		if (!mimeType) {
 			mimeType=f_textEditor.TEXT_HTML_MIME_TYPE;
 		}
@@ -290,7 +290,7 @@ var __members = {
 		
 		this._contentDocument=contentDocument;
 		
-		var text=f_core.GetAttribute(this, f_core._VNS+":text");
+		var text=f_core.GetAttributeNS(this,"text");
 		if (text) {
 			this.f_setText(text);
 		}

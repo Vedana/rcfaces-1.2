@@ -539,19 +539,19 @@ var __members = {
 		
 		this._nodesList=new Array();
 
-		this._interactive=f_core.GetBooleanAttribute(this, f_core._VNS+":asyncRender", false);
+		this._interactive=f_core.GetBooleanAttributeNS(this,"asyncRender", false);
 
-		this._hideRootExpandSign=f_core.GetBooleanAttribute(this, f_core._VNS+":hideRootExpandSign", false);
+		this._hideRootExpandSign=f_core.GetBooleanAttributeNS(this,"hideRootExpandSign", false);
 				
-		this._userExpandable=f_core.GetBooleanAttribute(this, f_core._VNS+":userExpandable", true);
+		this._userExpandable=f_core.GetBooleanAttributeNS(this,"userExpandable", true);
 		
-		this._images=f_core.GetBooleanAttribute(this, f_core._VNS+":images");
+		this._images=f_core.GetBooleanAttributeNS(this,"images");
 		
-		this._preloadedLevelDepth=f_core.GetNumberAttribute(this, f_core._VNS+":preloadedLevelDepth");
+		this._preloadedLevelDepth=f_core.GetNumberAttributeNS(this,"preloadedLevelDepth");
 		
-		this._initCursorValue=f_core.GetAttribute(this, f_core._VNS+":cursorValue");
+		this._initCursorValue=f_core.GetAttributeNS(this,"cursorValue");
 
-		this._showValue=f_core.GetAttribute(this, f_core._VNS+":showValue");
+		this._showValue=f_core.GetAttributeNS(this,"showValue");
 		
 		this._blankNodeImageURL=f_env.GetBlankImageURL();
 		
@@ -634,7 +634,7 @@ var __members = {
 		}
 	
 		if (this.f_isDroppable()) {
-			this._bodyDroppable=f_core.GetBooleanAttribute(this, f_core._VNS+":bodyDroppable", false);
+			this._bodyDroppable=f_core.GetBooleanAttributeNS(this,"bodyDroppable", false);
 		}
 	},
 	f_finalize: function() {

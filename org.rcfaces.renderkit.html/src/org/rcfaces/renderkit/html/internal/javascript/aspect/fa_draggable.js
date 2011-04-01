@@ -24,12 +24,12 @@ var __members = {
 	f_isDraggable: function() {
 		if (this._draggable===undefined) {
 			// Appel depuis le constructor de l'objet !
-			var dragEffects=f_core.GetNumberAttribute(this, f_core._VNS+":dragEffects");
+			var dragEffects=f_core.GetNumberAttributeNS(this, "dragEffects");
 			
 		  	this._draggable=(dragEffects!==undefined);
 		  	if (this._draggable) {
 		  		this._dragEffects=dragEffects;
-		  		var ds=f_core.GetAttribute(this, f_core._VNS+":dragTypes");
+		  		var ds=f_core.GetAttributeNS(this, "dragTypes");
 		  		if (ds) {
 		  			this._dragTypes=ds.split(",");
 		  		}		  		

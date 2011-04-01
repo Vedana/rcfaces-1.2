@@ -29,7 +29,7 @@ var __members = {
 		
 		var imageURL=this.fa_getInitialImageURL();
 		
-		var v_imageURL=f_core.GetAttribute(this, f_core._VNS+":imageURL");
+		var v_imageURL=f_core.GetAttributeNS(this, "imageURL");
 		if (v_imageURL) {
 			if (this.fa_getInitialDisabled && this.fa_getInitialDisabled()) {
 				this._disabledImageURL=imageURL;
@@ -58,7 +58,7 @@ var __members = {
 		this._imageURL=imageURL;
 		
 		if (!this._disabledImageURL) {
-			var v_disabledImageURL=f_core.GetAttribute(this, f_core._VNS+":disabledImageURL");
+			var v_disabledImageURL=f_core.GetAttributeNS(this, "disabledImageURL");
 			if (v_disabledImageURL) {
 				this._disabledImageURL=v_disabledImageURL;
 				f_imageRepository.PrepareImage(v_disabledImageURL);
@@ -66,14 +66,14 @@ var __members = {
 		}
 		
 		if (!this._selectedImageURL) {
-			var v_selectedImageURL=f_core.GetAttribute(this, f_core._VNS+":selectedImageURL");
+			var v_selectedImageURL=f_core.GetAttributeNS(this, "selectedImageURL");
 			if (v_selectedImageURL) {
 				this._selectedImageURL=v_selectedImageURL;
 				f_imageRepository.PrepareImage(v_selectedImageURL);
 			}
 		}	
 
-		var v_hoverImageURL=f_core.GetAttribute(this, f_core._VNS+":hoverImageURL");
+		var v_hoverImageURL=f_core.GetAttributeNS(this, "hoverImageURL");
 		if (v_hoverImageURL) {
 			this._hoverImageURL=v_hoverImageURL;
 			f_imageRepository.PrepareImage(v_hoverImageURL);
@@ -225,7 +225,7 @@ var __members = {
 			return this._hoverImageURL!==undefined;
 		}
 				
-		return f_core.GetAttribute(this, f_core._VNS+":hoverImageURL")!=null;
+		return f_core.GetAttributeNS(this, "hoverImageURL")!=null;
 	},
 	
 	/**

@@ -70,7 +70,7 @@ var __statics = {
 			
 			var className="f_dateChooser_popup f_dateChooser_popup_"+dateChooser._layout;
 			
-			var usc=f_core.GetAttribute(dateChooser, f_core._VNS+":popupStyleClass");
+			var usc=f_core.GetAttributeNS(dateChooser,"popupStyleClass");
 			if (usc) {
 				className+=" "+usc+" "+usc+"_"+dateChooser._layout;
 			}			
@@ -360,7 +360,7 @@ var __members={
 		
 	fa_calendarPopup: function() {
 
-		this._layout=f_core.GetNumberAttribute(this, f_core._VNS+":layout", f_calendar.DEFAULT_LAYOUT);
+		this._layout=f_core.GetNumberAttributeNS(this,"layout", f_calendar.DEFAULT_LAYOUT);
 		var layout;
 		switch(this._layout) {
 		case f_calendar.FULL_LAYOUT:

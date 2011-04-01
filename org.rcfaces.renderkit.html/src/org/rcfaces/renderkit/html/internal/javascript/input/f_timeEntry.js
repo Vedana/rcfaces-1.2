@@ -14,7 +14,7 @@ var __members={
 	f_timeEntry: function() {
 		this.f_super(arguments);
 
-//		this._timeFormat=f_core.GetAttribute(this, f_core._VNS+":timeFormat");
+//		this._timeFormat=f_core.GetAttributeNS(this,"timeFormat");
 	},
 	/*
 	f_finalize: function() {
@@ -148,7 +148,7 @@ var __members={
 			return minTime;
 		}
 		
-		minTime=f_core.GetAttribute(this, f_core._VNS+":minTime");
+		minTime=f_core.GetAttributeNS(this,"minTime");
 		if (minTime) {
 			minTime=new f_time(parseInt(minTime, 10));
 		} else {
@@ -170,7 +170,7 @@ var __members={
 			return maxTime;
 		}
 		
-		maxTime=f_core.GetAttribute(this, f_core._VNS+":maxTime");
+		maxTime=f_core.GetAttributeNS(this,"maxTime");
 		if (maxTime) {
 			maxTime=new f_time(parseInt(maxTime, 10));
 		} else {

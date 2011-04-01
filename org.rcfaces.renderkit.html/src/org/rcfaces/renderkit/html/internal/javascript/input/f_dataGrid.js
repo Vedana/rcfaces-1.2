@@ -283,7 +283,7 @@ var __members = {
 		this._gridUpdadeServiceId="dataGrid.update";
 		this._serviceGridId=this.id;
 		this._keyRowSearch=true;
-		this._cellWrap=f_core.GetAttribute(this, f_core._VNS+":cellTextWrap", false);
+		this._cellWrap=f_core.GetAttributeNS(this,"cellTextWrap", false);
 		//this._noCellWrap=false;
 
 		if (!!this._cellWrap) {
@@ -1855,7 +1855,7 @@ var __members = {
 	f_getElementLabel: function(rowValue) {
 		var labelColumnId=this._labelColumnId;
 		if (labelColumnId===undefined) {
-			labelColumnId=f_core.GetAttribute(this, f_core._VNS+":rowLabelColumnId", null);
+			labelColumnId=f_core.GetAttributeNS(this,"rowLabelColumnId", null);
 			
 			this._labelColumnId=labelColumnId;
 		}

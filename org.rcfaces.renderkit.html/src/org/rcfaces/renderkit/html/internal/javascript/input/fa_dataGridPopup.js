@@ -43,7 +43,7 @@ var __statics = {
 		f_core.Debug(fa_dataGridPopup, "_OpenPopup: Open popup for dataGridPopup '"+dataGridPopup.id+"'. (popupOpened='"+dataGridPopup._popupOpened+"' popup='"+dataGridPopup._popup+"')");
 
 		var popupClassName="f_dataGridPopup_popup";
-		var ds=f_core.GetAttribute(dataGridPopup, f_core._VNS+":popupStyleClass");
+		var ds=f_core.GetAttributeNS(dataGridPopup,"popupStyleClass");
 		if (ds) {
 			popupClassName+=" "+ds;
 		}			
@@ -354,14 +354,14 @@ var __members = {
 	_columns: undefined,
 	
 	fa_dataGridPopup: function() {		
-		this._valueColumnId=f_core.GetAttribute(this, f_core._VNS+":valueColumnId");
+		this._valueColumnId=f_core.GetAttributeNS(this,"valueColumnId");
 		
-		var labelColumnId=f_core.GetAttribute(this, f_core._VNS+":labelColumnId");
+		var labelColumnId=f_core.GetAttributeNS(this,"labelColumnId");
 		if (labelColumnId) {
 			this._labelColumnId=labelColumnId;
 		}
 		
-		var valueFormat=f_core.GetAttribute(this, f_core._VNS+":valueFormat");
+		var valueFormat=f_core.GetAttributeNS(this,"valueFormat");
 		if (!valueFormat) {
 			if (labelColumnId) {
 				valueFormat="{"+labelColumnId+"}";
@@ -371,8 +371,8 @@ var __members = {
 			}
 		}
 		
-		this._popupWidth=f_core.GetNumberAttribute(this, f_core._VNS+":popupWidth", 320);
-		this._popupHeight=f_core.GetNumberAttribute(this, f_core._VNS+":popupHeight", 200);
+		this._popupWidth=f_core.GetNumberAttributeNS(this,"popupWidth", 320);
+		this._popupHeight=f_core.GetNumberAttributeNS(this,"popupHeight", 200);
 		
 		this._valueFormat=valueFormat;
 		
@@ -467,8 +467,8 @@ var __members = {
 	f_constructDataGrid: function(parent) {
 		f_core.Debug(fa_dataGridPopup, "f_constructDataGrid: construct components parent="+parent);
 
-		var rows=f_core.GetNumberAttribute(this, f_core._VNS+":rows");
-		var paged=f_core.GetBooleanAttribute(this, f_core._VNS+":paged", true);
+		var rows=f_core.GetNumberAttributeNS(this,"rows");
+		var paged=f_core.GetBooleanAttributeNS(this,"paged", true);
 		
 		var hasPager=(rows>0 && paged);
 		
@@ -488,7 +488,7 @@ var __members = {
 		
 		var tBodyContainer=f_core.CreateElement(dataGridContainer, "tbody");		
 		
-		var showTitle=f_core.GetBooleanAttribute(this, f_core._VNS+":searchFieldVisible", true);
+		var showTitle=f_core.GetBooleanAttributeNS(this,"searchFieldVisible", true);
 		
 		var cwidth=width;
 		var cheight=height;
@@ -559,7 +559,7 @@ var __members = {
 		});									
 		
 		var dataGridStyleClass="fa_dataGridPopup_grid";
-		var ds=f_core.GetAttribute(this, f_core._VNS+":gridStyleClass");
+		var ds=f_core.GetAttributeNS(this,"gridStyleClass");
 		if (ds) {
 			dataGridStyleClass+=" "+ds;
 		}
@@ -576,7 +576,7 @@ var __members = {
 	
 		if (hasPager) {
 
-			if (!f_core.GetAttribute(this, f_core._VNS+":message")) {				
+			if (!f_core.GetAttributeNS(this,"message")) {				
 
 				this.setAttribute(f_core._VNS+":message", resourceBundle.f_get("MESSAGE"));
 				this.setAttribute(f_core._VNS+":zeroResultMessage", resourceBundle.f_get("ZERO_RESULT_MESSAGE"));			
@@ -592,7 +592,7 @@ var __members = {
 				valign: "middle" });
 				
 			var psc="fa_dataGridPopup_pager";
-			var ppsc=f_core.GetAttribute(this, f_core._VNS+":pagerStyleClass");
+			var ppsc=f_core.GetAttributeNS(this,"pagerStyleClass");
 			if (ppsc) {
 				psc+=" "+ppsc;
 			}

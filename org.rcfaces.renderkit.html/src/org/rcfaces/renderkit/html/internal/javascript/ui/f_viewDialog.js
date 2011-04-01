@@ -54,11 +54,11 @@ var __members = {
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			
-			this._parameters=f_core.ParseDataAttribute(this, f_core._VNS+":parameter");
+			this._parameters=f_core.ParseDataAttributeNS(this,"parameter");
 			
-			this.f_setViewURL(f_core.GetAttribute(this, f_core._VNS+":viewURL", "about:blank"));
+			this.f_setViewURL(f_core.GetAttributeNS(this,"viewURL", "about:blank"));
 
-			if (f_core.GetBooleanAttribute(this, f_core._VNS+":visible", true)) {
+			if (f_core.GetBooleanAttributeNS(this,"visible", true)) {
 				this.f_open();
 			}
 		}		

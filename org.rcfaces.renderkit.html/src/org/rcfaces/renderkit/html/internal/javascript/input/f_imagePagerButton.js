@@ -13,10 +13,10 @@ var __members = {
 	f_imagePagerButton: function() {
 		this.f_super(arguments);
 		
-		this._type=f_core.GetAttribute(this, f_core._VNS+":type");
+		this._type=f_core.GetAttributeNS(this,"type");
 		
-		var forComponent=f_core.GetAttribute(this, f_core._VNS+":for");
-		this._hideIfDisabled=f_core.GetBooleanAttribute(this, f_core._VNS+":hideIfDisabled", false);
+		var forComponent=f_core.GetAttributeNS(this,"for");
+		this._hideIfDisabled=f_core.GetBooleanAttributeNS(this,"hideIfDisabled", false);
 		
 		// this.f_setDisabled(true); // D'office !  on attend la synchro !
 		// C'est fait sur le serveur !

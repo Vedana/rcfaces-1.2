@@ -622,13 +622,13 @@ f_classLoader.prototype = {
 					continue;
 				}
 				
-				var clz=f_core.GetAttribute(component, f_core._VNS+":class");
+				var clz=f_core.GetAttributeNS(component,"class");
 				if (clz) {
 					components.push(component, component);
 					continue;
 				}
 				
-				var fct=f_core.GetAttribute(component, f_core._VNS+":function");
+				var fct=f_core.GetAttributeNS(component,"function");
 				if (fct) {
 					var evaluatedFunction=evaluations[fct];
 					if (!evaluatedFunction) {
@@ -665,7 +665,7 @@ f_classLoader.prototype = {
 						continue;
 					}
 					
-					var clz=f_core.GetAttribute(prev, f_core._VNS+":class");
+					var clz=f_core.GetAttributeNS(prev,"class");
 					if (!clz) {
 						f_core.Warn(f_classLoader, "f_initializeObjects: Lazy detection: Unknown previous sibling type '"+prev.tagName+"#"+prev.id+"'.");
 						continue;
@@ -1260,7 +1260,7 @@ f_classLoader.prototype = {
 					if (obj.id) {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') has already an ID ('+obj.id+') !");
 			
-					} else if (f_core.GetAttribute(obj, f_core._VNS+":class")==null) {
+					} else if (f_core.GetAttributeNS(obj,"class")==null) {
 						f_core.Assert(obj, "f_classLoader._init: Component found by name ('"+id+"') is not a RCFaces Component !");
 					}
 				}
@@ -1284,7 +1284,7 @@ f_classLoader.prototype = {
 		
 		f_core.Debug(f_classLoader, "f_init: Initialize object '"+obj+"' (id='"+obj.id+"') ignore='"+ignoreNotFound+"'  typeof(obj)='"+typeof(obj)+"'");
 			
-		var claz = f_core.GetAttribute(obj, f_core._VNS+":class");
+		var claz = f_core.GetAttributeNS(obj,"class");
 		if (!claz) {
 			// La classe n'est pas définie ... c'est peut etre une form !
 	
@@ -1292,7 +1292,7 @@ f_classLoader.prototype = {
 			return obj;
 		}
 	
-		var look = f_core.GetAttribute(obj, f_core._VNS+":lookid");
+		var look = f_core.GetAttributeNS(obj,"lookid");
 	
 		var cls=this.f_getClass(claz, look);
 		if (!cls) {

@@ -55,7 +55,7 @@ var __members = {
 		for(var i=0;i<lis.length;i++) {
 			var li=lis[i];
 			
-			if (!f_core.GetAttribute(li, f_core._VNS+":separator")) {
+			if (!f_core.GetAttributeNS(li,"separator")) {
 				continue;
 			}
 			

@@ -110,7 +110,7 @@ var __members = {
 		this.f_super(arguments);
 		this.fa_componentUpdated = false;
 		
-		var accessKey=f_core.GetAttribute(this, f_core._VNS+":accessKey");
+		var accessKey=f_core.GetAttributeNS(this,"accessKey");
 		if (!accessKey) {
 			accessKey=this.accessKey;
 		}
@@ -437,7 +437,7 @@ var __members = {
 			return hiddenMode;
 		}
 
-		hiddenMode=f_core.GetAttribute(this, f_core._VNS+":hiddenMode");
+		hiddenMode=f_core.GetAttributeNS(this,"hiddenMode");
 		if (hiddenMode) {
 			hiddenMode=parseInt(hiddenMode, 10);
 
@@ -459,7 +459,7 @@ var __members = {
 			return helpURL;
 		}
 		
-		var helpURL=f_core.GetAttribute(this, f_core._VNS+":helpURL", null);
+		var helpURL=f_core.GetAttributeNS(this,"helpURL", null);
 
 		this._helpURL=helpURL;
 		
@@ -505,7 +505,7 @@ var __members = {
 			return helpMessage;
 		}
 		
-		helpMessage=f_core.GetAttribute(this, f_core._VNS+":helpMessage", null);
+		helpMessage=f_core.GetAttributeNS(this,"helpMessage", null);
 		this._helpMessage=helpMessage;		
 		
 		return helpMessage;
@@ -566,7 +566,7 @@ var __members = {
 			return styleClass;
 		}
 		
-		styleClass=f_core.GetAttribute(this, f_core._VNS+":styleClass");
+		styleClass=f_core.GetAttributeNS(this,"styleClass");
 		if (!styleClass) {
 			styleClass=null;
 		}

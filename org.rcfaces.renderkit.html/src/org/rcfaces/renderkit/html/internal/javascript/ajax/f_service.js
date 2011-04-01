@@ -84,9 +84,9 @@ var __members={
 	f_service: function() {
 		this.f_super(arguments);
 		
-		this._serviceId=f_core.GetAttribute(this, f_core._VNS+":serviceId");
+		this._serviceId=f_core.GetAttributeNS(this, "serviceId");
 		
-		var events=f_core.GetAttribute(this, f_core._VNS+":events");
+		var events=f_core.GetAttributeNS(this, "events");
 		if (events) {
 			this.f_initEventAtts(f_service._EVENTS, events);
 		}

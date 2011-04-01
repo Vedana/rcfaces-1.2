@@ -2751,7 +2751,7 @@ var f_core = {
 			return null;
 		}
 						
-		var cl=f_core.GetAttribute(elt, f_core._VNS+":class");
+		var cl=f_core.GetAttributeNS(elt,"class");
 		if (!cl) {
 			return null;
 		}
@@ -2985,6 +2985,16 @@ var f_core = {
 	 * @method hidden static
 	 * @param Element element
 	 * @param String attributeName
+	 * @param optional any defaultValue
+	 * @return any
+	 */
+	GetAttributeNS: function(element, attributeName, defaultValue) {
+		return f_core.GetAttribute(element, f_core._VNS+":"+attributeName, defaultValue);
+	},
+	/** 
+	 * @method hidden static
+	 * @param Element element
+	 * @param String attributeName
 	 * @param optional Number defaultValue
 	 * @return Number
 	 */
@@ -3002,6 +3012,16 @@ var f_core = {
 	 * @method hidden static
 	 * @param Element element
 	 * @param String attributeName
+	 * @param optional Number defaultValue
+	 * @return Number
+	 */
+	GetNumberAttributeNS: function(element, attributeName, defaultValue) {
+		return f_core.GetNumberAttribute(element, f_core._VNS+":"+attributeName, defaultValue);
+	},
+	/** 
+	 * @method hidden static
+	 * @param Element element
+	 * @param String attributeName
 	 * @return optional Boolean defaultValue
 	 * @return Boolean
 	 */
@@ -3014,6 +3034,16 @@ var f_core = {
 		}
 
 		return defaultValue;
+	},
+	/** 
+	 * @method hidden static
+	 * @param Element element
+	 * @param String attributeName
+	 * @return optional Boolean defaultValue
+	 * @return Boolean
+	 */
+	GetBooleanAttributeNS: function(element, attributeName, defaultValue) {
+		return f_core.GetBooleanAttribute(element, f_core._VNS+":"+attributeName, defaultValue);
 	},	
 	/** 
 	 * Returns true if component (and its ancestors) is visible.
@@ -5469,7 +5499,7 @@ var f_core = {
 		f_core.Debug(f_core, "UpdateAjaxParameters: Use default faces hidden input search !");
 		
 		return f_core.AddFacesHiddenInputParameters(form, function(input) {
-			return true; // Ca peut servir !!!! !f_core.GetAttribute(input, f_core._VNS+":class");
+			return true; // Ca peut servir !!!! !f_core.GetAttributeNS(input,"class");
 		}, data);
 	},
 	/**

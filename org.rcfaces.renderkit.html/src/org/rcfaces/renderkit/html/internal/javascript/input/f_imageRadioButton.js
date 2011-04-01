@@ -14,7 +14,7 @@ var __members = {
 	f_imageRadioButton: function() {
 		this.f_super(arguments);
 		
-		var groupName=f_core.GetAttribute(this, f_core._VNS+":groupName");
+		var groupName=f_core.GetAttributeNS(this,"groupName");
 		if (groupName ) {	
 			this._groupName=groupName;
 		

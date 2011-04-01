@@ -41,9 +41,9 @@ var __members = {
 	f_initializeOnFocus: function() {
 		this.f_super(arguments);
 				
-		this._emptyMessage=f_core.GetAttribute(this, f_core._VNS+":emptyMessage");
+		this._emptyMessage=f_core.GetAttributeNS(this, "emptyMessage");
 		if (this._emptyMessage) {
-			this._emptyMessageShown=f_core.GetBooleanAttribute(this.f_getInput(), f_core._VNS+":emptyMessageShown");
+			this._emptyMessageShown=f_core.GetBooleanAttributeNS(this.f_getInput(), "emptyMessageShown");
 		}
 		
 		if (this._emptyMessage) {

@@ -125,21 +125,20 @@ var __members = {
 			return;
 		}
 	
-		var columnNumber = f_core.GetNumberAttribute(this, f_core._VNS+":columnNumber");
-		var tabIndex = f_core.GetNumberAttribute(this, f_core._VNS+":tabIndex");
-		var dateBegin = f_core.GetAttribute(this, f_core._VNS+":dateBegin");
+		var columnNumber = f_core.GetNumberAttributeNS(this,"columnNumber");
+		var tabIndex = f_core.GetNumberAttributeNS(this,"tabIndex");
+		var dateBegin = f_core.GetAttributeNS(this,"dateBegin");
 		if (dateBegin) {
 			dateBegin = f_core.DeserializeDate(dateBegin);
 		}
 		var dayBegin = dateBegin.getDay();
 		var dateEnd =  new Date(dateBegin.getTime());
 		dateEnd.setTime(dateEnd.getTime()+ (columnNumber * 24 * 3600 * 1000));
-		var minutesDayBegin = f_core.GetNumberAttribute(this,
-				f_core._VNS+":minutesDayBegin");
-		var minutesDayEnd = f_core.GetNumberAttribute(this, f_core._VNS+":minutesDayEnd");
+		var minutesDayBegin = f_core.GetNumberAttributeNS(this,"minutesDayBegin");
+		var minutesDayEnd = f_core.GetNumberAttributeNS(this,"minutesDayEnd");
 
-		var minPerPx = parseFloat(f_core.GetAttribute(this, f_core._VNS+":minPerPx"));
-		var columnWidth = f_core.GetNumberAttribute(this, f_core._VNS+":columnWidth");
+		var minPerPx = parseFloat(f_core.GetAttributeNS(this,"minPerPx"));
+		var columnWidth = f_core.GetNumberAttributeNS(this,"columnWidth");
 
 		var div = this.ownerDocument.getElementById(this.id + "::periods");
 

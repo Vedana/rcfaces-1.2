@@ -63,29 +63,29 @@ var __members={
 		
 		if (this.nodeType==f_core.ELEMENT_NODE) {
 			// Du DOM
-			this._character=f_core.GetAttribute(this, f_core._VNS+":character", undefined);
+			this._character=f_core.GetAttributeNS(this, "character", undefined);
 	
-			var vk=f_core.GetAttribute(this, f_core._VNS+":virtualKey");
+			var vk=f_core.GetAttributeNS(this, "virtualKey");
 			if (vk) {
 				this._virtualKeys = [ parseInt(vk, 10) ];
 			}
 	
-			this._keyFlags = f_core.GetNumberAttribute(this, f_core._VNS+":keyFlags");
+			this._keyFlags = f_core.GetNumberAttributeNS(this, "keyFlags");
 	
-			this._ignoreEditableComponent=f_core.GetBooleanAttribute(this, f_core._VNS+":ignoreEditableComponent");
+			this._ignoreEditableComponent=f_core.GetBooleanAttributeNS(this, "ignoreEditableComponent");
 	
 			f_key.AddAccelerator(this._character, this._virtualKeys, this._keyFlags, this, this._performKeyEvent, this._ignoreEditableComponent);
 	
-			var events=f_core.GetAttribute(this, f_core._VNS+":events");
+			var events=f_core.GetAttributeNS(this, "events");
 			if (events) {
 				this.f_initEventAtts(f_accelerator._EVENTS, events);
 			}
 			
-			var forComponent=f_core.GetAttribute(this, f_core._VNS+":for");
+			var forComponent=f_core.GetAttributeNS(this, "for");
 			
 			if (forComponent) {
 				this._forComponentId=fa_namingContainer.ComputeComponentId(this, forComponent);
-				this._forItemValue=f_core.GetAttribute(this, f_core._VNS+":forItemValue");
+				this._forItemValue=f_core.GetAttributeNS(this, "forItemValue");
 					
 				this.f_insertEventListenerFirst(f_event.KEYPRESS, this._forListener);
 			}

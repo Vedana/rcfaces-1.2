@@ -646,9 +646,14 @@ var __statics = {
 	_Gecko_OnBlur: function(evt) {	
 		f_core.Debug(f_popup, "OnBlur on "+this+" target="+evt.target+"/"+evt.target.className);
 
-/* 
 		if (!f_popup.Component) {
 			return;
+		}
+		var found=f_popup.IsChildOfDocument(evt.target, evt);
+		f_core.Debug(f_popup, "OnFocus search parent="+found);
+
+		if (found) {
+			return true;
 		}
 		try {
 			f_popup.Callbacks.exit.call(f_popup.Component, evt);
@@ -656,7 +661,7 @@ var __statics = {
 		} catch (x) {
 			f_core.Error(f_popup, "exit callback throws exception", x);
 		}
-		*/	
+
 		return true;
 	},
 	/**

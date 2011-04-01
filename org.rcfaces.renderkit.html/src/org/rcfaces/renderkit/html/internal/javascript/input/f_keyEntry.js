@@ -60,21 +60,21 @@ var __members = {
 	f_keyEntry: function() {
 		this.f_super(arguments);
 			
-		this._suggestionDelayMs=f_core.GetNumberAttribute(this, f_core._VNS+":suggestionDelayMs", f_keyEntry._DEFAULT_SUGGESTION_DELAY_MS);
+		this._suggestionDelayMs=f_core.GetNumberAttributeNS(this,"suggestionDelayMs", f_keyEntry._DEFAULT_SUGGESTION_DELAY_MS);
 		
-		this._suggestionMinChars=f_core.GetNumberAttribute(this, f_core._VNS+":suggestionMinChars", f_keyEntry._DEFAULT_SUGGESTION_MIN_CHARS);
+		this._suggestionMinChars=f_core.GetNumberAttributeNS(this,"suggestionMinChars", f_keyEntry._DEFAULT_SUGGESTION_MIN_CHARS);
 		
-		this._valueFormat=f_core.GetAttribute(this, f_core._VNS+":valueFormat");
-		this._forLabel=f_core.GetAttribute(this, f_core._VNS+":forLabel");
-		this._valueFormatLabel=f_core.GetAttribute(this, f_core._VNS+":valueFormatLabel");
-		this._noValueFormatLabel=f_core.GetAttribute(this, f_core._VNS+":noValueFormatLabel", "");
+		this._valueFormat=f_core.GetAttributeNS(this,"valueFormat");
+		this._forLabel=f_core.GetAttributeNS(this,"forLabel");
+		this._valueFormatLabel=f_core.GetAttributeNS(this,"valueFormatLabel");
+		this._noValueFormatLabel=f_core.GetAttributeNS(this,"noValueFormatLabel", "");
 		
 		this._filtred=true;
 		
 		var input=this.f_getInput();
 		
-		this._emptyMessage=f_core.GetAttribute(this, f_core._VNS+":emptyMessage");
-		if (this._emptyMessage && f_core.GetAttribute(input, f_core._VNS+":emptyMessage")) {
+		this._emptyMessage=f_core.GetAttributeNS(this,"emptyMessage");
+		if (this._emptyMessage && f_core.GetAttributeNS(input,"emptyMessage")) {
 			this._formattedValue="";
 			this._emptyMessageShown=true;
 			
@@ -82,17 +82,17 @@ var __members = {
 			this._formattedValue=input.value;
 		}
 			
-		this._selectedValue=f_core.GetAttribute(this, f_core._VNS+":selectedValue", "");
+		this._selectedValue=f_core.GetAttributeNS(this,"selectedValue", "");
 		this._inputValue=this._selectedValue;
 		if (this._selectedValue) {
-			this._keyErrored=f_core.GetAttribute(this, f_core._VNS+":invalidKey", false);
+			this._keyErrored=f_core.GetAttributeNS(this,"invalidKey", false);
 		}
 		
-		this._maxTextLength=f_core.GetNumberAttribute(this, f_core._VNS+":maxTextLength", 0);
+		this._maxTextLength=f_core.GetNumberAttributeNS(this,"maxTextLength", 0);
 
-		this._gridStyleClass=f_core.GetNumberAttribute(this, f_core._VNS+":gridStyleClass", 0);
+		this._gridStyleClass=f_core.GetNumberAttributeNS(this,"gridStyleClass", 0);
 
-		this._forceValidation=f_core.GetBooleanAttribute(this, f_core._VNS+":forceValidation", false);
+		this._forceValidation=f_core.GetBooleanAttributeNS(this,"forceValidation", false);
 		
 		if(this._forceValidation) {
 			this._installCheckListener();
