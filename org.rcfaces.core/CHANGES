@@ -1,3 +1,6 @@
+service:
+Ajout IErrorEventCapability
+
 Configuration loader:
 Mutualisation du système de chargement des configurations faces-config et rcfaces-config
 

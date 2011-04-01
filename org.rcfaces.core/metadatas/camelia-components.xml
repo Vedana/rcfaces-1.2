@@ -4400,6 +4400,7 @@ Dans le cas d'un mode period !
 		<capability id="IPropertyChangeEventCapability" />
 		<capability id="IServiceEventCapability" />
 		<capability id="IFilterCapability" />
+		<capability id="IErrorEventCapability" />
 
 		<!-- Dans la sérialisation on en a besoin !!!! -->
 		<capability id="IComponentLocaleCapability" />
