@@ -66,8 +66,17 @@ var __statics= {
 	/**
 	 * @field private static Number
 	 */
-	_Id: 0
-	
+	_Id: 0,
+
+	/**
+	 * @field private static final
+	 */
+	_EVENTS: {
+		error: f_event.ERROR,
+		propertyChange: f_event.PROPERTY_CHANGE,
+		user: f_event.USER
+	}
+
 };
 
 var __members={
@@ -76,6 +85,11 @@ var __members={
 		this.f_super(arguments);
 		
 		this._serviceId=f_core.GetAttribute(this, f_core._VNS+":serviceId");
+		
+		var events=f_core.GetAttribute(this, f_core._VNS+":events");
+		if (events) {
+			this.f_initEventAtts(f_service._EVENTS, events);
+		}
 	},
 	f_finalize: function() {
 		// this._serviceId=undefined;  // string
