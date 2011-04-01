@@ -53,7 +53,7 @@ var __statics = {
 		var properties= { 
 			id: dataGridPopupId,
 			role: "grid", 
-			className: sc, 
+			className: sc
 		};
 		
 		properties[f_core._VNS+":nc"]=true;
