@@ -41,8 +41,6 @@ import org.rcfaces.core.internal.version.IResourceVersionHandler;
  * @version $Revision$ $Date$
  */
 public abstract class RcfacesContext {
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(RcfacesContext.class);
 
     private static final String CAMELIA_CONTEXT_PROPERTY = "org.rcfaces.core.internal.CAMELIA_CONTEXT";
@@ -70,13 +68,14 @@ public abstract class RcfacesContext {
         isJSF1_2 = is1_2;
     }
 
-    protected static final String CAMELIA_CONFIG_FILES_PARAMETER = Constants
-            .getPackagePrefix()
-            + ".CONFIG_FILES";
+    public static final String RCFACES_CONFIG_FILES_PARAMETER = Constants
+            .getPackagePrefix() + ".CONFIG_FILES";
+
+    public static final String RCFACES_CONFIG_FILENAME = "rcfaces-config.xml";
 
     protected static final String LISTENER_MANAGER_STRATEGY_PARAMETER = Constants
-    	.getPackagePrefix()+ ".LISTENER_MANAGER_STRATEGY";
-  
+            .getPackagePrefix() + ".LISTENER_MANAGER_STRATEGY";
+
     protected static final String APPLICATION_VERSION_PROPERTY = "org.rcfaces.core.internal.APPLICATION_VERSION";
 
     private static final Lifecycle EMPTY_LIFECYCLE = new Lifecycle() {
@@ -227,7 +226,7 @@ public abstract class RcfacesContext {
     public abstract String getApplicationVersion();
 
     public abstract boolean isDesignerMode();
-    
+
     public abstract int getListenerManagerStrategy();
 
     public abstract IServicesRegistry getServicesRegistry();

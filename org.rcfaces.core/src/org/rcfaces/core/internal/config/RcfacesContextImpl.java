@@ -5,23 +5,17 @@ package org.rcfaces.core.internal.config;
 
 import java.io.CharArrayReader;
 import java.io.Externalizable;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.faces.FactoryFinder;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
@@ -49,6 +43,7 @@ import org.rcfaces.core.internal.renderkit.border.IBorderRenderersRegistry;
 import org.rcfaces.core.internal.repository.IRepositoryManager;
 import org.rcfaces.core.internal.repository.RepositoryManagerImpl;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.util.ConfigurationLoader;
 import org.rcfaces.core.internal.validator.IClientValidatorsRegistry;
 import org.rcfaces.core.internal.version.IResourceVersionHandler;
 import org.rcfaces.core.internal.version.ResourceVersionHandlerImpl;
@@ -63,16 +58,9 @@ import org.xml.sax.InputSource;
 public class RcfacesContextImpl extends RcfacesContext implements
         Externalizable {
 
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -4224530723124583628L;
 
     private static final Log LOG = LogFactory.getLog(RcfacesContextImpl.class);
-
-    private static final String RCFACES_CONFIG_FILENAME = "rcfaces-config.xml";
-
-    private static final String RCFACES_RESOURCE_NAME = "META-INF/"
-            + RCFACES_CONFIG_FILENAME;
 
     private static final Package[] KERNEL_CONFIG_FILENAMES = new Package[] {
             RcfacesContext.class.getPackage(),
@@ -138,8 +126,8 @@ public class RcfacesContextImpl extends RcfacesContext implements
             LOG.info("Designer MODE  detected.");
         }
 
-        facesContext.getExternalContext().getApplicationMap().put(
-                RCFACES_VERSION_PROPERTY, Constants.getVersion());
+        facesContext.getExternalContext().getApplicationMap()
+                .put(RCFACES_VERSION_PROPERTY, Constants.getVersion());
 
         initializeRegistries(null);
 
@@ -289,134 +277,14 @@ public class RcfacesContextImpl extends RcfacesContext implements
             urls.add(url);
         }
 
-        ClassLoader contextClassLoader = Thread.currentThread()
-                .getContextClassLoader();
-        if (contextClassLoader != null) {
+        ConfigurationLoader configurationLoader = ConfigurationLoader
+                .scanRCFacesConfig(facesContext.getExternalContext(), urls);
 
-            Enumeration enumeration = null;
-            try {
-                enumeration = contextClassLoader
-                        .getResources(RCFACES_RESOURCE_NAME);
+        configurationLoader.parse(digester);
 
-            } catch (IOException e) {
-                LOG.error("Can not scan resources '" + RCFACES_RESOURCE_NAME
-                        + "' into context classloader.");
-            }
-
-            if (enumeration != null) {
-                for (; enumeration.hasMoreElements();) {
-                    URL url = (URL) enumeration.nextElement();
-
-                    LOG.debug("Rcfaces resource in meta-inf detected : " + url);
-
-                    urls.add(url);
-                }
-            }
-
-            ExternalContext externalContext = facesContext.getExternalContext();
-
-            String configFilenames = externalContext
-                    .getInitParameter(CAMELIA_CONFIG_FILES_PARAMETER);
-
-            if (configFilenames != null) {
-                // LOG.debug("Value for parameter '"+
-                // CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"+
-                // configFilenames + "'.");
-
-                StringTokenizer st = new StringTokenizer(configFilenames,
-                        ",;\t \r\n");
-
-                for (; st.hasMoreTokens();) {
-                    String filename = st.nextToken();
-
-                    LOG.debug("An item of value of parameter '"
-                            + CAMELIA_CONFIG_FILES_PARAMETER + "' detected : '"
-                            + filename + "'.");
-
-                    URL url = contextClassLoader.getResource(filename);
-
-                    if (url == null) {
-                        try {
-                            url = externalContext.getResource(filename);
-
-                        } catch (MalformedURLException ex) {
-                            LOG.error("Malformed url for filename '" + filename
-                                    + "'.", ex);
-                        }
-                    }
-
-                    if (url == null) {
-                        LOG.debug("Configuration file '" + filename
-                                + "' does not exist.");
-                        continue;
-                    }
-
-                    LOG.debug("Configuration file '" + filename
-                            + "' registred.");
-
-                    urls.add(url);
-                }
-            }
-        }
-
-        loadConfigurations(digester, urls);
-
-        loadProvidersConfiguration(facesContext, urls);
+        loadProvidersConfiguration(facesContext, configurationLoader);
 
         LOG.info("Rcfaces config loaded.");
-    }
-
-    private void loadConfigurations(Digester digester, List urls) {
-
-        if (urls.isEmpty()) {
-            return;
-        }
-
-        for (Iterator it = urls.iterator(); it.hasNext();) {
-            URL url = (URL) it.next();
-
-            InputStream inputStream;
-            try {
-                inputStream = url.openStream();
-
-            } catch (IOException e) {
-                LOG.error("Can not open url '" + url + "'.", e);
-                continue;
-            }
-
-            if (inputStream == null) {
-                LOG.debug("Configuration file '" + url + "' does not exist.");
-                continue;
-            }
-
-            loadConfig(digester, inputStream, url.toString());
-        }
-    }
-
-    private void loadConfig(Digester digester, InputStream inputStream,
-            String resourceName) {
-
-        LOG.debug("Loading rcfaces config file '" + resourceName + "' ...");
-
-        try {
-            digester.parse(inputStream);
-
-        } catch (Throwable th) {
-            LOG.error("Can not parse Rcfaces config file '" + resourceName
-                    + "'.", th);
-            return;
-
-        } finally {
-            try {
-                inputStream.close();
-
-            } catch (IOException e) {
-                LOG.error("Can not close Rcfaces config file '" + resourceName
-                        + "'.", e);
-            }
-        }
-
-        LOG.debug("Rcfaces config file '" + resourceName + "' loaded !");
     }
 
     private void configureRules(Digester digester) {
@@ -433,12 +301,12 @@ public class RcfacesContextImpl extends RcfacesContext implements
     }
 
     private void loadProvidersConfiguration(FacesContext facesContext,
-            final List urls) {
+            final ConfigurationLoader configurationLoader) {
 
         IProvidersConfigurator providersConfigurator = new IProvidersConfigurator() {
 
             public void parseConfiguration(Digester digester) {
-                loadConfigurations(digester, urls);
+                configurationLoader.parse(digester);
             }
 
         };
@@ -476,9 +344,7 @@ public class RcfacesContextImpl extends RcfacesContext implements
 
             listenerManagerStrategy = convertedStartegy.intValue();
 
-            LOG
-                    .debug("Set listener manager stategy to '" + strategyName
-                            + "'.");
+            LOG.debug("Set listener manager stategy to '" + strategyName + "'.");
         }
 
         LOG.debug("Initialize all configs: done.");
