@@ -1,3 +1,6 @@
+f_dragAndDropEngine:
+Correction de pb d'accès à des variables non initialisées
+
 f_service:
 Gestion des événements
 

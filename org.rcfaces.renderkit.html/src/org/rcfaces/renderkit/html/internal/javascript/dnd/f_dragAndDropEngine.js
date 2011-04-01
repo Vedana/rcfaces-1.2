@@ -1171,30 +1171,72 @@ var __members = {
 	f_getSourceAdditionnalInformations: function() {
 		return this._additionalSourceInformations;
 	},
+	/**
+	 * @method public
+	 * @return first sourceItem
+	 */
 	f_getSourceItem: function() {
-		return this._sourceItems[0];
+		if (this._sourceItems && this._sourceItems[0]) {
+			return this._sourceItems[0];
+		}
+		return null;
 	},
+	/**
+	 * @method public
+	 * @return first sourceItemValue
+	 */
 	f_getSourceItemValue: function() {
-		return this._sourceItemsValue[0];
+		if (this._sourceItemsValue && this._sourceItemsValue[0]) {
+			return this._sourceItemsValue[0];
+		}
+		return null;
 	},
+	/**
+	 * @method public
+	 * @return array of sourceItems
+	 */
 	f_getSourceItems: function() {
 		return this._sourceItems;
 	},
+	/**
+	 * @method public
+	 * @return array of sourceItemValues
+	 */
 	f_getSourceItemsValue: function() {
 		return this._sourceItemsValue;
 	},
+	/**
+	 * @method public
+	 * @return source Component
+	 */
 	f_getSourceComponent: function() {
 		return this._sourceComponent;
 	},
+	/**
+	 * @method public
+	 * @return last mouse position
+	 */
 	f_getLastMousePosition: function() {
 		return this._lastMousePosition;
 	},
+	/**
+	 * @method public
+	 * @return last mouse position
+	 */
 	fa_getLastMousePosition: function() {
 		return this._lastMousePosition;
 	},
+	/**
+	 * @method public
+	 * @return the scrollable container
+	 */
 	fa_getScrollableContainer: function() {
 		return document.body;
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	f_updateMousePosition: function() {
 		
 		var event;
@@ -1236,6 +1278,10 @@ var __members = {
 		
 		this._dragMove(event);
 	},
+	/**
+	 * @method public
+	 * @return void
+	 */
 	fa_autoScrollPerformed: function() {
 		this.f_updateMousePosition();
 	}
