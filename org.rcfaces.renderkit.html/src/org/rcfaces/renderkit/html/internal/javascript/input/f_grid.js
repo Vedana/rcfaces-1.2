@@ -1478,7 +1478,9 @@ var __statics = {
 			dataGrid._dragTimerId = undefined;
 		}
 
-		var w = column._col.offsetWidth + dw;
+		var head = column._head;
+		 var hw =  parseInt (head.style.width);
+		var w = hw + dw;
 
 		f_core.Debug(f_grid, "_DragCursorMove: dw="+dw+" w="+w+" columnOffsetWidth="+column._col.offsetWidth);
 		
@@ -1491,7 +1493,7 @@ var __statics = {
 			w = column._maxWidth;
 		}
 	
-		dw = w - column._col.offsetWidth;
+		dw = w - hw;
 	
 		if (dw == 0) {
 			return 0;
@@ -1499,7 +1501,6 @@ var __statics = {
 	
 		var tcol = column._tcol;
 		var col = column._col;
-		var head = column._head;
 		var tableOffsetWidth = dataGrid._table.offsetWidth;
 	
 		var twidth = 0;
@@ -5300,27 +5301,51 @@ var __members = {
 
 		// var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
 
-		var total = 0;
+		var total = 0; // total des colonnes fixe en px
+		var totalPercent = 0; // total des % 
+		var totalZero = 0; // total colone sans taille donnee
 		var ci = 0;
+		var webkit = false;//f_core.IsWebkit();
+		var ie = f_core.IsInternetExplorer();
 		for ( var i = 0; i < columns.length; i++) {
 			var column = columns[i];
 			if (column._visibility === false) {
 				continue;
 			}
-
-			var col = column._col;
+			
+			var col = undefined;
+			if (webkit || ie) {
+				//the header column tag col does not have any size. So we get a cell. 
+				var rows = this._rowsPool;
+				if (rows.length > 0) {
+					col = rows[0]._cells[i]; 
+				}
+			}      
+			
+			if (!col) {
+				col = column._col;
+			}
+			
 			if (!col) {
 				break;
 			}
 
 			var w = col.offsetWidth;
+
 			if (!w && !col.offsetHeight) {
 				w = parseInt(col.style.width);
-
+				var width =  col.style.width;
+				if (width.indexOf("%") > 0){
+					totalPercent += w;
+					w = 0;
+				}else if (!w) {
+					totalZero ++;
+				}
+				
 				if (isNaN(w) || w < 0) {
 					w = 0;
 				}
-			} else if (!col.style.width) {
+			} else if (!col.style.width && f_core.IsGecko()) {
 				col.style.width = w + "px"; // Probleme de scale sous firefox !
 			}
 
@@ -5330,9 +5355,50 @@ var __members = {
 			if (cw < 0) {
 				cw = 0;
 			}
-			column._head.style.width = cw + "px";
-
+			if( cw > 0 ) {
+				column._head.style.width = cw + "px";
+			}	
 			this._updateTitleCellBody(column, w);
+		}
+
+		// deuxième tour s il y a pas de donnée pour trident et webkit
+		if ( (webkit || ie) && (!!totalZero || !!totalPercent)) {
+			
+			var totalNonPx = offsetWidth - total; 
+			var totalZeroPx = (totalNonPx - (offsetWidth*totalPercent/100));
+			var pxForZero = totalZeroPx /totalZero;
+			
+			for ( var i = 0; i < columns.length; i++) {
+				var column = columns[i];
+				
+				if (column._visibility === false) {
+					continue;
+				}
+				
+				var col = col = column._col;
+				var w = col.offsetWidth;
+
+				if (!w && !col.offsetHeight) {
+					
+					w = parseInt(col.style.width);
+					var width =  col.style.width; 
+					
+					if (width.indexOf("%") > 0){
+						if(!total && !totalZero) {
+							w = w*100/ totalPercent; // si toutes les colonnes sont en %,
+													//on recacul les % pour avoir un total de 100%
+						}
+						w = w *(offsetWidth) /100;
+					}else if (!w) {
+						w = pxForZero; // pas de donnee alors taille par defaut 
+					}
+					if( w > 0 ) {
+						var bw = w;
+						column._head.style.width = bw + "px";
+						this._updateTitleCellBody(column, w);
+					}	
+				}
+			}
 		}
 
 		var t2 = new Date().getTime();
@@ -5344,9 +5410,8 @@ var __members = {
 			}
 			// body.style.height=h+"px";
 		}
-
-		if (f_core.IsInternetExplorer()
-				&& !f_core.GetBooleanAttributeNS(this,"sb", true)) {
+		
+		if (ie && !f_core.GetBooleanAttributeNS(this, "sb", true)) { //ns
 			// this._title.style.width=total+"px";
 
 			if (!body.style.width) {
