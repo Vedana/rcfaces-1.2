@@ -561,7 +561,7 @@ var __members = {
 		
 		var item=this.fa_getElementItem(element);
 
-		if (mouseup || this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
+		if (this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
 			return false;
 		}
 		
@@ -654,6 +654,9 @@ var __members = {
 			break;
 		}
 	
+		if (mouseup) {
+			return false;
+		}
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		
 		return true;

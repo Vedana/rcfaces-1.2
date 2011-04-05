@@ -1,3 +1,9 @@
+f_tree : 
+Correction selection de type range
+
+fa_selection: 
+Correction selection mouseup
+
 f_core et al.:
 Ajout Get*AttributeNS
 

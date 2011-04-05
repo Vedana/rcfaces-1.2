@@ -2451,7 +2451,12 @@ var __members = {
 
 		this.f_moveCursor(last, true, evt, selection);
 	},
-	fa_listVisibleElements: function(container, list) {
+	
+	fa_listVisibleElements: function(ordered) {
+		return this.f_listVisibleElementsInTree();
+	},
+	
+	f_listVisibleElementsInTree: function(container, list) {
 		if (container===undefined) {
 			container=this._body;
 			list=new Array;
@@ -2475,7 +2480,7 @@ var __members = {
 			
 			var ul=li.getElementsByTagName("ul");
 			if (ul.length) {
-				this.fa_listVisibleElements(ul[0], list);
+				this.f_listVisibleElementsInTree(ul[0], list);
 			}
 		}
 		
@@ -2564,7 +2569,7 @@ var __members = {
 				continue;
 			}
 
-			this.fa_listVisibleElements(ul, listLI);
+			this.f_listVisibleElementsInTree(ul, listLI);
 		}
 	},
 	/**
