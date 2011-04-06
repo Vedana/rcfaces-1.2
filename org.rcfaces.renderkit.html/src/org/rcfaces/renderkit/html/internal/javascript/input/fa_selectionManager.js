@@ -561,9 +561,11 @@ var __members = {
 		
 		var item=this.fa_getElementItem(element);
 
-		if (!mouseup && this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false){
+		if (!mouseup && this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
 			return false;
 		}
+		
+		
 		
 		switch(cardinality) {
 		case fa_cardinality.OPTIONAL_CARDINALITY:
@@ -588,7 +590,6 @@ var __members = {
 			// On deselectionne tout: 1 seul doit rester selectionner 
 			this._deselectAllElements();
 			this._selectElement(element, elementValue, show);
-			this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 			break;
 			
 		case fa_cardinality.ONEMANY_CARDINALITY:
@@ -615,7 +616,7 @@ var __members = {
 				
 				// Nous sommes en range mode .....
 				this._selectRange(element, lastSelectedElement, (selection & fa_selectionManager.APPEND_SELECTION));
-				this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
+				
 			} else if (elementSelected) {
 				
 				
@@ -650,9 +651,13 @@ var __members = {
 			}
 
 			this._selectElement(element, elementValue, show);
-			this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 			break;
 		}
+	
+		if (!mouseup) {
+			return false;
+		}
+		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		
 		return true;
 	},
