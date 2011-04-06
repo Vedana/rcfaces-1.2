@@ -561,11 +561,9 @@ var __members = {
 		
 		var item=this.fa_getElementItem(element);
 
-		if (mouseup || this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
+		if (!mouseup && this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false){
 			return false;
 		}
-		
-		
 		
 		switch(cardinality) {
 		case fa_cardinality.OPTIONAL_CARDINALITY:
@@ -616,7 +614,6 @@ var __members = {
 				
 				// Nous sommes en range mode .....
 				this._selectRange(element, lastSelectedElement, (selection & fa_selectionManager.APPEND_SELECTION));
-				
 			} else if (elementSelected) {
 				
 				
@@ -653,7 +650,10 @@ var __members = {
 			this._selectElement(element, elementValue, show);
 			break;
 		}
-	
+
+		if (!mouseup) {
+			return false;
+		}
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		
 		return true;
