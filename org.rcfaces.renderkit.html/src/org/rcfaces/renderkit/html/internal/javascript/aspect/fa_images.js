@@ -44,12 +44,12 @@ var __members = {
 		} else if (this.fa_getInitialDisabled && this.fa_getInitialDisabled()) {
 			// Il n'y a que le disabled qui est spécifié !
 			this._disabledImageURL=imageURL;
-			imageURL=null;
+//			imageURL=null;
 			
 		} else if (this.fa_getInitialSelection && this.fa_getInitialSelection()) {
 			// Il n'y a que le selected qui est spécifié !
 			this._selectedImageURL=imageURL;
-			imageURL=null;
+//			imageURL=null;
 		}
 		
 		if (imageURL===undefined) {
