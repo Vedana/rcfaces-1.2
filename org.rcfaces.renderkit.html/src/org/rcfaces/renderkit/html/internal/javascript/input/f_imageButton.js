@@ -41,7 +41,7 @@ var __statics = {
 	 * @field private static final String
 	 */	  
 	_LINK_ID_SUFFIX: "::a"
-}
+};
  
 var __members = {
 
@@ -671,7 +671,7 @@ var __members = {
 		
 		return imageElement.src;
 	}
-}
+};
 
 new f_class("f_imageButton", {
 	extend: f_component, 
