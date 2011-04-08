@@ -873,6 +873,8 @@ var f_core = {
 				capture.nodeType==f_core.DOCUMENT_NODE || 
 				capture.screen /* window ? */), "f_core.RemoveEventListener: Invalid capture parameter ("+capture+")");
 
+		f_core.Debug(f_core, "RemoveEventListener: component='"+component+"' name='"+name+"' fct=<not printed> capture='"+capture+"'");
+
 	 	if (f_core.IsInternetExplorer()) {
 		    if (capture) {
 		 		if (capture.nodeType==f_core.DOCUMENT_NODE) {
