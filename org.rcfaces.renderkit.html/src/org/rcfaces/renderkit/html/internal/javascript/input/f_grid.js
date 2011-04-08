@@ -290,13 +290,13 @@ var __statics = {
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
-
+			
+			var sub = f_core.IsPopupButton(evt);
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
 				if (menu) {
-					menu.f_open(evt, {
-						position : f_popup.MOUSE_POSITION
-					});
+					if(menu.f_closeAllpopups)
+						menu.f_closeAllpopups();
 				}
 				
 			} else if (dataGrid._dragAndDropEngine) {
@@ -328,13 +328,16 @@ var __statics = {
 			}
 
 			if (dataGrid.f_getEventLocked(evt)) {
+				f_core.Debug(f_grid, "RowMouseUp: event already locked");
 				return false;
 			}
 
 			if (!f_grid.VerifyTarget(evt)) {
+				f_core.Debug(f_grid, "RowMouseUp: invalid target");
 				return true;
+				
 			}
-
+			
 			if (dataGrid.f_isDisabled()
 					|| (dataGrid.f_isReadOnly && dataGrid.f_isReadOnly())) {
 				return f_core.CancelJsEvent(evt);
@@ -343,12 +346,23 @@ var __statics = {
 			var sub = f_core.IsPopupButton(evt);
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
-
+			
 			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.END_PHASE);
+			
 
+			if (sub && this._selected) {
+				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
+				if (menu) {
+					menu.f_open(evt, {
+						position : f_popup.MOUSE_POSITION
+					});
+				}
+				
+			} 
+			
 			return f_core.CancelJsEvent(evt);
 		} finally {
-			f_core.Debug(f_grid, "RowMouseUp: mouse down on row of '"
+			f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '"
 					+ dataGrid + "' EXITED");
 		}
 	},
@@ -483,6 +497,56 @@ var __statics = {
 	 * @context object:dataGrid
 	 */
 	_BodyMouseDown : function(evt) {
+		var dataGrid = this._dataGrid;
+
+		if (!evt) {
+			evt = f_core.GetJsEvent(this);
+		}
+
+		if (dataGrid.f_getEventLocked(evt)) {
+			return false;
+		}
+
+		if (!f_grid.VerifyTarget(evt)) {
+			return true;
+		}
+
+		if (dataGrid.f_isDisabled()) {
+			return f_core.CancelJsEvent(evt);
+		}
+
+		var sub = f_core.IsPopupButton(evt);
+		if (!sub) {
+			return f_core.CancelJsEvent(evt);
+		}
+
+		dataGrid.f_forceFocus();
+
+		var menuId = f_grid._BODY_MENU_ID;
+
+		// S'il y a une seule selection, on bascule en popup de ligne !
+		if (this._selectable && dataGrid._currentSelection.length) {
+			menuId = f_grid._ROW_MENU_ID;
+		}
+
+		var menu = dataGrid.f_getSubMenuById(menuId);
+		if (menu) {
+				if(menu.f_closeAllpopups)
+				menu.f_closeAllpopups();
+			
+		}
+
+		return f_core.CancelJsEvent(evt);
+	},
+	
+	/**
+	 * @method private static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 * @context object:dataGrid
+	 */
+	_BodyMouseUp : function(evt) {
 		var dataGrid = this._dataGrid;
 
 		if (!evt) {
@@ -2484,7 +2548,7 @@ var __members = {
 		var menu = this.f_getSubMenuById(f_grid._BODY_MENU_ID);
 		if (menu) {
 			scrollBody.onmousedown = f_grid._BodyMouseDown;
-			scrollBody.onmouseup = f_grid.FiltredCancelJsEventHandler;
+			scrollBody.onmouseup =  f_grid._BodyMouseUp;// f_grid.FiltredCancelJsEventHandler;
 			scrollBody.onclick = f_grid.FiltredCancelJsEventHandler;
 		}
 

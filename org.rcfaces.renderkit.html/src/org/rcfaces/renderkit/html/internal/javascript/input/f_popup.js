@@ -373,7 +373,7 @@ var __statics = {
 				body.onkeyup=f_popup._OnKeyUpJs;
 				body.onkeydown=f_popup._OnKeyDownJs;
 				body.onkeypress=f_popup._OnKeyPressJs;
-
+				
 				//document.body.onfocus=f_popup._Ie_OnMouseFocus;
 			}
 			
@@ -601,6 +601,11 @@ var __statics = {
 		var evt = f_core.GetJsEvent(this);
 		
 		f_core.Debug(f_popup, "_Ie_OnMouseDown: click on "+this+" fromElement="+evt.srcElement+"/"+evt.srcElement.className);
+		
+		var component=f_popup.Component;
+		if (!component) {
+			return true;
+		}
 		
 		var found=f_popup.IsChildOfDocument(evt.srcElement, evt);
 		f_core.Debug(f_popup, "_Ie_OnMouseDown: search parent="+found);
@@ -901,7 +906,7 @@ var __statics = {
 	 * @method hidden static 
 	 */	
 	VerifyMouseDown: function(component, jsEvent) {
-		if (f_core.IsGecko()) {
+		if (f_core.IsGecko()){ // || f_core.IsWebkit()) {
 			
 			// On a un probleme ! 
 			// Les evenements clicks sont traités par notre composant !
@@ -1053,10 +1058,11 @@ var __statics = {
 				
 		f_core.Debug(f_popup, "_Ie_unload: Unload popup '"+this.id+"' rootPopup="+doc._rootPopup);		
 		
+		var component = f_popup.Component;
 		if (doc._rootPopup) {
 			var cbs=f_popup.Callbacks;
-			if (cbs) {
-				cbs.exit.call(f_popup.Component, evt);
+			if (cbs && component) {
+				cbs.exit.call(component, evt);
 				f_popup.Callbacks=undefined;
 			}
 		}
