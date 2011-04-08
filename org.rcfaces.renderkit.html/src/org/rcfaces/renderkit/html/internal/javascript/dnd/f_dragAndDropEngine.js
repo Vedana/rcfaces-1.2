@@ -87,7 +87,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Debug(f_dragAndDropEngine, "_DragMove: drag move ! current="+current);
+			f_core.Debug(f_dragAndDropEngine, "_DragMove: drag move ! current="+current);
 	
 			if (!current) {
 				return;
@@ -113,7 +113,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Debug(f_dragAndDropEngine, "_DragStop: stop drag ! current="+current);
+			f_core.Debug(f_dragAndDropEngine, "_DragStop: stop drag ! current="+current);
 	
 			if (!current) {
 				return;
@@ -121,7 +121,20 @@ var __statics = {
 			
 			current._dragStop(evt, false);
 			
-			return f_dragAndDropEngine._Exit();
+			f_dragAndDropEngine._Exit();
+			
+			if (f_core.IsInternetExplorer()) {
+//				f_core.Debug(f_dragAndDropEngine, "_DragStop: from="+evt.srcElement+" to="+evt.toElement+" related="+evt.relatedElement);
+				
+				try {
+					evt.srcElement.fireEvent("onmouseup");
+
+				} catch (x2) {
+					// Dans certains cas, ca peut arriver !
+				}
+			}
+			
+			return;
 			
 		} catch (x) {
 			f_core.Error(f_dragAndDropEngine, "_DragStop: exception", x);
@@ -141,7 +154,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current+" keyCode="+evt.keyCode);
+			f_core.Debug(f_dragAndDropEngine, "_KeyDown/_KeyUp: stop drag ! current="+current+" keyCode="+evt.keyCode);
 	
 			if (!current) {
 				return;
@@ -180,7 +193,7 @@ var __statics = {
 		try {
 			var current=f_dragAndDropEngine._Current;
 	
-//			f_core.Info(f_dragAndDropEngine, "_FocusExit: focus ! current="+current);
+			f_core.Info(f_dragAndDropEngine, "_FocusExit: focus ! current="+current);
 	
 			if (!current) {
 				return;
@@ -203,11 +216,11 @@ var __statics = {
 		
 		if (!current) {
 
-//			f_core.Debug(f_dragAndDropEngine, "_Exit: nothing to clear");
+			f_core.Debug(f_dragAndDropEngine, "_Exit: nothing to clear");
 			return;
 		}	
 		
-//		f_core.Debug(f_dragAndDropEngine, "_Exit: exit dnd engine ! current="+current);
+		f_core.Debug(f_dragAndDropEngine, "_Exit: exit dnd engine ! current="+current);
 		
 		f_dragAndDropEngine._Current=undefined;
 
@@ -490,7 +503,7 @@ var __members = {
 	 * @return void
 	 */
 	_exit: function() {
-//		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
+		f_core.Debug(f_dragAndDropEngine, "_exit: Exit drag/drop engine.");
 
 		this._releaseDropInfos(true);
 		
@@ -708,6 +721,8 @@ var __members = {
 		this._lastClientX=jsEvent.clientX;
 		this._lastClientY=jsEvent.clientY;
 
+		f_core.Debug(f_dragAndDropEngine, "_dragMove: started="+this._started+" dndInfo="+this._dragAndDropInfo);
+		
 		if (!this._started) {
 
 //			f_core.Debug(f_dragAndDropEngine, "_dragMove: Test start drag");
@@ -1187,7 +1202,7 @@ var __members = {
 	 */
 	f_getSourceItemValue: function() {
 		if (this._sourceItemsValue && this._sourceItemsValue[0]) {
-			return this._sourceItemsValue[0];
+		return this._sourceItemsValue[0];
 		}
 		return null;
 	},
