@@ -1033,6 +1033,25 @@ var __statics = {
 			popupH+=positionInfos.deltaHeight;
 		}
 
+		
+		var viewSize=f_core.GetViewSize(null, popupComponent.ownerDocument);
+		
+		var bw=viewSize.width;
+		var bh=viewSize.height;
+		
+		var scrollPosition=f_core.GetScrollOffsets(popupComponent.ownerDocument);
+		bw+=scrollPosition.x;
+		bh+=scrollPosition.y;
+
+		
+		if (popupW+popupX>bw) {
+			popupX +=  (bw-popupW-popupX);
+		}
+		
+		if (popupH+popupY>bh) {
+			popupY += (bh-popupH-popupY);
+		}
+		
 		f_core.Debug(f_popup, "Ie_openPopup: Open popup x="+popupX+" y="+popupY+" w="+popupW+" h="+popupH+" componentPosition="+popupComponent.id+"/"+popupComponent.tagName);
 		
 		popup.show(popupX, popupY, popupW, popupH, popupComponent);		
