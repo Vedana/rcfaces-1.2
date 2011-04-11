@@ -565,8 +565,6 @@ var __members = {
 			return false;
 		}
 		
-		
-		
 		switch(cardinality) {
 		case fa_cardinality.OPTIONAL_CARDINALITY:
 			if (elementSelected) {
@@ -655,7 +653,7 @@ var __members = {
 		}
 	
 		if (!mouseup) {
-			return false;
+			return true;
 		}
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		
