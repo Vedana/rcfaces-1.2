@@ -712,6 +712,12 @@ var __members = {
 	 * @return Boolean
 	 */
 	_clickOutside: function(jsEvent) {
+		
+		if (jsEvent.type == f_event.BLUR) {
+			// on ne gère pas les events de type blur afin de ne pas fermer la popup au changement de focus
+			return true;
+		}
+		
 		f_core.Debug(fa_dataGridPopup, "_clickOutside: popup click outside");
 		fa_dataGridPopup.LAST_OUTSIDE = jsEvent.timeStamp;
 		this.f_closeDataGridPopup(jsEvent);
