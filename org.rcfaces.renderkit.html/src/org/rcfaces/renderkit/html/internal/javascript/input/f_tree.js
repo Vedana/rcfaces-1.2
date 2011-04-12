@@ -197,6 +197,12 @@ var __statics = {
 		return f_core.CancelJsEvent(evt);
 	},
 	
+	/**
+	 * @method private static 
+	 * @param Event evt
+	 * @return Boolean
+	 * @context object:tree
+	 */
 	_DivNode_mouseUp: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
