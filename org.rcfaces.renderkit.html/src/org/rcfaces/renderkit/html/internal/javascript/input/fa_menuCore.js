@@ -226,8 +226,24 @@ var __statics = {
 		}
 		
 		return true;
+	},
+	/**
+	 * @field private static number
+	 */
+	_KeyGenerator: 0,
+	/**
+	 * @private static
+	 */
+	_ComputeKey: function(obj) {
+		if (obj._menuHashKey) {
+			return obj._menuHashKey;
+		}
+		
+		obj._menuHashKey="key"+(fa_menuCore._KeyGenerator++);
+		
+		return obj._menuHashKey;
 	}
-}
+};
 
 var __members = {
 	fa_menuCore: function() {
@@ -538,7 +554,8 @@ var __members = {
 	
 		f_core.AppendChild(container, uiPopup);
 		
-		this._uiMenuPopups[parentItem]=uiPopup;
+		var key = fa_menuCore._ComputeKey(parentItem);
+		this._uiMenuPopups[key]=uiPopup;
 		
 		uiPopup.id=this.fa_getMenuScopeName(parentItem);
 		uiPopup._item=parentItem;
@@ -582,7 +599,8 @@ var __members = {
 			}
 			f_core.AppendChild(uiPopup, uiItem);
 			
-			this._uiMenuItems[item]=uiItem;
+			var key = fa_menuCore._ComputeKey(item);
+			this._uiMenuItems[key]=uiItem;
 			uiItem._item=item;
 			sep=false;
 			
@@ -671,7 +689,8 @@ var __members = {
 	f_getUIItem: function(menuItem) {
 		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_getUIItem: Invalid menuItem parameter ("+menuItem+")");
 
-		var mi=this._uiMenuItems[menuItem];
+		var key = fa_menuCore._ComputeKey(menuItem);
+		var mi=this._uiMenuItems[key];
 		f_core.Assert(mi, "fa_menuCore.f_getUIItem: No uiMenuItem for '"+menuItem+"'.");
 		return mi;
 	},
@@ -681,8 +700,8 @@ var __members = {
 	f_getUIPopup: function(menuItem) {
 		f_core.Assert(typeof(menuItem)=="object" && (!menuItem.nodeType || menuItem==this) && menuItem._menu, "fa_menuCore.f_getUIPopup: Invalid menuItem parameter ("+menuItem+")");
 
-		var mi=this._uiMenuPopups[menuItem];
-			
+		var key = fa_menuCore._ComputeKey(menuItem);
+		var mi=this._uiMenuPopups[key];
 // f_core.Debug(fa_menuCore, "fa_menuCore.f_getUIPopup: For popup '"+menuItem+"'
 // => "+mi);
 		return mi;
@@ -1387,8 +1406,8 @@ var __members = {
 		f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"'");
 	
 		if (this.f_getUIPopup(menuItem)) {
-// f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is
-// already opened !");
+			f_core.Debug(fa_menuCore, "_preparePopup: Popup menu '"+menuItem+"' is already opened !");
+			f_core.CancelJsEvent();
 			return false;
 		}
 			
@@ -1601,7 +1620,7 @@ var __members = {
 	 * @return void
 	 */
 	f_closeUIPopup: function(menuItem, popup) {
-		f_core.Assert(!popup || this._uiMenuPopups[menuItem]==popup, "fa_menuCore.f_closeUIPopup: Invalid popup or menuItem. menuItem="+menuItem+" popup="+popup);
+		f_core.Assert(!popup || this._uiMenuPopups[fa_menuCore._ComputeKey(menuItem)]==popup, "fa_menuCore.f_closeUIPopup: Invalid popup or menuItem. menuItem="+menuItem+" popup="+popup);
 
 		if (!popup) {
 			popup=this.f_getUIPopup(menuItem);
@@ -1655,12 +1674,13 @@ var __members = {
 		for(var i=0;i<items.length;i++) {
 			var item=items[i];
 			
-			var uiItem=uiMenuItems[item];
+			var key = fa_menuCore._ComputeKey(item);
+			var uiItem=uiMenuItems[key];
 			if (!uiItem) {
 				continue;
 			}
 			
-			delete uiMenuItems[item];
+			delete uiMenuItems[key];
 			
 			uiItem._item=undefined; // Object
 			uiItem._icon=undefined; // HTMLImageElement
@@ -1672,7 +1692,8 @@ var __members = {
 			f_core.VerifyProperties(uiItem);
 		}
 		
-		delete this._uiMenuPopups[menuItem];
+		var key = fa_menuCore._ComputeKey(menuItem);
+		delete this._uiMenuPopups[key];
 // f_core.Debug(fa_menuCore, "f_closeUIPopup: remove one popup="+popup+"
 // menuItem="+menuItem);
 

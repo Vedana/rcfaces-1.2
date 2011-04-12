@@ -434,7 +434,7 @@ var __members = {
 					self._onReadyStateChange();
 				};
 				
-				if (f_core.IsGecko()) {
+				if (f_core.IsGecko() || f_core.IsWebkit()) {
 					req.onerror = function() {
 						if (window._rcfacesExiting) {
 							// Nous ne sommes pas dans un contexte sain ....

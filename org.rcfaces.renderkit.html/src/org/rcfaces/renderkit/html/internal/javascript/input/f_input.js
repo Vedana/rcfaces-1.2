@@ -47,7 +47,11 @@ var __members = {
 			});
 		} else {
 			this.f_initializeOnFocus();
-		}			
+		}	
+		
+		if (f_core.IsWebkit()) {
+			this.f_setInitEventReturn(f_event.KEYPRESS, true);
+		}
 		
 		if (f_core.IsDebugEnabled(f_input)) {
 			var input=this.f_getInput();

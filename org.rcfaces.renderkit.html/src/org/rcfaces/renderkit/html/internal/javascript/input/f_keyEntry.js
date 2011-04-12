@@ -361,7 +361,7 @@ var __members = {
 				this.f_updateInputStyle();
 			}
 				
-			if (this._selectedValue && newInput!=this._selectedValue && newInput!=this._formattedValue) {
+			if (this._selectedValue && newInput!=this._selectedValue && (this.f_isEditable() && !this.f_isReadOnly())) {
 				f_core.Debug(f_keyEntry, "f_onSuggest: value='"+this._selectedValue+"' not equals input ='"+newInput+"'");
 				this._selectedValue=null;
 	

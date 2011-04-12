@@ -906,7 +906,7 @@ var __statics = {
 	 * @method hidden static 
 	 */	
 	VerifyMouseDown: function(component, jsEvent) {
-		if (f_core.IsGecko()) {
+		if (f_core.IsGecko() || f_core.IsWebkit()) {
 			
 			// On a un probleme ! 
 			// Les evenements clicks sont traités par notre composant !

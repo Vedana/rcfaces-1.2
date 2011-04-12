@@ -107,16 +107,48 @@ public class ClientBrowserFactory {
                 version = searchVersion(ua, idx);
 
             } else {
-                idx = ua.indexOf("safari");
+            	idx = ua.indexOf("chrome");
                 if (idx >= 0) {
-                    type = IClientBrowser.SAFARI_BROWSER_TYPE;
-                    version = searchVersion(ua, idx);
+                    type = IClientBrowser.CHROME_BROWSER_TYPE;
+                    int idx2 = ua.indexOf('/', idx);
+                    int idx3 = ua.indexOf(' ', idx);
+                    if (idx3 < 0) {
+                        idx3 = ua.length();
+                    }
 
-                } else {
-                    idx = ua.indexOf("firefox");
+                    if (idx2 > idx && idx3 > idx2) {
+                        version = ua.substring(idx2 + 1, idx3).trim();
+                    }
+
+                }else {
+                    idx = ua.indexOf("safari");
                     if (idx >= 0) {
-                        type = IClientBrowser.FIREFOX_BROWSER_TYPE;
-                        version = searchVersion(ua, idx);
+                    	idx = ua.indexOf("version");
+                        type = IClientBrowser.SAFARI_BROWSER_TYPE;
+                        int idx2 = ua.indexOf('/', idx);
+                        int idx3 = ua.indexOf(' ', idx);
+                        if (idx3 < 0) {
+                            idx3 = ua.length();
+                        }
+
+                        if (idx2 > idx && idx3 > idx2) {
+                            version = ua.substring(idx2 + 1, idx3).trim();
+                        }
+
+                    } else {
+	                    idx = ua.indexOf("firefox");
+	                    if (idx >= 0) {
+	                        type = IClientBrowser.FIREFOX_BROWSER_TYPE;
+	                        int idx2 = ua.indexOf('/', idx);
+	                        int idx3 = ua.indexOf(' ', idx);
+	                        if (idx3 < 0) {
+	                            idx3 = ua.length();
+	                        }
+	
+	                        if (idx2 > idx && idx3 > idx2) {
+	                            version = ua.substring(idx2 + 1, idx3).trim();
+	                        }
+	                    }
                     }
                 }
             }

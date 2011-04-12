@@ -135,7 +135,10 @@ var __members = {
 		
 		f_core.InsertBefore(document.body, iframe, document.body.firstChild);
 		
-		iframe.src="about:blank";
+		if (f_core.IsInternetExplorer()) {
+			iframe.src="about:blank";
+		}
+		
 		f_core.Debug(f_frameShellDecorator, "f_createDecoration: wait decoration creation");
 	},
 	

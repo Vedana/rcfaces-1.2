@@ -1135,6 +1135,17 @@ f_classLoader.prototype = {
 
 				initFct(evt.target);
 			}, document.body);
+			
+			// Chrome ne déclanche pas d evenement focus sur certain composant
+			if (f_core.IsWebkit()) {
+				f_core.AddEventListener(document.body, "mousedown", function(evt) {
+					if (self._exiting) {
+						return;
+					}
+
+					initFct(evt.target);
+				}, document.body);
+			}	
 		}
 	},
 	/**

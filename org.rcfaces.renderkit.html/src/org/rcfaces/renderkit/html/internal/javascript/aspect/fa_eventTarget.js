@@ -237,6 +237,14 @@ var __members = {
 			}
 
 			var ret = true;
+			
+			var ier = this._initEventReturns;
+			if(ier){
+				var initReturn = ier[type];
+				if (initReturn !== undefined) {
+					event._eventReturn = initReturn;
+				}
+			}
 
 			try {
 				f_core.Debug(fa_eventTarget, "f_fireEvent: Fire event '"
@@ -258,7 +266,7 @@ var __members = {
 				}
 			}
 
-			if (event && event._eventReturn !== undefined) {
+			if (ret !== false && event && event._eventReturn !== undefined) {
 				ret = event._eventReturn;
 				f_core.Debug(fa_eventTarget,
 						"f_fireEvent: Call actions: eventReturn is forced (by _eventReturn) to "
@@ -497,6 +505,29 @@ var __members = {
 		}
 		fer[type] = value;
 	},
+	
+	/**
+	 * @method proteted final
+	 * @param String type Name of the type of event.
+	 * @param Boolean value Boolean value or undefined.
+	 * @return void
+	 */
+	f_setInitEventReturn : function(type, value) {
+		f_core.Assert(typeof (type) == "string",
+				"fa_eventTarget.f_setInitEventReturn: Invalid type parameter '"
+						+ type + "'.");
+		f_core.Assert(value === undefined || typeof (value) == "boolean",
+				"fa_eventTarget.f_setInitEventReturn: Invalid value parameter '"
+						+ value + "'.");
+
+		var ier = this._initEventReturns;
+		if (!ier) {
+			ier = new Object();
+			this._initEventReturns = ier;
+		}
+		ier[type] = value;
+	},
+	
 	/**
 	 * @method protected abstract
 	 * @return void

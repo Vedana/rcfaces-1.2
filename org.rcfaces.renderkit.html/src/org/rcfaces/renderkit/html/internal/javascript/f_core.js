@@ -101,17 +101,22 @@ var f_core = {
 	/**
 	 * @field hidden static final String
 	 */
-	FIREFOX_1_0: "firefox.1.0",
-		
-	/**
-	 * @field hidden static final String
-	 */
-	FIREFOX_1_5: "firefox.1.5",
+	GECKO: "gecko",
 
 	/**
 	 * @field hidden static final String
 	 */
-	FIREFOX_2_0: "firefox.2.0",
+	FIREFOX_3_5: "firefox.3.5",
+		
+	/**
+	 * @field hidden static final String
+	 */
+	FIREFOX_3_6: "firefox.3.6",
+
+	/**
+	 * @field hidden static final String
+	 */
+	FIREFOX_4_0: "firefox.4.0",
 
 	/**
 	 * @field hidden static final String
@@ -122,6 +127,32 @@ var f_core = {
 	 * @field hidden static final String
 	 */
 	INTERNET_EXPLORER_7: "iexplorer.7",
+	
+
+	/**
+	 * @field hidden static final String
+	 */
+	INTERNET_EXPLORER_8: "iexplorer.8",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	INTERNET_EXPLORER_9: "iexplorer.9",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	WEBKIT: "webkit",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	WEBKIT_CHROME_10: "webkit.chrome.10",
+	
+	/**
+	 * @field hidden static final String
+	 */
+	WEBKIT_SAFARI_5: "webkit.safari.5",
 
 	/**
 	 * @field hidden static final String
@@ -3315,13 +3346,14 @@ var f_core = {
 		}
 		
 		switch(f_core._browser) {
-		case f_core.FIREFOX_2_0:
-			return (!version || version==f_core.FIREFOX_2_0);
+		
+		case f_core.FIREFOX_4_0:
+			return (!version || version==f_core.FIREFOX_4_0);
 			
-		case f_core.FIREFOX_1_5:
-			return (!version || version==f_core.FIREFOX_1_5);
+		case f_core.FIREFOX_3_6:
+			return (!version || version==f_core.FIREFOX_3_6);
 				
-		case f_core.FIREFOX_1_0:
+		case f_core.FIREFOX_3_5:
 			return true;
 		}
 		
@@ -3356,11 +3388,41 @@ var f_core = {
 		}
 		
 		switch(f_core._browser) {
+		case f_core.INTERNET_EXPLORER_9:
+			return (!version || version==f_core.INTERNET_EXPLORER_9);
+	
+		case f_core.INTERNET_EXPLORER_8:
+			return (!version || version==f_core.INTERNET_EXPLORER_8);
+		
 		case f_core.INTERNET_EXPLORER_7:
 			return (!version || version==f_core.INTERNET_EXPLORER_7);
 				
 		case f_core.INTERNET_EXPLORER_6:
 			return (!version || version==f_core.INTERNET_EXPLORER_6);
+		}
+		
+		return false;
+	},
+	
+	/**
+	 * @method hidden static
+	 * @param optional String version
+	 * @return Boolean 
+	 */
+	IsWebkit: function(version) {
+		if (!f_core._browser) {
+			f_core._SearchBrowser();
+		}
+		
+		switch(f_core._browser) {
+		case f_core.WEBKIT_CHROME_10:
+			return (!version || version==f_core.WEBKIT_CHROME_10);
+			
+		case f_core.WEBKIT_SAFARI_5:
+			return (!version || version==WEBKIT_SAFARI_5);
+				
+		case f_core.WEBKIT:
+			return true;
 		}
 		
 		return false;
@@ -3407,18 +3469,28 @@ var f_core = {
 			
 			f_core._ieScriptEngine57=(scriptEngineMajorVersion>5) || (scriptEngineMajorVersion==5 && scriptEngineMinorVersion>=7);
 			f_core.IsGecko=f_core._ReturnsAlwaysFalse;
+			f_core.IsWebkit=f_core._ReturnsAlwaysFalse;
 			
-			if (f_core._browser_major>=7) {
+			switch (f_core._browser_major) {
+			case 8:
+				f_core._browser=f_core.INTERNET_EXPLORER_8;
+				break;
+			case 7:
 				f_core._browser=f_core.INTERNET_EXPLORER_7;
+				break;
+			case 6:
+				f_core._browser=f_core.INTERNET_EXPLORER_6;
+				break;
 
-				f_core.Info(f_core, "Microsoft Internet Explorer 7 detected ! (script engine '"+scriptEngine+"' "+scriptEngineMajorVersion+"."+scriptEngineMinorVersion+")");
-				return true;
+			default:
+				if (f_core._browser_major>=9) {
+					f_core._browser=f_core.INTERNET_EXPLORER_9;
+				}
+				break;
 			}
 			
-			if (f_core._browser_major>=6) {
-				f_core._browser=f_core.INTERNET_EXPLORER_6;
-
-				f_core.Info(f_core, "Microsoft Internet Explorer 6 detected ! (script engine '"+scriptEngine+"' "+scriptEngineMajorVersion+"."+scriptEngineMinorVersion+")");
+			if (f_core._browser != f_core._UNKNOWN_BROWER) {
+				f_core.Info(f_core, "Microsoft "+f_core._browser+" detected ! (script engine '"+scriptEngine+"' "+scriptEngineMajorVersion+"."+scriptEngineMinorVersion+")");
 				return true;
 			}
 			
@@ -3427,81 +3499,123 @@ var f_core = {
 			return false;
 		}
 		
-		var firefox=agt.indexOf("firefox");
-		if (firefox<0) {
-			firefox=agt.indexOf("mozilla");
-		}
-		if (firefox>=0) {			
-			// On coupe aprés le premier espace, ou la fin de la chaine !
-			var p1=agt.indexOf(" ",firefox);
-			if (p1<0) {
-				p1=agt.length;
+		var webkit=agt.indexOf("applewebkit");
+		if (webkit>=0) {
+			var browser =agt.indexOf("chrome");
+			if (browser>=0) {
+				if (f_core._GetBrowserVersion(agt, "chrome", browser)){
+					if (f_core._browser_major>=10) {			
+						f_core._browser=f_core.WEBKIT_CHROME_10;						
+					}
+				}
+			} else {
+			
+				browser =agt.indexOf("safari");
+				if (browser>=0) {
+					browser = agt.indexOf("version");
+					if (browser>=0) {
+						if (f_core._GetBrowserVersion(agt,"safari",browser)){
+							if (f_core._browser_major>=5) {			
+								f_core._browser=f_core.WEBKIT_SAFARI_5;
+							}
+						}
+					}
+				}
 			}
 			
-			var version=agt.substring(firefox, p1);
-			var vs=version.split("/");
-			if (vs.length>1) {
-				vs=vs[1].split(".");
-				if (vs.length>0) {
-					try {
-						f_core._browser_major=parseInt(vs[0], 10);
-
-					} catch (ex) {
-						f_core.Error(f_core, "_SearchBrowser: Can not parse firefox version '"+version+"'.", ex);
-						return false;
-					}
-				}
-				
-				if (vs.length>1) {	
-					try {
-						f_core._browser_release=parseInt(vs[1], 10);
-						
-					} catch (ex) {
-						f_core.Debug(f_core, "_SearchBrowser: Can not parse release version ! (release="+vs[1]+")");
-					}
-				}
-				if (vs.length>2) {	
-					try {
-						f_core._browser_minor=parseInt(vs[2], 10);
-						
-					} catch (ex) {
-						f_core.Debug(f_core, "Can not parse minor version ! (minor="+vs[2]+")");
-					}
-				}
+			if (f_core._browser == f_core._UNKNOWN_BROWER){
+				f_core._browser=f_core.WEBKIT_SAFARI_5;
 			}
-
-			f_core.Debug(f_core, "_SearchBrowser: Firefox version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
+			
 			f_core.IsInternetExplorer=f_core._ReturnsAlwaysFalse;
-
-			if (f_core._browser_major>=2) {			
-				f_core._browser=f_core.FIREFOX_2_0;
+			f_core.IsGecko= f_core._ReturnsAlwaysFalse;//function(){return true;};
+			
+			f_core.Info(f_core, f_core._browser+" detected !");
+		
+			return true;	
+		}
+		
+		var gecko=agt.indexOf("gecko");
+		if (gecko>=0) {
+		 	var firefox=agt.indexOf("firefox");
+		
+			if (firefox>=0) {
+				if (f_core._GetBrowserVersion(agt, "firefox", firefox)){		
 				
-				f_core.Info(f_core, "Firefox 2.0 detected !");
-				return true;
+					f_core.Debug(f_core, "_SearchBrowser: Firefox version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
+					f_core.IsInternetExplorer=f_core._ReturnsAlwaysFalse;
+					f_core.IsWebkit=f_core._ReturnsAlwaysFalse;
+					
+					if (f_core._browser_major>=4) {			
+						f_core._browser=f_core.FIREFOX_4_0;
+					}else if (f_core._browser_major==3 && f_core._browser_release>=6) {			
+						f_core._browser=f_core.FIREFOX_3_6;
+					}else if (f_core._browser_major>=3) {
+						f_core._browser=f_core.FIREFOX_3_5;
+					}
+					f_core.Info(f_core, f_core._browser+" detected !");
+					return true;
+				}
+				f_core.Info(f_core, "_SearchBrowser: Invalid version of Firefox !");
 			}
-
-			if (f_core._browser_major==1 && f_core._browser_release>=5) {			
-				f_core._browser=f_core.FIREFOX_1_5;
-				
-				f_core.Info(f_core, "Firefox 1.5 detected !");
-				return true;
+			if (f_core._browser == f_core._UNKNOWN_BROWER){
+				f_core._browser=f_core.GECKO;
 			}
-			
-			if (f_core._browser_major>=1) {
-				f_core._browser=f_core.FIREFOX_1_0;
-
-				f_core.Info(f_core, "Firefox 1.0 detected !");
-				return true;
-			}
-			
-			f_core.Info(f_core, "_SearchBrowser: Invalid version of Firefox !");
-			
-			return false;
+			return true;
 		}
 
 		f_core.Assert(false, "f_core._SearchBrowser: Unknown browser '"+agt+"'.");
 		return false;
 	},
+	
+	_GetBrowserVersion: function(agent, browser, position) {
+		
+		if (!position) {
+			return false;
+		}
+		
+		var p1=agent.indexOf(" ",position);
+		if (p1<0) {
+			p1=agent.length;
+		}
+		
+		var version=agent.substring(position, p1);
+		var vs=version.split("/");
+		if (vs.length>1) {
+			vs=vs[1].split(".");
+			if (vs.length>0) {
+				try {
+					f_core._browser_major=parseInt(vs[0], 10);
+
+				} catch (ex) {
+					f_core.Error(f_core, "_GetBrowserVersion: Can not parse "+browser+" version '"+version+"'.", ex);
+					return false;
+				}
+			}
+			
+			if (vs.length>1) {	
+				try {
+					f_core._browser_release=parseInt(vs[1], 10);
+					
+				} catch (ex) {
+					f_core.Debug(f_core, "_GetBrowserVersion: Can not parse release version ! (release="+vs[1]+")");
+				}
+			}
+			if (vs.length>2) {	
+				try {
+					f_core._browser_minor=parseInt(vs[2], 10);
+					
+				} catch (ex) {
+					f_core.Debug(f_core, "Can not parse minor version ! (minor="+vs[2]+")");
+				}
+			}
+		}
+
+		f_core.Debug(f_core, "_GetBrowserVersion: "+browser+" version: major="+f_core._browser_major+" release="+f_core._browser_release+" minor="+f_core._browser_minor);
+
+		return true;
+	},
+	
 	/**
 	 * @method static hidden
 	 * @pararm Object target
@@ -3852,7 +3966,7 @@ var f_core = {
 			targetDocument.appendChild(head);
 		}
 		
-		if (f_core.IsGecko()) {
+		if (f_core.IsGecko() || f_core.IsWebkit()) {
 			for(var i=startIndex;i<length;i++) {
 				var link=links[i];
 	
@@ -4269,7 +4383,7 @@ var f_core = {
 			return component.currentStyle[attributeId];
 		}
 		
-		if (f_core.IsGecko()) {	
+		if (f_core.IsGecko() || f_core.IsWebkit()) {	
 			return component.ownerDocument.defaultView.getComputedStyle(component, '').getPropertyValue(attributeId);
 		}
 		
@@ -4986,7 +5100,7 @@ var f_core = {
 			return [ i, i+j ];
 		}
 						
-		if (f_core.IsGecko()) {
+		if (f_core.IsGecko() || f_core.IsWebkit()) {
 			f_core.Debug(f_core, "GetTextSelection: Caret position: "+component.selectionStart+" to "+component.selectionEnd+".");
 
 			return [ component.selectionStart, component.selectionEnd ];
@@ -5657,7 +5771,7 @@ var f_core = {
 	VerifyBrowserCompatibility: function(url) {
 		f_core.Assert(typeof(url)=="string", "f_core.VerifyBrowserCompatibility: Invalid url parameter ("+url+").");
 
-		if (f_core.IsGecko() || f_core.IsInternetExplorer()) {
+		if (f_core.IsGecko() || f_core.IsInternetExplorer() || f_core.IsWebkit()) {
 			return;
 		}
 		

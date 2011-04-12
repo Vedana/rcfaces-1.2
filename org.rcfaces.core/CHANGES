@@ -1,3 +1,15 @@
+f_core, ClientBrowserFactory, f_httpRequest, f_focusManager, f_popup:
+Ajout de la prise en compte du moteur webkit
+
+f_classLoader:
+Initialisation temporaire onmousedown pour webkit
+
+fa_eventTarget, f_input :
+Ajout de l'evenement onkeypress pour les input avec webkit
+
+fa_menuCore : 
+Correction la clé d'une hashmap utilisant le toString des objets 
+
 fa_images:
 Affichage d'imageButton enabled et  initialement disabled avec seulement imageUrl spécifié
 
