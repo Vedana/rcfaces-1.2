@@ -373,7 +373,7 @@ var __statics = {
 				body.onkeyup=f_popup._OnKeyUpJs;
 				body.onkeydown=f_popup._OnKeyDownJs;
 				body.onkeypress=f_popup._OnKeyPressJs;
-				
+
 				//document.body.onfocus=f_popup._Ie_OnMouseFocus;
 			}
 			
@@ -906,7 +906,7 @@ var __statics = {
 	 * @method hidden static 
 	 */	
 	VerifyMouseDown: function(component, jsEvent) {
-		if (f_core.IsGecko()){ // || f_core.IsWebkit()) {
+		if (f_core.IsGecko()) {
 			
 			// On a un probleme ! 
 			// Les evenements clicks sont traités par notre composant !
@@ -1033,7 +1033,6 @@ var __statics = {
 			popupH+=positionInfos.deltaHeight;
 		}
 
-		
 		var viewSize=f_core.GetViewSize(null, popupComponent.ownerDocument);
 		
 		var bw=viewSize.width;
