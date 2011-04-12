@@ -528,7 +528,10 @@ var __members = {
 	 */
 	f_performElementSelection: function(element, show, evt, selection, phaseName) {
 		var cardinality=this._selectionCardinality;
-		var mouseup = (phaseName == fa_selectionManager.END_PHASE);
+		var mouseup = true;
+		if (phaseName) {
+			mouseup = (phaseName == fa_selectionManager.END_PHASE);
+		}
 		if (!cardinality) {
 			return false;
 		}
@@ -652,7 +655,7 @@ var __members = {
 		}
 
 		if (!mouseup) {
-			return false;
+			return true;
 		}
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		
