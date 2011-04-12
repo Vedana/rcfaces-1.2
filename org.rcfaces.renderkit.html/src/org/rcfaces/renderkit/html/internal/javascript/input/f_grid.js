@@ -286,7 +286,7 @@ var __statics = {
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
 
-			dataGrid.f_moveCursor(this, true, evt, selection);
+			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
