@@ -524,6 +524,7 @@ var __members = {
 	 * @param Boolean show
 	 * @param Event evt
 	 * @param Number selection Mask of type of selection
+	 * @param String phaseName 
 	 * @return Boolean
 	 */
 	f_performElementSelection: function(element, show, evt, selection, phaseName) {
@@ -576,6 +577,9 @@ var __members = {
 				if (selection & fa_selectionManager.APPEND_SELECTION && !mouseup) {
 					this._deselectAllElements();
 				}
+				break;
+			}
+			if (mouseup && phaseName){
 				break;
 			}
 			
