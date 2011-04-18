@@ -831,7 +831,8 @@ var f_core = {
 				capture.screen /* window ? */), "f_core.AddEventListener: Invalid capture parameter ("+capture+")");
 
 		f_core.Debug(f_core, "AddEventListener: entering with component='"+component+"' name='"+name+"' fct=<not printed> capture='"+capture+"'");
-	 	if (f_core.IsInternetExplorer()) {
+	 	if (f_core.IsInternetExplorer() && !f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_9)) {
+	 		
 	 		if (component.nodeType==f_core.DOCUMENT_NODE) {
 	 			switch (name) {
 	 			case "focus":
@@ -3353,7 +3354,10 @@ var f_core = {
 		case f_core.FIREFOX_3_6:
 			return (!version || version==f_core.FIREFOX_3_6);
 				
-		case f_core.FIREFOX_3_5:
+		case (!version || version==f_core.FIREFOX_3_5):
+			return true;
+			
+		case f_core.GECKO:
 			return true;
 		}
 		
@@ -3444,7 +3448,7 @@ var f_core = {
 		f_core.Info(f_core, "_SearchBrowser: Navigator agent: "+agt);
 		f_core._browser=f_core._UNKNOWN_BROWER;
 
-		var idx=agt.indexOf("msie ");
+		var idx=agt.indexOf("msie");
 		if (idx>=0) {
 			var idx2=agt.indexOf(';', idx);
 			
@@ -3524,7 +3528,7 @@ var f_core = {
 			}
 			
 			if (f_core._browser == f_core._UNKNOWN_BROWER){
-				f_core._browser=f_core.WEBKIT_SAFARI_5;
+				f_core._browser=f_core.WEBKIT;
 			}
 			
 			f_core.IsInternetExplorer=f_core._ReturnsAlwaysFalse;
@@ -3682,7 +3686,7 @@ var f_core = {
 		}		
 
 		evt.cancelBubble = true;
-
+		
 		if (evt.preventDefault) {
 			evt.preventDefault();
 
