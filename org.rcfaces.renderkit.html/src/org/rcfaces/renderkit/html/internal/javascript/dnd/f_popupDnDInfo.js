@@ -152,7 +152,7 @@ var __members = {
 			return "Copier sur";
 			
 		case f_dndEvent.MOVE_DND_EFFECT:
-			return "Deplacer vers";
+			return "Déplacer vers";
 			
 		case f_dndEvent.LINK_DND_EFFECT:
 			return "Créer le lien dans";
