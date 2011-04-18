@@ -180,7 +180,7 @@ var __statics = {
 		
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
 		
-		tree.f_moveCursor(li, true, evt, selection);
+		tree.f_moveCursor(li, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
 					
 		if (f_core.IsPopupButton(evt) && !tree.fa_isElementDisabled(li)) {		
 			var menu=tree.f_getSubMenuById(f_tree._NODE_MENU_ID);
@@ -197,6 +197,12 @@ var __statics = {
 		return f_core.CancelJsEvent(evt);
 	},
 	
+	/**
+	 * @method private static 
+	 * @param Event evt
+	 * @return Boolean
+	 * @context object:tree
+	 */
 	_DivNode_mouseUp: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
