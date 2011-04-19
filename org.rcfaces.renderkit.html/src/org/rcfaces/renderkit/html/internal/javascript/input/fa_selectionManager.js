@@ -524,11 +524,15 @@ var __members = {
 	 * @param Boolean show
 	 * @param Event evt
 	 * @param Number selection Mask of type of selection
+	 * @param String phaseName 	 
 	 * @return Boolean
 	 */
 	f_performElementSelection: function(element, show, evt, selection, phaseName) {
 		var cardinality=this._selectionCardinality;
-		var mouseup = (phaseName == fa_selectionManager.END_PHASE);
+		var mouseup = true;
+		if (phaseName) {
+			mouseup = (phaseName == fa_selectionManager.END_PHASE);
+		}
 		if (!cardinality) {
 			return false;
 		}
@@ -561,11 +565,15 @@ var __members = {
 		
 		var item=this.fa_getElementItem(element);
 
-		if (mouseup || this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
+		if (!mouseup && this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false){
+			this._cancelSelection = true;
 			return false;
 		}
 		
-		
+		if(mouseup && this._cancelSelection){
+			this._cancelSelection = false;
+			return false;
+		}
 		
 		switch(cardinality) {
 		case fa_cardinality.OPTIONAL_CARDINALITY:
@@ -577,7 +585,9 @@ var __members = {
 				}
 				break;
 			}
-			
+			if (mouseup && phaseName){
+				break;
+			}
 			// On continue ....
 			
 		case fa_cardinality.ONE_CARDINALITY:
@@ -616,7 +626,6 @@ var __members = {
 				
 				// Nous sommes en range mode .....
 				this._selectRange(element, lastSelectedElement, (selection & fa_selectionManager.APPEND_SELECTION));
-				
 			} else if (elementSelected) {
 				
 				
@@ -653,7 +662,10 @@ var __members = {
 			this._selectElement(element, elementValue, show);
 			break;
 		}
-	
+
+		if (!mouseup) {
+			return true;
+		}
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);
 		
 		return true;
