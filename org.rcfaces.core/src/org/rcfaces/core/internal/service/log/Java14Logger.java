@@ -66,6 +66,10 @@ class Java14Logger implements LogService.ILogger {
 
             Logger logger = logManager.getLogger(loggerName);
 
+            if (logger == null) {
+                continue;
+            }
+
             String name = logger.getName();
             if (name.startsWith(LogService.PREFIX_LOGGER_NAME) == false) {
                 continue;
