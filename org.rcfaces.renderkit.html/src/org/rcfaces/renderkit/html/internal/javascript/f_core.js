@@ -2302,10 +2302,10 @@ var f_core = {
 		return true;
 	},
 	/**
-	 * @method hidden static
-	 * @param Window win
+	 * @method public static
+	 * @param Window win  A specific Window or null
 	 * @param Object parameters
-	 * @param Boolean modal
+	 * @param optional Boolean modal Modal State
 	 * @return Window
 	 */
 	OpenWindow: function(win, parameters, modal) {
@@ -2679,7 +2679,7 @@ var f_core = {
 	 * @method public static
 	 * @param optional String dest Window name.
 	 * @param optional Object createWindowParameters
-	 * @return optional Boolean modal
+	 * @param optional Boolean modal Modal state
 	 * @param optional f_event event Event if any.
 	 * @return Boolean <code>true</code> if success.
 	 */

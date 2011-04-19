@@ -1,3 +1,6 @@
+f_core:
+Passe OpenWindow en public
+
 f_core, ClientBrowserFactory, f_httpRequest, f_focusManager, f_popup:
 Ajout de la prise en compte du moteur webkit
 
