@@ -524,6 +524,7 @@ var __members = {
 	 * @param Boolean show
 	 * @param Event evt
 	 * @param Number selection Mask of type of selection
+	 * @param String phaseName 	 
 	 * @return Boolean
 	 */
 	f_performElementSelection: function(element, show, evt, selection, phaseName) {
@@ -564,7 +565,13 @@ var __members = {
 		
 		var item=this.fa_getElementItem(element);
 
-		if (this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false){
+		if (!mouseup && this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false){
+			this._cancelSelection = true;
+			return false;
+		}
+		
+		if(mouseup && this._cancelSelection){
+			this._cancelSelection = false;
 			return false;
 		}
 		
@@ -578,7 +585,9 @@ var __members = {
 				}
 				break;
 			}
-			
+			if (mouseup && phaseName){
+				break;
+			}
 			// On continue ....
 			
 		case fa_cardinality.ONE_CARDINALITY:
