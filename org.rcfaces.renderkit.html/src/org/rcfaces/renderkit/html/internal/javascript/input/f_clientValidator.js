@@ -296,7 +296,15 @@ var __statics = {
 				var selectionEnd=input.selectionEnd;
 				
 				var value=input.value;
-				
+
+				// Gestion du maxTextLength
+				if (component.f_getMaxTextLength) {
+					var max = component.f_getMaxTextLength();
+					if (max >= 0 && value.length >= max) {
+						return true;
+					}
+				}
+
 				input.value = value.substring(0, selectionStart)+ ch + value.substring(selectionEnd);
 									
 				input.setSelectionRange(selectionStart + ch.length, selectionStart + ch.length);
