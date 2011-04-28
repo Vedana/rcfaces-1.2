@@ -51,6 +51,24 @@ var __members = {
 		return this.f_getInput().maxLength;
 	},
 	/**
+	 * Returns the value associated to the input component.
+	 *
+	 * @method public
+	 * @param Object value
+	 * @return Boolean If value is recognized.
+	 */
+	f_setValue: function(value) {
+		if (typeof(value)=="string") {
+			var maxTextLength=this.f_getMaxTextLength();
+			
+			if (maxTextLength>0 && value.length>maxTextLength) {
+				value=value.substring(0, maxTextLength);
+			}
+		}
+		
+		return this.f_super(arguments, value);
+	},
+	/**
 	 * @method public
 	 * @return boolean Returns <code>true</code> if auto tab facility is enabled.
 	 */
