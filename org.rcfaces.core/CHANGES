@@ -1,3 +1,9 @@
+JavaScriptRenderContext:
+Correction de l'initialisation des composants <v:init>  (comme Accelerator)
+
+AcceleratorRenderer:
+Correction de la génération du parametrage des touches de l'accelerateur
+
 f_core:
 La fonction OpenWindow devient public 
 
