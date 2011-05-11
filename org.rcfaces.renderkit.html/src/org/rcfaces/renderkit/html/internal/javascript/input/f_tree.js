@@ -3358,7 +3358,7 @@ var __members = {
 			var cursor=this._cursor;
 			var breadCrumbsCursor=this._breadCrumbsCursor;
 			
-			for(var i=0;i<children;i++) {
+			for(var i=0;i<children.length;i++) {
 				var child=children[i];
 				
 				if (child==cursor) {
@@ -3370,6 +3370,7 @@ var __members = {
 								
 				this._nodeFinalizer(child, true);
 			}
+			
 		}
 				
 		if (opened) {
