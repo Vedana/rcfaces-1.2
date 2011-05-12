@@ -1,3 +1,6 @@
+AbstractGridRendererContext:
+Correction de la colonne rendered=false qui était visible.  (visible=false fonctionnait par contre !)
+
 JavaScriptRenderContext:
 Correction de l'initialisation des composants <v:init>  (comme Accelerator)
 
