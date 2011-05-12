@@ -85,1091 +85,1097 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractGridRenderContext {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory
-            .getLog(AbstractGridRenderContext.class);
+	private static final Log LOG = LogFactory
+			.getLog(AbstractGridRenderContext.class);
 
-    private static final ISortedComponent SORTED_COMPONENT_EMPTY_ARRAY[] = new ISortedComponent[0];
+	private static final ISortedComponent SORTED_COMPONENT_EMPTY_ARRAY[] = new ISortedComponent[0];
 
-    public static final int SERVER_HIDDEN = 1;
+	public static final int SERVER_HIDDEN = 1;
 
-    public static final int CLIENT_HIDDEN = 2;
+	public static final int CLIENT_HIDDEN = 2;
 
-    public static final int VISIBLE = 3;
+	public static final int VISIBLE = 3;
 
-    public final IProcessContext processContext;
+	public final IProcessContext processContext;
 
-    public final IGridComponent gridComponent;
+	public final IGridComponent gridComponent;
 
-    private int clientSelectionFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
+	private int clientSelectionFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
 
-    private int clientCheckFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
+	private int clientCheckFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
 
-    private boolean checkable;
+	private boolean checkable;
 
-    private int checkCardinality;
+	private int checkCardinality;
 
-    private boolean selectable;
+	private boolean selectable;
 
-    private int selectionCardinality;
+	private int selectionCardinality;
 
-    private boolean disabled;
+	private boolean disabled;
 
-    private String rowIndexVar;
+	private String rowIndexVar;
 
-    private String rowCountVar;
+	private String rowCountVar;
 
-    private boolean cellStyleClasses[];
+	private boolean cellStyleClasses[];
 
-    private boolean hasCellStyleClass;
+	private boolean hasCellStyleClass;
 
-    private boolean hasCellToolTipText;
+	private boolean hasCellToolTipText;
 
-    private boolean cellToolTipText[];
+	private boolean cellToolTipText[];
 
-    private int columnStates[];
+	private int columnStates[];
 
-    private boolean paged;
+	private boolean paged;
 
-    private String rowVarName;
+	private String rowVarName;
 
-    private boolean hasColumnImages;
+	private boolean hasColumnImages;
 
-    private boolean hasTitleColumnImages;
+	private boolean hasTitleColumnImages;
 
-    private ISortedComponent sortedComponents[];
+	private ISortedComponent sortedComponents[];
 
-    private int rows;
+	private int rows;
 
-    private int forcedRows = -1;
+	private int forcedRows = -1;
 
-    private boolean resizable;
+	private boolean resizable;
 
-    private int first;
+	private int first;
 
-    private int rowCount = -2;
+	private int rowCount = -2;
 
-    private boolean columnImageURLs[];
+	private boolean columnImageURLs[];
 
-    private boolean sortClientSide[];
+	private boolean sortClientSide[];
 
-    private String columnWidths[];
+	private String columnWidths[];
 
-    private int columnWidthsInPixel[];
+	private int columnWidthsInPixel[];
 
-    private Object sortCommand[];
+	private Object sortCommand[];
 
-    private String columnIds[];
+	private String columnIds[];
 
-    protected DataModel dataModel;
+	protected DataModel dataModel;
 
-    private IFilterProperties filtersMap;
+	private IFilterProperties filtersMap;
 
-    protected UIColumn columns[];
+	protected UIColumn columns[];
 
-    private int columnWidthTotalSize;
+	private int columnWidthTotalSize;
 
-    private boolean designerMode;
+	private boolean designerMode;
 
-    private IScriptRenderContext scriptRenderContext;
+	private IScriptRenderContext scriptRenderContext;
 
-    private boolean hasScrollBars;
+	private boolean hasScrollBars;
 
-    private String defaultCellImageURLs[];
+	private String defaultCellImageURLs[];
 
-    private String defaultCellStyleClasses[][];
+	private String defaultCellStyleClasses[][];
 
-    private String defaultCellToolTipTexts[];
+	private String defaultCellToolTipTexts[];
 
-    private String defaultCellHorizontalAligments[];
+	private String defaultCellHorizontalAligments[];
 
-    private String cellTitleImageURLs[];
+	private String cellTitleImageURLs[];
 
-    private String cellTitleDisabledImageURLs[];
+	private String cellTitleDisabledImageURLs[];
 
-    private String cellTitleHoverImageURLs[];
+	private String cellTitleHoverImageURLs[];
 
-    private String cellTitleSelectedImageURLs[];
+	private String cellTitleSelectedImageURLs[];
 
-    private String columnStyleClasses[];
+	private String columnStyleClasses[];
 
-    private String rowStyleClasses[];
+	private String rowStyleClasses[];
 
-    protected int gridWidth;
+	protected int gridWidth;
 
-    protected int gridHeight;
+	protected int gridHeight;
 
-    private boolean headerVisible = true;
+	private boolean headerVisible = true;
 
-    private Object showValue;
+	private Object showValue;
 
-    private AdditionalInformationComponent[] additionalInformations;
+	private AdditionalInformationComponent[] additionalInformations;
 
-    private int clientAdditionalFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
+	private int clientAdditionalFullState = IClientSelectionFullStateCapability.DEFAULT_CLIENT_FULL_STATE;
 
-    private int additionalInformationCardinality;
+	private int additionalInformationCardinality;
 
-    private String requestShowAdditionals;
+	private String requestShowAdditionals;
 
-    private String requestHideAdditionals;
+	private String requestHideAdditionals;
 
-    private String sortManager;
+	private String sortManager;
 
-    private boolean isDraggable;
+	private boolean isDraggable;
 
-    private boolean isDroppable;
-    
-    private boolean wheelSelection = true;
-    
-    private String alertLoadingMessage = null;
+	private boolean isDroppable;
 
-    private AbstractGridRenderContext(IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
-            IGridComponent gridComponent, ISortedComponent sortedComponents[],
-            boolean checkTitleImages) {
-        this.processContext = processContext;
-        this.scriptRenderContext = scriptRenderContext;
-
-        this.gridComponent = gridComponent;
-        this.sortedComponents = sortedComponents;
+	private boolean wheelSelection = true;
 
-        if (gridComponent instanceof ISizeCapability) {
-            computeGridSize((ISizeCapability) gridComponent);
-        }
+	private String alertLoadingMessage = null;
 
-        if (gridComponent instanceof IShowValueCapability) {
-            showValue = ((IShowValueCapability) gridComponent).getShowValue();
-        }
-
-        if (gridComponent instanceof ISortManagerCapability) {
-            sortManager = ((ISortManagerCapability) gridComponent)
-                    .getSortManager();
-        }
-
-        if (gridComponent instanceof IDraggableCapability) {
-            isDraggable = ((IDraggableCapability) gridComponent).isDraggable();
-        }
-
-        if (gridComponent instanceof IDroppableCapability) {
-            isDroppable = ((IDroppableCapability) gridComponent).isDroppable();
-        }
-
-        initialize(checkTitleImages);
-
-    }
-
-    protected void computeGridSize(ISizeCapability sizeCapability) {
-        String width = sizeCapability.getWidth();
-        if (width != null) {
-            this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
-        }
-
-        String height = sizeCapability.getHeight();
-        if (height != null) {
-            this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); // 9)
-        }
-    }
-
-    protected void initialize(boolean checkTitleImages) {
-
-        if (gridComponent instanceof IHeaderVisibilityCapability) {
-            headerVisible = ((IHeaderVisibilityCapability) gridComponent)
-                    .isHeaderVisible();
-        }
+	private AbstractGridRenderContext(IProcessContext processContext,
+			IScriptRenderContext scriptRenderContext,
+			IGridComponent gridComponent, ISortedComponent sortedComponents[],
+			boolean checkTitleImages) {
+		this.processContext = processContext;
+		this.scriptRenderContext = scriptRenderContext;
 
-        if (gridComponent instanceof ISelectableCapability) {
-            selectable = ((ISelectableCapability) gridComponent).isSelectable();
-            if (selectable) {
-                int selectionCardinality = 0;
-                if (gridComponent instanceof ISelectionCardinalityCapability) {
-                    selectionCardinality = ((ISelectionCardinalityCapability) gridComponent)
-                            .getSelectionCardinality();
-                }
+		this.gridComponent = gridComponent;
+		this.sortedComponents = sortedComponents;
 
-                if (selectionCardinality == 0) {
-                    selectionCardinality = ISelectionCardinalityCapability.DEFAULT_CARDINALITY;
-                }
-                this.selectionCardinality = selectionCardinality;
+		if (gridComponent instanceof ISizeCapability) {
+			computeGridSize((ISizeCapability) gridComponent);
+		}
 
-                if (gridComponent instanceof IClientSelectionFullStateCapability) {
-                    this.clientSelectionFullState = ((IClientSelectionFullStateCapability) gridComponent)
-                            .getClientSelectionFullState();
-                }
-            }
-            
-        }
-        
-        if (gridComponent instanceof IWheelSelectionCapability) {
-        	wheelSelection = ((IWheelSelectionCapability) gridComponent).isWheelSelection();
-        }
-        
-        if (gridComponent instanceof IAlertLoadingMessageCapability) {
-        	alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent).getAlertLoadingMessage();
-        }
+		if (gridComponent instanceof IShowValueCapability) {
+			showValue = ((IShowValueCapability) gridComponent).getShowValue();
+		}
 
-        if (gridComponent instanceof ICheckableCapability) {
-            checkable = ((ICheckableCapability) gridComponent).isCheckable();
-            if (checkable) {
-                int checkCardinality = 0;
-                if (gridComponent instanceof ICheckCardinalityCapability) {
-                    checkCardinality = ((ICheckCardinalityCapability) gridComponent)
-                            .getCheckCardinality();
-                }
-                if (checkCardinality == 0) {
-                    checkCardinality = ICheckCardinalityCapability.DEFAULT_CARDINALITY;
-                }
-                this.checkCardinality = checkCardinality;
+		if (gridComponent instanceof ISortManagerCapability) {
+			sortManager = ((ISortManagerCapability) gridComponent)
+					.getSortManager();
+		}
 
-                if (gridComponent instanceof IClientCheckFullStateCapability) {
-                    this.clientCheckFullState = ((IClientCheckFullStateCapability) gridComponent)
-                            .getClientCheckFullState();
-                }
-            }
-        }
+		if (gridComponent instanceof IDraggableCapability) {
+			isDraggable = ((IDraggableCapability) gridComponent).isDraggable();
+		}
 
-        if (gridComponent instanceof IAdditionalInformationComponent) {
-            additionalInformations = ((IAdditionalInformationComponent) gridComponent)
-                    .listAdditionalInformations().toArray();
+		if (gridComponent instanceof IDroppableCapability) {
+			isDroppable = ((IDroppableCapability) gridComponent).isDroppable();
+		}
 
-            if (gridComponent instanceof IClientAdditionalInformationFullStateCapability) {
-                this.clientAdditionalFullState = ((IClientAdditionalInformationFullStateCapability) gridComponent)
-                        .getClientAdditionalInformationFullState();
-            }
+		initialize(checkTitleImages);
 
-            int additionalInformationCardinality = 0;
-            if (gridComponent instanceof IAdditionalInformationCardinalityCapability) {
-                additionalInformationCardinality = ((IAdditionalInformationCardinalityCapability) gridComponent)
-                        .getAdditionalInformationCardinality();
-            }
-
-            if (additionalInformationCardinality == 0) {
-                additionalInformationCardinality = IAdditionalInformationCardinalityCapability.DEFAULT_CARDINALITY;
-            }
-
-            this.additionalInformationCardinality = additionalInformationCardinality;
-        }
-
-        if (gridComponent instanceof IDisabledCapability) {
-            disabled = ((IDisabledCapability) gridComponent).isDisabled();
-        }
-
-        rows = gridComponent.getRows();
-        if (rows > 0) {
-            paged = true;
-        }
-
-        if (gridComponent instanceof IPagedCapability) {
-            if (((IPagedCapability) gridComponent).isPagedSetted()) {
-                paged = ((IPagedCapability) gridComponent).isPaged();
-            }
-        }
-
-        rowCountVar = gridComponent.getRowCountVar();
-
-        rowIndexVar = gridComponent.getRowIndexVar();
-
-        if (gridComponent instanceof IRowStyleClassCapability) {
-            String rowStyleClass = ((IRowStyleClassCapability) gridComponent)
-                    .getRowStyleClass();
-
-            if (rowStyleClass != null) {
-                StringTokenizer st = new StringTokenizer(rowStyleClass, ",");
-
-                rowStyleClasses = new String[st.countTokens()];
-
-                for (int i = 0; i < rowStyleClasses.length; i++) {
-                    String token = st.nextToken().trim();
-
-                    rowStyleClasses[i] = token;
-                }
-            }
-        }
-
-        IColumnIterator itColumns = gridComponent.listColumns();
-
-        columns = itColumns.toArray();
-
-        if (gridComponent instanceof IOrderedChildrenCapability) {
-            UIComponent orderedChildren[] = ((IOrderedChildrenCapability) gridComponent)
-                    .getOrderedChildren();
-            if (orderedChildren != null && orderedChildren.length > 0) {
-                List cs = new ArrayList(orderedChildren.length);
-
-                for (int i = 0; i < orderedChildren.length; i++) {
-                    UIComponent c = orderedChildren[i];
-
-                    if ((c instanceof UIColumn) == false) {
-                        continue;
-                    }
-
-                    cs.add(c);
-                }
-
-                columns = (UIColumn[]) cs.toArray(new UIColumn[cs.size()]);
-            }
-        }
+	}
 
-        columnStates = new int[columns.length];
-        columnImageURLs = new boolean[columns.length];
-        cellStyleClasses = new boolean[columns.length];
-        cellToolTipText = new boolean[columns.length];
-        columnIds = new String[columns.length];
-        columnWidths = new String[columns.length];
-        columnWidthsInPixel = new int[columns.length];
-
-        FacesContext facesContext = processContext.getFacesContext();
-
-        boolean widthNotSpecified = false;
-
-        int tableWidth = -1;
-        if (gridComponent instanceof IWidthCapability) {
-            String width = ((IWidthCapability) gridComponent).getWidth();
-            if (width != null) {
-                tableWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
-            }
-        }
-
-        for (int i = 0; i < columns.length; i++) {
-            UIColumn column = columns[i];
-
-            String columnId = column.getId();
-            if (columnId != null
-                    && ComponentTools.isAnonymousComponentId(columnId) == false) {
-                columnIds[i] = columnId;
-            }
-
-            if (column instanceof IVisibilityCapability) {
-                Boolean v = ((IVisibilityCapability) column).getVisibleState();
-                if (v != null && v.booleanValue() == false) {
-                    // Pas visible du tout !
-
-                    if (column instanceof IHiddenModeCapability) {
-                        int hiddenMode = ((IHiddenModeCapability) column)
-                                .getHiddenMode();
-                        if (IHiddenModeCapability.SERVER_HIDDEN_MODE == hiddenMode) {
-                            columnStates[i] = SERVER_HIDDEN; // Pas visible
-                            // et
-                            // limit� au serveur
-                            continue;
-                        }
-                    }
-
-                    columnStates[i] = CLIENT_HIDDEN; // Pas visible mais
-                    // envoy�
-
-                } else {
-                    columnStates[i] = VISIBLE;
-                }
-            }
-
-            if (columnStates[i] != VISIBLE) {
-                continue;
-            }
-
-            String dw = null;
-            int idw = -1;
-
-            if (column instanceof IWidthCapability) {
-                dw = ((IWidthCapability) column).getWidth();
-            }
-
-            if (dw == null && (column instanceof IWidthRangeCapability)) {
-                IWidthRangeCapability widthRangeCapability = (IWidthRangeCapability) column;
-
-                idw = widthRangeCapability.getMinWidth();
-                if (idw <= 0) {
-                    idw = widthRangeCapability.getMaxWidth();
-                }
-            }
-
-            if (idw <= 0 && dw == null && gridWidth <= 0) {
-                // On prend la taille par defaut
-
-                // idw = getDefaultColumnSize();
-            }
-
-            if (idw <= 0 && dw != null) {
-                idw = AbstractCssRenderer.computeSize(dw, tableWidth, 0);
-
-            } else if (idw > 0 && dw == null) {
-                dw = idw + "px";
-            }
-
-            columnWidths[i] = dw;
-            columnWidthsInPixel[i] = idw;
-
-            if (idw <= 0) {
-                widthNotSpecified = true;
-
-            } else {
-                columnWidthTotalSize += idw;
-            }
-
-            if (column instanceof IResizableCapability) {
-                if (((IResizableCapability) column).isResizable()) {
-
-                    if (widthNotSpecified) {
-                        LOG
-                                .error("You must specify a width for a resizable column ! (#"
-                                        + i
-                                        + ", columnId="
-                                        + columnId
-                                        + ", idw=" + idw + ", dw='" + dw + "')");
-
-                        // Fred if dw = 0 should this be triggered ?
-                        // See f_grid.js 2198
-                        throw new FacesException(
-                                "You must specify a width for a resizable column ! (#"
-                                        + i + ", columnId=" + columnId
-                                        + ", idw=" + idw + ", dw='" + dw + "')");
-                    }
-
-                    resizable |= true;
-                }
-            }
-
-            boolean sortSetted = false;
-
-            if (column instanceof ISortEventCapability) {
-                FacesListener facesListeners[] = ((ISortEventCapability) column)
-                        .listSortListeners();
-                if (facesListeners != null && facesListeners.length > 0) {
-                    if (sortClientSide == null) {
-                        sortClientSide = new boolean[columnStates.length];
-                        sortCommand = new Object[columnStates.length];
-                    }
-
-                    listeners: for (int j = 0; j < facesListeners.length; j++) {
-                        FacesListener facesListener = facesListeners[j];
-
-                        if (facesListener instanceof IScriptListener) {
-                            IScriptListener scriptListener = (IScriptListener) facesListener;
-
-                            String aliasCommand = convertAliasCommand(scriptListener
-                                    .getCommand());
-
-                            if (aliasCommand != null) {
-                                // Gestion serveur comme client !
-                                sortCommand[i] = translateJavascriptMethod(aliasCommand);
-                                sortClientSide[i] = (rows == 0);
-                                sortSetted = true;
-                                break listeners;
-                            }
-
-                            if (IHtmlRenderContext.JAVASCRIPT_TYPE
-                                    .equals(scriptListener
-                                            .getScriptType(processContext))) {
-
-                                if (rows > 0) {
-                                    // Script en mode ROW !
-                                    throw new FacesException(
-                                            "Client-side sort does not support 'rows' mode !");
-                                }
-
-                                sortClientSide[i] = true;
-                                sortCommand[i] = scriptListener;
-                                sortSetted = true;
-                                break listeners;
-                            }
-                        }
-
-                        if (facesListener instanceof IServerActionListener) {
-                            sortClientSide[i] = false;
-                            sortCommand[i] = facesListener;
-                            sortSetted = true;
-                            break listeners;
-                        }
-                    }
-                }
-            }
-
-            if (sortSetted == false
-                    && (column instanceof ISortComparatorCapability)) {
-                Comparator comparator = ((ISortComparatorCapability) column)
-                        .getSortComparator();
-                if (comparator != null) {
-                    if (sortClientSide == null) {
-                        sortClientSide = new boolean[columnStates.length];
-                        sortCommand = new Object[columnStates.length];
-                    }
-
-                    sortSetted = true;
-                    sortClientSide[i] = false;
-                    sortCommand[i] = comparator;
-                }
-            }
-
-            if (column instanceof ICellToolTipTextSettings) {
-                if (((ICellToolTipTextSettings) column)
-                        .isCellToolTipTextSetted()) {
-                    cellToolTipText[i] = true;
-                    hasCellToolTipText = true;
-                }
-            }
-
-            if (column instanceof ICellToolTipTextCapability) {
-                String ctt = ((ICellToolTipTextCapability) column)
-                        .getCellDefaultToolTipText();
-                if (ctt != null) {
-                    if (defaultCellToolTipTexts == null) {
-                        defaultCellToolTipTexts = new String[columns.length];
-                    }
-                    defaultCellToolTipTexts[i] = ctt;
-                }
-            }
-
-            if (column instanceof ICellStyleClassSettings) {
-                if (((ICellStyleClassSettings) column).isCellStyleClassSetted()) {
-                    cellStyleClasses[i] = true;
-                    hasCellStyleClass = true;
-                }
-            }
-
-            if (column instanceof ICellStyleClassCapability) {
-                String classes = ((ICellStyleClassCapability) column)
-                        .getDefaultCellStyleClass();
-                if (classes != null) {
-                    if (defaultCellStyleClasses == null) {
-                        defaultCellStyleClasses = new String[columns.length][];
-                    }
-
-                    StringTokenizer st = new StringTokenizer(classes, ",;");
-
-                    String cs[] = new String[st.countTokens()];
-                    defaultCellStyleClasses[i] = cs;
-
-                    for (int j = 0; st.hasMoreTokens(); j++) {
-                        cs[j] = st.nextToken().trim();
-                    }
-                }
-            }
-
-            if (column instanceof IAlignmentCapability) {
-                String halign = ((IAlignmentCapability) column).getAlignment();
-                if (halign != null && "left".equalsIgnoreCase(halign) == false) {
-                    if (defaultCellHorizontalAligments == null) {
-                        defaultCellHorizontalAligments = new String[columns.length];
-                    }
-
-                    defaultCellHorizontalAligments[i] = halign;
-                }
-            }
-
-            if (column instanceof ICellImageSettings) {
-                if (((ICellImageSettings) column).isCellImageURLSetted()) {
-                    columnImageURLs[i] = true;
-                    hasColumnImages = true;
-                }
-            }
-
-            if (column instanceof ICellImageCapability) {
-                String dci = ((ICellImageCapability) column)
-                        .getDefaultCellImageURL();
-                if (dci != null) {
-                    if (defaultCellImageURLs == null) {
-                        defaultCellImageURLs = new String[columns.length];
-                    }
-
-                    defaultCellImageURLs[i] = resolveImageURL(dci);
-                }
-            }
-
-            if (column instanceof IStyleClassCapability) {
-                String dci = ((IStyleClassCapability) column).getStyleClass();
-                if (dci != null) {
-                    if (columnStyleClasses == null) {
-                        columnStyleClasses = new String[columns.length];
-                    }
-                    columnStyleClasses[i] = dci;
-                }
-            }
-
-            if (column instanceof IImageAccessorsCapability) {
-                IContentAccessors contentAccessors = ((IImageAccessorsCapability) column)
-                        .getImageAccessors(facesContext);
-
-                if (contentAccessors instanceof IImageAccessors) {
-                    IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
-
-                    IContentAccessor imageAccessor = imageAccessors
-                            .getImageAccessor();
-                    if (imageAccessor != null) {
-                        String imageURL = imageAccessor.resolveURL(
-                                facesContext, null, null);
-
-                        if (imageURL != null) {
-                            if (cellTitleImageURLs == null) {
-                                cellTitleImageURLs = new String[columns.length];
-                            }
-
-                            cellTitleImageURLs[i] = imageURL;
-                        }
-
-                        if (imageAccessors instanceof IStatesImageAccessors) {
-                            IStatesImageAccessors is = (IStatesImageAccessors) imageAccessors;
-
-                            IContentAccessor disabledImageContentAccessor = is
-                                    .getDisabledImageAccessor();
-                            if (disabledImageContentAccessor != null) {
-                                String disabledImageURL = disabledImageContentAccessor
-                                        .resolveURL(facesContext, null, null);
-                                if (disabledImageURL != null) {
-                                    if (cellTitleDisabledImageURLs == null) {
-                                        cellTitleDisabledImageURLs = new String[columns.length];
-                                    }
-
-                                    cellTitleDisabledImageURLs[i] = disabledImageURL;
-                                }
-                            }
-
-                            IContentAccessor hoverImageContentAccessor = is
-                                    .getHoverImageAccessor();
-                            if (hoverImageContentAccessor != null) {
-                                String hoverImageURL = hoverImageContentAccessor
-                                        .resolveURL(facesContext, null, null);
-                                if (hoverImageURL != null) {
-                                    if (cellTitleHoverImageURLs == null) {
-                                        cellTitleHoverImageURLs = new String[columns.length];
-                                    }
-
-                                    cellTitleHoverImageURLs[i] = hoverImageURL;
-                                }
-                            }
-
-                            IContentAccessor selectedImageContentAccessor = is
-                                    .getSelectedImageAccessor();
-                            if (selectedImageContentAccessor != null) {
-                                String selectedImageURL = selectedImageContentAccessor
-                                        .resolveURL(facesContext, null, null);
-
-                                if (selectedImageURL != null) {
-                                    if (cellTitleSelectedImageURLs == null) {
-                                        cellTitleSelectedImageURLs = new String[columns.length];
-                                    }
-
-                                    cellTitleSelectedImageURLs[i] = selectedImageURL;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (widthNotSpecified) {
-            columnWidthTotalSize = -1;
-        }
-
-        if (getGridHeight() > 0 || resizable == true) {
-            hasScrollBars = true;
-        }
-        if (getGridWidth() > 0
-                && (getColumnWidthTotalSize() < 1 || getColumnWidthTotalSize() > getGridWidth())) {
-            hasScrollBars = true;
-        }
-
-        if (hasAdditionalInformations()) {
-            hasScrollBars = true;
-        }
-
-        if (getSortManager() != null) {
-            hasScrollBars = true;
-        }
-
-        if (resizable && (hasScrollBars == false || widthNotSpecified)) {
-            resizable = false;
-        }
-
-        dataModel = gridComponent.getDataModelValue();
-
-        // Le dataModel peut etre NULL, car dans des cas de structures
-        // simples,
-        // elles n'ont pas besoin de publier un model !
-    }
-
-    public String resolveImageURL(String imageURL) {
-
-        FacesContext facesContext = processContext.getFacesContext();
-
-        return ((IImageAccessors) ContentAccessorFactory
-                .createSingleImageWebResource(facesContext, imageURL,
-                        IContentFamily.IMAGE)).getImageAccessor().resolveURL(
-                facesContext, null, null);
-    }
-
-    protected int getDefaultColumnSize() {
-        return 64;
-    }
-
-    protected abstract String convertAliasCommand(String command);
-
-    public boolean isDesignerMode() {
-        return designerMode;
-    }
-
-    public String getRowIndexVar() {
-        return rowIndexVar;
-    }
-
-    public String getRowCountVar() {
-        return rowCountVar;
-    }
-
-    public String getRowVarName() {
-        return rowVarName;
-    }
-
-    public int getColumnCount() {
-        return columns.length;
-    }
-
-    public UIColumn[] listColumns() {
-        return columns;
-    }
-
-    protected AbstractGridRenderContext(
-            IHtmlComponentRenderContext componentRenderContext) {
-        this(componentRenderContext.getRenderContext().getProcessContext(),
-                componentRenderContext.getRenderContext()
-                        .getScriptRenderContext(),
-                (IGridComponent) componentRenderContext.getComponent(),
-                computeSortedComponents(componentRenderContext), true);
-
-        designerMode = componentRenderContext.getRenderContext()
-                .getProcessContext().isDesignerMode();
-
-        first = gridComponent.getFirst();
-
-        if (gridComponent instanceof IFilterCapability) {
-            filtersMap = ((IFilterCapability) gridComponent)
-                    .getFilterProperties();
-        }
-    }
-
-    private static ISortedComponent[] computeSortedComponents(
-            IHtmlComponentRenderContext componentRenderContext) {
-        UIComponent component = componentRenderContext.getComponent();
-
-        if (component instanceof ISortedComponentsCapability) {
-            return ((ISortedComponentsCapability) component)
-                    .listSortedComponents(componentRenderContext
-                            .getFacesContext());
-        }
-
-        return SORTED_COMPONENT_EMPTY_ARRAY;
-    }
-
-    protected AbstractGridRenderContext(IProcessContext processContext,
-            IScriptRenderContext scriptRenderContext,
-            IGridComponent gridComponent, int rowIndex, int forcedRows,
-            ISortedComponent sortedComponents[], String filterExpression,
-            String showAdditionals, String hideAdditionals) {
-        this(processContext, scriptRenderContext, gridComponent,
-                sortedComponents, false);
-
-        this.first = rowIndex;
-        this.forcedRows = forcedRows;
-
-        if (filterExpression != null) {
-            this.filtersMap = HtmlTools.decodeFilterExpression(null,
-                    (UIComponent) gridComponent, filterExpression);
-        }
-
-        this.requestShowAdditionals = showAdditionals;
-        this.requestHideAdditionals = hideAdditionals;
-    }
-
-    public IFilterProperties getFiltersMap() {
-        if (filtersMap == null) {
-            filtersMap = new FilterPropertiesMap();
-        }
-        return filtersMap;
-    }
-
-    public DataModel getDataModel() {
-        return dataModel;
-    }
-
-    public final boolean isResizable() {
-        return resizable;
-    }
-
-    public String getColumnId(int index) {
-        return columnIds[index];
-    }
-
-    public void updateRowCount() {
-        rowCount = -2;
-    }
-
-    public int getRowCount() {
-        if (rowCount == -2) {
-            rowCount = gridComponent.getRowCount();
-        }
-
-        return rowCount;
-    }
-
-    public final int getFirst() {
-        return first;
-    }
-    
-    public final void resetFirst() {
-    	first = 0;
-    	gridComponent.setFirst(0);
-    }
-
-    public final boolean isPaged() {
-        return paged;
-    }
-
-    public final ISortedComponent[] listSortedComponents() {
-        return sortedComponents;
-    }
-
-    public final int getForcedRows() {
-        return forcedRows;
-    }
-
-    public final int getRows() {
-        return rows;
-    }
-
-    public boolean hasCellStyleClass() {
-        return hasCellStyleClass;
-    }
-
-    public boolean hasCellToolTipText() {
-        return hasCellToolTipText;
-    }
-
-    public boolean isCellStyleClass(int index) {
-        return cellStyleClasses[index];
-    }
-
-    public boolean[] getCellStyleClass() {
-        return cellStyleClasses;
-    }
-
-    public boolean isCellToolTipText(int index) {
-        return cellToolTipText[index];
-    }
-
-    public boolean[] getCellToolTipText() {
-        return cellToolTipText;
-    }
-
-    public boolean hasTitleColumnImages() {
-        return hasTitleColumnImages;
-    }
-
-    public boolean hasColumnImages() {
-        return hasColumnImages;
-    }
-
-    public boolean isColumnImageURL(int index) {
-        return columnImageURLs[index];
-    }
-
-    public final int getColumnState(int index) {
-        return columnStates[index];
-    }
-
-    public final boolean isDisabled() {
-        return disabled;
-    }
-
-    public final IGridComponent getGridComponent() {
-        return gridComponent;
-    }
-
-    public void setRowVarName(String rowVarName) {
-        this.rowVarName = rowVarName;
-    }
-
-    public boolean hasSortClientSide() {
-        return sortClientSide != null;
-    }
-
-    public Object getSortCommand(int i) {
-        if (sortCommand == null) {
-            return null;
-        }
-        return sortCommand[i];
-    }
-
-    public boolean getSortClientSide(int i) {
-        return sortClientSide[i];
-    }
-
-    public String translateJavascriptMethod(String command) {
-
-        int idx = command.indexOf('.');
-        String className = command.substring(0, idx);
-        String newClassName = scriptRenderContext
-                .convertSymbol(null, className);
-
-        String memberName = command.substring(idx + 1);
-        String newMemberName = scriptRenderContext.convertSymbol(className,
-                memberName);
-
-        if (className == newClassName && memberName == newMemberName) {
-            return command;
-        }
-
-        StringAppender sa = new StringAppender(newClassName.length() + 1
-                + newMemberName.length());
-
-        sa.append(newClassName);
-        sa.append('.');
-        sa.append(newMemberName);
-
-        return sa.toString();
-    }
-
-    public final boolean isCheckable() {
-        return checkable;
-    }
-
-    public final int getClientCheckFullState() {
-        return clientCheckFullState;
-    }
-
-    public int getClientAdditionalFullState() {
-        return clientAdditionalFullState;
-    }
-
-    public final boolean isSelectable() {
-        return selectable;
-    }
-
-    public final int getSelectionCardinality() {
-        return selectionCardinality;
-    }
-
-    public final int getClientSelectionFullState() {
-        return clientSelectionFullState;
-    }
-
-    public final int getCheckCardinality() {
-        return checkCardinality;
-    }
-
-    public final boolean hasScrollBars() {
-        return hasScrollBars;
-    }
-
-    public String[] getDefaultCellImageURLs() {
-        return defaultCellImageURLs;
-    }
-
-    public String[][] getDefaultCellStyleClasses() {
-        return defaultCellStyleClasses;
-    }
-
-    public String[] getDefaultCellToolTipTexts() {
-        return defaultCellToolTipTexts;
-    }
-
-    public String[] getDefaultCellHorizontalAlignments() {
-        return defaultCellHorizontalAligments;
-    }
-
-    public String[] getCellTitleImageURLs() {
-        return cellTitleImageURLs;
-    }
-
-    public String[] getCellTitleDisabledImageURLs() {
-        return cellTitleDisabledImageURLs;
-    }
-
-    public String[] getCellTitleHoverImageURLs() {
-        return cellTitleHoverImageURLs;
-    }
-
-    public String[] getCellTitleSelectedImageURLs() {
-        return cellTitleSelectedImageURLs;
-    }
-
-    public String[] getColumnStyleClasses() {
-        return columnStyleClasses;
-    }
-
-    public String[] getRowStyleClasses() {
-        return rowStyleClasses;
-    }
-
-    public int getGridHeight() {
-        return gridHeight;
-    }
-
-    public int getGridWidth() {
-        return gridWidth;
-    }
-
-    public int getColumnWidthTotalSize() {
-        return columnWidthTotalSize;
-    }
-
-    public boolean isHeaderVisible() {
-        return headerVisible;
-    }
-
-    public final Object getShowValue() {
-        return showValue;
-    }
-
-    public final AdditionalInformationComponent[] listAdditionalInformations() {
-        return additionalInformations;
-    }
-
-    public boolean hasAdditionalInformations() {
-        return additionalInformations != null
-                && additionalInformations.length > 0;
-    }
-
-    public int getAdditionalInformationCardinality() {
-        return additionalInformationCardinality;
-    }
-
-    public String getRequestHideAdditionalValues() {
-        return requestHideAdditionals;
-    }
-
-    public String getRequestShowAdditionalValues() {
-        return requestShowAdditionals;
-    }
-
-    public String getSortManager() {
-        return sortManager;
-    }
-
-    public String getColumnWidth(int columnIndex) {
-        return columnWidths[columnIndex];
-    }
-
-    public int getColumnWidthInPixel(int columnIndex) {
-        if (columnWidthsInPixel == null) {
-            return -1;
-        }
-        return columnWidthsInPixel[columnIndex];
-    }
-
-    public boolean isDraggable() {
-        return isDraggable;
-    }
-
-    public boolean isDroppable() {
-        return isDroppable;
-    }
-    
-    public boolean isWheelSelection() {
-    	return wheelSelection;
-    }
-    
-    public String getAlertLoadingMessage() {
-    	return alertLoadingMessage;
-    }
+	protected void computeGridSize(ISizeCapability sizeCapability) {
+		String width = sizeCapability.getWidth();
+		if (width != null) {
+			this.gridWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
+		}
+
+		String height = sizeCapability.getHeight();
+		if (height != null) {
+			this.gridHeight = AbstractCssRenderer.computeSize(height, 0, 0); // 9)
+		}
+	}
+
+	protected void initialize(boolean checkTitleImages) {
+
+		if (gridComponent instanceof IHeaderVisibilityCapability) {
+			headerVisible = ((IHeaderVisibilityCapability) gridComponent)
+					.isHeaderVisible();
+		}
+
+		if (gridComponent instanceof ISelectableCapability) {
+			selectable = ((ISelectableCapability) gridComponent).isSelectable();
+			if (selectable) {
+				int selectionCardinality = 0;
+				if (gridComponent instanceof ISelectionCardinalityCapability) {
+					selectionCardinality = ((ISelectionCardinalityCapability) gridComponent)
+							.getSelectionCardinality();
+				}
+
+				if (selectionCardinality == 0) {
+					selectionCardinality = ISelectionCardinalityCapability.DEFAULT_CARDINALITY;
+				}
+				this.selectionCardinality = selectionCardinality;
+
+				if (gridComponent instanceof IClientSelectionFullStateCapability) {
+					this.clientSelectionFullState = ((IClientSelectionFullStateCapability) gridComponent)
+							.getClientSelectionFullState();
+				}
+			}
+
+		}
+
+		if (gridComponent instanceof IWheelSelectionCapability) {
+			wheelSelection = ((IWheelSelectionCapability) gridComponent)
+					.isWheelSelection();
+		}
+
+		if (gridComponent instanceof IAlertLoadingMessageCapability) {
+			alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent)
+					.getAlertLoadingMessage();
+		}
+
+		if (gridComponent instanceof ICheckableCapability) {
+			checkable = ((ICheckableCapability) gridComponent).isCheckable();
+			if (checkable) {
+				int checkCardinality = 0;
+				if (gridComponent instanceof ICheckCardinalityCapability) {
+					checkCardinality = ((ICheckCardinalityCapability) gridComponent)
+							.getCheckCardinality();
+				}
+				if (checkCardinality == 0) {
+					checkCardinality = ICheckCardinalityCapability.DEFAULT_CARDINALITY;
+				}
+				this.checkCardinality = checkCardinality;
+
+				if (gridComponent instanceof IClientCheckFullStateCapability) {
+					this.clientCheckFullState = ((IClientCheckFullStateCapability) gridComponent)
+							.getClientCheckFullState();
+				}
+			}
+		}
+
+		if (gridComponent instanceof IAdditionalInformationComponent) {
+			additionalInformations = ((IAdditionalInformationComponent) gridComponent)
+					.listAdditionalInformations().toArray();
+
+			if (gridComponent instanceof IClientAdditionalInformationFullStateCapability) {
+				this.clientAdditionalFullState = ((IClientAdditionalInformationFullStateCapability) gridComponent)
+						.getClientAdditionalInformationFullState();
+			}
+
+			int additionalInformationCardinality = 0;
+			if (gridComponent instanceof IAdditionalInformationCardinalityCapability) {
+				additionalInformationCardinality = ((IAdditionalInformationCardinalityCapability) gridComponent)
+						.getAdditionalInformationCardinality();
+			}
+
+			if (additionalInformationCardinality == 0) {
+				additionalInformationCardinality = IAdditionalInformationCardinalityCapability.DEFAULT_CARDINALITY;
+			}
+
+			this.additionalInformationCardinality = additionalInformationCardinality;
+		}
+
+		if (gridComponent instanceof IDisabledCapability) {
+			disabled = ((IDisabledCapability) gridComponent).isDisabled();
+		}
+
+		rows = gridComponent.getRows();
+		if (rows > 0) {
+			paged = true;
+		}
+
+		if (gridComponent instanceof IPagedCapability) {
+			if (((IPagedCapability) gridComponent).isPagedSetted()) {
+				paged = ((IPagedCapability) gridComponent).isPaged();
+			}
+		}
+
+		rowCountVar = gridComponent.getRowCountVar();
+
+		rowIndexVar = gridComponent.getRowIndexVar();
+
+		if (gridComponent instanceof IRowStyleClassCapability) {
+			String rowStyleClass = ((IRowStyleClassCapability) gridComponent)
+					.getRowStyleClass();
+
+			if (rowStyleClass != null) {
+				StringTokenizer st = new StringTokenizer(rowStyleClass, ",");
+
+				rowStyleClasses = new String[st.countTokens()];
+
+				for (int i = 0; i < rowStyleClasses.length; i++) {
+					String token = st.nextToken().trim();
+
+					rowStyleClasses[i] = token;
+				}
+			}
+		}
+
+		IColumnIterator itColumns = gridComponent.listColumns();
+
+		columns = itColumns.toArray();
+
+		if (gridComponent instanceof IOrderedChildrenCapability) {
+			UIComponent orderedChildren[] = ((IOrderedChildrenCapability) gridComponent)
+					.getOrderedChildren();
+			if (orderedChildren != null && orderedChildren.length > 0) {
+				List cs = new ArrayList(orderedChildren.length);
+
+				for (int i = 0; i < orderedChildren.length; i++) {
+					UIComponent c = orderedChildren[i];
+
+					if ((c instanceof UIColumn) == false) {
+						continue;
+					}
+
+					cs.add(c);
+				}
+
+				columns = (UIColumn[]) cs.toArray(new UIColumn[cs.size()]);
+			}
+		}
+
+		columnStates = new int[columns.length];
+		columnImageURLs = new boolean[columns.length];
+		cellStyleClasses = new boolean[columns.length];
+		cellToolTipText = new boolean[columns.length];
+		columnIds = new String[columns.length];
+		columnWidths = new String[columns.length];
+		columnWidthsInPixel = new int[columns.length];
+
+		FacesContext facesContext = processContext.getFacesContext();
+
+		boolean widthNotSpecified = false;
+
+		int tableWidth = -1;
+		if (gridComponent instanceof IWidthCapability) {
+			String width = ((IWidthCapability) gridComponent).getWidth();
+			if (width != null) {
+				tableWidth = AbstractCssRenderer.computeSize(width, 0, 0); // 9);
+			}
+		}
+
+		for (int i = 0; i < columns.length; i++) {
+			UIColumn column = columns[i];
+
+			String columnId = column.getId();
+			if (columnId != null
+					&& ComponentTools.isAnonymousComponentId(columnId) == false) {
+				columnIds[i] = columnId;
+			}
+
+			if (column.isRendered() == false) {
+				columnStates[i] = SERVER_HIDDEN;
+
+			} else if (column instanceof IVisibilityCapability) {
+				Boolean v = ((IVisibilityCapability) column).getVisibleState();
+				if (v != null && v.booleanValue() == false) {
+					// Pas visible du tout !
+
+					if (column instanceof IHiddenModeCapability) {
+						int hiddenMode = ((IHiddenModeCapability) column)
+								.getHiddenMode();
+						if (IHiddenModeCapability.SERVER_HIDDEN_MODE == hiddenMode) {
+							columnStates[i] = SERVER_HIDDEN; // Pas visible
+							// et
+							// limit� au serveur
+							continue;
+						}
+					}
+
+					columnStates[i] = CLIENT_HIDDEN; // Pas visible mais
+					// envoy�
+
+				} else {
+					columnStates[i] = VISIBLE;
+				}
+			}
+
+			if (columnStates[i] != VISIBLE) {
+				continue;
+			}
+
+			String dw = null;
+			int idw = -1;
+
+			if (column instanceof IWidthCapability) {
+				dw = ((IWidthCapability) column).getWidth();
+			}
+
+			if (dw == null && (column instanceof IWidthRangeCapability)) {
+				IWidthRangeCapability widthRangeCapability = (IWidthRangeCapability) column;
+
+				idw = widthRangeCapability.getMinWidth();
+				if (idw <= 0) {
+					idw = widthRangeCapability.getMaxWidth();
+				}
+			}
+
+			if (idw <= 0 && dw == null && gridWidth <= 0) {
+				// On prend la taille par defaut
+
+				// idw = getDefaultColumnSize();
+			}
+
+			if (idw <= 0 && dw != null) {
+				idw = AbstractCssRenderer.computeSize(dw, tableWidth, 0);
+
+			} else if (idw > 0 && dw == null) {
+				dw = idw + "px";
+			}
+
+			columnWidths[i] = dw;
+			columnWidthsInPixel[i] = idw;
+
+			if (idw <= 0) {
+				widthNotSpecified = true;
+
+			} else {
+				columnWidthTotalSize += idw;
+			}
+
+			if (column instanceof IResizableCapability) {
+				if (((IResizableCapability) column).isResizable()) {
+
+					if (widthNotSpecified) {
+						LOG.error("You must specify a width for a resizable column ! (#"
+								+ i
+								+ ", columnId="
+								+ columnId
+								+ ", idw="
+								+ idw
+								+ ", dw='" + dw + "')");
+
+						// Fred if dw = 0 should this be triggered ?
+						// See f_grid.js 2198
+						throw new FacesException(
+								"You must specify a width for a resizable column ! (#"
+										+ i + ", columnId=" + columnId
+										+ ", idw=" + idw + ", dw='" + dw + "')");
+					}
+
+					resizable |= true;
+				}
+			}
+
+			boolean sortSetted = false;
+
+			if (column instanceof ISortEventCapability) {
+				FacesListener facesListeners[] = ((ISortEventCapability) column)
+						.listSortListeners();
+				if (facesListeners != null && facesListeners.length > 0) {
+					if (sortClientSide == null) {
+						sortClientSide = new boolean[columnStates.length];
+						sortCommand = new Object[columnStates.length];
+					}
+
+					listeners: for (int j = 0; j < facesListeners.length; j++) {
+						FacesListener facesListener = facesListeners[j];
+
+						if (facesListener instanceof IScriptListener) {
+							IScriptListener scriptListener = (IScriptListener) facesListener;
+
+							String aliasCommand = convertAliasCommand(scriptListener
+									.getCommand());
+
+							if (aliasCommand != null) {
+								// Gestion serveur comme client !
+								sortCommand[i] = translateJavascriptMethod(aliasCommand);
+								sortClientSide[i] = (rows == 0);
+								sortSetted = true;
+								break listeners;
+							}
+
+							if (IHtmlRenderContext.JAVASCRIPT_TYPE
+									.equals(scriptListener
+											.getScriptType(processContext))) {
+
+								if (rows > 0) {
+									// Script en mode ROW !
+									throw new FacesException(
+											"Client-side sort does not support 'rows' mode !");
+								}
+
+								sortClientSide[i] = true;
+								sortCommand[i] = scriptListener;
+								sortSetted = true;
+								break listeners;
+							}
+						}
+
+						if (facesListener instanceof IServerActionListener) {
+							sortClientSide[i] = false;
+							sortCommand[i] = facesListener;
+							sortSetted = true;
+							break listeners;
+						}
+					}
+				}
+			}
+
+			if (sortSetted == false
+					&& (column instanceof ISortComparatorCapability)) {
+				Comparator comparator = ((ISortComparatorCapability) column)
+						.getSortComparator();
+				if (comparator != null) {
+					if (sortClientSide == null) {
+						sortClientSide = new boolean[columnStates.length];
+						sortCommand = new Object[columnStates.length];
+					}
+
+					sortSetted = true;
+					sortClientSide[i] = false;
+					sortCommand[i] = comparator;
+				}
+			}
+
+			if (column instanceof ICellToolTipTextSettings) {
+				if (((ICellToolTipTextSettings) column)
+						.isCellToolTipTextSetted()) {
+					cellToolTipText[i] = true;
+					hasCellToolTipText = true;
+				}
+			}
+
+			if (column instanceof ICellToolTipTextCapability) {
+				String ctt = ((ICellToolTipTextCapability) column)
+						.getCellDefaultToolTipText();
+				if (ctt != null) {
+					if (defaultCellToolTipTexts == null) {
+						defaultCellToolTipTexts = new String[columns.length];
+					}
+					defaultCellToolTipTexts[i] = ctt;
+				}
+			}
+
+			if (column instanceof ICellStyleClassSettings) {
+				if (((ICellStyleClassSettings) column).isCellStyleClassSetted()) {
+					cellStyleClasses[i] = true;
+					hasCellStyleClass = true;
+				}
+			}
+
+			if (column instanceof ICellStyleClassCapability) {
+				String classes = ((ICellStyleClassCapability) column)
+						.getDefaultCellStyleClass();
+				if (classes != null) {
+					if (defaultCellStyleClasses == null) {
+						defaultCellStyleClasses = new String[columns.length][];
+					}
+
+					StringTokenizer st = new StringTokenizer(classes, ",;");
+
+					String cs[] = new String[st.countTokens()];
+					defaultCellStyleClasses[i] = cs;
+
+					for (int j = 0; st.hasMoreTokens(); j++) {
+						cs[j] = st.nextToken().trim();
+					}
+				}
+			}
+
+			if (column instanceof IAlignmentCapability) {
+				String halign = ((IAlignmentCapability) column).getAlignment();
+				if (halign != null && "left".equalsIgnoreCase(halign) == false) {
+					if (defaultCellHorizontalAligments == null) {
+						defaultCellHorizontalAligments = new String[columns.length];
+					}
+
+					defaultCellHorizontalAligments[i] = halign;
+				}
+			}
+
+			if (column instanceof ICellImageSettings) {
+				if (((ICellImageSettings) column).isCellImageURLSetted()) {
+					columnImageURLs[i] = true;
+					hasColumnImages = true;
+				}
+			}
+
+			if (column instanceof ICellImageCapability) {
+				String dci = ((ICellImageCapability) column)
+						.getDefaultCellImageURL();
+				if (dci != null) {
+					if (defaultCellImageURLs == null) {
+						defaultCellImageURLs = new String[columns.length];
+					}
+
+					defaultCellImageURLs[i] = resolveImageURL(dci);
+				}
+			}
+
+			if (column instanceof IStyleClassCapability) {
+				String dci = ((IStyleClassCapability) column).getStyleClass();
+				if (dci != null) {
+					if (columnStyleClasses == null) {
+						columnStyleClasses = new String[columns.length];
+					}
+					columnStyleClasses[i] = dci;
+				}
+			}
+
+			if (column instanceof IImageAccessorsCapability) {
+				IContentAccessors contentAccessors = ((IImageAccessorsCapability) column)
+						.getImageAccessors(facesContext);
+
+				if (contentAccessors instanceof IImageAccessors) {
+					IImageAccessors imageAccessors = (IImageAccessors) contentAccessors;
+
+					IContentAccessor imageAccessor = imageAccessors
+							.getImageAccessor();
+					if (imageAccessor != null) {
+						String imageURL = imageAccessor.resolveURL(
+								facesContext, null, null);
+
+						if (imageURL != null) {
+							if (cellTitleImageURLs == null) {
+								cellTitleImageURLs = new String[columns.length];
+							}
+
+							cellTitleImageURLs[i] = imageURL;
+						}
+
+						if (imageAccessors instanceof IStatesImageAccessors) {
+							IStatesImageAccessors is = (IStatesImageAccessors) imageAccessors;
+
+							IContentAccessor disabledImageContentAccessor = is
+									.getDisabledImageAccessor();
+							if (disabledImageContentAccessor != null) {
+								String disabledImageURL = disabledImageContentAccessor
+										.resolveURL(facesContext, null, null);
+								if (disabledImageURL != null) {
+									if (cellTitleDisabledImageURLs == null) {
+										cellTitleDisabledImageURLs = new String[columns.length];
+									}
+
+									cellTitleDisabledImageURLs[i] = disabledImageURL;
+								}
+							}
+
+							IContentAccessor hoverImageContentAccessor = is
+									.getHoverImageAccessor();
+							if (hoverImageContentAccessor != null) {
+								String hoverImageURL = hoverImageContentAccessor
+										.resolveURL(facesContext, null, null);
+								if (hoverImageURL != null) {
+									if (cellTitleHoverImageURLs == null) {
+										cellTitleHoverImageURLs = new String[columns.length];
+									}
+
+									cellTitleHoverImageURLs[i] = hoverImageURL;
+								}
+							}
+
+							IContentAccessor selectedImageContentAccessor = is
+									.getSelectedImageAccessor();
+							if (selectedImageContentAccessor != null) {
+								String selectedImageURL = selectedImageContentAccessor
+										.resolveURL(facesContext, null, null);
+
+								if (selectedImageURL != null) {
+									if (cellTitleSelectedImageURLs == null) {
+										cellTitleSelectedImageURLs = new String[columns.length];
+									}
+
+									cellTitleSelectedImageURLs[i] = selectedImageURL;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (widthNotSpecified) {
+			columnWidthTotalSize = -1;
+		}
+
+		if (getGridHeight() > 0 || resizable == true) {
+			hasScrollBars = true;
+		}
+		if (getGridWidth() > 0
+				&& (getColumnWidthTotalSize() < 1 || getColumnWidthTotalSize() > getGridWidth())) {
+			hasScrollBars = true;
+		}
+
+		if (hasAdditionalInformations()) {
+			hasScrollBars = true;
+		}
+
+		if (getSortManager() != null) {
+			hasScrollBars = true;
+		}
+
+		if (resizable && (hasScrollBars == false || widthNotSpecified)) {
+			resizable = false;
+		}
+
+		dataModel = gridComponent.getDataModelValue();
+
+		// Le dataModel peut etre NULL, car dans des cas de structures
+		// simples,
+		// elles n'ont pas besoin de publier un model !
+	}
+
+	public String resolveImageURL(String imageURL) {
+
+		FacesContext facesContext = processContext.getFacesContext();
+
+		return ((IImageAccessors) ContentAccessorFactory
+				.createSingleImageWebResource(facesContext, imageURL,
+						IContentFamily.IMAGE)).getImageAccessor().resolveURL(
+				facesContext, null, null);
+	}
+
+	protected int getDefaultColumnSize() {
+		return 64;
+	}
+
+	protected abstract String convertAliasCommand(String command);
+
+	public boolean isDesignerMode() {
+		return designerMode;
+	}
+
+	public String getRowIndexVar() {
+		return rowIndexVar;
+	}
+
+	public String getRowCountVar() {
+		return rowCountVar;
+	}
+
+	public String getRowVarName() {
+		return rowVarName;
+	}
+
+	public int getColumnCount() {
+		return columns.length;
+	}
+
+	public UIColumn[] listColumns() {
+		return columns;
+	}
+
+	protected AbstractGridRenderContext(
+			IHtmlComponentRenderContext componentRenderContext) {
+		this(componentRenderContext.getRenderContext().getProcessContext(),
+				componentRenderContext.getRenderContext()
+						.getScriptRenderContext(),
+				(IGridComponent) componentRenderContext.getComponent(),
+				computeSortedComponents(componentRenderContext), true);
+
+		designerMode = componentRenderContext.getRenderContext()
+				.getProcessContext().isDesignerMode();
+
+		first = gridComponent.getFirst();
+
+		if (gridComponent instanceof IFilterCapability) {
+			filtersMap = ((IFilterCapability) gridComponent)
+					.getFilterProperties();
+		}
+	}
+
+	private static ISortedComponent[] computeSortedComponents(
+			IHtmlComponentRenderContext componentRenderContext) {
+		UIComponent component = componentRenderContext.getComponent();
+
+		if (component instanceof ISortedComponentsCapability) {
+			return ((ISortedComponentsCapability) component)
+					.listSortedComponents(componentRenderContext
+							.getFacesContext());
+		}
+
+		return SORTED_COMPONENT_EMPTY_ARRAY;
+	}
+
+	protected AbstractGridRenderContext(IProcessContext processContext,
+			IScriptRenderContext scriptRenderContext,
+			IGridComponent gridComponent, int rowIndex, int forcedRows,
+			ISortedComponent sortedComponents[], String filterExpression,
+			String showAdditionals, String hideAdditionals) {
+		this(processContext, scriptRenderContext, gridComponent,
+				sortedComponents, false);
+
+		this.first = rowIndex;
+		this.forcedRows = forcedRows;
+
+		if (filterExpression != null) {
+			this.filtersMap = HtmlTools.decodeFilterExpression(null,
+					(UIComponent) gridComponent, filterExpression);
+		}
+
+		this.requestShowAdditionals = showAdditionals;
+		this.requestHideAdditionals = hideAdditionals;
+	}
+
+	public IFilterProperties getFiltersMap() {
+		if (filtersMap == null) {
+			filtersMap = new FilterPropertiesMap();
+		}
+		return filtersMap;
+	}
+
+	public DataModel getDataModel() {
+		return dataModel;
+	}
+
+	public final boolean isResizable() {
+		return resizable;
+	}
+
+	public String getColumnId(int index) {
+		return columnIds[index];
+	}
+
+	public void updateRowCount() {
+		rowCount = -2;
+	}
+
+	public int getRowCount() {
+		if (rowCount == -2) {
+			rowCount = gridComponent.getRowCount();
+		}
+
+		return rowCount;
+	}
+
+	public final int getFirst() {
+		return first;
+	}
+
+	public final void resetFirst() {
+		first = 0;
+		gridComponent.setFirst(0);
+	}
+
+	public final boolean isPaged() {
+		return paged;
+	}
+
+	public final ISortedComponent[] listSortedComponents() {
+		return sortedComponents;
+	}
+
+	public final int getForcedRows() {
+		return forcedRows;
+	}
+
+	public final int getRows() {
+		return rows;
+	}
+
+	public boolean hasCellStyleClass() {
+		return hasCellStyleClass;
+	}
+
+	public boolean hasCellToolTipText() {
+		return hasCellToolTipText;
+	}
+
+	public boolean isCellStyleClass(int index) {
+		return cellStyleClasses[index];
+	}
+
+	public boolean[] getCellStyleClass() {
+		return cellStyleClasses;
+	}
+
+	public boolean isCellToolTipText(int index) {
+		return cellToolTipText[index];
+	}
+
+	public boolean[] getCellToolTipText() {
+		return cellToolTipText;
+	}
+
+	public boolean hasTitleColumnImages() {
+		return hasTitleColumnImages;
+	}
+
+	public boolean hasColumnImages() {
+		return hasColumnImages;
+	}
+
+	public boolean isColumnImageURL(int index) {
+		return columnImageURLs[index];
+	}
+
+	public final int getColumnState(int index) {
+		return columnStates[index];
+	}
+
+	public final boolean isDisabled() {
+		return disabled;
+	}
+
+	public final IGridComponent getGridComponent() {
+		return gridComponent;
+	}
+
+	public void setRowVarName(String rowVarName) {
+		this.rowVarName = rowVarName;
+	}
+
+	public boolean hasSortClientSide() {
+		return sortClientSide != null;
+	}
+
+	public Object getSortCommand(int i) {
+		if (sortCommand == null) {
+			return null;
+		}
+		return sortCommand[i];
+	}
+
+	public boolean getSortClientSide(int i) {
+		return sortClientSide[i];
+	}
+
+	public String translateJavascriptMethod(String command) {
+
+		int idx = command.indexOf('.');
+		String className = command.substring(0, idx);
+		String newClassName = scriptRenderContext
+				.convertSymbol(null, className);
+
+		String memberName = command.substring(idx + 1);
+		String newMemberName = scriptRenderContext.convertSymbol(className,
+				memberName);
+
+		if (className == newClassName && memberName == newMemberName) {
+			return command;
+		}
+
+		StringAppender sa = new StringAppender(newClassName.length() + 1
+				+ newMemberName.length());
+
+		sa.append(newClassName);
+		sa.append('.');
+		sa.append(newMemberName);
+
+		return sa.toString();
+	}
+
+	public final boolean isCheckable() {
+		return checkable;
+	}
+
+	public final int getClientCheckFullState() {
+		return clientCheckFullState;
+	}
+
+	public int getClientAdditionalFullState() {
+		return clientAdditionalFullState;
+	}
+
+	public final boolean isSelectable() {
+		return selectable;
+	}
+
+	public final int getSelectionCardinality() {
+		return selectionCardinality;
+	}
+
+	public final int getClientSelectionFullState() {
+		return clientSelectionFullState;
+	}
+
+	public final int getCheckCardinality() {
+		return checkCardinality;
+	}
+
+	public final boolean hasScrollBars() {
+		return hasScrollBars;
+	}
+
+	public String[] getDefaultCellImageURLs() {
+		return defaultCellImageURLs;
+	}
+
+	public String[][] getDefaultCellStyleClasses() {
+		return defaultCellStyleClasses;
+	}
+
+	public String[] getDefaultCellToolTipTexts() {
+		return defaultCellToolTipTexts;
+	}
+
+	public String[] getDefaultCellHorizontalAlignments() {
+		return defaultCellHorizontalAligments;
+	}
+
+	public String[] getCellTitleImageURLs() {
+		return cellTitleImageURLs;
+	}
+
+	public String[] getCellTitleDisabledImageURLs() {
+		return cellTitleDisabledImageURLs;
+	}
+
+	public String[] getCellTitleHoverImageURLs() {
+		return cellTitleHoverImageURLs;
+	}
+
+	public String[] getCellTitleSelectedImageURLs() {
+		return cellTitleSelectedImageURLs;
+	}
+
+	public String[] getColumnStyleClasses() {
+		return columnStyleClasses;
+	}
+
+	public String[] getRowStyleClasses() {
+		return rowStyleClasses;
+	}
+
+	public int getGridHeight() {
+		return gridHeight;
+	}
+
+	public int getGridWidth() {
+		return gridWidth;
+	}
+
+	public int getColumnWidthTotalSize() {
+		return columnWidthTotalSize;
+	}
+
+	public boolean isHeaderVisible() {
+		return headerVisible;
+	}
+
+	public final Object getShowValue() {
+		return showValue;
+	}
+
+	public final AdditionalInformationComponent[] listAdditionalInformations() {
+		return additionalInformations;
+	}
+
+	public boolean hasAdditionalInformations() {
+		return additionalInformations != null
+				&& additionalInformations.length > 0;
+	}
+
+	public int getAdditionalInformationCardinality() {
+		return additionalInformationCardinality;
+	}
+
+	public String getRequestHideAdditionalValues() {
+		return requestHideAdditionals;
+	}
+
+	public String getRequestShowAdditionalValues() {
+		return requestShowAdditionals;
+	}
+
+	public String getSortManager() {
+		return sortManager;
+	}
+
+	public String getColumnWidth(int columnIndex) {
+		return columnWidths[columnIndex];
+	}
+
+	public int getColumnWidthInPixel(int columnIndex) {
+		if (columnWidthsInPixel == null) {
+			return -1;
+		}
+		return columnWidthsInPixel[columnIndex];
+	}
+
+	public boolean isDraggable() {
+		return isDraggable;
+	}
+
+	public boolean isDroppable() {
+		return isDroppable;
+	}
+
+	public boolean isWheelSelection() {
+		return wheelSelection;
+	}
+
+	public String getAlertLoadingMessage() {
+		return alertLoadingMessage;
+	}
 
 }
