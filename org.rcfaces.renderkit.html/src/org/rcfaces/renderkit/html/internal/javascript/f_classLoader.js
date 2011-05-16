@@ -1117,7 +1117,7 @@ f_classLoader.prototype = {
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
-		}
+		};
 		
 		if (f_core.IsInternetExplorer()) {
 			document.body.onfocusin=function() {
@@ -1137,7 +1137,7 @@ f_classLoader.prototype = {
 			}, document.body);
 			
 			// Chrome ne déclanche pas d evenement focus sur certain composant
-			if (f_core.IsWebkit()) {
+			if (f_core.IsWebkit()) {// click sur bouton
 				f_core.AddEventListener(document.body, "mousedown", function(evt) {
 					if (self._exiting) {
 						return;
@@ -1145,7 +1145,16 @@ f_classLoader.prototype = {
 
 					initFct(evt.target);
 				}, document.body);
-			}	
+			}
+			if (f_core.IsWebkit()) {//accesskey
+				f_core.AddEventListener(document.body, "click", function(evt) {
+					if (self._exiting) {
+						return;
+					}
+
+					initFct(evt.target);
+				}, document.body);
+			}
 		}
 	},
 	/**
@@ -2189,8 +2198,12 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
  * @context window:window
  */
 f_classLoader.Get=function(win) {
+	if(!win._rcfacesClassLoader){
+		f_classLoader._kernelClass=true;
+		win._rcfacesClassLoader=new f_classLoader(window);
+	}
 	return win._rcfacesClassLoader;
-}
+},
 
 /**
  * @method public static
@@ -2198,7 +2211,7 @@ f_classLoader.Get=function(win) {
  */
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
-}
+},
 
 f_classLoader._kernelClass=true;
 

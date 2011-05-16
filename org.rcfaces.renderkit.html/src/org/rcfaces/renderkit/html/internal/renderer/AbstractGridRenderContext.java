@@ -438,8 +438,11 @@ public abstract class AbstractGridRenderContext {
                     && ComponentTools.isAnonymousComponentId(columnId) == false) {
                 columnIds[i] = columnId;
             }
+            
+            if (column.isRendered() == false) {
+				columnStates[i] = SERVER_HIDDEN;
 
-            if (column instanceof IVisibilityCapability) {
+			} else if (column instanceof IVisibilityCapability) {
                 Boolean v = ((IVisibilityCapability) column).getVisibleState();
                 if (v != null && v.booleanValue() == false) {
                     // Pas visible du tout !

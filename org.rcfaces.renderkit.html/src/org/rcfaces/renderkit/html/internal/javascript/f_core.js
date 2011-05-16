@@ -3690,7 +3690,9 @@ var f_core = {
 		if (evt.preventDefault) {
 			evt.preventDefault();
 
-		} else {
+		} else if (evt.stopPropagation && f_core.IsWebkit(f_core.WEBKIT_SAFARI_5)) {
+			evt.stopPropagation();	
+		}else {
 			evt.returnValue = false;	
 		}
 		

@@ -84,7 +84,7 @@ var __statics = {
 	
 		expandBar.f_fireEvent(f_event.SELECTION, evt);
 		
-		return true;
+		return f_core.CancelJsEvent(evt);
 	}
 }
 
@@ -205,7 +205,8 @@ var __members = {
 		case f_event.KEYDOWN:
 		case f_event.KEYUP:
 			var link=this.f_getButton();
-			if (!link) {
+			
+			if (!link || !link.offsetTop) {
 				return;
 			}
 			
@@ -290,8 +291,10 @@ var __members = {
 			cmp=this;
 		}
 		
-		f_core.Debug(f_expandBar, "f_setFocus: focus component '"+cmp+"' for expandBar '"+this.id+"'.");
-		cmp.focus();
+		if( cmp.visible){ // IE
+			f_core.Debug(f_expandBar, "f_setFocus: focus component '"+cmp+"' for expandBar '"+this.id+"'.");
+			cmp.focus();
+		}
 	},
 	/**
 	 * @method protected
@@ -303,11 +306,11 @@ var __members = {
 			return false;
 		}
 
-		var ret=this.f_fireEvent(f_event.EXPAND, evt);
-		
+		var ret=this.f_fireEvent(f_event.SELECTION, evt);
+			
 		this.f_setFocus();
 		
-		return ret;
+		return f_core.CancelJsEvent(evt);
 	},
 	/**
 	 * @method protected

@@ -565,7 +565,13 @@ var __members = {
 		
 		var item=this.fa_getElementItem(element);
 
-		if (!mouseup && this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false) {
+		if (!mouseup && this.fa_firePreSelectionChangedEvent(evt, detail, item, elementValue)===false){
+			this._cancelSelection = true;
+			return false;
+		}
+		
+		if(mouseup && this._cancelSelection){
+			this._cancelSelection = false;
 			return false;
 		}
 		
