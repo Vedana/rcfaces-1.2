@@ -179,7 +179,7 @@ var __members = {
 		return this._maxRows;
 	},
 	/**
-	 * List rows.
+	 * Get number of rows by page
 	 *
 	 * @method public
 	 * @return Number
