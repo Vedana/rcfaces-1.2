@@ -349,14 +349,14 @@ public abstract class AbstractImageButtonFamillyDecorator extends
                     writer.writeName(writer.getComponentRenderContext()
                             .getComponentClientId());
                     writer.writeValue(getInputValue(true));
-                    writeInputAttributes(writer);
+                    writeInputAttributes(writer, true);
                     writeImageSrc(writer, imageSrc);
                     writeImageSize(writer, imageButtonFamilly);
 
                 } else {
                     // C'est un <a href> !
                     writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
-                    writeInputAttributes(writer);
+                    writeInputAttributes(writer, false);
 
                     writer.startElement(IHtmlWriter.IMG);
                     writer.writeId(getImageId(writer, htmlBorderWriter));
@@ -424,14 +424,23 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         return null;
     }
 
-    private void writeInputAttributes(IHtmlWriter writer)
+    private void writeInputAttributes(IHtmlWriter writer, boolean isInput)
             throws WriterException {
-    	if (disabled) {
-    		writer.writeTabIndex(-1);
-    		
-    	} else if (tabIndex != null) {
-            writer.writeTabIndex(tabIndex.intValue());
-        }
+    	
+    	if (isInput) {
+        	if (disabled) {
+        		writer.writeDisabled();
+        	}
+        	if (tabIndex != null) {	
+                writer.writeTabIndex(tabIndex.intValue());
+            }
+    	} else {
+        	if (disabled) {
+        		writer.writeTabIndex(-1);
+        	} else if (tabIndex != null) {
+                writer.writeTabIndex(tabIndex.intValue());
+            }
+    	}
 
         if (accessKey != null) {
             writer.writeAccessKey(accessKey);
@@ -656,7 +665,6 @@ public abstract class AbstractImageButtonFamillyDecorator extends
 
         String inputElement = getInputElement();
         writer.startElement(inputElement);
-        writeInputAttributes(writer);
         writer.writeRole(getInputRole());
         if (disabled) {
             writer.writeAriaDisabled(disabled);
@@ -664,6 +672,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
         writer.writeAriaLabelledBy(getTextId(writer, htmlBorderWriter));
 
         if (IHtmlWriter.INPUT.equals(inputElement)) {
+            writeInputAttributes(writer, true);
             writer.writeType(IHtmlWriter.IMAGE_INPUT_TYPE);
 
             writer.writeName(writer.getComponentRenderContext()
@@ -682,6 +691,7 @@ public abstract class AbstractImageButtonFamillyDecorator extends
             }
 
         } else {
+            writeInputAttributes(writer, false);
             writeImageAttributes();
             writer.writeHRef(IHtmlWriter.JAVASCRIPT_VOID);
 

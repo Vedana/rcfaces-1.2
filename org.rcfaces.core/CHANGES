@@ -1,3 +1,6 @@
+f_imageButton, AbstractImageButtonFamillyDecorator:
+gestion du disabled différent pour Input et A : contournement du bug IE de gestion des tabIndex 
+
 f_expandBar: 
 Correction setFocus pour IE
 Correction fireEvent multiple

@@ -527,12 +527,20 @@ var __members = {
 		if (disabled) {
 			// Initialisation eventuelle
 			this.fa_getTabIndex();
-			cmp.tabIndex=-1;
+			if (cmp.tagName == "INPUT") {
+				cmp.disabled = true;
+			} else {
+				cmp.tabIndex=-1;
+			}
 			cmp.hideFocus=true;
 			fa_aria.SetElementAriaDisabled(cmp, disabled);
 			
 		} else {
-			cmp.tabIndex=this.fa_getTabIndex();
+			if (cmp.tagName == "INPUT") {
+				cmp.disabled = false;
+			} else {
+				cmp.tabIndex=this.fa_getTabIndex();
+			}
 			cmp.hideFocus=false;
 			cmp.removeAttribute(fa_aria.ARIA_DISABLED);
 		}
