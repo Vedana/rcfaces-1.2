@@ -524,10 +524,11 @@ var __members = {
 	},
 	fa_updateDisabled: function(disabled) {
 		var cmp=this.f_getEventElement();
+		var isInput = (cmp.tagName.toLowerCase() == "input");
 		if (disabled) {
 			// Initialisation eventuelle
 			this.fa_getTabIndex();
-			if (cmp.tagName == "INPUT") {
+			if (isInput) {
 				cmp.disabled = true;
 			} else {
 				cmp.tabIndex=-1;
@@ -536,7 +537,7 @@ var __members = {
 			fa_aria.SetElementAriaDisabled(cmp, disabled);
 			
 		} else {
-			if (cmp.tagName == "INPUT") {
+			if (isInput) {
 				cmp.disabled = false;
 			} else {
 				cmp.tabIndex=this.fa_getTabIndex();
