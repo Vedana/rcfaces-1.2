@@ -760,6 +760,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
     protected void addUnlockProperties(Set unlockedProperties) {
         super.addUnlockProperties(unlockedProperties);
 
+        unlockedProperties.add("selected");
         unlockedProperties.add("selectedValue");
     }
 
