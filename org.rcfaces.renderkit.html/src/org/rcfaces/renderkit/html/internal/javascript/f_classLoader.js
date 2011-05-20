@@ -2198,12 +2198,8 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
  * @context window:window
  */
 f_classLoader.Get=function(win) {
-	if(!win._rcfacesClassLoader){
-		f_classLoader._kernelClass=true;
-		win._rcfacesClassLoader=new f_classLoader(window);
-	}
 	return win._rcfacesClassLoader;
-},
+};
 
 /**
  * @method public static
@@ -2211,7 +2207,7 @@ f_classLoader.Get=function(win) {
  */
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
-},
+};
 
 f_classLoader._kernelClass=true;
 
