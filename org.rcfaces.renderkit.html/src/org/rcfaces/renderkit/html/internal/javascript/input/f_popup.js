@@ -1139,22 +1139,17 @@ var __statics = {
 			offsetY=absPos.y;
 		}
 		
-		switch(positionInfos.position) {
+switch(positionInfos.position) {
+		
 		case f_popup.BOTTOM_COMPONENT:
-			offsetY+=component.offsetHeight;
-			break;
-
-		case f_popup.RIGHT_COMPONENT:
-			offsetX+=component.offsetWidth;
-			break;
-
 		case f_popup.BOTTOM_LEFT_COMPONENT:
 			offsetY+=component.offsetHeight;
 			break;
-
+					
 		case f_popup.BOTTOM_RIGHT_COMPONENT:
-			offsetX+=component.offsetWidth;
 			offsetY+=component.offsetHeight;
+		case f_popup.RIGHT_COMPONENT:
+			offsetX+=component.offsetWidth;
 			break;
 
 		case f_popup.MIDDLE_COMPONENT:
@@ -1199,9 +1194,39 @@ var __statics = {
 				
 		offsetX+=2; // Border par défaut !
 		
-		var pos={ x: offsetX, y: offsetY };
+		var positions={ x: offsetX, y: offsetY };
 		
-		f_core.ComputePopupPosition(popup, pos);
+		var viewSize=f_core.GetViewSize(null, popup.ownerDocument);
+		
+		var bw=viewSize.width;
+		var bh=viewSize.height;
+		var scrollPosition=f_core.GetScrollOffsets(popup.ownerDocument);
+		bw+=scrollPosition.x;
+		bh+=scrollPosition.y;
+
+		var absPos=f_core.GetAbsolutePosition(popup.offsetParent);
+
+		f_core.Debug(f_core, "Gecko_openPopup: bw="+bw+" bh="+bh+" absPos.x="+absPos.x+" absPos.y="+absPos.y+" positions.x="+positions.x+" positions.y="+positions.y+" popupWidth="+popup.offsetWidth+" popupHeight="+popup.offsetHeight);
+
+		if (popup.offsetWidth+positions.x+absPos.x>bw) {
+			positions.x=bw-popup.offsetWidth-absPos.x;
+
+			f_core.Debug(f_core, "Gecko_openPopup: change x position to "+positions.x);
+		}
+		
+		
+		if(popup.offsetHeight > bh - scrollPosition.y){
+			positions.y=0;
+			positions.x=0;
+		}else if (popup.offsetHeight+positions.y+absPos.y>bh) {
+			if (component) {
+				var aeAbs = f_core.GetAbsolutePosition(component);
+				positions.y=aeAbs.y-popup.offsetHeight;
+			}else {
+				positions.y=bh-popup.offsetHeight-absPos.y;
+			}
+			f_core.Debug(f_core, "Gecko_openPopup: change y position to "+positions.y);
+		} 
 
 		var popupStyle=popup.style;
 
@@ -1224,8 +1249,8 @@ var __statics = {
 			}
 		}
 
-		popupStyle.left=pos.x+"px";
-		popupStyle.top=pos.y+"px";
+		popupStyle.left=positions.x+"px";
+		popupStyle.top=positions.y+"px";
 	
 		popupStyle.visibility="inherit";
 	},
