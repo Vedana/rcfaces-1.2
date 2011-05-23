@@ -1602,6 +1602,9 @@ var __members = {
 		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_updateElementStyle: Invalid LI parameter ("+li+")");
 		
 		var node=li._node;
+		if (!node) {
+			return;
+		}
 	
 		var suffixLabel="";
 		var suffixDivNode="";

@@ -1,3 +1,10 @@
+fa_selectionManager:
+interdiction de END_PHASE si la dernière phase n'est pas BEGIN_PHASE
+
+f_dragAndDropEngine:
+ajout methode statique IsDragInProgress
+reset de la phase des composants de type fa_selectionManager
+
 f_imageButton, AbstractImageButtonFamillyDecorator:
 gestion du disabled différent pour Input et A : contournement du bug IE de gestion des tabIndex 
 

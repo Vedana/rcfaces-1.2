@@ -520,6 +520,14 @@ var __members = {
 	
 	/**
 	 * @method protected
+	 * @return void
+	 */
+	f_resetPhase: function() {
+		this._phaseName = undefined;
+	},
+	
+	/**
+	 * @method protected
 	 * @param Object element
 	 * @param Boolean show
 	 * @param Event evt
@@ -533,6 +541,10 @@ var __members = {
 		if (phaseName) {
 			mouseup = (phaseName == fa_selectionManager.END_PHASE);
 		}
+		if (mouseup && this._phaseName != fa_selectionManager.BEGIN_PHASE) {
+			return false;
+		}
+		this._phaseName = phaseName;
 		if (!cardinality) {
 			return false;
 		}

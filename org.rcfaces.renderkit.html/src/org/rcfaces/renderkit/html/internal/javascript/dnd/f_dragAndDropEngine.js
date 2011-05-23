@@ -36,6 +36,15 @@ var __statics = {
 		return engine;
 	 },
 	 
+	/**
+	 * 
+	 * @method public static
+	 * @return boolean
+	 */
+	 IsDragInProgress: function() {
+		 return !!f_dragAndDropEngine._Current;
+	 },
+	 
 	 /**
 	 * 
 	 * @method public static
@@ -772,7 +781,9 @@ var __members = {
 		
 		var dropComponent=f_core.GetParentByClass(dropElement);
 		//f_core.Debug(f_dragAndDropEngine, "_dragMove: DropComponent="+dropComponent);
-		
+		if (dropComponent && dropComponent.f_resetPhase) {
+			dropComponent.f_resetPhase();
+		}
 		
 		var queryDropInfosCall=this._queryDropInfosCall;
 		if (this._targetComponent && !this._verifyParent(this._targetComponent, dropComponent)) {
