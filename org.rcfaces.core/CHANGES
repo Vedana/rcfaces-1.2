@@ -1,3 +1,6 @@
+fa_selectionManager:
+protected f_resetPhase => hidden f_resetSelectionPhase
+
 RadioButton: 
 Uniformisation de la gestion du focus (tabIndex)
 

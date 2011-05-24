@@ -781,8 +781,8 @@ var __members = {
 		
 		var dropComponent=f_core.GetParentByClass(dropElement);
 		//f_core.Debug(f_dragAndDropEngine, "_dragMove: DropComponent="+dropComponent);
-		if (dropComponent && dropComponent.f_resetPhase) {
-			dropComponent.f_resetPhase();
+		if (dropComponent && dropComponent.f_resetSelectionPhase) {
+			dropComponent.f_resetSelectionPhase();
 		}
 		
 		var queryDropInfosCall=this._queryDropInfosCall;

@@ -519,10 +519,10 @@ var __members = {
 	},
 	
 	/**
-	 * @method protected
+	 * @method hidden
 	 * @return void
 	 */
-	f_resetPhase: function() {
+	f_resetSelectionPhase: function() {
 		this._phaseName = undefined;
 	},
 	
