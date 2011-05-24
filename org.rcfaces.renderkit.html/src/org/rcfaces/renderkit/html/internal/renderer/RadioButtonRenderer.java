@@ -145,6 +145,8 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
             htmlWriter.writeAccessKey(accessKey);
         }
 
+        writeTabIndex(htmlWriter, radioButtonComponent);
+
         htmlWriter.endElement(IHtmlWriter.INPUT);
 
         // if (Constants.KEEP_DISABLED_STATE) {
@@ -167,6 +169,11 @@ public class RadioButtonRenderer extends AbstractInputRenderer implements
         }
 
         return htmlWriter;
+    }
+
+    protected IHtmlWriter writeUserInputAttributes(IHtmlWriter writer,
+            UIComponent component) throws WriterException {
+        return writer;
     }
 
     protected IHtmlWriter writeLabel(IHtmlWriter htmlWriter,

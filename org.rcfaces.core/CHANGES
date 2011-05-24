@@ -1,3 +1,6 @@
+RadioButton: 
+Uniformisation de la gestion du focus (tabIndex)
+
 fa_selectionManager:
 interdiction de END_PHASE si la dernière phase n'est pas BEGIN_PHASE
 
