@@ -147,12 +147,12 @@ var f_core = {
 	/**
 	 * @field hidden static final String
 	 */
-	WEBKIT_CHROME_10: "webkit.chrome.10",
+	WEBKIT_CHROME: "webkit.chrome",
 	
 	/**
 	 * @field hidden static final String
 	 */
-	WEBKIT_SAFARI_5: "webkit.safari.5",
+	WEBKIT_SAFARI: "webkit.safari",
 
 	/**
 	 * @field hidden static final String
@@ -3419,11 +3419,11 @@ var f_core = {
 		}
 		
 		switch(f_core._browser) {
-		case f_core.WEBKIT_CHROME_10:
-			return (!version || version==f_core.WEBKIT_CHROME_10);
+		case f_core.WEBKIT_CHROME:
+			return (!version || version==f_core.WEBKIT_CHROME);
 			
-		case f_core.WEBKIT_SAFARI_5:
-			return (!version || version==WEBKIT_SAFARI_5);
+		case f_core.WEBKIT_SAFARI:
+			return (!version || version==f_core.WEBKIT_SAFARI);
 				
 		case f_core.WEBKIT:
 			return true;
@@ -3507,22 +3507,22 @@ var f_core = {
 		if (webkit>=0) {
 			var browser =agt.indexOf("chrome");
 			if (browser>=0) {
-				if (f_core._GetBrowserVersion(agt, "chrome", browser)){
-					if (f_core._browser_major>=10) {			
-						f_core._browser=f_core.WEBKIT_CHROME_10;						
-					}
-				}
+				//if (f_core._GetBrowserVersion(agt, "chrome", browser)){ 
+					//if (f_core._browser_major>=10) {			
+						f_core._browser=f_core.WEBKIT_CHROME; 						
+					//}
+				//}
 			} else {
 			
 				browser =agt.indexOf("safari");
 				if (browser>=0) {
 					browser = agt.indexOf("version");
 					if (browser>=0) {
-						if (f_core._GetBrowserVersion(agt,"safari",browser)){
-							if (f_core._browser_major>=5) {			
-								f_core._browser=f_core.WEBKIT_SAFARI_5;
-							}
-						}
+//						if (f_core._GetBrowserVersion(agt,"safari",browser)){
+//							if (f_core._browser_major>=5) {			
+								f_core._browser=f_core.WEBKIT_SAFARI;
+//							}
+//						}
 					}
 				}
 			}
@@ -3690,7 +3690,7 @@ var f_core = {
 		if (evt.preventDefault) {
 			evt.preventDefault();
 
-		} else if (evt.stopPropagation && f_core.IsWebkit(f_core.WEBKIT_SAFARI_5)) {
+		} else if (evt.stopPropagation && f_core.IsWebkit(f_core.WEBKIT_SAFARI)) {
 			evt.stopPropagation();	
 		}else {
 			evt.returnValue = false;	
@@ -3722,7 +3722,7 @@ var f_core = {
 			win=f_core.GetWindow(doc);
 		}
 		
-		if (f_core.IsInternetExplorer()) {
+		if (f_core.IsInternetExplorer() || f_core.IsWebkit()) {
 			var docElement=doc.documentElement;
 			
 			if (docElement && docElement.clientWidth) {
@@ -3732,7 +3732,7 @@ var f_core = {
 				return values;
 			}
 			
-		} else if (f_core.IsGecko()) {
+		} else if (f_core.IsGecko() ) {
 			// Firefox !
 
 			var docElement=doc.documentElement;

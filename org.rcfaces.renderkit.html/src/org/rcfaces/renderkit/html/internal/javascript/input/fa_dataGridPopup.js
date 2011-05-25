@@ -667,7 +667,7 @@ var __members = {
 	f_openDataGridPopup: function(jsEvent, text, autoSelect) {
 		f_core.Debug(fa_dataGridPopup, "f_openDataGridPopup: jsEvent="+jsEvent+" text='"+text+"' autoSelect="+autoSelect);
 
-		var popupOpened=this._popupOpened
+		var popupOpened=this._popupOpened;
 		if (!popupOpened) {
 			if (this.f_fireEvent(f_event.MENU, jsEvent)===false) {
 				return false;
@@ -712,6 +712,10 @@ var __members = {
 	 * @return Boolean
 	 */
 	_clickOutside: function(jsEvent) {
+		
+		if(!jsEvent) {
+			jsEvent = f_core.GetJsEvent(this);
+		}
 		
 		if (jsEvent.type == f_event.BLUR) {
 			// on ne gère pas les events de type blur afin de ne pas fermer la popup au changement de focus

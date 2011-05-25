@@ -5339,7 +5339,9 @@ var __members = {
 		}
 
 		var doc = this.ownerDocument;
-
+		
+			var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
+		
 		var t0 = new Date().getTime();
 
 		this._titleLayout = true;
@@ -5361,8 +5363,6 @@ var __members = {
 		var columns = this._columns;
 
 		var t1 = new Date().getTime();
-
-		// var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
 
 		var total = 0; // total des colonnes fixe en px
 		var totalPercent = 0; // total des % 
@@ -5414,7 +5414,10 @@ var __members = {
 
 			total += w;
 
-			var cw = w; // -cellMargin;
+			var cw = w;
+			if(f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
+				cw -= cellMargin;
+			}
 			if (cw < 0) {
 				cw = 0;
 			}

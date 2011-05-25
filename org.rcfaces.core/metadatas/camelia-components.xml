@@ -518,7 +518,7 @@
 			return isItemDisabled();
 			</code>
 		</method>
-	
+		
 		<method id="getClientData(String,javax.faces.context.FacesContext)" />
 		<method id="setClientData(String,javax.faces.el.ValueBinding)" />
 
@@ -530,6 +530,17 @@
 
 		<method id="listClientDataKeys(javax.faces.context.FacesContext)" />
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
+		
+		<method id="setValueExpression" returnType="void">
+			<parameter type="String" name="name" />
+			<parameter type="ValueExpression" name="binding" />
+			<code>
+			if(name.equals(Properties.DISABLED)){
+				name = Properties.ITEM_DISABLED;
+			}
+			super.setValueExpression(name, binding);
+			</code>
+		</method>
 
 		<attribute id="itemValue" type="java.lang.String" writeComponent="false"/>
 		<attribute id="itemLabel" type="java.lang.String" writeComponent="false"/>
