@@ -1,3 +1,9 @@
+AbstractItem:
+Convertions des valeur lié à l'attribut disabled en itemDisabled
+
+f_popup:
+Amelioration de l'ouverture des popups d'un combo
+
 fa_selectionManager:
 protected f_resetPhase => hidden f_resetSelectionPhase
 
