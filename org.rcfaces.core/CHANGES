@@ -1,3 +1,6 @@
+TreeService f_tree:
+Ajout du rafraichissement du noeud père lors du chargement partiel d'un arbre
+
 AbstractItem:
 Convertions des valeur lié à l'attribut disabled en itemDisabled
 

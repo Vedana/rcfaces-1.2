@@ -1862,32 +1862,59 @@ var __members = {
 	},
 	/** 
 	 * @method hidden
-	 * @param Object parent Parent node
-	 * @param Object node  New node
-	 * @return Object New node
+	 * @param Object nodeValue node value
+	 * @param Object nodeInfo refreshed node Object 
+	 * @return void
 	 */
-	f_appendNode2: function(parent, node) {
-		
-		node._tooltip=node._description;
-		node._opened=node._expanded;
+	f_refreshNode: function(nodeValue, nodeInfo) {
+		var li=this._searchComponentByNodeOrValue(nodeValue);
+		if (!li) {
+			return;
+		}
+		var node=li._node;
+		if (!node) {
+			return;
+		}
+		if (nodeInfo._description) {
+			node._tooltip=nodeInfo._description;
+		}
+		if (nodeInfo._expanded !== undefined) {
+			node._opened=nodeInfo._expanded;
+		}
+		this._setImages(nodeInfo, node);
+		delete nodeInfo._imageURL;
+		delete nodeInfo._disabledImageURL;
+		delete nodeInfo._selectedImageURL;
+		delete nodeInfo._expandedImageURL;
 
-		if (node._opened===undefined && !this._userExpandable) {
-			node._opened=true;
+		var clientDatas=nodeInfo._clientDatas;
+		if (clientDatas) {
+			this.f_setItemClientDatas(node, clientDatas);
+			delete nodeInfo._clientDatas;
 		}
 		
-		if (!parent._nodes) {
-			parent._nodes=new Array;
-			parent._container=true;
+		if (nodeInfo._hasChild !== undefined) {
+			node._container = nodeInfo._hasChild;
+			this._updateCommandStyle(li);
+			delete nodeInfo._hasChild;
 		}
 		
-		node._parentTreeNode=parent;
-		
-		parent._nodes.push(node);
-		
-		var imageURL=node._imageURL;
-		var disabledImageURL=node._disabledImageURL;
-		var selectedImageURL=node._selectedImageURL;
-		var expandedImageURL=node._expandedImageURL;
+		for (var attr in nodeInfo) {
+			node[attr] = nodeInfo[attr];
+		}
+
+	},
+	/** 
+	 * @method private
+	 * @param Object srcObj  object
+	 * @param Object node  node
+	 * @return void
+	 */
+	_setImages: function(imagesInfo, node) {
+		var imageURL=imagesInfo._imageURL;
+		var disabledImageURL=imagesInfo._disabledImageURL;
+		var selectedImageURL=imagesInfo._selectedImageURL;
+		var expandedImageURL=imagesInfo._expandedImageURL;
 		
 		if (imageURL || disabledImageURL || selectedImageURL || expandedImageURL) {
 			this._images=true; // C'est peut-etre trop tard ?  en Ajax ! ?
@@ -1915,6 +1942,32 @@ var __members = {
 				this.f_setDisabledNodeImageURL(node, disabledImageURL);				
 			}
 		}
+	},
+	/** 
+	 * @method hidden
+	 * @param Object parent Parent node
+	 * @param Object node  New node
+	 * @return Object New node
+	 */
+	f_appendNode2: function(parent, node) {
+		
+		node._tooltip=node._description;
+		node._opened=node._expanded;
+
+		if (node._opened===undefined && !this._userExpandable) {
+			node._opened=true;
+		}
+		
+		if (!parent._nodes) {
+			parent._nodes=new Array;
+			parent._container=true;
+		}
+		
+		node._parentTreeNode=parent;
+		
+		parent._nodes.push(node);
+		
+		this._setImages(node, node);
 		
 		var clientDatas=node._clientDatas;
 		if (clientDatas) {

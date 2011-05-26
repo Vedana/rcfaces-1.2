@@ -1349,4 +1349,8 @@ public abstract class AbstractSelectItemsDecorator extends
 
         javaScriptWriter.writeln(");");
     }
+    
+	public void refreshNode(UIComponent component) throws WriterException {
+	}
+
 }
