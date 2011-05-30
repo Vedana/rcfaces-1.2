@@ -173,11 +173,7 @@ var __statics = {
 		if (tree.f_getEventLocked(evt)) {
 			return false;
 		}
-
-		if (!tree._focus) {
-			tree.f_setFocus();
-		}
-		
+	
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
 		
 		tree.f_moveCursor(li, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
@@ -213,6 +209,10 @@ var __statics = {
 			return false;
 		}
 		
+		if (!tree._focus) {
+			tree.f_setFocus();
+		}
+	
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
 		
 		tree.f_moveCursor(li, true, evt, selection, fa_selectionManager.END_PHASE);
