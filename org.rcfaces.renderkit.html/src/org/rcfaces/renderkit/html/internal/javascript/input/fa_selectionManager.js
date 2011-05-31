@@ -595,8 +595,9 @@ var __members = {
 				}
 				break;
 			}
-			
-			
+			if (mouseup && phaseName){
+				break;
+			}
 			// On continue ....
 			
 		case fa_cardinality.ONE_CARDINALITY:
@@ -607,17 +608,15 @@ var __members = {
 //			}
 			
 			// On deselectionne tout: 1 seul doit rester selectionner 
-			if ((mouseup && phaseName) || !phaseName){
+			
 				this._deselectAllElements();
 				this._selectElement(element, elementValue, show);
-			} 
-			
 			
 			
 			break;
 			
 		case fa_cardinality.ONEMANY_CARDINALITY:
-			if (elementSelected && !rangeMode) {
+			if (elementSelected && !rangeMode ) {
 				if (this._currentSelection.length<2) {
 					// Un seul selectionné: on arrete tout !
 					return false;
