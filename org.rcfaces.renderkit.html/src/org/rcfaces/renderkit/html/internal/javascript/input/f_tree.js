@@ -174,10 +174,6 @@ var __statics = {
 			return false;
 		}
 
-		if (!tree._focus) {
-			tree.f_setFocus();
-		}
-		
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
 		
 		tree.f_moveCursor(li, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
@@ -211,6 +207,10 @@ var __statics = {
 		}
 		if (tree.f_getEventLocked(evt)) {
 			return false;
+		}
+		
+		if (!tree._focus) {
+			tree.f_setFocus();
 		}
 		
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
@@ -759,7 +759,7 @@ var __members = {
 
 		this.f_super(arguments);
 	},
-	_nodeFinalizer: function(li, deepFinalizer) {
+	_nodeFinalizer: function(li, deepFinalizer, deselectedNodeValues) {
 	
 		if (deepFinalizer) {
 			this._nodesList.f_removeElement(li);
@@ -770,11 +770,18 @@ var __members = {
 				for(var i=0;i<children;i++) {
 					var child=children[i];
 					
-					this._nodeFinalizer(child, true);
+					this._nodeFinalizer(child, true, deselectedNodeValues);
 				}
 			}
-		}		
-	
+		}
+
+		if(this._currentSelection) { //que sur le refresh
+			 value = li._node._value;
+			if(this._deselectElement(li,value)){
+				deselectedNodeValues.push(value);
+			}
+		}
+
 		li._node=undefined;
 		li._nodes=undefined;
 //		li._depth=undefined; // number
@@ -856,7 +863,7 @@ var __members = {
 			f_core.VerifyProperties(label);			
 		}
 
-		f_core.VerifyProperties(li);			
+		f_core.VerifyProperties(li);
 	},
 	f_update: function() {
 		this.f_updateScrollPosition();
@@ -1619,7 +1626,7 @@ var __members = {
 		var suffixDivNode="";
 		var cursor=this._cursor;
 	
-		if(!cursor){
+		if (!cursor && this._cfocus) {
 			this._cfocus.removeAttribute("aria-activedescendant");
 		}
 	
@@ -3370,10 +3377,9 @@ var __members = {
 	 */
 	f_refreshContent: function(value) {
 		if (value===undefined) {		
-			var children=this._nodes;
-			
-			var ul=this._body;
 
+			var ul=this._body;
+			var children=ul.childNodes;
 			var lis=ul.childNodes;
 			for(var i=0;i<lis.length;) {
 				var li=lis[i];
@@ -3389,10 +3395,11 @@ var __members = {
 			this._breadCrumbsCursor=undefined;
 			
 			this._nodes=new Array;
-			for(var i=0;i<children;i++) {
+			var selectedValue= new Array;
+			for(var i=0;i<children.length;i++) {
 				var child=children[i];
 				
-				this._nodeFinalizer(child, true);
+				this._nodeFinalizer(child, true, selectedValue);
 			}
 
 			this._reloadTree();
@@ -3422,7 +3429,7 @@ var __members = {
 			
 			var cursor=this._cursor;
 			var breadCrumbsCursor=this._breadCrumbsCursor;
-			
+			var selectedValue= new Array;
 			for(var i=0;i<children.length;i++) {
 				var child=children[i];
 				
@@ -3433,7 +3440,11 @@ var __members = {
 					this._breadCrumbsCursor=undefined;
 				}
 								
-				this._nodeFinalizer(child, true);
+				this._nodeFinalizer(child, true, selectedValue);
+			}
+			
+			if (selectedValue.length) {
+				this.fa_fireSelectionChangedEvent(null, f_event.REFRESH_DETAIL);
 			}
 			
 		}
@@ -3451,44 +3462,44 @@ var __members = {
 	},
 
 	fa_getElementItem: function(li) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_getElementItem: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li" && li._node, "f_tree.fa_getElementItem: Invalid element parameter ! ("+li+")");
 
 		return li._node;
 	},
 
 
 	fa_getElementValue: function(li) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_getElementValue: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li" && li._node, "f_tree.fa_getElementValue: Invalid element parameter ! ("+li+")");
 
 		return li._node._value;
 	},
 
 	fa_isElementDisabled: function(li) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_isElementDisabled: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li" && li._node, "f_tree.fa_isElementDisabled: Invalid element parameter ! ("+li+")");
 		
 		return li._node._disabled;
 	},
 
 	fa_isElementSelected: function(li) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_isElementSelected: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li" && li._node, "f_tree.fa_isElementSelected: Invalid element parameter ! ("+li+")");
 		
 		return li._node._selected;
 	},
 	
 	fa_setElementSelected: function(li, selected) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_setElementSelected: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li" && li._node, "f_tree.fa_setElementSelected: Invalid element parameter ! ("+li+")");
 		
 		li._node._selected=selected;
 	},
 
 	fa_isElementChecked: function(li) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_isElementChecked: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li" && li._node, "f_tree.fa_isElementChecked: Invalid element parameter ! ("+li+")");
 		
 		return li._node._checked;
 	},
 	
 	fa_setElementChecked: function(li, checked) {
-		f_core.Assert(li && li.tagName.toLowerCase()=="li", "f_tree.fa_setElementChecked: Invalid element parameter ! ("+li+")");
+		f_core.Assert(li && li.tagName.toLowerCase()=="li" && li._node, "f_tree.fa_setElementChecked: Invalid element parameter ! ("+li+")");
 		
 		li._node._checked=checked;
 	},

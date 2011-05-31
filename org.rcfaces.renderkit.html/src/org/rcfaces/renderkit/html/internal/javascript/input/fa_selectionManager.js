@@ -37,6 +37,11 @@ var __statics = {
 	STARTRANGE_SELECTION: 16,
 	
 	/** 
+	 * @field hidden static final Number 
+	 */
+	REFRESH_SELECTION: 32,
+	
+	/** 
 	 * @field public static final String 
 	 */
 	BEGIN_PHASE: "begin",
@@ -519,14 +524,6 @@ var __members = {
 	},
 	
 	/**
-	 * @method hidden
-	 * @return void
-	 */
-	f_resetSelectionPhase: function() {
-		this._phaseName = undefined;
-	},
-	
-	/**
 	 * @method protected
 	 * @param Object element
 	 * @param Boolean show
@@ -541,9 +538,7 @@ var __members = {
 		if (phaseName) {
 			mouseup = (phaseName == fa_selectionManager.END_PHASE);
 		}
-		if (mouseup && this._phaseName != fa_selectionManager.BEGIN_PHASE) {
-			return false;
-		}
+
 		this._phaseName = phaseName;
 		if (!cardinality) {
 			return false;
@@ -571,6 +566,9 @@ var __members = {
 		if (selection & fa_selectionManager.ACTIVATE_SELECTION) {
 			detail|=f_event.ACTIVATE_DETAIL;
 		}
+		if (selection & fa_selectionManager.REFRESH_SELECTION) {
+			detail|=f_event.REFRESH_DETAIL;
+		}
 		if (selection) {	
 			detail|=1;
 		}
@@ -592,14 +590,12 @@ var __members = {
 			if (elementSelected) {
 				// Deselection seulement !
 				
-				if (selection & fa_selectionManager.APPEND_SELECTION && !mouseup) {
+				if (selection & fa_selectionManager.APPEND_SELECTION && mouseup) {
 					this._deselectAllElements();
 				}
 				break;
 			}
-			if (mouseup && phaseName){
-				break;
-			}
+			
 			
 			// On continue ....
 			
@@ -611,8 +607,13 @@ var __members = {
 //			}
 			
 			// On deselectionne tout: 1 seul doit rester selectionner 
-			this._deselectAllElements();
-			this._selectElement(element, elementValue, show);
+			if ((mouseup && phaseName) || !phaseName){
+				this._deselectAllElements();
+				this._selectElement(element, elementValue, show);
+			} 
+			
+			
+			
 			break;
 			
 		case fa_cardinality.ONEMANY_CARDINALITY:

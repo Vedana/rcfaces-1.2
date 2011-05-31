@@ -1,3 +1,7 @@
+Selection:
+Ajout du détail refresh dans l'évènement de selection lors d'un refreshcontent (tree & grid) 
+Correction du mouvement du curseur dans le composant tree pendant la sélection
+
 TreeService f_tree:
 Ajout du rafraichissement du noeud père lors du chargement partiel d'un arbre
 

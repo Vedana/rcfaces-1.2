@@ -451,7 +451,7 @@ var __members = {
 		f_core.Assert(typeof(checkedValues)=="object", "fa_checkManager.f_setCheckedValues: Invalid checkedValues parameter ("+selection+")");
 		f_core.Assert(show===undefined || typeof(show)=="boolean", "fa_checkManager.f_setCheckedValues: Invalid show parameter ("+show+")");
 		
-		f_core.Debug(fa_selectionManager, "f_setCheckedValues: Set checked values to '"+checkedValues+"' show='"+show+"'.");
+		f_core.Debug(fa_checkManager, "f_setCheckedValues: Set checked values to '"+checkedValues+"' show='"+show+"'.");
 		
 		if (!checkedValues || !checkedValues.length) {
 			this._uncheckAllElements();

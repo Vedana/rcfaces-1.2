@@ -711,7 +711,7 @@ var __members = {
 			f_core.Error(f_dragAndDropEngine, "_dragStop: fire DROP_COMPLETE throws exception: jsEvent='"+jsEvent+"'.", x);
 		}
 
-		return true;
+		return f_core.CancelJsEvent(jsEvent);
 	},
 	/**
 	 * @method private
@@ -781,9 +781,6 @@ var __members = {
 		
 		var dropComponent=f_core.GetParentByClass(dropElement);
 		//f_core.Debug(f_dragAndDropEngine, "_dragMove: DropComponent="+dropComponent);
-		if (dropComponent && dropComponent.f_resetSelectionPhase) {
-			dropComponent.f_resetSelectionPhase();
-		}
 		
 		var queryDropInfosCall=this._queryDropInfosCall;
 		if (this._targetComponent && !this._verifyParent(this._targetComponent, dropComponent)) {
