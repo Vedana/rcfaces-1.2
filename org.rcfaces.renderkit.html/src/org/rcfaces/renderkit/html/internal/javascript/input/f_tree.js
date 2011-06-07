@@ -202,6 +202,11 @@ var __statics = {
 	_DivNode_mouseUp: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
+		
+		if(tree._cursor && tree._cursor != li){
+			li=tree._cursor;
+		}
+		
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}
