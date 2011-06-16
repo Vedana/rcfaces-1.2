@@ -186,7 +186,7 @@ var __members={
 		if (f_core.IsInternetExplorer()) {
 			activeElement=document.activeElement;
 
-		} else if (f_core.IsGecko() || f_core.IsWebkit()) {
+		} else {
 			/*var selection=window.getSelection();
 			if (selection) {
 				activeElement=selection.focusNode;

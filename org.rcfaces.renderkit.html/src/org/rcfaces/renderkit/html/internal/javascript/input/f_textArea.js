@@ -75,16 +75,16 @@ var __statics = {
 		// f_core.Debug(f_textArea, "_MaxTextLengthKeyDown: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
 	
 		// Il faut compter les CRs !!!
-		if (f_core.IsInternetExplorer()) {
-			if (keyCode < 32 && keyCode!=13) {
-				return true;
+		
+		 if (f_core.IsGecko()) {
+				if (keyCode>0 && keyCode!=13) {
+					return true;
+				}
+				//keyCode=charCode;
 			}
-		} else if (f_core.IsGecko()) {
-			if (keyCode>0 && keyCode!=13) {
-				return true;
-			}
-			//keyCode=charCode;
-		}
+		 else if (keyCode < 32 && keyCode!=13) {
+			return true;
+		} 
 
 		return f_textArea._ChangeText(textArea, keyChar);
 	},

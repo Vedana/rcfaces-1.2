@@ -285,8 +285,14 @@ var __statics = {
 			var sub = f_core.IsPopupButton(evt);
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
-
-			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
+			
+			var selectOnMousedown = false;
+			var srcElement = evt.target ? evt.target : evt.srcElement;
+			if (srcElement && this._label && srcElement.tagName == this._label.tagName) {
+				selectOnMousedown = true;
+			}
+		
+			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.BEGIN_PHASE, selectOnMousedown);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
@@ -348,6 +354,9 @@ var __statics = {
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
 
 			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.END_PHASE);
+			
+			// On deplace le cursor avant de donner le focus !
+			dataGrid.f_forceFocus();
 
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
@@ -3916,13 +3925,13 @@ var __members = {
 
 		var cfocus = this._cfocus;
 		if (cfocus) {
-			if (f_core.IsGecko()) {
-				// fonctionnement de base
-				cfocus.focus();
-			} else {
+			if (f_core.IsInternetExplorer(f_core.INTERNET_EXPLORER_6)) {
 				// pour *vraiment* donner les focus sous IE
 				// genere une exception sous FF : passer par une focntion anonyme ?
 				window.setTimeout(cfocus.focus, 0);
+			} else {
+				// fonctionnement de base
+				cfocus.focus();
 			}
 
 			return;
@@ -6374,6 +6383,9 @@ var __members = {
 	 * @return void
 	 */
 	f_selectAllPage: function() {
+		if (!this._selectable) {
+			return;
+		}
 		var first = this.f_getFirst();
 		var last = 1;
 		var rowCount = this.f_getRowCount();
@@ -6381,13 +6393,18 @@ var __members = {
 		if(this._rows) {
 			rows = this._rows;
 		}
-		if( rowCount > 0 && ((rows > 0 && rowCount < rows)) || rows < 0){
-			last = this.f_getRowCount();
+		if( rowCount > 0 && ((rows > 0 && rowCount < rows) || rows < 0)){
+			last = rowCount;
 		}else if(rows > 0) {
 			last = rows;
 		} 
+		
+		var end = first+last-1;
+		if (end > rowCount) {
+			end = rowCount - 1; // evite de selectioner des lignes en trop
+		}
 		this._selectRange(this.f_getRow(first),
-				this.f_getRow(first+last-1),
+				this.f_getRow(end),
 				fa_selectionManager.RANGE_SELECTION);
 	},
 	
@@ -6397,7 +6414,9 @@ var __members = {
 	 * @return void
 	 */
 	f_unselectAll: function() {
-		this.f_setSelection([]);
+		if (this._selectable) {
+			this.f_setSelection([]);
+		}
 	},
 /**
  * 

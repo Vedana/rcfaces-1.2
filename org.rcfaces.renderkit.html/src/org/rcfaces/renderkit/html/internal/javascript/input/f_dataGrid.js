@@ -1829,6 +1829,9 @@ var __members = {
 	 * @method public
 	 */
 	f_checkAllPage: function() {
+		if (!this._checkable) {
+			return;
+		}
 		var elts = this.fa_listVisibleElements();
 		for(var i=0;i<elts.length;i++) {
 			var element=elts[i];
@@ -1843,7 +1846,9 @@ var __members = {
 	 * @method public
 	 */
 	f_uncheckAll: function() {
-		this._uncheckAllElements();
+		if (this._checkable) {
+			this._uncheckAllElements();
+		}
 	},
 	/**
 	 * Returns label of a row

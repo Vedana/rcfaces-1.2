@@ -197,7 +197,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_moveCursor: function(element, show, evt, selection, phaseName) {
+	f_moveCursor: function(element, show, evt, selection, phaseName, selectOnMousedown) {
 		f_core.Assert(element && element.tagName, "fa_selectionManager.f_moveCursor: Invalid parameter to move cursor !");
 		
 		var old=this._cursor;
@@ -221,7 +221,7 @@ var __members = {
 		f_core.Debug(fa_selectionManager, "f_moveCursor: Move cursor to element '"+this.fa_getElementValue(element)+"'"+((selection)?" selection=0x"+selection.toString(16):"")+" disabled="+this.fa_isElementDisabled(element));
 		
 		if (selection) {
-			if (this.f_performElementSelection(element, show, evt, selection, phaseName)) {
+			if (this.f_performElementSelection(element, show, evt, selection, phaseName, selectOnMousedown)) {
 				show=false;
 			}
 		}
@@ -529,10 +529,11 @@ var __members = {
 	 * @param Boolean show
 	 * @param Event evt
 	 * @param Number selection Mask of type of selection
-	 * @param String phaseName 
+	 * @param String phaseName
+	 * @param optional Boolean selectOnMousedown force selection on mousedown 
 	 * @return Boolean
 	 */
-	f_performElementSelection: function(element, show, evt, selection, phaseName) {
+	f_performElementSelection: function(element, show, evt, selection, phaseName, selectOnMousedown) {
 		var cardinality=this._selectionCardinality;
 		var mouseup = true;
 		if (phaseName) {
@@ -580,6 +581,10 @@ var __members = {
 			return false;
 		}
 		
+		if (selectOnMousedown && (selection & fa_selectionManager.EXCLUSIVE_SELECTION)) {
+			this._cancelSelection = true;
+		}
+		
 		if(mouseup && this._cancelSelection){
 			this._cancelSelection = false;
 			return false;
@@ -589,14 +594,15 @@ var __members = {
 		case fa_cardinality.OPTIONAL_CARDINALITY:
 			if (elementSelected) {
 				// Deselection seulement !
-				
-				if (selection & fa_selectionManager.APPEND_SELECTION && mouseup) {
+				if (selection & fa_selectionManager.APPEND_SELECTION && mouseup ) {
 					this._deselectAllElements();
+					break;
 				}
-				break;
 			}
-			if (mouseup && phaseName){
-				break;
+			
+			if (selection & fa_selectionManager.APPEND_SELECTION && selectOnMousedown ) {
+				//En modre append la selection se fait au mouseup
+				return false;
 			}
 			// On continue ....
 			
@@ -606,12 +612,13 @@ var __members = {
 				// On ne peut pas deselectionner un élément déjà selectionné
 				//return false;
 //			}
-			
-			// On deselectionne tout: 1 seul doit rester selectionner 
-			
-				this._deselectAllElements();
-				this._selectElement(element, elementValue, show);
-			
+
+				
+			if (selectOnMousedown || mouseup) { 
+					// On deselectionne tout: 1 seul doit rester selectionner 	
+					this._deselectAllElements();
+					this._selectElement(element, elementValue, show);
+			} 	
 			
 			break;
 			
@@ -619,7 +626,7 @@ var __members = {
 			if (elementSelected && !rangeMode ) {
 				if (this._currentSelection.length<2) {
 					// Un seul selectionné: on arrete tout !
-					return false;
+					break;
 				}
 			}
 
@@ -638,46 +645,51 @@ var __members = {
 				}
 				
 				// Nous sommes en range mode .....
-				this._selectRange(element, lastSelectedElement, (selection & fa_selectionManager.APPEND_SELECTION));
-				
+				if (mouseup || selectOnMousedown) {
+					this._selectRange(element, lastSelectedElement, (selection & fa_selectionManager.APPEND_SELECTION));
+				}
 			} else if (elementSelected) {
 				
 				
-				if (selection & fa_selectionManager.APPEND_SELECTION && !mouseup) {
+				if (selection & fa_selectionManager.APPEND_SELECTION && mouseup) {
 					// On est juste en ajout: pas de déselection complete !
 					this._deselectElement(element, elementValue);
 					break;
 				}
 			 
 				var selections = this.f_getSelection();
-				if(selection & fa_selectionManager.EXCLUSIVE_SELECTION && mouseup && selections.length > 1) {
+				if(selection & fa_selectionManager.EXCLUSIVE_SELECTION && (mouseup || selectOnMousedown)  && selections.length > 1) {
 					// On deselectionne tout !
 					this._deselectAllElements();
 				}
 		
 			} else if (selection & fa_selectionManager.EXCLUSIVE_SELECTION) {
 				// On deselectionne tout !
-				this._deselectAllElements();
+				if (mouseup || selectOnMousedown) {
+					this._deselectAllElements();
+				}
 			}
 			
 			if (selection & fa_selectionManager.APPEND_SELECTION && !mouseup) {
 				break;
 			}
 			
-			if (selection & fa_selectionManager.APPEND_SELECTION && mouseup) {
+			if (selection & fa_selectionManager.APPEND_SELECTION && (mouseup || selectOnMousedown) ) {
 				var deselectedElement = this._lastDeSelectedElement;
 				if( deselectedElement &&  deselectedElement == element ){
 					this._lastDeSelectedElement = null;
-					break;
+					//break;
 				}
 				
 			}
-
-			this._selectElement(element, elementValue, show);
+			
+			if (selectOnMousedown || mouseup) {
+				this._selectElement(element, elementValue, show);
+			}
 			break;
 		}
 	
-		if (!mouseup) {
+		if (!mouseup && !selectOnMousedown) {
 			return true;
 		}
 		this.fa_fireSelectionChangedEvent(evt, detail, item, elementValue);

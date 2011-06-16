@@ -1,3 +1,9 @@
+f_key: 
+Correction de l'affichage des accesskey sous IE et Webkit 
+
+f_clientValidator, f_focusManager,f_textArea, fa_spinner, fa_compositeEntry :
+Prise en compte de Webkit sur le keyCode sur le keypress  
+
 Selection:
 Ajout du détail refresh dans l'évènement de selection lors d'un refreshcontent (tree & grid) 
 Correction du mouvement du curseur dans le composant tree pendant la sélection
@@ -17,8 +23,8 @@ protected f_resetPhase => hidden f_resetSelectionPhase
 RadioButton: 
 Uniformisation de la gestion du focus (tabIndex)
 
-fa_selectionManager:
-interdiction de END_PHASE si la dernière phase n'est pas BEGIN_PHASE
+fa_selectionManager, f_grid:
+Ajour de la notion selectOnMousedown sur le label
 
 f_dragAndDropEngine:
 ajout methode statique IsDragInProgress

@@ -308,7 +308,7 @@ var __members={
 				
 		f_core.Debug(fa_compositeEntry, "KeyPress: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+") min="+input._min+" max="+input._max+" default="+input._default);
 	
-		if (f_core.IsInternetExplorer()) {
+		if (f_core.IsInternetExplorer() || f_core.IsWebkit()) {
 			if (keyCode < 32) {
 				return true;
 			}

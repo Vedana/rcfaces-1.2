@@ -737,13 +737,13 @@ var __statics = {
 	
 		var styleSheet=childWindow.document.styleSheets[0];
 
-/* C'est fait par le CSS propriétaire de IE  !
+/* C'est fait par le CSS propriétaire de IE  ! a voir dans I8 et +*/
 		if (f_core.IsInternetExplorer()) {
-		//	styleSheet.addRule("SPAN.f_accessKey", "text-decoration: underline");	
+			styleSheet.addRule(".f_accessKey", "text-decoration: underline");	
 			return;
 		}
-*/	
-		if (f_core.IsGecko()) {
+	
+		if (f_core.IsGecko() || f_core.IsWebkit()) { 
 			try {
 				styleSheet.insertRule(".f_accessKey { text-decoration: underline }", styleSheet.cssRules.length);
 

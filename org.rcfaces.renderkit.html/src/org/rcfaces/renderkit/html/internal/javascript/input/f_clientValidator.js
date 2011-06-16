@@ -220,17 +220,14 @@ var __statics = {
 		}
 				
 		f_core.Debug(f_clientValidator, "_OnKeyPress: keyCode="+keyCode+" charCode="+charCode+" shift="+jsEvent.shift+" ctrl="+jsEvent.ctrl+" alt="+jsEvent.alt+" keyChar="+keyChar+"("+((keyChar.length>0)?keyChar.charCodeAt(0):"")+")");
-	
-		if (f_core.IsInternetExplorer()) {
-			if (keyCode < 32) {
-				return true;
-			}
-		} else if (f_core.IsGecko()) {
+		if (f_core.IsGecko()) {
 			if (keyCode>0 || jsEvent.ctrlKey) {
 				return true;
 			}
 			keyCode=charCode;
-		}
+		} else if (keyCode < 32) { // fonctionement IE et Webkit
+			return true;
+		} 
 		
 		validator.f_setInputValue(this._input.value);
 		
@@ -286,14 +283,15 @@ var __statics = {
 			return true;
 		}
 	
-		if (f_core.IsGecko()) {
+		if (f_core.IsGecko() || f_core.IsWebkit()) {
 			var ch=String.fromCharCode(retCode);
 			
 			// initKeyEvent() : Un trou de sécurité ??? ! 
 			// C'était pourtant bien pratique !
 			// bref, comme d'ab ... on bidouille ...
 			// Fred : exact de la bidouille
-			if (f_core.IsGeckoDisableDispatchKeyEvent()) {
+			// JBM : et j'en rajoute !!
+			if (f_core.IsGeckoDisableDispatchKeyEvent() || f_core.IsWebkit()) { 
 				var input=component._input;
 				
 				var oldScrollTop=input.scrollTop;

@@ -1645,6 +1645,7 @@
 				<required-class name="fa_items" />
 				<required-class name="fa_selectionManager" />
 				<required-class name="f_core" />
+				<required-class name="f_dateFormat"/>
 				
 				<required-style name="f_scheduler.css" />
 			</class>
