@@ -1169,24 +1169,25 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
 	}
 
-	public int getRows() {
-		return getRows(null);
+	public String getVar() {
+		return getVar(null);
 	}
 
-	public int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	public String getVar(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.VAR, facesContext);
 	}
 
-	public void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
+	public void setVar(String var) {
+		engine.setProperty(Properties.VAR, var);
+		this.var=var;
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * Returns <code>true</code> if the attribute "var" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
+	public boolean isVarSetted() {
+		return engine.isPropertySetted(Properties.VAR);
 	}
 
 	public int getFirst() {
@@ -1209,25 +1210,24 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.FIRST);
 	}
 
-	public String getVar() {
-		return getVar(null);
+	public int getRows() {
+		return getRows(null);
 	}
 
-	public String getVar(javax.faces.context.FacesContext facesContext) {
-		return engine.getStringProperty(Properties.VAR, facesContext);
+	public int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
 	}
 
-	public void setVar(String var) {
-		engine.setProperty(Properties.VAR, var);
-		this.var=var;
+	public void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "var" is set.
+	 * Returns <code>true</code> if the attribute "rows" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isVarSetted() {
-		return engine.isPropertySetted(Properties.VAR);
+	public boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	protected Set getCameliaFields() {

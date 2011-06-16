@@ -229,7 +229,7 @@ A boolean value indicating wether the vertical scroll is shown.
 	</component>
 	<component>
 		<description><![CDATA[
-<p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
+<p>The combo Component is equivalent to the standard HTML tag <SELECT SIZE=1><option>option 1</option> </SELECT>.</p>
       <p>The combo Component has the following capabilities :
       <ul>
         <li>ISelectionEventCapability</li>
@@ -2158,7 +2158,7 @@ A boolean value indicating wether the value is not determinated.
       </ul>
       </p>
       
-       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">lineBreak</a> renderer is linked to the <a href="/jsdocs/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
+       <p>The default <a href="/apidocs/index.html?org/rcfaces/core/component/SuggestTextEntryComponent.html">suggestTextEntry</a> renderer is linked to the <a href="/jsdocs/index.html?f_suggestTextEntry.html" target="_blank">f_suggestTextEntry</a> javascript class. f_suggestTextEntry extends f_textEntry, fa_filterProperties, fa_commands</p>
       
       <p> Table of component style classes: </p>
 		<table border="1" cellpadding="3" cellspacing="0" width="100%">
