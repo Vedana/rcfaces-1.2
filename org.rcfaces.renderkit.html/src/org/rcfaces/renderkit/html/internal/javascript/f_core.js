@@ -3354,9 +3354,9 @@ var f_core = {
 		case f_core.FIREFOX_3_6:
 			return (!version || version==f_core.FIREFOX_3_6);
 				
-		case (!version || version==f_core.FIREFOX_3_5):
-			return true;
-			
+		case f_core.FIREFOX_3_5:
+		    return (!version || version==f_core.FIREFOX_3_5);
+		    
 		case f_core.GECKO:
 			return true;
 		}
