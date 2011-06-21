@@ -351,19 +351,21 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 .listSortedComponents();
 
         DataModel dataModel = componentsGridComponent.getDataModelValue();
-
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent(componentsGridComponent);
-        }
+        
+        IComponentRefModel componentRefModel = (IComponentRefModel) 
+    	getDataModelAdapter(IComponentRefModel.class, dataModel);
+    
+	    if (componentRefModel != null) {
+	    	componentRefModel.setComponent((UIComponent) componentsGridComponent);
+	    }
 
         boolean filtred = false;
 
         IFilterProperties filtersMap = gridRenderContext.getFiltersMap();
+        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
-
+            if (filtredDataModel != null) {
+     
                 filtredDataModel.setFilter(filtersMap);
                 gridRenderContext.updateRowCount();
 
@@ -374,15 +376,14 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 gridRenderContext.updateRowCount();
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
-
+        } else if (filtredDataModel != null) {
+           
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             gridRenderContext.updateRowCount();
 
             filtred = true;
         }
-
+        ISortedDataModel sortedDataModel = (ISortedDataModel) getDataModelAdapter(ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
 
             if (NOT_SUPPORTED_SERVER_SORT) {
@@ -390,7 +391,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                         "Can not sort dataModel in server side !");
             }
 
-            if (dataModel instanceof ISortedDataModel) {
+            if (sortedDataModel != null) {
                 // On delegue au modele, le tri !
 
                 // Nous devons êctre OBLIGATOIREMENT en mode rowValueColumnId
@@ -399,7 +400,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                             "Can not sort dataModel without attribute rowValue attribute specified !");
                 }
 
-                ((ISortedDataModel) dataModel).setSortParameters(
+                sortedDataModel.setSortParameters(
                         componentsGridComponent, sortedComponents);
             } else {
                 throw new FacesException(
@@ -409,9 +410,9 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             // Apres le tri, on connait peu etre la taille
             gridRenderContext.updateRowCount();
 
-        } else if (dataModel instanceof ISortedDataModel) {
+        } else if (sortedDataModel != null) {
             // Reset des parametres de tri !
-            ((ISortedDataModel) dataModel).setSortParameters(
+        	sortedDataModel.setSortParameters(
                     componentsGridComponent, null);
         }
 

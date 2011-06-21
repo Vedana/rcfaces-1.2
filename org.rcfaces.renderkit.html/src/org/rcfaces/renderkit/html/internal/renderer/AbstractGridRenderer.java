@@ -337,7 +337,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         DataModel dataModel = dataGridComponent.getDataModelValue();
-        if (dataModel instanceof IFiltredModel) {
+        IFiltredModel filtredModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        if (filtredModel != null) {
             return true;
         }
 
@@ -430,25 +431,26 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         AbstractGridRenderContext tableContext = getGridRenderContext(htmlWriter
                 .getHtmlComponentRenderContext());
         DataModel dataModel = tableContext.getDataModel();
-
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent((UIComponent) gridComponent);
+        
+        IComponentRefModel componentRefModel = (IComponentRefModel) 
+        	getDataModelAdapter(IComponentRefModel.class, dataModel);
+        
+        if (componentRefModel != null) {
+        	componentRefModel.setComponent((UIComponent) gridComponent);
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
+        IFiltredModel filtredDataModel = (IFiltredModel)
+        	getDataModelAdapter(IFiltredModel.class, dataModel);
+        
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+            if (filtredDataModel != null) {
                 filtredDataModel.setFilter(filtersMap);
-
             } else {
                 dataModel = FilteredDataModel.filter(dataModel, filtersMap);
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
-
+        } else if (filtredDataModel != null) {
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
         }
 
@@ -456,9 +458,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         ISortedComponent sortedComponents[] = tableContext
                 .listSortedComponents();
+        ISortedDataModel sortedDataModel = (ISortedDataModel)
+        
+        	getDataModelAdapter(ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
-            if (dataModel instanceof ISortedDataModel) {
-                ((ISortedDataModel) dataModel).setSortParameters(
+            if (sortedDataModel != null) {
+            	sortedDataModel.setSortParameters(
                         (UIComponent) gridComponent, sortedComponents);
             } else {
                 // Il faut faire le tri à la main !
@@ -472,13 +477,12 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                     translatedRowIndex = sortTranslations[translatedRowIndex];
                 }
             }
-        } else {
-            if (dataModel instanceof ISortedDataModel) {
-                // Reset des parametres de tri !
-                ((ISortedDataModel) dataModel).setSortParameters(
-                        (UIComponent) gridComponent, null);
-            }
+        } else if (sortedDataModel != null) {
+	        // Reset des parametres de tri !
+	    	sortedDataModel.setSortParameters(
+	                (UIComponent) gridComponent, null);
         }
+        
 
         gridComponent.setRowIndex(translatedRowIndex);
         try {
@@ -660,8 +664,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttribute("v:sortManager", sortManager);
         }
 
-        Object dataModel = gridRenderContext.getDataModel();
-        if (dataModel instanceof IFiltredModel) {
+        DataModel dataModel = gridRenderContext.getDataModel();
+        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        if (filtredDataModel != null) {
             htmlWriter.writeAttribute("v:filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
@@ -1356,7 +1361,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         htmlWriter.endElement(IHtmlWriter.DIV);
     }
-
+    
     protected int getSortPadding() {
         return SORT_PADDING;
     }

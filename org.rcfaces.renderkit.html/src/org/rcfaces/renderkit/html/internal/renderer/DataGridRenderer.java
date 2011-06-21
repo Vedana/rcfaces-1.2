@@ -59,6 +59,7 @@ import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.lang.IAdaptable;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
@@ -334,15 +335,17 @@ public class DataGridRenderer extends AbstractGridRenderer {
         boolean filtred = false;
         int firstRowCount = tableContext.getRowCount();
 
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent((UIComponent) gridComponent);
+        IComponentRefModel componentRefModel = (IComponentRefModel) 
+        	getDataModelAdapter(IComponentRefModel.class, dataModel);
+        
+        if (componentRefModel != null) {
+        	componentRefModel.setComponent((UIComponent) gridComponent);
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
+        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+            if (filtredDataModel != null) {
 
                 filtredDataModel.setFilter(filtersMap);
                 tableContext.updateRowCount();
@@ -354,8 +357,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                 tableContext.updateRowCount();
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+        } else if (filtredDataModel != null) {
 
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             tableContext.updateRowCount();
@@ -380,8 +382,11 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         ISortedComponent sortedComponents[] = tableContext
                 .listSortedComponents();
+        ISortedDataModel sortedDataModel = (ISortedDataModel) getDataModelAdapter(ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
-            if (dataModel instanceof ISortedDataModel) {
+        	
+        
+            if (sortedDataModel != null) {
                 // On delegue au modele, le tri !
 
                 // Nous devons être OBLIGATOIREMENT en mode rowValueColumnId
@@ -390,7 +395,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
                             "Can not sort dataModel without attribute rowValueColumnId specified !");
                 }
 
-                ((ISortedDataModel) dataModel).setSortParameters(
+                sortedDataModel.setSortParameters(
                         (UIComponent) gridComponent, sortedComponents);
             } else {
                 // Il faut faire le tri à la main !
@@ -404,9 +409,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
             tableContext.updateRowCount();
         } else {
 
-            if (dataModel instanceof ISortedDataModel) {
+            if (sortedDataModel != null) {
                 // Reset des parametres de tri !
-                ((ISortedDataModel) dataModel).setSortParameters(
+            		sortedDataModel.setSortParameters(
                         (UIComponent) gridComponent, null);
             }
         }
