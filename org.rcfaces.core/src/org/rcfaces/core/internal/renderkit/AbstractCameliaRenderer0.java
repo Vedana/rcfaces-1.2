@@ -276,14 +276,14 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return ValuesTools.valueToString(value, component, facesContext);
     }
     
-	protected Object getDataModelAdapter (Class adapter, DataModel dataModel) {
+	protected Object getAdapter (Class adapter, Object object) {
     	
-    	if(dataModel instanceof IAdaptable) {
-    		 return ((IAdaptable) dataModel).getAdapter(adapter, this);
+    	if(object instanceof IAdaptable) {
+    		 return ((IAdaptable) object).getAdapter(adapter, this);
     	} 
     	
-    	if (adapter.isAssignableFrom(dataModel.getClass())){
-    		return dataModel;
+    	if (adapter.isAssignableFrom(object.getClass())){
+    		return object;
     	}
    
     	return null;
