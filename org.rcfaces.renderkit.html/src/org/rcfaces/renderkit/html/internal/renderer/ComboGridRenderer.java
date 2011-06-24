@@ -309,7 +309,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
         }
 
         DataModel dataModel = gridRenderContext.getDataModel();
-        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
         if (filtredDataModel != null) {
             htmlWriter.writeAttribute("v:filtred", true);
 

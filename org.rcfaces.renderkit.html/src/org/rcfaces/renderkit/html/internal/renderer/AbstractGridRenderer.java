@@ -337,7 +337,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         DataModel dataModel = dataGridComponent.getDataModelValue();
-        IFiltredModel filtredModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        IFiltredModel filtredModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
         if (filtredModel != null) {
             return true;
         }
@@ -433,7 +433,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         DataModel dataModel = tableContext.getDataModel();
         
         IComponentRefModel componentRefModel = (IComponentRefModel) 
-        	getDataModelAdapter(IComponentRefModel.class, dataModel);
+        	getAdapter(IComponentRefModel.class, dataModel);
         
         if (componentRefModel != null) {
         	componentRefModel.setComponent((UIComponent) gridComponent);
@@ -441,7 +441,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
         IFiltredModel filtredDataModel = (IFiltredModel)
-        	getDataModelAdapter(IFiltredModel.class, dataModel);
+        	getAdapter(IFiltredModel.class, dataModel);
         
         if (filtersMap != null) {
             if (filtredDataModel != null) {
@@ -460,7 +460,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 .listSortedComponents();
         ISortedDataModel sortedDataModel = (ISortedDataModel)
         
-        	getDataModelAdapter(ISortedDataModel.class, dataModel);
+        	getAdapter(ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
             if (sortedDataModel != null) {
             	sortedDataModel.setSortParameters(
@@ -665,7 +665,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         DataModel dataModel = gridRenderContext.getDataModel();
-        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
         if (filtredDataModel != null) {
             htmlWriter.writeAttribute("v:filtred", true);
 

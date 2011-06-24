@@ -234,7 +234,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         DataModel dataModel = gridRenderContext.getDataModel();
-        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
         if (filtredDataModel != null) {
             htmlWriter.writeAttribute("v:filtred", true);
 
@@ -301,14 +301,14 @@ public class KeyEntryRenderer extends DataGridRenderer {
         DataModel dataModel = comboGridComponent.getDataModelValue();
 
         IComponentRefModel componentRefModel = (IComponentRefModel) 
-    		getDataModelAdapter(IComponentRefModel.class, dataModel);
+    		getAdapter(IComponentRefModel.class, dataModel);
     
 	    if (componentRefModel != null) {
 	    	componentRefModel.setComponent((UIComponent) comboGridComponent);
 	    }
         
         IFiltredModel filtredDataModel = (IFiltredModel) 
-        	getDataModelAdapter(IFiltredModel.class, dataModel);
+        	getAdapter(IFiltredModel.class, dataModel);
         
         if (filtredDataModel == null) {
             if (true) {
@@ -637,7 +637,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
         IFiltredModel filtredDataModel = (IFiltredModel) 
-        	getDataModelAdapter(IFiltredModel.class, dataModel);
+        	getAdapter(IFiltredModel.class, dataModel);
         
         if (filtersMap != null) {
             if (filtredDataModel != null) {

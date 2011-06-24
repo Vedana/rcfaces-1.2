@@ -336,14 +336,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
         int firstRowCount = tableContext.getRowCount();
 
         IComponentRefModel componentRefModel = (IComponentRefModel) 
-        	getDataModelAdapter(IComponentRefModel.class, dataModel);
+        	getAdapter(IComponentRefModel.class, dataModel);
         
         if (componentRefModel != null) {
         	componentRefModel.setComponent((UIComponent) gridComponent);
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
-        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
         if (filtersMap != null) {
             if (filtredDataModel != null) {
 
@@ -382,7 +382,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         ISortedComponent sortedComponents[] = tableContext
                 .listSortedComponents();
-        ISortedDataModel sortedDataModel = (ISortedDataModel) getDataModelAdapter(ISortedDataModel.class, dataModel);
+        ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
         	
         

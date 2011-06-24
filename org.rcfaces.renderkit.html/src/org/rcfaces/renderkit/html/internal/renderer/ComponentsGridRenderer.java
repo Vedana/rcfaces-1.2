@@ -353,7 +353,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         DataModel dataModel = componentsGridComponent.getDataModelValue();
         
         IComponentRefModel componentRefModel = (IComponentRefModel) 
-    	getDataModelAdapter(IComponentRefModel.class, dataModel);
+    	getAdapter(IComponentRefModel.class, dataModel);
     
 	    if (componentRefModel != null) {
 	    	componentRefModel.setComponent((UIComponent) componentsGridComponent);
@@ -362,7 +362,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
         boolean filtred = false;
 
         IFilterProperties filtersMap = gridRenderContext.getFiltersMap();
-        IFiltredModel filtredDataModel = (IFiltredModel) getDataModelAdapter(IFiltredModel.class, dataModel);
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
         if (filtersMap != null) {
             if (filtredDataModel != null) {
      
@@ -383,7 +383,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             filtred = true;
         }
-        ISortedDataModel sortedDataModel = (ISortedDataModel) getDataModelAdapter(ISortedDataModel.class, dataModel);
+        ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
 
             if (NOT_SUPPORTED_SERVER_SORT) {
