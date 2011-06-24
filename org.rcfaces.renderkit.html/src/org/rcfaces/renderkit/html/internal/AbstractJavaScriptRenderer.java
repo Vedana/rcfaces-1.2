@@ -255,7 +255,7 @@ public abstract class AbstractJavaScriptRenderer extends
         IJavaScriptWriter js = htmlRenderContext.getJavaScriptRenderContext()
                 .removeJavaScriptWriter(writer);
         if (js != null) {
-            // Le Javascript writer a �t� referm�, on ignore dans ce cas ...
+            // Le Javascript writer a été refermé, on ignore dans ce cas ...
 
             js = null;
         }

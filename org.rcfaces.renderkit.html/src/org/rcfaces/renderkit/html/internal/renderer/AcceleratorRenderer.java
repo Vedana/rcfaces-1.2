@@ -24,199 +24,210 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    protected void encodeEnd(IComponentWriter writer) throws WriterException {
-        IComponentRenderContext componentRenderContext = writer
-                .getComponentRenderContext();
+	protected void encodeEnd(IComponentWriter writer) throws WriterException {
+		IComponentRenderContext componentRenderContext = writer
+				.getComponentRenderContext();
 
-        FacesContext facesContext = componentRenderContext.getFacesContext();
+		FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        AcceleratorComponent acceleratorComponent = (AcceleratorComponent) componentRenderContext
-                .getComponent();
+		AcceleratorComponent acceleratorComponent = (AcceleratorComponent) componentRenderContext
+				.getComponent();
 
-        String keyBinding = acceleratorComponent.getKeyBinding(facesContext);
-        if (keyBinding == null || keyBinding.length() == 0) {
-            return;
-        }
+		String keyBinding = acceleratorComponent.getKeyBinding(facesContext);
+		if (keyBinding == null || keyBinding.length() == 0) {
+			return;
+		}
 
-        IHtmlWriter htmlWriter = (IHtmlWriter) writer;
+		IHtmlWriter htmlWriter = (IHtmlWriter) writer;
 
-        IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
-                .getHtmlComponentRenderContext();
-        if (htmlComponentRenderContext.getHtmlRenderContext()
-                .getJavaScriptRenderContext().isCollectorMode() == false) {
+		IHtmlComponentRenderContext htmlComponentRenderContext = htmlWriter
+				.getHtmlComponentRenderContext();
+		if (htmlComponentRenderContext.getHtmlRenderContext()
+				.getJavaScriptRenderContext().isCollectorMode() == false) {
 
-            htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
-            writeHtmlAttributes(htmlWriter);
-            writeJavaScriptAttributes(htmlWriter);
+			htmlWriter.startElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+			writeHtmlAttributes(htmlWriter);
+			writeJavaScriptAttributes(htmlWriter);
 
-            String forComponent = acceleratorComponent.getFor(facesContext);
-            if (forComponent != null) {
-                htmlWriter.writeAttribute("v:for", forComponent);
-            }
+			String forComponent = acceleratorComponent.getFor(facesContext);
+			if (forComponent != null) {
+				htmlWriter.writeAttribute("v:for", forComponent);
+			}
 
-            String forItemValue = acceleratorComponent
-                    .getForItemValue(facesContext);
-            if (forItemValue != null) {
-                htmlWriter.writeAttribute("v:forItemValue", forItemValue);
-            }
+			String forItemValue = acceleratorComponent
+					.getForItemValue(facesContext);
+			if (forItemValue != null) {
+				htmlWriter.writeAttribute("v:forItemValue", forItemValue);
+			}
 
-            KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
+			KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
 
-            if (state.character > 0) {
-                htmlWriter.writeAttribute("v:character", String
-                        .valueOf(state.character));
-            }
+			if (state.character > 0) {
+				htmlWriter.writeAttribute("v:character",
+						String.valueOf(state.character));
+			}
 
-            if (state.virtualKey != null) {
-                htmlWriter.writeAttribute("v:virtualKey", state.virtualKey
-                        .intValue());
-            }
+			if (state.virtualKey != null) {
+				htmlWriter.writeAttribute("v:virtualKey",
+						state.virtualKey.intValue());
+			}
 
-            if (state.keyFlags > 0) {
-                htmlWriter.writeAttribute("v:keyFlags", state.keyFlags);
-            }
+			if (state.keyFlags > 0) {
+				htmlWriter.writeAttribute("v:keyFlags", state.keyFlags);
+			}
 
-            if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
-                htmlWriter.writeAttribute("v:ignoreEditableComponent", true);
-            }
+			if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
+				htmlWriter.writeAttribute("v:ignoreEditableComponent", true);
+			}
 
-            htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
+			htmlWriter.endElement(AbstractJavaScriptRenderer.LAZY_INIT_TAG);
 
-            declareLazyJavaScriptRenderer(htmlWriter);
-            htmlWriter.getJavaScriptEnableMode().enableOnInit();
+			declareLazyJavaScriptRenderer(htmlWriter);
+			htmlWriter.getJavaScriptEnableMode().enableOnInit();
 
-        } else {
-            htmlWriter.enableJavaScript();
-        }
+		} else {
+			htmlWriter.enableJavaScript();
+		}
 
-        super.encodeEnd(htmlWriter);
-    }
+		super.encodeEnd(htmlWriter);
+	}
 
-    protected void encodeJavaScript(IJavaScriptWriter jsWriter)
-            throws WriterException {
-        super.encodeJavaScript(jsWriter);
+	@Override
+	protected boolean encodeEventsInAttributes(IHtmlWriter writer) {
+		if (writer.getHtmlComponentRenderContext().getHtmlRenderContext()
+				.getJavaScriptRenderContext().isCollectorMode() == false) {
+			return true;
+		}
 
-        if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
-            return;
-        }
+		return false;
+	}
 
-        FacesContext facesContext = jsWriter.getFacesContext();
+	protected void encodeJavaScript(IJavaScriptWriter jsWriter)
+			throws WriterException {
+		super.encodeJavaScript(jsWriter);
 
-        IComponentRenderContext componentRenderContext = jsWriter
-                .getComponentRenderContext();
+		if (jsWriter.getJavaScriptRenderContext().isCollectorMode() == false) {
+			return;
+		}
 
-        AcceleratorComponent acceleratorComponent = (AcceleratorComponent) componentRenderContext
-                .getComponent();
+		FacesContext facesContext = jsWriter.getFacesContext();
 
-        String keyBinding = acceleratorComponent.getKeyBinding(facesContext);
+		IComponentRenderContext componentRenderContext = jsWriter
+				.getComponentRenderContext();
 
-        jsWriter.setIgnoreComponentInitialization();
+		AcceleratorComponent acceleratorComponent = (AcceleratorComponent) componentRenderContext
+				.getComponent();
 
-        String varName = jsWriter.getJavaScriptRenderContext()
-                .allocateVarName();
-        jsWriter.setComponentVarName(varName);
+		String keyBinding = acceleratorComponent.getKeyBinding(facesContext);
 
-        jsWriter.write(varName).write('=').writeCall(getJavaScriptClassName(),
-                "f_newInstance");
+		jsWriter.setIgnoreComponentInitialization();
 
-        int param = 0;
+		String varName = jsWriter.getJavaScriptRenderContext()
+				.allocateVarName();
+		jsWriter.setComponentVarName(varName);
 
-        KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
-        if (state.character > 0) {
-            jsWriter.writeString(String.valueOf(state.character));
-        } else {
-            jsWriter.writeNull();
-        }
+		jsWriter.write(varName).write('=')
+				.writeCall(getJavaScriptClassName(), "f_newInstance");
 
-        if (state.virtualKey != null) {
-            for (; param > 0; param--) {
-                jsWriter.write(',').writeNull();
-            }
-            jsWriter.write(',').writeInt(state.virtualKey.intValue());
+		int param = 0;
 
-        } else {
-            param++;
-        }
+		KeyTools.State state = KeyTools.parseKeyBinding(keyBinding);
+		if (state.character > 0) {
+			jsWriter.writeString(String.valueOf(state.character));
+		} else {
+			jsWriter.writeNull();
+		}
 
-        if (state.keyFlags > 0) {
-            for (; param > 0; param--) {
-                jsWriter.write(',').writeNull();
-            }
-            jsWriter.write(',').writeInt(state.keyFlags);
+		if (state.virtualKey != null) {
+			for (; param > 0; param--) {
+				jsWriter.write(',').writeNull();
+			}
+			jsWriter.write(",[").writeInt(state.virtualKey.intValue())
+					.write(']');
 
-        } else {
-            param++;
-        }
+		} else {
+			param++;
+		}
 
-        String forComponent = acceleratorComponent.getFor(facesContext);
-        if (forComponent != null) {
-            for (; param > 0; param--) {
-                jsWriter.write(',').writeNull();
-            }
+		if (state.keyFlags > 0) {
+			for (; param > 0; param--) {
+				jsWriter.write(',').writeNull();
+			}
+			jsWriter.write(',').writeInt(state.keyFlags);
 
-            // Il faut calculer le for, car l'accelerator n'est plus rattaché à
-            // un composant DOM !
+		} else {
+			param++;
+		}
 
-            IRenderContext renderContext = componentRenderContext
-                    .getRenderContext();
+		String forComponent = acceleratorComponent.getFor(facesContext);
+		if (forComponent != null) {
+			for (; param > 0; param--) {
+				jsWriter.write(',').writeNull();
+			}
 
-            String forComponentClientId = renderContext
-                    .computeBrotherComponentClientId(acceleratorComponent,
-                            forComponent);
+			// Il faut calculer le for, car l'accelerator n'est plus rattaché à
+			// un composant DOM !
 
-            jsWriter.write(',').writeString(forComponentClientId);
+			IRenderContext renderContext = componentRenderContext
+					.getRenderContext();
 
-        } else {
-            param++;
-        }
+			String forComponentClientId = renderContext
+					.computeBrotherComponentClientId(acceleratorComponent,
+							forComponent);
 
-        String forItemValue = acceleratorComponent
-                .getForItemValue(facesContext);
-        if (forItemValue != null) {
-            for (; param > 0; param--) {
-                jsWriter.write(',').writeNull();
-            }
-            jsWriter.write(',').writeString(forItemValue);
+			jsWriter.write(',').writeString(forComponentClientId);
 
-        } else {
-            param++;
-        }
+		} else {
+			param++;
+		}
 
-        if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
-            for (; param > 0; param--) {
-                jsWriter.write(',').writeNull();
-            }
-            jsWriter.write(',').writeBoolean(true);
+		String forItemValue = acceleratorComponent
+				.getForItemValue(facesContext);
+		if (forItemValue != null) {
+			for (; param > 0; param--) {
+				jsWriter.write(',').writeNull();
+			}
+			jsWriter.write(',').writeString(forItemValue);
 
-        } else {
-            param++;
-        }
+		} else {
+			param++;
+		}
 
-        jsWriter.writeln(");");
-    }
+		if (acceleratorComponent.isIgnoreEditableComponent(facesContext)) {
+			for (; param > 0; param--) {
+				jsWriter.write(',').writeNull();
+			}
+			jsWriter.write(',').writeBoolean(true);
 
-    /*
-     * protected IWriter writeIdAttribute(IWriter htmlWriter) throws
-     * WriterException { Pas ca car il nous faut un ID ! (en cas de premier
-     * composant a initialiser ! if
-     * (ComponentTools.isAnonymousComponentId(htmlWriter
-     * .getComponentRenderContext().getComponentId())) { return htmlWriter; }
-     * 
-     * return super.writeIdAttribute(htmlWriter); }
-     */
+		} else {
+			param++;
+		}
 
-    protected String getJavaScriptClassName() {
-        return JavaScriptClasses.ACCELERATOR;
-    }
+		jsWriter.writeln(");");
+	}
 
-    protected String getActionEventName(INameSpace nameSpace) {
-        return nameSpace.getKeyPressEventName();
-    }
+	/*
+	 * protected IWriter writeIdAttribute(IWriter htmlWriter) throws
+	 * WriterException { Pas ca car il nous faut un ID ! (en cas de premier
+	 * composant a initialiser ! if
+	 * (ComponentTools.isAnonymousComponentId(htmlWriter
+	 * .getComponentRenderContext().getComponentId())) { return htmlWriter; }
+	 * 
+	 * return super.writeIdAttribute(htmlWriter); }
+	 */
 
-    protected boolean sendCompleteComponent(
-            IHtmlComponentRenderContext htmlComponentContext) {
-        return false;
-    }
+	protected String getJavaScriptClassName() {
+		return JavaScriptClasses.ACCELERATOR;
+	}
+
+	protected String getActionEventName(INameSpace nameSpace) {
+		return nameSpace.getKeyPressEventName();
+	}
+
+	protected boolean sendCompleteComponent(
+			IHtmlComponentRenderContext htmlComponentContext) {
+		return false;
+	}
 }

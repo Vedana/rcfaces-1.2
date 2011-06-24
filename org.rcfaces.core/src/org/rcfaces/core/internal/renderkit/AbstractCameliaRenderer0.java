@@ -12,6 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
+import javax.faces.model.DataModel;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 
@@ -21,6 +22,7 @@ import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.lang.IAdaptable;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -272,6 +274,19 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     protected String convertValue(FacesContext facesContext,
             UIComponent component, Object value) {
         return ValuesTools.valueToString(value, component, facesContext);
+    }
+    
+	protected Object getAdapter (Class adapter, Object object) {
+    	
+    	if(object instanceof IAdaptable) {
+    		 return ((IAdaptable) object).getAdapter(adapter, this);
+    	} 
+    	
+    	if (adapter.isAssignableFrom(object.getClass())){
+    		return object;
+    	}
+   
+    	return null;
     }
 
     public Object getConvertedValue(FacesContext context,
