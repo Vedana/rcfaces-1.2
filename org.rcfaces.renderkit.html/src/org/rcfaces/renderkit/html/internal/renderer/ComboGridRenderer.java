@@ -10,6 +10,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
+import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -307,8 +308,9 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             htmlWriter.writeAttribute("v:headerVisible", true);
         }
 
-        Object dataModel = gridRenderContext.getDataModel();
-        if (dataModel instanceof IFiltredModel) {
+        DataModel dataModel = gridRenderContext.getDataModel();
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
+        if (filtredDataModel != null) {
             htmlWriter.writeAttribute("v:filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();

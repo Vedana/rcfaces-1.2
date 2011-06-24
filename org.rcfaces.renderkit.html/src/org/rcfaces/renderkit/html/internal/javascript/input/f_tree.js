@@ -173,11 +173,7 @@ var __statics = {
 		if (tree.f_getEventLocked(evt)) {
 			return false;
 		}
-
-		if (!tree._focus) {
-			tree.f_setFocus();
-		}
-		
+	
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
 		
 		tree.f_moveCursor(li, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
@@ -206,6 +202,11 @@ var __statics = {
 	_DivNode_mouseUp: function(evt) {
 		var li=this._node;
 		var tree=li._tree;
+		
+		if(tree._cursor && tree._cursor != li){
+			li=tree._cursor;
+		}
+		
 		if (!evt) {
 			evt=f_core.GetJsEvent(this);
 		}
@@ -213,6 +214,10 @@ var __statics = {
 			return false;
 		}
 		
+		if (!tree._focus) {
+			tree.f_setFocus();
+		}
+	
 		var selection=fa_selectionManager.ComputeMouseSelection(evt);
 		
 		tree.f_moveCursor(li, true, evt, selection, fa_selectionManager.END_PHASE);
