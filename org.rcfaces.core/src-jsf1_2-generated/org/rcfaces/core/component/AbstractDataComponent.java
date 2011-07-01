@@ -979,7 +979,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 	 * See {@link #isWheelSelection() isWheelSelection()} for more details
 	 */
 	public boolean isWheelSelection(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.WHEEL_SELECTION, false, facesContext);
+		return engine.getBoolProperty(Properties.WHEEL_SELECTION, true, facesContext);
 	}
 
 	/**
