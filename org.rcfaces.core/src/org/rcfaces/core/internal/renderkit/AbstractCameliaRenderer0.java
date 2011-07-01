@@ -12,7 +12,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
-import javax.faces.model.DataModel;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 
@@ -276,10 +275,19 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
         return ValuesTools.valueToString(value, component, facesContext);
     }
     
-	protected Object getAdapter (Class adapter, Object object) {
+    
+    protected Object getAdapter (Class adapter, Object object){
+    	return getAdapter(adapter, object, null);
+    }
+    
+	protected Object getAdapter (Class adapter, Object object, Object params) {
     	
+		if(params == null){
+			params = this;
+		}
+		
     	if(object instanceof IAdaptable) {
-    		 return ((IAdaptable) object).getAdapter(adapter, this);
+    		 return ((IAdaptable) object).getAdapter(adapter, params);
     	} 
     	
     	if (adapter.isAssignableFrom(object.getClass())){

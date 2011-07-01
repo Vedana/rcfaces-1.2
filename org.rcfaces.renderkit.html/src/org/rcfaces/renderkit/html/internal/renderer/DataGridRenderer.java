@@ -382,7 +382,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
         ISortedComponent sortedComponents[] = tableContext
                 .listSortedComponents();
-        ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(ISortedDataModel.class, dataModel);
+        ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(ISortedDataModel.class, dataModel, sortedComponents);
         if (sortedComponents != null && sortedComponents.length > 0) {
         	
         
