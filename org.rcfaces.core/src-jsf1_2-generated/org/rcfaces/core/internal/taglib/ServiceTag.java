@@ -21,6 +21,7 @@ public class ServiceTag extends CameliaTag implements Tag {
 	private ValueExpression propertyChangeListeners;
 	private ValueExpression serviceEventListeners;
 	private ValueExpression filterProperties;
+	private ValueExpression errorListeners;
 	private ValueExpression componentLocale;
 	private ValueExpression componentTimeZone;
 	private ValueExpression serviceId;
@@ -39,6 +40,10 @@ public class ServiceTag extends CameliaTag implements Tag {
 
 	public final void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
+	}
+
+	public final void setErrorListener(ValueExpression errorListeners) {
+		this.errorListeners = errorListeners;
 	}
 
 	public final void setComponentLocale(ValueExpression componentLocale) {
@@ -97,6 +102,10 @@ public class ServiceTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (errorListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.ERROR_LISTENER_TYPE, errorListeners);
+		}
+
 		if (componentLocale != null) {
 			if (componentLocale.isLiteralText()==false) {
 				component.setValueExpression(Properties.COMPONENT_LOCALE, componentLocale);
@@ -138,6 +147,7 @@ public class ServiceTag extends CameliaTag implements Tag {
 		propertyChangeListeners = null;
 		serviceEventListeners = null;
 		filterProperties = null;
+		errorListeners = null;
 		componentLocale = null;
 		componentTimeZone = null;
 		serviceId = null;
