@@ -1,11 +1,14 @@
+GridTools:
+Ajout de la Classe GridTools et de la fonction HasSortedServerListener permettant de contrÃ´ler si un tableau doit Ãªtre trier sur le serveur
+
 AbstractGridRendererContext:
-Correction de la colonne rendered=false qui était visible.  (visible=false fonctionnait par contre !)
+Correction de la colonne rendered=false qui ï¿½tait visible.  (visible=false fonctionnait par contre !)
 
 JavaScriptRenderContext:
 Correction de l'initialisation des composants <v:init>  (comme Accelerator)
 
 AcceleratorRenderer:
-Correction de la génération du parametrage des touches de l'accelerateur
+Correction de la gï¿½nï¿½ration du parametrage des touches de l'accelerateur
 
 f_core:
 La fonction OpenWindow devient public 
