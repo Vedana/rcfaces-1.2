@@ -29,6 +29,8 @@ import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.ICriteriaContainer;
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IDroppableCapability;
@@ -72,6 +74,7 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.lang.IContentFamily;
+import org.rcfaces.core.model.ICriteriaConfig;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
@@ -90,7 +93,9 @@ public abstract class AbstractGridRenderContext {
 	private static final Log LOG = LogFactory
 			.getLog(AbstractGridRenderContext.class);
 
-	private static final ISortedComponent SORTED_COMPONENT_EMPTY_ARRAY[] = new ISortedComponent[0];
+	private static final ISortedComponent[] SORTED_COMPONENT_EMPTY_ARRAY = new ISortedComponent[0];
+
+	private static final ICriteriaConfig[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ICriteriaConfig[0];
 
 	public static final int SERVER_HIDDEN = 1;
 
@@ -139,6 +144,8 @@ public abstract class AbstractGridRenderContext {
 	private boolean hasTitleColumnImages;
 
 	private ISortedComponent sortedComponents[];
+
+	private ICriteriaConfig criteriaConfigs[];
 
 	private int rows;
 
@@ -227,12 +234,13 @@ public abstract class AbstractGridRenderContext {
 	private AbstractGridRenderContext(IProcessContext processContext,
 			IScriptRenderContext scriptRenderContext,
 			IGridComponent gridComponent, ISortedComponent sortedComponents[],
-			boolean checkTitleImages) {
+			boolean checkTitleImages, ICriteriaConfig[] criteriaConfigs) {
 		this.processContext = processContext;
 		this.scriptRenderContext = scriptRenderContext;
 
 		this.gridComponent = gridComponent;
 		this.sortedComponents = sortedComponents;
+		this.criteriaConfigs = criteriaConfigs;
 
 		if (gridComponent instanceof ISizeCapability) {
 			computeGridSize((ISizeCapability) gridComponent);
@@ -840,7 +848,8 @@ public abstract class AbstractGridRenderContext {
 				componentRenderContext.getRenderContext()
 						.getScriptRenderContext(),
 				(IGridComponent) componentRenderContext.getComponent(),
-				computeSortedComponents(componentRenderContext), true);
+				computeSortedComponents(componentRenderContext), true,
+				listCriteriaContainers(componentRenderContext));
 
 		designerMode = componentRenderContext.getRenderContext()
 				.getProcessContext().isDesignerMode();
@@ -851,6 +860,17 @@ public abstract class AbstractGridRenderContext {
 			filtersMap = ((IFilterCapability) gridComponent)
 					.getFilterProperties();
 		}
+	}
+
+	private static ICriteriaConfig[] listCriteriaContainers(
+			IHtmlComponentRenderContext componentRenderContext) {
+		UIComponent component = componentRenderContext.getComponent();
+
+		if (component instanceof ICriteriaManagerCapability) {
+			return null; //((ICriteriaManagerCapability) component).listCriteriaContainers();
+		}
+
+		return CRITERIA_CONTAINER_EMPTY_ARRAY;
 	}
 
 	private static ISortedComponent[] computeSortedComponents(
@@ -870,9 +890,10 @@ public abstract class AbstractGridRenderContext {
 			IScriptRenderContext scriptRenderContext,
 			IGridComponent gridComponent, int rowIndex, int forcedRows,
 			ISortedComponent sortedComponents[], String filterExpression,
-			String showAdditionals, String hideAdditionals) {
+			String showAdditionals, String hideAdditionals,
+			ICriteriaConfig[] criteriaContainers) {
 		this(processContext, scriptRenderContext, gridComponent,
-				sortedComponents, false);
+				sortedComponents, false, criteriaContainers);
 
 		this.first = rowIndex;
 		this.forcedRows = forcedRows;
