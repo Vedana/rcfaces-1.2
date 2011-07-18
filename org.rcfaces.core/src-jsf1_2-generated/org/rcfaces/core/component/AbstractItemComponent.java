@@ -171,16 +171,6 @@ public abstract class AbstractItemComponent extends CameliaItemComponent impleme
 		
 	}
 
-	public void setValueExpression(String name, ValueExpression binding) {
-
-
-			if(name.equals(Properties.DISABLED)){
-				name = Properties.ITEM_DISABLED;
-			}
-			super.setValueExpression(name, binding);
-			
-	}
-
 	/**
 	 * Returns <code>true</code> if the attribute "disabled" is set.
 	 * @return <code>true</code> if the attribute is set.

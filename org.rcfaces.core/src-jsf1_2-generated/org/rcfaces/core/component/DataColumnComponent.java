@@ -1,50 +1,59 @@
 package org.rcfaces.core.component;
 
-import org.rcfaces.core.component.capability.IVisibilityCapability;
-import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
+import org.rcfaces.core.component.capability.ICriteriaValuesCapability;
 import org.rcfaces.core.internal.component.Properties;
-import org.rcfaces.core.component.capability.IStatesImageCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
-import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
-import org.rcfaces.core.component.capability.IImageSizeCapability;
-import org.apache.commons.logging.LogFactory;
-import org.rcfaces.core.component.capability.IResizableCapability;
 import javax.faces.component.ValueHolder;
+import org.rcfaces.core.component.capability.ICriteriaEventCapability;
 import javax.faces.context.FacesContext;
-import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
+import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
-import org.apache.commons.logging.Log;
-import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
-import java.util.Set;
-import org.rcfaces.core.component.capability.IAutoFilterCapability;
-import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
+import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
-import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
-import org.rcfaces.core.component.capability.ICellImageCapability;
-import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
-import org.rcfaces.core.component.familly.IContentAccessors;
-import org.rcfaces.core.component.capability.ISortComparatorCapability;
-import java.lang.String;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
-import org.rcfaces.core.component.capability.IHiddenModeCapability;
-import org.rcfaces.core.internal.tools.ImageAccessorTools;
-import org.rcfaces.core.internal.converter.AlignmentNormalizer;
-import javax.faces.convert.Converter;
-import org.rcfaces.core.component.capability.ITextDirectionCapability;
+import org.rcfaces.core.component.capability.ICriteriaCardinalityCapability;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
-import javax.el.ValueExpression;
-import org.rcfaces.core.component.capability.ISortEventCapability;
-import java.util.HashSet;
-import org.rcfaces.core.component.capability.IWidthRangeCapability;
+import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
+import org.rcfaces.core.internal.converter.HiddenModeConverter;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.capability.IVisibilityCapability;
+import org.rcfaces.core.component.capability.ICriteriaContainer;
+import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
+import org.rcfaces.core.component.capability.IStatesImageCapability;
+import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
+import org.apache.commons.logging.LogFactory;
+import org.rcfaces.core.component.capability.IImageSizeCapability;
+import org.rcfaces.core.component.capability.IResizableCapability;
+import org.rcfaces.core.item.CriteriaItem;
+import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
+import org.apache.commons.logging.Log;
+import java.util.Set;
+import org.rcfaces.core.component.capability.IAutoFilterCapability;
+import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
+import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.ICellImageCapability;
+import org.rcfaces.core.component.familly.IContentAccessors;
+import java.lang.String;
+import org.rcfaces.core.component.capability.ISortComparatorCapability;
+import org.rcfaces.core.component.capability.IHiddenModeCapability;
+import org.rcfaces.core.internal.converter.AlignmentNormalizer;
+import org.rcfaces.core.internal.tools.ImageAccessorTools;
+import org.rcfaces.core.model.ICriteriaConfig;
+import javax.faces.convert.Converter;
+import org.rcfaces.core.component.capability.ISortEventCapability;
+import javax.el.ValueExpression;
+import java.util.HashSet;
+import org.rcfaces.core.component.capability.IWidthRangeCapability;
 import org.rcfaces.core.component.capability.ITextCapability;
 
 /**
@@ -76,9 +85,13 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	IDoubleClickEventCapability,
 	IUserEventCapability,
 	IInitEventCapability,
+	ICriteriaEventCapability,
+	ICriteriaCardinalityCapability,
+	ICriteriaValuesCapability,
 	IImageAccessorsCapability,
 	ValueHolder,
 	ICellStyleClassSettings,
+	ICriteriaContainer,
 	ICellToolTipTextSettings,
 	ICellImageSettings {
 
@@ -88,7 +101,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaValueColumnComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","alignment","defaultCellImageURL","menuPopupId","visible","backgroundColor","minWidth","sortComparator","autoFilter","cellStyleClass","cellImageURL","selectedImageURL","selectionListener","hiddenMode","value","defaultCellStyleClass","maxWidth","resizable","ascending","foregroundColor","imageHeight","text","cellToolTipText","userEventListener","styleClass","hoverImageURL","width","doubleClickListener","cellDefaultToolTipText","initListener","textDirection","verticalAlignment","sortListener","toolTipText","imageURL","imageWidth"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"disabledImageURL","criteriaValues","alignment","defaultCellImageURL","menuPopupId","visible","backgroundColor","minWidth","sortComparator","autoFilter","criteriaListener","cellStyleClass","cellImageURL","selectedImageURL","selectionListener","hiddenMode","value","defaultCellStyleClass","maxWidth","resizable","ascending","foregroundColor","imageHeight","text","cellToolTipText","userEventListener","styleClass","hoverImageURL","width","doubleClickListener","cellDefaultToolTipText","initListener","textDirection","verticalAlignment","criteriaCardinality","sortListener","toolTipText","imageURL","imageWidth"}));
 	}
 
 	public DataColumnComponent() {
@@ -190,6 +203,76 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 			setAscending(((Boolean)OrderConverter.SINGLETON.getAsObject(null, this, order)).booleanValue());
 		
+	}
+
+	public void selectCriterion(Object rowValue) {
+
+
+				CriteriaTools.selectCriterion(null, this, rowValue);
+			
+	}
+
+	public void selectAllCriteria() {
+
+
+				CriteriaTools.selectAllCriteria(null, this);
+			
+	}
+
+	public void deselectCriterion(Object rowValue) {
+
+
+				CriteriaTools.deselectCriterion(null, this, rowValue);
+			
+	}
+
+	public void deselectAllCriteria() {
+
+
+				CriteriaTools.deselectAllCriteria(null, this);
+			
+	}
+
+	public int getCriteriaValuesCount() {
+
+
+				return CriteriaTools.getCount(getCriteriaValues());
+			
+	}
+
+	public Object getFirstCriteriaValue() {
+
+
+				return CriteriaTools.getFirst(getCriteriaValues());
+			
+	}
+
+	public Object[] listCriteriaValues() {
+
+
+				return CriteriaTools.listValues(getCriteriaValues());
+			
+	}
+
+	public CriteriaItem[] listAvailableCriteriaItems() {
+
+
+				return CriteriaTools.listAvailableCriteriaItems(this, null);
+			
+	}
+
+	public CriteriaItem[] listAvailableCriteriaItems(ICriteriaConfig[] configs) {
+
+
+				return CriteriaTools.listAvailableCriteriaItems(this, configs);
+			
+	}
+
+	public ICriteriaManagerCapability getCriteriaManager() {
+
+
+				return (ICriteriaManagerCapability)getParent();
+			
 	}
 
 	public boolean isVisible() {
@@ -957,6 +1040,78 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	public final javax.faces.event.FacesListener [] listInitListeners() {
 		return getFacesListeners(org.rcfaces.core.event.IInitListener.class);
+	}
+
+	public final void addCriteriaListener(org.rcfaces.core.event.ICriteriaListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeCriteriaListener(org.rcfaces.core.event.ICriteriaListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listCriteriaListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ICriteriaListener.class);
+	}
+
+	public int getCriteriaCardinality() {
+		return getCriteriaCardinality(null);
+	}
+
+	/**
+	 * See {@link #getCriteriaCardinality() getCriteriaCardinality()} for more details
+	 */
+	public int getCriteriaCardinality(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.CRITERIA_CARDINALITY,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "criteriaCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCriteriaCardinalitySetted() {
+		return engine.isPropertySetted(Properties.CRITERIA_CARDINALITY);
+	}
+
+	public void setCriteriaCardinality(int criteriaCardinality) {
+		engine.setProperty(Properties.CRITERIA_CARDINALITY, criteriaCardinality);
+	}
+
+	public java.lang.Object getCriteriaValues() {
+		return getCriteriaValues(null);
+	}
+
+	/**
+	 * See {@link #getCriteriaValues() getCriteriaValues()} for more details
+	 */
+	public java.lang.Object getCriteriaValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.CRITERIA_VALUES, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "criteriaValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isCriteriaValuesSetted() {
+		return engine.isPropertySetted(Properties.CRITERIA_VALUES);
+	}
+
+	public void setCriteriaValues(java.lang.Object criteriaValues) {
+		engine.setProperty(Properties.CRITERIA_VALUES, criteriaValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueExpression}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public Class getCriteriaValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueExpression valueExpression=engine.getValueExpressionProperty(Properties.CRITERIA_VALUES);
+		if (valueExpression==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueExpression.getType(facesContext.getELContext());
 	}
 
 	protected Set getCameliaFields() {

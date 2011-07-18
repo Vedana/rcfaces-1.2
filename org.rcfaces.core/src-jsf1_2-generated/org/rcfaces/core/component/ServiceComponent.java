@@ -12,8 +12,8 @@ import org.rcfaces.core.component.capability.IServiceEventCapability;
 import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.Constants;
 import org.rcfaces.core.internal.converter.FilterPropertiesConverter;
-import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.component.capability.IServerDataCapability;
+import org.rcfaces.core.internal.converter.TimeZoneConverter;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
 import org.apache.commons.logging.Log;
 import org.rcfaces.core.internal.converter.LocaleConverter;
@@ -25,7 +25,6 @@ import java.lang.String;
 import org.rcfaces.core.component.capability.IPropertyChangeEventCapability;
 import org.rcfaces.core.internal.component.IDataMapAccessor;
 import org.rcfaces.core.internal.manager.IServerDataManager;
-import org.rcfaces.core.component.capability.IErrorEventCapability;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.component.capability.IFilterCapability;
@@ -58,7 +57,6 @@ public class ServiceComponent extends CameliaBaseComponent implements
 	IPropertyChangeEventCapability,
 	IServiceEventCapability,
 	IFilterCapability,
-	IErrorEventCapability,
 	IComponentLocaleCapability,
 	IComponentTimeZoneCapability,
 	IClientDataManager,
@@ -70,7 +68,7 @@ public class ServiceComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"enableViewState","filterProperties","serviceId","componentTimeZone","componentLocale","errorListener","serviceEventListener","propertyChangeListener"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"enableViewState","filterProperties","serviceId","componentTimeZone","componentLocale","serviceEventListener","propertyChangeListener"}));
 	}
 
 	public ServiceComponent() {
@@ -360,18 +358,6 @@ public class ServiceComponent extends CameliaBaseComponent implements
 
 	public void setFilterProperties(org.rcfaces.core.model.IFilterProperties filterProperties) {
 		engine.setProperty(Properties.FILTER_PROPERTIES, filterProperties);
-	}
-
-	public final void addErrorListener(org.rcfaces.core.event.IErrorListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeErrorListener(org.rcfaces.core.event.IErrorListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listErrorListeners() {
-		return getFacesListeners(org.rcfaces.core.event.IErrorListener.class);
 	}
 
 	public java.util.Locale getComponentLocale() {

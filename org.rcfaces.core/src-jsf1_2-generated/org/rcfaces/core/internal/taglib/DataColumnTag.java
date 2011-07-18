@@ -53,6 +53,9 @@ public class DataColumnTag extends CameliaTag implements Tag {
 	private ValueExpression doubleClickListeners;
 	private ValueExpression userEventListeners;
 	private ValueExpression initListeners;
+	private ValueExpression criteriaListeners;
+	private ValueExpression criteriaCardinality;
+	private ValueExpression criteriaValues;
 	private ValueExpression value;
 	private ValueExpression converter;
 
@@ -200,6 +203,18 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		this.initListeners = initListeners;
 	}
 
+	public final void setCriteriaListener(ValueExpression criteriaListeners) {
+		this.criteriaListeners = criteriaListeners;
+	}
+
+	public final void setCriteriaCardinality(ValueExpression criteriaCardinality) {
+		this.criteriaCardinality = criteriaCardinality;
+	}
+
+	public final void setCriteriaValues(ValueExpression criteriaValues) {
+		this.criteriaValues = criteriaValues;
+	}
+
 	public final void setValue(ValueExpression value) {
 		this.value = value;
 	}
@@ -243,6 +258,8 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			LOG.debug("  defaultCellStyleClass='"+defaultCellStyleClass+"'");
 			LOG.debug("  cellDefaultToolTipText='"+cellDefaultToolTipText+"'");
 			LOG.debug("  cellToolTipText='"+cellToolTipText+"'");
+			LOG.debug("  criteriaCardinality='"+criteriaCardinality+"'");
+			LOG.debug("  criteriaValues='"+criteriaValues+"'");
 			LOG.debug("  value='"+value+"'");
 		}
 		if ((uiComponent instanceof DataColumnComponent)==false) {
@@ -543,6 +560,23 @@ public class DataColumnTag extends CameliaTag implements Tag {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.INIT_LISTENER_TYPE, initListeners);
 		}
 
+		if (criteriaListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.CRITERIA_LISTENER_TYPE, criteriaListeners);
+		}
+
+		if (criteriaCardinality != null) {
+			if (criteriaCardinality.isLiteralText()==false) {
+				component.setValueExpression(Properties.CRITERIA_CARDINALITY, criteriaCardinality);
+
+			} else {
+				component.setCriteriaCardinality(getInt(criteriaCardinality.getExpressionString()));
+			}
+		}
+
+		if (criteriaValues != null) {
+				component.setValueExpression(Properties.CRITERIA_VALUES, criteriaValues);
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
@@ -596,6 +630,9 @@ public class DataColumnTag extends CameliaTag implements Tag {
 		doubleClickListeners = null;
 		userEventListeners = null;
 		initListeners = null;
+		criteriaListeners = null;
+		criteriaCardinality = null;
+		criteriaValues = null;
 		value = null;
 		converter = null;
 

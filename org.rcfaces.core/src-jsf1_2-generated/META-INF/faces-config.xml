@@ -3393,6 +3393,18 @@ TODO
 		</attribute>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.criteria</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteriaItem</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaItemComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteriaItemFiller</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaItemFillerComponent</component-class>
+	</component>
+	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>
 		<component-class>org.rcfaces.core.internal.component.AsyncHtmlOutputText</component-class>
 	</component>
