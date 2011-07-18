@@ -38,1381 +38,1409 @@ import org.rcfaces.core.model.IRangeDataModel;
  * @version $Revision$ $Date$
  */
 public class CollectionTools {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory.getLog(CollectionTools.class);
+	private static final Log LOG = LogFactory.getLog(CollectionTools.class);
 
-    protected static final Object[] EMPTY_VALUES = new Object[0];
+	protected static final Object[] EMPTY_VALUES = new Object[0];
 
-    private static final Object[] EMPTY_STRING_ARRAY = new String[0];
+	private static final Object[] EMPTY_STRING_ARRAY = new String[0];
 
-    private static final boolean SORT_INDICES = true;
+	private static final boolean SORT_INDICES = true;
 
-    private static final Map IMPLEMENTATION_TYPES = new HashMap(64);
-    static {
-        IMPLEMENTATION_TYPES.put(Collection.class, ArrayList.class);
-        IMPLEMENTATION_TYPES.put(List.class, ArrayList.class);
-        IMPLEMENTATION_TYPES.put(Set.class, HashSet.class);
-        IMPLEMENTATION_TYPES.put(Map.class, HashMap.class);
+	private static final Map IMPLEMENTATION_TYPES = new HashMap(64);
+	static {
+		IMPLEMENTATION_TYPES.put(Collection.class, ArrayList.class);
+		IMPLEMENTATION_TYPES.put(List.class, ArrayList.class);
+		IMPLEMENTATION_TYPES.put(Set.class, HashSet.class);
+		IMPLEMENTATION_TYPES.put(Map.class, HashMap.class);
 
-        IMPLEMENTATION_TYPES.put(IIndexesModel.class, ArrayIndexesModel.class);
-    }
+		IMPLEMENTATION_TYPES.put(IIndexesModel.class, ArrayIndexesModel.class);
+	}
 
-    private static final IValuesAccessor NULL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
+	private static final IValuesAccessor NULL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
+		public int getCount(Object value) {
+			return 0;
+		}
 
-        public int getCount(Object value) {
-            return 0;
-        }
+		public Object getFirst(Object value, Object refValues) {
+			return null;
+		}
 
-        public Object getFirst(Object value, Object refValues) {
-            return null;
-        }
+		public Object[] listValues(Object value, Object refValues) {
+			return EMPTY_VALUES;
+		}
+	};
+
+	private static final IValuesAccessor ARRAY_VALUES_ACCESSOR = new AbstractValuesAccessor() {
+		public int getCount(Object array) {
+			return Array.getLength(array);
+		}
+
+		public Object getFirst(Object array, Object refValues) {
+			if (getCount(array) < 1) {
+				return null;
+			}
+
+			return Array.get(array, 0);
+		}
+
+		public Object[] listValues(Object array, Object refValues) {
+			return (Object[]) array;
+		}
+	};
+
+	private static final IValuesAccessor STRING_VALUES_ACCESSOR = new AbstractValuesAccessor() {
+		public int getCount(Object array) {
+			return StringList.countTokens((String) array);
+		}
+
+		public Object getFirst(Object array, Object refValues) {
+			return StringList.getFirstToken((String) array);
+		}
+
+		public Object[] listValues(Object array, Object refValues) {
+			return convertToObjectArray(array);
+		}
+
+	};
+
+	private static final IValuesAccessor COLLECTION_VALUES_ACCESSOR = new AbstractValuesAccessor() {
+		private static final String REVISION = "$Revision$";
+
+		public int getCount(Object collection) {
+			return ((Collection) collection).size();
+		}
+
+		public Object getFirst(Object collection, Object refValues) {
+			Collection cl = (Collection) collection;
+
+			if (cl.isEmpty()) {
+				return null;
+			}
+
+			if (cl instanceof List) {
+				return ((List) cl).get(0);
+			}
+
+			return cl.iterator().next();
+		}
+
+		public Object[] listValues(Object collection, Object refValues) {
+			return ((Collection) collection).toArray();
+		}
+	};
+
+	private static final IValuesAccessor MAP_VALUES_ACCESSOR = new AbstractValuesAccessor() {
+		private static final String REVISION = "$Revision$";
+
+		public int getCount(Object map) {
+			return ((Map) map).size();
+		}
+
+		public Object getFirst(Object map, Object refValues) {
+			return ((Map) map).keySet().iterator().next();
+		}
+
+		public Object[] listValues(Object map, Object refValues) {
+			return ((Map) map).keySet().toArray();
+		}
+	};
+
+	private static final IValuesAccessor INDEXES_MODEL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
+		public int getCount(Object indexesModel) {
+			return ((IIndexesModel) indexesModel).countIndexes();
+		}
+
+		public Object getFirst(Object indexesModel, Object refValues) {
+			return ((IIndexesModel) indexesModel)
+					.getFirstSelectedObject(refValues);
+		}
+
+		public Object[] listValues(Object indexesModel, Object refValues) {
+			return ((IIndexesModel) indexesModel).listSelectedObjects(null,
+					refValues);
+		}
+	};
+
+	protected static IValuesAccessor getValuesAccessor(Object values,
+			Class providerClass, IValuesAccessor providerValuesAccessor,
+			boolean useValue, boolean indexSupported) {
+
+		if (values == null) {
+			if (useValue == false) {
+				return null;
+			}
+			return NULL_VALUES_ACCESSOR;
+		}
+
+		if (values.getClass().isArray()) {
+			if (useValue == false) {
+				return null;
+			}
+			return ARRAY_VALUES_ACCESSOR;
+		}
+
+		if (values instanceof String) {
+			if (useValue == false) {
+				return null;
+			}
+			return STRING_VALUES_ACCESSOR;
+		}
+
+		if (values instanceof Collection) {
+			if (useValue == false) {
+				return null;
+			}
+			return COLLECTION_VALUES_ACCESSOR;
+		}
+
+		if (values instanceof Map) {
+			if (useValue == false) {
+				return null;
+			}
+			return MAP_VALUES_ACCESSOR;
+		}
+
+		if (indexSupported && (values instanceof IIndexesModel)) {
+			if (useValue == false) {
+				return null;
+			}
+			return INDEXES_MODEL_VALUES_ACCESSOR;
+		}
+
+		if (providerClass == null) {
+			return null;
+		}
+
+		if (values.getClass().isAssignableFrom(providerClass)) {
+			return providerValuesAccessor;
+		}
+
+		if (values instanceof IAdaptable) {
+			Object provider = ((IAdaptable) values).getAdapter(providerClass,
+					null);
+
+			if (provider != null) {
+				return new ProviderValuesAccessor(providerValuesAccessor,
+						provider);
+			}
+		}
+
+		Object provider = RcfacesContext.getCurrentInstance()
+				.getAdapterManager().getAdapter(values, providerClass, null);
+
+		if (provider != null) {
+			return new ProviderValuesAccessor(providerValuesAccessor, provider);
+		}
+
+		return null;
+	}
+
+	public static Object getEmptyValues() {
+		return EMPTY_VALUES;
+	}
+
+	protected static Object[] convertToObjectArray(Object values) {
+		if (values == null) {
+			return null;
+		}
+
+		if (values instanceof String) {
+			Set set = valuesToSet(values, true);
+			if (set.isEmpty()) {
+				return EMPTY_STRING_ARRAY;
+			}
+
+			return set.toArray(new String[set.size()]);
+		}
+
+		if (values instanceof Object[]) {
+			return (Object[]) values;
+		}
+
+		if (values instanceof Collection) {
+			return ((Collection) values).toArray();
+		}
+
+		if (values instanceof Map) {
+			return ((Map) values).keySet().toArray();
+		}
+
+		throw new FacesException("Can not convert object '" + values
+				+ "' to object array.");
+	}
+
+	private static Object createNewValues(UIComponent component,
+			IValuesAccessor valuesAccessor) {
+		Class type = valuesAccessor.getComponentValuesType(null, component);
+		if (type == null) {
+
+			if ((component instanceof IComponentValueTypeCapability) == false) {
+				throw new FacesException(
+						"Can not identify IComponentValueType for component id='"
+								+ component.getId() + " renderType='"
+								+ component.getRendererType() + "'");
+			}
+
+			IComponentValueType componentValueType = ((IComponentValueTypeCapability) component)
+					.getComponentValueType();
+
+			Object values = componentValueType.createNewValue(component);
+
+			valuesAccessor.setComponentValues(component, values);
+
+			return values;
+		}
+
+		if (type.isArray()) {
+			Object values = Array.newInstance(type.getComponentType(), 0);
+
+			valuesAccessor.setComponentValues(component, values);
+
+			return values;
+		}
+
+		Class implementationType = (Class) IMPLEMENTATION_TYPES.get(type);
+		if (implementationType != null) {
+			type = implementationType;
+		}
+
+		Object values;
+		try {
+			values = type.newInstance();
+
+		} catch (Throwable th) {
+			throw new FacesException("Can not instanciate values for type '"
+					+ type + "'", th);
+		}
+
+		valuesAccessor.setComponentValues(component, values);
+
+		return values;
+	}
+
+	public static void select(UIComponent component,
+			IValuesAccessor valuesAccessor, int indices[]) {
+		Object values = valuesAccessor.getComponentValues(component);
+
+		if (values == null) {
+			values = createNewValues(component, valuesAccessor);
+		}
+
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
+
+			for (int i = 0; i < indices.length; i++) {
+				indexesModel.addIndex(indices[i]);
+			}
+
+			return;
+		}
+
+		if (component instanceof IGridComponent) {
+			List rowDatas = getRowDatas((IGridComponent) component, indices);
+			if (rowDatas.isEmpty()) {
+				return;
+			}
+
+			select(component, valuesAccessor, values, rowDatas);
+			return;
+		}
+	}
+
+	public static void select(UIComponent component,
+			IValuesAccessor valuesAccessor, int start, int end) {
+
+		Object values = valuesAccessor.getComponentValues(component);
+
+		if (values == null) {
+			values = createNewValues(component, valuesAccessor);
+		}
+
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
+
+			for (; start < end; start++) {
+				indexesModel.addIndex(start);
+			}
+
+			return;
+		}
+
+		if (component instanceof IGridComponent) {
+			List rowDatas = getRowDatas((IGridComponent) component, start, end);
+			if (rowDatas.isEmpty()) {
+				return;
+			}
+
+			select(component, valuesAccessor, values, rowDatas);
+			return;
+		}
+	}
+
+	public static void select(UIComponent component,
+			IValuesAccessor valuesAccessor, int index) {
+
+		Object values = valuesAccessor.getComponentValues(component);
+
+		if (values == null) {
+			values = createNewValues(component, valuesAccessor);
+		}
+
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
+
+			indexesModel.addIndex(index);
+			return;
+		}
+
+		if (component instanceof IGridComponent) {
+			Object rowData = getRowData((IGridComponent) component, index);
+			if (rowData == null) {
+				LOG.error("No rowData for index='" + index + "'.");
+				return;
+			}
+
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Select index=" + index + " => " + rowData
+						+ "   selectedValues=" + values);
+			}
+
+			select(component, valuesAccessor, values,
+					Collections.singleton(rowData));
+
+			return;
+		}
+	}
+
+	public static void selectAll(UIComponent component,
+			IValuesAccessor valuesAccessor, IAllValuesProvider allValuesProvider) {
+
+		if ((component instanceof IGridComponent) == false) {
+			throw new UnsupportedOperationException(
+					"Can not list all values of component '"
+							+ component.getId() + "'.");
+		}
+
+		Object values = valuesAccessor.getComponentValues(component);
+
+		if (values == null) {
+			values = createNewValues(component, valuesAccessor);
+		}
+
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
+
+			int rowCount = getRowCount(component);
+			for (int i = 0; i < rowCount; i++) {
+				indexesModel.addIndex(i);
+			}
+
+			return;
+		}
+
+		if (component instanceof IGridComponent) {
+			List rowDatas = getRowDatas((IGridComponent) component);
+			if (rowDatas.isEmpty()) {
+				return;
+			}
 
-        public Object[] listValues(Object value, Object refValues) {
-            return EMPTY_VALUES;
-        }
-    };
+			select(component, valuesAccessor, values, rowDatas);
+			return;
+		}
 
-    private static final IValuesAccessor ARRAY_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
+		if (allValuesProvider != null) {
+			List rowDatas = allValuesProvider.listAllValues(component);
+			if (rowDatas.isEmpty()) {
+				return;
+			}
 
-        public int getCount(Object array) {
-            return Array.getLength(array);
-        }
+			select(component, valuesAccessor, values, rowDatas);
+			return;
+		}
+	}
 
-        public Object getFirst(Object array, Object refValues) {
-            if (getCount(array) < 1) {
-                return null;
-            }
+	public static void select(UIComponent component,
+			IValuesAccessor valuesAccessor, Object rowValue) {
 
-            return Array.get(array, 0);
-        }
+		Object values = valuesAccessor.getComponentValues(component);
 
-        public Object[] listValues(Object array, Object refValues) {
-            return (Object[]) array;
-        }
-    };
+		if (values == null) {
+			values = createNewValues(component, valuesAccessor);
+		}
 
-    private static final IValuesAccessor STRING_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
+		if (values instanceof IIndexesModel) {
+			int index = searchIndexIntoDataModel((IGridComponent) component,
+					rowValue);
+			if (index < 0) {
+				return;
+			}
 
-        public int getCount(Object array) {
-            return StringList.countTokens((String) array);
-        }
-
-        public Object getFirst(Object array, Object refValues) {
-            return StringList.getFirstToken((String) array);
-        }
-
-        public Object[] listValues(Object array, Object refValues) {
-            return convertToObjectArray(array);
-        }
-
-    };
-
-    private static final IValuesAccessor COLLECTION_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
-
-        public int getCount(Object collection) {
-            return ((Collection) collection).size();
-        }
-
-        public Object getFirst(Object collection, Object refValues) {
-            Collection cl = (Collection) collection;
-
-            if (cl.isEmpty()) {
-                return null;
-            }
-
-            if (cl instanceof List) {
-                return ((List) cl).get(0);
-            }
-
-            return cl.iterator().next();
-        }
-
-        public Object[] listValues(Object collection, Object refValues) {
-            return ((Collection) collection).toArray();
-        }
-    };
-
-    private static final IValuesAccessor MAP_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
-
-        public int getCount(Object map) {
-            return ((Map) map).size();
-        }
-
-        public Object getFirst(Object map, Object refValues) {
-            return ((Map) map).keySet().iterator().next();
-        }
-
-        public Object[] listValues(Object map, Object refValues) {
-            return ((Map) map).keySet().toArray();
-        }
-    };
-
-    private static final IValuesAccessor INDEXES_MODEL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
-
-        public int getCount(Object indexesModel) {
-            return ((IIndexesModel) indexesModel).countIndexes();
-        }
-
-        public Object getFirst(Object indexesModel, Object refValues) {
-            return ((IIndexesModel) indexesModel)
-                    .getFirstSelectedObject(refValues);
-        }
-
-        public Object[] listValues(Object indexesModel, Object refValues) {
-            return ((IIndexesModel) indexesModel).listSelectedObjects(null,
-                    refValues);
-        }
-    };
-
-    protected static IValuesAccessor getValuesAccessor(Object values,
-            Class providerClass, IValuesAccessor providerValuesAccessor,
-            boolean useValue) {
-
-        if (values == null) {
-            if (useValue == false) {
-                return null;
-            }
-            return NULL_VALUES_ACCESSOR;
-        }
-
-        if (values.getClass().isArray()) {
-            if (useValue == false) {
-                return null;
-            }
-            return ARRAY_VALUES_ACCESSOR;
-        }
-
-        if (values instanceof String) {
-            if (useValue == false) {
-                return null;
-            }
-            return STRING_VALUES_ACCESSOR;
-        }
-
-        if (values instanceof Collection) {
-            if (useValue == false) {
-                return null;
-            }
-            return COLLECTION_VALUES_ACCESSOR;
-        }
-
-        if (values instanceof Map) {
-            if (useValue == false) {
-                return null;
-            }
-            return MAP_VALUES_ACCESSOR;
-        }
-
-        if (values instanceof IIndexesModel) {
-            if (useValue == false) {
-                return null;
-            }
-            return INDEXES_MODEL_VALUES_ACCESSOR;
-        }
-
-        if (providerClass == null) {
-            return null;
-        }
-
-        if (values.getClass().isAssignableFrom(providerClass)) {
-            return providerValuesAccessor;
-        }
-
-        if (values instanceof IAdaptable) {
-            Object provider = ((IAdaptable) values).getAdapter(providerClass,
-                    null);
-
-            if (provider != null) {
-                return new ProviderValuesAccessor(providerValuesAccessor,
-                        provider);
-            }
-        }
-
-        Object provider = RcfacesContext.getCurrentInstance()
-                .getAdapterManager().getAdapter(values, providerClass, null);
-
-        if (provider != null) {
-            return new ProviderValuesAccessor(providerValuesAccessor, provider);
-        }
-
-        return null;
-    }
-
-    public static Object getEmptyValues() {
-        return EMPTY_VALUES;
-    }
-
-    protected static Object[] convertToObjectArray(Object values) {
-        if (values == null) {
-            return null;
-        }
-
-        if (values instanceof String) {
-            Set set = valuesToSet(values, true);
-            if (set.isEmpty()) {
-                return EMPTY_STRING_ARRAY;
-            }
-
-            return set.toArray(new String[set.size()]);
-        }
-
-        if (values instanceof Object[]) {
-            return (Object[]) values;
-        }
-
-        if (values instanceof Collection) {
-            return ((Collection) values).toArray();
-        }
-
-        if (values instanceof Map) {
-            return ((Map) values).keySet().toArray();
-        }
-
-        throw new FacesException("Can not convert object '" + values
-                + "' to object array.");
-    }
-
-    private static Object createNewValues(UIComponent component,
-            IValuesAccessor valuesAccessor) {
-        Class type = valuesAccessor.getComponentValuesType(null, component);
-        if (type == null) {
-
-            if ((component instanceof IComponentValueTypeCapability) == false) {
-                throw new FacesException(
-                        "Can not identify IComponentValueType for component id='"
-                                + component.getId() + " renderType='"
-                                + component.getRendererType() + "'");
-            }
-
-            IComponentValueType componentValueType = ((IComponentValueTypeCapability) component)
-                    .getComponentValueType();
-
-            Object values = componentValueType.createNewValue(component);
-
-            valuesAccessor.setComponentValues(component, values);
-
-            return values;
-        }
-
-        if (type.isArray()) {
-            Object values = Array.newInstance(type.getComponentType(), 0);
-
-            valuesAccessor.setComponentValues(component, values);
-
-            return values;
-        }
-
-        Class implementationType = (Class) IMPLEMENTATION_TYPES.get(type);
-        if (implementationType != null) {
-            type = implementationType;
-        }
-
-        Object values;
-        try {
-            values = type.newInstance();
-
-        } catch (Throwable th) {
-            throw new FacesException("Can not instanciate values for type '"
-                    + type + "'", th);
-        }
-
-        valuesAccessor.setComponentValues(component, values);
-
-        return values;
-    }
-
-    public static void select(UIComponent component,
-            IValuesAccessor valuesAccessor, int indices[]) {
-        Object values = valuesAccessor.getComponentValues(component);
-
-        if (values == null) {
-            values = createNewValues(component, valuesAccessor);
-        }
-
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
-
-            for (int i = 0; i < indices.length; i++) {
-                indexesModel.addIndex(indices[i]);
-            }
-
-            return;
-        }
-
-        List rowDatas = getRowDatas((IGridComponent) component, indices);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
-
-        select(component, valuesAccessor, values, rowDatas);
-    }
-
-    public static void select(UIComponent component,
-            IValuesAccessor valuesAccessor, int start, int end) {
-
-        Object values = valuesAccessor.getComponentValues(component);
-
-        if (values == null) {
-            values = createNewValues(component, valuesAccessor);
-        }
-
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
-
-            for (; start < end; start++) {
-                indexesModel.addIndex(start);
-            }
-
-            return;
-        }
-
-        List rowDatas = getRowDatas((IGridComponent) component, start, end);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
-
-        select(component, valuesAccessor, values, rowDatas);
-    }
+			select(component, valuesAccessor, index);
 
-    public static void select(UIComponent component,
-            IValuesAccessor valuesAccessor, int index) {
+			return;
+		}
 
-        Object values = valuesAccessor.getComponentValues(component);
+		select(component, valuesAccessor, values,
+				Collections.singletonList(rowValue));
+	}
 
-        if (values == null) {
-            values = createNewValues(component, valuesAccessor);
-        }
-
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
+	private static Object select(UIComponent component,
+			IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
 
-            indexesModel.addIndex(index);
-            return;
-        }
+		if (values.getClass().isArray()) {
 
-        Object rowData = getRowData((IGridComponent) component, index);
-        if (rowData == null) {
-            LOG.error("No rowData for index='" + index + "'.");
-            return;
-        }
+			int length = Array.getLength(values);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Select index=" + index + " => " + rowData
-                    + "   selectedValues=" + values);
-        }
+			List l = null;
 
-        select(component, valuesAccessor, values, Collections
-                .singleton(rowData));
-    }
+			next_data: for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+				Object rowData = it.next();
 
-    public static void selectAll(UIComponent component,
-            IValuesAccessor valuesAccessor) {
+				for (int i = 0; i < length; i++) {
+					if (Array.get(values, i).equals(rowData) == false) {
+						continue;
+					}
 
-        if ((component instanceof IGridComponent) == false) {
-            throw new UnsupportedOperationException(
-                    "Can not list all values of component '"
-                            + component.getId() + "'.");
-        }
+					continue next_data;
+				}
 
-        Object values = valuesAccessor.getComponentValues(component);
+				if (l == null) {
+					l = new ArrayList();
 
-        if (values == null) {
-            values = createNewValues(component, valuesAccessor);
-        }
+				} else if (l.contains(rowData)) {
+					continue;
+				}
 
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
+				l.add(rowData);
+			}
 
-            int rowCount = getRowCount(component);
-            for (int i = 0; i < rowCount; i++) {
-                indexesModel.addIndex(i);
-            }
+			if (l == null) {
+				return values;
+			}
 
-            return;
-        }
+			Class type = values.getClass().getComponentType();
 
-        List rowDatas = getRowDatas((IGridComponent) component);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
+			Object newValues = Array.newInstance(type, length + l.size());
 
-        select(component, valuesAccessor, values, rowDatas);
-    }
+			System.arraycopy(values, 0, newValues, 0, length);
 
-    public static void select(UIComponent component,
-            IValuesAccessor valuesAccessor, Object rowValue) {
+			for (Iterator it = l.iterator(); it.hasNext(); length++) {
+				Array.set(newValues, length, it.next());
+			}
 
-        Object values = valuesAccessor.getComponentValues(component);
+			valuesAccessor.setComponentValues(component, newValues);
 
-        if (values == null) {
-            values = createNewValues(component, valuesAccessor);
-        }
+			return newValues;
+		}
 
-        if (values instanceof IIndexesModel) {
-            int index = searchIndexIntoDataModel((IGridComponent) component,
-                    rowValue);
-            if (index < 0) {
-                return;
-            }
+		if (values instanceof String) {
+			Set set = valuesToSet(values, false);
 
-            select(component, valuesAccessor, index);
+			set.addAll(rowDatas);
 
-            return;
-        }
+			String newValues = StringList.joinTokens(set);
 
-        select(component, valuesAccessor, values, Collections
-                .singletonList(rowValue));
-    }
+			if (newValues.equals(values)) {
+				return values;
+			}
 
-    private static Object select(UIComponent component,
-            IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
+			valuesAccessor.setComponentValues(component, newValues);
 
-        if (values.getClass().isArray()) {
+			return newValues;
+		}
 
-            int length = Array.getLength(values);
+		if (values instanceof Collection) {
+			Collection collection = cloneCollection(component, valuesAccessor,
+					(Collection) values);
 
-            List l = null;
+			if (collection instanceof Set) {
+				collection.addAll(rowDatas);
+				return collection;
+			}
 
-            next_data: for (Iterator it = rowDatas.iterator(); it.hasNext();) {
-                Object rowData = it.next();
+			for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+				Object rowData = it.next();
 
-                for (int i = 0; i < length; i++) {
-                    if (Array.get(values, i).equals(rowData) == false) {
-                        continue;
-                    }
+				if (collection.contains(rowData)) {
+					continue;
+				}
 
-                    continue next_data;
-                }
+				collection.add(rowData);
+			}
 
-                if (l == null) {
-                    l = new ArrayList();
+			return collection;
+		}
 
-                } else if (l.contains(rowData)) {
-                    continue;
-                }
+		throw new FacesException("Select index is not implemented for values="
+				+ values);
+	}
 
-                l.add(rowData);
-            }
+	private static Collection cloneCollection(UIComponent component,
+			IValuesAccessor valuesAccessor, Collection collection) {
 
-            if (l == null) {
-                return values;
-            }
+		boolean copy = true;
 
-            Class type = values.getClass().getComponentType();
+		if (collection instanceof ICommitableObject) {
+			copy = ((ICommitableObject) collection).isCommited();
+		}
 
-            Object newValues = Array.newInstance(type, length + l.size());
+		if (copy == false) {
+			return collection;
+		}
 
-            System.arraycopy(values, 0, newValues, 0, length);
+		try {
+			Method method = collection.getClass().getMethod("clone",
+					(Class[]) null);
 
-            for (Iterator it = l.iterator(); it.hasNext(); length++) {
-                Array.set(newValues, length, it.next());
-            }
+			collection = (Collection) method
+					.invoke(collection, (Object[]) null);
 
-            valuesAccessor.setComponentValues(component, newValues);
+		} catch (Throwable th) {
+			LOG.info("Can not copy the collection ! ("
+					+ collection.getClass().getName() + ")", th);
+		}
 
-            return newValues;
-        }
+		valuesAccessor.setComponentValues(component, collection);
 
-        if (values instanceof String) {
-            Set set = valuesToSet(values, false);
+		return collection;
+	}
 
-            set.addAll(rowDatas);
+	private static int getRowCount(UIComponent component) {
 
-            String newValues = StringList.joinTokens(set);
+		IGridComponent gridComponent = (IGridComponent) component;
 
-            if (newValues.equals(values)) {
-                return values;
-            }
+		int index = gridComponent.getRowCount();
 
-            valuesAccessor.setComponentValues(component, newValues);
+		if (index >= 0) {
+			return index;
+		}
 
-            return newValues;
-        }
+		try {
+			for (index = 0;; index++) {
+				gridComponent.setRowIndex(index);
 
-        if (values instanceof Collection) {
-            Collection collection = cloneCollection(component, valuesAccessor,
-                    (Collection) values);
+				if (gridComponent.isRowAvailable()) {
+					return index;
+				}
+			}
+		} finally {
+			gridComponent.setRowIndex(-1);
+		}
+	}
 
-            if (collection instanceof Set) {
-                collection.addAll(rowDatas);
-                return collection;
-            }
+	public static void deselectAll(UIComponent component,
+			IValuesAccessor valuesAccessor) {
 
-            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
-                Object rowData = it.next();
+		Object values = valuesAccessor.getComponentValues(component);
+		if (values == null) {
+			return;
+		}
 
-                if (collection.contains(rowData)) {
-                    continue;
-                }
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
 
-                collection.add(rowData);
-            }
+			indexesModel.clearIndexes();
+			return;
+		}
 
-            return collection;
-        }
+		if (values instanceof Collection) {
+			Collection collection = cloneCollection(component, valuesAccessor,
+					(Collection) values);
 
-        throw new FacesException("Select index is not implemented for values="
-                + values);
-    }
+			collection.clear();
+			return;
+		}
 
-    private static Collection cloneCollection(UIComponent component,
-            IValuesAccessor valuesAccessor, Collection collection) {
+		if (values instanceof String) {
+			if ("".equals(values)) {
+				return;
+			}
 
-        boolean copy = true;
+			valuesAccessor.setComponentValues(component, "");
 
-        if (collection instanceof ICommitableObject) {
-            copy = ((ICommitableObject) collection).isCommited();
-        }
+			return;
+		}
 
-        if (copy == false) {
-            return collection;
-        }
+		if (values instanceof Object[]) {
+			if (Array.getLength(values) == 0) {
+				return;
+			}
 
-        try {
-            Method method = collection.getClass().getMethod("clone",
-                    (Class[]) null);
+			Class type = values.getClass().getComponentType();
 
-            collection = (Collection) method
-                    .invoke(collection, (Object[]) null);
+			values = Array.newInstance(type, 0);
 
-        } catch (Throwable th) {
-            LOG.info("Can not copy the collection ! ("
-                    + collection.getClass().getName() + ")", th);
-        }
+			valuesAccessor.setComponentValues(component, values);
+			return;
+		}
 
-        valuesAccessor.setComponentValues(component, collection);
+		throw new FacesException("Deselect all is not implemented for values="
+				+ values);
+	}
 
-        return collection;
-    }
+	public static void deselect(UIComponent component,
+			IValuesAccessor valuesAccessor, Object rowValue) {
 
-    private static int getRowCount(UIComponent component) {
+		Object values = valuesAccessor.getComponentValues(component);
 
-        IGridComponent gridComponent = (IGridComponent) component;
+		if (values == null) {
+			return;
+		}
 
-        int index = gridComponent.getRowCount();
+		if (values instanceof IIndexesModel) {
+			int index = searchIndexIntoDataModel((IGridComponent) component,
+					rowValue);
 
-        if (index >= 0) {
-            return index;
-        }
+			if (index < 0) {
+				return;
+			}
 
-        try {
-            for (index = 0;; index++) {
-                gridComponent.setRowIndex(index);
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
 
-                if (gridComponent.isRowAvailable()) {
-                    return index;
-                }
-            }
-        } finally {
-            gridComponent.setRowIndex(-1);
-        }
-    }
+			indexesModel.removeIndex(index);
 
-    public static void deselectAll(UIComponent component,
-            IValuesAccessor valuesAccessor) {
+			return;
+		}
 
-        Object values = valuesAccessor.getComponentValues(component);
-        if (values == null) {
-            return;
-        }
+		deselect(component, valuesAccessor, values,
+				Collections.singletonList(rowValue));
+	}
 
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
+	public static void deselect(UIComponent component,
+			IValuesAccessor valuesAccessor, int index) {
 
-            indexesModel.clearIndexes();
-            return;
-        }
+		Object values = valuesAccessor.getComponentValues(component);
 
-        if (values instanceof Collection) {
-            Collection collection = cloneCollection(component, valuesAccessor,
-                    (Collection) values);
+		if (values == null) {
+			return;
+		}
 
-            collection.clear();
-            return;
-        }
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
 
-        if (values instanceof String) {
-            if ("".equals(values)) {
-                return;
-            }
+			indexesModel.removeIndex(index);
+			return;
+		}
 
-            valuesAccessor.setComponentValues(component, "");
+		if (component instanceof IGridComponent) {
+			Object rowData = getRowData((IGridComponent) component, index);
 
-            return;
-        }
+			if (rowData == null) {
+				LOG.error("No rowData for index='" + index + "'.");
+				return;
+			}
 
-        if (values instanceof Object[]) {
-            if (Array.getLength(values) == 0) {
-                return;
-            }
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Deselect index=" + index + " => " + rowData
+						+ "   selectedValues=" + values);
+			}
 
-            Class type = values.getClass().getComponentType();
+			deselect(component, valuesAccessor, values,
+					Collections.singleton(rowData));
+			return;
+		}
+	}
 
-            values = Array.newInstance(type, 0);
+	public static void deselect(UIComponent component,
+			IValuesAccessor valuesAccessor, int indices[]) {
 
-            valuesAccessor.setComponentValues(component, values);
-            return;
-        }
+		if (indices == null || indices.length < 1) {
+			return;
+		}
 
-        throw new FacesException("Deselect all is not implemented for values="
-                + values);
-    }
+		Object values = valuesAccessor.getComponentValues(component);
 
-    public static void deselect(UIComponent component,
-            IValuesAccessor valuesAccessor, Object rowValue) {
+		if (values == null) {
+			return;
+		}
 
-        Object values = valuesAccessor.getComponentValues(component);
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
 
-        if (values == null) {
-            return;
-        }
+			for (int i = 0; i < indices.length; i++) {
+				indexesModel.removeIndex(indices[i]);
+			}
 
-        if (values instanceof IIndexesModel) {
-            int index = searchIndexIntoDataModel((IGridComponent) component,
-                    rowValue);
+			return;
+		}
 
-            if (index < 0) {
-                return;
-            }
+		if (component instanceof IGridComponent) {
+			List rowDatas = getRowDatas((IGridComponent) component, indices);
+			if (rowDatas.isEmpty()) {
+				return;
+			}
 
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
+			deselect(component, valuesAccessor, values, rowDatas);
+			return;
+		}
+	}
 
-            indexesModel.removeIndex(index);
+	public static void deselect(UIComponent component,
+			IValuesAccessor valuesAccessor, int start, int end) {
 
-            return;
-        }
+		Object values = valuesAccessor.getComponentValues(component);
 
-        deselect(component, valuesAccessor, values, Collections
-                .singletonList(rowValue));
-    }
+		if (values == null) {
+			return;
+		}
 
-    public static void deselect(UIComponent component,
-            IValuesAccessor valuesAccessor, int index) {
+		if (values instanceof IIndexesModel) {
+			IIndexesModel indexesModel = cloneIndexModel(component,
+					valuesAccessor, (IIndexesModel) values);
 
-        Object values = valuesAccessor.getComponentValues(component);
+			for (; start < end; start++) {
+				indexesModel.removeIndex(start);
+			}
 
-        if (values == null) {
-            return;
-        }
+			return;
+		}
 
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
+		if (component instanceof IGridComponent) {
+			List rowDatas = getRowDatas((IGridComponent) component, start, end);
+			if (rowDatas.isEmpty()) {
+				return;
+			}
 
-            indexesModel.removeIndex(index);
-            return;
-        }
+			deselect(component, valuesAccessor, values, rowDatas);
+			return;
+		}
+	}
 
-        Object rowData = getRowData((IGridComponent) component, index);
+	private static Object deselect(UIComponent component,
+			IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
 
-        if (rowData == null) {
-            LOG.error("No rowData for index='" + index + "'.");
-            return;
-        }
+		if (values.getClass().isArray()) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Deselect index=" + index + " => " + rowData
-                    + "   selectedValues=" + values);
-        }
+			int length = Array.getLength(values);
+			if (length == 0) {
+				return values;
+			}
 
-        deselect(component, valuesAccessor, values, Collections
-                .singleton(rowData));
-    }
+			for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+				Object rowData = it.next();
 
-    public static void deselect(UIComponent component,
-            IValuesAccessor valuesAccessor, int indices[]) {
+				for (int i = 0; i < length;) {
+					if (Array.get(values, i).equals(rowData) == false) {
+						i++;
+						continue;
+					}
 
-        if (indices == null || indices.length < 1) {
-            return;
-        }
+					length--;
+					if (i >= length) {
+						break;
+					}
 
-        Object values = valuesAccessor.getComponentValues(component);
+					System.arraycopy(values, i + 1, values, i, length - i);
+				}
+			}
 
-        if (values == null) {
-            return;
-        }
+			if (Array.getLength(values) == length) {
+				// On a pas touché au tableau !
+				return values;
+			}
 
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
+			Class type = values.getClass().getComponentType();
 
-            for (int i = 0; i < indices.length; i++) {
-                indexesModel.removeIndex(indices[i]);
-            }
+			Object newValues = Array.newInstance(type, length);
+			if (length > 0) {
+				System.arraycopy(values, 0, newValues, 0, length);
+			}
 
-            return;
-        }
+			valuesAccessor.setComponentValues(component, newValues);
 
-        List rowDatas = getRowDatas((IGridComponent) component, indices);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
+			return newValues;
+		}
 
-        deselect(component, valuesAccessor, values, rowDatas);
-    }
+		if (values instanceof String) {
+			Set set = valuesToSet(values, false);
 
-    public static void deselect(UIComponent component,
-            IValuesAccessor valuesAccessor, int start, int end) {
+			set.removeAll(rowDatas);
 
-        Object values = valuesAccessor.getComponentValues(component);
+			String newValues = StringList.joinTokens(set);
 
-        if (values == null) {
-            return;
-        }
+			if (newValues.equals(values)) {
+				return values;
+			}
 
-        if (values instanceof IIndexesModel) {
-            IIndexesModel indexesModel = cloneIndexModel(component,
-                    valuesAccessor, (IIndexesModel) values);
+			valuesAccessor.setComponentValues(component, newValues);
 
-            for (; start < end; start++) {
-                indexesModel.removeIndex(start);
-            }
+			return newValues;
+		}
 
-            return;
-        }
+		if (values instanceof Collection) {
+			Collection collection = cloneCollection(component, valuesAccessor,
+					(Collection) values);
 
-        List rowDatas = getRowDatas((IGridComponent) component, start, end);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
+			if (collection instanceof Set) {
+				collection.removeAll(rowDatas);
+				return collection;
+			}
 
-        deselect(component, valuesAccessor, values, rowDatas);
-    }
+			for (Iterator it = rowDatas.iterator(); it.hasNext();) {
+				Object rowData = it.next();
 
-    private static Object deselect(UIComponent component,
-            IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
+				collection.remove(rowData);
+			}
 
-        if (values.getClass().isArray()) {
+			return collection;
+		}
 
-            int length = Array.getLength(values);
-            if (length == 0) {
-                return values;
-            }
+		throw new FacesException(
+				"Deselect index is not implemented for selectedValues="
+						+ values);
+	}
 
-            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
-                Object rowData = it.next();
+	private static IIndexesModel cloneIndexModel(UIComponent component,
+			IValuesAccessor valuesAccessor, IIndexesModel indexesModel) {
 
-                for (int i = 0; i < length;) {
-                    if (Array.get(values, i).equals(rowData) == false) {
-                        i++;
-                        continue;
-                    }
+		boolean copy = true;
 
-                    length--;
-                    if (i >= length) {
-                        break;
-                    }
+		if (indexesModel instanceof ICommitableObject) {
+			copy = ((ICommitableObject) indexesModel).isCommited();
+		}
 
-                    System.arraycopy(values, i + 1, values, i, length - i);
-                }
-            }
+		if (copy == false) {
+			return indexesModel;
+		}
 
-            if (Array.getLength(values) == length) {
-                // On a pas touché au tableau !
-                return values;
-            }
+		indexesModel = indexesModel.copy();
+		valuesAccessor.setComponentValues(component, indexesModel);
 
-            Class type = values.getClass().getComponentType();
+		return indexesModel;
+	}
 
-            Object newValues = Array.newInstance(type, length);
-            if (length > 0) {
-                System.arraycopy(values, 0, newValues, 0, length);
-            }
+	private static List getRowDatas(IGridComponent gridComponent, int[] indices) {
 
-            valuesAccessor.setComponentValues(component, newValues);
+		int rowCount = gridComponent.getRowCount();
+		if (rowCount > 0) {
+			DataModel dataModel = gridComponent.getDataModelValue();
 
-            return newValues;
-        }
+			if (dataModel instanceof IRangeDataModel) {
+				((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+			}
+		}
 
-        if (values instanceof String) {
-            Set set = valuesToSet(values, false);
+		if (SORT_INDICES) {
+			indices = (int[]) indices.clone();
+			Arrays.sort(indices);
+		}
 
-            set.removeAll(rowDatas);
+		List rowDatas = null;
+		try {
+			for (int i = 0; i < indices.length; i++) {
+				int index = indices[i];
+				gridComponent.setRowIndex(index);
+				if (gridComponent.isRowAvailable() == false) {
+					LOG.error("Row not available for index='" + index + "'.");
+					continue;
+				}
 
-            String newValues = StringList.joinTokens(set);
+				Object rowData = gridComponent.getRowData();
 
-            if (newValues.equals(values)) {
-                return values;
-            }
+				if (rowData == null) {
+					LOG.error("No rowData for index='" + index + "'.");
+					continue;
+				}
 
-            valuesAccessor.setComponentValues(component, newValues);
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Get row at index=" + index + " => " + rowData);
+				}
 
-            return newValues;
-        }
+				if (rowDatas == null) {
+					rowDatas = new ArrayList(indices.length - i);
+				}
+				rowDatas.add(rowData);
+			}
 
-        if (values instanceof Collection) {
-            Collection collection = cloneCollection(component, valuesAccessor,
-                    (Collection) values);
+		} finally {
+			gridComponent.setRowIndex(-1);
+		}
 
-            if (collection instanceof Set) {
-                collection.removeAll(rowDatas);
-                return collection;
-            }
+		if (rowDatas == null) {
+			return Collections.EMPTY_LIST;
+		}
 
-            for (Iterator it = rowDatas.iterator(); it.hasNext();) {
-                Object rowData = it.next();
+		return rowDatas;
+	}
 
-                collection.remove(rowData);
-            }
+	private static Object getRowData(IGridComponent gridComponent, int index) {
 
-            return collection;
-        }
+		DataModel dataModel = gridComponent.getDataModelValue();
 
-        throw new FacesException(
-                "Deselect index is not implemented for selectedValues="
-                        + values);
-    }
+		if (dataModel instanceof IRangeDataModel) {
+			((IRangeDataModel) dataModel).setRowRange(index, 1);
+		}
 
-    private static IIndexesModel cloneIndexModel(UIComponent component,
-            IValuesAccessor valuesAccessor, IIndexesModel indexesModel) {
+		Object rowData = null;
+		gridComponent.setRowIndex(index);
+		try {
+			if (gridComponent.isRowAvailable() == false) {
+				LOG.error("Row not available for index='" + index + "'.");
+				return null;
+			}
 
-        boolean copy = true;
+			rowData = gridComponent.getRowData();
 
-        if (indexesModel instanceof ICommitableObject) {
-            copy = ((ICommitableObject) indexesModel).isCommited();
-        }
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Get row at index=" + index + " => " + rowData);
+			}
 
-        if (copy == false) {
-            return indexesModel;
-        }
+		} finally {
+			gridComponent.setRowIndex(-1);
+		}
 
-        indexesModel = indexesModel.copy();
-        valuesAccessor.setComponentValues(component, indexesModel);
+		if (rowData == null) {
+			LOG.error("RowData is null for index='" + index + "'.");
+		}
 
-        return indexesModel;
-    }
+		return rowData;
+	}
 
-    private static List getRowDatas(IGridComponent gridComponent, int[] indices) {
+	private static List getRowDatas(IGridComponent gridComponent) {
 
-        int rowCount = gridComponent.getRowCount();
-        if (rowCount > 0) {
-            DataModel dataModel = gridComponent.getDataModelValue();
+		int rowCount = gridComponent.getRowCount();
+		if (rowCount > 0) {
+			DataModel dataModel = gridComponent.getDataModelValue();
 
-            if (dataModel instanceof IRangeDataModel) {
-                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
-            }
-        }
+			if (dataModel instanceof IRangeDataModel) {
+				((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+			}
+		}
 
-        if (SORT_INDICES) {
-            indices = (int[]) indices.clone();
-            Arrays.sort(indices);
-        }
+		List rowDatas = null;
+		try {
+			for (int index = 0;; index++) {
+				gridComponent.setRowIndex(index);
 
-        List rowDatas = null;
-        try {
-            for (int i = 0; i < indices.length; i++) {
-                int index = indices[i];
-                gridComponent.setRowIndex(index);
-                if (gridComponent.isRowAvailable() == false) {
-                    LOG.error("Row not available for index='" + index + "'.");
-                    continue;
-                }
+				if (gridComponent.isRowAvailable() == false) {
+					LOG.debug("Row not available for index='" + index + "'.");
+					break;
+				}
 
-                Object rowData = gridComponent.getRowData();
+				Object rowData = gridComponent.getRowData();
 
-                if (rowData == null) {
-                    LOG.error("No rowData for index='" + index + "'.");
-                    continue;
-                }
+				if (rowData == null) {
+					LOG.debug("RowData is null for index='" + index + "'.");
+					continue;
+				}
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Get row at index=" + index + " => " + rowData);
-                }
+				if (rowDatas == null) {
+					int size = rowCount - index;
 
-                if (rowDatas == null) {
-                    rowDatas = new ArrayList(indices.length - i);
-                }
-                rowDatas.add(rowData);
-            }
+					if (size < 8) {
+						size = 8;
+					}
 
-        } finally {
-            gridComponent.setRowIndex(-1);
-        }
+					rowDatas = new ArrayList(size);
+				}
 
-        if (rowDatas == null) {
-            return Collections.EMPTY_LIST;
-        }
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Get row at index=" + index + " => " + rowData);
+				}
 
-        return rowDatas;
-    }
+				rowDatas.add(rowData);
+			}
 
-    private static Object getRowData(IGridComponent gridComponent, int index) {
+		} finally {
+			gridComponent.setRowIndex(-1);
+		}
 
-        DataModel dataModel = gridComponent.getDataModelValue();
+		if (rowDatas == null) {
+			return Collections.EMPTY_LIST;
+		}
 
-        if (dataModel instanceof IRangeDataModel) {
-            ((IRangeDataModel) dataModel).setRowRange(index, 1);
-        }
+		return rowDatas;
+	}
 
-        Object rowData = null;
-        gridComponent.setRowIndex(index);
-        try {
-            if (gridComponent.isRowAvailable() == false) {
-                LOG.error("Row not available for index='" + index + "'.");
-                return null;
-            }
+	private static List getRowDatas(IGridComponent gridComponent, int start,
+			int end) {
 
-            rowData = gridComponent.getRowData();
+		DataModel dataModel = gridComponent.getDataModelValue();
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Get row at index=" + index + " => " + rowData);
-            }
+		if (dataModel instanceof IRangeDataModel) {
+			((IRangeDataModel) dataModel).setRowRange(start, end - start + 1);
+		}
 
-        } finally {
-            gridComponent.setRowIndex(-1);
-        }
+		List rowDatas = null;
+		try {
+			for (int index = start; index <= end; index++) {
+				gridComponent.setRowIndex(index);
 
-        if (rowData == null) {
-            LOG.error("RowData is null for index='" + index + "'.");
-        }
+				if (gridComponent.isRowAvailable() == false) {
+					LOG.error("Row not available for index='" + index + "'.");
+					break;
+				}
 
-        return rowData;
-    }
+				Object rowData = gridComponent.getRowData();
 
-    private static List getRowDatas(IGridComponent gridComponent) {
+				if (rowData == null) {
+					LOG.error("RowData is null for index='" + index + "'.");
+					break;
+				}
 
-        int rowCount = gridComponent.getRowCount();
-        if (rowCount > 0) {
-            DataModel dataModel = gridComponent.getDataModelValue();
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Get index=" + index + " => " + rowData);
+				}
 
-            if (dataModel instanceof IRangeDataModel) {
-                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
-            }
-        }
+				if (rowDatas == null) {
+					rowDatas = new ArrayList(end - index + 1);
+				}
 
-        List rowDatas = null;
-        try {
-            for (int index = 0;; index++) {
-                gridComponent.setRowIndex(index);
+				rowDatas.add(rowData);
+			}
 
-                if (gridComponent.isRowAvailable() == false) {
-                    LOG.debug("Row not available for index='" + index + "'.");
-                    break;
-                }
+		} finally {
+			gridComponent.setRowIndex(-1);
+		}
 
-                Object rowData = gridComponent.getRowData();
+		if (rowDatas == null) {
+			return Collections.EMPTY_LIST;
+		}
 
-                if (rowData == null) {
-                    LOG.debug("RowData is null for index='" + index + "'.");
-                    continue;
-                }
+		return rowDatas;
+	}
 
-                if (rowDatas == null) {
-                    int size = rowCount - index;
+	private static int searchIndexIntoDataModel(IGridComponent component,
+			Object rowValue) {
+		int rowCount = component.getRowCount();
+		if (rowCount > 0) {
+			DataModel dataModel = component.getDataModelValue();
 
-                    if (size < 8) {
-                        size = 8;
-                    }
+			if (dataModel instanceof IRangeDataModel) {
+				((IRangeDataModel) dataModel).setRowRange(0, rowCount);
+			}
+		}
 
-                    rowDatas = new ArrayList(size);
-                }
+		try {
+			for (int index = 0;; index++) {
+				component.setRowIndex(index);
+				if (component.isRowAvailable() == false) {
+					break;
+				}
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Get row at index=" + index + " => " + rowData);
-                }
+				Object rowData = component.getRowData();
 
-                rowDatas.add(rowData);
-            }
+				if (rowData == null) {
+					LOG.error("RowData is null for index='" + index + "'.");
+					break;
+				}
 
-        } finally {
-            gridComponent.setRowIndex(-1);
-        }
+				if (rowData.equals(rowValue) == false) {
+					continue;
+				}
 
-        if (rowDatas == null) {
-            return Collections.EMPTY_LIST;
-        }
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Find row " + rowData + " => index=" + index);
+				}
 
-        return rowDatas;
-    }
+				return index;
+			}
 
-    private static List getRowDatas(IGridComponent gridComponent, int start,
-            int end) {
+		} finally {
+			component.setRowIndex(-1);
+		}
 
-        DataModel dataModel = gridComponent.getDataModelValue();
+		return -1;
+	}
 
-        if (dataModel instanceof IRangeDataModel) {
-            ((IRangeDataModel) dataModel).setRowRange(start, end - start + 1);
-        }
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	private static class ProviderValuesAccessor implements IValuesAccessor {
 
-        List rowDatas = null;
-        try {
-            for (int index = start; index <= end; index++) {
-                gridComponent.setRowIndex(index);
+		private final IValuesAccessor providerValuesAccessor;
 
-                if (gridComponent.isRowAvailable() == false) {
-                    LOG.error("Row not available for index='" + index + "'.");
-                    break;
-                }
+		private final Object provider;
 
-                Object rowData = gridComponent.getRowData();
+		public ProviderValuesAccessor(IValuesAccessor providerValuesAccessor,
+				Object provider) {
+			this.providerValuesAccessor = providerValuesAccessor;
+			this.provider = provider;
+		}
 
-                if (rowData == null) {
-                    LOG.error("RowData is null for index='" + index + "'.");
-                    break;
-                }
+		public int getCount(Object value) {
+			return providerValuesAccessor.getCount(provider);
+		}
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Get index=" + index + " => " + rowData);
-                }
+		public Object getFirst(Object value, Object refValues) {
+			return providerValuesAccessor.getFirst(provider, null);
+		}
 
-                if (rowDatas == null) {
-                    rowDatas = new ArrayList(end - index + 1);
-                }
+		public Object[] listValues(Object value, Object refValues) {
+			return providerValuesAccessor.listValues(provider, null);
+		}
 
-                rowDatas.add(rowData);
-            }
+		public Object getAdaptedValues(Object value) {
+			return provider;
+		}
 
-        } finally {
-            gridComponent.setRowIndex(-1);
-        }
+		public Object getComponentValues(UIComponent component) {
+			return providerValuesAccessor.getComponentValues(component);
+		}
 
-        if (rowDatas == null) {
-            return Collections.EMPTY_LIST;
-        }
+		public void setComponentValues(UIComponent component, Object values) {
+			providerValuesAccessor.setComponentValues(component, values);
+		}
 
-        return rowDatas;
-    }
+		public Class getComponentValuesType(FacesContext facesContext,
+				UIComponent component) {
+			return providerValuesAccessor.getComponentValuesType(null,
+					component);
+		}
 
-    private static int searchIndexIntoDataModel(IGridComponent component,
-            Object rowValue) {
-        int rowCount = component.getRowCount();
-        if (rowCount > 0) {
-            DataModel dataModel = component.getDataModelValue();
+		public void setAdaptedValues(Object value, Object values) {
+			providerValuesAccessor.setAdaptedValues(value, values);
+		}
+	}
 
-            if (dataModel instanceof IRangeDataModel) {
-                ((IRangeDataModel) dataModel).setRowRange(0, rowCount);
-            }
-        }
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	protected interface IValuesAccessor {
+		Object getFirst(Object value, Object refValues);
 
-        try {
-            for (int index = 0;; index++) {
-                component.setRowIndex(index);
-                if (component.isRowAvailable() == false) {
-                    break;
-                }
+		int getCount(Object value);
 
-                Object rowData = component.getRowData();
+		Object[] listValues(Object value, Object refValues);
 
-                if (rowData == null) {
-                    LOG.error("RowData is null for index='" + index + "'.");
-                    break;
-                }
+		Object getAdaptedValues(Object values);
 
-                if (rowData.equals(rowValue) == false) {
-                    continue;
-                }
+		void setAdaptedValues(Object value, Object values);
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Find row " + rowData + " => index=" + index);
-                }
+		Object getComponentValues(UIComponent component);
 
-                return index;
-            }
+		void setComponentValues(UIComponent component, Object values);
 
-        } finally {
-            component.setRowIndex(-1);
-        }
+		Class getComponentValuesType(FacesContext facesContext,
+				UIComponent component);
+	}
 
-        return -1;
-    }
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	private static abstract class AbstractValuesAccessor implements
+			IValuesAccessor {
+		private static final String REVISION = "$Revision$";
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static class ProviderValuesAccessor implements IValuesAccessor {
+		public Object getComponentValues(UIComponent component) {
+			throw new IllegalStateException("Not implemented !");
+		}
 
-        private final IValuesAccessor providerValuesAccessor;
+		public void setComponentValues(UIComponent component, Object values) {
+			throw new IllegalStateException("Not implemented !");
+		}
 
-        private final Object provider;
+		public Class getComponentValuesType(FacesContext facesContext,
+				UIComponent component) {
+			throw new IllegalStateException("Not implemented !");
+		}
 
-        public ProviderValuesAccessor(IValuesAccessor providerValuesAccessor,
-                Object provider) {
-            this.providerValuesAccessor = providerValuesAccessor;
-            this.provider = provider;
-        }
+		public Object getAdaptedValues(Object value) {
+			return value;
+		}
 
-        public int getCount(Object value) {
-            return providerValuesAccessor.getCount(provider);
-        }
+		public void setAdaptedValues(Object value, Object values) {
+			throw new IllegalStateException("Not supported");
+		}
+	}
 
-        public Object getFirst(Object value, Object refValues) {
-            return providerValuesAccessor.getFirst(provider, null);
-        }
+	public static Object adaptValues(Class target, Collection collection) {
+		if (target == null || target.equals(Object.class)
+				|| target.equals(Object[].class)) {
+			return collection.toArray();
+		}
 
-        public Object[] listValues(Object value, Object refValues) {
-            return providerValuesAccessor.listValues(provider, null);
-        }
+		if (target.isArray()) {
+			Object array = Array.newInstance(target.getComponentType(),
+					collection.size());
 
-        public Object getAdaptedValues(Object value) {
-            return provider;
-        }
+			if (array instanceof Object[]) {
+				return collection.toArray((Object[]) array);
+			}
 
-        public Object getComponentValues(UIComponent component) {
-            return providerValuesAccessor.getComponentValues(component);
-        }
+			Object src[] = collection.toArray();
 
-        public void setComponentValues(UIComponent component, Object values) {
-            providerValuesAccessor.setComponentValues(component, values);
-        }
+			System.arraycopy(src, 0, array, 0, collection.size());
 
-        public Class getComponentValuesType(FacesContext facesContext,
-                UIComponent component) {
-            return providerValuesAccessor.getComponentValuesType(null,
-                    component);
-        }
+			return array;
+		}
 
-        public void setAdaptedValues(Object value, Object values) {
-            providerValuesAccessor.setAdaptedValues(value, values);
-        }
-    }
+		if (Set.class.isAssignableFrom(target)) {
+			if (collection instanceof Set) {
+				return collection;
+			}
+			return new HashSet(collection);
+		}
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    protected interface IValuesAccessor {
-        Object getFirst(Object value, Object refValues);
+		if (List.class.isAssignableFrom(target)) {
+			if (collection instanceof List) {
+				return collection;
+			}
+			return new ArrayList(collection);
+		}
 
-        int getCount(Object value);
+		if (Collection.class.isAssignableFrom(target)) {
+			return collection;
+		}
 
-        Object[] listValues(Object value, Object refValues);
+		throw new FacesException("Invalid collection type '" + target + "'.");
+	}
 
-        Object getAdaptedValues(Object values);
+	public static Set __convertSelection(Object selection) {
+		if (selection instanceof Object[]) {
+			return new OrderedSet(Arrays.asList((Object[]) selection));
+		}
 
-        void setAdaptedValues(Object value, Object values);
+		if (selection instanceof Collection) {
+			return new OrderedSet((Collection) selection);
+		}
 
-        Object getComponentValues(UIComponent component);
+		if (selection == null) {
+			return new OrderedSet();
+		}
 
-        void setComponentValues(UIComponent component, Object values);
+		throw new FacesException(
+				"Bad type of value for attribute selectedValues/checkedValues !");
+	}
 
-        Class getComponentValuesType(FacesContext facesContext,
-                UIComponent component);
-    }
+	protected static void setValues(UIComponent component,
+			IValuesAccessor valuesAccessor, Collection values) {
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static abstract class AbstractValuesAccessor implements
-            IValuesAccessor {
-        private static final String REVISION = "$Revision$";
+		Object newValues = createNewValues(component, valuesAccessor);
 
-        public Object getComponentValues(UIComponent component) {
-            throw new IllegalStateException("Not implemented !");
-        }
+		select(component, valuesAccessor, newValues, values);
+	}
 
-        public void setComponentValues(UIComponent component, Object values) {
-            throw new IllegalStateException("Not implemented !");
-        }
+	protected static Set valuesToSet(UIComponent component,
+			IValuesAccessor valuesAccessor, boolean immutable) {
+		Object value = valuesAccessor.getComponentValues(component);
 
-        public Class getComponentValuesType(FacesContext facesContext,
-                UIComponent component) {
-            throw new IllegalStateException("Not implemented !");
-        }
+		return valuesToSet(value, immutable);
+	}
 
-        public Object getAdaptedValues(Object value) {
-            return value;
-        }
+	public static Set valuesToSet(Object value, boolean immutable) {
+		if (value == null) {
+			if (immutable == false) {
+				return new OrderedSet();
+			}
+			return Collections.EMPTY_SET;
+		}
 
-        public void setAdaptedValues(Object value, Object values) {
-            throw new IllegalStateException("Not supported");
-        }
-    }
+		if (value.getClass().isArray()) {
+			int length = Array.getLength(value);
 
-    public static Object adaptValues(Class target, Collection collection) {
-        if (target == null || target.equals(Object.class)
-                || target.equals(Object[].class)) {
-            return collection.toArray();
-        }
+			if (length < 1) {
+				if (immutable == false) {
+					return new OrderedSet();
+				}
+				return Collections.EMPTY_SET;
+			}
 
-        if (target.isArray()) {
-            Object array = Array.newInstance(target.getComponentType(),
-                    collection.size());
+			Set set = new OrderedSet();
 
-            if (array instanceof Object[]) {
-                return collection.toArray((Object[]) array);
-            }
+			for (int i = 0; i < length; i++) {
+				set.add(Array.get(value, i));
+			}
 
-            Object src[] = collection.toArray();
+			if (LOG.isDebugEnabled() && immutable) {
+				return Collections.unmodifiableSet(set);
+			}
 
-            System.arraycopy(src, 0, array, 0, collection.size());
+			return set;
+		}
 
-            return array;
-        }
+		if (value instanceof String) {
+			String ss[] = StringList.parseTokensList((String) value);
 
-        if (Set.class.isAssignableFrom(target)) {
-            if (collection instanceof Set) {
-                return collection;
-            }
-            return new HashSet(collection);
-        }
+			if (ss.length == 0) {
+				if (immutable == false) {
+					return new OrderedSet();
+				}
+				return Collections.EMPTY_SET;
+			}
 
-        if (List.class.isAssignableFrom(target)) {
-            if (collection instanceof List) {
-                return collection;
-            }
-            return new ArrayList(collection);
-        }
+			Set set = new OrderedSet(Arrays.asList(ss));
 
-        if (Collection.class.isAssignableFrom(target)) {
-            return collection;
-        }
+			if (LOG.isDebugEnabled() && immutable) {
+				return Collections.unmodifiableSet(set);
+			}
 
-        throw new FacesException("Invalid collection type '" + target + "'.");
-    }
+			return set;
+		}
 
-    public static Set __convertSelection(Object selection) {
-        if (selection instanceof Object[]) {
-            return new OrderedSet(Arrays.asList((Object[]) selection));
-        }
+		if (value instanceof Set) {
+			if (immutable == false) {
+				return new OrderedSet((Set) value);
+			}
 
-        if (selection instanceof Collection) {
-            return new OrderedSet((Collection) selection);
-        }
+			if (LOG.isDebugEnabled() && immutable) {
+				return Collections.unmodifiableSet((Set) value);
+			}
 
-        if (selection == null) {
-            return new OrderedSet();
-        }
+			return (Set) value;
+		}
 
-        throw new FacesException(
-                "Bad type of value for attribute selectedValues/checkedValues !");
-    }
+		if (value instanceof Collection) {
+			Collection col = (Collection) value;
+			if (col.isEmpty() && immutable) {
+				return Collections.EMPTY_SET;
+			}
 
-    protected static void setValues(UIComponent component,
-            IValuesAccessor valuesAccessor, Collection values) {
+			Set set = new OrderedSet((Collection) value);
 
-        Object newValues = createNewValues(component, valuesAccessor);
+			if (LOG.isDebugEnabled() && immutable) {
+				return Collections.unmodifiableSet(set);
+			}
 
-        select(component, valuesAccessor, newValues, values);
-    }
+			return set;
+		}
 
-    protected static Set valuesToSet(UIComponent component,
-            IValuesAccessor valuesAccessor, boolean immutable) {
-        Object value = valuesAccessor.getComponentValues(component);
+		if (immutable == false) {
+			Set set = new OrderedSet();
+			set.add(value);
 
-        return valuesToSet(value, immutable);
-    }
+			return set;
+		}
 
-    public static Set valuesToSet(Object value, boolean immutable) {
-        if (value == null) {
-            if (immutable == false) {
-                return new OrderedSet();
-            }
-            return Collections.EMPTY_SET;
-        }
+		return Collections.singleton(value);
+	}
 
-        if (value.getClass().isArray()) {
-            int length = Array.getLength(value);
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	public interface IComponentValueType {
+		Object createNewValue(UIComponent component);
+	}
 
-            if (length < 1) {
-                if (immutable == false) {
-                    return new OrderedSet();
-                }
-                return Collections.EMPTY_SET;
-            }
+	/**
+	 * INTERNAL Stuff
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	public interface IComponentValueTypeCapability {
+		IComponentValueType getComponentValueType();
+	}
 
-            Set set = new OrderedSet();
-
-            for (int i = 0; i < length; i++) {
-                set.add(Array.get(value, i));
-            }
-
-            if (LOG.isDebugEnabled() && immutable) {
-                return Collections.unmodifiableSet(set);
-            }
-
-            return set;
-        }
-
-        if (value instanceof String) {
-            String ss[] = StringList.parseTokensList((String) value);
-
-            if (ss.length == 0) {
-                if (immutable == false) {
-                    return new OrderedSet();
-                }
-                return Collections.EMPTY_SET;
-            }
-
-            Set set = new OrderedSet(Arrays.asList(ss));
-
-            if (LOG.isDebugEnabled() && immutable) {
-                return Collections.unmodifiableSet(set);
-            }
-
-            return set;
-        }
-
-        if (value instanceof Set) {
-            if (immutable == false) {
-                return new OrderedSet((Set) value);
-            }
-
-            if (LOG.isDebugEnabled() && immutable) {
-                return Collections.unmodifiableSet((Set) value);
-            }
-
-            return (Set) value;
-        }
-
-        if (value instanceof Collection) {
-            Collection col = (Collection) value;
-            if (col.isEmpty() && immutable) {
-                return Collections.EMPTY_SET;
-            }
-
-            Set set = new OrderedSet((Collection) value);
-
-            if (LOG.isDebugEnabled() && immutable) {
-                return Collections.unmodifiableSet(set);
-            }
-
-            return set;
-        }
-
-        if (immutable == false) {
-            Set set = new OrderedSet();
-            set.add(value);
-
-            return set;
-        }
-
-        return Collections.singleton(value);
-    }
-
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    public interface IComponentValueType {
-        Object createNewValue(UIComponent component);
-    }
-
-    /**
-     * INTERNAL Stuff
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    public interface IComponentValueTypeCapability {
-        IComponentValueType getComponentValueType();
-    }
+	public interface IAllValuesProvider {
+		List listAllValues(UIComponent component);
+	}
 }
