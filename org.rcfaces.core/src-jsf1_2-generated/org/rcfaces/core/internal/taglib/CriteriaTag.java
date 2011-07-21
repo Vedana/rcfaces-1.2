@@ -18,18 +18,33 @@ public class CriteriaTag extends CameliaTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(CriteriaTag.class);
 
-	private ValueExpression value;
-	private ValueExpression converter;
+	private ValueExpression selectionCardinality;
+	private ValueExpression selectedValues;
+	private ValueExpression criteriaValue;
+	private ValueExpression criteriaConverter;
+	private ValueExpression labelConverter;
 	public String getComponentType() {
 		return CriteriaComponent.COMPONENT_TYPE;
 	}
 
-	public final void setValue(ValueExpression value) {
-		this.value = value;
+	public final void setSelectionCardinality(ValueExpression selectionCardinality) {
+		this.selectionCardinality = selectionCardinality;
 	}
 
-	public final void setConverter(ValueExpression converter) {
-		this.converter = converter;
+	public final void setSelectedValues(ValueExpression selectedValues) {
+		this.selectedValues = selectedValues;
+	}
+
+	public final void setCriteriaValue(ValueExpression criteriaValue) {
+		this.criteriaValue = criteriaValue;
+	}
+
+	public final void setCriteriaConverter(ValueExpression criteriaConverter) {
+		this.criteriaConverter = criteriaConverter;
+	}
+
+	public final void setLabelConverter(ValueExpression labelConverter) {
+		this.labelConverter = labelConverter;
 	}
 
 	protected void setProperties(UIComponent uiComponent) {
@@ -37,8 +52,11 @@ public class CriteriaTag extends CameliaTag implements Tag {
 			if (CriteriaComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  value='"+value+"'");
-			LOG.debug("  converter='"+converter+"'");
+			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
+			LOG.debug("  criteriaValue='"+criteriaValue+"'");
+			LOG.debug("  criteriaConverter='"+criteriaConverter+"'");
+			LOG.debug("  labelConverter='"+labelConverter+"'");
 		}
 		if ((uiComponent instanceof CriteriaComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -52,28 +70,58 @@ public class CriteriaTag extends CameliaTag implements Tag {
 		CriteriaComponent component = (CriteriaComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
 
-		if (value != null) {
-			if (value.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE, value);
+		if (selectionCardinality != null) {
+			if (selectionCardinality.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTION_CARDINALITY, selectionCardinality);
 
 			} else {
-				component.setValue(value.getExpressionString());
+				component.setSelectionCardinality(selectionCardinality.getExpressionString());
 			}
 		}
 
-		if (converter != null) {
-			if (converter.isLiteralText()==false) {
-				component.setValueExpression(Properties.CONVERTER, converter);
+		if (selectedValues != null) {
+			if (selectedValues.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
 
 			} else {
-				component.setConverter(converter.getExpressionString());
+				component.setSelectedValues(selectedValues.getExpressionString());
+			}
+		}
+
+		if (criteriaValue != null) {
+			if (criteriaValue.isLiteralText()==false) {
+				component.setValueExpression(Properties.CRITERIA_VALUE, criteriaValue);
+
+			} else {
+				component.setCriteriaValue(criteriaValue.getExpressionString());
+			}
+		}
+
+		if (criteriaConverter != null) {
+			if (criteriaConverter.isLiteralText()==false) {
+				component.setValueExpression(Properties.CRITERIA_CONVERTER, criteriaConverter);
+
+			} else {
+				component.setCriteriaConverter(criteriaConverter.getExpressionString());
+			}
+		}
+
+		if (labelConverter != null) {
+			if (labelConverter.isLiteralText()==false) {
+				component.setValueExpression(Properties.LABEL_CONVERTER, labelConverter);
+
+			} else {
+				component.setLabelConverter(labelConverter.getExpressionString());
 			}
 		}
 	}
 
 	public void release() {
-		value = null;
-		converter = null;
+		selectionCardinality = null;
+		selectedValues = null;
+		criteriaValue = null;
+		criteriaConverter = null;
+		labelConverter = null;
 
 		super.release();
 	}

@@ -37,7 +37,7 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
-import org.rcfaces.core.model.ICriteriaConfig;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
@@ -180,7 +180,7 @@ public class ComponentsGridService extends AbstractHtmlService {
 				}
 			}
 
-			ICriteriaConfig[] criteriaConfigs = null;
+			ISelectedCriteria[] criteriaConfigs = null;
 			String criteria_s = (String) parameters.get("criteria");
 			criteriaConfigs = DataGridService.computeCriteriaConfigs(dgc,
 					criteria_s);
@@ -296,7 +296,7 @@ public class ComponentsGridService extends AbstractHtmlService {
 			ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
 			ISortedComponent sortedComponents[], String filterExpression,
 			String showAdditional, String hideAdditional,
-			boolean unknownRowCount, ICriteriaConfig[] criteriaContainers)
+			boolean unknownRowCount, ISelectedCriteria[] criteriaContainers)
 			throws IOException {
 
 		IProcessContext processContext = HtmlProcessContextImpl

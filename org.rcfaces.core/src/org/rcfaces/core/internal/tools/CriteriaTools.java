@@ -1,20 +1,23 @@
 package org.rcfaces.core.internal.tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import org.rcfaces.core.component.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
-import org.rcfaces.core.component.capability.ICriteriaValuesCapability;
 import org.rcfaces.core.internal.capability.IComponentEngine;
+import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
+import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.item.CriteriaItem;
-import org.rcfaces.core.lang.provider.ICriteriaProvider;
-import org.rcfaces.core.model.ICriteriaConfig;
-import org.rcfaces.core.model.ICriteriaConfigResult;
+import org.rcfaces.core.model.ICriteriaSelectedResult;
+import org.rcfaces.core.model.ISelectedCriteria;
 
 /**
  * 
@@ -23,123 +26,7 @@ import org.rcfaces.core.model.ICriteriaConfigResult;
  */
 public class CriteriaTools extends CollectionTools {
 
-	private static final IValuesAccessor CRITERIA_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
-		public int getCount(Object selectionProvider) {
-			return ((ICriteriaProvider) selectionProvider)
-					.getCriteriaValuesCount();
-		}
-
-		public Object getFirst(Object selectionProvider, Object refValues) {
-			return ((ICriteriaProvider) selectionProvider)
-					.getFirstCriteriaValue();
-		}
-
-		public Object[] listValues(Object selectionProvider, Object refValues) {
-			return convertToObjectArray(((ICriteriaProvider) selectionProvider)
-					.getCriteriaValues());
-		}
-
-		public Object getAdaptedValues(Object value) {
-			return value;
-		}
-
-		public void setAdaptedValues(Object selectionProvider,
-				Object selectedValues) {
-			((ICriteriaProvider) selectionProvider)
-					.setCriteriaValues(selectedValues);
-		}
-
-		public Object getComponentValues(UIComponent component) {
-			return ((ICriteriaValuesCapability) component).getCriteriaValues();
-		}
-
-		public void setComponentValues(UIComponent component, Object values) {
-			((ICriteriaValuesCapability) component).setCriteriaValues(values);
-		}
-
-		public Class getComponentValuesType(FacesContext facesContext,
-				UIComponent component) {
-			return ((ICriteriaValuesCapability) component)
-					.getCriteriaValuesType(facesContext);
-		}
-	};
-	private static final IAllValuesProvider CRITERIA_ALL_VALUES_PROVIDER = new IAllValuesProvider() {
-
-		public List listAllValues(UIComponent component) {
-
-			ICriteriaContainer container = (ICriteriaContainer) component;
-
-			ICriteriaConfigResult configResult = container.getCriteriaManager()
-					.processCriteriaConfig();
-
-			CriteriaItem[] items = configResult
-					.getAvailableCriteriaItems(container);
-
-			if (items == null || items.length == 0) {
-				return Collections.emptyList();
-			}
-
-			List values = new ArrayList(items.length);
-			for (int i = 0; i < items.length; i++) {
-				values.add(items[i].getValue());
-			}
-
-			return values;
-		}
-	};
-
-	public static void selectCriterion(FacesContext facesContext,
-			ICriteriaContainer component, Object criteriaValue) {
-		select((UIComponent) component, CRITERIA_PROVIDER_VALUES_ACCESSOR,
-				criteriaValue);
-	}
-
-	public static void selectAllCriteria(FacesContext facesContext,
-			ICriteriaContainer component) {
-		selectAll((UIComponent) component, CRITERIA_PROVIDER_VALUES_ACCESSOR,
-				CRITERIA_ALL_VALUES_PROVIDER);
-	}
-
-	public static void deselectCriterion(FacesContext facesContext,
-			ICriteriaContainer component, Object criteriaValue) {
-		deselect((UIComponent) component, CRITERIA_PROVIDER_VALUES_ACCESSOR,
-				criteriaValue);
-	}
-
-	public static void deselectAllCriteria(FacesContext facesContext,
-			ICriteriaContainer component) {
-		deselectAll((UIComponent) component, CRITERIA_PROVIDER_VALUES_ACCESSOR);
-	}
-
-	public static int getCount(Object criteriaValues) {
-		IValuesAccessor valuesAccessor = getValuesAccessor(criteriaValues,
-				ICriteriaProvider.class, CRITERIA_PROVIDER_VALUES_ACCESSOR,
-				true, true);
-		if (valuesAccessor == null) {
-			return 0;
-		}
-		return valuesAccessor.getCount(criteriaValues);
-	}
-
-	public static Object getFirst(Object criteriaValues) {
-		IValuesAccessor valuesAccessor = getValuesAccessor(criteriaValues,
-				ICriteriaProvider.class, CRITERIA_PROVIDER_VALUES_ACCESSOR,
-				true, true);
-		if (valuesAccessor == null) {
-			return null;
-		}
-		return valuesAccessor.getFirst(criteriaValues, null);
-	}
-
-	public static Object[] listValues(Object criteriaValues) {
-		IValuesAccessor valuesAccessor = getValuesAccessor(criteriaValues,
-				ICriteriaProvider.class, CRITERIA_PROVIDER_VALUES_ACCESSOR,
-				true, true);
-		if (valuesAccessor == null) {
-			return EMPTY_VALUES;
-		}
-		return valuesAccessor.listValues(criteriaValues, null);
-	}
+	private static final ISelectedCriteria[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ISelectedCriteria[0];
 
 	public static ICriteriaContainer[] getCriteriaColumns(
 			FacesContext facesContext, UIComponent component,
@@ -169,20 +56,118 @@ public class CriteriaTools extends CollectionTools {
 	}
 
 	public static CriteriaItem[] listAvailableCriteriaItems(
-			ICriteriaContainer container, ICriteriaConfig[] configs) {
-		ICriteriaConfigResult result = container.getCriteriaManager()
-				.processCriteriaConfig(configs);
+			ICriteriaConfiguration container, ISelectedCriteria[] configs) {
+		ICriteriaSelectedResult result = container.getCriteriaContainer()
+				.getCriteriaManager().processSelectedCriteria(configs);
 
 		return result.getAvailableCriteriaItems(container);
 	}
 
-	public static ICriteriaConfigResult processCriteriaConfig(
-			ICriteriaManagerCapability manager, ICriteriaConfig[] configs) {
+	public static ICriteriaSelectedResult processCriteriaConfig(
+			ICriteriaManagerCapability manager, ISelectedCriteria[] configs) {
 
-		GridCriteriaConfigResult result = new GridCriteriaConfigResult(manager,
-				configs);
+		if (manager instanceof IGridComponent) {
+			ICriteriaSelectedResult result = new GridCriteriaSelectedResult(
+					(IGridComponent) manager, configs);
+			return result;
+		}
 
-		return result;
+		throw new UnsupportedOperationException("Not implemented");
 	}
 
+	public static ISelectedCriteria[] listSelectedCriteria(
+			ICriteriaManagerCapability manager) {
+
+		ICriteriaContainer[] criteriaContainers = manager
+				.listCriteriaContainers();
+
+		if (criteriaContainers == null || criteriaContainers.length == 0) {
+			return CRITERIA_CONTAINER_EMPTY_ARRAY;
+		}
+
+		List<ISelectedCriteria> configs = new ArrayList<ISelectedCriteria>();
+
+		for (ICriteriaContainer container : criteriaContainers) {
+			ICriteriaConfiguration configuration = container
+					.getCriteriaConfiguration();
+			if (configuration == null) {
+				continue;
+			}
+
+			Object[] values = configuration.listSelectedValues();
+
+			Set<?> set = null;
+			if (values != null) {
+				if (values.length == 0) {
+					set = Collections.emptySet();
+
+				} else {
+					set = new HashSet<Object>(Arrays.asList(values));
+				}
+			}
+
+			ISelectedCriteria selectedCriteria = new BasicSelectedCriteria(
+					configuration, set);
+			configs.add(selectedCriteria);
+		}
+
+		return (ISelectedCriteria[]) configs
+				.toArray(new ISelectedCriteria[configs.size()]);
+	}
+
+	public static ICriteriaManagerCapability getCriteriaManager(
+			ICriteriaContainer container) {
+
+		for (UIComponent component = ((UIComponent) container).getParent(); component != null; component = component
+				.getParent()) {
+
+			if (component instanceof ICriteriaManagerCapability) {
+				return (ICriteriaManagerCapability) component;
+			}
+		}
+
+		return null;
+	}
+
+	public static ICriteriaConfiguration[] listCriteriaConfigurations(
+			ICriteriaContainer container) {
+
+		List<ICriteriaConfiguration> configurations = new ArrayList<ICriteriaConfiguration>();
+
+		for (UIComponent component : ((UIComponent) container).getChildren()) {
+			if (component instanceof ICriteriaConfiguration) {
+				configurations.add((ICriteriaConfiguration) component);
+			}
+		}
+
+		return (ICriteriaConfiguration[]) configurations
+				.toArray(new ICriteriaConfiguration[configurations.size()]);
+	}
+
+	public static ICriteriaConfiguration getFirstCriteriaConfiguration(
+			ICriteriaContainer container) {
+
+		for (UIComponent component : ((UIComponent) container).getChildren()) {
+			if (component instanceof ICriteriaConfiguration) {
+				return (ICriteriaConfiguration) component;
+			}
+		}
+
+		return null;
+	}
+
+	public static ICriteriaContainer getCriteriaContainer(
+			ICriteriaConfiguration criteriaConfiguration) {
+
+		for (UIComponent component = ((UIComponent) criteriaConfiguration)
+				.getParent(); component != null; component = component
+				.getParent()) {
+
+			if (component instanceof ICriteriaContainer) {
+				return (ICriteriaContainer) component;
+			}
+		}
+
+		return null;
+	}
 }

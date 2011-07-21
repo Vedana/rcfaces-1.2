@@ -1,11 +1,19 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.component.Properties;
+import java.lang.String;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.SelectionTools;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
+import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.item.CriteriaItem;
 import javax.faces.convert.Converter;
+import org.rcfaces.core.model.ISelectedCriteria;
+import org.rcfaces.core.internal.converter.SelectionCardinalityConverter;
 import org.rcfaces.core.internal.component.CameliaBaseComponent;
+import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.apache.commons.logging.Log;
@@ -16,7 +24,9 @@ import org.rcfaces.core.internal.tools.CollectionTools;
 import org.rcfaces.core.internal.tools.ComponentTools;
 
 public class CriteriaComponent extends CameliaBaseComponent implements 
-	ISelectionComponent {
+	ISelectionCardinalityCapability,
+	ISelectionComponent,
+	ICriteriaConfiguration {
 
 	private static final Log LOG = LogFactory.getLog(CriteriaComponent.class);
 
@@ -24,7 +34,7 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"converter","value"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"criteriaValue","criteriaConverter","selectionCardinality","labelConverter","selectedValues"}));
 	}
 
 	public CriteriaComponent() {
@@ -36,19 +46,35 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 		setId(componentId);
 	}
 
-	public void setConverter(String converterId) {
+	public void setCriteriaConverter(String converterId) {
 
 			
-				setConverter(converterId, null);
+				setCriteriaConverter(converterId, null);
 			
 	}
 
-	public void setConverter(String converterId, FacesContext facesContext) {
+	public void setCriteriaConverter(String converterId, FacesContext facesContext) {
 
 
 				Converter converter=ComponentTools.createConverter(facesContext, converterId);
 	
-				setConverter(converter);
+				setCriteriaConverter(converter);
+			
+	}
+
+	public void setLabelConverter(String converterId) {
+
+			
+				setLabelConverter(converterId, null);
+			
+	}
+
+	public void setLabelConverter(String converterId, FacesContext facesContext) {
+
+
+				Converter converter=ComponentTools.createConverter(facesContext, converterId);
+	
+				setLabelConverter(converter);
 			
 	}
 
@@ -90,86 +116,169 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 	public Object getFirstSelectedValue() {
 
 
-				return SelectionTools.getFirst(getSelectedValues(), getValue());
+				return SelectionTools.getFirst(getSelectedValues(), null);
 			
 	}
 
 	public Object[] listSelectedValues() {
 
 
-				return SelectionTools.listValues(getSelectedValues(), getValue());
+				return SelectionTools.listValues(getSelectedValues(), null);
 			
 	}
 
+	public void setSelectionCardinality(String cardinality) {
+
+
+			setSelectionCardinality(((Integer)SelectionCardinalityConverter.SINGLETON.getAsObject(null, this, cardinality)).intValue());
+		
+	}
+
+	public CriteriaItem[] listAvailableCriteriaItems() {
+
+
+				return CriteriaTools.listAvailableCriteriaItems(this, null);
+			
+	}
+
+	public CriteriaItem[] listAvailableCriteriaItems(ISelectedCriteria[] configs) {
+
+
+				return CriteriaTools.listAvailableCriteriaItems(this, configs);
+			
+	}
+
+	public ICriteriaContainer getCriteriaContainer() {
+
+
+				return CriteriaTools.getCriteriaContainer(this);
+			
+	}
+
+	public int getCriteriaCardinality() {
+
+
+				return getSelectionCardinality();
+			
+	}
+
+	public int getSelectionCardinality() {
+		return getSelectionCardinality(null);
+	}
+
+	/**
+	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
+	 */
+	public int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectionCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectionCardinalitySetted() {
+		return engine.isPropertySetted(Properties.SELECTION_CARDINALITY);
+	}
+
+	public void setSelectionCardinality(int selectionCardinality) {
+		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
+	}
+
+	/**
+	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
+	 * @return table of values
+	 */
 	public Object getSelectedValues() {
-
-			
-				return getSelectedValues(null);
-			
+		return getSelectedValues(null);
 	}
 
-	public Object getSelectedValues(FacesContext facesContext) {
-
-			
-				if (engine.isPropertySetted(Properties.SELECTED_VALUES)) {
-					return engine.getValue(Properties.SELECTED_VALUES, facesContext);
-				}
-
-				return SelectionTools.getAdaptedValues(getValue(), false);
-			
+	/**
+	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
+	 * @return table of values
+	 */
+	public Object getSelectedValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.SELECTED_VALUES, facesContext);
 	}
 
+	/**
+	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
+	 * @param selectedValues table of values
+	 */
 	public void setSelectedValues(Object selectedValues) {
-
-
-				if (engine.isPropertySetted(Properties.SELECTED_VALUES)==false) {
-					if (SelectionTools.setAdaptedValues(getValue(), selectedValues)) {
-						return;
-					}
-				}
-								
-				engine.setValue(Properties.SELECTED_VALUES, selectedValues);
-			
-	}
-
-	public Object getValue() {
-		return getValue(null);
-	}
-
-	public Object getValue(javax.faces.context.FacesContext facesContext) {
-		return engine.getValue(Properties.VALUE, facesContext);
-	}
-
-	public void setValue(Object value) {
-		engine.setValue(Properties.VALUE, value);
+		engine.setValue(Properties.SELECTED_VALUES, selectedValues);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "value" is set.
+	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
+	 * @param selectedValues table of values
+	 */
+	/**
+	 * Returns <code>true</code> if the attribute "selectedValues" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isValueSetted() {
-		return engine.isPropertySetted(Properties.VALUE);
+	public boolean isSelectedValuesSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_VALUES);
 	}
 
-	public javax.faces.convert.Converter getConverter() {
-		return getConverter(null);
+	public Object getCriteriaValue() {
+		return getCriteriaValue(null);
 	}
 
-	public javax.faces.convert.Converter getConverter(javax.faces.context.FacesContext facesContext) {
-		return (javax.faces.convert.Converter)engine.getValue(Properties.CONVERTER, facesContext);
+	public Object getCriteriaValue(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.CRITERIA_VALUE, facesContext);
 	}
 
-	public void setConverter(javax.faces.convert.Converter converter) {
-		engine.setProperty(Properties.CONVERTER, converter);
+	public void setCriteriaValue(Object criteriaValue) {
+		engine.setValue(Properties.CRITERIA_VALUE, criteriaValue);
 	}
 
 	/**
-	 * Returns <code>true</code> if the attribute "converter" is set.
+	 * Returns <code>true</code> if the attribute "criteriaValue" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isConverterSetted() {
-		return engine.isPropertySetted(Properties.CONVERTER);
+	public boolean isCriteriaValueSetted() {
+		return engine.isPropertySetted(Properties.CRITERIA_VALUE);
+	}
+
+	public javax.faces.convert.Converter getCriteriaConverter() {
+		return getCriteriaConverter(null);
+	}
+
+	public javax.faces.convert.Converter getCriteriaConverter(javax.faces.context.FacesContext facesContext) {
+		return (javax.faces.convert.Converter)engine.getValue(Properties.CRITERIA_CONVERTER, facesContext);
+	}
+
+	public void setCriteriaConverter(javax.faces.convert.Converter criteriaConverter) {
+		engine.setProperty(Properties.CRITERIA_CONVERTER, criteriaConverter);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "criteriaConverter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isCriteriaConverterSetted() {
+		return engine.isPropertySetted(Properties.CRITERIA_CONVERTER);
+	}
+
+	public javax.faces.convert.Converter getLabelConverter() {
+		return getLabelConverter(null);
+	}
+
+	public javax.faces.convert.Converter getLabelConverter(javax.faces.context.FacesContext facesContext) {
+		return (javax.faces.convert.Converter)engine.getValue(Properties.LABEL_CONVERTER, facesContext);
+	}
+
+	public void setLabelConverter(javax.faces.convert.Converter labelConverter) {
+		engine.setProperty(Properties.LABEL_CONVERTER, labelConverter);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "labelConverter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isLabelConverterSetted() {
+		return engine.isPropertySetted(Properties.LABEL_CONVERTER);
 	}
 
 	protected Set getCameliaFields() {

@@ -34,6 +34,7 @@ import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
 import org.rcfaces.core.component.capability.IDraggableCapability;
@@ -49,7 +50,6 @@ import java.util.Arrays;
 import org.rcfaces.core.component.capability.IOrderedChildrenCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
-import org.rcfaces.core.component.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.ICheckCardinalityCapability;
 import org.rcfaces.core.internal.capability.ISelectionRangeComponent;
@@ -58,7 +58,6 @@ import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.component.capability.IPagedCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
-import org.rcfaces.core.model.ICriteriaConfigResult;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.internal.tools.GridTools;
 import org.rcfaces.core.component.capability.IDragAndDropEffects;
@@ -80,9 +79,10 @@ import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import org.rcfaces.core.component.capability.IDropEventCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
-import org.rcfaces.core.model.ICriteriaConfig;
+import org.rcfaces.core.model.ICriteriaSelectedResult;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.model.ISelectedCriteria;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
@@ -523,14 +523,14 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
-	public ICriteriaConfigResult processCriteriaConfig() {
+	public ICriteriaSelectedResult processSelectedCriteria() {
 
 
 				return CriteriaTools.processCriteriaConfig(this, null);
 			
 	}
 
-	public ICriteriaConfigResult processCriteriaConfig(ICriteriaConfig[] configs) {
+	public ICriteriaSelectedResult processSelectedCriteria(ISelectedCriteria[] configs) {
 
 
 				return CriteriaTools.processCriteriaConfig(this, configs);

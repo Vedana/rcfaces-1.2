@@ -63,9 +63,9 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression hiddenMode;
 	private ValueExpression immediate;
 	private ValueExpression rows;
+	private ValueExpression first;
 	private ValueExpression value;
 	private ValueExpression margins;
-	private ValueExpression first;
 	private ValueExpression var;
 	private ValueExpression saveCompleteState;
 	public final void setHelpMessage(ValueExpression helpMessage) {
@@ -248,16 +248,16 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.rows = rows;
 	}
 
+	public final void setFirst(ValueExpression first) {
+		this.first = first;
+	}
+
 	public final void setValue(ValueExpression value) {
 		this.value = value;
 	}
 
 	public final void setMargins(ValueExpression margins) {
 		this.margins = margins;
-	}
-
-	public final void setFirst(ValueExpression first) {
-		this.first = first;
 	}
 
 	public final void setVar(ValueExpression var) {
@@ -302,9 +302,9 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  immediate='"+immediate+"'");
 			LOG.debug("  rows='"+rows+"'");
+			LOG.debug("  first='"+first+"'");
 			LOG.debug("  value='"+value+"'");
 			LOG.debug("  margins='"+margins+"'");
-			LOG.debug("  first='"+first+"'");
 			LOG.debug("  var='"+var+"'");
 		}
 		if ((uiComponent instanceof AbstractDataComponent)==false) {
@@ -659,6 +659,15 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (first != null) {
+			if (first.isLiteralText()==false) {
+				component.setValueExpression(Properties.FIRST, first);
+
+			} else {
+				component.setFirst(getInt(first.getExpressionString()));
+			}
+		}
+
 		if (value != null) {
 			if (value.isLiteralText()==false) {
 				component.setValueExpression(Properties.VALUE, value);
@@ -673,15 +682,6 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
 			}
 				component.setMargins(margins.getExpressionString());
-		}
-
-		if (first != null) {
-			if (first.isLiteralText()==false) {
-				component.setValueExpression(Properties.FIRST, first);
-
-			} else {
-				component.setFirst(getInt(first.getExpressionString()));
-			}
 		}
 
 		if (var != null) {
@@ -749,9 +749,9 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		hiddenMode = null;
 		immediate = null;
 		rows = null;
+		first = null;
 		value = null;
 		margins = null;
-		first = null;
 		var = null;
 		saveCompleteState = null;
 

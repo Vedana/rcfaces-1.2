@@ -29,7 +29,6 @@ import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IDraggableCapability;
@@ -72,10 +71,11 @@ import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.lang.IContentFamily;
-import org.rcfaces.core.model.ICriteriaConfig;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -95,7 +95,7 @@ public abstract class AbstractGridRenderContext {
 
 	private static final ISortedComponent[] SORTED_COMPONENT_EMPTY_ARRAY = new ISortedComponent[0];
 
-	private static final ICriteriaConfig[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ICriteriaConfig[0];
+	private static final ISelectedCriteria[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ISelectedCriteria[0];
 
 	public static final int SERVER_HIDDEN = 1;
 
@@ -143,9 +143,9 @@ public abstract class AbstractGridRenderContext {
 
 	private boolean hasTitleColumnImages;
 
-	private ISortedComponent sortedComponents[];
+	private ISortedComponent[] sortedComponents;
 
-	private ICriteriaConfig criteriaConfigs[];
+	private ISelectedCriteria[] selectedCriteria;
 
 	private int rows;
 
@@ -234,13 +234,13 @@ public abstract class AbstractGridRenderContext {
 	private AbstractGridRenderContext(IProcessContext processContext,
 			IScriptRenderContext scriptRenderContext,
 			IGridComponent gridComponent, ISortedComponent sortedComponents[],
-			boolean checkTitleImages, ICriteriaConfig[] criteriaConfigs) {
+			boolean checkTitleImages, ISelectedCriteria[] criteriaConfigs) {
 		this.processContext = processContext;
 		this.scriptRenderContext = scriptRenderContext;
 
 		this.gridComponent = gridComponent;
 		this.sortedComponents = sortedComponents;
-		this.criteriaConfigs = criteriaConfigs;
+		this.selectedCriteria = criteriaConfigs;
 
 		if (gridComponent instanceof ISizeCapability) {
 			computeGridSize((ISizeCapability) gridComponent);
@@ -862,12 +862,13 @@ public abstract class AbstractGridRenderContext {
 		}
 	}
 
-	private static ICriteriaConfig[] listCriteriaContainers(
+	private static ISelectedCriteria[] listCriteriaContainers(
 			IHtmlComponentRenderContext componentRenderContext) {
 		UIComponent component = componentRenderContext.getComponent();
 
 		if (component instanceof ICriteriaManagerCapability) {
-			return null; //((ICriteriaManagerCapability) component).listCriteriaContainers();
+			return CriteriaTools
+					.listSelectedCriteria((ICriteriaManagerCapability) component);
 		}
 
 		return CRITERIA_CONTAINER_EMPTY_ARRAY;
@@ -891,7 +892,7 @@ public abstract class AbstractGridRenderContext {
 			IGridComponent gridComponent, int rowIndex, int forcedRows,
 			ISortedComponent sortedComponents[], String filterExpression,
 			String showAdditionals, String hideAdditionals,
-			ICriteriaConfig[] criteriaContainers) {
+			ISelectedCriteria[] criteriaContainers) {
 		this(processContext, scriptRenderContext, gridComponent,
 				sortedComponents, false, criteriaContainers);
 
@@ -953,6 +954,10 @@ public abstract class AbstractGridRenderContext {
 
 	public final ISortedComponent[] listSortedComponents() {
 		return sortedComponents;
+	}
+
+	public final ISelectedCriteria[] listSelectedCriteria() {
+		return selectedCriteria;
 	}
 
 	public final int getForcedRows() {

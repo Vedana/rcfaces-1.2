@@ -1441,6 +1441,6 @@ public class CollectionTools {
 	}
 
 	public interface IAllValuesProvider {
-		List listAllValues(UIComponent component);
+		List<?> listAllValues(UIComponent component);
 	}
 }

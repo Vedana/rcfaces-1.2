@@ -38,6 +38,8 @@ import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICheckComponent;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.internal.capability.IDraggableGridComponent;
 import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
@@ -61,12 +63,12 @@ import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.provider.ICursorProvider;
 import org.rcfaces.core.model.IComponentRefModel;
-import org.rcfaces.core.model.ICriteriaConfig;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
 import org.rcfaces.core.model.IRangeDataModel;
 import org.rcfaces.core.model.IRangeDataModel2;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.model.ITransactionalDataModel;
@@ -407,7 +409,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 						sortedComponents);
 			}
 
-			// Apres le tri, on connait peu etre la taille
+			// Apres le tri, on connait peut etre la taille
 			tableContext.updateRowCount();
 		} else {
 
@@ -418,35 +420,66 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			}
 		}
 
+		ISelectedCriteria[] selectedCriteria = tableContext
+				.listSelectedCriteria();
+		if (selectedCriteria != null && selectedCriteria.length == 0) {
+			selectedCriteria = null;
+		}
+
 		int rowIndex = tableContext.getFirst();
 
-		// Initializer le IRandgeDataModel avant la selection/check/additionnal
-		// informations !
-		if (sortTranslations == null
-				&& rows > 0
-				&& ((dataModel instanceof IRangeDataModel) || (dataModel instanceof IRangeDataModel2))) {
-			// Specifie le range que si il n'y a pas de tri !
+		IRangeDataModel rangeDataModel = (IRangeDataModel) getAdapter(
+				IRangeDataModel.class, dataModel, null);
+		IRangeDataModel2 rangeDataModel2 = (IRangeDataModel2) getAdapter(
+				IRangeDataModel2.class, dataModel, null);
 
-			int rangeLength = rows;
-			if (searchEnd) {
-				// On regardera si il y a bien une suite ...
-				rangeLength++;
-			}
+		if ((rangeDataModel != null || rangeDataModel2 != null) && rows >= 0) {
+			// Initializer le IRandgeDataModel avant la
+			// selection/check/additionnal
+			// informations !
+			if (sortTranslations == null && selectedCriteria == null) {
+				// Specifie le range que si il n'y a pas de tri !
 
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Encode set range rowIndex='" + rowIndex
-						+ "' rangeLength='" + rangeLength + "'.");
-			}
+				int rangeLength = rows;
+				if (searchEnd) {
+					// On regardera si il y a bien une suite ...
+					rangeLength++;
+				}
 
-			if (dataModel instanceof IRangeDataModel) {
-				((IRangeDataModel) dataModel)
-						.setRowRange(rowIndex, rangeLength);
-			}
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Encode set range rowIndex='" + rowIndex
+							+ "' rangeLength='" + rangeLength + "'.");
+				}
 
-			if (dataModel instanceof IRangeDataModel2) {
-				((IRangeDataModel2) dataModel).setRowRange(rowIndex,
-						rangeLength, searchEnd);
+				if (rangeDataModel != null) {
+					rangeDataModel.setRowRange(rowIndex, rangeLength);
+				}
+
+				if (rangeDataModel2 != null) {
+					rangeDataModel2.setRowRange(rowIndex, rangeLength,
+							searchEnd);
+				}
+
+			} else {
+				// TOUT
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Encode set range to ALL => rowIndex='" + 0
+							+ "' rangeLength='" + rows + "'.");
+				}
+
+				if (rangeDataModel != null) {
+					rangeDataModel.setRowRange(0, rows);
+				}
+
+				if (rangeDataModel2 != null) {
+					rangeDataModel2.setRowRange(0, rows, searchEnd);
+				}
+
 			}
+		}
+
+		if (selectedCriteria != null && selectedCriteria.length > 0) {
+			searchEnd = true; // On force la recherche de la fin
 		}
 
 		int selectedIndexes[] = null;
@@ -642,7 +675,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 			// Le tri a été fait coté serveur,
 			// On connait peut être le nombre d'elements !
-			if (count < 0 && sortTranslations != null) {
+			if (/* count < 0 && Pour les CRITERES */sortTranslations != null) {
 				count = sortTranslations.length;
 			}
 
@@ -812,6 +845,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
 					varContext.put(rowIndexVar, new Integer(i));
 				}
 
+				if (selectedCriteria != null) {
+					if (acceptCriteria(gridComponent, selectedCriteria) == false) {
+						continue;
+					}
+				}
+
 				if (rowValueColumn != null) {
 					Object value;
 
@@ -913,6 +952,39 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				encodeJsRowCount(jsWriter, tableContext, count);
 			}
 		}
+	}
+
+	private boolean acceptCriteria(IGridComponent gridComponent,
+			ISelectedCriteria[] selectedCriteriaArray) {
+
+		for (ISelectedCriteria selectedCriteria : selectedCriteriaArray) {
+			Set<?> criteriaValues = selectedCriteria.listSelectedValues();
+			if (criteriaValues == null || criteriaValues.isEmpty()) {
+				continue;
+			}
+
+			ICriteriaConfiguration config = selectedCriteria.getConfig();
+			ICriteriaContainer container = config.getCriteriaContainer();
+
+			Object dataValue = null;
+
+			if (config != null && config.isCriteriaValueSetted()) {
+				dataValue = config.getCriteriaValue();
+
+			} else if (container instanceof ValueHolder) {
+				dataValue = ((ValueHolder) container).getValue();
+			}
+
+			if (dataValue == null) {
+				continue;
+			}
+
+			if (criteriaValues.contains(dataValue) == false) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private Object updateAdditionalValues(FacesContext facesContext,
@@ -1382,7 +1454,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			IScriptRenderContext scriptRenderContext, IGridComponent dg,
 			int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
 			String filterExpression, String showAdditional,
-			String hideAdditional, ICriteriaConfig[] criteriaContainers) {
+			String hideAdditional, ISelectedCriteria[] criteriaContainers) {
 
 		DataGridRenderContext tableContext = new DataGridRenderContext(
 				processContext, scriptRenderContext, dg, rowIndex, forcedRows,
@@ -1410,7 +1482,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				int rowIndex, int forcedRows,
 				ISortedComponent[] sortedComponents, String filterExpression,
 				String showAdditionals, String hideAdditionals,
-				ICriteriaConfig[] criteriaContainers) {
+				ISelectedCriteria[] criteriaContainers) {
 			super(processContext, scriptRenderContext, dg, rowIndex,
 					forcedRows, sortedComponents, filterExpression,
 					showAdditionals, hideAdditionals, criteriaContainers);

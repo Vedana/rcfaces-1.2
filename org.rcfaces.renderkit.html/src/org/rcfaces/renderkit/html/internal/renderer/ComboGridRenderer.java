@@ -28,7 +28,7 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
-import org.rcfaces.core.model.ICriteriaConfig;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -571,7 +571,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 			IScriptRenderContext scriptRenderContext, IGridComponent dg,
 			int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
 			String filterExpression, String showAdditionals,
-			String hideAdditionals, ICriteriaConfig[] criteriaContainers) {
+			String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
 		DataGridRenderContext tableContext = new ComboGridRenderContext(
 				processContext, scriptRenderContext, dg, rowIndex, forcedRows,
 				sortedComponents, filterExpression, showAdditionals,
@@ -609,7 +609,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 				int rowIndex, int forcedRows,
 				ISortedComponent[] sortedComponents, String filterExpression,
 				String showAdditionals, String hideAdditionals,
-				ICriteriaConfig[] criteriaContainers) {
+				ISelectedCriteria[] criteriaContainers) {
 			super(processContext, scriptRenderContext, dg, rowIndex,
 					forcedRows, sortedComponents, filterExpression,
 					showAdditionals, hideAdditionals, criteriaContainers);

@@ -32,9 +32,9 @@ import org.rcfaces.core.component.ComponentsGridComponent;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
-import org.rcfaces.core.component.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -54,7 +54,7 @@ import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IComponentRefModel;
-import org.rcfaces.core.model.ICriteriaConfig;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
@@ -185,7 +185,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 			ComponentsGridComponent dgc, int rowIndex, int forcedRow,
 			ISortedComponent[] sortedComponents, String filterExpression,
 			String showAdditionals, String hideAdditionals,
-			ICriteriaConfig[] criteriaContainers) {
+			ISelectedCriteria[] criteriaContainers) {
 		return new ComponentsGridRenderContext(processContext,
 				scriptRenderContext, dgc, rowIndex, forcedRow,
 				sortedComponents, filterExpression, showAdditionals,
@@ -1150,7 +1150,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 				ComponentsGridComponent gridComponent, int rowIndex,
 				int forcedRows, ISortedComponent[] sortedComponents,
 				String filterExpression, String showAdditionals,
-				String hideAdditionals, ICriteriaConfig[] criteriaContainers) {
+				String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
 			super(processContext, scriptRenderContext, gridComponent, rowIndex,
 					forcedRows, sortedComponents, filterExpression,
 					showAdditionals, hideAdditionals, criteriaContainers);

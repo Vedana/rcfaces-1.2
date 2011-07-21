@@ -1,7 +1,8 @@
 package org.rcfaces.core.component.capability;
 
-import org.rcfaces.core.model.ICriteriaConfig;
-import org.rcfaces.core.model.ICriteriaConfigResult;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
+import org.rcfaces.core.model.ISelectedCriteria;
+import org.rcfaces.core.model.ICriteriaSelectedResult;
 
 /**
  * 
@@ -13,7 +14,7 @@ public interface ICriteriaManagerCapability {
 
 	void setCriteriaContainers(ICriteriaContainer[] containers);
 
-	ICriteriaConfigResult processCriteriaConfig();
+	ICriteriaSelectedResult processSelectedCriteria();
 
-	ICriteriaConfigResult processCriteriaConfig(ICriteriaConfig[] configs);
+	ICriteriaSelectedResult processSelectedCriteria(ISelectedCriteria[] configs);
 }

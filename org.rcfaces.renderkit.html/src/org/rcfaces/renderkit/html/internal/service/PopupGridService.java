@@ -31,7 +31,7 @@ import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
-import org.rcfaces.core.model.ICriteriaConfig;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
@@ -255,7 +255,7 @@ public class PopupGridService extends AbstractHtmlService {
 			int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
 			String filterExpression, boolean unknownRowCount,
 			String showAdditional, String hideAdditional,
-			ICriteriaConfig[] criteriaConfigs) throws IOException {
+			ISelectedCriteria[] criteriaConfigs) throws IOException {
 
 		IProcessContext processContext = HtmlProcessContextImpl
 				.getHtmlProcessContext(facesContext);
