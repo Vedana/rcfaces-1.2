@@ -56,11 +56,13 @@ public class CriteriaTools extends CollectionTools {
 	}
 
 	public static CriteriaItem[] listAvailableCriteriaItems(
-			ICriteriaConfiguration container, ISelectedCriteria[] configs) {
-		ICriteriaSelectedResult result = container.getCriteriaContainer()
-				.getCriteriaManager().processSelectedCriteria(configs);
+			ICriteriaConfiguration configuration, ISelectedCriteria[] configs) {
+		ICriteriaContainer container = configuration.getCriteriaContainer();
 
-		return result.getAvailableCriteriaItems(container);
+		ICriteriaSelectedResult result = container.getCriteriaManager()
+				.processSelectedCriteria(configs);
+
+		return result.getAvailableCriteriaItems(configuration);
 	}
 
 	public static ICriteriaSelectedResult processCriteriaConfig(

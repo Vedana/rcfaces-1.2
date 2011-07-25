@@ -4,7 +4,7 @@ import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 
 /**
  * 
- * @author Oeuillot
+ * @author Olivier Oeuillot
  * 
  */
 public interface ICriteriaContainer {
@@ -12,5 +12,8 @@ public interface ICriteriaContainer {
 
 	ICriteriaConfiguration getCriteriaConfiguration();
 
+	// Retourne la valeur de la colonne et de la ligne selectionnée
 	Object getValue();
+
+	String getId();
 }

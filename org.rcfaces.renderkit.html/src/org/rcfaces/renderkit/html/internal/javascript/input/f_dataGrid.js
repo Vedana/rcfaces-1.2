@@ -981,6 +981,9 @@ var __members = {
 			params.filterExpression=filterExpression;
 		}
 		
+		// TODO JB A RAJOUTER
+		// params.criteria = computeCriteria
+		
 		if (this._additionalInformations) {
 			this.fa_serializeAdditionalInformations(params);
 		}

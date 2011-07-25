@@ -240,6 +240,10 @@ public abstract class AbstractGridRenderContext {
 
 		this.gridComponent = gridComponent;
 		this.sortedComponents = sortedComponents;
+
+		if (criteriaConfigs == null) {
+			criteriaConfigs = listCriteriaContainers((UIComponent) gridComponent);
+		}
 		this.selectedCriteria = criteriaConfigs;
 
 		if (gridComponent instanceof ISizeCapability) {
@@ -848,8 +852,7 @@ public abstract class AbstractGridRenderContext {
 				componentRenderContext.getRenderContext()
 						.getScriptRenderContext(),
 				(IGridComponent) componentRenderContext.getComponent(),
-				computeSortedComponents(componentRenderContext), true,
-				listCriteriaContainers(componentRenderContext));
+				computeSortedComponents(componentRenderContext), true, null);
 
 		designerMode = componentRenderContext.getRenderContext()
 				.getProcessContext().isDesignerMode();
@@ -863,8 +866,7 @@ public abstract class AbstractGridRenderContext {
 	}
 
 	private static ISelectedCriteria[] listCriteriaContainers(
-			IHtmlComponentRenderContext componentRenderContext) {
-		UIComponent component = componentRenderContext.getComponent();
+			UIComponent component) {
 
 		if (component instanceof ICriteriaManagerCapability) {
 			return CriteriaTools

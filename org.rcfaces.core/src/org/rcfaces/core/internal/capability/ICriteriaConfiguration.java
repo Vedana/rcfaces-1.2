@@ -14,11 +14,13 @@ public interface ICriteriaConfiguration extends ISelectionProvider,
 		ISelectionCardinalityCapability {
 	ICriteriaContainer getCriteriaContainer();
 
-	Converter getCriteriaConverter();
-
 	boolean isCriteriaValueSetted();
 
+	// Retourne l'objet associé à la colonne et à la ligne selectionnée
 	Object getCriteriaValue();
+
+	// Converter de l'objet associé à la colonne et à la ligne selectionnée
+	Converter getCriteriaConverter();
 
 	int getCriteriaCardinality();
 }

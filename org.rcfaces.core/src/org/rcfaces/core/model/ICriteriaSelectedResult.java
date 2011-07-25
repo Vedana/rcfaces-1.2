@@ -8,8 +8,7 @@ import org.rcfaces.core.item.CriteriaItem;
 
 /**
  * 
- * @author Oeuillot
- * 
+ * @author Olivier Oeuillot
  */
 public interface ICriteriaSelectedResult {
 
@@ -17,7 +16,8 @@ public interface ICriteriaSelectedResult {
 
 	ISelectedCriteria[] listSelectedCriteria();
 
-	CriteriaItem[] getAvailableCriteriaItems(ICriteriaConfiguration container);
+	CriteriaItem[] getAvailableCriteriaItems(
+			ICriteriaConfiguration criteriaConfiguration);
 
 	int getResultCount();
 
