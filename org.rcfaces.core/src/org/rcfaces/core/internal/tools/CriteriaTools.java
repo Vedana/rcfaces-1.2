@@ -31,9 +31,13 @@ public class CriteriaTools extends CollectionTools {
 	public static ICriteriaContainer[] getCriteriaColumns(
 			FacesContext facesContext, UIComponent component,
 			IComponentEngine engine, String propertiesName) {
-
-		return (ICriteriaContainer[]) ComponentTools.listChildren(facesContext,
-				component, engine, ICriteriaContainer.class, propertiesName);
+			UIComponent[] childs = ComponentTools.listChildren(facesContext,
+					component, engine, ICriteriaContainer.class, propertiesName);
+		
+			ICriteriaContainer[] criteriaContainers = new ICriteriaContainer[childs.length];
+			System.arraycopy(childs, 0, criteriaContainers, 0, childs.length);
+		
+		return criteriaContainers;
 	}
 
 	public static void setCriteriaColumns(FacesContext facesContext,

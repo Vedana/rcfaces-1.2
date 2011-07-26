@@ -4,7 +4,7 @@
 
 /**
  * 
- * @class public f_dataGrid extends f_grid, fa_readOnly, fa_checkManager, fa_droppable, fa_draggable, fa_autoOpen
+ * @class public f_dataGrid extends f_grid, fa_readOnly, fa_checkManager, fa_droppable, fa_draggable, fa_autoOpen, fa_criteriaManager
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
@@ -281,8 +281,10 @@ var __members = {
 		this._cellStyleClass="f_dataGrid_cell";
 		this._rowStyleClass="f_dataGrid_row";
 		this._gridUpdadeServiceId="dataGrid.update";
+		this._gridUpdadeCriteriaServiceId="dataGrid.updateCriteria";
 		this._serviceGridId=this.id;
 		this._keyRowSearch=true;
+		this._countToken =0;
 		this._cellWrap=f_core.GetAttribute(this, "v:cellTextWrap", false);
 		//this._noCellWrap=false;
 
@@ -298,6 +300,7 @@ var __members = {
 		// this._gridUpdadeServiceId=undefined; // String
 		// this._serviceGridId=undefined; // String
 		
+		//this._countToken=undefided; // Integer
 		//		this._lastKeyDate=undefined; // number
 		//		this._lastKey=undefined; // char
 
@@ -954,13 +957,15 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate) {
+	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate, params) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
 		}		
 		
-		var params=new Object;
+		if (params === undefined){
+			var params=new Object;
+		}
 		
 		params.gridId=this._serviceGridId;		
 		params.index=firstIndex;
@@ -981,7 +986,7 @@ var __members = {
 			params.filterExpression=filterExpression;
 		}
 		
-		// TODO JB A RAJOUTER
+		// TODO JB A RAJOUTER pas sur
 		// params.criteria = computeCriteria
 		
 		if (this._additionalInformations) {
@@ -1209,7 +1214,11 @@ var __members = {
 		});
 
 		this._loading=true;
-		request.f_setRequestHeader("X-Camelia", this._gridUpdadeServiceId);
+		var service = params.service;
+		if (service === undefined){
+			service =this._gridUpdadeServiceId;
+		}
+		request.f_setRequestHeader("X-Camelia", service);
 		request.f_doFormRequest(params);
 	},
 	/**
@@ -1905,12 +1914,75 @@ var __members = {
 		}
 		
 		this.f_super(arguments, dragAndDropEngine, infos);
+	},
+	
+	/**
+	 * @method publi
+	 * @params Object selectedCriteria
+	 * @params Object callback 
+	 * @return void
+	 */
+	fa_evaluateCriteria: function (selectedCriteria, callBack){
+		
+		if (!this._interactive) {
+			return false;
+		}
+		
+		
+		var params = new Object();
+		
+		params.service = this._gridUpdadeCriteriaServiceId;
+		params.tokenId = this._countToken++;
+		
+		this._criteriaEvaluateCallBack = callBack;
+		
+		this.f_appendCommand(function(dataGrid) {
+			dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, true, params);
+		});
+		
+	},
+	
+	/**
+	 * @method protected abstract
+	 * @return void
+	 */
+	fa_setSelectedCriteria: function (selectedCriteria){
+		this._selectedCriteria = selectedCriteria;
+	},
+	/**
+	 * @method protected abstract
+	 * @return Object selectedDatagrid
+	 */
+	fa_getSelectedCriteria: function (){
+		this._selectedCriteria;
+	},
+	
+	/**
+	 * @method public abstract
+	 * @return f_gridColumn column
+	 */
+	fa_getColumnCriteriaCardinality: function (column){
+		
+		if(column._criteriaCardinality) {
+			return column._criteriaCardinality;
+		}
+	},
+	
+	/**
+	 * @method protected abstract
+	 * @param Integer tokenId
+	 * @param Integer resultCount
+	 * @parameter Object criteriaSelected 
+	 * @return void
+	 */
+	_processSelectedCriteriaResult: function (tokenId, resultCount, availableCriteria) {
+		this._criteriaEvaluateCallBack.call(window, resultCount, availableCriteria);
 	}
 };
 
 new f_class("f_dataGrid", {
 	extend: f_grid,
-	aspects: [fa_readOnly, fa_checkManager, fa_droppable, fa_draggable],
+	aspects: [fa_readOnly, fa_checkManager, fa_droppable, fa_draggable, fa_criteriaManager],
 	statics: __statics,
 	members: __members
 });

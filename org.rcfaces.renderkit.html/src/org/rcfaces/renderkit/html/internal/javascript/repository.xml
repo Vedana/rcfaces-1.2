@@ -272,6 +272,11 @@
 			</class>
 		</file>		
 		
+		<file name="aspect/fa_criteriaManager.js">
+			<class name="fa_criteriaManager">
+			</class>
+		</file>		
+		
 		<file name="ui/fa_autoScroll.js">
 			<class name="fa_autoScroll">
 				<required-class name="f_aspect" />
@@ -1191,6 +1196,8 @@
 				<required-class name="f_grid" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_checkManager" />
+				<required-class name="fa_criteriaManager" />
+				
 
 				<required-style name="f_dataGrid.css" />
 			</class>
