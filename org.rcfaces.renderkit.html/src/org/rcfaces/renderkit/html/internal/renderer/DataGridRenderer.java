@@ -847,6 +847,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 				if (selectedCriteria != null) {
 					if (acceptCriteria(gridComponent, selectedCriteria) == false) {
+						rowIndex++;
 						continue;
 					}
 				}

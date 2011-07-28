@@ -296,6 +296,8 @@ var __members = {
 	 
 		this._addRowFragment=undefined; // HtmlDocumentFragment
 		
+		this._criteriaEvaluateCallBacks= undefined; // Object
+		
 		// this._labelColumnId=undefined; // String
 		// this._gridUpdadeServiceId=undefined; // String
 		// this._serviceGridId=undefined; // String
@@ -1938,9 +1940,8 @@ var __members = {
 			return false;
 		}
 		
-		
 		if (this._criteriaEvaluateCallBacks === undefined){
-			this._criteriaEvaluateCallBacks = new Array();
+			this._criteriaEvaluateCallBacks = new Object;
 		}
 		this._criteriaEvaluateCallBacks[++this._countToken] = callBack;
 		

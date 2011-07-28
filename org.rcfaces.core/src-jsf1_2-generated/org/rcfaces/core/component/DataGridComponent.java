@@ -225,7 +225,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -1725,6 +1725,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isRowDropEffectsSetted() {
 		return engine.isPropertySetted(Properties.ROW_DROP_EFFECTS);
+	}
+
+	public Object getSelectedCriteriaColumns() {
+		return getSelectedCriteriaColumns(null);
+	}
+
+	public Object getSelectedCriteriaColumns(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.SELECTED_CRITERIA_COLUMNS, facesContext);
+	}
+
+	public void setSelectedCriteriaColumns(Object selectedCriteriaColumns) {
+		engine.setValue(Properties.SELECTED_CRITERIA_COLUMNS, selectedCriteriaColumns);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectedCriteriaColumns" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSelectedCriteriaColumnsSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_CRITERIA_COLUMNS);
 	}
 
 	/**

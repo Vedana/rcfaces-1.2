@@ -62,6 +62,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression rowDragEffects;
 	private ValueExpression rowDropTypes;
 	private ValueExpression rowDropEffects;
+	private ValueExpression selectedCriteriaColumns;
 	private ValueExpression rowValueColumnId;
 	private ValueExpression rowLabelColumnId;
 	private ValueExpression rowCountVar;
@@ -250,6 +251,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.rowDropEffects = rowDropEffects;
 	}
 
+	public final void setSelectedCriteriaColumns(ValueExpression selectedCriteriaColumns) {
+		this.selectedCriteriaColumns = selectedCriteriaColumns;
+	}
+
 	public final void setRowValueColumnId(ValueExpression rowValueColumnId) {
 		this.rowValueColumnId = rowValueColumnId;
 	}
@@ -323,6 +328,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  rowDragEffects='"+rowDragEffects+"'");
 			LOG.debug("  rowDropTypes='"+rowDropTypes+"'");
 			LOG.debug("  rowDropEffects='"+rowDropEffects+"'");
+			LOG.debug("  selectedCriteriaColumns='"+selectedCriteriaColumns+"'");
 			LOG.debug("  rowValueColumnId='"+rowValueColumnId+"'");
 			LOG.debug("  rowLabelColumnId='"+rowLabelColumnId+"'");
 			LOG.debug("  rowCountVar='"+rowCountVar+"'");
@@ -680,6 +686,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (selectedCriteriaColumns != null) {
+			if (selectedCriteriaColumns.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTED_CRITERIA_COLUMNS, selectedCriteriaColumns);
+
+			} else {
+				component.setSelectedCriteriaColumns(selectedCriteriaColumns.getExpressionString());
+			}
+		}
+
 		if (rowValueColumnId != null) {
 			if (rowValueColumnId.isLiteralText()==false) {
 				component.setValueExpression(Properties.ROW_VALUE_COLUMN_ID, rowValueColumnId);
@@ -784,6 +799,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		rowDragEffects = null;
 		rowDropTypes = null;
 		rowDropEffects = null;
+		selectedCriteriaColumns = null;
 		rowValueColumnId = null;
 		rowLabelColumnId = null;
 		rowCountVar = null;

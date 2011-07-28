@@ -1144,6 +1144,8 @@
 		<attribute id="rowDropEffects" type="int" />
 		<method id="setRowDropEffects(String)" />
 
+		<attribute id="selectedCriteriaColumns" type="Object" />
+
 		<capability id="ISelectionEventCapability" />
 		<capability id="ISelectableCapability" />
 		<capability id="ISelectionCardinalityCapability" />

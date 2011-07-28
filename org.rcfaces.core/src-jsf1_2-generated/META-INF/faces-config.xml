@@ -460,6 +460,10 @@ A string specifying the message to display when there is no row to display.
 			<attribute-class>int</attribute-class>
 		</attribute>
 		<attribute>
+			<attribute-name>selectedCriteriaColumns</attribute-name>
+			<attribute-class>Object</attribute-class>
+		</attribute>
+		<attribute>
 			<description><![CDATA[
 An id for the column containing the key for the row.
 ]]></description>
