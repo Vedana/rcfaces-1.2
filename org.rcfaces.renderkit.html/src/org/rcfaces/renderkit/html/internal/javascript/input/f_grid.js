@@ -3414,13 +3414,13 @@ var __members = {
 	 * 
 	 * @return Boolean
 	 */
-	f_refreshContent : function(fullUpdate) {
+	f_refreshContent : function(fullUpdate, selectedCriteria) {
 		if (!this._interactive) {
 			return false;
 		}
-
+		
 		this.f_appendCommand(function(dataGrid) {
-			dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, fullUpdate);
+			dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, fullUpdate, selectedCriteria);
 		});
 
 		return true;

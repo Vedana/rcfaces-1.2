@@ -957,7 +957,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate, params) {
+	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate, selectedCriteria) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
@@ -987,7 +987,7 @@ var __members = {
 		}
 		
 		// TODO JB A RAJOUTER pas sur
-		// params.criteria = computeCriteria
+		params.criteria = selectedCriteria;//compute
 		
 		if (this._additionalInformations) {
 			this.fa_serializeAdditionalInformations(params);
@@ -1214,11 +1214,7 @@ var __members = {
 		});
 
 		this._loading=true;
-		var service = params.service;
-		if (service === undefined){
-			service =this._gridUpdadeServiceId;
-		}
-		request.f_setRequestHeader("X-Camelia", service);
+		request.f_setRequestHeader("X-Camelia", this._gridUpdadeServiceId);
 		request.f_doFormRequest(params);
 	},
 	/**
@@ -1916,53 +1912,213 @@ var __members = {
 		this.f_super(arguments, dragAndDropEngine, infos);
 	},
 	
-	/**
-	 * @method publi
-	 * @params Object selectedCriteria
-	 * @params Object callback 
-	 * @return void
-	 */
+	_computeSelectedcriteria : function(selectedCriteria) {
+		
+		if(selectedCriteria === undefined) {
+			return undefined;
+		}
+		
+		var cs = selectedCriteria.split(',');
+		var result ="";
+		for ( var int = 0; int < cs.length; int++) {
+			var array_element = cs[int];
+			
+			if (result) {
+				result +=",";
+			}
+			
+			result += encodeURIComponent(array_element);
+		}
+		return result;
+	},
+	
 	fa_evaluateCriteria: function (selectedCriteria, callBack){
 		
 		if (!this._interactive) {
 			return false;
 		}
 		
-		
-		var params = new Object();
-		
-		params.service = this._gridUpdadeCriteriaServiceId;
-		params.tokenId = this._countToken++;
-		
 		this._criteriaEvaluateCallBack = callBack;
 		
 		this.f_appendCommand(function(dataGrid) {
-			dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, true, params);
+			
+			var params = new Object();
+			params.gridId=this._serviceGridId;		
+			params.tokenId = this._countToken++;	
+
+			params.selectedCriteria = this._computeSelectedcriteria(selectedCriteria);
+
+			this.f_hideEmptyDataMessage();
+			
+			var waitingObject=undefined;
+
+			var url=f_env.GetViewURI();
+			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+			var dataGrid=this;
+			request.f_setListener({
+				/**
+				 * @method public
+				 */
+		 		onInit: function(request) {
+		 			if (!waitingObject) {
+		 				waitingObject=f_waiting.Create(dataGrid, null, false);
+		 				dataGrid._waiting=waitingObject;
+		 			}
+		 			
+		 			if (waitingObject) {
+			 			waitingObject.f_setText(f_waiting.GetLoadingMessage());
+			 			waitingObject.f_show();
+				 	}
+			 	},
+				/**
+				 * @method public
+				 */
+		 		onError: function(request, status, text) {
+		 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+status);
+		 			
+		 			var continueProcess;
+		 			
+		 			try {
+		 				continueProcess=dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+		 				
+		 			} catch (x) {
+		 				// On continue coute que coute !
+		 				continueProcess=false;
+		 			}	 				
+		 				 				
+		 			 			
+			 		if (continueProcess===false) {
+						dataGrid._loading=undefined;
+		
+						if (waitingObject) {
+							waitingObject.f_hide();
+						}
+				 		return;
+			 		}
+		 			
+					if (dataGrid.f_processNextCommand()) {
+						return;
+					}
+		 		
+					dataGrid._loading=undefined;		
+
+					if (waitingObject) {
+						waitingObject.f_hide();
+					}
+		 		},
+				/**
+				 * @method public
+				 */
+		 		onProgress: function(request, content, length, contentType) {
+					if (waitingObject && f_class.IsObjectInitialized(waitingObject)) {
+		 				waitingObject.f_setText(f_waiting.GetReceivingMessage());
+					}	 			
+		 		},
+				/**
+				 * @method public
+				 */
+		 		onLoad: function(request, content, contentType) {
+					if (!f_class.IsObjectInitialized(dataGrid)) {
+						return;
+					}
+				
+					if (dataGrid.f_processNextCommand()) {
+						return;
+					}
+		 				
+					try {
+						if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+							dataGrid.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+							return;
+						}
+
+						var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+						if (!cameliaServiceVersion) {
+							dataGrid.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+							return;					
+						}
+		
+						var responseContentType=request.f_getResponseContentType().toLowerCase();
+						if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
+							var code=f_error.ComputeApplicationErrorCode(request);
+					
+					 		dataGrid.f_performErrorEvent(request, code, content);
+							return;
+						}
+			
+						if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+					 		dataGrid.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+							return;
+						}
+						
+						var ret=request.f_getResponse();
+						
+						if (dataGrid._waitingLoading) {
+							if (dataGrid._waitingMode==f_grid.END_WAITING) {
+								dataGrid.f_removePagedWait();
+							}
+						}
+						
+						//alert("ret="+ret);
+						try {
+							f_core.WindowScopeEval(ret);
+							
+						} catch (x) {
+				 			dataGrid.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
+						}
+
+					} finally {
+						dataGrid._loading=undefined;
+						
+						if (waitingObject) {
+							waitingObject.f_hide(true);					
+						}					
+						
+						dataGrid._waitingLoading=undefined;
+					}
+		
+					var event=new f_event(dataGrid, f_event.LOAD);
+					try {
+						dataGrid.f_fireEvent(event);
+						
+					} finally {
+						f_classLoader.Destroy(event);
+					}
+		 		}
+			});
+
+			this._loading=true;
+			request.f_setRequestHeader("X-Camelia", this._gridUpdadeCriteriaServiceId);
+			request.f_doFormRequest(params);
+			
+			//dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, true, params);
 		});
 		
 	},
 	
-	/**
-	 * @method protected abstract
-	 * @return void
-	 */
+	
+	fa_addSelectedCriteria:  function (coulmundId, values){
+		var selectedCriteria  =  this.fa_getSelectedCriteria();
+		
+		if(selectedCriteria == undefined) {
+			selectedCriteria ='';
+		}
+		
+		selectedCriteria += coulmundId +","+values;
+		this.fa_setSelectedCriteria(selectedCriteria);
+		return selectedCriteria;
+	},
+	
+	
 	fa_setSelectedCriteria: function (selectedCriteria){
 		this._selectedCriteria = selectedCriteria;
 	},
-	/**
-	 * @method protected abstract
-	 * @return Object selectedDatagrid
-	 */
+	
 	fa_getSelectedCriteria: function (){
 		this._selectedCriteria;
 	},
 	
-	/**
-	 * @method public abstract
-	 * @return f_gridColumn column
-	 */
 	fa_getColumnCriteriaCardinality: function (column){
-		
 		if(column._criteriaCardinality) {
 			return column._criteriaCardinality;
 		}

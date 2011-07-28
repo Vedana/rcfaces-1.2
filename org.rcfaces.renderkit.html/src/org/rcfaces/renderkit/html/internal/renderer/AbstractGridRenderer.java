@@ -8,6 +8,9 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,6 +67,8 @@ import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
@@ -93,6 +98,7 @@ import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.preference.GridPreferences;
@@ -1593,6 +1599,24 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         String hoverImageURLs[] = null;
         String selectedImageURLs[] = null;
         String columnStyleClasses[] = null;
+        
+        ISelectedCriteria[] criteriaConfigs = gridRenderContext.listSelectedCriteria();
+        int criteriaIndex = 0;
+        
+        if(criteriaConfigs != null && criteriaConfigs.length >0 ){
+        	 jsWriter.writeMethodCall("fa_setSelectedCriteria");
+        	 Map<String, String> selectedCriteria = new HashMap<String, String>();
+        	 for (int i = 0; i < criteriaConfigs.length; i++) {
+        		 ISelectedCriteria criteria = criteriaConfigs[i];
+        		 Set criteriaSet = criteria.listSelectedValues();
+        		 for (Iterator iterator = criteriaSet.iterator(); iterator
+						.hasNext();) {
+					Object object = (Object) iterator.next();
+					
+				}
+        		// selectedCriteria.put(criteria.getConfig().getCriteriaValue(), )
+			}
+        }
 
         if ((generationMask & GENERATE_CELL_IMAGES) > 0) {
             defaultCellImageURLs = gridRenderContext.getDefaultCellImageURLs();
@@ -1739,6 +1763,22 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 if (((IAutoFilterCapability) columnComponent).isAutoFilter()) {
                     objectWriter.writeSymbol("_autoFilter").writeInt(
                             autoFilterIndex++);
+                }
+            }
+            
+            if (columnComponent instanceof ICriteriaContainer) {
+            //	((ICriteriaContainer) columnComponent).getCriteriaConfiguration().getCriteriaValue();
+            	ICriteriaConfiguration  criteriaConfiguration = ((ICriteriaContainer) columnComponent)
+            		.getCriteriaConfiguration();
+            	
+            	
+            	if (criteriaConfiguration != null) {
+            		objectWriter.writeSymbol("_criteriaCardinality").writeInt(
+                    		criteriaConfiguration.getCriteriaCardinality());
+            		objectWriter.writeSymbol("_criteriaIndex").writeInt(++criteriaIndex);
+            		
+//            		objectWriter.writeSymbol("_criteriaLabel").writeString(
+//            		"null");
                 }
             }
 

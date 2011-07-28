@@ -24,6 +24,7 @@ import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
 import org.rcfaces.core.internal.capability.ICriteriaContainer;
+import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.tools.ValuesTools;
@@ -154,8 +155,11 @@ public class CriteriaGridService extends AbstractHtmlService {
 					printWriter = new PrintWriter(writer, false);
 				}
 
+				
 				ISelectedCriteria[] selectedCriteria = null;
-
+				String criteria_s = (String) parameters.get("selectedCriteria");
+				selectedCriteria = DataGridService.computeCriteriaConfigs((IGridComponent) component, criteria_s);
+				
 				writeJs(facesContext, printWriter, keyLabelComponent,
 						componentId, selectedCriteria, tokenId);
 
@@ -215,7 +219,7 @@ public class CriteriaGridService extends AbstractHtmlService {
 				.writeInt(result.getResultCount()).write(',');
 		
 		ISelectedCriteria[] resultCriteria = result.listSelectedCriteria();
-		if (resultCriteria != null) {
+		if (resultCriteria != null && resultCriteria.length > 0) {
 			for (int i = 0; i < resultCriteria.length; i++) {
 				ISelectedCriteria rc = resultCriteria[i];
 	

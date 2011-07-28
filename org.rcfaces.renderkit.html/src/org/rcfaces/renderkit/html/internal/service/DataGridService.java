@@ -67,7 +67,7 @@ public class DataGridService extends AbstractHtmlService {
 
 	private static final String DATAGRID_SERVICE_VERSION = "1.0.0";
 
-	private static final String DEFAULT_ENCODE_CHARSET = null;
+	private static final String DEFAULT_ENCODE_CHARSET = "UTF8";
 
 	public DataGridService() {
 	}
