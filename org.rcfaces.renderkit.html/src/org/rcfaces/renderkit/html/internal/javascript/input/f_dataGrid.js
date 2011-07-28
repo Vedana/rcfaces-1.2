@@ -2142,7 +2142,7 @@ var __members = {
 	 * Returns the cardinality of a column criteria
 	 * 
 	 * @param String columnId Identifier of column
-	 * @return Number  criteria cardinality constant or "undefined" if the column is not known 
+	 * @return Number criteria cardinality constant or  if the column is not known 
 	 */
 	fa_getColumnCriteriaCardinality: function (columnId) {
 		f_core.Assert(typeof(columnId)=="string", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
