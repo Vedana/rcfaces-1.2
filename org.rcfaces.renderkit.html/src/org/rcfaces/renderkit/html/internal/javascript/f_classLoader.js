@@ -1122,8 +1122,6 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_initOnFocusIds: Can not initialize component '"+componentId+"'.", ex);
 			}	
 			
-				
-			
 			var onInitComponentListeners=self._onInitComponentListeners;
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
@@ -1216,7 +1214,6 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_initOnOverIds: Can not initialize component '"+componentId+"'.", ex);
 			}	
 			
-		
 			var onInitComponentListeners=self._onInitComponentListeners;
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);

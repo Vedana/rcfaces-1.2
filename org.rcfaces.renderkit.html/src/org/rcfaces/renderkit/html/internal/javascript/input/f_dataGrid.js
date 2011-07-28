@@ -2100,32 +2100,59 @@ var __members = {
 		
 	},
 	
-	
-	fa_addSelectedCriteria:  function (coulmundId, values){
+	/**
+	 * 
+	 * @param columnId
+	 * @param values
+	 * @return Array Selected criteria array
+	 */
+	fa_addSelectedCriteria:  function (columnId, values){
+		f_core.Assert(typeof(columnId)=="string", "f_dataGrid.fa_addSelectedCriteria: Invalid columnId parameter ! ("+columnId+")");
+		f_core.Assert(values instanceof Array, "f_dataGrid.fa_addSelectedCriteria: Invalid element parameter ! ("+values+")");
+
 		var selectedCriteria  =  this.fa_getSelectedCriteria();
 		
 		if(selectedCriteria == undefined) {
-			selectedCriteria ='';
+			selectedCriteria = [];
 		}
 		
-		selectedCriteria += coulmundId +","+values;
+		selectedCriteria.push( { id: columnId, values: values } );
+		
 		this.fa_setSelectedCriteria(selectedCriteria);
+		
 		return selectedCriteria;
 	},
-	
-	
+		
 	fa_setSelectedCriteria: function (selectedCriteria){
+		f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
+
 		this._selectedCriteria = selectedCriteria;
 	},
 	
-	fa_getSelectedCriteria: function (){
+	/**
+	 * 
+	 * @return Object Selected criteria
+	 */
+	fa_getSelectedCriteria: function () {
 		return this._selectedCriteria;
 	},
 	
-	fa_getColumnCriteriaCardinality: function (column){
+	/**
+	 * Returns the cardinality of a column criteria
+	 * 
+	 * @param String columnId Identifier of column
+	 * @return Number  criteria cardinality constant or "undefined" if the column is not known 
+	 */
+	fa_getColumnCriteriaCardinality: function (columnId) {
+		f_core.Assert(typeof(columnId)=="string", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
+
+		var column = columnById[columnId]; // TODO  FAIRE LA MAP
+		
 		if(column._criteriaCardinality) {
 			return column._criteriaCardinality;
 		}
+		
+		return undefined;
 	},
 	
 	/**

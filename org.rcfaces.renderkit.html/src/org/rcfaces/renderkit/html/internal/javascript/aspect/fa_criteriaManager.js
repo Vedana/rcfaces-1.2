@@ -18,16 +18,16 @@ var __members = {
 		
 		/**
 		 * @method protected abstract
-		 * @param Object criteriaSelected
+		 * @param Array criteriaSelected  Sous la forme  [{ id: "idColonne", values: [ val1, val2 ] }, {...} ] 
 		 * @return void
 		 */
 		fa_setSelectedCriteria: f_class.ABSTRACT,
 		
 		/**
 		 * @method protected abstract
-		 * @return Object selectedDatagrid
+		 * @return Array selectedDatagrid
 		 */
-		fa_fa_getSelectedCriteria: f_class.ABSTRACT,
+		fa_getSelectedCriteria: f_class.ABSTRACT,
 		
 		/**
 		 * @method protected abstract
