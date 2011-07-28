@@ -961,6 +961,8 @@ f_classLoader.prototype = {
 		if (f_core.IsDebugEnabled(f_classLoader)) {
 			f_core.Debug(f_classLoader, "_initializeIds: ("+ids.length+" objects) ids="+ids.join());
 		}
+		
+		var documentComplete = this.f_isDocumentCompleted();
 
 		for(var i=0;i<ids.length;i++) {
 			var componentId=ids[i];
@@ -988,6 +990,13 @@ f_classLoader.prototype = {
 			if (onInitComponentListeners) {
 				this._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
+			
+			if (documentComplete) {
+				var documentCompleteFct = component.f_documentComplete;
+				if (documentCompleteFct) {
+					documentCompleteFct.call(component);
+				}
+			}			
 		}
 	},
 	/**
@@ -1113,11 +1122,19 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_initOnFocusIds: Can not initialize component '"+componentId+"'.", ex);
 			}	
 			
+				
+			
 			var onInitComponentListeners=self._onInitComponentListeners;
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
-		}
+			
+			var documentCompleteFct = component.f_documentComplete;
+			if (documentCompleteFct && self.f_isDocumentCompleted()) {
+				documentCompleteFct.call(component);
+			}		
+			
+		};
 		
 		if (f_core.IsInternetExplorer()) {
 			document.body.onfocusin=function() {
@@ -1199,10 +1216,16 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_initOnOverIds: Can not initialize component '"+componentId+"'.", ex);
 			}	
 			
+		
 			var onInitComponentListeners=self._onInitComponentListeners;
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
+			
+			var documentCompleteFct = component.f_documentComplete;
+			if (documentCompleteFct && self.f_isDocumentCompleted()) {
+				documentCompleteFct.call(component);
+			}			
 			
 			if (retargetIE) {						
 				var newEvt = component.ownerDocument.createEventObject(window.event)
