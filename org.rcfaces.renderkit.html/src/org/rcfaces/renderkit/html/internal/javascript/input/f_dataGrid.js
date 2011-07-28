@@ -297,6 +297,7 @@ var __members = {
 		this._addRowFragment=undefined; // HtmlDocumentFragment
 		
 		this._criteriaEvaluateCallBacks= undefined; // Object
+		this._selectedCriteria=undefined; // Array
 		
 		// this._labelColumnId=undefined; // String
 		// this._gridUpdadeServiceId=undefined; // String
@@ -1914,24 +1915,33 @@ var __members = {
 		this.f_super(arguments, dragAndDropEngine, infos);
 	},
 	
-	_computeSelectedcriteria : function(selectedCriteria) {
+	/**
+	 * 
+	 * @param Array selectedCriteria
+	 * @return
+	 */
+	_computeSelectedCriteria : function(selectedCriteria) {
 		
-		if(selectedCriteria === undefined) {
+		if (selectedCriteria === undefined) {
 			return undefined;
 		}
 		
-		var cs = selectedCriteria.split(',');
-		var result ="";
-		for ( var i = 0; i < cs.length; i++) {
-			var array_element = cs[i];
+		var result = new Array();
+		for (var i = 0; i < selectedCriteria.length; i++) {
+			var crit=selectedCriteria[i];
 			
-			if (result) {
-				result +=",";
+			result.push(crit.id);
+			
+			var array= crit.values;
+			var arrayString=new Array;
+			for(var j=0;j<array.length;j++) {			
+				arrayString.push(encodeURIComponent(array[j]));
 			}
 			
-			result += encodeURIComponent(array_element);
+			result.push(encodeURIComponent(arrayString.join(',')));
 		}
-		return result;
+		
+		return result.join(',');
 	},
 	
 	fa_evaluateCriteria: function (selectedCriteria, callBack){
@@ -1951,7 +1961,7 @@ var __members = {
 			params.gridId=this._serviceGridId;		
 			params.tokenId = this._countToken;	
 
-			params.selectedCriteria = this._computeSelectedcriteria(selectedCriteria);
+			params.selectedCriteria = this._computeSelectedCriteria(selectedCriteria);
 
 			this.f_hideEmptyDataMessage();
 			
@@ -2142,18 +2152,27 @@ var __members = {
 	 * Returns the cardinality of a column criteria
 	 * 
 	 * @param String columnId Identifier of column
-	 * @return Number criteria cardinality constant or "undefined" if the column is not known 
+	 * @return Number  criteria cardinality constant or "undefined" if the column is not known 
 	 */
 	fa_getColumnCriteriaCardinality: function (columnId) {
 		f_core.Assert(typeof(columnId)=="string", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
 
-		var column = columnById[columnId]; // TODO  FAIRE LA MAP
-		
-		if(column._criteriaCardinality) {
-			return column._criteriaCardinality;
+		var column = null;
+		var columns = this._columns;
+		for (var i = 0; i < columns.length; i++) {
+			var cl = columns[i];
+			
+			if (cl._id==columnId) {
+				column=cl;
+				break;
+			}
 		}
 		
-		return undefined;
+		if (!column) {
+			return undefined;
+		}
+				
+		return column._criteriaCardinality;
 	},
 	
 	/**

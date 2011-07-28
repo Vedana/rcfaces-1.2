@@ -1609,8 +1609,8 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 		int criteriaIndex = 0;
 
 		if (selectedCriteriaArray != null && selectedCriteriaArray.length > 0) {
-			jsWriter.writeMethodCall("fa_setSelectedCriteria");
-
+			jsWriter.writeMethodCall("fa_setSelectedCriteria").write('[');
+			
 			for (int i = 0; i < selectedCriteriaArray.length; i++) {
 				ISelectedCriteria criteria = selectedCriteriaArray[i];
 
@@ -1653,7 +1653,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 			}
 
-			jsWriter.writeln(");");
+			jsWriter.writeln("]);");
 		}
 
 		if ((generationMask & GENERATE_CELL_IMAGES) > 0) {
