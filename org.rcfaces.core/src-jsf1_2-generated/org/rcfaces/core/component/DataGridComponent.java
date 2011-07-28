@@ -1,5 +1,6 @@
 package org.rcfaces.core.component;
 
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueType;
 import javax.faces.component.UIComponent;
 import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
@@ -24,6 +25,7 @@ import org.rcfaces.core.internal.converter.CheckCardinalityConverter;
 import org.rcfaces.core.internal.capability.IAdditionalInformationRangeComponent;
 import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.CheckTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.IScrollableCapability;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.model.ISortedComponent;
@@ -32,10 +34,11 @@ import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.internal.tools.OrderTools;
 import org.rcfaces.core.component.iterator.IColumnIterator;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IEmptyDataMessageCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
-import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IDraggableCapability;
+import org.rcfaces.core.component.AbstractDataComponent;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IPreferencesSettings;
@@ -76,8 +79,10 @@ import org.rcfaces.core.component.iterator.IAdditionalInformationIterator;
 import org.rcfaces.core.component.capability.IDropEventCapability;
 import java.lang.String;
 import org.rcfaces.core.internal.converter.ClientFullStateConverter;
+import org.rcfaces.core.model.ICriteriaSelectedResult;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
+import org.rcfaces.core.model.ISelectedCriteria;
 import javax.el.ValueExpression;
 import java.util.HashSet;
 import org.rcfaces.core.internal.converter.AdditionalInformationCardinalityConverter;
@@ -166,15 +171,15 @@ import org.rcfaces.core.internal.tools.CollectionTools;
  * </table>
  */
 public class DataGridComponent extends AbstractDataComponent implements 
-	ISelectionEventCapability,
-	ISelectableCapability,
-	ISelectionCardinalityCapability,
-	ISelectedValuesCapability,
 	IDragEventCapability,
 	IDraggableCapability,
 	IDropEventCapability,
 	IDropCompleteEventCapability,
 	IDroppableCapability,
+	ISelectionEventCapability,
+	ISelectableCapability,
+	ISelectionCardinalityCapability,
+	ISelectedValuesCapability,
 	ICheckEventCapability,
 	ICheckableCapability,
 	ICheckCardinalityCapability,
@@ -210,6 +215,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	ISelectionRangeComponent,
 	ICheckRangeComponent,
 	ISortedComponentsCapability,
+	ICriteriaManagerCapability,
 	IAdditionalInformationRangeComponent,
 	IDraggableGridComponent {
 
@@ -219,7 +225,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","selectionCardinality","droppable","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -503,6 +509,34 @@ public class DataGridComponent extends AbstractDataComponent implements
 			
 	}
 
+	public ICriteriaContainer[] listCriteriaContainers() {
+
+
+				return CriteriaTools.getCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
+			
+	}
+
+	public void setCriteriaContainers(ICriteriaContainer[] components) {
+
+
+				CriteriaTools.setCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
+			
+	}
+
+	public ICriteriaSelectedResult processSelectedCriteria() {
+
+
+				return CriteriaTools.processCriteriaConfig(this, null);
+			
+	}
+
+	public ICriteriaSelectedResult processSelectedCriteria(ISelectedCriteria[] configs) {
+
+
+				return CriteriaTools.processCriteriaConfig(this, configs);
+			
+	}
+
 	public DataColumnComponent[] getSortedColumns() {
 
 
@@ -755,90 +789,6 @@ public class DataGridComponent extends AbstractDataComponent implements
 		
 	}
 
-	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		addFacesListener(listener);
-	}
-
-	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
-		removeFacesListener(listener);
-	}
-
-	public final javax.faces.event.FacesListener [] listSelectionListeners() {
-		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
-	}
-
-	public boolean isSelectable() {
-		return isSelectable(null);
-	}
-
-	/**
-	 * See {@link #isSelectable() isSelectable()} for more details
-	 */
-	public boolean isSelectable(javax.faces.context.FacesContext facesContext) {
-		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectable" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectableSetted() {
-		return engine.isPropertySetted(Properties.SELECTABLE);
-	}
-
-	public void setSelectable(boolean selectable) {
-		engine.setProperty(Properties.SELECTABLE, selectable);
-	}
-
-	public int getSelectionCardinality() {
-		return getSelectionCardinality(null);
-	}
-
-	/**
-	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
-	 */
-	public int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectionCardinality" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectionCardinalitySetted() {
-		return engine.isPropertySetted(Properties.SELECTION_CARDINALITY);
-	}
-
-	public void setSelectionCardinality(int selectionCardinality) {
-		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
-	}
-
-	public java.lang.Object getSelectedValues() {
-		return getSelectedValues(null);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "selectedValues" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public final boolean isSelectedValuesSetted() {
-		return engine.isPropertySetted(Properties.SELECTED_VALUES);
-	}
-
-	/**
-	 * Return the type of the property represented by the {@link ValueExpression}, relative to the specified {@link javax.faces.context.FacesContext}.
-	 */
-	public Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
-		ValueExpression valueExpression=engine.getValueExpressionProperty(Properties.SELECTED_VALUES);
-		if (valueExpression==null) {
-			return null;
-		}
-		if (facesContext==null) {
-			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
-		}
-		return valueExpression.getType(facesContext.getELContext());
-	}
-
 	public final void addDragListener(org.rcfaces.core.event.IDragListener listener) {
 		addFacesListener(listener);
 	}
@@ -1011,6 +961,90 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setDroppable(boolean droppable) {
 		engine.setProperty(Properties.DROPPABLE, droppable);
+	}
+
+	public final void addSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removeSelectionListener(org.rcfaces.core.event.ISelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public boolean isSelectable() {
+		return isSelectable(null);
+	}
+
+	/**
+	 * See {@link #isSelectable() isSelectable()} for more details
+	 */
+	public boolean isSelectable(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.SELECTABLE, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectable" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectableSetted() {
+		return engine.isPropertySetted(Properties.SELECTABLE);
+	}
+
+	public void setSelectable(boolean selectable) {
+		engine.setProperty(Properties.SELECTABLE, selectable);
+	}
+
+	public int getSelectionCardinality() {
+		return getSelectionCardinality(null);
+	}
+
+	/**
+	 * See {@link #getSelectionCardinality() getSelectionCardinality()} for more details
+	 */
+	public int getSelectionCardinality(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.SELECTION_CARDINALITY,0, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectionCardinality" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectionCardinalitySetted() {
+		return engine.isPropertySetted(Properties.SELECTION_CARDINALITY);
+	}
+
+	public void setSelectionCardinality(int selectionCardinality) {
+		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
+	}
+
+	public java.lang.Object getSelectedValues() {
+		return getSelectedValues(null);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectedValues" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isSelectedValuesSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_VALUES);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueExpression}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueExpression valueExpression=engine.getValueExpressionProperty(Properties.SELECTED_VALUES);
+		if (valueExpression==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueExpression.getType(facesContext.getELContext());
 	}
 
 	public final void addCheckListener(org.rcfaces.core.event.ICheckListener listener) {
@@ -1691,6 +1725,26 @@ public class DataGridComponent extends AbstractDataComponent implements
 	 */
 	public boolean isRowDropEffectsSetted() {
 		return engine.isPropertySetted(Properties.ROW_DROP_EFFECTS);
+	}
+
+	public Object getSelectedCriteriaColumns() {
+		return getSelectedCriteriaColumns(null);
+	}
+
+	public Object getSelectedCriteriaColumns(javax.faces.context.FacesContext facesContext) {
+		return engine.getValue(Properties.SELECTED_CRITERIA_COLUMNS, facesContext);
+	}
+
+	public void setSelectedCriteriaColumns(Object selectedCriteriaColumns) {
+		engine.setValue(Properties.SELECTED_CRITERIA_COLUMNS, selectedCriteriaColumns);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "selectedCriteriaColumns" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isSelectedCriteriaColumnsSetted() {
+		return engine.isPropertySetted(Properties.SELECTED_CRITERIA_COLUMNS);
 	}
 
 	/**

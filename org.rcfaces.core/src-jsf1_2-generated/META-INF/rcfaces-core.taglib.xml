@@ -721,6 +721,27 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>criteria</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteria</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>criteriaItem</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteriaItem</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>criteriaItemFiller</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteriaItemFiller</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>convertByte</tag-name>
 		<converter>
 			<converter-id>org.rcfaces.Byte</converter-id>

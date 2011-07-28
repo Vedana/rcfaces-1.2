@@ -21,6 +21,7 @@ import org.rcfaces.core.component.capability.IPartialRenderingCapability;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.tools.AsyncModeTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.lang.IAdaptable;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -272,6 +273,28 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
     protected String convertValue(FacesContext facesContext,
             UIComponent component, Object value) {
         return ValuesTools.valueToString(value, component, facesContext);
+    }
+    
+    
+    protected Object getAdapter (Class adapter, Object object){
+    	return getAdapter(adapter, object, null);
+    }
+    
+	protected Object getAdapter (Class adapter, Object object, Object params) {
+    	
+		if(params == null){
+			params = this;
+		}
+		
+    	if(object instanceof IAdaptable) {
+    		 return ((IAdaptable) object).getAdapter(adapter, params);
+    	} 
+    	
+    	if (adapter.isAssignableFrom(object.getClass())){
+    		return object;
+    	}
+   
+    	return null;
     }
 
     public Object getConvertedValue(FacesContext context,
