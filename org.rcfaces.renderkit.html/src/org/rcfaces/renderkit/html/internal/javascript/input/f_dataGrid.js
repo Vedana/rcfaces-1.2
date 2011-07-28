@@ -1922,8 +1922,8 @@ var __members = {
 		
 		var cs = selectedCriteria.split(',');
 		var result ="";
-		for ( var int = 0; int < cs.length; int++) {
-			var array_element = cs[int];
+		for ( var i = 0; i < cs.length; i++) {
+			var array_element = cs[i];
 			
 			if (result) {
 				result +=",";
@@ -2142,7 +2142,7 @@ var __members = {
 	 * Returns the cardinality of a column criteria
 	 * 
 	 * @param String columnId Identifier of column
-	 * @return Number criteria cardinality constant or  if the column is not known 
+	 * @return Number criteria cardinality constant or "undefined" if the column is not known 
 	 */
 	fa_getColumnCriteriaCardinality: function (columnId) {
 		f_core.Assert(typeof(columnId)=="string", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
