@@ -1938,13 +1938,17 @@ var __members = {
 			return false;
 		}
 		
-		this._criteriaEvaluateCallBack = callBack;
+		
+		if (this._criteriaEvaluateCallBacks === undefined){
+			this._criteriaEvaluateCallBacks = new Array();
+		}
+		this._criteriaEvaluateCallBacks[++this._countToken] = callBack;
 		
 		this.f_appendCommand(function(dataGrid) {
 			
 			var params = new Object();
 			params.gridId=this._serviceGridId;		
-			params.tokenId = this._countToken++;	
+			params.tokenId = this._countToken;	
 
 			params.selectedCriteria = this._computeSelectedcriteria(selectedCriteria);
 
@@ -2115,7 +2119,7 @@ var __members = {
 	},
 	
 	fa_getSelectedCriteria: function (){
-		this._selectedCriteria;
+		return this._selectedCriteria;
 	},
 	
 	fa_getColumnCriteriaCardinality: function (column){
@@ -2132,7 +2136,11 @@ var __members = {
 	 * @return void
 	 */
 	_processSelectedCriteriaResult: function (tokenId, resultCount, availableCriteria) {
-		this._criteriaEvaluateCallBack.call(window, resultCount, availableCriteria);
+		
+		var cb=this._criteriaEvaluateCallBacks[tokenId];
+		delete this._criteriaEvaluateCallBacks[tokenId];
+				
+		cb.call(this, resultCount, availableCriteria);
 	}
 };
 
