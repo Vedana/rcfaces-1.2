@@ -520,7 +520,7 @@ public final class ComponentTools extends ComponentTools0 {
             UIComponent component, String ids, Class childClass) {
 
         if (ids == null) {
-            if (childClass == null || childClass == UIComponent.class) {
+            if (true ||  childClass == null || childClass == UIComponent.class) {
                 return COMPONENT_EMPTY_ARRAY;
             }
             return (UIComponent[]) Array.newInstance(childClass, 0);

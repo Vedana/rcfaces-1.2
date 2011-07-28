@@ -37,13 +37,14 @@ import org.rcfaces.core.internal.renderkit.IRenderContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
+import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.renderer.ComponentsGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -52,358 +53,365 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class ComponentsGridService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
-
-    private static final String SERVICE_ID = Constants.getPackagePrefix()
-            + ".ComponentsGrid";
+	private static final String REVISION = "$Revision$";
+
+	private static final String SERVICE_ID = Constants.getPackagePrefix()
+			+ ".ComponentsGrid";
 
-    private static final Log LOG = LogFactory
-            .getLog(ComponentsGridService.class);
+	private static final Log LOG = LogFactory
+			.getLog(ComponentsGridService.class);
 
-    private static final int DEFAULT_BUFFER_SIZE = 4096;
+	private static final int DEFAULT_BUFFER_SIZE = 4096;
 
-    private static final int INITIAL_SIZE = 8000;
+	private static final int INITIAL_SIZE = 8000;
 
-    private static final String RENDER_CONTEXT_STATE = "camelia.cls.renderContext";
+	private static final String RENDER_CONTEXT_STATE = "camelia.cls.renderContext";
 
-    private static final String COMPONENTS_LIST_SERVICE_VERSION = "1.0.0";
+	private static final String COMPONENTS_LIST_SERVICE_VERSION = "1.0.0";
 
-    public ComponentsGridService() {
-    }
+	public ComponentsGridService() {
+	}
 
-    public static ComponentsGridService getInstance(FacesContext facesContext) {
+	public static ComponentsGridService getInstance(FacesContext facesContext) {
 
-        IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext).getServicesRegistry();
-        if (serviceRegistry == null) {
-            // Designer mode
-            return null;
-        }
+		IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
+				facesContext).getServicesRegistry();
+		if (serviceRegistry == null) {
+			// Designer mode
+			return null;
+		}
 
-        return (ComponentsGridService) serviceRegistry.getService(facesContext,
-                RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
-    }
+		return (ComponentsGridService) serviceRegistry.getService(facesContext,
+				RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
+	}
 
-    public void service(FacesContext facesContext, String commandId) {
-        Map parameters = facesContext.getExternalContext()
-                .getRequestParameterMap();
+	public void service(FacesContext facesContext, String commandId) {
+		Map parameters = facesContext.getExternalContext()
+				.getRequestParameterMap();
 
-        String componentsGridId = (String) parameters.get("componentsGridId");
-        if (componentsGridId == null) {
-            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find 'componentsListId' parameter.", null);
-            return;
-        }
+		String componentsGridId = (String) parameters.get("componentsGridId");
+		if (componentsGridId == null) {
+			sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find 'componentsListId' parameter.", null);
+			return;
+		}
 
-        UIViewRoot viewRoot = facesContext.getViewRoot();
-        if (viewRoot.getChildCount() == 0) {
-            sendJsError(facesContext, componentsGridId,
-                    SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
-            return;
-        }
+		UIViewRoot viewRoot = facesContext.getViewRoot();
+		if (viewRoot.getChildCount() == 0) {
+			sendJsError(facesContext, componentsGridId,
+					SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
+			return;
+		}
+
+		String index_s = (String) parameters.get("index");
+		if (index_s == null) {
+			sendJsError(facesContext, componentsGridId,
+					INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find 'index' parameter.", null);
+			return;
+		}
 
-        String index_s = (String) parameters.get("index");
-        if (index_s == null) {
-            sendJsError(facesContext, componentsGridId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find 'index' parameter.", null);
-            return;
-        }
+		String filterExpression = (String) parameters.get("filterExpression");
 
-        String filterExpression = (String) parameters.get("filterExpression");
+		String forcedRows_s = (String) parameters.get("rows");
 
-        String forcedRows_s = (String) parameters.get("rows");
+		int rowIndex = Integer.parseInt(index_s);
+		int forcedRows = -1;
+		if (forcedRows_s != null && forcedRows_s.length() > 0) {
+			forcedRows = Integer.parseInt(forcedRows_s);
+			if (forcedRows < 1) {
+				forcedRows = -1;
+			}
+		}
 
-        int rowIndex = Integer.parseInt(index_s);
-        int forcedRows = -1;
-        if (forcedRows_s != null && forcedRows_s.length() > 0) {
-            forcedRows = Integer.parseInt(forcedRows_s);
-            if (forcedRows < 1) {
-                forcedRows = -1;
-            }
-        }
+		String showAdditional = (String) parameters.get("showAdditional");
+		String hideAdditional = (String) parameters.get("hideAdditional");
 
-        String showAdditional = (String) parameters.get("showAdditional");
-        String hideAdditional = (String) parameters.get("hideAdditional");
+		boolean unknownRowCount = "true".equals(parameters
+				.get("unknownRowCount"));
 
-        boolean unknownRowCount = "true".equals(parameters
-                .get("unknownRowCount"));
+		ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+				facesContext, componentsGridId);
+		if (localizedComponent == null) {
+			// Cas special: la session a du expir�e ....
 
-        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
-                facesContext, componentsGridId);
-        if (localizedComponent == null) {
-            // Cas special: la session a du expir�e ....
+			sendJsError(facesContext, componentsGridId,
+					INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find componentsGrid component (id='"
+							+ componentsGridId + "').", null);
 
-            sendJsError(facesContext, componentsGridId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find componentsGrid component (id='"
-                            + componentsGridId + "').", null);
+			return;
+		}
 
-            return;
-        }
+		try {
+			UIComponent component = localizedComponent.getComponent();
 
-        try {
-            UIComponent component = localizedComponent.getComponent();
+			if ((component instanceof ComponentsGridComponent) == false) {
+				sendJsError(facesContext, componentsGridId,
+						INVALID_PARAMETER_SERVICE_ERROR,
+						"Invalid componentsGrid component (id='"
+								+ componentsGridId + "').", null);
+				return;
+			}
 
-            if ((component instanceof ComponentsGridComponent) == false) {
-                sendJsError(facesContext, componentsGridId,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Invalid componentsGrid component (id='"
-                                + componentsGridId + "').", null);
-                return;
-            }
+			ComponentsGridComponent dgc = (ComponentsGridComponent) component;
 
-            ComponentsGridComponent dgc = (ComponentsGridComponent) component;
+			decodeSubComponents(facesContext, dgc, parameters);
 
-            decodeSubComponents(facesContext, dgc, parameters);
+			ISortedComponent sortedComponents[] = null;
 
-            ISortedComponent sortedComponents[] = null;
+			String sortIndex_s = (String) parameters.get("sortIndex");
+			if (sortIndex_s != null) {
+				UIColumn columns[] = dgc.listColumns().toArray();
 
-            String sortIndex_s = (String) parameters.get("sortIndex");
-            if (sortIndex_s != null) {
-                UIColumn columns[] = dgc.listColumns().toArray();
+				StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
 
-                StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
+				sortedComponents = new ISortedComponent[st1.countTokens() / 2];
 
-                sortedComponents = new ISortedComponent[st1.countTokens() / 2];
+				for (int i = 0; st1.hasMoreTokens(); i++) {
+					String tok1 = st1.nextToken();
+					String tok2 = st1.nextToken();
 
-                for (int i = 0; st1.hasMoreTokens(); i++) {
-                    String tok1 = st1.nextToken();
-                    String tok2 = st1.nextToken();
+					int idx = Integer.parseInt(tok1);
+					boolean order = "true".equalsIgnoreCase(tok2);
 
-                    int idx = Integer.parseInt(tok1);
-                    boolean order = "true".equalsIgnoreCase(tok2);
+					sortedComponents[i] = new DefaultSortedComponent(
+							columns[idx], idx, order);
+				}
+			}
 
-                    sortedComponents[i] = new DefaultSortedComponent(
-                            columns[idx], idx, order);
-                }
-            }
+			ISelectedCriteria[] criteriaConfigs = null;
+			String criteria_s = (String) parameters.get("criteria");
+			criteriaConfigs = DataGridService.computeCriteriaConfigs(dgc,
+					criteria_s);
 
-            ComponentsGridRenderer dgr = getComponentsGridRenderer(
-                    facesContext, dgc);
-            if (dgr == null) {
-                sendJsError(facesContext, componentsGridId,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find componentsGrid renderer. (componentsGridId='"
-                                + componentsGridId + "')", null);
-                return;
-            }
+			ComponentsGridRenderer dgr = getComponentsGridRenderer(
+					facesContext, dgc);
+			if (dgr == null) {
+				sendJsError(facesContext, componentsGridId,
+						INVALID_PARAMETER_SERVICE_ERROR,
+						"Can not find componentsGrid renderer. (componentsGridId='"
+								+ componentsGridId + "')", null);
+				return;
+			}
 
-            ServletResponse response = (ServletResponse) facesContext
-                    .getExternalContext().getResponse();
+			ServletResponse response = (ServletResponse) facesContext
+					.getExternalContext().getResponse();
 
-            setNoCache(response);
-            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                    + "; charset=" + RESPONSE_CHARSET);
-            setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
+			setNoCache(response);
+			response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+					+ "; charset=" + RESPONSE_CHARSET);
+			setCameliaResponse(response, COMPONENTS_LIST_SERVICE_VERSION);
 
-            boolean useGzip = canUseGzip(facesContext);
+			boolean useGzip = canUseGzip(facesContext);
 
-            PrintWriter printWriter = null;
-            try {
+			PrintWriter printWriter = null;
+			try {
 
-                if (useGzip == false) {
-                    printWriter = response.getWriter();
+				if (useGzip == false) {
+					printWriter = response.getWriter();
 
-                } else {
-                    ConfiguredHttpServlet.setGzipContentEncoding(
-                            (HttpServletResponse) response, true);
+				} else {
+					ConfiguredHttpServlet.setGzipContentEncoding(
+							(HttpServletResponse) response, true);
 
-                    OutputStream outputStream = response.getOutputStream();
+					OutputStream outputStream = response.getOutputStream();
 
-                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                            outputStream, DEFAULT_BUFFER_SIZE);
+					GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+							outputStream, DEFAULT_BUFFER_SIZE);
 
-                    Writer writer = new OutputStreamWriter(gzipOutputStream,
-                            RESPONSE_CHARSET);
+					Writer writer = new OutputStreamWriter(gzipOutputStream,
+							RESPONSE_CHARSET);
 
-                    printWriter = new PrintWriter(writer, false);
-                }
+					printWriter = new PrintWriter(writer, false);
+				}
 
-                writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
-                        rowIndex, forcedRows, sortedComponents,
-                        filterExpression, showAdditional, hideAdditional,
-                        unknownRowCount);
+				writeJs(facesContext, printWriter, dgc, componentsGridId, dgr,
+						rowIndex, forcedRows, sortedComponents,
+						filterExpression, showAdditional, hideAdditional,
+						unknownRowCount, criteriaConfigs);
 
-            } catch (IOException ex) {
-                throw new FacesException(
-                        "Can not write dataGrid javascript rows !", ex);
+			} catch (IOException ex) {
+				throw new FacesException(
+						"Can not write dataGrid javascript rows !", ex);
 
-            } catch (RuntimeException ex) {
-                LOG.error("Catch runtime exception !", ex);
+			} catch (RuntimeException ex) {
+				LOG.error("Catch runtime exception !", ex);
 
-                throw ex;
+				throw ex;
 
-            } finally {
-                if (printWriter != null) {
-                    printWriter.close();
-                }
-            }
-        } finally {
-            localizedComponent.end();
-        }
-        facesContext.responseComplete();
-    }
+			} finally {
+				if (printWriter != null) {
+					printWriter.close();
+				}
+			}
+		} finally {
+			localizedComponent.end();
+		}
+		facesContext.responseComplete();
+	}
 
-    private void decodeSubComponents(FacesContext facesContext,
-            ComponentsGridComponent dgc, Map parameters) {
+	private void decodeSubComponents(FacesContext facesContext,
+			ComponentsGridComponent dgc, Map parameters) {
 
-        int first = -1;
-        int rows = -1;
+		int first = -1;
+		int rows = -1;
 
-        String serializedFirst = (String) parameters.get("serializedFirst");
-        if (serializedFirst != null) {
-            first = Integer.parseInt(serializedFirst);
-        }
+		String serializedFirst = (String) parameters.get("serializedFirst");
+		if (serializedFirst != null) {
+			first = Integer.parseInt(serializedFirst);
+		}
 
-        String serializedRows = (String) parameters.get("serializedRows");
-        if (serializedRows != null) {
-            rows = Integer.parseInt(serializedRows);
-        }
+		String serializedRows = (String) parameters.get("serializedRows");
+		if (serializedRows != null) {
+			rows = Integer.parseInt(serializedRows);
+		}
 
-        if (first < 0 || rows < 1) {
-            return;
-        }
+		if (first < 0 || rows < 1) {
+			return;
+		}
 
-        dgc.setFirst(first);
-        dgc.setRows(rows);
+		dgc.setFirst(first);
+		dgc.setRows(rows);
 
-        dgc.processDecodes(facesContext);
-    }
+		dgc.processDecodes(facesContext);
+	}
 
-    private ComponentsGridRenderer getComponentsGridRenderer(
-            FacesContext facesContext, ComponentsGridComponent component) {
+	private ComponentsGridRenderer getComponentsGridRenderer(
+			FacesContext facesContext, ComponentsGridComponent component) {
 
-        Renderer renderer = getRenderer(facesContext, component);
+		Renderer renderer = getRenderer(facesContext, component);
 
-        if ((renderer instanceof ComponentsGridRenderer) == false) {
-            LOG.error("Renderer is not a valid type (AbstractGridRenderer) => "
-                    + renderer);
-            return null;
-        }
+		if ((renderer instanceof ComponentsGridRenderer) == false) {
+			LOG.error("Renderer is not a valid type (AbstractGridRenderer) => "
+					+ renderer);
+			return null;
+		}
 
-        return (ComponentsGridRenderer) renderer;
-    }
+		return (ComponentsGridRenderer) renderer;
+	}
 
-    private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            ComponentsGridComponent dgc, String componentClientId,
-            ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
-            ISortedComponent sortedComponents[], String filterExpression,
-            String showAdditional, String hideAdditional,
-            boolean unknownRowCount) throws IOException {
+	private void writeJs(FacesContext facesContext, PrintWriter printWriter,
+			ComponentsGridComponent dgc, String componentClientId,
+			ComponentsGridRenderer dgr, int rowIndex, int forcedRows,
+			ISortedComponent sortedComponents[], String filterExpression,
+			String showAdditional, String hideAdditional,
+			boolean unknownRowCount, ISelectedCriteria[] criteriaContainers)
+			throws IOException {
 
-        IProcessContext processContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext);
+		IProcessContext processContext = HtmlProcessContextImpl
+				.getHtmlProcessContext(facesContext);
 
-        CharArrayWriter cw = null;
-        PrintWriter pw = printWriter;
-        if (LOG.isTraceEnabled()) {
-            cw = new CharArrayWriter(2000);
-            pw = new PrintWriter(cw);
-        }
+		CharArrayWriter cw = null;
+		PrintWriter pw = printWriter;
+		if (LOG.isTraceEnabled()) {
+			cw = new CharArrayWriter(2000);
+			pw = new PrintWriter(cw);
+		}
 
-        Object states[] = (Object[]) dgc.getAttributes().get(
-                RENDER_CONTEXT_STATE);
-        String contentType = (String) states[1];
+		Object states[] = (Object[]) dgc.getAttributes().get(
+				RENDER_CONTEXT_STATE);
+		String contentType = (String) states[1];
 
-        JavaScriptResponseWriter jsWriter = new JavaScriptResponseWriter(
-                facesContext, pw, RESPONSE_CHARSET, dgc, componentClientId);
+		JavaScriptResponseWriter jsWriter = new JavaScriptResponseWriter(
+				facesContext, pw, RESPONSE_CHARSET, dgc, componentClientId);
 
-        String varId = jsWriter.getComponentVarName();
+		String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document);");
+		jsWriter.write("var ").write(varId).write('=')
+				.writeCall("f_core", "GetElementByClientId")
+				.writeString(componentClientId).writeln(", document);");
 
-        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
-                ");");
+		jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+				.writeln(");");
 
-        ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
-        ResponseStream oldResponseStream = facesContext.getResponseStream();
+		ResponseWriter oldResponseWriter = facesContext.getResponseWriter();
+		ResponseStream oldResponseStream = facesContext.getResponseStream();
 
-        try {
-            CharArrayWriter myWriter = new CharArrayWriter(1);
+		try {
+			CharArrayWriter myWriter = new CharArrayWriter(1);
 
-            ResponseWriter newWriter = facesContext.getRenderKit()
-                    .createResponseWriter(myWriter, contentType,
-                            RESPONSE_CHARSET);
+			ResponseWriter newWriter = facesContext.getRenderKit()
+					.createResponseWriter(myWriter, contentType,
+							RESPONSE_CHARSET);
 
-            facesContext.setResponseWriter(newWriter);
+			facesContext.setResponseWriter(newWriter);
 
-            IRenderContext renderContext = HtmlRenderContext
-                    .restoreRenderContext(facesContext, states[0], true);
+			IRenderContext renderContext = HtmlRenderContext
+					.restoreRenderContext(facesContext, states[0], true);
 
-            renderContext.pushComponent(dgc, componentClientId);
+			renderContext.pushComponent(dgc, componentClientId);
 
-            jsWriter.setRenderContext(renderContext);
+			jsWriter.setRenderContext(renderContext);
 
-            // IComponentTreeRenderProcessor
-            // componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.
-            // get(facesContext)
+			// IComponentTreeRenderProcessor
+			// componentTreeRenderProcessor=ComponentTreeRenderProcessorFactory.
+			// get(facesContext)
 
-            ComponentsGridRenderer.ComponentsGridRenderContext listContext = dgr
-                    .createComponentsGridContext(processContext, jsWriter
-                            .getJavaScriptRenderContext(), dgc, rowIndex,
-                            forcedRows, sortedComponents, filterExpression,
-                            showAdditional, hideAdditional);
+			ComponentsGridRenderer.ComponentsGridRenderContext listContext = dgr
+					.createComponentsGridContext(processContext,
+							jsWriter.getJavaScriptRenderContext(), dgc,
+							rowIndex, forcedRows, sortedComponents,
+							filterExpression, showAdditional, hideAdditional,
+							criteriaContainers);
 
-            int rowCount = dgr.encodeChildren(jsWriter, listContext, true,
-                    unknownRowCount);
+			int rowCount = dgr.encodeChildren(jsWriter, listContext, true,
+					unknownRowCount);
 
-            if (rowCount >= 0) {
-                jsWriter.writeMethodCall("f_setRowCount").writeInt(rowCount)
-                        .writeln(");");
-            }
+			if (rowCount >= 0) {
+				jsWriter.writeMethodCall("f_setRowCount").writeInt(rowCount)
+						.writeln(");");
+			}
 
-            jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
+			jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
-            saveView(facesContext);
+			saveView(facesContext);
 
-        } finally {
+		} finally {
 
-            if (oldResponseWriter != null) {
-                facesContext.setResponseWriter(oldResponseWriter);
-            }
+			if (oldResponseWriter != null) {
+				facesContext.setResponseWriter(oldResponseWriter);
+			}
 
-            if (oldResponseStream != null) {
-                facesContext.setResponseStream(oldResponseStream);
-            }
-        }
+			if (oldResponseStream != null) {
+				facesContext.setResponseStream(oldResponseStream);
+			}
+		}
 
-        if (LOG.isTraceEnabled()) {
-            pw.flush();
+		if (LOG.isTraceEnabled()) {
+			pw.flush();
 
-            LOG.trace(cw.toString());
+			LOG.trace(cw.toString());
 
-            printWriter.write(cw.toCharArray());
-        }
-    }
+			printWriter.write(cw.toCharArray());
+		}
+	}
 
-    private void saveView(FacesContext facesContext) throws IOException {
-        StateManager stateManager = facesContext.getApplication()
-                .getStateManager();
+	private void saveView(FacesContext facesContext) throws IOException {
+		StateManager stateManager = facesContext.getApplication()
+				.getStateManager();
 
-        Object state = stateManager.saveView(facesContext);
+		Object state = stateManager.saveView(facesContext);
 
-        stateManager.writeState(facesContext, state);
-    }
+		stateManager.writeState(facesContext, state);
+	}
 
-    public void setupComponent(IComponentRenderContext componentRenderContext) {
-        UIComponent dataListComponent = componentRenderContext.getComponent();
+	public void setupComponent(IComponentRenderContext componentRenderContext) {
+		UIComponent dataListComponent = componentRenderContext.getComponent();
 
-        IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
-                .getRenderContext();
+		IHtmlRenderContext htmlRenderContext = (IHtmlRenderContext) componentRenderContext
+				.getRenderContext();
 
-        FacesContext facesContext = htmlRenderContext.getFacesContext();
+		FacesContext facesContext = htmlRenderContext.getFacesContext();
 
-        Object state = htmlRenderContext.saveState(facesContext);
+		Object state = htmlRenderContext.saveState(facesContext);
 
-        if (state != null) {
-            String contentType = facesContext.getResponseWriter()
-                    .getContentType();
+		if (state != null) {
+			String contentType = facesContext.getResponseWriter()
+					.getContentType();
 
-            dataListComponent.getAttributes().put(RENDER_CONTEXT_STATE,
-                    new Object[] { state, contentType });
-        }
-    }
+			dataListComponent.getAttributes().put(RENDER_CONTEXT_STATE,
+					new Object[] { state, contentType });
+		}
+	}
 }

@@ -18,10 +18,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 	private static final Log LOG=LogFactory.getLog(DataGridTag.class);
 
-	private ValueExpression selectionListeners;
-	private ValueExpression selectable;
-	private ValueExpression selectionCardinality;
-	private ValueExpression selectedValues;
 	private ValueExpression dragListeners;
 	private ValueExpression dragEffects;
 	private ValueExpression dragTypes;
@@ -31,6 +27,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression dropEffects;
 	private ValueExpression dropTypes;
 	private ValueExpression droppable;
+	private ValueExpression selectionListeners;
+	private ValueExpression selectable;
+	private ValueExpression selectionCardinality;
+	private ValueExpression selectedValues;
 	private ValueExpression checkListeners;
 	private ValueExpression checkable;
 	private ValueExpression checkCardinality;
@@ -74,22 +74,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		return DataGridComponent.COMPONENT_TYPE;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
-		this.selectionListeners = selectionListeners;
-	}
-
-	public final void setSelectable(ValueExpression selectable) {
-		this.selectable = selectable;
-	}
-
-	public final void setSelectionCardinality(ValueExpression selectionCardinality) {
-		this.selectionCardinality = selectionCardinality;
-	}
-
-	public final void setSelectedValues(ValueExpression selectedValues) {
-		this.selectedValues = selectedValues;
-	}
-
 	public final void setDragListener(ValueExpression dragListeners) {
 		this.dragListeners = dragListeners;
 	}
@@ -124,6 +108,22 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 	public final void setDroppable(ValueExpression droppable) {
 		this.droppable = droppable;
+	}
+
+	public final void setSelectionListener(ValueExpression selectionListeners) {
+		this.selectionListeners = selectionListeners;
+	}
+
+	public final void setSelectable(ValueExpression selectable) {
+		this.selectable = selectable;
+	}
+
+	public final void setSelectionCardinality(ValueExpression selectionCardinality) {
+		this.selectionCardinality = selectionCardinality;
+	}
+
+	public final void setSelectedValues(ValueExpression selectedValues) {
+		this.selectedValues = selectedValues;
 	}
 
 	public final void setCheckListener(ValueExpression checkListeners) {
@@ -287,15 +287,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			if (DataGridComponent.COMPONENT_TYPE==getComponentType()) {
 				LOG.debug("Component id='"+getId()+"' type='"+getComponentType()+"'.");
 			}
-			LOG.debug("  selectable='"+selectable+"'");
-			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
-			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  dragEffects='"+dragEffects+"'");
 			LOG.debug("  dragTypes='"+dragTypes+"'");
 			LOG.debug("  draggable='"+draggable+"'");
 			LOG.debug("  dropEffects='"+dropEffects+"'");
 			LOG.debug("  dropTypes='"+dropTypes+"'");
 			LOG.debug("  droppable='"+droppable+"'");
+			LOG.debug("  selectable='"+selectable+"'");
+			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
+			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  checkable='"+checkable+"'");
 			LOG.debug("  checkCardinality='"+checkCardinality+"'");
 			LOG.debug("  checkedValues='"+checkedValues+"'");
@@ -343,32 +343,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 
 		DataGridComponent component = (DataGridComponent) uiComponent;
 		FacesContext facesContext = getFacesContext();
-
-		if (selectionListeners != null) {
-			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
-		}
-
-		if (selectable != null) {
-			if (selectable.isLiteralText()==false) {
-				component.setValueExpression(Properties.SELECTABLE, selectable);
-
-			} else {
-				component.setSelectable(getBool(selectable.getExpressionString()));
-			}
-		}
-
-		if (selectionCardinality != null) {
-			if (selectionCardinality.isLiteralText()==false) {
-				component.setValueExpression(Properties.SELECTION_CARDINALITY, selectionCardinality);
-
-			} else {
-				component.setSelectionCardinality(selectionCardinality.getExpressionString());
-			}
-		}
-
-		if (selectedValues != null) {
-				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
-		}
 
 		if (dragListeners != null) {
 			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.DRAG_LISTENER_TYPE, dragListeners);
@@ -434,6 +408,32 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			} else {
 				component.setDroppable(getBool(droppable.getExpressionString()));
 			}
+		}
+
+		if (selectionListeners != null) {
+			ListenersTools1_2.parseListener(facesContext, component, ListenersTools.SELECTION_LISTENER_TYPE, selectionListeners);
+		}
+
+		if (selectable != null) {
+			if (selectable.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTABLE, selectable);
+
+			} else {
+				component.setSelectable(getBool(selectable.getExpressionString()));
+			}
+		}
+
+		if (selectionCardinality != null) {
+			if (selectionCardinality.isLiteralText()==false) {
+				component.setValueExpression(Properties.SELECTION_CARDINALITY, selectionCardinality);
+
+			} else {
+				component.setSelectionCardinality(selectionCardinality.getExpressionString());
+			}
+		}
+
+		if (selectedValues != null) {
+				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
 		}
 
 		if (checkListeners != null) {
@@ -740,10 +740,6 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	}
 
 	public void release() {
-		selectionListeners = null;
-		selectable = null;
-		selectionCardinality = null;
-		selectedValues = null;
 		dragListeners = null;
 		dragEffects = null;
 		dragTypes = null;
@@ -753,6 +749,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		dropEffects = null;
 		dropTypes = null;
 		droppable = null;
+		selectionListeners = null;
+		selectable = null;
+		selectionCardinality = null;
+		selectedValues = null;
 		checkListeners = null;
 		checkable = null;
 		checkCardinality = null;

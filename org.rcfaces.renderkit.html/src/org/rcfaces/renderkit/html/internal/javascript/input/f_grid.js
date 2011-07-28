@@ -286,7 +286,7 @@ var __statics = {
 
 			var selection = fa_selectionManager.ComputeMouseSelection(evt);
 
-			dataGrid.f_moveCursor(this, true, evt, selection);
+			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.BEGIN_PHASE);
 
 			// On deplace le cursor avant de donner le focus !
 			dataGrid.f_forceFocus();
@@ -294,9 +294,9 @@ var __statics = {
 			if (sub && this._selected) {
 				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
 				if (menu) {
-					menu.f_open(evt, {
-						position : f_popup.MOUSE_POSITION
-					});
+					if(menu.f_closeAllpopups) {
+						menu.f_closeAllpopups();
+					}
 				}
 				
 			} else if (dataGrid._dragAndDropEngine) {
@@ -346,9 +346,19 @@ var __statics = {
 
 			dataGrid.f_moveCursor(this, true, evt, selection, fa_selectionManager.END_PHASE);
 
+			if (sub && this._selected) {
+				var menu = dataGrid.f_getSubMenuById(f_grid._ROW_MENU_ID);
+				if (menu) {
+					menu.f_open(evt, {
+						position : f_popup.MOUSE_POSITION
+					});
+				}				
+			} 
+			
 			return f_core.CancelJsEvent(evt);
+			
 		} finally {
-			f_core.Debug(f_grid, "RowMouseUp: mouse down on row of '"
+			f_core.Debug(f_grid, "RowMouseUp: mouse up on row of '"
 					+ dataGrid + "' EXITED");
 		}
 	},
@@ -3404,13 +3414,13 @@ var __members = {
 	 * 
 	 * @return Boolean
 	 */
-	f_refreshContent : function(fullUpdate) {
+	f_refreshContent : function(fullUpdate, selectedCriteria) {
 		if (!this._interactive) {
 			return false;
 		}
-
+		
 		this.f_appendCommand(function(dataGrid) {
-			dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, fullUpdate);
+			dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, fullUpdate, selectedCriteria);
 		});
 
 		return true;
