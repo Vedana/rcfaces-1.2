@@ -1626,9 +1626,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 				IObjectLiteralWriter oj = jsWriter.writeObjectLiteral(true);
 
-				oj.writeSymbol("_id").writeString(criteriaComponent.getId());
+				oj.writeSymbol("id").writeString(criteriaComponent.getId());
 
-				IJavaScriptWriter jsWriterOj = oj.writeSymbol("_value").write(
+				IJavaScriptWriter jsWriterOj = oj.writeSymbol("values").write(
 						'[');
 				Set criteriaSet = criteria.listSelectedValues();
 				boolean first = true;
