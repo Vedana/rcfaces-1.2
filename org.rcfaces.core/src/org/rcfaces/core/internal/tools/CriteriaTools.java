@@ -105,15 +105,11 @@ public class CriteriaTools extends CollectionTools {
 
 			Object[] values = configuration.listSelectedValues();
 
-			Set<Object> set = null;
-			if (values != null) {
-				if (values.length == 0) {
-					set = Collections.emptySet();
-
-				} else {
-					set = new HashSet<Object>(Arrays.asList(values));
-				}
+			if (values == null || values.length == 0) {
+				continue;
 			}
+
+			Set<Object> set = new HashSet<Object>(Arrays.asList(values));
 
 			ISelectedCriteria selectedCriteria = new BasicSelectedCriteria(
 					configuration, set);
