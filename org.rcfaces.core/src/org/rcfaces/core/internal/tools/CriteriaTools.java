@@ -190,9 +190,16 @@ public class CriteriaTools extends CollectionTools {
 				.hasNext();) {
 			UIComponent child = it.next();
 
-			if (child instanceof ICriteriaContainer) {
-				list.add((ICriteriaContainer) child);
+			if ((child instanceof ICriteriaContainer) == false) {
+				continue;
 			}
+
+			ICriteriaContainer criteriaContainer = (ICriteriaContainer) child;
+			if (criteriaContainer.getCriteriaConfiguration() == null) {
+				continue;
+			}
+
+			list.add(criteriaContainer);
 		}
 
 		if (list.isEmpty()) {
