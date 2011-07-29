@@ -217,18 +217,25 @@ public class CriteriaGridService extends AbstractHtmlService {
 		jsWriter.writeMethodCall("_processSelectedCriteriaResult");
 
 		jsWriter.writeString(tokenId).write(',')
-				.writeInt(result.getResultCount());
+				.writeInt(result.getResultCount()).write(',');
 
+		jsWriter.write('[');
 		ICriteriaConfiguration[] resultCriteria = result
 				.listAvailableCriteriaConfiguration();
 		if (resultCriteria != null && resultCriteria.length > 0) {
+			boolean first=true;
 			for (int i = 0; i < resultCriteria.length; i++) {
 				ICriteriaConfiguration rc = resultCriteria[i];
 
-				jsWriter.write(',');
+				if (first) {
+					first=false;
+				} else {
+					jsWriter.write(',');
+				}
 
 				writeSelectedCriteria(jsWriter, rc, result);
 			}
+			jsWriter.write(']');
 		}
 
 		jsWriter.writeln(");");

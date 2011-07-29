@@ -2134,10 +2134,17 @@ var __members = {
 		return selectedCriteria;
 	},
 		
-	fa_setSelectedCriteria: function (selectedCriteria){
+	fa_setSelectedCriteria: function (selectedCriteria, refresh){
 		f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
 
 		this._selectedCriteria = selectedCriteria;
+		
+		if(refresh === false) {
+			return;
+		}
+		
+		this.f_refreshContent(true, selectedCriteria);
+		
 	},
 	
 	/**
