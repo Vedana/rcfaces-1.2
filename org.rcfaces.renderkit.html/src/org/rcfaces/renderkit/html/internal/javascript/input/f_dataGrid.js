@@ -1930,7 +1930,7 @@ var __members = {
 		for (var i = 0; i < selectedCriteria.length; i++) {
 			var crit=selectedCriteria[i];
 			
-			result.push(crit.id);
+			result.push(encodeURIComponent(crit.id));
 			
 			var array= crit.values;
 			var arrayString=new Array;

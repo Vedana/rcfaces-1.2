@@ -12,6 +12,8 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +24,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 import javax.servlet.ServletResponse;
@@ -38,6 +41,7 @@ import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
 import org.rcfaces.core.internal.tools.BasicSelectedCriteria;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.ISelectedCriteria;
@@ -182,7 +186,8 @@ public class DataGridService extends AbstractHtmlService {
 
 			ISelectedCriteria[] criteriaConfigs = null;
 			String criteria_s = (String) parameters.get("criteria");
-			criteriaConfigs = computeCriteriaConfigs(dgc, criteria_s);
+			criteriaConfigs = computeCriteriaConfigs(facesContext, dgc,
+					criteria_s);
 
 			DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
 			if (dgr == null) {
@@ -251,8 +256,8 @@ public class DataGridService extends AbstractHtmlService {
 		facesContext.responseComplete();
 	}
 
-	static ISelectedCriteria[] computeCriteriaConfigs(IGridComponent dgc,
-			String criteria_s) {
+	static ISelectedCriteria[] computeCriteriaConfigs(
+			FacesContext facesContext, IGridComponent dgc, String criteria_s) {
 		if (criteria_s == null) {
 			return null;
 		}
@@ -273,6 +278,7 @@ public class DataGridService extends AbstractHtmlService {
 					if ((child instanceof ICriteriaContainer) == false) {
 						continue;
 					}
+
 					if (columnId.equals(child.getId()) == false) {
 						continue;
 					}
@@ -295,7 +301,7 @@ public class DataGridService extends AbstractHtmlService {
 						DEFAULT_ENCODE_CHARSET);
 
 				Set<Object> convertedValues = convertCriteriaValues(
-						criteriaConfiguration, itemValues);
+						facesContext, criteriaConfiguration, itemValues);
 				if (convertedValues == null) {
 					continue;
 				}
@@ -313,10 +319,32 @@ public class DataGridService extends AbstractHtmlService {
 		return criteriaList.toArray(new ISelectedCriteria[criteriaList.size()]);
 	}
 
-	private static Set<Object> convertCriteriaValues(
-			ICriteriaConfiguration criteriaConfiguration, String itemValues) {
-		// TODO Auto-generated method stub
-		return null;
+	private static Set<Object> convertCriteriaValues(FacesContext facesContext,
+			ICriteriaConfiguration criteriaConfiguration, String itemValues)
+			throws UnsupportedEncodingException {
+
+		StringTokenizer st = new StringTokenizer(itemValues, ",");
+		if (st.hasMoreTokens() == false) {
+			return Collections.emptySet();
+		}
+
+		Converter converter = criteriaConfiguration.getCriteriaConverter();
+
+		UIComponent component = (UIComponent) criteriaConfiguration;
+
+		Set<Object> set = new HashSet<Object>();
+
+		for (; st.hasMoreTokens();) {
+			String stringValue = URLDecoder.decode(st.nextToken(),
+					DEFAULT_ENCODE_CHARSET);
+
+			Object value = ValuesTools.convertStringToValue(facesContext,
+					component, converter, stringValue, null, false);
+
+			set.add(value);
+		}
+
+		return Collections.unmodifiableSet(set);
 	}
 
 	private DataGridRenderer getDataGridRenderer(FacesContext facesContext,

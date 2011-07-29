@@ -155,11 +155,14 @@ public class CriteriaGridService extends AbstractHtmlService {
 					printWriter = new PrintWriter(writer, false);
 				}
 
-				
 				ISelectedCriteria[] selectedCriteria = null;
 				String criteria_s = (String) parameters.get("selectedCriteria");
-				selectedCriteria = DataGridService.computeCriteriaConfigs((IGridComponent) component, criteria_s);
-				
+				if (criteria_s != null) {
+					selectedCriteria = DataGridService.computeCriteriaConfigs(
+							facesContext, (IGridComponent) component,
+							criteria_s);
+				}
+
 				writeJs(facesContext, printWriter, keyLabelComponent,
 						componentId, selectedCriteria, tokenId);
 
@@ -217,87 +220,86 @@ public class CriteriaGridService extends AbstractHtmlService {
 
 		jsWriter.writeString(tokenId).write(',')
 				.writeInt(result.getResultCount()).write(',');
-		
+
 		ISelectedCriteria[] resultCriteria = result.listSelectedCriteria();
 		if (resultCriteria != null && resultCriteria.length > 0) {
 			for (int i = 0; i < resultCriteria.length; i++) {
 				ISelectedCriteria rc = resultCriteria[i];
-	
+
 				if (first == false) {
 					jsWriter.write(',');
 				}
-	
+
 				writeSelectedCriteria(jsWriter, rc, result);
 			}
-		}else {
-			 ICriteriaContainer[] criteriaContainers = component.listCriteriaContainers();
-			 IObjectLiteralWriter ow = jsWriter.writeObjectLiteral(true);
-			 //for (int i = 0; i < criteriaContainers.length; i++) {
-				 //ICriteriaContainer container = criteriaContainers[i];
-				 //ICriteriaConfiguration configuration = container.getCriteriaConfiguration();
+		} else {
+			ICriteriaContainer[] criteriaContainers = component
+					.listCriteriaContainers();
+			IObjectLiteralWriter ow = jsWriter.writeObjectLiteral(true);
+			// for (int i = 0; i < criteriaContainers.length; i++) {
+			// ICriteriaContainer container = criteriaContainers[i];
+			// ICriteriaConfiguration configuration =
+			// container.getCriteriaConfiguration();
 
-					
+			ow.writeSymbol("_id").writeString("unId");
 
-					ow.writeSymbol("_id").writeString("unId");
-					
-					CriteriaItem[] cis = new CriteriaItem[4];//result.getAvailableCriteriaItems(configuration);
-					
-					/*
-					 * Bouchon
-					 */
-					CriteriaItem item = new CriteriaItem();
-					item.setLabel("label1");
-					item.setValue("value1");
-					
-					CriteriaItem item2 = new CriteriaItem();
-					item2.setLabel("label2");
-					item2.setValue("value2");
-					CriteriaItem item3 = new CriteriaItem();
-					item3.setLabel("label3");
-					item3.setValue("value3");
-					CriteriaItem item4 = new CriteriaItem();
-					item4.setLabel("label4");
-					item4.setValue("value4");
-					
-					cis[0] = item;
-					cis[1] = item2;
-					cis[2] = item3;
-					cis[3] = item4;
-					
-					/*
-					 * Fin bouchon
-					 */
-					//UIComponent refComponent = (UIComponent) configuration;
-					Converter converter = null;//configuration.getCriteriaConverter();
+			CriteriaItem[] cis = new CriteriaItem[4];// result.getAvailableCriteriaItems(configuration);
 
-					IJavaScriptWriter ijs = ow.writeSymbol("_items").write('[');
-					for (int j = 0; j < cis.length; j++) {
-						CriteriaItem ci = cis[j];
+			/*
+			 * Bouchon
+			 */
+			CriteriaItem item = new CriteriaItem();
+			item.setLabel("label1");
+			item.setValue("value1");
 
-						if (j > 0) {
-							ijs.write(',');
-						}
+			CriteriaItem item2 = new CriteriaItem();
+			item2.setLabel("label2");
+			item2.setValue("value2");
+			CriteriaItem item3 = new CriteriaItem();
+			item3.setLabel("label3");
+			item3.setValue("value3");
+			CriteriaItem item4 = new CriteriaItem();
+			item4.setLabel("label4");
+			item4.setValue("value4");
 
-						IObjectLiteralWriter itemsW = ijs.writeObjectLiteral(true);
-						itemsW.writeSymbol("_label").writeString(ci.getLabel());
+			cis[0] = item;
+			cis[1] = item2;
+			cis[2] = item3;
+			cis[3] = item4;
 
-						Object itemValue = ci.getValue();
+			/*
+			 * Fin bouchon
+			 */
+			// UIComponent refComponent = (UIComponent) configuration;
+			Converter converter = null;// configuration.getCriteriaConverter();
 
-						String itemConvertedValue = ValuesTools
-								.convertValueToString(itemValue, converter, null,
-										jsWriter.getFacesContext());
+			IJavaScriptWriter ijs = ow.writeSymbol("_items").write('[');
+			for (int j = 0; j < cis.length; j++) {
+				CriteriaItem ci = cis[j];
 
-						itemsW.writeSymbol("_value").writeString(itemConvertedValue);
+				if (j > 0) {
+					ijs.write(',');
+				}
 
-						itemsW.end();
-					}
+				IObjectLiteralWriter itemsW = ijs.writeObjectLiteral(true);
+				itemsW.writeSymbol("_label").writeString(ci.getLabel());
 
-					ijs.write(']');
+				Object itemValue = ci.getValue();
 
-					ow.end();
-			//}
+				String itemConvertedValue = ValuesTools.convertValueToString(
+						itemValue, converter, null, jsWriter.getFacesContext());
+
+				itemsW.writeSymbol("_value").writeString(itemConvertedValue);
+
+				itemsW.end();
+			}
+
+			ijs.write(']');
+
+			ow.end();
+			// }
 		}
-		
+
 		jsWriter.writeln(");");
 
 		if (LOG.isTraceEnabled()) {
@@ -320,15 +322,15 @@ public class CriteriaGridService extends AbstractHtmlService {
 		ow.writeSymbol("_id").writeString(
 				resultCriteria.getConfig().getCriteriaContainer().getId());
 
-		CriteriaItem[] cis = new CriteriaItem[4];//result.getAvailableCriteriaItems(configuration);
-		
+		CriteriaItem[] cis = new CriteriaItem[4];// result.getAvailableCriteriaItems(configuration);
+
 		/*
 		 * Bouchon
 		 */
 		CriteriaItem item = new CriteriaItem();
 		item.setLabel("label1");
 		item.setValue("value1");
-		
+
 		CriteriaItem item2 = new CriteriaItem();
 		item.setLabel("label2");
 		item.setValue("value2");
@@ -338,16 +340,15 @@ public class CriteriaGridService extends AbstractHtmlService {
 		CriteriaItem item4 = new CriteriaItem();
 		item.setLabel("label4");
 		item.setValue("value4");
-		
+
 		cis[0] = item;
 		cis[1] = item2;
 		cis[2] = item3;
 		cis[3] = item4;
-		
+
 		/*
 		 * Fin bouchon
 		 */
-		
 
 		UIComponent refComponent = (UIComponent) configuration;
 		Converter converter = resultCriteria.getConfig().getCriteriaConverter();
@@ -365,9 +366,9 @@ public class CriteriaGridService extends AbstractHtmlService {
 
 			Object itemValue = ci.getValue();
 
-			String itemConvertedValue = ValuesTools
-					.convertValueToString(itemValue, converter, refComponent,
-							jsWriter.getFacesContext());
+			String itemConvertedValue = ValuesTools.convertValueToString(
+					itemValue, converter, refComponent,
+					jsWriter.getFacesContext());
 
 			itemsW.writeSymbol("_value").writeString(itemConvertedValue);
 

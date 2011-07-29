@@ -182,8 +182,10 @@ public class ComponentsGridService extends AbstractHtmlService {
 
 			ISelectedCriteria[] criteriaConfigs = null;
 			String criteria_s = (String) parameters.get("criteria");
-			criteriaConfigs = DataGridService.computeCriteriaConfigs(dgc,
-					criteria_s);
+			if (criteria_s != null) {
+				criteriaConfigs = DataGridService.computeCriteriaConfigs(
+						facesContext, dgc, criteria_s);
+			}
 
 			ComponentsGridRenderer dgr = getComponentsGridRenderer(
 					facesContext, dgc);
