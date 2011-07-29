@@ -24,7 +24,7 @@ public abstract class AbstractCriteriaSelectedResult implements
 
 	private Map<ICriteriaConfiguration, CriteriaItem[]> criteriaItemsByContainer;
 
-	private List<?> result;
+	private List<Object> result;
 
 	public AbstractCriteriaSelectedResult(ICriteriaManagerCapability manager,
 			ISelectedCriteria[] configs) {
@@ -70,7 +70,7 @@ public abstract class AbstractCriteriaSelectedResult implements
 		fillDatas(result, criteriaItemsByContainer);
 	}
 
-	protected abstract void fillDatas(List<?> result,
+	protected abstract void fillDatas(List<Object> result,
 			Map<ICriteriaConfiguration, CriteriaItem[]> criteriaItemsByContainer);
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,21 +27,23 @@ import org.rcfaces.core.model.ISelectedCriteria;
  */
 public class CriteriaTools extends CollectionTools {
 
-	private static final ISelectedCriteria[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ISelectedCriteria[0];
+	private static final ISelectedCriteria[] SELECTED_CRITERIA_EMPTY_ARRAY = new ISelectedCriteria[0];
 
-	public static ICriteriaContainer[] getCriteriaColumns(
+	private static final ICriteriaContainer[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ICriteriaContainer[0];
+
+	public static ICriteriaContainer[] getSelectedCriteriaColumns(
 			FacesContext facesContext, UIComponent component,
 			IComponentEngine engine, String propertiesName) {
-			UIComponent[] childs = ComponentTools.listChildren(facesContext,
-					component, engine, ICriteriaContainer.class, propertiesName);
-		
-			ICriteriaContainer[] criteriaContainers = new ICriteriaContainer[childs.length];
-			System.arraycopy(childs, 0, criteriaContainers, 0, childs.length);
-		
+		UIComponent[] childs = ComponentTools.listChildren(facesContext,
+				component, engine, ICriteriaContainer.class, propertiesName);
+
+		ICriteriaContainer[] criteriaContainers = new ICriteriaContainer[childs.length];
+		System.arraycopy(childs, 0, criteriaContainers, 0, childs.length);
+
 		return criteriaContainers;
 	}
 
-	public static void setCriteriaColumns(FacesContext facesContext,
+	public static void setSelectedCriteriaColumns(FacesContext facesContext,
 			UIComponent component, IComponentEngine engine,
 			ICriteriaContainer[] children, String propertiesName) {
 
@@ -88,7 +91,7 @@ public class CriteriaTools extends CollectionTools {
 				.listCriteriaContainers();
 
 		if (criteriaContainers == null || criteriaContainers.length == 0) {
-			return CRITERIA_CONTAINER_EMPTY_ARRAY;
+			return SELECTED_CRITERIA_EMPTY_ARRAY;
 		}
 
 		List<ISelectedCriteria> configs = new ArrayList<ISelectedCriteria>();
@@ -102,7 +105,7 @@ public class CriteriaTools extends CollectionTools {
 
 			Object[] values = configuration.listSelectedValues();
 
-			Set<?> set = null;
+			Set<Object> set = null;
 			if (values != null) {
 				if (values.length == 0) {
 					set = Collections.emptySet();
@@ -175,5 +178,27 @@ public class CriteriaTools extends CollectionTools {
 		}
 
 		return null;
+	}
+
+	public static ICriteriaContainer[] listCriteriaContainers(
+			FacesContext facesContext, UIComponent component) {
+
+		List<ICriteriaContainer> list = new ArrayList<ICriteriaContainer>(
+				component.getChildCount());
+
+		for (Iterator<UIComponent> it = component.getChildren().iterator(); it
+				.hasNext();) {
+			UIComponent child = it.next();
+
+			if (child instanceof ICriteriaContainer) {
+				list.add((ICriteriaContainer) child);
+			}
+		}
+
+		if (list.isEmpty()) {
+			return CRITERIA_CONTAINER_EMPTY_ARRAY;
+		}
+
+		return list.toArray(new ICriteriaContainer[list.size()]);
 	}
 }

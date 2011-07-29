@@ -13,9 +13,10 @@ import org.rcfaces.core.model.ISelectedCriteria;
 public class BasicSelectedCriteria implements ISelectedCriteria {
 
 	private final ICriteriaConfiguration config;
-	private final Set<?> criteriaValues;
+	private final Set<Object> criteriaValues;
 
-	public BasicSelectedCriteria(ICriteriaConfiguration config, Set<?> values) {
+	public BasicSelectedCriteria(ICriteriaConfiguration config,
+			Set<Object> values) {
 		this.config = config;
 		this.criteriaValues = values;
 	}
@@ -24,7 +25,7 @@ public class BasicSelectedCriteria implements ISelectedCriteria {
 		return config;
 	}
 
-	public Set<?> listSelectedValues() {
+	public Set<Object> listSelectedValues() {
 		return criteriaValues;
 	}
 

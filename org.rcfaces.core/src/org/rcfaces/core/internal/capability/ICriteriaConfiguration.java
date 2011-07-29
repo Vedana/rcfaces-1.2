@@ -22,5 +22,7 @@ public interface ICriteriaConfiguration extends ISelectionProvider,
 	// Converter de l'objet associé à la colonne et à la ligne selectionnée
 	Converter getCriteriaConverter();
 
+	Converter getLabelConverter();
+
 	int getCriteriaCardinality();
 }

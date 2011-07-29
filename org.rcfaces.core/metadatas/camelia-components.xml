@@ -1360,15 +1360,22 @@
 		<method id="listCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
 			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
 			<code>
-				return CriteriaTools.getCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
+			return CriteriaTools.listCriteriaContainers(null, this);
+			</code>
+		</method>
+
+		<method id="listSelectedCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<code>
+				return CriteriaTools.getSelectedCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
 			</code>
 		</method>
 		
-		<method id="setCriteriaContainers" returnType="void">
+		<method id="setSelectedCriteriaContainers" returnType="void">
 			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
 			<parameter name="components" type="org.rcfaces.core.internal.capability.ICriteriaContainer[]" />
 			<code>
-				CriteriaTools.setCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
+				CriteriaTools.setSelectedCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
 			</code>
 		</method>
 

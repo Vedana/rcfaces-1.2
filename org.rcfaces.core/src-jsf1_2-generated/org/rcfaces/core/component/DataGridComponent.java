@@ -512,14 +512,21 @@ public class DataGridComponent extends AbstractDataComponent implements
 	public ICriteriaContainer[] listCriteriaContainers() {
 
 
-				return CriteriaTools.getCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
+			return CriteriaTools.listCriteriaContainers(null, this);
 			
 	}
 
-	public void setCriteriaContainers(ICriteriaContainer[] components) {
+	public ICriteriaContainer[] listSelectedCriteriaContainers() {
 
 
-				CriteriaTools.setCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
+				return CriteriaTools.getSelectedCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
+			
+	}
+
+	public void setSelectedCriteriaContainers(ICriteriaContainer[] components) {
+
+
+				CriteriaTools.setSelectedCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
 			
 	}
 

@@ -62,11 +62,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
 	private ValueExpression immediate;
-	private ValueExpression var;
-	private ValueExpression first;
 	private ValueExpression rows;
-	private ValueExpression margins;
 	private ValueExpression value;
+	private ValueExpression margins;
+	private ValueExpression first;
+	private ValueExpression var;
 	private ValueExpression saveCompleteState;
 	public final void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
@@ -244,24 +244,24 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		this.immediate = immediate;
 	}
 
-	public final void setVar(ValueExpression var) {
-		this.var = var;
-	}
-
-	public final void setFirst(ValueExpression first) {
-		this.first = first;
-	}
-
 	public final void setRows(ValueExpression rows) {
 		this.rows = rows;
+	}
+
+	public final void setValue(ValueExpression value) {
+		this.value = value;
 	}
 
 	public final void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
-	public final void setValue(ValueExpression value) {
-		this.value = value;
+	public final void setFirst(ValueExpression first) {
+		this.first = first;
+	}
+
+	public final void setVar(ValueExpression var) {
+		this.var = var;
 	}
 
 	public final void setSaveCompleteState(ValueExpression saveCompleteState) {
@@ -301,11 +301,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			LOG.debug("  top='"+top+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
 			LOG.debug("  immediate='"+immediate+"'");
-			LOG.debug("  var='"+var+"'");
-			LOG.debug("  first='"+first+"'");
 			LOG.debug("  rows='"+rows+"'");
-			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  value='"+value+"'");
+			LOG.debug("  margins='"+margins+"'");
+			LOG.debug("  first='"+first+"'");
+			LOG.debug("  var='"+var+"'");
 		}
 		if ((uiComponent instanceof AbstractDataComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -650,13 +650,29 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (var != null) {
-			if (var.isLiteralText()==false) {
-				component.setValueExpression(Properties.VAR, var);
+		if (rows != null) {
+			if (rows.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROWS, rows);
 
 			} else {
-				component.setVar(var.getExpressionString());
+				component.setRows(getInt(rows.getExpressionString()));
 			}
+		}
+
+		if (value != null) {
+			if (value.isLiteralText()==false) {
+				component.setValueExpression(Properties.VALUE, value);
+
+			} else {
+				component.setValue(value.getExpressionString());
+			}
+		}
+
+		if (margins != null) {
+			if (margins.isLiteralText()==false) {
+				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
+			}
+				component.setMargins(margins.getExpressionString());
 		}
 
 		if (first != null) {
@@ -668,28 +684,12 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 			}
 		}
 
-		if (rows != null) {
-			if (rows.isLiteralText()==false) {
-				component.setValueExpression(Properties.ROWS, rows);
+		if (var != null) {
+			if (var.isLiteralText()==false) {
+				component.setValueExpression(Properties.VAR, var);
 
 			} else {
-				component.setRows(getInt(rows.getExpressionString()));
-			}
-		}
-
-		if (margins != null) {
-			if (margins.isLiteralText()==false) {
-				throw new javax.faces.FacesException("Attribute 'margins' does not accept binding !");
-			}
-				component.setMargins(margins.getExpressionString());
-		}
-
-		if (value != null) {
-			if (value.isLiteralText()==false) {
-				component.setValueExpression(Properties.VALUE, value);
-
-			} else {
-				component.setValue(value.getExpressionString());
+				component.setVar(var.getExpressionString());
 			}
 		}
 
@@ -748,11 +748,11 @@ public abstract class AbstractDataTag extends CameliaTag implements Tag {
 		initListeners = null;
 		hiddenMode = null;
 		immediate = null;
-		var = null;
-		first = null;
 		rows = null;
-		margins = null;
 		value = null;
+		margins = null;
+		first = null;
+		var = null;
 		saveCompleteState = null;
 
 		super.release();

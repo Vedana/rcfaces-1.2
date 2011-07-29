@@ -11,5 +11,5 @@ import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
 public interface ISelectedCriteria {
 	ICriteriaConfiguration getConfig();
 
-	Set<?> listSelectedValues();
+	Set<Object> listSelectedValues();
 }
