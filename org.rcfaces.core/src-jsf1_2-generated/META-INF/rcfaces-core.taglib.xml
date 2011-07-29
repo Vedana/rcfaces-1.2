@@ -96,6 +96,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>criteriaList</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.criteriaList</component-type>
+			<renderer-type>org.rcfaces.core.criteriaList</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>dataGrid</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.dataGrid</component-type>

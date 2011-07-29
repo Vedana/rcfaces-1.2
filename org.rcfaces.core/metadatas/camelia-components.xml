@@ -1104,6 +1104,14 @@
 		<attribute id="noPagedMessage" type="java.lang.String"/>
 		
 	</component>
+
+	<component id="criteriaList" extends="abstractBasic">
+		<capability id="IForCapability" required="true"/>
+
+		<attribute id="criteriaFormat" type="java.lang.String"/>
+
+		<attribute id="noCriteriaMessage" type="java.lang.String"/>		
+	</component>
 	
 	<component id="dataGrid" extends="abstractData">
 		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />

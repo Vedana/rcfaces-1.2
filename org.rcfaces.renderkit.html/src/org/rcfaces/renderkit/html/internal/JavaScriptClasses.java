@@ -40,6 +40,8 @@ public final class JavaScriptClasses {
 
     public static final String COMPONENTS_GRID = "f_componentsGrid";
 
+    public static final String CRITERIA_LIST = "f_criteriaList";
+
     public static final String CUSTOM_BUTTON = "f_customButton";
 
     public static final String DATA_GRID = "f_dataGrid";

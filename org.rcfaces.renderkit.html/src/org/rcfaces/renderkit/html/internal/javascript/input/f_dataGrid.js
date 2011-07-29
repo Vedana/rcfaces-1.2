@@ -1772,9 +1772,7 @@ var __members = {
 
 		var columns=this._columns;
 
-		var colIndex=undefined;
-		
-		colIndex=this._keySearchColumnIndex;
+		var colIndex=this._keySearchColumnIndex;
 		
 		if (colIndex===undefined) {
 			var currentSorts=this._currentSorts;
@@ -1935,7 +1933,7 @@ var __members = {
 			var array= crit.values;
 			var arrayString=new Array;
 			for(var j=0;j<array.length;j++) {			
-				arrayString.push(encodeURIComponent(array[j]));
+				arrayString.push(encodeURIComponent(array[j].value));
 			}
 			
 			result.push(encodeURIComponent(arrayString.join(',')));
@@ -2162,8 +2160,40 @@ var __members = {
 	 * @return Number  criteria cardinality constant or "undefined" if the column is not known 
 	 */
 	fa_getColumnCriteriaCardinality: function (columnId) {
-		f_core.Assert(typeof(columnId)=="string", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
+		f_core.Assert(typeof(columnId)=="string" || typeof(columnId)=="object", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
 
+		var column = this._getColumn(columnId);		
+		if (!column) {
+			return undefined;
+		}
+				
+		return column._criteriaCardinality;
+	},
+	
+	/**
+	 * @method protected
+	 * @param Integer tokenId
+	 * @param Integer resultCount
+	 * @parameter Object criteriaSelected 
+	 * @return void
+	 */
+	_processSelectedCriteriaResult: function (tokenId, resultCount, availableCriteria) {
+		
+		var cb=this._criteriaEvaluateCallBacks[tokenId];
+		delete this._criteriaEvaluateCallBacks[tokenId];
+				
+		cb.call(this, resultCount, availableCriteria);
+	},
+	/**
+	 * @method private
+	 * @param columnId Identifier of Column or column object  
+	 * @return Object Column object
+	 */
+	_getColumn: function(columnId) {
+		if (typeof(columnId)=="object") {
+			return columnId;
+		}
+		
 		var column = null;
 		var columns = this._columns;
 		for (var i = 0; i < columns.length; i++) {
@@ -2179,22 +2209,25 @@ var __members = {
 			return undefined;
 		}
 				
-		return column._criteriaCardinality;
+		return column;
 	},
-	
 	/**
-	 * @method protected abstract
-	 * @param Integer tokenId
-	 * @param Integer resultCount
-	 * @parameter Object criteriaSelected 
-	 * @return void
+	 * @method public
+	 * @param String columnId Identifier of Column or column object  
 	 */
-	_processSelectedCriteriaResult: function (tokenId, resultCount, availableCriteria) {
-		
-		var cb=this._criteriaEvaluateCallBacks[tokenId];
-		delete this._criteriaEvaluateCallBacks[tokenId];
+	fa_getCriteriaLabelByColumn: function(columnId) {
+		f_core.Assert(typeof(columnId)=="string" || typeof(columnId)=="object", "f_dataGrid.fa_getCriteriaLabelByColumn: Invalid columnId parameter ! ("+columnId+")");
+
+		var column = this._getColumn(columnId);		
+		if (!column) {
+			return undefined;
+		}
 				
-		cb.call(this, resultCount, availableCriteria);
+		if (column._criteriaLabel) {
+			return column._criteriaLabel;
+		}
+		
+		return column._id;		 // TODO A CORRIGER
 	}
 };
 

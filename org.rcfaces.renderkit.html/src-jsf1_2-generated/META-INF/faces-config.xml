@@ -296,6 +296,11 @@ Base name of the resource bundle to be loaded.
 		</renderer>
 		<renderer>
 			<component-family>rcfaces</component-family>
+			<renderer-type>org.rcfaces.core.criteriaList</renderer-type>
+			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.CriteriaListRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>rcfaces</component-family>
 			<renderer-type>org.rcfaces.core.dataGrid</renderer-type>
 			<renderer-class>org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer</renderer-class>
 		</renderer>

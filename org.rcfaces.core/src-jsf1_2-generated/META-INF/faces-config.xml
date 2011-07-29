@@ -360,6 +360,10 @@ A string specifying the message to display when there is no row to display.
 		</attribute>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.criteriaList</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaListComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
       <p>The dataGrid Component has the following capabilities :

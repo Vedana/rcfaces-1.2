@@ -1060,6 +1060,11 @@
 				<required-class name="f_resourceBundle" />
 			</class>
 		</file>
+		<file name="input/f_criteriaList.js">
+			<class name="f_criteriaList">
+				<required-class name="f_pager" />
+			</class>
+		</file>
 		<file name="input/f_imagePagerButton.js">
 			<class name="f_imagePagerButton">
 				<required-class name="f_imageButton" />

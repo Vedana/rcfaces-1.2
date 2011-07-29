@@ -1617,8 +1617,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				UIComponent criteriaComponent = (UIComponent) criteria
 						.getConfig();
 
-				Converter converter = criteria.getConfig()
+				Converter criteriaConverter = criteria.getConfig()
 						.getCriteriaConverter();
+
+				Converter labelConverter = criteria.getConfig()
+						.getLabelConverter();
 
 				if (i > 0) {
 					jsWriter.write(',');
@@ -1638,15 +1641,30 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 					Object criteriaValue = iterator.next();
 
 					String sValue = ValuesTools.convertValueToString(
-							criteriaValue, converter, criteriaComponent,
-							facesContext);
+							criteriaValue, criteriaConverter,
+							criteriaComponent, facesContext);
 
 					if (first) {
 						first = false;
 					} else {
 						jsWriterOj.write(',');
 					}
-					jsWriterOj.writeString(sValue);
+
+					IObjectLiteralWriter ol = jsWriterOj
+							.writeObjectLiteral(false);
+
+					ol.writeSymbol("value").writeString(sValue);
+
+					if (labelConverter != null) {
+						String label = ValuesTools.convertValueToString(
+								criteriaValue, labelConverter,
+								criteriaComponent, facesContext);
+						if (label != null) {
+							ol.writeSymbol("label").writeString(label);
+						}
+					}
+
+					ol.end();
 				}
 				jsWriterOj.write(']');
 
