@@ -1653,7 +1653,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 			}
 
-			jsWriter.writeln("]);");
+			jsWriter.writeln("], false);");
 		}
 
 		if ((generationMask & GENERATE_CELL_IMAGES) > 0) {
