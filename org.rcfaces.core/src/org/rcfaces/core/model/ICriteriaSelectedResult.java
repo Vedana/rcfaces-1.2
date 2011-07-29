@@ -19,7 +19,10 @@ public interface ICriteriaSelectedResult {
 	CriteriaItem[] getAvailableCriteriaItems(
 			ICriteriaConfiguration criteriaConfiguration);
 
+	ICriteriaConfiguration[] listAvailableCriteriaConfiguration();
+
 	int getResultCount();
 
 	List<?> getResult();
+
 }

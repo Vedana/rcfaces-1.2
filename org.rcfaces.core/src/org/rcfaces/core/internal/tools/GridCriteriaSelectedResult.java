@@ -86,12 +86,14 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 
 		ICriteriaConfiguration[] notSelectedContainers = new ICriteriaConfiguration[criteriaContainers
 				.size()];
+		Set<Object>[] notPossibleValues = new Set[notSelectedContainers.length];
 		int j = 0;
 		for (Iterator<ICriteriaContainer> it = criteriaContainers.iterator(); it
-				.hasNext();) {
+				.hasNext(); j++) {
 			ICriteriaContainer cc = it.next();
 
-			notSelectedContainers[j++] = cc.getCriteriaConfiguration();
+			notSelectedContainers[j] = cc.getCriteriaConfiguration();
+			notPossibleValues[j] = new HashSet<Object>();
 		}
 
 		try {
@@ -119,7 +121,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 					Object dataValue = getDataValue(facesContext,
 							gridComponent, notSelectedContainers[i]);
 
-					possibleValues[i].add(dataValue);
+					notPossibleValues[i].add(dataValue);
 				}
 
 				result.add(gridComponent.getRowData());
@@ -132,37 +134,56 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 		for (int i = 0; i < selectedCriteria.length; i++) {
 			ISelectedCriteria sc = selectedCriteria[i];
 
-			Converter labelConverter = sc.getConfig().getLabelConverter();
-			UIComponent component = (UIComponent) sc.getConfig();
-
 			Set<Object> values = possibleValues[i];
-			List<CriteriaItem> criteriaItems = new ArrayList<CriteriaItem>(
-					values.size());
-
-			for (Iterator<Object> it = values.iterator(); it.hasNext();) {
-				Object criteriaValue = it.next();
-
-				String criteriaLabel = ValuesTools.convertValueToString(
-						criteriaValue, labelConverter, component, facesContext);
-
-				CriteriaItem criteriaItem = new CriteriaItem();
-				criteriaItem.setLabel(criteriaLabel);
-				criteriaItem.setValue(criteriaValue);
-			}
-
-			Collections.sort(criteriaItems, new Comparator<CriteriaItem>() {
-
-				public int compare(CriteriaItem o1, CriteriaItem o2) {
-
-					return o1.getLabel().compareTo(o2.getLabel());
-				}
-			});
-
-			CriteriaItem[] criteriaItemsArray = criteriaItems
-					.toArray(new CriteriaItem[criteriaItems.size()]);
-
-			criteriaItemsByContainer.put(sc.getConfig(), criteriaItemsArray);
+			fillValues(facesContext, sc.getConfig(), criteriaItemsByContainer,
+					values);
 		}
+
+		for (int i = 0; i < notSelectedContainers.length; i++) {
+			ICriteriaConfiguration sc = notSelectedContainers[i];
+
+			Set<Object> values = notPossibleValues[i];
+			fillValues(facesContext, sc, criteriaItemsByContainer, values);
+		}
+	}
+
+	private void fillValues(
+			FacesContext facesContext,
+			ICriteriaConfiguration config,
+			Map<ICriteriaConfiguration, CriteriaItem[]> criteriaItemsByContainer,
+			Set<Object> values) {
+
+		Converter labelConverter = config.getLabelConverter();
+		UIComponent component = (UIComponent) config;
+
+		List<CriteriaItem> criteriaItems = new ArrayList<CriteriaItem>(
+				values.size());
+
+		for (Iterator<Object> it = values.iterator(); it.hasNext();) {
+			Object criteriaValue = it.next();
+
+			String criteriaLabel = ValuesTools.convertValueToString(
+					criteriaValue, labelConverter, component, facesContext);
+
+			CriteriaItem criteriaItem = new CriteriaItem();
+			criteriaItem.setLabel(criteriaLabel);
+			criteriaItem.setValue(criteriaValue);
+
+			criteriaItems.add(criteriaItem);
+		}
+
+		Collections.sort(criteriaItems, new Comparator<CriteriaItem>() {
+
+			public int compare(CriteriaItem o1, CriteriaItem o2) {
+
+				return o1.getLabel().compareTo(o2.getLabel());
+			}
+		});
+
+		CriteriaItem[] criteriaItemsArray = criteriaItems
+				.toArray(new CriteriaItem[criteriaItems.size()]);
+
+		criteriaItemsByContainer.put(config, criteriaItemsArray);
 	}
 
 	private Object getDataValue(FacesContext facesContext,

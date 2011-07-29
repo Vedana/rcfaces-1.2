@@ -214,20 +214,18 @@ public class CriteriaGridService extends AbstractHtmlService {
 
 		// component.setFilterProperties(filterProperties);
 
-		boolean first = true;
 		jsWriter.writeMethodCall("_processSelectedCriteriaResult");
 
 		jsWriter.writeString(tokenId).write(',')
-				.writeInt(result.getResultCount()).write(',');
+				.writeInt(result.getResultCount());
 
-		ISelectedCriteria[] resultCriteria = result.listSelectedCriteria();
+		ICriteriaConfiguration[] resultCriteria = result
+				.listAvailableCriteriaConfiguration();
 		if (resultCriteria != null && resultCriteria.length > 0) {
 			for (int i = 0; i < resultCriteria.length; i++) {
-				ISelectedCriteria rc = resultCriteria[i];
+				ICriteriaConfiguration rc = resultCriteria[i];
 
-				if (first == false) {
-					jsWriter.write(',');
-				}
+				jsWriter.write(',');
 
 				writeSelectedCriteria(jsWriter, rc, result);
 			}
@@ -245,10 +243,8 @@ public class CriteriaGridService extends AbstractHtmlService {
 	}
 
 	private void writeSelectedCriteria(IJavaScriptWriter jsWriter,
-			ISelectedCriteria selectedCriteria, ICriteriaSelectedResult result)
+			ICriteriaConfiguration configuration, ICriteriaSelectedResult result)
 			throws WriterException {
-
-		ICriteriaConfiguration configuration = selectedCriteria.getConfig();
 
 		IObjectLiteralWriter ow = jsWriter.writeObjectLiteral(true);
 
@@ -269,14 +265,17 @@ public class CriteriaGridService extends AbstractHtmlService {
 				ijs.write(',');
 			}
 
-			IObjectLiteralWriter itemsW = ijs.writeObjectLiteral(true);
-			itemsW.writeSymbol("label").writeString(ci.getLabel());
-
 			Object itemValue = ci.getValue();
 
 			String itemConvertedValue = ValuesTools.convertValueToString(
 					itemValue, converter, refComponent,
 					jsWriter.getFacesContext());
+
+			IObjectLiteralWriter itemsW = ijs.writeObjectLiteral(true);
+
+			if (itemConvertedValue.equals(ci.getLabel()) == false) {
+				itemsW.writeSymbol("label").writeString(ci.getLabel());
+			}
 
 			itemsW.writeSymbol("value").writeString(itemConvertedValue);
 

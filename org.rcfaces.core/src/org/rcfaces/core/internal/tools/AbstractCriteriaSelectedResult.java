@@ -1,6 +1,7 @@
 package org.rcfaces.core.internal.tools;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,13 @@ public abstract class AbstractCriteriaSelectedResult implements
 		criteriaItemsByContainer = new HashMap<ICriteriaConfiguration, CriteriaItem[]>();
 
 		fillDatas(result, criteriaItemsByContainer);
+	}
+
+	public ICriteriaConfiguration[] listAvailableCriteriaConfiguration() {
+		Collection<ICriteriaConfiguration> c = criteriaItemsByContainer
+				.keySet();
+
+		return c.toArray(new ICriteriaConfiguration[c.size()]);
 	}
 
 	protected abstract void fillDatas(List<Object> result,
