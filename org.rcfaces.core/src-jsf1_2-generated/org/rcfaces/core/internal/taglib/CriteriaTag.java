@@ -21,6 +21,7 @@ public class CriteriaTag extends CameliaTag implements Tag {
 	private ValueExpression selectionCardinality;
 	private ValueExpression selectedValues;
 	private ValueExpression criteriaValue;
+	private ValueExpression criteriaTitle;
 	private ValueExpression criteriaConverter;
 	private ValueExpression labelConverter;
 	public String getComponentType() {
@@ -39,6 +40,10 @@ public class CriteriaTag extends CameliaTag implements Tag {
 		this.criteriaValue = criteriaValue;
 	}
 
+	public final void setCriteriaTitle(ValueExpression criteriaTitle) {
+		this.criteriaTitle = criteriaTitle;
+	}
+
 	public final void setCriteriaConverter(ValueExpression criteriaConverter) {
 		this.criteriaConverter = criteriaConverter;
 	}
@@ -55,6 +60,7 @@ public class CriteriaTag extends CameliaTag implements Tag {
 			LOG.debug("  selectionCardinality='"+selectionCardinality+"'");
 			LOG.debug("  selectedValues='"+selectedValues+"'");
 			LOG.debug("  criteriaValue='"+criteriaValue+"'");
+			LOG.debug("  criteriaTitle='"+criteriaTitle+"'");
 			LOG.debug("  criteriaConverter='"+criteriaConverter+"'");
 			LOG.debug("  labelConverter='"+labelConverter+"'");
 		}
@@ -97,6 +103,15 @@ public class CriteriaTag extends CameliaTag implements Tag {
 			}
 		}
 
+		if (criteriaTitle != null) {
+			if (criteriaTitle.isLiteralText()==false) {
+				component.setValueExpression(Properties.CRITERIA_TITLE, criteriaTitle);
+
+			} else {
+				component.setCriteriaTitle(criteriaTitle.getExpressionString());
+			}
+		}
+
 		if (criteriaConverter != null) {
 			if (criteriaConverter.isLiteralText()==false) {
 				component.setValueExpression(Properties.CRITERIA_CONVERTER, criteriaConverter);
@@ -120,6 +135,7 @@ public class CriteriaTag extends CameliaTag implements Tag {
 		selectionCardinality = null;
 		selectedValues = null;
 		criteriaValue = null;
+		criteriaTitle = null;
 		criteriaConverter = null;
 		labelConverter = null;
 

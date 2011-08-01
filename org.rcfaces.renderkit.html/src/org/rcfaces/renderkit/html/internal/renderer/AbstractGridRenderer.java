@@ -1606,7 +1606,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
 		ISelectedCriteria[] selectedCriteriaArray = gridRenderContext
 				.listSelectedCriteria();
-		int criteriaIndex = 0;
 
 		if (selectedCriteriaArray != null && selectedCriteriaArray.length > 0) {
 			jsWriter.writeMethodCall("fa_setSelectedCriteria").write('[');
@@ -1832,11 +1831,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				if (criteriaConfiguration != null) {
 					objectWriter.writeSymbol("_criteriaCardinality").writeInt(
 							criteriaConfiguration.getCriteriaCardinality());
-					objectWriter.writeSymbol("_criteriaIndex").writeInt(
-							++criteriaIndex);
 
-					// objectWriter.writeSymbol("_criteriaLabel").writeString(
-					// "null");
+					String criteriaTitle = criteriaConfiguration
+							.getCriteriaTitle();
+					if (criteriaTitle != null) {
+						objectWriter.writeSymbol("_criteriaTitle").writeString(
+								criteriaTitle);
+					}
 				}
 			}
 

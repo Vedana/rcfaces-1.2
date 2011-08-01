@@ -1206,7 +1206,6 @@
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
 		
 		<attribute id="bodyDroppable" type="boolean" default="false"/>
-
 				
 		<action id="action" type="selection" default="true"/>
 		
@@ -4516,6 +4515,8 @@ Dans le cas d'un mode period !
 		
 		<attribute id="selectedValues" type="java.lang.Object"/>
 		<attribute id="criteriaValue" type="java.lang.Object"/>
+
+		<attribute id="criteriaTitle" type="java.lang.String" />
 
 		<attribute id="criteriaConverter" type="javax.faces.convert.Converter" />
 		<method id="setCriteriaConverter">

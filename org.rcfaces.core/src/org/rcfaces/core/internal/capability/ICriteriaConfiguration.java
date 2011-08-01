@@ -25,4 +25,6 @@ public interface ICriteriaConfiguration extends ISelectionProvider,
 	Converter getLabelConverter();
 
 	int getCriteriaCardinality();
+
+	String getCriteriaTitle();
 }

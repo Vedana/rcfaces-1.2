@@ -989,8 +989,8 @@ var __members = {
 			params.filterExpression=filterExpression;
 		}
 		
-		// TODO JB A RAJOUTER pas sur
-		params.criteria = selectedCriteria;//compute
+		// TODO JB A RAJOUTER pas sur		
+		params.criteria = (selectedCriteria)?selectedCriteria:this._selectedCriteria;//compute
 		
 		if (this._additionalInformations) {
 			this.fa_serializeAdditionalInformations(params);
@@ -2223,11 +2223,11 @@ var __members = {
 			return undefined;
 		}
 				
-		if (column._criteriaLabel) {
-			return column._criteriaLabel;
+		if (column._criteriaTitle) {
+			return column._criteriaTitle;
 		}
 		
-		return column._id;		 // TODO A CORRIGER
+		return this.f_getColumnName(column);
 	}
 };
 

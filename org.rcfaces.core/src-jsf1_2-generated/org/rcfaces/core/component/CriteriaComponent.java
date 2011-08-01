@@ -34,7 +34,7 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaBaseComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"criteriaValue","criteriaConverter","selectionCardinality","labelConverter","selectedValues"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"criteriaValue","criteriaConverter","selectionCardinality","labelConverter","criteriaTitle","selectedValues"}));
 	}
 
 	public CriteriaComponent() {
@@ -239,6 +239,26 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 	 */
 	public boolean isCriteriaValueSetted() {
 		return engine.isPropertySetted(Properties.CRITERIA_VALUE);
+	}
+
+	public String getCriteriaTitle() {
+		return getCriteriaTitle(null);
+	}
+
+	public String getCriteriaTitle(javax.faces.context.FacesContext facesContext) {
+		return engine.getStringProperty(Properties.CRITERIA_TITLE, facesContext);
+	}
+
+	public void setCriteriaTitle(String criteriaTitle) {
+		engine.setProperty(Properties.CRITERIA_TITLE, criteriaTitle);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "criteriaTitle" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isCriteriaTitleSetted() {
+		return engine.isPropertySetted(Properties.CRITERIA_TITLE);
 	}
 
 	public javax.faces.convert.Converter getCriteriaConverter() {
