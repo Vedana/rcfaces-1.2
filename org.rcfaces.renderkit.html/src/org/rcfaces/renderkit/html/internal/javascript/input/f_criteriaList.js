@@ -44,7 +44,11 @@ var __members = {
 
 		var selectedCriteria = dataGrid.fa_getSelectedCriteria();
 		if (!selectedCriteria || !selectedCriteria.length) {
-			this._formatMessage(fragement, this._noCriteriaMessage);
+			var critUL=f_core.CreateElement(fragment, "span", {
+				className: "f_criteriaList_noCriteria"			
+			});
+
+			this._formatMessage(critUL, this._noCriteriaMessage);
 			return;
 		}
 		
@@ -52,7 +56,6 @@ var __members = {
 			className: "f_criteriaList_list"			
 		});
 		
-
 		for(var i=0;i<selectedCriteria.length;i++) {
 			
 			var critDiv=f_core.CreateElement(critUL, "li", {
