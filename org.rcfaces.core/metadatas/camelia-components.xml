@@ -2846,6 +2846,14 @@ Dans le cas d'un mode period !
 		<attribute id="hideIfDisabled" type="boolean" required="false"/>		
 	</component>	
 
+	<component id="imageCriteriaButton" extends="imageButton">
+
+		<capability id="IForCapability" required="true"/>
+
+		<attribute id="type" type="java.lang.String" required="true"/>		
+		<attribute id="hideIfDisabled" type="boolean" required="false"/>		
+	</component>	
+
 	<component id="textEditorImageButton" extends="imageButton">
 		<capability id="IForCapability" required="true"/>
 		<capability id="IRadioGroupCapability" required="true"/>

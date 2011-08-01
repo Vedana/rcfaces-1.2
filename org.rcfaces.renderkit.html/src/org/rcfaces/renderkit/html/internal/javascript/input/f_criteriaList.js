@@ -99,7 +99,10 @@ var __members = {
 	_addCriteriaFirstValue: function(fragment, criteria) {
 		// var dataGrid = this._pagedComponent;
 		
-		f_pager._AddSpan(fragment, "first", this._getCriteriaLabel(criteria.values[0]), "f_criteriaList_item");
+		var label=this._getCriteriaLabel(criteria.values[0]);
+
+		var span=f_pager._AddSpan(fragment, "first", label, "f_criteriaList_item");
+		span.title=label;
 	},
 	_addCriteriaValues: function(fragment, criteria) {
 		// var dataGrid = this._pagedComponent;
@@ -115,7 +118,8 @@ var __members = {
 			
 			var label=this._getCriteriaLabel(criteria.values[i]);
 			
-			f_pager._AddSpan(fragment, "_"+i, this._getCriteriaLabel(criteria.values[0]), "f_criteriaList_item");
+			var span=f_pager._AddSpan(fragment, "_"+i, this._getCriteriaLabel(criteria.values[0]), "f_criteriaList_item");
+			span.title=label;
 		}
 		
 		f_pager._AddText(valuesSpan, ".");

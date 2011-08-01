@@ -292,6 +292,14 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>imageCriteriaButton</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.imageCriteriaButton</component-type>
+			<renderer-type>org.rcfaces.core.imageCriteriaButton</renderer-type>
+			<handler-class>org.rcfaces.core.internal.facelets.ButtonHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>textEditorImageButton</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.textEditorImageButton</component-type>

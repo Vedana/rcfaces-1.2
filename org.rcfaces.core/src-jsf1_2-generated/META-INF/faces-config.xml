@@ -1556,6 +1556,10 @@ A boolean value indicating wether the component should be hide when it is not av
 		</attribute>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.imageCriteriaButton</component-type>
+		<component-class>org.rcfaces.core.component.ImageCriteriaButtonComponent</component-class>
+	</component>
+	<component>
 		<component-type>org.rcfaces.core.textEditorImageButton</component-type>
 		<component-class>org.rcfaces.core.component.TextEditorImageButtonComponent</component-class>
 	</component>

@@ -78,6 +78,8 @@ public final class JavaScriptClasses {
 
     public static final String IMAGE_COMBO = "f_imageCombo";
 
+    public static final String IMAGE_CRITERIA_BUTTON = "f_imageCriteriaButton";
+
     public static final String IMAGE_PAGER_BUTTON = "f_imagePagerButton";
 
     public static final String IMAGE_RADIO_BUTTON = "f_imageRadioButton";

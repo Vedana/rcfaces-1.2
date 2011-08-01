@@ -32,6 +32,7 @@
 		<file name="f_imageButton.css" />
 		<file name="f_imageCheckButton.css" />
 		<file name="f_imageCombo.css" />
+		<file name="f_imageCriteriaButton.css" />
 		<file name="f_imagePagerButton.css" />
 		<file name="f_imageRadioButton.css" />
 		<file name="f_imageResetButton.css" />
