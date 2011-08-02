@@ -11,14 +11,17 @@
 var __statics = {
 	
 	/**
-	 * @method private static
+	 * @method protected static
 	 */
-	_AddSpan: function(container, spanClass, text) {		
-		return f_core.CreateElement(container, "span", {className: "f_pager_value f_pager_value_"+spanClass, textNode: text });
+	_AddSpan: function(container, spanClass, text, classBase) {
+		if (!classBase) {
+			classBase="f_pager_value";
+		}
+		return f_core.CreateElement(container, "span", {className: classBase+" "+classBase+"_"+spanClass, textNode: text });
 	},	
 
 	/**
-	 * @method private static
+	 * @method protected static
 	 */
 	_AddText: function(container, text) {
 		f_core.AppendChild(container, container.ownerDocument.createTextNode(text));	
@@ -27,7 +30,7 @@ var __statics = {
 	/**
 	 * @method private static
 	 */
-	_AddButton: function(dataPager, container, buttonClass, text, tooltip, index, parameters) {
+	_AddButton: function(dataPager, container, buttonClass, text, tooltip, index, parameters, classBase) {
 		if (parameters) {
 			if (parameters["label"]) {
 				text=parameters["label"];
@@ -55,10 +58,13 @@ var __statics = {
 			button.f_link=dataPager;
 		}
 		
-		var cls="f_pager_button f_pager_button_"+buttonClass;
+		if (!classBase) {
+			classBase="f_pager_button";
+		}
+		var cls=classBase+" "+classBase+"_"+buttonClass;
 		
 		if (suffix) {
-			cls+=" f_pager_button"+suffix+" f_pager_button_"+buttonClass+suffix;
+			cls+=" "+classBase+suffix+" "+classBase+"_"+buttonClass+suffix;
 		}
 		
 		if (button.className!=cls) {
@@ -155,7 +161,7 @@ var __statics = {
 			}		
 			
 			cancel=true;
-			break
+			break;
 						
 		case f_key.VK_LEFT: 
 			var buttons=dataPager._buttons;
@@ -246,7 +252,7 @@ var __statics = {
 		
 		return pager;		
 	}
-}
+};
  
 var __members = {
 
@@ -254,6 +260,46 @@ var __members = {
 		this.f_super(arguments);
 		
 		this._for=f_core.GetAttribute(this, "v:for");
+		
+		this._readAttributes();
+		
+/*
+		f_core.Debug(f_pager, "Message='"+this._message+"'");
+		f_core.Debug(f_pager, "ZeroMessage='"+this._zeroMessage+"'");
+		f_core.Debug(f_pager, "OneMessage='"+this._oneMessage+"'");
+		f_core.Debug(f_pager, "ManyMessage='"+this._manyMessage+"'");
+		f_core.Debug(f_pager, "NoPagedMessage='"+this._noPagedMessage+"'");
+		f_core.Debug(f_pager, "ManyMessage2='"+this._manyMessage2+"'");
+*/
+		if (this._for) {
+			fa_pagedComponent.RegisterPager(this._for, this);
+
+		} else  {
+			f_core.Error(f_pager, "f_pager: 'for' attribute is not defined !");
+		}
+	},
+	f_finalize: function() {
+
+		fa_pagedComponent.UnregisterPager(this);
+
+		this._destroyButtons();
+		
+		this._pagedComponent=undefined; // f_pagedComponent
+		// this._for=undefined; // string
+		// this._message=undefined; // string
+		// this._zeroMessage=undefined; // string
+		// this._oneMessage=undefined; // string
+		// this._manyMessage=undefined; // string
+		// this._manyMessage2=undefined; // string
+		// this._noPagedMessage=undefined; // string
+		
+		this.f_super(arguments);
+	},
+	/**
+	 * @method protected
+	 * @return void
+	 */
+	_readAttributes: function() {
 		
 		var zeroMessage;
 		var oneMessage;
@@ -289,39 +335,7 @@ var __members = {
 			
 			noPagedMessage=resourceBundle.f_get("NO_PAGED_MESSAGE");			
 		}
-		this._noPagedMessage=noPagedMessage;
-		
-/*
-		f_core.Debug(f_pager, "Message='"+this._message+"'");
-		f_core.Debug(f_pager, "ZeroMessage='"+this._zeroMessage+"'");
-		f_core.Debug(f_pager, "OneMessage='"+this._oneMessage+"'");
-		f_core.Debug(f_pager, "ManyMessage='"+this._manyMessage+"'");
-		f_core.Debug(f_pager, "NoPagedMessage='"+this._noPagedMessage+"'");
-		f_core.Debug(f_pager, "ManyMessage2='"+this._manyMessage2+"'");
-*/
-		if (this._for) {
-			fa_pagedComponent.RegisterPager(this._for, this);
-
-		} else  {
-			f_core.Error(f_pager, "f_pager: 'for' attribute is not defined !");
-		}
-	},
-	f_finalize: function() {
-
-		fa_pagedComponent.UnregisterPager(this);
-
-		this._destroyButtons();
-		
-		this._pagedComponent=undefined; // f_pagedComponent
-		// this._for=undefined; // string
-		// this._message=undefined; // string
-		// this._zeroMessage=undefined; // string
-		// this._oneMessage=undefined; // string
-		// this._manyMessage=undefined; // string
-		// this._manyMessage2=undefined; // string
-		// this._noPagedMessage=undefined; // string
-		
-		this.f_super(arguments);
+		this._noPagedMessage=noPagedMessage;		
 	},
 	_destroyButtons: function() {
 		var buttons=this._buttons;
@@ -359,13 +373,14 @@ var __members = {
 	fa_pagedComponentInitialized: function(dataComponent) {
 		this._pagedComponent=dataComponent;
 		
-		var component=this;
 		
 		var oldVisibility=this.style.visibility;
 		if (!oldVisibility) {
 			oldVisibility="inherit";
 		}
 		
+		var fragment;
+		var component=this;
 		try {
 			this.style.visibility="hidden";
 			
@@ -378,179 +393,9 @@ var __members = {
 				}
 			}
 		
-			var fragment=component.ownerDocument.createDocumentFragment();
+			fragment=component.ownerDocument.createDocumentFragment();
 		
-			var resourceBundle;
-			var message;
-	
-			var rows=dataComponent.f_getRows();
-			var rowCount=dataComponent.f_getRowCount();
-			var first=dataComponent.f_getFirst();
-			var maxRows=dataComponent.f_getMaxRows();
-			var paged=dataComponent.f_isPaged();
-	
-			if (this._noPagedMessage && (rows<1 || !paged)) {
-				message=this._noPagedMessage;
-	
-			} else {
-				if (rowCount<0) {
-					if (first+rows<maxRows) {
-						message=this._manyMessage2;
-						
-					} else {
-						message=this._manyMessage;
-					}
-					
-				} else if (rowCount==0) {
-					message=this._zeroMessage;
-		
-				} else if (rowCount==1) {
-					message=this._oneMessage;
-				}
-			}
-			
-			if (message==undefined) {
-				message=this._message;
-			}
-			
-			f_core.Debug(f_pager, "fa_pagedComponentInitialized: Format message '"+message+"' rows="+rows+" rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
-			
-			var span=null;
-			for(var i=0;i<message.length;) {
-				var c=message.charAt(i++);
-				if (c=="{") {
-					var end=message.indexOf("}", i);
-					var varName=message.substring(i, end).toLowerCase();		
-					i=end+1;
-					
-					if (span && span.length) {
-						this._appendSpan(fragment, span.join(""));
-						span=null;
-					}
-					
-					if (!resourceBundle) {
-						resourceBundle=f_resourceBundle.Get(f_pager);
-					}
-					
-					var parameters=undefined;
-					var pvar=varName.indexOf(':');
-					if (pvar>=0) {
-						var parameter=varName.substring(pvar+1);
-						varName=varName.substring(0, pvar);
-						
-						parameters=new Object();
-						
-						var ss=parameter.split(';');
-						for(var j=0;j<ss.length;j++) {
-							var s=ss[j];
-							var p="";
-							var ep=s.indexOf('=');
-							if (ep>=0) {
-								p=s.substring(ep+1);
-								s=s.substring(0, ep);
-							}
-							
-							parameters[s]=p;
-						}
-					}
-					
-					switch(varName) {
-					case "first":
-					case "position":
-						this.f_appendFirstValue(fragment, first+1, "first");
-						
-						break;
-						
-					case "pageposition":
-						if (rows>0) {
-							this.f_appendFirstValue(fragment, Math.floor(first/rows)+1, "pagePosition");
-						}
-						
-						break;
-						
-					case "last":
-						var last=first+rows;
-						if (rowCount>0 && last>=rowCount) {
-							last=rowCount;
-						} else if (maxRows>0 && last>=maxRows) {
-							last=maxRows;
-						}
-						this.f_appendLastValue(fragment, last, "last");
-						break;
-						
-					case "rowcount":
-						if (rowCount>=0) {
-							this.f_appendRowCountValue(fragment, rowCount, "rowCount", parameters);
-						}
-						break;
-						
-					case "pagecount":
-						if (rowCount>=0 && rows>0) {
-							this.f_appendRowCountValue(fragment, Math.floor(((rowCount-1)/rows)+1), "pageCount", parameters);
-						}
-						break;
-						
-					case "bfirst":
-						this.f_appendFirstButton(fragment, first, "first", resourceBundle, parameters);
-						break;
-	
-					case "bprev":
-						this.f_appendPrevButton(fragment, first, rows, "prev", resourceBundle, parameters);
-						break;
-						
-					case "bnext":		
-						this.f_appendNextButton(fragment, first, rows, rowCount, maxRows, "next", resourceBundle, parameters);
-						break;
-					
-					case "blast":
-						this.f_appendLastButton(fragment, first, rows, rowCount, maxRows, "last", resourceBundle, parameters);
-						break;
-					
-					case "bpages":
-						this.f_appendPagesButtons(fragment, first, rows, rowCount, maxRows,"goto", resourceBundle, parameters);
-						break;
-						
-					default:
-						f_core.Error(f_pager, "Unknown pager message button '"+varName+"'.");
-					}
-					
-					continue;	
-				} else if (c=="\'") {
-					if (!span) {
-						span=new Array;
-					}
-					for(var j=i;;) {
-						var end=message.indexOf("'", j);
-						if (end<0) {
-							span.push(message.substring(j));
-							i=message.length;
-							break;
-						}
-								
-						if (message.charAt(end+1)=="\'") {
-							span.push(message.substring(j, end), "'");
-							j=end+2;
-							continue;
-						}
-						
-						span.push(message.substring(j, end));
-						i=end+1;
-						break;
-					}
-					continue;
-				}
-				
-				if (!span) {
-					span=new Array;
-				}
-				span.push(c);
-			}
-			
-			if (span && span.length) {
-				this._appendSpan(fragment, span.join(""));
-			}
-			
-			
+			this._computeMessage(fragment);			
 			
 		} finally {
 		
@@ -564,9 +409,183 @@ var __members = {
 		}
 	},
 	/**
+	 * @method protected
+	 */
+	_computeMessage: function(fragment) {
+		var dataGrid = this._pagedComponent;
+				
+		var rows=dataGrid.f_getRows();
+		var rowCount=dataGrid.f_getRowCount();
+		var first=dataGrid.f_getFirst();
+		var maxRows=dataGrid.f_getMaxRows();
+		var paged=dataGrid.f_isPaged();
+
+		var message;
+		if (this._noPagedMessage && (rows<1 || !paged)) {
+			message=this._noPagedMessage;
+
+		} else {
+			if (rowCount<0) {
+				if (first+rows<maxRows) {
+					message=this._manyMessage2;
+					
+				} else {
+					message=this._manyMessage;
+				}
+				
+			} else if (rowCount==0) {
+				message=this._zeroMessage;
+	
+			} else if (rowCount==1) {
+				message=this._oneMessage;
+			}
+		}
+		
+		if (message==undefined) {
+			message=this._message;
+		}	
+				
+		f_core.Debug(f_pager, "fa_pagedComponentInitialized: Format message '"+message+"' rows="+rows+" rowCount="+rowCount+" first="+first+" maxRows="+maxRows);
+		
+		this._formatMessage(fragment, message);
+	},
+	/**
+	 * @method protected
+	 * @param dataGrid
+	 * @param fragment
+	 * @param message
+	 */
+	_formatMessage: function(fragment, message, target) {
+		
+		var span=null;
+		for(var i=0;i<message.length;) {
+			var c=message.charAt(i++);
+			if (c=="{") {
+				var end=message.indexOf("}", i);
+				var varName=message.substring(i, end).toLowerCase();		
+				i=end+1;
+				
+				if (span && span.length) {
+					this._appendSpan(fragment, span.join(""));
+					span=null;
+				}
+				
+				var parameters=undefined;
+				var pvar=varName.indexOf(':');
+				if (pvar>=0) {
+					var parameter=varName.substring(pvar+1);
+					varName=varName.substring(0, pvar);
+					
+					parameters=new Object();
+					
+					var ss=parameter.split(';');
+					for(var j=0;j<ss.length;j++) {
+						var s=ss[j];
+						var p="";
+						var ep=s.indexOf('=');
+						if (ep>=0) {
+							p=s.substring(ep+1);
+							s=s.substring(0, ep);
+						}
+						
+						parameters[s]=p;
+					}
+				}
+				
+				this._processToken(fragment, varName, parameters, target);
+				
+				continue;	
+			}
+			
+			if (c=="\'") {
+				if (!span) {
+					span=new Array;
+				}
+				for(var j=i;;) {
+					var end=message.indexOf("'", j);
+					if (end<0) {
+						span.push(message.substring(j));
+						i=message.length;
+						break;
+					}
+							
+					if (message.charAt(end+1)=="\'") {
+						span.push(message.substring(j, end), "'");
+						j=end+2;
+						continue;
+					}
+					
+					span.push(message.substring(j, end));
+					i=end+1;
+					break;
+				}
+				continue;
+			}
+			
+			if (!span) {
+				span=new Array;
+			}
+			span.push(c);
+		}
+		
+		if (span && span.length) {
+			this._appendSpan(fragment, span.join(""));
+		}
+	},
+	/**
+	 * @method protected
+	 */
+	_processToken: function(fragment, varName, parameters) {		
+		switch(varName) {
+		case "first":
+		case "position":
+			this.f_appendFirstValue(fragment, "first", parameters);			
+			break;
+			
+		case "pageposition":
+			this.f_appendPagePositionValue(fragment, "pagePosition", parameters);			
+			break;
+			
+		case "last":
+			this.f_appendLastValue(fragment, "last", parameters);
+			break;
+			
+		case "rowcount":
+			this.f_appendRowCountValue(fragment, "rowCount", parameters);
+			break;
+			
+		case "pagecount":
+			this.f_appendPageCountValue(fragment, "pageCount", parameters);
+			break;
+			
+		case "bfirst":
+			this.f_appendFirstButton(fragment, "first", parameters);
+			break;
+
+		case "bprev":
+			this.f_appendPrevButton(fragment, "prev", parameters);
+			break;
+			
+		case "bnext":		
+			this.f_appendNextButton(fragment, "next", parameters);
+			break;
+		
+		case "blast":
+			this.f_appendLastButton(fragment, "last", parameters);
+			break;
+		
+		case "bpages":
+			this.f_appendPagesButtons(fragment,"goto", parameters);
+			break;
+			
+		default:
+			f_core.Error(f_pager, "Unknown pager message button '"+varName+"'.");
+		}
+	},
+	/**
 	 * @method private
 	 */
-	_appendSpan: function(component, message) {
+	_appendSpan: function(fragment, message) {
 		if (!message) {
 			return;
 		}
@@ -574,15 +593,15 @@ var __members = {
 		for(;;) {
 			var next=message.indexOf('\n', idx);
 			if (next<0) {
-				f_pager._AddText(component, message.substring(idx));
+				f_pager._AddText(fragment, message.substring(idx));
 				break;
 			}
 			
 			if (idx+1<next) {
-				f_pager._AddText(component, message.substring(idx, next));
+				f_pager._AddText(fragment, message.substring(idx, next));
 			}
 			
-			f_core.AppendChild(component, component.ownerDocument.createElement("br"));
+			f_core.AppendChild(fragment, fragment.ownerDocument.createElement("br"));
 			
 			idx=next+1;
 		}
@@ -590,27 +609,86 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_appendRowCountValue: function(component, rowCount, cls, parameters) {
-		f_pager._AddSpan(component, cls, rowCount);
+	f_appendRowCountValue: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		
+		var rowCount=dataGrid.f_getRowCount();
+		if (rowCount<0) {
+			return;
+		}
+
+		f_pager._AddSpan(fragment, cls, rowCount);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendFirstValue: function(component, first, cls, parameters) {
-		f_pager._AddSpan(component, cls, first);
+	f_appendPageCountValue: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var rows=dataGrid.f_getRows();
+		var rowCount=dataGrid.f_getRowCount();
+
+		if (rowCount<0 || rows<=0) {
+			return;
+		}
+		
+		var pageCount=Math.floor(((rowCount-1)/rows)+1);
+
+		f_pager._AddSpan(fragment, cls, pageCount);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendLastValue: function(component, last, cls, parameters) {
-		f_pager._AddSpan(component, cls, last);
+	f_appendFirstValue: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var first=dataGrid.f_getFirst()+1;
+
+		f_pager._AddSpan(fragment, cls, first);
 	},
 	/**
 	 * @method protected
 	 */
-	f_appendFirstButton: function(component, first, cls, resourceBundle, parameters) {
+	f_appendPagePositionValue: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var rows=dataGrid.f_getRows();
+
+		if (rows<=0) {
+			return;
+		}
+
+		var first=Math.floor(first/rows)+1;
+
+		f_pager._AddSpan(fragment, cls, first);
+	},
+	/**
+	 * @method protected
+	 */
+	f_appendLastValue: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var rows=dataGrid.f_getRows();
+		var rowCount=dataGrid.f_getRowCount();
+		var first=dataGrid.f_getFirst();
+		var maxRows=dataGrid.f_getMaxRows();
+
+		var last=first+rows;
+		if (rowCount>0 && last>=rowCount) {
+			last=rowCount;
+		} else if (maxRows>0 && last>=maxRows) {
+			last=maxRows;
+		}
+		
+		f_pager._AddSpan(fragment, cls, last);
+	},
+	/**
+	 * @method protected
+	 */
+	f_appendFirstButton: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var resourceBundle=f_resourceBundle.Get(f_pager);
+		
+		var first=dataGrid.f_getFirst();
+
 		f_pager._AddButton(this, 
-			component, 
+			fragment, 
 			cls,
 			resourceBundle.f_get("FIRST"), 
 			resourceBundle.f_get("FIRST_TOOLTIP"), 
@@ -620,14 +698,20 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_appendPrevButton: function(component, first, rows, cls, resourceBundle, parameters) {
+	f_appendPrevButton: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var resourceBundle=f_resourceBundle.Get(f_pager);
+		
+		var rows=dataGrid.f_getRows();
+		var first=dataGrid.f_getFirst();
+
 		var idx = first - rows;
 		if (idx < 0) {
 			idx = 0;
 		}
 
 		f_pager._AddButton(this, 
-			component, 
+				fragment, 
 			cls, 
 			resourceBundle.f_get("PREVIOUS"), 
 			resourceBundle.f_get("PREVIOUS_TOOLTIP"), 
@@ -637,7 +721,15 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_appendNextButton: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, parameters) {			
+	f_appendNextButton: function(fragment, cls, parameters) {			
+		var dataGrid = this._pagedComponent;
+		var resourceBundle=f_resourceBundle.Get(f_pager);
+		
+		var rows=dataGrid.f_getRows();
+		var rowCount=dataGrid.f_getRowCount();
+		var first=dataGrid.f_getFirst();
+		var maxRows=dataGrid.f_getMaxRows();
+
 		var idx = first + rows;
 
 		var nextIndex=-1;
@@ -658,7 +750,7 @@ var __members = {
 		}
 							
 		f_pager._AddButton(this, 
-			component, 
+			fragment, 
 			cls,
 			resourceBundle.f_get("NEXT"), 
 			resourceBundle.f_get("NEXT_TOOLTIP"), 
@@ -667,7 +759,15 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_appendLastButton: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, parameters) {
+	f_appendLastButton: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var resourceBundle=f_resourceBundle.Get(f_pager);
+		
+		var rows=dataGrid.f_getRows();
+		var rowCount=dataGrid.f_getRowCount();
+		var first=dataGrid.f_getFirst();
+		var maxRows=dataGrid.f_getMaxRows();
+
 		var idx = first + rows;
 
 		var lastIndex=-1;
@@ -691,7 +791,7 @@ var __members = {
 		}
 							
 		f_pager._AddButton(this, 
-			component, 
+			fragment, 
 			cls,
 			resourceBundle.f_get("LAST"), 
 			resourceBundle.f_get("LAST_TOOLTIP"), 
@@ -702,7 +802,14 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_appendPagesButtons: function(component, first, rows, rowCount, maxRows, cls, resourceBundle, parameters) {
+	f_appendPagesButtons: function(fragment, cls, parameters) {
+		var dataGrid = this._pagedComponent;
+		var resourceBundle=f_resourceBundle.Get(f_pager);
+		
+		var rows=dataGrid.f_getRows();
+		var rowCount=dataGrid.f_getRowCount();
+		var first=dataGrid.f_getFirst();
+		var maxRows=dataGrid.f_getMaxRows();
 		
 		var maxPage=3 * 2 + 1;		
 		var sep=null;
@@ -747,7 +854,7 @@ var __members = {
 		
 		for (var i = 0; i < showPage; i++) {
 			if (i > 0) {
-				f_pager._AddText(component, sep);
+				f_pager._AddText(fragment, sep);
 			}
 
 			var pi = pageOffset + i;
@@ -762,7 +869,7 @@ var __members = {
 			var tooltipIndex=resourceBundle.f_format(tooltipKey, pi+1);
 	
 			f_pager._AddButton(this, 
-				component, 
+				fragment, 
 				cls,
 				label, 
 				tooltipIndex,
@@ -797,7 +904,7 @@ var __members = {
 	f_changePosition: function(index) {
 		this._pagedComponent.f_setFirst(index);
 	}
-}
+};
 
 new f_class("f_pager", {
 	extend: f_component,
