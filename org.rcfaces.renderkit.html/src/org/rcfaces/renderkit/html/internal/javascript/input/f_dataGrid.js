@@ -960,7 +960,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate, selectedCriteria) {
+	f_callServer: function(firstIndex, length, cursorIndex, selection, partialWaiting, fullUpdate) {
 //		f_core.Assert(!this._loading, "Already loading ....");
 		if (!selection) {
 			selection=0;
@@ -989,8 +989,7 @@ var __members = {
 			params.filterExpression=filterExpression;
 		}
 		
-		// TODO JB A RAJOUTER pas sur		
-		params.criteria = (selectedCriteria)?selectedCriteria:this._selectedCriteria;//compute
+		params.criteria = this._computeSelectedCriteria(this._selectedCriteria);//compute
 		
 		if (this._additionalInformations) {
 			this.fa_serializeAdditionalInformations(params);
@@ -2140,8 +2139,9 @@ var __members = {
 		if(refresh === false) {
 			return;
 		}
+		this._first = 0;
 		
-		this.f_refreshContent(true, selectedCriteria);
+		this.f_refreshContent(true);
 		
 	},
 	

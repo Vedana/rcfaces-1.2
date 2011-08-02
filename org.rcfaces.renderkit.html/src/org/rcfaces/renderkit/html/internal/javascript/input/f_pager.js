@@ -492,7 +492,7 @@ var __members = {
 					}
 				}
 				
-				this._processToken(fragment, varName, parameter, target);
+				this._processToken(fragment, varName, parameters, target);
 				
 				continue;	
 			}
@@ -535,7 +535,7 @@ var __members = {
 	/**
 	 * @method protected
 	 */
-	_processToken: function(fragment, varName, parameter) {		
+	_processToken: function(fragment, varName, parameters) {		
 		switch(varName) {
 		case "first":
 		case "position":
