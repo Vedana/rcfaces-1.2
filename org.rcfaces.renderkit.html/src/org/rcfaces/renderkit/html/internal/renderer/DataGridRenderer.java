@@ -424,9 +424,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				.listSelectedCriteria();
 		if (selectedCriteria != null && selectedCriteria.length == 0) {
 			selectedCriteria = null;
-			
 		}
-		
+
 		int rowIndex = tableContext.getFirst();
 
 		IRangeDataModel rangeDataModel = (IRangeDataModel) getAdapter(
@@ -680,7 +679,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				count = sortTranslations.length;
 			}
 
-			if (count >= 0 && selectedCriteria == null) {
+			if (count >= 0) {
 				searchEnd = false;
 			}
 		}
@@ -732,9 +731,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
 					if (rows > 0 && i >= rows) {
 						break;
 					}
-				}
-				if (i >= tableContext.getRowCount()){
-					break;
 				}
 
 				int translatedRowIndex = rowIndex;
@@ -833,14 +829,14 @@ public class DataGridRenderer extends AbstractGridRenderer {
 							+ rowIndexVar + ")");
 				}
 
-				if (available == false && selectedCriteria == null) {
+				if (available == false) {
 					count = rowIndex;
 					break;
 				}
 
 				if (searchEnd) {
 					// On teste juste la validité de la fin !
-					if (rows > 0 && i >= rows && selectedCriteria == null) {
+					if (rows > 0 && i >= rows) {
 						break;
 					}
 				}
@@ -852,7 +848,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				if (selectedCriteria != null) {
 					if (acceptCriteria(gridComponent, selectedCriteria) == false) {
 						rowIndex++;
-						count--;
 						continue;
 					}
 				}
@@ -941,7 +936,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		// * en mode liste, le dataModel ne pouvait pas encore donner le nombre
 		// de rows
 
-		if ((unknownRowCount && firstRowCount >= 0) || (selectedCriteria != null && selectedCriteria.length > 0)) {
+		if (unknownRowCount && firstRowCount >= 0) {
 			encodeJsRowCount(jsWriter, tableContext, count);
 
 		} else if (rows > 0) {
