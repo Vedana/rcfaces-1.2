@@ -226,7 +226,7 @@ var __members = {
 				
 				period._divNode = divNode;
 				var type = period._periodType;
-				if (!type ){
+				if (!type) {
 					type ="";
 				}
 				

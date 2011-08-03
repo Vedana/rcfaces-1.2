@@ -17,6 +17,7 @@
 		<file name="f_comboGrid.css" />
 		<file name="f_componentsGrid.css" />
 		<file name="f_componentsList.css" />
+		<file name="f_crieriaList.css" />
 		<file name="f_dataGrid.css" />
 		<file name="f_dateChooser.css" />
 		<file name="f_dateEntry.css" />
@@ -31,6 +32,7 @@
 		<file name="f_imageButton.css" />
 		<file name="f_imageCheckButton.css" />
 		<file name="f_imageCombo.css" />
+		<file name="f_imageCriteriaButton.css" />
 		<file name="f_imagePagerButton.css" />
 		<file name="f_imageRadioButton.css" />
 		<file name="f_imageResetButton.css" />
