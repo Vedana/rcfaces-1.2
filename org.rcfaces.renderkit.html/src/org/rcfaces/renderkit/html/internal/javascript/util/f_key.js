@@ -414,7 +414,7 @@ var __statics = {
 	/** 
 	 * @method hidden static
 	 * @param String character
-	 * @param String virtualKeys
+	 * @param Number[] virtualKeys
 	 * @param Number keyFlags
 	 * @param HTMLElement component
 	 * @param function method
