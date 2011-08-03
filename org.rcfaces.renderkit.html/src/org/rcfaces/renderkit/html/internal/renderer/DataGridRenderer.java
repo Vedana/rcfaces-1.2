@@ -377,7 +377,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		boolean searchEnd = (rows > 0);
 		// int firstCount = -1;
 		int count = -1;
-
+		int criteriaRowCount = 0;
 		if (searchEnd) {
 			count = firstRowCount;
 		}
@@ -734,15 +734,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
 					}
 				}
 				
-				int rowCount = tableContext.getRowCount();
-				if( rowCount<=0 ) {
-					rowCount = dataModel.getRowCount();
-				}
-				
-				if (selectedCriteria != null &&  rowCount > 0 &&   i >= rowCount){
-					break;
-				}
-
 				int translatedRowIndex = rowIndex;
 
 				if (rowValueColumn != null) {
@@ -839,7 +830,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 							+ rowIndexVar + ")");
 				}
 
-				if (available == false && selectedCriteria == null) {
+				if (available == false) {
 					count = rowIndex;
 					break;
 				}
@@ -858,9 +849,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				if (selectedCriteria != null) {
 					if (acceptCriteria(gridComponent, selectedCriteria) == false) {
 						rowIndex++;
-						count--;
 						continue;
 					}
+					criteriaRowCount++;
 				}
 
 				if (rowValueColumn != null) {
@@ -947,7 +938,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		// * en mode liste, le dataModel ne pouvait pas encore donner le nombre
 		// de rows
 
-		if ((unknownRowCount && firstRowCount >= 0) || (selectedCriteria != null && selectedCriteria.length > 0)) {
+		if(selectedCriteria != null && selectedCriteria.length > 0) {
+			encodeJsRowCount(jsWriter, tableContext, criteriaRowCount);
+			
+		}else if ((unknownRowCount && firstRowCount >= 0)) {
 			encodeJsRowCount(jsWriter, tableContext, count);
 
 		} else if (rows > 0) {
