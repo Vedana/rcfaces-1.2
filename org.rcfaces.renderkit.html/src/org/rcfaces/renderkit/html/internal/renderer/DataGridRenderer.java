@@ -87,8 +87,6 @@ import org.rcfaces.renderkit.html.internal.service.DataGridService;
  * @version $Revision$ $Date$
  */
 public class DataGridRenderer extends AbstractGridRenderer {
-	private static final String REVISION = "$Revision$";
-
 	private static final Log LOG = LogFactory.getLog(DataGridRenderer.class);
 
 	private static final Map SORT_ALIASES = new HashMap(8);
@@ -424,9 +422,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				.listSelectedCriteria();
 		if (selectedCriteria != null && selectedCriteria.length == 0) {
 			selectedCriteria = null;
-			
 		}
-		
+
 		int rowIndex = tableContext.getFirst();
 
 		IRangeDataModel rangeDataModel = (IRangeDataModel) getAdapter(
@@ -479,7 +476,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			}
 		}
 
-		if (selectedCriteria != null && selectedCriteria.length > 0) {
+		if (selectedCriteria != null) {
 			searchEnd = true; // On force la recherche de la fin
 		}
 
@@ -725,15 +722,56 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 			}
 
+			if (selectedCriteria != null) {
+				// On repositionne le FIRST !
+				int i = 0;
+				for (; i < rowIndex;) {
+
+					int translatedRowIndex = i;
+
+					if (sortTranslations != null) {
+						if (i >= sortTranslations.length) {
+							break;
+						}
+
+						translatedRowIndex = sortTranslations[i];
+					}
+
+					gridComponent.setRowIndex(translatedRowIndex);
+					boolean available = gridComponent.isRowAvailable();
+					if (available == false) {
+						// ???
+						break;
+					}
+
+					if (rowIndexVar != null) {
+						varContext.put(rowIndexVar, new Integer(i));
+					}
+
+					if (acceptCriteria(gridComponent, selectedCriteria) == false) {
+						continue;
+					}
+
+					i++;
+				}
+				rowIndex += i;
+			}
+
 			for (int i = 0;; i++) {
 				if (searchEnd == false) {
 					// Pas de recherche de la fin !
 					// On peut sortir tout de suite ...
-					if (rows > 0 && i >= rows) {
+
+					if (selectedCriteria != null) {
+						if (rows > 0 && criteriaRowCount >= rows) {
+							break;
+						}
+
+					} else if (rows > 0 && i >= rows) {
 						break;
 					}
 				}
-				
+
 				int translatedRowIndex = rowIndex;
 
 				if (rowValueColumn != null) {
@@ -837,7 +875,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 				if (searchEnd) {
 					// On teste juste la validité de la fin !
-					if (rows > 0 && i >= rows && selectedCriteria == null) {
+					if (selectedCriteria != null) {
+						if (rows > 0 && criteriaRowCount > rows) {
+							break;
+						}
+
+					} else if (rows > 0 && i >= rows) {
 						break;
 					}
 				}
@@ -938,10 +981,10 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		// * en mode liste, le dataModel ne pouvait pas encore donner le nombre
 		// de rows
 
-		if(selectedCriteria != null && selectedCriteria.length > 0) {
-			encodeJsRowCount(jsWriter, tableContext, criteriaRowCount);
-			
-		}else if ((unknownRowCount && firstRowCount >= 0)) {
+		if (selectedCriteria != null) {
+			encodeJsRowCount(jsWriter, tableContext, -1 /* criteriaRowCount */);
+
+		} else if ((unknownRowCount && firstRowCount >= 0)) {
 			encodeJsRowCount(jsWriter, tableContext, count);
 
 		} else if (rows > 0) {
@@ -1476,8 +1519,6 @@ public class DataGridRenderer extends AbstractGridRenderer {
 	 * @version $Revision$ $Date$
 	 */
 	public class DataGridRenderContext extends AbstractGridRenderContext {
-
-		private static final String REVISION = "$Revision$";
 
 		private UIColumn rowValueColumn;
 
