@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 
 import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.capability.IComponentEngine;
@@ -202,5 +204,32 @@ public class CriteriaTools extends CollectionTools {
 		}
 
 		return list.toArray(new ICriteriaContainer[list.size()]);
+	}
+
+	public static Object getDataValue(FacesContext facesContext,
+			IGridComponent gridComponent, ICriteriaConfiguration config) {
+
+		if (config.isCriteriaValueSetted()) {
+			return config.getCriteriaValue();
+		}
+
+		ICriteriaContainer container = config.getCriteriaContainer();
+		if (container instanceof ValueHolder) {
+			ValueHolder valueHolder = (ValueHolder) container;
+
+			Object dataValue = valueHolder.getValue();
+
+			if (dataValue != null) {
+				Converter converter = valueHolder.getConverter();
+				if (converter != null) {
+					dataValue = converter.getAsString(facesContext,
+							(UIComponent) container, dataValue);
+				}
+			}
+
+			return dataValue;
+		}
+
+		return null;
 	}
 }

@@ -56,6 +56,7 @@ import org.rcfaces.core.internal.tools.AdditionalInformationTools;
 import org.rcfaces.core.internal.tools.ArrayIndexesModel;
 import org.rcfaces.core.internal.tools.CheckTools;
 import org.rcfaces.core.internal.tools.CollectionTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.GridServerSort;
@@ -748,7 +749,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 						varContext.put(rowIndexVar, new Integer(i));
 					}
 
-					if (acceptCriteria(gridComponent, selectedCriteria) == false) {
+					if (acceptCriteria(facesContext, gridComponent,
+							selectedCriteria) == false) {
 						continue;
 					}
 
@@ -890,7 +892,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				}
 
 				if (selectedCriteria != null) {
-					if (acceptCriteria(gridComponent, selectedCriteria) == false) {
+					if (acceptCriteria(facesContext, gridComponent,
+							selectedCriteria) == false) {
 						rowIndex++;
 						continue;
 					}
@@ -1003,7 +1006,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		}
 	}
 
-	private boolean acceptCriteria(IGridComponent gridComponent,
+	private boolean acceptCriteria(FacesContext facesContext,
+			IGridComponent gridComponent,
 			ISelectedCriteria[] selectedCriteriaArray) {
 
 		for (ISelectedCriteria selectedCriteria : selectedCriteriaArray) {
@@ -1013,16 +1017,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			}
 
 			ICriteriaConfiguration config = selectedCriteria.getConfig();
-			ICriteriaContainer container = config.getCriteriaContainer();
 
-			Object dataValue = null;
-
-			if (config != null && config.isCriteriaValueSetted()) {
-				dataValue = config.getCriteriaValue();
-
-			} else if (container instanceof ValueHolder) {
-				dataValue = ((ValueHolder) container).getValue();
-			}
+			Object dataValue = CriteriaTools.getDataValue(
+					facesContext, gridComponent, config);
 
 			if (dataValue == null) {
 				continue;

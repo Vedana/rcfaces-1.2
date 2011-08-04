@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.DataModel;
@@ -107,7 +106,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 				for (int i = 0; i < selectedCriteria.length; i++) {
 					ISelectedCriteria sc = selectedCriteria[i];
 
-					Object dataValue = getDataValue(facesContext,
+					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, sc.getConfig());
 
 					if (selectedValues[i].contains(dataValue) == false) {
@@ -118,7 +117,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 				}
 
 				for (int i = 0; i < notSelectedContainers.length; i++) {
-					Object dataValue = getDataValue(facesContext,
+					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, notSelectedContainers[i]);
 
 					notPossibleValues[i].add(dataValue);
@@ -184,21 +183,5 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 				.toArray(new CriteriaItem[criteriaItems.size()]);
 
 		criteriaItemsByContainer.put(config, criteriaItemsArray);
-	}
-
-	private Object getDataValue(FacesContext facesContext,
-			IGridComponent gridComponent, ICriteriaConfiguration config) {
-
-		Object dataValue = null;
-		if (config.isCriteriaValueSetted()) {
-			return config.getCriteriaValue();
-		}
-
-		ICriteriaContainer container = config.getCriteriaContainer();
-		if (container instanceof ValueHolder) {
-			dataValue = ((ValueHolder) container).getValue();
-		}
-
-		return dataValue;
 	}
 }
