@@ -31,11 +31,6 @@
 			<service id="org.rcfaces.renderkit.html.DataGrid" class="org.rcfaces.renderkit.html.internal.service.DataGridService">
 				<command id="dataGrid.update" />
 			</service>
-			
-			<service id="org.rcfaces.renderkit.html.CriteriaGrid"
-				class="org.rcfaces.renderkit.html.internal.service.CriteriaGridService">
-				<command id="criteria.request" />
-			</service>
 
 			<service id="org.rcfaces.renderkit.html.ComponentsList" class="org.rcfaces.renderkit.html.internal.service.ComponentsListService">
 				<command id="componentsList.update" />
