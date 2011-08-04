@@ -650,12 +650,13 @@ var __members = {
 	f_appendPagePositionValue: function(fragment, cls, parameters) {
 		var dataGrid = this._pagedComponent;
 		var rows=dataGrid.f_getRows();
-
+		var first = dataGrid.f_getFirst();
+		
 		if (rows<=0) {
 			return;
 		}
 
-		var first=Math.floor(first/rows)+1;
+		first = Math.floor(first/rows)+1;
 
 		f_pager._AddSpan(fragment, cls, first);
 	},
