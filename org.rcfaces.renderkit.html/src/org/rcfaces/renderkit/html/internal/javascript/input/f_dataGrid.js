@@ -1941,7 +1941,7 @@ var __members = {
 		return result.join(',');
 	},
 	
-	fa_evaluateCriteria: function (selectedCriteria, callBack){
+	fa_evaluateCriteria: function (selectedCriteria, callBack, waitingElement){
 		
 		if (!this._interactive) {
 			return false;
@@ -1967,20 +1967,15 @@ var __members = {
 			var url=f_env.GetViewURI();
 			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
 			var dataGrid=this;
+			var elementWait = waitingElement;
 			request.f_setListener({
 				/**
 				 * @method public
 				 */
 		 		onInit: function(request) {
-		 			if (!waitingObject) {
-		 				waitingObject=f_waiting.Create(dataGrid, null, false);
-		 				dataGrid._waiting=waitingObject;
-		 			}
-		 			
-		 			if (waitingObject) {
-			 			waitingObject.f_setText(f_waiting.GetLoadingMessage());
-			 			waitingObject.f_show();
-				 	}
+					if (waitingElement) {
+						f_core.SetTextNode(waitingElement, f_waiting.GetLoadingMessage());
+					}
 			 	},
 				/**
 				 * @method public
@@ -1988,43 +1983,24 @@ var __members = {
 		 		onError: function(request, status, text) {
 		 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+status);
 		 			
-		 			var continueProcess;
-		 			
 		 			try {
 		 				continueProcess=dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
 		 				
 		 			} catch (x) {
-		 				// On continue coute que coute !
-		 				continueProcess=false;
+		 				
 		 			}	 				
-		 				 				
-		 			 			
-			 		if (continueProcess===false) {
-						dataGrid._loading=undefined;
-		
-						if (waitingObject) {
-							waitingObject.f_hide();
-						}
-				 		return;
-			 		}
-		 			
 					if (dataGrid.f_processNextCommand()) {
 						return;
 					}
+			 	},
 		 		
-					dataGrid._loading=undefined;		
-
-					if (waitingObject) {
-						waitingObject.f_hide();
-					}
-		 		},
 				/**
 				 * @method public
 				 */
 		 		onProgress: function(request, content, length, contentType) {
-					if (waitingObject && f_class.IsObjectInitialized(waitingObject)) {
-		 				waitingObject.f_setText(f_waiting.GetReceivingMessage());
-					}	 			
+		 			if (waitingElement) {
+						f_core.SetTextNode(waitingElement, f_waiting.GetReceivingMessage());
+					}	
 		 		},
 				/**
 				 * @method public
@@ -2071,7 +2047,6 @@ var __members = {
 							}
 						}
 						
-						//alert("ret="+ret);
 						try {
 							f_core.WindowScopeEval(ret);
 							
@@ -2081,11 +2056,6 @@ var __members = {
 
 					} finally {
 						dataGrid._loading=undefined;
-						
-						if (waitingObject) {
-							waitingObject.f_hide(true);					
-						}					
-						
 						dataGrid._waitingLoading=undefined;
 					}
 		
@@ -2102,44 +2072,21 @@ var __members = {
 			this._loading=true;
 			request.f_setRequestHeader("X-Camelia", this._gridUpdadeCriteriaServiceId);
 			request.f_doFormRequest(params);
-			
-			//dataGrid.f_callServer(0, undefined, undefined, undefined, undefined, true, params);
 		});
 		
 	},
 	
-	/**
-	 * 
-	 * @param columnId
-	 * @param values
-	 * @return Array Selected criteria array
-	 */
-	fa_addSelectedCriteria:  function (columnId, values){
-		f_core.Assert(typeof(columnId)=="string", "f_dataGrid.fa_addSelectedCriteria: Invalid columnId parameter ! ("+columnId+")");
-		f_core.Assert(values instanceof Array, "f_dataGrid.fa_addSelectedCriteria: Invalid element parameter ! ("+values+")");
-
-		var selectedCriteria  =  this.fa_getSelectedCriteria();
-		
-		if(selectedCriteria == undefined) {
-			selectedCriteria = [];
-		}
-		
-		selectedCriteria.push( { id: columnId, values: values } );
-		
-		this.fa_setSelectedCriteria(selectedCriteria);
-		
-		return selectedCriteria;
-	},
 		
 	fa_setSelectedCriteria: function (selectedCriteria, refresh){
 		f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
 
 		this._selectedCriteria = selectedCriteria;
-		
+		this._countToken = -1;
 		if(refresh === false) {
 			return;
 		}
 		this._first = 0;
+		
 		
 		this.f_refreshContent(true);
 		
@@ -2178,6 +2125,7 @@ var __members = {
 	 * @return void
 	 */
 	_processSelectedCriteriaResult: function (tokenId, resultCount, availableCriteria) {
+		
 		
 		var cb=this._criteriaEvaluateCallBacks[tokenId];
 		delete this._criteriaEvaluateCallBacks[tokenId];
@@ -2228,6 +2176,37 @@ var __members = {
 		}
 		
 		return this.f_getColumnName(column);
+	},
+	
+	f_serialize : function() {
+
+		
+		if (this._selectedCriteria !== undefined) {
+			var selectedCriteria = this._selectedCriteria;
+			var selectedCriteriaColumns = "";
+			for ( var i = 0; i < selectedCriteria.length; i++) {
+				var criteria = selectedCriteria[i];
+				if (i<1) {
+					selectedCriteriaColumns += criteria.id;
+				}else {
+					selectedCriteriaColumns += ","+criteria.id;
+				}
+				
+				var columns = this._columns;
+				for ( var j = 0; j < columns.length; j++) {
+					var col = columns[j];
+					if(criteria.id == col.f_getId()){
+						var values = criteria.values;
+						this.f_setProperty(criteria.id+":criteriaValues", values[0].value);
+					}
+				} 
+				
+			}
+			
+			this.f_setProperty("selectedCriteriaColumns", selectedCriteriaColumns);	
+		}
+
+		this.f_super(arguments);
 	}
 };
 

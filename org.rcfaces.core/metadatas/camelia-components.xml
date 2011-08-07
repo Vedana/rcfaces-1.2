@@ -1189,6 +1189,7 @@
 
 		<capability id="IPreferencesSettings" />
 		<capability id="IPagedCapability" />
+		<capability id="ICriteriaCountCapability" />
 
 		<capability id="IClientSelectionFullStateCapability"/>
 		<capability id="IClientCheckFullStateCapability"/>

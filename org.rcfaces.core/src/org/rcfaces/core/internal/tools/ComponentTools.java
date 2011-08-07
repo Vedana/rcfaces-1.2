@@ -532,7 +532,7 @@ public final class ComponentTools extends ComponentTools0 {
 			if (childClass == null || childClass == UIComponent.class) {
 				return COMPONENT_EMPTY_ARRAY;
 			}
-			return (UIComponent[]) Array.newInstance(childClass, 0);
+			return (UIComponent[]) Array.newInstance(UIComponent.class , 0);
 		}
 
 		Object children[] = ComponentIterators.list(component, childClass)

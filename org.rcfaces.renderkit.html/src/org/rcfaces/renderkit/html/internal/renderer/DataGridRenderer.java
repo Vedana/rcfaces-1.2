@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
@@ -20,6 +21,8 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
+import org.rcfaces.core.component.CriteriaComponent;
+import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
@@ -27,6 +30,8 @@ import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
+import org.rcfaces.core.component.capability.ICriteriaCountCapability;
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.component.capability.IDragAndDropEffects;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
 import org.rcfaces.core.component.capability.ISelectedValuesCapability;
@@ -376,7 +381,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		boolean searchEnd = (rows > 0);
 		// int firstCount = -1;
 		int count = -1;
-		int criteriaRowCount = 0;
+		int fullCriteriaRowCount = -1;
 		if (searchEnd) {
 			count = firstRowCount;
 		}
@@ -722,20 +727,22 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				}
 
 			}
-
+			int criteriaRowCountFirst = 0;
 			if (selectedCriteria != null) {
+				
 				// On repositionne le FIRST !
-				int i = 0;
-				for (; i < rowIndex;) {
+				int targetFirst = rowIndex;
+				rowIndex = 0;
+				for (int i = 0; i < targetFirst;) {
 
-					int translatedRowIndex = i;
+					int translatedRowIndex = rowIndex;
 
 					if (sortTranslations != null) {
-						if (i >= sortTranslations.length) {
+						if (translatedRowIndex >= sortTranslations.length) {
 							break;
 						}
 
-						translatedRowIndex = sortTranslations[i];
+						translatedRowIndex = sortTranslations[translatedRowIndex];
 					}
 
 					gridComponent.setRowIndex(translatedRowIndex);
@@ -749,16 +756,18 @@ public class DataGridRenderer extends AbstractGridRenderer {
 						varContext.put(rowIndexVar, new Integer(i));
 					}
 
-					if (acceptCriteria(facesContext, gridComponent,
-							selectedCriteria) == false) {
+					rowIndex ++;
+					
+					if (acceptCriteria(facesContext, gridComponent, selectedCriteria) == false) {
 						continue;
 					}
 
 					i++;
+					criteriaRowCountFirst++;
 				}
-				rowIndex += i;
 			}
-
+			
+			int criteriaRowCount = 0;
 			for (int i = 0;; i++) {
 				if (searchEnd == false) {
 					// Pas de recherche de la fin !
@@ -878,7 +887,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				if (searchEnd) {
 					// On teste juste la validité de la fin !
 					if (selectedCriteria != null) {
-						if (rows > 0 && criteriaRowCount > rows) {
+						if (rows > 0 && criteriaRowCount >= rows) {
 							break;
 						}
 
@@ -963,7 +972,43 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 				rowIndex++;
 			}
+			
+			if(selectedCriteria != null) {
+				if (gridComponent instanceof ICriteriaCountCapability){
+					if ( ((ICriteriaCountCapability) gridComponent).isFullCriteriaCount() ) {
+						fullCriteriaRowCount = criteriaRowCount+criteriaRowCountFirst;
+						for (int i = rowIndex;; i++) {
 
+							int translatedRowIndex = i;
+
+							if (sortTranslations != null) {
+								if (translatedRowIndex >= sortTranslations.length) {
+									break;
+								}
+
+								translatedRowIndex = sortTranslations[translatedRowIndex];
+							}
+
+							gridComponent.setRowIndex(translatedRowIndex);
+							boolean available = gridComponent.isRowAvailable();
+							if (available == false) {
+								// ???
+								break;
+							}
+
+							if (rowIndexVar != null) {
+								varContext.put(rowIndexVar, new Integer(i));
+							}
+
+							if (acceptCriteria(facesContext, gridComponent, selectedCriteria) == false) {
+								continue;
+							}
+							fullCriteriaRowCount++;
+						}
+					}
+				}				
+			}
+			
 		} finally {
 			gridComponent.setRowIndex(-1);
 
@@ -985,7 +1030,8 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		// de rows
 
 		if (selectedCriteria != null) {
-			encodeJsRowCount(jsWriter, tableContext, -1 /* criteriaRowCount */);
+			
+			encodeJsRowCount(jsWriter, tableContext,   fullCriteriaRowCount);
 
 		} else if ((unknownRowCount && firstRowCount >= 0)) {
 			encodeJsRowCount(jsWriter, tableContext, count);
@@ -1826,6 +1872,64 @@ public class DataGridRenderer extends AbstractGridRenderer {
 						Properties.CURSOR_VALUE, oldCursorValueObject,
 						cursorValueObject));
 			}
+		}
+		
+		if(gridComponent instanceof ICriteriaManagerCapability){
+			
+			ICriteriaManagerCapability manager = (ICriteriaManagerCapability) gridComponent;
+			ICriteriaContainer[] selectedContainers = manager.listSelectedCriteriaContainers();
+			String containersId = "";
+			for (int i = 0; i < selectedContainers.length; i++) {
+				ICriteriaContainer container = selectedContainers[i];
+					
+				if(i<1){
+					containersId +=container.getId(); 
+				}else {
+					containersId += ","+container.getId();
+				}
+			}
+			
+			 String crit = componentData.getStringProperty("selectedCriteriaColumns");
+			 ICriteriaContainer[] containers =  manager.listCriteriaContainers();
+			 if(crit != null) {
+				 
+				 StringTokenizer st = new StringTokenizer(crit, ",");
+				 ICriteriaContainer[] newcrito =  new ICriteriaContainer[st.countTokens()]; 
+				 for (int i = 0; i < containers.length; i++) {
+					ICriteriaContainer container = containers[i];
+
+					if (container instanceof DataColumnComponent) {
+					
+						DataColumnComponent columnComponent = (DataColumnComponent) container;
+						
+						String value = "";
+						ICriteriaConfiguration criteriaConfiguration= container.getCriteriaConfiguration();
+						
+						StringTokenizer stringTokenizer = new StringTokenizer(crit, ",");
+						for (int j=0; stringTokenizer.hasMoreElements(); j++) {
+							String columnId = stringTokenizer.nextToken();
+							
+							if(columnId.equals(columnComponent.getId())) {
+								value = componentData.getStringProperty(columnId+":criteriaValues");
+								criteriaConfiguration.setSelectedValues(value);
+								newcrito[j] = container;
+							}
+						}
+						if("".equals(value) ) {
+							criteriaConfiguration.setSelectedValues(null);
+						}
+						
+					}
+				}
+				
+				 component.queueEvent(new PropertyChangeEvent(component,
+							Properties.SELECTED_CRITERIA_COLUMNS, containersId,
+							crit)); 
+				 
+				manager.setSelectedCriteriaContainers(newcrito);
+				
+				
+			 }
 		}
 
 		super.decode(context, component, componentData);
