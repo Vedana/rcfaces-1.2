@@ -54,6 +54,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 	private ValueExpression keySearchColumnId;
 	private ValueExpression preferences;
 	private ValueExpression paged;
+	private ValueExpression fullCriteriaCount;
 	private ValueExpression clientSelectionFullState;
 	private ValueExpression clientCheckFullState;
 	private ValueExpression headerVisible;
@@ -219,6 +220,10 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		this.paged = paged;
 	}
 
+	public final void setFullCriteriaCount(ValueExpression fullCriteriaCount) {
+		this.fullCriteriaCount = fullCriteriaCount;
+	}
+
 	public final void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
 		this.clientSelectionFullState = clientSelectionFullState;
 	}
@@ -320,6 +325,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			LOG.debug("  keySearchColumnId='"+keySearchColumnId+"'");
 			LOG.debug("  preferences='"+preferences+"'");
 			LOG.debug("  paged='"+paged+"'");
+			LOG.debug("  fullCriteriaCount='"+fullCriteriaCount+"'");
 			LOG.debug("  clientSelectionFullState='"+clientSelectionFullState+"'");
 			LOG.debug("  clientCheckFullState='"+clientCheckFullState+"'");
 			LOG.debug("  headerVisible='"+headerVisible+"'");
@@ -614,6 +620,15 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 			}
 		}
 
+		if (fullCriteriaCount != null) {
+			if (fullCriteriaCount.isLiteralText()==false) {
+				component.setValueExpression(Properties.FULL_CRITERIA_COUNT, fullCriteriaCount);
+
+			} else {
+				component.setFullCriteriaCount(getBool(fullCriteriaCount.getExpressionString()));
+			}
+		}
+
 		if (clientSelectionFullState != null) {
 			if (clientSelectionFullState.isLiteralText()==false) {
 				component.setValueExpression(Properties.CLIENT_SELECTION_FULL_STATE, clientSelectionFullState);
@@ -791,6 +806,7 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		keySearchColumnId = null;
 		preferences = null;
 		paged = null;
+		fullCriteriaCount = null;
 		clientSelectionFullState = null;
 		clientCheckFullState = null;
 		headerVisible = null;

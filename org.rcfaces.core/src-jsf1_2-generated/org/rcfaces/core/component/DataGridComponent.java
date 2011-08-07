@@ -7,6 +7,7 @@ import org.rcfaces.core.internal.converter.DragDropEffectsConverter;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ISelectableCapability;
 import org.rcfaces.core.internal.capability.ISortedComponentsCapability;
+import org.rcfaces.core.component.capability.ICriteriaCountCapability;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.component.capability.IKeySearchColumnIdCapability;
 import org.rcfaces.core.component.capability.IHeaderVisibilityCapability;
@@ -203,6 +204,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 	IKeySearchColumnIdCapability,
 	IPreferencesSettings,
 	IPagedCapability,
+	ICriteriaCountCapability,
 	IClientSelectionFullStateCapability,
 	IClientCheckFullStateCapability,
 	IHeaderVisibilityCapability,
@@ -225,7 +227,7 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(AbstractDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"dragListener","rowDropEffects","dropListener","dropEffects","fullCriteriaCount","emptyDataMessage","loadListener","checkedValues","selectionListener","paged","additionalInformationListener","cursorValue","border","required","bodyDroppable","doubleClickListener","clientCheckFullState","rowLabelColumnId","horizontalScrollPosition","dropCompleteListener","rowCountVar","dropTypes","rowDragEffects","rowValueColumnId","selectedCriteriaColumns","additionalInformationCardinality","rowIndexVar","checkListener","headerVisible","droppable","selectionCardinality","dragTypes","rowDropTypes","clientAdditionalInformationFullState","checkCardinality","checkable","cellTextWrap","rowDragTypes","additionalInformationValues","showValue","verticalScrollPosition","clientSelectionFullState","preferences","filterProperties","dragEffects","selectedValues","rowStyleClass","keySearchColumnId","readOnly","selectable","draggable","disabled"}));
 	}
 
 	public DataGridComponent() {
@@ -1567,6 +1569,29 @@ public class DataGridComponent extends AbstractDataComponent implements
 
 	public void setPaged(boolean paged) {
 		engine.setProperty(Properties.PAGED, paged);
+	}
+
+	public boolean isFullCriteriaCount() {
+		return isFullCriteriaCount(null);
+	}
+
+	/**
+	 * See {@link #isFullCriteriaCount() isFullCriteriaCount()} for more details
+	 */
+	public boolean isFullCriteriaCount(javax.faces.context.FacesContext facesContext) {
+		return engine.getBoolProperty(Properties.FULL_CRITERIA_COUNT, false, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "fullCriteriaCount" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isFullCriteriaCountSetted() {
+		return engine.isPropertySetted(Properties.FULL_CRITERIA_COUNT);
+	}
+
+	public void setFullCriteriaCount(boolean fullCriteriaCount) {
+		engine.setProperty(Properties.FULL_CRITERIA_COUNT, fullCriteriaCount);
 	}
 
 	public int getClientSelectionFullState() {
