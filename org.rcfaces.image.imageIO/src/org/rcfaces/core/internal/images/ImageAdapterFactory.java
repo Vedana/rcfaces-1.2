@@ -105,6 +105,7 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         return super.getAdapter(adaptableObject, adapterType, parameter);
     }
 
+    @Override
     protected File getTempFolder() {
         if (tempFolder != null) {
             return tempFolder;
@@ -112,6 +113,7 @@ public class ImageAdapterFactory extends ContentAdapterFactory {
         return super.getTempFolder();
     }
 
+    @Override
     protected String getTempPrefix() {
         return TEMP_PREFIX;
     }
