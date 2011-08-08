@@ -881,6 +881,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 
 				if (available == false) {
 					count = rowIndex;
+					fullCriteriaRowCount = criteriaRowCountFirst+criteriaRowCount;
 					break;
 				}
 
@@ -1029,9 +1030,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		// * en mode liste, le dataModel ne pouvait pas encore donner le nombre
 		// de rows
 
-		if (selectedCriteria != null) {
+		if (selectedCriteria != null && rows > 0 ) {
 			
-			encodeJsRowCount(jsWriter, tableContext,   fullCriteriaRowCount);
+			encodeJsRowCount(jsWriter, tableContext, fullCriteriaRowCount);
 
 		} else if ((unknownRowCount && firstRowCount >= 0)) {
 			encodeJsRowCount(jsWriter, tableContext, count);
