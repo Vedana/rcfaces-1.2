@@ -2262,7 +2262,7 @@ var f_core = {
 		return true;
 	},
 	/**
-	 * @method hidden static
+	 * @method public static
 	 * @param Window win
 	 * @param Object parameters
 	 * @param Boolean modal

@@ -112,6 +112,9 @@ public final class GridServerSort {
                     }
 
                     ISortMethod sortMethod = sortMethods[i];
+                    if (sortMethod == null) {
+                    	throw new FacesException("Can not get sort method for column #"+i+" id="+column.getId());
+                    }
                     value = sortMethod
                             .convertValue(facesContext, column, value);
 
