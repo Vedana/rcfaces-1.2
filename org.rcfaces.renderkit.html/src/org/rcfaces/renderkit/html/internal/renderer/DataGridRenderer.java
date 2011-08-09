@@ -788,6 +788,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 				if (rowValueColumn != null) {
 					if (sortTranslations != null) {
 						if (rowIndex >= sortTranslations.length) {
+							if (selectedCriteria != null) {
+								fullCriteriaRowCount = criteriaRowCountFirst+criteriaRowCount;
+							}
 							break;
 						}
 
@@ -829,6 +832,9 @@ public class DataGridRenderer extends AbstractGridRenderer {
 						}
 					} else {
 						if (rowIndex >= sortTranslations.length) {
+							if (selectedCriteria != null) {
+								fullCriteriaRowCount = criteriaRowCountFirst+criteriaRowCount;
+							}
 							break;
 						}
 
