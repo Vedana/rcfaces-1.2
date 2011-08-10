@@ -75,8 +75,10 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 
 		Set<Object>[] selectedValues = new Set[selectedCriteria.length];
 		Set<Object>[] possibleValues = new Set[selectedCriteria.length];
+		Set<Object>[] possibleAndNotValues = new Set[selectedCriteria.length];
 		for (int i = 0; i < possibleValues.length; i++) {
 			possibleValues[i] = new HashSet<Object>();
+			possibleAndNotValues[i] = new HashSet<Object>();
 			selectedValues[i] = selectedCriteria[i].listSelectedValues();
 
 			criteriaContainers.remove(selectedCriteria[i].getConfig()
@@ -109,6 +111,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, sc.getConfig());
 
+					possibleAndNotValues[i].add(dataValue);
 					if (selectedValues[i].contains(dataValue) == false) {
 						continue next_row;
 					}
@@ -133,7 +136,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 		for (int i = 0; i < selectedCriteria.length; i++) {
 			ISelectedCriteria sc = selectedCriteria[i];
 
-			Set<Object> values = possibleValues[i];
+			Set<Object> values = possibleAndNotValues[i];
 			fillValues(facesContext, sc.getConfig(), criteriaItemsByContainer,
 					values);
 		}
