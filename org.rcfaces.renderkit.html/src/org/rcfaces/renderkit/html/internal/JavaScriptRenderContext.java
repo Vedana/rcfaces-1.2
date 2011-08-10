@@ -159,6 +159,9 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
                 return;
             }
+
+            pushUnitializedComponent(componentRenderContext
+                    .getComponentClientId());
         }
 
         if (sendComplete) {
