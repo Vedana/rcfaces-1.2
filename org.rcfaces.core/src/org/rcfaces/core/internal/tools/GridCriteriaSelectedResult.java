@@ -135,8 +135,14 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 
 		for (int i = 0; i < selectedCriteria.length; i++) {
 			ISelectedCriteria sc = selectedCriteria[i];
-
-			Set<Object> values = possibleAndNotValues[i];
+			
+			Set<Object> values = null;
+			if (i == selectedCriteria.length-1 ) {
+				 values = possibleAndNotValues[i];
+			}else {
+				values = possibleValues[i];
+			}
+			
 			fillValues(facesContext, sc.getConfig(), criteriaItemsByContainer,
 					values);
 		}
