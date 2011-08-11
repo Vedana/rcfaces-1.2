@@ -76,9 +76,11 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 		Set<Object>[] selectedValues = new Set[selectedCriteria.length];
 		Set<Object>[] possibleValues = new Set[selectedCriteria.length];
 		Set<Object>[] possibleAndNotValues = new Set[selectedCriteria.length];
+		Set<Object>[] excludedValues = new Set[selectedCriteria.length];
 		for (int i = 0; i < possibleValues.length; i++) {
 			possibleValues[i] = new HashSet<Object>();
 			possibleAndNotValues[i] = new HashSet<Object>();
+			excludedValues[i] = new HashSet<Object>();
 			selectedValues[i] = selectedCriteria[i].listSelectedValues();
 
 			criteriaContainers.remove(selectedCriteria[i].getConfig()
@@ -104,19 +106,49 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 				if (gridComponent.isRowAvailable() == false) {
 					break;
 				}
-
+				boolean nextRow = false ;
 				for (int i = 0; i < selectedCriteria.length; i++) {
 					ISelectedCriteria sc = selectedCriteria[i];
 
 					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, sc.getConfig());
-
-					possibleAndNotValues[i].add(dataValue);
-					if (selectedValues[i].contains(dataValue) == false) {
-						continue next_row;
+					
+					if (nextRow == false ) {
+						possibleAndNotValues[i].add(dataValue);
+					}else {
+						excludedValues[i].add(dataValue);
 					}
-
-					possibleValues[i].add(dataValue);
+					
+					if (selectedValues[i].contains(dataValue) == false) {
+						nextRow = true;
+						for (int k = 0; k < i; k++) {
+							ISelectedCriteria sc2 = selectedCriteria[k];
+							Object dataValue2 = CriteriaTools.getDataValue(facesContext,
+									gridComponent, sc2.getConfig(), false);
+								excludedValues[k].add(dataValue2);
+						}
+						
+						continue ;
+					}
+					
+					if (nextRow == false) {
+						possibleValues[i].add(dataValue);
+					}
+					
+					for (int k = 0; k < i; k++) {
+						ISelectedCriteria sc2 = selectedCriteria[k];
+						Object dataValue2 = CriteriaTools.getDataValue(facesContext,
+								gridComponent, sc2.getConfig(), false);
+						
+						if(excludedValues[k].contains(dataValue2) == false) {
+							possibleValues[k].add(dataValue2);
+						}
+					}
+				}
+				
+				
+				if (nextRow) {
+					continue next_row;
 				}
 
 				for (int i = 0; i < notSelectedContainers.length; i++) {
@@ -124,6 +156,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 							gridComponent, notSelectedContainers[i]);
 
 					notPossibleValues[i].add(dataValue);
+					
 				}
 
 				result.add(gridComponent.getRowData());
