@@ -115,8 +115,6 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 					
 					if (nextRow == false ) {
 						possibleAndNotValues[i].add(dataValue);
-					}else {
-						excludedValues[i].add(dataValue);
 					}
 					
 					if (selectedValues[i].contains(dataValue) == false) {
@@ -129,6 +127,14 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 						}
 						
 						continue ;
+					} 
+					if (!nextRow) {
+						for (int k = 0; k < i; k++) {
+							ISelectedCriteria sc2 = selectedCriteria[k];
+							Object dataValue2 = CriteriaTools.getDataValue(facesContext,
+									gridComponent, sc2.getConfig(), false);
+								possibleValues[k].add(dataValue2);
+						}
 					}
 					
 					if (nextRow == false) {
@@ -140,7 +146,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 						Object dataValue2 = CriteriaTools.getDataValue(facesContext,
 								gridComponent, sc2.getConfig(), false);
 						
-						if(excludedValues[k].contains(dataValue2) == false) {
+						if(excludedValues[k].contains(dataValue2) == false ) {
 							possibleValues[k].add(dataValue2);
 						}
 					}
