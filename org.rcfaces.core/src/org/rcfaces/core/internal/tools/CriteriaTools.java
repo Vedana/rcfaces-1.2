@@ -208,8 +208,12 @@ public class CriteriaTools extends CollectionTools {
 
 	public static Object getDataValue(FacesContext facesContext,
 			IGridComponent gridComponent, ICriteriaConfiguration config) {
+		return CriteriaTools.getDataValue(facesContext, gridComponent, config, true);
+	}
+	public static Object getDataValue(FacesContext facesContext,
+				IGridComponent gridComponent, ICriteriaConfiguration config, boolean returnIfSetted) {
 
-		if (config.isCriteriaValueSetted()) {
+		if (config.isCriteriaValueSetted() && returnIfSetted) {
 			return config.getCriteriaValue();
 		}
 
@@ -218,7 +222,8 @@ public class CriteriaTools extends CollectionTools {
 			ValueHolder valueHolder = (ValueHolder) container;
 
 			Object dataValue = valueHolder.getValue();
-
+			
+			//dataValue = ((String) dataValue).replaceAll(",", "");
 			if (dataValue != null) {
 				Converter converter = valueHolder.getConverter();
 				if (converter != null) {
