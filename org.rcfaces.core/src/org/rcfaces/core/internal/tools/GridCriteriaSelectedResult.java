@@ -75,12 +75,8 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 
 		Set<Object>[] selectedValues = new Set[selectedCriteria.length];
 		Set<Object>[] possibleValues = new Set[selectedCriteria.length];
-		Set<Object>[] possibleAndNotValues = new Set[selectedCriteria.length];
-		Set<Object>[] excludedValues = new Set[selectedCriteria.length];
 		for (int i = 0; i < possibleValues.length; i++) {
 			possibleValues[i] = new HashSet<Object>();
-			possibleAndNotValues[i] = new HashSet<Object>();
-			excludedValues[i] = new HashSet<Object>();
 			selectedValues[i] = selectedCriteria[i].listSelectedValues();
 
 			criteriaContainers.remove(selectedCriteria[i].getConfig()
@@ -98,7 +94,7 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 			notSelectedContainers[j] = cc.getCriteriaConfiguration();
 			notPossibleValues[j] = new HashSet<Object>();
 		}
-
+		
 		try {
 			next_row: for (int idx = 0;; idx++) {
 				gridComponent.setRowIndex(idx);
@@ -106,55 +102,32 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 				if (gridComponent.isRowAvailable() == false) {
 					break;
 				}
-				boolean nextRow = false ;
+				boolean nextRow  = false;
 				for (int i = 0; i < selectedCriteria.length; i++) {
 					ISelectedCriteria sc = selectedCriteria[i];
 
 					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, sc.getConfig());
-					
-					if (nextRow == false ) {
-						possibleAndNotValues[i].add(dataValue);
+					boolean outCriteria = false;
+					if(nextRow == false)  {
+						for (int z = 0; z< selectedCriteria.length; z++ ){
+							if(z==i){
+								continue;
+							}
+							ISelectedCriteria sc2 = selectedCriteria[z];
+							Object dataValue2 = CriteriaTools.getDataValue(facesContext,
+									gridComponent, sc2.getConfig());
+							if (selectedValues[z].contains(dataValue2)== false){
+								outCriteria = true;
+							}
+						}
+						if (outCriteria == false)
+							possibleValues[i].add(dataValue);
 					}
-					
 					if (selectedValues[i].contains(dataValue) == false) {
-						nextRow = true;
-						for (int k = 0; k < i; k++) {
-							ISelectedCriteria sc2 = selectedCriteria[k];
-							Object dataValue2 = CriteriaTools.getDataValue(facesContext,
-									gridComponent, sc2.getConfig(), false);
-								excludedValues[k].add(dataValue2);
-						}
-						
-						continue ;
-					} 
-					if (!nextRow) {
-						for (int k = 0; k < i; k++) {
-							ISelectedCriteria sc2 = selectedCriteria[k];
-							Object dataValue2 = CriteriaTools.getDataValue(facesContext,
-									gridComponent, sc2.getConfig(), false);
-								possibleValues[k].add(dataValue2);
-						}
+						nextRow  = true;
+						continue next_row;
 					}
-					
-					if (nextRow == false) {
-						possibleValues[i].add(dataValue);
-					}
-					
-					for (int k = 0; k < i; k++) {
-						ISelectedCriteria sc2 = selectedCriteria[k];
-						Object dataValue2 = CriteriaTools.getDataValue(facesContext,
-								gridComponent, sc2.getConfig(), false);
-						
-						if(excludedValues[k].contains(dataValue2) == false ) {
-							possibleValues[k].add(dataValue2);
-						}
-					}
-				}
-				
-				
-				if (nextRow) {
-					continue next_row;
 				}
 
 				for (int i = 0; i < notSelectedContainers.length; i++) {
@@ -162,26 +135,21 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 							gridComponent, notSelectedContainers[i]);
 
 					notPossibleValues[i].add(dataValue);
-					
 				}
 
 				result.add(gridComponent.getRowData());
+				
 			}
-
+			
 		} finally {
 			gridComponent.setRowIndex(-1);
 		}
-
+		
 		for (int i = 0; i < selectedCriteria.length; i++) {
 			ISelectedCriteria sc = selectedCriteria[i];
-			
-			Set<Object> values = null;
-			if (i == selectedCriteria.length-1 ) {
-				 values = possibleAndNotValues[i];
-			}else {
-				values = possibleValues[i];
-			}
-			
+
+		Set<Object> values = null;
+			values = possibleValues[i];
 			fillValues(facesContext, sc.getConfig(), criteriaItemsByContainer,
 					values);
 		}

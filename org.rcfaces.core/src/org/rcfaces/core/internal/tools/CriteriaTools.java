@@ -207,13 +207,9 @@ public class CriteriaTools extends CollectionTools {
 	}
 
 	public static Object getDataValue(FacesContext facesContext,
-			IGridComponent gridComponent, ICriteriaConfiguration config) {
-		return CriteriaTools.getDataValue(facesContext, gridComponent, config, true);
-	}
-	public static Object getDataValue(FacesContext facesContext,
-				IGridComponent gridComponent, ICriteriaConfiguration config, boolean returnIfSetted) {
+				IGridComponent gridComponent, ICriteriaConfiguration config) {
 
-		if (config.isCriteriaValueSetted() && returnIfSetted) {
+		if (config.isCriteriaValueSetted()) {
 			return config.getCriteriaValue();
 		}
 
