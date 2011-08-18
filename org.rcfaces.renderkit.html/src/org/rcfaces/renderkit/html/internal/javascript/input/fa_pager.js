@@ -17,7 +17,7 @@ var __members = {
 	 */
 	fa_pagedComponentInitialized: f_class.ABSTRACT
 	
-}
+};
 
 new f_aspect("fa_pager", null, __members);
 	
