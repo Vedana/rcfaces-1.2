@@ -163,6 +163,12 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return i.doubleValue();
     }
 
+    /**
+     * Ne retourne pas de valeur de l'expression EL
+     * 
+     * @param propertyName
+     * @return
+     */
     final Object getLocalProperty(String propertyName) {
 
         if (debugEnabled) {
@@ -190,6 +196,14 @@ public class BasicComponentEngine extends AbstractComponentEngine {
         return value;
     }
 
+    /**
+     * Retourne la valeur de la propriété même si il faut utiliser une EL
+     * 
+     * @param propertyName
+     * @param requestedClass
+     * @param facesContext
+     * @return
+     */
     public final Object getInternalProperty(String propertyName,
             Class requestedClass, FacesContext facesContext) {
 
