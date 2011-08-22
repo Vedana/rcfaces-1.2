@@ -26,6 +26,7 @@ import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.item.CriteriaItem;
@@ -33,10 +34,10 @@ import org.rcfaces.core.model.ICriteriaSelectedResult;
 import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
@@ -157,7 +158,7 @@ public class CriteriaGridService extends AbstractHtmlService {
 				ISelectedCriteria[] selectedCriteria = null;
 				String criteria_s = (String) parameters.get("selectedCriteria");
 				if (criteria_s != null) {
-					selectedCriteria = DataGridService.computeCriteriaConfigs(
+					selectedCriteria = CriteriaTools.computeCriteriaConfigs(
 							facesContext, (IGridComponent) component,
 							criteria_s);
 				}

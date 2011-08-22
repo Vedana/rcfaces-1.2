@@ -4517,12 +4517,13 @@ Dans le cas d'un mode period !
 
 
 	<component id="criteria" extends="cameliaBase" render="false">
+	
 		<implements id="org.rcfaces.core.internal.capability.ISelectionComponent" importMethods="false" />
 		<implements id="org.rcfaces.core.internal.capability.ICriteriaConfiguration" importMethods="false" />
 
 		<capability id="ISelectionCardinalityCapability" />
+		<capability id="ISelectedValuesCapability" onlyValueBinding="true" />
 		
-		<attribute id="selectedValues" type="java.lang.Object"/>
 		<attribute id="criteriaValue" type="java.lang.Object"/>
 
 		<attribute id="criteriaTitle" type="java.lang.String" />

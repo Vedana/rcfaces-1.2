@@ -1,17 +1,23 @@
 package org.rcfaces.core.internal.tools;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.internal.capability.IComponentEngine;
 import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
@@ -31,6 +37,9 @@ public class CriteriaTools extends CollectionTools {
 	private static final ISelectedCriteria[] SELECTED_CRITERIA_EMPTY_ARRAY = new ISelectedCriteria[0];
 
 	private static final ICriteriaContainer[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ICriteriaContainer[0];
+	
+	private static final String DEFAULT_ENCODE_CHARSET = "UTF8";
+	private static final Log LOG = LogFactory.getLog(CriteriaTools.class);
 
 	public static ICriteriaContainer[] getSelectedCriteriaColumns(
 			FacesContext facesContext, UIComponent component,
@@ -232,5 +241,96 @@ public class CriteriaTools extends CollectionTools {
 		}
 
 		return null;
+	}
+	
+	public static ISelectedCriteria[] computeCriteriaConfigs(
+			FacesContext facesContext, IGridComponent dgc, String criteria_s) {
+		if (criteria_s == null) {
+			return null;
+		}
+
+		List<ISelectedCriteria> criteriaList = new ArrayList<ISelectedCriteria>();
+
+		List<UIComponent> children = ((UIComponent) dgc).getChildren();
+
+		try {
+			StringTokenizer st = new StringTokenizer(criteria_s, ", ");
+			for (; st.hasMoreTokens();) {
+				String columnId = URLDecoder.decode(st.nextToken(),
+						DEFAULT_ENCODE_CHARSET);
+
+				ICriteriaContainer criteriaContainer = null;
+
+				for (UIComponent child : children) {
+					if ((child instanceof ICriteriaContainer) == false) {
+						continue;
+					}
+
+					if (columnId.equals(child.getId()) == false) {
+						continue;
+					}
+
+					criteriaContainer = (ICriteriaContainer) child;
+					break;
+				}
+
+				if (criteriaContainer == null) {
+					LOG.error("Can not find criteriaContainer '" + columnId
+							+ "'.");
+
+					continue;
+				}
+
+				ICriteriaConfiguration criteriaConfiguration = criteriaContainer
+						.getCriteriaConfiguration();
+
+				String itemValues = URLDecoder.decode(st.nextToken(),
+						DEFAULT_ENCODE_CHARSET);
+
+				Set<Object> convertedValues = convertCriteriaValues(
+						facesContext, criteriaConfiguration, itemValues);
+				if (convertedValues == null) {
+					continue;
+				}
+
+				ISelectedCriteria selectedCriteria = new BasicSelectedCriteria(
+						criteriaConfiguration, convertedValues);
+
+				criteriaList.add(selectedCriteria);
+			}
+
+		} catch (UnsupportedEncodingException ex) {
+			LOG.error("Never happen !", ex);
+		}
+
+		return criteriaList.toArray(new ISelectedCriteria[criteriaList.size()]);
+	}
+	
+	private static Set<Object> convertCriteriaValues(FacesContext facesContext,
+			ICriteriaConfiguration criteriaConfiguration, String itemValues)
+			throws UnsupportedEncodingException {
+
+		StringTokenizer st = new StringTokenizer(itemValues, ",");
+		if (st.hasMoreTokens() == false) {
+			return Collections.emptySet();
+		}
+
+		Converter converter = criteriaConfiguration.getCriteriaConverter();
+
+		UIComponent component = (UIComponent) criteriaConfiguration;
+
+		Set<Object> set = new HashSet<Object>();
+
+		for (; st.hasMoreTokens();) {
+			String stringValue = URLDecoder.decode(st.nextToken(),
+					DEFAULT_ENCODE_CHARSET);
+
+			Object value = ValuesTools.convertStringToValue(facesContext,
+					component, converter, stringValue, null, false);
+
+			set.add(value);
+		}
+
+		return Collections.unmodifiableSet(set);
 	}
 }

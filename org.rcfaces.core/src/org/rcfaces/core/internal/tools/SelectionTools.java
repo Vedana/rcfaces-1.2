@@ -179,7 +179,7 @@ public class SelectionTools extends CollectionTools {
 	}
 
 	public static void setSelectionValues(FacesContext facesContext,
-			ISelectionComponent component, Set valuesSet) {
+			ISelectionProvider component, Set valuesSet) {
 
 		setValues((UIComponent) component, SELECTION_PROVIDER_VALUES_ACCESSOR,
 				valuesSet);

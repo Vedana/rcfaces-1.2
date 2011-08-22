@@ -8,15 +8,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 
@@ -24,7 +17,6 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 import javax.servlet.ServletResponse;
@@ -35,13 +27,9 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
-import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
-import org.rcfaces.core.internal.capability.ICriteriaContainer;
-import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
-import org.rcfaces.core.internal.tools.BasicSelectedCriteria;
-import org.rcfaces.core.internal.tools.ValuesTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
 import org.rcfaces.core.model.ISelectedCriteria;
@@ -49,9 +37,9 @@ import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
@@ -70,8 +58,6 @@ public class DataGridService extends AbstractHtmlService {
 	private static final int DEFAULT_BUFFER_SIZE = 4096;
 
 	private static final String DATAGRID_SERVICE_VERSION = "1.0.0";
-
-	private static final String DEFAULT_ENCODE_CHARSET = "UTF8";
 
 	public DataGridService() {
 	}
@@ -186,7 +172,7 @@ public class DataGridService extends AbstractHtmlService {
 
 			ISelectedCriteria[] criteriaConfigs = null;
 			String criteria_s = (String) parameters.get("criteria");
-			criteriaConfigs = computeCriteriaConfigs(facesContext, dgc,
+			criteriaConfigs = CriteriaTools.computeCriteriaConfigs(facesContext, dgc,
 					criteria_s);
 
 			DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
@@ -256,96 +242,7 @@ public class DataGridService extends AbstractHtmlService {
 		facesContext.responseComplete();
 	}
 
-	static ISelectedCriteria[] computeCriteriaConfigs(
-			FacesContext facesContext, IGridComponent dgc, String criteria_s) {
-		if (criteria_s == null) {
-			return null;
-		}
-
-		List<ISelectedCriteria> criteriaList = new ArrayList<ISelectedCriteria>();
-
-		List<UIComponent> children = ((UIComponent) dgc).getChildren();
-
-		try {
-			StringTokenizer st = new StringTokenizer(criteria_s, ", ");
-			for (; st.hasMoreTokens();) {
-				String columnId = URLDecoder.decode(st.nextToken(),
-						DEFAULT_ENCODE_CHARSET);
-
-				ICriteriaContainer criteriaContainer = null;
-
-				for (UIComponent child : children) {
-					if ((child instanceof ICriteriaContainer) == false) {
-						continue;
-					}
-
-					if (columnId.equals(child.getId()) == false) {
-						continue;
-					}
-
-					criteriaContainer = (ICriteriaContainer) child;
-					break;
-				}
-
-				if (criteriaContainer == null) {
-					LOG.error("Can not find criteriaContainer '" + columnId
-							+ "'.");
-
-					continue;
-				}
-
-				ICriteriaConfiguration criteriaConfiguration = criteriaContainer
-						.getCriteriaConfiguration();
-
-				String itemValues = URLDecoder.decode(st.nextToken(),
-						DEFAULT_ENCODE_CHARSET);
-
-				Set<Object> convertedValues = convertCriteriaValues(
-						facesContext, criteriaConfiguration, itemValues);
-				if (convertedValues == null) {
-					continue;
-				}
-
-				ISelectedCriteria selectedCriteria = new BasicSelectedCriteria(
-						criteriaConfiguration, convertedValues);
-
-				criteriaList.add(selectedCriteria);
-			}
-
-		} catch (UnsupportedEncodingException ex) {
-			LOG.error("Never happen !", ex);
-		}
-
-		return criteriaList.toArray(new ISelectedCriteria[criteriaList.size()]);
-	}
-
-	private static Set<Object> convertCriteriaValues(FacesContext facesContext,
-			ICriteriaConfiguration criteriaConfiguration, String itemValues)
-			throws UnsupportedEncodingException {
-
-		StringTokenizer st = new StringTokenizer(itemValues, ",");
-		if (st.hasMoreTokens() == false) {
-			return Collections.emptySet();
-		}
-
-		Converter converter = criteriaConfiguration.getCriteriaConverter();
-
-		UIComponent component = (UIComponent) criteriaConfiguration;
-
-		Set<Object> set = new HashSet<Object>();
-
-		for (; st.hasMoreTokens();) {
-			String stringValue = URLDecoder.decode(st.nextToken(),
-					DEFAULT_ENCODE_CHARSET);
-
-			Object value = ValuesTools.convertStringToValue(facesContext,
-					component, converter, stringValue, null, false);
-
-			set.add(value);
-		}
-
-		return Collections.unmodifiableSet(set);
-	}
+	
 
 	private DataGridRenderer getDataGridRenderer(FacesContext facesContext,
 			DataGridComponent component) {

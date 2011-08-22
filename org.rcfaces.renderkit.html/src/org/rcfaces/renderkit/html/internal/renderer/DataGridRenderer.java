@@ -68,6 +68,7 @@ import org.rcfaces.core.internal.tools.GridServerSort;
 import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.lang.provider.ICursorProvider;
+import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
@@ -1732,7 +1733,7 @@ public class DataGridRenderer extends AbstractGridRenderer {
 							deselectedRows);
 
 					SelectionTools.setSelectionValues(facesContext,
-							(ISelectionComponent) gridComponent,
+							(ISelectionProvider) gridComponent,
 							newSelectedValues);
 
 				} else if (gridComponent instanceof ISelectionRangeComponent) {
@@ -1899,43 +1900,32 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			 String crit = componentData.getStringProperty("selectedCriteriaColumns");
 			 ICriteriaContainer[] containers =  manager.listCriteriaContainers();
 			 if(crit != null) {
-				 
-				 StringTokenizer st = new StringTokenizer(crit, ",");
-				 ICriteriaContainer[] newcrito =  new ICriteriaContainer[st.countTokens()]; 
-				 for (int i = 0; i < containers.length; i++) {
-					ICriteriaContainer container = containers[i];
-
-					if (container instanceof DataColumnComponent) {
-					
-						DataColumnComponent columnComponent = (DataColumnComponent) container;
-						
-						String value = "";
-						ICriteriaConfiguration criteriaConfiguration= container.getCriteriaConfiguration();
-						
-						StringTokenizer stringTokenizer = new StringTokenizer(crit, ",");
-						for (int j=0; stringTokenizer.hasMoreElements(); j++) {
-							String columnId = stringTokenizer.nextToken();
-							
-							if(columnId.equals(columnComponent.getId())) {
-								value = componentData.getStringProperty(columnId+":criteriaValues");
-								criteriaConfiguration.setSelectedValues(value);
-								newcrito[j] = container;
-							}
-						}
-						if("".equals(value) ) {
-							criteriaConfiguration.setSelectedValues(null);
-						}
-						
-					}
+				
+				ISelectedCriteria[] selectedCriteria = null;
+				String criteria_s = componentData.getStringProperty("criteriaValues");
+				if (criteria_s != null) {
+					selectedCriteria = CriteriaTools.computeCriteriaConfigs(
+							facesContext, (IGridComponent) component,
+							criteria_s);
 				}
 				
-				 component.queueEvent(new PropertyChangeEvent(component,
+				ICriteriaContainer[] newSelectedCriteria =  new ICriteriaContainer[selectedCriteria.length];
+				for (int i = 0; i < selectedCriteria.length; i++) {
+					ISelectedCriteria iSelectedCriteria = selectedCriteria[i];
+					
+					Set<Object> values = iSelectedCriteria.listSelectedValues();
+					SelectionTools.setSelectionValues(facesContext,
+							 iSelectedCriteria.getConfig(),
+							values);
+
+					newSelectedCriteria[i] = iSelectedCriteria.getConfig().getCriteriaContainer();
+				}
+								
+				component.queueEvent(new PropertyChangeEvent(component,
 							Properties.SELECTED_CRITERIA_COLUMNS, containersId,
 							crit)); 
 				 
-				manager.setSelectedCriteriaContainers(newcrito);
-				
-				
+				manager.setSelectedCriteriaContainers(newSelectedCriteria);
 			 }
 		}
 

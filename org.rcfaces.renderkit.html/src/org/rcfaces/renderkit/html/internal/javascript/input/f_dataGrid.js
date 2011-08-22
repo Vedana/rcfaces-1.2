@@ -1893,6 +1893,7 @@ var __members = {
 		
 		this.f_super(arguments, dragAndDropEngine, infos);
 	},
+	
 	f_outDropInfos: function(dragAndDropEngine, infos) {
 		var row=infos.item;
 		
@@ -1910,35 +1911,6 @@ var __members = {
 		}
 		
 		this.f_super(arguments, dragAndDropEngine, infos);
-	},
-	
-	/**
-	 * 
-	 * @param Array selectedCriteria
-	 * @return
-	 */
-	_computeSelectedCriteria : function(selectedCriteria) {
-		
-		if (selectedCriteria === undefined) {
-			return undefined;
-		}
-		
-		var result = new Array();
-		for (var i = 0; i < selectedCriteria.length; i++) {
-			var crit=selectedCriteria[i];
-			
-			result.push(encodeURIComponent(crit.id));
-			
-			var array= crit.values;
-			var arrayString=new Array;
-			for(var j=0;j<array.length;j++) {			
-				arrayString.push(encodeURIComponent(array[j].value));
-			}
-			
-			result.push(encodeURIComponent(arrayString.join(',')));
-		}
-		
-		return result.join(',');
 	},
 	
 	fa_evaluateCriteria: function (selectedCriteria, callBack, waitingElement){
@@ -2077,35 +2049,29 @@ var __members = {
 	},
 	
 		
-	fa_setSelectedCriteria: function (selectedCriteria, refresh){
-		f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
-
-		this._selectedCriteria = selectedCriteria;
-		this._countToken = -1;
-		if(refresh === false) {
-			return;
-		}
-		this._first = 0;
-		
-		
-		this.f_refreshContent(true);
-		
-	},
+//	fa_setSelectedCriteria: function (selectedCriteria, refresh){
+//		f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
+//
+//		this._selectedCriteria = selectedCriteria;
+//		this._countToken = -1;
+//		if(refresh === false) {
+//			return;
+//		}
+//		this._first = 0;
+//		
+//		
+//		this.f_refreshContent(true);
+//		
+//	},
 	
-	/**
-	 * 
-	 * @return Object Selected criteria
-	 */
-	fa_getSelectedCriteria: function () {
-		return this._selectedCriteria;
-	},
+//	/**
+//	 * 
+//	 * @return Object Selected criteria
+//	 */
+//	fa_getSelectedCriteria: function () {
+//		return this._selectedCriteria;
+//	},
 	
-	/**
-	 * Returns the cardinality of a column criteria
-	 * 
-	 * @param String columnId Identifier of column
-	 * @return Number  criteria cardinality constant or "undefined" if the column is not known 
-	 */
 	fa_getColumnCriteriaCardinality: function (columnId) {
 		f_core.Assert(typeof(columnId)=="string" || typeof(columnId)=="object", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
 
@@ -2125,7 +2091,6 @@ var __members = {
 	 * @return void
 	 */
 	_processSelectedCriteriaResult: function (tokenId, resultCount, availableCriteria) {
-		
 		
 		var cb=this._criteriaEvaluateCallBacks[tokenId];
 		delete this._criteriaEvaluateCallBacks[tokenId];
@@ -2176,38 +2141,9 @@ var __members = {
 		}
 		
 		return this.f_getColumnName(column);
-	},
-	
-	f_serialize : function() {
-
-		
-		if (this._selectedCriteria !== undefined) {
-			var selectedCriteria = this._selectedCriteria;
-			var selectedCriteriaColumns = "";
-			for ( var i = 0; i < selectedCriteria.length; i++) {
-				var criteria = selectedCriteria[i];
-				if (i<1) {
-					selectedCriteriaColumns += criteria.id;
-				}else {
-					selectedCriteriaColumns += ","+criteria.id;
-				}
-				
-				var columns = this._columns;
-				for ( var j = 0; j < columns.length; j++) {
-					var col = columns[j];
-					if(criteria.id == col.f_getId()){
-						var values = criteria.values;
-						this.f_setProperty(criteria.id+":criteriaValues", values[0].value);
-					}
-				} 
-				
-			}
-			
-			this.f_setProperty("selectedCriteriaColumns", selectedCriteriaColumns);	
-		}
-
-		this.f_super(arguments);
 	}
+	
+	
 };
 
 new f_class("f_dataGrid", {
