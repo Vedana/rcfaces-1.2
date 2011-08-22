@@ -86,12 +86,7 @@ public class CriteriaTag extends CameliaTag implements Tag {
 		}
 
 		if (selectedValues != null) {
-			if (selectedValues.isLiteralText()==false) {
 				component.setValueExpression(Properties.SELECTED_VALUES, selectedValues);
-
-			} else {
-				component.setSelectedValues(selectedValues.getExpressionString());
-			}
 		}
 
 		if (criteriaValue != null) {

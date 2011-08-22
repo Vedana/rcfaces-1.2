@@ -8,6 +8,7 @@ import org.rcfaces.core.internal.tools.SelectionTools;
 import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.ISelectionCardinalityCapability;
 import javax.faces.context.FacesContext;
+import org.rcfaces.core.component.capability.ISelectedValuesCapability;
 import org.rcfaces.core.item.CriteriaItem;
 import javax.faces.convert.Converter;
 import org.rcfaces.core.model.ISelectedCriteria;
@@ -25,6 +26,7 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 
 public class CriteriaComponent extends CameliaBaseComponent implements 
 	ISelectionCardinalityCapability,
+	ISelectedValuesCapability,
 	ISelectionComponent,
 	ICriteriaConfiguration {
 
@@ -185,40 +187,41 @@ public class CriteriaComponent extends CameliaBaseComponent implements
 		engine.setProperty(Properties.SELECTION_CARDINALITY, selectionCardinality);
 	}
 
-	/**
-	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
-	 * @return table of values
-	 */
-	public Object getSelectedValues() {
+	public java.lang.Object getSelectedValues() {
 		return getSelectedValues(null);
 	}
 
 	/**
-	 * Returns a table of the values associated with selected nodes for the component. (Binding only)
-	 * @return table of values
+	 * See {@link #getSelectedValues() getSelectedValues()} for more details
 	 */
-	public Object getSelectedValues(javax.faces.context.FacesContext facesContext) {
-		return engine.getValue(Properties.SELECTED_VALUES, facesContext);
+	public java.lang.Object getSelectedValues(javax.faces.context.FacesContext facesContext) {
+		return engine.getProperty(Properties.SELECTED_VALUES, facesContext);
 	}
 
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
-	public void setSelectedValues(Object selectedValues) {
-		engine.setValue(Properties.SELECTED_VALUES, selectedValues);
-	}
-
-	/**
-	 * Sets a table of the values associated with selected nodes for the component. (Binding only)
-	 * @param selectedValues table of values
-	 */
 	/**
 	 * Returns <code>true</code> if the attribute "selectedValues" is set.
 	 * @return <code>true</code> if the attribute is set.
 	 */
-	public boolean isSelectedValuesSetted() {
+	public final boolean isSelectedValuesSetted() {
 		return engine.isPropertySetted(Properties.SELECTED_VALUES);
+	}
+
+	public void setSelectedValues(java.lang.Object selectedValues) {
+		engine.setProperty(Properties.SELECTED_VALUES, selectedValues);
+	}
+
+	/**
+	 * Return the type of the property represented by the {@link ValueExpression}, relative to the specified {@link javax.faces.context.FacesContext}.
+	 */
+	public Class getSelectedValuesType(javax.faces.context.FacesContext facesContext) {
+		ValueExpression valueExpression=engine.getValueExpressionProperty(Properties.SELECTED_VALUES);
+		if (valueExpression==null) {
+			return null;
+		}
+		if (facesContext==null) {
+			facesContext=javax.faces.context.FacesContext.getCurrentInstance();
+		}
+		return valueExpression.getType(facesContext.getELContext());
 	}
 
 	public Object getCriteriaValue() {
