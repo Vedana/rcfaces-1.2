@@ -169,7 +169,7 @@ var __members = {
 	 * @method protected abstract
 	 */
 	f_performMessageChanges: f_class.ABSTRACT	
-}
+};
 
 new f_aspect("fa_message", {
 	members: __members

@@ -9,19 +9,27 @@ package org.rcfaces.core.component.capability;
  * @version $Revision$ $Date$
  */
 public interface ILayoutPositionCapability {
-    int getLeft();
+    Number getLeft();
 
-    void setLeft(int left);
+    void setLeft(Number left);
 
-    int getRight();
+    Number getRight();
 
-    void setRight(int right);
+    void setRight(Number right);
 
-    int getTop();
+    Number getTop();
 
-    void setTop(int top);
+    void setTop(Number top);
 
-    int getBottom();
+    Number getBottom();
 
-    void setBottom(int bottom);
+    void setBottom(Number bottom);
+
+    Number getHorizontalCenter();
+
+    void setHorizontalCenter(Number horizontalCenter);
+
+    Number getVerticalCenter();
+
+    void setVerticalCenter(Number verticalCenter);
 }

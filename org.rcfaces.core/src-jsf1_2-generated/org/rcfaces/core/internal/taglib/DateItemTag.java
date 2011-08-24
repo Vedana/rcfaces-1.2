@@ -28,23 +28,23 @@ public class DateItemTag extends SelectItemTag implements Tag {
 		return DateItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setMenuPopupId(ValueExpression menuPopupId) {
+	public void setMenuPopupId(ValueExpression menuPopupId) {
 		this.menuPopupId = menuPopupId;
 	}
 
-	public final void setLiteralLocale(ValueExpression literalLocale) {
+	public void setLiteralLocale(ValueExpression literalLocale) {
 		this.literalLocale = literalLocale;
 	}
 
-	public final void setLiteralTimeZone(ValueExpression literalTimeZone) {
+	public void setLiteralTimeZone(ValueExpression literalTimeZone) {
 		this.literalTimeZone = literalTimeZone;
 	}
 

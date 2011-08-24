@@ -32,43 +32,43 @@ public class TreeNodeTag extends ExpandableItemTag implements Tag {
 		return TreeNodeComponent.COMPONENT_TYPE;
 	}
 
-	public final void setGroupName(ValueExpression groupName) {
+	public void setGroupName(ValueExpression groupName) {
 		this.groupName = groupName;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setMenuPopupId(ValueExpression menuPopupId) {
+	public void setMenuPopupId(ValueExpression menuPopupId) {
 		this.menuPopupId = menuPopupId;
 	}
 
-	public final void setInputType(ValueExpression inputType) {
+	public void setInputType(ValueExpression inputType) {
 		this.inputType = inputType;
 	}
 
-	public final void setDragEffects(ValueExpression dragEffects) {
+	public void setDragEffects(ValueExpression dragEffects) {
 		this.dragEffects = dragEffects;
 	}
 
-	public final void setDragTypes(ValueExpression dragTypes) {
+	public void setDragTypes(ValueExpression dragTypes) {
 		this.dragTypes = dragTypes;
 	}
 
-	public final void setDraggable(ValueExpression draggable) {
+	public void setDraggable(ValueExpression draggable) {
 		this.draggable = draggable;
 	}
 
-	public final void setDropEffects(ValueExpression dropEffects) {
+	public void setDropEffects(ValueExpression dropEffects) {
 		this.dropEffects = dropEffects;
 	}
 
-	public final void setDropTypes(ValueExpression dropTypes) {
+	public void setDropTypes(ValueExpression dropTypes) {
 		this.dropTypes = dropTypes;
 	}
 
-	public final void setDroppable(ValueExpression droppable) {
+	public void setDroppable(ValueExpression droppable) {
 		this.droppable = droppable;
 	}
 

@@ -47,103 +47,103 @@ public class TimeEntryTag extends AbstractInputTag implements Tag {
 		return TimeEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setAutoTab(ValueExpression autoTab) {
+	public void setAutoTab(ValueExpression autoTab) {
 		this.autoTab = autoTab;
 	}
 
-	public final void setValueChangeListener(ValueExpression valueChangeListeners) {
+	public void setValueChangeListener(ValueExpression valueChangeListeners) {
 		this.valueChangeListeners = valueChangeListeners;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setLiteralLocale(ValueExpression literalLocale) {
+	public void setLiteralLocale(ValueExpression literalLocale) {
 		this.literalLocale = literalLocale;
 	}
 
-	public final void setLiteralTimeZone(ValueExpression literalTimeZone) {
+	public void setLiteralTimeZone(ValueExpression literalTimeZone) {
 		this.literalTimeZone = literalTimeZone;
 	}
 
-	public final void setComponentLocale(ValueExpression componentLocale) {
+	public void setComponentLocale(ValueExpression componentLocale) {
 		this.componentLocale = componentLocale;
 	}
 
-	public final void setComponentTimeZone(ValueExpression componentTimeZone) {
+	public void setComponentTimeZone(ValueExpression componentTimeZone) {
 		this.componentTimeZone = componentTimeZone;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setAutoCompletion(ValueExpression autoCompletion) {
+	public void setAutoCompletion(ValueExpression autoCompletion) {
 		this.autoCompletion = autoCompletion;
 	}
 
-	public final void setTime(ValueExpression time) {
+	public void setTime(ValueExpression time) {
 		this.time = time;
 	}
 
-	public final void setMinTime(ValueExpression minTime) {
+	public void setMinTime(ValueExpression minTime) {
 		this.minTime = minTime;
 	}
 
-	public final void setDefaultTime(ValueExpression defaultTime) {
+	public void setDefaultTime(ValueExpression defaultTime) {
 		this.defaultTime = defaultTime;
 	}
 
-	public final void setMaxTime(ValueExpression maxTime) {
+	public void setMaxTime(ValueExpression maxTime) {
 		this.maxTime = maxTime;
 	}
 
-	public final void setTimeFormat(ValueExpression timeFormat) {
+	public void setTimeFormat(ValueExpression timeFormat) {
 		this.timeFormat = timeFormat;
 	}
 
-	public final void setHourStep(ValueExpression hourStep) {
+	public void setHourStep(ValueExpression hourStep) {
 		this.hourStep = hourStep;
 	}
 
-	public final void setMinuteStep(ValueExpression minuteStep) {
+	public void setMinuteStep(ValueExpression minuteStep) {
 		this.minuteStep = minuteStep;
 	}
 
-	public final void setSecondStep(ValueExpression secondStep) {
+	public void setSecondStep(ValueExpression secondStep) {
 		this.secondStep = secondStep;
 	}
 
-	public final void setMillisStep(ValueExpression millisStep) {
+	public void setMillisStep(ValueExpression millisStep) {
 		this.millisStep = millisStep;
 	}
 

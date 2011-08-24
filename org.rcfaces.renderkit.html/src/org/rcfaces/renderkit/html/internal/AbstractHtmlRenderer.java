@@ -379,6 +379,7 @@ public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
             switch (textDirection) {
             case ITextDirectionCapability.RIGHT_LEFT_TEXT_DIRECTION:
                 htmlWriter.writeDir(RIGHT_TO_LEFT);
+                break;
             }
         }
 

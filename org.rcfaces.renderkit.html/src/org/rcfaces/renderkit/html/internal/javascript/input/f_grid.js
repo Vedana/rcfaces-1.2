@@ -71,7 +71,7 @@ var __statics = {
 	/**
 	 * @field private static final Number
 	 */
-	_COLUMN_MAX_WIDTH : 640,
+	_COLUMN_MAX_WIDTH : 4096,
 
 	/**
 	 * @field private static final Number
@@ -1551,7 +1551,7 @@ var __statics = {
 		}
 
 		var head = column._head;
-		 var hw =  parseInt (head.style.width);
+		var hw =  parseInt (head.style.width);
 		var w = hw + dw;
 
 		f_core.Debug(f_grid, "_DragCursorMove: dw="+dw+" w="+w+" columnOffsetWidth="+column._col.offsetWidth);
@@ -1588,6 +1588,8 @@ var __statics = {
 	
 			col.style.width = w + "px";
 			head.style.width = w + "px";
+			
+			column._widthSetted=w;
 	
 			var bw = w - f_grid._TEXT_RIGHT_PADDING - f_grid._TEXT_LEFT_PADDING;
 			if (bw < 0) {
@@ -1609,7 +1611,11 @@ var __statics = {
 			var cellMargin = 0;
 	
 			col.style.width = w + "px"; // Colonne Des données ...
-			
+
+			column._widthSetted=w;  // On desactive le calcul automatique pour cette colonne ...
+			column._widthPercent=undefined;
+			column._widthComputed=undefined;
+		
 			var w1=w - cellMargin;
 			head.style.width = ((w1>0)?w1:0) + "px";
 			
@@ -5332,33 +5338,11 @@ var __members = {
 			return;
 		}
 
-		if (this._scrollTitle) {
-			var sw = this.style.width;
-			if (sw && sw.indexOf("px") > 0) {
-				var swPixel = parseInt(sw);
-
-				swPixel -= f_core.ComputeContentBoxBorderLength(this, "left",
-						"right");
-				this._scrollTitle.style.width = swPixel + "px";
-			}
-		}
-
-		if (!this._columnsLayoutPerformed) {
-			this.f_updateColumnsLayout();
-		}
-
-		var doc = this.ownerDocument;
-		
-			var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
-		
-		var t0 = new Date().getTime();
-
-		this._titleLayout = true;
-
 		var body = this._scrollBody;
 		var clientWidth = body.clientWidth;
 		var offsetWidth = body.offsetWidth;
 		var scrollBarWidth = offsetWidth - clientWidth;
+		var verticalScrollBar = (scrollBarWidth>0);
 
 		if (scrollBarWidth <= 0) {
 			// Ben si y a pas de scrollbar a droite, on cherche en bas !
@@ -5369,6 +5353,36 @@ var __members = {
 			}
 		}
 
+		var sw = this.style.width;
+		if (sw && sw.indexOf("px") > 0) {
+			var swPixel = parseInt(sw);
+
+			swPixel -= f_core.ComputeContentBoxBorderLength(this, "left",
+					"right");
+			if (this._scrollTitle) {
+				this._scrollTitle.style.width = swPixel + "px";
+			}
+			body.style.width = swPixel + "px";
+			
+			offsetWidth=swPixel;
+			if (verticalScrollBar) {
+				clientWidth=offsetWidth-scrollBarWidth;
+			}
+		}
+
+		if (!this._columnsLayoutPerformed) {
+			this.f_updateColumnsLayout();
+		}
+
+		var doc = this.ownerDocument;
+		
+		var cellMargin=f_grid._TEXT_RIGHT_PADDING+f_grid._TEXT_LEFT_PADDING;
+		
+		var t0 = new Date().getTime();
+
+		this._titleLayout = true;
+
+
 		var columns = this._columns;
 
 		var t1 = new Date().getTime();
@@ -5376,6 +5390,7 @@ var __members = {
 		var total = 0; // total des colonnes fixe en px
 		var totalPercent = 0; // total des % 
 		var totalZero = 0; // total colone sans taille donnee
+		var colToProcess = new Array();
 		var ci = 0;
 		var webkit = f_core.IsWebkit();
 		var ie = f_core.IsInternetExplorer();
@@ -5402,80 +5417,180 @@ var __members = {
 				break;
 			}
 
-			var w = col.offsetWidth;
+			if (column._widthComputed) {
+				totalZero++;
+				colToProcess.push(column);
+				continue;
+			}
+			
+			if (column._widthPercent!==undefined) {
+				totalPercent += column._widthPercent;
+				colToProcess.push(column);
+				continue;
+			}
 
-			if (!w && !col.offsetHeight) {
-				w = parseInt(col.style.width);
-				var width =  col.style.width;
-				if (width.indexOf("%") > 0){
+			if (!column._widthSetted) {
+				var styleWidth = col.style.width;
+				var w = parseInt(styleWidth);
+				if (styleWidth.indexOf("%") > 0){
 					totalPercent += w;
-					w = 0;
-				}else if (!w) {
+					column._widthPercent=w;
+					colToProcess.push(column);
+					continue;
+				}
+				
+				if (!w) {
 					totalZero ++;
+					column._widthComputed=true;
+					colToProcess.push(column);
+					continue;
 				}
 				
 				if (isNaN(w) || w < 0) {
 					w = 0;
 				}
-			} else if (!col.style.width && f_core.IsGecko()) {
-				col.style.width = w + "px"; // Probleme de scale sous firefox !
+	
+				column._widthSetted = w;
 			}
-
+			
+			var w=column._widthSetted;
 			total += w;
-
+			
 			var cw = w;
-			if(f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
+			if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
 				cw -= cellMargin;
 			}
 			if (cw < 0) {
 				cw = 0;
 			}
-			if( cw > 0 ) {
-				column._head.style.width = cw + "px";
-			}	
+			column._head.style.width = cw + "px";
+			
 			this._updateTitleCellBody(column, w);
 		}
 
 		// deuxième tour s il y a pas de donnée pour trident et webkit
-		if ( (webkit || ie) && (!!totalZero || !!totalPercent)) {
-			
-			var totalNonPx = offsetWidth - total; 
-			var totalZeroPx = (totalNonPx - (offsetWidth*totalPercent/100));
-			var pxForZero = totalZeroPx /totalZero;
-			
-			for ( var i = 0; i < columns.length; i++) {
-				var column = columns[i];
-				
-				if (column._visibility === false) {
-					continue;
-				}
-				
-				var col = col = column._col;
-				var w = col.offsetWidth;
+		if (colToProcess.length) {
 
-				if (!w && !col.offsetHeight) {
-					
-					w = parseInt(col.style.width);
-					var width =  col.style.width; 
-					
-					if (width.indexOf("%") > 0){
-						if(!total && !totalZero) {
-							w = w*100/ totalPercent; // si toutes les colonnes sont en %,
-													//on recacul les % pour avoir un total de 100%
-						}
-						w = w *(offsetWidth) /100;
-					}else if (!w) {
-						w = pxForZero; // pas de donnee alors taille par defaut 
-					}
-					if( w > 0 ) {
-						var bw = w;
-						column._head.style.width = bw + "px";
-						this._updateTitleCellBody(column, w);
-					}	
-				}
+			var totalNonPx = clientWidth - total; 
+
+			for(var i=0;i<colToProcess.length;i++) {
+				var column = colToProcess[i];
+				
+				column._tempWidth=0;
 			}
-		}
+			
+			if (totalNonPx>0 && totalPercent>0) {			
+				var totalPercent=totalNonPx/100;
+				
+				// On affecte les %				
+				for(var i=0;i<colToProcess.length;i++) {
+					var column = colToProcess[i];
+					
+					var percent = column._widthPercent;
+					if (!percent) {
+						continue;
+					}
+					
+					var w=Math.floor(percent*totalPercent);
+					
+					if (column._maxWidth && w>column._maxWidth) {
+						w=column._maxWidth;
+					}
+					
+					if (totalNonPx<w) {
+						w=totalNonPx;
+					}					
+					
+					column._tempWidth+=w;
+					
+					totalNonPx-=w;
+				}							
 
+				// On verifie les mins ...
+				for(var i=0;i<colToProcess.length;i++) {
+					var column = colToProcess[i];
+
+					var percent = column._widthPercent;
+					if (!percent) {
+						continue;
+					}
+
+					var minWidth = column._minWidth;
+					if (!minWidth) {
+						continue;
+					}
+
+					var diff=minWidth-column._tempWidth;
+
+					if (diff<0) {
+						continue;
+					}
+										
+					if (diff>totalNonPx) {
+						diff=totalNonPx;
+					}
+					
+					column._tempWidth+=diff;
+					
+					totalNonPx-=diff;
+				}			
+			}
+						
+			if (totalNonPx>0 && totalZero>0) {
+				
+				var cnt=totalZero;
+				
+				// On affecte les colonnes sans taille !			
+				for(var i=0;i<colToProcess.length;i++) {
+					var column = colToProcess[i];
+
+					if (!column._widthComputed) {
+						continue;
+					}
+					
+					var w=Math.floor(totalNonPx/cnt);
+					
+					if (column._maxWidth && w>column._maxWidth) {
+						w=column._maxWidth;
+					}
+					
+					if (column._minWidth && w<column._minWidth) {
+						w=column._maxWidth;
+					}
+					
+					if (totalNonPx<w) {
+						w=totalNonPx;
+					}					
+					
+					column._tempWidth+=w;
+					
+					totalNonPx-=w;
+					cnt--;
+				}							
+			}
+		
+			
+			for(var i=0;i<colToProcess.length;i++) {
+				var column = colToProcess[i];
+
+				var w = column._tempWidth;
+				var cw = w;
+				if (f_core.IsWebkit(f_core.WEBKIT_SAFARI)){ 
+					cw -= cellMargin;
+				}
+				if (cw < 0) {
+					cw = 0;
+				}
+				column._head.style.width = cw + "px";
+				this._updateTitleCellBody(column, w);
+				column._col.style.width=cw+"px";
+				
+				total+=w;
+				
+				f_core.Debug(f_grid, "Total="+total+" w="+w);
+			}							
+		}
+		
 		var t2 = new Date().getTime();
 
 		if (scrollBarWidth > 0) {
@@ -5497,6 +5612,11 @@ var __members = {
 				this._title.parentNode.style.width = (parseInt(
 						body.style.width, 10) - 2)
 						+ "px";
+			}
+		} else {
+			//body.style.width = total+"px";
+			if (this._table) {
+				this._table.style.width=total+"px";
 			}
 		}
 
@@ -6326,31 +6446,15 @@ var __members = {
 	 *            width Width of the component.
 	 * @return void
 	 */
-	f_setWidth : function(width) {
+	f_updateWidth : function(width) {
 		f_core.Assert(typeof (width) == "number",
-				"f_component.f_setWidth: w parameter must be a number ! ("
+				"f_grid.f_setWidth: width parameter must be a number ! ("
 						+ width + ")");
 
-		var difference = this.offsetWidth - width; 
 		this.style.width = width + "px";
-		this.f_setProperty(f_prop.WIDTH, width);
-		
-		var scrollTitle = this.ownerDocument.getElementById(this.id
-				+ f_grid._DATA_TITLE_SCROLL_ID_SUFFIX);
-		if(scrollTitle) {
-			var otPixel = scrollTitle.offsetWidth - difference;
-			scrollTitle.style.width = otPixel + "px";
-		}
-		var scrollBody = this.ownerDocument.getElementById(this.id
-				+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
-		if (scrollBody){
-			var obPixel = scrollBody.offsetWidth - difference;
-			scrollBody.style.width = obPixel + "px";
-		}
 		
 		this.f_updateTitle();
 	},
-
 	/**
 	 * 
 	 * Set the height of the component.
@@ -6361,13 +6465,12 @@ var __members = {
 	 *            height Height of the component.
 	 * @return void
 	 */
-	f_setHeight : function(height) {
+	f_updateHeight : function(height) {
 		f_core.Assert(typeof (height) == "number", "f_component.f_setHeight: h parameter must be a number ! ("+ height + ")");
 
 		var oldHeight = this.offsetHeight;
 		var difference = oldHeight - height;
 		this.style.height = height + "px";
-		this.f_setProperty(f_prop.HEIGHT, height);
 		
 		var scrollBody = this.ownerDocument.getElementById(this.id+ f_grid._DATA_BODY_SCROLL_ID_SUFFIX);
 		if(scrollBody){

@@ -27,23 +27,23 @@ public class CalendarTag extends AbstractCalendarTag implements Tag {
 		return CalendarComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setCalendarLayout(ValueExpression calendarLayout) {
+	public void setCalendarLayout(ValueExpression calendarLayout) {
 		this.calendarLayout = calendarLayout;
 	}
 
-	public final void setMultipleSelect(ValueExpression multipleSelect) {
+	public void setMultipleSelect(ValueExpression multipleSelect) {
 		this.multipleSelect = multipleSelect;
 	}
 
-	public final void setMode(ValueExpression mode) {
+	public void setMode(ValueExpression mode) {
 		this.mode = mode;
 	}
 
-	public final void setAutoSelection(ValueExpression autoSelection) {
+	public void setAutoSelection(ValueExpression autoSelection) {
 		this.autoSelection = autoSelection;
 	}
 

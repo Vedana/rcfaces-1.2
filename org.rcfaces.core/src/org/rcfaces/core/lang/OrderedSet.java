@@ -17,44 +17,48 @@ import org.rcfaces.core.model.ICommitableObject;
  * @author Olivier Oeuillot (latest modification by $Author$)
  * @version $Revision$ $Date$
  */
-public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
-        ICommitableObject {
+public class OrderedSet<T> extends AbstractSet<T> implements Cloneable,
+        Serializable, ICommitableObject {
     private static final String REVISION = "$Revision$";
 
     private static final long serialVersionUID = -8481215239333898818L;
 
-    private List order;
+    private List<T> order;
 
     private boolean commited;
 
     public OrderedSet() {
-        order = new ArrayList();
+        order = new ArrayList<T>();
     }
 
     public OrderedSet(int size) {
-        order = new ArrayList(size);
+        order = new ArrayList<T>(size);
     }
 
-    public OrderedSet(Collection collection) {
+    public OrderedSet(Collection<T> collection) {
         this(collection.size());
 
         addAll(collection);
     }
 
-    public Iterator iterator() {
-        final Iterator it = order.iterator();
+    @Override
+    public Iterator<T> iterator() {
+        final Iterator<T> it = order.iterator();
 
-        return new Iterator() {
+        return new Iterator<T>() {
             private static final String REVISION = "$Revision$";
 
+            @Override
             public boolean hasNext() {
                 return it.hasNext();
             }
 
-            public Object next() {
+            @Override
+            public T next() {
                 return it.next();
             }
 
+            @Override
             public void remove() {
                 if (commited) {
                     throw new IllegalStateException("Already commited set.");
@@ -66,15 +70,18 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         };
     }
 
+    @Override
     public boolean contains(Object o) {
         return order.contains(o);
     }
 
-    public boolean containsAll(Collection c) {
+    @Override
+    public boolean containsAll(Collection< ? > c) {
         return order.containsAll(c);
     }
 
-    public boolean add(Object o) {
+    @Override
+    public boolean add(T o) {
         if (commited) {
             throw new IllegalStateException("Already commited set.");
         }
@@ -86,6 +93,7 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         return order.add(o);
     }
 
+    @Override
     public boolean remove(Object o) {
         if (commited) {
             throw new IllegalStateException("Already commited set.");
@@ -94,7 +102,8 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         return order.remove(o);
     }
 
-    public boolean removeAll(Collection c) {
+    @Override
+    public boolean removeAll(Collection< ? > c) {
         if (commited) {
             throw new IllegalStateException("Already commited set.");
         }
@@ -102,10 +111,12 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         return order.removeAll(c);
     }
 
+    @Override
     public int size() {
         return order.size();
     }
 
+    @Override
     public void clear() {
         if (commited) {
             throw new IllegalStateException("Already commited set.");
@@ -114,18 +125,22 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         order.clear();
     }
 
+    @Override
     public Object[] toArray() {
         return order.toArray();
     }
 
-    public Object[] toArray(Object[] a) {
+    @Override
+    public <U> U[] toArray(U[] a) {
         return order.toArray(a);
     }
 
+    @Override
     public int hashCode() {
         return order.hashCode();
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -135,7 +150,7 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
             return false;
         }
 
-        final OrderedSet other = (OrderedSet) obj;
+        final OrderedSet< ? > other = (OrderedSet< ? >) obj;
         if (order == null) {
             if (other.order != null) {
                 return false;
@@ -148,7 +163,8 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         return true;
     }
 
-    public boolean retainAll(Collection c) {
+    @Override
+    public boolean retainAll(Collection< ? > c) {
         if (commited) {
             throw new IllegalStateException("Already commited set.");
         }
@@ -156,14 +172,17 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         return order.retainAll(c);
     }
 
+    @Override
     public String toString() {
         return order.toString();
     }
 
+    @Override
     public Object clone() {
         try {
-            OrderedSet newSet = (OrderedSet) super.clone();
-            newSet.order = new ArrayList(order);
+            @SuppressWarnings("unchecked")
+            OrderedSet<T> newSet = (OrderedSet<T>) super.clone();
+            newSet.order = new ArrayList<T>(order);
 
             return newSet;
 
@@ -172,13 +191,15 @@ public class OrderedSet extends AbstractSet implements Cloneable, Serializable,
         }
     }
 
+    @Override
     public void commit() {
         if (order instanceof ArrayList) {
-            ((ArrayList) order).trimToSize();
+            ((ArrayList<T>) order).trimToSize();
         }
         this.commited = true;
     }
 
+    @Override
     public boolean isCommited() {
         return commited;
     }

@@ -40,75 +40,75 @@ public class DateChooserTag extends AbstractCalendarTag implements Tag {
 		return DateChooserComponent.COMPONENT_TYPE;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setDisabledImageURL(ValueExpression disabledImageURL) {
+	public void setDisabledImageURL(ValueExpression disabledImageURL) {
 		this.disabledImageURL = disabledImageURL;
 	}
 
-	public final void setHoverImageURL(ValueExpression hoverImageURL) {
+	public void setHoverImageURL(ValueExpression hoverImageURL) {
 		this.hoverImageURL = hoverImageURL;
 	}
 
-	public final void setSelectedImageURL(ValueExpression selectedImageURL) {
+	public void setSelectedImageURL(ValueExpression selectedImageURL) {
 		this.selectedImageURL = selectedImageURL;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextPosition(ValueExpression textPosition) {
+	public void setTextPosition(ValueExpression textPosition) {
 		this.textPosition = textPosition;
 	}
 
-	public final void setImageHeight(ValueExpression imageHeight) {
+	public void setImageHeight(ValueExpression imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public final void setImageWidth(ValueExpression imageWidth) {
+	public void setImageWidth(ValueExpression imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
-	public final void setValueChangeListener(ValueExpression valueChangeListeners) {
+	public void setValueChangeListener(ValueExpression valueChangeListeners) {
 		this.valueChangeListeners = valueChangeListeners;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setCalendarLayout(ValueExpression calendarLayout) {
+	public void setCalendarLayout(ValueExpression calendarLayout) {
 		this.calendarLayout = calendarLayout;
 	}
 
-	public final void setForValueFormat(ValueExpression forValueFormat) {
+	public void setForValueFormat(ValueExpression forValueFormat) {
 		this.forValueFormat = forValueFormat;
 	}
 
-	public final void setHomeDate(ValueExpression homeDate) {
+	public void setHomeDate(ValueExpression homeDate) {
 		this.homeDate = homeDate;
 	}
 
-	public final void setDefaultSelectedDate(ValueExpression defaultSelectedDate) {
+	public void setDefaultSelectedDate(ValueExpression defaultSelectedDate) {
 		this.defaultSelectedDate = defaultSelectedDate;
 	}
 
-	public final void setHomeDateLabel(ValueExpression homeDateLabel) {
+	public void setHomeDateLabel(ValueExpression homeDateLabel) {
 		this.homeDateLabel = homeDateLabel;
 	}
 
-	public final void setPopupStyleClass(ValueExpression popupStyleClass) {
+	public void setPopupStyleClass(ValueExpression popupStyleClass) {
 		this.popupStyleClass = popupStyleClass;
 	}
 

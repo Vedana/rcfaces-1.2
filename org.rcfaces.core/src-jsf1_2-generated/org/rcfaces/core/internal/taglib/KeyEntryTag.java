@@ -44,91 +44,91 @@ public class KeyEntryTag extends AbstractGridTag implements Tag {
 		return KeyEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setEmptyMessage(ValueExpression emptyMessage) {
+	public void setEmptyMessage(ValueExpression emptyMessage) {
 		this.emptyMessage = emptyMessage;
 	}
 
-	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
+	public void setEmptyDataMessage(ValueExpression emptyDataMessage) {
 		this.emptyDataMessage = emptyDataMessage;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setMaxTextLength(ValueExpression maxTextLength) {
+	public void setMaxTextLength(ValueExpression maxTextLength) {
 		this.maxTextLength = maxTextLength;
 	}
 
-	public final void setEditable(ValueExpression editable) {
+	public void setEditable(ValueExpression editable) {
 		this.editable = editable;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
+	public void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
 		this.suggestionDelayMs = suggestionDelayMs;
 	}
 
-	public final void setSuggestionMinChars(ValueExpression suggestionMinChars) {
+	public void setSuggestionMinChars(ValueExpression suggestionMinChars) {
 		this.suggestionMinChars = suggestionMinChars;
 	}
 
-	public final void setRowCountVar(ValueExpression rowCountVar) {
+	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
 
-	public final void setRowIndexVar(ValueExpression rowIndexVar) {
+	public void setRowIndexVar(ValueExpression rowIndexVar) {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final void setValueColumnId(ValueExpression valueColumnId) {
+	public void setValueColumnId(ValueExpression valueColumnId) {
 		this.valueColumnId = valueColumnId;
 	}
 
-	public final void setLabelColumnId(ValueExpression labelColumnId) {
+	public void setLabelColumnId(ValueExpression labelColumnId) {
 		this.labelColumnId = labelColumnId;
 	}
 
-	public final void setSelectedValue(ValueExpression selectedValue) {
+	public void setSelectedValue(ValueExpression selectedValue) {
 		this.selectedValue = selectedValue;
 	}
 
-	public final void setValueFormat(ValueExpression valueFormat) {
+	public void setValueFormat(ValueExpression valueFormat) {
 		this.valueFormat = valueFormat;
 	}
 
-	public final void setForceValidation(ValueExpression forceValidation) {
+	public void setForceValidation(ValueExpression forceValidation) {
 		this.forceValidation = forceValidation;
 	}
 
-	public final void setForLabel(ValueExpression forLabel) {
+	public void setForLabel(ValueExpression forLabel) {
 		this.forLabel = forLabel;
 	}
 
-	public final void setValueFormatLabel(ValueExpression valueFormatLabel) {
+	public void setValueFormatLabel(ValueExpression valueFormatLabel) {
 		this.valueFormatLabel = valueFormatLabel;
 	}
 
-	public final void setNoValueFormatLabel(ValueExpression noValueFormatLabel) {
+	public void setNoValueFormatLabel(ValueExpression noValueFormatLabel) {
 		this.noValueFormatLabel = noValueFormatLabel;
 	}
 

@@ -24,7 +24,7 @@ public class JavaScriptCollectorTag extends CameliaTag implements Tag {
 		return JavaScriptCollectorComponent.COMPONENT_TYPE;
 	}
 
-	public final void setMergeScripts(ValueExpression mergeScripts) {
+	public void setMergeScripts(ValueExpression mergeScripts) {
 		this.mergeScripts = mergeScripts;
 	}
 

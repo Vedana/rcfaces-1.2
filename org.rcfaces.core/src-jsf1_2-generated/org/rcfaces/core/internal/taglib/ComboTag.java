@@ -30,35 +30,35 @@ public class ComboTag extends AbstractInputTag implements Tag {
 		return ComboComponent.COMPONENT_TYPE;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 

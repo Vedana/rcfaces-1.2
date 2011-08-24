@@ -88,7 +88,7 @@ var __members = {
 	f_getName: function() {
 		return this._name;
 	}
-}
+};
 
 new f_class("f_bundle", {
 	members: __members

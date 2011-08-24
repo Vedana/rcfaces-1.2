@@ -53,190 +53,200 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 	private ValueExpression ariaLevel;
 	private ValueExpression waiRole;
 	private ValueExpression bottom;
+	private ValueExpression horizontalCenter;
 	private ValueExpression left;
 	private ValueExpression right;
 	private ValueExpression top;
+	private ValueExpression verticalCenter;
 	private ValueExpression initListeners;
 	private ValueExpression hiddenMode;
+	private ValueExpression rows;
 	private ValueExpression margins;
 	private ValueExpression var;
 	private ValueExpression first;
-	private ValueExpression rows;
 	private ValueExpression value;
-	public final void setHelpMessage(ValueExpression helpMessage) {
+	public void setHelpMessage(ValueExpression helpMessage) {
 		this.helpMessage = helpMessage;
 	}
 
-	public final void setHelpURL(ValueExpression helpURL) {
+	public void setHelpURL(ValueExpression helpURL) {
 		this.helpURL = helpURL;
 	}
 
-	public final void setToolTipText(ValueExpression toolTipText) {
+	public void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
 	}
 
-	public final void setBlurListener(ValueExpression blurListeners) {
+	public void setBlurListener(ValueExpression blurListeners) {
 		this.blurListeners = blurListeners;
 	}
 
-	public final void setFocusListener(ValueExpression focusListeners) {
+	public void setFocusListener(ValueExpression focusListeners) {
 		this.focusListeners = focusListeners;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setErrorListener(ValueExpression errorListeners) {
+	public void setErrorListener(ValueExpression errorListeners) {
 		this.errorListeners = errorListeners;
 	}
 
-	public final void setSortManager(ValueExpression sortManager) {
+	public void setSortManager(ValueExpression sortManager) {
 		this.sortManager = sortManager;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+	public void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setTabIndex(ValueExpression tabIndex) {
+	public void setTabIndex(ValueExpression tabIndex) {
 		this.tabIndex = tabIndex;
 	}
 
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+	public void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setMarginBottom(ValueExpression marginBottom) {
+	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
 
-	public final void setMarginLeft(ValueExpression marginLeft) {
+	public void setMarginLeft(ValueExpression marginLeft) {
 		this.marginLeft = marginLeft;
 	}
 
-	public final void setMarginRight(ValueExpression marginRight) {
+	public void setMarginRight(ValueExpression marginRight) {
 		this.marginRight = marginRight;
 	}
 
-	public final void setMarginTop(ValueExpression marginTop) {
+	public void setMarginTop(ValueExpression marginTop) {
 		this.marginTop = marginTop;
 	}
 
-	public final void setKeyUpListener(ValueExpression keyUpListeners) {
+	public void setKeyUpListener(ValueExpression keyUpListeners) {
 		this.keyUpListeners = keyUpListeners;
 	}
 
-	public final void setKeyDownListener(ValueExpression keyDownListeners) {
+	public void setKeyDownListener(ValueExpression keyDownListeners) {
 		this.keyDownListeners = keyDownListeners;
 	}
 
-	public final void setKeyPressListener(ValueExpression keyPressListeners) {
+	public void setKeyPressListener(ValueExpression keyPressListeners) {
 		this.keyPressListeners = keyPressListeners;
 	}
 
-	public final void setResetListener(ValueExpression resetListeners) {
+	public void setResetListener(ValueExpression resetListeners) {
 		this.resetListeners = resetListeners;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
+	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
 	}
 
-	public final void setX(ValueExpression x) {
+	public void setX(ValueExpression x) {
 		this.x = x;
 	}
 
-	public final void setY(ValueExpression y) {
+	public void setY(ValueExpression y) {
 		this.y = y;
 	}
 
-	public final void setPartialRendering(ValueExpression partialRendering) {
+	public void setPartialRendering(ValueExpression partialRendering) {
 		this.partialRendering = partialRendering;
 	}
 
-	public final void setLookId(ValueExpression lookId) {
+	public void setLookId(ValueExpression lookId) {
 		this.lookId = lookId;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setAriaLabel(ValueExpression ariaLabel) {
+	public void setAriaLabel(ValueExpression ariaLabel) {
 		this.ariaLabel = ariaLabel;
 	}
 
-	public final void setAriaLevel(ValueExpression ariaLevel) {
+	public void setAriaLevel(ValueExpression ariaLevel) {
 		this.ariaLevel = ariaLevel;
 	}
 
-	public final void setWaiRole(ValueExpression waiRole) {
+	public void setWaiRole(ValueExpression waiRole) {
 		this.waiRole = waiRole;
 	}
 
-	public final void setBottom(ValueExpression bottom) {
+	public void setBottom(ValueExpression bottom) {
 		this.bottom = bottom;
 	}
 
-	public final void setLeft(ValueExpression left) {
+	public void setHorizontalCenter(ValueExpression horizontalCenter) {
+		this.horizontalCenter = horizontalCenter;
+	}
+
+	public void setLeft(ValueExpression left) {
 		this.left = left;
 	}
 
-	public final void setRight(ValueExpression right) {
+	public void setRight(ValueExpression right) {
 		this.right = right;
 	}
 
-	public final void setTop(ValueExpression top) {
+	public void setTop(ValueExpression top) {
 		this.top = top;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setVerticalCenter(ValueExpression verticalCenter) {
+		this.verticalCenter = verticalCenter;
+	}
+
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setMargins(ValueExpression margins) {
+	public void setRows(ValueExpression rows) {
+		this.rows = rows;
+	}
+
+	public void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 
-	public final void setVar(ValueExpression var) {
+	public void setVar(ValueExpression var) {
 		this.var = var;
 	}
 
-	public final void setFirst(ValueExpression first) {
+	public void setFirst(ValueExpression first) {
 		this.first = first;
-	}
-
-	public final void setRows(ValueExpression rows) {
-		this.rows = rows;
 	}
 
 	public final void setValue(ValueExpression value) {
@@ -269,14 +279,16 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 			LOG.debug("  ariaLevel='"+ariaLevel+"'");
 			LOG.debug("  waiRole='"+waiRole+"'");
 			LOG.debug("  bottom='"+bottom+"'");
+			LOG.debug("  horizontalCenter='"+horizontalCenter+"'");
 			LOG.debug("  left='"+left+"'");
 			LOG.debug("  right='"+right+"'");
 			LOG.debug("  top='"+top+"'");
+			LOG.debug("  verticalCenter='"+verticalCenter+"'");
 			LOG.debug("  hiddenMode='"+hiddenMode+"'");
+			LOG.debug("  rows='"+rows+"'");
 			LOG.debug("  margins='"+margins+"'");
 			LOG.debug("  var='"+var+"'");
 			LOG.debug("  first='"+first+"'");
-			LOG.debug("  rows='"+rows+"'");
 		}
 		if ((uiComponent instanceof AbstractGridComponent)==false) {
 			if (uiComponent instanceof UIViewRoot) {
@@ -546,7 +558,16 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setValueExpression(Properties.BOTTOM, bottom);
 
 			} else {
-				component.setBottom(getInt(bottom.getExpressionString()));
+				component.setBottom(getNumber(bottom.getExpressionString()));
+			}
+		}
+
+		if (horizontalCenter != null) {
+			if (horizontalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.HORIZONTAL_CENTER, horizontalCenter);
+
+			} else {
+				component.setHorizontalCenter(getNumber(horizontalCenter.getExpressionString()));
 			}
 		}
 
@@ -555,7 +576,7 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setValueExpression(Properties.LEFT, left);
 
 			} else {
-				component.setLeft(getInt(left.getExpressionString()));
+				component.setLeft(getNumber(left.getExpressionString()));
 			}
 		}
 
@@ -564,7 +585,7 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setValueExpression(Properties.RIGHT, right);
 
 			} else {
-				component.setRight(getInt(right.getExpressionString()));
+				component.setRight(getNumber(right.getExpressionString()));
 			}
 		}
 
@@ -573,7 +594,16 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 				component.setValueExpression(Properties.TOP, top);
 
 			} else {
-				component.setTop(getInt(top.getExpressionString()));
+				component.setTop(getNumber(top.getExpressionString()));
+			}
+		}
+
+		if (verticalCenter != null) {
+			if (verticalCenter.isLiteralText()==false) {
+				component.setValueExpression(Properties.VERTICAL_CENTER, verticalCenter);
+
+			} else {
+				component.setVerticalCenter(getNumber(verticalCenter.getExpressionString()));
 			}
 		}
 
@@ -587,6 +617,15 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setHiddenMode(hiddenMode.getExpressionString());
+			}
+		}
+
+		if (rows != null) {
+			if (rows.isLiteralText()==false) {
+				component.setValueExpression(Properties.ROWS, rows);
+
+			} else {
+				component.setRows(getInt(rows.getExpressionString()));
 			}
 		}
 
@@ -612,15 +651,6 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 
 			} else {
 				component.setFirst(getInt(first.getExpressionString()));
-			}
-		}
-
-		if (rows != null) {
-			if (rows.isLiteralText()==false) {
-				component.setValueExpression(Properties.ROWS, rows);
-
-			} else {
-				component.setRows(getInt(rows.getExpressionString()));
 			}
 		}
 
@@ -670,15 +700,17 @@ public abstract class AbstractGridTag extends CameliaTag implements Tag {
 		ariaLevel = null;
 		waiRole = null;
 		bottom = null;
+		horizontalCenter = null;
 		left = null;
 		right = null;
 		top = null;
+		verticalCenter = null;
 		initListeners = null;
 		hiddenMode = null;
+		rows = null;
 		margins = null;
 		var = null;
 		first = null;
-		rows = null;
 		value = null;
 
 		super.release();

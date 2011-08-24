@@ -27,6 +27,8 @@ public class CssWriter extends FastWriter implements ICssWriter {
 
     protected static final String BORDER_STYLE = "border-style";
 
+    protected static final String BOTTOM = "bottom";
+
     protected static final String COLOR = "color";
 
     protected static final String DISPLAY = "display";
@@ -58,10 +60,12 @@ public class CssWriter extends FastWriter implements ICssWriter {
     protected static final String OVERFLOW = "overflow";
 
     protected static final String PADDING = "padding";
-    
+
     protected static final String PADDING_TOP = "padding-top";
 
     protected static final String POSITION = "position";
+
+    protected static final String RIGHT = "right";
 
     protected static final String TEXT_ALIGN = "text-align";
 
@@ -314,14 +318,22 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeLeft(String left) {
         return writeProperty(LEFT, left, null);
     }
-    
-    public ICssWriter writeLeftPx(int left) {
-		return writeProperty(LEFT, String.valueOf(left), PX_UNIT);
-	}
 
-	public ICssWriter writeTopPx(int top) {
-		return writeProperty(TOP, String.valueOf(top), PX_UNIT);
-	}
+    public ICssWriter writeLeftPx(int left) {
+        return writeProperty(LEFT, String.valueOf(left), PX_UNIT);
+    }
+
+    public ICssWriter writeTopPx(int top) {
+        return writeProperty(TOP, String.valueOf(top), PX_UNIT);
+    }
+
+    public ICssWriter writeRightPx(int right) {
+        return writeProperty(RIGHT, String.valueOf(right), PX_UNIT);
+    }
+
+    public ICssWriter writeBottomPx(int bottom) {
+        return writeProperty(BOTTOM, String.valueOf(bottom), PX_UNIT);
+    }
 
     public ICssWriter writePosition(String position) {
         return writeProperty(POSITION, position, null);
@@ -587,7 +599,7 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writePadding(String padding) {
         return writeProperty(PADDING, padding, null);
     }
-    
+
     public ICssWriter writePaddingTop(String padding) {
         return writeProperty(PADDING_TOP, padding, null);
     }
@@ -602,7 +614,5 @@ public class CssWriter extends FastWriter implements ICssWriter {
     public ICssWriter writeBackgroundColor(String backgroundColor) {
         return writeProperty(BACKGROUND_COLOR, backgroundColor, null);
     }
-
-	
 
 }

@@ -20,7 +20,7 @@ public abstract class FileItemTag extends CameliaTag implements Tag {
 
 	private ValueExpression charSet;
 	private ValueExpression src;
-	public final void setCharSet(ValueExpression charSet) {
+	public void setCharSet(ValueExpression charSet) {
 		this.charSet = charSet;
 	}
 

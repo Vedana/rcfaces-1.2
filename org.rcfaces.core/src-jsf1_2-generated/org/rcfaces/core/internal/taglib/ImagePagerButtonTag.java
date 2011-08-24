@@ -25,15 +25,15 @@ public class ImagePagerButtonTag extends ImageButtonTag implements Tag {
 		return ImagePagerButtonComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setType(ValueExpression type) {
+	public void setType(ValueExpression type) {
 		this.type = type;
 	}
 
-	public final void setHideIfDisabled(ValueExpression hideIfDisabled) {
+	public void setHideIfDisabled(ValueExpression hideIfDisabled) {
 		this.hideIfDisabled = hideIfDisabled;
 	}
 

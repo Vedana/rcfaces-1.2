@@ -30,27 +30,27 @@ public class ButtonTag extends AbstractCommandTag implements Tag {
 		return ButtonComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 

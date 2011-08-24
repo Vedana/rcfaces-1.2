@@ -16,7 +16,7 @@ var __statics = {
 	 */
 	_LABEL_ID_SUFFIX: "::label"
 	
-}
+};
  
 var __members = {
 	f_finalize: function() {
@@ -110,8 +110,27 @@ var __members = {
 		if (this.className!=className) {
 			this.className=className;
 		}
+	},
+	f_updateWidth: function(width) {
+		f_core.Assert(typeof (width) == "number",
+				"f_fieldSet.f_setWidth: width parameter must be a number ! ("
+						+ width + ")");
+
+		this.style.width = width + "px";
+		
+		this.firstElementChild.style.width=width + "px";
+	},
+	f_updateHeight: function(height) {
+		f_core.Assert(typeof (height) == "number",
+				"f_fieldSet.f_setHeight: height parameter must be a number ! ("
+						+ height + ")");
+
+		this.style.height = height + "px";
+		
+		this.firstElementChild.style.height=height + "px";
 	}
-}
+};
+
 new f_class("f_fieldSet", {
 	extend: f_component,
 	aspects: [ fa_overStyleClass ],

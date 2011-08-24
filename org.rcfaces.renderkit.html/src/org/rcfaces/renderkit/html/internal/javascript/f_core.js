@@ -3702,6 +3702,27 @@ var f_core = {
 	 * Returns the size of the View.
 	 *
 	 * @method public static 
+	 * @param Element component The component
+	 * @param optional Object values Object which will contain the result or <code>null</code>.
+	 * @return Object Object which defines 2 fields: width and height 
+	 */
+	GetComponentSize: function(component, values) {
+		f_core.Assert(values===undefined || values===null || typeof(values)=="object", "f_core.GetComponentSize: Invalid values parameter '"+values+"'.");
+		f_core.Assert(component && component.style, "f_core.GetComponentSize: Invalid component parameter '"+component+"'.");
+		
+		if (!values) {
+			values={};
+		}
+		
+		values.width=component.offsetWidth;
+		values.height=component.offsetHeight;
+		
+		return values;		
+	},
+	/**
+	 * Returns the size of the View.
+	 *
+	 * @method public static 
 	 * @param optional Object values Object which will contain the result or <code>null</code>.
 	 * @param optional HTMLDocument doc
 	 * @return Object Object which defines 2 fields: width and height 

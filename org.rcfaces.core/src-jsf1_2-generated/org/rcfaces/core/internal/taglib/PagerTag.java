@@ -28,27 +28,27 @@ public class PagerTag extends AbstractBasicTag implements Tag {
 		return PagerComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setManyResultsMessage(ValueExpression manyResultsMessage) {
+	public void setManyResultsMessage(ValueExpression manyResultsMessage) {
 		this.manyResultsMessage = manyResultsMessage;
 	}
 
-	public final void setMessage(ValueExpression message) {
+	public void setMessage(ValueExpression message) {
 		this.message = message;
 	}
 
-	public final void setOneResultMessage(ValueExpression oneResultMessage) {
+	public void setOneResultMessage(ValueExpression oneResultMessage) {
 		this.oneResultMessage = oneResultMessage;
 	}
 
-	public final void setZeroResultMessage(ValueExpression zeroResultMessage) {
+	public void setZeroResultMessage(ValueExpression zeroResultMessage) {
 		this.zeroResultMessage = zeroResultMessage;
 	}
 
-	public final void setNoPagedMessage(ValueExpression noPagedMessage) {
+	public void setNoPagedMessage(ValueExpression noPagedMessage) {
 		this.noPagedMessage = noPagedMessage;
 	}
 

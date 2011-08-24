@@ -11,7 +11,6 @@ import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.component.MenuComponent;
 import org.rcfaces.core.component.capability.IAsyncDecodeModeCapability;
 import org.rcfaces.core.component.capability.IAsyncRenderModeCapability;
-import org.rcfaces.core.component.capability.ILayoutManagerCapability;
 import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.internal.renderkit.IAsyncRenderer;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -24,9 +23,6 @@ import org.rcfaces.renderkit.html.internal.IJavaScriptRenderContext;
 import org.rcfaces.renderkit.html.internal.JavaScriptClasses;
 import org.rcfaces.renderkit.html.internal.decorator.IComponentDecorator;
 import org.rcfaces.renderkit.html.internal.decorator.SubMenuDecorator;
-import org.rcfaces.renderkit.html.internal.layout.AbsoluteLayoutProcessor;
-import org.rcfaces.renderkit.html.internal.layout.AbstractLayoutProcessor;
-import org.rcfaces.renderkit.html.internal.layout.ILayoutProcessor;
 import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
 import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
 
@@ -106,26 +102,6 @@ public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
         }
 
         setAsyncRenderer(htmlWriter, boxComponent, asyncRender);
-
-        int type = boxComponent.getLayoutType(facesContext);
-        if (type == ILayoutManagerCapability.INHERITED_LAYOUT_TYPE) {
-            type = AbstractLayoutProcessor
-                    .computeInheritedLayoutType(boxComponent.getParent());
-        }
-
-        if (type == ILayoutManagerCapability.ABSOLUTE_LAYOUT_TYPE) {
-            manageAbsoluteLayout(htmlWriter, boxComponent, type,
-                    AbsoluteLayoutProcessor.getSingleton());
-        }
-
-    }
-
-    private void manageAbsoluteLayout(IHtmlWriter htmlWriter,
-            ILayoutManagerCapability layoutManager, int type,
-            ILayoutProcessor processor) {
-
-        // Connait-on notre taille en pixel ?
-
     }
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {

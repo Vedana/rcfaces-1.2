@@ -39,63 +39,63 @@ public class SchedulerColumnTag extends CameliaTag implements Tag {
 		return SchedulerColumnComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setToolTipText(ValueExpression toolTipText) {
+	public void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
 	}
 
-	public final void setAlignment(ValueExpression alignment) {
+	public void setAlignment(ValueExpression alignment) {
 		this.alignment = alignment;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setVerticalAlignment(ValueExpression verticalAlignment) {
+	public void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
+	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setValue(ValueExpression value) {
+	public void setValue(ValueExpression value) {
 		this.value = value;
 	}
 

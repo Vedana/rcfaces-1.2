@@ -23,7 +23,7 @@ public class SelectItemTag extends AbstractItemTag implements Tag {
 		return SelectItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setToolTipText(ValueExpression toolTipText) {
+	public void setToolTipText(ValueExpression toolTipText) {
 		this.toolTipText = toolTipText;
 	}
 

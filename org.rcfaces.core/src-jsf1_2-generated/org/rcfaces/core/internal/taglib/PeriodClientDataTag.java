@@ -24,11 +24,11 @@ public class PeriodClientDataTag extends CameliaTag implements Tag {
 		return PeriodClientDataComponent.COMPONENT_TYPE;
 	}
 
-	public final void setName(ValueExpression name) {
+	public void setName(ValueExpression name) {
 		this.name = name;
 	}
 
-	public final void setValue(ValueExpression value) {
+	public void setValue(ValueExpression value) {
 		this.value = value;
 	}
 

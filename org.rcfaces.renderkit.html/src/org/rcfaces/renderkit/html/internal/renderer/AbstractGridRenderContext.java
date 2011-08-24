@@ -219,9 +219,9 @@ public abstract class AbstractGridRenderContext {
     private boolean isDraggable;
 
     private boolean isDroppable;
-    
+
     private boolean wheelSelection = true;
-    
+
     private String alertLoadingMessage = null;
 
     private AbstractGridRenderContext(IProcessContext processContext,
@@ -297,15 +297,17 @@ public abstract class AbstractGridRenderContext {
                             .getClientSelectionFullState();
                 }
             }
-            
+
         }
-        
+
         if (gridComponent instanceof IWheelSelectionCapability) {
-        	wheelSelection = ((IWheelSelectionCapability) gridComponent).isWheelSelection();
+            wheelSelection = ((IWheelSelectionCapability) gridComponent)
+                    .isWheelSelection();
         }
-        
+
         if (gridComponent instanceof IAlertLoadingMessageCapability) {
-        	alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent).getAlertLoadingMessage();
+            alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent)
+                    .getAlertLoadingMessage();
         }
 
         if (gridComponent instanceof ICheckableCapability) {
@@ -438,11 +440,11 @@ public abstract class AbstractGridRenderContext {
                     && ComponentTools.isAnonymousComponentId(columnId) == false) {
                 columnIds[i] = columnId;
             }
-            
-            if (column.isRendered() == false) {
-				columnStates[i] = SERVER_HIDDEN;
 
-			} else if (column instanceof IVisibilityCapability) {
+            if (column.isRendered() == false) {
+                columnStates[i] = SERVER_HIDDEN;
+
+            } else if (column instanceof IVisibilityCapability) {
                 Boolean v = ((IVisibilityCapability) column).getVisibleState();
                 if (v != null && v.booleanValue() == false) {
                     // Pas visible du tout !
@@ -512,13 +514,14 @@ public abstract class AbstractGridRenderContext {
             if (column instanceof IResizableCapability) {
                 if (((IResizableCapability) column).isResizable()) {
 
-                    if (widthNotSpecified) {
-                        LOG
-                                .error("You must specify a width for a resizable column ! (#"
-                                        + i
-                                        + ", columnId="
-                                        + columnId
-                                        + ", idw=" + idw + ", dw='" + dw + "')");
+                    if (false && widthNotSpecified) {
+                        LOG.error("You must specify a width for a resizable column ! (#"
+                                + i
+                                + ", columnId="
+                                + columnId
+                                + ", idw="
+                                + idw
+                                + ", dw='" + dw + "')");
 
                         // Fred if dw = 0 should this be triggered ?
                         // See f_grid.js 2198
@@ -781,7 +784,7 @@ public abstract class AbstractGridRenderContext {
         }
 
         if (resizable && (hasScrollBars == false || widthNotSpecified)) {
-            resizable = false;
+            // resizable = false; // Avec le nouveau LAYOUT plus la peine ....
         }
 
         dataModel = gridComponent.getDataModelValue();
@@ -917,10 +920,10 @@ public abstract class AbstractGridRenderContext {
     public final int getFirst() {
         return first;
     }
-    
+
     public final void resetFirst() {
-    	first = 0;
-    	gridComponent.setFirst(0);
+        first = 0;
+        gridComponent.setFirst(0);
     }
 
     public final boolean isPaged() {
@@ -1166,13 +1169,13 @@ public abstract class AbstractGridRenderContext {
     public boolean isDroppable() {
         return isDroppable;
     }
-    
+
     public boolean isWheelSelection() {
-    	return wheelSelection;
+        return wheelSelection;
     }
-    
+
     public String getAlertLoadingMessage() {
-    	return alertLoadingMessage;
+        return alertLoadingMessage;
     }
 
 }

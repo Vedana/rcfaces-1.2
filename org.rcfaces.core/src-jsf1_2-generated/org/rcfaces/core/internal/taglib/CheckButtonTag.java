@@ -34,51 +34,51 @@ public class CheckButtonTag extends AbstractInputTag implements Tag {
 		return CheckButtonComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setTextPosition(ValueExpression textPosition) {
+	public void setTextPosition(ValueExpression textPosition) {
 		this.textPosition = textPosition;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setSelected(ValueExpression selected) {
+	public void setSelected(ValueExpression selected) {
 		this.selected = selected;
 	}
 

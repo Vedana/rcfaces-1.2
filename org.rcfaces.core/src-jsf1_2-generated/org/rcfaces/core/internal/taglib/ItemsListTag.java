@@ -39,71 +39,71 @@ public class ItemsListTag extends AbstractInputTag implements Tag {
 		return ItemsListComponent.COMPONENT_TYPE;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setTextPosition(ValueExpression textPosition) {
+	public void setTextPosition(ValueExpression textPosition) {
 		this.textPosition = textPosition;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setCheckListener(ValueExpression checkListeners) {
+	public void setCheckListener(ValueExpression checkListeners) {
 		this.checkListeners = checkListeners;
 	}
 
-	public final void setCheckedValues(ValueExpression checkedValues) {
+	public void setCheckedValues(ValueExpression checkedValues) {
 		this.checkedValues = checkedValues;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setDefaultImageURL(ValueExpression defaultImageURL) {
+	public void setDefaultImageURL(ValueExpression defaultImageURL) {
 		this.defaultImageURL = defaultImageURL;
 	}
 
-	public final void setDefaultSelectedImageURL(ValueExpression defaultSelectedImageURL) {
+	public void setDefaultSelectedImageURL(ValueExpression defaultSelectedImageURL) {
 		this.defaultSelectedImageURL = defaultSelectedImageURL;
 	}
 
-	public final void setDefaultHoverImageURL(ValueExpression defaultHoverImageURL) {
+	public void setDefaultHoverImageURL(ValueExpression defaultHoverImageURL) {
 		this.defaultHoverImageURL = defaultHoverImageURL;
 	}
 
-	public final void setDefaultDisabledImageURL(ValueExpression defaultDisabledImageURL) {
+	public void setDefaultDisabledImageURL(ValueExpression defaultDisabledImageURL) {
 		this.defaultDisabledImageURL = defaultDisabledImageURL;
 	}
 
-	public final void setDefaultItemInputType(ValueExpression defaultItemInputType) {
+	public void setDefaultItemInputType(ValueExpression defaultItemInputType) {
 		this.defaultItemInputType = defaultItemInputType;
 	}
 
-	public final void setDefaultItemLookId(ValueExpression defaultItemLookId) {
+	public void setDefaultItemLookId(ValueExpression defaultItemLookId) {
 		this.defaultItemLookId = defaultItemLookId;
 	}
 
-	public final void setDefaultItemStyleClass(ValueExpression defaultItemStyleClass) {
+	public void setDefaultItemStyleClass(ValueExpression defaultItemStyleClass) {
 		this.defaultItemStyleClass = defaultItemStyleClass;
 	}
 
-	public final void setDefaultItemGroupName(ValueExpression defaultItemGroupName) {
+	public void setDefaultItemGroupName(ValueExpression defaultItemGroupName) {
 		this.defaultItemGroupName = defaultItemGroupName;
 	}
 
-	public final void setItemPadding(ValueExpression itemPadding) {
+	public void setItemPadding(ValueExpression itemPadding) {
 		this.itemPadding = itemPadding;
 	}
 
-	public final void setItemHiddenMode(ValueExpression itemHiddenMode) {
+	public void setItemHiddenMode(ValueExpression itemHiddenMode) {
 		this.itemHiddenMode = itemHiddenMode;
 	}
 

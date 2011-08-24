@@ -29,31 +29,31 @@ public class MessagesTag extends AbstractMessagesTag implements Tag {
 		return MessagesComponent.COMPONENT_TYPE;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setShowIfMessage(ValueExpression showIfMessage) {
+	public void setShowIfMessage(ValueExpression showIfMessage) {
 		this.showIfMessage = showIfMessage;
 	}
 
-	public final void setShowActiveComponentMessage(ValueExpression showActiveComponentMessage) {
+	public void setShowActiveComponentMessage(ValueExpression showActiveComponentMessage) {
 		this.showActiveComponentMessage = showActiveComponentMessage;
 	}
 
-	public final void setMaxCount(ValueExpression maxCount) {
+	public void setMaxCount(ValueExpression maxCount) {
 		this.maxCount = maxCount;
 	}
 

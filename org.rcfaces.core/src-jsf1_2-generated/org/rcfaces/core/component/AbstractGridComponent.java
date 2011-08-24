@@ -86,7 +86,7 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 private transient String var;
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaGridComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","backgroundColor","marginLeft","var","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","left","right","waiRole","mouseOutListener","foregroundColor","top","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","first","y","sortManager","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"blurListener","visible","backgroundColor","marginLeft","var","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","ariaLevel","height","keyDownListener","hiddenMode","mouseOverListener","left","right","waiRole","mouseOutListener","foregroundColor","top","lookId","helpMessage","userEventListener","marginTop","width","styleClass","marginRight","partialRendering","keyUpListener","keyPressListener","resetListener","ariaLabel","rows","initListener","verticalCenter","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","first","horizontalCenter","y","sortManager","margins","x"}));
 	}
 
 
@@ -1042,15 +1042,15 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
-	public int getBottom() {
+	public java.lang.Number getBottom() {
 		return getBottom(null);
 	}
 
 	/**
 	 * See {@link #getBottom() getBottom()} for more details
 	 */
-	public int getBottom(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.BOTTOM,0, facesContext);
+	public java.lang.Number getBottom(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.BOTTOM, facesContext);
 	}
 
 	/**
@@ -1061,19 +1061,42 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.BOTTOM);
 	}
 
-	public void setBottom(int bottom) {
+	public void setBottom(java.lang.Number bottom) {
 		engine.setProperty(Properties.BOTTOM, bottom);
 	}
 
-	public int getLeft() {
+	public java.lang.Number getHorizontalCenter() {
+		return getHorizontalCenter(null);
+	}
+
+	/**
+	 * See {@link #getHorizontalCenter() getHorizontalCenter()} for more details
+	 */
+	public java.lang.Number getHorizontalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.HORIZONTAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalCenterSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_CENTER);
+	}
+
+	public void setHorizontalCenter(java.lang.Number horizontalCenter) {
+		engine.setProperty(Properties.HORIZONTAL_CENTER, horizontalCenter);
+	}
+
+	public java.lang.Number getLeft() {
 		return getLeft(null);
 	}
 
 	/**
 	 * See {@link #getLeft() getLeft()} for more details
 	 */
-	public int getLeft(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.LEFT,0, facesContext);
+	public java.lang.Number getLeft(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.LEFT, facesContext);
 	}
 
 	/**
@@ -1084,19 +1107,19 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.LEFT);
 	}
 
-	public void setLeft(int left) {
+	public void setLeft(java.lang.Number left) {
 		engine.setProperty(Properties.LEFT, left);
 	}
 
-	public int getRight() {
+	public java.lang.Number getRight() {
 		return getRight(null);
 	}
 
 	/**
 	 * See {@link #getRight() getRight()} for more details
 	 */
-	public int getRight(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.RIGHT,0, facesContext);
+	public java.lang.Number getRight(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.RIGHT, facesContext);
 	}
 
 	/**
@@ -1107,19 +1130,19 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.RIGHT);
 	}
 
-	public void setRight(int right) {
+	public void setRight(java.lang.Number right) {
 		engine.setProperty(Properties.RIGHT, right);
 	}
 
-	public int getTop() {
+	public java.lang.Number getTop() {
 		return getTop(null);
 	}
 
 	/**
 	 * See {@link #getTop() getTop()} for more details
 	 */
-	public int getTop(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TOP,0, facesContext);
+	public java.lang.Number getTop(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.TOP, facesContext);
 	}
 
 	/**
@@ -1130,8 +1153,31 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 		return engine.isPropertySetted(Properties.TOP);
 	}
 
-	public void setTop(int top) {
+	public void setTop(java.lang.Number top) {
 		engine.setProperty(Properties.TOP, top);
+	}
+
+	public java.lang.Number getVerticalCenter() {
+		return getVerticalCenter(null);
+	}
+
+	/**
+	 * See {@link #getVerticalCenter() getVerticalCenter()} for more details
+	 */
+	public java.lang.Number getVerticalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.VERTICAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "verticalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalCenterSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_CENTER);
+	}
+
+	public void setVerticalCenter(java.lang.Number verticalCenter) {
+		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
 	}
 
 	public final void addInitListener(org.rcfaces.core.event.IInitListener listener) {
@@ -1167,6 +1213,26 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 
 	public void setHiddenMode(int hiddenMode) {
 		engine.setProperty(Properties.HIDDEN_MODE, hiddenMode);
+	}
+
+	public int getRows() {
+		return getRows(null);
+	}
+
+	public int getRows(javax.faces.context.FacesContext facesContext) {
+		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
+	}
+
+	public void setRows(int rows) {
+		engine.setProperty(Properties.ROWS, rows);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "rows" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public boolean isRowsSetted() {
+		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	public String getVar() {
@@ -1208,26 +1274,6 @@ public abstract class AbstractGridComponent extends CameliaGridComponent impleme
 	 */
 	public boolean isFirstSetted() {
 		return engine.isPropertySetted(Properties.FIRST);
-	}
-
-	public int getRows() {
-		return getRows(null);
-	}
-
-	public int getRows(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.ROWS, 0, facesContext);
-	}
-
-	public void setRows(int rows) {
-		engine.setProperty(Properties.ROWS, rows);
-	}
-
-	/**
-	 * Returns <code>true</code> if the attribute "rows" is set.
-	 * @return <code>true</code> if the attribute is set.
-	 */
-	public boolean isRowsSetted() {
-		return engine.isPropertySetted(Properties.ROWS);
 	}
 
 	protected Set getCameliaFields() {

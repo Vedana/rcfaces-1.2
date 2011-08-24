@@ -21,15 +21,15 @@ public abstract class AbstractSeparatorTag extends CameliaTag implements Tag {
 	private ValueExpression visible;
 	private ValueExpression hiddenMode;
 	private ValueExpression unlockedClientAttributeNames;
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+	public void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 

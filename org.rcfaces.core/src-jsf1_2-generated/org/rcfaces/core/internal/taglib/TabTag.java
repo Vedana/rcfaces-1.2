@@ -35,55 +35,55 @@ public class TabTag extends CardTag implements Tag {
 		return TabComponent.COMPONENT_TYPE;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setFontBold(ValueExpression fontBold) {
+	public void setFontBold(ValueExpression fontBold) {
 		this.fontBold = fontBold;
 	}
 
-	public final void setFontItalic(ValueExpression fontItalic) {
+	public void setFontItalic(ValueExpression fontItalic) {
 		this.fontItalic = fontItalic;
 	}
 
-	public final void setFontName(ValueExpression fontName) {
+	public void setFontName(ValueExpression fontName) {
 		this.fontName = fontName;
 	}
 
-	public final void setFontSize(ValueExpression fontSize) {
+	public void setFontSize(ValueExpression fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	public final void setFontUnderline(ValueExpression fontUnderline) {
+	public void setFontUnderline(ValueExpression fontUnderline) {
 		this.fontUnderline = fontUnderline;
 	}
 
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setDisabledImageURL(ValueExpression disabledImageURL) {
+	public void setDisabledImageURL(ValueExpression disabledImageURL) {
 		this.disabledImageURL = disabledImageURL;
 	}
 
-	public final void setHoverImageURL(ValueExpression hoverImageURL) {
+	public void setHoverImageURL(ValueExpression hoverImageURL) {
 		this.hoverImageURL = hoverImageURL;
 	}
 
-	public final void setSelectedImageURL(ValueExpression selectedImageURL) {
+	public void setSelectedImageURL(ValueExpression selectedImageURL) {
 		this.selectedImageURL = selectedImageURL;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setAccessKey(ValueExpression accessKey) {
+	public void setAccessKey(ValueExpression accessKey) {
 		this.accessKey = accessKey;
 	}
 

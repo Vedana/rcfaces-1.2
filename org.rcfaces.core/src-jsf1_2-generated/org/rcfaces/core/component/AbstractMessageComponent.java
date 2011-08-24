@@ -75,7 +75,7 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaMessageComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","visible","for","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","mouseOverListener","left","right","mouseOutListener","foregroundColor","waiRole","top","lookId","helpMessage","userEventListener","marginTop","styleClass","marginRight","width","partialRendering","showDetail","ariaLabel","initListener","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","y","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"showSummary","visible","for","marginLeft","backgroundColor","errorListener","propertyChangeListener","helpURL","ariaLevel","height","hiddenMode","mouseOverListener","left","right","mouseOutListener","foregroundColor","waiRole","top","lookId","helpMessage","userEventListener","marginTop","styleClass","marginRight","width","partialRendering","showDetail","ariaLabel","initListener","verticalCenter","unlockedClientAttributeNames","marginBottom","bottom","toolTipText","y","horizontalCenter","margins","x"}));
 	}
 
 
@@ -755,15 +755,15 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		engine.setProperty(Properties.WAI_ROLE, waiRole);
 	}
 
-	public int getBottom() {
+	public java.lang.Number getBottom() {
 		return getBottom(null);
 	}
 
 	/**
 	 * See {@link #getBottom() getBottom()} for more details
 	 */
-	public int getBottom(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.BOTTOM,0, facesContext);
+	public java.lang.Number getBottom(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.BOTTOM, facesContext);
 	}
 
 	/**
@@ -774,19 +774,42 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		return engine.isPropertySetted(Properties.BOTTOM);
 	}
 
-	public void setBottom(int bottom) {
+	public void setBottom(java.lang.Number bottom) {
 		engine.setProperty(Properties.BOTTOM, bottom);
 	}
 
-	public int getLeft() {
+	public java.lang.Number getHorizontalCenter() {
+		return getHorizontalCenter(null);
+	}
+
+	/**
+	 * See {@link #getHorizontalCenter() getHorizontalCenter()} for more details
+	 */
+	public java.lang.Number getHorizontalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.HORIZONTAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "horizontalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isHorizontalCenterSetted() {
+		return engine.isPropertySetted(Properties.HORIZONTAL_CENTER);
+	}
+
+	public void setHorizontalCenter(java.lang.Number horizontalCenter) {
+		engine.setProperty(Properties.HORIZONTAL_CENTER, horizontalCenter);
+	}
+
+	public java.lang.Number getLeft() {
 		return getLeft(null);
 	}
 
 	/**
 	 * See {@link #getLeft() getLeft()} for more details
 	 */
-	public int getLeft(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.LEFT,0, facesContext);
+	public java.lang.Number getLeft(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.LEFT, facesContext);
 	}
 
 	/**
@@ -797,19 +820,19 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		return engine.isPropertySetted(Properties.LEFT);
 	}
 
-	public void setLeft(int left) {
+	public void setLeft(java.lang.Number left) {
 		engine.setProperty(Properties.LEFT, left);
 	}
 
-	public int getRight() {
+	public java.lang.Number getRight() {
 		return getRight(null);
 	}
 
 	/**
 	 * See {@link #getRight() getRight()} for more details
 	 */
-	public int getRight(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.RIGHT,0, facesContext);
+	public java.lang.Number getRight(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.RIGHT, facesContext);
 	}
 
 	/**
@@ -820,19 +843,19 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		return engine.isPropertySetted(Properties.RIGHT);
 	}
 
-	public void setRight(int right) {
+	public void setRight(java.lang.Number right) {
 		engine.setProperty(Properties.RIGHT, right);
 	}
 
-	public int getTop() {
+	public java.lang.Number getTop() {
 		return getTop(null);
 	}
 
 	/**
 	 * See {@link #getTop() getTop()} for more details
 	 */
-	public int getTop(javax.faces.context.FacesContext facesContext) {
-		return engine.getIntProperty(Properties.TOP,0, facesContext);
+	public java.lang.Number getTop(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.TOP, facesContext);
 	}
 
 	/**
@@ -843,8 +866,31 @@ public abstract class AbstractMessageComponent extends CameliaMessageComponent i
 		return engine.isPropertySetted(Properties.TOP);
 	}
 
-	public void setTop(int top) {
+	public void setTop(java.lang.Number top) {
 		engine.setProperty(Properties.TOP, top);
+	}
+
+	public java.lang.Number getVerticalCenter() {
+		return getVerticalCenter(null);
+	}
+
+	/**
+	 * See {@link #getVerticalCenter() getVerticalCenter()} for more details
+	 */
+	public java.lang.Number getVerticalCenter(javax.faces.context.FacesContext facesContext) {
+		return (java.lang.Number)engine.getProperty(Properties.VERTICAL_CENTER, facesContext);
+	}
+
+	/**
+	 * Returns <code>true</code> if the attribute "verticalCenter" is set.
+	 * @return <code>true</code> if the attribute is set.
+	 */
+	public final boolean isVerticalCenterSetted() {
+		return engine.isPropertySetted(Properties.VERTICAL_CENTER);
+	}
+
+	public void setVerticalCenter(java.lang.Number verticalCenter) {
+		engine.setProperty(Properties.VERTICAL_CENTER, verticalCenter);
 	}
 
 	public final void addMouseOutListener(org.rcfaces.core.event.IMouseOutListener listener) {

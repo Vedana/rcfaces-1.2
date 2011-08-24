@@ -13,7 +13,6 @@ import javax.servlet.jsp.JspException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.capability.IComponentLifeCycle;
-import org.rcfaces.core.internal.capability.IRCFacesComponent;
 
 /**
  * @author Olivier Oeuillot (latest modification by $Author$)
@@ -38,6 +37,25 @@ public abstract class CameliaTag extends UIComponentELTag {
         }
 
         return Boolean.valueOf(value);
+    }
+
+    protected static final Number getNumber(String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+
+        if (value.indexOf('.') > 0) {
+            Double dbl = Double.valueOf(value);
+
+            return dbl;
+        }
+
+        long l = Long.parseLong(value);
+        if (l >= Integer.MIN_VALUE && l <= Integer.MAX_VALUE) {
+            return new Integer((int) l);
+        }
+
+        return new Long(l);
     }
 
     protected static final Integer getInteger(String value) {

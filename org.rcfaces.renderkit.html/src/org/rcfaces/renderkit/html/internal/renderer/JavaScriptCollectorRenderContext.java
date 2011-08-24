@@ -63,13 +63,13 @@ public class JavaScriptCollectorRenderContext extends
     private static final Log LOG = LogFactory
             .getLog(JavaScriptCollectorRenderContext.class);
 
-    private static final Object DISABLE_VINIT_SEARCH_PROPERTY = "camelia.jsCollector.disable.vinit";
+    private static final String DISABLE_VINIT_SEARCH_PROPERTY = "camelia.jsCollector.disable.vinit";
 
     private static final boolean PERFORM_ACCESSKEYS = false;
 
     // Le focus devrait faire l'affaire
 
-    private final Set components = new OrderedSet();
+    private final Set<Object> components = new OrderedSet<Object>();
 
     // private final List scriptsToInclude = new ArrayList();
 
@@ -79,7 +79,8 @@ public class JavaScriptCollectorRenderContext extends
 
     private static final Integer UTF8_charset = new Integer(0);
 
-    private static final Map charSets = new HashMap(8);
+    private static final Map<String, Integer> charSets = new HashMap<String, Integer>(
+            8);
 
     private static final String MERGE_DEFAULT_CHARSET = "UTF-8";
     static {
@@ -252,11 +253,12 @@ public class JavaScriptCollectorRenderContext extends
                     components.remove(bufferedWriter);
                 }
 
-                if (initialized == false) {
-                    JavaScriptEnableModeImpl js = (JavaScriptEnableModeImpl) writer
-                            .getJavaScriptEnableMode();
+                JavaScriptEnableModeImpl js = (JavaScriptEnableModeImpl) writer
+                        .getJavaScriptEnableMode();
 
-                    int mode = js.getMode();
+                int mode = js.getMode();
+
+                if (initialized == false) {
                     String accessKey = null;
 
                     if ((mode & JavaScriptEnableModeImpl.ONACCESSKEY) > 0) {
@@ -278,6 +280,19 @@ public class JavaScriptCollectorRenderContext extends
                             writer.getComponentRenderContext()
                                     .getComponentClientId(), js.getMode(),
                             accessKey, subComponents));
+
+                    return;
+                }
+
+                int passiveModes = JavaScriptEnableModeImpl.PASSIVE_MASK & mode;
+
+                // On mode initialisé, mais y a t-il des modes (
+                if (passiveModes > 0) {
+
+                    components.add(new ComponentId(
+                            writer.getComponentRenderContext()
+                                    .getComponentClientId(), passiveModes,
+                            null, null));
 
                     return;
                 }
@@ -406,17 +421,17 @@ public class JavaScriptCollectorRenderContext extends
         FacesContext facesContext = htmlWriter.getComponentRenderContext()
                 .getFacesContext();
 
-        List scripts = null;
-        List raws = null;
+        List<Script> scripts = null;
+        List<Raw> raws = null;
 
         for (Iterator it = components.iterator(); it.hasNext();) {
             Object object = it.next();
 
             if (object instanceof Script) {
                 if (scripts == null) {
-                    scripts = new ArrayList(8);
+                    scripts = new ArrayList<Script>(8);
                 }
-                scripts.add(object);
+                scripts.add((Script) object);
 
                 it.remove();
                 continue;
@@ -424,9 +439,9 @@ public class JavaScriptCollectorRenderContext extends
 
             if (object instanceof Raw) {
                 if (raws == null) {
-                    raws = new ArrayList(8);
+                    raws = new ArrayList<Raw>(8);
                 }
-                raws.add(object);
+                raws.add((Raw) object);
 
                 it.remove();
                 continue;
@@ -513,7 +528,7 @@ public class JavaScriptCollectorRenderContext extends
         }
 
         ExternalContext externalContext = facesContext.getExternalContext();
-        Map requestMap = externalContext.getRequestMap();
+        Map<String, Object> requestMap = externalContext.getRequestMap();
 
         if (requestMap.put(DISABLE_VINIT_SEARCH_PROPERTY, Boolean.TRUE) == null) {
             if (jsWriter == null) {
@@ -553,23 +568,28 @@ public class JavaScriptCollectorRenderContext extends
         if (components.isEmpty() == false) {
 
             if (logProfiling) {
+                assert jsWriter != null : "JsWriter is NULL";
+
                 jsWriter.writeCall("f_core", "Profile").writeln(
                         "null,\"javascriptCollector.components("
                                 + (components.size()) + ")\");");
             }
 
-            List initializeIds = new ArrayList(16);
-            List accessIds = new ArrayList(16);
-            List messageIds = new ArrayList(16);
-            List focusIds = new ArrayList();
-            List submitIds = new ArrayList(16);
-            List hoverIds = new ArrayList(16);
+            List<ComponentId> initializeIds = new ArrayList<ComponentId>(16);
+            List<String> accessIds = new ArrayList<String>(16);
+            List<String> messageIds = new ArrayList<String>(16);
+            List<String> focusIds = new ArrayList<String>();
+            List<String> submitIds = new ArrayList<String>(16);
+            List<String> hoverIds = new ArrayList<String>(16);
+            List<String> layoutIds = new ArrayList<String>(16);
 
             for (Iterator it = components.iterator(); it.hasNext();) {
                 Object object = it.next();
 
                 if (object instanceof ComponentId) {
-                    initializeIds.add(object);
+                    ComponentId componentId = (ComponentId) object;
+
+                    initializeIds.add(componentId);
 
                     if (logIntermediateProfiling) {
                         if (jsWriter == null) {
@@ -578,7 +598,7 @@ public class JavaScriptCollectorRenderContext extends
 
                         writeInitIds(jsWriter, initializeIds, beginRender,
                                 focusIds, hoverIds, messageIds, accessIds,
-                                submitIds);
+                                submitIds, layoutIds);
 
                         jsWriter.writeCall("f_core", "Profile").writeln(
                                 "null,\"javascriptCollector.initIds(#"
@@ -595,7 +615,7 @@ public class JavaScriptCollectorRenderContext extends
 
                     writeInitIds(jsWriter, initializeIds, beginRender,
                             focusIds, hoverIds, messageIds, accessIds,
-                            submitIds);
+                            submitIds, layoutIds);
 
                     if (logIntermediateProfiling) {
                         jsWriter.writeCall("f_core", "Profile").writeln(
@@ -621,6 +641,8 @@ public class JavaScriptCollectorRenderContext extends
                     jsWriter = InitRenderer.openScriptTag(htmlWriter);
                 }
 
+                assert jsWriter != null : "JsWriter is null !";
+
                 jsWriter.writeln(buffer);
 
                 if (logIntermediateProfiling) {
@@ -636,13 +658,14 @@ public class JavaScriptCollectorRenderContext extends
                 }
 
                 writeInitIds(jsWriter, initializeIds, beginRender, focusIds,
-                        hoverIds, messageIds, accessIds, submitIds);
+                        hoverIds, messageIds, accessIds, submitIds, layoutIds);
             }
 
             if (accessIds.isEmpty() == false || messageIds.isEmpty() == false
                     || focusIds.isEmpty() == false
                     || submitIds.isEmpty() == false
-                    || hoverIds.isEmpty() == false) {
+                    || hoverIds.isEmpty() == false
+                    || layoutIds.isEmpty() == false) {
                 if (jsWriter == null) {
                     jsWriter = InitRenderer.openScriptTag(htmlWriter);
                 }
@@ -722,6 +745,24 @@ public class JavaScriptCollectorRenderContext extends
                     }
                     objWriter.end();
                     jsWriter.writeln(");");
+                }
+
+                if (layoutIds.isEmpty() == false) {
+                    boolean first = true;
+                    jsWriter.writeCall(cameliaClassLoader, "f_initOnLayoutIds")
+                            .write('[');
+                    for (Iterator it = layoutIds.iterator(); it.hasNext();) {
+
+                        if (first) {
+                            first = false;
+
+                        } else {
+                            jsWriter.write(',');
+                        }
+
+                        jsWriter.writeString((String) it.next());
+                    }
+                    jsWriter.writeln("]);");
                 }
 
             }
@@ -848,8 +889,10 @@ public class JavaScriptCollectorRenderContext extends
     }
 
     private static void writeInitIds(IJavaScriptWriter jsWriter,
-            List initializeIds, boolean beginRender, List focusIds,
-            List hoverIds, List messagesIds, List accessIds, List submitIds)
+            List<ComponentId> initializeIds, boolean beginRender,
+            List<String> focusIds, List<String> hoverIds,
+            List<String> messagesIds, List<String> accessIds,
+            List<String> submitIds, List<String> layoutIds)
             throws WriterException {
 
         String currendId = null;
@@ -863,7 +906,7 @@ public class JavaScriptCollectorRenderContext extends
 
         ComponentId currendIdDetected = null;
 
-        List others = null;
+        List<ComponentId> others = null;
 
         boolean hasMessages = jsWriter.getFacesContext()
                 .getClientIdsWithMessages().hasNext();
@@ -879,12 +922,14 @@ public class JavaScriptCollectorRenderContext extends
                 continue;
             }
 
-            if (componentId.mode > 0
-                    && (componentId.mode & JavaScriptEnableModeImpl.ONINIT) == 0
-                    && (hasMessages == false || (componentId.mode & JavaScriptEnableModeImpl.ONMESSAGE) == 0)) {
+            int mode = componentId.mode;
+
+            if (mode > 0
+                    && (mode & JavaScriptEnableModeImpl.ONINIT) == 0
+                    && (hasMessages == false || (mode & JavaScriptEnableModeImpl.ONMESSAGE) == 0)) {
 
                 if (others == null) {
-                    others = new ArrayList(initializeIds.size());
+                    others = new ArrayList<ComponentId>(initializeIds.size());
                 }
                 others.add(componentId);
                 continue;
@@ -899,6 +944,15 @@ public class JavaScriptCollectorRenderContext extends
             }
 
             jsWriter.writeString(clientId);
+
+            int passiveModes = JavaScriptEnableModeImpl.PASSIVE_MASK & mode;
+            if (passiveModes > 0) {
+                if (others == null) {
+                    others = new ArrayList<ComponentId>(initializeIds.size());
+                }
+                others.add(componentId);
+            }
+
         }
 
         if (first == false) {
@@ -922,41 +976,25 @@ public class JavaScriptCollectorRenderContext extends
             for (Iterator it = others.iterator(); it.hasNext();) {
                 ComponentId componentId = (ComponentId) it.next();
 
-                if ((componentId.mode & JavaScriptEnableModeImpl.ONSUBMIT) == 0) {
-                    continue;
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONSUBMIT) > 0) {
+                    submitIds.add(componentId.clientId);
                 }
 
-                submitIds.add(componentId.clientId);
-            }
-
-            for (Iterator it = others.iterator(); it.hasNext();) {
-                ComponentId componentId = (ComponentId) it.next();
-
-                if ((componentId.mode & JavaScriptEnableModeImpl.ONFOCUS) == 0) {
-                    continue;
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONFOCUS) > 0) {
+                    focusIds.add(componentId.clientId);
                 }
 
-                focusIds.add(componentId.clientId);
-            }
-
-            for (Iterator it = others.iterator(); it.hasNext();) {
-                ComponentId componentId = (ComponentId) it.next();
-
-                if ((componentId.mode & JavaScriptEnableModeImpl.ONMESSAGE) == 0) {
-                    continue;
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONMESSAGE) > 0) {
+                    messagesIds.add(componentId.clientId);
                 }
 
-                messagesIds.add(componentId.clientId);
-            }
-
-            for (Iterator it = others.iterator(); it.hasNext();) {
-                ComponentId componentId = (ComponentId) it.next();
-
-                if ((componentId.mode & JavaScriptEnableModeImpl.ONOVER) == 0) {
-                    continue;
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONOVER) > 0) {
+                    hoverIds.add(componentId.clientId);
                 }
 
-                hoverIds.add(componentId.clientId);
+                if ((componentId.mode & JavaScriptEnableModeImpl.ONLAYOUT) > 0) {
+                    layoutIds.add(componentId.clientId);
+                }
             }
         }
 

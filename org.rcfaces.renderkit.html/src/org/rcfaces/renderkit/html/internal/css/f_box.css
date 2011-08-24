@@ -10,3 +10,6 @@
  * @version $Revision$ $Date$ 
  */
  
+.f_box {
+	position: relative;
+}

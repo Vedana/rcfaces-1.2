@@ -40,75 +40,75 @@ public class SelectItemsIteratorTag extends CameliaTag implements Tag {
 		return SelectItemsIteratorComponent.COMPONENT_TYPE;
 	}
 
-	public final void setItems(ValueExpression items) {
+	public void setItems(ValueExpression items) {
 		this.items = items;
 	}
 
-	public final void setVar(ValueExpression var) {
+	public void setVar(ValueExpression var) {
 		this.var = var;
 	}
 
-	public final void setItemIndexVar(ValueExpression itemIndexVar) {
+	public void setItemIndexVar(ValueExpression itemIndexVar) {
 		this.itemIndexVar = itemIndexVar;
 	}
 
-	public final void setItemLabel(ValueExpression itemLabel) {
+	public void setItemLabel(ValueExpression itemLabel) {
 		this.itemLabel = itemLabel;
 	}
 
-	public final void setItemValue(ValueExpression itemValue) {
+	public void setItemValue(ValueExpression itemValue) {
 		this.itemValue = itemValue;
 	}
 
-	public final void setItemDisabled(ValueExpression itemDisabled) {
+	public void setItemDisabled(ValueExpression itemDisabled) {
 		this.itemDisabled = itemDisabled;
 	}
 
-	public final void setItemDescription(ValueExpression itemDescription) {
+	public void setItemDescription(ValueExpression itemDescription) {
 		this.itemDescription = itemDescription;
 	}
 
-	public final void setItemAccessKey(ValueExpression itemAccessKey) {
+	public void setItemAccessKey(ValueExpression itemAccessKey) {
 		this.itemAccessKey = itemAccessKey;
 	}
 
-	public final void setItemAcceleratorKey(ValueExpression itemAcceleratorKey) {
+	public void setItemAcceleratorKey(ValueExpression itemAcceleratorKey) {
 		this.itemAcceleratorKey = itemAcceleratorKey;
 	}
 
-	public final void setItemGroupName(ValueExpression itemGroupName) {
+	public void setItemGroupName(ValueExpression itemGroupName) {
 		this.itemGroupName = itemGroupName;
 	}
 
-	public final void setItemInputType(ValueExpression itemInputType) {
+	public void setItemInputType(ValueExpression itemInputType) {
 		this.itemInputType = itemInputType;
 	}
 
-	public final void setItemStyleClass(ValueExpression itemStyleClass) {
+	public void setItemStyleClass(ValueExpression itemStyleClass) {
 		this.itemStyleClass = itemStyleClass;
 	}
 
-	public final void setItemImageURL(ValueExpression itemImageURL) {
+	public void setItemImageURL(ValueExpression itemImageURL) {
 		this.itemImageURL = itemImageURL;
 	}
 
-	public final void setItemDisabledImageURL(ValueExpression itemDisabledImageURL) {
+	public void setItemDisabledImageURL(ValueExpression itemDisabledImageURL) {
 		this.itemDisabledImageURL = itemDisabledImageURL;
 	}
 
-	public final void setItemHoverImageURL(ValueExpression itemHoverImageURL) {
+	public void setItemHoverImageURL(ValueExpression itemHoverImageURL) {
 		this.itemHoverImageURL = itemHoverImageURL;
 	}
 
-	public final void setItemSelectedImageURL(ValueExpression itemSelectedImageURL) {
+	public void setItemSelectedImageURL(ValueExpression itemSelectedImageURL) {
 		this.itemSelectedImageURL = itemSelectedImageURL;
 	}
 
-	public final void setItemExpandedImageURL(ValueExpression itemExpandedImageURL) {
+	public void setItemExpandedImageURL(ValueExpression itemExpandedImageURL) {
 		this.itemExpandedImageURL = itemExpandedImageURL;
 	}
 
-	public final void setItemVisibility(ValueExpression itemVisibility) {
+	public void setItemVisibility(ValueExpression itemVisibility) {
 		this.itemVisibility = itemVisibility;
 	}
 

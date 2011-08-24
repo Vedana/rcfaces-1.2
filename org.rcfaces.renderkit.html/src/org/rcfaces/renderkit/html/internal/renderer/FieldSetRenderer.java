@@ -37,7 +37,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
     private static final String BORDER_RENDERER = "camelia.customButton.borderRenderer";
 
-    private static final String DIV_BODY = "_cellBody";
+    private static final String CONTENT = "_content";
 
     private static final String TITLE_ID_SUFFIX = ""
             + UINamingContainer.SEPARATOR_CHAR
@@ -148,7 +148,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
     }
 
     protected String getBodyClassName(IHtmlWriter htmlWriter) {
-        return getMainStyleClassName() + DIV_BODY;
+        return getMainStyleClassName() + CONTENT;
     }
 
     protected void writeFieldSetAttributes(IHtmlWriter htmlWriter,
@@ -160,7 +160,7 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         writeStyleClass(htmlWriter, getCssStyleClasses(htmlWriter));
 
         ICssWriter cssWriter = htmlWriter.writeStyle(32);
-        writeFieldSetCss(cssWriter, fieldSetComponent);
+        writeFieldSetCss(htmlWriter, cssWriter, fieldSetComponent);
 
         String overStyleClass = fieldSetComponent.getOverStyleClass(htmlWriter
                 .getComponentRenderContext().getFacesContext());
@@ -172,10 +172,15 @@ public class FieldSetRenderer extends AbstractCssRenderer {
 
     }
 
-    protected void writeFieldSetCss(ICssWriter cssWriter,
-            FieldSetComponent fieldSetComponent) {
-        cssWriter.writePosition(fieldSetComponent);
-        cssWriter.writeSize(fieldSetComponent);
+    protected void writeFieldSetCss(IHtmlWriter htmlWriter,
+            ICssWriter cssWriter, FieldSetComponent fieldSetComponent)
+            throws WriterException {
+
+        writeComponentPosition(htmlWriter, cssWriter, fieldSetComponent,
+                CSS_ALL_MASK);
+        // cssWriter.writePosition(fieldSetComponent);
+        // cssWriter.writeSize(fieldSetComponent);
+
         cssWriter.writeMargin(fieldSetComponent);
         cssWriter.writeVisibility(fieldSetComponent);
         cssWriter.writeBackground(fieldSetComponent, null);
@@ -270,4 +275,10 @@ public class FieldSetRenderer extends AbstractCssRenderer {
         nameSpaceProperties.addAttributes(null,
                 new String[] { "overStyleClass" });
     }
+
+    @Override
+    protected boolean needInitLayout() {
+        return true;
+    }
+
 }

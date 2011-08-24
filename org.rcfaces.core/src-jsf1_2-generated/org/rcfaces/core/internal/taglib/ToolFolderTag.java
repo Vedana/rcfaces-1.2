@@ -28,27 +28,27 @@ public class ToolFolderTag extends AbstractBasicTag implements Tag {
 		return ToolFolderComponent.COMPONENT_TYPE;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+	public void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setVerticalAlignment(ValueExpression verticalAlignment) {
+	public void setVerticalAlignment(ValueExpression verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 

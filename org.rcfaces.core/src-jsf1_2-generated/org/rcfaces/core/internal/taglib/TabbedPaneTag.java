@@ -26,19 +26,19 @@ public class TabbedPaneTag extends CardBoxTag implements Tag {
 		return TabbedPaneComponent.COMPONENT_TYPE;
 	}
 
-	public final void setCloseListener(ValueExpression closeListeners) {
+	public void setCloseListener(ValueExpression closeListeners) {
 		this.closeListeners = closeListeners;
 	}
 
-	public final void setClosable(ValueExpression closable) {
+	public void setClosable(ValueExpression closable) {
 		this.closable = closable;
 	}
 
-	public final void setPreSelectionListener(ValueExpression preSelectionListeners) {
+	public void setPreSelectionListener(ValueExpression preSelectionListeners) {
 		this.preSelectionListeners = preSelectionListeners;
 	}
 
-	public final void setShowValue(ValueExpression showValue) {
+	public void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
 	}
 

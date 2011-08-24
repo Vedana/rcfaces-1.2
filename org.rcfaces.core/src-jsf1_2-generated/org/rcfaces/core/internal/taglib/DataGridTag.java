@@ -74,203 +74,203 @@ public class DataGridTag extends AbstractDataTag implements Tag {
 		return DataGridComponent.COMPONENT_TYPE;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setSelectable(ValueExpression selectable) {
+	public void setSelectable(ValueExpression selectable) {
 		this.selectable = selectable;
 	}
 
-	public final void setSelectionCardinality(ValueExpression selectionCardinality) {
+	public void setSelectionCardinality(ValueExpression selectionCardinality) {
 		this.selectionCardinality = selectionCardinality;
 	}
 
-	public final void setSelectedValues(ValueExpression selectedValues) {
+	public void setSelectedValues(ValueExpression selectedValues) {
 		this.selectedValues = selectedValues;
 	}
 
-	public final void setDragListener(ValueExpression dragListeners) {
+	public void setDragListener(ValueExpression dragListeners) {
 		this.dragListeners = dragListeners;
 	}
 
-	public final void setDragEffects(ValueExpression dragEffects) {
+	public void setDragEffects(ValueExpression dragEffects) {
 		this.dragEffects = dragEffects;
 	}
 
-	public final void setDragTypes(ValueExpression dragTypes) {
+	public void setDragTypes(ValueExpression dragTypes) {
 		this.dragTypes = dragTypes;
 	}
 
-	public final void setDraggable(ValueExpression draggable) {
+	public void setDraggable(ValueExpression draggable) {
 		this.draggable = draggable;
 	}
 
-	public final void setDropListener(ValueExpression dropListeners) {
+	public void setDropListener(ValueExpression dropListeners) {
 		this.dropListeners = dropListeners;
 	}
 
-	public final void setDropCompleteListener(ValueExpression dropCompleteListeners) {
+	public void setDropCompleteListener(ValueExpression dropCompleteListeners) {
 		this.dropCompleteListeners = dropCompleteListeners;
 	}
 
-	public final void setDropEffects(ValueExpression dropEffects) {
+	public void setDropEffects(ValueExpression dropEffects) {
 		this.dropEffects = dropEffects;
 	}
 
-	public final void setDropTypes(ValueExpression dropTypes) {
+	public void setDropTypes(ValueExpression dropTypes) {
 		this.dropTypes = dropTypes;
 	}
 
-	public final void setDroppable(ValueExpression droppable) {
+	public void setDroppable(ValueExpression droppable) {
 		this.droppable = droppable;
 	}
 
-	public final void setCheckListener(ValueExpression checkListeners) {
+	public void setCheckListener(ValueExpression checkListeners) {
 		this.checkListeners = checkListeners;
 	}
 
-	public final void setCheckable(ValueExpression checkable) {
+	public void setCheckable(ValueExpression checkable) {
 		this.checkable = checkable;
 	}
 
-	public final void setCheckCardinality(ValueExpression checkCardinality) {
+	public void setCheckCardinality(ValueExpression checkCardinality) {
 		this.checkCardinality = checkCardinality;
 	}
 
-	public final void setCheckedValues(ValueExpression checkedValues) {
+	public void setCheckedValues(ValueExpression checkedValues) {
 		this.checkedValues = checkedValues;
 	}
 
-	public final void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
+	public void setAdditionalInformationListener(ValueExpression additionalInformationListeners) {
 		this.additionalInformationListeners = additionalInformationListeners;
 	}
 
-	public final void setAdditionalInformationValues(ValueExpression additionalInformationValues) {
+	public void setAdditionalInformationValues(ValueExpression additionalInformationValues) {
 		this.additionalInformationValues = additionalInformationValues;
 	}
 
-	public final void setClientAdditionalInformationFullState(ValueExpression clientAdditionalInformationFullState) {
+	public void setClientAdditionalInformationFullState(ValueExpression clientAdditionalInformationFullState) {
 		this.clientAdditionalInformationFullState = clientAdditionalInformationFullState;
 	}
 
-	public final void setAdditionalInformationCardinality(ValueExpression additionalInformationCardinality) {
+	public void setAdditionalInformationCardinality(ValueExpression additionalInformationCardinality) {
 		this.additionalInformationCardinality = additionalInformationCardinality;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setRowStyleClass(ValueExpression rowStyleClass) {
+	public void setRowStyleClass(ValueExpression rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
 	}
 
-	public final void setEmptyDataMessage(ValueExpression emptyDataMessage) {
+	public void setEmptyDataMessage(ValueExpression emptyDataMessage) {
 		this.emptyDataMessage = emptyDataMessage;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
 	}
 
-	public final void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setShowValue(ValueExpression showValue) {
+	public void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
 	}
 
-	public final void setKeySearchColumnId(ValueExpression keySearchColumnId) {
+	public void setKeySearchColumnId(ValueExpression keySearchColumnId) {
 		this.keySearchColumnId = keySearchColumnId;
 	}
 
-	public final void setPreferences(ValueExpression preferences) {
+	public void setPreferences(ValueExpression preferences) {
 		this.preferences = preferences;
 	}
 
-	public final void setPaged(ValueExpression paged) {
+	public void setPaged(ValueExpression paged) {
 		this.paged = paged;
 	}
 
-	public final void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
+	public void setClientSelectionFullState(ValueExpression clientSelectionFullState) {
 		this.clientSelectionFullState = clientSelectionFullState;
 	}
 
-	public final void setClientCheckFullState(ValueExpression clientCheckFullState) {
+	public void setClientCheckFullState(ValueExpression clientCheckFullState) {
 		this.clientCheckFullState = clientCheckFullState;
 	}
 
-	public final void setHeaderVisible(ValueExpression headerVisible) {
+	public void setHeaderVisible(ValueExpression headerVisible) {
 		this.headerVisible = headerVisible;
 	}
 
-	public final void setCursorValue(ValueExpression cursorValue) {
+	public void setCursorValue(ValueExpression cursorValue) {
 		this.cursorValue = cursorValue;
 	}
 
-	public final void setRowDragTypes(ValueExpression rowDragTypes) {
+	public void setRowDragTypes(ValueExpression rowDragTypes) {
 		this.rowDragTypes = rowDragTypes;
 	}
 
-	public final void setRowDragEffects(ValueExpression rowDragEffects) {
+	public void setRowDragEffects(ValueExpression rowDragEffects) {
 		this.rowDragEffects = rowDragEffects;
 	}
 
-	public final void setRowDropTypes(ValueExpression rowDropTypes) {
+	public void setRowDropTypes(ValueExpression rowDropTypes) {
 		this.rowDropTypes = rowDropTypes;
 	}
 
-	public final void setRowDropEffects(ValueExpression rowDropEffects) {
+	public void setRowDropEffects(ValueExpression rowDropEffects) {
 		this.rowDropEffects = rowDropEffects;
 	}
 
-	public final void setRowValueColumnId(ValueExpression rowValueColumnId) {
+	public void setRowValueColumnId(ValueExpression rowValueColumnId) {
 		this.rowValueColumnId = rowValueColumnId;
 	}
 
-	public final void setRowLabelColumnId(ValueExpression rowLabelColumnId) {
+	public void setRowLabelColumnId(ValueExpression rowLabelColumnId) {
 		this.rowLabelColumnId = rowLabelColumnId;
 	}
 
-	public final void setRowCountVar(ValueExpression rowCountVar) {
+	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
 
-	public final void setRowIndexVar(ValueExpression rowIndexVar) {
+	public void setRowIndexVar(ValueExpression rowIndexVar) {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final void setCellTextWrap(ValueExpression cellTextWrap) {
+	public void setCellTextWrap(ValueExpression cellTextWrap) {
 		this.cellTextWrap = cellTextWrap;
 	}
 
-	public final void setBodyDroppable(ValueExpression bodyDroppable) {
+	public void setBodyDroppable(ValueExpression bodyDroppable) {
 		this.bodyDroppable = bodyDroppable;
 	}
 

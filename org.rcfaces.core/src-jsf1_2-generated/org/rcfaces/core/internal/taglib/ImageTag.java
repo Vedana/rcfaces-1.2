@@ -27,23 +27,23 @@ public class ImageTag extends AbstractOutputTag implements Tag {
 		return ImageComponent.COMPONENT_TYPE;
 	}
 
-	public final void setImageURL(ValueExpression imageURL) {
+	public void setImageURL(ValueExpression imageURL) {
 		this.imageURL = imageURL;
 	}
 
-	public final void setImageHeight(ValueExpression imageHeight) {
+	public void setImageHeight(ValueExpression imageHeight) {
 		this.imageHeight = imageHeight;
 	}
 
-	public final void setImageWidth(ValueExpression imageWidth) {
+	public void setImageWidth(ValueExpression imageWidth) {
 		this.imageWidth = imageWidth;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 

@@ -32,43 +32,43 @@ public class ComponentsListTag extends AbstractDataTag implements Tag {
 		return ComponentsListComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setBorderType(ValueExpression borderType) {
+	public void setBorderType(ValueExpression borderType) {
 		this.borderType = borderType;
 	}
 
-	public final void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
+	public void setHorizontalScrollPosition(ValueExpression horizontalScrollPosition) {
 		this.horizontalScrollPosition = horizontalScrollPosition;
 	}
 
-	public final void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
+	public void setVerticalScrollPosition(ValueExpression verticalScrollPosition) {
 		this.verticalScrollPosition = verticalScrollPosition;
 	}
 
-	public final void setShowValue(ValueExpression showValue) {
+	public void setShowValue(ValueExpression showValue) {
 		this.showValue = showValue;
 	}
 
-	public final void setRowCountVar(ValueExpression rowCountVar) {
+	public void setRowCountVar(ValueExpression rowCountVar) {
 		this.rowCountVar = rowCountVar;
 	}
 
-	public final void setRowIndexVar(ValueExpression rowIndexVar) {
+	public void setRowIndexVar(ValueExpression rowIndexVar) {
 		this.rowIndexVar = rowIndexVar;
 	}
 
-	public final void setColumnNumber(ValueExpression columnNumber) {
+	public void setColumnNumber(ValueExpression columnNumber) {
 		this.columnNumber = columnNumber;
 	}
 
-	public final void setRowStyleClass(ValueExpression rowStyleClass) {
+	public void setRowStyleClass(ValueExpression rowStyleClass) {
 		this.rowStyleClass = rowStyleClass;
 	}
 
-	public final void setColumnStyleClass(ValueExpression columnStyleClass) {
+	public void setColumnStyleClass(ValueExpression columnStyleClass) {
 		this.columnStyleClass = columnStyleClass;
 	}
 

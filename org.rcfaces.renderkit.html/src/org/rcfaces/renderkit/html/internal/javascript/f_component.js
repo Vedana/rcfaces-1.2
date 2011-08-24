@@ -209,13 +209,27 @@ var __members = {
 	 *
 	 * @method public
 	 * @param Number width Width of the component.
+	 * @param hidden Boolean persistence
 	 * @return void
 	 */
-	f_setWidth: function(width) {
+	f_setWidth: function(width, persistence) {
 		f_core.Assert(typeof(width)=="number", "f_component.f_setWidth: w parameter must be a number ! ("+width+")");
-
-		this.style.width = width+"px";
-		this.f_setProperty(f_prop.WIDTH, width);
+		
+		this.f_updateWidth(width);
+		
+		if (persistence!==false) {
+			this.f_setProperty(f_prop.WIDTH, width);
+		}
+	},
+	/**
+	 * Update the width of the component
+	 *
+	 * @method protected
+	 * @param Number width Width of the component.
+	 * @return void
+	 */
+	f_updateWidth: function(width) {
+		this.style.width = width+"px";		
 	},
 	/**
 	 * Returns the height of the component.
@@ -231,13 +245,27 @@ var __members = {
 	 * 
 	 * @method public
 	 * @param Number height Height of the component.
+	 * @param hidden Boolean persistence
 	 * @return void
 	 */
-	f_setHeight: function(height) {
+	f_setHeight: function(height, persistence) {
 		f_core.Assert(typeof(height)=="number", "f_component.f_setHeight: h parameter must be a number ! ("+height+")");
 
-		this.style.height = height+"px";
-		this.f_setProperty(f_prop.HEIGHT, height);
+		this.f_updateHeight(height);
+
+		if (persistence!==false) {
+			this.f_setProperty(f_prop.HEIGHT, height);
+		}
+	},
+	/**
+	 * Update the height of the component
+	 *
+	 * @method protected
+	 * @param Number width Height of the component.
+	 * @return void
+	 */
+	f_updateHeight: function(height) {
+		this.style.height = height+"px";		
 	},
 	/**
 	 *  Returns the background color of the component.

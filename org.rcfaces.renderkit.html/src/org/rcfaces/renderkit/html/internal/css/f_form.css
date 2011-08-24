@@ -1,0 +1,15 @@
+/*
+ * $Id$
+ */
+
+.f_form {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.f_form_full {
+	width: 100%;
+	height: 100%;
+}

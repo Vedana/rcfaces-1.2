@@ -238,7 +238,7 @@ f_classLoader.prototype = {
 			
 			document.body.onmouseover=null;
 		}
-		
+
 		this._onFireInits=undefined; // List<String>
 		this._onCompleteIds=undefined; // List<String>
 		this._onMessageIds=undefined; // List<String>
@@ -448,7 +448,7 @@ f_classLoader.prototype = {
 			}
 		}
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" static DocumentComplete method(s) called.");
-	
+
 		nb=0;
 	
 		var documentCompleteObjects = this._documentCompleteObjects;
@@ -472,7 +472,7 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during documentComplete event for object "+obj.id+"/"+obj.tagName, x);
 			}
 		}	
-	
+
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" f_documentComplete method(s) called.");
 	},
 	
@@ -1054,6 +1054,28 @@ f_classLoader.prototype = {
 	 * @param Set ids
 	 * @return void
 	 */
+	f_initOnLayoutIds: function(ids) {
+		
+		if (f_core.IsDebugEnabled(f_classLoader)) {
+			var idsLog="";
+			for(var id in ids) {
+				if (idsLog) {
+					idsLog+=",";
+				}
+				
+				idsLog+=id;
+			}	
+
+			f_core.Debug(f_classLoader, "f_initOnLayoutIds: ids="+idsLog);
+		}
+
+		f_layoutManager.Get().f_addComponentClientIds(ids);
+	},
+	/**
+	 * @method hidden final
+	 * @param Set ids
+	 * @return void
+	 */
 	f_initOnFocusIds: function(ids) {
 		
 		if (f_core.IsDebugEnabled(f_classLoader)) {
@@ -1251,8 +1273,8 @@ f_classLoader.prototype = {
 	/**
 	 * @method hidden final
 	 * @param Object obj Object or String
-	 * @return optional Boolean ignoreNotFound
-	 * @return optional Boolean callCompleteComponent
+	 * @param optional Boolean ignoreNotFound
+	 * @param optional Boolean callCompleteComponent
 	 * @return Object
 	 */
 	f_init: function(obj, ignoreNotFound, callCompleteComponent) {
@@ -1952,7 +1974,7 @@ f_classLoader._EMPTY_ARGUMENTS=[];
 f_classLoader._MakeClassName=function(claz, lookId) {
 	if (!lookId) {
 		return claz;
-	}
+	} 
 	
 	return claz+f_class._LOOK+lookId;
 };
@@ -2070,7 +2092,7 @@ f_classLoader._SerializeInputs=function(component) {
 	}
 	
 	return serializedInputs;
-}
+};
 
 /**
  * @method hidden static
@@ -2188,8 +2210,6 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 		}
 	}		
 };
-
-
 
 /**
  * @method public static

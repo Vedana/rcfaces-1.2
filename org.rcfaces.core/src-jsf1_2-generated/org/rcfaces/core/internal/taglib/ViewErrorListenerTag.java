@@ -24,11 +24,11 @@ public class ViewErrorListenerTag extends CameliaTag implements Tag {
 		return ViewErrorListenerComponent.COMPONENT_TYPE;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setErrorListener(ValueExpression errorListeners) {
+	public void setErrorListener(ValueExpression errorListeners) {
 		this.errorListeners = errorListeners;
 	}
 

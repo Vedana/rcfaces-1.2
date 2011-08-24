@@ -38,67 +38,67 @@ public class StyledMessageTag extends AbstractBasicTag implements Tag {
 		return StyledMessageComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
+	public void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
 		this.backgroundImageHorizontalPosition = backgroundImageHorizontalPosition;
 	}
 
-	public final void setBackgroundImageHorizontalRepeat(ValueExpression backgroundImageHorizontalRepeat) {
+	public void setBackgroundImageHorizontalRepeat(ValueExpression backgroundImageHorizontalRepeat) {
 		this.backgroundImageHorizontalRepeat = backgroundImageHorizontalRepeat;
 	}
 
-	public final void setBackgroundImageURL(ValueExpression backgroundImageURL) {
+	public void setBackgroundImageURL(ValueExpression backgroundImageURL) {
 		this.backgroundImageURL = backgroundImageURL;
 	}
 
-	public final void setBackgroundImageVerticalPosition(ValueExpression backgroundImageVerticalPosition) {
+	public void setBackgroundImageVerticalPosition(ValueExpression backgroundImageVerticalPosition) {
 		this.backgroundImageVerticalPosition = backgroundImageVerticalPosition;
 	}
 
-	public final void setBackgroundImageVerticalRepeat(ValueExpression backgroundImageVerticalRepeat) {
+	public void setBackgroundImageVerticalRepeat(ValueExpression backgroundImageVerticalRepeat) {
 		this.backgroundImageVerticalRepeat = backgroundImageVerticalRepeat;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+	public void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setShowIfMessage(ValueExpression showIfMessage) {
+	public void setShowIfMessage(ValueExpression showIfMessage) {
 		this.showIfMessage = showIfMessage;
 	}
 
-	public final void setSetFocusIfMessage(ValueExpression setFocusIfMessage) {
+	public void setSetFocusIfMessage(ValueExpression setFocusIfMessage) {
 		this.setFocusIfMessage = setFocusIfMessage;
 	}
 

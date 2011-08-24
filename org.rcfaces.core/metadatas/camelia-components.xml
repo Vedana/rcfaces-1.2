@@ -3118,6 +3118,13 @@ Dans le cas d'un mode period !
 		</method>
 
 		<method id="setNumber">
+			<parameter type="java.lang.Number" name="number" />
+			<code>
+				setValue(number);
+			</code>			
+		</method>
+
+		<method id="setNumber">
 			<parameter type="String" name="number" />
 			<code>
 				setValue(number);
