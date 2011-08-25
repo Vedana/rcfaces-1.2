@@ -312,7 +312,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         
         if (filtredDataModel == null) {
             if (true) {
-                LOG.error("Model doest not implement IFiltredModel, returns *not found*");
+                LOG.error("Model does not implement IFiltredModel, returns *not found*");
                 return null;
             }
 
