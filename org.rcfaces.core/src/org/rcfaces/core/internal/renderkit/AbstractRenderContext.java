@@ -30,6 +30,8 @@ public abstract class AbstractRenderContext implements IRenderContext {
     private static final Log LOG = LogFactory
             .getLog(AbstractRenderContext.class);
 
+    private static final boolean LOG_DEBUG = LOG.isDebugEnabled();
+
     private static final int COMPONENT_STACK_INITIAL_DEPTH = 16;
 
     private static final int SCOPE_VAR_INITIAL_SIZE = 4;
@@ -88,7 +90,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         stack.add(componentClientId);
         stack.add(Boolean.FALSE);
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
             for (Iterator it = stack.iterator(); it.hasNext();) {
@@ -111,7 +113,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
             releaseMap((Map) componentContextAttributes);
         }
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
             for (Iterator it = stack.iterator(); it.hasNext();) {

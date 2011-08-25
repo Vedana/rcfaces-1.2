@@ -181,6 +181,7 @@
 		<tagAttribute id="rendered" type="boolean" generate="false"/>
 		<tagAttribute id="saveCompleteState" type="boolean" generate="true"/>
 	</facesComponent>
+	
 	<facesComponent id="cameliaGrid" extends="javax.faces.component.UIComponentBase" implements="javax.faces.component.NamingContainer" >
 		<field id="dataModel" type="javax.faces.model.DataModel" value="null" modifiers="transient"/>
 
@@ -530,6 +531,17 @@
 
 		<method id="listClientDataKeys(javax.faces.context.FacesContext)" />
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
+
+		<method id="setValueExpression" returnType="void">
+			<parameter type="String" name="name" />
+			<parameter type="ValueExpression" name="binding" />
+			<code>
+			if(name.equals(Properties.DISABLED)){
+				name = Properties.ITEM_DISABLED;
+			}
+			super.setValueExpression(name, binding);
+			</code>
+		</method>
 
 		<attribute id="itemValue" type="java.lang.String" writeComponent="false"/>
 		<attribute id="itemLabel" type="java.lang.String" writeComponent="false"/>
@@ -928,6 +940,7 @@
 		<implements id="org.rcfaces.core.internal.capability.ICellStyleClassSettings" />		
 		<implements id="org.rcfaces.core.internal.capability.ICellToolTipTextSettings" />
 		<implements id="org.rcfaces.core.internal.capability.IImageAccessorsCapability" />
+		<implements id="org.rcfaces.core.internal.capability.ICriteriaContainer" importMethods="false" />
 		
 		<capability id="IVisibilityCapability" />
 		<capability id="IHiddenModeCapability" />
@@ -955,7 +968,7 @@
 		<capability id="IDoubleClickEventCapability" />
 		<capability id="IUserEventCapability" />
 		<capability id="IInitEventCapability" />
-
+	
 		<attribute id="value" type="java.lang.Object" writeComponent="false"/>
 		
 		<!-- <attribute id="imagesProviderId" type="java.lang.String" setted="true"/>-->
@@ -993,7 +1006,22 @@
 		<method id="setHiddenMode(String)" />
 
 		<method id="setAscending(String)" />
-			
+		
+		
+		<method id="getCriteriaManager" returnType="org.rcfaces.core.component.capability.ICriteriaManagerCapability">
+			<code>
+				return CriteriaTools.getCriteriaManager(this);
+			</code>
+		</method>
+		
+		<method id="getCriteriaConfiguration" returnType="org.rcfaces.core.internal.capability.ICriteriaConfiguration">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<code>
+				return CriteriaTools.getFirstCriteriaConfiguration(this);
+			</code>
+		</method>
+		
+		
 	</component>
 
 	<component id="comboColumn" extends="cameliaValueColumn" render="false" converter="true">
@@ -1076,6 +1104,14 @@
 		<attribute id="noPagedMessage" type="java.lang.String"/>
 		
 	</component>
+
+	<component id="criteriaList" extends="abstractBasic">
+		<capability id="IForCapability" required="true"/>
+
+		<attribute id="criteriaFormat" type="java.lang.String"/>
+
+		<attribute id="noCriteriaMessage" type="java.lang.String"/>		
+	</component>
 	
 	<component id="dataGrid" extends="abstractData">
 		<implements id="org.rcfaces.core.internal.capability.IGridComponent" importMethods="false" />
@@ -1092,10 +1128,7 @@
 
 		<implements id="org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability" importMethods="false" />
 
-		<capability id="ISelectionEventCapability" />
-		<capability id="ISelectableCapability" />
-		<capability id="ISelectionCardinalityCapability" />
-		<capability id="ISelectedValuesCapability" onlyValueBinding="true" />
+		<implements id="org.rcfaces.core.component.capability.ICriteriaManagerCapability" importMethods="false" properties="selectedCriteriaColumns" />
 
 		<capability id="IDragEventCapability" />
 		<capability id="IDraggableCapability" />
@@ -1118,6 +1151,13 @@
 		
 		<attribute id="rowDropEffects" type="int" />
 		<method id="setRowDropEffects(String)" />
+
+		<attribute id="selectedCriteriaColumns" type="Object" />
+
+		<capability id="ISelectionEventCapability" />
+		<capability id="ISelectableCapability" />
+		<capability id="ISelectionCardinalityCapability" />
+		<capability id="ISelectedValuesCapability" onlyValueBinding="true" />
 	
 		<capability id="ICheckEventCapability" />
 		<capability id="ICheckableCapability" />
@@ -1149,6 +1189,7 @@
 
 		<capability id="IPreferencesSettings" />
 		<capability id="IPagedCapability" />
+		<capability id="ICriteriaCountCapability" />
 
 		<capability id="IClientSelectionFullStateCapability"/>
 		<capability id="IClientCheckFullStateCapability"/>
@@ -1166,7 +1207,6 @@
 		<attribute id="cellTextWrap" type="boolean" default="false"/>
 		
 		<attribute id="bodyDroppable" type="boolean" default="false"/>
-
 				
 		<action id="action" type="selection" default="true"/>
 		
@@ -1322,6 +1362,44 @@
 			</code>
 		</method>
 
+
+<!-- Criteria/Filtred -->
+
+		<method id="listCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<code>
+			return CriteriaTools.listCriteriaContainers(null, this);
+			</code>
+		</method>
+
+		<method id="listSelectedCriteriaContainers" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer[]">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<code>
+				return CriteriaTools.getSelectedCriteriaColumns(null, this, engine, Properties.SELECTED_CRITERIA_COLUMNS);
+			</code>
+		</method>
+		
+		<method id="setSelectedCriteriaContainers" returnType="void">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<parameter name="components" type="org.rcfaces.core.internal.capability.ICriteriaContainer[]" />
+			<code>
+				CriteriaTools.setSelectedCriteriaColumns(null, this, engine, components, Properties.SELECTED_CRITERIA_COLUMNS);
+			</code>
+		</method>
+
+		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<code>
+				return CriteriaTools.processCriteriaConfig(this, null);
+			</code>
+		</method>
+		<method id="processSelectedCriteria" returnType="org.rcfaces.core.model.ICriteriaSelectedResult">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<parameter type="org.rcfaces.core.model.ISelectedCriteria[]" name="configs" />
+			<code>
+				return CriteriaTools.processCriteriaConfig(this, configs);
+			</code>
+		</method>
 
 <!-- Order -->
 
@@ -2762,6 +2840,14 @@ Dans le cas d'un mode period !
 	</component>	
 
 	<component id="imagePagerButton" extends="imageButton">
+
+		<capability id="IForCapability" required="true"/>
+
+		<attribute id="type" type="java.lang.String" required="true"/>		
+		<attribute id="hideIfDisabled" type="boolean" required="false"/>		
+	</component>	
+
+	<component id="imageCriteriaButton" extends="imageButton">
 
 		<capability id="IForCapability" required="true"/>
 
@@ -4427,6 +4513,150 @@ Dans le cas d'un mode period !
 		<method id="listServerDataKeys(javax.faces.context.FacesContext)" />
 		
 		<method id="setFilterProperties(String)" returnType="void" />
+	</component>
+
+
+	<component id="criteria" extends="cameliaBase" render="false">
+	
+		<implements id="org.rcfaces.core.internal.capability.ISelectionComponent" importMethods="false" />
+		<implements id="org.rcfaces.core.internal.capability.ICriteriaConfiguration" importMethods="false" />
+
+		<capability id="ISelectionCardinalityCapability" />
+		<capability id="ISelectedValuesCapability" onlyValueBinding="true" />
+		
+		<attribute id="criteriaValue" type="java.lang.Object"/>
+
+		<attribute id="criteriaTitle" type="java.lang.String" />
+
+		<attribute id="criteriaConverter" type="javax.faces.convert.Converter" />
+		<method id="setCriteriaConverter">
+			<parameter type="String" name="converterId" />
+			<code>			
+				setCriteriaConverter(converterId, null);
+			</code>
+		</method>
+				
+		<method id="setCriteriaConverter">
+			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
+			<import>javax.faces.convert.Converter</import>
+			<parameter type="String" name="converterId" />
+			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+			<code>
+				Converter converter=ComponentTools.createConverter(facesContext, converterId);
+	
+				setCriteriaConverter(converter);
+			</code>
+		</method>
+
+		<attribute id="labelConverter" type="javax.faces.convert.Converter" />
+		<method id="setLabelConverter">
+			<parameter type="String" name="converterId" />
+			<code>			
+				setLabelConverter(converterId, null);
+			</code>
+		</method>
+				
+		<method id="setLabelConverter">
+			<import>org.rcfaces.core.internal.tools.ComponentTools</import>
+			<import>javax.faces.convert.Converter</import>
+			<parameter type="String" name="converterId" />
+			<parameter type="javax.faces.context.FacesContext" name="facesContext" />
+			<code>
+				Converter converter=ComponentTools.createConverter(facesContext, converterId);
+	
+				setLabelConverter(converter);
+			</code>
+		</method>
+
+			
+	<!-- Selection/deselection -->
+		<method id="select" returnType="void">
+			<parameter type="Object" name="rowValue" />
+			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
+			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
+			<code>
+				SelectionTools.select(null, this, rowValue);
+			</code>
+		</method>		
+		<method id="selectAll" returnType="void">
+			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
+			<import>org.rcfaces.core.internal.tools.CollectionTools</import>
+			<code>
+				SelectionTools.selectAll(null, this);
+			</code>
+		</method>
+
+		<method id="deselect" returnType="void">
+			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
+			<parameter type="Object" name="rowValue" />
+			<code>
+				SelectionTools.deselect(null, this, rowValue);
+			</code>
+		</method>
+		<method id="deselectAll" returnType="void">
+			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
+			<code>
+				SelectionTools.deselectAll(null, this);
+			</code>
+		</method>
+	
+		<method id="getSelectedValuesCount" returnType="int">
+			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
+			<code>
+				return SelectionTools.getCount(getSelectedValues());
+			</code>
+		</method>
+		<method id="getFirstSelectedValue" returnType="Object">
+			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
+			<code>
+				return SelectionTools.getFirst(getSelectedValues(), null);
+			</code>
+		</method>
+		<method id="listSelectedValues" returnType="Object[]">
+			<import>org.rcfaces.core.internal.tools.SelectionTools</import>
+			<code>
+				return SelectionTools.listValues(getSelectedValues(), null);
+			</code>
+		</method>
+
+		<method id="setSelectionCardinality(String)" />
+
+		<method id="listAvailableCriteriaItems" returnType="org.rcfaces.core.item.CriteriaItem[]">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<code>
+				return CriteriaTools.listAvailableCriteriaItems(this, null);
+			</code>
+		</method>
+		<method id="listAvailableCriteriaItems" returnType="org.rcfaces.core.item.CriteriaItem[]">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<parameter type="org.rcfaces.core.model.ISelectedCriteria[]" name="configs" />
+			<code>
+				return CriteriaTools.listAvailableCriteriaItems(this, configs);
+			</code>
+		</method>
+
+		<method id="getCriteriaContainer" returnType="org.rcfaces.core.internal.capability.ICriteriaContainer">
+			<import>org.rcfaces.core.internal.tools.CriteriaTools</import>
+			<code>
+				return CriteriaTools.getCriteriaContainer(this);
+			</code>
+		</method>
+		<method id="getCriteriaCardinality" returnType="int">
+			<code>
+				return getSelectionCardinality();
+			</code>
+		</method>
+	
+	</component>
+
+	<component id="criteriaItem" extends="selectItem" render="false">
+		<attribute id="logicalFilter" type="java.lang.String"/>
+		<attribute id="startingValue" type="java.lang.Object"/>
+	</component>
+
+	<component id="criteriaItemFiller" extends="cameliaItems" render="false">
+		<attribute id="logicalFilter" type="java.lang.String"/>
+		<attribute id="itemValue" type="java.lang.Object"/>
 	</component>
 
 <!--

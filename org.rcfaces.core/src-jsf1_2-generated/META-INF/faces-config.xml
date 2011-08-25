@@ -360,6 +360,10 @@ A string specifying the message to display when there is no row to display.
 		</attribute>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.criteriaList</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaListComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 <p>The dataGrid Component is a grid component. It can be compared to the grid found in the list part of the modern file explorer. It allows sorts, resizing, contextual menus ...</p>
       <p>The dataGrid Component has the following capabilities :
@@ -458,6 +462,10 @@ A string specifying the message to display when there is no row to display.
 		<attribute>
 			<attribute-name>rowDropEffects</attribute-name>
 			<attribute-class>int</attribute-class>
+		</attribute>
+		<attribute>
+			<attribute-name>selectedCriteriaColumns</attribute-name>
+			<attribute-class>Object</attribute-class>
 		</attribute>
 		<attribute>
 			<description><![CDATA[
@@ -1546,6 +1554,10 @@ A boolean value indicating wether the component should be hide when it is not av
 			<attribute-name>hideIfDisabled</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.imageCriteriaButton</component-type>
+		<component-class>org.rcfaces.core.component.ImageCriteriaButtonComponent</component-class>
 	</component>
 	<component>
 		<component-type>org.rcfaces.core.textEditorImageButton</component-type>
@@ -3391,6 +3403,18 @@ TODO
 			<attribute-name>enableViewState</attribute-name>
 			<attribute-class>boolean</attribute-class>
 		</attribute>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteria</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteriaItem</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaItemComponent</component-class>
+	</component>
+	<component>
+		<component-type>org.rcfaces.core.criteriaItemFiller</component-type>
+		<component-class>org.rcfaces.core.component.CriteriaItemFillerComponent</component-class>
 	</component>
 	<component>
 		<component-type>javax.faces.HtmlOutputText</component-type>
