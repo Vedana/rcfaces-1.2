@@ -43,87 +43,87 @@ public class RulerTag extends CameliaTag implements Tag {
 		return RulerComponent.COMPONENT_TYPE;
 	}
 
-	public final void setX(ValueExpression x) {
+	public void setX(ValueExpression x) {
 		this.x = x;
 	}
 
-	public final void setY(ValueExpression y) {
+	public void setY(ValueExpression y) {
 		this.y = y;
 	}
 
-	public final void setBottom(ValueExpression bottom) {
+	public void setBottom(ValueExpression bottom) {
 		this.bottom = bottom;
 	}
 
-	public final void setLeft(ValueExpression left) {
+	public void setLeft(ValueExpression left) {
 		this.left = left;
 	}
 
-	public final void setRight(ValueExpression right) {
+	public void setRight(ValueExpression right) {
 		this.right = right;
 	}
 
-	public final void setTop(ValueExpression top) {
+	public void setTop(ValueExpression top) {
 		this.top = top;
 	}
 
-	public final void setMarginBottom(ValueExpression marginBottom) {
+	public void setMarginBottom(ValueExpression marginBottom) {
 		this.marginBottom = marginBottom;
 	}
 
-	public final void setMarginLeft(ValueExpression marginLeft) {
+	public void setMarginLeft(ValueExpression marginLeft) {
 		this.marginLeft = marginLeft;
 	}
 
-	public final void setMarginRight(ValueExpression marginRight) {
+	public void setMarginRight(ValueExpression marginRight) {
 		this.marginRight = marginRight;
 	}
 
-	public final void setMarginTop(ValueExpression marginTop) {
+	public void setMarginTop(ValueExpression marginTop) {
 		this.marginTop = marginTop;
 	}
 
-	public final void setWidth(ValueExpression width) {
+	public void setWidth(ValueExpression width) {
 		this.width = width;
 	}
 
-	public final void setHeight(ValueExpression height) {
+	public void setHeight(ValueExpression height) {
 		this.height = height;
 	}
 
-	public final void setVisible(ValueExpression visible) {
+	public void setVisible(ValueExpression visible) {
 		this.visible = visible;
 	}
 
-	public final void setHiddenMode(ValueExpression hiddenMode) {
+	public void setHiddenMode(ValueExpression hiddenMode) {
 		this.hiddenMode = hiddenMode;
 	}
 
-	public final void setLookId(ValueExpression lookId) {
+	public void setLookId(ValueExpression lookId) {
 		this.lookId = lookId;
 	}
 
-	public final void setOrientation(ValueExpression orientation) {
+	public void setOrientation(ValueExpression orientation) {
 		this.orientation = orientation;
 	}
 
-	public final void setBackgroundColor(ValueExpression backgroundColor) {
+	public void setBackgroundColor(ValueExpression backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public final void setForegroundColor(ValueExpression foregroundColor) {
+	public void setForegroundColor(ValueExpression foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
-	public final void setAlignment(ValueExpression alignment) {
+	public void setAlignment(ValueExpression alignment) {
 		this.alignment = alignment;
 	}
 
-	public final void setRendered(ValueExpression rendered) {
+	public void setRendered(ValueExpression rendered) {
 		this.rendered = rendered;
 	}
 
-	public final void setMargins(ValueExpression margins) {
+	public void setMargins(ValueExpression margins) {
 		this.margins = margins;
 	}
 

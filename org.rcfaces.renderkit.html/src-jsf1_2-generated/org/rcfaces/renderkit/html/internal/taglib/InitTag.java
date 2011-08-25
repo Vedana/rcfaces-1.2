@@ -40,71 +40,71 @@ public class InitTag extends CameliaTag implements Tag {
 		return InitComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBase(ValueExpression base) {
+	public void setBase(ValueExpression base) {
 		this.base = base;
 	}
 
-	public final void setDomain(ValueExpression domain) {
+	public void setDomain(ValueExpression domain) {
 		this.domain = domain;
 	}
 
-	public final void setTitle(ValueExpression title) {
+	public void setTitle(ValueExpression title) {
 		this.title = title;
 	}
 
-	public final void setFavoriteImageURL(ValueExpression favoriteImageURL) {
+	public void setFavoriteImageURL(ValueExpression favoriteImageURL) {
 		this.favoriteImageURL = favoriteImageURL;
 	}
 
-	public final void setDisabledScriptPageURL(ValueExpression disabledScriptPageURL) {
+	public void setDisabledScriptPageURL(ValueExpression disabledScriptPageURL) {
 		this.disabledScriptPageURL = disabledScriptPageURL;
 	}
 
-	public final void setDisabledCookiesPageURL(ValueExpression disabledCookiesPageURL) {
+	public void setDisabledCookiesPageURL(ValueExpression disabledCookiesPageURL) {
 		this.disabledCookiesPageURL = disabledCookiesPageURL;
 	}
 
-	public final void setInvalidBrowserPageURL(ValueExpression invalidBrowserPageURL) {
+	public void setInvalidBrowserPageURL(ValueExpression invalidBrowserPageURL) {
 		this.invalidBrowserPageURL = invalidBrowserPageURL;
 	}
 
-	public final void setLiteralLocale(ValueExpression literalLocale) {
+	public void setLiteralLocale(ValueExpression literalLocale) {
 		this.literalLocale = literalLocale;
 	}
 
-	public final void setLiteralTimeZone(ValueExpression literalTimeZone) {
+	public void setLiteralTimeZone(ValueExpression literalTimeZone) {
 		this.literalTimeZone = literalTimeZone;
 	}
 
-	public final void setDisabledIEImageBar(ValueExpression disabledIEImageBar) {
+	public void setDisabledIEImageBar(ValueExpression disabledIEImageBar) {
 		this.disabledIEImageBar = disabledIEImageBar;
 	}
 
-	public final void setDisableCache(ValueExpression disableCache) {
+	public void setDisableCache(ValueExpression disableCache) {
 		this.disableCache = disableCache;
 	}
 
-	public final void setDisableContextMenu(ValueExpression disableContextMenu) {
+	public void setDisableContextMenu(ValueExpression disableContextMenu) {
 		this.disableContextMenu = disableContextMenu;
 	}
 
-	public final void setRenderBaseTag(ValueExpression renderBaseTag) {
+	public void setRenderBaseTag(ValueExpression renderBaseTag) {
 		this.renderBaseTag = renderBaseTag;
 	}
 
-	public final void setClientMessageIdFilter(ValueExpression clientMessageIdFilter) {
+	public void setClientMessageIdFilter(ValueExpression clientMessageIdFilter) {
 		this.clientMessageIdFilter = clientMessageIdFilter;
 	}
 
-	public final void setWaiRolesNS(ValueExpression waiRolesNS) {
+	public void setWaiRolesNS(ValueExpression waiRolesNS) {
 		this.waiRolesNS = waiRolesNS;
 	}
 
-	public final void setClientValidation(ValueExpression clientValidation) {
+	public void setClientValidation(ValueExpression clientValidation) {
 		this.clientValidation = clientValidation;
 	}
 
-	public final void setUserAgentVary(ValueExpression userAgentVary) {
+	public void setUserAgentVary(ValueExpression userAgentVary) {
 		this.userAgentVary = userAgentVary;
 	}
 

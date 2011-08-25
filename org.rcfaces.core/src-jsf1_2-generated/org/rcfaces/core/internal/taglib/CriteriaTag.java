@@ -28,27 +28,27 @@ public class CriteriaTag extends CameliaTag implements Tag {
 		return CriteriaComponent.COMPONENT_TYPE;
 	}
 
-	public final void setSelectionCardinality(ValueExpression selectionCardinality) {
+	public void setSelectionCardinality(ValueExpression selectionCardinality) {
 		this.selectionCardinality = selectionCardinality;
 	}
 
-	public final void setSelectedValues(ValueExpression selectedValues) {
+	public void setSelectedValues(ValueExpression selectedValues) {
 		this.selectedValues = selectedValues;
 	}
 
-	public final void setCriteriaValue(ValueExpression criteriaValue) {
+	public void setCriteriaValue(ValueExpression criteriaValue) {
 		this.criteriaValue = criteriaValue;
 	}
 
-	public final void setCriteriaTitle(ValueExpression criteriaTitle) {
+	public void setCriteriaTitle(ValueExpression criteriaTitle) {
 		this.criteriaTitle = criteriaTitle;
 	}
 
-	public final void setCriteriaConverter(ValueExpression criteriaConverter) {
+	public void setCriteriaConverter(ValueExpression criteriaConverter) {
 		this.criteriaConverter = criteriaConverter;
 	}
 
-	public final void setLabelConverter(ValueExpression labelConverter) {
+	public void setLabelConverter(ValueExpression labelConverter) {
 		this.labelConverter = labelConverter;
 	}
 

@@ -24,11 +24,11 @@ public class CriteriaItemTag extends SelectItemTag implements Tag {
 		return CriteriaItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setLogicalFilter(ValueExpression logicalFilter) {
+	public void setLogicalFilter(ValueExpression logicalFilter) {
 		this.logicalFilter = logicalFilter;
 	}
 
-	public final void setStartingValue(ValueExpression startingValue) {
+	public void setStartingValue(ValueExpression startingValue) {
 		this.startingValue = startingValue;
 	}
 

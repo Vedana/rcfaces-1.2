@@ -29,31 +29,31 @@ public class CardBoxTag extends AbstractInputTag implements Tag {
 		return CardBoxComponent.COMPONENT_TYPE;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setAsyncRenderMode(ValueExpression asyncRenderMode) {
+	public void setAsyncRenderMode(ValueExpression asyncRenderMode) {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
-	public final void setPreferences(ValueExpression preferences) {
+	public void setPreferences(ValueExpression preferences) {
 		this.preferences = preferences;
 	}
 
-	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+	public void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
 
-	public final void setScopeValue(ValueExpression scopeValue) {
+	public void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
 
-	public final void setScopeVar(ValueExpression scopeVar) {
+	public void setScopeVar(ValueExpression scopeVar) {
 		this.scopeVar = scopeVar;
 	}
 
-	public final void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
+	public void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
 		this.asyncDecodeMode = asyncDecodeMode;
 	}
 

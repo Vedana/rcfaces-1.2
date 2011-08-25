@@ -24,11 +24,11 @@ public class FocusManagerTag extends CameliaTag implements Tag {
 		return FocusManagerComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFocusId(ValueExpression focusId) {
+	public void setFocusId(ValueExpression focusId) {
 		this.focusId = focusId;
 	}
 
-	public final void setSetFocusIfMessage(ValueExpression setFocusIfMessage) {
+	public void setSetFocusIfMessage(ValueExpression setFocusIfMessage) {
 		this.setFocusIfMessage = setFocusIfMessage;
 	}
 

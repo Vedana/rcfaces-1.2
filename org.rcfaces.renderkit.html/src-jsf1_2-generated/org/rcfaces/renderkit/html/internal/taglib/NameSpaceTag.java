@@ -25,11 +25,11 @@ public class NameSpaceTag extends CameliaTag implements Tag {
 		return NameSpaceComponent.COMPONENT_TYPE;
 	}
 
-	public final void setUri(ValueExpression uri) {
+	public void setUri(ValueExpression uri) {
 		this.uri = uri;
 	}
 
-	public final void setPrefix(ValueExpression prefix) {
+	public void setPrefix(ValueExpression prefix) {
 		this.prefix = prefix;
 	}
 

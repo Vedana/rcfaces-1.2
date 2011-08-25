@@ -25,15 +25,15 @@ public class ProgressBarTag extends AbstractInputTag implements Tag {
 		return ProgressBarComponent.COMPONENT_TYPE;
 	}
 
-	public final void setMinimum(ValueExpression minimum) {
+	public void setMinimum(ValueExpression minimum) {
 		this.minimum = minimum;
 	}
 
-	public final void setMaximum(ValueExpression maximum) {
+	public void setMaximum(ValueExpression maximum) {
 		this.maximum = maximum;
 	}
 
-	public final void setIndeterminate(ValueExpression indeterminate) {
+	public void setIndeterminate(ValueExpression indeterminate) {
 		this.indeterminate = indeterminate;
 	}
 

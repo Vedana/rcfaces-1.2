@@ -25,7 +25,7 @@ public class CssStyleItemTag extends FileItemTag implements Tag {
 		return CssStyleItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setUserAgent(ValueExpression userAgent) {
+	public void setUserAgent(ValueExpression userAgent) {
 		this.userAgent = userAgent;
 	}
 

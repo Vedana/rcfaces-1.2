@@ -24,11 +24,11 @@ public class CriteriaItemFillerTag extends CameliaTag implements Tag {
 		return CriteriaItemFillerComponent.COMPONENT_TYPE;
 	}
 
-	public final void setLogicalFilter(ValueExpression logicalFilter) {
+	public void setLogicalFilter(ValueExpression logicalFilter) {
 		this.logicalFilter = logicalFilter;
 	}
 
-	public final void setItemValue(ValueExpression itemValue) {
+	public void setItemValue(ValueExpression itemValue) {
 		this.itemValue = itemValue;
 	}
 

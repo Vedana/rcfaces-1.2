@@ -3198,6 +3198,13 @@ Dans le cas d'un mode period !
 				setValue(number);
 			</code>
 		</method>
+		
+		<method id="setNumber">
+			<parameter type="java.lang.Number" name="number" />
+			<code>
+				setValue(number);
+			</code>
+		</method>
 
 		<attribute id="minimum" type="java.lang.Number" />
 		<method id="setMinimum(String)" />

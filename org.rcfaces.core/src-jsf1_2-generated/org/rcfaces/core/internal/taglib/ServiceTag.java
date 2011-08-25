@@ -29,31 +29,31 @@ public class ServiceTag extends CameliaTag implements Tag {
 		return ServiceComponent.COMPONENT_TYPE;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setServiceEventListener(ValueExpression serviceEventListeners) {
+	public void setServiceEventListener(ValueExpression serviceEventListeners) {
 		this.serviceEventListeners = serviceEventListeners;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setComponentLocale(ValueExpression componentLocale) {
+	public void setComponentLocale(ValueExpression componentLocale) {
 		this.componentLocale = componentLocale;
 	}
 
-	public final void setComponentTimeZone(ValueExpression componentTimeZone) {
+	public void setComponentTimeZone(ValueExpression componentTimeZone) {
 		this.componentTimeZone = componentTimeZone;
 	}
 
-	public final void setServiceId(ValueExpression serviceId) {
+	public void setServiceId(ValueExpression serviceId) {
 		this.serviceId = serviceId;
 	}
 
-	public final void setEnableViewState(ValueExpression enableViewState) {
+	public void setEnableViewState(ValueExpression enableViewState) {
 		this.enableViewState = enableViewState;
 	}
 

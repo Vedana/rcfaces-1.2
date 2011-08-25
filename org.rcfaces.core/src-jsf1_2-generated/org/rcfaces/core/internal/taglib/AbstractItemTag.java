@@ -24,27 +24,27 @@ public abstract class AbstractItemTag extends CameliaTag implements Tag {
 	private ValueExpression itemLabel;
 	private ValueExpression itemDescription;
 	private ValueExpression itemDisabled;
-	public final void setDisabled(ValueExpression disabled) {
+	public void setDisabled(ValueExpression disabled) {
 		this.disabled = disabled;
 	}
 
-	public final void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
+	public void setUnlockedClientAttributeNames(ValueExpression unlockedClientAttributeNames) {
 		this.unlockedClientAttributeNames = unlockedClientAttributeNames;
 	}
 
-	public final void setItemValue(ValueExpression itemValue) {
+	public void setItemValue(ValueExpression itemValue) {
 		this.itemValue = itemValue;
 	}
 
-	public final void setItemLabel(ValueExpression itemLabel) {
+	public void setItemLabel(ValueExpression itemLabel) {
 		this.itemLabel = itemLabel;
 	}
 
-	public final void setItemDescription(ValueExpression itemDescription) {
+	public void setItemDescription(ValueExpression itemDescription) {
 		this.itemDescription = itemDescription;
 	}
 
-	public final void setItemDisabled(ValueExpression itemDisabled) {
+	public void setItemDisabled(ValueExpression itemDisabled) {
 		this.itemDisabled = itemDisabled;
 	}
 

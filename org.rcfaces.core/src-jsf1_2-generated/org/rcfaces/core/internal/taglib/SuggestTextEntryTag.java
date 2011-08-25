@@ -34,51 +34,51 @@ public class SuggestTextEntryTag extends TextEntryTag implements Tag {
 		return SuggestTextEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFilterProperties(ValueExpression filterProperties) {
+	public void setFilterProperties(ValueExpression filterProperties) {
 		this.filterProperties = filterProperties;
 	}
 
-	public final void setMaxResultNumber(ValueExpression maxResultNumber) {
+	public void setMaxResultNumber(ValueExpression maxResultNumber) {
 		this.maxResultNumber = maxResultNumber;
 	}
 
-	public final void setSuggestionListener(ValueExpression suggestionListeners) {
+	public void setSuggestionListener(ValueExpression suggestionListeners) {
 		this.suggestionListeners = suggestionListeners;
 	}
 
-	public final void setMenuListener(ValueExpression menuListeners) {
+	public void setMenuListener(ValueExpression menuListeners) {
 		this.menuListeners = menuListeners;
 	}
 
-	public final void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
+	public void setSuggestionDelayMs(ValueExpression suggestionDelayMs) {
 		this.suggestionDelayMs = suggestionDelayMs;
 	}
 
-	public final void setSuggestionMinChars(ValueExpression suggestionMinChars) {
+	public void setSuggestionMinChars(ValueExpression suggestionMinChars) {
 		this.suggestionMinChars = suggestionMinChars;
 	}
 
-	public final void setCaseSensitive(ValueExpression caseSensitive) {
+	public void setCaseSensitive(ValueExpression caseSensitive) {
 		this.caseSensitive = caseSensitive;
 	}
 
-	public final void setForceProposal(ValueExpression forceProposal) {
+	public void setForceProposal(ValueExpression forceProposal) {
 		this.forceProposal = forceProposal;
 	}
 
-	public final void setSuggestionValue(ValueExpression suggestionValue) {
+	public void setSuggestionValue(ValueExpression suggestionValue) {
 		this.suggestionValue = suggestionValue;
 	}
 
-	public final void setSuggestionConverter(ValueExpression suggestionConverter) {
+	public void setSuggestionConverter(ValueExpression suggestionConverter) {
 		this.suggestionConverter = suggestionConverter;
 	}
 
-	public final void setMoreResultsMessage(ValueExpression moreResultsMessage) {
+	public void setMoreResultsMessage(ValueExpression moreResultsMessage) {
 		this.moreResultsMessage = moreResultsMessage;
 	}
 
-	public final void setOrderedItems(ValueExpression orderedItems) {
+	public void setOrderedItems(ValueExpression orderedItems) {
 		this.orderedItems = orderedItems;
 	}
 

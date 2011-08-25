@@ -28,27 +28,27 @@ public class MenuItemTag extends ExpandableItemTag implements Tag {
 		return MenuItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setAccessKey(ValueExpression accessKey) {
+	public void setAccessKey(ValueExpression accessKey) {
 		this.accessKey = accessKey;
 	}
 
-	public final void setAcceleratorKey(ValueExpression acceleratorKey) {
+	public void setAcceleratorKey(ValueExpression acceleratorKey) {
 		this.acceleratorKey = acceleratorKey;
 	}
 
-	public final void setStyleClass(ValueExpression styleClass) {
+	public void setStyleClass(ValueExpression styleClass) {
 		this.styleClass = styleClass;
 	}
 
-	public final void setImmediate(ValueExpression immediate) {
+	public void setImmediate(ValueExpression immediate) {
 		this.immediate = immediate;
 	}
 
-	public final void setMenuListener(ValueExpression menuListeners) {
+	public void setMenuListener(ValueExpression menuListeners) {
 		this.menuListeners = menuListeners;
 	}
 
-	public final void setRemoveAllWhenShown(ValueExpression removeAllWhenShown) {
+	public void setRemoveAllWhenShown(ValueExpression removeAllWhenShown) {
 		this.removeAllWhenShown = removeAllWhenShown;
 	}
 

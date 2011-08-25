@@ -46,99 +46,99 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 		return NumberEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setAutoTab(ValueExpression autoTab) {
+	public void setAutoTab(ValueExpression autoTab) {
 		this.autoTab = autoTab;
 	}
 
-	public final void setValueChangeListener(ValueExpression valueChangeListeners) {
+	public void setValueChangeListener(ValueExpression valueChangeListeners) {
 		this.valueChangeListeners = valueChangeListeners;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setNumberFormatType(ValueExpression numberFormatType) {
+	public void setNumberFormatType(ValueExpression numberFormatType) {
 		this.numberFormatType = numberFormatType;
 	}
 
-	public final void setLiteralLocale(ValueExpression literalLocale) {
+	public void setLiteralLocale(ValueExpression literalLocale) {
 		this.literalLocale = literalLocale;
 	}
 
-	public final void setComponentLocale(ValueExpression componentLocale) {
+	public void setComponentLocale(ValueExpression componentLocale) {
 		this.componentLocale = componentLocale;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setAutoCompletion(ValueExpression autoCompletion) {
+	public void setAutoCompletion(ValueExpression autoCompletion) {
 		this.autoCompletion = autoCompletion;
 	}
 
-	public final void setIntegerDigits(ValueExpression integerDigits) {
+	public void setIntegerDigits(ValueExpression integerDigits) {
 		this.integerDigits = integerDigits;
 	}
 
-	public final void setFractionDigits(ValueExpression fractionDigits) {
+	public void setFractionDigits(ValueExpression fractionDigits) {
 		this.fractionDigits = fractionDigits;
 	}
 
-	public final void setNumberFormat(ValueExpression numberFormat) {
+	public void setNumberFormat(ValueExpression numberFormat) {
 		this.numberFormat = numberFormat;
 	}
 
-	public final void setIntegerStep(ValueExpression integerStep) {
+	public void setIntegerStep(ValueExpression integerStep) {
 		this.integerStep = integerStep;
 	}
 
-	public final void setFractionStep(ValueExpression fractionStep) {
+	public void setFractionStep(ValueExpression fractionStep) {
 		this.fractionStep = fractionStep;
 	}
 
-	public final void setNumber(ValueExpression number) {
+	public void setNumber(ValueExpression number) {
 		this.number = number;
 	}
 
-	public final void setMinimum(ValueExpression minimum) {
+	public void setMinimum(ValueExpression minimum) {
 		this.minimum = minimum;
 	}
 
-	public final void setDefaultNumber(ValueExpression defaultNumber) {
+	public void setDefaultNumber(ValueExpression defaultNumber) {
 		this.defaultNumber = defaultNumber;
 	}
 
-	public final void setMaximum(ValueExpression maximum) {
+	public void setMaximum(ValueExpression maximum) {
 		this.maximum = maximum;
 	}
 
@@ -357,7 +357,7 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.VALUE, number);
 
 			} else {
-				component.setNumber(number.getExpressionString());
+				component.setNumber(getNumber(number.getExpressionString()));
 			}
 		}
 
@@ -366,7 +366,7 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.MINIMUM, minimum);
 
 			} else {
-				component.setMinimum(minimum.getExpressionString());
+				component.setMinimum(getNumber(minimum.getExpressionString()));
 			}
 		}
 
@@ -375,7 +375,7 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.DEFAULT_NUMBER, defaultNumber);
 
 			} else {
-				component.setDefaultNumber(defaultNumber.getExpressionString());
+				component.setDefaultNumber(getNumber(defaultNumber.getExpressionString()));
 			}
 		}
 
@@ -384,7 +384,7 @@ public class NumberEntryTag extends AbstractInputTag implements Tag {
 				component.setValueExpression(Properties.MAXIMUM, maximum);
 
 			} else {
-				component.setMaximum(maximum.getExpressionString());
+				component.setMaximum(getNumber(maximum.getExpressionString()));
 			}
 		}
 	}

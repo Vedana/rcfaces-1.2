@@ -189,6 +189,13 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 			
 	}
 
+	public void setNumber(Number number) {
+
+
+				setValue(number);
+			
+	}
+
 	public void setMinimum(String number) {
 
 

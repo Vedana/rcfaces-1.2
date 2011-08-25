@@ -25,15 +25,15 @@ public class CriteriaListTag extends AbstractBasicTag implements Tag {
 		return CriteriaListComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setCriteriaFormat(ValueExpression criteriaFormat) {
+	public void setCriteriaFormat(ValueExpression criteriaFormat) {
 		this.criteriaFormat = criteriaFormat;
 	}
 
-	public final void setNoCriteriaMessage(ValueExpression noCriteriaMessage) {
+	public void setNoCriteriaMessage(ValueExpression noCriteriaMessage) {
 		this.noCriteriaMessage = noCriteriaMessage;
 	}
 

@@ -29,23 +29,23 @@ public class HiddenValueTag extends CameliaTag implements Tag {
 		return HiddenValueComponent.COMPONENT_TYPE;
 	}
 
-	public final void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
+	public void setPropertyChangeListener(ValueExpression propertyChangeListeners) {
 		this.propertyChangeListeners = propertyChangeListeners;
 	}
 
-	public final void setImmediate(ValueExpression immediate) {
+	public void setImmediate(ValueExpression immediate) {
 		this.immediate = immediate;
 	}
 
-	public final void setValueLocked(ValueExpression valueLocked) {
+	public void setValueLocked(ValueExpression valueLocked) {
 		this.valueLocked = valueLocked;
 	}
 
-	public final void setValidationListener(ValueExpression validationListeners) {
+	public void setValidationListener(ValueExpression validationListeners) {
 		this.validationListeners = validationListeners;
 	}
 
-	public final void setUserEventListener(ValueExpression userEventListeners) {
+	public void setUserEventListener(ValueExpression userEventListeners) {
 		this.userEventListeners = userEventListeners;
 	}
 

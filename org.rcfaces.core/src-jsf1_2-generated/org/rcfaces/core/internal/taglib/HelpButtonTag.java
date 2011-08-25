@@ -23,7 +23,7 @@ public class HelpButtonTag extends ImageButtonTag implements Tag {
 		return HelpButtonComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 

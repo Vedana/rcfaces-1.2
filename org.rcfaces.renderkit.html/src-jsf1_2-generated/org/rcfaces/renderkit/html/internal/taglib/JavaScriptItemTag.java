@@ -25,7 +25,7 @@ public class JavaScriptItemTag extends FileItemTag implements Tag {
 		return JavaScriptItemComponent.COMPONENT_TYPE;
 	}
 
-	public final void setUserAgent(ValueExpression userAgent) {
+	public void setUserAgent(ValueExpression userAgent) {
 		this.userAgent = userAgent;
 	}
 

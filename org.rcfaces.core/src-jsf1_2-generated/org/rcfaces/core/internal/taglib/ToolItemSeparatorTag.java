@@ -23,7 +23,7 @@ public class ToolItemSeparatorTag extends AbstractSeparatorTag implements Tag {
 		return ToolItemSeparatorComponent.COMPONENT_TYPE;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 

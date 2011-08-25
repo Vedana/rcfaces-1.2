@@ -36,51 +36,51 @@ public class DateEntryTag extends AbstractCalendarTag implements Tag {
 		return DateEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setAutoTab(ValueExpression autoTab) {
+	public void setAutoTab(ValueExpression autoTab) {
 		this.autoTab = autoTab;
 	}
 
-	public final void setValueChangeListener(ValueExpression valueChangeListeners) {
+	public void setValueChangeListener(ValueExpression valueChangeListeners) {
 		this.valueChangeListeners = valueChangeListeners;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setDateFormat(ValueExpression dateFormat) {
+	public void setDateFormat(ValueExpression dateFormat) {
 		this.dateFormat = dateFormat;
 	}
 
-	public final void setShowCalendarOnFocus(ValueExpression showCalendarOnFocus) {
+	public void setShowCalendarOnFocus(ValueExpression showCalendarOnFocus) {
 		this.showCalendarOnFocus = showCalendarOnFocus;
 	}
 
-	public final void setAutoCompletion(ValueExpression autoCompletion) {
+	public void setAutoCompletion(ValueExpression autoCompletion) {
 		this.autoCompletion = autoCompletion;
 	}
 
-	public final void setDefaultDate(ValueExpression defaultDate) {
+	public void setDefaultDate(ValueExpression defaultDate) {
 		this.defaultDate = defaultDate;
 	}
 

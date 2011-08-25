@@ -25,15 +25,15 @@ public class ListTag extends ComboTag implements Tag {
 		return ListComponent.COMPONENT_TYPE;
 	}
 
-	public final void setMultipleSelect(ValueExpression multipleSelect) {
+	public void setMultipleSelect(ValueExpression multipleSelect) {
 		this.multipleSelect = multipleSelect;
 	}
 
-	public final void setDoubleClickListener(ValueExpression doubleClickListeners) {
+	public void setDoubleClickListener(ValueExpression doubleClickListeners) {
 		this.doubleClickListeners = doubleClickListeners;
 	}
 
-	public final void setRowNumber(ValueExpression rowNumber) {
+	public void setRowNumber(ValueExpression rowNumber) {
 		this.rowNumber = rowNumber;
 	}
 

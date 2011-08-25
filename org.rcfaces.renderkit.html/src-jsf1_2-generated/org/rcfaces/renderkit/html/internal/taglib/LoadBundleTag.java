@@ -28,23 +28,23 @@ public class LoadBundleTag extends CameliaTag implements Tag {
 		return LoadBundleComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBundleName(ValueExpression bundleName) {
+	public void setBundleName(ValueExpression bundleName) {
 		this.bundleName = bundleName;
 	}
 
-	public final void setBaseName(ValueExpression baseName) {
+	public void setBaseName(ValueExpression baseName) {
 		this.baseName = baseName;
 	}
 
-	public final void setSide(ValueExpression side) {
+	public void setSide(ValueExpression side) {
 		this.side = side;
 	}
 
-	public final void setServerScope(ValueExpression serverScope) {
+	public void setServerScope(ValueExpression serverScope) {
 		this.serverScope = serverScope;
 	}
 
-	public final void setOverride(ValueExpression override) {
+	public void setOverride(ValueExpression override) {
 		this.override = override;
 	}
 

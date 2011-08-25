@@ -24,11 +24,11 @@ public class TextEditorComboTag extends ComboTag implements Tag {
 		return TextEditorComboComponent.COMPONENT_TYPE;
 	}
 
-	public final void setFor(ValueExpression forValue) {
+	public void setFor(ValueExpression forValue) {
 		this.forValue = forValue;
 	}
 
-	public final void setType(ValueExpression type) {
+	public void setType(ValueExpression type) {
 		this.type = type;
 	}
 

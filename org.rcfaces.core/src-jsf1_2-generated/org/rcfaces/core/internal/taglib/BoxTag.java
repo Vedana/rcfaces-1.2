@@ -42,83 +42,83 @@ public class BoxTag extends AbstractBasicTag implements Tag {
 		return BoxComponent.COMPONENT_TYPE;
 	}
 
-	public final void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
+	public void setBackgroundImageHorizontalPosition(ValueExpression backgroundImageHorizontalPosition) {
 		this.backgroundImageHorizontalPosition = backgroundImageHorizontalPosition;
 	}
 
-	public final void setBackgroundImageHorizontalRepeat(ValueExpression backgroundImageHorizontalRepeat) {
+	public void setBackgroundImageHorizontalRepeat(ValueExpression backgroundImageHorizontalRepeat) {
 		this.backgroundImageHorizontalRepeat = backgroundImageHorizontalRepeat;
 	}
 
-	public final void setBackgroundImageURL(ValueExpression backgroundImageURL) {
+	public void setBackgroundImageURL(ValueExpression backgroundImageURL) {
 		this.backgroundImageURL = backgroundImageURL;
 	}
 
-	public final void setBackgroundImageVerticalPosition(ValueExpression backgroundImageVerticalPosition) {
+	public void setBackgroundImageVerticalPosition(ValueExpression backgroundImageVerticalPosition) {
 		this.backgroundImageVerticalPosition = backgroundImageVerticalPosition;
 	}
 
-	public final void setBackgroundImageVerticalRepeat(ValueExpression backgroundImageVerticalRepeat) {
+	public void setBackgroundImageVerticalRepeat(ValueExpression backgroundImageVerticalRepeat) {
 		this.backgroundImageVerticalRepeat = backgroundImageVerticalRepeat;
 	}
 
-	public final void setBorder(ValueExpression border) {
+	public void setBorder(ValueExpression border) {
 		this.border = border;
 	}
 
-	public final void setMouseOutListener(ValueExpression mouseOutListeners) {
+	public void setMouseOutListener(ValueExpression mouseOutListeners) {
 		this.mouseOutListeners = mouseOutListeners;
 	}
 
-	public final void setMouseOverListener(ValueExpression mouseOverListeners) {
+	public void setMouseOverListener(ValueExpression mouseOverListeners) {
 		this.mouseOverListeners = mouseOverListeners;
 	}
 
-	public final void setInitListener(ValueExpression initListeners) {
+	public void setInitListener(ValueExpression initListeners) {
 		this.initListeners = initListeners;
 	}
 
-	public final void setLoadListener(ValueExpression loadListeners) {
+	public void setLoadListener(ValueExpression loadListeners) {
 		this.loadListeners = loadListeners;
 	}
 
-	public final void setLayoutType(ValueExpression layoutType) {
+	public void setLayoutType(ValueExpression layoutType) {
 		this.layoutType = layoutType;
 	}
 
-	public final void setAsyncRenderMode(ValueExpression asyncRenderMode) {
+	public void setAsyncRenderMode(ValueExpression asyncRenderMode) {
 		this.asyncRenderMode = asyncRenderMode;
 	}
 
-	public final void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
+	public void setAsyncDecodeMode(ValueExpression asyncDecodeMode) {
 		this.asyncDecodeMode = asyncDecodeMode;
 	}
 
-	public final void setScopeSaveValue(ValueExpression scopeSaveValue) {
+	public void setScopeSaveValue(ValueExpression scopeSaveValue) {
 		this.scopeSaveValue = scopeSaveValue;
 	}
 
-	public final void setScopeValue(ValueExpression scopeValue) {
+	public void setScopeValue(ValueExpression scopeValue) {
 		this.scopeValue = scopeValue;
 	}
 
-	public final void setScopeVar(ValueExpression scopeVar) {
+	public void setScopeVar(ValueExpression scopeVar) {
 		this.scopeVar = scopeVar;
 	}
 
-	public final void setType(ValueExpression type) {
+	public void setType(ValueExpression type) {
 		this.type = type;
 	}
 
-	public final void setOverStyleClass(ValueExpression overStyleClass) {
+	public void setOverStyleClass(ValueExpression overStyleClass) {
 		this.overStyleClass = overStyleClass;
 	}
 
-	public final void setHorizontalScroll(ValueExpression horizontalScroll) {
+	public void setHorizontalScroll(ValueExpression horizontalScroll) {
 		this.horizontalScroll = horizontalScroll;
 	}
 
-	public final void setVerticalScroll(ValueExpression verticalScroll) {
+	public void setVerticalScroll(ValueExpression verticalScroll) {
 		this.verticalScroll = verticalScroll;
 	}
 

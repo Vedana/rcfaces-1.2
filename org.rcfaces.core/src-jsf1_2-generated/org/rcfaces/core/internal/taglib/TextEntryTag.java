@@ -42,75 +42,75 @@ public class TextEntryTag extends AbstractInputTag implements Tag {
 		return TextEntryComponent.COMPONENT_TYPE;
 	}
 
-	public final void setRequired(ValueExpression required) {
+	public void setRequired(ValueExpression required) {
 		this.required = required;
 	}
 
-	public final void setAutoTab(ValueExpression autoTab) {
+	public void setAutoTab(ValueExpression autoTab) {
 		this.autoTab = autoTab;
 	}
 
-	public final void setText(ValueExpression text) {
+	public void setText(ValueExpression text) {
 		this.text = text;
 	}
 
-	public final void setTextDirection(ValueExpression textDirection) {
+	public void setTextDirection(ValueExpression textDirection) {
 		this.textDirection = textDirection;
 	}
 
-	public final void setEmptyMessage(ValueExpression emptyMessage) {
+	public void setEmptyMessage(ValueExpression emptyMessage) {
 		this.emptyMessage = emptyMessage;
 	}
 
-	public final void setReadOnly(ValueExpression readOnly) {
+	public void setReadOnly(ValueExpression readOnly) {
 		this.readOnly = readOnly;
 	}
 
-	public final void setValueChangeListener(ValueExpression valueChangeListeners) {
+	public void setValueChangeListener(ValueExpression valueChangeListeners) {
 		this.valueChangeListeners = valueChangeListeners;
 	}
 
-	public final void setFocusStyleClass(ValueExpression focusStyleClass) {
+	public void setFocusStyleClass(ValueExpression focusStyleClass) {
 		this.focusStyleClass = focusStyleClass;
 	}
 
-	public final void setErrorStyleClass(ValueExpression errorStyleClass) {
+	public void setErrorStyleClass(ValueExpression errorStyleClass) {
 		this.errorStyleClass = errorStyleClass;
 	}
 
-	public final void setFatalStyleClass(ValueExpression fatalStyleClass) {
+	public void setFatalStyleClass(ValueExpression fatalStyleClass) {
 		this.fatalStyleClass = fatalStyleClass;
 	}
 
-	public final void setInfoStyleClass(ValueExpression infoStyleClass) {
+	public void setInfoStyleClass(ValueExpression infoStyleClass) {
 		this.infoStyleClass = infoStyleClass;
 	}
 
-	public final void setWarnStyleClass(ValueExpression warnStyleClass) {
+	public void setWarnStyleClass(ValueExpression warnStyleClass) {
 		this.warnStyleClass = warnStyleClass;
 	}
 
-	public final void setAlternateText(ValueExpression alternateText) {
+	public void setAlternateText(ValueExpression alternateText) {
 		this.alternateText = alternateText;
 	}
 
-	public final void setMaxTextLength(ValueExpression maxTextLength) {
+	public void setMaxTextLength(ValueExpression maxTextLength) {
 		this.maxTextLength = maxTextLength;
 	}
 
-	public final void setClientValidator(ValueExpression clientValidator) {
+	public void setClientValidator(ValueExpression clientValidator) {
 		this.clientValidator = clientValidator;
 	}
 
-	public final void setSelectionListener(ValueExpression selectionListeners) {
+	public void setSelectionListener(ValueExpression selectionListeners) {
 		this.selectionListeners = selectionListeners;
 	}
 
-	public final void setColumnNumber(ValueExpression columnNumber) {
+	public void setColumnNumber(ValueExpression columnNumber) {
 		this.columnNumber = columnNumber;
 	}
 
-	public final void setAutoCompletion(ValueExpression autoCompletion) {
+	public void setAutoCompletion(ValueExpression autoCompletion) {
 		this.autoCompletion = autoCompletion;
 	}
 
