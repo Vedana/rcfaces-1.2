@@ -1162,6 +1162,10 @@ var __members = {
 	f_closeNode: function(value, evt) {
 		var li=this._searchComponentByNodeOrValue(value);
 		
+		if (li === undefined) {
+			return false;
+		}	
+		
 		return this._closeNode(li._node, evt, li);
 	},
 	
