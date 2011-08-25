@@ -27,205 +27,206 @@ import org.rcfaces.core.lang.provider.ICheckProvider;
  * @version $Revision$ $Date$
  */
 public class AdditionalInformationTools extends CollectionTools {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    private static final Log LOG = LogFactory
-            .getLog(AdditionalInformationTools.class);
+	private static final Log LOG = LogFactory
+			.getLog(AdditionalInformationTools.class);
 
-    private static final IValuesAccessor ADDITIONAL_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
-        private static final String REVISION = "$Revision$";
+	private static final IValuesAccessor ADDITIONAL_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
+		private static final String REVISION = "$Revision$";
 
-        public int getCount(Object additionalInformationProvider) {
-            return ((IAdditionalInformationProvider) additionalInformationProvider)
-                    .getAdditionalInformationValuesCount();
-        }
+		public int getCount(Object additionalInformationProvider) {
+			return ((IAdditionalInformationProvider) additionalInformationProvider)
+					.getAdditionalInformationValuesCount();
+		}
 
-        public Object getFirst(Object additionalInformationProvider,
-                Object refValues) {
-            return ((IAdditionalInformationProvider) additionalInformationProvider)
-                    .getFirstAdditionalInformationValue();
-        }
+		public Object getFirst(Object additionalInformationProvider,
+				Object refValues) {
+			return ((IAdditionalInformationProvider) additionalInformationProvider)
+					.getFirstAdditionalInformationValue();
+		}
 
-        public Object[] listValues(Object additionalInformationProvider,
-                Object refValues) {
-            return convertToObjectArray(((IAdditionalInformationProvider) additionalInformationProvider)
-                    .getAdditionalInformationValues());
-        }
+		public Object[] listValues(Object additionalInformationProvider,
+				Object refValues) {
+			return convertToObjectArray(((IAdditionalInformationProvider) additionalInformationProvider)
+					.getAdditionalInformationValues());
+		}
 
-        public void setAdaptedValues(Object additionalInformationProvider,
-                Object additionalInformationValues) {
-            ((IAdditionalInformationProvider) additionalInformationProvider)
-                    .setAdditionalInformationValues(additionalInformationValues);
-        }
+		public void setAdaptedValues(Object additionalInformationProvider,
+				Object additionalInformationValues) {
+			((IAdditionalInformationProvider) additionalInformationProvider)
+					.setAdditionalInformationValues(additionalInformationValues);
+		}
 
-        public Object getAdaptedValues(Object value) {
-            return value;
-        }
+		public Object getAdaptedValues(Object value) {
+			return value;
+		}
 
-        public Object getComponentValues(UIComponent component) {
-            return ((IAdditionalInformationValuesCapability) component)
-                    .getAdditionalInformationValues();
-        }
+		public Object getComponentValues(UIComponent component) {
+			return ((IAdditionalInformationValuesCapability) component)
+					.getAdditionalInformationValues();
+		}
 
-        public void setComponentValues(UIComponent component, Object values) {
-            ((IAdditionalInformationValuesCapability) component)
-                    .setAdditionalInformationValues(values);
-        }
+		public void setComponentValues(UIComponent component, Object values) {
+			((IAdditionalInformationValuesCapability) component)
+					.setAdditionalInformationValues(values);
+		}
 
-        public Class getComponentValuesType(FacesContext facesContext,
-                UIComponent component) {
-            return ((IAdditionalInformationValuesCapability) component)
-                    .getAdditionalInformationValuesType(facesContext);
-        }
-    };
+		public Class getComponentValuesType(FacesContext facesContext,
+				UIComponent component) {
+			return ((IAdditionalInformationValuesCapability) component)
+					.getAdditionalInformationValuesType(facesContext);
+		}
+	};
 
-    private static final IAdditionalInformationIterator EMPTY_ADDITIONAL_INFORMATION_ITERATOR = new AdditionalInformationListIterator(
-            Collections.EMPTY_LIST);
+	private static final IAdditionalInformationIterator EMPTY_ADDITIONAL_INFORMATION_ITERATOR = new AdditionalInformationListIterator(
+			Collections.EMPTY_LIST);
 
-    public static int getCount(Object additionalInformationValues) {
-        IValuesAccessor valuesAccessor = getValuesAccessor(
-                additionalInformationValues, ICheckProvider.class,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true);
+	public static int getCount(Object additionalInformationValues) {
+		IValuesAccessor valuesAccessor = getValuesAccessor(
+				additionalInformationValues, ICheckProvider.class,
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
-        if (valuesAccessor == null) {
-            return 0;
-        }
-        return valuesAccessor.getCount(additionalInformationValues);
-    }
+		if (valuesAccessor == null) {
+			return 0;
+		}
+		return valuesAccessor.getCount(additionalInformationValues);
+	}
 
-    public static Object getFirst(Object additionalInformationValues,
-            Object refValue) {
-        IValuesAccessor valuesAccessor = getValuesAccessor(
-                additionalInformationValues, ICheckProvider.class,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true);
+	public static Object getFirst(Object additionalInformationValues,
+			Object refValue) {
+		IValuesAccessor valuesAccessor = getValuesAccessor(
+				additionalInformationValues, ICheckProvider.class,
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
-        if (valuesAccessor == null) {
-            return null;
-        }
+		if (valuesAccessor == null) {
+			return null;
+		}
 
-        return valuesAccessor.getFirst(additionalInformationValues, refValue);
-    }
+		return valuesAccessor.getFirst(additionalInformationValues, refValue);
+	}
 
-    public static Object[] listValues(Object additionalInformationValues,
-            Object refValue) {
-        IValuesAccessor valuesAccessor = getValuesAccessor(
-                additionalInformationValues, ICheckProvider.class,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true);
+	public static Object[] listValues(Object additionalInformationValues,
+			Object refValue) {
+		IValuesAccessor valuesAccessor = getValuesAccessor(
+				additionalInformationValues, ICheckProvider.class,
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
-        if (valuesAccessor == null) {
-            return EMPTY_VALUES;
-        }
+		if (valuesAccessor == null) {
+			return EMPTY_VALUES;
+		}
 
-        return valuesAccessor.listValues(additionalInformationValues, refValue);
-    }
+		return valuesAccessor.listValues(additionalInformationValues, refValue);
+	}
 
-    public static void show(FacesContext facesContext,
-            IAdditionalInformationComponent component, Object rowValue) {
-        select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                rowValue);
-    }
+	public static void show(FacesContext facesContext,
+			IAdditionalInformationComponent component, Object rowValue) {
+		select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				rowValue);
+	}
 
-    public static void show(FacesContext facesContext,
-            IAdditionalInformationRangeComponent component, int index) {
-        select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                index);
-    }
+	public static void show(FacesContext facesContext,
+			IAdditionalInformationRangeComponent component, int index) {
+		select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				index);
+	}
 
-    public static void show(FacesContext facesContext,
-            IAdditionalInformationRangeComponent component, int indexes[]) {
-        select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                indexes);
-    }
+	public static void show(FacesContext facesContext,
+			IAdditionalInformationRangeComponent component, int indexes[]) {
+		select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				indexes);
+	}
 
-    public static void show(FacesContext facesContext,
-            IAdditionalInformationRangeComponent component, int start, int end) {
-        select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                start, end);
-    }
+	public static void show(FacesContext facesContext,
+			IAdditionalInformationRangeComponent component, int start, int end) {
+		select((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				start, end);
+	}
 
-    public static void showAll(FacesContext facesContext,
-            IAdditionalInformationComponent component) {
-        selectAll((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR);
-    }
+	public static void showAll(FacesContext facesContext,
+			IAdditionalInformationComponent component) {
+		selectAll((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				null);
+	}
 
-    public static void hide(FacesContext facesContext,
-            IAdditionalInformationComponent component, Object rowValue) {
-        deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                rowValue);
-    }
+	public static void hide(FacesContext facesContext,
+			IAdditionalInformationComponent component, Object rowValue) {
+		deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				rowValue);
+	}
 
-    public static void hide(FacesContext facesContext,
-            IAdditionalInformationRangeComponent component, int index) {
-        deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                index);
-    }
+	public static void hide(FacesContext facesContext,
+			IAdditionalInformationRangeComponent component, int index) {
+		deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				index);
+	}
 
-    public static void hide(FacesContext facesContext,
-            IAdditionalInformationRangeComponent component, int indexes[]) {
-        deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                indexes);
-    }
+	public static void hide(FacesContext facesContext,
+			IAdditionalInformationRangeComponent component, int indexes[]) {
+		deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				indexes);
+	}
 
-    public static void hide(FacesContext facesContext,
-            IAdditionalInformationRangeComponent component, int start, int end) {
-        deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                start, end);
-    }
+	public static void hide(FacesContext facesContext,
+			IAdditionalInformationRangeComponent component, int start, int end) {
+		deselect((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				start, end);
+	}
 
-    public static void hideAll(FacesContext facesContext,
-            IAdditionalInformationComponent component) {
-        deselectAll((UIComponent) component,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR);
-    }
+	public static void hideAll(FacesContext facesContext,
+			IAdditionalInformationComponent component) {
+		deselectAll((UIComponent) component,
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR);
+	}
 
-    public static IAdditionalInformationIterator listAdditionalInformations(
-            UIComponent component) {
-        List list = ComponentIterators.list(component,
-                AdditionalInformationComponent.class);
-        if (list.isEmpty()) {
-            return EMPTY_ADDITIONAL_INFORMATION_ITERATOR;
-        }
+	public static IAdditionalInformationIterator listAdditionalInformations(
+			UIComponent component) {
+		List list = ComponentIterators.list(component,
+				AdditionalInformationComponent.class);
+		if (list.isEmpty()) {
+			return EMPTY_ADDITIONAL_INFORMATION_ITERATOR;
+		}
 
-        return new AdditionalInformationListIterator(list);
-    }
+		return new AdditionalInformationListIterator(list);
+	}
 
-    /**
-     * 
-     * @author Olivier Oeuillot (latest modification by $Author$)
-     * @version $Revision$ $Date$
-     */
-    private static final class AdditionalInformationListIterator extends
-            ComponentIterators.ComponentListIterator implements
-            IAdditionalInformationIterator {
-        private static final String REVISION = "$Revision$";
+	/**
+	 * 
+	 * @author Olivier Oeuillot (latest modification by $Author$)
+	 * @version $Revision$ $Date$
+	 */
+	private static final class AdditionalInformationListIterator extends
+			ComponentIterators.ComponentListIterator implements
+			IAdditionalInformationIterator {
+		private static final String REVISION = "$Revision$";
 
-        public AdditionalInformationListIterator(List list) {
-            super(list);
-        }
+		public AdditionalInformationListIterator(List list) {
+			super(list);
+		}
 
-        public final AdditionalInformationComponent next() {
-            return (AdditionalInformationComponent) nextComponent();
-        }
+		public final AdditionalInformationComponent next() {
+			return (AdditionalInformationComponent) nextComponent();
+		}
 
-        public AdditionalInformationComponent[] toArray() {
-            return (AdditionalInformationComponent[]) toArray(new AdditionalInformationComponent[count()]);
-        }
-    }
+		public AdditionalInformationComponent[] toArray() {
+			return (AdditionalInformationComponent[]) toArray(new AdditionalInformationComponent[count()]);
+		}
+	}
 
-    public static Set additionalInformationValuesToSet(
-            FacesContext facesContext,
-            IAdditionalInformationComponent component, boolean immutable) {
+	public static Set additionalInformationValuesToSet(
+			FacesContext facesContext,
+			IAdditionalInformationComponent component, boolean immutable) {
 
-        return valuesToSet((UIComponent) component,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, immutable);
-    }
+		return valuesToSet((UIComponent) component,
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, immutable);
+	}
 
-    public static void setAdditionalInformationValues(
-            FacesContext facesContext,
-            IAdditionalInformationComponent component, Set valuesSet) {
+	public static void setAdditionalInformationValues(
+			FacesContext facesContext,
+			IAdditionalInformationComponent component, Set valuesSet) {
 
-        setValues((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
-                valuesSet);
+		setValues((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				valuesSet);
 
-    }
+	}
 }

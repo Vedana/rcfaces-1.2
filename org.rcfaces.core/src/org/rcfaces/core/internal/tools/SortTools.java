@@ -16,8 +16,6 @@ import org.rcfaces.core.internal.component.Properties;
  */
 public class SortTools {
 
-    private static final UIComponent[] COMPONENT_EMPTY_ARRAY = new UIComponent[0];
-
     public static UIComponent[] getSortedChildren(FacesContext facesContext,
             UIComponent component, IComponentEngine engine, Class classOfChild) {
 

@@ -29,8 +29,10 @@ import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.internal.RcfacesContext;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.service.IServicesRegistry;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.internal.webapp.ConfiguredHttpServlet;
 import org.rcfaces.core.model.DefaultSortedComponent;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlProcessContextImpl;
@@ -46,295 +48,303 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class DataGridService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
+	private static final String REVISION = "$Revision$";
 
-    private static final String SERVICE_ID = Constants.getPackagePrefix()
-            + ".DataGrid";
+	private static final String SERVICE_ID = Constants.getPackagePrefix()
+			+ ".DataGrid";
 
-    private static final Log LOG = LogFactory.getLog(DataGridService.class);
+	private static final Log LOG = LogFactory.getLog(DataGridService.class);
 
-    private static final int DEFAULT_BUFFER_SIZE = 4096;
+	private static final int DEFAULT_BUFFER_SIZE = 4096;
 
-    private static final String DATAGRID_SERVICE_VERSION = "1.0.0";
+	private static final String DATAGRID_SERVICE_VERSION = "1.0.0";
 
-    public DataGridService() {
-    }
+	public DataGridService() {
+	}
 
-    public static DataGridService getInstance(FacesContext facesContext) {
+	public static DataGridService getInstance(FacesContext facesContext) {
 
-        IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
-                facesContext).getServicesRegistry();
-        if (serviceRegistry == null) {
-            // Designer mode
-            return null;
-        }
+		IServicesRegistry serviceRegistry = RcfacesContext.getInstance(
+				facesContext).getServicesRegistry();
+		if (serviceRegistry == null) {
+			// Designer mode
+			return null;
+		}
 
-        return (DataGridService) serviceRegistry.getService(facesContext,
-                RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
-    }
+		return (DataGridService) serviceRegistry.getService(facesContext,
+				RenderKitFactory.HTML_BASIC_RENDER_KIT, SERVICE_ID);
+	}
 
-    public void service(FacesContext facesContext, String commandId) {
-        Map parameters = facesContext.getExternalContext()
-                .getRequestParameterMap();
+	public void service(FacesContext facesContext, String commandId) {
+		Map parameters = facesContext.getExternalContext()
+				.getRequestParameterMap();
 
-        UIViewRoot viewRoot = facesContext.getViewRoot();
+		UIViewRoot viewRoot = facesContext.getViewRoot();
 
-        String dataGridId = (String) parameters.get("gridId");
-        if (dataGridId == null) {
-            sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find 'dataGridId' parameter.", null);
-            return;
-        }
+		String dataGridId = (String) parameters.get("gridId");
+		if (dataGridId == null) {
+			sendJsError(facesContext, null, INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find 'dataGridId' parameter.", null);
+			return;
+		}
 
-        if (viewRoot.getChildCount() == 0) {
-            sendJsError(facesContext, dataGridId,
-                    SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
-            return;
-        }
+		if (viewRoot.getChildCount() == 0) {
+			sendJsError(facesContext, dataGridId,
+					SESSION_EXPIRED_SERVICE_ERROR, "No view !", null);
+			return;
+		}
 
-        String index_s = (String) parameters.get("index");
-        if (index_s == null) {
-            sendJsError(facesContext, dataGridId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Can not find 'index' parameter.", null);
-            return;
-        }
+		String index_s = (String) parameters.get("index");
+		if (index_s == null) {
+			sendJsError(facesContext, dataGridId,
+					INVALID_PARAMETER_SERVICE_ERROR,
+					"Can not find 'index' parameter.", null);
+			return;
+		}
 
-        String forcedRows_s = (String) parameters.get("rows");
+		String forcedRows_s = (String) parameters.get("rows");
 
-        boolean unknownRowCount = "true".equals(parameters
-                .get("unknownRowCount"));
+		boolean unknownRowCount = "true".equals(parameters
+				.get("unknownRowCount"));
 
-        String filterExpression = (String) parameters.get("filterExpression");
+		String filterExpression = (String) parameters.get("filterExpression");
 
-        int rowIndex = Integer.parseInt(index_s);
-        int forcedRows = -1;
-        if (forcedRows_s != null && forcedRows_s.length() > 0) {
-            forcedRows = Integer.parseInt(forcedRows_s);
-            if (forcedRows < 1) {
-                forcedRows = -1;
-            }
-        }
+		int rowIndex = Integer.parseInt(index_s);
+		int forcedRows = -1;
+		if (forcedRows_s != null && forcedRows_s.length() > 0) {
+			forcedRows = Integer.parseInt(forcedRows_s);
+			if (forcedRows < 1) {
+				forcedRows = -1;
+			}
+		}
 
-        String showAdditional = (String) parameters.get("showAdditional");
-        String hideAdditional = (String) parameters.get("hideAdditional");
+		String showAdditional = (String) parameters.get("showAdditional");
+		String hideAdditional = (String) parameters.get("hideAdditional");
 
-        ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
-                facesContext, dataGridId);
-        if (localizedComponent == null) {
-            // Cas special: la session a du expir�e ....
+		ILocalizedComponent localizedComponent = HtmlTools.localizeComponent(
+				facesContext, dataGridId);
+		if (localizedComponent == null) {
+			// Cas special: la session a du expir�e ....
 
-            sendJsError(facesContext, dataGridId,
-                    INVALID_PARAMETER_SERVICE_ERROR,
-                    "Component is not found !", null);
+			sendJsError(facesContext, dataGridId,
+					INVALID_PARAMETER_SERVICE_ERROR,
+					"Component is not found !", null);
 
-            return;
-        }
+			return;
+		}
 
-        try {
-            UIComponent component = localizedComponent.getComponent();
+		try {
+			UIComponent component = localizedComponent.getComponent();
 
-            if ((component instanceof DataGridComponent) == false) {
-                sendJsError(facesContext, dataGridId,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find dataGridComponent (id='" + dataGridId
-                                + "').", null);
-                return;
-            }
+			if ((component instanceof DataGridComponent) == false) {
+				sendJsError(facesContext, dataGridId,
+						INVALID_PARAMETER_SERVICE_ERROR,
+						"Can not find dataGridComponent (id='" + dataGridId
+								+ "').", null);
+				return;
+			}
 
-            DataGridComponent dgc = (DataGridComponent) component;
+			DataGridComponent dgc = (DataGridComponent) component;
 
-            decodeSubComponents(facesContext, dgc, parameters);
+			decodeSubComponents(facesContext, dgc, parameters);
 
-            ISortedComponent sortedComponents[] = null;
+			ISortedComponent sortedComponents[] = null;
 
-            String sortIndex_s = (String) parameters.get("sortIndex");
-            if (sortIndex_s != null) {
-                DataColumnComponent columns[] = dgc.listDataColumns().toArray();
+			String sortIndex_s = (String) parameters.get("sortIndex");
+			if (sortIndex_s != null) {
+				DataColumnComponent columns[] = dgc.listDataColumns().toArray();
 
-                StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
+				StringTokenizer st1 = new StringTokenizer(sortIndex_s, ", ");
 
-                sortedComponents = new ISortedComponent[st1.countTokens() / 2];
+				sortedComponents = new ISortedComponent[st1.countTokens() / 2];
 
-                for (int i = 0; st1.hasMoreTokens(); i++) {
-                    String tok1 = st1.nextToken();
-                    String tok2 = st1.nextToken();
+				for (int i = 0; st1.hasMoreTokens(); i++) {
+					String tok1 = st1.nextToken();
+					String tok2 = st1.nextToken();
 
-                    int idx = Integer.parseInt(tok1);
-                    boolean order = "true".equalsIgnoreCase(tok2);
+					int idx = Integer.parseInt(tok1);
+					boolean order = "true".equalsIgnoreCase(tok2);
 
-                    sortedComponents[i] = new DefaultSortedComponent(
-                            columns[idx], idx, order);
-                }
-            }
+					sortedComponents[i] = new DefaultSortedComponent(
+							columns[idx], idx, order);
+				}
+			}
 
-            DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
-            if (dgr == null) {
-                sendJsError(facesContext, dataGridId,
-                        INVALID_PARAMETER_SERVICE_ERROR,
-                        "Can not find dataGridRenderer.", null);
-                return;
-            }
+			ISelectedCriteria[] criteriaConfigs = null;
+			String criteria_s = (String) parameters.get("criteria");
+			criteriaConfigs = CriteriaTools.computeCriteriaConfigs(facesContext, dgc,
+					criteria_s);
 
-            ServletResponse response = (ServletResponse) facesContext
-                    .getExternalContext().getResponse();
+			DataGridRenderer dgr = getDataGridRenderer(facesContext, dgc);
+			if (dgr == null) {
+				sendJsError(facesContext, dataGridId,
+						INVALID_PARAMETER_SERVICE_ERROR,
+						"Can not find dataGridRenderer.", null);
+				return;
+			}
 
-            setNoCache(response);
-            response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
-                    + "; charset=" + RESPONSE_CHARSET);
+			ServletResponse response = (ServletResponse) facesContext
+					.getExternalContext().getResponse();
 
-            setCameliaResponse(response, DATAGRID_SERVICE_VERSION);
+			setNoCache(response);
+			response.setContentType(IHtmlRenderContext.JAVASCRIPT_TYPE
+					+ "; charset=" + RESPONSE_CHARSET);
 
-            boolean useGzip = canUseGzip(facesContext);
+			setCameliaResponse(response, DATAGRID_SERVICE_VERSION);
 
-            PrintWriter printWriter = null;
-            try {
+			boolean useGzip = canUseGzip(facesContext);
 
-                if (useGzip == false) {
-                    printWriter = response.getWriter();
+			PrintWriter printWriter = null;
+			try {
 
-                } else {
-                    ConfiguredHttpServlet
-                            .setGzipContentEncoding((HttpServletResponse) response, true);
+				if (useGzip == false) {
+					printWriter = response.getWriter();
 
-                    OutputStream outputStream = response.getOutputStream();
+				} else {
+					ConfiguredHttpServlet.setGzipContentEncoding(
+							(HttpServletResponse) response, true);
 
-                    GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
-                            outputStream, DEFAULT_BUFFER_SIZE);
+					OutputStream outputStream = response.getOutputStream();
 
-                    Writer writer = new OutputStreamWriter(gzipOutputStream,
-                            RESPONSE_CHARSET);
+					GZIPOutputStream gzipOutputStream = new GZIPOutputStream(
+							outputStream, DEFAULT_BUFFER_SIZE);
 
-                    printWriter = new PrintWriter(writer, false);
-                }
+					Writer writer = new OutputStreamWriter(gzipOutputStream,
+							RESPONSE_CHARSET);
 
-                writeJs(facesContext, printWriter, dgc, dataGridId, dgr,
-                        rowIndex, forcedRows, sortedComponents,
-                        filterExpression, unknownRowCount, showAdditional,
-                        hideAdditional);
+					printWriter = new PrintWriter(writer, false);
+				}
 
-            } catch (IOException ex) {
-                throw new FacesException(
-                        "Can not write dataGrid javascript rows !", ex);
+				writeJs(facesContext, printWriter, dgc, dataGridId, dgr,
+						rowIndex, forcedRows, sortedComponents,
+						filterExpression, unknownRowCount, showAdditional,
+						hideAdditional, criteriaConfigs);
 
-            } catch (RuntimeException ex) {
-                LOG.error("Catch runtime exception !", ex);
+			} catch (IOException ex) {
+				throw new FacesException(
+						"Can not write dataGrid javascript rows !", ex);
 
-                throw ex;
+			} catch (RuntimeException ex) {
+				LOG.error("Catch runtime exception !", ex);
 
-            } finally {
-                if (printWriter != null) {
-                    printWriter.close();
-                }
-            }
+				throw ex;
 
-        } finally {
-            localizedComponent.end();
-        }
+			} finally {
+				if (printWriter != null) {
+					printWriter.close();
+				}
+			}
 
-        facesContext.responseComplete();
-    }
+		} finally {
+			localizedComponent.end();
+		}
 
-    private DataGridRenderer getDataGridRenderer(FacesContext facesContext,
-            DataGridComponent component) {
+		facesContext.responseComplete();
+	}
 
-        Renderer renderer = getRenderer(facesContext, component);
+	
 
-        if ((renderer instanceof DataGridRenderer) == false) {
-            return null;
-        }
+	private DataGridRenderer getDataGridRenderer(FacesContext facesContext,
+			DataGridComponent component) {
 
-        return (DataGridRenderer) renderer;
-    }
+		Renderer renderer = getRenderer(facesContext, component);
 
-    private void decodeSubComponents(FacesContext facesContext,
-            DataGridComponent dgc, Map parameters) {
+		if ((renderer instanceof DataGridRenderer) == false) {
+			return null;
+		}
 
-        int first = -1;
-        int rows = -1;
+		return (DataGridRenderer) renderer;
+	}
 
-        String serializedFirst = (String) parameters.get("serializedFirst");
-        if (serializedFirst != null) {
-            first = Integer.parseInt(serializedFirst);
-        }
+	private void decodeSubComponents(FacesContext facesContext,
+			DataGridComponent dgc, Map parameters) {
 
-        String serializedRows = (String) parameters.get("serializedRows");
-        if (serializedRows != null) {
-            rows = Integer.parseInt(serializedRows);
-        }
+		int first = -1;
+		int rows = -1;
 
-        if (first < 0 || rows < 1) {
-            return;
-        }
+		String serializedFirst = (String) parameters.get("serializedFirst");
+		if (serializedFirst != null) {
+			first = Integer.parseInt(serializedFirst);
+		}
 
-        dgc.setFirst(first);
-        dgc.setRows(rows);
+		String serializedRows = (String) parameters.get("serializedRows");
+		if (serializedRows != null) {
+			rows = Integer.parseInt(serializedRows);
+		}
 
-        String serializedIndexes = (String) parameters.get("serializedIndexes");
-        if (serializedIndexes != null) {
-            for (StringTokenizer st = new StringTokenizer(serializedIndexes,
-                    ","); st.hasMoreTokens();) {
+		if (first < 0 || rows < 1) {
+			return;
+		}
 
-                int zfirst = Integer.parseInt(st.nextToken());
-                int zrows = Integer.parseInt(st.nextToken());
+		dgc.setFirst(first);
+		dgc.setRows(rows);
 
-                dgc.addDecodedIndexes(zfirst, zrows);
-            }
-        }
+		String serializedIndexes = (String) parameters.get("serializedIndexes");
+		if (serializedIndexes != null) {
+			for (StringTokenizer st = new StringTokenizer(serializedIndexes,
+					","); st.hasMoreTokens();) {
 
-        dgc.processDecodes(facesContext);
-    }
+				int zfirst = Integer.parseInt(st.nextToken());
+				int zrows = Integer.parseInt(st.nextToken());
 
-    private void writeJs(FacesContext facesContext, PrintWriter printWriter,
-            DataGridComponent dgc, String componentClientId,
-            DataGridRenderer dgr, int rowIndex, int forcedRows,
-            ISortedComponent sortedComponents[], String filterExpression,
-            boolean unknownRowCount, String showAdditional,
-            String hideAdditional) throws IOException {
+				dgc.addDecodedIndexes(zfirst, zrows);
+			}
+		}
 
-        IProcessContext processContext = HtmlProcessContextImpl
-                .getHtmlProcessContext(facesContext);
+		dgc.processDecodes(facesContext);
+	}
 
-        CharArrayWriter cw = null;
-        PrintWriter pw = printWriter;
-        if (LOG.isTraceEnabled()) {
-            cw = new CharArrayWriter(2000);
-            pw = new PrintWriter(cw);
-        }
+	private void writeJs(FacesContext facesContext, PrintWriter printWriter,
+			DataGridComponent dgc, String componentClientId,
+			DataGridRenderer dgr, int rowIndex, int forcedRows,
+			ISortedComponent sortedComponents[], String filterExpression,
+			boolean unknownRowCount, String showAdditional,
+			String hideAdditional, ISelectedCriteria[] criteriaContainers)
+			throws IOException {
 
-        IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
-                pw, RESPONSE_CHARSET, dgc, componentClientId);
+		IProcessContext processContext = HtmlProcessContextImpl
+				.getHtmlProcessContext(facesContext);
 
-        DataGridRenderer.DataGridRenderContext tableContext = dgr
-                .createTableContext(processContext, jsWriter
-                        .getJavaScriptRenderContext(), dgc, rowIndex,
-                        forcedRows, sortedComponents, filterExpression,
-                        showAdditional, hideAdditional);
+		CharArrayWriter cw = null;
+		PrintWriter pw = printWriter;
+		if (LOG.isTraceEnabled()) {
+			cw = new CharArrayWriter(2000);
+			pw = new PrintWriter(cw);
+		}
 
-        String varId = jsWriter.getComponentVarName();
+		IJavaScriptWriter jsWriter = new JavaScriptResponseWriter(facesContext,
+				pw, RESPONSE_CHARSET, dgc, componentClientId);
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document);");
+		DataGridRenderer.DataGridRenderContext tableContext = dgr
+				.createTableContext(processContext,
+						jsWriter.getJavaScriptRenderContext(), dgc, rowIndex,
+						forcedRows, sortedComponents, filterExpression,
+						showAdditional, hideAdditional, criteriaContainers);
 
-        jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex).writeln(
-                ");");
+		String varId = jsWriter.getComponentVarName();
 
-        String rowVarId = jsWriter.getJavaScriptRenderContext()
-                .allocateVarName();
-        tableContext.setRowVarName(rowVarId);
+		jsWriter.write("var ").write(varId).write('=')
+				.writeCall("f_core", "GetElementByClientId")
+				.writeString(componentClientId).writeln(", document);");
 
-        dgr.encodeJsTransactionalRows(jsWriter, tableContext, false,
-                unknownRowCount);
+		jsWriter.writeMethodCall("f_startNewPage").writeInt(rowIndex)
+				.writeln(");");
 
-        jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
+		String rowVarId = jsWriter.getJavaScriptRenderContext()
+				.allocateVarName();
+		tableContext.setRowVarName(rowVarId);
 
-        if (LOG.isTraceEnabled()) {
-            pw.flush();
+		dgr.encodeJsTransactionalRows(jsWriter, tableContext, false,
+				unknownRowCount);
 
-            LOG.trace(cw.toString());
+		jsWriter.writeMethodCall("f_updateNewPage").writeln(");");
 
-            printWriter.write(cw.toCharArray());
-        }
-    }
+		if (LOG.isTraceEnabled()) {
+			pw.flush();
+
+			LOG.trace(cw.toString());
+
+			printWriter.write(cw.toCharArray());
+		}
+	}
 }
