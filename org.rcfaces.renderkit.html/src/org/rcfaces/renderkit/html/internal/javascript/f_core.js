@@ -1219,8 +1219,6 @@ var f_core = {
 						
 						form._rcfacesOldSubmit = undefined;
 					}
-					
-					
 				}
 				
 				if (win.rcfacesGarbageDisabled!==true) {
