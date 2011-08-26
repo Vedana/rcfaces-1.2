@@ -1143,18 +1143,21 @@ var __members = {
 				}
 			}
 		}
-		
-		if (!domFragment) {
-			container.appendChild(fragment);
-		}
-		
-		if (this._waitingNodes) {
-			for ( var j = 0; j < this._waitingNodes.length; j++) {
-				var waintingNode = this._waitingNodes[j];
-				if (waintingNode._li){
-					this.f_clearWaiting(this._waitingNodes[j]._id);
+
+		// Si c'est la racine, on retire les erreurs
+		var waitingNodes=this._waitingNodes;
+		if (container==this._body && waitingNodes) {
+			for ( var j = 0; j < waitingNodes.length; j++) {
+				var waintingNode = waitingNodes[j];
+				
+				if (waintingNode._li) {
+					this.f_clearWaiting(waitingNode._id);
 				}
 			}
+		}
+
+		if (!domFragment) {
+			container.appendChild(fragment);
 		}
 		
 		if (this._cursor) {
