@@ -4,12 +4,14 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
@@ -21,8 +23,6 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
-import org.rcfaces.core.component.CriteriaComponent;
-import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
@@ -1885,20 +1885,13 @@ public class DataGridRenderer extends AbstractGridRenderer {
 		if(gridComponent instanceof ICriteriaManagerCapability){
 			
 			ICriteriaManagerCapability manager = (ICriteriaManagerCapability) gridComponent;
-			ICriteriaContainer[] selectedContainers = manager.listSelectedCriteriaContainers();
-			String containersId = "";
-			for (int i = 0; i < selectedContainers.length; i++) {
-				ICriteriaContainer container = selectedContainers[i];
-					
-				if(i<1){
-					containersId +=container.getId(); 
-				}else {
-					containersId += ","+container.getId();
-				}
-			}
+			ICriteriaContainer[] oldSelectedContainers = manager.listSelectedCriteriaContainers();
 			
+			 Set<ICriteriaContainer> oldContainerSet = new HashSet<ICriteriaContainer>();
+			 if(oldSelectedContainers != null && oldSelectedContainers.length > 0) {
+				 oldContainerSet.addAll(Arrays.asList(oldSelectedContainers));
+			 }
 			 String crit = componentData.getStringProperty("selectedCriteriaColumns");
-			 ICriteriaContainer[] containers =  manager.listCriteriaContainers();
 			 if(crit != null) {
 				
 				ISelectedCriteria[] selectedCriteria = null;
@@ -1917,15 +1910,24 @@ public class DataGridRenderer extends AbstractGridRenderer {
 					SelectionTools.setSelectionValues(facesContext,
 							 iSelectedCriteria.getConfig(),
 							values);
-
-					newSelectedCriteria[i] = iSelectedCriteria.getConfig().getCriteriaContainer();
+					
+					ICriteriaContainer criteriaContainer = iSelectedCriteria.getConfig().getCriteriaContainer(); 
+					newSelectedCriteria[i] = criteriaContainer;
+					oldContainerSet.remove(criteriaContainer);
 				}
 								
 				component.queueEvent(new PropertyChangeEvent(component,
-							Properties.SELECTED_CRITERIA_COLUMNS, containersId,
-							crit)); 
+							Properties.SELECTED_CRITERIA_COLUMNS, oldSelectedContainers,
+							newSelectedCriteria)); 
 				 
 				manager.setSelectedCriteriaContainers(newSelectedCriteria);
+				
+				for (ICriteriaContainer criteriaContainer : oldContainerSet) {
+					SelectionTools.setSelectionValues(facesContext,
+							criteriaContainer.getCriteriaConfiguration(),
+							Collections.emptySet());
+				}
+				
 			 }
 		}
 
