@@ -2047,31 +2047,7 @@ var __members = {
 		});
 		
 	},
-	
 		
-//	fa_setSelectedCriteria: function (selectedCriteria, refresh){
-//		f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
-//
-//		this._selectedCriteria = selectedCriteria;
-//		this._countToken = -1;
-//		if(refresh === false) {
-//			return;
-//		}
-//		this._first = 0;
-//		
-//		
-//		this.f_refreshContent(true);
-//		
-//	},
-	
-//	/**
-//	 * 
-//	 * @return Object Selected criteria
-//	 */
-//	fa_getSelectedCriteria: function () {
-//		return this._selectedCriteria;
-//	},
-	
 	fa_getColumnCriteriaCardinality: function (columnId) {
 		f_core.Assert(typeof(columnId)=="string" || typeof(columnId)=="object", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
 
