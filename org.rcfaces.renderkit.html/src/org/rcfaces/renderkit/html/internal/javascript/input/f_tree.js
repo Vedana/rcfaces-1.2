@@ -1147,6 +1147,16 @@ var __members = {
 		if (!domFragment) {
 			container.appendChild(fragment);
 		}
+		
+		if (this._waitingNodes) {
+			for ( var j = 0; j < this._waitingNodes.length; j++) {
+				var waintingNode = this._waitingNodes[j];
+				if (waintingNode._li){
+					this.f_clearWaiting(this._waitingNodes[j]._id);
+				}
+			}
+		}
+		
 		if (this._cursor) {
  			this.fa_showElement(this._cursor); 
 		}
@@ -3317,6 +3327,7 @@ var __members = {
 	 * @return void
 	 */
 	f_refreshContent: function(value) {
+		
 		if (value===undefined) {		
 			var children=this._nodes;
 			
@@ -3384,7 +3395,7 @@ var __members = {
 				this._nodeFinalizer(child, true);
 			}
 		}
-				
+		
 		if (opened) {
 			this._openNode(node, null, li);
 		}
