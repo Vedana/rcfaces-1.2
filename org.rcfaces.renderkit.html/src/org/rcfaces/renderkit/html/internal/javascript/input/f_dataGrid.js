@@ -297,7 +297,6 @@ var __members = {
 		this._addRowFragment=undefined; // HtmlDocumentFragment
 		
 		this._criteriaEvaluateCallBacks= undefined; // Object
-		this._selectedCriteria=undefined; // Array
 		
 		// this._labelColumnId=undefined; // String
 		// this._gridUpdadeServiceId=undefined; // String

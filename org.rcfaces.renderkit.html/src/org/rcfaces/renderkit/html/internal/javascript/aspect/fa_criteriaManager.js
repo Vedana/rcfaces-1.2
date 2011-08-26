@@ -7,6 +7,10 @@
  */
  
 var __members = {
+		
+		f_finalize: function() {
+			this._selectedCriteria = undefined; //ISelectedCriteria[] 
+		},
 
 		/**
 		 * @method public
@@ -122,8 +126,6 @@ var __members = {
 		 * @return Number  criteria cardinality constant or "undefined" if the column is not known 
 		 */
 		fa_getColumnCriteriaCardinality: f_class.ABSTRACT
-		
-		
 
 };
 
