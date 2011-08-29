@@ -34,6 +34,7 @@ import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.IClientFullStateCapability;
 import org.rcfaces.core.component.capability.IShowValueCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -53,6 +54,7 @@ import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.Convertor;
 import org.rcfaces.core.lang.provider.ISelectionProvider;
 import org.rcfaces.core.model.IComponentRefModel;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.IIndexesModel;
@@ -76,7 +78,6 @@ import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
  * @version $Revision$ $Date$
  */
 public class ComponentsGridRenderer extends AbstractGridRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ComponentsGridRenderer.class);
@@ -183,11 +184,12 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             IScriptRenderContext scriptRenderContext,
             ComponentsGridComponent dgc, int rowIndex, int forcedRow,
             ISortedComponent[] sortedComponents, String filterExpression,
-            String showAdditionals, String hideAdditionals) {
+			String showAdditionals, String hideAdditionals,
+			ISelectedCriteria[] criteriaContainers) {
         return new ComponentsGridRenderContext(processContext,
                 scriptRenderContext, dgc, rowIndex, forcedRow,
                 sortedComponents, filterExpression, showAdditionals,
-                hideAdditionals);
+				hideAdditionals, criteriaContainers);
     }
 
     protected void encodeBodyEnd(IHtmlWriter writer,
@@ -353,17 +355,21 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         DataModel dataModel = componentsGridComponent.getDataModelValue();
 
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent(componentsGridComponent);
+		IComponentRefModel componentRefModel = (IComponentRefModel) getAdapter(
+				IComponentRefModel.class, dataModel);
+
+		if (componentRefModel != null) {
+			componentRefModel
+					.setComponent((UIComponent) componentsGridComponent);
         }
 
         boolean filtred = false;
 
         IFilterProperties filtersMap = gridRenderContext.getFiltersMap();
+		IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+				IFiltredModel.class, dataModel);
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+			if (filtredDataModel != null) {
 
                 filtredDataModel.setFilter(filtersMap);
                 gridRenderContext.updateRowCount();
@@ -375,15 +381,15 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 gridRenderContext.updateRowCount();
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+		} else if (filtredDataModel != null) {
 
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             gridRenderContext.updateRowCount();
 
             filtred = true;
         }
-
+		ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(
+				ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
 
             if (NOT_SUPPORTED_SERVER_SORT) {
@@ -391,7 +397,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                         "Can not sort dataModel in server side !");
             }
 
-            if (dataModel instanceof ISortedDataModel) {
+			if (sortedDataModel != null) {
                 // On delegue au modele, le tri !
 
                 // Nous devons êctre OBLIGATOIREMENT en mode rowValueColumnId
@@ -400,8 +406,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                             "Can not sort dataModel without attribute rowValue attribute specified !");
                 }
 
-                ((ISortedDataModel) dataModel).setSortParameters(
-                        componentsGridComponent, sortedComponents);
+				sortedDataModel.setSortParameters(componentsGridComponent,
+						sortedComponents);
             } else {
                 throw new FacesException(
                         "ComponentsGrid can not be sorted automatically ! (the dataModel must implement ISortedDataModel)");
@@ -410,10 +416,9 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
             // Apres le tri, on connait peu etre la taille
             gridRenderContext.updateRowCount();
 
-        } else if (dataModel instanceof ISortedDataModel) {
+		} else if (sortedDataModel != null) {
             // Reset des parametres de tri !
-            ((ISortedDataModel) dataModel).setSortParameters(
-                    componentsGridComponent, null);
+			sortedDataModel.setSortParameters(componentsGridComponent, null);
         }
 
         // Initializer le IRandgeDataModel avant la selection/check/additionnal
@@ -1132,7 +1137,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
      */
     public class ComponentsGridRenderContext extends AbstractGridRenderContext {
 
-        private static final String REVISION = "$Revision$";
 
         private boolean rowValueSetted;
 
@@ -1145,10 +1149,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 ComponentsGridComponent gridComponent, int rowIndex,
                 int forcedRows, ISortedComponent[] sortedComponents,
                 String filterExpression, String showAdditionals,
-                String hideAdditionals) {
+				String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
             super(processContext, scriptRenderContext, gridComponent, rowIndex,
                     forcedRows, sortedComponents, filterExpression,
-                    showAdditionals, hideAdditionals);
+					showAdditionals, hideAdditionals, criteriaContainers);
         }
 
         public ComponentsGridRenderContext(

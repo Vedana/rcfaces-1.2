@@ -45,7 +45,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class TreeRenderer extends AbstractSelectItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String NODE_ROW_ID = "#node";
 

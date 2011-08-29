@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.capability.IAdditionalInformationEventCapability;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
 import org.rcfaces.core.component.capability.ICloseEventCapability;
+import org.rcfaces.core.component.capability.ICriteriaEventCapability;
 import org.rcfaces.core.component.capability.IDoubleClickEventCapability;
 import org.rcfaces.core.component.capability.IDragEventCapability;
 import org.rcfaces.core.component.capability.IDropCompleteEventCapability;
@@ -36,7 +37,6 @@ import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IServiceEventCapability;
 import org.rcfaces.core.component.capability.ISortEventCapability;
 import org.rcfaces.core.component.capability.ISuggestionEventCapability;
-import org.rcfaces.core.component.capability.IUnlockedClientAttributesCapability;
 import org.rcfaces.core.component.capability.IUserEventCapability;
 import org.rcfaces.core.component.capability.IValidationEventCapability;
 import org.rcfaces.core.component.capability.IValueChangeEventCapability;
@@ -44,6 +44,7 @@ import org.rcfaces.core.event.IAdditionalInformationListener;
 import org.rcfaces.core.event.IBlurListener;
 import org.rcfaces.core.event.ICheckListener;
 import org.rcfaces.core.event.ICloseListener;
+import org.rcfaces.core.event.ICriteriaListener;
 import org.rcfaces.core.event.IDoubleClickListener;
 import org.rcfaces.core.event.IDragListener;
 import org.rcfaces.core.event.IDropCompleteListener;
@@ -78,6 +79,8 @@ import org.rcfaces.core.internal.listener.CheckActionListener;
 import org.rcfaces.core.internal.listener.CheckScriptListener;
 import org.rcfaces.core.internal.listener.CloseActionListener;
 import org.rcfaces.core.internal.listener.CloseScriptListener;
+import org.rcfaces.core.internal.listener.CriteriaActionListener;
+import org.rcfaces.core.internal.listener.CriteriaScriptListener;
 import org.rcfaces.core.internal.listener.DoubleClickActionListener;
 import org.rcfaces.core.internal.listener.DoubleClickScriptListener;
 import org.rcfaces.core.internal.listener.DragScriptListener;
@@ -126,7 +129,6 @@ import org.rcfaces.core.internal.listener.ValidationScriptListener;
  * @version $Revision$ $Date$
  */
 public class ListenersTools {
-	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory.getLog(ListenersTools.class);
 
@@ -155,11 +157,9 @@ public class ListenersTools {
 	 * @version $Revision$ $Date$
 	 */
 	private static abstract class AbstractListenerType implements IListenerType {
-		private static final String REVISION = "$Revision$";
 	}
 
 	public static final IListenerType BLUR_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -187,8 +187,35 @@ public class ListenersTools {
 		}
 	};
 
+	public static final IListenerType CRITERIA_LISTENER_TYPE = new AbstractListenerType() {
+		public void addScriptListener(UIComponent component, String scriptType,
+				String command) {
+
+			ICriteriaEventCapability focusBlurEventCapability = (ICriteriaEventCapability) component;
+
+			focusBlurEventCapability
+					.addCriteriaListener(new CriteriaScriptListener(scriptType,
+							command));
+		}
+
+		public IServerActionListener addActionListener(UIComponent component,
+				Application application, String expression,
+				boolean partialRendering) {
+			ICriteriaEventCapability criteriaEventCapability = (ICriteriaEventCapability) component;
+
+			CriteriaActionListener criteriaActionListener = new CriteriaActionListener(
+					expression, partialRendering);
+			criteriaEventCapability.addCriteriaListener(criteriaActionListener);
+
+			return criteriaActionListener;
+		}
+
+		public Class getListenerClass() {
+			return ICriteriaListener.class;
+		}
+	};
+
 	public static final IListenerType DRAG_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -210,7 +237,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType DROP_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -232,7 +258,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType DROP_COMPLETE_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -261,7 +286,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType FOCUS_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -289,7 +313,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType LOAD_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -317,7 +340,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType EXPAND_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -345,7 +367,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType ERROR_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -373,7 +394,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType DOUBLE_CLICK_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -403,7 +423,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType SELECTION_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -432,7 +451,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType ADDITIONAL_INFORMATION_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -462,7 +480,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType CHECK_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -490,7 +507,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType CLOSE_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -518,7 +534,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType VALUE_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -547,7 +562,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType SUGGESTION_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -577,7 +591,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType PROPERTY_CHANGE_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -607,7 +620,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType KEY_PRESS_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -635,7 +647,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType KEY_DOWN_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -657,7 +668,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType KEY_UP_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -679,7 +689,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType INIT_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -701,7 +710,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType MOUSE_OUT_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -724,7 +732,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType MOUSE_OVER_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -747,7 +754,6 @@ public class ListenersTools {
 	};
 	
 	public static final IListenerType PRE_SELECTION_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -770,7 +776,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType SORT_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -799,7 +804,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType RESET_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -828,7 +832,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType VALIDATION_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -858,7 +861,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType MENU_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -880,7 +882,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType USER_EVENT_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
 
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
@@ -910,8 +911,6 @@ public class ListenersTools {
 	};
 
 	public static final IListenerType SERVICE_EVENT_LISTENER_TYPE = new AbstractListenerType() {
-		private static final String REVISION = "$Revision$";
-
 		public void addScriptListener(UIComponent component, String scriptType,
 				String command) {
 			IServiceEventCapability userEventCapability = (IServiceEventCapability) component;
@@ -1119,9 +1118,9 @@ public class ListenersTools {
 				}
 
 				IServerActionListener serverActionListener = listenerType
-						.addActionListener(component, facesContext
-								.getApplication(), actionExpression,
-								partialRendering);
+						.addActionListener(component,
+								facesContext.getApplication(),
+								actionExpression, partialRendering);
 
 				if (serverActionListener != null
 						&& methodExpressionCreator != null) {

@@ -71,7 +71,6 @@ import org.rcfaces.renderkit.html.internal.service.AsyncRenderService;
 public abstract class AbstractHtmlRenderer extends AbstractCameliaRenderer
         implements IEventObjectDecoder, INamespaceContributor {
 
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractHtmlRenderer.class);

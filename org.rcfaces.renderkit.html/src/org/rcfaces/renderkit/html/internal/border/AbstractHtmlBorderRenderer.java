@@ -25,7 +25,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  */
 public abstract class AbstractHtmlBorderRenderer extends AbstractBorderRenderer
         implements IHtmlBorderRenderer, INamespaceContributor {
-    private static final String REVISION = "$Revision$";
 
     public static final String TD_TEXT = "_ctext";
 

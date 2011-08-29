@@ -26,7 +26,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ImagePagerButtonRenderer extends ImageButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ImagePagerButtonRenderer.class);
@@ -110,7 +109,6 @@ public class ImagePagerButtonRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class PagerImageButtonDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         public PagerImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);

@@ -60,8 +60,6 @@ import org.rcfaces.renderkit.html.internal.service.TreeService;
  */
 public class TreeDecorator extends AbstractSelectItemsDecorator {
 
-    private static final String REVISION = "$Revision$";
-
     private static final String IMAGES_PROPERTY = "treeRender.images";
 
     private static final Object[] OBJECT_EMPTY_ARRAY = new Object[0];

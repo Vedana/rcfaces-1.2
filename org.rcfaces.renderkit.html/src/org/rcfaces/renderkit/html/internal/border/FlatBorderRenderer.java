@@ -15,7 +15,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  * @version $Revision$ $Date$
  */
 public class FlatBorderRenderer extends AbstractHtmlBorderRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String FLAT_BORDER_CLASS = "fb_flat";
 

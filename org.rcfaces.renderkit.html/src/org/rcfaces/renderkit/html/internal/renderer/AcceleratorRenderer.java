@@ -25,7 +25,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void encodeEnd(IComponentWriter writer) throws WriterException {
         IComponentRenderContext componentRenderContext = writer
@@ -95,6 +94,16 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
         super.encodeEnd(htmlWriter);
     }
 
+	@Override
+	protected boolean encodeEventsInAttributes(IHtmlWriter writer) {
+		if (writer.getHtmlComponentRenderContext().getHtmlRenderContext()
+				.getJavaScriptRenderContext().isCollectorMode() == false) {
+			return true;
+		}
+
+		return false;
+	}
+
     protected void encodeJavaScript(IJavaScriptWriter jsWriter)
             throws WriterException {
         super.encodeJavaScript(jsWriter);
@@ -135,7 +144,8 @@ public class AcceleratorRenderer extends AbstractJavaScriptRenderer {
             for (; param > 0; param--) {
                 jsWriter.write(',').writeNull();
             }
-            jsWriter.write(',').writeInt(state.virtualKey.intValue());
+			jsWriter.write(",[").writeInt(state.virtualKey.intValue())
+					.write(']');
 
         } else {
             param++;

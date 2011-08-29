@@ -41,7 +41,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public class DateEntryRenderer extends AbstractCalendarRenderer implements
         ICalendarDecoderRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.DATE_ENTRY;

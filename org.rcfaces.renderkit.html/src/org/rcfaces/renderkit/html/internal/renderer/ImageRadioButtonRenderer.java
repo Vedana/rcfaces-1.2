@@ -27,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ImageRadioButtonRenderer.class);
@@ -84,7 +83,6 @@ public class ImageRadioButtonRenderer extends ImageCheckButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class ImageRadioButtonWriter extends ImageCheckButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         public ImageRadioButtonWriter(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);

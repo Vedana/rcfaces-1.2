@@ -1239,6 +1239,7 @@ var f_core = {
 					}
 					form._rcfacesInitialized=undefined;
 		
+					f_core.AddEventListener(form, "submit", document._rcfacesDisableSubmit);
 					f_core.RemoveEventListener(form, "submit", f_core._OnSubmit);
 					f_core.RemoveEventListener(form, "reset", f_core._OnReset);
 		
@@ -6339,7 +6340,25 @@ var f_core = {
 	toString: function() {
 		return "[class f_core]";
 	}
-}
+};
+
+document._rcfacesDisableSubmit=function(event) {
+	if (!event) {
+		event=this.ownerDocument.parentWindow.event;
+	}
+
+	event.cancelBubble = true;
+
+	if (event.preventDefault) {
+		event.preventDefault();
+
+	} else {
+		event.returnValue = false;	
+	}
+	
+	return false;
+	
+};
 
 
 f_core._InitLibrary(window);

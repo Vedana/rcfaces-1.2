@@ -49,7 +49,6 @@ import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
  * @version $Revision$ $Date$
  */
 public class TreeService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(TreeService.class);
 
@@ -294,7 +293,6 @@ public class TreeService extends AbstractHtmlService {
      * @version $Revision$ $Date$
      */
     private static class FilterNodeRenderer implements ISelectItemNodeWriter {
-        private static final String REVISION = "$Revision$";
 
         private final ISelectItemNodeWriter parent;
 

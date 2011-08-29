@@ -26,7 +26,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ServiceRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);

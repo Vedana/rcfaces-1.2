@@ -22,7 +22,6 @@ import org.rcfaces.core.internal.lang.StringAppender;
  * @version $Revision$ $Date$
  */
 public class StringList {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(StringList.class);
 
@@ -36,7 +35,7 @@ public class StringList {
             return null;
         }
         if (value.length() < 1) {
-            return new String[] { value };
+            return new String[] { /*value*/ };
         }
 
         char chs[] = value.toCharArray();

@@ -24,7 +24,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class AbstractCompositeRenderer extends AbstractCssRenderer {
 
-    private static final String REVISION = "$Revision$";
 
     private static final int CHAR_SIZE = 8;
 

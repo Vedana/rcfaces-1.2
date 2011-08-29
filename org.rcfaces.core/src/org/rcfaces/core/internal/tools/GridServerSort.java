@@ -36,7 +36,6 @@ import org.rcfaces.core.model.ISortedComponent;
  * @version $Revision$ $Date$
  */
 public final class GridServerSort {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(GridServerSort.class);
 
@@ -112,6 +111,9 @@ public final class GridServerSort {
                     }
 
                     ISortMethod sortMethod = sortMethods[i];
+                    if (sortMethod == null) {
+                    	throw new FacesException("Can not get sort method for column #"+i+" id="+column.getId());
+                    }
                     value = sortMethod
                             .convertValue(facesContext, column, value);
 
@@ -263,7 +265,6 @@ public final class GridServerSort {
      */
     private static abstract class AbstractSortMethod implements ISortMethod,
             Comparator {
-        private static final String REVISION = "$Revision$";
 
         public Comparator getComparator() {
             return this;
@@ -288,7 +289,6 @@ public final class GridServerSort {
      */
     private static class SortLong extends AbstractSortMethod {
 
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -324,7 +324,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortDouble extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -360,7 +359,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortAlpha extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -388,7 +386,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortAlphaIgnoreCase extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -415,7 +412,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortDate extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         public Object convertValue(FacesContext facesContext,
                 UIComponent component, Object value) {
@@ -439,7 +435,6 @@ public final class GridServerSort {
      * @version $Revision$ $Date$
      */
     private static class SortAction extends AbstractSortMethod {
-        private static final String REVISION = "$Revision$";
 
         private final Comparator comparator;
 

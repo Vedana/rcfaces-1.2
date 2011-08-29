@@ -94,7 +94,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ToolBarRenderer;
  * @version $Revision$ $Date$
  */
 public class ItemsToolFolderDecorator extends AbstractSelectItemsDecorator {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(ItemsToolFolderDecorator.class);

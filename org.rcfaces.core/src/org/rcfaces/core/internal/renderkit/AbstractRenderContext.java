@@ -25,10 +25,11 @@ import org.rcfaces.core.internal.tools.BindingTools;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractRenderContext implements IRenderContext {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractRenderContext.class);
+
+    private static final boolean LOG_DEBUG = LOG.isDebugEnabled();
 
     private static final int COMPONENT_STACK_INITIAL_DEPTH = 16;
 
@@ -88,7 +89,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
         stack.add(componentClientId);
         stack.add(Boolean.FALSE);
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
             for (Iterator it = stack.iterator(); it.hasNext();) {
@@ -111,7 +112,7 @@ public abstract class AbstractRenderContext implements IRenderContext {
             releaseMap((Map) componentContextAttributes);
         }
 
-        if (LOG.isDebugEnabled()) {
+        if (LOG_DEBUG) {
             StringBuffer sb = new StringBuffer();
 
             for (Iterator it = stack.iterator(); it.hasNext();) {
@@ -342,7 +343,6 @@ public abstract class AbstractRenderContext implements IRenderContext {
      * @version $Revision$ $Date$
      */
     public static class VarScopeState implements StateHolder {
-        private static final String REVISION = "$Revision$";
 
         private String varName;
 

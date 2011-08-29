@@ -32,7 +32,6 @@ import org.rcfaces.renderkit.html.internal.util.TextTypeTools;
  * @version $Revision$ $Date$
  */
 public class BoxRenderer extends AbstractCssRenderer implements IAsyncRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String HTML_TYPE_PROPERTY = "org.rcfaces.renderkit.html.box.COMPONENT_TYPE";
 

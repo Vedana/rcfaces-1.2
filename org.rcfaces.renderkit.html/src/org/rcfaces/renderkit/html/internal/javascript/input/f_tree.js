@@ -764,6 +764,7 @@ var __members = {
 
 		this.f_super(arguments);
 	},
+	
 	_nodeFinalizer: function(li, deepFinalizer, deselectedNodeValues) {
 	
 		if (deepFinalizer) {
@@ -1151,6 +1152,18 @@ var __members = {
 			}
 		}
 		
+		// Si c'est la racine, on retire les erreurs
+		var waitingNodes=this._waitingNodes;
+		if (container==this._body && waitingNodes) {
+			for ( var j = 0; j < waitingNodes.length; j++) {
+				var waintingNode = waitingNodes[j];
+				
+				if (waintingNode._li) {
+					this.f_clearWaiting(waitingNode._id);
+				}
+			}
+		}
+
 		if (!domFragment) {
 			container.appendChild(fragment);
 		}
@@ -1168,6 +1181,10 @@ var __members = {
 	 */
 	f_closeNode: function(value, evt) {
 		var li=this._searchComponentByNodeOrValue(value);
+
+		if (li === undefined) {
+			return false;
+		}	
 		
 		return this._closeNode(li._node, evt, li);
 	},
@@ -3382,7 +3399,8 @@ var __members = {
 	 */
 	f_refreshContent: function(value) {
 		if (value===undefined) {		
-
+			//var children=this._nodes;
+			//pe
 			var ul=this._body;
 			var children=ul.childNodes;
 			var lis=ul.childNodes;

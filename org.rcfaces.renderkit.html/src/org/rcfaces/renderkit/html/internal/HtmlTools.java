@@ -53,7 +53,6 @@ import org.w3c.dom.Document;
  * @version $Revision$ $Date$
  */
 public class HtmlTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(HtmlTools.class);
 

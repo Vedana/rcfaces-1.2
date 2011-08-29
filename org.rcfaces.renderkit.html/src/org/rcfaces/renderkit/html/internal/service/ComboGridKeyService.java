@@ -36,7 +36,6 @@ import org.rcfaces.renderkit.html.internal.renderer.DataGridRenderer.DataGridRen
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 public class ComboGridKeyService extends AbstractHtmlService {
-    private static final String REVISION = "$Revision$";
 
     private static final String SERVICE_ID = Constants.getPackagePrefix()
             + ".ComboGridKey";
@@ -207,17 +206,18 @@ public class ComboGridKeyService extends AbstractHtmlService {
                 pw, RESPONSE_CHARSET, comboGridComponent, componentClientId);
 
         DataGridRenderContext tableContext = comboGridRenderer
-                .createTableContext(processContext, jsWriter
-                        .getJavaScriptRenderContext(), comboGridComponent, 0,
-                        -1, null, filterExpression, null, null);
+				.createTableContext(processContext,
+						jsWriter.getJavaScriptRenderContext(),
+						comboGridComponent, 0, -1, null, filterExpression,
+						null, null, null);
 
         tableContext.getFiltersMap().put("key", rowKey);
 
         String varId = jsWriter.getComponentVarName();
 
-        jsWriter.write("var ").write(varId).write('=').writeCall("f_core",
-                "GetElementByClientId").writeString(componentClientId).writeln(
-                ", document);");
+		jsWriter.write("var ").write(varId).write('=')
+				.writeCall("f_core", "GetElementByClientId")
+				.writeString(componentClientId).writeln(", document);");
 
         comboGridRenderer.encodeRowByKey(jsWriter, tableContext);
 

@@ -41,7 +41,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractCalendarRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void decode(IRequestContext context, UIComponent component,
             IComponentData componentData) {

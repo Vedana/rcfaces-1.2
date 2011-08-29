@@ -39,7 +39,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public class DateChooserRenderer extends AbstractCalendarRenderer implements
         ICalendarDecoderRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final boolean USE_CSS_IMAGES = true;
 

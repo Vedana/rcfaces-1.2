@@ -427,7 +427,7 @@ var __statics = {
 		
 		return year;
 	}
-}
+};
 
 
 new f_class("f_dateFormat", {

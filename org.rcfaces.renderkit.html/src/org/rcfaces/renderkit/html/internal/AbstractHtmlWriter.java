@@ -28,7 +28,6 @@ import org.rcfaces.core.internal.renderkit.WriterException;
  */
 public abstract class AbstractHtmlWriter extends
         AbstractHtmlComponentRenderContext implements IHtmlWriter {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(AbstractHtmlWriter.class);
 

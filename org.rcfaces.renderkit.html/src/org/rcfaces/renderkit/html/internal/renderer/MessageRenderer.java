@@ -29,7 +29,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class MessageRenderer extends AbstractCssRenderer {
-    public static final String REVISION = "$Revision$";
 
     private static final String SUMMARY = "_summary";
 

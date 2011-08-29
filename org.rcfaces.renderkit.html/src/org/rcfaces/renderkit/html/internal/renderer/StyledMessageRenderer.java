@@ -20,7 +20,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class StyledMessageRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.STYLED_MESSAGE;

@@ -30,7 +30,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class ImageButtonRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     public static final String IMAGE_BUTTON_WRITER = "camelia.writer.ImageButton";
 
@@ -134,7 +133,6 @@ public class ImageButtonRenderer extends AbstractCssRenderer {
      */
     protected class ImageButtonDecorator extends
             AbstractImageButtonFamillyDecorator {
-        private static final String REVISION = "$Revision$";
 
         public ImageButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);

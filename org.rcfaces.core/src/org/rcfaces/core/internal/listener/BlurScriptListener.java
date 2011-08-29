@@ -13,7 +13,6 @@ import org.rcfaces.core.event.IBlurListener;
  */
 public class BlurScriptListener extends AbstractScriptListener implements
         IBlurListener {
-    private static final String REVISION = "$Revision$";
 
     public BlurScriptListener(String scriptType, String command) {
         super(scriptType, command);

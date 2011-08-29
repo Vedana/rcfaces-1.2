@@ -29,10 +29,8 @@ import org.w3c.dom.Document;
  * @version $Revision$ $Date$
  */
 public class TextEditorRenderer extends AbstractInputRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final IJavaScriptComponentRenderer TEXTEDITOR_JAVASCRIPT_COMPONENT = new IJavaScriptComponentRenderer() {
-        private static final String REVISION = "$Revision$";
 
         public void initializeJavaScript(IJavaScriptWriter javaScriptWriter)
                 throws WriterException {

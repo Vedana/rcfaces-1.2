@@ -32,7 +32,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ViewDialogRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
 
     public ViewDialogRenderer() {
         super();

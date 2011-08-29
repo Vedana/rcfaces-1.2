@@ -57,7 +57,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  */
 public abstract class AbstractImageButtonFamillyDecorator extends
         AbstractComponentDecorator {
-    private static final String REVISION = "$Revision$";
 
     // private static final String SELECTED_IMAGE_RENDERED =
     // "imageButton.selected.rendered";

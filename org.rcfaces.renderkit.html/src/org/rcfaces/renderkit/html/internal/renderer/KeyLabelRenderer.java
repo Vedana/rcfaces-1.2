@@ -39,7 +39,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class KeyLabelRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(KeyLabelRenderer.class);
 

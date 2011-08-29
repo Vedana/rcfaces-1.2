@@ -182,14 +182,14 @@ public class NumberEntryComponent extends AbstractInputComponent implements
 			
 	}
 
-	public void setNumber(Number number) {
+	public void setNumber(String number) {
 
 
 				setValue(number);
 			
 	}
 
-	public void setNumber(String number) {
+	public void setNumber(Number number) {
 
 
 				setValue(number);

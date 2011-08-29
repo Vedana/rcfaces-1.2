@@ -56,7 +56,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class KeyEntryRenderer extends DataGridRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(KeyEntryRenderer.class);
 
@@ -234,9 +233,10 @@ public class KeyEntryRenderer extends DataGridRenderer {
             htmlWriter.writeAttributeNS("labelColumnId", labelColumnId);
         }
 
-        Object dataModel = gridRenderContext.getDataModel();
-        if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttributeNS("filtred", true);
+        DataModel dataModel = gridRenderContext.getDataModel();
+        IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(IFiltredModel.class, dataModel);
+        if (filtredDataModel != null) {
+             htmlWriter.writeAttributeNS("filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
@@ -300,11 +300,17 @@ public class KeyEntryRenderer extends DataGridRenderer {
 
         DataModel dataModel = comboGridComponent.getDataModelValue();
 
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel).setComponent(comboGridComponent);
+        IComponentRefModel componentRefModel = (IComponentRefModel) 
+    		getAdapter(IComponentRefModel.class, dataModel);
+    
+	    if (componentRefModel != null) {
+	    	componentRefModel.setComponent((UIComponent) comboGridComponent);
         }
 
-        if ((dataModel instanceof IFiltredModel) == false) {
+        IFiltredModel filtredDataModel = (IFiltredModel) 
+        	getAdapter(IFiltredModel.class, dataModel);
+        
+        if (filtredDataModel == null) {
             if (true) {
                 LOG.error("Model doest not implement IFiltredModel, returns *not found*");
                 return null;
@@ -362,7 +368,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
         filterProperties.put("key", convertedSelectedValue);
         filterProperties.put("text", convertedSelectedValue);
 
-        ((IFiltredModel) dataModel).setFilter(filterProperties);
+        filtredDataModel.setFilter(filterProperties);
 
         try {
             dataModel.setRowIndex(0);
@@ -630,9 +636,11 @@ public class KeyEntryRenderer extends DataGridRenderer {
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
+        IFiltredModel filtredDataModel = (IFiltredModel) 
+        	getAdapter(IFiltredModel.class, dataModel);
+        
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+            if (filtredDataModel != null) {
 
                 filtredDataModel.setFilter(filtersMap);
                 tableContext.updateRowCount();
@@ -642,9 +650,7 @@ public class KeyEntryRenderer extends DataGridRenderer {
                 tableContext.updateRowCount();
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
-
+        } else if (filtredDataModel != null) {
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
             tableContext.updateRowCount();
         }

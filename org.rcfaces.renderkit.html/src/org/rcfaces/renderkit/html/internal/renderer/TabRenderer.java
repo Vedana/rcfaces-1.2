@@ -34,7 +34,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class TabRenderer extends CardRenderer implements
         ISubInputClientIdRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String TAB = "_tab";
 

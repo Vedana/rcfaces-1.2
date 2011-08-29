@@ -18,7 +18,7 @@ import org.rcfaces.core.component.AbstractInputComponent;
 import org.rcfaces.core.component.capability.ISeverityStyleClassCapability;
 
 /**
- * <p>The combo Component is equivalent to the standard HTML tag <SELECT SIZE=1><option>option 1</option> </SELECT>.</p>
+ * <p>The combo Component is equivalent to the standard HTML tag &lt;SELECT SIZE=1&gt;.</p>
  * <p>The combo Component has the following capabilities :
  * <ul>
  * <li>ISelectionEventCapability</li>

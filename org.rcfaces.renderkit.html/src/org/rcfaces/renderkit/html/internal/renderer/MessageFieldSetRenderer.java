@@ -19,7 +19,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class MessageFieldSetRenderer extends FieldSetRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MESSAGE_FIELD_SET;

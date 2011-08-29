@@ -37,7 +37,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class RadioButtonRenderer extends AbstractInputRenderer implements
         ISubInputClientIdRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected static final String INPUT_STYLECLASS_SUFFIX = "_input";
 

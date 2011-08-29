@@ -281,9 +281,11 @@ var __members = {
 		this._cellStyleClass="f_dataGrid_cell";
 		this._rowStyleClass="f_dataGrid_row";
 		this._gridUpdadeServiceId="dataGrid.update";
+		this._gridUpdadeCriteriaServiceId="criteria.request";
 		this._serviceGridId=this.id;
 		this._keyRowSearch=true;
-		this._cellWrap=f_core.GetAttributeNS(this,"cellTextWrap", false);
+		this._countToken =0;
+		this._cellWrap=f_core.GetAttribute(this, "v:cellTextWrap", false);
 		//this._noCellWrap=false;
 
 		if (!!this._cellWrap) {
@@ -294,10 +296,13 @@ var __members = {
 	 
 		this._addRowFragment=undefined; // HtmlDocumentFragment
 		
+		this._criteriaEvaluateCallBacks= undefined; // Object
+		
 		// this._labelColumnId=undefined; // String
 		// this._gridUpdadeServiceId=undefined; // String
 		// this._serviceGridId=undefined; // String
 		
+		//this._countToken=undefided; // Integer
 		//		this._lastKeyDate=undefined; // number
 		//		this._lastKey=undefined; // char
 
@@ -960,7 +965,9 @@ var __members = {
 			selection=0;
 		}		
 		
-		var params=new Object;
+		if (params === undefined){
+			var params=new Object;
+		}
 		
 		params.gridId=this._serviceGridId;		
 		params.index=firstIndex;
@@ -980,6 +987,8 @@ var __members = {
 		if (filterExpression) {
 			params.filterExpression=filterExpression;
 		}
+		
+		params.criteria = this._computeSelectedCriteria(this._selectedCriteria);//compute
 		
 		if (this._additionalInformations) {
 			this.fa_serializeAdditionalInformations(params);
@@ -1836,8 +1845,7 @@ var __members = {
 		for(var i=0;i<elts.length;i++) {
 			var element=elts[i];
 			if(!this.fa_isElementChecked(element)) {
-				//this.fa_setElementChecked(element,true);
-				this._checkElement(element,true,true);
+				this._checkElement(element, this.fa_getElementValue(element), true);
 				this.fa_updateElementCheck(element, true);
 			}
 		}
@@ -1907,12 +1915,219 @@ var __members = {
 		}
 		
 		this.f_super(arguments, dragAndDropEngine, infos);
+	},
+	
+	fa_evaluateCriteria: function (selectedCriteria, callBack, waitingElement){
+		
+		if (!this._interactive) {
+			return false;
+		}
+		
+		if (this._criteriaEvaluateCallBacks === undefined){
+			this._criteriaEvaluateCallBacks = new Object;
+		}
+		this._criteriaEvaluateCallBacks[++this._countToken] = callBack;
+		
+		this.f_appendCommand(function(dataGrid) {
+			
+			var params = new Object();
+			params.gridId=this._serviceGridId;		
+			params.tokenId = this._countToken;	
+
+			params.selectedCriteria = this._computeSelectedCriteria(selectedCriteria);
+
+			this.f_hideEmptyDataMessage();
+			
+			var waitingObject=undefined;
+
+			var url=f_env.GetViewURI();
+			var request=new f_httpRequest(this, url, f_httpRequest.JAVASCRIPT_MIME_TYPE);
+			var dataGrid=this;
+			var elementWait = waitingElement;
+			request.f_setListener({
+				/**
+				 * @method public
+				 */
+		 		onInit: function(request) {
+					if (waitingElement) {
+						f_core.SetTextNode(waitingElement, f_waiting.GetLoadingMessage());
+					}
+			 	},
+				/**
+				 * @method public
+				 */
+		 		onError: function(request, status, text) {
+		 			f_core.Info(f_dataGrid, "f_callServer.onError: Bad status: "+status);
+		 			
+		 			try {
+		 				continueProcess=dataGrid.f_performErrorEvent(request, f_error.HTTP_ERROR, text);
+		 				
+		 			} catch (x) {
+		 				
+		 			}	 				
+					if (dataGrid.f_processNextCommand()) {
+						return;
+					}
+			 	},
+		 		
+				/**
+				 * @method public
+				 */
+		 		onProgress: function(request, content, length, contentType) {
+		 			if (waitingElement) {
+						f_core.SetTextNode(waitingElement, f_waiting.GetReceivingMessage());
+					}	
+		 		},
+				/**
+				 * @method public
+				 */
+		 		onLoad: function(request, content, contentType) {
+					if (!f_class.IsObjectInitialized(dataGrid)) {
+						return;
+					}
+				
+					if (dataGrid.f_processNextCommand()) {
+						return;
+					}
+		 				
+					try {
+						if (request.f_getStatus()!=f_httpRequest.OK_STATUS) {
+							dataGrid.f_performErrorEvent(request, f_error.INVALID_RESPONSE_SERVICE_ERROR, "Bad http response status ! ("+request.f_getStatusText()+")");
+							return;
+						}
+
+						var cameliaServiceVersion=request.f_getResponseHeader(f_httpRequest.CAMELIA_RESPONSE_HEADER);
+						if (!cameliaServiceVersion) {
+							dataGrid.f_performErrorEvent(request, f_error.INVALID_SERVICE_RESPONSE_ERROR, "Not a service response !");
+							return;					
+						}
+		
+						var responseContentType=request.f_getResponseContentType().toLowerCase();
+						if (responseContentType.indexOf(f_error.APPLICATION_ERROR_MIME_TYPE)>=0) {
+							var code=f_error.ComputeApplicationErrorCode(request);
+					
+					 		dataGrid.f_performErrorEvent(request, code, content);
+							return;
+						}
+			
+						if (responseContentType.indexOf(f_httpRequest.JAVASCRIPT_MIME_TYPE)<0) {
+					 		dataGrid.f_performErrorEvent(request, f_error.RESPONSE_TYPE_SERVICE_ERROR, "Unsupported content type: "+responseContentType);
+							return;
+						}
+						
+						var ret=request.f_getResponse();
+						
+						if (dataGrid._waitingLoading) {
+							if (dataGrid._waitingMode==f_grid.END_WAITING) {
+								dataGrid.f_removePagedWait();
+							}
+						}
+						
+						try {
+							f_core.WindowScopeEval(ret);
+							
+						} catch (x) {
+				 			dataGrid.f_performErrorEvent(x, f_error.RESPONSE_EVALUATION_SERVICE_ERROR, "Evaluation exception");
+						}
+
+					} finally {
+						dataGrid._loading=undefined;
+						dataGrid._waitingLoading=undefined;
+					}
+		
+					var event=new f_event(dataGrid, f_event.LOAD);
+					try {
+						dataGrid.f_fireEvent(event);
+						
+					} finally {
+						f_classLoader.Destroy(event);
+					}
+		 		}
+			});
+
+			this._loading=true;
+			request.f_setRequestHeader("X-Camelia", this._gridUpdadeCriteriaServiceId);
+			request.f_doFormRequest(params);
+		});
+		
+	},
+	
+	fa_getColumnCriteriaCardinality: function (columnId) {
+		f_core.Assert(typeof(columnId)=="string" || typeof(columnId)=="object", "f_dataGrid.fa_getColumnCriteriaCardinality: Invalid columnId parameter ! ("+columnId+")");
+
+		var column = this._getColumn(columnId);		
+		if (!column) {
+			return undefined;
+		}
+				
+		return column._criteriaCardinality;
+	},
+	
+	/**
+	 * @method protected
+	 * @param Integer tokenId
+	 * @param Integer resultCount
+	 * @parameter Object criteriaSelected 
+	 * @return void
+	 */
+	_processSelectedCriteriaResult: function (tokenId, resultCount, availableCriteria) {
+		
+		var cb=this._criteriaEvaluateCallBacks[tokenId];
+		delete this._criteriaEvaluateCallBacks[tokenId];
+				
+		cb.call(this, resultCount, availableCriteria);
+	},
+	/**
+	 * @method private
+	 * @param columnId Identifier of Column or column object  
+	 * @return Object Column object
+	 */
+	_getColumn: function(columnId) {
+		if (typeof(columnId)=="object") {
+			return columnId;
 	}
+		
+		var column = null;
+		var columns = this._columns;
+		for (var i = 0; i < columns.length; i++) {
+			var cl = columns[i];
+			
+			if (cl._id==columnId) {
+				column=cl;
+				break;
+			}
+		}
+		
+		if (!column) {
+			return undefined;
+		}
+				
+		return column;
+	},
+	/**
+	 * @method public
+	 * @param String columnId Identifier of Column or column object  
+	 */
+	fa_getCriteriaLabelByColumn: function(columnId) {
+		f_core.Assert(typeof(columnId)=="string" || typeof(columnId)=="object", "f_dataGrid.fa_getCriteriaLabelByColumn: Invalid columnId parameter ! ("+columnId+")");
+
+		var column = this._getColumn(columnId);		
+		if (!column) {
+			return undefined;
+		}
+				
+		if (column._criteriaTitle) {
+			return column._criteriaTitle;
+		}
+		
+		return this.f_getColumnName(column);
+	}
+		
 };
 
 new f_class("f_dataGrid", {
 	extend: f_grid,
-	aspects: [fa_readOnly, fa_checkManager, fa_droppable, fa_draggable],
+	aspects: [fa_readOnly, fa_checkManager, fa_droppable, fa_draggable, fa_criteriaManager],
 	statics: __statics,
 	members: __members
 });

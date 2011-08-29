@@ -26,7 +26,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceContributor;
  */
 public class AbstractComponentDecorator implements IComponentDecorator,
         INamespaceContributor {
-    private static final String REVISION = "$Revision$";
 
     private IComponentDecorator subWriter;
 

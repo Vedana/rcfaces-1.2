@@ -31,7 +31,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ToolBarRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ToolBarRenderer.class);
 

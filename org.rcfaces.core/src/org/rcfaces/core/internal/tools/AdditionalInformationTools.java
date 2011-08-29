@@ -27,13 +27,11 @@ import org.rcfaces.core.lang.provider.ICheckProvider;
  * @version $Revision$ $Date$
  */
 public class AdditionalInformationTools extends CollectionTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AdditionalInformationTools.class);
 
     private static final IValuesAccessor ADDITIONAL_PROVIDER_VALUES_ACCESSOR = new IValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object additionalInformationProvider) {
             return ((IAdditionalInformationProvider) additionalInformationProvider)
@@ -85,7 +83,7 @@ public class AdditionalInformationTools extends CollectionTools {
     public static int getCount(Object additionalInformationValues) {
         IValuesAccessor valuesAccessor = getValuesAccessor(
                 additionalInformationValues, ICheckProvider.class,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true);
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
         if (valuesAccessor == null) {
             return 0;
@@ -97,7 +95,7 @@ public class AdditionalInformationTools extends CollectionTools {
             Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(
                 additionalInformationValues, ICheckProvider.class,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true);
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
         if (valuesAccessor == null) {
             return null;
@@ -110,7 +108,7 @@ public class AdditionalInformationTools extends CollectionTools {
             Object refValue) {
         IValuesAccessor valuesAccessor = getValuesAccessor(
                 additionalInformationValues, ICheckProvider.class,
-                ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true);
+				ADDITIONAL_PROVIDER_VALUES_ACCESSOR, true, true);
 
         if (valuesAccessor == null) {
             return EMPTY_VALUES;
@@ -145,7 +143,8 @@ public class AdditionalInformationTools extends CollectionTools {
 
     public static void showAll(FacesContext facesContext,
             IAdditionalInformationComponent component) {
-        selectAll((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR);
+		selectAll((UIComponent) component, ADDITIONAL_PROVIDER_VALUES_ACCESSOR,
+				null);
     }
 
     public static void hide(FacesContext facesContext,
@@ -197,7 +196,6 @@ public class AdditionalInformationTools extends CollectionTools {
     private static final class AdditionalInformationListIterator extends
             ComponentIterators.ComponentListIterator implements
             IAdditionalInformationIterator {
-        private static final String REVISION = "$Revision$";
 
         public AdditionalInformationListIterator(List list) {
             super(list);

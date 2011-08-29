@@ -23,7 +23,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class MessagesRenderer extends AbstractCssRenderer {
-    public static final String REVISION = "$Revision$";
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);

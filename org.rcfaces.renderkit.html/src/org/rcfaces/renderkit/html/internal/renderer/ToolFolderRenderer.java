@@ -39,8 +39,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class ToolFolderRenderer extends AbstractCssRenderer {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(ToolFolderRenderer.class);
 
     protected String getJavaScriptClassName() {

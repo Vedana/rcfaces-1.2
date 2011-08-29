@@ -30,7 +30,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final int TEXT_EDITOR_IMAGE_BUTTON_WIDTH = 16;
 
@@ -164,7 +163,6 @@ public class TextEditorImageButtonRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class TextEditorImageButtonDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         private IContentAccessor imageAccessor;
 

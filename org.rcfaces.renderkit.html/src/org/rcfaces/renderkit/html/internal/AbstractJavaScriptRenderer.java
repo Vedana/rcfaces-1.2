@@ -35,7 +35,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  */
 public abstract class AbstractJavaScriptRenderer extends
         AbstractJavaScriptRenderer0 implements IJavaScriptComponentRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractJavaScriptRenderer.class);
@@ -49,7 +48,7 @@ public abstract class AbstractJavaScriptRenderer extends
 
     // private static final String LAZY_COMPONENTS = "camelia.component.lazy";
 
-    public static final String LAZY_INIT_TAG = "init";
+    protected static final String LAZY_INIT_TAG = "init";
 
     // private static final String INIT_BY_NAME = "javascript.InitByName";
 
@@ -256,7 +255,7 @@ public abstract class AbstractJavaScriptRenderer extends
         IJavaScriptWriter js = htmlRenderContext.getJavaScriptRenderContext()
                 .removeJavaScriptWriter(writer);
         if (js != null) {
-            // Le Javascript writer a �t� referm�, on ignore dans ce cas ...
+            // Le Javascript writer a été refermé, on ignore dans ce cas ...
 
             js = null;
         }

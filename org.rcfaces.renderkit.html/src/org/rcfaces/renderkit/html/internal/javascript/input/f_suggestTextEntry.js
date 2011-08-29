@@ -55,12 +55,12 @@ var __members = {
 		}
 		
 		// Permet d'optimiser les propositions !
-		this._orderedResult=f_core.GetAttributeNS(this,"orderedResult");
-		this._orderedResult=true;
+		this._orderedResult=f_core.GetAttributeNS(this, "orderedResult", true);
+	//	this._orderedResult=true;
 
-		this._suggestionValue=f_core.GetAttributeNS(this,"suggestionValue");
+		this._suggestionValue=f_core.GetAttributeNS(this, "suggestionValue");
 		
-		this._moreResultsMessage=f_core.GetAttributeNS(this,"moreResultsMessage");
+		this._moreResultsMessage=f_core.GetAttributeNS(this, "moreResultsMessage");
 		
 		this.f_insertEventListenerFirst(f_event.KEYDOWN, this._onCancelDown);
 		this.f_insertEventListenerFirst(f_event.KEYUP, this._onSuggest);
@@ -200,7 +200,7 @@ var __members = {
 		var cancel=false;
 		var value=this.f_getValue();
 		var showPopup=false;
-
+		var disableAutoComplete = false;
 		switch(jsEvt.keyCode) {
 		case f_key.VK_DOWN:
 		case f_key.VK_UP:
@@ -218,7 +218,10 @@ var __members = {
 			
 			showPopup=true;
 			break;
+		case f_key.VK_BACK_SPACE:
+			disableAutoComplete = true;
 
+			break;
 		case f_key.VK_ENTER:
 		case f_key.VK_RETURN:
 		case f_key.VK_TAB:
@@ -273,9 +276,9 @@ var __members = {
 			delay*=2.0;
 		}
 		
-		if (showPopup) {
+		if (showPopup || disableAutoComplete) {
 			this._lastValue=value;
-			this._onSuggestTimeOut();
+			this._onSuggestTimeOut(undefined,disableAutoComplete);
 			
 		} else {
 			
@@ -307,7 +310,7 @@ var __members = {
 	 * @param String text
 	 * @return void
 	 */
-	_onSuggestTimeOut: function(text) {
+	_onSuggestTimeOut: function(text, disableAutoComplete) {
 		if (!this._focus || window._rcfacesExiting) {
 			return;
 		}
@@ -335,15 +338,15 @@ var __members = {
 		}
 
 		if (requestedText==t) {
-			this._showProposal();
+			this._showProposal(undefined, disableAutoComplete);
 			return;
 		}
 
 		var results=this._results;
 
-		if (results && results.length && typeof(requestedText)=="string" && !t.indexOf(requestedText)) {
+		if (results && results.length && this._orderedResult && typeof(requestedText)=="string" && !t.indexOf(requestedText)) {
 			if (this._filterProposals(new Array(), text)) {
-				this._showProposal();
+				this._showProposal(text, disableAutoComplete);
 				return;
 			}
 		}
@@ -586,14 +589,14 @@ var __members = {
 	/**
 	 * @method private
 	 */
-	_showProposal: function(jsEvt) {	
+	_showProposal: function(text, disableAutoComplete) {	
 		var results=this._results;
 		if (!results) {
 			return;
 		}
 			
 		var rs=new Array;
-		this._filterProposals(rs);
+		this._filterProposals(rs, text);
 	
 		if (!rs.length) {
 			return;
@@ -602,14 +605,18 @@ var __members = {
 		f_core.Debug(f_suggestTextEntry, "_showProposal: result="+rs+" forceProposal="+this._forceProposal);
 		
 		if (!this._forceProposal && rs.length>1) {	
-			this._showPopup(jsEvt);
+			this._showPopup(undefined, undefined, text);
 			return;
 		}
 		
-		this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], jsEvt);
+		if (disableAutoComplete) {
+			this._showPopup(undefined, undefined, text);
+		}else {
+			this.f_showProposal(rs[0]._label, rs[0]._value, rs[0], null);
+		}
 		
 		if (rs.length>1) {	
-			this._showPopup(jsEvt);
+			this._showPopup(undefined, undefined, text);
 		}
 	},
 	/**
@@ -618,7 +625,7 @@ var __members = {
 	 * @param optional Number autoSelect
 	 * @return void
 	 */
-	_showPopup: function(jsEvt, autoSelect) {
+	_showPopup: function(jsEvt, autoSelect, text) {
 		var menu=this.f_getSubMenuById(f_suggestTextEntry._SUGGESTION_MENU_ID);
 		if (!menu) {
 			f_core.Debug(f_suggestTextEntry, "_showPopup: no menu !");
@@ -634,7 +641,7 @@ var __members = {
 		menu.f_removeAllItems(menu);
 		
 		var results=new Array;
-		var complete=this._filterProposals(results);
+		var complete=this._filterProposals(results, text);
 		if (!results.length) {
 			return;
 		}
@@ -789,7 +796,8 @@ var __members = {
 		}
 		
 		if (!this._orderedResult) {
-			return false;
+			ret.push.apply(ret, results);
+			return true;
 		}
 		
 		if (!this._caseSensitive) {

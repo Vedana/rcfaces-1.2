@@ -33,7 +33,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class FieldSetRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String BORDER_RENDERER = "camelia.customButton.borderRenderer";
 

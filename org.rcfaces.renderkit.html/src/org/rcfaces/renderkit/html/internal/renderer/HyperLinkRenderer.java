@@ -27,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class HyperLinkRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     public void encodeEnd(IComponentWriter writer) throws WriterException {
         FacesContext facesContext = writer.getComponentRenderContext()

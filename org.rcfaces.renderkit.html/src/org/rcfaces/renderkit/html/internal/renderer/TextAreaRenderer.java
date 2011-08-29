@@ -23,7 +23,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class TextAreaRenderer extends AbstractInputRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {

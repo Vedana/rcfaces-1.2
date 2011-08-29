@@ -27,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.renderer.InitRenderer;
  */
 public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(JavaScriptRenderContext.class);
@@ -162,6 +161,9 @@ public class JavaScriptRenderContext extends AbstractJavaScriptRenderContext {
 
                 return;
             }
+
+            pushUnitializedComponent(componentRenderContext
+                    .getComponentClientId());
         }
 
         if (sendComplete) {

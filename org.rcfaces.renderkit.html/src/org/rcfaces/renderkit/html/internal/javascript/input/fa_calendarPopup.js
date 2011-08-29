@@ -319,7 +319,13 @@ var __statics = {
 		}
 		
 		var value;
-		if (component.f_getText) {
+		if (component.f_getValue) { // si le composant associé est un inputText
+			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: call f_getValue of component '"+component.id+"'.");
+			var value = component.f_getValue();
+			if (value instanceof Date){
+				return value;
+			}
+		}else if (component.f_getText) {
 			f_core.Debug(fa_calendarPopup, "_GetDateToComponent: call f_getText of component '"+component.id+"'.");
 			value=component.f_getText();
 

@@ -29,6 +29,7 @@ import org.rcfaces.core.component.capability.ICheckableCapability;
 import org.rcfaces.core.component.capability.IClientAdditionalInformationFullStateCapability;
 import org.rcfaces.core.component.capability.IClientCheckFullStateCapability;
 import org.rcfaces.core.component.capability.IClientSelectionFullStateCapability;
+import org.rcfaces.core.component.capability.ICriteriaManagerCapability;
 import org.rcfaces.core.component.capability.IDisabledCapability;
 import org.rcfaces.core.component.capability.IDraggableCapability;
 import org.rcfaces.core.component.capability.IDroppableCapability;
@@ -70,9 +71,11 @@ import org.rcfaces.core.internal.listener.IServerActionListener;
 import org.rcfaces.core.internal.renderkit.IProcessContext;
 import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.tools.ComponentTools;
+import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.lang.FilterPropertiesMap;
 import org.rcfaces.core.lang.IContentFamily;
 import org.rcfaces.core.model.IFilterProperties;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.renderkit.html.internal.AbstractCssRenderer;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
@@ -85,12 +88,13 @@ import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractGridRenderContext {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderContext.class);
 
-    private static final ISortedComponent SORTED_COMPONENT_EMPTY_ARRAY[] = new ISortedComponent[0];
+	private static final ISortedComponent[] SORTED_COMPONENT_EMPTY_ARRAY = new ISortedComponent[0];
+
+	private static final ISelectedCriteria[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ISelectedCriteria[0];
 
     public static final int SERVER_HIDDEN = 1;
 
@@ -138,7 +142,9 @@ public abstract class AbstractGridRenderContext {
 
     private boolean hasTitleColumnImages;
 
-    private ISortedComponent sortedComponents[];
+	private ISortedComponent[] sortedComponents;
+
+	private ISelectedCriteria[] selectedCriteria;
 
     private int rows;
 
@@ -227,12 +233,17 @@ public abstract class AbstractGridRenderContext {
     private AbstractGridRenderContext(IProcessContext processContext,
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, ISortedComponent sortedComponents[],
-            boolean checkTitleImages) {
+			boolean checkTitleImages, ISelectedCriteria[] criteriaConfigs) {
         this.processContext = processContext;
         this.scriptRenderContext = scriptRenderContext;
 
         this.gridComponent = gridComponent;
         this.sortedComponents = sortedComponents;
+
+		if (criteriaConfigs == null) {
+			criteriaConfigs = listCriteriaContainers((UIComponent) gridComponent);
+		}
+		this.selectedCriteria = criteriaConfigs;
 
         if (gridComponent instanceof ISizeCapability) {
             computeGridSize((ISizeCapability) gridComponent);
@@ -301,13 +312,13 @@ public abstract class AbstractGridRenderContext {
         }
 
         if (gridComponent instanceof IWheelSelectionCapability) {
-            wheelSelection = ((IWheelSelectionCapability) gridComponent)
-                    .isWheelSelection();
+			wheelSelection = ((IWheelSelectionCapability) gridComponent)
+					.isWheelSelection();
         }
 
         if (gridComponent instanceof IAlertLoadingMessageCapability) {
-            alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent)
-                    .getAlertLoadingMessage();
+			alertLoadingMessage = ((IAlertLoadingMessageCapability) gridComponent)
+					.getAlertLoadingMessage();
         }
 
         if (gridComponent instanceof ICheckableCapability) {
@@ -514,14 +525,14 @@ public abstract class AbstractGridRenderContext {
             if (column instanceof IResizableCapability) {
                 if (((IResizableCapability) column).isResizable()) {
 
-                    if (false && widthNotSpecified) {
-                        LOG.error("You must specify a width for a resizable column ! (#"
+                    if (widthNotSpecified) {
+						LOG.error("You must specify a width for a resizable column ! (#"
                                 + i
                                 + ", columnId="
                                 + columnId
-                                + ", idw="
-                                + idw
-                                + ", dw='" + dw + "')");
+								+ ", idw="
+								+ idw
+								+ ", dw='" + dw + "')");
 
                         // Fred if dw = 0 should this be triggered ?
                         // See f_grid.js 2198
@@ -840,7 +851,7 @@ public abstract class AbstractGridRenderContext {
                 componentRenderContext.getRenderContext()
                         .getScriptRenderContext(),
                 (IGridComponent) componentRenderContext.getComponent(),
-                computeSortedComponents(componentRenderContext), true);
+				computeSortedComponents(componentRenderContext), true, null);
 
         designerMode = componentRenderContext.getRenderContext()
                 .getProcessContext().isDesignerMode();
@@ -852,6 +863,17 @@ public abstract class AbstractGridRenderContext {
                     .getFilterProperties();
         }
     }
+
+	private static ISelectedCriteria[] listCriteriaContainers(
+			UIComponent component) {
+
+		if (component instanceof ICriteriaManagerCapability) {
+			return CriteriaTools
+					.listSelectedCriteria((ICriteriaManagerCapability) component);
+		}
+
+		return CRITERIA_CONTAINER_EMPTY_ARRAY;
+	}
 
     private static ISortedComponent[] computeSortedComponents(
             IHtmlComponentRenderContext componentRenderContext) {
@@ -870,9 +892,10 @@ public abstract class AbstractGridRenderContext {
             IScriptRenderContext scriptRenderContext,
             IGridComponent gridComponent, int rowIndex, int forcedRows,
             ISortedComponent sortedComponents[], String filterExpression,
-            String showAdditionals, String hideAdditionals) {
+			String showAdditionals, String hideAdditionals,
+			ISelectedCriteria[] criteriaContainers) {
         this(processContext, scriptRenderContext, gridComponent,
-                sortedComponents, false);
+				sortedComponents, false, criteriaContainers);
 
         this.first = rowIndex;
         this.forcedRows = forcedRows;
@@ -933,6 +956,10 @@ public abstract class AbstractGridRenderContext {
     public final ISortedComponent[] listSortedComponents() {
         return sortedComponents;
     }
+
+	public final ISelectedCriteria[] listSelectedCriteria() {
+		return selectedCriteria;
+	}
 
     public final int getForcedRows() {
         return forcedRows;

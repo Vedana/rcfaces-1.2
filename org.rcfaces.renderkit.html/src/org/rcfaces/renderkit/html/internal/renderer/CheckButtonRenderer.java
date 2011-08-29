@@ -33,7 +33,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class CheckButtonRenderer extends AbstractInputRenderer implements
         ISubInputClientIdRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected static final String DEFAULT_VALUE = "CHECKED";
 

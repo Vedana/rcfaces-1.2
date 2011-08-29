@@ -47,7 +47,6 @@ import org.rcfaces.core.lang.provider.ICursorProvider;
  * @version $Revision$ $Date$
  */
 public final class ComponentTools extends ComponentTools0 {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComponentTools.class);
 
@@ -350,7 +349,6 @@ public final class ComponentTools extends ComponentTools0 {
      * @version $Revision$ $Date$
      */
     static class VarScope implements IVarScope {
-        private static final String REVISION = "$Revision$";
 
         private final String var;
 
@@ -520,7 +518,7 @@ public final class ComponentTools extends ComponentTools0 {
             UIComponent component, String ids, Class childClass) {
 
         if (ids == null) {
-            if (childClass == null || childClass == UIComponent.class) {
+			if (true || childClass == null || childClass == UIComponent.class) {
                 return COMPONENT_EMPTY_ARRAY;
             }
             return (UIComponent[]) Array.newInstance(childClass, 0);
@@ -532,7 +530,7 @@ public final class ComponentTools extends ComponentTools0 {
             if (childClass == null || childClass == UIComponent.class) {
                 return COMPONENT_EMPTY_ARRAY;
             }
-            return (UIComponent[]) Array.newInstance(childClass, 0);
+			return (UIComponent[]) Array.newInstance(UIComponent.class , 0);
         }
 
         Object children[] = ComponentIterators.list(component, childClass)
@@ -573,7 +571,7 @@ public final class ComponentTools extends ComponentTools0 {
         }
 
         return (UIComponent[]) l.toArray((UIComponent[]) Array.newInstance(
-                childClass, l.size()));
+				UIComponent.class, l.size()));
     }
 
     public static void setChildren(UIComponent component,

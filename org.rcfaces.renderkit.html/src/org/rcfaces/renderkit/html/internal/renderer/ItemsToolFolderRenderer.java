@@ -31,12 +31,10 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ItemsToolFolderRenderer extends AbstractSelectItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final int IMMEDIATE_DETAIL = 0x400;
 
     protected static EventDecoders.IEventDecoder ITEM_SELECTION_DECODER = new EventDecoders.AbstractEventDecoder() {
-        private static final String REVISION = "$Revision$";
 
         public void decodeEvent(IRequestContext requestContext,
                 UIComponent component, IEventData eventData,

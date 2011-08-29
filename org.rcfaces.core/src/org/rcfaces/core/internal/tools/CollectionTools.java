@@ -38,7 +38,6 @@ import org.rcfaces.core.model.IRangeDataModel;
  * @version $Revision$ $Date$
  */
 public class CollectionTools {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(CollectionTools.class);
 
@@ -59,7 +58,6 @@ public class CollectionTools {
     }
 
     private static final IValuesAccessor NULL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object value) {
             return 0;
@@ -75,7 +73,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor ARRAY_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object array) {
             return Array.getLength(array);
@@ -95,7 +92,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor STRING_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object array) {
             return StringList.countTokens((String) array);
@@ -112,7 +108,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor COLLECTION_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object collection) {
             return ((Collection) collection).size();
@@ -138,7 +133,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor MAP_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object map) {
             return ((Map) map).size();
@@ -154,7 +148,6 @@ public class CollectionTools {
     };
 
     private static final IValuesAccessor INDEXES_MODEL_VALUES_ACCESSOR = new AbstractValuesAccessor() {
-        private static final String REVISION = "$Revision$";
 
         public int getCount(Object indexesModel) {
             return ((IIndexesModel) indexesModel).countIndexes();
@@ -173,7 +166,7 @@ public class CollectionTools {
 
     protected static IValuesAccessor getValuesAccessor(Object values,
             Class providerClass, IValuesAccessor providerValuesAccessor,
-            boolean useValue) {
+			boolean useValue, boolean indexSupported) {
 
         if (values == null) {
             if (useValue == false) {
@@ -210,7 +203,7 @@ public class CollectionTools {
             return MAP_VALUES_ACCESSOR;
         }
 
-        if (values instanceof IIndexesModel) {
+		if (indexSupported && (values instanceof IIndexesModel)) {
             if (useValue == false) {
                 return null;
             }
@@ -347,12 +340,15 @@ public class CollectionTools {
             return;
         }
 
+		if (component instanceof IGridComponent) {
         List rowDatas = getRowDatas((IGridComponent) component, indices);
         if (rowDatas.isEmpty()) {
             return;
         }
 
         select(component, valuesAccessor, values, rowDatas);
+			return;
+		}
     }
 
     public static void select(UIComponent component,
@@ -375,13 +371,16 @@ public class CollectionTools {
             return;
         }
 
+		if (component instanceof IGridComponent) {
         List rowDatas = getRowDatas((IGridComponent) component, start, end);
         if (rowDatas.isEmpty()) {
             return;
         }
 
         select(component, valuesAccessor, values, rowDatas);
-    }
+			return;
+		}
+	}
 
     public static void select(UIComponent component,
             IValuesAccessor valuesAccessor, int index) {
@@ -400,23 +399,27 @@ public class CollectionTools {
             return;
         }
 
-        Object rowData = getRowData((IGridComponent) component, index);
-        if (rowData == null) {
-            LOG.error("No rowData for index='" + index + "'.");
-            return;
-        }
+		if (component instanceof IGridComponent) {
+	        Object rowData = getRowData((IGridComponent) component, index);
+	        if (rowData == null) {
+	            LOG.error("No rowData for index='" + index + "'.");
+	            return;
+	        }
+	
+	        if (LOG.isDebugEnabled()) {
+	            LOG.debug("Select index=" + index + " => " + rowData
+	                    + "   selectedValues=" + values);
+	        }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Select index=" + index + " => " + rowData
-                    + "   selectedValues=" + values);
-        }
+			select(component, valuesAccessor, values,
+					Collections.singleton(rowData));
 
-        select(component, valuesAccessor, values, Collections
-                .singleton(rowData));
+			return;
+		}
     }
 
     public static void selectAll(UIComponent component,
-            IValuesAccessor valuesAccessor) {
+			IValuesAccessor valuesAccessor, IAllValuesProvider allValuesProvider) {
 
         if ((component instanceof IGridComponent) == false) {
             throw new UnsupportedOperationException(
@@ -442,12 +445,25 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
+		if (component instanceof IGridComponent) {
+	        List rowDatas = getRowDatas((IGridComponent) component);
+	        if (rowDatas.isEmpty()) {
+	            return;
+	        }
+	
+	        select(component, valuesAccessor, values, rowDatas);
+			return;
+		}
 
-        select(component, valuesAccessor, values, rowDatas);
+		if (allValuesProvider != null) {
+			List rowDatas = allValuesProvider.listAllValues(component);
+			if (rowDatas.isEmpty()) {
+				return;
+			}
+
+			select(component, valuesAccessor, values, rowDatas);
+			return;
+		}
     }
 
     public static void select(UIComponent component,
@@ -471,8 +487,8 @@ public class CollectionTools {
             return;
         }
 
-        select(component, valuesAccessor, values, Collections
-                .singletonList(rowValue));
+		select(component, valuesAccessor, values,
+				Collections.singletonList(rowValue));
     }
 
     private static Object select(UIComponent component,
@@ -695,8 +711,8 @@ public class CollectionTools {
             return;
         }
 
-        deselect(component, valuesAccessor, values, Collections
-                .singletonList(rowValue));
+		deselect(component, valuesAccessor, values,
+				Collections.singletonList(rowValue));
     }
 
     public static void deselect(UIComponent component,
@@ -716,20 +732,23 @@ public class CollectionTools {
             return;
         }
 
-        Object rowData = getRowData((IGridComponent) component, index);
+		if (component instanceof IGridComponent) {
+	        Object rowData = getRowData((IGridComponent) component, index);
+	
+	        if (rowData == null) {
+	            LOG.error("No rowData for index='" + index + "'.");
+	            return;
+	        }
+	
+	        if (LOG.isDebugEnabled()) {
+	            LOG.debug("Deselect index=" + index + " => " + rowData
+	                    + "   selectedValues=" + values);
+	        }
 
-        if (rowData == null) {
-            LOG.error("No rowData for index='" + index + "'.");
-            return;
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Deselect index=" + index + " => " + rowData
-                    + "   selectedValues=" + values);
-        }
-
-        deselect(component, valuesAccessor, values, Collections
-                .singleton(rowData));
+			deselect(component, valuesAccessor, values,
+					Collections.singleton(rowData));
+			return;
+		}
     }
 
     public static void deselect(UIComponent component,
@@ -756,12 +775,15 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component, indices);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
-
-        deselect(component, valuesAccessor, values, rowDatas);
+		if (component instanceof IGridComponent) {
+	        List rowDatas = getRowDatas((IGridComponent) component, indices);
+	        if (rowDatas.isEmpty()) {
+	            return;
+	        }
+	
+	        deselect(component, valuesAccessor, values, rowDatas);
+			return;
+		}
     }
 
     public static void deselect(UIComponent component,
@@ -784,13 +806,16 @@ public class CollectionTools {
             return;
         }
 
-        List rowDatas = getRowDatas((IGridComponent) component, start, end);
-        if (rowDatas.isEmpty()) {
-            return;
-        }
-
-        deselect(component, valuesAccessor, values, rowDatas);
-    }
+		if (component instanceof IGridComponent) {
+	        List rowDatas = getRowDatas((IGridComponent) component, start, end);
+	        if (rowDatas.isEmpty()) {
+	            return;
+	        }
+	
+	        deselect(component, valuesAccessor, values, rowDatas);
+				return;
+	    }
+	}
 
     private static Object deselect(UIComponent component,
             IValuesAccessor valuesAccessor, Object values, Collection rowDatas) {
@@ -1212,7 +1237,6 @@ public class CollectionTools {
      */
     private static abstract class AbstractValuesAccessor implements
             IValuesAccessor {
-        private static final String REVISION = "$Revision$";
 
         public Object getComponentValues(UIComponent component) {
             throw new IllegalStateException("Not implemented !");
@@ -1415,4 +1439,8 @@ public class CollectionTools {
     public interface IComponentValueTypeCapability {
         IComponentValueType getComponentValueType();
     }
+
+	public interface IAllValuesProvider {
+		List<?> listAllValues(UIComponent component);
+	}
 }

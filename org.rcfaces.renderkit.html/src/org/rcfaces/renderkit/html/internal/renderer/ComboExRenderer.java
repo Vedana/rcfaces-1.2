@@ -11,7 +11,6 @@ import org.rcfaces.renderkit.html.internal.AbstractSelectItemsRenderer;
  * @version $Revision$ $Date$
  */
 public class ComboExRenderer extends AbstractSelectItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     /*
      * protected void encodeBeforeDecorator(IHtmlWriter writer,

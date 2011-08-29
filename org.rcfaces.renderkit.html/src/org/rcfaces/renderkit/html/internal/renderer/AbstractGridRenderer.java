@@ -8,6 +8,7 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
 import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
@@ -64,6 +66,8 @@ import org.rcfaces.core.internal.capability.IAdditionalInformationComponent;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
 import org.rcfaces.core.internal.capability.ICellStyleClassSettings;
 import org.rcfaces.core.internal.capability.ICheckRangeComponent;
+import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
+import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.internal.capability.IDroppableGridComponent;
 import org.rcfaces.core.internal.capability.IGridComponent;
 import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
@@ -88,11 +92,13 @@ import org.rcfaces.core.internal.tools.ComponentTools;
 import org.rcfaces.core.internal.tools.FilterExpressionTools;
 import org.rcfaces.core.internal.tools.FilteredDataModel;
 import org.rcfaces.core.internal.tools.GridServerSort;
+import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
 import org.rcfaces.core.lang.provider.ICheckProvider;
 import org.rcfaces.core.model.IComponentRefModel;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.ISortedComponent;
 import org.rcfaces.core.model.ISortedDataModel;
 import org.rcfaces.core.preference.GridPreferences;
@@ -120,7 +126,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools;
  * @version $Revision$ $Date$
  */
 public abstract class AbstractGridRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractGridRenderer.class);
@@ -338,7 +343,9 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         }
 
         DataModel dataModel = dataGridComponent.getDataModelValue();
-        if (dataModel instanceof IFiltredModel) {
+		IFiltredModel filtredModel = (IFiltredModel) getAdapter(
+				IFiltredModel.class, dataModel);
+		if (filtredModel != null) {
             return true;
         }
 
@@ -432,24 +439,26 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                 .getHtmlComponentRenderContext());
         DataModel dataModel = tableContext.getDataModel();
 
-        if (dataModel instanceof IComponentRefModel) {
-            ((IComponentRefModel) dataModel)
-                    .setComponent((UIComponent) gridComponent);
+		IComponentRefModel componentRefModel = (IComponentRefModel) getAdapter(
+				IComponentRefModel.class, dataModel);
+
+		if (componentRefModel != null) {
+			componentRefModel.setComponent((UIComponent) gridComponent);
         }
 
         IFilterProperties filtersMap = tableContext.getFiltersMap();
+		IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+				IFiltredModel.class, dataModel);
+
         if (filtersMap != null) {
-            if (dataModel instanceof IFiltredModel) {
-                IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
+			if (filtredDataModel != null) {
                 filtredDataModel.setFilter(filtersMap);
 
             } else {
                 dataModel = FilteredDataModel.filter(dataModel, filtersMap);
             }
 
-        } else if (dataModel instanceof IFiltredModel) {
-            IFiltredModel filtredDataModel = (IFiltredModel) dataModel;
-
+		} else if (filtredDataModel != null) {
             filtredDataModel.setFilter(FilterExpressionTools.EMPTY);
         }
 
@@ -457,10 +466,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 
         ISortedComponent sortedComponents[] = tableContext
                 .listSortedComponents();
+		ISortedDataModel sortedDataModel = (ISortedDataModel)
+
+		getAdapter(ISortedDataModel.class, dataModel);
         if (sortedComponents != null && sortedComponents.length > 0) {
-            if (dataModel instanceof ISortedDataModel) {
-                ((ISortedDataModel) dataModel).setSortParameters(
-                        (UIComponent) gridComponent, sortedComponents);
+			if (sortedDataModel != null) {
+				sortedDataModel.setSortParameters((UIComponent) gridComponent,
+						sortedComponents);
             } else {
                 // Il faut faire le tri à la main !
 
@@ -473,12 +485,10 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                     translatedRowIndex = sortTranslations[translatedRowIndex];
                 }
             }
-        } else {
-            if (dataModel instanceof ISortedDataModel) {
+		} else if (sortedDataModel != null) {
                 // Reset des parametres de tri !
-                ((ISortedDataModel) dataModel).setSortParameters(
-                        (UIComponent) gridComponent, null);
-            }
+			sortedDataModel
+					.setSortParameters((UIComponent) gridComponent, null);
         }
 
         gridComponent.setRowIndex(translatedRowIndex);
@@ -662,9 +672,11 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
             htmlWriter.writeAttributeNS("sortManager", sortManager);
         }
 
-        Object dataModel = gridRenderContext.getDataModel();
-        if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttributeNS("filtred", true);
+		DataModel dataModel = gridRenderContext.getDataModel();
+		IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+				IFiltredModel.class, dataModel);
+		if (filtredDataModel != null) {
+			htmlWriter.writeAttributeNS("filtred", true);
 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
@@ -1591,6 +1603,78 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
         String selectedImageURLs[] = null;
         String columnStyleClasses[] = null;
 
+		FacesContext facesContext = jsWriter.getFacesContext();
+
+		ISelectedCriteria[] selectedCriteriaArray = gridRenderContext
+				.listSelectedCriteria();
+
+		if (selectedCriteriaArray != null && selectedCriteriaArray.length > 0) {
+			jsWriter.writeMethodCall("fa_setSelectedCriteria").write('[');
+
+			for (int i = 0; i < selectedCriteriaArray.length; i++) {
+				ISelectedCriteria criteria = selectedCriteriaArray[i];
+
+				UIComponent criteriaComponent = (UIComponent) criteria
+						.getConfig();
+
+				Converter criteriaConverter = criteria.getConfig()
+						.getCriteriaConverter();
+
+				Converter labelConverter = criteria.getConfig()
+						.getLabelConverter();
+
+				if (i > 0) {
+					jsWriter.write(',');
+				}
+
+				IObjectLiteralWriter oj = jsWriter.writeObjectLiteral(true);
+
+				oj.writeSymbol("id").writeString(
+						criteria.getConfig().getCriteriaContainer().getId());
+
+				IJavaScriptWriter jsWriterOj = oj.writeSymbol("values").write(
+						'[');
+				Set criteriaSet = criteria.listSelectedValues();
+				boolean first = true;
+				for (Iterator iterator = criteriaSet.iterator(); iterator
+						.hasNext();) {
+					Object criteriaValue = iterator.next();
+
+					String sValue = ValuesTools.convertValueToString(
+							criteriaValue, criteriaConverter,
+							criteriaComponent, facesContext);
+
+					if (first) {
+						first = false;
+					} else {
+						jsWriterOj.write(',');
+					}
+
+					IObjectLiteralWriter ol = jsWriterOj
+							.writeObjectLiteral(false);
+
+					ol.writeSymbol("value").writeString(sValue);
+
+					if (labelConverter != null) {
+						String label = ValuesTools.convertValueToString(
+								criteriaValue, labelConverter,
+								criteriaComponent, facesContext);
+						if (label != null) {
+							ol.writeSymbol("label").writeString(label);
+						}
+					}
+
+					ol.end();
+				}
+				jsWriterOj.write(']');
+
+				oj.end();
+
+			}
+
+			jsWriter.writeln("], false);");
+		}
+
         if ((generationMask & GENERATE_CELL_IMAGES) > 0) {
             defaultCellImageURLs = gridRenderContext.getDefaultCellImageURLs();
             if (defaultCellImageURLs != null) {
@@ -1738,6 +1822,24 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
                             autoFilterIndex++);
                 }
             }
+
+			if (columnComponent instanceof ICriteriaContainer) {
+				
+				ICriteriaConfiguration criteriaConfiguration = ((ICriteriaContainer) columnComponent)
+						.getCriteriaConfiguration();
+
+				if (criteriaConfiguration != null) {
+					objectWriter.writeSymbol("_criteriaCardinality").writeInt(
+							criteriaConfiguration.getCriteriaCardinality());
+
+					String criteriaTitle = criteriaConfiguration
+							.getCriteriaTitle();
+					if (criteriaTitle != null) {
+						objectWriter.writeSymbol("_criteriaTitle").writeString(
+								criteriaTitle);
+					}
+				}
+			}
 
             if (defaultCellToolTipTexts != null) {
                 String tooltip = defaultCellToolTipTexts[i];
@@ -1950,7 +2052,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     }
 
     private static final IBooleanStateCallback CELL_STYLE_CLASS = new IBooleanStateCallback() {
-        private static final String REVISION = "$Revision$";
 
         public boolean test(AbstractGridRenderContext tableContext, int index) {
             return tableContext.isCellStyleClass(index);
@@ -1958,7 +2059,6 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
     };
 
     private static final IBooleanStateCallback CELL_TOOLTIP_TEXT = new IBooleanStateCallback() {
-        private static final String REVISION = "$Revision$";
 
         public boolean test(AbstractGridRenderContext tableContext, int index) {
             return tableContext.isCellToolTipText(index);

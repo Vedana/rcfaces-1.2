@@ -8,7 +8,6 @@ package org.rcfaces.renderkit.html.internal;
  * @version $Revision$ $Date$
  */
 public final class JavaScriptClasses {
-    private static final String REVISION = "$Revision$";
 
     public static final String ACCELERATOR = "f_accelerator";
 
@@ -39,6 +38,8 @@ public final class JavaScriptClasses {
     public static final String COMPONENTS_LIST = "f_componentsList";
 
     public static final String COMPONENTS_GRID = "f_componentsGrid";
+
+    public static final String CRITERIA_LIST = "f_criteriaList";
 
     public static final String CUSTOM_BUTTON = "f_customButton";
 
@@ -75,6 +76,8 @@ public final class JavaScriptClasses {
     public static final String IMAGE_CHECK_BUTTON = "f_imageCheckButton";
 
     public static final String IMAGE_COMBO = "f_imageCombo";
+
+    public static final String IMAGE_CRITERIA_BUTTON = "f_imageCriteriaButton";
 
     public static final String IMAGE_PAGER_BUTTON = "f_imagePagerButton";
 

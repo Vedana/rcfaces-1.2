@@ -30,7 +30,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class ExternalBoxRenderer extends AbstractCssRenderer implements
         IAsyncRenderer {
-    private static final String REVISION = "$Revision$";
 
     public void encodeBegin(IComponentWriter writer) throws WriterException {
         super.encodeBegin(writer);

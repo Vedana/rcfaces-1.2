@@ -277,6 +277,11 @@
 			</class>
 		</file>		
 		
+		<file name="aspect/fa_criteriaManager.js">
+			<class name="fa_criteriaManager">
+			</class>
+		</file>		
+		
 		<file name="ui/fa_autoScroll.js">
 			<class name="fa_autoScroll">
 				<required-class name="f_aspect" />
@@ -1067,6 +1072,16 @@
 				<required-class name="fa_pagedComponent" />
 			</class>
 		</file>
+		<file name="input/f_criteriaList.js">
+			<class name="f_criteriaList">
+				<required-class name="f_pager" />
+			</class>
+		</file>
+		<file name="input/f_imageCriteriaButton.js">
+			<class name="f_imageCriteriaButton">
+				<required-class name="f_imagePagerButton" />
+			</class>
+		</file>
 	</module>
 
 <!-- DATALIST Components -->
@@ -1196,6 +1211,8 @@
 				<required-class name="f_grid" />
 				<required-class name="fa_readOnly" />
 				<required-class name="fa_checkManager" />
+				<required-class name="fa_criteriaManager" />
+				
 
 				<required-style name="f_dataGrid.css" />
 			</class>
@@ -1651,7 +1668,7 @@
 				<required-class name="fa_selectionManager" />
 				<required-class name="f_core" />
 				<required-class name="f_dateFormat"/>
-				
+				<required-class name="f_resourceBundle" />
 				<required-style name="f_scheduler.css" />
 			</class>
 			

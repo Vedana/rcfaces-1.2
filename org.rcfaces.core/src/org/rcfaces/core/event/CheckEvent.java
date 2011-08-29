@@ -13,8 +13,6 @@ import javax.faces.event.FacesListener;
  * @version $Revision$ $Date$
  */
 public class CheckEvent extends ActionEvent {
-    private static final String REVISION = "$Revision$";
-
     private static final long serialVersionUID = -8297800672322392936L;
 
     public CheckEvent(UIComponent component) {

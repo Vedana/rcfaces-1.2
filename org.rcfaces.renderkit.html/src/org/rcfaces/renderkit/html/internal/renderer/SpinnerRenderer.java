@@ -24,7 +24,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class SpinnerRenderer extends TextEntryRenderer implements
         ISubInputClientIdRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected static final int SPINNER_BUTTON_WIDTH = 16;
 

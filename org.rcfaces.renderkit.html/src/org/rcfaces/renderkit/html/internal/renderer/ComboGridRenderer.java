@@ -10,6 +10,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
+import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,6 +28,7 @@ import org.rcfaces.core.internal.renderkit.IScriptRenderContext;
 import org.rcfaces.core.internal.renderkit.WriterException;
 import org.rcfaces.core.internal.tools.ValuesTools;
 import org.rcfaces.core.internal.util.ParamUtils;
+import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.core.model.IFilterProperties;
 import org.rcfaces.core.model.IFiltredModel;
 import org.rcfaces.core.model.ISortedComponent;
@@ -46,7 +48,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class ComboGridRenderer extends KeyEntryRenderer implements
         ISubInputClientIdRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory.getLog(ComboGridRenderer.class);
 
@@ -308,10 +309,12 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             htmlWriter.writeAttributeNS("headerVisible", true);
         }
 
-        Object dataModel = gridRenderContext.getDataModel();
-        if (dataModel instanceof IFiltredModel) {
-            htmlWriter.writeAttributeNS("filtred", true);
-
+		DataModel dataModel = gridRenderContext.getDataModel();
+		IFiltredModel filtredDataModel = (IFiltredModel) getAdapter(
+				IFiltredModel.class, dataModel);
+		if (filtredDataModel != null) {
+			 htmlWriter.writeAttributeNS("filtred", true);
+ 
             IFilterProperties filterMap = gridRenderContext.getFiltersMap();
             if (filterMap != null && filterMap.isEmpty() == false) {
                 String filterExpression = HtmlTools.encodeFilterExpression(
@@ -568,11 +571,11 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
             IScriptRenderContext scriptRenderContext, IGridComponent dg,
             int rowIndex, int forcedRows, ISortedComponent sortedComponents[],
             String filterExpression, String showAdditionals,
-            String hideAdditionals) {
+			String hideAdditionals, ISelectedCriteria[] criteriaContainers) {
         DataGridRenderContext tableContext = new ComboGridRenderContext(
                 processContext, scriptRenderContext, dg, rowIndex, forcedRows,
                 sortedComponents, filterExpression, showAdditionals,
-                hideAdditionals);
+				hideAdditionals, criteriaContainers);
 
         return tableContext;
     }
@@ -599,16 +602,16 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
      */
     public class ComboGridRenderContext extends DataGridRenderContext {
 
-        private static final String REVISION = "$Revision$";
 
         public ComboGridRenderContext(IProcessContext processContext,
                 IScriptRenderContext scriptRenderContext, IGridComponent dg,
                 int rowIndex, int forcedRows,
                 ISortedComponent[] sortedComponents, String filterExpression,
-                String showAdditionals, String hideAdditionals) {
+				String showAdditionals, String hideAdditionals,
+				ISelectedCriteria[] criteriaContainers) {
             super(processContext, scriptRenderContext, dg, rowIndex,
                     forcedRows, sortedComponents, filterExpression,
-                    showAdditionals, hideAdditionals);
+					showAdditionals, hideAdditionals, criteriaContainers);
         }
 
         public ComboGridRenderContext(

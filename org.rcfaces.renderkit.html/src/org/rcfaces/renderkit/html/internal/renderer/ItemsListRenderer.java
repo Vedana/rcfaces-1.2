@@ -25,7 +25,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @see ItemsToolFolderRenderer
  */
 public class ItemsListRenderer extends AbstractSelectItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     /**
      * surrounding for the decorator

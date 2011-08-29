@@ -35,7 +35,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class TimeEntryRenderer extends AbstractCompositeRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.TIME_ENTRY;

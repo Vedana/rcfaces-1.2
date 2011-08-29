@@ -78,6 +78,11 @@
 			<service id="org.rcfaces.renderkit.html.Log" class="org.rcfaces.renderkit.html.internal.service.LogHtmlService">
 				<command id="log.append" />
 			</service>
+
+			<service id="org.rcfaces.renderkit.html.CriteriaGrid"
+				class="org.rcfaces.renderkit.html.internal.service.CriteriaGridService">
+				<command id="criteria.request" />
+			</service>
 		</render-kit>
 	</services>
 

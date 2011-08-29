@@ -25,7 +25,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ProgressBarRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final int BORDER_LEFT_WIDTH = 4;
 

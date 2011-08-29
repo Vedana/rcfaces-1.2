@@ -33,7 +33,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
  */
 public abstract class AbstractInputRenderer extends AbstractCssRenderer {
 
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractInputRenderer.class);

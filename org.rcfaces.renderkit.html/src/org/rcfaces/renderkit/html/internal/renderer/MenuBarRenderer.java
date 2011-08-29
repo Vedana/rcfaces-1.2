@@ -22,7 +22,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class MenuBarRenderer extends AbstractSelectItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.MENU_BAR;

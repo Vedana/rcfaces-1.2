@@ -23,7 +23,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ImageCheckButtonRenderer extends ImageButtonRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected String getJavaScriptClassName() {
         return JavaScriptClasses.IMAGE_CHECK_BUTTON;
@@ -62,7 +61,6 @@ public class ImageCheckButtonRenderer extends ImageButtonRenderer {
      * @version $Revision$ $Date$
      */
     protected class ImageCheckButtonDecorator extends ImageButtonDecorator {
-        private static final String REVISION = "$Revision$";
 
         public ImageCheckButtonDecorator(IImageButtonFamilly imageButtonFamilly) {
             super(imageButtonFamilly);

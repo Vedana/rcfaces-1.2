@@ -238,7 +238,7 @@ f_classLoader.prototype = {
 			
 			document.body.onmouseover=null;
 		}
-
+		
 		this._onFireInits=undefined; // List<String>
 		this._onCompleteIds=undefined; // List<String>
 		this._onMessageIds=undefined; // List<String>
@@ -448,7 +448,7 @@ f_classLoader.prototype = {
 			}
 		}
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" static DocumentComplete method(s) called.");
-
+	
 		nb=0;
 	
 		var documentCompleteObjects = this._documentCompleteObjects;
@@ -472,7 +472,7 @@ f_classLoader.prototype = {
 				f_core.Error(f_classLoader, "f_onDocumentComplete: Exception during documentComplete event for object "+obj.id+"/"+obj.tagName, x);
 			}
 		}	
-
+	
 		f_core.Debug(f_classLoader, "f_onDocumentComplete: "+nb+" f_documentComplete method(s) called.");
 	},
 	
@@ -962,6 +962,8 @@ f_classLoader.prototype = {
 			f_core.Debug(f_classLoader, "_initializeIds: ("+ids.length+" objects) ids="+ids.join());
 		}
 
+		var documentComplete = this.f_isDocumentCompleted();
+
 		for(var i=0;i<ids.length;i++) {
 			var componentId=ids[i];
 						
@@ -987,6 +989,13 @@ f_classLoader.prototype = {
 			var onInitComponentListeners=this._onInitComponentListeners;
 			if (onInitComponentListeners) {
 				this._callOnInitComponentListeners(onInitComponentListeners, component);
+			}
+			
+			if (documentComplete) {
+				var documentCompleteFct = component.f_documentComplete;
+				if (documentCompleteFct) {
+					documentCompleteFct.call(component);
+				}
 			}
 		}
 	},
@@ -1048,28 +1057,6 @@ f_classLoader.prototype = {
 		f_core.Info(f_classLoader, "f_verifyOnSubmit: initialize "+onSubmitIds.length+" components.");
 		
 		this._initializeIds(onSubmitIds);
-	},
-	/**
-	 * @method hidden final
-	 * @param Set ids
-	 * @return void
-	 */
-	f_initOnLayoutIds: function(ids) {
-		
-		if (f_core.IsDebugEnabled(f_classLoader)) {
-			var idsLog="";
-			for(var id in ids) {
-				if (idsLog) {
-					idsLog+=",";
-				}
-				
-				idsLog+=id;
-			}	
-
-			f_core.Debug(f_classLoader, "f_initOnLayoutIds: ids="+idsLog);
-		}
-
-		f_layoutManager.Get().f_addComponentClientIds(ids);
 	},
 	/**
 	 * @method hidden final
@@ -1139,6 +1126,12 @@ f_classLoader.prototype = {
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
+			
+			var documentCompleteFct = component.f_documentComplete;
+			if (documentCompleteFct && self.f_isDocumentCompleted()) {
+				documentCompleteFct.call(component);
+			}		
+			
 		};
 		
 		if (f_core.IsInternetExplorer()) {
@@ -1245,6 +1238,11 @@ f_classLoader.prototype = {
 			if (onInitComponentListeners) {
 				self._callOnInitComponentListeners(onInitComponentListeners, component);
 			}
+			
+			var documentCompleteFct = component.f_documentComplete;
+			if (documentCompleteFct && self.f_isDocumentCompleted()) {
+				documentCompleteFct.call(component);
+			}			
 			
 			if (retargetIE) {						
 				var newEvt = component.ownerDocument.createEventObject(window.event);
@@ -1974,7 +1972,7 @@ f_classLoader._EMPTY_ARGUMENTS=[];
 f_classLoader._MakeClassName=function(claz, lookId) {
 	if (!lookId) {
 		return claz;
-	} 
+	}
 	
 	return claz+f_class._LOOK+lookId;
 };

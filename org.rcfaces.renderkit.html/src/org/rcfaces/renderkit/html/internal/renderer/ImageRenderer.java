@@ -27,7 +27,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class ImageRenderer extends AbstractCssRenderer {
-    private static final String REVISION = "$Revision$";
 
     private static final String FILTRED_CONTENT_PROPERTY = "camelia.image.filtredContent";
 

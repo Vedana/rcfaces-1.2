@@ -18,7 +18,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class TextEditorComboRenderer extends ComboRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void encodeBegin(IComponentWriter writer) throws WriterException {
         TextEditorComboComponent component = (TextEditorComboComponent) writer

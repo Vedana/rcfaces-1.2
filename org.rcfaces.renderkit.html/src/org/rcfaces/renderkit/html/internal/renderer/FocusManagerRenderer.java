@@ -26,7 +26,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  * @version $Revision$ $Date$
  */
 public class FocusManagerRenderer extends AbstractJavaScriptRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected static final String NONE_FOCUS_ID = "--none--";
 

@@ -38,7 +38,6 @@ import org.rcfaces.renderkit.html.internal.util.ListenerTools.INameSpace;
  * @version $Revision$ $Date$
  */
 public class NumberEntryRenderer extends AbstractCompositeRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected static final String UNDEFINED_CURRENCY = "XXX";
 

@@ -3,12 +3,16 @@
  */
 package org.rcfaces.renderkit.html.internal.renderer;
 
+import java.util.Iterator;
+
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItems;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 import org.rcfaces.core.component.SuggestTextEntryComponent;
 import org.rcfaces.core.component.capability.IFilterCapability;
+import org.rcfaces.core.component.iterator.IOrderedIterator;
 import org.rcfaces.core.event.PropertyChangeEvent;
 import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.internal.renderkit.IComponentData;
@@ -31,7 +35,6 @@ import org.rcfaces.renderkit.html.internal.ns.INamespaceConfiguration;
  */
 public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         IFilteredItemsRenderer {
-    private static final String REVISION = "$Revision$";
 
     protected void encodeComponent(IHtmlWriter htmlWriter)
             throws WriterException {
@@ -99,6 +102,22 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
 
         boolean orderedResult = suggestTextEntryComponent
                 .isOrderedItems(facesContext);
+        
+        Iterator  it = suggestTextEntryComponent.getChildren().iterator();
+        for (; it.hasNext();) {
+            UIComponent component = (UIComponent) it.next();
+            if (component instanceof UISelectItems) {
+                UISelectItems uiSelectItems = (UISelectItems) component;
+                IOrderedIterator orderedIterator= (IOrderedIterator)
+                	getAdapter(IOrderedIterator.class, uiSelectItems.getValue());
+                if (orderedIterator != null) {
+                	orderedResult = orderedIterator.isOrdered();
+                }
+            	break;
+                
+            }
+        }
+            
         if (orderedResult == false) {
             htmlWriter.writeAttributeNS("orderedResult", false);
         }

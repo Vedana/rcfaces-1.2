@@ -1,24 +1,24 @@
-f_key: 
-Correction de l'affichage des accesskey sous IE et Webkit 
+SuggesTextEntry: 
+Correction globale du composant.
 
-f_clientValidator, f_focusManager,f_textArea, fa_spinner, fa_compositeEntry :
-Prise en compte de Webkit sur le keyCode sur le keypress  
+Pattern Adaptable:
+Les classes héritant de AbstractGridRenderer (comboGrid, datagrid, componentsGrid) sont compatible avec le pattern Adaptable. Les dataModel de ces composants doivent implémenter l'interface IAdaptable pour se spécialiser.
+Les classes AdaptedDataModel et  AdaptedArrayDataModel permettent d'utiliser à la fois le pattern Adaptable et d'implémenter les interfaces traditionelles.
 
-Selection:
-Ajout du détail refresh dans l'évènement de selection lors d'un refreshcontent (tree & grid) 
-Correction du mouvement du curseur dans le composant tree pendant la sélection
+Criteria:
+Ajout des capability criteria. Implementation des critère pour le composant Datagrig 
 
-TreeService f_tree:
-Ajout du rafraichissement du noeud père lors du chargement partiel d'un arbre
+GridTools:
+Ajout de la Classe GridTools et de la fonction HasSortedServerListener permettant de contrôler si un tableau doit être trier sur le serveur
 
-AbstractItem:
-Convertions des valeur lié à l'attribut disabled en itemDisabled
+AbstractGridRendererContext:
+Correction de la colonne rendered=false qui �tait visible.  (visible=false fonctionnait par contre !)
 
-f_popup:
-Amelioration de l'ouverture des popups d'un combo
+JavaScriptRenderContext:
+Correction de l'initialisation des composants <v:init>  (comme Accelerator)
 
-fa_selectionManager:
-protected f_resetPhase => hidden f_resetSelectionPhase
+AcceleratorRenderer:
+Correction de la génération du parametrage des touches de l'accelerateur
 
 RadioButton: 
 Uniformisation de la gestion du focus (tabIndex)
@@ -41,57 +41,7 @@ f_tree:
 f_refreshContent correction bug boucle
 
 f_core:
-Passe OpenWindow en public
-
-f_core, ClientBrowserFactory, f_httpRequest, f_focusManager, f_popup:
-Ajout de la prise en compte du moteur webkit
-
-f_classLoader:
-Initialisation temporaire onmousedown pour webkit
-Initialisation temporaire onclick pour webkit
-
-fa_eventTarget, f_input :
-Ajout de l'evenement onkeypress pour les input avec webkit
-
-fa_menuCore : 
-Correction la clé d'une hashmap utilisant le toString des objets 
-
-fa_images:
-Affichage d'imageButton enabled et  initialement disabled avec seulement imageUrl spécifié
-
-f_tree : 
-Correction selection de type range
-
-fa_selectionManager: 
-Correction selection mouseup
-
-f_core et al.:
-Ajout Get*AttributeNS
-
-f_dragAndDropEngine:
-Correction de pb d'accès à des variables non initialisées
-
-f_service:
-Gestion des événements
-
-service:
-Ajout IErrorEventCapability
-
-Configuration loader:
-Mutualisation du système de chargement des configurations faces-config et rcfaces-config
-
-Namespace:
-Configuration du namespace privé RCFaces utilisé par le générateur HTML/Javascript
-
-f_popup:
-Gestion du BLUR recommenté !
-
-AbstractImageButtonFamillyDecorator:
-input.tabIndex=-1 si disabled
-
-----------------------------------------------------------------------
-- @version M
-
+La fonction OpenWindow devient public 
 
 f_grid:
 transformation de la property SORT_INDEX en attribut pour la bonne gestion du tri lorsqu'il est initialisé sur le serveur

@@ -33,8 +33,6 @@ import org.rcfaces.renderkit.html.internal.renderer.ICssStyleClasses;
 public abstract class AbstractCssRenderer extends AbstractJavaScriptRenderer
         implements ICssRenderer {
 
-    private static final String REVISION = "$Revision$";
-
     private static final Log LOG = LogFactory.getLog(AbstractCssRenderer.class);
 
     private static final int DEFAULT_RENDERED_HIDDEN_MODE = IHiddenModeCapability.IGNORE_HIDDEN_MODE;

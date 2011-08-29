@@ -66,7 +66,6 @@ import org.rcfaces.renderkit.html.internal.EventDecoders.IEventObjectDecoder;
 public abstract class AbstractSelectItemsDecorator extends
         AbstractComponentDecorator implements ISelectItemNodeWriter,
         IEventObjectDecoder {
-    private static final String REVISION = "$Revision$";
 
     private static final Log LOG = LogFactory
             .getLog(AbstractSelectItemsDecorator.class);
