@@ -8,7 +8,6 @@ import org.rcfaces.core.internal.adapter.IAdapterManager;
 public abstract class AdaptedArrayDataModel extends ArrayDataModel implements
 		IAdaptable {
 
-	@Override
 	public Object getAdapter(Class adapter, Object parameter) {
 		if (adapter.isAssignableFrom(getClass())) {
 			return this;

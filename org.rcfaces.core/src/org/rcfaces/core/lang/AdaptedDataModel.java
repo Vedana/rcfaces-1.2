@@ -7,7 +7,6 @@ import org.rcfaces.core.internal.adapter.IAdapterManager;
 
 public abstract class AdaptedDataModel extends DataModel implements IAdaptable {
 
-	@Override
 	public Object getAdapter(Class adapter, Object parameter) {
 		if (adapter.isAssignableFrom(getClass())) {
 			return this;
