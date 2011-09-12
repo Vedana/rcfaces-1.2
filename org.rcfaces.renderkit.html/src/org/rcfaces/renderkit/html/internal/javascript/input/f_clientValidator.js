@@ -303,11 +303,13 @@ var __statics = {
 				
 				var value=input.value;
 				
-				// Gestion du maxTextLength
-				if (component.f_getMaxTextLength) {
-					var max = component.f_getMaxTextLength();
-					if (max >= 0 && value.length >= max) {
-						return true;
+				// Gestion du maxTextLength si mode insertion
+				if (selectionEnd == selectionStart) {
+					if (component.f_getMaxTextLength) {
+						var max = component.f_getMaxTextLength();
+						if (max >= 0 && value.length >= max) {
+							return true;
+						}
 					}
 				}
 				
