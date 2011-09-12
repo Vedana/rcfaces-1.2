@@ -34,10 +34,10 @@ import org.rcfaces.core.model.ICriteriaSelectedResult;
 import org.rcfaces.core.model.ISelectedCriteria;
 import org.rcfaces.renderkit.html.internal.Constants;
 import org.rcfaces.renderkit.html.internal.HtmlTools;
+import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.IHtmlRenderContext;
 import org.rcfaces.renderkit.html.internal.IJavaScriptWriter;
 import org.rcfaces.renderkit.html.internal.IObjectLiteralWriter;
-import org.rcfaces.renderkit.html.internal.HtmlTools.ILocalizedComponent;
 import org.rcfaces.renderkit.html.internal.util.JavaScriptResponseWriter;
 
 /**
@@ -224,12 +224,12 @@ public class CriteriaGridService extends AbstractHtmlService {
 		ICriteriaConfiguration[] resultCriteria = result
 				.listAvailableCriteriaConfiguration();
 		if (resultCriteria != null && resultCriteria.length > 0) {
-			boolean first=true;
+			boolean first = true;
 			for (int i = 0; i < resultCriteria.length; i++) {
 				ICriteriaConfiguration rc = resultCriteria[i];
 
 				if (first) {
-					first=false;
+					first = false;
 				} else {
 					jsWriter.write(',');
 				}
@@ -266,22 +266,28 @@ public class CriteriaGridService extends AbstractHtmlService {
 		Converter converter = configuration.getCriteriaConverter();
 
 		IJavaScriptWriter ijs = ow.writeSymbol("values").write('[');
+		int vir = 0;
 		for (int j = 0; j < criteriaItems.length; j++) {
 			CriteriaItem ci = criteriaItems[j];
 
-			if (j > 0) {
+			if (vir > 0) {
 				ijs.write(',');
 			}
+			vir++;
 
 			Object itemValue = ci.getValue();
 
 			String itemConvertedValue = ValuesTools.convertValueToString(
 					itemValue, converter, refComponent,
 					jsWriter.getFacesContext());
+			if (itemConvertedValue == null) {
+				continue;
+			}
 
 			IObjectLiteralWriter itemsW = ijs.writeObjectLiteral(true);
 
-			if (itemConvertedValue.equals(ci.getLabel()) == false) {
+			if (itemConvertedValue != null
+					&& itemConvertedValue.equals(ci.getLabel()) == false) {
 				itemsW.writeSymbol("label").writeString(ci.getLabel());
 			}
 

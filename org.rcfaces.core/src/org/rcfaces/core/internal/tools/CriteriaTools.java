@@ -37,7 +37,7 @@ public class CriteriaTools extends CollectionTools {
 	private static final ISelectedCriteria[] SELECTED_CRITERIA_EMPTY_ARRAY = new ISelectedCriteria[0];
 
 	private static final ICriteriaContainer[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ICriteriaContainer[0];
-	
+
 	private static final String DEFAULT_ENCODE_CHARSET = "UTF8";
 	private static final Log LOG = LogFactory.getLog(CriteriaTools.class);
 
@@ -216,7 +216,7 @@ public class CriteriaTools extends CollectionTools {
 	}
 
 	public static Object getDataValue(FacesContext facesContext,
-				IGridComponent gridComponent, ICriteriaConfiguration config) {
+			IGridComponent gridComponent, ICriteriaConfiguration config) {
 
 		if (config.isCriteriaValueSetted()) {
 			return config.getCriteriaValue();
@@ -227,8 +227,8 @@ public class CriteriaTools extends CollectionTools {
 			ValueHolder valueHolder = (ValueHolder) container;
 
 			Object dataValue = valueHolder.getValue();
-			
-			//dataValue = ((String) dataValue).replaceAll(",", "");
+
+			// dataValue = ((String) dataValue).replaceAll(",", "");
 			if (dataValue != null) {
 				Converter converter = valueHolder.getConverter();
 				if (converter != null) {
@@ -242,7 +242,7 @@ public class CriteriaTools extends CollectionTools {
 
 		return null;
 	}
-	
+
 	public static ISelectedCriteria[] computeCriteriaConfigs(
 			FacesContext facesContext, IGridComponent dgc, String criteria_s) {
 		if (criteria_s == null) {
@@ -284,6 +284,11 @@ public class CriteriaTools extends CollectionTools {
 				ICriteriaConfiguration criteriaConfiguration = criteriaContainer
 						.getCriteriaConfiguration();
 
+				if (st.hasMoreTokens() == false) {
+					// Cas ou le token sélectionné est NULL
+					continue;
+				}
+
 				String itemValues = URLDecoder.decode(st.nextToken(),
 						DEFAULT_ENCODE_CHARSET);
 
@@ -305,7 +310,7 @@ public class CriteriaTools extends CollectionTools {
 
 		return criteriaList.toArray(new ISelectedCriteria[criteriaList.size()]);
 	}
-	
+
 	private static Set<Object> convertCriteriaValues(FacesContext facesContext,
 			ICriteriaConfiguration criteriaConfiguration, String itemValues)
 			throws UnsupportedEncodingException {
