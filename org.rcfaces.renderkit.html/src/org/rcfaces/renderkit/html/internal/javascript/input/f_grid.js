@@ -6254,21 +6254,27 @@ var __members = {
 	 * @return void
 	 */
 	f_selectAllPage: function() {
-		var first = this.f_getFirst();
-		var last = 1;
-		var rowCount = this.f_getRowCount();
-		var rows = -1;
-		if(this._rows) {
-			rows = this._rows;
+		
+		if (!this._selectable) {
+			return;
 		}
-		if( rowCount > 0 && ((rows > 0 && rowCount < rows)) || rows < 0){
-			last = this.f_getRowCount();
-		}else if(rows > 0) {
-			last = rows;
-		} 
-		this._selectRange(this.f_getRow(first),
-				this.f_getRow(first+last-1),
-				fa_selectionManager.RANGE_SELECTION);
+		
+		var rows = this.fa_listVisibleElements();
+		if(rows.length) {
+			
+			var l=new Array;
+			
+			for ( var i = 0; i < rows.length; i++) {
+				
+				var row = rows[i];
+				var elementValue=this.fa_getElementValue(row);
+				
+				if (!this.fa_isElementDisabled(row)) {
+					l.push(elementValue);
+				}
+			}
+			this._selectElementsRange(l, fa_selectionManager.RANGE_SELECTION, false, rows);
+		}
 	},
 	
 	/**

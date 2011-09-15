@@ -1836,12 +1836,16 @@ var __members = {
 	 * @method public
 	 */
 	f_checkAllPage: function() {
+		
+		if (!this._checkable) {
+			return;
+		}
+		
 		var elts = this.fa_listVisibleElements();
 		for(var i=0;i<elts.length;i++) {
 			var element=elts[i];
 			if(!this.fa_isElementChecked(element)) {
-				//this.fa_setElementChecked(element,true);
-				this._checkElement(element,true,true);
+				this._checkElement(element, this.fa_getElementValue(element), true);
 				this.fa_updateElementCheck(element, true);
 			}
 		}

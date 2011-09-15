@@ -350,8 +350,7 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
 		int sortTranslations[] = null;
 
-		ISortedComponent sortedComponents[] = gridRenderContext
-				.listSortedComponents();
+		
 
 		DataModel dataModel = componentsGridComponent.getDataModelValue();
 
@@ -388,8 +387,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
 			filtred = true;
 		}
+		
+		ISortedComponent sortedComponents[] = gridRenderContext.listSortedComponents();
 		ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(
-				ISortedDataModel.class, dataModel);
+				ISortedDataModel.class, dataModel, sortedComponents);
 		if (sortedComponents != null && sortedComponents.length > 0) {
 
 			if (NOT_SUPPORTED_SERVER_SORT) {

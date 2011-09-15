@@ -467,7 +467,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				.listSortedComponents();
 		ISortedDataModel sortedDataModel = (ISortedDataModel)
 
-		getAdapter(ISortedDataModel.class, dataModel);
+		getAdapter(ISortedDataModel.class, dataModel, sortedComponents);
 		if (sortedComponents != null && sortedComponents.length > 0) {
 			if (sortedDataModel != null) {
 				sortedDataModel.setSortParameters((UIComponent) gridComponent,
