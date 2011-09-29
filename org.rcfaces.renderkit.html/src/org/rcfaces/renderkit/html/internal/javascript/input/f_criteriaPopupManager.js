@@ -1,9 +1,13 @@
+/*
+ * $Id$
+ */
+
 /**
  * f_criteriaPopupManager class
  * 
  * @class public f_criteriaPopupManager
  * @author jb.meslin@vedana.com
- * @version $Revision: 1.0
+ * @version $Revision$
  */
 var __statics = {
 

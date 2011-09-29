@@ -3,7 +3,7 @@
  *
  * @aspect public abstract  
  * @author jbmeslin@vedana.com
- * @version  
+ * @version $Revision$   
  */
  
 var __statics = {

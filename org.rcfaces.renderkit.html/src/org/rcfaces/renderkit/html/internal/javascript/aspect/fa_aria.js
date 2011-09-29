@@ -3,7 +3,7 @@
  *
  * @aspect public abstract fa_aria
  * @author jean-baptiste.meslin@vedana.com 
- * @version $Revision$ $Date: 
+ * @version $Revision$  
  */
 
 var __statics = {
