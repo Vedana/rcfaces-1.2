@@ -217,10 +217,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 				.getHtmlComponentRenderContext());
 
 		// Dans tous les cas il faut positionner le renderContext !
-		ComponentsListService componentsListServer = ComponentsListService
+		ComponentsGridService componentsGridServer = ComponentsGridService
 				.getInstance(facesContext);
-		if (componentsListServer != null) {
-			componentsListServer.setupComponent(componentRenderContext);
+		if (componentsGridServer != null) {
+			componentsGridServer.setupComponent(componentRenderContext);
 		}
 
 		if (tableContext.isInteractiveShow()) {
@@ -349,8 +349,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 		}
 
 		int sortTranslations[] = null;
-
-		
 
 		DataModel dataModel = componentsGridComponent.getDataModelValue();
 
