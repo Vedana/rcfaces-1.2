@@ -1,7 +1,7 @@
 /**
  *	Aspect Aria for accesibilty
  *
- * @aspect public abstract fa_iaria
+ * @aspect public abstract fa_aria
  * @author jean-baptiste.meslin@vedana.com 
  * @version $Revision$ $Date: 
  */
