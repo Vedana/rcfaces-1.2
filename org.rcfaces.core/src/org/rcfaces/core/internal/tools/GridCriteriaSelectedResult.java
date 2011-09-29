@@ -109,9 +109,6 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, sc.getConfig());
 					
-					if (dataValue == null) {
-						continue;
-					}
 					
 					boolean outCriteria = false;
 					if(nextRow == false)  {
@@ -141,9 +138,6 @@ public class GridCriteriaSelectedResult extends AbstractCriteriaSelectedResult {
 					Object dataValue = CriteriaTools.getDataValue(facesContext,
 							gridComponent, notSelectedContainers[i]);
 					
-					if (dataValue == null) {
-						continue;
-					}
 
 					notPossibleValues[i].add(dataValue);
 				}
