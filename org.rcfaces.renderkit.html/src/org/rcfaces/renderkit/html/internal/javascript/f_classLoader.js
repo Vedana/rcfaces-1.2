@@ -1945,7 +1945,7 @@ f_classLoader.prototype = {
 		}
 		return "[ClassLoader '"+this._window.location+"']";
 	}
-};
+}
 
 
 /**
@@ -1975,7 +1975,7 @@ f_classLoader._MakeClassName=function(claz, lookId) {
 	}
 	
 	return claz+f_class._LOOK+lookId;
-};
+}
 
 
 /**
@@ -2027,7 +2027,7 @@ f_classLoader.Destroy=function(objects) {
 	if (lastClassLoader) {
 		lastClassLoader._destroy(toDestroy);
 	}
-};
+}
 
 /**
  * @method private static
@@ -2090,7 +2090,7 @@ f_classLoader._SerializeInputs=function(component) {
 	}
 	
 	return serializedInputs;
-};
+}
 
 /**
  * @method hidden static
@@ -2119,7 +2119,7 @@ f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInp
 	for(var name in serializedInputs) {
 		parameters[name]=serializedInputs[name];
 	}	
-};
+}
 
 /**
  * @method hidden static
@@ -2207,7 +2207,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
 			break;
 		}
 	}		
-};
+}
 
 /**
  * @method public static
@@ -2217,7 +2217,7 @@ f_classLoader.SerializeInputsIntoForm=function(form) {
  */
 f_classLoader.Get=function(win) {
 	return win._rcfacesClassLoader;
-};
+}
 
 /**
  * @method public static
@@ -2225,7 +2225,7 @@ f_classLoader.Get=function(win) {
  */
 f_classLoader.f_getName=function() {
 	return "f_classLoader";
-};
+}
 
 f_classLoader._kernelClass=true;
 
