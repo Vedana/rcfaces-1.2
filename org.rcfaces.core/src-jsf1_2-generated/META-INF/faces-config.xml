@@ -1989,6 +1989,10 @@ A menu item with a radiobutton (see attribute GroupName)
 		<component-class>org.rcfaces.core.component.MenuRadioItemComponent</component-class>
 	</component>
 	<component>
+		<component-type>org.rcfaces.core.menuCriteria</component-type>
+		<component-class>org.rcfaces.core.component.MenuCriteriaComponent</component-class>
+	</component>
+	<component>
 		<description><![CDATA[
 <b>NOT COMPLETE</b>
 ]]></description>

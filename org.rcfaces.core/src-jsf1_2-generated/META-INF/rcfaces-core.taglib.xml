@@ -431,6 +431,13 @@
 		</component>
 	</tag>
 	<tag>
+		<tag-name>menuCriteria</tag-name>
+		<component>
+			<component-type>org.rcfaces.core.menuCriteria</component-type>
+			<handler-class>org.rcfaces.core.internal.facelets.CameliaComponentHandler</handler-class>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>numberEntry</tag-name>
 		<component>
 			<component-type>org.rcfaces.core.numberEntry</component-type>

@@ -6,6 +6,7 @@ import org.rcfaces.core.internal.component.Properties;
 import org.rcfaces.core.component.capability.ICheckedValuesCapability;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.internal.tools.MenuTools;
+import org.rcfaces.core.component.capability.IPreSelectionEventCapability;
 import org.rcfaces.core.internal.tools.CollectionTools.IComponentValueTypeCapability;
 import org.rcfaces.core.component.iterator.IMenuItemIterator;
 import org.rcfaces.core.component.capability.ICheckEventCapability;
@@ -59,6 +60,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 	IPreloadedLevelDepthCapability,
 	IMenuEventCapability,
 	ISelectionEventCapability,
+	IPreSelectionEventCapability,
 	ICheckEventCapability,
 	ICheckedValuesCapability,
 	ICheckComponent,
@@ -71,7 +73,7 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaSelectManyComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkedValues","checkListener","selectionListener","preloadedLevelDepth","converter","removeAllWhenShown","menuListener","menuId"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"checkedValues","checkListener","selectionListener","preloadedLevelDepth","converter","removeAllWhenShown","menuListener","menuId","preSelectionListener"}));
 	}
 
 	public MenuComponent() {
@@ -170,6 +172,18 @@ public class MenuComponent extends CameliaSelectManyComponent implements
 
 	public final javax.faces.event.FacesListener [] listSelectionListeners() {
 		return getFacesListeners(org.rcfaces.core.event.ISelectionListener.class);
+	}
+
+	public final void addPreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
+		addFacesListener(listener);
+	}
+
+	public final void removePreSelectionListener(org.rcfaces.core.event.IPreSelectionListener listener) {
+		removeFacesListener(listener);
+	}
+
+	public final javax.faces.event.FacesListener [] listPreSelectionListeners() {
+		return getFacesListeners(org.rcfaces.core.event.IPreSelectionListener.class);
 	}
 
 	public final void addCheckListener(org.rcfaces.core.event.ICheckListener listener) {

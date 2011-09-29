@@ -91,7 +91,7 @@ public abstract class AbstractDataComponent extends CameliaDataComponent impleme
 
 	protected static final Set CAMELIA_ATTRIBUTES=new HashSet(CameliaDataComponent.CAMELIA_ATTRIBUTES);
 	static {
-		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","mouseOverListener","value","right","alertLoadingMessage","mouseOutListener","waiRole","lookId","userEventListener","wheelSelection","marginTop","styleClass","width","resetListener","rows","bottom","toolTipText","sortManager","horizontalCenter","blurListener","var","ariaLevel","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","verticalCenter","initListener","marginBottom","unlockedClientAttributeNames","immediate","sortListener","first","y","margins","x"}));
+		CAMELIA_ATTRIBUTES.addAll(Arrays.asList(new String[] {"visible","marginLeft","backgroundColor","tabIndex","errorListener","focusListener","propertyChangeListener","helpURL","height","keyDownListener","mouseOverListener","value","right","alertLoadingMessage","mouseOutListener","waiRole","lookId","userEventListener","wheelSelection","marginTop","styleClass","width","resetListener","rows","bottom","toolTipText","sortManager","horizontalCenter","blurListener","var","ariaLevel","hiddenMode","left","foregroundColor","top","helpMessage","marginRight","keyUpListener","partialRendering","keyPressListener","ariaLabel","verticalCenter","initListener","marginBottom","unlockedClientAttributeNames","immediate","sortListener","first","y","x","margins"}));
 	}
 
 

@@ -8,22 +8,26 @@ import javax.faces.context.FacesContext;
 import org.rcfaces.core.internal.capability.ICellToolTipTextSettings;
 import org.rcfaces.core.component.capability.ICellStyleClassCapability;
 import org.rcfaces.core.component.capability.IToolTipCapability;
+import org.rcfaces.core.component.IMenuComponent;
 import org.rcfaces.core.internal.component.CameliaValueColumnComponent;
 import org.rcfaces.core.component.capability.IInitEventCapability;
 import org.rcfaces.core.internal.converter.OrderConverter;
 import org.rcfaces.core.internal.tools.CriteriaTools;
 import org.rcfaces.core.component.capability.ISelectionEventCapability;
 import org.rcfaces.core.component.capability.IForegroundBackgroundColorCapability;
+import org.rcfaces.core.internal.tools.MenuTools;
 import org.rcfaces.core.internal.capability.ICriteriaContainer;
 import org.rcfaces.core.component.capability.IAlignmentCapability;
 import org.rcfaces.core.component.capability.ITextDirectionCapability;
 import org.rcfaces.core.internal.capability.ICriteriaConfiguration;
 import org.rcfaces.core.component.capability.IStyleClassCapability;
 import java.util.Arrays;
-import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.converter.HiddenModeConverter;
+import org.rcfaces.core.internal.capability.IImageAccessorsCapability;
 import org.rcfaces.core.internal.capability.ICellImageSettings;
+import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IVerticalAlignmentCapability;
+import org.rcfaces.core.component.iterator.IMenuIterator;
 import org.rcfaces.core.component.capability.IVisibilityCapability;
 import org.rcfaces.core.component.capability.ICellToolTipTextCapability;
 import org.rcfaces.core.component.capability.IStatesImageCapability;
@@ -70,6 +74,7 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 	IStatesImageCapability,
 	IImageSizeCapability,
 	IMenuPopupIdCapability,
+	IMenuCapability,
 	IWidthRangeCapability,
 	IVerticalAlignmentCapability,
 	IAutoFilterCapability,
@@ -675,6 +680,27 @@ public class DataColumnComponent extends CameliaValueColumnComponent implements
 
 	public void setMenuPopupId(java.lang.String menuPopupId) {
 		engine.setProperty(Properties.MENU_POPUP_ID, menuPopupId);
+	}
+
+	public IMenuComponent getMenu() {
+
+
+		return MenuTools.getMenu(this);
+		
+	}
+
+	public IMenuComponent getMenu(String menuId) {
+
+
+		return MenuTools.getMenu(this, menuId);
+		
+	}
+
+	public IMenuIterator listMenus() {
+
+
+		return MenuTools.listMenus(this);
+		
 	}
 
 	public int getMaxWidth() {
