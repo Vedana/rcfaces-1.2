@@ -3043,6 +3043,7 @@ Dans le cas d'un mode period !
 		<capability id="IPreloadedLevelDepthCapability" />
 		<capability id="IMenuEventCapability" />
 		<capability id="ISelectionEventCapability" />		
+		<capability id="IPreSelectionEventCapability" />
 		<capability id="ICheckEventCapability" />
 		<capability id="ICheckedValuesCapability" onlyValueBinding="true" />
 

@@ -265,13 +265,15 @@ public class CriteriaGridService extends AbstractHtmlService {
 		UIComponent refComponent = (UIComponent) configuration;
 		Converter converter = configuration.getCriteriaConverter();
 
-		IJavaScriptWriter ijs = ow.writeSymbol("values").write('[');
+		IJavaScriptWriter ijs = ow.writeSymbol("values").write('[');	
+		int vir = 0;	
 		for (int j = 0; j < criteriaItems.length; j++) {
 			CriteriaItem ci = criteriaItems[j];
 
-			if (j > 0) {
+			if (vir > 0) {
 				ijs.write(',');
 			}
+			vir++;
 
 			Object itemValue = ci.getValue();
 
@@ -279,10 +281,14 @@ public class CriteriaGridService extends AbstractHtmlService {
 					itemValue, converter, refComponent,
 					jsWriter.getFacesContext());
 			
+			if (itemConvertedValue == null) {
+				continue;
+			}
 
 			IObjectLiteralWriter itemsW = ijs.writeObjectLiteral(true);
 
-			if (itemConvertedValue!= null &&ci.getLabel() != null && itemConvertedValue.equals(ci.getLabel()) == false) {
+			if (itemConvertedValue!= null &&ci.getLabel() != null 
+					&& itemConvertedValue.equals(ci.getLabel()) == false) {
 				itemsW.writeSymbol("label").writeString(ci.getLabel());
 			}
 

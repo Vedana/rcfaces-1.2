@@ -694,6 +694,15 @@ var __members = {
 		
 		return uiPopup;
 	},
+	
+	f_hasSelectionAutoClose: function() {
+		return this._selectionAutoClose;
+	},
+	
+	f_setSelectionAutoClose: function(autoClose) {
+		 this._selectionAutoClose = autoClose;
+	},
+	
 	/**
 	 * @method protected final
 	 */
@@ -1127,10 +1136,9 @@ var __members = {
 		if (this.f_isItemDisabled(menuItem)) {
 			return;
 		}
-				
-		this.f_closeUIPopup(menuItem);
 					
 		if (this.f_isReadOnly()) {
+			this.f_closeUIPopup(menuItem);
 			return;
 		}
 			
@@ -1308,9 +1316,13 @@ var __members = {
 	 * @return void
 	 */
 	f_performItemSelect: function(item, value, jsEvent) {		
-
-		this.f_closeAllPopups();
-
+		
+		this.f_fireEvent(f_event.PRE_SELECTION, jsEvent, item, value);
+		
+		if (this.f_hasSelectionAutoClose() !== false) {
+			this.f_closeAllPopups();
+		}
+		
 		switch(item._inputType) {
 		case fa_items.AS_CHECK_BUTTON:
 			var state=this.f_isItemChecked(item);
@@ -1330,6 +1342,7 @@ var __members = {
 		var selectionProvider=this.fa_getSelectionProvider();
 
 		this.f_fireEvent(f_event.SELECTION, jsEvent, item, value, selectionProvider);
+		
 	},
 	/**
 	 * Returns the label of the item.

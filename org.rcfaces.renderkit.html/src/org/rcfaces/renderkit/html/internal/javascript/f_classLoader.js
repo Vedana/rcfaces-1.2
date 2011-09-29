@@ -2109,7 +2109,7 @@ f_classLoader.SerializeInputsIntoParam=function(parameters, component, updateInp
 
 	} else {
 		var form=f_core.GetParentForm(component);
-		serializedInputs=form._serializedInputs
+		serializedInputs=form._serializedInputs;
 	}
 	
 	if (!serializedInputs) {

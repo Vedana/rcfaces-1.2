@@ -46,6 +46,7 @@ import org.rcfaces.core.component.capability.IImageSizeCapability;
 import org.rcfaces.core.component.capability.IMenuCapability;
 import org.rcfaces.core.component.capability.IMenuPopupIdCapability;
 import org.rcfaces.core.component.capability.IOrderCapability;
+import org.rcfaces.core.component.capability.IPreSelectionEventCapability;
 import org.rcfaces.core.component.capability.IPreferencesCapability;
 import org.rcfaces.core.component.capability.IReadOnlyCapability;
 import org.rcfaces.core.component.capability.IRequiredCapability;
@@ -84,6 +85,7 @@ import org.rcfaces.core.internal.lang.StringAppender;
 import org.rcfaces.core.internal.listener.CheckScriptListener;
 import org.rcfaces.core.internal.listener.IScriptListener;
 import org.rcfaces.core.internal.listener.IServerActionListener;
+import org.rcfaces.core.internal.listener.PreSelectionScriptListener;
 import org.rcfaces.core.internal.renderkit.IComponentData;
 import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
 import org.rcfaces.core.internal.renderkit.IComponentWriter;
@@ -478,7 +480,7 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 				.listSortedComponents();
 		ISortedDataModel sortedDataModel = (ISortedDataModel)
 
-		getAdapter(ISortedDataModel.class, dataModel);
+		getAdapter(ISortedDataModel.class, dataModel, sortedComponents);
 		if (sortedComponents != null && sortedComponents.length > 0) {
 			if (sortedDataModel != null) {
 				sortedDataModel.setSortParameters((UIComponent) gridComponent,
@@ -2497,6 +2499,13 @@ public abstract class AbstractGridRenderer extends AbstractCssRenderer {
 					if ( null == id || id.length() < 1) {
 						id = column.getId() + "_menu";
 					}
+					
+					if (menuComponent instanceof IPreSelectionEventCapability) {
+						
+						((IPreSelectionEventCapability) menuComponent).addPreSelectionListener(new PreSelectionScriptListener(
+								HtmlRenderContext.JAVASCRIPT_TYPE, "f_criteriaPopupManager.OnPreSelectedCriteriaChange(event)"));
+					}
+					
 					
 					if (menuComponent instanceof ICheckEventCapability) {
 						

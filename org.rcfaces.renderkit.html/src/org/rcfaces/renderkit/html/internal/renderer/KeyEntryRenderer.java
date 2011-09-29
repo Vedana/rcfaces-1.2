@@ -282,6 +282,11 @@ public class KeyEntryRenderer extends DataGridRenderer {
             }
         }
 
+        if (formattedValue != null) {
+			htmlWriter.writeValue(formattedValue);
+		}
+
+        
         htmlWriter.endComponent();
 
         htmlWriter.endElement(IHtmlWriter.INPUT);

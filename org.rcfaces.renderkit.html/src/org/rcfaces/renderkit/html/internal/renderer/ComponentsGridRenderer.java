@@ -217,11 +217,11 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
                 .getHtmlComponentRenderContext());
 
         // Dans tous les cas il faut positionner le renderContext !
-        ComponentsListService componentsListServer = ComponentsListService
-                .getInstance(facesContext);
-        if (componentsListServer != null) {
-            componentsListServer.setupComponent(componentRenderContext);
-        }
+        ComponentsGridService componentsGridServer = ComponentsGridService
+				.getInstance(facesContext);
+		if (componentsGridServer != null) {
+			componentsGridServer.setupComponent(componentRenderContext);
+		}
 
         if (tableContext.isInteractiveShow()) {
             return;
@@ -350,8 +350,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
         int sortTranslations[] = null;
 
-        ISortedComponent sortedComponents[] = gridRenderContext
-                .listSortedComponents();
 
         DataModel dataModel = componentsGridComponent.getDataModelValue();
 
@@ -388,8 +386,10 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 
             filtred = true;
         }
+        
+        ISortedComponent sortedComponents[] = gridRenderContext.listSortedComponents();
 		ISortedDataModel sortedDataModel = (ISortedDataModel) getAdapter(
-				ISortedDataModel.class, dataModel);
+				ISortedDataModel.class, dataModel, sortedComponents);
         if (sortedComponents != null && sortedComponents.length > 0) {
 
             if (NOT_SUPPORTED_SERVER_SORT) {

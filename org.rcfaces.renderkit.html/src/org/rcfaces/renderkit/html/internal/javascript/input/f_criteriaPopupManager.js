@@ -13,7 +13,18 @@ var __statics = {
 	 *            evt
 	 * @return Boolean
 	 */
-	OnSelectedCriteriaChange : function(evt) {
+	OnPreSelectedCriteriaChange: function(evt) {
+		var menu = evt.f_getComponent();
+		menu.f_setSelectionAutoClose(false);
+	},
+		
+	/**
+	 * @method public static
+	 * @param Event
+	 *            evt
+	 * @return Boolean
+	 */
+	OnSelectedCriteriaChange: function(evt) {
 
 		var menu = evt.f_getComponent();
 		var grid = menu.f_getOwnerComponent();
@@ -158,7 +169,7 @@ var __statics = {
 							break;
 						}
 						menuItem.f_removeAllItems(menuItem);
-
+						menuItem._criteriaPopup = true;
 						var selectedValues = [];
 						for ( var k = 0; k < selectedCriteria.length; k++) {
 							var criteriaSelected = selectedCriteria[k];

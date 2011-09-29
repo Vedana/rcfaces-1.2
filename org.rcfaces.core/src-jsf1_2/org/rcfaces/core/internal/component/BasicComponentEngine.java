@@ -945,6 +945,20 @@ public class BasicComponentEngine extends AbstractComponentEngine {
             }
             s += "converter='" + converter + "'";
         }
+        
+        if (dataAccessorsByName != null
+				&& dataAccessorsByName.isEmpty() == false) {
+			for (Iterator it = dataAccessorsByName.entrySet().iterator(); it
+					.hasNext();) {
+				Map.Entry entry = (Map.Entry) it.next();
+
+				if (s.length() > 0) {
+					s += ",";
+				}
+				s += "dataAccessor[" + entry.getKey() + "]='"
+						+ entry.getValue() + "'";
+			}
+		}
 
         return s;
     }

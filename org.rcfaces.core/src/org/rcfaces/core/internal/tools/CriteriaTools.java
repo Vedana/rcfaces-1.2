@@ -285,11 +285,14 @@ public class CriteriaTools extends CollectionTools {
 
 				ICriteriaConfiguration criteriaConfiguration = criteriaContainer
 						.getCriteriaConfiguration();
+				
+				if (st.hasMoreTokens() == false) {
+					// Cas ou le token sélectionné est NULL
+					continue;
+				}
 
 				String itemValues = URLDecoder.decode(st.nextToken(),
 						DEFAULT_ENCODE_CHARSET);
-				
-			
 				
 				Set<Object> convertedValues = convertCriteriaValues(
 						facesContext, criteriaConfiguration, itemValues);

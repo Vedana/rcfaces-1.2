@@ -107,13 +107,18 @@ public class SuggestTextEntryRenderer extends TextEntryRenderer implements
         for (; it.hasNext();) {
             UIComponent component = (UIComponent) it.next();
             if (component instanceof UISelectItems) {
-                UISelectItems uiSelectItems = (UISelectItems) component;
-                IOrderedIterator orderedIterator= (IOrderedIterator)
-                	getAdapter(IOrderedIterator.class, uiSelectItems.getValue());
-                if (orderedIterator != null) {
-                	orderedResult = orderedIterator.isOrdered();
-                }
-            	break;
+            	UISelectItems uiSelectItems = (UISelectItems) component;
+
+				Object itemsValue = uiSelectItems.getValue();
+				if (itemsValue != null) {
+					IOrderedIterator orderedIterator = (IOrderedIterator) getAdapter(
+							IOrderedIterator.class, itemsValue);
+
+	                if (orderedIterator != null) {
+	                	orderedResult = orderedIterator.isOrdered();
+	                }
+	            	break;
+				}
                 
             }
         }

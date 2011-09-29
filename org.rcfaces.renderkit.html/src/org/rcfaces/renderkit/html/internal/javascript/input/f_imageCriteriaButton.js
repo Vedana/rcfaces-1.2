@@ -10,12 +10,13 @@
  * @version $Revision$ $Date$
  */
 var __members = {
+		
 	/**
 	 * @method protected
 	 * 
-	 * @param type
-	 * @param pagedComponent
-	 * @returns {Boolean}
+	 * @param String type
+	 * @param Element pagedComponent
+	 * @return Boolean 
 	 */
 	_isDisabled: function(type, pagedComponent) {
 

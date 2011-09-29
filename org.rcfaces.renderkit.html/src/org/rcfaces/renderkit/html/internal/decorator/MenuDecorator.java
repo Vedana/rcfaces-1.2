@@ -227,6 +227,10 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
             break;
         }
+        
+        if (this instanceof CriteriaMenuDecorator) {
+        	objectLiteralWriter.writeSymbol("_criteriaPopup").writeBoolean(true);
+        }
 
         if (selectItem instanceof IAccessKeyItem) {
             String key = ((IAccessKeyItem) selectItem).getAccessKey();

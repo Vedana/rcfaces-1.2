@@ -42,11 +42,11 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
 	private final String defaultUnlockedProperties[];
 
 	protected AbstractCameliaRenderer0() {
-		Set unlockedProperties = new HashSet();
+		Set<String> unlockedProperties = new HashSet<String>();
 		addUnlockProperties(unlockedProperties);
 
 		if (unlockedProperties.isEmpty() == false) {
-			defaultUnlockedProperties = (String[]) unlockedProperties
+			defaultUnlockedProperties = unlockedProperties
 					.toArray(new String[unlockedProperties.size()]);
 
 		} else {
@@ -244,10 +244,10 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
 	}
 
 	public void decodeChildren(FacesContext context, UIComponent component) {
-		for (Iterator children = component.getFacetsAndChildren(); children
+		for (Iterator<UIComponent> children = component.getFacetsAndChildren(); children
 				.hasNext();) {
-			UIComponent child = (UIComponent) children.next();
-
+			UIComponent child = children.next();
+		
 			decodeChild(context, component, child);
 		}
 	}
@@ -274,16 +274,21 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
 		return ValuesTools.valueToString(value, component, facesContext);
 	}
 
-	protected Object getAdapter(Class adapter, Object object) {
+	protected Object getAdapter(Class<?> adapter, Object object) {
 		return getAdapter(adapter, object, this);
 	}
 
-	public static Object getAdapter(Class adapter, Object object, Object params) {
+	public static Object getAdapter(Class<?> adapter, Object object,
+			Object params) {
+
+		if (object == null) {
+			throw new NullPointerException("Object is null !");
+		}
 
 		if (object instanceof IAdaptable) {
 			return ((IAdaptable) object).getAdapter(adapter, params);
 		}
-
+		
 		if (adapter.isAssignableFrom(object.getClass())) {
 			return object;
 		}
