@@ -281,6 +281,11 @@ public class KeyEntryRenderer extends DataGridRenderer {
                 htmlWriter.writeAttribute("v:invalidKey", true);
             }
         }
+        
+        if (formattedValue != null) {
+			htmlWriter.writeValue(formattedValue);
+
+		}
 
         htmlWriter.endComponent();
 

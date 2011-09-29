@@ -77,7 +77,6 @@ import org.rcfaces.renderkit.html.internal.service.ComponentsListService;
  * @version $Revision$ $Date$
  */
 public class ComponentsGridRenderer extends AbstractGridRenderer {
-	private static final String REVISION = "$Revision$";
 
 	private static final Log LOG = LogFactory
 			.getLog(ComponentsGridRenderer.class);
@@ -349,6 +348,8 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 		}
 
 		int sortTranslations[] = null;
+
+		
 
 		DataModel dataModel = componentsGridComponent.getDataModelValue();
 
@@ -1136,7 +1137,6 @@ public class ComponentsGridRenderer extends AbstractGridRenderer {
 	 */
 	public class ComponentsGridRenderContext extends AbstractGridRenderContext {
 
-		private static final String REVISION = "$Revision$";
 
 		private boolean rowValueSetted;
 

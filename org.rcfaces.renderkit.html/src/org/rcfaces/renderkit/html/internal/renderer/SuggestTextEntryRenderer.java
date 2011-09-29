@@ -33,197 +33,196 @@ import org.rcfaces.renderkit.html.internal.decorator.SuggestTextEntryDecorator;
  * @version $Revision$ $Date$
  */
 public class SuggestTextEntryRenderer extends TextEntryRenderer implements
-		IFilteredItemsRenderer {
-	private static final String REVISION = "$Revision$";
+        IFilteredItemsRenderer {
 
-	protected void encodeComponent(IHtmlWriter htmlWriter)
-			throws WriterException {
+    protected void encodeComponent(IHtmlWriter htmlWriter)
+            throws WriterException {
 
-		super.encodeComponent(htmlWriter);
+        super.encodeComponent(htmlWriter);
 
-		htmlWriter.getJavaScriptEnableMode().enableOnFocus();
-	}
+        htmlWriter.getJavaScriptEnableMode().enableOnFocus();
+    }
 
-	protected IHtmlWriter writeInputAttributes(IHtmlWriter htmlWriter)
-			throws WriterException {
-		htmlWriter = super.writeInputAttributes(htmlWriter);
+    protected IHtmlWriter writeInputAttributes(IHtmlWriter htmlWriter)
+            throws WriterException {
+        htmlWriter = super.writeInputAttributes(htmlWriter);
 
-		FacesContext facesContext = htmlWriter.getComponentRenderContext()
-				.getFacesContext();
+        FacesContext facesContext = htmlWriter.getComponentRenderContext()
+                .getFacesContext();
 
-		SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) htmlWriter
-				.getComponentRenderContext().getComponent();
+        SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) htmlWriter
+                .getComponentRenderContext().getComponent();
 
-		int maxResultNumber = suggestTextEntryComponent
-				.getMaxResultNumber(facesContext);
-		if (maxResultNumber > 0) {
-			htmlWriter.writeAttribute("v:maxResultNumber", maxResultNumber);
-		}
+        int maxResultNumber = suggestTextEntryComponent
+                .getMaxResultNumber(facesContext);
+        if (maxResultNumber > 0) {
+            htmlWriter.writeAttribute("v:maxResultNumber", maxResultNumber);
+        }
 
-		int suggestionDelayMs = suggestTextEntryComponent
-				.getSuggestionDelayMs(facesContext);
-		if (suggestionDelayMs > 0) {
-			htmlWriter.writeAttribute("v:suggestionDelayMs", suggestionDelayMs);
-		}
+        int suggestionDelayMs = suggestTextEntryComponent
+                .getSuggestionDelayMs(facesContext);
+        if (suggestionDelayMs > 0) {
+            htmlWriter.writeAttribute("v:suggestionDelayMs", suggestionDelayMs);
+        }
 
-		int suggestionMinChars = suggestTextEntryComponent
-				.getSuggestionMinChars(facesContext);
-		if (suggestionMinChars > 0) {
-			htmlWriter.writeAttribute("v:suggestionMinChars",
-					suggestionMinChars);
-		}
+        int suggestionMinChars = suggestTextEntryComponent
+                .getSuggestionMinChars(facesContext);
+        if (suggestionMinChars > 0) {
+            htmlWriter.writeAttribute("v:suggestionMinChars",
+                    suggestionMinChars);
+        }
 
-		boolean caseSensitive = suggestTextEntryComponent
-				.isCaseSensitive(facesContext);
-		if (caseSensitive) {
-			htmlWriter.writeAttribute("v:caseSensitive", true);
-		}
+        boolean caseSensitive = suggestTextEntryComponent
+                .isCaseSensitive(facesContext);
+        if (caseSensitive) {
+            htmlWriter.writeAttribute("v:caseSensitive", true);
+        }
 
-		boolean forceProposal = suggestTextEntryComponent
-				.isForceProposal(facesContext);
-		if (forceProposal) {
-			htmlWriter.writeAttribute("v:forceProposal", true);
-		}
+        boolean forceProposal = suggestTextEntryComponent
+                .isForceProposal(facesContext);
+        if (forceProposal) {
+            htmlWriter.writeAttribute("v:forceProposal", true);
+        }
 
-		Object suggestionValue = suggestTextEntryComponent
-				.getSuggestionValue(facesContext);
-		if (suggestionValue != null) {
-			String value = ValuesTools.convertValueToString(suggestionValue,
-					suggestTextEntryComponent, facesContext);
-			htmlWriter.writeAttribute("v:suggestionValue", value);
-		}
+        Object suggestionValue = suggestTextEntryComponent
+                .getSuggestionValue(facesContext);
+        if (suggestionValue != null) {
+            String value = ValuesTools.convertValueToString(suggestionValue,
+                    suggestTextEntryComponent, facesContext);
+            htmlWriter.writeAttribute("v:suggestionValue", value);
+        }
 
-		String moreResultsMessage = suggestTextEntryComponent
-				.getMoreResultsMessage(facesContext);
-		if (moreResultsMessage != null) {
-			htmlWriter.writeAttribute("v:moreResultsMessage",
-					moreResultsMessage);
-		}
-
-		boolean orderedResult = suggestTextEntryComponent
-				.isOrderedItems(facesContext);
-
-		Iterator it = suggestTextEntryComponent.getChildren().iterator();
-		for (; it.hasNext();) {
-			UIComponent component = (UIComponent) it.next();
-			if (component instanceof UISelectItems) {
-				UISelectItems uiSelectItems = (UISelectItems) component;
+        String moreResultsMessage = suggestTextEntryComponent
+                .getMoreResultsMessage(facesContext);
+        if (moreResultsMessage != null) {
+            htmlWriter.writeAttribute("v:moreResultsMessage",
+                    moreResultsMessage);
+        }
+        
+        boolean orderedResult = suggestTextEntryComponent
+        .isOrderedItems(facesContext);
+        
+        Iterator  it = suggestTextEntryComponent.getChildren().iterator();
+        for (; it.hasNext();) {
+            UIComponent component = (UIComponent) it.next();
+            if (component instanceof UISelectItems) {
+                UISelectItems uiSelectItems = (UISelectItems) component;
 
 				Object itemsValue = uiSelectItems.getValue();
 				if (itemsValue != null) {
 					IOrderedIterator orderedIterator = (IOrderedIterator) getAdapter(
 							IOrderedIterator.class, itemsValue);
 
-					if (orderedIterator != null) {
-						orderedResult = orderedIterator.isOrdered();
-					}
-
-					break;
-				}
-			}
+                if (orderedIterator != null) {
+                	orderedResult = orderedIterator.isOrdered();
+                }
+            	break;
+                
+            }
+        }
 		}
+            
+        if (orderedResult == false) {
+            htmlWriter.writeAttribute("v:orderedResult", false);
+        }
 
-		if (orderedResult == false) {
-			htmlWriter.writeAttribute("v:orderedResult", false);
-		}
+        return htmlWriter;
+    }
 
-		return htmlWriter;
-	}
+    protected void encodeJavaScript(IJavaScriptWriter writer)
+            throws WriterException {
+        super.encodeJavaScript(writer);
 
-	protected void encodeJavaScript(IJavaScriptWriter writer)
-			throws WriterException {
-		super.encodeJavaScript(writer);
+        FacesContext facesContext = writer.getFacesContext();
 
-		FacesContext facesContext = writer.getFacesContext();
+        SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) writer
+                .getHtmlComponentRenderContext().getComponent();
 
-		SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) writer
-				.getHtmlComponentRenderContext().getComponent();
+        IFilterProperties filterProperties = suggestTextEntryComponent
+                .getFilterProperties(facesContext);
 
-		IFilterProperties filterProperties = suggestTextEntryComponent
-				.getFilterProperties(facesContext);
+        int maxResultNumber = suggestTextEntryComponent
+                .getMaxResultNumber(facesContext);
 
-		int maxResultNumber = suggestTextEntryComponent
-				.getMaxResultNumber(facesContext);
+        encodeFilteredItems(writer, suggestTextEntryComponent,
+                filterProperties, maxResultNumber, false);
+    }
 
-		encodeFilteredItems(writer, suggestTextEntryComponent,
-				filterProperties, maxResultNumber, false);
-	}
+    protected String getJavaScriptClassName() {
+        return JavaScriptClasses.SUGGEST_TEXT_ENTRY;
+    }
 
-	protected String getJavaScriptClassName() {
-		return JavaScriptClasses.SUGGEST_TEXT_ENTRY;
-	}
+    protected IComponentDecorator createSuggestionDecorator(
+            FacesContext facesContext, UIComponent component,
+            Converter converter, IFilterProperties filterProperties,
+            int maxResultNumber, boolean service) {
 
-	protected IComponentDecorator createSuggestionDecorator(
-			FacesContext facesContext, UIComponent component,
-			Converter converter, IFilterProperties filterProperties,
-			int maxResultNumber, boolean service) {
+        return new SuggestTextEntryDecorator(component, converter,
+                filterProperties, maxResultNumber, service);
+    }
 
-		return new SuggestTextEntryDecorator(component, converter,
-				filterProperties, maxResultNumber, service);
-	}
+    public void encodeFilteredItems(IJavaScriptWriter writer,
+            IFilterCapability component, IFilterProperties filterProperties,
+            int maxResultNumber) throws WriterException {
 
-	public void encodeFilteredItems(IJavaScriptWriter writer,
-			IFilterCapability component, IFilterProperties filterProperties,
-			int maxResultNumber) throws WriterException {
+        encodeFilteredItems(writer, component, filterProperties,
+                maxResultNumber, true);
+    }
 
-		encodeFilteredItems(writer, component, filterProperties,
-				maxResultNumber, true);
-	}
+    protected void encodeFilteredItems(IJavaScriptWriter writer,
+            IFilterCapability component, IFilterProperties filterProperties,
+            int maxResultNumber, boolean service) throws WriterException {
 
-	protected void encodeFilteredItems(IJavaScriptWriter writer,
-			IFilterCapability component, IFilterProperties filterProperties,
-			int maxResultNumber, boolean service) throws WriterException {
+        FacesContext facesContext = writer.getFacesContext();
 
-		FacesContext facesContext = writer.getFacesContext();
+        Converter converter = null;
+        if (component instanceof SuggestTextEntryComponent) {
+            converter = ((SuggestTextEntryComponent) component)
+                    .getSuggestionConverter(facesContext);
+        }
 
-		Converter converter = null;
-		if (component instanceof SuggestTextEntryComponent) {
-			converter = ((SuggestTextEntryComponent) component)
-					.getSuggestionConverter(facesContext);
-		}
+        IComponentDecorator componentDecorator = createSuggestionDecorator(
+                facesContext, (UIComponent) component, converter,
+                filterProperties, maxResultNumber, service);
+        if (componentDecorator == null) {
+            return;
+        }
 
-		IComponentDecorator componentDecorator = createSuggestionDecorator(
-				facesContext, (UIComponent) component, converter,
-				filterProperties, maxResultNumber, service);
-		if (componentDecorator == null) {
-			return;
-		}
+        componentDecorator.encodeJavaScript(writer);
+    }
 
-		componentDecorator.encodeJavaScript(writer);
-	}
+    protected void decode(IRequestContext context, UIComponent element,
+            IComponentData componentData) {
+        super.decode(context, element, componentData);
 
-	protected void decode(IRequestContext context, UIComponent element,
-			IComponentData componentData) {
-		super.decode(context, element, componentData);
+        FacesContext facesContext = context.getFacesContext();
 
-		FacesContext facesContext = context.getFacesContext();
+        SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) element;
 
-		SuggestTextEntryComponent suggestTextEntryComponent = (SuggestTextEntryComponent) element;
+        Object oldValue = suggestTextEntryComponent
+                .getSuggestionValue(facesContext);
+        Object newValue = null;
 
-		Object oldValue = suggestTextEntryComponent
-				.getSuggestionValue(facesContext);
-		Object newValue = null;
+        String suggestionValue = componentData
+                .getStringProperty("suggestionValue");
+        if (suggestionValue != null) {
+            Converter converter = suggestTextEntryComponent
+                    .getSuggestionConverter(facesContext);
 
-		String suggestionValue = componentData
-				.getStringProperty("suggestionValue");
-		if (suggestionValue != null) {
-			Converter converter = suggestTextEntryComponent
-					.getSuggestionConverter(facesContext);
+            newValue = ValuesTools.convertStringToValue(facesContext,
+                    suggestTextEntryComponent, converter, suggestionValue,
+                    "suggestionValue", false);
+        }
 
-			newValue = ValuesTools.convertStringToValue(facesContext,
-					suggestTextEntryComponent, converter, suggestionValue,
-					"suggestionValue", false);
-		}
+        if (newValue != oldValue) {
+            if (newValue == null || newValue.equals(oldValue) == false) {
+                suggestTextEntryComponent.setSuggestionValue(newValue);
 
-		if (newValue != oldValue) {
-			if (newValue == null || newValue.equals(oldValue) == false) {
-				suggestTextEntryComponent.setSuggestionValue(newValue);
-
-				suggestTextEntryComponent.queueEvent(new PropertyChangeEvent(
-						suggestTextEntryComponent, Properties.SUGGESTION_VALUE,
-						oldValue, newValue));
-			}
-		}
-	}
+                suggestTextEntryComponent.queueEvent(new PropertyChangeEvent(
+                        suggestTextEntryComponent, Properties.SUGGESTION_VALUE,
+                        oldValue, newValue));
+            }
+        }
+    }
 
 }

@@ -29,6 +29,8 @@ import org.rcfaces.core.lang.IAdaptable;
  */
 public abstract class AbstractCameliaRenderer0 extends Renderer implements
 		IDefaultUnlockedPropertiesRenderer {
+	private static final String REVISION = "$Revision$";
+
 	private static final Log LOG = LogFactory
 			.getLog(AbstractCameliaRenderer0.class);
 
@@ -287,7 +289,7 @@ public abstract class AbstractCameliaRenderer0 extends Renderer implements
 		if (object instanceof IAdaptable) {
 			return ((IAdaptable) object).getAdapter(adapter, params);
 		}
-
+		
 		if (adapter.isAssignableFrom(object.getClass())) {
 			return object;
 		}
