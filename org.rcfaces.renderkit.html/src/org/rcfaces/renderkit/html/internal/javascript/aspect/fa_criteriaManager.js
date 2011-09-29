@@ -30,7 +30,7 @@ var __members = {
 		fa_evaluateCriteria: f_class.ABSTRACT,
 		
 		/**
-		 * @method protected 
+		 * @method protected abstract
 		 * @param Array criteriaSelected  Sous la forme  [{ id: "idColonne", values: [ val1, val2 ] }, {...} ] 
 		 * @return void
 		 */
