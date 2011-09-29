@@ -39,6 +39,8 @@ public class CriteriaTools extends CollectionTools {
 	private static final ICriteriaContainer[] CRITERIA_CONTAINER_EMPTY_ARRAY = new ICriteriaContainer[0];
 	
 	private static final String DEFAULT_ENCODE_CHARSET = "UTF8";
+	public static final String DEFAULT_NULL_VALUE = "\u0001";
+	
 	private static final Log LOG = LogFactory.getLog(CriteriaTools.class);
 
 	public static ICriteriaContainer[] getSelectedCriteriaColumns(
@@ -229,13 +231,13 @@ public class CriteriaTools extends CollectionTools {
 			Object dataValue = valueHolder.getValue();
 			
 			//dataValue = ((String) dataValue).replaceAll(",", "");
-			if (dataValue != null) {
+			//if (dataValue != null) {
 				Converter converter = valueHolder.getConverter();
 				if (converter != null) {
 					dataValue = converter.getAsString(facesContext,
 							(UIComponent) container, dataValue);
 				}
-			}
+			//}
 
 			return dataValue;
 		}
@@ -286,9 +288,13 @@ public class CriteriaTools extends CollectionTools {
 
 				String itemValues = URLDecoder.decode(st.nextToken(),
 						DEFAULT_ENCODE_CHARSET);
-
+				
+			
+				
 				Set<Object> convertedValues = convertCriteriaValues(
 						facesContext, criteriaConfiguration, itemValues);
+				
+				
 				if (convertedValues == null) {
 					continue;
 				}
@@ -322,8 +328,13 @@ public class CriteriaTools extends CollectionTools {
 		Set<Object> set = new HashSet<Object>();
 
 		for (; st.hasMoreTokens();) {
+			
 			String stringValue = URLDecoder.decode(st.nextToken(),
 					DEFAULT_ENCODE_CHARSET);
+			
+			if(DEFAULT_NULL_VALUE.equals(stringValue) ) {
+				stringValue = null;
+			}
 
 			Object value = ValuesTools.convertStringToValue(facesContext,
 					component, converter, stringValue, null, false);

@@ -28,6 +28,8 @@ public class StringList {
     private static final char STRING_DEFAULT_SEPARATOR = ',';
 
     private static final char STRING_DEFAULT_ESCAPE = '\\';
+    
+    private static final String STRING_DEFAULT_NULL = "##null##";
 
     public static String[] parseTokensList(String value) {
 
@@ -46,7 +48,7 @@ public class StringList {
 
         for (int i = 0; i < chs.length; i++) {
             char c = chs[i];
-
+            
             if (c == STRING_DEFAULT_ESCAPE) {
                 i++;
                 if (i == chs.length) {
@@ -58,8 +60,15 @@ public class StringList {
 
             if (c == STRING_DEFAULT_SEPARATOR) {
                 if (l == null) {
-                    l = new ArrayList(value.length() / 8);
+                    l = new ArrayList(value.length() / 8 + 1);
                 }
+                
+                if (STRING_DEFAULT_NULL.equals(sa.toString().trim())) {
+                   l.add(null);
+                   sa.setLength(0);
+                   continue;
+               }
+                
                 l.add(sa.toString().trim());
 
                 sa.setLength(0);
@@ -68,7 +77,15 @@ public class StringList {
 
             sa.append(chs[i]);
         }
-
+        
+        if (STRING_DEFAULT_NULL.equals(sa.toString().trim())) {
+        	if (l == null) {
+                return  new String[] { null };
+            }
+            l.add(null);
+            return (String[]) l.toArray(new String[l.size()]);
+        }
+        
         if (l == null) {
             return new String[] { sa.toString().trim() };
         }
@@ -137,7 +154,10 @@ public class StringList {
 
         for (Iterator it = collection.iterator(); it.hasNext();) {
             String token = (String) it.next();
-
+            if (token == null) {
+            	token = STRING_DEFAULT_NULL;
+            }
+            
             if (sa.length() > 0) {
                 sa.append(STRING_DEFAULT_SEPARATOR);
             }

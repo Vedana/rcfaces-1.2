@@ -15,7 +15,6 @@ import org.rcfaces.core.internal.renderkit.IComponentRenderContext;
  * @version $Revision$ $Date$
  */
 class MenuContext extends SelectItemsJsContext {
-    private static final String REVISION = "$Revision$";
 
     public MenuContext(ISelectItemNodeWriter renderer,
             IComponentRenderContext componentRenderContext,
@@ -26,8 +25,8 @@ class MenuContext extends SelectItemsJsContext {
 
         // FacesContext facesContext = componentRenderContext.getFacesContext();
 
-        if (menuComponent instanceof ICheckedValuesCapability) {
-            ICheckedValuesCapability checkedValuesCapability = (ICheckedValuesCapability) menuComponent;
+        if (rootComponent instanceof ICheckedValuesCapability) {
+            ICheckedValuesCapability checkedValuesCapability = (ICheckedValuesCapability) rootComponent;
 
             Object checkValues = checkedValuesCapability.getCheckedValues();
             if (checkValues != null) {

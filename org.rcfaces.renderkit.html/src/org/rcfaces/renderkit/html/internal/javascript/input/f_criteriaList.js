@@ -118,7 +118,7 @@ var __members = {
 			
 			var label=this._getCriteriaLabel(criteria.values[i]);
 			
-			var span=f_pager._AddSpan(fragment, "_"+i, this._getCriteriaLabel(criteria.values[0]), "f_criteriaList_item");
+			var span=f_pager._AddSpan(valuesSpan, "value", label, "f_criteriaList_item");
 			span.title=label;
 		}
 		
@@ -127,6 +127,12 @@ var __members = {
 	_getCriteriaLabel: function(valueObject) {
 		if (valueObject.label) {
 			return valueObject.label;
+		}
+		
+		if (valueObject.value === fa_criteriaManager.DEFAULT_NULL_VALUE) {
+			var resourceBundle = f_resourceBundle.Get(fa_criteriaManager);
+			var label = "("+resourceBundle.f_get("EMPTY_LABEL") +")";
+			return label;
 		}
 		
 		return valueObject.value;

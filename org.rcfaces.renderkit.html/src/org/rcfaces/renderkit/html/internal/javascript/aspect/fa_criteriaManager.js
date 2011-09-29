@@ -1,11 +1,20 @@
 /**
  * Aspect Criteria Manager
  *
- * @aspect public abstract fa_criteriaManager 
+ * @aspect public abstract  
  * @author jbmeslin@vedana.com
- * @version 
+ * @version  
  */
  
+var __statics = {
+		
+	/**
+	 * @field public static final String
+	 */
+	DEFAULT_NULL_VALUE: '\x01'
+	
+			
+};
 var __members = {
 
 		f_finalize: function() {
@@ -23,23 +32,9 @@ var __members = {
 		/**
 		 * @method protected 
 		 * @param Array criteriaSelected  Sous la forme  [{ id: "idColonne", values: [ val1, val2 ] }, {...} ] 
-		 * @param Boolean refresh Refresh the grid
 		 * @return void
 		 */
-		fa_setSelectedCriteria: function (selectedCriteria, refresh){
-			f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
-		
-			this._selectedCriteria = selectedCriteria;
-			this._countToken = -1;
-			if(refresh === false) {
-				return;
-			}
-			this._first = 0;
-			
-			
-			this.f_refreshContent(true);
-			
-		},
+		fa_setSelectedCriteria: f_class.ABSTRACT,
 		
 		/**
 		 * @method protected 
@@ -132,5 +127,7 @@ var __members = {
 };
 
 new f_aspect("fa_criteriaManager", {
+	statics: __statics,
 	members: __members
+	
 });

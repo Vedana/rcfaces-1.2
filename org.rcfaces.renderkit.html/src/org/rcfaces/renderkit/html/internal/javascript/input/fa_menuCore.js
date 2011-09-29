@@ -290,6 +290,8 @@ var __members = {
 	 * @param optional
 	 *            boolean checked
 	 * @param optional
+	 *            Boolean notFireChecked
+	 * @param optional
 	 *            String accessKey
 	 * @param optional
 	 *            String tooltip
@@ -301,7 +303,7 @@ var __members = {
 	 *            String acceleratorKey
 	 * @return Object
 	 */
-	f_appendRadioItem: function(parentItem, id, groupName, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
+	f_appendRadioItem: function(parentItem, id, groupName, label, value, checked, notFireChecked, accessKey, tooltip, disabled, visible, acceleratorKey) {
 		f_core.Assert(typeof(groupName)=="string", "fa_menuCore.f_appendRadioItem: groupName parameter is invalid. ("+groupName+")");
 
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
@@ -311,7 +313,7 @@ var __members = {
 			this.f_setItemGroupName(item, groupName);
 		}		
 		if (checked) {
-			this.f_setItemChecked(item, checked);
+			this.f_setItemChecked(item, checked, notFireChecked);
 		}
 		
 		return item;
@@ -329,6 +331,8 @@ var __members = {
 	 * @param optional
 	 *            boolean checked
 	 * @param optional
+	 *            Boolean notFireChecked
+	 * @param optional
 	 *            String accessKey
 	 * @param optional
 	 *            String tooltip
@@ -340,12 +344,12 @@ var __members = {
 	 *            String acceleratorKey
 	 * @return Object
 	 */
-	f_appendCheckItem: function(parentItem, id, label, value, checked, accessKey, tooltip, disabled, visible, acceleratorKey) {
+	f_appendCheckItem: function(parentItem, id, label, value, checked, notFireChecked, accessKey, tooltip, disabled, visible, acceleratorKey) {
 		var item=this.f_appendItem(parentItem, id, label, value, accessKey, tooltip, disabled, visible, acceleratorKey);
 
 		item._inputType=fa_items.AS_CHECK_BUTTON;
 		if (checked) {
-			this.f_setItemChecked(item, checked);
+			this.f_setItemChecked(item, checked, notFireChecked);
 		}
 				
 		return item;
@@ -362,6 +366,13 @@ var __members = {
 	 * @return Object
 	 */
 	f_appendItem2: function(parentItem, id, properties) {
+		
+		if (properties._value === null && !properties._label) {
+			var resourceBundle = f_resourceBundle.Get(fa_criteriaManager);
+			properties._label = "("+resourceBundle.f_get("EMPTY_LABEL") +")";
+			properties._value = '\x01';
+		}
+		
 		var item=this.f_appendItem(parentItem, id,
 				properties._label, 
 				properties._value, 

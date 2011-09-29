@@ -957,6 +957,7 @@
 		<capability id="IStatesImageCapability" />
 		<capability id="IImageSizeCapability" />
 		<capability id="IMenuPopupIdCapability" />
+		<capability id="IMenuCapability" />
 		<capability id="IWidthRangeCapability" />
 		<capability id="IVerticalAlignmentCapability" />
 		<capability id="IAutoFilterCapability" />
@@ -3118,6 +3119,10 @@ Dans le cas d'un mode period !
 
 	<component id="menuRadioItem" extends="menuCheckItem" render="false">
 		<capability id="IRadioValueCapability" />
+	</component>
+	
+	<component id="menuCriteria" extends="menu" render="false">
+		
 	</component>
 
 	<component id="numberEntry" extends="abstractInput">

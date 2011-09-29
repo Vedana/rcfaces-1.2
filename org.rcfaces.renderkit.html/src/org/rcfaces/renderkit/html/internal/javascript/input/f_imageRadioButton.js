@@ -111,7 +111,7 @@ var __members = {
 	 * @return f_imageRadioButton[]
 	 */
 	f_listAllInGroup: function() {
-		return this.f_listGroup(this.f_getGroupName());
+		return this.f_listGroupComponents(this.f_getGroupName());
 	},
 	fa_updateRequired: function() {
 	},

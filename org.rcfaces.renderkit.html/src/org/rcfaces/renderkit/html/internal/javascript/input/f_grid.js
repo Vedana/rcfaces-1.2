@@ -334,7 +334,7 @@ var __statics = {
 				evt = f_core.GetJsEvent(this);
 			}
 
-			if (dataGrid.f_getEventLocked(evt)) {
+			if (dataGrid.f_getEventLocked(evt, false)) {
 				f_core.Debug(f_grid, "RowMouseUp: event already locked");
 				return false;
 			}
@@ -561,7 +561,7 @@ var __statics = {
 			evt = f_core.GetJsEvent(this);
 		}
 
-		if (dataGrid.f_getEventLocked(evt)) {
+		if (dataGrid.f_getEventLocked(evt, false)) {
 			return false;
 		}
 
@@ -1050,8 +1050,12 @@ var __statics = {
 
 		var sub = f_core.IsPopupButton(evt);
 		if (sub) {
-			var menu = dataGrid.f_getSubMenuById(f_grid._HEAD_MENU_ID);
-
+			var menuId = f_grid._HEAD_MENU_ID;
+			if (column._menuPopupId) {
+				menuId = column._menuPopupId;
+			}
+			var menu = dataGrid.f_getSubMenuById(menuId);
+			
 			if (menu) {
 				menu.f_open(evt, {
 					position : f_popup.MOUSE_POSITION

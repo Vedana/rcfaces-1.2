@@ -1,3 +1,9 @@
+fa_items, fa_menuCore:
+Ajout de l'attribut notFireChecked aux fonctions appendRadioItem et setItemChecked pour ne pas lancé l'évènement
+
+Menu popup des critère:
+Ajout de la classe CriteriaMenuDecorator et f_criteriaPopupMAnager
+
 SuggesTextEntry: 
 Correction globale du composant.
 

@@ -172,7 +172,7 @@ var __members = {
 	 * @return f_radioButton[]
 	 */
 	f_listAllInGroup: function() {
-		return this.f_listGroup(this.f_getGroupName());
+		return this.f_listGroupComponents(this.f_getGroupName());
 	},
 	/**
 	 * @method public 

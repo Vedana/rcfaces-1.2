@@ -278,10 +278,11 @@ public class CriteriaGridService extends AbstractHtmlService {
 			String itemConvertedValue = ValuesTools.convertValueToString(
 					itemValue, converter, refComponent,
 					jsWriter.getFacesContext());
+			
 
 			IObjectLiteralWriter itemsW = ijs.writeObjectLiteral(true);
 
-			if (itemConvertedValue.equals(ci.getLabel()) == false) {
+			if (itemConvertedValue!= null &&ci.getLabel() != null && itemConvertedValue.equals(ci.getLabel()) == false) {
 				itemsW.writeSymbol("label").writeString(ci.getLabel());
 			}
 

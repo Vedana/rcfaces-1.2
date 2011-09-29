@@ -104,6 +104,39 @@ var __members = {
 	 * @return optional Boolean create
 	 * @return f_component[]
 	 */
+	f_listGroupComponents: function(groupName) {
+		f_core.Assert(typeof(groupName)=="string", "fa_groupName.f_listGroup: Invalid groupName parameter ("+groupName+") !");
+		
+		var group= this.f_listGroup(groupName);		
+		if (group) {
+			// Il faut transformer les clientIds en composants !
+			
+			var components=new Array;
+			for(var i=0;i<group.length;) {
+				var component = this.ownerDocument.getElementById(group[i]);
+				
+				// He oui en ajax, le composant peut etre introuvable !
+				if (!component) {
+					group.splice(i,1);
+					continue;
+				}
+				
+				i++;
+				components.push(component);
+			}
+			
+			return components;
+		}
+		
+		return [];
+	},
+	
+	/**
+	 * @method protected
+	 * @param String groupName
+	 * @return optional Boolean create
+	 * @return any[]
+	 */
 	f_listGroup: function(groupName, create) {
 		f_core.Assert(typeof(groupName)=="string", "fa_groupName.f_listGroup: Invalid groupName parameter ("+groupName+") !");
 			
@@ -139,28 +172,11 @@ var __members = {
 		}
 		
 		var group=groups[groupName];		
-		if (group) {
-			// Il faut transformer les clientIds en composants !
-			
-			var components=new Array;
-			for(var i=0;i<group.length;) {
-				var component=this.ownerDocument.getElementById(group[i]);
-				
-				// He oui en ajax, le composant peut etre introuvable !
-				if (!component) {
-					group.splice(i,1);
-					continue;
-				}
-				
-				i++;
-				components.push(component);
-			}
-			
-			return components;
-		}
 		
-		group=new Array;
-		groups[groupName]=group;
+		if(!group) {
+			group=new Array;
+			groups[groupName]=group;
+		}
 
 		if (!create || !isNativeRadioElement) {
 			// Les composants ont été enregistré à la construction car ils ne sont pas nativement regroupable par groupes.

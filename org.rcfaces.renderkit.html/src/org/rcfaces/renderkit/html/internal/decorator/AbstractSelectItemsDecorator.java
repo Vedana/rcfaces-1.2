@@ -116,7 +116,7 @@ public abstract class AbstractSelectItemsDecorator extends
 
             this.selectItemsContext = context;
 
-            Iterator it = component.getChildren().iterator();
+            Iterator it = iterateNodes(component);
             encodeComponents(it, 0, true);
 
             postEncodeContainer();
@@ -588,9 +588,15 @@ public abstract class AbstractSelectItemsDecorator extends
     }
 
     protected void encodeNodes(UIComponent component) throws WriterException {
+    	Iterator it = iterateNodes(component);
+
+        encodeComponents(it, 0, true);    
+    }
+    
+    protected Iterator iterateNodes(UIComponent component) throws WriterException {
         Iterator it = component.getChildren().iterator();
 
-        encodeComponents(it, 0, true);
+        return it;
     }
 
     protected void encodeComponents(Iterator it, int depth, boolean visible)
@@ -899,7 +905,7 @@ public abstract class AbstractSelectItemsDecorator extends
         // On regarde maintenant les enfants du composant qui contient le
         // SelectItem
         if (component.getChildCount() > 0) {
-            encodeComponents(component.getChildren().iterator(), depth + 1, v);
+            encodeComponents(iterateNodes(component), depth + 1, v);
         }
 
         selectItemsContext.popSelectItem();

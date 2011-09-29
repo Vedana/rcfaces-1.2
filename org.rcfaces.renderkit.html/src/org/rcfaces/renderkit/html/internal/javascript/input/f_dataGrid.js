@@ -2023,6 +2023,9 @@ var __members = {
 							}
 						}
 						
+						//the scopeEval can throw an other ajax command
+						dataGrid._loading=undefined;
+						
 						try {
 							f_core.WindowScopeEval(ret);
 							
@@ -2049,6 +2052,27 @@ var __members = {
 			request.f_setRequestHeader("X-Camelia", this._gridUpdadeCriteriaServiceId);
 			request.f_doFormRequest(params);
 		});
+		
+	},
+	
+	/**
+	 * @method protected 
+	 * @param Array criteriaSelected  Sous la forme  [{ id: "idColonne", values: [ val1, val2 ] }, {...} ] 
+	 * @param Boolean refresh Refresh the grid
+	 * @return void
+	 */
+	fa_setSelectedCriteria: function (selectedCriteria, refresh){
+		f_core.Assert(selectedCriteria instanceof Array, "f_dataGrid.fa_setSelectedCriteria: Invalid selectedCriteria parameter ! ("+selectedCriteria+")");
+	
+		this._selectedCriteria = selectedCriteria;
+		this._countToken = -1;
+		if(refresh === false) {
+			return;
+		}
+		this._first = 0;
+		
+		
+		this.f_refreshContent(true);
 		
 	},
 	

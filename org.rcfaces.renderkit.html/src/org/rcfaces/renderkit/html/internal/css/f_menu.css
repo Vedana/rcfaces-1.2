@@ -117,6 +117,7 @@
 .f_menu_item_image_radio_hover,
 .f_menu_item_image_radio_disabled {
 	background-image: url("menu/markers.gif");
+	background-position: 0 0;
 }
 
 .f_menu_item_image_check_hover {

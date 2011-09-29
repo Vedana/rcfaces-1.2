@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
@@ -24,8 +23,6 @@ import javax.faces.model.DataModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rcfaces.core.component.AdditionalInformationComponent;
-import org.rcfaces.core.component.CriteriaComponent;
-import org.rcfaces.core.component.DataColumnComponent;
 import org.rcfaces.core.component.DataGridComponent;
 import org.rcfaces.core.component.capability.IAdditionalInformationValuesCapability;
 import org.rcfaces.core.component.capability.ICellImageCapability;
@@ -1080,11 +1077,12 @@ public class DataGridRenderer extends AbstractGridRenderer {
 			Object dataValue = CriteriaTools.getDataValue(
 					facesContext, gridComponent, config);
 
-			if (dataValue == null) {
-				continue;
-			}
+//			if (dataValue == null) {
+//				continue;
+//			}
 
 			if (criteriaValues.contains(dataValue) == false) {
+				
 				return false;
 			}
 		}

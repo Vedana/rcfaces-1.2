@@ -1166,6 +1166,11 @@
 				<required-class name="f_component" />
 			</class>
 		</file>
+		<file name="input/f_criteriaPopupManager.js">
+			<class name="f_criteriaPopupManager">
+				<required-class name="f_waiting" />
+			</class>
+		</file>
 		<file name="input/f_gridColumn.js">
 			<class name="f_gridColumn">
 				<required-class name="f_object" />

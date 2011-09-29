@@ -6,8 +6,8 @@ package org.rcfaces.core.item;
  * 
  */
 public class CriteriaItem extends DefaultItem implements IImagesItem,
-		IInputTypeItem {
+		IInputTypeItem, IGroupSelectItem {
 
 	private static final long serialVersionUID = -9108414856552266049L;
-
+	
 }

@@ -880,6 +880,7 @@ var __members = {
 			this.f_updateBreadCrumbs();		
 			
 			this._updateBodyWidth();
+			//this.f_updateScrollPosition();
 		}
 		
 		this.f_super(arguments);		

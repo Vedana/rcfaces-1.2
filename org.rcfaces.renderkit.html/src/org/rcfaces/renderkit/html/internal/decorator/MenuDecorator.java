@@ -220,7 +220,7 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
 
         case IInputTypeCapability.AS_CHECK_BUTTON:
             objectLiteralWriter.writeSymbol("_type").writeInt(style);
-
+            
             if (menuContext.isValueChecked(selectItem, selectItemValue)) {
                 objectLiteralWriter.writeSymbol("_checked").writeBoolean(true);
             }
@@ -463,6 +463,11 @@ public class MenuDecorator extends AbstractSelectItemsDecorator {
     public void decode(IRequestContext requestContext,
             UIComponent decodedComponent, IComponentData componentData) {
 
+    	
+    	String requestComponentId = requestContext.getComponentId(component);
+    	
+    	componentData = requestContext.getComponentData(component, requestComponentId, null);
+    	
         super.decode(requestContext, decodedComponent, componentData);
 
         FacesContext facesContext = requestContext.getFacesContext();
