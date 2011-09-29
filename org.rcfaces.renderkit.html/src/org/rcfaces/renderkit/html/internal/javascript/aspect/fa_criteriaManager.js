@@ -1,7 +1,7 @@
 /**
  * Aspect Criteria Manager
  *
- * @aspect public abstract  
+ * @aspect public abstract fa_criteriaManager   
  * @author jbmeslin@vedana.com
  * @version $Revision$   
  */
