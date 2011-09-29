@@ -1,7 +1,7 @@
 /**
  * f_criteriaPopupManager class
  * 
- * @class f_criteriaPopupManager
+ * @class public f_criteriaPopupManager
  * @author jb.meslin@vedana.com
  * @version $Revision: 1.0
  */
@@ -9,8 +9,7 @@ var __statics = {
 
 	/**
 	 * @method public static
-	 * @param Event
-	 *            evt
+	 * @param Event evt
 	 * @return Boolean
 	 */
 	OnPreSelectedCriteriaChange: function(evt) {
