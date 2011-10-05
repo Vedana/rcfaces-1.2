@@ -79,18 +79,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
 		AbstractGridRenderContext gridRenderContext = getGridRenderContext(componentRenderContext);
 
-		Map formatValues = new HashMap();
-
-		String valueFormat = comboGridComponent.getValueFormat(facesContext);
-		if (valueFormat != null) {
-			formatValues.put("valueFormat", valueFormat);
-		}
-
-		String valueFormatLabel = comboGridComponent
-				.getValueFormatLabel(facesContext);
-		if (valueFormatLabel != null) {
-			formatValues.put("valueFormatLabel", valueFormatLabel);
-		}
+		
 
 		Map formattedValues = null;
 		String formattedValue = null;
@@ -103,6 +92,30 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 
 		String labelColumnId = comboGridComponent
 				.getLabelColumnId(facesContext);
+		
+		Map formatValues = new HashMap();
+
+		String valueFormat = comboGridComponent.getValueFormat(facesContext);
+		if (valueFormat == null) {
+			if(labelColumnId != null) {
+				valueFormat = "{"+labelColumnId+"}";
+			}else {
+				valueFormat= "{"+valueColumnId+"}";
+			}
+		}
+		formatValues.put("valueFormat", valueFormat);
+		
+		String valueFormatLabel = comboGridComponent
+				.getValueFormatLabel(facesContext);
+		if (valueFormatLabel == null ){
+			if(labelColumnId != null) {
+				valueFormatLabel = "{"+labelColumnId+"}";
+			}else {
+				valueFormatLabel = "{"+valueColumnId+"}";
+			}
+		} 
+		formatValues.put("valueFormatLabel", valueFormatLabel);
+		
 
 		if (selectedValue != null) {
 			UIComponent converterComponent = getColumn(comboGridComponent,
@@ -121,9 +134,7 @@ public class ComboGridRenderer extends KeyEntryRenderer implements
 							.get("valueFormat");
 					formattedValueLabel = (String) formattedValues
 							.get("valueFormatLabel");
-				} else if (labelColumnId != null) {
-
-				}
+				} 
 
 				if (formattedValue == null) {
 					componentRenderContext.setAttribute(INPUT_ERRORED_PROPERTY,

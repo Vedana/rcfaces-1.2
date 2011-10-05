@@ -2293,7 +2293,7 @@
 		<attribute id="rowCountVar" type="java.lang.String" noValueBinding="true"/>
 		<attribute id="rowIndexVar" type="java.lang.String" noValueBinding="true"/>
 
-		<attribute id="valueColumnId" type="java.lang.String"/>
+		<attribute id="valueColumnId" type="java.lang.String" required="true"/>
 		<attribute id="labelColumnId" type="java.lang.String"/>
 
 		<attribute id="selectedValue" type="java.lang.Object"/>

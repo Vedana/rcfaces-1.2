@@ -119,7 +119,7 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
         int idx = index.intValue();
         
     	if (button.isDisabled() == false) {
-    		htmlWriter.writeTabIndex(idx);
+    		//htmlWriter.writeTabIndex(idx);
     	} else {
     		htmlWriter.writeTabIndex(-1);
     		htmlWriter.writeAttribute("v:tabIndex", idx);
@@ -137,7 +137,14 @@ public class CheckButtonRenderer extends AbstractInputRenderer implements
         htmlWriter.startElement(IHtmlWriter.INPUT);
         htmlWriter.writeId(inputId);
         writeInputAttributes(htmlWriter, inputId);
-        htmlWriter.writeTabIndex(-1);
+        
+        Integer index = ((ITabIndexCapability) button).getTabIndex();
+        
+    	if (button.isDisabled() == false && index != null) {
+    		 int idx = index.intValue();
+    		htmlWriter.writeTabIndex(idx);
+    	} 
+       
         writeChecked(htmlWriter, button);
 
         htmlWriter.addSubFocusableComponent(inputId);
