@@ -881,7 +881,7 @@ var __members = {
 		}
 	
 		// On selectionne car IE remet le focus au début du champ sinon !
-		input.select();
+		//input.select();
 	},
 	/**
 	 * @method private
